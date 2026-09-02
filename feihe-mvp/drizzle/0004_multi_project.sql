@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS `projects` (`id` text PRIMARY KEY NOT NULL,`name` text NOT NULL,`spu` text DEFAULT '' NOT NULL,`brand` text DEFAULT '' NOT NULL,`category` text DEFAULT '' NOT NULL,`description` text DEFAULT '' NOT NULL,`status` text DEFAULT '进行中' NOT NULL,`color` text DEFAULT '#1769d5' NOT NULL,`start_at` text,`end_at` text,`created_by` text DEFAULT '' NOT NULL,`created_at` text NOT NULL,`updated_at` text NOT NULL);
+CREATE TABLE IF NOT EXISTS `project_notes` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`note_id` text NOT NULL,`source_type` text DEFAULT 'scan' NOT NULL,`pipeline` text DEFAULT 'value_scan' NOT NULL,`level` text DEFAULT 'P3' NOT NULL,`product_scope` text DEFAULT '本品' NOT NULL,`status` text DEFAULT '待抓取' NOT NULL,`last_fetched_at` text,`comment_total` integer DEFAULT 0 NOT NULL,`positive_count` integer DEFAULT 0 NOT NULL,`negative_count` integer DEFAULT 0 NOT NULL,`question_count` integer DEFAULT 0 NOT NULL,`brand_mention_top5` real DEFAULT 0 NOT NULL,`added_at` text NOT NULL);
+CREATE TABLE IF NOT EXISTS `project_pipelines` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`key` text NOT NULL,`name` text NOT NULL,`target_count` integer NOT NULL,`delivered_count` integer DEFAULT 0 NOT NULL,`budget` real DEFAULT 0 NOT NULL,`spent` real DEFAULT 0 NOT NULL);
+CREATE TABLE IF NOT EXISTS `project_settings` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`key` text NOT NULL,`value` text NOT NULL,`updated_at` text NOT NULL);
+CREATE TABLE IF NOT EXISTS `data_sources` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`type` text DEFAULT 'feishu_sheet' NOT NULL,`name` text NOT NULL,`spreadsheet` text DEFAULT '' NOT NULL,`sheet_id` text DEFAULT '' NOT NULL,`range` text DEFAULT 'A1:AZ5000' NOT NULL,`kind` text DEFAULT 'owned' NOT NULL,`sync_frequency` text DEFAULT 'manual' NOT NULL,`status` text DEFAULT '未连接' NOT NULL,`last_synced_at` text,`last_row_count` integer DEFAULT 0 NOT NULL,`created_at` text NOT NULL,`updated_at` text NOT NULL);
+ALTER TABLE `comment_snapshots` ADD COLUMN `project_id` text DEFAULT 'qicui' NOT NULL;
+ALTER TABLE `key_comments` ADD COLUMN `project_id` text DEFAULT 'qicui' NOT NULL;
+ALTER TABLE `supplier_comments` ADD COLUMN `project_id` text DEFAULT 'qicui' NOT NULL;
+ALTER TABLE `jobs` ADD COLUMN `project_id` text DEFAULT 'qicui' NOT NULL;
+ALTER TABLE `action_logs` ADD COLUMN `project_id` text DEFAULT 'qicui' NOT NULL;
+CREATE INDEX IF NOT EXISTS `idx_project_notes_project` ON `project_notes` (`project_id`);
+CREATE INDEX IF NOT EXISTS `idx_project_notes_note` ON `project_notes` (`note_id`);
+CREATE INDEX IF NOT EXISTS `idx_project_pipelines_project` ON `project_pipelines` (`project_id`);
+CREATE INDEX IF NOT EXISTS `idx_project_settings_project` ON `project_settings` (`project_id`);
+CREATE INDEX IF NOT EXISTS `idx_data_sources_project` ON `data_sources` (`project_id`);
+CREATE INDEX IF NOT EXISTS `idx_key_comments_project` ON `key_comments` (`project_id`);
+CREATE INDEX IF NOT EXISTS `idx_supplier_comments_project` ON `supplier_comments` (`project_id`);
+CREATE INDEX IF NOT EXISTS `idx_snapshots_project_time` ON `comment_snapshots` (`project_id`,`captured_at`);

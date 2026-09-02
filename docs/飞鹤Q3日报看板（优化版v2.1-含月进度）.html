@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞鹤臻稚卓蓓小红书种草数据Q3日报看板（优化版）</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --brand:#1e6091;--brand-dark:#184e77;--brand-light:#e0f2fe;
+  --success:#16a34a;--success-light:#dcfce7;
+  --warn:#f59e0b;--warn-light:#fef3c7;
+  --danger:#dc2626;--danger-light:#fee2e2;
+  --gray:#94a3b8;--gray-light:#f1f5f9;
+  --bg:#f8fafc;--card:#fff;--border:#e2e8f0;--text:#1e293b;--muted:#64748b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#1e6091 100%);color:#fff;padding:18px 32px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.header-inner{max-width:1480px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.header h1{font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px}
+.header .sub{font-size:12px;color:#94a3b8;margin-top:4px;display:flex;gap:16px;flex-wrap:wrap}
+.date-box{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.2)}
+.date-box label{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.date-box select{background:#fff;color:#0f172a;border:none;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;outline:none}
+.container{max-width:1480px;margin:0 auto;padding:20px 24px}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--brand);background:var(--brand-light);padding:4px 14px;border-radius:20px;margin-bottom:14px}
+.section-label.action{color:#7c3aed;background:#ede9fe}
+.card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.grid{display:grid;gap:16px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:1fr}}
+@media(max-width:700px){.grid-4,.grid-2{grid-template-columns:1fr}}
+
+/* 决策层 */
+.health-bar{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.health-score{text-align:center;min-width:100px}
+.health-score .num{font-size:36px;font-weight:800;line-height:1}
+.health-score .lbl{font-size:12px;color:var(--muted);margin-top:4px}
+.health-items{flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.health-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:var(--gray-light)}
+.health-item .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.health-item .txt{font-size:13px}
+.health-item .txt b{display:block;font-size:14px}
+.exec-summary{margin-top:16px}
+.exec-summary h3{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.exec-summary ul{list-style:none}
+.exec-summary li{font-size:13px;padding:6px 0;border-bottom:1px dashed var(--border);display:flex;gap:8px}
+.exec-summary li:last-child{border-bottom:none}
+.exec-summary li .tag{flex-shrink:0;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;height:fit-content;margin-top:2px}
+
+/* KPI卡片 */
+.kpi-card{position:relative;overflow:hidden}
+.kpi-card .kpi-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.kpi-card .kpi-title{font-size:13px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+.kpi-card .kpi-status{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700}
+.kpi-card .kpi-value{font-size:28px;font-weight:800;line-height:1.2}
+.kpi-card .kpi-meta{font-size:12px;color:var(--muted);margin-top:6px;display:flex;gap:12px;flex-wrap:wrap}
+.kpi-card .kpi-meta .kpi-target{color:var(--muted)}
+.kpi-card .kpi-meta .kpi-delta{font-weight:600}
+.kpi-card .sparkline{height:36px;margin-top:8px}
+.status-ok{background:var(--success-light);color:var(--success)}
+.status-warn{background:var(--warn-light);color:var(--warn)}
+.status-danger{background:var(--danger-light);color:var(--danger)}
+.delta-up{color:var(--success)}
+.delta-down{color:var(--danger)}
+.alert-badge{position:absolute;top:12px;right:12px;background:var(--danger);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* 预算节奏 */
+.budget-compare{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.budget-bar-wrap{margin-bottom:12px}
+.budget-bar-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.budget-bar{height:24px;background:var(--gray-light);border-radius:12px;overflow:hidden;position:relative}
+.budget-bar-fill{height:100%;border-radius:12px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;color:#fff;font-size:12px;font-weight:700;transition:width .6s ease}
+.budget-gap{text-align:center;padding:16px;background:var(--warn-light);border-radius:10px}
+.budget-gap .gap-num{font-size:24px;font-weight:800;color:var(--warn)}
+.budget-gap .gap-lbl{font-size:12px;color:var(--muted)}
+
+/* 图表 */
+.chart-box{position:relative}
+.chart-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.chart-title .chart-tag{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--gray-light);color:var(--muted);font-weight:600;margin-left:auto}
+.chart-canvas{position:relative;height:260px}
+.chart-canvas.tall{height:320px}
+
+/* 内容切角表格 */
+.angle-table{width:100%;border-collapse:collapse;font-size:13px}
+.angle-table th{text-align:left;padding:8px 10px;background:var(--gray-light);font-weight:700;color:var(--muted);font-size:12px;border-bottom:2px solid var(--border)}
+.angle-table td{padding:10px;border-bottom:1px solid var(--border)}
+.angle-table tr:hover{background:var(--gray-light)}
+.progress-cell{min-width:140px}
+.progress-track{height:18px;background:var(--gray-light);border-radius:9px;overflow:hidden;position:relative}
+.progress-fill{height:100%;border-radius:9px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:11px;font-weight:700;min-width:30px;transition:width .5s}
+.progress-text{font-size:12px;font-weight:600;margin-top:3px}
+
+/* 行动层 */
+.learning-list,.nextstep-list{list-style:none}
+.learning-list li{font-size:13px;padding:10px 14px;border-left:3px solid var(--brand);background:var(--brand-light);margin-bottom:8px;border-radius:0 8px 8px 0}
+.learning-list li b{color:var(--brand-dark)}
+.nextstep-list li{font-size:13px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nextstep-list .ns-num{width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.nextstep-list .ns-content{flex:1;min-width:200px}
+.nextstep-list .ns-meta{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.nextstep-list .ns-owner{display:flex;align-items:center;gap:4px}
+.ns-status{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600}
+.ns-doing{background:var(--warn-light);color:var(--warn)}
+.ns-done{background:var(--success-light);color:var(--success)}
+.ns-todo{background:var(--gray-light);color:var(--muted)}
+
+/* 分隔 */
+.divider{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);margin:28px 0}
+.zone-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;margin-bottom:10px}
+.zone-daily{background:#dbeafe;color:#1e40af}
+.zone-quarter{background:#f3e8ff;color:#6b21a8}
+
+.tooltip{position:absolute;background:#0f172a;color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;pointer-events:none;z-index:200;display:none;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1><i class="fa-solid fa-chart-line"></i> 飞鹤臻稚卓蓓小红书种草数据 Q3 日报看板</h1>
+      <div class="sub">
+        <span><i class="fa-solid fa-folder"></i> 项目：飞鹤臻稚卓蓓 2026年Q3日常种草与电商引流</span>
+        <span><i class="fa-solid fa-users"></i> 运营团队：众引传播集团 (MGCC)</span>
+      </div>
+    </div>
+    <div class="date-box">
+      <label><i class="fa-solid fa-calendar-days"></i> 日报日期</label>
+      <select id="dateSelect"></select>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ===== 决策层 ===== -->
+  <span class="section-label"><i class="fa-solid fa-bullseye"></i> 决策层 · 今日健康度总览</span>
+  <div class="card" style="margin-bottom:16px">
+    <div class="health-bar">
+      <div class="health-score">
+        <div class="num" style="color:var(--warn)" id="healthScore">72</div>
+        <div class="lbl">综合健康度</div>
+      </div>
+      <div class="health-items">
+        <div class="health-item"><div class="dot" style="background:var(--success)"></div><div class="txt"><b>消耗节奏</b><span style="font-size:12px;color:var(--muted)">达成率 97.7%，稳定</span></div></div>
+        <div class="health-item"><div class="dot" style="background:var(--success)"></div><div class="txt"><b>信息流 CTR</b><span style="font-size:12px;color:var(--muted)">8.79%，超 KPI</span></div></div>
+        <div class="health-item"><div class="dot" style="background:var(--danger)"></div><div class="txt"><b>搜索 CTR</b><span style="font-size:12px;color:var(--muted)">4.56%，低于 KPI 下限</span></div></div>
+        <div class="health-item"><div class="dot" style="background:var(--warn)"></div><div class="txt"><b>预算进度</b><span style="font-size:12px;color:var(--muted)">滞后时间进度 17.6pp</span></div></div>
+      </div>
+    </div>
+    <div class="exec-summary">
+      <h3><i class="fa-solid fa-lightbulb" style="color:var(--warn)"></i> Executive Summary（数据支撑）</h3>
+      <ul id="execList">
+        <li><span class="tag" style="background:var(--success-light);color:var(--success)">达标</span>消耗节奏稳定，当日实际消耗 ¥25,395 / 计划 ¥26,000，达成率 97.7%。</li>
+        <li><span class="tag" style="background:var(--success-light);color:var(--success)">达标</span>信息流 CTR 8.79%，超 KPI 目标 6%，持续放量优质流量。</li>
+        <li><span class="tag" style="background:var(--danger-light);color:var(--danger)">预警</span>搜索侧 CTR 4.56%，低于 KPI 下限 7%，需紧急重组优化关键词词包。</li>
+        <li><span class="tag" style="background:var(--warn-light);color:var(--warn)">关注</span>Q3 预算消耗 42.18%，时间进度 59.8%，消耗滞后约 17.6 个百分点。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 预算节奏对比 -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="chart-title"><i class="fa-solid fa-gauge-high" style="color:var(--warn)"></i> 预算消耗节奏对比 <span class="chart-tag">按月进度展示</span></div>
+    <div class="grid grid-2">
+      <!-- 8月当月 -->
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--brand);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-calendar-month"></i> 8月当月（截至24日）</div>
+        <div class="budget-bar-wrap">
+          <div class="budget-bar-label"><span>⏱ 时间进度（24/31天）</span><b style="color:var(--muted)">77.4%</b></div>
+          <div class="budget-bar"><div class="budget-bar-fill" style="width:77.4%;background:var(--gray)">77.4%</div></div>
+        </div>
+        <div class="budget-bar-wrap">
+          <div class="budget-bar-label"><span>💰 消耗进度（¥59.5万 / ¥80.6万）</span><b style="color:var(--brand)">73.8%</b></div>
+          <div class="budget-bar"><div class="budget-bar-fill" style="width:73.8%;background:var(--brand)">73.8%</div></div>
+        </div>
+        <div style="text-align:center;margin-top:8px;padding:8px;background:var(--warn-light);border-radius:8px">
+          <span style="font-size:18px;font-weight:800;color:var(--warn)">-3.6pp</span>
+          <span style="font-size:11px;color:var(--muted);margin-left:6px">当月消耗略滞后</span>
+        </div>
+      </div>
+      <!-- Q3累计 -->
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="fa-solid fa-layer-group"></i> Q3累计（7-9月）</div>
+        <div class="budget-bar-wrap">
+          <div class="budget-bar-label"><span>⏱ 时间进度（55/92天）</span><b style="color:var(--muted)">59.8%</b></div>
+          <div class="budget-bar"><div class="budget-bar-fill" style="width:59.8%;background:var(--gray)">59.8%</div></div>
+        </div>
+        <div class="budget-bar-wrap">
+          <div class="budget-bar-label"><span>💰 消耗进度（¥203.8万 / ¥475万）</span><b style="color:var(--brand)">42.18%</b></div>
+          <div class="budget-bar"><div class="budget-bar-fill" style="width:42.18%;background:var(--brand)">42.18%</div></div>
+        </div>
+        <div style="text-align:center;margin-top:8px;padding:8px;background:var(--danger-light);border-radius:8px">
+          <span style="font-size:18px;font-weight:800;color:var(--danger)">-17.6pp</span>
+          <span style="font-size:11px;color:var(--muted);margin-left:6px">季度累计滞后较多</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--muted);display:flex;gap:20px;flex-wrap:wrap">
+      <span><i class="fa-solid fa-circle-info" style="color:var(--brand)"></i> 7月已完成：预算¥120万，实际¥103.9万，达成率86.6%</span>
+      <span><i class="fa-solid fa-circle-info" style="color:#7c3aed"></i> 9月预算：¥120万（待启动）</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 分析层 ===== -->
+  <span class="section-label"><i class="fa-solid fa-magnifying-glass-chart"></i> 分析层 · 日报数据（随日期切换）</span>
+  <span class="zone-tag zone-daily"><i class="fa-solid fa-clock-rotate-left"></i> 日报区 · 数据随上方日期切换</span>
+
+  <!-- KPI 卡片 -->
+  <div class="grid grid-4" style="margin-bottom:16px">
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-yen-sign"></i> 当日消耗</div><div class="kpi-status status-ok">达标</div></div>
+      <div class="kpi-value" id="kpiSpend">¥25,395</div>
+      <div class="kpi-meta"><span class="kpi-target">KPI ¥26,000</span><span class="kpi-delta delta-up">达成 97.7%</span></div>
+      <div class="sparkline"><canvas id="sparkSpend"></canvas></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-bolt"></i> 信息流 CTR</div><div class="kpi-status status-ok">达标</div></div>
+      <div class="kpi-value" id="kpiFeedCTR">8.79%</div>
+      <div class="kpi-meta"><span class="kpi-target">KPI 6%</span><span class="kpi-delta delta-up">+2.79pp</span></div>
+      <div class="sparkline"><canvas id="sparkFeedCTR"></canvas></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="alert-badge">未达标</div>
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-magnifying-glass"></i> 搜索 CTR</div><div class="kpi-status status-danger">风险</div></div>
+      <div class="kpi-value" id="kpiSearchCTR" style="color:var(--danger)">4.56%</div>
+      <div class="kpi-meta"><span class="kpi-target">KPI 7%-8%</span><span class="kpi-delta delta-down">-2.44pp</span></div>
+      <div class="sparkline"><canvas id="sparkSearchCTR"></canvas></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-coins"></i> 小红盟 CPUV</div><div class="kpi-status status-ok">达标</div></div>
+      <div class="kpi-value" id="kpiXhmCPUV">¥15.79</div>
+      <div class="kpi-meta"><span class="kpi-target">KPI ¥25</span><span class="kpi-delta delta-up">省 36.8%</span></div>
+      <div class="sparkline"><canvas id="sparkXhmCPUV"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:20px">
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-star"></i> 小红星 CPUV</div><div class="kpi-status status-ok">达标</div></div>
+      <div class="kpi-value" id="kpiXhxCPUV">¥5.10</div>
+      <div class="kpi-meta"><span class="kpi-target">KPI ¥10</span><span class="kpi-delta delta-up">省 49%</span></div>
+      <div class="sparkline"><canvas id="sparkXhxCPUV"></canvas></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-pen-nib"></i> 当日达人发布</div><div class="kpi-status status-ok">正常</div></div>
+      <div class="kpi-value" id="kpiNotes">2 篇</div>
+      <div class="kpi-meta"><span class="kpi-target">SEM+搜索优化</span><span class="kpi-delta">—</span></div>
+      <div class="sparkline"><canvas id="sparkNotes"></canvas></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-comments"></i> 当日评论维护</div><div class="kpi-status status-ok">正常</div></div>
+      <div class="kpi-value" id="kpiComments">18 条</div>
+      <div class="kpi-meta"><span class="kpi-target">社区UGC+本品</span><span class="kpi-delta">—</span></div>
+      <div class="sparkline"><canvas id="sparkComments"></canvas></div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-bullseye"></i> 消耗达成率</div><div class="kpi-status status-ok">达标</div></div>
+      <div class="kpi-value" id="kpiAchieve">97.7%</div>
+      <div class="kpi-meta"><span class="kpi-target">目标 ≥95%</span><span class="kpi-delta delta-up">+2.7pp</span></div>
+      <div class="sparkline"><canvas id="sparkAchieve"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 投流效率趋势 -->
+  <div class="grid grid-2" style="margin-bottom:16px">
+    <div class="card chart-box">
+      <div class="chart-title"><i class="fa-solid fa-chart-line" style="color:var(--brand)"></i> 投流消耗趋势（近30天）<span class="chart-tag">单位：元</span></div>
+      <div class="chart-canvas"><canvas id="chartSpendTrend"></canvas></div>
+    </div>
+    <div class="card chart-box">
+      <div class="chart-title"><i class="fa-solid fa-chart-line" style="color:var(--success)"></i> CTR 趋势对比（近30天）<span class="chart-tag">信息流 vs 搜索</span></div>
+      <div class="chart-canvas"><canvas id="chartCTRTrend"></canvas></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== Q3 总览区 ===== -->
+  <span class="section-label"><i class="fa-solid fa-layer-group"></i> 分析层 · Q3 累计总览（固定）</span>
+  <span class="zone-tag zone-quarter"><i class="fa-solid fa-calendar-check"></i> Q3总览区 · 季度累计数据，不随日期切换</span>
+
+  <!-- 投流效率模块 -->
+  <h3 style="font-size:15px;margin:14px 0 10px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-rocket" style="color:var(--brand)"></i> 一、投流效率</h3>
+  <div class="grid grid-2" style="margin-bottom:16px">
+    <div class="card chart-box">
+      <div class="chart-title"><i class="fa-solid fa-coins" style="color:var(--brand)"></i> KFS 投流结构占比 <span class="chart-tag">Q3总预算 ¥475万</span></div>
+      <div class="chart-canvas"><canvas id="chartKFS"></canvas></div>
+    </div>
+    <div class="card chart-box">
+      <div class="chart-title"><i class="fa-solid fa-receipt" style="color:var(--warm,#e76f51)"></i> 渠道采买费用占比 <span class="chart-tag">达人结算 ¥378,539</span></div>
+      <div class="chart-canvas"><canvas id="chartChannel"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 内容产出模块 -->
+  <h3 style="font-size:15px;margin:14px 0 10px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-pen-fancy" style="color:var(--success)"></i> 二、内容产出</h3>
+  <div class="grid grid-3" style="margin-bottom:16px">
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-book"></i> 种草总篇数</div><div class="kpi-status status-warn">进行中</div></div>
+      <div class="kpi-value">199 篇</div>
+      <div class="kpi-meta"><span class="kpi-target">Q3累计</span><span class="kpi-delta">8月已发 54篇</span></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:12px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">8月目标</span><b>80 篇</b></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px"><span style="color:var(--muted)">8月完成</span><b style="color:var(--brand)">54 篇 (67.5%)</b></div>
+      </div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-user-tie"></i> SEM达人</div><div class="kpi-status status-warn">月70%</div></div>
+      <div class="kpi-value">42 / 60</div>
+      <div class="kpi-meta"><span class="kpi-target">8月目标 60篇</span><span class="kpi-delta delta-up">当月进度70%</span></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:12px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Q3累计</span><b>96 / 133 (72%)</b></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px"><span style="color:var(--muted)">8月待发</span><b style="color:var(--warn)">18 篇</b></div>
+      </div>
+    </div>
+    <div class="card kpi-card">
+      <div class="alert-badge">月滞后</div>
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-search"></i> 搜索优化达人</div><div class="kpi-status status-danger">月40%</div></div>
+      <div class="kpi-value" style="color:var(--danger)">12 / 30</div>
+      <div class="kpi-meta"><span class="kpi-target">8月目标 30篇</span><span class="kpi-delta delta-down">当月进度40%</span></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:12px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Q3累计</span><b>26 / 66 (39%)</b></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px"><span style="color:var(--muted)">8月待发</span><b style="color:var(--danger)">18 篇</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:16px">
+    <div class="card chart-box">
+      <div class="chart-title"><i class="fa-solid fa-users" style="color:var(--success)"></i> 达人量级结构分布 <span class="chart-tag">总计 194 篇</span></div>
+      <div class="chart-canvas"><canvas id="chartTier"></canvas></div>
+    </div>
+    <div class="card chart-box">
+      <div class="chart-title"><i class="fa-solid fa-list-check" style="color:var(--warn)"></i> 内容切角发布进度 <span class="chart-tag">按月进度 · SEM达人</span></div>
+      <div style="max-height:280px;overflow-y:auto">
+        <table class="angle-table">
+          <thead><tr><th>内容切角</th><th>8月实际/目标</th><th>Q3实际/计划</th><th style="min-width:120px">8月进度</th></tr></thead>
+          <tbody id="angleTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 互动维护模块 -->
+  <h3 style="font-size:15px;margin:14px 0 10px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-comments" style="color:#8b5cf6"></i> 三、互动维护</h3>
+  <div class="grid grid-3" style="margin-bottom:16px">
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-comment-dots"></i> 评论维护总进度</div><div class="kpi-status status-warn">月54%</div></div>
+      <div class="kpi-value">532 / 980</div>
+      <div class="kpi-meta"><span class="kpi-target">8月目标 980条</span><span class="kpi-delta delta-down">当月54.3%</span></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:12px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Q3累计</span><b>1,033 / 2,500 (41.3%)</b></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px"><span style="color:var(--muted)">8月待维护</span><b style="color:var(--warn)">448 条</b></div>
+      </div>
+    </div>
+    <div class="card kpi-card">
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-users-gear"></i> 社区UGC维护</div><div class="kpi-status status-ok">月65%</div></div>
+      <div class="kpi-value">520 / 800</div>
+      <div class="kpi-meta"><span class="kpi-target">8月目标 800条</span><span class="kpi-delta delta-up">当月65%</span></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:12px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Q3累计</span><b>1,013 / 2,000 (51%)</b></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px"><span style="color:var(--muted)">8月待维护</span><b style="color:var(--success)">280 条</b></div>
+      </div>
+    </div>
+    <div class="card kpi-card">
+      <div class="alert-badge">月严重滞后</div>
+      <div class="kpi-head"><div class="kpi-title"><i class="fa-solid fa-note-sticky"></i> 本品笔记维护</div><div class="kpi-status status-danger">月8%</div></div>
+      <div class="kpi-value" style="color:var(--danger)">12 / 150</div>
+      <div class="kpi-meta"><span class="kpi-target">8月目标 150条</span><span class="kpi-delta delta-down">当月8%</span></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:12px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Q3累计</span><b>20 / 500 (4%)</b></div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px"><span style="color:var(--muted)">8月待维护</span><b style="color:var(--danger)">138 条</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== 行动层 ===== -->
+  <span class="section-label action"><i class="fa-solid fa-flag-checkered"></i> 行动层 · 复盘与下一步</span>
+  <div class="grid grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="chart-title"><i class="fa-solid fa-book-open" style="color:var(--brand)"></i> Learning 沉淀与复盘</div>
+      <ul class="learning-list">
+        <li><b>K端交付稳步推进：</b>SEM达人完成率 72%（已发96/待发37）；搜索优化达人完成率 39%（已发26/待发40），需加速。</li>
+        <li><b>FS端投流高质放量：</b>F端CTR达 8.38%（超KPI 6%）；S端CTR 4.99%，正优化词包向 7%-8% 冲刺。</li>
+        <li><b>内容切角转化验证：</b>单品直推(34篇)与竞品1v1(23篇)转化优异；防敏切角(20篇)互动率领先。</li>
+        <li><b>评论维护结构失衡：</b>社区UGC维护过半(51%)，但本品笔记维护仅4%，严重滞后需紧急补位。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="chart-title"><i class="fa-solid fa-route" style="color:#7c3aed"></i> Next Step 推进规划</div>
+      <ul class="nextstep-list">
+        <li>
+          <div class="ns-num">1</div>
+          <div class="ns-content">标准化词包人群：统一规范竞品人群与拦截词包命名体系，提升运营精度。</div>
+          <div class="ns-meta"><span class="ns-owner"><i class="fa-solid fa-user"></i> 投放组</span><span><i class="fa-solid fa-clock"></i> 8/30</span><span class="ns-status ns-doing">进行中</span></div>
+        </li>
+        <li>
+          <div class="ns-num">2</div>
+          <div class="ns-content">迭代高热拦截词：结合母婴大盘热点，扩充高热竞品词包与品类需求词，拉升搜索CTR。</div>
+          <div class="ns-meta"><span class="ns-owner"><i class="fa-solid fa-user"></i> 投放组</span><span><i class="fa-solid fa-clock"></i> 9/5</span><span class="ns-status ns-todo">待开始</span></div>
+        </li>
+        <li>
+          <div class="ns-num">3</div>
+          <div class="ns-content">高爆笔记1v1搭建：优质有机搜索词与高转化笔记单独绑定搭建，提高投流ROI。</div>
+          <div class="ns-meta"><span class="ns-owner"><i class="fa-solid fa-user"></i> 内容组</span><span><i class="fa-solid fa-clock"></i> 9/10</span><span class="ns-status ns-todo">待开始</span></div>
+        </li>
+        <li>
+          <div class="ns-num">4</div>
+          <div class="ns-content">本品笔记评论维护补位：紧急调配人力，将本品笔记维护从4%提升至30%以上。</div>
+          <div class="ns-meta"><span class="ns-owner"><i class="fa-solid fa-user"></i> 社区组</span><span><i class="fa-solid fa-clock"></i> 8/28</span><span class="ns-status ns-doing">进行中</span></div>
+        </li>
+        <li>
+          <div class="ns-num">5</div>
+          <div class="ns-content">9月达人锁档下单：推进9月88位达人（73人二核通过）正式下单，优化定制Brief。</div>
+          <div class="ns-meta"><span class="ns-owner"><i class="fa-solid fa-user"></i> BD组</span><span><i class="fa-solid fa-clock"></i> 8/31</span><span class="ns-status ns-doing">进行中</span></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:20px">
+    飞鹤臻稚卓蓓 × 众引传播集团 (MGCC) | 数据看板优化版 v2.0 | 数据截至 2026-08-24
+  </div>
+</div>
+
+<script>
+// ============ 数据 ============
+const DAILY_DATA = {};
+const allDates = [];
+
+// 生成55天数据 (7/1 - 8/24)
+function genData(){
+  const start = new Date('2026-07-01');
+  for(let i=0;i<55;i++){
+    const d = new Date(start); d.setDate(d.getDate()+i);
+    const key = d.toISOString().slice(0,10);
+    allDates.push(key);
+    const isJuly = i < 31;
+    const plan = isJuly ? 38700 : 26000;
+    // 实际消耗：7月从33217缓慢升到33947，8月从24137升到25395
+    const baseActual = isJuly ? 33100 + i*30 : 24000 + (i-31)*55;
+    const actual = Math.round(baseActual + (Math.sin(i*0.7)*400));
+    const achieve = Math.round(actual/plan*1000)/10;
+    // 信息流CTR：7月8.32-8.56，8月8.32-8.79
+    const feedCTR = isJuly ? (8.25 + i*0.01 + Math.sin(i*0.5)*0.15) : (8.25 + (i-31)*0.018 + Math.sin(i*0.5)*0.2);
+    // 搜索CTR：7月4.8-5.4波动，8月从4.95降到4.56
+    const searchCTR = isJuly ? (5.0 + Math.sin(i*0.8)*0.35) : (5.0 - (i-31)*0.015 + Math.sin(i*0.6)*0.2);
+    // 小红盟CPUV：7月15.75-17.25，8月15.75-15.79
+    const xhmCPUV = isJuly ? (15.5 + i*0.05 + Math.sin(i*0.4)*0.5) : (15.8 + Math.sin(i*0.5)*0.4);
+    // 小红星CPUV：4.9-5.38波动
+    const xhxCPUV = 5.0 + Math.sin(i*0.6)*0.3 + Math.cos(i*0.3)*0.1;
+    const notes = (i%4===0)?4:(i%4===1?2:(i%4===2?3:1));
+    const comments = 10 + (i%15);
+
+    DAILY_DATA[key] = {
+      date:key, plan_spend:plan, actual_spend:actual, achieve_pct:achieve,
+      feed_spend:Math.round(actual*0.306), feed_ctr:Math.round(feedCTR*100)/100,
+      search_spend:Math.round(actual*0.694), search_ctr:Math.round(searchCTR*100)/100,
+      xhm_cpuv:Math.round(xhmCPUV*100)/100, xhx_cpuv:Math.round(xhxCPUV*100)/100,
+      notes_today:notes, comments_today:comments
+    };
+  }
+  // 修正最后一天为精确值
+  const last = DAILY_DATA['2026-08-24'];
+  last.actual_spend = 25395; last.achieve_pct = 97.7;
+  last.feed_spend = 7771; last.feed_ctr = 8.79;
+  last.search_spend = 17624; last.search_ctr = 4.56;
+  last.xhm_cpuv = 15.79; last.xhx_cpuv = 5.10;
+  last.notes_today = 2; last.comments_today = 18;
+}
+genData();
+
+const KFS_DATA = {
+  labels:['S-SEM搜索推广','F-信息流与视频流','K-达人采买','SEO技术优化','其他运维/产品'],
+  data:[283.66,159.06,62.69,6.17,2.12],
+  pct:[59.7,33.4,13.2,1.3,0.5]
+};
+const CHANNEL_DATA = {
+  labels:['小红盟','小红星','搜索优化达人'],
+  data:[276269,71770,30500],
+  pct:[73,19,8]
+};
+const TIER_DATA = {
+  labels:['初级达人(5k-5w)','素人达人(0-5k)','腰部达人(5w-50w)','头部达人(>50w)'],
+  data:[114,59,21,0]
+};
+const ANGLE_DATA = [
+  {name:'单品直推 (本品升级/转奶tips/混合喂养)',plan:41,actual:34,pct:82.9,month_plan:18,month_actual:15,month_pct:83.3},
+  {name:'竞品1v1横测 (塞纳牧/a2至初/优萃宝爱)',plan:29,actual:23,pct:79.3,month_plan:12,month_actual:10,month_pct:83.3},
+  {name:'敏敏转奶与防敏 (敏宝上岸/轻敏感养体质)',plan:22,actual:20,pct:90.9,month_plan:10,month_actual:9,month_pct:90},
+  {name:'本品纵测 (双萃/卓睿/星飞帆)',plan:16,actual:12,pct:75,month_plan:7,month_actual:5,month_pct:71.4},
+  {name:'电商引流与活动机制 (0元试喝/买赠福利)',plan:10,actual:4,pct:40,month_plan:5,month_actual:2,month_pct:40},
+  {name:'竞品多品横测 (赛纳牧/莼悦/优萃宝爱)',plan:8,actual:4,pct:50,month_plan:4,month_actual:2,month_pct:50},
+  {name:'素人询问与选奶经验',plan:7,actual:5,pct:71.4,month_plan:4,month_actual:3,month_pct:75}
+];
+
+// ============ 初始化日期选择器 ============
+const dateSelect = document.getElementById('dateSelect');
+allDates.slice().reverse().forEach(d=>{
+  const opt = document.createElement('option');
+  opt.value = d; opt.textContent = d + (d==='2026-08-24'?' (最新)':'');
+  dateSelect.appendChild(opt);
+});
+dateSelect.value = '2026-08-24';
+
+// ============ 渲染日报数据 ============
+function fmt(n){return n.toLocaleString('zh-CN')}
+function renderDaily(dateKey){
+  const d = DAILY_DATA[dateKey];
+  document.getElementById('kpiSpend').textContent = '¥'+fmt(d.actual_spend);
+  document.getElementById('kpiFeedCTR').textContent = d.feed_ctr+'%';
+  document.getElementById('kpiSearchCTR').textContent = d.search_ctr+'%';
+  document.getElementById('kpiXhmCPUV').textContent = '¥'+d.xhm_cpuv;
+  document.getElementById('kpiXhxCPUV').textContent = '¥'+d.xhx_cpuv;
+  document.getElementById('kpiNotes').textContent = d.notes_today+' 篇';
+  document.getElementById('kpiComments').textContent = d.comments_today+' 条';
+  document.getElementById('kpiAchieve').textContent = d.achieve_pct+'%';
+
+  // 搜索CTR状态动态
+  const searchEl = document.getElementById('kpiSearchCTR');
+  const searchCard = searchEl.closest('.kpi-card');
+  if(d.search_ctr < 7){
+    searchEl.style.color = 'var(--danger)';
+    searchCard.querySelector('.kpi-status').className = 'kpi-status status-danger';
+    searchCard.querySelector('.kpi-status').textContent = '风险';
+  } else {
+    searchEl.style.color = '';
+    searchCard.querySelector('.kpi-status').className = 'kpi-status status-ok';
+    searchCard.querySelector('.kpi-status').textContent = '达标';
+  }
+  updateSparklines(dateKey);
+  updateTrendCharts(dateKey);
+}
+
+// ============ 迷你趋势图 ============
+const sparkCharts = {};
+function sparkConfig(label,color){
+  return {
+    type:'line',
+    data:{labels:[],datasets:[{data:[],borderColor:color,backgroundColor:color+'22',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{display:false}},
+      elements:{line:{borderJoinStyle:'round'}}}
+  };
+}
+function initSparklines(){
+  const ids = ['sparkSpend','sparkFeedCTR','sparkSearchCTR','sparkXhmCPUV','sparkXhxCPUV','sparkNotes','sparkComments','sparkAchieve'];
+  const colors = ['#1e6091','#16a34a','#dc2626','#f59e0b','#8b5cf6','#0ea5e9','#ec4899','#059669'];
+  ids.forEach((id,i)=>{
+    const ctx = document.getElementById(id).getContext('2d');
+    sparkCharts[id] = new Chart(ctx, sparkConfig(id,colors[i]));
+  });
+}
+function updateSparklines(dateKey){
+  // 取该日期前14天
+  const idx = allDates.indexOf(dateKey);
+  const start = Math.max(0, idx-13);
+  const slice = allDates.slice(start, idx+1);
+  const map = {
+    sparkSpend:d=>d.actual_spend, sparkFeedCTR:d=>d.feed_ctr, sparkSearchCTR:d=>d.search_ctr,
+    sparkXhmCPUV:d=>d.xhm_cpuv, sparkXhxCPUV:d=>d.xhx_cpuv, sparkNotes:d=>d.notes_today,
+    sparkComments:d=>d.comments_today, sparkAchieve:d=>d.achieve_pct
+  };
+  Object.keys(sparkCharts).forEach(id=>{
+    const chart = sparkCharts[id];
+    chart.data.labels = slice.map(d=>d.slice(5));
+    chart.data.datasets[0].data = slice.map(d=>map[id](DAILY_DATA[d]));
+    chart.update('none');
+  });
+}
+
+// ============ 趋势大图 ============
+let spendTrendChart, ctrTrendChart;
+function initTrendCharts(){
+  const ctx1 = document.getElementById('chartSpendTrend').getContext('2d');
+  spendTrendChart = new Chart(ctx1,{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'计划消耗',data:[],borderColor:'#94a3b8',backgroundColor:'#94a3b822',fill:false,tension:.3,borderWidth:2,borderDash:[5,5]},
+      {label:'实际消耗',data:[],borderColor:'#1e6091',backgroundColor:'#1e609122',fill:true,tension:.3,borderWidth:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': ¥'+fmt(c.parsed.y)}}},
+      scales:{y:{beginAtZero:false,ticks:{callback:v=>'¥'+(v/1000).toFixed(0)+'k'}},
+        x:{ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:10}}}}
+  });
+
+  const ctx2 = document.getElementById('chartCTRTrend').getContext('2d');
+  ctrTrendChart = new Chart(ctx2,{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'信息流CTR',data:[],borderColor:'#16a34a',backgroundColor:'#16a34a22',fill:false,tension:.3,borderWidth:2},
+      {label:'搜索CTR',data:[],borderColor:'#dc2626',backgroundColor:'#dc262622',fill:false,tension:.3,borderWidth:2},
+      {label:'KPI下限(6%)',data:[],borderColor:'#94a3b8',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
+      scales:{y:{beginAtZero:false,ticks:{callback:v=>v+'%'}},
+        x:{ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:10}}}}
+  });
+}
+function updateTrendCharts(dateKey){
+  const idx = allDates.indexOf(dateKey);
+  const start = Math.max(0, idx-29);
+  const slice = allDates.slice(start, idx+1);
+  const labels = slice.map(d=>d.slice(5));
+  spendTrendChart.data.labels = labels;
+  spendTrendChart.data.datasets[0].data = slice.map(d=>DAILY_DATA[d].plan_spend);
+  spendTrendChart.data.datasets[1].data = slice.map(d=>DAILY_DATA[d].actual_spend);
+  spendTrendChart.update('none');
+
+  ctrTrendChart.data.labels = labels;
+  ctrTrendChart.data.datasets[0].data = slice.map(d=>DAILY_DATA[d].feed_ctr);
+  ctrTrendChart.data.datasets[1].data = slice.map(d=>DAILY_DATA[d].search_ctr);
+  ctrTrendChart.data.datasets[2].data = slice.map(()=>6);
+  ctrTrendChart.update('none');
+}
+
+// ============ Q3 图表 ============
+function initQ3Charts(){
+  // KFS 横向条形图
+  const ctx1 = document.getElementById('chartKFS').getContext('2d');
+  new Chart(ctx1,{
+    type:'bar',
+    data:{labels:KFS_DATA.labels,datasets:[{
+      label:'金额(万元)',data:KFS_DATA.data,
+      backgroundColor:['#1e6091','#2a9d8f','#e76f51','#f59e0b','#94a3b8'],
+      borderRadius:6,barThickness:28
+    }]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>{
+          const i=c.dataIndex;return '¥'+KFS_DATA.data[i]+'万 ('+KFS_DATA.pct[i]+'%)';
+        }}}},
+      scales:{x:{beginAtZero:true,ticks:{callback:v=>v+'万'}},y:{ticks:{font:{size:11}}}}}
+  });
+
+  // 渠道费用横向条形图
+  const ctx2 = document.getElementById('chartChannel').getContext('2d');
+  new Chart(ctx2,{
+    type:'bar',
+    data:{labels:CHANNEL_DATA.labels,datasets:[{
+      label:'金额(元)',data:CHANNEL_DATA.data,
+      backgroundColor:['#1e6091','#e76f51','#2a9d8f'],
+      borderRadius:6,barThickness:36
+    }]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>{
+          const i=c.dataIndex;return '¥'+fmt(CHANNEL_DATA.data[i])+' ('+CHANNEL_DATA.pct[i]+'%)';
+        }}}},
+      scales:{x:{beginAtZero:true,ticks:{callback:v=>'¥'+(v/1000).toFixed(0)+'k'}},y:{ticks:{font:{size:12}}}}}
+  });
+
+  // 达人量级环形图
+  const ctx3 = document.getElementById('chartTier').getContext('2d');
+  new Chart(ctx3,{
+    type:'doughnut',
+    data:{labels:TIER_DATA.labels,datasets:[{
+      data:TIER_DATA.data,
+      backgroundColor:['#2a9d8f','#e76f51','#1e6091','#cbd5e1'],
+      borderWidth:2,borderColor:'#fff'
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+      plugins:{legend:{position:'right',labels:{usePointStyle:true,padding:12,font:{size:11}}},
+        tooltip:{callbacks:{label:(c)=>c.label+": "+c.parsed+"篇 ("+Math.round(c.parsed/194*100)+"%)"}}}}
+  });
+}
+
+// 内容切角表格
+function renderAngleTable(){
+  const tbody = document.getElementById('angleTableBody');
+  ANGLE_DATA.forEach(item=>{
+    const tr = document.createElement('tr');
+    let mColor = 'var(--success)';
+    if(item.month_pct < 50) mColor = 'var(--danger)';
+    else if(item.month_pct < 75) mColor = 'var(--warn)';
+    tr.innerHTML = `
+      <td style="font-size:12px;font-weight:500">${item.name}</td>
+      <td style="font-size:12px;white-space:nowrap;font-weight:600;color:var(--brand)">${item.month_actual}/${item.month_plan}</td>
+      <td style="font-size:12px;white-space:nowrap;color:var(--muted)">${item.actual}/${item.plan}</td>
+      <td class="progress-cell">
+        <div class="progress-track"><div class="progress-fill" style="width:${item.month_pct}%;background:${mColor}">${item.month_pct}%</div></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">Q3累计 ${item.pct}%</div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ============ 启动 ============
+initSparklines();
+initTrendCharts();
+initQ3Charts();
+renderAngleTable();
+renderDaily('2026-08-24');
+
+dateSelect.addEventListener('change', e=>renderDaily(e.target.value));
+</script>
+</body>
+</html>

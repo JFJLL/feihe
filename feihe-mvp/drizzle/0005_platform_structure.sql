@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS `integrations` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`provider` text NOT NULL,`name` text NOT NULL,`base_url` text DEFAULT '' NOT NULL,`enabled` integer DEFAULT 1 NOT NULL,`config_json` text DEFAULT '{}' NOT NULL,`status` text DEFAULT '未检测' NOT NULL,`last_tested_at` text,`last_error` text DEFAULT '' NOT NULL,`created_at` text NOT NULL,`updated_at` text NOT NULL);
+CREATE TABLE IF NOT EXISTS `review_rules` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`name` text NOT NULL,`keywords` text DEFAULT '' NOT NULL,`sentiment` text DEFAULT '中立' NOT NULL,`category` text DEFAULT '自定义规则' NOT NULL,`action` text DEFAULT '保留观察' NOT NULL,`priority` integer DEFAULT 100 NOT NULL,`enabled` integer DEFAULT 1 NOT NULL,`created_at` text NOT NULL,`updated_at` text NOT NULL);
+CREATE TABLE IF NOT EXISTS `saved_reports` (`id` text PRIMARY KEY NOT NULL,`project_id` text NOT NULL,`title` text NOT NULL,`period_start` text,`period_end` text,`status` text DEFAULT '草稿' NOT NULL,`summary_json` text DEFAULT '{}' NOT NULL,`created_by` text DEFAULT '' NOT NULL,`created_at` text NOT NULL,`updated_at` text NOT NULL);
+ALTER TABLE `data_sources` ADD COLUMN `mapping_json` text DEFAULT '{}' NOT NULL;
+ALTER TABLE `data_sources` ADD COLUMN `last_error` text DEFAULT '' NOT NULL;
+CREATE INDEX IF NOT EXISTS `idx_integrations_project_provider` ON `integrations` (`project_id`,`provider`);
+CREATE INDEX IF NOT EXISTS `idx_review_rules_project_priority` ON `review_rules` (`project_id`,`priority`);
+CREATE INDEX IF NOT EXISTS `idx_saved_reports_project_updated` ON `saved_reports` (`project_id`,`updated_at`);

@@ -1,0 +1,31 @@
+# Local credentials
+config.json
+token.txt
+
+# Large data files and raw sheets
+data/
+outputs/
+*.xlsx
+*.xls
+*.csv
+
+# Runtime output & temp folders
+.codex_work/
+.codegraph/
+error_log.txt
+*.log
+
+# Build artifacts & dependencies
+node_modules/
+feihe-mvp/node_modules/
+feihe-mvp/.next/
+feihe-mvp/.wrangler/
+feihe-mvp/dist/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS metadata
+.DS_Store
+Thumbs.db
