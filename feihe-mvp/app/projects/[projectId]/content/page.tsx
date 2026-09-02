@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 
 import { use } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useProjectData } from '../../../../lib/hooks/use-project-data';
+import { useProjectData, daysAgo } from '../../../../lib/hooks/use-project-data';
 import { ContentWorkspace } from '../../../../features/content/ContentWorkspace';
 import { LoadingState } from '../../../../components/ui/LoadingState';
 import { ErrorState } from '../../../../components/ui/ErrorState';
@@ -14,19 +14,16 @@ export default function ContentPage({
 }) {
   const { projectId } = use(params);
   const searchParams = useSearchParams();
-  const fromQuery = searchParams.get('from') || undefined;
-  const toQuery = searchParams.get('to') || undefined;
-  const sourceQuery = searchParams.get('source') || undefined;
+  const from = searchParams.get('from') || daysAgo(90);
+  const to = searchParams.get('to') || new Date().toISOString().slice(0, 10);
+  const source = searchParams.get('source') || '';
 
   const {
     dashboard,
     loading,
     error,
     refresh,
-    from,
-    to,
-    source,
-  } = useProjectData(projectId, fromQuery, toQuery, sourceQuery);
+  } = useProjectData(projectId, { from, to, source });
 
   if (loading && !dashboard) return <LoadingState text="正在加载内容资产与发布数据…" />;
   if (error && !dashboard) return <ErrorState error={error} onRetry={refresh} />;

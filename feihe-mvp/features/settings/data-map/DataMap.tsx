@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useMemo } from 'react';
 import type { MapData, Keystone, Row } from '../../../lib/types/project';
@@ -21,7 +21,7 @@ export function DataMap({
   projectId: string;
   data: MapData;
   reload: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [tab, setTab] = useState('overview');
   const [editor, setEditor] = useState<{ entity: string; row: Row } | null>(null);
@@ -51,11 +51,11 @@ export function DataMap({
           ...editor.row,
         }),
       });
-      toast(entityLabels[editor.entity] + '已保存');
+      toast(entityLabels[editor.entity] + '已保存', 'success');
       setEditor(null);
       await reload();
     } catch (e) {
-      toast(e instanceof Error ? e.message : '保存失败');
+      toast(e instanceof Error ? e.message : '保存失败', 'error');
     } finally {
       setBusy('');
     }
@@ -74,10 +74,10 @@ export function DataMap({
           name: row.name,
         }),
       });
-      toast('已删除');
+      toast('已删除', 'success');
       await reload();
     } catch (e) {
-      toast(e instanceof Error ? e.message : '删除失败');
+      toast(e instanceof Error ? e.message : '删除失败', 'error');
     }
   }
 
@@ -88,10 +88,10 @@ export function DataMap({
         method: 'POST',
         body: JSON.stringify({ action: 'probe_keystone', projectId }),
       });
-      toast('Keystone：' + result.status);
+      toast('Keystone：' + result.status, 'success');
       await reload();
     } catch (e) {
-      toast(e instanceof Error ? e.message : '检测失败');
+      toast(e instanceof Error ? e.message : '检测失败', 'error');
     } finally {
       setBusy('');
     }

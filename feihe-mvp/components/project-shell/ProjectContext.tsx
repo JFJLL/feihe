@@ -1,7 +1,7 @@
-﻿'use client';
+'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { Project, Workspace } from '../../lib/types/project';
+import type { Project, Source, Workspace } from '../../lib/types/project';
 import { api } from '../../lib/hooks/use-project-data';
 
 export type ToastMessage = {
@@ -12,10 +12,13 @@ export type ToastMessage = {
 
 type ProjectContextType = {
   projectId: string;
+  workspace: Workspace | null;
   projects: Project[];
+  sources: Source[];
   currentProject: Project | null;
   loading: boolean;
   error: string | null;
+  refreshWorkspace: () => Promise<void>;
   refreshProjects: () => Promise<void>;
   toasts: ToastMessage[];
   showToast: (text: string, type?: 'success' | 'error' | 'info') => void;
@@ -26,22 +29,22 @@ const ProjectContext = createContext<ProjectContextType | null>(null);
 
 export function ProjectProvider({
   projectId,
-  initialProjects = [],
+  initialWorkspace = null,
   children,
 }: {
   projectId: string;
-  initialProjects?: Project[];
+  initialWorkspace?: Workspace | null;
   children: React.ReactNode;
 }) {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
-  const [loading, setLoading] = useState(initialProjects.length === 0);
+  const [workspace, setWorkspace] = useState<Workspace | null>(initialWorkspace);
+  const [loading, setLoading] = useState(!initialWorkspace);
   const [error, setError] = useState<string | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  const refreshProjects = useCallback(async () => {
+  const refreshWorkspace = useCallback(async () => {
     try {
       const data = await api<Workspace>('/api/projects');
-      setProjects(data.projects || []);
+      setWorkspace(data);
       setError(null);
     } catch (err) {
       const msg = err instanceof Error ? err.message : '项目列表加载失败';
@@ -53,10 +56,10 @@ export function ProjectProvider({
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      void refreshProjects();
+      void refreshWorkspace();
     }, 0);
     return () => clearTimeout(timer);
-  }, [refreshProjects]);
+  }, [refreshWorkspace]);
 
   const showToast = useCallback((text: string, type: 'success' | 'error' | 'info' = 'success') => {
     const id = 'toast-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);
@@ -70,17 +73,22 @@ export function ProjectProvider({
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
+  const projects = workspace?.projects || [];
+  const sources = workspace?.sources || [];
   const currentProject = projects.find((p) => p.id === projectId) || null;
 
   return (
     <ProjectContext.Provider
       value={{
         projectId,
+        workspace,
         projects,
+        sources,
         currentProject,
         loading,
         error,
-        refreshProjects,
+        refreshWorkspace,
+        refreshProjects: refreshWorkspace,
         toasts,
         showToast,
         removeToast,

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import type { MapData, Plan, Spec, Row } from '../../../lib/types/project';
@@ -14,7 +14,7 @@ export function AgentStudio({
   projectId: string;
   map: MapData;
   reload: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [prompt, setPrompt] = useState(
     '生成 2026年8月1日-2026年8月31日的启萃项目经营、发布进度、评论口碑与舆情看板，按决策、分析、行动三层展开。'
@@ -38,10 +38,10 @@ export function AgentStudio({
       });
       setPlan(result.plan);
       setSpec(result.spec);
-      toast('报告已生成 · ' + result.engine);
+      toast('报告已生成 · ' + result.engine, 'success');
       await reload();
     } catch (e) {
-      toast(e instanceof Error ? e.message : '生成失败');
+      toast(e instanceof Error ? e.message : '生成失败', 'error');
     } finally {
       setBusy('');
     }
@@ -65,10 +65,10 @@ export function AgentStudio({
       const result = (await response.json()) as { ok?: boolean; id?: string; error?: string };
       if (!response.ok || !result.ok) throw new Error(result.error || '上传失败');
       setAssets((x) => (result.id ? [...x, result.id] : x));
-      toast(file.name + ' 已加入本次任务');
+      toast(file.name + ' 已加入本次任务', 'success');
       await reload();
     } catch (e) {
-      toast(e instanceof Error ? e.message : '上传失败');
+      toast(e instanceof Error ? e.message : '上传失败', 'error');
     } finally {
       setBusy('');
     }
@@ -83,7 +83,7 @@ export function AgentStudio({
       setPlan(null);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e) {
-      toast(e instanceof Error ? e.message : '报告读取失败');
+      toast(e instanceof Error ? e.message : '报告读取失败', 'error');
     }
   }
 

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import type { Dashboard, GrowthSettings, Rules, Note } from '../../lib/types/project';
@@ -41,7 +41,7 @@ export function KeywordRadar({
   save: (next: GrowthSettings, message: string) => Promise<void>;
   openNote?: (id: string) => void;
   projectId: string;
-  toast?: (v: string) => void;
+  toast?: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [dataView, setDataView] = useState<'project' | 'lingxi'>('project');
   const [draft, setDraft] = useState('');

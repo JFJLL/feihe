@@ -1,7 +1,8 @@
-﻿'use client';
+'use client';
 
 import type { Dashboard, Project, Ops, SavedReport } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
+import { LoadingState } from '../../components/ui/LoadingState';
 import { compact, cnTime, num, pct, api } from '../../lib/hooks/use-project-data';
 
 export function DynamicReports({
@@ -13,18 +14,27 @@ export function DynamicReports({
   toast,
 }: {
   data: Dashboard;
-  project: Project;
+  project: Project | null;
   ops: Ops;
   projectId: string;
   onDone: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
+  if (!project) {
+    return (
+      <div className="report-page">
+        <LoadingState text="正在获取项目资料以生成复盘…" />
+      </div>
+    );
+  }
+
   const m = data.metrics;
   const a = m.actions || {};
   const topTopic = data.analytics.topics[0];
   const topBrand = data.analytics.brands[0];
 
   async function saveReport() {
+    if (!project) return;
     try {
       await api('/api/resources', {
         method: 'POST',
@@ -36,10 +46,10 @@ export function DynamicReports({
           summary: { metrics: m, topTopic, topBrand },
         }),
       });
-      toast('当前复盘已保存');
+      toast('当前复盘已保存', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
+      toast(err instanceof Error ? err.message : '保存失败', 'error');
     }
   }
 
@@ -50,10 +60,10 @@ export function DynamicReports({
         method: 'POST',
         body: JSON.stringify({ action: 'report_delete', projectId, id }),
       });
-      toast('复盘已删除');
+      toast('复盘已删除', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '删除失败');
+      toast(err instanceof Error ? err.message : '删除失败', 'error');
     }
   }
 
@@ -71,10 +81,10 @@ export function DynamicReports({
           summary: item.summaryJson,
         }),
       });
-      toast('复盘已设为' + status);
+      toast('复盘已设为' + status, 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '更新失败');
+      toast(err instanceof Error ? err.message : '更新失败', 'error');
     }
   }
 
@@ -83,7 +93,7 @@ export function DynamicReports({
       <section className="report-cover">
         <div>
           <small>
-            {project.brand.toUpperCase()} · {project.spu.toUpperCase()} · DYNAMIC REVIEW
+            {(project.brand || 'PROJECT').toUpperCase()} · {(project.spu || project.name).toUpperCase()} · DYNAMIC REVIEW
           </small>
           <h2>{project.name}动态经营复盘</h2>
           <p>

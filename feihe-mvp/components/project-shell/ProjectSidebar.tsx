@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -23,8 +23,8 @@ export function ProjectSidebar({
   const connectionStatus = error
     ? { text: '项目资料加载失败', ok: false }
     : loading && !currentProject
-    ? { text: '正在连接项目服务…', ok: true }
-    : { text: '数据服务正常', ok: true };
+    ? { text: '正在连接项目资料…', ok: true }
+    : { text: '项目资料已连接', ok: true };
 
   return (
     <aside className="sidebar" aria-label="项目主要导航">

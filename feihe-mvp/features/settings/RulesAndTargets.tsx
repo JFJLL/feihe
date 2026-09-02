@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import type { Dashboard, Ops, Pipeline, ReviewRule, Goals } from '../../lib/types/project';
@@ -17,7 +17,7 @@ export function RulesAndTargets({
   ops: Ops;
   projectId: string;
   onDone: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [goals, setGoals] = useState<Goals>(ops.settings.goals);
   const [rules, setRules] = useState(ops.settings.rules);
@@ -48,10 +48,10 @@ export function RulesAndTargets({
         method: 'POST',
         body: JSON.stringify({ projectId, rules, acceptance, pipelines, goals }),
       });
-      toast('项目目标与规则已保存');
+      toast('项目目标与规则已保存', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
+      toast(err instanceof Error ? err.message : '保存失败', 'error');
     } finally {
       setLoading(false);
     }
@@ -63,10 +63,10 @@ export function RulesAndTargets({
         method: 'POST',
         body: JSON.stringify({ action, projectId, ...payload }),
       });
-      toast(message);
+      toast(message, 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '操作失败');
+      toast(err instanceof Error ? err.message : '操作失败', 'error');
     }
   }
 

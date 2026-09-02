@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
@@ -108,11 +108,11 @@ export function InsightsWorkspace({
       {tab === 'report' && (
         <DynamicReports
           data={dashboard}
-          project={project || { id: projectId, name: projectId, brand: '飞鹤', spu: projectId, category: '社媒项目', description: '', status: '进行中', color: '#2563eb', updatedAt: '', noteCount: 0, reportableCount: 0 }}
+          project={project}
           ops={ops}
           projectId={projectId}
           onDone={onRefresh}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 
@@ -121,7 +121,7 @@ export function InsightsWorkspace({
           projectId={projectId}
           map={map}
           reload={reloadMap}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 

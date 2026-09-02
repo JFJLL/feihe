@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
@@ -48,7 +48,7 @@ export function SettingsWorkspace({
   onRefresh: () => Promise<void>;
 }) {
   const [tab, setTab] = useProjectTab('profile', ['profile', 'rules', 'data-sources', 'integrations', 'data-map']);
-  const { currentProject, projects, refreshProjects, showToast } = useProject();
+  const { currentProject, workspace, refreshWorkspace, showToast } = useProject();
 
   const [map, setMap] = useState<MapData>(emptyMap);
 
@@ -70,7 +70,7 @@ export function SettingsWorkspace({
   };
 
   const handleProfileOrSourceUpdate = async () => {
-    await refreshProjects();
+    await refreshWorkspace();
     await onRefresh();
   };
 
@@ -100,24 +100,10 @@ export function SettingsWorkspace({
 
       {tab === 'profile' && (
         <ProjectProfile
-          project={
-            currentProject || {
-              id: projectId,
-              name: projectId,
-              brand: '飞鹤',
-              spu: projectId,
-              category: '社媒项目',
-              description: '',
-              status: '进行中',
-              color: '#2563eb',
-              updatedAt: '',
-              noteCount: 0,
-              reportableCount: 0,
-            }
-          }
+          project={currentProject}
           projectId={projectId}
           onDone={handleProfileOrSourceUpdate}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 
@@ -127,23 +113,23 @@ export function SettingsWorkspace({
           ops={ops}
           projectId={projectId}
           onDone={onRefresh}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 
       {tab === 'data-sources' && (
         <SettingsDataSources
           projectId={projectId}
-          workspace={{ projects, sources: [] }}
+          workspace={workspace}
           onDone={handleProfileOrSourceUpdate}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 
       {tab === 'integrations' && (
         <SettingsIntegrations
           projectId={projectId}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 
@@ -152,7 +138,7 @@ export function SettingsWorkspace({
           projectId={projectId}
           data={map}
           reload={reloadMap}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
     </div>

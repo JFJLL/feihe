@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Dashboard, Ops } from '../types/project';
 
 export const emptyAnalytics = {
@@ -130,25 +130,32 @@ export async function api<T>(url: string, options?: RequestInit): Promise<T> {
   return data as T;
 }
 
+export type ProjectDataFilters = {
+  from?: string;
+  to?: string;
+  source?: string;
+};
+
 export function useProjectData(
   projectId: string,
-  initialFrom?: string,
-  initialTo?: string,
-  initialSource?: string
+  filters?: ProjectDataFilters
 ) {
   const [dashboard, setDashboard] = useState<Dashboard | null>(null);
   const [ops, setOps] = useState<Ops | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [from, setFrom] = useState(initialFrom || daysAgo(90));
-  const [to, setTo] = useState(initialTo || new Date().toISOString().slice(0, 10));
-  const [source, setSource] = useState(initialSource || '');
+
+  const from = filters?.from;
+  const to = filters?.to;
+  const source = filters?.source;
 
   const refresh = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const query = new URLSearchParams({ from, to, projectId });
+      const query = new URLSearchParams({ projectId });
+      if (from) query.set('from', from);
+      if (to) query.set('to', to);
       if (source) query.set('source', source);
       const [dashRes, opsRes] = await Promise.all([
         api<Dashboard>('/api/dashboard?' + query.toString()),
@@ -176,12 +183,6 @@ export function useProjectData(
     ops,
     loading,
     error,
-    from,
-    setFrom,
-    to,
-    setTo,
-    source,
-    setSource,
     refresh,
   };
 }

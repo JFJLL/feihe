@@ -1,12 +1,56 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import type { Project } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
+import { LoadingState } from '../../components/ui/LoadingState';
+import { ErrorState } from '../../components/ui/ErrorState';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 
 export function ProjectProfile({
-  project: initialProject,
+  project,
+  projectId,
+  onDone,
+  toast,
+}: {
+  project: Project | null;
+  projectId: string;
+  onDone: () => Promise<void>;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
+}) {
+  const { error, refreshWorkspace } = useProject();
+
+  if (!project) {
+    if (error) {
+      return (
+        <article className="panel">
+          <PanelHead eyebrow="PROJECT PROFILE" title="项目基本资料" />
+          <ErrorState error={error} onRetry={refreshWorkspace} />
+        </article>
+      );
+    }
+    return (
+      <article className="panel">
+        <PanelHead eyebrow="PROJECT PROFILE" title="项目基本资料" />
+        <LoadingState text="正在获取项目资料…" />
+      </article>
+    );
+  }
+
+  return (
+    <ProjectProfileForm
+      key={project.id + '-' + project.updatedAt}
+      project={project}
+      projectId={projectId}
+      onDone={onDone}
+      toast={toast}
+    />
+  );
+}
+
+function ProjectProfileForm({
+  project,
   projectId,
   onDone,
   toast,
@@ -14,9 +58,9 @@ export function ProjectProfile({
   project: Project;
   projectId: string;
   onDone: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
-  const [project, setProject] = useState(initialProject);
+  const [form, setForm] = useState<Project>(project);
   const [busy, setBusy] = useState(false);
 
   async function update() {
@@ -24,12 +68,12 @@ export function ProjectProfile({
     try {
       await api('/api/projects', {
         method: 'POST',
-        body: JSON.stringify({ action: 'update', projectId, ...project }),
+        body: JSON.stringify({ action: 'update', projectId, ...form }),
       });
-      toast('项目资料已更新');
+      toast('项目资料已更新', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
+      toast(err instanceof Error ? err.message : '保存失败', 'error');
     } finally {
       setBusy(false);
     }
@@ -42,36 +86,36 @@ export function ProjectProfile({
         <label>
           项目名称
           <input
-            value={project.name}
-            onChange={(e) => setProject({ ...project, name: e.target.value })}
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
         </label>
         <label>
           SPU
           <input
-            value={project.spu}
-            onChange={(e) => setProject({ ...project, spu: e.target.value })}
+            value={form.spu}
+            onChange={(e) => setForm({ ...form, spu: e.target.value })}
           />
         </label>
         <label>
           品牌
           <input
-            value={project.brand}
-            onChange={(e) => setProject({ ...project, brand: e.target.value })}
+            value={form.brand}
+            onChange={(e) => setForm({ ...form, brand: e.target.value })}
           />
         </label>
         <label>
           品类
           <input
-            value={project.category}
-            onChange={(e) => setProject({ ...project, category: e.target.value })}
+            value={form.category}
+            onChange={(e) => setForm({ ...form, category: e.target.value })}
           />
         </label>
         <label>
           状态
           <select
-            value={project.status}
-            onChange={(e) => setProject({ ...project, status: e.target.value })}
+            value={form.status}
+            onChange={(e) => setForm({ ...form, status: e.target.value })}
           >
             <option>进行中</option>
             <option>筹备中</option>
@@ -82,15 +126,15 @@ export function ProjectProfile({
           识别色
           <input
             type="color"
-            value={project.color || '#2563eb'}
-            onChange={(e) => setProject({ ...project, color: e.target.value })}
+            value={form.color || '#2563eb'}
+            onChange={(e) => setForm({ ...form, color: e.target.value })}
           />
         </label>
         <label className="wide-field">
           项目说明
           <textarea
-            value={project.description || ''}
-            onChange={(e) => setProject({ ...project, description: e.target.value })}
+            value={form.description || ''}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
         </label>
       </div>

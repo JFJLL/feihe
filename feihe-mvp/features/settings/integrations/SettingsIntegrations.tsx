@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import type { Integration, IntegrationData } from '../../../lib/types/project';
@@ -29,7 +29,7 @@ export function SettingsIntegrations({
   toast,
 }: {
   projectId: string;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [tools, setTools] = useState<IntegrationData>({
     integrations: [],
@@ -61,11 +61,11 @@ export function SettingsIntegrations({
         method: 'POST',
         body: JSON.stringify({ action: 'save', projectId, ...integration }),
       });
-      toast('工具集成已保存');
+      toast('工具集成已保存', 'success');
       setIntegration(emptyIntegration);
       await load();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
+      toast(err instanceof Error ? err.message : '保存失败', 'error');
     } finally {
       setBusy('');
     }
@@ -78,10 +78,10 @@ export function SettingsIntegrations({
         method: 'POST',
         body: JSON.stringify({ action: 'test', projectId: item.projectId, id: item.id }),
       });
-      toast(item.name + ' 连接正常');
+      toast(item.name + ' 连接正常', 'success');
       await load();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '检测失败');
+      toast(err instanceof Error ? err.message : '检测失败', 'error');
     } finally {
       setBusy('');
     }
@@ -95,10 +95,10 @@ export function SettingsIntegrations({
         method: 'POST',
         body: JSON.stringify({ action: 'delete', projectId: item.projectId, id: item.id }),
       });
-      toast('工具集成已删除');
+      toast('工具集成已删除', 'success');
       await load();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '删除失败');
+      toast(err instanceof Error ? err.message : '删除失败', 'error');
     } finally {
       setBusy('');
     }

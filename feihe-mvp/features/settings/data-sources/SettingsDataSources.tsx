@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import type { Source, Workspace } from '../../../lib/types/project';
@@ -25,7 +25,7 @@ export function SettingsDataSources({
   projectId: string;
   workspace: Workspace | null;
   onDone: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [source, setSource] = useState<Record<string, unknown>>(emptySource);
   const [busy, setBusy] = useState('');
@@ -40,11 +40,11 @@ export function SettingsDataSources({
         method: 'POST',
         body: JSON.stringify({ action: 'save_source', projectId, ...source }),
       });
-      toast('数据源已保存');
+      toast('数据源已保存', 'success');
       setSource(emptySource);
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
+      toast(err instanceof Error ? err.message : '保存失败', 'error');
     } finally {
       setBusy('');
     }
@@ -57,10 +57,10 @@ export function SettingsDataSources({
         method: 'POST',
         body: JSON.stringify({ ...item, projectId: item.projectId, sourceId: item.id }),
       });
-      toast(item.name + ' 同步完成');
+      toast(item.name + ' 同步完成', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '同步失败');
+      toast(err instanceof Error ? err.message : '同步失败', 'error');
     } finally {
       setBusy('');
     }
@@ -74,10 +74,10 @@ export function SettingsDataSources({
         method: 'POST',
         body: JSON.stringify({ action: 'remove_source', projectId: item.projectId, id: item.id }),
       });
-      toast('数据源已移除');
+      toast('数据源已移除', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '移除失败');
+      toast(err instanceof Error ? err.message : '移除失败', 'error');
     } finally {
       setBusy('');
     }

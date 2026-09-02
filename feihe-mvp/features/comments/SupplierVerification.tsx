@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -46,7 +46,7 @@ export function SupplierVerification({
   runResult: string;
   projectId: string;
   onDone: () => Promise<void>;
-  toast: (v: string) => void;
+  toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const s = data.metrics.supplier || {};
   const [filter, setFilter] = useState('');
@@ -61,10 +61,10 @@ export function SupplierVerification({
         method: 'POST',
         body: JSON.stringify({ action: 'supplier_delete', projectId, id }),
       });
-      toast('记录已删除');
+      toast('记录已删除', 'success');
       await onDone();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '删除失败');
+      toast(err instanceof Error ? err.message : '删除失败', 'error');
     }
   }
 
