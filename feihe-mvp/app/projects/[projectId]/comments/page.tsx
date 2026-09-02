@@ -1,7 +1,6 @@
 ﻿'use client';
 
 import { use } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useProjectData } from '../../../../lib/hooks/use-project-data';
 import { CommentsWorkspace } from '../../../../features/comments/CommentsWorkspace';
 import { LoadingState } from '../../../../components/ui/LoadingState';
@@ -13,9 +12,7 @@ export default function CommentsPage({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = use(params);
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab') || 'acceptance';
-  const { dashboard, ops, loading, error, refresh, setToast } = useProjectData(projectId);
+  const { dashboard, ops, loading, error, refresh } = useProjectData(projectId);
 
   if (loading && !dashboard) return <LoadingState text="正在加载评论验收与处置数据…" />;
   if (error && !dashboard) return <ErrorState error={error} onRetry={refresh} />;
@@ -26,9 +23,7 @@ export default function CommentsPage({
       projectId={projectId}
       dashboard={dashboard}
       ops={ops}
-      initialTab={tab}
       onRefresh={refresh}
-      toast={setToast}
     />
   );
 }

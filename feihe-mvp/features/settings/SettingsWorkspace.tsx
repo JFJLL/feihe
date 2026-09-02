@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import { useState, useEffect } from 'react';
-import type { Dashboard, Project, Ops, Workspace, MapData } from '../../lib/types/project';
+import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { SectionTabs } from '../../components/ui/SectionTabs';
 import { ProjectProfile } from './ProjectProfile';
@@ -9,6 +9,8 @@ import { RulesAndTargets } from './RulesAndTargets';
 import { SettingsDataSources } from './data-sources/SettingsDataSources';
 import { SettingsIntegrations } from './integrations/SettingsIntegrations';
 import { DataMap } from './data-map/DataMap';
+import { useProjectTab } from '../../lib/hooks/useProjectTab';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 
 const emptyMap: MapData = {
@@ -35,33 +37,28 @@ const emptyMap: MapData = {
 
 export function SettingsWorkspace({
   projectId,
-  project,
   dashboard,
   ops,
-  workspace,
-  initialTab = 'profile',
   onRefresh,
-  toast,
 }: {
   projectId: string;
-  project: Project;
+  project?: Project | null;
   dashboard: Dashboard;
   ops: Ops;
-  workspace: Workspace | null;
-  initialTab?: string;
   onRefresh: () => Promise<void>;
-  toast: (msg: string) => void;
 }) {
-  const [tab, setTab] = useState(initialTab);
+  const [tab, setTab] = useProjectTab('profile', ['profile', 'rules', 'data-sources', 'integrations', 'data-map']);
+  const { currentProject, projects, refreshProjects, showToast } = useProject();
+
   const [map, setMap] = useState<MapData>(emptyMap);
 
   useEffect(() => {
     if (tab === 'data-map') {
       api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId))
         .then((m) => setMap(m))
-        .catch((e) => toast(e instanceof Error ? e.message : '数据地图加载失败'));
+        .catch((e) => showToast(e instanceof Error ? e.message : '数据地图加载失败', 'error'));
     }
-  }, [tab, projectId, toast]);
+  }, [tab, projectId, showToast]);
 
   const reloadMap = async () => {
     try {
@@ -70,6 +67,11 @@ export function SettingsWorkspace({
     } catch {
       // ignore
     }
+  };
+
+  const handleProfileOrSourceUpdate = async () => {
+    await refreshProjects();
+    await onRefresh();
   };
 
   const tabs: Array<[string, string, string]> = [
@@ -98,10 +100,24 @@ export function SettingsWorkspace({
 
       {tab === 'profile' && (
         <ProjectProfile
-          project={project}
+          project={
+            currentProject || {
+              id: projectId,
+              name: projectId,
+              brand: '飞鹤',
+              spu: projectId,
+              category: '社媒项目',
+              description: '',
+              status: '进行中',
+              color: '#2563eb',
+              updatedAt: '',
+              noteCount: 0,
+              reportableCount: 0,
+            }
+          }
           projectId={projectId}
-          onDone={onRefresh}
-          toast={toast}
+          onDone={handleProfileOrSourceUpdate}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
 
@@ -111,21 +127,24 @@ export function SettingsWorkspace({
           ops={ops}
           projectId={projectId}
           onDone={onRefresh}
-          toast={toast}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
 
       {tab === 'data-sources' && (
         <SettingsDataSources
           projectId={projectId}
-          workspace={workspace}
-          onDone={onRefresh}
-          toast={toast}
+          workspace={{ projects, sources: [] }}
+          onDone={handleProfileOrSourceUpdate}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
 
       {tab === 'integrations' && (
-        <SettingsIntegrations projectId={projectId} toast={toast} />
+        <SettingsIntegrations
+          projectId={projectId}
+          toast={(msg) => showToast(msg, 'success')}
+        />
       )}
 
       {tab === 'data-map' && (
@@ -133,7 +152,7 @@ export function SettingsWorkspace({
           projectId={projectId}
           data={map}
           reload={reloadMap}
-          toast={toast}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
     </div>

@@ -9,6 +9,9 @@ import { CompetitorAnalysis } from './CompetitorAnalysis';
 import { ContentAnalysis } from './ContentAnalysis';
 import { DynamicReports } from './DynamicReports';
 import { AgentStudio } from './ai-report/AgentStudio';
+import { useProjectTab } from '../../lib/hooks/useProjectTab';
+import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { api, pct } from '../../lib/hooks/use-project-data';
 
 const emptyMap: MapData = {
@@ -38,37 +41,38 @@ export function InsightsWorkspace({
   project,
   dashboard,
   ops,
-  initialTab = 'voice',
   onRefresh,
-  toast,
-  openNote,
 }: {
   projectId: string;
-  project: Project;
+  project: Project | null;
   dashboard: Dashboard;
   ops: Ops;
-  initialTab?: string;
   onRefresh: () => Promise<void>;
-  toast: (msg: string) => void;
-  openNote?: (id: string) => void;
 }) {
-  const [tab, setTab] = useState(initialTab);
+  const [tab, setTab] = useProjectTab('voice', ['voice', 'competitor', 'content', 'report', 'ai']);
+  const { showToast } = useProject();
+  const { openNote, renderDrawer } = useNoteDetail({
+    projectId,
+    onRefresh,
+    toast: showToast,
+  });
+
   const [map, setMap] = useState<MapData>(emptyMap);
 
   useEffect(() => {
     if (tab === 'ai') {
       api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId))
         .then((m) => setMap(m))
-        .catch((e) => toast(e instanceof Error ? e.message : '数据地图加载失败'));
+        .catch((e) => showToast(e instanceof Error ? e.message : '数据地图加载失败', 'error'));
     }
-  }, [tab, projectId, toast]);
+  }, [tab, projectId, showToast]);
 
   const reloadMap = async () => {
     try {
       const m = await api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId));
       setMap(m);
     } catch {
-      // toast in parent
+      // ignore
     }
   };
 
@@ -104,11 +108,11 @@ export function InsightsWorkspace({
       {tab === 'report' && (
         <DynamicReports
           data={dashboard}
-          project={project}
+          project={project || { id: projectId, name: projectId, brand: '飞鹤', spu: projectId, category: '社媒项目', description: '', status: '进行中', color: '#2563eb', updatedAt: '', noteCount: 0, reportableCount: 0 }}
           ops={ops}
           projectId={projectId}
           onDone={onRefresh}
-          toast={toast}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
 
@@ -117,9 +121,11 @@ export function InsightsWorkspace({
           projectId={projectId}
           map={map}
           reload={reloadMap}
-          toast={toast}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
+
+      {renderDrawer()}
     </div>
   );
 }

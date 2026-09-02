@@ -1,46 +1,62 @@
 ﻿'use client';
 
-import { useState } from 'react';
-import type { Dashboard, Note, NoteDetail } from '../../lib/types/project';
+import { useState, useCallback } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import type { Dashboard } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { SectionTabs } from '../../components/ui/SectionTabs';
 import { NotesPool } from './NotesPool';
 import { PublicationLinkage } from './PublicationLinkage';
 import { ContentPerformance } from './ContentPerformance';
-import { DetailDrawer } from './DetailDrawer';
+import { useProjectTab } from '../../lib/hooks/useProjectTab';
+import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 
 export function ContentWorkspace({
   projectId,
   dashboard,
-  initialTab = 'pool',
   onRefresh,
-  toast,
   from,
   to,
-  setFrom,
-  setTo,
   source,
-  setSource,
 }: {
   projectId: string;
   dashboard: Dashboard;
-  initialTab?: string;
   onRefresh: () => Promise<void>;
-  toast: (msg: string) => void;
   from: string;
   to: string;
-  setFrom: (v: string) => void;
-  setTo: (v: string) => void;
   source: string;
-  setSource: (v: string) => void;
 }) {
-  const [tab, setTab] = useState(initialTab);
+  const [tab, setTab] = useProjectTab('pool', ['pool', 'linkage', 'performance']);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { showToast } = useProject();
+  const { openNote, renderDrawer } = useNoteDetail({
+    projectId,
+    onRefresh,
+    toast: showToast,
+  });
+
   const [noteIds, setNoteIds] = useState('');
   const [keywords, setKeywords] = useState('启萃,飞鹤奶粉');
   const [loading, setLoading] = useState(false);
   const [runResult, setRunResult] = useState('');
-  const [detail, setDetail] = useState<NoteDetail | null>(null);
+
+  const updateFilters = useCallback(
+    (nextFrom: string, nextTo: string, nextSource: string) => {
+      const p = new URLSearchParams(searchParams.toString());
+      if (nextFrom) p.set('from', nextFrom);
+      else p.delete('from');
+      if (nextTo) p.set('to', nextTo);
+      else p.delete('to');
+      if (nextSource) p.set('source', nextSource);
+      else p.delete('source');
+      router.push(pathname + '?' + p.toString());
+    },
+    [searchParams, router, pathname]
+  );
 
   async function runFetch(ids = noteIds) {
     setLoading(true);
@@ -53,19 +69,27 @@ export function ContentWorkspace({
           body: JSON.stringify({ noteIds: ids, projectId }),
         }
       );
-      toast('全量评论抓取与增量比对完成');
+      showToast('全量评论抓取与增量比对完成', 'success');
       setRunResult(
         result.results
           .map((x) =>
             x.ok
-              ? x.noteId + '：主评论 ' + x.fetchedL1 + '，楼中楼 ' + x.fetchedL2 + '，合计 ' + x.total + '，' + x.status
+              ? x.noteId +
+                '：主评论 ' +
+                x.fetchedL1 +
+                '，楼中楼 ' +
+                x.fetchedL2 +
+                '，合计 ' +
+                x.total +
+                '，' +
+                x.status
               : x.noteId + '：失败 · ' + x.error
           )
           .join('\n')
       );
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '抓取失败');
+      showToast(err instanceof Error ? err.message : '抓取失败', 'error');
     } finally {
       setLoading(false);
     }
@@ -79,11 +103,11 @@ export function ContentWorkspace({
         method: 'POST',
         body: JSON.stringify({ keywords, startDate: from, endDate: to, maxPages: 5, projectId }),
       });
-      toast('关键词扫描完成');
+      showToast('关键词扫描完成', 'success');
       setRunResult('已扫描并入库 ' + result.count + ' 篇笔记，可在内容池中筛选并批量抓取。');
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '扫描失败');
+      showToast(err instanceof Error ? err.message : '扫描失败', 'error');
     } finally {
       setLoading(false);
     }
@@ -101,57 +125,13 @@ export function ContentWorkspace({
         method: 'POST',
         body: JSON.stringify({ kind, rows, projectId }),
       });
-      toast('表格导入完成');
+      showToast('表格导入完成', 'success');
       setRunResult('导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条。');
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '导入失败');
+      showToast(err instanceof Error ? err.message : '导入失败', 'error');
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function openNote(id: string) {
-    try {
-      const data = await api<NoteDetail>(
-        '/api/notes/detail?id=' + encodeURIComponent(id) + '&projectId=' + encodeURIComponent(projectId)
-      );
-      setDetail(data);
-    } catch (err) {
-      toast(err instanceof Error ? err.message : '明细加载失败');
-    }
-  }
-
-  async function saveNote(note: Note) {
-    try {
-      await api('/api/resources', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'note_update',
-          projectId,
-          ...(note as unknown as Record<string, unknown>),
-        }),
-      });
-      toast('笔记资料已更新');
-      setDetail(null);
-      await onRefresh();
-    } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
-    }
-  }
-
-  async function removeNote(note: Note) {
-    if (!confirm('确认将此笔记及当前项目内的评论快照移出项目？')) return;
-    try {
-      await api('/api/resources', {
-        method: 'POST',
-        body: JSON.stringify({ action: 'note_delete', projectId, id: note.id }),
-      });
-      toast('笔记已移出当前项目');
-      setDetail(null);
-      await onRefresh();
-    } catch (err) {
-      toast(err instanceof Error ? err.message : '删除失败');
     }
   }
 
@@ -172,13 +152,24 @@ export function ContentWorkspace({
         <div className="range-actions">
           <label>
             从
-            <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => updateFilters(e.target.value, to, source)}
+            />
           </label>
           <label>
             至
-            <input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => updateFilters(from, e.target.value, source)}
+            />
           </label>
-          <select value={source} onChange={(e) => setSource(e.target.value)}>
+          <select
+            value={source}
+            onChange={(e) => updateFilters(from, to, e.target.value)}
+          >
             <option value="">全部来源</option>
             <option value="owned">自有笔记</option>
             <option value="keyword_scan">关键词扫描</option>
@@ -214,15 +205,7 @@ export function ContentWorkspace({
         <ContentPerformance data={dashboard} openNote={openNote} />
       )}
 
-      {detail && (
-        <DetailDrawer
-          key={detail.note?.id || 'detail'}
-          detail={detail}
-          close={() => setDetail(null)}
-          saveNote={saveNote}
-          removeNote={removeNote}
-        />
-      )}
+      {renderDrawer()}
     </div>
   );
 }

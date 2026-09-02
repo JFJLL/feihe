@@ -7,24 +7,24 @@ import { SectionTabs } from '../../components/ui/SectionTabs';
 import { AcceptanceDelivery } from './AcceptanceDelivery';
 import { SupplierVerification } from './SupplierVerification';
 import { RiskTriage } from './RiskTriage';
+import { useProjectTab } from '../../lib/hooks/useProjectTab';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { api, num } from '../../lib/hooks/use-project-data';
 
 export function CommentsWorkspace({
   projectId,
   dashboard,
   ops,
-  initialTab = 'acceptance',
   onRefresh,
-  toast,
 }: {
   projectId: string;
   dashboard: Dashboard;
   ops: Ops;
-  initialTab?: string;
   onRefresh: () => Promise<void>;
-  toast: (msg: string) => void;
 }) {
-  const [tab, setTab] = useState(initialTab);
+  const [tab, setTab] = useProjectTab('acceptance', ['acceptance', 'supplier', 'risk']);
+  const { showToast } = useProject();
+
   const [loading, setLoading] = useState(false);
   const [runResult, setRunResult] = useState('');
 
@@ -45,11 +45,11 @@ export function CommentsWorkspace({
         method: 'POST',
         body: JSON.stringify({ kind, rows, projectId }),
       });
-      toast('表格导入完成');
+      showToast('表格导入完成', 'success');
       setRunResult('导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条。');
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '导入失败');
+      showToast(err instanceof Error ? err.message : '导入失败', 'error');
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export function CommentsWorkspace({
         method: 'POST',
         body: JSON.stringify({ projectId }),
       });
-      toast('供应商外显核验完成');
+      showToast('供应商外显核验完成', 'success');
       setRunResult(
         '原文一致 ' +
           result.summary.exact +
@@ -79,7 +79,7 @@ export function CommentsWorkspace({
       );
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '核验失败');
+      showToast(err instanceof Error ? err.message : '核验失败', 'error');
     } finally {
       setLoading(false);
     }
@@ -91,10 +91,10 @@ export function CommentsWorkspace({
         method: 'POST',
         body: JSON.stringify({ id: item.id, status: '已处理', method, projectId }),
       });
-      toast('处置状态已更新');
+      showToast('处置状态已更新', 'success');
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '操作失败');
+      showToast(err instanceof Error ? err.message : '操作失败', 'error');
     }
   }
 
@@ -105,10 +105,10 @@ export function CommentsWorkspace({
         method: 'POST',
         body: JSON.stringify({ action: 'comment_delete', projectId, id: item.id }),
       });
-      toast('关键评论已移除');
+      showToast('关键评论已移除', 'success');
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '移除失败');
+      showToast(err instanceof Error ? err.message : '移除失败', 'error');
     }
   }
 
@@ -151,7 +151,7 @@ export function CommentsWorkspace({
           runResult={runResult}
           projectId={projectId}
           onDone={onRefresh}
-          toast={toast}
+          toast={(msg) => showToast(msg, 'success')}
         />
       )}
 

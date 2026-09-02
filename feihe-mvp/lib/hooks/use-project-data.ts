@@ -1,5 +1,5 @@
 ﻿import { useCallback, useEffect, useState } from 'react';
-import type { Dashboard, Ops, Workspace, Project } from '../types/project';
+import type { Dashboard, Ops } from '../types/project';
 
 export const emptyAnalytics = {
   trend: [],
@@ -48,13 +48,13 @@ export const emptyOps: Ops = {
   reports: [],
   settings: {
     rules: {
-      brands: ['飞鹤', '启萃', '卓睿'],
-      competitors: ['爱他美', '合生元', '派星', 'A2', '至初', '美素', '金领冠'],
-      positiveWords: ['好吸收', '长肉', '适应', '抵抗力'],
-      negativeWords: ['不好', '过敏', '便秘', '胀气', '吐奶'],
-      questionWords: ['吗', '怎么', '多少'],
-      sellingWords: ['出售', '加微'],
-      irrelevantWords: ['互赞', '打卡'],
+      brands: [],
+      competitors: [],
+      positiveWords: [],
+      negativeWords: [],
+      questionWords: [],
+      sellingWords: [],
+      irrelevantWords: [],
       deleteCompetitorMentions: true,
     },
     acceptance: {
@@ -83,20 +83,6 @@ export const emptyOps: Ops = {
       },
     },
   },
-};
-
-export const fallbackProject: Project = {
-  id: 'qicui',
-  name: '启萃评论与声量项目',
-  spu: '启萃',
-  brand: '飞鹤',
-  category: '婴幼儿奶粉',
-  description: '评论执行、口碑舆情与本竞品监测',
-  status: '进行中',
-  color: '#1769d5',
-  updatedAt: '',
-  noteCount: 0,
-  reportableCount: 0,
 };
 
 export const pct = (value: number | string | null | undefined) =>
@@ -144,16 +130,19 @@ export async function api<T>(url: string, options?: RequestInit): Promise<T> {
   return data as T;
 }
 
-export function useProjectData(projectId: string, initialFrom?: string, initialTo?: string) {
+export function useProjectData(
+  projectId: string,
+  initialFrom?: string,
+  initialTo?: string,
+  initialSource?: string
+) {
   const [dashboard, setDashboard] = useState<Dashboard | null>(null);
   const [ops, setOps] = useState<Ops | null>(null);
-  const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [toast, setToast] = useState('');
   const [from, setFrom] = useState(initialFrom || daysAgo(90));
   const [to, setTo] = useState(initialTo || new Date().toISOString().slice(0, 10));
-  const [source, setSource] = useState('');
+  const [source, setSource] = useState(initialSource || '');
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -161,14 +150,12 @@ export function useProjectData(projectId: string, initialFrom?: string, initialT
     try {
       const query = new URLSearchParams({ from, to, projectId });
       if (source) query.set('source', source);
-      const [dashRes, opsRes, projRes] = await Promise.all([
+      const [dashRes, opsRes] = await Promise.all([
         api<Dashboard>('/api/dashboard?' + query.toString()),
         api<Ops>('/api/ops?projectId=' + encodeURIComponent(projectId)),
-        api<Workspace>('/api/projects'),
       ]);
       setDashboard(dashRes);
       setOps(opsRes);
-      setWorkspace(projRes);
     } catch (err) {
       const msg = err instanceof Error ? err.message : '数据加载失败';
       setError(msg);
@@ -184,24 +171,11 @@ export function useProjectData(projectId: string, initialFrom?: string, initialT
     return () => clearTimeout(timer);
   }, [refresh]);
 
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(''), 3200);
-    return () => clearTimeout(timer);
-  }, [toast]);
-
-  const currentProject =
-    workspace?.projects.find((p) => p.id === projectId) || fallbackProject;
-
   return {
     dashboard,
     ops,
-    workspace,
-    currentProject,
     loading,
     error,
-    toast,
-    setToast,
     from,
     setFrom,
     to,

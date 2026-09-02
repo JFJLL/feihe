@@ -14,20 +14,19 @@ export default function ContentPage({
 }) {
   const { projectId } = use(params);
   const searchParams = useSearchParams();
-  const tab = searchParams.get('tab') || 'pool';
+  const fromQuery = searchParams.get('from') || undefined;
+  const toQuery = searchParams.get('to') || undefined;
+  const sourceQuery = searchParams.get('source') || undefined;
+
   const {
     dashboard,
     loading,
     error,
     refresh,
-    setToast,
     from,
     to,
-    setFrom,
-    setTo,
     source,
-    setSource,
-  } = useProjectData(projectId);
+  } = useProjectData(projectId, fromQuery, toQuery, sourceQuery);
 
   if (loading && !dashboard) return <LoadingState text="正在加载内容资产与发布数据…" />;
   if (error && !dashboard) return <ErrorState error={error} onRetry={refresh} />;
@@ -37,15 +36,10 @@ export default function ContentPage({
     <ContentWorkspace
       projectId={projectId}
       dashboard={dashboard}
-      initialTab={tab}
       onRefresh={refresh}
-      toast={setToast}
       from={from}
       to={to}
-      setFrom={setFrom}
-      setTo={setTo}
       source={source}
-      setSource={setSource}
     />
   );
 }

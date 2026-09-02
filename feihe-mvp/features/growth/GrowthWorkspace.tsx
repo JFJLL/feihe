@@ -1,32 +1,35 @@
 ﻿'use client';
 
-import { useState } from 'react';
 import type { Dashboard, Ops, GrowthSettings } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { SectionTabs } from '../../components/ui/SectionTabs';
 import { KeywordRadar } from './KeywordRadar';
 import { InspirationLibrary } from './InspirationLibrary';
 import { SeedEngine } from './SeedEngine';
+import { useProjectTab } from '../../lib/hooks/useProjectTab';
+import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 
 export function GrowthWorkspace({
   projectId,
   dashboard,
   ops,
-  initialTab = 'radar',
   onRefresh,
-  toast,
-  openNote,
 }: {
   projectId: string;
   dashboard: Dashboard;
   ops: Ops;
-  initialTab?: string;
   onRefresh: () => Promise<void>;
-  toast: (msg: string) => void;
-  openNote?: (id: string) => void;
 }) {
-  const [tab, setTab] = useState(initialTab);
+  const [tab, setTab] = useProjectTab('radar', ['radar', 'inspiration', 'seed']);
+  const { showToast } = useProject();
+  const { openNote, renderDrawer } = useNoteDetail({
+    projectId,
+    onRefresh,
+    toast: showToast,
+  });
+
   const growth = ops.settings.growth;
 
   async function saveGrowth(next: GrowthSettings, message: string) {
@@ -35,10 +38,10 @@ export function GrowthWorkspace({
         method: 'POST',
         body: JSON.stringify({ projectId, growth: next }),
       });
-      toast(message);
+      showToast(message, 'success');
       await onRefresh();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败');
+      showToast(err instanceof Error ? err.message : '保存失败', 'error');
     }
   }
 
@@ -81,7 +84,7 @@ export function GrowthWorkspace({
           save={saveGrowth}
           openNote={openNote}
           projectId={projectId}
-          toast={toast}
+          toast={showToast}
         />
       )}
 
@@ -103,6 +106,8 @@ export function GrowthWorkspace({
           projectId={projectId}
         />
       )}
+
+      {renderDrawer()}
     </div>
   );
 }

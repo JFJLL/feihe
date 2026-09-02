@@ -1,9 +1,31 @@
 ﻿'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { ProjectProvider, useProject } from './ProjectContext';
 import { ProjectSidebar } from './ProjectSidebar';
-import type { Workspace } from '../../lib/types/project';
-import { api, fallbackProject } from '../../lib/hooks/use-project-data';
+import { FeedbackToastContainer } from '../ui/FeedbackToast';
+
+function ProjectShellContent({
+  userName,
+  signedIn,
+  children,
+}: {
+  userName: string;
+  signedIn: boolean;
+  children: React.ReactNode;
+}) {
+  const { toasts, removeToast } = useProject();
+
+  return (
+    <div className="app-shell">
+      <ProjectSidebar userName={userName} signedIn={signedIn} />
+      <main className="main">
+        {children}
+        <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
+      </main>
+    </div>
+  );
+}
 
 export function ProjectShell({
   projectId,
@@ -16,36 +38,11 @@ export function ProjectShell({
   signedIn?: boolean;
   children: React.ReactNode;
 }) {
-  const [workspace, setWorkspace] = useState<Workspace>({
-    projects: [fallbackProject],
-    sources: [],
-  });
-
-  useEffect(() => {
-    let cancelled = false;
-    api<Workspace>('/api/projects')
-      .then((data) => {
-        if (!cancelled) setWorkspace(data);
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [projectId]);
-
-  const currentProject =
-    workspace.projects.find((p) => p.id === projectId) || fallbackProject;
-
   return (
-    <div className="app-shell">
-      <ProjectSidebar
-        projectId={projectId}
-        projects={workspace.projects}
-        userName={userName}
-        signedIn={signedIn}
-        syncedAt={currentProject.updatedAt}
-      />
-      <main className="main">{children}</main>
-    </div>
+    <ProjectProvider projectId={projectId}>
+      <ProjectShellContent userName={userName} signedIn={signedIn}>
+        {children}
+      </ProjectShellContent>
+    </ProjectProvider>
   );
 }

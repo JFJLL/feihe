@@ -1,4 +1,4 @@
-export type NavItem = {
+﻿export type NavItem = {
   id: string;
   path: string;
   number: string;
@@ -102,18 +102,19 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
   map: { module: 'settings', tab: 'data-map' },
 };
 
-export function resolveProjectRoute(projectId: string, section?: string, tab?: string): string {
+export function resolveProjectRoute(projectId: string, section?: string, searchParams?: URLSearchParams): string {
   const base = '/projects/' + encodeURIComponent(projectId);
-  if (!section) return base;
-  const cleanSection = section.replace(/^\//, '');
-  if (!cleanSection) return base;
-  const qs = tab ? '?tab=' + encodeURIComponent(tab) : '';
-  return base + '/' + cleanSection + qs;
+  const cleanSection = section ? section.replace(/^\//, '') : '';
+  const pathPart = cleanSection ? base + '/' + cleanSection : base;
+  const qs = searchParams && searchParams.toString() ? '?' + searchParams.toString() : '';
+  return pathPart + qs;
 }
 
 export function getLegacyRedirectUrl(projectId: string, section: string, searchParams?: URLSearchParams): string {
   const mapping = LEGACY_SECTION_REDIRECTS[section.toLowerCase()];
   const targetModule = mapping ? mapping.module : '';
-  const tab = searchParams?.get('tab') || mapping?.tab;
-  return resolveProjectRoute(projectId, targetModule, tab);
+  const params = new URLSearchParams(searchParams?.toString() || '');
+  const tab = params.get('tab') || mapping?.tab;
+  if (tab) params.set('tab', tab);
+  return resolveProjectRoute(projectId, targetModule, params);
 }

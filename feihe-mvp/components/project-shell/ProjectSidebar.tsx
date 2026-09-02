@@ -3,27 +3,28 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PROJECT_NAV_ITEMS } from '../../lib/navigation/project-navigation';
-import type { Project } from '../../lib/types/project';
 import { ProjectSwitcher } from './ProjectSwitcher';
+import { useProject } from './ProjectContext';
 import { cnTime } from '../../lib/hooks/use-project-data';
 
 export function ProjectSidebar({
-  projectId,
-  projects,
   userName,
   signedIn = true,
-  syncedAt,
 }: {
-  projectId: string;
-  projects: Project[];
   userName: string;
   signedIn?: boolean;
-  syncedAt?: string;
 }) {
   const pathname = usePathname();
+  const { projectId, projects, currentProject, loading, error } = useProject();
 
   const match = pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
   const activeSegment = match ? match[1] || '' : '';
+
+  const connectionStatus = error
+    ? { text: '项目资料加载失败', ok: false }
+    : loading && !currentProject
+    ? { text: '正在连接项目服务…', ok: true }
+    : { text: '数据服务正常', ok: true };
 
   return (
     <aside className="sidebar" aria-label="项目主要导航">
@@ -39,7 +40,12 @@ export function ProjectSidebar({
         </div>
       </div>
 
-      <ProjectSwitcher projects={projects} currentProjectId={projectId} />
+      <ProjectSwitcher
+        projects={projects}
+        currentProjectId={projectId}
+        currentProject={currentProject}
+        loading={loading}
+      />
 
       <nav className="project-main-nav" aria-label="项目模块">
         {PROJECT_NAV_ITEMS.map((item) => {
@@ -67,10 +73,11 @@ export function ProjectSidebar({
       </nav>
 
       <div className="sidebar-foot">
-        <i></i> 服务与数据连接正常
+        <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {userName} · {signedIn ? '已登录' : '本地预览'} · {cnTime(syncedAt)}
+          {userName} · {signedIn ? '已登录' : '本地预览'} ·{' '}
+          {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '实时连接'}
         </small>
       </div>
     </aside>

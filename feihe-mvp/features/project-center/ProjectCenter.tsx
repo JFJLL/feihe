@@ -3,7 +3,10 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import type { Project, Workspace } from '../../lib/types/project';
-import { api, fallbackProject } from '../../lib/hooks/use-project-data';
+import { LoadingState } from '../../components/ui/LoadingState';
+import { ErrorState } from '../../components/ui/ErrorState';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { api } from '../../lib/hooks/use-project-data';
 
 const emptyProject = {
   name: '',
@@ -16,18 +19,24 @@ const emptyProject = {
 };
 
 export function ProjectCenter({ userName }: { userName: string }) {
-  const [workspace, setWorkspace] = useState<Workspace>({ projects: [], sources: [] });
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState('');
   const [showEditor, setShowEditor] = useState(false);
   const [editingProject, setEditingProject] = useState<Record<string, unknown>>(emptyProject);
 
   const refresh = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
       const nextWorkspace = await api<Workspace>('/api/projects');
       setWorkspace(nextWorkspace);
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : '项目列表加载失败');
+      setError(err instanceof Error ? err.message : '项目列表加载失败');
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -85,7 +94,7 @@ export function ProjectCenter({ userName }: { userName: string }) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  const projects = workspace.projects.length ? workspace.projects : [fallbackProject];
+  const projects = workspace?.projects || [];
   const activeCount = projects.filter((p) => p.status === '进行中').length;
 
   return (
@@ -219,66 +228,92 @@ export function ProjectCenter({ userName }: { userName: string }) {
           </section>
         )}
 
-        <section className="portfolio-grid">
-          {projects.map((item) => (
-            <article className="portfolio-card" key={item.id}>
-              <div className="portfolio-accent" style={{ background: item.color || '#2563eb' }} />
-              <div className="portfolio-card-head">
-                <span
-                  className={'project-state ' + (item.status === '已结束' ? 'closed' : item.status === '筹备中' ? 'pending' : '')}
-                >
-                  <i />
-                  {item.status || '进行中'}
-                </span>
-                <div className="secondary-actions">
-                  <button onClick={() => openEdit(item)}>编辑</button>
-                  {item.id !== 'qicui' && (
-                    <button
-                      className="danger-link"
-                      disabled={busy === item.id}
-                      onClick={() => removeProject(item)}
-                    >
-                      删除
-                    </button>
-                  )}
+        {loading && !workspace ? (
+          <LoadingState text="正在获取项目列表…" />
+        ) : error && !workspace ? (
+          <ErrorState error={error} onRetry={refresh} />
+        ) : !projects.length ? (
+          <EmptyState
+            title="暂无项目"
+            text="点击右上角“创建项目”建立您的第一个品牌/SPU工作区。"
+            action={
+              <button className="primary" onClick={() => openEdit()}>
+                ＋ 创建项目
+              </button>
+            }
+          />
+        ) : (
+          <section className="portfolio-grid">
+            {projects.map((item) => (
+              <article className="portfolio-card" key={item.id}>
+                <div className="portfolio-accent" style={{ background: item.color || '#2563eb' }} />
+                <div className="portfolio-card-head">
+                  <span
+                    className={
+                      'project-state ' +
+                      (item.status === '已结束'
+                        ? 'closed'
+                        : item.status === '筹备中'
+                        ? 'pending'
+                        : '')
+                    }
+                  >
+                    <i />
+                    {item.status || '进行中'}
+                  </span>
+                  <div className="secondary-actions">
+                    <button onClick={() => openEdit(item)}>编辑</button>
+                    {item.id !== 'qicui' && (
+                      <button
+                        className="danger-link"
+                        disabled={busy === item.id}
+                        onClick={() => removeProject(item)}
+                      >
+                        删除
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="project-identity">
-                <b style={{ background: item.color || '#2563eb' }}>
-                  {(item.brand || item.name || '飞').slice(0, 1)}
-                </b>
-                <div>
-                  <h2>{item.name}</h2>
-                  <p>
-                    {item.brand || '飞鹤'} / {item.spu || item.id}
-                  </p>
+                <div className="project-identity">
+                  <b style={{ background: item.color || '#2563eb' }}>
+                    {(item.brand || item.name || '项').slice(0, 1)}
+                  </b>
+                  <div>
+                    <h2>{item.name}</h2>
+                    <p>
+                      {item.brand || '未设置品牌'} / {item.spu || item.id}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <p className="project-description">
-                {item.description || (item.category || '社媒项目') + '的数据接入、评论审查与增长分析工作区。'}
-              </p>
-              <dl className="portfolio-metrics">
-                <div>
-                  <dt>笔记资产</dt>
-                  <dd>{item.noteCount || 0}</dd>
+                <p className="project-description">
+                  {item.description ||
+                    (item.category || '社媒项目') + '的数据接入、评论审查与增长分析工作区。'}
+                </p>
+                <dl className="portfolio-metrics">
+                  <div>
+                    <dt>笔记资产</dt>
+                    <dd>{item.noteCount || 0}</dd>
+                  </div>
+                  <div>
+                    <dt>可汇报</dt>
+                    <dd>{item.reportableCount || 0}</dd>
+                  </div>
+                  <div>
+                    <dt>数据源</dt>
+                    <dd>
+                      {(workspace?.sources || []).filter((s) => s.projectId === item.id).length}
+                    </dd>
+                  </div>
+                </dl>
+                <div className="portfolio-actions">
+                  <Link className="enter-project-btn" href={'/projects/' + encodeURIComponent(item.id)}>
+                    进入项目 <span>→</span>
+                  </Link>
                 </div>
-                <div>
-                  <dt>可汇报</dt>
-                  <dd>{item.reportableCount || 0}</dd>
-                </div>
-                <div>
-                  <dt>数据源</dt>
-                  <dd>{workspace.sources.filter((s) => s.projectId === item.id).length}</dd>
-                </div>
-              </dl>
-              <div className="portfolio-actions">
-                <Link className="enter-project-btn" href={'/projects/' + encodeURIComponent(item.id)}>
-                  进入项目 <span>→</span>
-                </Link>
-              </div>
-            </article>
-          ))}
-        </section>
+              </article>
+            ))}
+          </section>
+        )}
       </main>
     </div>
   );
