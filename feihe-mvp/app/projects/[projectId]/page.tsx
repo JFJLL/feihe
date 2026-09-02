@@ -1,4 +1,31 @@
-import { getChatGPTUser } from '../../chatgpt-auth';
-import DashboardClient from '../../dashboard-client';
-export const dynamic='force-dynamic';
-export default async function ProjectPage({params}:{params:Promise<{projectId:string}>}){const [{projectId},user]=await Promise.all([params,getChatGPTUser()]);return <DashboardClient initialProjectId={projectId} initialSection="cockpit" userName={user?.displayName||'内部用户'} signedIn={Boolean(user)}/>}
+﻿'use client';
+
+import { use } from 'react';
+import { useProjectData } from '../../../lib/hooks/use-project-data';
+import { OverviewWorkspace } from '../../../features/overview/OverviewWorkspace';
+import { LoadingState } from '../../../components/ui/LoadingState';
+import { ErrorState } from '../../../components/ui/ErrorState';
+
+export default function OverviewPage({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
+  const { projectId } = use(params);
+  const { dashboard, ops, currentProject, loading, error, refresh } = useProjectData(projectId);
+
+  if (loading && !dashboard) return <LoadingState text="正在加载项目总览数据…" />;
+  if (error && !dashboard) return <ErrorState error={error} onRetry={refresh} />;
+  if (!dashboard || !ops) return <LoadingState text="正在初始化…" />;
+
+  return (
+    <OverviewWorkspace
+      projectId={projectId}
+      project={currentProject}
+      dashboard={dashboard}
+      ops={ops}
+      loading={loading}
+      onRefresh={refresh}
+    />
+  );
+}

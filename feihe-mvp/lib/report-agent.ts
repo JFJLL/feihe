@@ -1,4 +1,4 @@
-export type MetricDefinition = { id:string; key:string; name:string; unit:string; aggregation:string; aliasesJson:string };
+﻿export type MetricDefinition = { id:string; key:string; name:string; unit:string; aggregation:string; aliasesJson:string };
 export type QueryPlan = {
   intent:string; period:{start:string;end:string}; requestedMetrics:string[]; requestedDimensions:string[];
   sources:Array<{id:string;name:string;type:string;reason:string}>; endpoints:Array<{id:string;name:string;method:string;path:string}>;

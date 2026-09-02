@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers';
+﻿import { env } from 'cloudflare:workers';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';

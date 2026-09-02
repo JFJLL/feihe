@@ -1,4 +1,12 @@
-import { getChatGPTUser } from '../../../chatgpt-auth';
-import IntelligenceClient from '../../../intelligence-client';
-export const dynamic='force-dynamic';
-export default async function AgentPage({params}:{params:Promise<{projectId:string}>}){const [{projectId},user]=await Promise.all([params,getChatGPTUser()]);return <IntelligenceClient projectId={projectId} initialMode="agent" userName={user?.displayName||'内部用户'}/>}
+﻿import { redirect } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
+
+export default async function AgentRedirectPage({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
+  const { projectId } = await params;
+  redirect('/projects/' + encodeURIComponent(projectId) + '/insights?tab=ai');
+}

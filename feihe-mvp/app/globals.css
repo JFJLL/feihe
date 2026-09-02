@@ -1,3 +1,7 @@
+@import '../styles/tokens.css';
+@import '../styles/project-shell.css';
+@import '../styles/platform.css';
+@import '../styles/workspace.css';
 @import 'tailwindcss';
 
 :root { --blue:#1264dc; --navy:#14233b; --muted:#738096; --line:#e8edf4; --bg:#f4f7fb; }

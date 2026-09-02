@@ -1,4 +1,12 @@
-import { getChatGPTUser } from '../../../chatgpt-auth';
-import IntelligenceClient from '../../../intelligence-client';
-export const dynamic='force-dynamic';
-export default async function DataMapPage({params}:{params:Promise<{projectId:string}>}){const [{projectId},user]=await Promise.all([params,getChatGPTUser()]);return <IntelligenceClient projectId={projectId} initialMode="map" userName={user?.displayName||'内部用户'}/>}
+﻿import { redirect } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
+
+export default async function DataMapRedirectPage({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
+  const { projectId } = await params;
+  redirect('/projects/' + encodeURIComponent(projectId) + '/settings?tab=data-map');
+}

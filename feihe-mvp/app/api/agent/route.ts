@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers';
+﻿import { env } from 'cloudflare:workers';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
@@ -65,11 +65,11 @@ async function externalFacts(project: string, prompt: string, start: string, end
 
   if (/投放|聚光|消耗|花费|CTR|点击|账户/.test(prompt) || /经营|复盘|日报|看板/.test(prompt)) {
     try {
-      let totals = await d1.prepare(`SELECT COUNT(*) AS accounts, COALESCE(SUM(spend),0) AS spend, COALESCE(SUM(impressions),0) AS impressions,
+      const totals = await d1.prepare(`SELECT COUNT(*) AS accounts, COALESCE(SUM(spend),0) AS spend, COALESCE(SUM(impressions),0) AS impressions,
         COALESCE(SUM(clicks),0) AS clicks, COALESCE(SUM(interactions),0) AS interactions,
         CASE WHEN SUM(impressions)>0 THEN SUM(clicks)*1.0/SUM(impressions) ELSE 0 END AS ctr
         FROM paid_ad_metrics WHERE project_id=?`).bind(project).first<Record<string, number>>();
-      let accounts = await d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
+      const accounts = await d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
         FROM paid_ad_metrics WHERE project_id=? ORDER BY spend DESC LIMIT 20`).bind(project).all();
 
       if (totals && Number(totals.accounts) > 0) {
