@@ -47,47 +47,38 @@ function TopNotes({
   openNote: (id: string) => void;
 }) {
   return (
-    <div className="ranking-table extended">
-      <div className="ranking-head">
-        <span>排名 / 笔记</span>
-        <span>分类</span>
-        <span>阅读</span>
-        <span>互动</span>
-        <span>评论</span>
-        <span>正向率</span>
-        <span>CPE</span>
-      </div>
+    <div className="hot-note-grid">
       {rows.length ? (
-        rows.map((row, index) => (
-          <div key={String(row.id)}>
-            <span className="ranked-note">
-              <b>{String(index + 1).padStart(2, '0')}</b>
-              <i>
-                {row.coverUrl ? (
-                  <img src={String(row.coverUrl)} alt="" />
-                ) : (
-                  String(row.author || '笔').slice(0, 1)
-                )}
-              </i>
-              <button onClick={() => openNote(String(row.id))}>
-                {String(row.title || row.id)}
-              </button>
-              <small>
-                {String(row.author || '未知作者')} ·{' '}
-                {String(row.brand || row.productScope || '未分类')}
-              </small>
-            </span>
-            <span>{String(row.category1 || row.creatorLevel || '待补充')}</span>
-            <span>{compact(row.readCount)}</span>
-            <span>{compact(row.interactionCount)}</span>
-            <span>{compact(row.commentTotal)}</span>
-            <span>
-              {num(row.commentTotal)
-                ? pct(num(row.positiveCount) / num(row.commentTotal))
-                : '—'}
-            </span>
-            <span>{num(row.cpe) ? '¥' + num(row.cpe).toFixed(2) : '—'}</span>
-          </div>
+        rows.slice(0, 12).map((note, index) => (
+          <article key={String(note.id)}>
+            <div>
+              {note.coverUrl ? (
+                <img src={String(note.coverUrl)} alt="" />
+              ) : (
+                <span>{String(note.author || '笔').slice(0, 1)}</span>
+              )}
+              <i>TOP {String(index + 1).padStart(2, '0')} · {String(note.category1 || note.creatorLevel || '笔记')}</i>
+            </div>
+            <strong>{String(note.title || note.id)}</strong>
+            <p>
+              {String(note.author || '未知作者')} · {String(note.brand || note.productScope || '本品')}
+            </p>
+            <dl>
+              <div>
+                <dt>阅读</dt>
+                <dd>{compact(note.readCount)}</dd>
+              </div>
+              <div>
+                <dt>互动</dt>
+                <dd>{compact(note.interactionCount)}</dd>
+              </div>
+              <div>
+                <dt>评论</dt>
+                <dd>{compact(note.commentTotal)}</dd>
+              </div>
+            </dl>
+            <button onClick={() => openNote(String(note.id))}>查看笔记明细 →</button>
+          </article>
         ))
       ) : (
         <EmptyState title="暂无笔记排行" text="同步笔记表现指标后生成高价值笔记排行。" />
