@@ -77,7 +77,7 @@ export function CompetitorAnalysis({ data }: { data: Dashboard }) {
             {brands.map((row, index) => {
               const comments = num(row.comments);
               return (
-                <div key={row.brand + '-' + index}>
+                <div className="brand-tr" key={row.brand + '-' + index}>
                   <strong>{String(row.brand)}</strong>
                   <span>{num(row.notes)}</span>
                   <span>{compact(comments)}</span>
