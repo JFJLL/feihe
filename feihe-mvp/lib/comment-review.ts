@@ -14,7 +14,7 @@ export type ReviewResult = {
   counts: { reportable: number; basic: number; needReply: number; needDelete: number; needSupplement: number };
 };
 const MENTION_RE = /启萃|飞鹤|星阶|蕴萃|奶粉|奶罐|生牛乳|小分子|母乳低聚糖|HMOs|乳铁蛋白/;
-const QUESTION_RE = /\?|？|吗|怎么|如何|为什么|为啥|求问|请问|可以吗|行不行|靠谱吗|哪个好|怎么选|喝过吗|有人|求推荐|咨询|客服/;
+const QUESTION_RE = /[?？]|吗|请问|求问|求推荐|怎么办|好不好|行不行|可以吗|靠谱吗|咋办/;
 const DELETE_NEG = /拉肚|腹泻|便秘|上火|过敏|呕吐|胀气|不吸收|难喝|腥味重|结块|有异物|投诉|维权|退货|退款|差评|避雷|踩雷|千万别|垃圾|难吃|倒闭|过期/;
 const DELETE_SPAM = /加微信|加V|微信号|vx|VX|QQ|拼单|转让|出售|出掉|闲置|代购|招代理|加盟|兼职|刷单|点赞互|互关|抽奖|领红包|点击链接|下单返/;
 const COMPETITOR = /爱他美|诺优能|合生元|派星|金领冠|伊利|美赞臣|蓝臻|惠氏|雀巢|能恩|美素|皇家|a2|A2|君乐宝|完达山|贝因美/;
@@ -22,7 +22,7 @@ const RELEVANT_RE = /奶粉|宝宝|娃|母乳|转奶|断奶|肠胃|吸收|便便
 const EMOJI_RE = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/u;
 function isDeleteText(t: string): string | null {
   if (!t || t.length < 2) return '空评论';
-  if (DELETE_NEG.test(t)) return '负面舆情';
+  if (!/转.*启萃|换.*启萃|后来.*启萃|现在.*启萃/.test(t) && DELETE_NEG.test(t)) return '负面舆情';
   if (DELETE_SPAM.test(t)) return '导流售卖';
   if (COMPETITOR.test(t) && /不好|差|贵|不如|别买|坑/.test(t)) return '竞品拉踩';
   const noEmoji = t.replace(EMOJI_RE, '').trim();
