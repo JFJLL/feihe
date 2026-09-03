@@ -1,4 +1,4 @@
-﻿import { env } from 'cloudflare:workers';
+import { env } from 'cloudflare:workers';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
@@ -26,7 +26,7 @@ async function seed(project:string){const d1=db(),now=new Date().toISOString();
   // Integrations: Keystone, IPSCG, Lingxi, Juguang
   await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:keystone`,project,'keystone','Keystone AI 模型网关','https://keystonehk.ai/v1',JSON.stringify({modelsPath:'/models',chatPath:'/chat/completions',textModel:'gpt-5.6-terra',imageModel:'gpt-image-2',purpose:'意图理解、ReportSpec 生成与生图'}),now,now).run();
   await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:ipscg`,project,'ipscg','IPSCG 素材抓取系统','http://117.78.5.18:8080/ips-api',JSON.stringify({purpose:'小红书关键词笔记抓取、竞品UGC样本、评论抓取',listPath:'/yimei/getKeywordTaskList',resultPath:'/yimei/selectKeywordResults'}),now,now).run();
-  await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:lingxi`,project,'lingxi','小红书灵犀平台（白犀计划）','https://idea.xiaohongshu.com',JSON.stringify({purpose:'市场机会（市场供需/潜力）、母婴13细分赛道、品牌与SPU Top30',brand:'白犀计划',brandId:'548104',muyingCode:'2d73b2f6a5584885ac4ca78638b8aab3',status:'免落库实时直连'}),now,now).run();
+  await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:lingxi`,project,'lingxi','小红书灵犀平台（白犀计划）','https://idea.xiaohongshu.com',JSON.stringify({purpose:'市场机会（市场供需/潜力）、母婴13细分赛道、品牌与SPU Top30',brand:'白犀计划',brandId:'548104',muyingCode:'2d73b2f6a5584885ac4ca78638b8aab3',status:'演示样本数据'}),now,now).run();
   await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:juguang`,project,'juguang','小红书聚光投放平台（代理商易美）','https://partner.xiaohongshu.com',JSON.stringify({purpose:'65个子账户消耗、曝光、点击、CTR、余额及明细',agent:'北京易美',subAccountCount:65,topAdvertiserId:10898747}),now,now).run();
 
   // Source Accounts
@@ -44,7 +44,7 @@ async function seed(project:string){const d1=db(),now=new Date().toISOString();
     [`${project}:project_metrics`,'project_metrics','项目经营指标','GET','/api/dashboard','内部数据','按项目和时间范围读取发布、评论、内容与处置聚合指标',null],
     [`${project}:juguang_summary`,'juguang_summary','聚光投放消耗与指标汇总','GET','/api/ads/summary','投放数据','按项目聚合聚光 65 个子账户的消耗、曝光、点击、CTR 与余额',`${project}:juguang`],
     [`${project}:juguang_sub_page`,'juguang_sub_page','聚光代理商子账户接口','GET','/api/partner/agent/sub/page','投放接口','代理商后台分页拉取全部 65 个子账户投放明细',`${project}:juguang`],
-    [`${project}:lingxi_track_live`,'lingxi_track_live','灵犀母婴大盘机会实时直连','GET','/api/lingxi/track','行业洞察','免落库实时直连母婴 13 大细分赛道供需四象限、品牌与 SPU Top30 排行',`${project}:lingxi`],
+    [`${project}:lingxi_track_live`,'lingxi_track_live','灵犀母婴大盘机会示例','GET','/api/lingxi/track','行业洞察','母婴 13 大细分赛道供需四象限、品牌与 SPU Top30 演示样本',`${project}:lingxi`],
     [`${project}:lingxi_market`,'lingxi_market','灵犀市场供需与潜力','POST','/api/idea/trackV2/*','行业洞察','市场供需/市场潜力（母婴类目，白犀计划品牌）；实时按需拉取',`${project}:lingxi`],
     [`${project}:redtrend_search`,'redtrend_search','关键词笔记搜索','POST','/api/solar/content_square/searchNote','内容扫描','按关键词和日期范围发现本品/竞品 UGC 笔记',`${project}:redtrend`],
     [`${project}:redtrend_detail`,'redtrend_detail','笔记详情与封面','GET','/api/solar/note/{noteId}/detail?bizCode=','内容资产','抓取笔记首图并下载到项目 R2 资产库',`${project}:redtrend`],

@@ -8,7 +8,7 @@ export type LingxiTrackResult = {
   brand: string;
   period: { start: string; end: string };
   subMarket: string;
-  benchmarks: { avgSearchNum: number; avgNoteNum: number; avgBrandCount: number };
+  benchmarks: { avgSearchNum: number; avgNoteNum: number; demandBenchmark?: number; supplyBenchmark?: number; avgBrandCount: number; scope?: string };
   marketOpportunities: LingxiCategory[];
   brandRankings: LingxiBrand[];
   spuRankings: LingxiSpu[];
@@ -100,19 +100,22 @@ export const topLingxiSpus: LingxiSpu[] = [
 export function getLingxiTrackData(startDate = '2026-08-23', endDate = '2026-08-30', subMarket = '母婴出行'): LingxiTrackResult {
   return {
     ok: true,
-    source: 'lingxi_live',
+    source: 'lingxi_demo',
     category: '母婴',
     brand: '白犀计划',
     period: { start: startDate, end: endDate },
     subMarket,
     benchmarks: {
-      avgSearchNum: 3349000,
-      avgNoteNum: 28840000,
+      avgSearchNum: 135000,
+      avgNoteNum: 1740000,
+      demandBenchmark: 135000,
+      supplyBenchmark: 1740000,
       avgBrandCount: 310,
+      scope: '母婴 13 细分市场品类均值',
     },
     marketOpportunities: muyingCategories,
     brandRankings: topLingxiBrands,
     spuRankings: topLingxiSpus,
-    syncedAt: new Date().toISOString(),
+    syncedAt: '2026-08-30T00:00:00.000Z',
   };
 }
