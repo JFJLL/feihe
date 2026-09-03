@@ -1,16 +1,18 @@
-﻿'use client';
+'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import type { Dashboard, Ops, Project } from '../../lib/types/project';
+import type { Dashboard, Ops, Project, Plan, Spec } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { compact, num, cnTime } from '../../lib/hooks/use-project-data';
+import { compact, num, cnTime, api, shown } from '../../lib/hooks/use-project-data';
 
 export function OverviewWorkspace({
   projectId,
   dashboard,
   ops,
+  onRefresh,
 }: {
   projectId: string;
   project?: Project;
@@ -19,6 +21,34 @@ export function OverviewWorkspace({
   loading?: boolean;
   onRefresh?: () => Promise<void>;
 }) {
+  const [prompt, setPrompt] = useState('生成近30天启萃经营复盘，结合聚光消耗、自然笔记互动及关键词样本');
+  const [busy, setBusy] = useState(false);
+  const [plan, setPlan] = useState<Plan | null>(null);
+  const [spec, setSpec] = useState<Spec | null>(null);
+  const [reportId, setReportId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  async function handleGenerate() {
+    if (!prompt.trim()) return;
+    setBusy(true);
+    setFeedback(null);
+    try {
+      const res = await api<{ ok: boolean; plan: Plan; spec: Spec; reportId: string; engine: string }>('/api/agent', {
+        method: 'POST',
+        body: JSON.stringify({ projectId, prompt }),
+      });
+      setPlan(res.plan);
+      setSpec(res.spec);
+      setReportId(res.reportId);
+      setFeedback({ text: '智能看板已生成 · ' + res.engine, type: 'success' });
+      try { if (typeof onRefresh === 'function') await onRefresh(); } catch(err) { console.warn('refresh error:', err); }
+    } catch (e) {
+      setFeedback({ text: e instanceof Error ? e.message : '生成失败，请重试', type: 'error' });
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const m = dashboard.metrics;
   const a = m.actions || {};
   const s = m.supplier || {};
@@ -189,6 +219,123 @@ export function OverviewWorkspace({
         <span>
           <i>5</i> 复盘: {ops.reports.length} 份报告
         </span>
+      </section>
+
+      {/* AI Agent Intelligent Query & Generation Studio */}
+      <section className="overview-agent-composer" aria-label="智能看板生成">
+        <div className="overview-agent-composer-header">
+          <div>
+            <small>AI INTELLIGENT AGENT</small>
+            <h3>个性化数据与智能看板生成</h3>
+            <p>输入你的业务分析诉求，Agent 自动调用匹配接口获取数据、通过模型提炼归纳，并生成可交付 HTML 报告。</p>
+          </div>
+          <div className="overview-agent-meta">
+            <span>已连接接口直通</span>
+            <span>模型智能提炼</span>
+            <span>导出 HTML 报告</span>
+          </div>
+        </div>
+
+        <div className="overview-agent-input-row">
+          <textarea
+            className="overview-agent-textarea"
+            rows={2}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="例如：生成8月启萃经营复盘，分析聚光投放消耗与灵犀母婴大盘机会Top30，并生成HTML..."
+          />
+          <button
+            type="button"
+            className="overview-agent-submit"
+            disabled={busy || !prompt.trim()}
+            onClick={handleGenerate}
+          >
+            {busy ? '正在调度生成…' : '生成智能看板 →'}
+          </button>
+        </div>
+
+        <div className="overview-agent-quick-prompts">
+          <span className="quick-label">常用意图：</span>
+          {[
+            '生成近30天启萃经营复盘，结合聚光消耗、自然笔记互动及关键词样本',
+            '分析聚光投放消耗与灵犀母婴大盘机会Top30',
+            '灵犀母婴13细分市场供需与竞品品牌/SPU排行',
+            '排查近期负面风险评论与供应商核验情况',
+          ].map((item) => (
+            <button key={item} type="button" onClick={() => setPrompt(item)}>
+              {item}
+            </button>
+          ))}
+        </div>
+
+        {feedback && (
+          <div className={'overview-agent-feedback ' + feedback.type}>
+            {feedback.type === 'success' ? '✓ ' : '⚠ '}
+            {feedback.text}
+          </div>
+        )}
+
+        {/* Generated Result Container */}
+        {spec && (
+          <div className="overview-agent-result">
+            <div className="overview-agent-result-head">
+              <div>
+                <span className="result-engine">引擎：{spec.engine}</span>
+                <h4>{spec.title}</h4>
+                <small>{spec.subtitle} · 周期：{spec.period.start} 至 {spec.period.end}</small>
+              </div>
+              <div className="overview-agent-result-actions">
+                {reportId && (
+                  <a
+                    href={'/api/report-html?projectId=' + encodeURIComponent(projectId) + '&id=' + encodeURIComponent(reportId)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-link"
+                    style={{ background: '#2563eb', color: '#fff', padding: '6px 14px', borderRadius: '6px', fontSize: '13px' }}
+                  >
+                    打开独立 HTML 报告 ↗
+                  </a>
+                )}
+                <Link
+                  href={'/projects/' + encodeURIComponent(projectId) + '/insights?tab=ai'}
+                  className="btn-link"
+                  style={{ fontSize: '13px' }}
+                >
+                  进入完整分析中心 →
+                </Link>
+              </div>
+            </div>
+
+            {/* KPIs */}
+            <div className="overview-agent-kpis">
+              {spec.kpis.slice(0, 6).map((k) => (
+                <div key={k.key} className="overview-agent-kpi-card">
+                  <small>{k.label}</small>
+                  <strong>{shown(k.value)} <em>{k.unit || ''}</em></strong>
+                  <span>{k.note}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Summary Points */}
+            <div className="overview-agent-summary-list">
+              {spec.summary.map((point, idx) => (
+                <div key={idx} className="overview-agent-summary-item">
+                  <b>0{idx + 1}</b>
+                  <p>{point}</p>
+                </div>
+              ))}
+            </div>
+
+            {plan && plan.warnings && plan.warnings.length > 0 && (
+              <div className="overview-agent-warnings">
+                {plan.warnings.map((w, idx) => (
+                  <p key={idx}>⚠ {w}</p>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Today's Attention & Next Actions */}
