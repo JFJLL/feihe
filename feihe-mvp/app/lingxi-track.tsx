@@ -63,6 +63,55 @@ const SUB_MARKETS = [
   '其他母婴用品',
 ];
 
+function safeNum(val: unknown): number {
+  const n = Number(val);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
+
+/**
+ * 数据驱动对数刻度归一化函数
+ * 跨度大的指标（搜索量、笔记数等）使用 Math.log1p 进行平滑映射
+ */
+function normalizeLogScale(
+  val: number,
+  allVals: number[],
+  minPct = 14,
+  maxPct = 86
+): number {
+  const clean = allVals.map(safeNum).filter((v) => Number.isFinite(v));
+  if (!clean.length) return 50;
+  const min = Math.min(...clean);
+  const max = Math.max(...clean);
+  if (max === min) return 50;
+
+  const logMin = Math.log1p(min);
+  const logMax = Math.log1p(max);
+  const logVal = Math.log1p(Math.max(0, safeNum(val)));
+  const ratio = Math.max(0, Math.min(1, (logVal - logMin) / (logMax - logMin)));
+  return minPct + ratio * (maxPct - minPct);
+}
+
+/**
+ * 数据驱动线性刻度归一化函数
+ * 比率型指标（阅读率、份额等）使用线性映射
+ */
+function normalizeLinearScale(
+  val: number,
+  allVals: number[],
+  minPct = 14,
+  maxPct = 86
+): number {
+  const clean = allVals.map(safeNum).filter((v) => Number.isFinite(v));
+  if (!clean.length) return 50;
+  const min = Math.min(...clean);
+  const max = Math.max(...clean);
+  if (max === min) return 50;
+
+  const v = safeNum(val);
+  const ratio = Math.max(0, Math.min(1, (v - min) / (max - min)));
+  return minPct + ratio * (maxPct - minPct);
+}
+
 export function LingxiTrackLive({
   projectId,
   toast,
@@ -161,9 +210,67 @@ export function LingxiTrackLive({
   const brands = trackData?.brandRankings || [];
   const spus = trackData?.spuRankings || [];
 
+  // ==========================================
+  // 1. 供需四象限数据基准计算
+  // 规则：优先使用细分品类集的真实均值作为供需分水岭，
+  // 保证四象限坐标与实际业务供需分布完全一致，杜绝“气泡位置与象限标签互相矛盾”。
+  // ==========================================
+  const maxSearchInCats = Math.max(1, ...cats.map((c) => safeNum(c.searchNum)));
+  const maxNoteInCats = Math.max(1, ...cats.map((c) => safeNum(c.noteNum)));
+
+  const rawAvgSearch = safeNum(trackData?.benchmarks?.avgSearchNum);
+  const rawAvgNote = safeNum(trackData?.benchmarks?.avgNoteNum);
+
+  const catMeanSearch = cats.length
+    ? Math.round(cats.reduce((s, c) => s + safeNum(c.searchNum), 0) / cats.length)
+    : 135000;
+  const catMeanNote = cats.length
+    ? Math.round(cats.reduce((s, c) => s + safeNum(c.noteNum), 0) / cats.length)
+    : 1740000;
+
+  // 如果接口返回的 benchmark 在当前品类数据区间内，则使用接口值；否则使用细分市场的真实均值基准
+  const avgSearch =
+    rawAvgSearch > 0 && rawAvgSearch <= maxSearchInCats * 1.5
+      ? rawAvgSearch
+      : catMeanSearch;
+
+  const avgNote =
+    rawAvgNote > 0 && rawAvgNote <= maxNoteInCats * 1.5
+      ? rawAvgNote
+      : catMeanNote;
+
+  const demandValues = [...cats.map((c) => safeNum(c.searchNum)), avgSearch];
+  const supplyValues = [...cats.map((c) => safeNum(c.noteNum)), avgNote];
+  const brandCountValues = cats.map((c) => safeNum(c.brandNum));
+
+  const demandBenchX = normalizeLogScale(avgSearch, demandValues, 14, 86);
+  const supplyBenchY = normalizeLogScale(avgNote, supplyValues, 14, 86);
+
+  // ==========================================
+  // 2. 竞争分析（品牌 & SPU 分布）数据基准计算
+  // 真实使用 X = searchNum, Y = readRate，气泡大小 = share (Brand) 或 searchNum (SPU)
+  // ==========================================
+  const competitionList =
+    subject === 'brand' ? brands.slice(0, 16) : spus.slice(0, 16);
+
+  const compSearches = competitionList.map((i) => safeNum(i.searchNum));
+  const compReadRates = competitionList.map((i) => safeNum(i.readRate));
+  const compAvgSearch = compSearches.length
+    ? compSearches.reduce((a, b) => a + b, 0) / compSearches.length
+    : 0;
+  const compAvgReadRate = compReadRates.length
+    ? compReadRates.reduce((a, b) => a + b, 0) / compReadRates.length
+    : 0;
+
+  const compSearchWithBench = [...compSearches, compAvgSearch];
+  const compReadWithBench = [...compReadRates, compAvgReadRate];
+
+  const compBenchX = normalizeLogScale(compAvgSearch, compSearchWithBench, 14, 86);
+  const compBenchY = normalizeLinearScale(compAvgReadRate, compReadWithBench, 16, 84);
+
   return (
     <div className="stack">
-      {/* 顶部控制与时间切换 */}
+      {/* 顶部控制面板 */}
       <section className="panel" style={{ background: '#ffffff' }}>
         <div
           style={{
@@ -332,7 +439,7 @@ export function LingxiTrackLive({
       {/* 供需四象限与竞争分布二维视图 */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         {/* 1. 市场供需与潜力四象限 */}
-        <section className="panel" style={{ minHeight: '440px', display: 'flex', flexDirection: 'column' }}>
+        <section className="panel" style={{ minHeight: '460px', display: 'flex', flexDirection: 'column' }}>
           <header style={{ marginBottom: '8px' }}>
             <small style={{ color: 'var(--primary-blue)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1px' }}>
               MARKET DEMAND & POTENTIAL
@@ -341,9 +448,25 @@ export function LingxiTrackLive({
               1. 市场供需与潜力四象限
             </h3>
           </header>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '-2px', marginBottom: '12px' }}>
-            X轴: 搜索量(需求) ｜ Y轴: 有曝光笔记数(供给) ｜ 气泡大小: 品牌数
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '-2px', marginBottom: '8px' }}>
+            X轴: 搜索量(需求) ｜ Y轴: 笔记数(供给) ｜ 气泡大小: 品牌数 ｜ 动态对数坐标归一化
           </p>
+          <div
+            style={{
+              display: 'flex',
+              gap: '16px',
+              fontSize: '11.5px',
+              color: 'var(--text-muted)',
+              marginBottom: '10px',
+            }}
+          >
+            <span>
+              需求基准线：<strong>{avgSearch.toLocaleString()}</strong>
+            </span>
+            <span>
+              供给基准线：<strong>{avgNote.toLocaleString()}</strong>
+            </span>
+          </div>
           <div
             style={{
               flex: 1,
@@ -352,7 +475,7 @@ export function LingxiTrackLive({
               borderRadius: '10px',
               border: '1px solid var(--border-line)',
               padding: '16px',
-              minHeight: '300px',
+              minHeight: '320px',
               overflow: 'hidden',
             }}
           >
@@ -368,9 +491,10 @@ export function LingxiTrackLive({
                 padding: '2px 8px',
                 borderRadius: '4px',
                 fontWeight: 600,
+                zIndex: 1,
               }}
             >
-              低需求, 高供给（竞争白热）
+              供给过剩 (低需求·高供给)
             </span>
             <span
               style={{
@@ -383,9 +507,10 @@ export function LingxiTrackLive({
                 padding: '2px 8px',
                 borderRadius: '4px',
                 fontWeight: 600,
+                zIndex: 1,
               }}
             >
-              🔥 高需求, 高供给（核心战场）
+              🔥 核心竞争 (高需求·高供给)
             </span>
             <span
               style={{
@@ -398,9 +523,10 @@ export function LingxiTrackLive({
                 padding: '2px 8px',
                 borderRadius: '4px',
                 fontWeight: 600,
+                zIndex: 1,
               }}
             >
-              低需求, 低供给（小众长尾）
+              小众长尾 (低需求·低供给)
             </span>
             <span
               style={{
@@ -413,53 +539,81 @@ export function LingxiTrackLive({
                 padding: '2px 8px',
                 borderRadius: '4px',
                 fontWeight: 600,
+                zIndex: 1,
               }}
             >
-              🌟 高需求, 低供给（蓝海机会）
+              🌟 蓝海机会 (高需求·低供给)
             </span>
 
-            {/* 十字基准线 */}
+            {/* 真实数据驱动的十字基准线 */}
             <div
               style={{
                 position: 'absolute',
-                top: '50%',
+                bottom: supplyBenchY + '%',
                 left: '0',
                 right: '0',
                 height: '1px',
-                borderTop: '1px dashed #cbd5e1',
+                borderTop: '1px dashed #94a3b8',
+                zIndex: 1,
               }}
+              title={'供给基准线: ' + avgNote.toLocaleString()}
             />
             <div
               style={{
                 position: 'absolute',
-                left: '50%',
+                left: demandBenchX + '%',
                 top: '0',
                 bottom: '0',
                 width: '1px',
-                borderLeft: '1px dashed #cbd5e1',
+                borderLeft: '1px dashed #94a3b8',
+                zIndex: 1,
               }}
+              title={'需求基准线: ' + avgSearch.toLocaleString()}
             />
 
-            {/* 气泡 */}
+            {/* 纯数据驱动的气泡 */}
             <div style={{ position: 'absolute', inset: '28px 24px', pointerEvents: 'auto' }}>
               {cats.map((cat) => {
                 const isSelected = subMarket === cat.name;
-                const left = Math.min(85, Math.max(15, ((cat.searchNum - 40000) / 260000) * 100));
-                const bottom = Math.min(85, Math.max(15, ((cat.noteNum - 500000) / 3800000) * 100));
-                const size = Math.min(46, Math.max(22, cat.brandNum / 16));
+                const left = normalizeLogScale(cat.searchNum, demandValues, 14, 86);
+                const bottom = normalizeLogScale(cat.noteNum, supplyValues, 14, 86);
+                const size = Math.round(
+                  22 + normalizeLinearScale(cat.brandNum, brandCountValues, 0, 1) * 26
+                );
+
+                const isHighDemand = cat.searchNum >= avgSearch;
+                const isHighSupply = cat.noteNum >= avgNote;
+                let quadrantName = '';
+                if (isHighDemand && !isHighSupply) {
+                  quadrantName = '蓝海机会 (高需求·低供给)';
+                } else if (isHighDemand && isHighSupply) {
+                  quadrantName = '核心竞争 (高需求·高供给)';
+                } else if (!isHighDemand && isHighSupply) {
+                  quadrantName = '供给过剩 (低需求·高供给)';
+                } else {
+                  quadrantName = '小众长尾 (低需求·低供给)';
+                }
+
+                const tooltip =
+                  cat.name +
+                  ' | 象限: ' +
+                  quadrantName +
+                  ' | 搜索量(需求): ' +
+                  cat.searchNum.toLocaleString() +
+                  ' (基准: ' +
+                  avgSearch.toLocaleString() +
+                  ') | 笔记供给: ' +
+                  cat.noteNum.toLocaleString() +
+                  ' (基准: ' +
+                  avgNote.toLocaleString() +
+                  ') | 品牌数: ' +
+                  cat.brandNum;
+
                 return (
                   <div
                     key={cat.code}
                     onClick={() => setSubMarket(cat.name)}
-                    title={
-                      cat.name +
-                      ' | 搜索量: ' +
-                      cat.searchNum.toLocaleString() +
-                      ' | 笔记: ' +
-                      cat.noteNum.toLocaleString() +
-                      ' | 品牌: ' +
-                      cat.brandNum
-                    }
+                    title={tooltip}
                     style={{
                       position: 'absolute',
                       left: left + '%',
@@ -515,8 +669,8 @@ export function LingxiTrackLive({
           </div>
         </section>
 
-        {/* 2. 市场竞争分析（品牌/SPU分布） */}
-        <section className="panel" style={{ minHeight: '440px', display: 'flex', flexDirection: 'column' }}>
+        {/* 2. 市场竞争分析（品牌 & SPU 分布） */}
+        <section className="panel" style={{ minHeight: '460px', display: 'flex', flexDirection: 'column' }}>
           <div
             style={{
               display: 'flex',
@@ -573,9 +727,25 @@ export function LingxiTrackLive({
               </button>
             </div>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '-2px', marginBottom: '12px' }}>
-            X轴: 搜索量 ｜ Y轴: 曝光/阅读率 ｜ 气泡大小: 市场占比 ｜ 当前赛道: {subMarket}
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '-2px', marginBottom: '8px' }}>
+            X轴: 搜索量 ｜ Y轴: 阅读率 ｜ {subject === 'brand' ? '气泡大小: 行业份额' : '气泡大小: 相对搜索热度'} ｜ 赛道: {subMarket}
           </p>
+          <div
+            style={{
+              display: 'flex',
+              gap: '16px',
+              fontSize: '11.5px',
+              color: 'var(--text-muted)',
+              marginBottom: '10px',
+            }}
+          >
+            <span>
+              搜索基准：<strong>{Math.round(compAvgSearch).toLocaleString()}</strong>
+            </span>
+            <span>
+              阅读率基准：<strong>{(compAvgReadRate * 100).toFixed(1)}%</strong>
+            </span>
+          </div>
           <div
             style={{
               flex: 1,
@@ -584,48 +754,92 @@ export function LingxiTrackLive({
               borderRadius: '10px',
               border: '1px solid var(--border-line)',
               padding: '16px',
-              minHeight: '300px',
+              minHeight: '320px',
               overflow: 'hidden',
             }}
           >
+            {/* 真实基准十字线 */}
             <div
               style={{
                 position: 'absolute',
-                top: '50%',
+                bottom: compBenchY + '%',
                 left: '0',
                 right: '0',
                 height: '1px',
-                borderTop: '1px dashed #cbd5e1',
+                borderTop: '1px dashed #94a3b8',
+                zIndex: 1,
               }}
+              title={'阅读率基准线: ' + (compAvgReadRate * 100).toFixed(1) + '%'}
             />
             <div
               style={{
                 position: 'absolute',
-                left: '50%',
+                left: compBenchX + '%',
                 top: '0',
                 bottom: '0',
                 width: '1px',
-                borderLeft: '1px dashed #cbd5e1',
+                borderLeft: '1px dashed #94a3b8',
+                zIndex: 1,
               }}
+              title={'搜索基准线: ' + Math.round(compAvgSearch).toLocaleString()}
             />
-            <span style={{ position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px', color: '#94a3b8' }}>
-              低转化, 低搜索
+
+            {/* 象限标识 */}
+            <span style={{ position: 'absolute', top: '10px', left: '12px', fontSize: '10px', color: '#64748b', zIndex: 1 }}>
+              高转化, 低搜索 (潜力黑马)
             </span>
-            <span style={{ position: 'absolute', bottom: '10px', right: '12px', fontSize: '10px', color: 'var(--primary-blue)' }}>
-              高转化, 高搜索
+            <span style={{ position: 'absolute', top: '10px', right: '12px', fontSize: '10px', color: 'var(--primary-blue)', fontWeight: 600, zIndex: 1 }}>
+              高转化, 高搜索 (核心标杆)
+            </span>
+            <span style={{ position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px', color: '#94a3b8', zIndex: 1 }}>
+              低转化, 低搜索 (基础长尾)
+            </span>
+            <span style={{ position: 'absolute', bottom: '10px', right: '12px', fontSize: '10px', color: '#d97706', zIndex: 1 }}>
+              低转化, 高搜索 (待承接)
             </span>
 
+            {/* 纯数据驱动的气泡 */}
             <div style={{ position: 'absolute', inset: '28px 24px', pointerEvents: 'auto' }}>
-              {(subject === 'brand' ? brands.slice(0, 14) : spus.slice(0, 14)).map((item, idx) => {
-                const left = Math.min(85, Math.max(15, 90 - idx * 6));
-                const bottom = Math.min(80, Math.max(20, idx % 2 === 0 ? 68 - idx * 3.5 : 32 + idx * 2.8));
-                const size = Math.min(42, Math.max(20, 38 - idx * 1.2));
+              {competitionList.map((item, idx) => {
+                const left = normalizeLogScale(item.searchNum, compSearchWithBench, 14, 86);
+                const bottom = normalizeLinearScale(item.readRate, compReadWithBench, 16, 84);
+
+                let size = 28;
+                let tooltip = '';
+                if (subject === 'brand') {
+                  const brandItem = item as LingxiBrand;
+                  const allShares = (competitionList as LingxiBrand[]).map((b) => safeNum(b.share));
+                  size = Math.round(20 + normalizeLinearScale(brandItem.share, allShares, 0, 1) * 32);
+                  tooltip =
+                    brandItem.name +
+                    ' | 搜索量: ' +
+                    brandItem.searchNum.toLocaleString() +
+                    ' | 阅读率: ' +
+                    (brandItem.readRate * 100).toFixed(1) +
+                    '% | 行业份额: ' +
+                    Number(brandItem.share || 0).toFixed(1) +
+                    '%';
+                } else {
+                  const spuItem = item as LingxiSpu;
+                  size = Math.round(20 + normalizeLinearScale(spuItem.searchNum, compSearches, 0, 1) * 28);
+                  tooltip =
+                    spuItem.brand +
+                    ' - ' +
+                    spuItem.name +
+                    ' | 搜索量: ' +
+                    spuItem.searchNum.toLocaleString() +
+                    ' | 阅读率: ' +
+                    (spuItem.readRate * 100).toFixed(1) +
+                    '%';
+                }
+
                 const isHighlight =
                   item.name.includes('飞鹤') || item.name.includes('启萃') || item.name.includes('卓睿');
+
                 return (
                   <div
-                    key={item.name + idx}
-                    title={item.name + ' | 搜索量: ' + item.searchNum.toLocaleString()}
+                    key={item.name + '-' + idx}
+                    title={tooltip}
                     style={{
                       position: 'absolute',
                       left: left + '%',
@@ -634,13 +848,17 @@ export function LingxiTrackLive({
                       height: size + 'px',
                       borderRadius: '50%',
                       background: isHighlight ? '#1d4ed8' : '#64748b',
-                      opacity: isHighlight ? 0.95 : 0.7,
-                      boxShadow: isHighlight ? '0 0 12px rgba(29,78,216,0.35)' : '0 1px 4px rgba(0,0,0,0.1)',
-                      border: isHighlight ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.7)',
+                      opacity: isHighlight ? 0.95 : 0.72,
+                      boxShadow: isHighlight
+                        ? '0 0 14px rgba(29,78,216,0.4), 0 0 0 2px rgba(255,255,255,0.9)'
+                        : '0 1px 4px rgba(0,0,0,0.1)',
+                      border: isHighlight ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.8)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       transform: 'translate(-50%, 50%)',
+                      cursor: 'pointer',
+                      zIndex: isHighlight ? 10 : 3,
                     }}
                   >
                     <span
@@ -649,8 +867,8 @@ export function LingxiTrackLive({
                         bottom: '-16px',
                         fontSize: '9.5px',
                         whiteSpace: 'nowrap',
-                        color: isHighlight ? '#1d4ed8' : '#64748b',
-                        fontWeight: isHighlight ? 700 : 400,
+                        color: isHighlight ? '#1d4ed8' : '#475569',
+                        fontWeight: isHighlight ? 700 : 500,
                       }}
                     >
                       {item.name.slice(0, 8)}
