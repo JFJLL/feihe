@@ -7,6 +7,7 @@ import { SectionTabs } from '../../components/ui/SectionTabs';
 import { AcceptanceDelivery } from './AcceptanceDelivery';
 import { SupplierVerification } from './SupplierVerification';
 import { RiskTriage } from './RiskTriage';
+import { ReviewActionQueue } from './ReviewActionQueue';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api, num } from '../../lib/hooks/use-project-data';
@@ -22,7 +23,7 @@ export function CommentsWorkspace({
   ops: Ops;
   onRefresh: () => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('acceptance', ['acceptance', 'supplier', 'risk']);
+  const [tab, setTab] = useProjectTab('acceptance', ['acceptance', 'supplier', 'risk', 'review']);
   const { showToast } = useProject();
 
   const [loading, setLoading] = useState(false);
@@ -116,6 +117,7 @@ export function CommentsWorkspace({
     ['acceptance', '交付验收', '主线交付、达标阈值与品牌提及'],
     ['supplier', '供应商核验', 'Excel 导入与隔天外显复核'],
     ['risk', '风险处置', '关键评论、回复与删除闭环'],
+    ['review', '判定处置', '需回复/删除/补充队列'],
   ];
 
   return (
@@ -154,6 +156,8 @@ export function CommentsWorkspace({
           toast={(msg) => showToast(msg, 'success')}
         />
       )}
+
+      {tab === 'review' && <ReviewActionQueue projectId={projectId} />}
 
       {tab === 'risk' && (
         <RiskTriage
