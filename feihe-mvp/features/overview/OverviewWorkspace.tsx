@@ -21,7 +21,7 @@ export function OverviewWorkspace({
   loading?: boolean;
   onRefresh?: () => Promise<void>;
 }) {
-  const [prompt, setPrompt] = useState('生成近30天启萃经营复盘，结合聚光消耗、自然笔记互动及关键词样本');
+  const [prompt, setPrompt] = useState('复盘8.30供应商评论验收：按200条汇报线和30条达标线判定，输出可汇报清单');
   const [busy, setBusy] = useState(false);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [spec, setSpec] = useState<Spec | null>(null);
@@ -225,9 +225,9 @@ export function OverviewWorkspace({
       <section className="overview-agent-composer" aria-label="智能看板生成">
         <div className="overview-agent-composer-header">
           <div>
-            <small>AI INTELLIGENT AGENT</small>
-            <h3>个性化数据与智能看板生成</h3>
-            <p>输入你的业务分析诉求，Agent 自动调用匹配接口获取数据、通过模型提炼归纳，并生成可交付 HTML 报告。</p>
+            <small>REVIEW & REPORT</small>
+            <h3>数据复盘与看板生成</h3>
+            <p>输入具体日期如8.30，即按验收口径判定当日笔记并输出可汇报清单；其他分析诉求也会自动匹配接口生成 HTML 报告。</p>
           </div>
           <div className="overview-agent-meta">
             <span>已连接接口直通</span>
@@ -242,7 +242,7 @@ export function OverviewWorkspace({
             rows={2}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="例如：生成8月启萃经营复盘，分析聚光投放消耗与灵犀母婴大盘机会Top30，并生成HTML..."
+            placeholder="例如：复盘8.30供应商评论验收，输出可汇报清单；或分析聚光消耗与灵犀母婴大盘机会..."
           />
           <button
             type="button"
@@ -257,9 +257,9 @@ export function OverviewWorkspace({
         <div className="overview-agent-quick-prompts">
           <span className="quick-label">常用意图：</span>
           {[
-            '生成近30天启萃经营复盘，结合聚光消耗、自然笔记互动及关键词样本',
+            '复盘8.30供应商评论验收：200条汇报线/30条达标线判定，输出可汇报清单',
             '分析聚光投放消耗与灵犀母婴大盘机会Top30',
-            '灵犀母婴13细分市场供需与竞品品牌/SPU排行',
+            '复盘8.29供应商评论验收：待补充、待回复、待删除同步列清',
             '排查近期负面风险评论与供应商核验情况',
           ].map((item) => (
             <button key={item} type="button" onClick={() => setPrompt(item)}>

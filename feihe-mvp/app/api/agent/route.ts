@@ -6,6 +6,9 @@ import { buildQueryPlan, reportHtml, type MetricDefinition, type ReportSpec } fr
 import { cacheNoteCovers } from '@/lib/note-covers';
 import { fetchIpScgTasks, fetchIpScgNotes } from '@/lib/data-fetchers';
 import { getLingxiTrackData, type LingxiTrackResult } from '@/lib/lingxi';
+import { parseDateKey } from '@/lib/comment-review';
+import { reviewByDate } from '@/lib/review-seed';
+import { ensureReviewTables, persistReviewBatch, reviewSections, reviewSummary } from '@/lib/review-report';
 
 export const dynamic = 'force-dynamic';
 const text = (v: unknown) => String(v ?? '').trim();
@@ -242,7 +245,7 @@ export async function POST(request: Request) {
           { id: 'progress', eyebrow: 'DELIVERY & BUDGET', title: '主线发布与费用进度', kind: 'funnel', data: facts.pipelines.map(row => ({ 主线: String(row.name), 已交付: number(row.deliveredCount), 目标: number(row.targetCount), 已花费: number(row.spent), 预算: number(row.budget), 发布进度: number(row.targetCount) ? `${(number(row.deliveredCount) / number(row.targetCount) * 100).toFixed(1)}%` : '—' })) },
           { id: 'topics', eyebrow: 'VOICE TOPICS', title: '消费者讨论主题', kind: 'bars', data: facts.topics },
           { id: 'notes', eyebrow: 'TOP CONTENT', title: '重点笔记与优秀案例', kind: 'cards', description: '按互动与评论表现排序，封面来自笔记详情接口并已下载到项目资产库。', data: facts.notes },
-          { id: 'actions', eyebrow: 'AI SUMMARY', title: '决策结论与下一步', kind: 'insights', data: [] },
+          { id: 'actions', eyebrow: '结论与行动', title: '决策结论与下一步', kind: 'insights', data: [] },
         ],
         sources: facts.sources.map(row => ({ name: String(row.name), type: String(row.type), freshness: String(row.freshness), rows: number(row.rows) })),
         quality: [
@@ -331,6 +334,21 @@ export async function POST(request: Request) {
         });
       }
 
+      let reviewResult: Awaited<ReturnType<typeof reviewByDate>> = null;
+      const reviewDateKey = parseDateKey(prompt);
+      if (reviewDateKey) {
+        try {
+          reviewResult = await reviewByDate(reviewDateKey);
+          if (reviewResult) {
+            await ensureReviewTables(d1);
+            await persistReviewBatch(d1, project, reviewResult);
+            spec.sections.unshift(...reviewSections(reviewResult));
+            spec.summary = [...reviewSummary(reviewResult), ...spec.summary];
+          } else {
+            plan.warnings.push(reviewDateKey + '暂无供应商执行数据，可换其他日期重试。');
+          }
+        } catch { plan.warnings.push('评论判定数据读取异常，已跳过。'); }
+      }
       const ai = await aiSummary(prompt, spec);
       if (ai?.length) {
         spec.summary = ai;
@@ -341,7 +359,7 @@ export async function POST(request: Request) {
       const reportId = crypto.randomUUID();
       const html = reportHtml(spec);
       const finished = new Date().toISOString();
-      const manifest = { sources: plan.sources, endpoints: plan.endpoints, metrics: plan.requestedMetrics, assets: Array.isArray(body.assetIds) ? body.assetIds : [] };
+      const manifest = { sources: plan.sources, endpoints: plan.endpoints, metrics: plan.requestedMetrics, review: reviewResult ? { date: reviewResult.dateKey, ...reviewResult.counts } : null, assets: Array.isArray(body.assetIds) ? body.assetIds : [] };
 
       await d1.batch([
         d1.prepare(`UPDATE agent_runs SET status='已完成',engine=?,report_spec_json=?,progress=100,finished_at=? WHERE id=?`).bind(spec.engine, JSON.stringify(spec), finished, runId),

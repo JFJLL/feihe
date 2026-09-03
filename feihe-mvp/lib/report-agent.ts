@@ -49,7 +49,7 @@ export function buildQueryPlan(prompt:string,metrics:MetricDefinition[],sources:
 export const reportHtml=(spec:ReportSpec)=>`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(spec.title)}</title><style>
   :root{color-scheme:light;font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background-color:#f8fafc;color:#0f172a}
   body{margin:0;padding:36px 20px;background-color:#f8fafc;color:#0f172a}.wrap{max-width:1440px;margin:auto}
-  .head{padding:32px 36px;border-radius:16px;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 60%,#3b82f6 100%);color:#ffffff;box-shadow:0 4px 16px rgba(37,99,235,0.15)}
+  .head{padding:32px 36px;border-radius:16px;background:linear-gradient(135deg,#0b2a5b 0%,#1e40af 55%,#2563eb 100%);color:#ffffff;box-shadow:0 4px 16px rgba(37,99,235,0.15)}
   .head small{color:#60a5fa;font-weight:700;letter-spacing:1.5px;font-size:11px}
   h1{margin:8px 0 6px;font-size:26px;color:#ffffff;font-weight:700}
   .muted{color:#94a3b8;font-size:13px}
@@ -57,7 +57,7 @@ export const reportHtml=(spec:ReportSpec)=>`<!doctype html><html lang="zh-CN"><h
   .kpi{border:1px solid #e2e8f0;border-radius:14px;background:#ffffff;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:transform .2s}
   .kpi:hover{transform:translateY(-2px)}
   .kpi span{font-size:12px;color:#64748b;font-weight:500}
-  .kpi b{display:block;margin:8px 0;font-size:26px;color:#1d4ed8;font-family:monospace,sans-serif}
+  .kpi b{display:block;margin:8px 0;font-size:26px;color:#1d4ed8;font-variant-numeric:tabular-nums}
   .kpi small{color:#64748b;font-size:11px}
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
   .card{border:1px solid #e2e8f0;border-radius:14px;background:#ffffff;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,0.03);display:flex;flex-direction:column}
