@@ -265,3 +265,11 @@ export const actionLogs = sqliteTable('action_logs', {
   detail: text('detail').notNull().default(''),
   createdAt: text('created_at').notNull(),
 }, (table) => [index('idx_action_logs_created_at').on(table.createdAt)]);
+
+export const noteReviewBatches = sqliteTable('note_review_batches', {
+  id: text('id').primaryKey(), projectId: text('project_id').notNull(), dateKey: text('date_key').notNull(), countsJson: text('counts_json').notNull().default('{}'), createdAt: text('created_at').notNull(),
+});
+
+export const reviewActionItems = sqliteTable('review_action_items', {
+  id: integer('id').primaryKey({autoIncrement:true}), batchId: text('batch_id').notNull(), projectId: text('project_id').notNull(), dateKey: text('date_key').notNull(), link: text('link').notNull().default(''), blogger: text('blogger').notNull().default(''), action: text('action').notNull(), reason: text('reason').notNull().default(''), sampleJson: text('sample_json').notNull().default('[]'), status: text('status').notNull().default(''), createdAt: text('created_at').notNull(),
+});

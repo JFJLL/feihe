@@ -1,4 +1,20 @@
-import { getChatGPTUser } from '../../../chatgpt-auth';
-import IntelligenceClient from '../../../intelligence-client';
-export const dynamic='force-dynamic';
-export default async function AgentPage({params}:{params:Promise<{projectId:string}>}){const [{projectId},user]=await Promise.all([params,getChatGPTUser()]);return <IntelligenceClient projectId={projectId} initialMode="agent" userName={user?.displayName||'内部用户'}/>}
+﻿import { redirect } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
+
+export default async function AgentRedirectPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ projectId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const [{ projectId }, query] = await Promise.all([params, searchParams]);
+  const sp = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (typeof value === 'string') sp.set(key, value);
+    else if (Array.isArray(value)) value.forEach((v) => sp.append(key, v));
+  }
+  sp.set('tab', 'ai');
+  redirect('/projects/' + encodeURIComponent(projectId) + '/insights?' + sp.toString());
+}

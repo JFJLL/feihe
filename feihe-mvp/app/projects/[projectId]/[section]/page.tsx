@@ -1,8 +1,21 @@
-import { getChatGPTUser } from '../../../chatgpt-auth';
-import DashboardClient from '../../../dashboard-client';
+﻿import { redirect } from 'next/navigation';
+import { getLegacyRedirectUrl } from '../../../../lib/navigation/project-navigation';
+
 export const dynamic = 'force-dynamic';
-const allowed = new Set(['growth', 'content', 'acceptance', 'risk', 'insights', 'settings', 'voice', 'competitor', 'progress', 'sentiment', 'notes', 'supplier', 'reports', 'tasks']);
-export default async function ProjectSectionPage({ params }: { params: Promise<{ projectId: string; section: string }> }) {
-  const [{ projectId, section }, user] = await Promise.all([params, getChatGPTUser()]);
-  return <DashboardClient initialProjectId={projectId} initialSection={allowed.has(section) ? section : 'cockpit'} userName={user?.displayName || '内部用户'} signedIn={Boolean(user)} />;
+
+export default async function ProjectSectionPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ projectId: string; section: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const [{ projectId, section }, query] = await Promise.all([params, searchParams]);
+  const sp = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (typeof value === 'string') sp.set(key, value);
+    else if (Array.isArray(value)) value.forEach((v) => sp.append(key, v));
+  }
+  const targetUrl = getLegacyRedirectUrl(projectId, section, sp);
+  redirect(targetUrl);
 }

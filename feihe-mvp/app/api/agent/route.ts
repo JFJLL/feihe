@@ -6,6 +6,9 @@ import { buildQueryPlan, reportHtml, type MetricDefinition, type ReportSpec } fr
 import { cacheNoteCovers } from '@/lib/note-covers';
 import { fetchIpScgTasks, fetchIpScgNotes } from '@/lib/data-fetchers';
 import { getLingxiTrackData, type LingxiTrackResult } from '@/lib/lingxi';
+import { parseDateKey } from '@/lib/comment-review';
+import { reviewByDate } from '@/lib/review-seed';
+import { buildReviewInsight, ensureReviewTables, persistReviewBatch, reviewSections, reviewSummary } from '@/lib/review-report';
 
 export const dynamic = 'force-dynamic';
 const text = (v: unknown) => String(v ?? '').trim();
@@ -65,11 +68,11 @@ async function externalFacts(project: string, prompt: string, start: string, end
 
   if (/投放|聚光|消耗|花费|CTR|点击|账户/.test(prompt) || /经营|复盘|日报|看板/.test(prompt)) {
     try {
-      let totals = await d1.prepare(`SELECT COUNT(*) AS accounts, COALESCE(SUM(spend),0) AS spend, COALESCE(SUM(impressions),0) AS impressions,
+      const totals = await d1.prepare(`SELECT COUNT(*) AS accounts, COALESCE(SUM(spend),0) AS spend, COALESCE(SUM(impressions),0) AS impressions,
         COALESCE(SUM(clicks),0) AS clicks, COALESCE(SUM(interactions),0) AS interactions,
         CASE WHEN SUM(impressions)>0 THEN SUM(clicks)*1.0/SUM(impressions) ELSE 0 END AS ctr
         FROM paid_ad_metrics WHERE project_id=?`).bind(project).first<Record<string, number>>();
-      let accounts = await d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
+      const accounts = await d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
         FROM paid_ad_metrics WHERE project_id=? ORDER BY spend DESC LIMIT 20`).bind(project).all();
 
       if (totals && Number(totals.accounts) > 0) {
@@ -140,6 +143,30 @@ async function aiSummary(prompt: string, spec: ReportSpec) {
   }
 }
 
+async function aiReviewInsight(prompt: string, result: { counts: Record<string, number>; dateKey: string; noteCount: number; reportable: Array<{ blogger: string; positive: number; mentionRate: number }>; basic: Array<{ blogger: string; positive: number; mentionRate: number }>; needSupplement: Array<{ blogger: string; positive: number; supplementNeed: number }>; needReply: Array<{ blogger: string; replyHits: string[] }>; needDelete: Array<{ blogger: string; deleteHits: string[] }> }): Promise<string[]> {
+  const fallback = buildReviewInsight(result as never);
+  try {
+    const r = runtime();
+    const key = r.KEYSTONE_API_KEY || process.env.KEYSTONE_API_KEY;
+    const model = r.KEYSTONE_MODEL || process.env.KEYSTONE_MODEL;
+    const rawBase = r.KEYSTONE_BASE_URL || process.env.KEYSTONE_BASE_URL || 'https://keystonehk.ai/v1';
+    if (!key || !model) return fallback;
+    const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+    const top = (list: Array<Record<string, unknown>>) => list.slice(0, 8);
+    const response = await fetch(base + '/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, temperature: 0.2, max_tokens: 700, response_format: { type: 'json_object' }, messages: [
+        { role: 'system', content: '你是母婴社媒评论验收顾问。只返回 JSON：{"insights":[不超过7条简洁中文]}。基于给定判定数据给出结论、补量优先级与处置建议，不得编造数据中没有的笔记或数字。' },
+        { role: 'user', content: JSON.stringify({ request: prompt, date: result.dateKey, counts: result.counts, reportable: top(result.reportable as never), basic: top(result.basic as never), supplementGap: top(result.needSupplement as never), replySample: top(result.needReply as never), deleteSample: top(result.needDelete as never) }) }] }) });
+    if (!response.ok) return fallback;
+    const payload = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
+    const content = payload.choices?.[0]?.message?.content;
+    if (!content) return fallback;
+    const parsed = JSON.parse(content) as { insights?: unknown };
+    return Array.isArray(parsed.insights) && parsed.insights.length ? parsed.insights.map(String).slice(0, 7) : fallback;
+  } catch { return fallback; }
+}
 export async function POST(request: Request) {
   const user = await apiUser(true);
   if (!user) return jsonError('请先登录', 401);
@@ -210,6 +237,7 @@ export async function POST(request: Request) {
 
       const spec: ReportSpec = {
         version: '1.0',
+        query: prompt,
         title: `${facts.project.name} · ${plan.intent}`,
         subtitle: `${facts.project.brand} ${facts.project.spu}｜聚光投放 × 灵犀母婴大盘机会看板`,
         period: plan.period,
@@ -219,7 +247,7 @@ export async function POST(request: Request) {
           `报告期覆盖 ${totalNotes} 篇笔记、${totalComments} 条评论；当前已同步聚光投放与灵犀母婴大盘。`,
           `正向口碑占比 ${totalComments ? (positive / totalComments * 100).toFixed(1) : '0.0'}%，负向风险占比 ${totalComments ? (negative / totalComments * 100).toFixed(1) : '0.0'}%。`,
           `执行进度 ${target ? (published / target * 100).toFixed(1) : '0.0'}%，聚光投放已同步消耗 ¥${external.paidAds?.totals?.spend ? Number(external.paidAds.totals.spend).toLocaleString() : (spent || spend).toLocaleString()}。`,
-          external.lingxi ? `灵犀大盘母婴搜索均值 334.9万，头部品牌 ${external.lingxi.brandRankings[0]?.name || 'BeBeBus'} 占据 ${external.lingxi.brandRankings[0]?.share || 18.2}% 份额。` : (facts.topics[0] ? `最高频评论主题为“${facts.topics[0].topic}”，共 ${facts.topics[0].count} 条。` : '关键评论样本稳定。')
+          external.lingxi ? `灵犀大盘母婴搜索均值 ${Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString()}，头部品牌 ${external.lingxi.brandRankings[0]?.name || 'BeBeBus'} 占据 ${external.lingxi.brandRankings[0]?.share || 18.2}% 份额。` : (facts.topics[0] ? `最高频评论主题为“${facts.topics[0].topic}”，共 ${facts.topics[0].count} 条。` : '关键评论样本稳定。')
         ],
         kpis: [
           { key: 'notes', label: '内容样本', value: totalNotes, unit: '篇', note: '报告期纳入' },
@@ -231,9 +259,9 @@ export async function POST(request: Request) {
           { key: 'positive', label: '正向口碑', value: totalComments ? `${(positive / totalComments * 100).toFixed(1)}%` : '—', tone: 'good', note: `${positive} 条` },
           { key: 'negative', label: '负向风险', value: totalComments ? `${(negative / totalComments * 100).toFixed(1)}%` : '—', tone: 'danger', note: `${negative} 条` },
           { key: 'supplier', label: '供应商外显', value: number(facts.supplier.total) ? `${(number(facts.supplier.visible) / number(facts.supplier.total) * 100).toFixed(1)}%` : '—', note: `${number(facts.supplier.visible)}/${number(facts.supplier.total)} 条` },
-          ...(external.paidAds ? [{ key: 'ad_spend', label: '聚光总消耗', value: external.paidAds.totals.spend, unit: '元', note: `${external.paidAds.totals.accounts} 个子账户 · CTR ${(Number(external.paidAds.totals.ctr) * 100).toFixed(1)}%` }] : []),
+          ...(external.paidAds ? [{ key: 'ad_spend', label: '聚光总消耗', value: Number(Number(external.paidAds.totals.spend).toFixed(2)).toLocaleString(), unit: '元', note: `${external.paidAds.totals.accounts} 个子账户 · CTR ${(Number(external.paidAds.totals.ctr) * 100).toFixed(1)}%` }] : []),
           ...(external.lingxi ? [
-            { key: 'lingxi_avg', label: '灵犀大盘均值', value: '334.9万', unit: '次', note: '白犀计划 · 母婴全类目' },
+            { key: 'lingxi_avg', label: '灵犀大盘均值', value: Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString(), unit: '次', note: '白犀计划 · 母婴全类目' },
             { key: 'lingxi_leader', label: '大盘头部品牌', value: external.lingxi.brandRankings[0]?.name || 'BeBeBus', note: `搜索份额 ${external.lingxi.brandRankings[0]?.share || 18.2}%` }
           ] : [])
         ],
@@ -242,7 +270,7 @@ export async function POST(request: Request) {
           { id: 'progress', eyebrow: 'DELIVERY & BUDGET', title: '主线发布与费用进度', kind: 'funnel', data: facts.pipelines.map(row => ({ 主线: String(row.name), 已交付: number(row.deliveredCount), 目标: number(row.targetCount), 已花费: number(row.spent), 预算: number(row.budget), 发布进度: number(row.targetCount) ? `${(number(row.deliveredCount) / number(row.targetCount) * 100).toFixed(1)}%` : '—' })) },
           { id: 'topics', eyebrow: 'VOICE TOPICS', title: '消费者讨论主题', kind: 'bars', data: facts.topics },
           { id: 'notes', eyebrow: 'TOP CONTENT', title: '重点笔记与优秀案例', kind: 'cards', description: '按互动与评论表现排序，封面来自笔记详情接口并已下载到项目资产库。', data: facts.notes },
-          { id: 'actions', eyebrow: 'AI SUMMARY', title: '决策结论与下一步', kind: 'insights', data: [] },
+          { id: 'actions', eyebrow: '结论与行动', title: '决策结论与下一步', kind: 'insights', data: [] },
         ],
         sources: facts.sources.map(row => ({ name: String(row.name), type: String(row.type), freshness: String(row.freshness), rows: number(row.rows) })),
         quality: [
@@ -331,6 +359,23 @@ export async function POST(request: Request) {
         });
       }
 
+      let reviewResult: Awaited<ReturnType<typeof reviewByDate>> = null;
+      const reviewDateKey = parseDateKey(prompt);
+      if (reviewDateKey) {
+        try {
+          reviewResult = await reviewByDate(reviewDateKey);
+          if (reviewResult) {
+            await ensureReviewTables(d1);
+            await persistReviewBatch(d1, project, reviewResult);
+            spec.sections.unshift(...reviewSections(reviewResult));
+            const insightLines = await aiReviewInsight(prompt, reviewResult);
+            spec.sections.splice(2, 0, { id: 'review_insight', eyebrow: '模型解读', title: '本期判定解读与下一步', kind: 'insights', data: insightLines.map((text) => ({ text })) });
+            spec.summary = [...reviewSummary(reviewResult), ...spec.summary];
+          } else {
+            plan.warnings.push(reviewDateKey + '暂无供应商执行数据，可换其他日期重试。');
+          }
+        } catch { plan.warnings.push('评论判定数据读取异常，已跳过。'); }
+      }
       const ai = await aiSummary(prompt, spec);
       if (ai?.length) {
         spec.summary = ai;
@@ -341,7 +386,7 @@ export async function POST(request: Request) {
       const reportId = crypto.randomUUID();
       const html = reportHtml(spec);
       const finished = new Date().toISOString();
-      const manifest = { sources: plan.sources, endpoints: plan.endpoints, metrics: plan.requestedMetrics, assets: Array.isArray(body.assetIds) ? body.assetIds : [] };
+      const manifest = { sources: plan.sources, endpoints: plan.endpoints, metrics: plan.requestedMetrics, review: reviewResult ? { date: reviewResult.dateKey, ...reviewResult.counts } : null, assets: Array.isArray(body.assetIds) ? body.assetIds : [] };
 
       await d1.batch([
         d1.prepare(`UPDATE agent_runs SET status='已完成',engine=?,report_spec_json=?,progress=100,finished_at=? WHERE id=?`).bind(spec.engine, JSON.stringify(spec), finished, runId),

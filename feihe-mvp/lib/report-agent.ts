@@ -1,4 +1,4 @@
-export type MetricDefinition = { id:string; key:string; name:string; unit:string; aggregation:string; aliasesJson:string };
+﻿export type MetricDefinition = { id:string; key:string; name:string; unit:string; aggregation:string; aliasesJson:string };
 export type QueryPlan = {
   intent:string; period:{start:string;end:string}; requestedMetrics:string[]; requestedDimensions:string[];
   sources:Array<{id:string;name:string;type:string;reason:string}>; endpoints:Array<{id:string;name:string;method:string;path:string}>;
@@ -6,7 +6,7 @@ export type QueryPlan = {
 };
 export type ReportSpec = {
   version:'1.0'; title:string; subtitle:string; period:{start:string;end:string}; generatedAt:string; engine:string;
-  summary:string[]; kpis:Array<{key:string;label:string;value:number|string;unit?:string;delta?:string;tone?:string;note?:string}>;
+  query?:string; summary:string[]; kpis:Array<{key:string;label:string;value:number|string;unit?:string;delta?:string;tone?:string;note?:string}>;
   sections:Array<{id:string;title:string;eyebrow:string;kind:'trend'|'bars'|'table'|'matrix'|'funnel'|'insights'|'cards';description?:string;data:Array<Record<string,string|number>>}>;
   sources:Array<{name:string;type:string;freshness:string;rows:number}>; quality:Array<{label:string;value:number;status:string}>;
 };
@@ -46,10 +46,11 @@ export function buildQueryPlan(prompt:string,metrics:MetricDefinition[],sources:
   ]};
 }
 
+const fmtTime=(iso:string)=>{try{return new Date(iso).toLocaleString('zh-CN',{hour12:false,timeZone:'Asia/Shanghai'})+' Beijing'}catch{return iso}};
 export const reportHtml=(spec:ReportSpec)=>`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(spec.title)}</title><style>
   :root{color-scheme:light;font-family:Inter,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background-color:#f8fafc;color:#0f172a}
   body{margin:0;padding:36px 20px;background-color:#f8fafc;color:#0f172a}.wrap{max-width:1440px;margin:auto}
-  .head{padding:32px 36px;border-radius:16px;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 60%,#3b82f6 100%);color:#ffffff;box-shadow:0 4px 16px rgba(37,99,235,0.15)}
+  .head{padding:32px 36px;border-radius:16px;background:linear-gradient(135deg,#0b2a5b 0%,#1e40af 55%,#2563eb 100%);color:#ffffff;box-shadow:0 4px 16px rgba(37,99,235,0.15)}
   .head small{color:#60a5fa;font-weight:700;letter-spacing:1.5px;font-size:11px}
   h1{margin:8px 0 6px;font-size:26px;color:#ffffff;font-weight:700}
   .muted{color:#94a3b8;font-size:13px}
@@ -57,7 +58,7 @@ export const reportHtml=(spec:ReportSpec)=>`<!doctype html><html lang="zh-CN"><h
   .kpi{border:1px solid #e2e8f0;border-radius:14px;background:#ffffff;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:transform .2s}
   .kpi:hover{transform:translateY(-2px)}
   .kpi span{font-size:12px;color:#64748b;font-weight:500}
-  .kpi b{display:block;margin:8px 0;font-size:26px;color:#1d4ed8;font-family:monospace,sans-serif}
+  .kpi b{display:block;margin:8px 0;font-size:26px;color:#1d4ed8;font-variant-numeric:tabular-nums}
   .kpi small{color:#64748b;font-size:11px}
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
   .card{border:1px solid #e2e8f0;border-radius:14px;background:#ffffff;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,0.03);display:flex;flex-direction:column}
@@ -82,8 +83,10 @@ export const reportHtml=(spec:ReportSpec)=>`<!doctype html><html lang="zh-CN"><h
   .case dt{color:#64748b;font-size:9px}
   .pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
   .pill.blue{background:rgba(59,130,246,0.15);color:#93c5fd}
+  .table-scroll{max-height:440px;overflow:auto;border:1px solid #eef2f7;border-radius:10px}
+  .table-scroll thead th{position:sticky;top:0;z-index:1}
   @media(max-width:900px){body{padding:18px}.grid{grid-template-columns:1fr}.case-grid{grid-template-columns:repeat(2,1fr)}}
-  </style></head><body><div class="wrap"><section class="head"><small>INTELLIGENCE EXECUTIVE REPORT</small><h1>${escapeHtml(spec.title)}</h1><p class="muted">${escapeHtml(spec.subtitle)} · ${spec.period.start} — ${spec.period.end} · 生成引擎: ${escapeHtml(spec.engine)}</p></section><section class="kpis">${spec.kpis.map(k=>`<article class="kpi"><span>${escapeHtml(k.label)}</span><b>${escapeHtml(String(k.value))}${escapeHtml(k.unit||'')}</b><small>${escapeHtml(k.note||'')}</small></article>`).join('')}</section><section class="grid">${spec.sections.map(s=>`<article class="card ${s.kind==='table'||s.kind==='cards'?'wide':''}"><div><small>${escapeHtml(s.eyebrow)}</small><h2>${escapeHtml(s.title)}</h2>${s.description?`<p class="desc">${escapeHtml(s.description)}</p>`:''}</div>${s.kind==='insights'?`<ul>${s.data.map(x=>`<li>${escapeHtml(String(x.text||''))}</li>`).join('')}</ul>`:s.kind==='cards'?`<div class="case-grid">${s.data.slice(0,8).map(row=>`<article class="case">${row.coverUrl?`<img src="${escapeHtml(String(row.coverUrl))}" alt="">`:''}<div><strong>${escapeHtml(String(row.title||row.noteId||'笔记'))}</strong><p>${escapeHtml(String(row.author||'未知作者'))} · ${escapeHtml(String(row.category||'待分类'))}</p><dl><span><dt>互动</dt><dd>${escapeHtml(String(row.interactions||0))}</dd></span><span><dt>评论</dt><dd>${escapeHtml(String(row.comments||0))}</dd></span><span><dt>负向</dt><dd>${escapeHtml(String(row.negative||0))}</dd></span></dl></div></article>`).join('')}</div>`:s.data&&s.data.length?`<div style="overflow-x:auto;"><table><thead><tr>${Object.keys(s.data[0]||{}).map(k=>`<th>${escapeHtml(k)}</th>`).join('')}</tr></thead><tbody>${s.data.map(row=>`<tr>${Object.values(row).map(v=>`<td>${escapeHtml(String(v))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:`<p class="muted">暂无数据</p>`}</article>`).join('')}</section></div></body></html>`;
+  </style></head><body><div class="wrap"><section class="head"><small>INTELLIGENCE EXECUTIVE REPORT</small><h1>${escapeHtml(spec.title)}</h1><p class="muted">${escapeHtml(spec.subtitle)}</p><p class="muted">需求：${escapeHtml(spec.query||'常规复盘')} · 周期 ${spec.period.start} — ${spec.period.end}</p><p class="muted">生成时间：${escapeHtml(fmtTime(spec.generatedAt))} · 生成引擎：${escapeHtml(spec.engine)}</p></section><section class="kpis">${spec.kpis.map(k=>`<article class="kpi"><span>${escapeHtml(k.label)}</span><b>${escapeHtml(String(k.value))}${escapeHtml(k.unit||'')}</b><small>${escapeHtml(k.note||'')}</small></article>`).join('')}</section><section class="grid">${spec.sections.map(s=>`<article class="card ${s.kind==='table'||s.kind==='cards'?'wide':''}"><div><small>${escapeHtml(s.eyebrow)}</small><h2>${escapeHtml(s.title)}</h2>${s.description?`<p class="desc">${escapeHtml(s.description)}</p>`:''}</div>${s.kind==='insights'?`<ul>${s.data.map(x=>`<li>${escapeHtml(String(x.text||''))}</li>`).join('')}</ul>`:s.kind==='cards'?`<div class="case-grid">${s.data.slice(0,8).map(row=>`<article class="case">${row.coverUrl?`<img src="${escapeHtml(String(row.coverUrl))}" alt="">`:''}<div><strong>${escapeHtml(String(row.title||row.noteId||'笔记'))}</strong><p>${escapeHtml(String(row.author||'未知作者'))} · ${escapeHtml(String(row.category||'待分类'))}</p><dl><span><dt>互动</dt><dd>${escapeHtml(String(row.interactions||0))}</dd></span><span><dt>评论</dt><dd>${escapeHtml(String(row.comments||0))}</dd></span><span><dt>负向</dt><dd>${escapeHtml(String(row.negative||0))}</dd></span></dl></div></article>`).join('')}</div>`:s.data&&s.data.length?`<div class="table-scroll"><table><thead><tr>${Object.keys(s.data[0]||{}).map(k=>`<th>${escapeHtml(k)}</th>`).join('')}</tr></thead><tbody>${s.data.map(row=>`<tr>${Object.values(row).map(v=>`<td>${escapeHtml(String(v))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:`<p class="muted">暂无数据</p>`}</article>`).join('')}</section></div></body></html>`;
 
 function escapeHtml(value:string){return value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]||char))}
 export const addDays=(date:string,days:number)=>{const d=atDay(date);d.setDate(d.getDate()+days);return iso(d)};

@@ -8,7 +8,7 @@ export type LingxiTrackResult = {
   brand: string;
   period: { start: string; end: string };
   subMarket: string;
-  benchmarks: { avgSearchNum: number; avgNoteNum: number; avgBrandCount: number };
+  benchmarks: { avgSearchNum: number; avgNoteNum: number; demandBenchmark?: number; supplyBenchmark?: number; avgBrandCount: number; scope?: string };
   marketOpportunities: LingxiCategory[];
   brandRankings: LingxiBrand[];
   spuRankings: LingxiSpu[];
@@ -106,9 +106,12 @@ export function getLingxiTrackData(startDate = '2026-08-23', endDate = '2026-08-
     period: { start: startDate, end: endDate },
     subMarket,
     benchmarks: {
-      avgSearchNum: 3349000,
-      avgNoteNum: 28840000,
+      avgSearchNum: 135000,
+      avgNoteNum: 1740000,
+      demandBenchmark: 135000,
+      supplyBenchmark: 1740000,
       avgBrandCount: 310,
+      scope: '母婴 13 细分市场品类均值',
     },
     marketOpportunities: muyingCategories,
     brandRankings: topLingxiBrands,
