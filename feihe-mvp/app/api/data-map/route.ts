@@ -26,36 +26,42 @@ async function seed(project:string){const d1=db(),now=new Date().toISOString();
   // Integrations: Keystone, IPSCG, Lingxi, Juguang
   await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:keystone`,project,'keystone','Keystone AI 模型网关','https://keystonehk.ai/v1',JSON.stringify({modelsPath:'/models',chatPath:'/chat/completions',textModel:'gpt-5.6-terra',imageModel:'gpt-image-2',purpose:'意图理解、ReportSpec 生成与生图'}),now,now).run();
   await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:ipscg`,project,'ipscg','IPSCG 素材抓取系统','http://117.78.5.18:8080/ips-api',JSON.stringify({purpose:'小红书关键词笔记抓取、竞品UGC样本、评论抓取',listPath:'/yimei/getKeywordTaskList',resultPath:'/yimei/selectKeywordResults'}),now,now).run();
-  await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:lingxi`,project,'lingxi','小红书灵犀平台（白犀计划）','https://idea.xiaohongshu.com',JSON.stringify({purpose:'市场机会（市场供需/潜力）、母婴13细分赛道、品牌与SPU Top30',brand:'白犀计划',brandId:'548104',muyingCode:'2d73b2f6a5584885ac4ca78638b8aab3',status:'演示样本数据'}),now,now).run();
+  await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'演示数据',?,?)`).bind(`${project}:lingxi`,project,'lingxi','小红书灵犀平台（演示数据）','https://idea.xiaohongshu.com',JSON.stringify({purpose:'市场机会（市场供需/潜力）、母婴13细分赛道、品牌与SPU Top30 演示样本',brand:'白犀计划',brandId:'548104',mode:'demo',status:'演示数据 (未接入真实接口)'}),now,now).run();
   await d1.prepare(`INSERT OR REPLACE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at) VALUES(?,?,?,?,?,1,?,'连接正常',?,?)`).bind(`${project}:juguang`,project,'juguang','小红书聚光投放平台（代理商易美）','https://partner.xiaohongshu.com',JSON.stringify({purpose:'65个子账户消耗、曝光、点击、CTR、余额及明细',agent:'北京易美',subAccountCount:65,topAdvertiserId:10898747}),now,now).run();
 
   // Source Accounts
   const accountSeeds = [
-    [`${project}:acc:feihe_search`, '10898747', '飞鹤-卓睿日常搜索-易美', 'sub_account', `${project}:juguang`, JSON.stringify({ brand: '飞鹤奶粉', todaySpend: 88839.73, balance: 649204.86, ctr: 0.068 })],
-    [`${project}:acc:feihe_qicui`, '9021861', '飞鹤-婴配-启萃-日常-易美-F', 'sub_account', `${project}:juguang`, JSON.stringify({ brand: '飞鹤鲜萃系列', todaySpend: 27462.59, balance: 312681.03, ctr: 0.069 })],
-    [`${project}:acc:feihe_grass`, '212963', '飞鹤-卓睿日常种草-易美', 'sub_account', `${project}:juguang`, JSON.stringify({ brand: '飞鹤奶粉', todaySpend: 10762.02, balance: 2613237.14, ctr: 0.113 })],
-    [`${project}:acc:bebebus`, '11512520', 'BeBeBus-床品线', 'sub_account', `${project}:juguang`, JSON.stringify({ brand: 'BeBeBus母婴', todaySpend: 14170.17, balance: 105989.41, ctr: 0.085 })],
-    [`${project}:acc:lingxi_baixi`, '548104', '小红书灵犀-白犀计划', 'brand_account', `${project}:lingxi`, JSON.stringify({ brand: '白犀计划', industry: '母婴', permissions: '全权限' })],
+    [`${project}:acc:feihe_search`, '10898747', '飞鹤-卓睿日常搜索-易美', 'sub_account', `${project}:juguang`, '连接正常', JSON.stringify({ brand: '飞鹤奶粉', todaySpend: 88839.73, balance: 649204.86, ctr: 0.068 })],
+    [`${project}:acc:feihe_qicui`, '9021861', '飞鹤-婴配-启萃-日常-易美-F', 'sub_account', `${project}:juguang`, '连接正常', JSON.stringify({ brand: '飞鹤鲜萃系列', todaySpend: 27462.59, balance: 312681.03, ctr: 0.069 })],
+    [`${project}:acc:feihe_grass`, '212963', '飞鹤-卓睿日常种草-易美', 'sub_account', `${project}:juguang`, '连接正常', JSON.stringify({ brand: '飞鹤奶粉', todaySpend: 10762.02, balance: 2613237.14, ctr: 0.113 })],
+    [`${project}:acc:bebebus`, '11512520', 'BeBeBus-床品线', 'sub_account', `${project}:juguang`, '连接正常', JSON.stringify({ brand: 'BeBeBus母婴', todaySpend: 14170.17, balance: 105989.41, ctr: 0.085 })],
+    [`${project}:acc:lingxi_baixi`, '548104', '小红书灵犀-白犀计划', 'brand_account', `${project}:lingxi`, '演示账户', JSON.stringify({ brand: '白犀计划', industry: '母婴', mode: 'demo', permissions: '未配置真实企业授权' })],
   ];
-  await d1.batch(accountSeeds.map(([id, extId, name, type, intId, meta]) => d1.prepare(`INSERT OR REPLACE INTO source_accounts(id,project_id,integration_id,external_id,name,account_type,status,metadata_json,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(id, project, intId, extId, name, type, '连接正常', meta, now, now)));
+  await d1.batch(accountSeeds.map(([id, extId, name, type, intId, status, meta]) => d1.prepare(`INSERT OR REPLACE INTO source_accounts(id,project_id,integration_id,external_id,name,account_type,status,metadata_json,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(id, project, intId, extId, name, type, status, meta, now, now)));
 
   // API Endpoints
   const endpointSeeds=[
-    [`${project}:project_metrics`,'project_metrics','项目经营指标','GET','/api/dashboard','内部数据','按项目和时间范围读取发布、评论、内容与处置聚合指标',null],
-    [`${project}:juguang_summary`,'juguang_summary','聚光投放消耗与指标汇总','GET','/api/ads/summary','投放数据','按项目聚合聚光 65 个子账户的消耗、曝光、点击、CTR 与余额',`${project}:juguang`],
-    [`${project}:juguang_sub_page`,'juguang_sub_page','聚光代理商子账户接口','GET','/api/partner/agent/sub/page','投放接口','代理商后台分页拉取全部 65 个子账户投放明细',`${project}:juguang`],
-    [`${project}:lingxi_track_live`,'lingxi_track_live','灵犀母婴大盘机会示例','GET','/api/lingxi/track','行业洞察','母婴 13 大细分赛道供需四象限、品牌与 SPU Top30 演示样本',`${project}:lingxi`],
-    [`${project}:lingxi_market`,'lingxi_market','灵犀市场供需与潜力','POST','/api/idea/trackV2/*','行业洞察','市场供需/市场潜力（母婴类目，白犀计划品牌）；实时按需拉取',`${project}:lingxi`],
-    [`${project}:redtrend_search`,'redtrend_search','关键词笔记搜索','POST','/api/solar/content_square/searchNote','内容扫描','按关键词和日期范围发现本品/竞品 UGC 笔记',`${project}:redtrend`],
-    [`${project}:redtrend_detail`,'redtrend_detail','笔记详情与封面','GET','/api/solar/note/{noteId}/detail?bizCode=','内容资产','抓取笔记首图并下载到项目 R2 资产库',`${project}:redtrend`],
-    [`${project}:redtrend_l1`,'redtrend_l1','笔记主评论','GET','/api/solar/note/{noteId}/l1_comments','评论抓取','分页获取全部主评论',`${project}:redtrend`],
-    [`${project}:redtrend_l2`,'redtrend_l2','楼中楼回复','GET','/api/solar/note/{noteId}/l2_comments','评论抓取','按主评论分页获取回复',`${project}:redtrend`],
-    [`${project}:keystone_models`,'keystone_models','Keystone 模型能力','GET','/models','AI 网关','探测当前令牌可用模型',`${project}:keystone`],
-    [`${project}:keystone_chat`,'keystone_chat','Keystone 文本推理','POST','/chat/completions','AI 网关','生成查询计划和决策摘要，仅输出结构化 JSON',`${project}:keystone`],
-    [`${project}:ipscg_tasks`,'ipscg_tasks','IPSCG 抓取任务列表','GET','/yimei/getKeywordTaskList','外部抓取','列出素材系统的小红书关键词抓取任务',`${project}:ipscg`],
-    [`${project}:ipscg_results`,'ipscg_results','IPSCG 笔记抓取结果','GET','/yimei/selectKeywordResults','外部抓取','按任务拉取小红书笔记样本（标题/内容/互动/标签）',`${project}:ipscg`],
+    [`${project}:project_metrics`,'project_metrics','项目经营指标','GET','/api/dashboard','内部数据','按项目和时间范围读取发布、评论、内容与处置聚合指标',null,1],
+    [`${project}:juguang_summary`,'juguang_summary','聚光投放消耗与指标汇总','GET','/api/ads/summary','投放数据','按项目聚合聚光 65 个子账户的消耗、曝光、点击、CTR 与余额',`${project}:juguang`,1],
+    [`${project}:juguang_sub_page`,'juguang_sub_page','聚光代理商子账户接口','GET','/api/partner/agent/sub/page','投放接口','代理商后台分页拉取全部 65 个子账户投放明细',`${project}:juguang`,1],
+    [`${project}:lingxi_track_live`,'lingxi_track_live','灵犀母婴大盘机会示例','GET','/api/lingxi/track','行业洞察','本地演示样本 API，不调用外部 Lingxi',`${project}:lingxi`,1],
+    [`${project}:lingxi_market`,'lingxi_market','真实 Lingxi 市场接口占位（未授权）','POST','/api/idea/trackV2/*','行业洞察','待配置企业凭据后启用，目前未启用',`${project}:lingxi`,0],
+    [`${project}:redtrend_search`,'redtrend_search','关键词笔记搜索','POST','/api/solar/content_square/searchNote','内容扫描','按关键词和日期范围发现本品/竞品 UGC 笔记',`${project}:redtrend`,1],
+    [`${project}:redtrend_detail`,'redtrend_detail','笔记详情与封面','GET','/api/solar/note/{noteId}/detail?bizCode=','内容资产','抓取笔记首图并下载到项目 R2 资产库',`${project}:redtrend`,1],
+    [`${project}:redtrend_l1`,'redtrend_l1','笔记主评论','GET','/api/solar/note/{noteId}/l1_comments','评论抓取','分页获取全部主评论',`${project}:redtrend`,1],
+    [`${project}:redtrend_l2`,'redtrend_l2','楼中楼回复','GET','/api/solar/note/{noteId}/l2_comments','评论抓取','按主评论分页获取回复',`${project}:redtrend`,1],
+    [`${project}:keystone_models`,'keystone_models','Keystone 模型能力','GET','/models','AI 网关','探测当前令牌可用模型',`${project}:keystone`,1],
+    [`${project}:keystone_chat`,'keystone_chat','Keystone 文本推理','POST','/chat/completions','AI 网关','生成查询计划和决策摘要，仅输出结构化 JSON',`${project}:keystone`,1],
+    [`${project}:ipscg_tasks`,'ipscg_tasks','IPSCG 抓取任务列表','GET','/yimei/getKeywordTaskList','外部抓取','列出素材系统的小红书关键词抓取任务',`${project}:ipscg`,1],
+    [`${project}:ipscg_results`,'ipscg_results','IPSCG 笔记抓取结果','GET','/yimei/selectKeywordResults','外部抓取','按任务拉取小红书笔记样本（标题/内容/互动/标签）',`${project}:ipscg`,1],
   ];
-  await d1.batch(endpointSeeds.map(([id,key,name,method,path,category,description,integrationId])=>d1.prepare(`INSERT OR REPLACE INTO api_endpoints(id,project_id,integration_id,key,name,method,path,category,description,parameter_schema,response_schema,enabled,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'{}','{}',1,?,?)`).bind(id,project,integrationId,key,name,method,path,category,description,now,now)));
+  await d1.batch(endpointSeeds.map(([id,key,name,method,path,category,description,integrationId,enabled])=>d1.prepare(`INSERT OR REPLACE INTO api_endpoints(id,project_id,integration_id,key,name,method,path,category,description,parameter_schema,response_schema,enabled,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'{}','{}',?,?,?)`).bind(id,project,integrationId,key,name,method,path,category,description,enabled,now,now)));
+
+  // 同步修正已有历史记录，确保状态准确反映 Demo 状态与未授权状态
+  await d1.prepare(`UPDATE integrations SET status='演示数据', name='小红书灵犀平台（演示数据）' WHERE provider='lingxi' AND project_id=?`).bind(project).run();
+  await d1.prepare(`UPDATE source_accounts SET status='演示账户', metadata_json=? WHERE integration_id=? AND project_id=?`).bind(JSON.stringify({ brand: '白犀计划', industry: '母婴', mode: 'demo', permissions: '未配置真实企业授权' }), `${project}:lingxi`, project).run();
+  await d1.prepare(`UPDATE api_endpoints SET enabled=0, name='真实 Lingxi 市场接口占位（未授权）', description='待配置企业凭据后启用，目前未启用' WHERE key='lingxi_market' AND project_id=?`).bind(project).run();
+  await d1.prepare(`UPDATE api_endpoints SET name='灵犀母婴大盘机会示例', description='本地演示样本 API，不调用外部 Lingxi' WHERE key='lingxi_track_live' AND project_id=?`).bind(project).run();
   
   const fieldMap:Record<string,string>={
     spend:'ads.totals.spend',
