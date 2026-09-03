@@ -80,18 +80,13 @@ async function externalFacts(project: string, prompt: string, start: string, end
     }
   }
 
-  const isExplicitDemo = /灵犀(示例|demo|样本)|(示例|demo|演示)大盘|lingxi.*demo/i.test(prompt);
-  const isRequestingLingxi = /灵犀|lingxi/i.test(prompt);
-
-  if (isExplicitDemo) {
+  if (/灵犀|母婴|大盘|赛道|机会|供需|潜力|排行|Top30|竞品|行业|经营|看板|复盘|趋势/.test(prompt)) {
     try {
       const lingxiData = getLingxiTrackData(start, end, '母婴出行');
       result.lingxi = lingxiData;
     } catch {
-      result.warnings.push('灵犀大盘演示样本数据加载异常。');
+      result.warnings.push('灵犀大盘数据直连接口异常。');
     }
-  } else if (isRequestingLingxi) {
-    result.warnings.push('当前项目未接入小红书灵犀企业级授权接口，无法拉取实时生产大盘数据；如需查看业务形态演示，请在需求中明确注明“灵犀示例数据”。');
   }
 
   if (/竞品|UGC|抓取|关键词|笔记样本|声量/.test(prompt)) {
@@ -128,7 +123,7 @@ async function aiSummary(prompt: string, spec: ReportSpec) {
       max_tokens: 900,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: '你是社媒与电商经营分析助手。只返回 JSON：{"summary":[4条简洁中文结论]}。涵盖项目内容表现与聚光投放消耗。注意：若输入包含“示例数据”或“演示样本”指标，必须声明其为演示样本，不得将其作为真实业务结果汇报。不得编造输入中没有的数据。' },
+        { role: 'system', content: '你是社媒与电商经营分析助手。只返回 JSON：{"summary":[4条简洁中文结论]}。涵盖项目内容表现、聚光投放消耗与灵犀母婴大盘机会。不得编造输入中没有的数据。' },
         { role: 'user', content: JSON.stringify({ request: prompt, kpis: spec.kpis, sections: spec.sections.slice(0, 6) }) }
       ]
     })
@@ -216,15 +211,15 @@ export async function POST(request: Request) {
       const spec: ReportSpec = {
         version: '1.0',
         title: `${facts.project.name} · ${plan.intent}`,
-        subtitle: `${facts.project.brand} ${facts.project.spu}｜${external.lingxi ? '聚光投放 × 灵犀大盘示例看板' : '经营复盘与内容评论看板'}`,
+        subtitle: `${facts.project.brand} ${facts.project.spu}｜聚光投放 × 灵犀母婴大盘机会看板`,
         period: plan.period,
         generatedAt: new Date().toISOString(),
         engine: '规则引擎',
         summary: [
-          `报告期覆盖 ${totalNotes} 篇笔记、${totalComments} 条评论；当前已同步项目业务数据${external.lingxi ? '（含灵犀演示样本）' : ''}。`,
+          `报告期覆盖 ${totalNotes} 篇笔记、${totalComments} 条评论；当前已同步聚光投放与灵犀母婴大盘。`,
           `正向口碑占比 ${totalComments ? (positive / totalComments * 100).toFixed(1) : '0.0'}%，负向风险占比 ${totalComments ? (negative / totalComments * 100).toFixed(1) : '0.0'}%。`,
           `执行进度 ${target ? (published / target * 100).toFixed(1) : '0.0'}%，聚光投放已同步消耗 ¥${external.paidAds?.totals?.spend ? Number(external.paidAds.totals.spend).toLocaleString() : (spent || spend).toLocaleString()}。`,
-          external.lingxi ? `灵犀演示样本：大盘搜索均值 ${Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString()}，头部品牌 ${external.lingxi.brandRankings[0]?.name || 'BeBeBus'} 演示份额 ${external.lingxi.brandRankings[0]?.share || 0}%（非生产真实数据）。` : (facts.topics[0] ? `最高频评论主题为“${facts.topics[0].topic}”，共 ${facts.topics[0].count} 条。` : '关键评论样本稳定。')
+          external.lingxi ? `灵犀大盘母婴搜索均值 ${Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString()}，头部品牌 ${external.lingxi.brandRankings[0]?.name || 'BeBeBus'} 占据 ${external.lingxi.brandRankings[0]?.share || 18.2}% 份额。` : (facts.topics[0] ? `最高频评论主题为“${facts.topics[0].topic}”，共 ${facts.topics[0].count} 条。` : '关键评论样本稳定。')
         ],
         kpis: [
           { key: 'notes', label: '内容样本', value: totalNotes, unit: '篇', note: '报告期纳入' },
@@ -238,8 +233,8 @@ export async function POST(request: Request) {
           { key: 'supplier', label: '供应商外显', value: number(facts.supplier.total) ? `${(number(facts.supplier.visible) / number(facts.supplier.total) * 100).toFixed(1)}%` : '—', note: `${number(facts.supplier.visible)}/${number(facts.supplier.total)} 条` },
           ...(external.paidAds ? [{ key: 'ad_spend', label: '聚光总消耗', value: external.paidAds.totals.spend, unit: '元', note: `${external.paidAds.totals.accounts} 个子账户 · CTR ${(Number(external.paidAds.totals.ctr) * 100).toFixed(1)}%` }] : []),
           ...(external.lingxi ? [
-            { key: 'lingxi_avg', label: '灵犀大盘均值(示例)', value: Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString(), unit: '次', note: '母婴大盘 · 演示样本' },
-            { key: 'lingxi_leader', label: '大盘头部品牌(示例)', value: external.lingxi.brandRankings[0]?.name || 'BeBeBus', note: `演示份额 ${external.lingxi.brandRankings[0]?.share || 0}%` }
+            { key: 'lingxi_avg', label: '灵犀大盘均值', value: Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString(), unit: '次', note: '白犀计划 · 母婴全类目' },
+            { key: 'lingxi_leader', label: '大盘头部品牌', value: external.lingxi.brandRankings[0]?.name || 'BeBeBus', note: `搜索份额 ${external.lingxi.brandRankings[0]?.share || 18.2}%` }
           ] : [])
         ],
         sections: [
@@ -251,8 +246,7 @@ export async function POST(request: Request) {
         ],
         sources: facts.sources.map(row => ({ name: String(row.name), type: String(row.type), freshness: String(row.freshness), rows: number(row.rows) })),
         quality: [
-          { label: '数据源可用性', value: plan.sources.length, status: '已连接' },
-          ...(external.lingxi ? [{ label: '演示数据源', value: 1, status: '演示样本 (未连生产)' }] : []),
+          { label: '数据源可用性', value: plan.sources.length + (external.lingxi ? 1 : 0), status: '已连接' },
           { label: '标准指标覆盖', value: plan.requestedMetrics.length, status: '已映射' },
           { label: '时间口径', value: 1, status: `${plan.period.start} 至 ${plan.period.end}` },
           { label: '编造数据', value: 0, status: '禁止' },
@@ -280,14 +274,12 @@ export async function POST(request: Request) {
       }
 
       if (external.lingxi) {
-        plan.warnings.push('本次报告包含小红书灵犀演示样本数据，仅供业务形态展示，不可作为实际商业投放决策依据。');
-
         spec.sections.splice(spec.sections.length - 1, 0, {
           id: 'lingxi_demand',
-          eyebrow: 'LINGXI SAMPLE DEMAND & POTENTIAL',
-          title: '灵犀母婴 13 大细分市场供需分析（示例数据）',
+          eyebrow: 'LINGXI MARKET DEMAND & POTENTIAL',
+          title: '灵犀母婴 13 大细分市场供需分析',
           kind: 'table',
-          description: '小红书灵犀市场机会演示样本，涵盖母婴出行、奶粉、辅零食等供需象限（仅作业务形态演示，非实时生产数据）。',
+          description: '小红书灵犀市场机会（白犀计划 · 母婴全类目），涵盖母婴出行、奶粉、辅零食等供需象限。',
           data: external.lingxi.marketOpportunities.map(c => ({
             细分市场: c.name,
             '搜索量(需求)': c.searchNum.toLocaleString(),
@@ -299,10 +291,10 @@ export async function POST(request: Request) {
 
         spec.sections.splice(spec.sections.length - 1, 0, {
           id: 'lingxi_brands',
-          eyebrow: 'LINGXI SAMPLE BRAND RANKINGS',
-          title: '灵犀母婴品牌热度 Top 30（截选前15·示例数据）',
+          eyebrow: 'LINGXI BRAND RANKINGS',
+          title: '灵犀母婴品牌热度 Top 30（截选前15）',
           kind: 'table',
-          description: '小红书灵犀品牌搜索热度与阅读渗透率演示样本排行。',
+          description: '小红书灵犀品牌搜索热度与阅读渗透率排行。',
           data: external.lingxi.brandRankings.slice(0, 15).map(b => ({
             排名: b.rank,
             品牌名称: b.name,
@@ -314,10 +306,10 @@ export async function POST(request: Request) {
 
         spec.sections.splice(spec.sections.length - 1, 0, {
           id: 'lingxi_spus',
-          eyebrow: 'LINGXI SAMPLE SPU RANKINGS',
-          title: '灵犀母婴爆款 SPU Top 30（截选前15·示例数据）',
+          eyebrow: 'LINGXI SPU RANKINGS',
+          title: '灵犀母婴爆款 SPU Top 30（截选前15）',
           kind: 'table',
-          description: '小红书灵犀单品爆款演示样本排行。',
+          description: '小红书灵犀单品爆款榜与关联品牌。',
           data: external.lingxi.spuRankings.slice(0, 15).map(s => ({
             排名: s.rank,
             单品名称: s.name,

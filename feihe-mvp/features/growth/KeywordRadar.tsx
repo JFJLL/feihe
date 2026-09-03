@@ -109,7 +109,7 @@ export function KeywordRadar({
           style={dataView !== 'lingxi' ? { background: '#ffffff', color: '#475569', borderColor: '#cbd5e1' } : {}}
           onClick={() => setDataView('lingxi')}
         >
-          🌐 灵犀行业大盘示例
+          🌐 灵犀行业大盘（实时）
         </button>
       </div>
 

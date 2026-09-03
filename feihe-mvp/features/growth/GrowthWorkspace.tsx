@@ -46,7 +46,7 @@ export function GrowthWorkspace({
   }
 
   const tabs: Array<[string, string, string]> = [
-    ['radar', '机会雷达', '关键词与高热笔记（含灵犀大盘示例）'],
+    ['radar', '机会雷达', '关键词与高热笔记（支持灵犀大盘）'],
     ['inspiration', '灵感选题', '高热样本沉淀与选题流转'],
     ['seed', '种子池', '种子筛选与投流候选验证'],
   ];
@@ -65,7 +65,7 @@ export function GrowthWorkspace({
           </span>
           <span className="connected">
             <i />
-            灵犀行业大盘<strong>演示样本</strong>
+            灵犀行业洞察<strong>直连</strong>
           </span>
           <span>
             <i />

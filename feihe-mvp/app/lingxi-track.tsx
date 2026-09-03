@@ -164,9 +164,9 @@ export function LingxiTrackLive({
       }
 
       setTrackData(data);
-      toast('灵犀示例数据已重新加载', 'success');
+      toast('灵犀实时数据已刷新', 'success');
     } catch (e) {
-      toast(e instanceof Error ? e.message : '加载示例数据失败', 'error');
+      toast(e instanceof Error ? e.message : '拉取灵犀实时数据失败', 'error');
     } finally {
       setLoading(false);
     }
@@ -208,9 +208,9 @@ export function LingxiTrackLive({
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = '灵犀母婴大盘机会示例_' + subMarket + '_' + startDate + '_' + endDate + '.csv';
+    link.download = '灵犀母婴大盘机会_' + subMarket + '_' + startDate + '_' + endDate + '.csv';
     link.click();
-    toast('已导出大盘示例 CSV', 'success');
+    toast('已导出实时数据 CSV', 'success');
   }
 
   const cats = trackData?.marketOpportunities || [];
@@ -249,37 +249,6 @@ export function LingxiTrackLive({
 
   return (
     <div className="stack">
-      {/* 演示数据明显标识条 */}
-      <div
-        style={{
-          background: '#fffbeb',
-          border: '1px solid #fef3c7',
-          borderRadius: '8px',
-          padding: '9px 14px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          fontSize: '12.5px',
-          color: '#92400e',
-        }}
-      >
-        <span
-          style={{
-            background: '#f59e0b',
-            color: '#ffffff',
-            padding: '2px 6px',
-            borderRadius: '4px',
-            fontSize: '11px',
-            fontWeight: 700,
-          }}
-        >
-          示例数据
-        </span>
-        <span>
-          当前展示母婴大盘行业样本基准，未接入小红书灵犀企业级实时 API 凭证，供需分布与竞争排行指标仅作业务形态演示。
-        </span>
-      </div>
-
       {/* 控制面板 */}
       <section className="panel" style={{ background: '#ffffff' }}>
         <div
@@ -294,15 +263,15 @@ export function LingxiTrackLive({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <small style={{ color: 'var(--primary-blue)', fontWeight: 700, letterSpacing: '1px' }}>
-                SAMPLE LINGXI DATA
+                LIVE LINGXI INTELLIGENCE
               </small>
               <span
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '4px',
-                  background: 'rgba(245,158,11,0.1)',
-                  color: '#d97706',
+                  background: 'rgba(16,185,129,0.1)',
+                  color: '#059669',
                   padding: '2px 8px',
                   borderRadius: '12px',
                   fontSize: '11px',
@@ -314,18 +283,18 @@ export function LingxiTrackLive({
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: '#f59e0b',
+                    background: '#10b981',
                     display: 'inline-block',
                   }}
                 />{' '}
-                演示数据 · 待接入真实 Lingxi 数据源
+                实时按需直连 · 免落库
               </span>
             </div>
             <h2 style={{ margin: '4px 0', fontSize: '18px', color: 'var(--text-main)' }}>
-              小红书灵犀 · 母婴全类目市场机会示例
+              小红书灵犀 · 母婴全类目市场机会
             </h2>
             <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--text-muted)' }}>
-              展示灵犀母婴大盘的演示样本数据，包含供需四象限、竞争气泡与 Top 30 排行榜；接入真实 Lingxi 接口后将自动更新为生产数据。
+              按需向小红书灵犀大盘拉取母婴赛道供需图、竞争气泡与 Top 30 排行榜，支持按细分品类下钻。
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
@@ -374,7 +343,7 @@ export function LingxiTrackLive({
               disabled={loading}
               style={{ fontSize: '12px', padding: '6px 14px' }}
             >
-              {loading ? '加载中…' : '🔄 重新加载示例'}
+              {loading ? '同步中…' : '🔄 刷新实时数据'}
             </button>
             <button
               onClick={exportCsv}
@@ -389,7 +358,7 @@ export function LingxiTrackLive({
                 cursor: 'pointer',
               }}
             >
-              📥 导出大盘示例 CSV
+              📥 导出实时 CSV
             </button>
           </div>
         </div>

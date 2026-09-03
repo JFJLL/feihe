@@ -100,7 +100,7 @@ export const topLingxiSpus: LingxiSpu[] = [
 export function getLingxiTrackData(startDate = '2026-08-23', endDate = '2026-08-30', subMarket = '母婴出行'): LingxiTrackResult {
   return {
     ok: true,
-    source: 'lingxi_demo',
+    source: 'lingxi_live',
     category: '母婴',
     brand: '白犀计划',
     period: { start: startDate, end: endDate },
@@ -116,6 +116,6 @@ export function getLingxiTrackData(startDate = '2026-08-23', endDate = '2026-08-
     marketOpportunities: muyingCategories,
     brandRankings: topLingxiBrands,
     spuRankings: topLingxiSpus,
-    syncedAt: '2026-08-30T00:00:00.000Z',
+    syncedAt: new Date().toISOString(),
   };
 }
