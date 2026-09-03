@@ -231,7 +231,7 @@ export async function POST(request: Request) {
           { key: 'positive', label: '正向口碑', value: totalComments ? `${(positive / totalComments * 100).toFixed(1)}%` : '—', tone: 'good', note: `${positive} 条` },
           { key: 'negative', label: '负向风险', value: totalComments ? `${(negative / totalComments * 100).toFixed(1)}%` : '—', tone: 'danger', note: `${negative} 条` },
           { key: 'supplier', label: '供应商外显', value: number(facts.supplier.total) ? `${(number(facts.supplier.visible) / number(facts.supplier.total) * 100).toFixed(1)}%` : '—', note: `${number(facts.supplier.visible)}/${number(facts.supplier.total)} 条` },
-          ...(external.paidAds ? [{ key: 'ad_spend', label: '聚光总消耗', value: external.paidAds.totals.spend, unit: '元', note: `${external.paidAds.totals.accounts} 个子账户 · CTR ${(Number(external.paidAds.totals.ctr) * 100).toFixed(1)}%` }] : []),
+          ...(external.paidAds ? [{ key: 'ad_spend', label: '聚光总消耗', value: Number(Number(external.paidAds.totals.spend).toFixed(2)).toLocaleString(), unit: '元', note: `${external.paidAds.totals.accounts} 个子账户 · CTR ${(Number(external.paidAds.totals.ctr) * 100).toFixed(1)}%` }] : []),
           ...(external.lingxi ? [
             { key: 'lingxi_avg', label: '灵犀大盘均值', value: Number(external.lingxi.benchmarks?.avgSearchNum || 0).toLocaleString(), unit: '次', note: '白犀计划 · 母婴全类目' },
             { key: 'lingxi_leader', label: '大盘头部品牌', value: external.lingxi.brandRankings[0]?.name || 'BeBeBus', note: `搜索份额 ${external.lingxi.brandRankings[0]?.share || 18.2}%` }
