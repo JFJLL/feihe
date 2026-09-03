@@ -8,7 +8,7 @@ import { fetchIpScgTasks, fetchIpScgNotes } from '@/lib/data-fetchers';
 import { getLingxiTrackData, type LingxiTrackResult } from '@/lib/lingxi';
 import { parseDateKey } from '@/lib/comment-review';
 import { reviewByDate } from '@/lib/review-seed';
-import { ensureReviewTables, persistReviewBatch, reviewSections, reviewSummary } from '@/lib/review-report';
+import { buildReviewInsight, ensureReviewTables, persistReviewBatch, reviewSections, reviewSummary } from '@/lib/review-report';
 
 export const dynamic = 'force-dynamic';
 const text = (v: unknown) => String(v ?? '').trim();
@@ -143,6 +143,30 @@ async function aiSummary(prompt: string, spec: ReportSpec) {
   }
 }
 
+async function aiReviewInsight(prompt: string, result: { counts: Record<string, number>; dateKey: string; noteCount: number; reportable: Array<{ blogger: string; positive: number; mentionRate: number }>; basic: Array<{ blogger: string; positive: number; mentionRate: number }>; needSupplement: Array<{ blogger: string; positive: number; supplementNeed: number }>; needReply: Array<{ blogger: string; replyHits: string[] }>; needDelete: Array<{ blogger: string; deleteHits: string[] }> }): Promise<string[]> {
+  const fallback = buildReviewInsight(result as never);
+  try {
+    const r = runtime();
+    const key = r.KEYSTONE_API_KEY || process.env.KEYSTONE_API_KEY;
+    const model = r.KEYSTONE_MODEL || process.env.KEYSTONE_MODEL;
+    const rawBase = r.KEYSTONE_BASE_URL || process.env.KEYSTONE_BASE_URL || 'https://keystonehk.ai/v1';
+    if (!key || !model) return fallback;
+    const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+    const top = (list: Array<Record<string, unknown>>) => list.slice(0, 8);
+    const response = await fetch(base + '/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, temperature: 0.2, max_tokens: 700, response_format: { type: 'json_object' }, messages: [
+        { role: 'system', content: '你是母婴社媒评论验收顾问。只返回 JSON：{"insights":[不超过7条简洁中文]}。基于给定判定数据给出结论、补量优先级与处置建议，不得编造数据中没有的笔记或数字。' },
+        { role: 'user', content: JSON.stringify({ request: prompt, date: result.dateKey, counts: result.counts, reportable: top(result.reportable as never), basic: top(result.basic as never), supplementGap: top(result.needSupplement as never), replySample: top(result.needReply as never), deleteSample: top(result.needDelete as never) }) }] }) });
+    if (!response.ok) return fallback;
+    const payload = await response.json() as { choices?: Array<{ message?: { content?: string } }> };
+    const content = payload.choices?.[0]?.message?.content;
+    if (!content) return fallback;
+    const parsed = JSON.parse(content) as { insights?: unknown };
+    return Array.isArray(parsed.insights) && parsed.insights.length ? parsed.insights.map(String).slice(0, 7) : fallback;
+  } catch { return fallback; }
+}
 export async function POST(request: Request) {
   const user = await apiUser(true);
   if (!user) return jsonError('请先登录', 401);
@@ -213,6 +237,7 @@ export async function POST(request: Request) {
 
       const spec: ReportSpec = {
         version: '1.0',
+        query: prompt,
         title: `${facts.project.name} · ${plan.intent}`,
         subtitle: `${facts.project.brand} ${facts.project.spu}｜聚光投放 × 灵犀母婴大盘机会看板`,
         period: plan.period,
@@ -343,6 +368,8 @@ export async function POST(request: Request) {
             await ensureReviewTables(d1);
             await persistReviewBatch(d1, project, reviewResult);
             spec.sections.unshift(...reviewSections(reviewResult));
+            const insightLines = await aiReviewInsight(prompt, reviewResult);
+            spec.sections.splice(2, 0, { id: 'review_insight', eyebrow: '模型解读', title: '本期判定解读与下一步', kind: 'insights', data: insightLines.map((text) => ({ text })) });
             spec.summary = [...reviewSummary(reviewResult), ...spec.summary];
           } else {
             plan.warnings.push(reviewDateKey + '暂无供应商执行数据，可换其他日期重试。');
