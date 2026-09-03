@@ -27,6 +27,8 @@ type ProjectContextType = {
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
 
+let cachedWorkspace: Workspace | null = null;
+
 export function ProjectProvider({
   projectId,
   initialWorkspace = null,
@@ -36,14 +38,15 @@ export function ProjectProvider({
   initialWorkspace?: Workspace | null;
   children: React.ReactNode;
 }) {
-  const [workspace, setWorkspace] = useState<Workspace | null>(initialWorkspace);
-  const [loading, setLoading] = useState(!initialWorkspace);
+  const [workspace, setWorkspace] = useState<Workspace | null>(cachedWorkspace || initialWorkspace);
+  const [loading, setLoading] = useState(!cachedWorkspace && !initialWorkspace);
   const [error, setError] = useState<string | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const refreshWorkspace = useCallback(async () => {
     try {
       const data = await api<Workspace>('/api/projects');
+      cachedWorkspace = data;
       setWorkspace(data);
       setError(null);
     } catch (err) {

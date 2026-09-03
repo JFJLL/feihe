@@ -136,18 +136,22 @@ export type ProjectDataFilters = {
   source?: string;
 };
 
+const projectDataCache = new Map<string, { dashboard: Dashboard; ops: Ops; timestamp: number }>();
+
 export function useProjectData(
   projectId: string,
   filters?: ProjectDataFilters
 ) {
-  const [dashboard, setDashboard] = useState<Dashboard | null>(null);
-  const [ops, setOps] = useState<Ops | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
   const from = filters?.from;
   const to = filters?.to;
   const source = filters?.source;
+  const cacheKey = projectId + '_' + (from || '') + '_' + (to || '') + '_' + (source || '');
+  const cached = projectDataCache.get(cacheKey);
+
+  const [dashboard, setDashboard] = useState<Dashboard | null>(cached?.dashboard || null);
+  const [ops, setOps] = useState<Ops | null>(cached?.ops || null);
+  const [loading, setLoading] = useState(!cached);
+  const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -161,6 +165,7 @@ export function useProjectData(
         api<Dashboard>('/api/dashboard?' + query.toString()),
         api<Ops>('/api/ops?projectId=' + encodeURIComponent(projectId)),
       ]);
+      projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp: Date.now() });
       setDashboard(dashRes);
       setOps(opsRes);
     } catch (err) {
@@ -169,7 +174,7 @@ export function useProjectData(
     } finally {
       setLoading(false);
     }
-  }, [projectId, from, to, source]);
+  }, [projectId, from, to, source, cacheKey]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

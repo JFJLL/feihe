@@ -13,7 +13,11 @@ export function PublicationLinkage({
   data: Dashboard;
   openNote: (id: string) => void;
 }) {
-  const owned = data.notes.filter(isOwnedNote);
+  const owned = data.notes.filter(isOwnedNote).sort((a, b) => {
+    const scoreA = (num(a.commentTotal) * 10) + num(a.interactionCount) + num(a.readCount) + (a.title ? 100 : 0);
+    const scoreB = (num(b.commentTotal) * 10) + num(b.interactionCount) + num(b.readCount) + (b.title ? 100 : 0);
+    return scoreB - scoreA;
+  });
   const natural = data.notes.filter((note) => !isOwnedNote(note));
   const directions = new Map<
     string,
@@ -109,19 +113,19 @@ export function PublicationLinkage({
               <dl>
                 <div>
                   <dt>阅读</dt>
-                  <dd>{compact(note.readCount)}</dd>
+                  <dd>{num(note.readCount) > 0 ? compact(note.readCount) : '待同步'}</dd>
                 </div>
                 <div>
                   <dt>互动</dt>
-                  <dd>{compact(note.interactionCount)}</dd>
+                  <dd>{num(note.interactionCount) > 0 ? compact(note.interactionCount) : '待同步'}</dd>
                 </div>
                 <div>
                   <dt>评论</dt>
-                  <dd>{compact(note.commentTotal)}</dd>
+                  <dd>{num(note.commentTotal) > 0 ? compact(note.commentTotal) : (note.status === '待抓取' ? '待抓取' : '0')}</dd>
                 </div>
                 <div>
                   <dt>负面</dt>
-                  <dd>{compact(note.negativeCount)}</dd>
+                  <dd>{num(note.negativeCount) > 0 ? compact(note.negativeCount) : '0'}</dd>
                 </div>
               </dl>
               <button onClick={() => openNote(note.id)}>查看内容与评论 →</button>
