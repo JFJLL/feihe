@@ -4,6 +4,7 @@ import React from 'react';
 import { ProjectProvider, useProject } from './ProjectContext';
 import { ProjectSidebar } from './ProjectSidebar';
 import { FeedbackToastContainer } from '../ui/FeedbackToast';
+import { FloatingAgent } from './FloatingAgent';
 
 function ProjectShellContent({
   userName,
@@ -14,7 +15,7 @@ function ProjectShellContent({
   signedIn: boolean;
   children: React.ReactNode;
 }) {
-  const { toasts, removeToast } = useProject();
+  const { toasts, removeToast, projectId } = useProject();
 
   return (
     <div className="app-shell">
@@ -23,6 +24,7 @@ function ProjectShellContent({
         {children}
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>
+      <FloatingAgent projectId={projectId} />
     </div>
   );
 }
