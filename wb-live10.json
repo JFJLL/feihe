@@ -1,1 +1,0 @@
-{"action":"evaluate","args":{"code":"(function(){window.__errs=[];window.addEventListener('error',function(e){window.__errs.push('MSG:'+String((e&&e.message)||e)+' FILE:'+(e&&e.filename)+' LINE:'+(e&&e.lineno)+':'+(e&&e.colno));});return 'hooked2';})()"},"session":"live-debug"}

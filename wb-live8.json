@@ -1,1 +1,0 @@
-{"action":"evaluate","args":{"code":"(function(){window.__errs=[];window.addEventListener('error',function(e){window.__errs.push('ERR:'+String((e&&e.message)||e))});window.addEventListener('unhandledrejection',function(e){window.__errs.push('REJ:'+String(e.reason&&e.reason.message||e.reason))});return 'hooked';})()"},"session":"live-debug"}

@@ -1,1 +1,0 @@
-{"action":"evaluate","args":{"code":"(function(){return 'url='+location.href+' errs='+JSON.stringify(window.__errs||'nohook');})()"},"session":"live-debug"}
