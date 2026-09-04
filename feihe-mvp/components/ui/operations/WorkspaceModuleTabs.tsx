@@ -17,7 +17,7 @@ export function WorkspaceModuleTabs({
   activeTab: string;
   onChange: (id: string) => void;
 }) {
-  const gridClass = tabs.length === 3 ? 'ops-module-tabs-3' : tabs.length === 4 ? 'ops-module-tabs-4' : '';
+  const gridClass = tabs.length === 3 ? 'ops-module-tabs-3' : tabs.length === 4 ? 'ops-module-tabs-4' : tabs.length === 5 ? 'ops-module-tabs-5' : '';
   return (
     <nav className={`ops-module-tabs ${gridClass}`} aria-label="模块切换">
       {tabs.map((t) => {

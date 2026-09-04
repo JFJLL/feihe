@@ -414,6 +414,18 @@ export async function ensureSchema() {
     try {
       await d1.prepare("UPDATE note_profiles SET cover_url = REPLACE(cover_url, 'http://', 'https://') WHERE cover_url LIKE 'http://%'").run();
     } catch {}
+    try {
+      const feishuSources = [
+        ['feishu-competitor-monthly', '飞鹤竞品月报数据收集表', 'https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=ldZDsR', 'ldZDsR', 'competitor'],
+        ['feishu-daily-kpi-dashboard', '启萃分日数据看板', 'https://yimeichuanbo.feishu.cn/wiki/CEsvwg65MikAGOkqKItcR7wkn3b', '4bTvDu', 'owned'],
+        ['feishu-weekly-trend', '飞鹤启萃周趋势变化底表', 'https://yimeichuanbo.feishu.cn/wiki/SVwkw52kZiSlLEkQuaNcHvrynGg', 'kMYs9o', 'weekly_trend'],
+        ['feishu-content-planning', '飞鹤启萃内容规划all in one', 'https://yimeichuanbo.feishu.cn/wiki/H0iDwGhffiL2UHk9G96cpnR4nBe', '7XkqoO', 'content_planning'],
+      ];
+      for (const [sId, sName, sUrl, sSheet, sKind] of feishuSources) {
+        await d1.prepare("INSERT OR IGNORE INTO data_sources(id,project_id,type,name,spreadsheet,sheet_id,range,kind,sync_frequency,status,created_at,updated_at) VALUES(?,'qicui','feishu_sheet',?,?,?,'A1:AZ5000',?,'realtime','已连接',?,?)")
+          .bind(sId, sName, sUrl, sSheet, sKind, new Date().toISOString(), new Date().toISOString()).run();
+      }
+    } catch {}
     await d1.prepare('PRAGMA optimize').run();
   })().catch((error) => {
     schemaReady = null;

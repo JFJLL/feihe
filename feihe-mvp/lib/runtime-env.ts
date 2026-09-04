@@ -2,6 +2,31 @@
 // 本文件绝不静态引入 cloudflare:workers，保证纯 Node 启动不崩。
 let workerSnapshot: Record<string, unknown> | null = null;
 let warming: Promise<Record<string, unknown>> | null = null;
+let cachedConfigFile: Record<string, unknown> | null = null;
+
+function readConfigFile(): Record<string, unknown> {
+  if (cachedConfigFile) return cachedConfigFile;
+  try {
+    if (typeof process !== 'undefined' && process.versions?.node) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const fs = require('node:fs') as typeof import('node:fs');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const path = require('node:path') as typeof import('node:path');
+      const candidates = [
+        path.resolve(process.cwd(), 'config.json'),
+        path.resolve(process.cwd(), '..', 'config.json'),
+      ];
+      for (const c of candidates) {
+        if (fs.existsSync(c)) {
+          cachedConfigFile = JSON.parse(fs.readFileSync(c, 'utf8')) as Record<string, unknown>;
+          return cachedConfigFile || {};
+        }
+      }
+    }
+  } catch {}
+  return {};
+}
+
 export function warmWorkerEnv(): Promise<Record<string, unknown>> {
   if (!warming) {
     warming = (async () => {
@@ -25,6 +50,13 @@ export function envVar(name: string, fallback = ''): string {
   if (fromProcess !== undefined && fromProcess !== '') return fromProcess;
   const fromWorker = workerSnapshot?.[name];
   if (fromWorker !== undefined && fromWorker !== null && String(fromWorker) !== '') return String(fromWorker);
+  const cfg = readConfigFile() as {
+    feishu?: { app_id?: string; app_secret?: string };
+    keystone?: { api_key?: string; base_url?: string; model?: string; image_model?: string };
+  };
+  if (name === 'FEISHU_APP_ID' && cfg.feishu?.app_id) return cfg.feishu.app_id;
+  if (name === 'FEISHU_APP_SECRET' && cfg.feishu?.app_secret) return cfg.feishu.app_secret;
+  if (name === 'KEYSTONE_API_KEY' && cfg.keystone?.api_key) return cfg.keystone.api_key;
   return fallback;
 }
 export function runtimeVars(): Record<string, string | undefined> {
@@ -37,5 +69,12 @@ export function runtimeVars(): Record<string, string | undefined> {
   if (typeof process !== 'undefined') {
     for (const k of Object.keys(process.env)) out[k] = process.env[k];
   }
+  const cfg = readConfigFile() as {
+    feishu?: { app_id?: string; app_secret?: string };
+    keystone?: { api_key?: string };
+  };
+  if (!out.FEISHU_APP_ID && cfg.feishu?.app_id) out.FEISHU_APP_ID = cfg.feishu.app_id;
+  if (!out.FEISHU_APP_SECRET && cfg.feishu?.app_secret) out.FEISHU_APP_SECRET = cfg.feishu.app_secret;
+  if (!out.KEYSTONE_API_KEY && cfg.keystone?.api_key) out.KEYSTONE_API_KEY = cfg.keystone.api_key;
   return out;
 }

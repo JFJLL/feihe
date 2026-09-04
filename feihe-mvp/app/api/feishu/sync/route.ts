@@ -7,8 +7,21 @@ import { projectId } from '@/lib/projects';
 
 export const dynamic = 'force-dynamic';
 
-function spreadsheetToken(value: string) {
-  return value.match(/sheets\/([a-zA-Z0-9]+)/)?.[1] || value.trim();
+async function resolveSpreadsheetToken(value: string, token: string): Promise<string> {
+  const wikiMatch = value.match(/wiki\/([a-zA-Z0-9]+)/);
+  if (wikiMatch) {
+    const wikiToken = wikiMatch[1];
+    try {
+      const nodeRes = await fetch('https://open.feishu.cn/open-apis/wiki/v2/spaces/get_node?token=' + wikiToken, {
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      const nodeData = (await nodeRes.json()) as { data?: { node?: { obj_token?: string } } };
+      if (nodeData.data?.node?.obj_token) return nodeData.data.node.obj_token;
+    } catch {}
+  }
+  const sheetMatch = value.match(/sheets\/([a-zA-Z0-9]+)/);
+  if (sheetMatch) return sheetMatch[1];
+  return value.trim();
 }
 
 export async function POST(request: Request) {
@@ -23,8 +36,9 @@ export async function POST(request: Request) {
     const tokenResponse = await fetch('https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ app_id: envVar('FEISHU_APP_ID'), app_secret: envVar('FEISHU_APP_SECRET') }) });
     const tokenData = await tokenResponse.json() as { code?: number; msg?: string; tenant_access_token?: string };
     if (!tokenResponse.ok || tokenData.code || !tokenData.tenant_access_token) throw new Error(tokenData.msg || '获取飞书访问凭证失败');
+    const realSpreadsheetToken = await resolveSpreadsheetToken(body.spreadsheet, tokenData.tenant_access_token);
     const range = `${body.sheetId}!${body.range || 'A1:AZ5000'}`;
-    const valuesResponse = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${spreadsheetToken(body.spreadsheet)}/values/${encodeURIComponent(range)}`, { headers: { Authorization: `Bearer ${tokenData.tenant_access_token}` } });
+    const valuesResponse = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${realSpreadsheetToken}/values/${encodeURIComponent(range)}`, { headers: { Authorization: `Bearer ${tokenData.tenant_access_token}` } });
     const valuesData = await valuesResponse.json() as { code?: number; msg?: string; data?: { valueRange?: { values?: unknown[][] } } };
     if (!valuesResponse.ok || valuesData.code) throw new Error(valuesData.msg || '读取飞书表格失败');
     const values = valuesData.data?.valueRange?.values || []; const headers = (values[0] || []).map(String);
@@ -32,7 +46,7 @@ export async function POST(request: Request) {
     if (!rows.length) throw new Error('指定范围内没有可同步的数据');
     const result = await importRows(body.kind,rows,true,project);
     await finishJob(jobId, { succeeded: result.imported, failed: result.skipped, message: `同步 ${result.imported} 条` });
-    await logAction('飞书表格同步',body.kind,spreadsheetToken(body.spreadsheet),`${body.sheetId} · ${result.imported} 条`,project);
+    await logAction('飞书表格同步',body.kind,realSpreadsheetToken,`${body.sheetId} · ${result.imported} 条`,project);
     if(body.sourceId){await ensureSchema();await db().prepare(`UPDATE data_sources SET status='同步正常',last_synced_at=?,last_row_count=?,last_error='',updated_at=? WHERE id=? AND project_id=?`).bind(new Date().toISOString(),result.imported,new Date().toISOString(),body.sourceId,project).run();}
     return Response.json({ ok: true, ...result, jobId });
   } catch (error) {

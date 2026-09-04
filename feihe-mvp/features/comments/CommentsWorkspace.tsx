@@ -25,11 +25,20 @@ export function CommentsWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('voice', ['voice', 'collection', 'actions', 'acceptance', 'supplier'], {
-    insights: 'voice',
-    sentiment: 'voice',
+  const [tab, setTab] = useProjectTab('actions', ['actions', 'collection', 'acceptance', 'supplier'], {
+    insights: 'actions',
+    sentiment: 'actions',
+    voice: 'actions',
     risk: 'actions',
     review: 'actions',
+  });
+  const [subView, setSubView] = useState<'voice' | 'triage'>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const t = p.get('tab');
+      if (t === 'actions' || t === 'risk' || t === 'review') return 'triage';
+    }
+    return 'voice';
   });
   const { showToast } = useProject();
 
@@ -99,9 +108,8 @@ export function CommentsWorkspace({
   }
 
   const tabs: ModuleTab[] = [
-    { id: 'voice', title: '口碑分析', desc: '情绪构成、动态话题与口碑趋势', badge: pct(dashboard.metrics.positiveRate), icon: '💬' },
+    { id: 'actions', title: '口碑与处置', desc: '情绪构成、动态话题与规则闭环', badge: `${pct(dashboard.metrics.positiveRate)} · ${pendingRisk}待办`, icon: '💬' },
     { id: 'collection', title: '采集监测', desc: '按ID/链接抓取、批量采集与快照变动', badge: dashboard.metrics.commentTotal || 0, icon: '🛰️' },
-    { id: 'actions', title: '处置工作台', desc: '舆情关键评论与规则判定统一闭环', badge: pendingRisk || 0, icon: '⚡' },
     { id: 'acceptance', title: '交付验收', desc: '主线交付、可汇报线与品牌提及率', badge: dashboard.metrics.noteCount || 0, icon: '🎯' },
     { id: 'supplier', title: '供应商核验', desc: '交付Excel导入、隔天外显与共性分析', badge: verifiedCount || 0, icon: '🛡️' },
   ];
@@ -121,13 +129,6 @@ export function CommentsWorkspace({
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
 
-      {tab === 'voice' && (
-        <VoiceIntelligence
-          data={dashboard}
-          onSwitchTab={setTab}
-        />
-      )}
-
       {tab === 'collection' && (
         <CommentCollection
           projectId={projectId}
@@ -138,11 +139,65 @@ export function CommentsWorkspace({
       )}
 
       {tab === 'actions' && (
-        <CommentActionWorkbench
-          projectId={projectId}
-          onRefresh={onRefresh}
-          toast={showToast}
-        />
+        <div className="stack animate-fade-in">
+          <div style={{ display: 'flex', gap: '8px', padding: '4px', background: '#f1f5f9', borderRadius: '10px', width: 'fit-content' }}>
+            <button
+              type="button"
+              onClick={() => setSubView('voice')}
+              style={{
+                border: 'none',
+                background: subView === 'voice' ? '#ffffff' : 'transparent',
+                color: subView === 'voice' ? '#0f172a' : '#64748b',
+                fontWeight: subView === 'voice' ? 700 : 500,
+                padding: '6px 16px',
+                borderRadius: '8px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                boxShadow: subView === 'voice' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <span>📊</span>
+              <span>口碑大盘 (主看板)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSubView('triage')}
+              style={{
+                border: 'none',
+                background: subView === 'triage' ? '#ffffff' : 'transparent',
+                color: subView === 'triage' ? '#0f172a' : '#64748b',
+                fontWeight: subView === 'triage' ? 700 : 500,
+                padding: '6px 16px',
+                borderRadius: '8px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                boxShadow: subView === 'triage' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <span>⚡</span>
+              <span>待办处置清单 ({pendingRisk})</span>
+            </button>
+          </div>
+
+          {subView === 'voice' ? (
+            <VoiceIntelligence
+              data={dashboard}
+              onSwitchTab={() => setSubView('triage')}
+            />
+          ) : (
+            <CommentActionWorkbench
+              projectId={projectId}
+              onRefresh={onRefresh}
+              toast={showToast}
+            />
+          )}
+        </div>
       )}
 
       {tab === 'acceptance' && (

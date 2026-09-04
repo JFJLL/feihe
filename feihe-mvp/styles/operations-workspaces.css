@@ -11,24 +11,30 @@
 /* Module Tabs */
 .ops-module-tabs {
   display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
-  margin-bottom: 4px;
+  margin-bottom: 20px;
 }
 .ops-module-tabs-3 {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .ops-module-tabs-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.ops-module-tabs-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 @media (max-width: 1024px) {
   .ops-module-tabs-3,
-  .ops-module-tabs-4 {
-    grid-template-columns: repeat(2, 1fr);
+  .ops-module-tabs-4,
+  .ops-module-tabs-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 640px) {
   .ops-module-tabs-3,
-  .ops-module-tabs-4 {
+  .ops-module-tabs-4,
+  .ops-module-tabs-5 {
     grid-template-columns: 1fr;
   }
 }
