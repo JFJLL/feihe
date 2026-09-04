@@ -18,6 +18,7 @@ import {
   LEARNING_ITEMS,
   NEXT_STEP_ITEMS,
   EXEC_SUMMARY_ITEMS,
+  type DailyRecord,
 } from './overview-data';
 import {
   Sparkline,
@@ -1341,7 +1342,6 @@ export function OverviewWorkspace({
     </div>
   );
 }
-
 
 
 

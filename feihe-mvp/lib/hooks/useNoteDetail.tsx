@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import type { Note, NoteDetail } from '../types/project';
+import { DetailDrawer } from '../../features/content/DetailDrawer';
 import { NoteDetailDrawer, type NoteDetailContext } from '../../components/note-detail/NoteDetailDrawer';
 import { api } from './use-project-data';
 
@@ -9,12 +10,14 @@ export function useNoteDetail({
   projectId,
   onRefresh,
   toast,
-  context = 'content',
+  variant,
+  context,
   defaultTab,
 }: {
   projectId: string;
   onRefresh: () => Promise<void>;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
+  variant?: 'legacy' | 'operations';
   context?: NoteDetailContext;
   defaultTab?: 'basic' | 'performance' | 'comments' | 'acceptance';
 }) {
@@ -73,20 +76,32 @@ export function useNoteDetail({
     [projectId, onRefresh, toast]
   );
 
+  const isOperations = variant === 'operations' || context === 'content' || context === 'comments';
+
   const renderDrawer = useCallback(() => {
     if (!detail) return null;
+    if (isOperations) {
+      return (
+        <NoteDetailDrawer
+          key={detail.note?.id || 'detail'}
+          detail={detail}
+          close={() => setDetail(null)}
+          saveNote={saveNote}
+          removeNote={removeNote}
+        context={context || 'content'}
+          defaultTab={defaultTab}
+        />
+      );
+    }
     return (
-      <NoteDetailDrawer
+      <DetailDrawer
         key={detail.note?.id || 'detail'}
         detail={detail}
         close={() => setDetail(null)}
-        saveNote={saveNote}
-        removeNote={removeNote}
-        context={context}
-        defaultTab={defaultTab}
+        readOnly={true}
       />
     );
-  }, [detail, saveNote, removeNote, context, defaultTab]);
+  }, [detail, isOperations, saveNote, removeNote, context, defaultTab]);
 
   return {
     openNote,

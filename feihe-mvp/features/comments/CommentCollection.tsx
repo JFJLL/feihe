@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { StatusBadge } from '../../components/ui/operations/StatusBadge';
@@ -8,7 +9,7 @@ import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolba
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
-import type { NoteListItem, NotesListResponse } from '../content/content-view-model';
+import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from '../content/content-view-model';
 
 export function CommentCollection({
   projectId,
@@ -27,38 +28,54 @@ export function CommentCollection({
   const [noteInput, setNoteInput] = useState(prefilledNoteId);
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [summary, setSummary] = useState<NotesListResponse['summary']>({
-    total: 0,
-    ownedCount: 0,
-    scanCount: 0,
-    completeCount: 0,
-    missingProfileCount: 0,
-    reportableCount: 0,
-    baseCount: 0,
-    supplementCount: 0,
-    fetchedCount: 0,
-    unfetchedCount: 0,
-    totalComments: 0,
-    totalReads: 0,
-    totalInteractions: 0,
-  });
+  const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
 
-  const [query, setQuery] = useState('');
-  const [monitored, setMonitored] = useState('');
-  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [monitored, setMonitored] = useState(searchParams.get('monitored') || '');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [fetchResult, setFetchResult] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
   useEffect(() => {
-    if (prefilledNoteId && !noteInput) {
-      const timer = setTimeout(() => {
-        setNoteInput(prefilledNoteId);
-      }, 0);
-      return () => clearTimeout(timer);
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const syncToUrl = useCallback((nextState: { query: string; monitored: string; page: number; noteId: string }) => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+      if (nextState.monitored) p.set('monitored', nextState.monitored); else p.delete('monitored');
+      if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+      if (nextState.noteId) p.set('noteId', nextState.noteId); else p.delete('noteId');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    syncToUrl({ query: debouncedQuery, monitored, page, noteId: prefilledNoteId });
+  }, [debouncedQuery, monitored, page, prefilledNoteId, syncToUrl]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setMonitored(p.get('monitored') || '');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (prefilledNoteId) {
+      setNoteInput(prefilledNoteId);
     }
-  }, [prefilledNoteId, noteInput]);
+  }, [prefilledNoteId]);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -69,7 +86,7 @@ export function CommentCollection({
         page: String(page),
         pageSize: '20',
       });
-      if (query) p.set('query', query);
+      if (debouncedQuery) p.set('query', debouncedQuery);
       if (monitored) p.set('monitored', monitored);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
       setItems(res.items || []);
@@ -80,7 +97,7 @@ export function CommentCollection({
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, query, monitored, toast]);
+  }, [projectId, page, debouncedQuery, monitored, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -89,8 +106,15 @@ export function CommentCollection({
     return () => clearTimeout(timer);
   }, [loadData]);
 
+  useEffect(() => {
+    setSelectedIds((prev) => prev.filter((id) => items.some((it) => it.id === id)));
+  }, [items]);
   async function executeFetch(ids: string[]) {
     if (!ids.length) return;
+    if (ids.length > 20) {
+      toast('批量抓取单次最多支持 20 篇笔记，请精简后再提交', 'error');
+      return;
+    }
     setFetching(true);
     setFetchResult(null);
     try {
@@ -131,8 +155,10 @@ export function CommentCollection({
     );
   }
 
+  const isAllCurrentPageSelected = items.length > 0 && items.every((it) => selectedIds.includes(it.id));
+
   function selectAllOnPage() {
-    if (selectedIds.length === items.length) {
+    if (isAllCurrentPageSelected) {
       setSelectedIds([]);
     } else {
       setSelectedIds(items.map((it) => it.id));
@@ -212,6 +238,10 @@ export function CommentCollection({
               disabled={fetching || !noteInput.trim()}
               onClick={() => {
                 const lines = noteInput.split(/[\n,，]+/).map((s) => s.trim()).filter(Boolean);
+                if (lines.length > 20) {
+                  toast('单次最多提交 20 篇笔记，请精简行数后再提交', 'error');
+                  return;
+                }
                 executeFetch(lines);
               }}
               style={{ background: '#0d9488', borderColor: '#0f766e', minWidth: '130px' }}
@@ -231,7 +261,12 @@ export function CommentCollection({
       <DashboardSection
         eyebrow="MONITORING LIST"
         title="评论快照与监测明细"
-        desc="监控所有笔记的评论总量、增量变化与验收状态，支持单篇重新采集与批量并发抓取。"
+        desc="监控所有笔记的评论总量、增量变化与验收状态，支持单篇重新采集与批量顺序抓取。"
+        extra={
+          <Link href={`/projects/${encodeURIComponent(projectId)}/comments?tab=acceptance`} className="btn-link" style={{ fontSize: '13px' }}>
+            前往交付验收 →
+          </Link>
+        }
       >
         <WorkspaceToolbar
           extra={
@@ -322,6 +357,7 @@ export function CommentCollection({
                             alt=""
                             className="ops-table-note-cover"
                             loading="lazy"
+                            decoding="async"
                             onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
                           />
                         ) : (
@@ -357,12 +393,14 @@ export function CommentCollection({
                       <strong>{note.commentTotal}</strong>
                     </td>
                     <td>
-                      {note.commentDelta > 0 ? (
+                      {note.commentDelta == null ? (
+                        <span style={{ color: '#94a3b8' }}>{note.latestSnapshotTotal != null ? '首次采集' : '—'}</span>
+                      ) : note.commentDelta > 0 ? (
                         <span style={{ color: '#15803d', fontWeight: 600 }}>+{note.commentDelta}</span>
                       ) : note.commentDelta < 0 ? (
                         <span style={{ color: '#b91c1c', fontWeight: 600 }}>{note.commentDelta}</span>
                       ) : (
-                        <span style={{ color: '#94a3b8' }}>持平</span>
+                        <span style={{ color: '#64748b' }}>持平</span>
                       )}
                     </td>
                     <td>

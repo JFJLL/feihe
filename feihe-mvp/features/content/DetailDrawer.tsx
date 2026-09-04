@@ -9,11 +9,13 @@ export function DetailDrawer({
   close,
   saveNote,
   removeNote,
+  readOnly = false,
 }: {
   detail: NoteDetail;
   close: () => void;
-  saveNote: (note: Note) => void;
-  removeNote: (note: Note) => void;
+  saveNote?: (note: Note) => void;
+  removeNote?: (note: Note) => void;
+  readOnly?: boolean;
 }) {
   const n = detail.note;
   const [draft, setDraft] = useState(n);
@@ -51,7 +53,7 @@ export function DetailDrawer({
           </article>
         </section>
 
-        {draft && (
+        {draft && !readOnly && saveNote && removeNote && (
           <section className="note-editor">
             <label>
               标题

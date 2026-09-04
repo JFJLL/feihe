@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { StatusBadge } from '../../components/ui/operations/StatusBadge';
+import { ResultNotice } from '../../components/ui/operations/ResultNotice';
 import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolbar';
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -18,209 +20,196 @@ export function CommentActionWorkbench({
   onRefresh: () => Promise<void>;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
-  const [sourceFilter, setSourceFilter] = useState<'all' | 'key-comment' | 'review-batch'>('all');
-  const [actionFilter, setActionFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('pending');
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+
+  // Initialize from URL search params
+  const [sourceFilter, setSourceFilter] = useState<'all' | 'key-comment' | 'review-batch'>(
+    (searchParams.get('source') as 'all' | 'key-comment' | 'review-batch') || 'all'
+  );
+  const [actionFilter, setActionFilter] = useState(searchParams.get('action') || '');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || 'pending');
+  const [sentimentFilter, setSentimentFilter] = useState(searchParams.get('sentiment') || '');
+  const [categoryFilter, setCategoryFilter] = useState(searchParams.get('category') || '');
+  const [selectedDate, setSelectedDate] = useState<string>(searchParams.get('date') || '');
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
+
   const [loading, setLoading] = useState(false);
-
-  // Key comments state
-  const [keyComments, setKeyComments] = useState<ActionWorkbenchItem[]>([]);
-  const [keySummary, setKeySummary] = useState({ total: 0, replyPending: 0, deletePending: 0, supplementPending: 0, handledCount: 0 });
-
-  // Review batch state
+  const [error, setError] = useState<string | null>(null);
+  const [items, setItems] = useState<ActionWorkbenchItem[]>([]);
+  const [total, setTotal] = useState(0);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string>('');
-  const [reviewItems, setReviewItems] = useState<ActionWorkbenchItem[]>([]);
-  const [reviewCounts, setReviewCounts] = useState<Record<string, number>>({});
+  const [summary, setSummary] = useState({
+    totalPending: 0,
+    replyPending: 0,
+    deletePending: 0,
+    supplementPending: 0,
+    observePending: 0,
+    handledCount: 0,
+  });
 
-  // Load available review dates on mount
+  const reqSeqRef = useRef(0);
+
+  // Sync state to URL with replaceState
+  const syncToUrl = useCallback(
+    (nextState: {
+      query: string;
+      source: string;
+      status: string;
+      action: string;
+      sentiment: string;
+      category: string;
+      date: string;
+      page: number;
+    }) => {
+      try {
+        const p = new URLSearchParams(window.location.search);
+        if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+        if (nextState.source && nextState.source !== 'all') p.set('source', nextState.source); else p.delete('source');
+        if (nextState.status && nextState.status !== 'pending') p.set('status', nextState.status); else p.delete('status');
+        if (nextState.action) p.set('action', nextState.action); else p.delete('action');
+        if (nextState.sentiment) p.set('sentiment', nextState.sentiment); else p.delete('sentiment');
+        if (nextState.category) p.set('category', nextState.category); else p.delete('category');
+        if (nextState.date) p.set('date', nextState.date); else p.delete('date');
+        if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+        window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+      } catch {}
+    },
+    []
+  );
+
+  // Debounce query and trigger search
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
   useEffect(() => {
-    api<{ ok: boolean; dates: string[] }>('/api/review?projectId=' + encodeURIComponent(projectId))
-      .then((r) => {
-        const ds = r.dates || [];
-        setAvailableDates(ds);
-        if (ds.length > 0) {
-          setSelectedDate(ds[ds.length - 1]);
-        }
-      })
-      .catch(() => undefined);
-  }, [projectId]);
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [query]);
 
-  // Load key comments
-  const loadKeyComments = useCallback(async () => {
+  // Sync state changes to URL
+  useEffect(() => {
+    syncToUrl({
+      query: debouncedQuery,
+      source: sourceFilter,
+      status: statusFilter,
+      action: actionFilter,
+      sentiment: sentimentFilter,
+      category: categoryFilter,
+      date: selectedDate,
+      page,
+    });
+  }, [debouncedQuery, sourceFilter, statusFilter, actionFilter, sentimentFilter, categoryFilter, selectedDate, page, syncToUrl]);
+
+  // Handle browser Back/Forward (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setSourceFilter((p.get('source') as 'all' | 'key-comment' | 'review-batch') || 'all');
+      setStatusFilter(p.get('status') || 'pending');
+      setActionFilter(p.get('action') || '');
+      setSentimentFilter(p.get('sentiment') || '');
+      setCategoryFilter(p.get('category') || '');
+      setSelectedDate(p.get('date') || '');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Server-side paginated data loader
+  const loadWorkbenchData = useCallback(async () => {
+    const seq = ++reqSeqRef.current;
+    setLoading(true);
+    setError(null);
     try {
       const p = new URLSearchParams({
         projectId,
-        pageSize: '100',
+        page: String(page),
+        pageSize: '20',
+        source: sourceFilter,
+        status: statusFilter || 'all',
       });
-      if (query) p.set('query', query);
+      if (actionFilter) p.set('action', actionFilter);
+      if (sentimentFilter) p.set('sentiment', sentimentFilter);
+      if (categoryFilter) p.set('category', categoryFilter);
+      if (selectedDate) p.set('date', selectedDate);
+      if (debouncedQuery) p.set('query', debouncedQuery);
+
       const res = await api<{
         ok: boolean;
-        items: Array<{
-          id: string;
-          noteId: string;
-          content: string;
-          author: string;
-          sentiment: string;
-          category: string;
-          action: string;
-          treatmentStatus: string;
-          lastSeenAt: string;
-          noteTitle?: string;
-          noteUrl?: string;
-        }>;
-        summary: { total: number; replyPending: number; deletePending: number; supplementPending: number; handledCount: number };
-      }>('/api/actions?' + p.toString());
-
-      const items: ActionWorkbenchItem[] = (res.items || []).map((c) => {
-        let act: ActionWorkbenchItem['action'] = 'observe';
-        if (c.action.includes('回复')) act = 'reply';
-        else if (c.action.includes('删')) act = 'delete';
-        else if (c.action.includes('补')) act = 'supplement';
-
-        return {
-          id: `kc-${c.id}`,
-          rawId: c.id,
-          source: 'key-comment',
-          itemType: 'comment',
-          action: act,
-          status: c.treatmentStatus === '已处理' ? 'handled' : 'pending',
-          noteId: c.noteId,
-          author: c.author,
-          content: c.content,
-          sentiment: c.sentiment,
-          category: c.category,
-          title: c.noteTitle,
-          link: c.noteUrl,
-          reason: `${c.sentiment} · ${c.category} · ${c.action}`,
+        items: ActionWorkbenchItem[];
+        total: number;
+        page: number;
+        pageSize: number;
+        summary: {
+          totalPending: number;
+          replyPending: number;
+          deletePending: number;
+          supplementPending: number;
+          observePending: number;
+          handledCount: number;
         };
-      });
-      setKeyComments(items);
-      if (res.summary) setKeySummary(res.summary);
+        availableDates: string[];
+      }>('/api/actions/workbench?' + p.toString());
+
+      if (seq !== reqSeqRef.current) return;
+
+      setItems(res.items || []);
+      setTotal(res.total || 0);
+      if (res.summary) setSummary(res.summary);
+      if (res.availableDates) {
+        setAvailableDates(res.availableDates);
+        if (!selectedDate && res.availableDates.length > 0 && sourceFilter === 'review-batch') {
+          setSelectedDate(res.availableDates[res.availableDates.length - 1]);
+        }
+      }
     } catch (e) {
-      console.warn('loadKeyComments error:', e);
+      if (seq !== reqSeqRef.current) return;
+      const msg = e instanceof Error ? e.message : '加载待办任务失败';
+      setError(msg);
+      toast(msg, 'error');
+    } finally {
+      if (seq === reqSeqRef.current) {
+        setLoading(false);
+      }
     }
-  }, [projectId, query]);
-
-  // Load review batch items
-  const loadReviewBatch = useCallback(async (dateKey: string) => {
-    if (!dateKey) return;
-    try {
-      const res = await api<{
-        ok: boolean;
-        counts: Record<string, number>;
-        items: Array<{
-          id: number;
-          link: string;
-          blogger: string;
-          action: string;
-          reason: string;
-          sample: string[];
-          status: string;
-        }>;
-      }>(
-        '/api/review?projectId=' + encodeURIComponent(projectId) + '&date=' + encodeURIComponent(dateKey) + '&items=1'
-      );
-      setReviewCounts(res.counts || {});
-      const items: ActionWorkbenchItem[] = (res.items || []).map((r) => {
-        let act: ActionWorkbenchItem['action'] = 'observe';
-        if (r.action.includes('回复')) act = 'reply';
-        else if (r.action.includes('删')) act = 'delete';
-        else if (r.action.includes('补')) act = 'supplement';
-
-        return {
-          id: `rb-${r.id}`,
-          rawId: r.id,
-          source: 'review-batch',
-          itemType: 'note',
-          action: act,
-          status: r.status === '已处理' ? 'handled' : 'pending',
-          author: r.blogger,
-          content: (r.sample || []).join('；') || '判定需处理笔记',
-          reason: r.reason,
-          link: r.link,
-          batchDate: dateKey,
-        };
-      });
-      setReviewItems(items);
-    } catch (e) {
-      console.warn('loadReviewBatch error:', e);
-    }
-  }, [projectId]);
-
-  const loadAll = useCallback(async () => {
-    setLoading(true);
-    await Promise.all([
-      loadKeyComments(),
-      selectedDate ? loadReviewBatch(selectedDate) : Promise.resolve(),
-    ]);
-    setLoading(false);
-  }, [loadKeyComments, loadReviewBatch, selectedDate]);
+  }, [projectId, page, sourceFilter, statusFilter, actionFilter, sentimentFilter, categoryFilter, selectedDate, debouncedQuery, toast]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      void loadAll();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [loadAll]);
+    void loadWorkbenchData();
+  }, [loadWorkbenchData]);
 
-  // Unified items computation
-  const unifiedItems = useMemo(() => {
-    let list: ActionWorkbenchItem[] = [];
-    if (sourceFilter === 'all') {
-      list = [...keyComments, ...reviewItems];
-    } else if (sourceFilter === 'key-comment') {
-      list = [...keyComments];
-    } else {
-      list = [...reviewItems];
-    }
-
-    return list.filter((item) => {
-      if (statusFilter && item.status !== statusFilter) return false;
-      if (actionFilter && item.action !== actionFilter) return false;
-      if (query) {
-        const q = query.toLowerCase();
-        const match =
-          (item.content || '').toLowerCase().includes(q) ||
-          (item.author || '').toLowerCase().includes(q) ||
-          (item.noteId || '').toLowerCase().includes(q) ||
-          (item.reason || '').toLowerCase().includes(q);
-        if (!match) return false;
-      }
-      return true;
-    });
-  }, [sourceFilter, keyComments, reviewItems, statusFilter, actionFilter, query]);
-
-  // Top KPIs
-  const totalPending =
-    keySummary.replyPending + keySummary.deletePending + keySummary.supplementPending +
-    Number(reviewCounts.needReply || 0) + Number(reviewCounts.needDelete || 0) + Number(reviewCounts.needSupplement || 0);
-  const replyPending = keySummary.replyPending + Number(reviewCounts.needReply || 0);
-  const deletePending = keySummary.deletePending + Number(reviewCounts.needDelete || 0);
-  const supplementPending = keySummary.supplementPending + Number(reviewCounts.needSupplement || 0);
-
-  // Action handlers
+  // Action handlers with optimistic updates
   async function handleResolve(item: ActionWorkbenchItem, method: string) {
     try {
-      if (item.source === 'key-comment') {
-        await api('/api/actions', {
-          method: 'POST',
-          body: JSON.stringify({ id: item.rawId, status: '已处理', method, projectId }),
-        });
-        setKeyComments((prev) =>
-          prev.map((x) => (x.id === item.id ? { ...x, status: 'handled' } : x))
-        );
-      } else {
-        await api('/api/review', {
-          method: 'POST',
-          body: JSON.stringify({ id: item.rawId, action: 'resolve', projectId }),
-        });
-        setReviewItems((prev) =>
-          prev.map((x) => (x.id === item.id ? { ...x, status: 'handled' } : x))
-        );
-      }
+      await api('/api/actions/workbench', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: item.id,
+          rawId: item.rawId,
+          source: item.source,
+          action: 'resolve',
+          method,
+          projectId,
+        }),
+      });
+
+      // Optimistic update
+      setItems((prev) =>
+        prev.map((x) => (x.id === item.id ? { ...x, status: 'handled' } : x))
+      );
+      setSummary((prev) => ({
+        ...prev,
+        totalPending: Math.max(0, prev.totalPending - 1),
+        replyPending: item.action === 'reply' ? Math.max(0, prev.replyPending - 1) : prev.replyPending,
+        deletePending: item.action === 'delete' ? Math.max(0, prev.deletePending - 1) : prev.deletePending,
+        supplementPending: item.action === 'supplement' ? Math.max(0, prev.supplementPending - 1) : prev.supplementPending,
+        handledCount: prev.handledCount + 1,
+      }));
+
       toast(`已标记${method}`, 'success');
       await onRefresh();
     } catch (e) {
@@ -231,21 +220,26 @@ export function CommentActionWorkbench({
   async function handleRemove(item: ActionWorkbenchItem) {
     if (!confirm('确认从清单中移除此待办记录？此操作将物理删除记录。')) return;
     try {
-      if (item.source === 'key-comment') {
-        await api('/api/resources', {
-          method: 'POST',
-          body: JSON.stringify({ action: 'comment_delete', projectId, id: item.rawId }),
-        });
-        setKeyComments((prev) => prev.filter((x) => x.id !== item.id));
-        toast('记录已移除', 'success');
-        await onRefresh();
-      }
+      await api('/api/actions/workbench', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: item.id,
+          rawId: item.rawId,
+          source: item.source,
+          action: 'delete',
+          projectId,
+        }),
+      });
+
+      setItems((prev) => prev.filter((x) => x.id !== item.id));
+      setTotal((prev) => Math.max(0, prev - 1));
+      toast('记录已移除', 'success');
+      await onRefresh();
+      void loadWorkbenchData();
     } catch (e) {
       toast(e instanceof Error ? e.message : '移除失败', 'error');
     }
   }
-
-  const pagedItems = unifiedItems.slice((page - 1) * 20, page * 20);
 
   return (
     <div className="stack animate-fade-in">
@@ -254,7 +248,7 @@ export function CommentActionWorkbench({
         <MetricCard
           theme="indigo"
           label="全部待办任务"
-          value={totalPending}
+          value={summary.totalPending}
           unit="项"
           desc="整合关键评论舆情与规则判定队列待办"
           tag="待办总盘"
@@ -262,7 +256,7 @@ export function CommentActionWorkbench({
         <MetricCard
           theme="blue"
           label="需达人回复"
-          value={replyPending}
+          value={summary.replyPending}
           unit="项"
           desc="正向问询或轻负面，需引导官方/达人回复"
           tag="舆情承接"
@@ -270,7 +264,7 @@ export function CommentActionWorkbench({
         <MetricCard
           theme="red"
           label="需删除违规"
-          value={deletePending}
+          value={summary.deletePending}
           unit="项"
           desc="严重负面、竞品拉踩或违规广告评论"
           tag="风险处置"
@@ -278,7 +272,7 @@ export function CommentActionWorkbench({
         <MetricCard
           theme="yellow"
           label="需补充笔记"
-          value={supplementPending}
+          value={summary.supplementPending}
           unit="篇"
           desc="评论达标数或品牌提及不足需追加"
           tag="交付缺口"
@@ -289,14 +283,14 @@ export function CommentActionWorkbench({
       <DashboardSection
         eyebrow="ACTION WORKBENCH"
         title="舆情风险与规则判定统一处置台"
-        desc="整合自实时检出的关键评论与各批次审核规则判定，支持一键闭环回复、删除与补充。"
+        desc="整合自实时检出的关键评论与各批次审核规则判定，支持真正的服务端全量检索与分页处置。"
         extra={
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button
               type="button"
               className="primary"
               style={{ fontSize: '13px', padding: '6px 14px' }}
-              onClick={loadAll}
+              onClick={loadWorkbenchData}
               disabled={loading}
             >
               {loading ? '刷新中…' : '刷新待办'}
@@ -316,20 +310,41 @@ export function CommentActionWorkbench({
             type="text"
             placeholder="搜索评论内容 / 博主 / 笔记ID / 原因"
             value={query}
-            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
             style={{ width: '240px' }}
           />
-          <select value={sourceFilter} onChange={(e) => { setSourceFilter(e.target.value as 'all' | 'key-comment' | 'review-batch'); setPage(1); }}>
+          <select
+            value={sourceFilter}
+            onChange={(e) => {
+              setSourceFilter(e.target.value as 'all' | 'key-comment' | 'review-batch');
+              setPage(1);
+            }}
+          >
             <option value="all">全部来源（关键评论 + 判定批次）</option>
             <option value="key-comment">仅关键评论</option>
             <option value="review-batch">仅规则判定批次</option>
           </select>
-          <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}>
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
+          >
             <option value="pending">待处理任务</option>
             <option value="handled">已处理归档</option>
-            <option value="">全部处理状态</option>
+            <option value="all">全部处理状态</option>
           </select>
-          <select value={actionFilter} onChange={(e) => { setActionFilter(e.target.value); setPage(1); }}>
+          <select
+            value={actionFilter}
+            onChange={(e) => {
+              setActionFilter(e.target.value);
+              setPage(1);
+            }}
+          >
             <option value="">全部动作类型</option>
             <option value="reply">需回复</option>
             <option value="delete">需删除</option>
@@ -341,10 +356,11 @@ export function CommentActionWorkbench({
               value={selectedDate}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
-                loadReviewBatch(e.target.value);
+                setPage(1);
               }}
               style={{ borderColor: '#c7d2fe' }}
             >
+              <option value="">全部判定日期</option>
               {availableDates.map((d) => (
                 <option key={d} value={d}>
                   批次：{d}
@@ -354,10 +370,25 @@ export function CommentActionWorkbench({
           )}
         </WorkspaceToolbar>
 
+        {error && (
+          <div style={{ marginBottom: '14px' }}>
+            <ResultNotice type="error">
+              待办任务加载失败：{error}
+              <button
+                type="button"
+                onClick={loadWorkbenchData}
+                style={{ marginLeft: '12px', fontSize: '12px', padding: '2px 8px', cursor: 'pointer' }}
+              >
+                重新加载
+              </button>
+            </ResultNotice>
+          </div>
+        )}
+
         <DataTableShell
           page={page}
           pageSize={20}
-          total={unifiedItems.length}
+          total={total}
           onPageChange={(p) => setPage(p)}
           loading={loading}
         >
@@ -374,7 +405,7 @@ export function CommentActionWorkbench({
               </tr>
             </thead>
             <tbody>
-              {pagedItems.map((item) => (
+              {items.map((item) => (
                 <tr key={item.id}>
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -382,8 +413,26 @@ export function CommentActionWorkbench({
                         status={item.source === 'key-comment' ? '关键评论' : `判定批次 ${item.batchDate || ''}`}
                         theme={item.source === 'key-comment' ? 'blue' : 'purple'}
                       />
-                      <strong style={{ fontSize: '13px', color: item.action === 'delete' ? '#b91c1c' : item.action === 'reply' ? '#0369a1' : '#334155' }}>
-                        {item.action === 'reply' ? '需回复' : item.action === 'delete' ? '需删除' : item.action === 'supplement' ? '需补充' : '保留观察'}
+                      <strong
+                        style={{
+                          fontSize: '13px',
+                          color:
+                            item.action === 'delete'
+                              ? '#b91c1c'
+                              : item.action === 'reply'
+                              ? '#0369a1'
+                              : item.action === 'supplement'
+                              ? '#d97706'
+                              : '#334155',
+                        }}
+                      >
+                        {item.action === 'reply'
+                          ? '需回复'
+                          : item.action === 'delete'
+                          ? '需删除'
+                          : item.action === 'supplement'
+                          ? '需补充'
+                          : '保留观察'}
                       </strong>
                     </div>
                   </td>
@@ -488,7 +537,7 @@ export function CommentActionWorkbench({
                   </td>
                 </tr>
               ))}
-              {!pagedItems.length && !loading && (
+              {!items.length && !loading && (
                 <tr>
                   <td colSpan={7}>
                     <EmptyState title="暂无待办任务" text="当前筛选条件下没有待处置的评论或规则判定。" />

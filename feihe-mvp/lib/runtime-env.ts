@@ -6,7 +6,7 @@ export function warmWorkerEnv(): Promise<Record<string, unknown>> {
   if (!warming) {
     warming = (async () => {
       try {
-        const mod = (await import('cloudflare:workers')) as { env?: Record<string, unknown> };
+        const mod = (await import('cloudflare:workers')) as unknown as { env?: Record<string, unknown> };
         workerSnapshot = { ...(mod.env ?? {}) };
       } catch {
         workerSnapshot = {};

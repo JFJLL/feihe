@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -9,7 +10,7 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, cnTime, pct } from '../../lib/hooks/use-project-data';
 import type { Dashboard, Acceptance } from '../../lib/types/project';
-import type { NoteListItem, NotesListResponse } from '../content/content-view-model';
+import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from '../content/content-view-model';
 
 export function AcceptanceDelivery({
   projectId,
@@ -26,26 +27,45 @@ export function AcceptanceDelivery({
 }) {
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [summary, setSummary] = useState<NotesListResponse['summary']>({
-    total: 0,
-    ownedCount: 0,
-    scanCount: 0,
-    completeCount: 0,
-    missingProfileCount: 0,
-    reportableCount: 0,
-    baseCount: 0,
-    supplementCount: 0,
-    fetchedCount: 0,
-    unfetchedCount: 0,
-    totalComments: 0,
-    totalReads: 0,
-    totalInteractions: 0,
-  });
+  const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
 
-  const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
+
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const syncToUrl = useCallback((nextState: { query: string; status: string; page: number }) => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+      if (nextState.status) p.set('status', nextState.status); else p.delete('status');
+      if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    syncToUrl({ query: debouncedQuery, status: statusFilter, page });
+  }, [debouncedQuery, statusFilter, page, syncToUrl]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setStatusFilter(p.get('status') || '');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const loadAcceptanceNotes = useCallback(async () => {
     setLoading(true);
@@ -56,7 +76,7 @@ export function AcceptanceDelivery({
         page: String(page),
         pageSize: '20',
       });
-      if (query) p.set('query', query);
+      if (debouncedQuery) p.set('query', debouncedQuery);
       if (statusFilter) p.set('status', statusFilter);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
       setItems(res.items || []);
@@ -67,7 +87,7 @@ export function AcceptanceDelivery({
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, query, statusFilter, toast]);
+  }, [projectId, page, debouncedQuery, statusFilter, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -125,7 +145,7 @@ export function AcceptanceDelivery({
           <div>
             <strong style={{ fontSize: '13.5px', color: '#166534' }}>当前项目验收判定规则配置</strong>
             <div style={{ fontSize: '12px', color: '#15803d', marginTop: '2px' }}>
-              可汇报线：≥ <strong>{reportReq}</strong> 条 · 基础达标线：≥ <strong>{baseReq}</strong> 条 · 前5主评品牌提及率阈值：≥ <strong>{pct(brandReqRate)}</strong> · 新鲜度：24小时
+              可汇报线：≥ <strong>{reportReq}</strong> 条 · 基础达标线：≥ <strong>{baseReq}</strong> 条 · 前5主评品牌提及率阈值：≥ <strong>{pct(brandReqRate)}</strong> · 新鲜度：{acceptance.freshnessHours || 24}小时
             </div>
           </div>
         </div>
@@ -155,8 +175,11 @@ export function AcceptanceDelivery({
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
           {dashboard.pipelines.map((p) => {
-            const commentRate = p.targetCount > 0 ? Math.min(100, Math.round((p.deliveredCount / p.targetCount) * 1000) / 10) : 0;
-            const budgetRate = p.budget > 0 ? Math.min(100, Math.round((p.spent / p.budget) * 1000) / 10) : 0;
+            const commentRate = p.targetCount > 0 ? Math.round((p.deliveredCount / p.targetCount) * 1000) / 10 : 0;
+            const budgetRate = p.budget > 0 ? Math.round((p.spent / p.budget) * 1000) / 10 : 0;
+            const isOverBudget = p.budget > 0 && p.spent > p.budget;
+            const overBudgetAmount = isOverBudget ? p.spent - p.budget : 0;
+            const overBudgetRate = isOverBudget ? Math.round(((p.spent - p.budget) / p.budget) * 1000) / 10 : 0;
             const remaining = Math.max(0, p.targetCount - p.deliveredCount);
             const isComplete = p.deliveredCount >= p.targetCount && p.targetCount > 0;
             const themeColor = isComplete ? 'green' : commentRate < 50 ? 'yellow' : 'blue';
@@ -189,11 +212,11 @@ export function AcceptanceDelivery({
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: isOverBudget ? '#dc2626' : '#64748b', marginBottom: '4px' }}>
                     <span>预算消耗：¥<strong>{p.spent.toLocaleString()}</strong> / ¥{p.budget.toLocaleString()}</span>
-                    <span>消耗率：{budgetRate}%</span>
+                    <span>{isOverBudget ? `超支 ${budgetRate}% (+¥${overBudgetAmount.toLocaleString()} / +${overBudgetRate}%)` : `消耗率：${budgetRate}%`}</span>
                   </div>
-                  <ProgressBar value={p.spent} max={p.budget || p.spent || 100} theme="teal" />
+                  <ProgressBar value={p.spent} max={p.budget || p.spent || 100} theme={isOverBudget ? 'red' : 'teal'} />
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#475569', paddingTop: '4px', borderTop: '1px solid #f1f5f9' }}>
@@ -224,7 +247,8 @@ export function AcceptanceDelivery({
             <option value="">全部验收状态</option>
             <option value="符合且能汇报">符合且能汇报</option>
             <option value="符合基础要求">符合基础要求</option>
-            <option value="不够30条需补充">不够30条需补充</option>
+            <option value={`不够${baseReq}条需补充`}>不够{baseReq}条需补充</option>
+            <option value="需补充">需补充</option>
             <option value="待抓取">待抓取</option>
           </select>
         </WorkspaceToolbar>

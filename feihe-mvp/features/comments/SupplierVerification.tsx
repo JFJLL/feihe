@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -9,7 +10,7 @@ import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolba
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
-import type { Dashboard, Ops } from '../../lib/types/project';
+import type { Ops } from '../../lib/types/project';
 import type { SupplierCommentItem } from './comment-view-model';
 
 export function SupplierVerification({
@@ -23,16 +24,15 @@ export function SupplierVerification({
   toast,
 }: {
   projectId: string;
-  dashboard: Dashboard;
   ops: Ops;
-  uploadWorkbook: (f: File | undefined, k: 'owned' | 'supplier') => void;
-  verifySupplier: () => void;
+  uploadWorkbook: (f: File | undefined, k: 'owned' | 'supplier') => Promise<void> | void;
+  verifySupplier: () => Promise<void> | void;
   loading: boolean;
   runResult: string;
-  projectId: string;
   onDone: () => Promise<void>;
   toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<SupplierCommentItem[]>([]);
   const [total, setTotal] = useState(0);
   const [summary, setSummary] = useState({
@@ -43,11 +43,49 @@ export function SupplierVerification({
     pendingCount: 0,
   });
 
-  const [visibilityFilter, setVisibilityFilter] = useState('');
-  const [query, setQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const [visibilityFilter, setVisibilityFilter] = useState(searchParams.get('visibility') || '');
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [from, setFrom] = useState(searchParams.get('from') || '');
+  const [to, setTo] = useState(searchParams.get('to') || '');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
   const [uploadFileName, setUploadFileName] = useState('');
+
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const syncToUrl = useCallback((nextState: { query: string; visibility: string; from: string; to: string; page: number }) => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+      if (nextState.visibility) p.set('visibility', nextState.visibility); else p.delete('visibility');
+      if (nextState.from) p.set('from', nextState.from); else p.delete('from');
+      if (nextState.to) p.set('to', nextState.to); else p.delete('to');
+      if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    syncToUrl({ query: debouncedQuery, visibility: visibilityFilter, from, to, page });
+  }, [debouncedQuery, visibilityFilter, from, to, page, syncToUrl]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setVisibilityFilter(p.get('visibility') || '');
+      setFrom(p.get('from') || '');
+      setTo(p.get('to') || '');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const loadSupplierList = useCallback(async () => {
     setLoading(true);
@@ -58,7 +96,9 @@ export function SupplierVerification({
         pageSize: '20',
       });
       if (visibilityFilter) p.set('visibility', visibilityFilter);
-      if (query) p.set('query', query);
+      if (debouncedQuery) p.set('query', debouncedQuery);
+      if (from) p.set('from', from);
+      if (to) p.set('to', to);
       const res = await api<{
         ok: boolean;
         items: SupplierCommentItem[];
@@ -74,7 +114,7 @@ export function SupplierVerification({
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, visibilityFilter, query, toast]);
+  }, [projectId, page, visibilityFilter, debouncedQuery, from, to, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,6 +131,9 @@ export function SupplierVerification({
         body: JSON.stringify({ action: 'supplier_delete', projectId, id }),
       });
       toast('记录已删除', 'success');
+      if (items.length <= 1 && page > 1) {
+        setPage(page - 1);
+      }
       await loadSupplierList();
       await onDone();
     } catch (err) {
@@ -118,7 +161,7 @@ export function SupplierVerification({
           label="有修改但外显"
           value={summary.modifiedCount.toLocaleString()}
           unit="条"
-          desc="达人或水军做过自然改写后成功外显"
+          desc="执行团队做过自然改写后成功外显"
           tag="改写通过"
         />
         <MetricCard
@@ -153,11 +196,17 @@ export function SupplierVerification({
                 <input
                   type="file"
                   accept=".xlsx,.xls"
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (file) {
                       setUploadFileName(file.name);
-                      uploadWorkbook(file, 'supplier');
+                      try {
+                        await uploadWorkbook(file, 'supplier');
+                        await loadSupplierList();
+                        await onDone();
+                      } catch (err) {
+                        toast(err instanceof Error ? err.message : '导入失败', 'error');
+                      }
                     }
                   }}
                 />
@@ -179,6 +228,7 @@ export function SupplierVerification({
               onClick={async () => {
                 await verifySupplier();
                 await loadSupplierList();
+                await onDone();
               }}
               style={{ background: '#7c3aed', borderColor: '#6d28d9', minWidth: '140px' }}
             >
@@ -282,7 +332,7 @@ export function SupplierVerification({
         <WorkspaceToolbar>
           <input
             type="text"
-            placeholder="搜索笔记ID / 达人 / 计划评论内容"
+            placeholder="搜索笔记ID / 达人 / 计划评论"
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             style={{ width: '240px' }}
@@ -294,6 +344,22 @@ export function SupplierVerification({
             <option value="当前外显-有修改">当前外显-有修改</option>
             <option value="当前未外显">当前未外显</option>
           </select>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '12.5px', color: '#64748b' }}>核验时间：</span>
+            <input
+              type="date"
+              value={from}
+              onChange={(e) => { setFrom(e.target.value); setPage(1); }}
+              style={{ width: '130px' }}
+            />
+            <span style={{ fontSize: '12px', color: '#94a3b8' }}>至</span>
+            <input
+              type="date"
+              value={to}
+              onChange={(e) => { setTo(e.target.value); setPage(1); }}
+              style={{ width: '130px' }}
+            />
+          </div>
         </WorkspaceToolbar>
 
         <DataTableShell

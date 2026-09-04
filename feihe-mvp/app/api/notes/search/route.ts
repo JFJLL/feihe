@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     }
     await ensureSchema(); const d1 = db();
     for (let i = 0; i < all.length; i += 30) {
-      const statements: D1PreparedStatement[] = [];
+      const statements: Array<{ run(): Promise<unknown> }> = [];
       for (const note of all.slice(i, i + 30)) {
         const p = note.profile as Record<string, unknown>;
         statements.push(d1.prepare(`INSERT INTO notes(id,url,author,title,source_type,pipeline,product_scope,published_at,status)

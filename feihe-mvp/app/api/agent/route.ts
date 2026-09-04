@@ -58,7 +58,14 @@ async function projectFacts(project: string, start: string, end: string) {
   return { project: projectRow || { name: '项目', spu: '', brand: '', category: '' }, counts: counts || {}, pipelines: pipelines.results || [], trend: trend.results || [], topics: topics.results || [], notes: notes.results || [], sources: sources.results || [], supplier: supplier || { total: 0, visible: 0 } };
 }
 
-async function externalFacts(project: string, prompt: string, start: string, end: string) {
+type ExternalFactsResult = {
+  paidAds?: { totals: Record<string, number>; accounts: Array<Record<string, unknown>> };
+  lingxi?: LingxiTrackResult;
+  ipscg?: { task: string; total: number; topNotes: Array<Record<string, unknown>> };
+  warnings: string[];
+};
+
+async function externalFacts(project: string, prompt: string, start: string, end: string): Promise<ExternalFactsResult> {
   const d1 = db();
   const result: {
     paidAds?: { totals: Record<string, number>; accounts: Array<Record<string, unknown>> };
@@ -220,7 +227,7 @@ export async function POST(request: Request) {
       const coverMap = new Map(covers.map(item => [item.noteId, item.coverUrl]));
       facts.notes = facts.notes.map(row => ({ ...row, coverUrl: coverMap.get(String(row.noteId)) || String(row.coverUrl || '') }));
 
-      const external = await externalFacts(project, prompt, plan.period.start, plan.period.end).catch(() => ({ warnings: [] }));
+      const external = await externalFacts(project, prompt, plan.period.start, plan.period.end).catch(() => ({ warnings: [] as string[], paidAds: undefined, lingxi: undefined, ipscg: undefined }));
       plan.warnings.push(...(external.warnings || []));
 
       const c = facts.counts;
@@ -289,7 +296,7 @@ export async function POST(request: Request) {
           title: '聚光投放子账户明细与消耗',
           kind: 'table',
           description: '来自 partner.xiaohongshu.com 后台 65 个子账户的今日消耗、曝光、点击与 CTR。',
-          data: external.paidAds.accounts.slice(0, 15).map(a => ({
+          data: (external.paidAds?.accounts || []).slice(0, 15).map((a: Record<string, unknown>) => ({
             账户名称: String(a.account || ''),
             所属品牌: String(a.brand || ''),
             消耗: `¥${number(a.spend).toLocaleString()}`,
@@ -309,7 +316,7 @@ export async function POST(request: Request) {
           title: '灵犀母婴 13 大细分市场供需分析',
           kind: 'table',
           description: '小红书灵犀市场机会（白犀计划 · 母婴全类目），涵盖母婴出行、奶粉、辅零食等供需象限。',
-          data: external.lingxi.marketOpportunities.map(c => ({
+          data: (external.lingxi?.marketOpportunities || []).map((c: { name: string; searchNum: number; noteNum: number; brandNum: number; demand: string; supply: string }) => ({
             细分市场: c.name,
             '搜索量(需求)': c.searchNum.toLocaleString(),
             '有曝光笔记数(供给)': c.noteNum.toLocaleString(),
@@ -324,7 +331,7 @@ export async function POST(request: Request) {
           title: '灵犀母婴品牌热度 Top 30（截选前15）',
           kind: 'table',
           description: '小红书灵犀品牌搜索热度与阅读渗透率排行。',
-          data: external.lingxi.brandRankings.slice(0, 15).map(b => ({
+          data: (external.lingxi?.brandRankings || []).slice(0, 15).map((b: { rank: number; name: string; searchNum: number; readRate: number; share: number }) => ({
             排名: b.rank,
             品牌名称: b.name,
             搜索热度: b.searchNum.toLocaleString(),
@@ -339,7 +346,7 @@ export async function POST(request: Request) {
           title: '灵犀母婴爆款 SPU Top 30（截选前15）',
           kind: 'table',
           description: '小红书灵犀单品爆款榜与关联品牌。',
-          data: external.lingxi.spuRankings.slice(0, 15).map(s => ({
+          data: (external.lingxi?.spuRankings || []).slice(0, 15).map((s: { rank: number; name: string; brand: string; searchNum: number; readRate: number }) => ({
             排名: s.rank,
             单品名称: s.name,
             归属品牌: s.brand,

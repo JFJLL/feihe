@@ -81,7 +81,7 @@ export async function GET(request: Request) {
   } else if (sort === 'lastFetchedAt') {
     orderBy = 'pn.last_fetched_at ' + order + ', n.id DESC';
   } else if (sort === 'cpe') {
-    orderBy = '(CASE WHEN p.interaction_count > 0 THEN p.note_price / p.interaction_count ELSE 999999 END) ' + order;
+    orderBy = 'CASE WHEN p.interaction_count > 0 AND p.note_price IS NOT NULL THEN 0 ELSE 1 END, (p.note_price / p.interaction_count) ' + order + ', n.id DESC';
   }
 
   const countSql = 'SELECT COUNT(*) AS total FROM notes n JOIN project_notes pn ON pn.note_id = n.id LEFT JOIN note_profiles p ON p.note_id = n.id' + whereClause;
@@ -89,7 +89,17 @@ export async function GET(request: Request) {
   const summarySql = `
     SELECT 
       COUNT(*) AS total,
+      SUM(CASE WHEN (p.cover_url IS NOT NULL AND p.cover_url != '') THEN 1 ELSE 0 END) AS coverCount,
+      SUM(CASE WHEN (p.category1 IS NOT NULL AND p.category1 != '') THEN 1 ELSE 0 END) AS categoryCount,
+      SUM(CASE WHEN (p.read_count IS NOT NULL AND p.read_count > 0) OR (p.interaction_count IS NOT NULL AND p.interaction_count > 0) THEN 1 ELSE 0 END) AS performanceMetricCount,
+      SUM(CASE WHEN (n.url IS NOT NULL AND n.url != '') THEN 1 ELSE 0 END) AS linkCount,
+      SUM(CASE WHEN (p.creator_level IS NOT NULL AND p.creator_level != '') THEN 1 ELSE 0 END) AS creatorLevelCount,
+      SUM(CASE WHEN (p.read_count IS NOT NULL AND p.read_count > 0) THEN 1 ELSE 0 END) AS readMetricCount,
+      SUM(CASE WHEN (p.interaction_count IS NOT NULL AND p.interaction_count > 0) THEN 1 ELSE 0 END) AS interactionMetricCount,
       SUM(CASE WHEN pn.source_type IN ('owned', 'commercial') THEN 1 ELSE 0 END) AS ownedCount,
+      SUM(CASE WHEN pn.source_type = 'commercial' OR p.cooperation = 1 THEN 1 ELSE 0 END) AS commercialCount,
+      SUM(CASE WHEN pn.source_type = 'owned' AND (n.published_at IS NOT NULL AND n.published_at != '') THEN 1 ELSE 0 END) AS ownedPublishedCount,
+      SUM(CASE WHEN (n.published_at IS NOT NULL AND n.published_at != '') THEN 1 ELSE 0 END) AS publishedCount,
       SUM(CASE WHEN pn.source_type = 'keyword_scan' THEN 1 ELSE 0 END) AS scanCount,
       SUM(CASE WHEN (p.cover_url IS NOT NULL AND p.cover_url != '') 
                 AND (p.read_count IS NOT NULL AND p.read_count > 0) 
@@ -120,12 +130,13 @@ export async function GET(request: Request) {
       p.read_count AS readCount, p.interaction_count AS interactionCount,
       p.like_count AS likeCount, p.favorite_count AS favoriteCount,
       p.creator_level AS creatorLevel, p.brand, p.note_price AS notePrice,
+      CASE WHEN p.interaction_count > 0 AND p.note_price IS NOT NULL THEN ROUND(p.note_price / p.interaction_count, 2) ELSE NULL END AS cpe,
       snap.captured_at AS latestSnapshotTime,
       snap.l1_count AS latestL1Count,
       snap.l2_count AS latestL2Count,
       snap.total_count AS latestSnapshotTotal,
       prev_snap.total_count AS prevSnapshotTotal,
-      (COALESCE(snap.total_count, 0) - COALESCE(prev_snap.total_count, 0)) AS commentDelta,
+      CASE WHEN snap.total_count IS NULL THEN NULL WHEN prev_snap.total_count IS NULL THEN NULL ELSE (snap.total_count - prev_snap.total_count) END AS commentDelta,
       CASE WHEN pn.status != '待抓取' OR pn.last_fetched_at IS NOT NULL OR snap.captured_at IS NOT NULL THEN 1 ELSE 0 END AS isFetched,
       CASE WHEN (p.cover_url IS NOT NULL AND p.cover_url != '') 
             AND (p.read_count IS NOT NULL AND p.read_count > 0) 
@@ -155,11 +166,37 @@ export async function GET(request: Request) {
     LIMIT ? OFFSET ?
   `;
 
-  const [totalRow, summaryRow, itemsRows] = await Promise.all([
+  const coverageFeedbackSql = `
+    SELECT 
+      COALESCE(NULLIF(p.category1, ''), '待补充内容方向') AS direction,
+      SUM(CASE WHEN pn.source_type = 'owned' THEN 1 ELSE 0 END) AS owned,
+      SUM(CASE WHEN pn.source_type = 'commercial' OR p.cooperation = 1 THEN 1 ELSE 0 END) AS commercial,
+      SUM(CASE WHEN pn.source_type = 'keyword_scan' THEN 1 ELSE 0 END) AS natural,
+      COALESCE(SUM(p.interaction_count), 0) AS interactions,
+      COALESCE(SUM(pn.comment_total), 0) AS comments
+    FROM notes n
+    JOIN project_notes pn ON pn.note_id = n.id
+    LEFT JOIN note_profiles p ON p.note_id = n.id
+    WHERE pn.project_id = ?
+    GROUP BY direction
+    ORDER BY natural DESC, owned DESC
+  `;
+
+  const [totalRow, summaryRow, itemsRows, feedbackRows] = await Promise.all([
     d1.prepare(countSql).bind(...params).first<{ total: number }>(),
     d1.prepare(summarySql).bind(project).first<{
       total: number;
+      coverCount: number;
+      categoryCount: number;
+      performanceMetricCount: number;
+      linkCount: number;
+      creatorLevelCount: number;
+      readMetricCount: number;
+      interactionMetricCount: number;
       ownedCount: number;
+      commercialCount: number;
+      ownedPublishedCount: number;
+      publishedCount: number;
       scanCount: number;
       completeCount: number;
       reportableCount: number;
@@ -172,15 +209,26 @@ export async function GET(request: Request) {
       totalInteractions: number;
     }>(),
     d1.prepare(listSql).bind(project, project, project, ...params, pageSize, offset).all(),
+    d1.prepare(coverageFeedbackSql).bind(project).all<{ direction: string; owned: number; commercial: number; natural: number; interactions: number; comments: number }>(),
   ]);
 
   const total = Number(totalRow?.total || 0);
   const summary = {
     total: Number(summaryRow?.total || 0),
+    coverCount: Number(summaryRow?.coverCount || 0),
+    categoryCount: Number(summaryRow?.categoryCount || 0),
+    performanceMetricCount: Number(summaryRow?.performanceMetricCount || 0),
+    linkCount: Number(summaryRow?.linkCount || 0),
+    creatorLevelCount: Number(summaryRow?.creatorLevelCount || 0),
+    readMetricCount: Number(summaryRow?.readMetricCount || 0),
+    interactionMetricCount: Number(summaryRow?.interactionMetricCount || 0),
     ownedCount: Number(summaryRow?.ownedCount || 0),
+    commercialCount: Number(summaryRow?.commercialCount || 0),
+    ownedPublishedCount: Number(summaryRow?.ownedPublishedCount || 0),
+    publishedCount: Number(summaryRow?.publishedCount || 0),
     scanCount: Number(summaryRow?.scanCount || 0),
     completeCount: Number(summaryRow?.completeCount || 0),
-    missingProfileCount: Math.max(0, Number(summaryRow?.total || 0) - Number(summaryRow?.completeCount || 0)),
+    missingProfileCount: Math.max(0, Number(summaryRow?.total || 0) - Number(summaryRow?.performanceMetricCount || 0)),
     reportableCount: Number(summaryRow?.reportableCount || 0),
     baseCount: Number(summaryRow?.baseCount || 0),
     supplementCount: Number(summaryRow?.supplementCount || 0),
@@ -198,5 +246,6 @@ export async function GET(request: Request) {
     page,
     pageSize,
     summary,
+    coverageFeedback: feedbackRows.results || [],
   });
 }

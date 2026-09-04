@@ -18,8 +18,15 @@ export function DataTableShell({
   className?: string;
 }) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const startItem = total === 0 ? 0 : (page - 1) * pageSize + 1;
-  const endItem = Math.min(total, page * pageSize);
+  const safePage = total === 0 ? 1 : Math.min(page, totalPages);
+  const startItem = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
+  const endItem = Math.min(total, safePage * pageSize);
+
+  React.useEffect(() => {
+    if (page > totalPages && totalPages >= 1) {
+      onPageChange(totalPages);
+    }
+  }, [page, totalPages, onPageChange]);
 
   return (
     <div className={`ops-data-shell ${className}`} style={{ opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s' }}>

@@ -181,17 +181,20 @@ export function useProjectData(
   const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (opts?: { fresh?: boolean }) => {
+    const isFresh = opts?.fresh ?? false;
     setLoading(true);
     setError(null);
     try {
-      const query = new URLSearchParams({ projectId, fresh: '1' });
+      const query = new URLSearchParams({ projectId });
+      if (isFresh) query.set('fresh', '1');
       if (from) query.set('from', from);
       if (to) query.set('to', to);
       if (source) query.set('source', source);
+      const opsUrl = '/api/ops?projectId=' + encodeURIComponent(projectId) + (isFresh ? '&fresh=1' : '');
       const [dashRes, opsRes] = await Promise.all([
         api<Dashboard>('/api/dashboard?' + query.toString()),
-        api<Ops>('/api/ops?projectId=' + encodeURIComponent(projectId) + '&fresh=1'),
+        api<Ops>(opsUrl),
       ]);
       const timestamp = Date.now();
       projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp });
@@ -210,7 +213,7 @@ export function useProjectData(
     const current = restoredProjectData(cacheKey);
     if (current && Date.now() - current.timestamp < REVALIDATE_AFTER) return;
     const timer = setTimeout(() => {
-      void refresh();
+      void refresh({ fresh: false });
     }, 0);
     return () => clearTimeout(timer);
   }, [refresh, cacheKey]);
@@ -226,4 +229,3 @@ export function useProjectData(
     refresh,
   };
 }
-

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, usePathname } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 export function useProjectTab(
   defaultTab: string,
@@ -21,6 +21,16 @@ export function useProjectTab(
       : resolvedRawTab && allowedTabs.includes(resolvedRawTab)
       ? resolvedRawTab
       : defaultTab;
+
+  useEffect(() => {
+    if (rawTab && aliases && aliases[rawTab] && aliases[rawTab] !== rawTab) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', aliases[rawTab]);
+        window.history.replaceState(null, '', pathname + '?' + params.toString());
+      } catch {}
+    }
+  }, [rawTab, aliases, pathname]);
 
   const setTab = useCallback(
     (nextTab: string) => {

@@ -29,11 +29,36 @@ export async function POST(request:Request){
     }
    if(action==='note_update'){
      const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');
-     await d1.batch([
-        d1.prepare(`UPDATE notes SET title=COALESCE(NULLIF(?,''),title),author=COALESCE(NULLIF(?,''),author),url=COALESCE(NULLIF(?,''),url) WHERE id=?`).bind(value(body.title),value(body.author),value(body.url),id),
-        d1.prepare(`UPDATE project_notes SET source_type=COALESCE(NULLIF(?,''),source_type),pipeline=COALESCE(NULLIF(?,''),pipeline),level=COALESCE(NULLIF(?,''),level),product_scope=COALESCE(NULLIF(?,''),product_scope),status=COALESCE(NULLIF(?,''),status) WHERE project_id=? AND note_id=?`)
-          .bind(value(body.sourceType),value(body.pipeline),value(body.level),value(body.productScope),value(body.status),project,id),
-     ]);await logAction('更新笔记','note',id,'笔记资料或项目分类已修改',project);return Response.json({ok:true});
+     const updates: string[] = [];
+     const updateVals: unknown[] = [];
+     if ('title' in body) { updates.push('title=?'); updateVals.push(value(body.title)); }
+     if ('author' in body) { updates.push('author=?'); updateVals.push(value(body.author)); }
+     if ('url' in body) { updates.push('url=?'); updateVals.push(value(body.url)); }
+     if (updates.length > 0) {
+       await d1.prepare(`UPDATE notes SET ${updates.join(',')} WHERE id=?`).bind(...updateVals, id).run();
+     }
+     const pnUpdates: string[] = [];
+     const pnVals: unknown[] = [];
+     if ('sourceType' in body) { pnUpdates.push('source_type=?'); pnVals.push(value(body.sourceType)); }
+     if ('pipeline' in body) { pnUpdates.push('pipeline=?'); pnVals.push(value(body.pipeline)); }
+     if ('level' in body) { pnUpdates.push('level=?'); pnVals.push(value(body.level)); }
+     if ('productScope' in body) { pnUpdates.push('product_scope=?'); pnVals.push(value(body.productScope)); }
+     if (pnUpdates.length > 0) {
+       await d1.prepare(`UPDATE project_notes SET ${pnUpdates.join(',')} WHERE project_id=? AND note_id=?`).bind(...pnVals, project, id).run();
+     }
+     await logAction('更新笔记','note',id,'笔记基础资料已更新',project);
+     return Response.json({ok:true});
+   }
+   if(action==='calibrate_acceptance'){
+     const id=value(body.id);
+     const newStatus=value(body.status);
+     const reason=value(body.reason)||'人工校正验收状态';
+     if(!id||!newStatus)return jsonError('缺少笔记 ID 或新状态');
+     const oldRow=await d1.prepare('SELECT status FROM project_notes WHERE project_id=? AND note_id=?').bind(project,id).first<{status:string}>();
+     const oldStatus=oldRow?.status||'待抓取';
+     await d1.prepare('UPDATE project_notes SET status=? WHERE project_id=? AND note_id=?').bind(newStatus,project,id).run();
+     await logAction('人工验收校正','acceptance',id,`原状态: ${oldStatus} -> 新状态: ${newStatus}，原因: ${reason}，操作人: ${user.displayName||user.userId}`,project);
+     return Response.json({ok:true,oldStatus,newStatus});
    }
     if(action==='note_delete'){
       const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');

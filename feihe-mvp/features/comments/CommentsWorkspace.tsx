@@ -35,7 +35,7 @@ export function CommentsWorkspace({
     projectId,
     onRefresh,
     toast: showToast,
-    context: 'comments',
+    context: tab === 'acceptance' ? 'acceptance' : 'comments',
     defaultTab: tab === 'acceptance' ? 'acceptance' : 'comments',
   });
 

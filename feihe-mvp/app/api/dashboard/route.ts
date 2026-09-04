@@ -7,7 +7,7 @@ import { DAILY_DATA, ALL_DATES } from '@/features/overview/overview-data';
 export const dynamic = 'force-dynamic';
 
 type Row = Record<string, string | number | null>;
-const resultRows = (value: D1Result<unknown>) => value.results as Row[];
+const resultRows = (value: { results?: unknown[] } | null | undefined) => ((value?.results || []) as Row[]);
 
 type CacheEntry = { json: string; timestamp: number };
 const memoryCache = new Map<string, CacheEntry>();
@@ -45,12 +45,21 @@ export async function GET(request: Request) {
     const d1 = db();
    const params = new URL(request.url).searchParams;
    const project = projectId(params.get('projectId'));
-   const fresh = params.get('fresh') === '1' || params.get('_t');
-   const cacheKey = `dash:${project}:${params.toString()}`;
+   const fresh = params.get('fresh') === '1' || Boolean(params.get('_t'));
+   const cleanParams = new URLSearchParams(params);
+   cleanParams.delete('fresh');
+   cleanParams.delete('_t');
+   const cacheKey = `dash:${project}:${cleanParams.toString()}`;
 
-   // 命中服务端内存缓存直接返回（<1ms）
+   if (fresh) {
+     for (const k of memoryCache.keys()) {
+       if (k.startsWith(`dash:${project}:`)) {
+         memoryCache.delete(k);
+       }
+     }
+   } else {
    const cached = memoryCache.get(cacheKey);
-   if (!fresh && cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+   if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
      return new Response(cached.json, {
         status: 200,
         headers: {
@@ -60,6 +69,7 @@ export async function GET(request: Request) {
         },
       });
     }
+   }
 
     // 确保日度表已就绪
     await ensureDailyKpiSeeded(d1, project);

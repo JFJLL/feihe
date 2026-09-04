@@ -49,17 +49,24 @@ export function reviewSummary(result: ReviewResult): string[] {
   ];
 }
 export async function persistReviewBatch(d1: MiniDb, project: string, result: ReviewResult): Promise<string> {
-  const batchId = crypto.randomUUID();
+  const batchId = 'batch:' + project + ':' + result.dateKey;
   const now = new Date().toISOString();
-  await d1.prepare('INSERT INTO note_review_batches(id,project_id,date_key,counts_json,created_at) VALUES(?,?,?,?,?)')
+  await d1.prepare('INSERT INTO note_review_batches(id,project_id,date_key,counts_json,created_at) VALUES(?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET counts_json=excluded.counts_json,created_at=excluded.created_at')
     .bind(batchId, project, result.dateKey, JSON.stringify(result.counts), now).run();
   const items: Array<{ n: ClassifiedNote; action: string; reason: string }> = [];
   for (const n of result.needReply) items.push({ n, action: 'needReply', reason: n.replyHits[0] || '用户问询待达人回复' });
   for (const n of result.needDelete) items.push({ n, action: 'needDelete', reason: n.deleteHits[0] || '命中删除口径' });
   for (const n of result.needSupplement) items.push({ n, action: 'needSupplement', reason: '正向' + n.positive + '条，还差' + n.supplementNeed + '条' });
-  for (const it of items.slice(0, 300)) {
-    await d1.prepare('INSERT INTO review_action_items(batch_id,project_id,date_key,link,blogger,action,reason,sample_json,status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)')
-      .bind(batchId, project, result.dateKey, it.n.link, it.n.blogger, it.action, it.reason, JSON.stringify(it.n.samples.slice(0, 2)), '待处理', now).run();
+  for (const it of items) {
+    const itemKey = result.dateKey + ':' + shortLink(it.n.link) + ':' + it.action;
+    const existing = await d1.prepare('SELECT id, status FROM review_action_items WHERE project_id=? AND item_key=?').bind(project, itemKey).first<{ id: number; status: string }>();
+    if (existing) {
+      await d1.prepare('UPDATE review_action_items SET batch_id=?, link=?, blogger=?, reason=?, sample_json=? WHERE id=?')
+        .bind(batchId, it.n.link, it.n.blogger, it.reason, JSON.stringify(it.n.samples.slice(0, 2)), existing.id).run();
+    } else {
+      await d1.prepare('INSERT INTO review_action_items(batch_id,project_id,date_key,link,blogger,action,reason,sample_json,status,created_at,item_key) VALUES(?,?,?,?,?,?,?,?,?,?,?)')
+        .bind(batchId, project, result.dateKey, it.n.link, it.n.blogger, it.action, it.reason, JSON.stringify(it.n.samples.slice(0, 2)), '待处理', now, itemKey).run();
+    }
   }
   return batchId;
 }
@@ -67,4 +74,61 @@ export async function persistReviewBatch(d1: MiniDb, project: string, result: Re
 export async function ensureReviewTables(d1: MiniDb): Promise<void> {
   await d1.prepare('CREATE TABLE IF NOT EXISTS note_review_batches(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,date_key TEXT NOT NULL,counts_json TEXT NOT NULL DEFAULT "{}",created_at TEXT NOT NULL)').run();
   await d1.prepare('CREATE TABLE IF NOT EXISTS review_action_items(id INTEGER PRIMARY KEY AUTOINCREMENT,batch_id TEXT NOT NULL,project_id TEXT NOT NULL,date_key TEXT NOT NULL,link TEXT NOT NULL DEFAULT "",blogger TEXT NOT NULL DEFAULT "",action TEXT NOT NULL,reason TEXT NOT NULL DEFAULT "",sample_json TEXT NOT NULL DEFAULT "[]",status TEXT NOT NULL DEFAULT "待处理",created_at TEXT NOT NULL)').run();
+
+  const cols = await d1.prepare('PRAGMA table_info(review_action_items)').all<{ name: string }>();
+  const hasItemKey = (cols.results || []).some((c) => c.name === 'item_key');
+  if (!hasItemKey) {
+    await d1.prepare('ALTER TABLE review_action_items ADD COLUMN item_key TEXT').run().catch(() => undefined);
+  }
+
+  const allBatches = await d1.prepare('SELECT id, project_id, date_key, counts_json, created_at FROM note_review_batches ORDER BY created_at DESC').all<{
+    id: string; project_id: string; date_key: string; counts_json: string; created_at: string;
+  }>();
+  const seenBatches = new Map<string, string>();
+  for (const b of allBatches.results || []) {
+    const key = b.project_id + ':' + b.date_key;
+    const canonicalId = 'batch:' + b.project_id + ':' + b.date_key;
+    if (!seenBatches.has(key)) {
+      seenBatches.set(key, b.id);
+      if (b.id !== canonicalId) {
+        await d1.prepare('INSERT OR REPLACE INTO note_review_batches(id, project_id, date_key, counts_json, created_at) VALUES (?, ?, ?, ?, ?)')
+          .bind(canonicalId, b.project_id, b.date_key, b.counts_json, b.created_at).run();
+        await d1.prepare('UPDATE review_action_items SET batch_id=? WHERE batch_id=?').bind(canonicalId, b.id).run();
+        await d1.prepare('DELETE FROM note_review_batches WHERE id=?').bind(b.id).run();
+      }
+    } else {
+      await d1.prepare('DELETE FROM note_review_batches WHERE id=?').bind(b.id).run();
+    }
+  }
+
+  const allItems = await d1.prepare('SELECT id, batch_id, project_id, date_key, link, action, status, item_key FROM review_action_items ORDER BY id ASC').all<{
+    id: number; batch_id: string; project_id: string; date_key: string; link: string; action: string; status: string; item_key?: string;
+  }>();
+  const itemGroups = new Map<string, Array<typeof allItems.results[0]>>();
+  for (const it of allItems.results || []) {
+    const ik = it.item_key || (it.date_key + ':' + shortLink(it.link) + ':' + it.action);
+    const groupKey = it.project_id + ':' + ik;
+    if (!itemGroups.has(groupKey)) {
+      itemGroups.set(groupKey, []);
+    }
+    itemGroups.get(groupKey)!.push({ ...it, item_key: ik });
+  }
+
+  for (const [, group] of itemGroups.entries()) {
+    const targetItemKey = group[0].item_key!;
+    const winner = group.find((g) => g.status === '已处理') || group[0];
+    if (winner.item_key !== targetItemKey || !winner.item_key) {
+      await d1.prepare('UPDATE review_action_items SET item_key=? WHERE id=?').bind(targetItemKey, winner.id).run();
+    }
+    for (const other of group) {
+      if (other.id !== winner.id) {
+        await d1.prepare('DELETE FROM review_action_items WHERE id=?').bind(other.id).run();
+      }
+    }
+  }
+
+  await d1.prepare('CREATE UNIQUE INDEX IF NOT EXISTS idx_review_action_items_key ON review_action_items(project_id, item_key)').run().catch(() => undefined);
+  await d1.prepare('CREATE UNIQUE INDEX IF NOT EXISTS idx_note_review_batches_key ON note_review_batches(project_id, date_key)').run().catch(() => undefined);
+  await d1.prepare('CREATE INDEX IF NOT EXISTS idx_review_action_items_status ON review_action_items(project_id, status)').run().catch(() => undefined);
+  await d1.prepare('CREATE INDEX IF NOT EXISTS idx_review_action_items_date ON review_action_items(project_id, date_key)').run().catch(() => undefined);
 }

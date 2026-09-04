@@ -17,11 +17,18 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const project = projectId(url.searchParams.get('projectId'));
   const visibility = url.searchParams.get('visibility') || '';
-  const fresh = url.searchParams.get('fresh') === '1' || url.searchParams.get('_t');
+  const fresh = url.searchParams.get('fresh') === '1' || Boolean(url.searchParams.get('_t'));
   const cacheKey = `ops:${project}:${visibility}`;
 
+  if (fresh) {
+    for (const k of memoryCache.keys()) {
+      if (k.startsWith(`ops:${project}:`)) {
+        memoryCache.delete(k);
+      }
+    }
+  } else {
   const cached = memoryCache.get(cacheKey);
-  if (!fresh && cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
     return new Response(cached.json, {
       status: 200,
       headers: {
@@ -30,6 +37,7 @@ export async function GET(request: Request) {
         'X-Cache': 'HIT',
       },
     });
+  }
   }
 
   const supplierSql = `SELECT id,note_id AS noteId,note_url AS noteUrl,creator,planned_content AS plannedContent,

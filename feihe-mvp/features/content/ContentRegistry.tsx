@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -7,7 +8,7 @@ import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolba
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact, cnTime, pct } from '../../lib/hooks/use-project-data';
-import type { NoteListItem, NotesListResponse } from './content-view-model';
+import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
 
 export function ContentRegistry({
   projectId,
@@ -28,35 +29,67 @@ export function ContentRegistry({
 }) {
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [summary, setSummary] = useState<NotesListResponse['summary']>({
-    total: 0,
-    ownedCount: 0,
-    scanCount: 0,
-    completeCount: 0,
-    missingProfileCount: 0,
-    reportableCount: 0,
-    baseCount: 0,
-    supplementCount: 0,
-    fetchedCount: 0,
-    unfetchedCount: 0,
-    totalComments: 0,
-    totalReads: 0,
-    totalInteractions: 0,
-  });
+  const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
 
   // Filter states
-  const [query, setQuery] = useState('');
-  const [source, setSource] = useState('');
-  const [scope, setScope] = useState('');
-  const [status, setStatus] = useState('');
-  const [category, setCategory] = useState('');
-  const [from] = useState('');
-  const [to] = useState('');
-  const [sort, setSort] = useState('');
-  const [order] = useState('desc');
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [source, setSource] = useState(searchParams.get('source') || '');
+  const [scope, setScope] = useState(searchParams.get('scope') || '');
+  const [status, setStatus] = useState(searchParams.get('status') || '');
+  const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [from, setFrom] = useState(searchParams.get('from') || '');
+  const [to, setTo] = useState(searchParams.get('to') || '');
+  const [sort, setSort] = useState(searchParams.get('sort') || '');
+  const [order, setOrder] = useState(searchParams.get('order') || 'desc');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
 
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const syncToUrl = useCallback((nextState: { query: string; source: string; scope: string; status: string; category: string; from: string; to: string; sort: string; order: string; page: number }) => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+      if (nextState.source) p.set('source', nextState.source); else p.delete('source');
+      if (nextState.scope) p.set('scope', nextState.scope); else p.delete('scope');
+      if (nextState.status) p.set('status', nextState.status); else p.delete('status');
+      if (nextState.category) p.set('category', nextState.category); else p.delete('category');
+      if (nextState.from) p.set('from', nextState.from); else p.delete('from');
+      if (nextState.to) p.set('to', nextState.to); else p.delete('to');
+      if (nextState.sort) p.set('sort', nextState.sort); else p.delete('sort');
+      if (nextState.order && nextState.order !== 'desc') p.set('order', nextState.order); else p.delete('order');
+      if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    syncToUrl({ query: debouncedQuery, source, scope, status, category, from, to, sort, order, page });
+  }, [debouncedQuery, source, scope, status, category, from, to, sort, order, page, syncToUrl]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setSource(p.get('source') || '');
+      setScope(p.get('scope') || '');
+      setStatus(p.get('status') || '');
+      setCategory(p.get('category') || '');
+      setFrom(p.get('from') || '');
+      setTo(p.get('to') || '');
+      setSort(p.get('sort') || '');
+      setOrder(p.get('order') || 'desc');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   // External sample scan inputs
   const [keywords, setKeywords] = useState('启萃,飞鹤奶粉');
   const [scanFrom, setScanFrom] = useState('2026-07-01');
@@ -76,7 +109,7 @@ export function ContentRegistry({
         page: String(page),
         pageSize: '20',
       });
-      if (query) p.set('query', query);
+      if (debouncedQuery) p.set('query', debouncedQuery);
       if (source) p.set('source', source);
       if (scope) p.set('scope', scope);
       if (status) p.set('status', status);
@@ -200,11 +233,17 @@ export function ContentRegistry({
                 <input
                   type="file"
                   accept=".xlsx,.xls"
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (file) {
                       setUploadFileName(file.name);
-                      uploadWorkbook(file, 'owned');
+                      try {
+                        await uploadWorkbook(file, 'owned');
+                        await loadData();
+                        await onRefresh();
+                      } catch (err) {
+                        toast(err instanceof Error ? err.message : '导入失败', 'error');
+                      }
                     }
                   }}
                 />

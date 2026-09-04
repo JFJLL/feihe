@@ -10,7 +10,7 @@ const number = (row: ImportRow, names: string[]) => { const result = Number(valu
 export async function importRows(kind: ImportKind, input: ImportRow[], replaceSupplier = true, project = DEFAULT_PROJECT_ID) {
   const rows = input.slice(0, 5000); await ensureSchema(); const d1 = db(); const currentProject=projectId(project); let imported = 0; let skipped = 0;
   if (kind === 'supplier' && replaceSupplier) await d1.prepare('DELETE FROM supplier_comments WHERE project_id=?').bind(currentProject).run();
-  const statements: D1PreparedStatement[] = [];
+  const statements: Array<{ run(): Promise<unknown> }> = [];
   for (const [index, row] of rows.entries()) {
     if (kind === 'owned') {
       const rawId = value(row, ['笔记ID', '笔记id', '笔记Id', 'ID', '笔记链接']);

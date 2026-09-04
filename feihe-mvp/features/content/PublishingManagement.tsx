@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -10,7 +11,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact } from '../../lib/hooks/use-project-data';
 import type { Dashboard, Ops } from '../../lib/types/project';
 import type { NoteListItem, NotesListResponse } from './content-view-model';
-import { isOwnedNote, noteDirection } from '../growth/KeywordRadar';
+import { isOwnedNote, noteDirection } from '../../lib/business/note-utils';
 
 export function PublishingManagement({
   projectId,
@@ -25,15 +26,78 @@ export function PublishingManagement({
   openNote: (id: string) => void;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [query, setQuery] = useState('');
-  const [sort, setSort] = useState('publishedAt');
-  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [sort, setSort] = useState(searchParams.get('sort') || 'publishedAt');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState<NotesListResponse['summary']>({
+    total: 0,
+    coverCount: 0,
+    categoryCount: 0,
+    performanceMetricCount: 0,
+    linkCount: 0,
+    creatorLevelCount: 0,
+    readMetricCount: 0,
+    interactionMetricCount: 0,
+    ownedCount: 0,
+    commercialCount: 0,
+    ownedPublishedCount: 0,
+    publishedCount: 0,
+    scanCount: 0,
+    completeCount: 0,
+    missingProfileCount: 0,
+    reportableCount: 0,
+    baseCount: 0,
+    supplementCount: 0,
+    fetchedCount: 0,
+    unfetchedCount: 0,
+    totalComments: 0,
+    totalReads: 0,
+    totalInteractions: 0,
+  });
+  const [coverageFeedback, setCoverageFeedback] = useState<Array<{ direction: string; owned: number; commercial: number; natural: number; interactions: number; comments: number }>>([]);
+
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const syncToUrl = useCallback((nextState: { query: string; category: string; sort: string; page: number }) => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+      if (nextState.category) p.set('category', nextState.category); else p.delete('category');
+      if (nextState.sort && nextState.sort !== 'publishedAt') p.set('sort', nextState.sort); else p.delete('sort');
+      if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    syncToUrl({ query: debouncedQuery, category, sort, page });
+  }, [debouncedQuery, category, sort, page, syncToUrl]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setCategory(p.get('category') || '');
+      setSort(p.get('sort') || 'publishedAt');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const publishTarget = ops.settings.goals?.publishTarget || 0;
-  const publishedCount = dashboard.metrics.publishedCount || total || 0;
+  const publishedCount = summary.ownedPublishedCount;
+  const commercialCount = summary.commercialCount;
   const hasPublishTarget = publishTarget > 0;
   const achievePct = hasPublishTarget ? Math.min(100, Math.round((publishedCount / publishTarget) * 1000) / 10) : 0;
   const gap = hasPublishTarget ? Math.max(0, publishTarget - publishedCount) : 0;
@@ -49,16 +113,19 @@ export function PublishingManagement({
         sort,
         order: 'desc',
       });
-      if (query) p.set('query', query);
+      if (debouncedQuery) p.set('query', debouncedQuery);
+      if (category) p.set('category', category);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
       setItems(res.items || []);
       setTotal(res.total || 0);
+      if (res.summary) setSummary(res.summary);
+      if (res.coverageFeedback) setCoverageFeedback(res.coverageFeedback);
     } catch (e) {
       toast(e instanceof Error ? e.message : '加载发布明细失败', 'error');
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, query, sort, toast]);
+  }, [projectId, page, debouncedQuery, category, sort, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,27 +134,13 @@ export function PublishingManagement({
     return () => clearTimeout(timer);
   }, [loadPublishingNotes]);
 
-  // 次级区域：自有发布与自然内容方向覆盖反馈分析
+  // 次级区域：全库服务端 SQL 聚合覆盖反馈分析（不截断 500 条）
   const { feedbackRows, opportunitiesCount, naturalTotalInteractions } = useMemo(() => {
-    const directions = new Map<string, { owned: number; natural: number; interactions: number; comments: number }>();
-    let naturalInteractionsSum = 0;
-    (dashboard.notes || []).forEach((note) => {
-      const key = noteDirection(note);
-      const row = directions.get(key) || { owned: 0, natural: 0, interactions: 0, comments: 0 };
-      if (isOwnedNote(note)) {
-        row.owned += 1;
-      } else {
-        row.natural += 1;
-        naturalInteractionsSum += Number(note.interactionCount || 0);
-      }
-      row.interactions += Number(note.interactionCount || 0);
-      row.comments += Number(note.commentTotal || 0);
-      directions.set(key, row);
-    });
-    const rows = [...directions.entries()].sort((a, b) => b[1].natural - a[1].natural);
-    const opps = rows.filter(([, row]) => row.natural > row.owned).length;
-    return { feedbackRows: rows, opportunitiesCount: opps, naturalTotalInteractions: naturalInteractionsSum };
-  }, [dashboard.notes]);
+    const rows = [...coverageFeedback].sort((a, b) => b.natural - a.natural);
+    const opps = rows.filter((r) => r.natural > (r.owned + r.commercial)).length;
+    const naturalSum = rows.reduce((sum, r) => sum + Number(r.interactions || 0), 0);
+    return { feedbackRows: rows, opportunitiesCount: opps, naturalTotalInteractions: naturalSum };
+  }, [coverageFeedback]);
 
   return (
     <div className="stack animate-fade-in">
@@ -111,7 +164,7 @@ export function PublishingManagement({
         <MetricCard
           theme="teal"
           label="商业合作内容"
-          value={(dashboard.metrics.commercialCount || total).toLocaleString()}
+          value={commercialCount.toLocaleString()}
           unit="篇"
           desc="达人签约与商业投放执行中"
           tag="达人合作"
@@ -311,17 +364,17 @@ export function PublishingManagement({
                 </tr>
               </thead>
               <tbody>
-                {feedbackRows.map(([direction, row]) => (
-                  <tr key={direction}>
-                    <td><strong>{direction}</strong></td>
-                    <td>{row.owned} 篇</td>
+                {feedbackRows.map((row) => (
+                  <tr key={row.direction}>
+                    <td><strong>{row.direction}</strong></td>
+                    <td>{row.owned + row.commercial} 篇 <small style={{ color: '#64748b' }}>(自有 {row.owned} / 商业 {row.commercial})</small></td>
                     <td>{row.natural} 篇</td>
                     <td>{compact(row.interactions)}</td>
                     <td>{compact(row.comments)}</td>
                     <td>
                       <StatusBadge
-                        status={row.natural > row.owned ? '自然热度高·缺口待补' : '覆盖充足'}
-                        theme={row.natural > row.owned ? 'yellow' : 'green'}
+                        status={row.natural > (row.owned + row.commercial) ? '自然热度高·缺口待补' : '覆盖充足'}
+                        theme={row.natural > (row.owned + row.commercial) ? 'yellow' : 'green'}
                       />
                     </td>
                   </tr>

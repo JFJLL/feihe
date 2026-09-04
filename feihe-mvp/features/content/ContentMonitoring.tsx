@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -18,11 +19,22 @@ export function ContentMonitoring({
   openNote: (id: string) => void;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
+  const searchParams = useSearchParams();
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [summary, setSummary] = useState<NotesListResponse['summary']>({
     total: 0,
+    coverCount: 0,
+    categoryCount: 0,
+    performanceMetricCount: 0,
+    linkCount: 0,
+    creatorLevelCount: 0,
+    readMetricCount: 0,
+    interactionMetricCount: 0,
     ownedCount: 0,
+    commercialCount: 0,
+    ownedPublishedCount: 0,
+    publishedCount: 0,
     scanCount: 0,
     completeCount: 0,
     missingProfileCount: 0,
@@ -36,13 +48,51 @@ export function ContentMonitoring({
     totalInteractions: 0,
   });
 
-  const [query, setQuery] = useState('');
-  const [source, setSource] = useState('');
-  const [category, setCategory] = useState('');
-  const [sort, setSort] = useState('reads');
-  const [order] = useState('desc');
-  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState(searchParams.get('query') || '');
+  const [source, setSource] = useState(searchParams.get('source') || '');
+  const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [sort, setSort] = useState(searchParams.get('sort') || 'reads');
+  const [order, setOrder] = useState(searchParams.get('order') || 'desc');
+  const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
+
+  const [debouncedQuery, setDebouncedQuery] = useState(query);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const syncToUrl = useCallback((nextState: { query: string; source: string; category: string; sort: string; order: string; page: number }) => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      if (nextState.query) p.set('query', nextState.query); else p.delete('query');
+      if (nextState.source) p.set('source', nextState.source); else p.delete('source');
+      if (nextState.category) p.set('category', nextState.category); else p.delete('category');
+      if (nextState.sort && nextState.sort !== 'reads') p.set('sort', nextState.sort); else p.delete('sort');
+      if (nextState.order && nextState.order !== 'desc') p.set('order', nextState.order); else p.delete('order');
+      if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    syncToUrl({ query: debouncedQuery, source, category, sort, order, page });
+  }, [debouncedQuery, source, category, sort, order, page, syncToUrl]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const p = new URLSearchParams(window.location.search);
+      setQuery(p.get('query') || '');
+      setDebouncedQuery(p.get('query') || '');
+      setSource(p.get('source') || '');
+      setCategory(p.get('category') || '');
+      setSort(p.get('sort') || 'reads');
+      setOrder(p.get('order') || 'desc');
+      setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const loadMonitoringNotes = useCallback(async () => {
     setLoading(true);
@@ -55,7 +105,7 @@ export function ContentMonitoring({
         sort,
         order,
       });
-      if (query) p.set('query', query);
+      if (debouncedQuery) p.set('query', debouncedQuery);
       if (source) p.set('source', source);
       if (category) p.set('category', category);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
@@ -67,7 +117,7 @@ export function ContentMonitoring({
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, query, source, category, sort, order, toast]);
+  }, [projectId, page, debouncedQuery, source, category, sort, order, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -76,7 +126,10 @@ export function ContentMonitoring({
     return () => clearTimeout(timer);
   }, [loadMonitoringNotes]);
 
-  const completeRate = summary.total ? Math.round((summary.completeCount / summary.total) * 1000) / 10 : 0;
+  const coverRate = summary.total ? Math.round((summary.coverCount / summary.total) * 1000) / 10 : 0;
+  const categoryRate = summary.total ? Math.round((summary.categoryCount / summary.total) * 1000) / 10 : 0;
+  const perfRate = summary.total ? Math.round((summary.performanceMetricCount / summary.total) * 1000) / 10 : 0;
+  const linkRate = summary.total ? Math.round((summary.linkCount / summary.total) * 1000) / 10 : 0;
 
   return (
     <div className="stack animate-fade-in">
@@ -85,9 +138,9 @@ export function ContentMonitoring({
         <MetricCard
           theme="blue"
           label="已同步表现指标"
-          value={summary.completeCount.toLocaleString()}
+          value={summary.performanceMetricCount.toLocaleString()}
           unit="篇"
-          desc={`占总盘 ${completeRate}% · 阅读与互动已沉淀`}
+          desc={`占总盘 ${perfRate}% · 阅读或互动已沉淀`}
           tag="有效样本"
         />
         <MetricCard
@@ -124,24 +177,24 @@ export function ContentMonitoring({
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>封面图缓存率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{completeRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#15803d' }}>图片已落库或本地代理缓存</div>
+            <div style={{ fontSize: '12px', color: '#64748b' }}>封面图覆盖率</div>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{coverRate}%</div>
+            <div style={{ fontSize: '11.5px', color: '#15803d' }}>已入库 {summary.coverCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: '#64748b' }}>内容方向归类率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{completeRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#0369a1' }}>已完成一级类目识别</div>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{categoryRate}%</div>
+            <div style={{ fontSize: '11.5px', color: '#0369a1' }}>已完成分类 {summary.categoryCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: '#64748b' }}>阅读 / 互动完整率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{completeRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#0f766e' }}>指标均为非空有效值</div>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{perfRate}%</div>
+            <div style={{ fontSize: '11.5px', color: '#0f766e' }}>指标有效 {summary.performanceMetricCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: '#64748b' }}>原文链接有效率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>100%</div>
-            <div style={{ fontSize: '11.5px', color: '#15803d' }}>均含原笔记跳转链接</div>
+            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{linkRate}%</div>
+            <div style={{ fontSize: '11.5px', color: '#6366f1' }}>有效原文 {summary.linkCount} / {summary.total} 篇</div>
           </div>
         </div>
       </DashboardSection>
@@ -198,6 +251,7 @@ export function ContentMonitoring({
                 <th>互动量</th>
                 <th>互动率</th>
                 <th>评论总数</th>
+                <th>CPE</th>
                 <th>数据完整度</th>
                 <th>最近抓取时间</th>
                 <th>操作</th>
@@ -252,6 +306,11 @@ export function ContentMonitoring({
                     </td>
                     <td>
                       <strong>{note.commentTotal}</strong>
+                    </td>
+                    <td>
+                      <span style={{ fontWeight: 600, color: note.cpe != null ? '#0f172a' : '#94a3b8' }}>
+                        {note.cpe != null ? '￥' + Number(note.cpe).toFixed(2) : '—'}
+                      </span>
                     </td>
                     <td>
                       <StatusBadge
