@@ -124,9 +124,18 @@ export async function api<T>(url: string, options?: RequestInit): Promise<T> {
       ...(options?.headers || {}),
     },
   });
-  const data = (await response.json()) as T & { ok?: boolean; error?: string };
-  if (!response.ok || data.ok === false) {
-    throw new Error(data.error || '操作失败');
+  let data: (T & { ok?: boolean; error?: string }) | null = null;
+  const rawText = await response.text().catch(() => '');
+  try {
+    data = JSON.parse(rawText) as T & { ok?: boolean; error?: string };
+  } catch {
+    if (!response.ok) {
+      throw new Error(`服务响应异常 (HTTP ${response.status}): ${rawText.slice(0, 150) || '无响应体'}`);
+    }
+    throw new Error(`数据格式解析异常: ${rawText.slice(0, 150)}`);
+  }
+  if (!response.ok || (data && data.ok === false)) {
+    throw new Error(data?.error || `操作失败 (HTTP ${response.status})`);
   }
   return data as T;
 }
@@ -217,3 +226,5 @@ export function useProjectData(
     refresh,
   };
 }
+
+
