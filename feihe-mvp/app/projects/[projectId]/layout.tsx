@@ -15,7 +15,7 @@ export default async function ProjectLayout({
   return (
     <ProjectShell
       projectId={projectId}
-      userName={user?.displayName || '内部用户'}
+      userName={user?.displayName || '公开访问'}
       signedIn={Boolean(user)}
     >
       {children}

@@ -111,7 +111,7 @@ export function ProjectCenter({ userName }: { userName: string }) {
           <i>{userName.slice(0, 1).toUpperCase()}</i>
           <span>
             {userName}
-            <small>平台管理员</small>
+            <small>免登录工作台</small>
           </span>
         </div>
       </header>

@@ -1,14 +1,13 @@
-import { getChatGPTUser } from '@/app/chatgpt-auth';
-import { envVar } from '@/lib/runtime-env';
+const PUBLIC_WORKSPACE_USER = {
+  userId: 'public-workspace',
+  email: '',
+  displayName: '公开访问',
+  fullName: '公开访问',
+};
 
 export async function apiUser(requireWrite = false) {
-  const user = await getChatGPTUser();
-  if (user) return user;
-  if (process.env.NODE_ENV !== 'production') return { userId: 'local', email: 'local@feihe', displayName: '本地用户', fullName: '本地用户' };
-  if (!requireWrite && envVar('PUBLIC_SITE_ACCESS') === 'true') {
-    return { userId: 'public-viewer', email: '', displayName: '公开访客', fullName: '公开访客' };
-  }
-  return null;
+  void requireWrite;
+  return PUBLIC_WORKSPACE_USER;
 }
 
 export function jsonError(message: string, status = 400) {

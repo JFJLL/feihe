@@ -19,6 +19,5 @@ declare namespace Cloudflare {
     KEYSTONE_BASE_URL?: string;
     KEYSTONE_MODEL?: string;
     KEYSTONE_IMAGE_MODEL?: string;
-    PUBLIC_SITE_ACCESS?: string;
   }
 }

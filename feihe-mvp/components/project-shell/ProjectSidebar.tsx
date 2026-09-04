@@ -76,7 +76,7 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {userName} · {signedIn ? '已登录' : '本地预览'} ·{' '}
+          {signedIn ? userName : '公开访问'} · 无需登录 ·{' '}
           {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '实时连接'}
         </small>
       </div>
