@@ -50,11 +50,12 @@ export async function POST(request:Request){
      return Response.json({ok:true});
    }
    if(action==='calibrate_acceptance'){
-     const id=value(body.id);
-     const newStatus=value(body.status);
+     const id=value(body.noteId || body.id);
+     const newStatus=value(body.newStatus || body.status);
      const reason=value(body.reason)||'人工校正验收状态';
-     if(!id||!newStatus)return jsonError('缺少笔记 ID 或新状态');
+     if(!id||!newStatus)return jsonError('缺少笔记 ID 或新状态', 400);
      const oldRow=await d1.prepare('SELECT status FROM project_notes WHERE project_id=? AND note_id=?').bind(project,id).first<{status:string}>();
+     if(!oldRow)return jsonError('未找到目标项目笔记记录', 404);
      const oldStatus=oldRow?.status||'待抓取';
      await d1.prepare('UPDATE project_notes SET status=? WHERE project_id=? AND note_id=?').bind(newStatus,project,id).run();
      await logAction('人工验收校正','acceptance',id,`原状态: ${oldStatus} -> 新状态: ${newStatus}，原因: ${reason}，操作人: ${user.displayName||user.userId}`,project);

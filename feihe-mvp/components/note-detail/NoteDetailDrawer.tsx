@@ -11,6 +11,9 @@ export function NoteDetailDrawer({
   removeNote,
   context = 'content',
   defaultTab,
+  projectId,
+  onRefresh,
+  baseCount = 30,
 }: {
   detail: NoteDetail;
   close: () => void;
@@ -18,6 +21,9 @@ export function NoteDetailDrawer({
   removeNote?: (note: Note) => void;
   context?: NoteDetailContext;
   defaultTab?: 'basic' | 'performance' | 'comments' | 'acceptance';
+  projectId?: string;
+  onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
+  baseCount?: number;
 }) {
   const n = detail.note;
   const [draft, setDraft] = useState(n);
@@ -40,7 +46,25 @@ export function NoteDetailDrawer({
     triggerElementRef.current = document.activeElement as HTMLElement | null;
     drawerRef.current?.focus();
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') {
+        close();
+        return;
+      }
+      if (e.key === 'Tab' && drawerRef.current) {
+        const focusables = drawerRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -58,13 +82,14 @@ export function NoteDetailDrawer({
         method: 'POST',
         body: JSON.stringify({
           action: 'calibrate_acceptance',
-          id: draft.id,
-          status: draft.status,
+          projectId,
+          noteId: draft.id,
+          newStatus: draft.status,
           reason: calibrationReason || '人工验收校正',
         }),
       });
       setCalibrationSuccess('验收状态已校正并记入审计日志');
-      if (saveNote) saveNote(draft);
+      if (onRefresh) await onRefresh({ fresh: true });
     } catch (e) {
       alert(e instanceof Error ? e.message : '校正失败');
     } finally {
@@ -179,24 +204,9 @@ export function NoteDetailDrawer({
                   </label>
                 </div>
 
-                {allowEditStatus ? (
-                  <label>
-                    验收状态（人工校正）
-                    <select
-                      value={draft.status || '待抓取'}
-                      onChange={(e) => setDraft({ ...draft, status: e.target.value })}
-                    >
-                      <option value="待抓取">待抓取</option>
-                      <option value="符合基础要求">符合基础要求</option>
-                      <option value="符合且能汇报">符合且能汇报</option>
-                      <option value="不够30条需补充">不够30条需补充</option>
-                    </select>
-                  </label>
-                ) : (
-                  <div style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 8px' }}>
-                    验收状态：<strong>{draft.status || '待抓取'}</strong>（如需调整请在评论运营-交付验收中进行校正）
-                  </div>
-                )}
+                <div style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 8px' }}>
+                  验收状态：<strong>{draft.status || '待抓取'}</strong>（校正请前往“验收与处置”标签）
+                </div>
 
                 <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
                   {saveNote && (
@@ -309,7 +319,7 @@ export function NoteDetailDrawer({
                       <option value="待抓取">待抓取</option>
                       <option value="符合基础要求">符合基础要求</option>
                       <option value="符合且能汇报">符合且能汇报</option>
-                      <option value="需补充">需补充</option>
+                      <option value={`不够${baseCount}条需补充`}>不够{baseCount}条需补充</option>
                     </select>
                   </label>
                   <label style={{ fontSize: '12px', color: '#15803d' }}>

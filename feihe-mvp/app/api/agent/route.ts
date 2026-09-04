@@ -371,7 +371,7 @@ export async function POST(request: Request) {
       const reviewDateKey = parseDateKey(prompt);
       if (reviewDateKey) {
         try {
-          reviewResult = await reviewByDate(reviewDateKey);
+          reviewResult = await reviewByDate(project, reviewDateKey);
           if (reviewResult) {
             await ensureReviewTables(d1);
             await persistReviewBatch(d1, project, reviewResult);

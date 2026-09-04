@@ -1,6 +1,12 @@
 export type SeedSample = { t: string; f: string; r: string; b: string; p: string };
 export type SeedNote = { link: string; blogger: string; sheets: string[]; count: number; forms: Record<string, number>; samples: SeedSample[] };
 export type NoteClass = 'reportable' | 'basic' | 'needReply' | 'needDelete' | 'needSupplement';
+export type AcceptanceCriteria = {
+  reportCount: number;
+  baseCount: number;
+  brandTopRate: number;
+  freshnessHours?: number;
+};
 export type ClassifiedNote = {
   link: string; blogger: string; sheets: string[]; total: number; positive: number;
   mentionRate: number; classes: NoteClass[]; supplementNeed: number;
@@ -44,7 +50,15 @@ export function parseDateKey(prompt: string): string | null {
 function pad(s: string): string {
   return String(Number(s)).padStart(2, '0');
 }
-export function classifyNotes(dateKey: string, notes: SeedNote[]): ReviewResult {
+export function classifyNotes(
+  dateKey: string,
+  notes: SeedNote[],
+  acceptance?: Partial<AcceptanceCriteria>
+): ReviewResult {
+  const reportCount = Math.max(1, Number(acceptance?.reportCount ?? 200));
+  const baseCount = Math.max(1, Number(acceptance?.baseCount ?? 30));
+  const brandTopRate = Math.min(1, Math.max(0, Number(acceptance?.brandTopRate ?? 0.4)));
+
   const reportable: ClassifiedNote[] = [];
   const basic: ClassifiedNote[] = [];
   const needReply: ClassifiedNote[] = [];
@@ -77,11 +91,11 @@ export function classifyNotes(dateKey: string, notes: SeedNote[]): ReviewResult 
       positive, mentionRate, classes: [], supplementNeed: 0,
       deleteHits, replyHits, samples: samples.slice(0, 4),
     };
-    if (positive >= 200 && mentionRate >= 0.4) c.classes.push('reportable');
-    else if (positive >= 30) c.classes.push('basic');
+    if (positive >= reportCount && mentionRate >= brandTopRate) c.classes.push('reportable');
+    else if (positive >= baseCount) c.classes.push('basic');
     else {
       c.classes.push('needSupplement');
-      c.supplementNeed = 30 - positive;
+      c.supplementNeed = Math.max(0, baseCount - positive);
     }
     if (reply > 0) c.classes.push('needReply');
     if (del > 0) c.classes.push('needDelete');

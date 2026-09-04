@@ -17,7 +17,7 @@ export function CommentActionWorkbench({
   toast,
 }: {
   projectId: string;
-  onRefresh: () => Promise<void>;
+  onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const searchParams = useSearchParams();
@@ -35,6 +35,8 @@ export function CommentActionWorkbench({
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
 
   const [loading, setLoading] = useState(false);
+  const [needsRecalculation, setNeedsRecalculation] = useState(false);
+  const [recalculating, setRecalculating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [items, setItems] = useState<ActionWorkbenchItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -153,12 +155,14 @@ export function CommentActionWorkbench({
           handledCount: number;
         };
         availableDates: string[];
+        needsRecalculation?: boolean;
       }>('/api/actions/workbench?' + p.toString());
 
       if (seq !== reqSeqRef.current) return;
 
       setItems(res.items || []);
       setTotal(res.total || 0);
+      setNeedsRecalculation(Boolean(res.needsRecalculation));
       if (res.summary) setSummary(res.summary);
       if (res.availableDates) {
         setAvailableDates(res.availableDates);
@@ -183,6 +187,25 @@ export function CommentActionWorkbench({
   }, [loadWorkbenchData]);
 
   // Action handlers with optimistic updates
+  async function handleRecalculate() {
+    if (!selectedDate) return;
+    setRecalculating(true);
+    try {
+      await api('/api/actions/workbench', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'recalculate', projectId, date: selectedDate }),
+      });
+      toast(`已生成 ${selectedDate} 规则判定批次`, 'success');
+      setNeedsRecalculation(false);
+      await loadWorkbenchData();
+      await onRefresh({ fresh: true });
+    } catch (err) {
+      toast(err instanceof Error ? err.message : '生成判定失败', 'error');
+    } finally {
+      setRecalculating(false);
+    }
+  }
+
   async function handleResolve(item: ActionWorkbenchItem, method: string) {
     try {
       await api('/api/actions/workbench', {
@@ -197,10 +220,15 @@ export function CommentActionWorkbench({
         }),
       });
 
-      // Optimistic update
-      setItems((prev) =>
-        prev.map((x) => (x.id === item.id ? { ...x, status: 'handled' } : x))
-      );
+      // Optimistic update: if in pending view, immediately remove from list
+      if (statusFilter === 'pending') {
+        setItems((prev) => prev.filter((x) => x.id !== item.id));
+        setTotal((prev) => Math.max(0, prev - 1));
+      } else {
+        setItems((prev) =>
+          prev.map((x) => (x.id === item.id ? { ...x, status: 'handled' } : x))
+        );
+      }
       setSummary((prev) => ({
         ...prev,
         totalPending: Math.max(0, prev.totalPending - 1),
@@ -211,7 +239,8 @@ export function CommentActionWorkbench({
       }));
 
       toast(`已标记${method}`, 'success');
-      await onRefresh();
+      void loadWorkbenchData();
+      await onRefresh({ fresh: true });
     } catch (e) {
       toast(e instanceof Error ? e.message : '操作失败', 'error');
     }
@@ -351,6 +380,33 @@ export function CommentActionWorkbench({
             <option value="supplement">需补充</option>
             <option value="observe">保留观察</option>
           </select>
+          <select
+            value={sentimentFilter}
+            onChange={(e) => {
+              setSentimentFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">全部情绪</option>
+            <option value="正向">正向</option>
+            <option value="负向">负向</option>
+            <option value="中立">中立</option>
+            <option value="问询">问询</option>
+          </select>
+          <select
+            value={categoryFilter}
+            onChange={(e) => {
+              setCategoryFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">全部分类</option>
+            <option value="产品体验">产品体验</option>
+            <option value="服务物流">服务物流</option>
+            <option value="导流违规">导流违规</option>
+            <option value="竞品提及">竞品提及</option>
+            <option value="常规互动">常规互动</option>
+          </select>
           {availableDates.length > 0 && (
             <select
               value={selectedDate}
@@ -369,6 +425,21 @@ export function CommentActionWorkbench({
             </select>
           )}
         </WorkspaceToolbar>
+
+        {needsRecalculation && (
+          <div style={{ marginBottom: '14px', padding: '12px 16px', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: '#92400e', fontSize: '13px', fontWeight: 600 }}>该日期尚未生成规则判定</span>
+            <button
+              type="button"
+              className="primary"
+              disabled={recalculating}
+              onClick={handleRecalculate}
+              style={{ fontSize: '12.5px', padding: '4px 12px' }}
+            >
+              {recalculating ? '正在生成判定…' : '生成本批次判定'}
+            </button>
+          </div>
+        )}
 
         {error && (
           <div style={{ marginBottom: '14px' }}>

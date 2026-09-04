@@ -34,6 +34,7 @@ const nodeBuiltins: NodeBuiltins = await (async (): Promise<NodeBuiltins> => {
 let sqliteDb: MiniDb | null = null;
 
 function seedFromMiniflare(file: string): void {
+  if (process.env.LOCAL_DB_NO_SEED === 'true') return;
   if (!nodeBuiltins) return;
   const { fs, path } = nodeBuiltins;
   try {
@@ -69,17 +70,25 @@ function nodeDb(): MiniDb {
   seedFromMiniflare(file);
   nb.fs.mkdirSync(nb.path.dirname(file), { recursive: true });
   const native = new nb.sqlite.DatabaseSync(file);
+  try {
+    native.exec('PRAGMA busy_timeout = 10000;');
+    native.exec('PRAGMA journal_mode = WAL;');
+  } catch {}
   const wrap = (query: string, params: unknown[]): MiniRunner => {
-    const stmt = native.prepare(query);
+    let stmt: ReturnType<typeof native.prepare> | null = null;
+    const getStmt = () => {
+      if (!stmt) stmt = native.prepare(query);
+      return stmt;
+    };
     const list = params as never[];
     return {
       first: (async <T>(column?: string) => {
-        const row = stmt.get(...list) as MiniRow | undefined;
+        const row = getStmt().get(...list) as MiniRow | undefined;
         if (!row) return null;
         return (column ? row[column] : row) as T;
       }),
-      all: (async <T>() => ({ results: (stmt.all(...list) as MiniRow[] as unknown as T[]) ?? [] })),
-      run: (async () => { stmt.run(...list); return { success: true }; }),
+      all: (async <T>() => ({ results: (getStmt().all(...list) as MiniRow[] as unknown as T[]) ?? [] })),
+      run: (async () => { getStmt().run(...list); return { success: true }; }),
     };
   };
   sqliteDb = {
@@ -88,9 +97,16 @@ function nodeDb(): MiniDb {
       return { bind: (...params: unknown[]) => wrap(query, params), ...unbound };
     },
     batch: (async (statements: Array<{ run(): Promise<unknown> }>) => {
-      const out: unknown[] = [];
-      for (const s of statements) out.push(await s.run());
-      return out;
+      native.exec('BEGIN TRANSACTION;');
+      try {
+        const out: unknown[] = [];
+        for (const s of statements) out.push(await s.run());
+        native.exec('COMMIT;');
+        return out;
+      } catch (err) {
+        try { native.exec('ROLLBACK;'); } catch {}
+        throw err;
+      }
     }),
   };
   return sqliteDb;
@@ -306,6 +322,27 @@ export async function ensureSchema() {
       )`),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_paid_ads_project_date ON paid_ad_metrics(project_id, metric_date)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_paid_ads_seller ON paid_ad_metrics(virtual_seller_id, metric_date)'),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS daily_kpi_metrics (
+        id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        date TEXT NOT NULL,
+        plan_spend REAL NOT NULL DEFAULT 0,
+        actual_spend REAL NOT NULL DEFAULT 0,
+        achieve_pct REAL NOT NULL DEFAULT 0,
+        feed_spend REAL NOT NULL DEFAULT 0,
+        feed_ctr REAL NOT NULL DEFAULT 0,
+        search_spend REAL NOT NULL DEFAULT 0,
+        search_ctr REAL NOT NULL DEFAULT 0,
+        xhm_cpuv REAL NOT NULL DEFAULT 0,
+        xhx_cpuv REAL NOT NULL DEFAULT 0,
+        notes_today INTEGER NOT NULL DEFAULT 0,
+        comments_today INTEGER NOT NULL DEFAULT 0,
+        impressions INTEGER NOT NULL DEFAULT 0,
+        clicks INTEGER NOT NULL DEFAULT 0,
+        interactions INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL
+      )`),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_daily_kpi_project_date ON daily_kpi_metrics(project_id, date)'),
     ]);
     const ensureColumn = async (table: string, column: string, definition: string) => {
       const existing = await d1.prepare(`PRAGMA table_info(${table})`).all<{ name: string }>();
@@ -381,5 +418,3 @@ export async function ensureSchema() {
   });
   return schemaReady;
 }
-
-

@@ -1,8 +1,9 @@
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
-import { ensureReviewTables } from '@/lib/review-report';
+import { ensureReviewTables, persistReviewBatch } from '@/lib/review-report';
 import { availableReviewDates, reviewByDate } from '@/lib/review-seed';
+import { logAction } from '@/lib/ops';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,15 +27,35 @@ export async function GET(request: Request) {
   const date = (url.searchParams.get('date') || '').trim();
   const query = (url.searchParams.get('query') || '').trim();
 
+  const availableDates = await availableReviewDates(project).catch(() => [] as string[]);
+
   // If date is requested and no review batch exists yet, idempotent ensure batch exists
   if (date) {
     const existing = await d1.prepare('SELECT id FROM note_review_batches WHERE project_id=? AND date_key=? LIMIT 1').bind(project, date).first<{ id: string }>();
     if (!existing) {
-      await reviewByDate(date, project).catch(() => null);
+      return Response.json({
+        ok: true,
+        items: [],
+        total: 0,
+        page,
+        pageSize,
+        summary: {
+          totalPending: 0,
+          replyPending: 0,
+          deletePending: 0,
+          supplementPending: 0,
+          observePending: 0,
+          handledCount: 0,
+        },
+        availableDates,
+        needsRecalculation: true,
+      });
     }
   }
 
-  const availableDates = await availableReviewDates(project).catch(() => [] as string[]);
+  // Resolve target review date: either explicit user selection, or latest active batch
+  const latestBatch = await d1.prepare('SELECT date_key FROM note_review_batches WHERE project_id=? ORDER BY date_key DESC LIMIT 1').bind(project).first<{ date_key: string }>();
+  const effectiveReviewDate = date || (latestBatch ? latestBatch.date_key : null);
 
   // Overall KPI summary counts directly from DB
   const [kcSummary, raSummary] = await Promise.all([
@@ -47,7 +68,7 @@ export async function GET(request: Request) {
         SUM(CASE WHEN action NOT LIKE '%回复%' AND action NOT LIKE '%删%' AND action NOT LIKE '%补%' AND treatment_status != '已处理' THEN 1 ELSE 0 END) AS observePending,
         SUM(CASE WHEN treatment_status = '已处理' THEN 1 ELSE 0 END) AS handledCount
       FROM key_comments
-      WHERE project_id = ?
+      WHERE project_id = ? AND disappeared_at IS NULL
     `).bind(project).first<{
       total: number; replyPending: number; deletePending: number; supplementPending: number; observePending: number; handledCount: number;
     }>(),
@@ -59,8 +80,8 @@ export async function GET(request: Request) {
         SUM(CASE WHEN (action = 'needSupplement' OR action LIKE '%补%') AND status != '已处理' THEN 1 ELSE 0 END) AS supplementPending,
         SUM(CASE WHEN status = '已处理' THEN 1 ELSE 0 END) AS handledCount
       FROM review_action_items
-      WHERE project_id = ? ${date ? 'AND date_key = ?' : ''}
-    `).bind(...(date ? [project, date] : [project])).first<{
+      WHERE project_id = ? AND active = 1 AND (? = '' OR date_key = ?)
+    `).bind(project, effectiveReviewDate || '', effectiveReviewDate || '').first<{
       total: number; replyPending: number; deletePending: number; supplementPending: number; handledCount: number;
     }>(),
   ]);
@@ -145,7 +166,7 @@ export async function GET(request: Request) {
         NULL AS batchDate
       FROM key_comments kc
       LEFT JOIN notes n ON n.id = kc.note_id
-      WHERE kc.project_id = ?
+      WHERE kc.project_id = ? AND kc.disappeared_at IS NULL
 
       UNION ALL
 
@@ -174,14 +195,14 @@ export async function GET(request: Request) {
         ra.link AS link,
         ra.date_key AS batchDate
       FROM review_action_items ra
-      WHERE ra.project_id = ?
+      WHERE ra.project_id = ? AND ra.active = 1 AND (? = '' OR ra.date_key = ?)
     )
   `;
 
   const [countRes, rowsRes] = await Promise.all([
-    d1.prepare(cteSql + ' SELECT COUNT(*) AS total FROM unified' + filterSql).bind(...filterParams).first<{ total: number }>(),
+    d1.prepare(cteSql + ' SELECT COUNT(*) AS total FROM unified' + filterSql).bind(project, project, effectiveReviewDate || '', effectiveReviewDate || '', ...filterParams.slice(2)).first<{ total: number }>(),
     d1.prepare(cteSql + ' SELECT * FROM unified' + filterSql + ' ORDER BY time DESC, id DESC LIMIT ? OFFSET ?')
-      .bind(...filterParams, pageSize, offset).all<{
+      .bind(project, project, effectiveReviewDate || '', effectiveReviewDate || '', ...filterParams.slice(2), pageSize, offset).all<{
         source: 'key-comment' | 'review-batch';
         rawId: string;
         id: string;
@@ -258,7 +279,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  if (!(await apiUser(true))) return jsonError('请先登录', 401);
   await ensureSchema();
   const d1 = db();
   await ensureReviewTables(d1);
@@ -267,24 +288,38 @@ export async function POST(request: Request) {
       id?: string;
       rawId?: string;
       source?: 'key-comment' | 'review-batch';
-      action?: 'resolve' | 'delete';
+      action?: 'resolve' | 'delete' | 'recalculate';
       method?: string;
       projectId?: string;
+      date?: string;
     };
     const project = projectId(body.projectId);
+
+    if (body.action === 'recalculate') {
+      const dateKey = (body.date || '').trim();
+      if (!dateKey) return jsonError('缺少日期参数', 400);
+      const result = await reviewByDate(project, dateKey).catch(() => null);
+      if (!result) return jsonError(dateKey + '暂无规则判定数据', 404);
+      const batchId = await persistReviewBatch(d1, project, result);
+      await logAction('重算规则判定批次', 'review_batch', batchId, `重算 ${dateKey} 批次待办`, project);
+      return Response.json({ ok: true, batchId });
+    }
+
     const source = body.source || (body.id?.startsWith('rb-') ? 'review-batch' : 'key-comment');
     const rawId = body.rawId || body.id?.replace(/^(kc-|rb-)/, '');
     if (!rawId) return jsonError('缺少项目 ID', 400);
 
     if (body.action === 'resolve') {
       const method = body.method || '已人工核实处置';
+      const now = new Date().toISOString();
       if (source === 'key-comment') {
         await d1.prepare('UPDATE key_comments SET treatment_status = ?, treatment_method = ? WHERE id = ? AND project_id = ?')
           .bind('已处理', method, rawId, project).run();
       } else {
-        await d1.prepare("UPDATE review_action_items SET status = '已处理' WHERE id = ? AND project_id = ?")
-          .bind(Number(rawId), project).run();
+        await d1.prepare("UPDATE review_action_items SET status = '已处理', handled_at = ?, treatment_method = ? WHERE id = ? AND project_id = ?")
+          .bind(now, method, Number(rawId), project).run();
       }
+      await logAction('处置待办', source, rawId, `标记已处理：${method}`, project);
       return Response.json({ ok: true });
     }
 
@@ -294,6 +329,7 @@ export async function POST(request: Request) {
       } else {
         await d1.prepare('DELETE FROM review_action_items WHERE id = ? AND project_id = ?').bind(Number(rawId), project).run();
       }
+      await logAction('删除待办', source, rawId, '移除待办项', project);
       return Response.json({ ok: true });
     }
 

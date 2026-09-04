@@ -21,7 +21,7 @@ export function ContentWorkspace({
   projectId: string;
   dashboard: Dashboard;
   ops: Ops;
-  onRefresh: () => Promise<void>;
+  onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
   const [tab, setTab] = useProjectTab('registry', ['registry', 'publishing', 'monitoring'], {
     pool: 'registry',
@@ -47,7 +47,7 @@ export function ContentWorkspace({
         body: JSON.stringify({ keywords, startDate: fromDate, endDate: toDate, maxPages: 5, projectId }),
       });
       showToast('外部样本扫描完成，已入库 ' + result.count + ' 篇笔记', 'success');
-      await onRefresh();
+      await onRefresh({ fresh: true });
     } catch (err) {
       showToast(err instanceof Error ? err.message : '扫描失败', 'error');
       throw err;
@@ -68,7 +68,7 @@ export function ContentWorkspace({
         body: JSON.stringify({ kind, rows, projectId }),
       });
       showToast('表格导入完成，导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条', 'success');
-      await onRefresh();
+      await onRefresh({ fresh: true });
     } catch (err) {
       showToast(err instanceof Error ? err.message : '导入失败', 'error');
     } finally {

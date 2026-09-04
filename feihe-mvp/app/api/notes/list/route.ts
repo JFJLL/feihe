@@ -19,6 +19,7 @@ export async function GET(request: Request) {
   const status = (url.searchParams.get('status') || '').trim();
   const category = (url.searchParams.get('category') || '').trim();
   const monitored = (url.searchParams.get('monitored') || '').trim();
+  const hasMetrics = (url.searchParams.get('hasMetrics') || '').trim();
   const sort = (url.searchParams.get('sort') || '').trim();
   const order = (url.searchParams.get('order') || 'desc').toLowerCase() === 'asc' ? 'ASC' : 'DESC';
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
@@ -54,8 +55,12 @@ export async function GET(request: Request) {
     params.push(scope);
   }
   if (status) {
-    conditions.push('pn.status = ?');
-    params.push(status);
+    if (status === 'supplement' || status.includes('补充')) {
+      conditions.push("pn.status LIKE '%补充%'");
+    } else {
+      conditions.push('pn.status = ?');
+      params.push(status);
+    }
   }
   if (category) {
     conditions.push('p.category1 = ?');
@@ -65,6 +70,11 @@ export async function GET(request: Request) {
     conditions.push("(pn.status != '待抓取' OR pn.last_fetched_at IS NOT NULL)");
   } else if (monitored === '0') {
     conditions.push("(pn.status = '待抓取' AND pn.last_fetched_at IS NULL)");
+  }
+  if (hasMetrics === '1') {
+    conditions.push('p.read_count > 0 AND p.interaction_count > 0');
+  } else if (hasMetrics === '0') {
+    conditions.push('(p.read_count IS NULL OR p.read_count = 0 OR p.interaction_count IS NULL OR p.interaction_count = 0)');
   }
 
   const whereClause = ' WHERE ' + conditions.join(' AND ');
@@ -91,13 +101,18 @@ export async function GET(request: Request) {
       COUNT(*) AS total,
       SUM(CASE WHEN (p.cover_url IS NOT NULL AND p.cover_url != '') THEN 1 ELSE 0 END) AS coverCount,
       SUM(CASE WHEN (p.category1 IS NOT NULL AND p.category1 != '') THEN 1 ELSE 0 END) AS categoryCount,
-      SUM(CASE WHEN (p.read_count IS NOT NULL AND p.read_count > 0) OR (p.interaction_count IS NOT NULL AND p.interaction_count > 0) THEN 1 ELSE 0 END) AS performanceMetricCount,
+      SUM(CASE WHEN (p.cover_url IS NOT NULL AND p.cover_url != '') AND (p.category1 IS NOT NULL AND p.category1 != '') THEN 1 ELSE 0 END) AS basicProfileCount,
+      SUM(CASE WHEN (p.read_count IS NOT NULL AND p.read_count > 0) AND (p.interaction_count IS NOT NULL AND p.interaction_count > 0) THEN 1 ELSE 0 END) AS performanceMetricCount,
+      SUM(CASE WHEN (p.read_count IS NOT NULL AND p.read_count > 0) OR (p.interaction_count IS NOT NULL AND p.interaction_count > 0) THEN 1 ELSE 0 END) AS anyPerformanceMetricCount,
       SUM(CASE WHEN (n.url IS NOT NULL AND n.url != '') THEN 1 ELSE 0 END) AS linkCount,
       SUM(CASE WHEN (p.creator_level IS NOT NULL AND p.creator_level != '') THEN 1 ELSE 0 END) AS creatorLevelCount,
       SUM(CASE WHEN (p.read_count IS NOT NULL AND p.read_count > 0) THEN 1 ELSE 0 END) AS readMetricCount,
       SUM(CASE WHEN (p.interaction_count IS NOT NULL AND p.interaction_count > 0) THEN 1 ELSE 0 END) AS interactionMetricCount,
-      SUM(CASE WHEN pn.source_type IN ('owned', 'commercial') THEN 1 ELSE 0 END) AS ownedCount,
+      SUM(CASE WHEN pn.source_type = 'owned' AND COALESCE(p.cooperation, 0) != 1 THEN 1 ELSE 0 END) AS ownedOrganicCount,
       SUM(CASE WHEN pn.source_type = 'commercial' OR p.cooperation = 1 THEN 1 ELSE 0 END) AS commercialCount,
+      SUM(CASE WHEN pn.source_type NOT IN ('owned', 'commercial') AND COALESCE(p.cooperation, 0) != 1 THEN 1 ELSE 0 END) AS externalNaturalCount,
+      SUM(CASE WHEN pn.source_type IN ('owned', 'commercial') OR COALESCE(p.cooperation, 0) = 1 THEN 1 ELSE 0 END) AS ownedCount,
+      COUNT(DISTINCT CASE WHEN (n.published_at IS NOT NULL AND n.published_at != '') AND (pn.source_type IN ('owned', 'commercial') OR COALESCE(p.cooperation, 0) = 1) THEN n.id END) AS operationalPublishedCount,
       SUM(CASE WHEN pn.source_type = 'owned' AND (n.published_at IS NOT NULL AND n.published_at != '') THEN 1 ELSE 0 END) AS ownedPublishedCount,
       SUM(CASE WHEN (n.published_at IS NOT NULL AND n.published_at != '') THEN 1 ELSE 0 END) AS publishedCount,
       SUM(CASE WHEN pn.source_type = 'keyword_scan' THEN 1 ELSE 0 END) AS scanCount,
@@ -169,11 +184,11 @@ export async function GET(request: Request) {
   const coverageFeedbackSql = `
     SELECT 
       COALESCE(NULLIF(p.category1, ''), '待补充内容方向') AS direction,
-      SUM(CASE WHEN pn.source_type = 'owned' THEN 1 ELSE 0 END) AS owned,
+      SUM(CASE WHEN pn.source_type = 'owned' AND COALESCE(p.cooperation, 0) != 1 THEN 1 ELSE 0 END) AS owned,
       SUM(CASE WHEN pn.source_type = 'commercial' OR p.cooperation = 1 THEN 1 ELSE 0 END) AS commercial,
-      SUM(CASE WHEN pn.source_type = 'keyword_scan' THEN 1 ELSE 0 END) AS natural,
-      COALESCE(SUM(p.interaction_count), 0) AS interactions,
-      COALESCE(SUM(pn.comment_total), 0) AS comments
+      SUM(CASE WHEN pn.source_type NOT IN ('owned', 'commercial') AND COALESCE(p.cooperation, 0) != 1 THEN 1 ELSE 0 END) AS natural,
+      COALESCE(SUM(CASE WHEN pn.source_type NOT IN ('owned', 'commercial') AND COALESCE(p.cooperation, 0) != 1 THEN p.interaction_count ELSE 0 END), 0) AS interactions,
+      COALESCE(SUM(CASE WHEN pn.source_type NOT IN ('owned', 'commercial') AND COALESCE(p.cooperation, 0) != 1 THEN pn.comment_total ELSE 0 END), 0) AS comments
     FROM notes n
     JOIN project_notes pn ON pn.note_id = n.id
     LEFT JOIN note_profiles p ON p.note_id = n.id
@@ -188,13 +203,18 @@ export async function GET(request: Request) {
       total: number;
       coverCount: number;
       categoryCount: number;
+      basicProfileCount: number;
       performanceMetricCount: number;
+      anyPerformanceMetricCount: number;
       linkCount: number;
       creatorLevelCount: number;
       readMetricCount: number;
       interactionMetricCount: number;
+      ownedOrganicCount: number;
+      externalNaturalCount: number;
       ownedCount: number;
       commercialCount: number;
+      operationalPublishedCount: number;
       ownedPublishedCount: number;
       publishedCount: number;
       scanCount: number;
@@ -213,22 +233,35 @@ export async function GET(request: Request) {
   ]);
 
   const total = Number(totalRow?.total || 0);
+  const basicProfileCount = Number(summaryRow?.basicProfileCount || 0);
+  const missingBasicProfileCount = Math.max(0, total - basicProfileCount);
+  const performanceMetricCount = Number(summaryRow?.performanceMetricCount || 0);
+  const missingPerformanceCount = Math.max(0, total - performanceMetricCount);
+
   const summary = {
-    total: Number(summaryRow?.total || 0),
+    total,
     coverCount: Number(summaryRow?.coverCount || 0),
     categoryCount: Number(summaryRow?.categoryCount || 0),
-    performanceMetricCount: Number(summaryRow?.performanceMetricCount || 0),
+    basicProfileCount,
+    missingBasicProfileCount,
+    performanceMetricCount,
+    missingPerformanceCount,
+    anyPerformanceMetricCount: Number(summaryRow?.anyPerformanceMetricCount || 0),
     linkCount: Number(summaryRow?.linkCount || 0),
     creatorLevelCount: Number(summaryRow?.creatorLevelCount || 0),
     readMetricCount: Number(summaryRow?.readMetricCount || 0),
     interactionMetricCount: Number(summaryRow?.interactionMetricCount || 0),
+    ownedOrganicCount: Number(summaryRow?.ownedOrganicCount || 0),
+    ownedCommercialCount: Number(summaryRow?.commercialCount || 0),
+    externalNaturalCount: Number(summaryRow?.externalNaturalCount || 0),
     ownedCount: Number(summaryRow?.ownedCount || 0),
     commercialCount: Number(summaryRow?.commercialCount || 0),
+    operationalPublishedCount: Number(summaryRow?.operationalPublishedCount || 0),
     ownedPublishedCount: Number(summaryRow?.ownedPublishedCount || 0),
     publishedCount: Number(summaryRow?.publishedCount || 0),
     scanCount: Number(summaryRow?.scanCount || 0),
     completeCount: Number(summaryRow?.completeCount || 0),
-    missingProfileCount: Math.max(0, Number(summaryRow?.total || 0) - Number(summaryRow?.performanceMetricCount || 0)),
+    missingProfileCount: missingPerformanceCount,
     reportableCount: Number(summaryRow?.reportableCount || 0),
     baseCount: Number(summaryRow?.baseCount || 0),
     supplementCount: Number(summaryRow?.supplementCount || 0),

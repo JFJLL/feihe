@@ -12,6 +12,8 @@ export async function GET(request: Request) {
   const project = projectId(url.searchParams.get('projectId'));
   const visibility = (url.searchParams.get('visibility') || '').trim();
   const query = (url.searchParams.get('query') || '').trim();
+  const from = (url.searchParams.get('from') || '').trim();
+  const to = (url.searchParams.get('to') || '').trim();
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
   const pageSize = Math.min(100, Math.max(1, parseInt(url.searchParams.get('pageSize') || '20', 10)));
   const offset = (page - 1) * pageSize;
@@ -28,11 +30,31 @@ export async function GET(request: Request) {
     const q = '%' + query + '%';
     params.push(q, q, q, q);
   }
+  if (from) {
+    conditions.push('(sc.verified_at IS NOT NULL AND date(sc.verified_at) >= date(?))');
+    params.push(from);
+  }
+  if (to) {
+    conditions.push('(sc.verified_at IS NOT NULL AND date(sc.verified_at) <= date(?))');
+    params.push(to);
+  }
 
   const whereClause = ' WHERE ' + conditions.join(' AND ');
 
-  const [totalRow, summaryRows, itemsRows] = await Promise.all([
+  const [totalRow, summaryRows, allSummaryRows, itemsRows] = await Promise.all([
     d1.prepare('SELECT COUNT(*) AS total FROM supplier_comments sc' + whereClause).bind(...params).first<{ total: number }>(),
+    d1.prepare('SELECT COUNT(*) AS total, ' +
+      "SUM(CASE WHEN visibility = '当前外显-原文一致' THEN 1 ELSE 0 END) AS exactCount, " +
+      "SUM(CASE WHEN visibility = '当前外显-有修改' THEN 1 ELSE 0 END) AS modifiedCount, " +
+      "SUM(CASE WHEN visibility = '当前未外显' THEN 1 ELSE 0 END) AS missingCount, " +
+      "SUM(CASE WHEN visibility = '待核验' THEN 1 ELSE 0 END) AS pendingCount " +
+      'FROM supplier_comments sc' + whereClause).bind(...params).first<{
+      total: number;
+      exactCount: number;
+      modifiedCount: number;
+      missingCount: number;
+      pendingCount: number;
+    }>(),
     d1.prepare('SELECT COUNT(*) AS total, ' +
       "SUM(CASE WHEN visibility = '当前外显-原文一致' THEN 1 ELSE 0 END) AS exactCount, " +
       "SUM(CASE WHEN visibility = '当前外显-有修改' THEN 1 ELSE 0 END) AS modifiedCount, " +
@@ -61,6 +83,13 @@ export async function GET(request: Request) {
     missingCount: Number(summaryRows?.missingCount || 0),
     pendingCount: Number(summaryRows?.pendingCount || 0),
   };
+  const allSummary = {
+    total: Number(allSummaryRows?.total || 0),
+    exactCount: Number(allSummaryRows?.exactCount || 0),
+    modifiedCount: Number(allSummaryRows?.modifiedCount || 0),
+    missingCount: Number(allSummaryRows?.missingCount || 0),
+    pendingCount: Number(allSummaryRows?.pendingCount || 0),
+  };
 
   return Response.json({
     ok: true,
@@ -69,5 +98,6 @@ export async function GET(request: Request) {
     page,
     pageSize,
     summary,
+    allSummary,
   });
 }

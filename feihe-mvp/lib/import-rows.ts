@@ -9,7 +9,6 @@ const number = (row: ImportRow, names: string[]) => { const result = Number(valu
 
 export async function importRows(kind: ImportKind, input: ImportRow[], replaceSupplier = true, project = DEFAULT_PROJECT_ID) {
   const rows = input.slice(0, 5000); await ensureSchema(); const d1 = db(); const currentProject=projectId(project); let imported = 0; let skipped = 0;
-  if (kind === 'supplier' && replaceSupplier) await d1.prepare('DELETE FROM supplier_comments WHERE project_id=?').bind(currentProject).run();
   const statements: Array<{ run(): Promise<unknown> }> = [];
   for (const [index, row] of rows.entries()) {
     if (kind === 'owned') {
@@ -39,6 +38,15 @@ export async function importRows(kind: ImportKind, input: ImportRow[], replaceSu
     }
     imported += 1;
   }
+
+  if (kind === 'supplier' && replaceSupplier) {
+    // Only replace when there are actually valid rows to import; if file was completely invalid, preserve existing data
+    if (imported === 0) {
+      return { imported: 0, skipped: rows.length };
+    }
+    statements.unshift(d1.prepare('DELETE FROM supplier_comments WHERE project_id=?').bind(currentProject));
+  }
+
   for (let i = 0; i < statements.length; i += 80) await d1.batch(statements.slice(i, i + 80));
   return { imported, skipped };
 }

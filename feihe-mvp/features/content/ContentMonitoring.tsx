@@ -8,7 +8,7 @@ import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolba
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact, cnTime, pct } from '../../lib/hooks/use-project-data';
-import type { NoteListItem, NotesListResponse } from './content-view-model';
+import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
 
 export function ContentMonitoring({
   projectId,
@@ -22,35 +22,12 @@ export function ContentMonitoring({
   const searchParams = useSearchParams();
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
-  const [summary, setSummary] = useState<NotesListResponse['summary']>({
-    total: 0,
-    coverCount: 0,
-    categoryCount: 0,
-    performanceMetricCount: 0,
-    linkCount: 0,
-    creatorLevelCount: 0,
-    readMetricCount: 0,
-    interactionMetricCount: 0,
-    ownedCount: 0,
-    commercialCount: 0,
-    ownedPublishedCount: 0,
-    publishedCount: 0,
-    scanCount: 0,
-    completeCount: 0,
-    missingProfileCount: 0,
-    reportableCount: 0,
-    baseCount: 0,
-    supplementCount: 0,
-    fetchedCount: 0,
-    unfetchedCount: 0,
-    totalComments: 0,
-    totalReads: 0,
-    totalInteractions: 0,
-  });
+  const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
 
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [source, setSource] = useState(searchParams.get('source') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [hasMetrics, setHasMetrics] = useState(searchParams.get('hasMetrics') || '');
   const [sort, setSort] = useState(searchParams.get('sort') || 'reads');
   const [order, setOrder] = useState(searchParams.get('order') || 'desc');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
@@ -68,6 +45,7 @@ export function ContentMonitoring({
       if (nextState.query) p.set('query', nextState.query); else p.delete('query');
       if (nextState.source) p.set('source', nextState.source); else p.delete('source');
       if (nextState.category) p.set('category', nextState.category); else p.delete('category');
+      if (hasMetrics) p.set('hasMetrics', hasMetrics); else p.delete('hasMetrics');
       if (nextState.sort && nextState.sort !== 'reads') p.set('sort', nextState.sort); else p.delete('sort');
       if (nextState.order && nextState.order !== 'desc') p.set('order', nextState.order); else p.delete('order');
       if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
@@ -86,6 +64,7 @@ export function ContentMonitoring({
       setDebouncedQuery(p.get('query') || '');
       setSource(p.get('source') || '');
       setCategory(p.get('category') || '');
+      setHasMetrics(p.get('hasMetrics') || '');
       setSort(p.get('sort') || 'reads');
       setOrder(p.get('order') || 'desc');
       setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
@@ -108,6 +87,7 @@ export function ContentMonitoring({
       if (debouncedQuery) p.set('query', debouncedQuery);
       if (source) p.set('source', source);
       if (category) p.set('category', category);
+      if (hasMetrics) p.set('hasMetrics', hasMetrics);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
       setItems(res.items || []);
       setTotal(res.total || 0);
@@ -117,7 +97,7 @@ export function ContentMonitoring({
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, debouncedQuery, source, category, sort, order, toast]);
+  }, [projectId, page, debouncedQuery, source, category, hasMetrics, sort, order, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -137,11 +117,11 @@ export function ContentMonitoring({
       <section className="ops-metric-grid">
         <MetricCard
           theme="blue"
-          label="已同步表现指标"
+          label="双指标完整表现样本"
           value={summary.performanceMetricCount.toLocaleString()}
           unit="篇"
-          desc={`占总盘 ${perfRate}% · 阅读或互动已沉淀`}
-          tag="有效样本"
+          desc={`占总盘 ${perfRate}% · 阅读与互动均已沉淀`}
+          tag="完整指标"
         />
         <MetricCard
           theme="teal"
@@ -226,6 +206,11 @@ export function ContentMonitoring({
             <option value="成分科普">成分科普</option>
             <option value="日常分享">日常分享</option>
           </select>
+          <select value={hasMetrics} onChange={(e) => { setHasMetrics(e.target.value); setPage(1); }}>
+            <option value="">全部数据完整度</option>
+            <option value="1">指标完整（具备阅读与互动）</option>
+            <option value="0">指标缺失（缺少阅读或互动）</option>
+          </select>
           <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}>
             <option value="reads">按阅读量排序</option>
             <option value="interactions">按互动量排序</option>
@@ -266,15 +251,19 @@ export function ContentMonitoring({
                   <tr key={note.id}>
                     <td>
                       <div className="ops-table-note-cell">
-                        {note.coverUrl ? (
-                          <img
-                            src={note.coverUrl}
-                            alt=""
-                            className="ops-table-note-cover"
-                            loading="lazy"
-                            onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
-                          />
-                        ) : (
+                      {note.coverUrl ? (
+                        <img
+                          src={note.coverUrl}
+                          alt=""
+                          className="ops-table-note-cover"
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                          }}
+                        />
+                      ) : (
                           <div className="ops-table-note-cover">
                             {(note.author || '笔').slice(0, 1)}
                           </div>
@@ -338,7 +327,7 @@ export function ContentMonitoring({
               })}
               {!items.length && !loading && (
                 <tr>
-                  <td colSpan={9}>
+                  <td colSpan={10}>
                     <EmptyState title="暂无监测数据" text="同步笔记表现指标后呈现单篇表现。" />
                   </td>
                 </tr>

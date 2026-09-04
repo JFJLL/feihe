@@ -12,6 +12,7 @@
     "start": "vinext start",
     "start:prod": "vinext start --port 5013 --hostname 127.0.0.1",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "verify:operations": "node scripts/verify-operations.mjs",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

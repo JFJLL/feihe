@@ -49,13 +49,21 @@ export type NotesListResponse = {
     total: number;
     coverCount: number;
     categoryCount: number;
+    basicProfileCount: number;
+    missingBasicProfileCount: number;
     performanceMetricCount: number;
+    missingPerformanceCount: number;
+    anyPerformanceMetricCount: number;
     linkCount: number;
     creatorLevelCount: number;
     readMetricCount: number;
     interactionMetricCount: number;
+    ownedOrganicCount: number;
+    ownedCommercialCount: number;
+    externalNaturalCount: number;
     ownedCount: number;
     commercialCount: number;
+    operationalPublishedCount: number;
     ownedPublishedCount: number;
     publishedCount: number;
     scanCount: number;
@@ -84,13 +92,21 @@ export const emptyNotesSummary: NotesListResponse['summary'] = {
   total: 0,
   coverCount: 0,
   categoryCount: 0,
+  basicProfileCount: 0,
+  missingBasicProfileCount: 0,
   performanceMetricCount: 0,
+  missingPerformanceCount: 0,
+  anyPerformanceMetricCount: 0,
   linkCount: 0,
   creatorLevelCount: 0,
   readMetricCount: 0,
   interactionMetricCount: 0,
+  ownedOrganicCount: 0,
+  ownedCommercialCount: 0,
+  externalNaturalCount: 0,
   ownedCount: 0,
   commercialCount: 0,
+  operationalPublishedCount: 0,
   ownedPublishedCount: 0,
   publishedCount: 0,
   scanCount: 0,

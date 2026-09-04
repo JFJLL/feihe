@@ -19,7 +19,7 @@ export function CommentCollection({
 }: {
   projectId: string;
   openNote: (id: string) => void;
-  onRefresh: () => Promise<void>;
+  onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const searchParams = useSearchParams();
@@ -139,7 +139,7 @@ export function CommentCollection({
       toast(`评论抓取完成 (成功 ${succeeded} / 失败 ${failed})`, succeeded > 0 ? 'success' : 'error');
       setSelectedIds([]);
       await loadData();
-      await onRefresh();
+      await onRefresh({ fresh: true });
     } catch (e) {
       const msg = e instanceof Error ? e.message : '抓取失败';
       setFetchResult({ type: 'error', text: msg });
@@ -322,7 +322,7 @@ export function CommentCollection({
                 <th style={{ width: '36px' }}>
                   <input
                     type="checkbox"
-                    checked={items.length > 0 && selectedIds.length === items.length}
+                    checked={isAllCurrentPageSelected}
                     onChange={selectAllOnPage}
                   />
                 </th>
@@ -358,7 +358,10 @@ export function CommentCollection({
                             className="ops-table-note-cover"
                             loading="lazy"
                             decoding="async"
-                            onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                            }}
                           />
                         ) : (
                           <div className="ops-table-note-cover">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
@@ -44,6 +44,7 @@ export function ContentRegistry({
   const [order, setOrder] = useState(searchParams.get('order') || 'desc');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
+  const reqSeqRef = useRef(0);
 
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   useEffect(() => {
@@ -91,9 +92,11 @@ export function ContentRegistry({
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
   // External sample scan inputs
+  const defaultTo = new Date().toISOString().slice(0, 10);
+  const defaultFrom = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
   const [keywords, setKeywords] = useState('启萃,飞鹤奶粉');
-  const [scanFrom, setScanFrom] = useState('2026-07-01');
-  const [scanTo, setScanTo] = useState('2026-08-30');
+  const [scanFrom, setScanFrom] = useState(defaultFrom);
+  const [scanTo, setScanTo] = useState(defaultTo);
   const [scanning, setScanning] = useState(false);
   const [scanResult, setScanResult] = useState('');
 
@@ -101,6 +104,7 @@ export function ContentRegistry({
   const [uploadFileName, setUploadFileName] = useState('');
 
   const loadData = useCallback(async () => {
+    const seq = ++reqSeqRef.current;
     setLoading(true);
     try {
       const p = new URLSearchParams({
@@ -122,6 +126,7 @@ export function ContentRegistry({
       }
 
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
+      if (seq !== reqSeqRef.current) return;
       setItems(res.items || []);
       setTotal(res.total || 0);
       if (res.summary) setSummary(res.summary);
@@ -130,7 +135,7 @@ export function ContentRegistry({
     } finally {
       setLoading(false);
     }
-  }, [projectId, page, query, source, scope, status, category, from, to, sort, order, toast]);
+  }, [projectId, page, debouncedQuery, source, scope, status, category, from, to, sort, order, toast]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -182,11 +187,11 @@ export function ContentRegistry({
           tag="自然沉淀"
         />
         <MetricCard
-          theme={summary.missingProfileCount > 0 ? 'yellow' : 'teal'}
+          theme={summary.missingBasicProfileCount > 0 ? 'yellow' : 'teal'}
           label="待补基础资料"
-          value={summary.missingProfileCount.toLocaleString()}
+          value={summary.missingBasicProfileCount.toLocaleString()}
           unit="篇"
-          desc={`基础信息完整度 ${summary.total ? pct(summary.completeCount / summary.total) : '—'}`}
+          desc={summary.total ? `基础资料完整度 ${pct(summary.basicProfileCount / summary.total)}` : '—'}
           tag="数据质量"
         />
       </section>
@@ -348,6 +353,20 @@ export function ContentRegistry({
             <option value="comments">按评论总数排序</option>
             <option value="publishedAt">按发布时间排序</option>
           </select>
+          <input
+            type="date"
+            value={from}
+            onChange={(e) => { setFrom(e.target.value); setPage(1); }}
+            title="开始日期"
+            aria-label="开始日期"
+          />
+          <input
+            type="date"
+            value={to}
+            onChange={(e) => { setTo(e.target.value); setPage(1); }}
+            title="结束日期"
+            aria-label="结束日期"
+          />
         </WorkspaceToolbar>
 
         <DataTableShell
@@ -381,7 +400,11 @@ export function ContentRegistry({
                           alt=""
                           className="ops-table-note-cover"
                           loading="lazy"
-                          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                          decoding="async"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                          }}
                         />
                       ) : (
                         <div className="ops-table-note-cover">

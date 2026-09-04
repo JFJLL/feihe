@@ -37,9 +37,10 @@ export function useProjectTab(
       if (nextTab === activeTab) return;
       setSelectedTab(nextTab);
       try {
-        const params = new URLSearchParams(window.location.search);
+        // Clear stale tab-specific filters when switching tabs
+        const params = new URLSearchParams();
         params.set('tab', nextTab);
-        window.history.replaceState(null, '', pathname + '?' + params.toString());
+        window.history.pushState(null, '', pathname + '?' + params.toString());
       } catch {
         // Fallback
       }

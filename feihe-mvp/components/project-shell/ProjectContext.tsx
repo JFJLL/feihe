@@ -39,7 +39,7 @@ type ProjectContextType = {
   ops: Ops | null;
   dataLoading: boolean;
   dataError: string | null;
-  refreshData: () => Promise<void>;
+  refreshData: (opts?: { fresh?: boolean }) => Promise<void>;
 };
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
@@ -216,4 +216,3 @@ export function useProject() {
   }
   return ctx;
 }
-

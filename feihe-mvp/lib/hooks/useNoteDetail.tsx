@@ -15,7 +15,7 @@ export function useNoteDetail({
   defaultTab,
 }: {
   projectId: string;
-  onRefresh: () => Promise<void>;
+  onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
   variant?: 'legacy' | 'operations';
   context?: NoteDetailContext;
@@ -50,7 +50,7 @@ export function useNoteDetail({
         });
         toast('笔记资料已更新', 'success');
         setDetail(null);
-        await onRefresh();
+        await onRefresh({ fresh: true });
       } catch (err) {
         toast(err instanceof Error ? err.message : '保存失败', 'error');
       }
@@ -68,7 +68,7 @@ export function useNoteDetail({
         });
         toast('笔记已移出当前项目', 'success');
         setDetail(null);
-        await onRefresh();
+        await onRefresh({ fresh: true });
       } catch (err) {
         toast(err instanceof Error ? err.message : '删除失败', 'error');
       }
@@ -76,7 +76,8 @@ export function useNoteDetail({
     [projectId, onRefresh, toast]
   );
 
-  const isOperations = variant === 'operations' || context === 'content' || context === 'comments';
+  const isOperations =
+    variant === 'operations' || context === 'content' || context === 'comments' || context === 'acceptance';
 
   const renderDrawer = useCallback(() => {
     if (!detail) return null;
@@ -88,8 +89,10 @@ export function useNoteDetail({
           close={() => setDetail(null)}
           saveNote={saveNote}
           removeNote={removeNote}
-        context={context || 'content'}
+          context={context || 'content'}
           defaultTab={defaultTab}
+          projectId={projectId}
+          onRefresh={onRefresh}
         />
       );
     }
@@ -98,10 +101,11 @@ export function useNoteDetail({
         key={detail.note?.id || 'detail'}
         detail={detail}
         close={() => setDetail(null)}
-        readOnly={true}
+        saveNote={saveNote}
+        removeNote={removeNote}
       />
     );
-  }, [detail, isOperations, saveNote, removeNote, context, defaultTab]);
+  }, [detail, isOperations, saveNote, removeNote, context, defaultTab, projectId, onRefresh]);
 
   return {
     openNote,

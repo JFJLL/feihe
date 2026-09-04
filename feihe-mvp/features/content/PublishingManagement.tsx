@@ -10,7 +10,7 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact } from '../../lib/hooks/use-project-data';
 import type { Dashboard, Ops } from '../../lib/types/project';
-import type { NoteListItem, NotesListResponse } from './content-view-model';
+import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
 import { isOwnedNote, noteDirection } from '../../lib/business/note-utils';
 
 export function PublishingManagement({
@@ -34,31 +34,7 @@ export function PublishingManagement({
   const [sort, setSort] = useState(searchParams.get('sort') || 'publishedAt');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
-  const [summary, setSummary] = useState<NotesListResponse['summary']>({
-    total: 0,
-    coverCount: 0,
-    categoryCount: 0,
-    performanceMetricCount: 0,
-    linkCount: 0,
-    creatorLevelCount: 0,
-    readMetricCount: 0,
-    interactionMetricCount: 0,
-    ownedCount: 0,
-    commercialCount: 0,
-    ownedPublishedCount: 0,
-    publishedCount: 0,
-    scanCount: 0,
-    completeCount: 0,
-    missingProfileCount: 0,
-    reportableCount: 0,
-    baseCount: 0,
-    supplementCount: 0,
-    fetchedCount: 0,
-    unfetchedCount: 0,
-    totalComments: 0,
-    totalReads: 0,
-    totalInteractions: 0,
-  });
+  const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
   const [coverageFeedback, setCoverageFeedback] = useState<Array<{ direction: string; owned: number; commercial: number; natural: number; interactions: number; comments: number }>>([]);
 
   const [debouncedQuery, setDebouncedQuery] = useState(query);
@@ -96,10 +72,10 @@ export function PublishingManagement({
   }, []);
 
   const publishTarget = ops.settings.goals?.publishTarget || 0;
-  const publishedCount = summary.ownedPublishedCount;
+  const publishedCount = summary.operationalPublishedCount || summary.ownedPublishedCount;
   const commercialCount = summary.commercialCount;
   const hasPublishTarget = publishTarget > 0;
-  const achievePct = hasPublishTarget ? Math.min(100, Math.round((publishedCount / publishTarget) * 1000) / 10) : 0;
+  const achievePct = hasPublishTarget ? Math.round((publishedCount / publishTarget) * 1000) / 10 : 0;
   const gap = hasPublishTarget ? Math.max(0, publishTarget - publishedCount) : 0;
 
   const loadPublishingNotes = useCallback(async () => {
@@ -137,7 +113,7 @@ export function PublishingManagement({
   // 次级区域：全库服务端 SQL 聚合覆盖反馈分析（不截断 500 条）
   const { feedbackRows, opportunitiesCount, naturalTotalInteractions } = useMemo(() => {
     const rows = [...coverageFeedback].sort((a, b) => b.natural - a.natural);
-    const opps = rows.filter((r) => r.natural > (r.owned + r.commercial)).length;
+    const opps = rows.filter((r) => r.natural > r.owned).length;
     const naturalSum = rows.reduce((sum, r) => sum + Number(r.interactions || 0), 0);
     return { feedbackRows: rows, opportunitiesCount: opps, naturalTotalInteractions: naturalSum };
   }, [coverageFeedback]);
@@ -265,7 +241,11 @@ export function PublishingManagement({
                           alt=""
                           className="ops-table-note-cover"
                           loading="lazy"
-                          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+                          decoding="async"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                          }}
                         />
                       ) : (
                         <div className="ops-table-note-cover">

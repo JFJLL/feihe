@@ -36,7 +36,7 @@ export async function saveFetchedComments(noteId: string, comments: CommentInput
   const top5 = l1.slice(0, 5);
   const brandMentionTop5 = top5.length ? top5.filter((x) => x.result.hasBrand).length / top5.length : 0;
   const total = comments.length;
-  const status = total >= acceptance.reportCount && brandMentionTop5 >= acceptance.brandTopRate ? '符合且能汇报' : total >= acceptance.baseCount ? '符合基础要求' : `不够${acceptance.baseCount}条需补充`;
+  const status = positive >= acceptance.reportCount && brandMentionTop5 >= acceptance.brandTopRate ? '符合且能汇报' : positive >= acceptance.baseCount ? '符合基础要求' : `不够${acceptance.baseCount}条需补充`;
 
   const existing = await d1.prepare('SELECT id FROM key_comments WHERE project_id=? AND note_id = ? AND disappeared_at IS NULL').bind(currentProject,noteId).all<{ id: string }>();
   const liveIds = new Set(comments.map((comment) => `${currentProject}:${comment.id}`));

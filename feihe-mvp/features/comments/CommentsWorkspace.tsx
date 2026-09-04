@@ -22,7 +22,7 @@ export function CommentsWorkspace({
   projectId: string;
   dashboard: Dashboard;
   ops: Ops;
-  onRefresh: () => Promise<void>;
+  onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
   const [tab, setTab] = useProjectTab('collection', ['collection', 'actions', 'acceptance', 'supplier'], {
     risk: 'actions',
@@ -61,7 +61,7 @@ export function CommentsWorkspace({
       });
       showToast('表格导入完成，导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条', 'success');
       setRunResult('导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条。');
-      await onRefresh();
+      await onRefresh({ fresh: true });
     } catch (err) {
       showToast(err instanceof Error ? err.message : '导入失败', 'error');
     } finally {
@@ -75,23 +75,20 @@ export function CommentsWorkspace({
     try {
       const result = await api<{
         summary: { exact: number; modified: number; missing: number; failedNotes: number };
+        processed?: number;
+        remaining?: number;
+        failedNotes?: number;
       }>('/api/supplier/verify', {
         method: 'POST',
         body: JSON.stringify({ projectId }),
       });
-      showToast('供应商外显核验完成', 'success');
+      const processed = result.processed ?? (result.summary.exact + result.summary.modified + result.summary.missing);
+      const remaining = result.remaining ?? 0;
+      showToast(`供应商评论核验完成，处理 ${processed} 条，剩余 ${remaining} 条`, 'success');
       setRunResult(
-        '原文一致 ' +
-          result.summary.exact +
-          '，有修改 ' +
-          result.summary.modified +
-          '，未外显 ' +
-          result.summary.missing +
-          '，失败笔记 ' +
-          result.summary.failedNotes +
-          '。'
+        `外显核验：原文一致 ${result.summary.exact}，有修改 ${result.summary.modified}，未外显 ${result.summary.missing}。本次共处理 ${processed} 条${remaining > 0 ? `，剩余待核验 ${remaining} 条` : ''}。`
       );
-      await onRefresh();
+      await onRefresh({ fresh: true });
     } catch (err) {
       showToast(err instanceof Error ? err.message : '核验失败', 'error');
     } finally {
