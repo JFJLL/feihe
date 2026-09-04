@@ -7,7 +7,6 @@ import { FeedbackToastContainer } from '../ui/FeedbackToast';
 import { FloatingAgent } from './FloatingAgent';
 import { LoadingState } from '../ui/LoadingState';
 import { ErrorState } from '../ui/ErrorState';
-import { daysAgo } from '../../lib/hooks/use-project-data';
 
 // 各板块工作区（全盘预载入内存，0ms 极速切换）
 import { OverviewWorkspace } from '../../features/overview/OverviewWorkspace';
@@ -90,16 +89,14 @@ function ProjectShellContent({
         );
         break;
       case 'content':
-        content = (
-          <ContentWorkspace
-            projectId={projectId}
-            dashboard={dashboard}
-            onRefresh={refreshData}
-            from={daysAgo(90)}
-            to={new Date().toISOString().slice(0, 10)}
-            source=""
-          />
-        );
+      content = (
+        <ContentWorkspace
+          projectId={projectId}
+          dashboard={dashboard}
+          ops={ops}
+          onRefresh={refreshData}
+        />
+      );
         break;
       case 'comments':
         content = (
@@ -170,4 +167,3 @@ export function ProjectShell({
     </ProjectProvider>
   );
 }
-

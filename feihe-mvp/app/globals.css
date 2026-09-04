@@ -2,6 +2,7 @@
 @import '../styles/project-shell.css';
 @import '../styles/platform.css';
 @import '../styles/workspace.css';
+@import '../styles/operations-workspaces.css';
 @import 'tailwindcss';
 
 /* Core Base & Shared UI Utilities */

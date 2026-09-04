@@ -3,18 +3,23 @@
 import { useSearchParams, usePathname } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
-export function useProjectTab(defaultTab: string, allowedTabs: string[]): [string, (tab: string) => void] {
+export function useProjectTab(
+  defaultTab: string,
+  allowedTabs: string[],
+  aliases?: Record<string, string>
+): [string, (tab: string) => void] {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
   const rawTab = searchParams.get('tab');
+  const resolvedRawTab = (rawTab && aliases && aliases[rawTab]) ? aliases[rawTab] : rawTab;
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
   const activeTab =
     selectedTab && allowedTabs.includes(selectedTab)
       ? selectedTab
-      : rawTab && allowedTabs.includes(rawTab)
-      ? rawTab
+      : resolvedRawTab && allowedTabs.includes(resolvedRawTab)
+      ? resolvedRawTab
       : defaultTab;
 
   const setTab = useCallback(
@@ -34,4 +39,3 @@ export function useProjectTab(defaultTab: string, allowedTabs: string[]): [strin
 
   return [activeTab, setTab];
 }
-

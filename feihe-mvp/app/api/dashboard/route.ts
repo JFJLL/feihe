@@ -43,14 +43,15 @@ export async function GET(request: Request) {
     if (!(await apiUser())) return jsonError('请先登录', 401);
     await ensureSchema();
     const d1 = db();
-    const params = new URL(request.url).searchParams;
-    const project = projectId(params.get('projectId'));
-    const cacheKey = `dash:${project}:${params.toString()}`;
+   const params = new URL(request.url).searchParams;
+   const project = projectId(params.get('projectId'));
+   const fresh = params.get('fresh') === '1' || params.get('_t');
+   const cacheKey = `dash:${project}:${params.toString()}`;
 
-    // 命中服务端内存缓存直接返回（<1ms）
-    const cached = memoryCache.get(cacheKey);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
-      return new Response(cached.json, {
+   // 命中服务端内存缓存直接返回（<1ms）
+   const cached = memoryCache.get(cacheKey);
+   if (!fresh && cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+     return new Response(cached.json, {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
@@ -300,4 +301,3 @@ export async function GET(request: Request) {
     return jsonError(err instanceof Error ? err.message : '数据接口处理失败', 500);
   }
 }
-

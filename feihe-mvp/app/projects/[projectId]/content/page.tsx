@@ -20,6 +20,7 @@ export default function ContentPage({
 
   const {
     dashboard,
+    ops,
     loading,
     error,
     refresh,
@@ -27,16 +28,14 @@ export default function ContentPage({
 
   if (loading && !dashboard) return <LoadingState text="正在加载内容资产与发布数据…" />;
   if (error && !dashboard) return <ErrorState error={error} onRetry={refresh} />;
-  if (!dashboard) return <LoadingState text="正在初始化…" />;
+  if (!dashboard || !ops) return <LoadingState text="正在初始化…" />;
 
   return (
     <ContentWorkspace
       projectId={projectId}
       dashboard={dashboard}
+      ops={ops}
       onRefresh={refresh}
-      from={from}
-      to={to}
-      source={source}
     />
   );
 }

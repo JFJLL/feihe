@@ -17,10 +17,11 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const project = projectId(url.searchParams.get('projectId'));
   const visibility = url.searchParams.get('visibility') || '';
+  const fresh = url.searchParams.get('fresh') === '1' || url.searchParams.get('_t');
   const cacheKey = `ops:${project}:${visibility}`;
 
   const cached = memoryCache.get(cacheKey);
-  if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+  if (!fresh && cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
     return new Response(cached.json, {
       status: 200,
       headers: {
@@ -88,4 +89,3 @@ export async function GET(request: Request) {
     },
   });
 }
-

@@ -32,8 +32,8 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     number: '03',
     label: '内容管理',
     title: '内容管理',
-    description: '内容池、发布与反馈、内容表现',
-    defaultTab: 'pool',
+    description: '内容台账、发布管理与内容监测',
+    defaultTab: 'registry',
   },
   {
     id: 'comments',
@@ -41,8 +41,8 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     number: '04',
     label: '评论运营',
     title: '评论运营',
-    description: '交付验收、供应商核验、风险处置',
-    defaultTab: 'acceptance',
+    description: '评论采集、处置、验收与供应商核验',
+    defaultTab: 'collection',
   },
   {
     id: 'insights',
@@ -74,16 +74,22 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
   seeds: { module: 'growth', tab: 'radar' },
   seed: { module: 'growth', tab: 'radar' },
   lingxi_track: { module: 'growth', tab: 'radar' },
-  content: { module: 'content', tab: 'pool' },
-  notes: { module: 'content', tab: 'pool' },
-  pool: { module: 'content', tab: 'pool' },
-  linkage: { module: 'content', tab: 'linkage' },
-  performance: { module: 'content', tab: 'performance' },
+  content: { module: 'content', tab: 'registry' },
+  notes: { module: 'content', tab: 'registry' },
+  pool: { module: 'content', tab: 'registry' },
+  registry: { module: 'content', tab: 'registry' },
+  linkage: { module: 'content', tab: 'publishing' },
+  publishing: { module: 'content', tab: 'publishing' },
+  performance: { module: 'content', tab: 'monitoring' },
+  monitoring: { module: 'content', tab: 'monitoring' },
+  collection: { module: 'comments', tab: 'collection' },
+  actions: { module: 'comments', tab: 'actions' },
+  risk: { module: 'comments', tab: 'actions' },
+  review: { module: 'comments', tab: 'actions' },
   acceptance: { module: 'comments', tab: 'acceptance' },
   progress: { module: 'comments', tab: 'acceptance' },
   supplier: { module: 'comments', tab: 'supplier' },
-  risk: { module: 'comments', tab: 'risk' },
-  sentiment: { module: 'comments', tab: 'risk' },
+  sentiment: { module: 'comments', tab: 'actions' },
   insights: { module: 'insights', tab: 'voice' },
   voice: { module: 'insights', tab: 'voice' },
   competitor: { module: 'insights', tab: 'competitor' },
@@ -118,6 +124,3 @@ export function getLegacyRedirectUrl(projectId: string, section: string, searchP
   if (tab) params.set('tab', tab);
   return resolveProjectRoute(projectId, targetModule, params);
 }
-
-
-

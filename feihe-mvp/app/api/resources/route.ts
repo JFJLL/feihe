@@ -27,14 +27,14 @@ export async function POST(request:Request){
         d1.prepare('DELETE FROM projects WHERE id=?').bind(project),
       ]);return Response.json({ok:true});
     }
-    if(action==='note_update'){
-      const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');
-      await d1.batch([
-        d1.prepare(`UPDATE notes SET title=?,author=?,url=? WHERE id=?`).bind(value(body.title),value(body.author),value(body.url),id),
-        d1.prepare(`UPDATE project_notes SET source_type=?,pipeline=?,level=?,product_scope=?,status=? WHERE project_id=? AND note_id=?`)
-          .bind(value(body.sourceType)||'scan',value(body.pipeline)||'value_scan',value(body.level)||'P3',value(body.productScope)||'本品',value(body.status)||'待抓取',project,id),
-      ]);await logAction('更新笔记','note',id,'笔记资料或项目分类已修改',project);return Response.json({ok:true});
-    }
+   if(action==='note_update'){
+     const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');
+     await d1.batch([
+        d1.prepare(`UPDATE notes SET title=COALESCE(NULLIF(?,''),title),author=COALESCE(NULLIF(?,''),author),url=COALESCE(NULLIF(?,''),url) WHERE id=?`).bind(value(body.title),value(body.author),value(body.url),id),
+        d1.prepare(`UPDATE project_notes SET source_type=COALESCE(NULLIF(?,''),source_type),pipeline=COALESCE(NULLIF(?,''),pipeline),level=COALESCE(NULLIF(?,''),level),product_scope=COALESCE(NULLIF(?,''),product_scope),status=COALESCE(NULLIF(?,''),status) WHERE project_id=? AND note_id=?`)
+          .bind(value(body.sourceType),value(body.pipeline),value(body.level),value(body.productScope),value(body.status),project,id),
+     ]);await logAction('更新笔记','note',id,'笔记资料或项目分类已修改',project);return Response.json({ok:true});
+   }
     if(action==='note_delete'){
       const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');
       await d1.batch([d1.prepare('DELETE FROM project_notes WHERE project_id=? AND note_id=?').bind(project,id),d1.prepare('DELETE FROM key_comments WHERE project_id=? AND note_id=?').bind(project,id),d1.prepare('DELETE FROM comment_snapshots WHERE project_id=? AND note_id=?').bind(project,id)]);

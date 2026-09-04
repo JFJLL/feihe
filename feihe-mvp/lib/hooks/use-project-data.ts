@@ -185,13 +185,13 @@ export function useProjectData(
     setLoading(true);
     setError(null);
     try {
-      const query = new URLSearchParams({ projectId });
+      const query = new URLSearchParams({ projectId, fresh: '1' });
       if (from) query.set('from', from);
       if (to) query.set('to', to);
       if (source) query.set('source', source);
       const [dashRes, opsRes] = await Promise.all([
         api<Dashboard>('/api/dashboard?' + query.toString()),
-        api<Ops>('/api/ops?projectId=' + encodeURIComponent(projectId)),
+        api<Ops>('/api/ops?projectId=' + encodeURIComponent(projectId) + '&fresh=1'),
       ]);
       const timestamp = Date.now();
       projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp });
@@ -226,5 +226,4 @@ export function useProjectData(
     refresh,
   };
 }
-
 

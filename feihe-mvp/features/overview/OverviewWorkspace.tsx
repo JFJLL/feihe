@@ -183,13 +183,13 @@ export function OverviewWorkspace({
   }> = [];
 
   if (pendingRisk > 0) {
-    attentionItems.push({
-      type: 'alert',
-      title: pendingRisk + ' 条风险评论待闭环',
-      desc: '待达人回复 ' + num(a.replyPending) + ' 条 · 待删除 ' + num(a.deletePending) + ' 条',
-      actionText: '去处置',
-      href: '/projects/' + encodeURIComponent(projectId) + '/comments?tab=risk',
-    });
+   attentionItems.push({
+     type: 'alert',
+     title: pendingRisk + ' 条风险评论待闭环',
+     desc: '待达人回复 ' + num(a.replyPending) + ' 条 · 待删除 ' + num(a.deletePending) + ' 条',
+     actionText: '去处置',
+      href: '/projects/' + encodeURIComponent(projectId) + '/comments?tab=actions',
+   });
   }
 
   if (supplierPending > 0) {
@@ -1235,9 +1235,9 @@ export function OverviewWorkspace({
 
         <article className="overview-actions-panel pastel-card pastel-teal">
           <PanelHead eyebrow="NEXT ACTIONS" title="下一步建议动作" />
-          <div className="action-links-grid">
-            <Link
-              href={'/projects/' + encodeURIComponent(projectId) + '/comments?tab=risk'}
+         <div className="action-links-grid">
+           <Link
+              href={'/projects/' + encodeURIComponent(projectId) + '/comments?tab=actions'}
               className="action-link-card pastel-rose"
             >
               <div>
@@ -1341,8 +1341,6 @@ export function OverviewWorkspace({
     </div>
   );
 }
-
-
 
 
 

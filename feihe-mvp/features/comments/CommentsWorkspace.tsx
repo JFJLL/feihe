@@ -1,14 +1,15 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
-import type { Dashboard, Ops, KeyComment } from '../../lib/types/project';
+import type { Dashboard, Ops } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { SectionTabs } from '../../components/ui/SectionTabs';
+import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
+import { CommentCollection } from './CommentCollection';
+import { CommentActionWorkbench } from './CommentActionWorkbench';
 import { AcceptanceDelivery } from './AcceptanceDelivery';
 import { SupplierVerification } from './SupplierVerification';
-import { RiskTriage } from './RiskTriage';
-import { ReviewActionQueue } from './ReviewActionQueue';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
+import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api, num } from '../../lib/hooks/use-project-data';
 
@@ -23,8 +24,20 @@ export function CommentsWorkspace({
   ops: Ops;
   onRefresh: () => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('acceptance', ['acceptance', 'supplier', 'risk', 'review']);
+  const [tab, setTab] = useProjectTab('collection', ['collection', 'actions', 'acceptance', 'supplier'], {
+    risk: 'actions',
+    review: 'actions',
+    sentiment: 'actions',
+  });
   const { showToast } = useProject();
+
+  const { openNote, renderDrawer } = useNoteDetail({
+    projectId,
+    onRefresh,
+    toast: showToast,
+    context: 'comments',
+    defaultTab: tab === 'acceptance' ? 'acceptance' : 'comments',
+  });
 
   const [loading, setLoading] = useState(false);
   const [runResult, setRunResult] = useState('');
@@ -46,7 +59,7 @@ export function CommentsWorkspace({
         method: 'POST',
         body: JSON.stringify({ kind, rows, projectId }),
       });
-      showToast('表格导入完成', 'success');
+      showToast('表格导入完成，导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条', 'success');
       setRunResult('导入 ' + result.imported + ' 条，跳过 ' + result.skipped + ' 条。');
       await onRefresh();
     } catch (err) {
@@ -86,46 +99,19 @@ export function CommentsWorkspace({
     }
   }
 
-  async function resolveComment(item: KeyComment, method: string) {
-    try {
-      await api('/api/actions', {
-        method: 'POST',
-        body: JSON.stringify({ id: item.id, status: '已处理', method, projectId }),
-      });
-      showToast('处置状态已更新', 'success');
-      await onRefresh();
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : '操作失败', 'error');
-    }
-  }
-
-  async function removeComment(item: KeyComment) {
-    if (!confirm('确认从关键评论清单移除此记录？')) return;
-    try {
-      await api('/api/resources', {
-        method: 'POST',
-        body: JSON.stringify({ action: 'comment_delete', projectId, id: item.id }),
-      });
-      showToast('关键评论已移除', 'success');
-      await onRefresh();
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : '移除失败', 'error');
-    }
-  }
-
-  const tabs: Array<[string, string, string]> = [
-    ['acceptance', '交付验收', '主线交付、达标阈值与品牌提及'],
-    ['supplier', '供应商核验', 'Excel 导入与隔天外显复核'],
-    ['risk', '风险处置', '关键评论、回复与删除闭环'],
-    ['review', '判定处置', '需回复/删除/补充队列'],
+  const tabs: ModuleTab[] = [
+    { id: 'collection', title: '采集监测', desc: '按ID/链接抓取、批量采集与快照变动', badge: dashboard.metrics.commentTotal || 0, icon: '🛰️' },
+    { id: 'actions', title: '处置工作台', desc: '舆情关键评论与规则判定统一闭环', badge: pendingRisk || 0, icon: '⚡' },
+    { id: 'acceptance', title: '交付验收', desc: '主线交付、可汇报线与品牌提及率', badge: dashboard.metrics.noteCount || 0, icon: '🎯' },
+    { id: 'supplier', title: '供应商核验', desc: '交付Excel导入、隔天外显与共性分析', badge: verifiedCount || 0, icon: '🛡️' },
   ];
 
   return (
-    <div className="stack">
+    <div className="ops-workspace">
       <PageHeader
         eyebrow="COMMENT OPERATIONS"
         title="评论运营"
-        subtitle="交付验收、供应商核验与舆情处置统一在评论运营工作区完成。"
+        subtitle="评论采集、处置、验收与供应商核验"
         badge={
           <span>
             {verifiedCount} 已确认外显 · {pendingRisk} 风险待办
@@ -133,40 +119,49 @@ export function CommentsWorkspace({
         }
       />
 
-      <SectionTabs value={tab} onChange={setTab} items={tabs} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+
+      {tab === 'collection' && (
+        <CommentCollection
+          projectId={projectId}
+          openNote={openNote}
+          onRefresh={onRefresh}
+          toast={showToast}
+        />
+      )}
+
+      {tab === 'actions' && (
+        <CommentActionWorkbench
+          projectId={projectId}
+          onRefresh={onRefresh}
+          toast={showToast}
+        />
+      )}
 
       {tab === 'acceptance' && (
         <AcceptanceDelivery
-          data={dashboard}
-          acceptance={ops.settings.acceptance}
           projectId={projectId}
+          dashboard={dashboard}
+          acceptance={ops.settings.acceptance}
+          openNote={openNote}
+          toast={showToast}
         />
       )}
 
       {tab === 'supplier' && (
         <SupplierVerification
-          data={dashboard}
+          projectId={projectId}
           ops={ops}
           uploadWorkbook={uploadWorkbook}
           verifySupplier={verifySupplier}
           loading={loading}
           runResult={runResult}
-          projectId={projectId}
           onDone={onRefresh}
-          toast={(msg) => showToast(msg, 'success')}
+          toast={showToast}
         />
       )}
 
-      {tab === 'review' && <ReviewActionQueue projectId={projectId} />}
-
-      {tab === 'risk' && (
-        <RiskTriage
-          comments={dashboard.keyComments}
-          resolveComment={resolveComment}
-          removeComment={removeComment}
-          projectId={projectId}
-        />
-      )}
+      {renderDrawer()}
     </div>
   );
 }
