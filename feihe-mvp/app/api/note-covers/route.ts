@@ -11,7 +11,10 @@ export async function GET(request: Request) {
   const noteId = String(params.get('noteId') || '');
   if (!/^[0-9a-f]{24}$/i.test(noteId)) return new Response('笔记 ID 无效', { status: 400 });
   const cached = await getNoteCover(project, noteId);
-  if (!cached) return new Response('封面尚未缓存', { status: 404 });
+  if (!cached) return new Response('封面尚未缓存', {
+    status: 404,
+    headers: { 'cache-control': 'no-store' },
+  });
   const headers = new Headers();
   headers.set('content-type', cached.object.contentType);
   headers.set('etag', cached.object.etag);

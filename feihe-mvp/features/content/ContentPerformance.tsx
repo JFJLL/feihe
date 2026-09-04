@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import { useState } from 'react';
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -39,6 +40,20 @@ function DistributionBars({
   );
 }
 
+function NoteCover({ src, label, eager }: { src: string; label: string; eager: boolean }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) return <span>{label.slice(0, 1)}</span>;
+  return (
+    <img
+      src={src}
+      alt=""
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 function TopNotes({
   rows,
   openNote,
@@ -52,11 +67,11 @@ function TopNotes({
         rows.slice(0, 12).map((note, index) => (
           <article key={String(note.id)}>
             <div>
-              {note.coverUrl ? (
-                <img src={String(note.coverUrl)} alt="" />
-              ) : (
-                <span>{String(note.author || '笔').slice(0, 1)}</span>
-              )}
+              <NoteCover
+                src={String(note.coverUrl || '')}
+                label={String(note.author || note.title || '笔')}
+                eager={index < 3}
+              />
               <i>TOP {String(index + 1).padStart(2, '0')} · {String(note.category1 || note.creatorLevel || '笔记')}</i>
             </div>
             <strong>{String(note.title || note.id)}</strong>

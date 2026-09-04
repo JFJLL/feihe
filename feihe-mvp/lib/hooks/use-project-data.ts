@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import type { Dashboard, Ops } from '../types/project';
+import { readSessionCache, writeSessionCache } from '../browser-cache';
 
 export const emptyAnalytics = {
   trend: [],
@@ -137,6 +138,19 @@ export type ProjectDataFilters = {
 };
 
 const projectDataCache = new Map<string, { dashboard: Dashboard; ops: Ops; timestamp: number }>();
+const projectCacheStorageKey = (cacheKey: string) => 'project-data:' + cacheKey;
+const subscribeCache = () => () => undefined;
+const REVALIDATE_AFTER = 2 * 60 * 1000;
+
+function restoredProjectData(cacheKey: string) {
+  const memory = projectDataCache.get(cacheKey);
+  if (memory) return memory;
+  const stored = readSessionCache<{ dashboard: Dashboard; ops: Ops }>(projectCacheStorageKey(cacheKey));
+  if (!stored?.value?.dashboard || !stored.value.ops) return null;
+  const restored = { ...stored.value, timestamp: stored.timestamp };
+  projectDataCache.set(cacheKey, restored);
+  return restored;
+}
 
 export function useProjectData(
   projectId: string,
@@ -147,6 +161,11 @@ export function useProjectData(
   const source = filters?.source;
   const cacheKey = projectId + '_' + (from || '') + '_' + (to || '') + '_' + (source || '');
   const cached = projectDataCache.get(cacheKey);
+  const restored = useSyncExternalStore(
+    subscribeCache,
+    () => restoredProjectData(cacheKey),
+    () => null
+  );
 
   const [dashboard, setDashboard] = useState<Dashboard | null>(cached?.dashboard || null);
   const [ops, setOps] = useState<Ops | null>(cached?.ops || null);
@@ -165,7 +184,9 @@ export function useProjectData(
         api<Dashboard>('/api/dashboard?' + query.toString()),
         api<Ops>('/api/ops?projectId=' + encodeURIComponent(projectId)),
       ]);
-      projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp: Date.now() });
+      const timestamp = Date.now();
+      projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp });
+      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard: dashRes, ops: opsRes }, timestamp);
       setDashboard(dashRes);
       setOps(opsRes);
     } catch (err) {
@@ -177,16 +198,21 @@ export function useProjectData(
   }, [projectId, from, to, source, cacheKey]);
 
   useEffect(() => {
+    const current = restoredProjectData(cacheKey);
+    if (current && Date.now() - current.timestamp < REVALIDATE_AFTER) return;
     const timer = setTimeout(() => {
       void refresh();
     }, 0);
     return () => clearTimeout(timer);
-  }, [refresh]);
+  }, [refresh, cacheKey]);
+
+  const visibleDashboard = dashboard || restored?.dashboard || null;
+  const visibleOps = ops || restored?.ops || null;
 
   return {
-    dashboard,
-    ops,
-    loading,
+    dashboard: visibleDashboard,
+    ops: visibleOps,
+    loading: loading && !visibleDashboard,
     error,
     refresh,
   };

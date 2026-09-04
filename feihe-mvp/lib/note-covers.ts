@@ -32,6 +32,17 @@ function extension(contentType: string) {
   return 'jpg';
 }
 
+async function downloadCover(sourceUrl: string) {
+  const response = await fetch(sourceUrl, {
+    headers: { Accept: 'image/avif,image/webp,image/*,*/*' },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!response.ok) throw new Error(`封面下载失败 HTTP ${response.status}`);
+  const contentType = (response.headers.get('content-type') || 'image/jpeg').split(';')[0];
+  if (!contentType.startsWith('image/')) throw new Error(`封面响应类型异常：${contentType}`);
+  return { data: await response.arrayBuffer(), contentType };
+}
+
 async function existing(project: string, noteId: string) {
   return db().prepare(`SELECT note_id AS noteId,source_url AS sourceUrl,r2_key AS r2Key,content_type AS contentType,
     status,fetched_at AS fetchedAt,last_error AS lastError FROM note_covers WHERE project_id=? AND note_id=?`)
@@ -54,12 +65,9 @@ async function cacheWithFetcher(noteId: string, project: string, fetchDetail: (n
     const detail = await fetchDetail(noteId);
     const sourceUrl = firstImage(detail);
     if (!sourceUrl) throw new Error('笔记详情未返回封面');
-    const response = await fetch(sourceUrl, { headers: { Accept: 'image/avif,image/webp,image/*,*/*' } });
-    if (!response.ok) throw new Error(`封面下载失败 HTTP ${response.status}`);
-    const contentType = (response.headers.get('content-type') || 'image/jpeg').split(';')[0];
-    if (!contentType.startsWith('image/')) throw new Error(`封面响应类型异常：${contentType}`);
+    const { data, contentType } = await downloadCover(sourceUrl);
     const r2Key = `projects/${project}/note-covers/${noteId}.${extension(contentType)}`;
-    await blobPut(r2Key, await response.arrayBuffer(), contentType);
+    await blobPut(r2Key, data, contentType);
     const now = new Date().toISOString();
     await db().batch([
       db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,r2_key,content_type,status,fetched_at,last_error,updated_at)
@@ -97,5 +105,24 @@ export async function getNoteCover(project: string, noteId: string) {
   const row = await existing(projectId(project), noteId);
   if (!row?.r2Key || row.status !== '已缓存') return null;
   const object = await blobGet(row.r2Key);
-  return object ? { object, row } : null;
+  if (object) return { object, row };
+  if (!row.sourceUrl) return null;
+  try {
+    const { data, contentType } = await downloadCover(row.sourceUrl);
+    try {
+      await blobPut(row.r2Key, data, contentType);
+    } catch {
+      // Still serve the repaired image when the local cache directory is read-only.
+    }
+    return {
+      object: {
+        body: data,
+        contentType,
+        etag: data.byteLength + '-' + Math.round(Date.now() / 1000),
+      },
+      row,
+    };
+  } catch {
+    return null;
+  }
 }
