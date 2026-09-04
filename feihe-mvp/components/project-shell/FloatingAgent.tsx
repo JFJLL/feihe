@@ -278,9 +278,14 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
                       <p key={i}>{line}</p>
                     ))}
                     {m.role === 'assistant' && m.reportId && (
-                      <Link className="floating-agent-report-link" href={'/projects/' + encodeURIComponent(projectId) + '/insights?tab=ai'}>
-                        在分析报告中查看完整 HTML →
-                      </Link>
+                      <a
+                        className="floating-agent-report-link"
+                        href={'/api/report-html?projectId=' + encodeURIComponent(projectId) + '&id=' + encodeURIComponent(m.reportId)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        在新窗口查看完整 HTML 报告 →
+                      </a>
                     )}
                   </div>
                 </div>

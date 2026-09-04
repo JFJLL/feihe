@@ -258,9 +258,15 @@ export function ContentMonitoring({
                           className="ops-table-note-cover"
                           loading="lazy"
                           decoding="async"
+                          referrerPolicy="no-referrer"
                           onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                            if (!e.currentTarget.dataset.retried) {
+                              e.currentTarget.dataset.retried = '1';
+                              e.currentTarget.src = '/api/note-covers?projectId=' + encodeURIComponent(projectId) + '&noteId=' + encodeURIComponent(note.id);
+                            } else {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                            }
                           }}
                         />
                       ) : (
@@ -343,11 +349,11 @@ export function ContentMonitoring({
             <div style={{ fontSize: '12px', color: '#64748b' }}>包含内容形式分布、达人层级效率矩阵与全盘内容分析报表。</div>
           </div>
           <Link
-            href={`/projects/${encodeURIComponent(projectId)}/insights?tab=content`}
+            href={`/projects/${encodeURIComponent(projectId)}/content?tab=analysis`}
             className="btn-link"
             style={{ fontSize: '13px', fontWeight: 600 }}
           >
-            进入分析报告查看完整内容分析 →
+            进入内容分析主看板查看聚合报表 →
           </Link>
         </div>
       </DashboardSection>

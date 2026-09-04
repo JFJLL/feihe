@@ -411,6 +411,9 @@ export async function ensureSchema() {
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_jobs_project_created ON jobs(project_id,created_at)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_action_logs_project_created ON action_logs(project_id,created_at)'),
     ]);
+    try {
+      await d1.prepare("UPDATE note_profiles SET cover_url = REPLACE(cover_url, 'http://', 'https://') WHERE cover_url LIKE 'http://%'").run();
+    } catch {}
     await d1.prepare('PRAGMA optimize').run();
   })().catch((error) => {
     schemaReady = null;

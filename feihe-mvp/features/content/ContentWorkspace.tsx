@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { Dashboard, Ops } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
+import { ContentPerformance } from './ContentPerformance';
 import { ContentRegistry } from './ContentRegistry';
 import { PublishingManagement } from './PublishingManagement';
 import { ContentMonitoring } from './ContentMonitoring';
@@ -23,7 +24,9 @@ export function ContentWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('registry', ['registry', 'publishing', 'monitoring'], {
+  const [tab, setTab] = useProjectTab('analysis', ['analysis', 'registry', 'publishing', 'monitoring'], {
+    content: 'analysis',
+    insights: 'analysis',
     pool: 'registry',
     linkage: 'publishing',
     performance: 'monitoring',
@@ -77,6 +80,7 @@ export function ContentWorkspace({
   }
 
   const tabs: ModuleTab[] = [
+    { id: 'analysis', title: '内容分析', desc: '内容效率、达人与投放拆解', badge: dashboard.metrics.noteCount || 0, icon: '📈' },
     { id: 'registry', title: '内容台账', desc: '内容资产总盘、自有导入与单篇明细', badge: dashboard.metrics.noteCount || 0, icon: '📑' },
     { id: 'publishing', title: '发布管理', desc: '自有发布进度、发布目标与覆盖反馈', badge: dashboard.metrics.publishedCount || 0, icon: '🚀' },
     { id: 'monitoring', title: '内容监测', desc: '单篇表现指标、数据质量与完整度', badge: dashboard.metrics.noteCount || 0, icon: '📊' },
@@ -87,11 +91,18 @@ export function ContentWorkspace({
       <PageHeader
         eyebrow="CONTENT OPERATIONS"
         title="内容管理"
-        subtitle="集中管理内容资产、发布情况和单篇表现，评论采集与处置统一进入评论运营。"
+        subtitle="全盘内容效率拆解、内容资产台账、发布管理与单篇监测。"
         badge={<span>{dashboard.metrics.noteCount} 篇笔记资产</span>}
       />
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+
+      {tab === 'analysis' && (
+        <ContentPerformance
+          data={dashboard}
+          openNote={openNote}
+        />
+      )}
 
       {tab === 'registry' && (
         <ContentRegistry

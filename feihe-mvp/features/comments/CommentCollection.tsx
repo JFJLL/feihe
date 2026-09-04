@@ -358,9 +358,15 @@ export function CommentCollection({
                             className="ops-table-note-cover"
                             loading="lazy"
                             decoding="async"
+                            referrerPolicy="no-referrer"
                             onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                              if (!e.currentTarget.dataset.retried) {
+                                e.currentTarget.dataset.retried = '1';
+                                e.currentTarget.src = '/api/note-covers?projectId=' + encodeURIComponent(projectId) + '&noteId=' + encodeURIComponent(note.id);
+                              } else {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+                              }
                             }}
                           />
                         ) : (

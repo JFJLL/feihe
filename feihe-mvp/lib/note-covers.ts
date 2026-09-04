@@ -102,7 +102,44 @@ export async function cacheNoteCovers(noteIds: string[], rawProject?: string, li
 
 export async function getNoteCover(project: string, noteId: string) {
   await ensureSchema();
-  const row = await existing(projectId(project), noteId);
+  const proj = projectId(project);
+  const row = await existing(proj, noteId);
+  if (!row?.r2Key || row.status !== '已缓存') {
+    const profile = await db().prepare('SELECT cover_url AS coverUrl FROM note_profiles WHERE note_id=?').bind(noteId).first<{ coverUrl?: string }>();
+    const rawSource = profile?.coverUrl;
+    if (rawSource && rawSource.startsWith('http')) {
+      const sourceUrl = rawSource.startsWith('http://') ? 'https://' + rawSource.slice(7) : rawSource;
+      try {
+        const { data, contentType } = await downloadCover(sourceUrl);
+        const r2Key = 'projects/' + proj + '/note-covers/' + noteId + '.' + extension(contentType);
+        try { await blobPut(r2Key, data, contentType); } catch {}
+        const now = new Date().toISOString();
+        try {
+          await db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,r2_key,content_type,status,fetched_at,last_error,updated_at)
+            VALUES(?,?,?,?,?,?,'已缓存',?,'',?) ON CONFLICT(id) DO UPDATE SET source_url=excluded.source_url,
+            r2_key=excluded.r2_key,content_type=excluded.content_type,status='已缓存',fetched_at=excluded.fetched_at,last_error='',updated_at=excluded.updated_at`)
+            .bind(proj + ':' + noteId, noteId, proj, sourceUrl, r2Key, contentType, now, now).run();
+        } catch {}
+        return {
+          object: {
+            body: data,
+            contentType,
+            etag: data.byteLength + '-' + Math.round(Date.now() / 1000),
+          },
+          row: {
+            noteId,
+            sourceUrl,
+            r2Key,
+            contentType,
+            status: '已缓存',
+            fetchedAt: now,
+            lastError: '',
+          },
+        };
+      } catch {}
+    }
+    return null;
+  }
   if (!row?.r2Key || row.status !== '已缓存') return null;
   const object = await blobGet(row.r2Key);
   if (object) return { object, row };

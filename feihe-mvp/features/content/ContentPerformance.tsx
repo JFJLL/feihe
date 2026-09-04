@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
-import { PanelHead } from '../../components/ui/PanelHead';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
+import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
 
@@ -49,6 +50,7 @@ function NoteCover({ src, label, eager }: { src: string; label: string; eager: b
       alt=""
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
+      referrerPolicy="no-referrer"
       onError={() => setFailed(true)}
     />
   );
@@ -114,55 +116,62 @@ export function ContentPerformance({
   const total = Math.max(1, num(q.total));
 
   return (
-    <div className="stack">
-      <section className="executive-kpis content-kpis">
-        <article className="metric">
-          <p>总曝光</p>
-          <strong>{compact(m.exposure)}</strong>
-          <span>已同步内容指标</span>
-        </article>
-        <article className="metric">
-          <p>总阅读</p>
-          <strong>{compact(m.readCount)}</strong>
-          <span>{num(m.cpr) ? 'CPR ¥' + num(m.cpr).toFixed(2) : '待同步费用'}</span>
-        </article>
-        <article className="metric">
-          <p>总互动</p>
-          <strong>{compact(m.interactionCount)}</strong>
-          <span>互动率 {pct(num(m.engagementRate))}</span>
-        </article>
-        <article className="metric">
-          <p>达人费用</p>
-          <strong>{num(m.creatorCost) ? '¥' + compact(m.creatorCost) : '待同步'}</strong>
-          <span>
-            覆盖 {num(q.metricCount)}/{total} 篇
-          </span>
-        </article>
-        <article className="metric">
-          <p>投流笔记</p>
-          <strong>{num(m.promotedCount)}</strong>
-          <span>占监测内容 {pct(num(m.promotedCount) / total)}</span>
-        </article>
-        <article className="metric">
-          <p>商业合作</p>
-          <strong>{num(m.commercialCount)}</strong>
-          <span>占监测内容 {pct(num(m.commercialCount) / total)}</span>
-        </article>
+    <div className="stack animate-fade-in">
+      {/* 顶部指标卡 */}
+      <section className="ops-metric-grid">
+        <MetricCard
+          theme="blue"
+          label="累计总曝光"
+          value={compact(m.exposure)}
+          unit="次"
+          desc="已同步内容曝光总额"
+          tag="曝光规模"
+        />
+        <MetricCard
+          theme="teal"
+          label="累计总阅读"
+          value={compact(m.readCount)}
+          unit="次"
+          desc={num(m.cpr) ? 'CPR ¥' + num(m.cpr).toFixed(2) : '待同步投放费用'}
+          tag="阅读成本"
+        />
+        <MetricCard
+          theme="green"
+          label="累计总互动"
+          value={compact(m.interactionCount)}
+          unit="次"
+          desc={'全盘互动率 ' + pct(num(m.engagementRate))}
+          tag="互动质量"
+        />
+        <MetricCard
+          theme="purple"
+          label="达人合作费用"
+          value={num(m.creatorCost) ? '¥' + compact(m.creatorCost) : '待同步'}
+          unit=""
+          desc={'已覆盖 ' + num(q.metricCount) + '/' + total + ' 篇内容'}
+          tag="达人采买"
+        />
       </section>
 
-      <section className="content-layout">
-        <article className="panel">
-          <PanelHead eyebrow="CONTENT STRATEGY" title="一级内容方向" />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+        <DashboardSection
+          eyebrow="CONTENT STRATEGY"
+          title="一级内容方向分布"
+          desc="按选题方向拆解笔记分布与讨论集中度。"
+        >
           <DistributionBars
             rows={data.analytics.categories}
             valueKey="count"
             labelKey="name"
             empty="导入 RedTrend 字段后生成"
           />
-        </article>
+        </DashboardSection>
 
-        <article className="panel">
-          <PanelHead eyebrow="FORMAT MIX" title="内容形式与互动贡献" />
+        <DashboardSection
+          eyebrow="FORMAT MIX"
+          title="内容形式与互动贡献"
+          desc="图文 vs 视频形式的内容分布与互动贡献拆解。"
+        >
           <DistributionBars
             rows={data.analytics.formats}
             valueKey="count"
@@ -170,49 +179,64 @@ export function ContentPerformance({
             empty="待同步图文/视频字段"
             secondaryKey="interactions"
           />
-        </article>
+        </DashboardSection>
 
-        <article className="panel">
-          <PanelHead eyebrow="CREATOR EFFICIENCY" title="达人层级效率" />
-          <div className="matrix-table">
-            <div className="matrix-head">
-              <span>达人层级</span>
-              <span>笔记</span>
-              <span>均阅读</span>
-              <span>均互动</span>
-              <span>均 CPE</span>
-            </div>
-            {data.analytics.creatorLevels.map((row, index) => (
-              <div key={row.name + '-' + index}>
-                <strong>{String(row.name)}</strong>
-                <span>{num(row.count)}</span>
-                <span>{compact(row.avgRead)}</span>
-                <span>{compact(row.avgInteraction)}</span>
-                <span>{num(row.avgCpe) ? '¥' + num(row.avgCpe).toFixed(2) : '—'}</span>
-              </div>
-            ))}
+        <DashboardSection
+          eyebrow="CREATOR EFFICIENCY"
+          title="达人层级效率矩阵"
+          desc="头部、腰部、初级达人与 KOC 采买效率与 CPE 表现。"
+        >
+          <div style={{ overflowX: 'auto', background: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+            <table className="ops-table">
+              <thead>
+                <tr>
+                  <th>达人层级</th>
+                  <th>笔记数</th>
+                  <th>均阅读</th>
+                  <th>均互动</th>
+                  <th>均 CPE 互动成本</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.analytics.creatorLevels.map((row, index) => (
+                  <tr key={row.name + '-' + index}>
+                    <td><strong>{String(row.name)}</strong></td>
+                    <td>{num(row.count)}</td>
+                    <td>{compact(row.avgRead)}</td>
+                    <td>{compact(row.avgInteraction)}</td>
+                    <td>
+                      <span style={{ fontWeight: 600, color: num(row.avgCpe) ? '#0f172a' : '#94a3b8' }}>
+                        {num(row.avgCpe) ? '¥' + num(row.avgCpe).toFixed(2) : '—'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </article>
+        </DashboardSection>
 
-        <article className="panel">
-          <PanelHead eyebrow="GEOGRAPHY" title="内容达人地域" />
+        <DashboardSection
+          eyebrow="GEOGRAPHY"
+          title="内容达人地域分布"
+          desc="达人分布主要省市与地域渗透格局。"
+        >
           <DistributionBars
             rows={data.analytics.locations}
             valueKey="count"
             labelKey="name"
             empty="待同步达人地域字段"
           />
-        </article>
-      </section>
+        </DashboardSection>
+      </div>
 
-      <article className="panel">
-        <PanelHead
-          eyebrow="CONTENT RANKING"
-          title="内容表现明细"
-          extra={<span className="subtle">互动、评论、效率三维排序</span>}
-        />
+      <DashboardSection
+        eyebrow="CONTENT RANKING"
+        title="高热内容表现排行"
+        desc="按阅读、互动与评论三维综合指标排序的高价值笔记。"
+      >
         <TopNotes rows={data.analytics.topNotes} openNote={openNote} />
-      </article>
+      </DashboardSection>
     </div>
   );
 }

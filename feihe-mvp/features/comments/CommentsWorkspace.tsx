@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { Dashboard, Ops } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
+import { VoiceIntelligence } from './VoiceIntelligence';
 import { CommentCollection } from './CommentCollection';
 import { CommentActionWorkbench } from './CommentActionWorkbench';
 import { AcceptanceDelivery } from './AcceptanceDelivery';
@@ -11,7 +12,7 @@ import { SupplierVerification } from './SupplierVerification';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import { useProject } from '../../components/project-shell/ProjectContext';
-import { api, num } from '../../lib/hooks/use-project-data';
+import { api, num, pct } from '../../lib/hooks/use-project-data';
 
 export function CommentsWorkspace({
   projectId,
@@ -24,10 +25,11 @@ export function CommentsWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('collection', ['collection', 'actions', 'acceptance', 'supplier'], {
+  const [tab, setTab] = useProjectTab('voice', ['voice', 'collection', 'actions', 'acceptance', 'supplier'], {
+    insights: 'voice',
+    sentiment: 'voice',
     risk: 'actions',
     review: 'actions',
-    sentiment: 'actions',
   });
   const { showToast } = useProject();
 
@@ -97,6 +99,7 @@ export function CommentsWorkspace({
   }
 
   const tabs: ModuleTab[] = [
+    { id: 'voice', title: '口碑分析', desc: '情绪构成、动态话题与口碑趋势', badge: pct(dashboard.metrics.positiveRate), icon: '💬' },
     { id: 'collection', title: '采集监测', desc: '按ID/链接抓取、批量采集与快照变动', badge: dashboard.metrics.commentTotal || 0, icon: '🛰️' },
     { id: 'actions', title: '处置工作台', desc: '舆情关键评论与规则判定统一闭环', badge: pendingRisk || 0, icon: '⚡' },
     { id: 'acceptance', title: '交付验收', desc: '主线交付、可汇报线与品牌提及率', badge: dashboard.metrics.noteCount || 0, icon: '🎯' },
@@ -108,7 +111,7 @@ export function CommentsWorkspace({
       <PageHeader
         eyebrow="COMMENT OPERATIONS"
         title="评论运营"
-        subtitle="评论采集、处置、验收与供应商核验"
+        subtitle="口碑分析、评论采集、处置、验收与供应商核验"
         badge={
           <span>
             {verifiedCount} 已确认外显 · {pendingRisk} 风险待办
@@ -117,6 +120,13 @@ export function CommentsWorkspace({
       />
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+
+      {tab === 'voice' && (
+        <VoiceIntelligence
+          data={dashboard}
+          onSwitchTab={setTab}
+        />
+      )}
 
       {tab === 'collection' && (
         <CommentCollection

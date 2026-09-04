@@ -1,11 +1,8 @@
 'use client';
 
-import { use } from 'react';
-import { useProjectData } from '../../../../lib/hooks/use-project-data';
-import { useProject } from '../../../../components/project-shell/ProjectContext';
-import { InsightsWorkspace } from '../../../../features/insights/InsightsWorkspace';
+import { use, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { LoadingState } from '../../../../components/ui/LoadingState';
-import { ErrorState } from '../../../../components/ui/ErrorState';
 
 export default function InsightsPage({
   params,
@@ -13,20 +10,19 @@ export default function InsightsPage({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = use(params);
-  const { currentProject } = useProject();
-  const { dashboard, ops, loading, error, refresh } = useProjectData(projectId);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  if (loading && !dashboard) return <LoadingState text="正在加载分析与复盘数据…" />;
-  if (error && !dashboard) return <ErrorState error={error} onRetry={refresh} />;
-  if (!dashboard || !ops) return <LoadingState text="正在初始化…" />;
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'competitor') {
+      router.replace('/projects/' + encodeURIComponent(projectId) + '/growth?tab=competitor');
+    } else if (tab === 'content') {
+      router.replace('/projects/' + encodeURIComponent(projectId) + '/content?tab=analysis');
+    } else {
+      router.replace('/projects/' + encodeURIComponent(projectId) + '/comments?tab=voice');
+    }
+  }, [projectId, router, searchParams]);
 
-  return (
-    <InsightsWorkspace
-      projectId={projectId}
-      project={currentProject}
-      dashboard={dashboard}
-      ops={ops}
-      onRefresh={refresh}
-    />
-  );
+  return <LoadingState text="正在跳转至对应分析看板…" />;
 }

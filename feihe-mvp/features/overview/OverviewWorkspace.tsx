@@ -1160,13 +1160,6 @@ export function OverviewWorkspace({
                     打开独立 HTML 报告 ↗
                   </a>
                 )}
-                <Link
-                  href={'/projects/' + encodeURIComponent(projectId) + '/insights?tab=ai'}
-                  className="btn-link"
-                  style={{ fontSize: '13px' }}
-                >
-                  进入完整分析中心 →
-                </Link>
               </div>
             </div>
 
@@ -1260,23 +1253,23 @@ export function OverviewWorkspace({
             </Link>
 
             <Link
-              href={'/projects/' + encodeURIComponent(projectId) + '/growth?tab=radar'}
+              href={'/projects/' + encodeURIComponent(projectId) + '/growth?tab=competitor'}
               className="action-link-card pastel-blue"
             >
               <div>
-                <strong>查看增长机会</strong>
-                <small>{growth.watchKeywords.length} 个观察关键词</small>
+                <strong>竞品格局分析</strong>
+                <small>本品与竞品声量对比</small>
               </div>
               <span>→</span>
             </Link>
 
             <Link
-              href={'/projects/' + encodeURIComponent(projectId) + '/insights?tab=ai'}
+              href={'/projects/' + encodeURIComponent(projectId) + '/comments?tab=voice'}
               className="action-link-card pastel-purple"
             >
               <div>
-                <strong>✨ AI 生成报告</strong>
-                <small>一句话生成受控经营看板</small>
+                <strong>口碑深度分析</strong>
+                <small>情感分布与核心反馈结论</small>
               </div>
               <span>→</span>
             </Link>
@@ -1342,7 +1335,6 @@ export function OverviewWorkspace({
     </div>
   );
 }
-
 
 
 

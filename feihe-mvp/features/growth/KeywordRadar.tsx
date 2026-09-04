@@ -270,7 +270,7 @@ export function KeywordRadar({
                 <article key={note.id}>
                   <div>
                     {note.coverUrl ? (
-                      <img src={note.coverUrl} alt="" />
+                      <img src={note.coverUrl} alt="" referrerPolicy="no-referrer" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                     ) : (
                       <span>{(note.author || '笔').slice(0, 1)}</span>
                     )}

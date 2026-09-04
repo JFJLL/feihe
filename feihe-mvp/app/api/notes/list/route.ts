@@ -141,7 +141,7 @@ export async function GET(request: Request) {
       pn.comment_total AS commentTotal, pn.positive_count AS positiveCount,
       pn.negative_count AS negativeCount, pn.question_count AS questionCount,
       pn.brand_mention_top5 AS brandMentionTop5, pn.added_at AS addedAt,
-      p.cover_url AS coverUrl, p.category1, p.category2, p.note_type AS noteType,
+      CASE WHEN p.cover_url LIKE 'http://%' THEN 'https://' || SUBSTR(p.cover_url, 8) ELSE p.cover_url END AS coverUrl, p.category1, p.category2, p.note_type AS noteType,
       p.read_count AS readCount, p.interaction_count AS interactionCount,
       p.like_count AS likeCount, p.favorite_count AS favoriteCount,
       p.creator_level AS creatorLevel, p.brand, p.note_price AS notePrice,

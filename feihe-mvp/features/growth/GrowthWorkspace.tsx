@@ -2,7 +2,8 @@
 
 import type { Dashboard, Ops, GrowthSettings } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { SectionTabs } from '../../components/ui/SectionTabs';
+import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
+import { CompetitorAnalysis } from './CompetitorAnalysis';
 import { KeywordRadar } from './KeywordRadar';
 import { InspirationLibrary } from './InspirationLibrary';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
@@ -21,7 +22,9 @@ export function GrowthWorkspace({
   ops: Ops;
   onRefresh: () => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('radar', ['radar', 'inspiration']);
+  const [tab, setTab] = useProjectTab('competitor', ['competitor', 'radar', 'inspiration'], {
+    growth: 'competitor',
+  });
   const { showToast } = useProject();
   const { openNote, renderDrawer } = useNoteDetail({
     projectId,
@@ -44,17 +47,19 @@ export function GrowthWorkspace({
     }
   }
 
-  const tabs: Array<[string, string, string]> = [
-    ['radar', '机会雷达', '关键词与高热笔记（支持灵犀大盘）'],
-    ['inspiration', '灵感选题', '高热样本沉淀与选题流转'],
+  const tabs: ModuleTab[] = [
+    { id: 'competitor', title: '竞品分析', desc: '声量格局与内容策略横向对比', badge: dashboard.analytics.brands?.length || 0, icon: '⚔️' },
+    { id: 'radar', title: '机会雷达', desc: '关键词与高热笔记（支持灵犀大盘）', badge: growth.watchKeywords?.length || 0, icon: '🛰️' },
+    { id: 'inspiration', title: '灵感选题', desc: '高热样本沉淀与选题流转', badge: dashboard.notes?.length || 0, icon: '💡' },
   ];
 
   return (
-    <div className="stack">
+    <div className="ops-workspace">
       <PageHeader
-        eyebrow="GROWTH OPPORTUNITY"
-        title="增长机会"
-        subtitle="发现当前项目值得跟进的关键词、内容和行业信号。"
+        eyebrow="COMPETITOR ANALYSIS"
+        title="竞品分析"
+        subtitle="声量格局与内容策略横向对比，结合机会雷达挖掘行业高热信号。"
+        badge={<span>{dashboard.analytics.brands?.length || 0} 家重点监测品牌</span>}
       >
         <section className="source-coverage" style={{ margin: 0 }}>
           <span className="connected">
@@ -72,7 +77,11 @@ export function GrowthWorkspace({
         </section>
       </PageHeader>
 
-      <SectionTabs value={tab} onChange={setTab} items={tabs} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+
+      {tab === 'competitor' && (
+        <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} />
+      )}
 
       {tab === 'radar' && (
         <KeywordRadar
@@ -99,4 +108,3 @@ export function GrowthWorkspace({
     </div>
   );
 }
-

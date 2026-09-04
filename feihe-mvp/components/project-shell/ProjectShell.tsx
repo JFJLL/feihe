@@ -13,7 +13,6 @@ import { OverviewWorkspace } from '../../features/overview/OverviewWorkspace';
 import { GrowthWorkspace } from '../../features/growth/GrowthWorkspace';
 import { ContentWorkspace } from '../../features/content/ContentWorkspace';
 import { CommentsWorkspace } from '../../features/comments/CommentsWorkspace';
-import { InsightsWorkspace } from '../../features/insights/InsightsWorkspace';
 import { SettingsWorkspace } from '../../features/settings/SettingsWorkspace';
 
 function ProjectShellContent({
@@ -79,6 +78,7 @@ function ProjectShellContent({
         );
         break;
       case 'growth':
+      case 'competitor':
         content = (
           <GrowthWorkspace
             projectId={projectId}
@@ -110,9 +110,8 @@ function ProjectShellContent({
         break;
       case 'insights':
         content = (
-          <InsightsWorkspace
+          <CommentsWorkspace
             projectId={projectId}
-            project={currentProject}
             dashboard={dashboard}
             ops={ops}
             onRefresh={refreshData}
