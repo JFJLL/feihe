@@ -1,4 +1,5 @@
-import { env } from 'cloudflare:workers';
+import { runtimeVars, warmWorkerEnv } from '@/lib/runtime-env';
+void warmWorkerEnv();
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
@@ -6,7 +7,7 @@ import { logAction } from '@/lib/ops';
 
 export const dynamic='force-dynamic';
 const text=(v:unknown)=>String(v??'').trim();
-const runtime=()=>env as unknown as Record<string,string|undefined>;
+const runtime=()=>runtimeVars();
 const safeJson=(value:unknown,fallback:string)=>{try{return typeof value==='string'?JSON.stringify(JSON.parse(value)):JSON.stringify(value??JSON.parse(fallback))}catch{throw new Error('JSON 配置格式不正确')}};
 
 const metricSeeds=[

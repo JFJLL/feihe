@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers';
+import { envVar } from '@/lib/runtime-env';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { importRows, type ImportKind, type ImportRow } from '@/lib/import-rows';
 import { failJob, finishJob, logAction, startJob } from '@/lib/ops';
@@ -18,9 +18,9 @@ export async function POST(request: Request) {
     const body = await request.json() as { spreadsheet?: string; sheetId?: string; range?: string; kind?: ImportKind; projectId?: string; sourceId?: string };
     const project=projectId(body.projectId);activeProject=project;sourceId=body.sourceId||'';
     if (!body.spreadsheet || !body.sheetId || !body.kind) return jsonError('请填写飞书表格链接/Token、工作表 ID 和同步类型');
-    if (!env.FEISHU_APP_ID || !env.FEISHU_APP_SECRET) return jsonError('飞书应用凭证尚未配置');
+    if (!envVar('FEISHU_APP_ID') || !envVar('FEISHU_APP_SECRET')) return jsonError('飞书应用凭证尚未配置');
     jobId = await startJob('feishu_sync',`飞书同步：${body.kind === 'owned' ? '自有笔记' : '供应商交付'}`,0,project);
-    const tokenResponse = await fetch('https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ app_id: env.FEISHU_APP_ID, app_secret: env.FEISHU_APP_SECRET }) });
+    const tokenResponse = await fetch('https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ app_id: envVar('FEISHU_APP_ID'), app_secret: envVar('FEISHU_APP_SECRET') }) });
     const tokenData = await tokenResponse.json() as { code?: number; msg?: string; tenant_access_token?: string };
     if (!tokenResponse.ok || tokenData.code || !tokenData.tenant_access_token) throw new Error(tokenData.msg || '获取飞书访问凭证失败');
     const range = `${body.sheetId}!${body.range || 'A1:AZ5000'}`;

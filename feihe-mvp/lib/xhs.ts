@@ -1,5 +1,5 @@
 import type { CommentInput } from './classify';
-import { env as workerEnv } from 'cloudflare:workers';
+import { envVar } from './runtime-env';
 import { DEFAULT_PROJECT_ID, db, ensureSchema } from './db';
 import { projectId } from './projects';
 
@@ -21,7 +21,6 @@ async function localConfig(): Promise<Config> {
 
 async function settings(project = DEFAULT_PROJECT_ID) {
   const local = await localConfig();
-  const runtime = workerEnv as unknown as Record<string, string | undefined>;
   await ensureSchema();
   const integration = await db().prepare(`SELECT base_url AS baseUrl,config_json AS configJson FROM integrations
     WHERE project_id=? AND provider IN ('redtrend','xiaohongshu') AND enabled=1 ORDER BY CASE provider WHEN 'redtrend' THEN 0 ELSE 1 END LIMIT 1`)
@@ -29,21 +28,21 @@ async function settings(project = DEFAULT_PROJECT_ID) {
   let integrationConfig:Record<string,unknown>={};
   try { integrationConfig=JSON.parse(integration?.configJson||'{}') as Record<string,unknown>; } catch { /* use defaults */ }
   return {
-    baseUrl: integration?.baseUrl || runtime.XHS_BASE_URL || process.env.XHS_BASE_URL || local.xiaohongshu?.base_url || '',
+    baseUrl: integration?.baseUrl || envVar('XHS_BASE_URL') || process.env.XHS_BASE_URL || local.xiaohongshu?.base_url || '',
     searchPath: String(integrationConfig.searchPath||'/api/solar/content_square/searchNote'),
     detailPath: String(integrationConfig.detailPath||'/api/solar/note/{noteId}/detail?bizCode='),
     l1Path: String(integrationConfig.l1Path||'/api/solar/note/{noteId}/l1_comments'),
     l2Path: String(integrationConfig.l2Path||'/api/solar/note/{noteId}/l2_comments'),
-    l1PageSize: Number(runtime.XHS_COMMENT_L1_PAGE_SIZE || process.env.XHS_COMMENT_L1_PAGE_SIZE || local.xiaohongshu?.comment_l1_page_size || 20),
-    l2PageSize: Number(runtime.XHS_COMMENT_L2_PAGE_SIZE || process.env.XHS_COMMENT_L2_PAGE_SIZE || local.xiaohongshu?.comment_l2_page_size || 20),
-    searchPageSize: Number(runtime.XHS_SEARCH_PAGE_SIZE || process.env.XHS_SEARCH_PAGE_SIZE || local.xiaohongshu?.search_page_size || 60),
-    timeout: Number(runtime.XHS_REQUEST_TIMEOUT_SECONDS || process.env.XHS_REQUEST_TIMEOUT_SECONDS || local.xiaohongshu?.request_timeout_seconds || 30),
+    l1PageSize: Number(envVar('XHS_COMMENT_L1_PAGE_SIZE') || process.env.XHS_COMMENT_L1_PAGE_SIZE || local.xiaohongshu?.comment_l1_page_size || 20),
+    l2PageSize: Number(envVar('XHS_COMMENT_L2_PAGE_SIZE') || process.env.XHS_COMMENT_L2_PAGE_SIZE || local.xiaohongshu?.comment_l2_page_size || 20),
+    searchPageSize: Number(envVar('XHS_SEARCH_PAGE_SIZE') || process.env.XHS_SEARCH_PAGE_SIZE || local.xiaohongshu?.search_page_size || 60),
+    timeout: Number(envVar('XHS_REQUEST_TIMEOUT_SECONDS') || process.env.XHS_REQUEST_TIMEOUT_SECONDS || local.xiaohongshu?.request_timeout_seconds || 30),
     oss: {
-      accessKeyId: runtime.OSS_ACCESS_KEY_ID || process.env.OSS_ACCESS_KEY_ID || local.oss?.access_key_id || '',
-      accessKeySecret: runtime.OSS_ACCESS_KEY_SECRET || process.env.OSS_ACCESS_KEY_SECRET || local.oss?.access_key_secret || '',
-      endpoint: runtime.OSS_ENDPOINT || process.env.OSS_ENDPOINT || local.oss?.endpoint || '',
-      bucket: runtime.OSS_BUCKET || process.env.OSS_BUCKET || local.oss?.bucket || '',
-      objectKey: runtime.OSS_COOKIE_OBJECT || process.env.OSS_COOKIE_OBJECT || local.oss?.cookie_object || '',
+      accessKeyId: envVar('OSS_ACCESS_KEY_ID') || process.env.OSS_ACCESS_KEY_ID || local.oss?.access_key_id || '',
+      accessKeySecret: envVar('OSS_ACCESS_KEY_SECRET') || process.env.OSS_ACCESS_KEY_SECRET || local.oss?.access_key_secret || '',
+      endpoint: envVar('OSS_ENDPOINT') || process.env.OSS_ENDPOINT || local.oss?.endpoint || '',
+      bucket: envVar('OSS_BUCKET') || process.env.OSS_BUCKET || local.oss?.bucket || '',
+      objectKey: envVar('OSS_COOKIE_OBJECT') || process.env.OSS_COOKIE_OBJECT || local.oss?.cookie_object || '',
     },
   };
 }

@@ -13,10 +13,10 @@ export async function GET(request: Request) {
   const cached = await getNoteCover(project, noteId);
   if (!cached) return new Response('封面尚未缓存', { status: 404 });
   const headers = new Headers();
-  cached.object.writeHttpMetadata(headers);
-  headers.set('etag', cached.object.httpEtag);
+  headers.set('content-type', cached.object.contentType);
+  headers.set('etag', cached.object.etag);
   headers.set('cache-control', 'public, max-age=86400, stale-while-revalidate=604800');
-  return new Response(cached.object.body, { headers });
+  return new Response(cached.object.body as BodyInit, { headers });
 }
 
 export async function POST(request: Request) {

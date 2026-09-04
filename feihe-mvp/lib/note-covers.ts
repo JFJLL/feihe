@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers';
+import { blobGet, blobPut } from './blob-store';
 import { db, ensureSchema } from './db';
 import { projectId } from './projects';
 import { createNoteDetailFetcher } from './xhs';
@@ -59,7 +59,7 @@ async function cacheWithFetcher(noteId: string, project: string, fetchDetail: (n
     const contentType = (response.headers.get('content-type') || 'image/jpeg').split(';')[0];
     if (!contentType.startsWith('image/')) throw new Error(`封面响应类型异常：${contentType}`);
     const r2Key = `projects/${project}/note-covers/${noteId}.${extension(contentType)}`;
-    await env.FILES.put(r2Key, await response.arrayBuffer(), { httpMetadata: { contentType } });
+    await blobPut(r2Key, await response.arrayBuffer(), contentType);
     const now = new Date().toISOString();
     await db().batch([
       db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,r2_key,content_type,status,fetched_at,last_error,updated_at)
@@ -96,6 +96,6 @@ export async function getNoteCover(project: string, noteId: string) {
   await ensureSchema();
   const row = await existing(projectId(project), noteId);
   if (!row?.r2Key || row.status !== '已缓存') return null;
-  const object = await env.FILES.get(row.r2Key);
+  const object = await blobGet(row.r2Key);
   return object ? { object, row } : null;
 }

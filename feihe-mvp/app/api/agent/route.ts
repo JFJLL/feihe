@@ -1,4 +1,5 @@
-import { env } from 'cloudflare:workers';
+import { runtimeVars, warmWorkerEnv } from '@/lib/runtime-env';
+void warmWorkerEnv();
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
@@ -13,7 +14,7 @@ import { buildReviewInsight, ensureReviewTables, persistReviewBatch, reviewSecti
 export const dynamic = 'force-dynamic';
 const text = (v: unknown) => String(v ?? '').trim();
 const number = (v: unknown) => Number(v || 0);
-const runtime = () => env as unknown as Record<string, string | undefined>;
+const runtime = () => runtimeVars();
 
 export async function GET(request: Request) {
   if (!(await apiUser())) return jsonError('请先登录', 401);

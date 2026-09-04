@@ -9,6 +9,7 @@
     "dev": "node scripts/dev.mjs",
     "build": "vinext build",
     "start": "vinext start",
+    "start:prod": "vinext start --port 5013 --hostname 127.0.0.1",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },

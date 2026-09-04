@@ -1,11 +1,105 @@
-import { env } from 'cloudflare:workers';
+import { runtimeVars, warmWorkerEnv, workerEnvSync } from './runtime-env';
 
 let schemaReady: Promise<void> | null = null;
 export const DEFAULT_PROJECT_ID = 'qicui';
 
-export function db() {
-  if (!env.DB) throw new Error('D1 数据库未绑定');
-  return env.DB;
+export type MiniRow = Record<string, unknown>;
+export type MiniRunner = {
+  first<T = MiniRow>(column?: string): Promise<T | null>;
+  all<T = MiniRow>(): Promise<{ results: T[] }>;
+  run(): Promise<{ success: boolean }>;
+};
+export type MiniDb = {
+  prepare(query: string): { bind(...params: unknown[]): MiniRunner } & MiniRunner;
+  batch(statements: Array<{ run(): Promise<unknown> }>): Promise<unknown[]>;
+};
+
+void warmWorkerEnv();
+
+type NodeBuiltins = {
+  sqlite: typeof import('node:sqlite');
+  fs: typeof import('node:fs');
+  path: typeof import('node:path');
+} | null;
+const nodeBuiltins: NodeBuiltins = await (async (): Promise<NodeBuiltins> => {
+  try {
+    if (typeof process === 'undefined' || !process.versions?.node) return null;
+    const [sqlite, fs, path] = await Promise.all([import('node:sqlite'), import('node:fs'), import('node:path')]);
+    return { sqlite, fs, path };
+  } catch {
+    return null;
+  }
+})();
+
+let sqliteDb: MiniDb | null = null;
+
+function seedFromMiniflare(file: string): void {
+  if (!nodeBuiltins) return;
+  const { fs, path } = nodeBuiltins;
+  try {
+    if (fs.existsSync(file)) return;
+    const d1dir = path.join(process.cwd(), '.wrangler', 'state', 'v3', 'd1');
+    if (!fs.existsSync(d1dir)) return;
+    let best = '';
+    let bestMtime = 0;
+    const walk = (dir: string): void => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, e.name);
+        if (e.isDirectory()) { walk(p); continue; }
+        if (!e.name.endsWith('.sqlite') || e.name.startsWith('metadata.sqlite')) continue;
+        const m = fs.statSync(p).mtimeMs;
+        if (m > bestMtime) { bestMtime = m; best = p; }
+      }
+    };
+    walk(d1dir);
+    if (!best) return;
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.copyFileSync(best, file);
+    for (const suffix of ['-wal', '-shm']) {
+      try { if (fs.existsSync(best + suffix)) fs.copyFileSync(best + suffix, file + suffix); } catch { /* ignore */ }
+    }
+  } catch { /* fall through to fresh database */ }
+}
+
+function nodeDb(): MiniDb {
+  if (sqliteDb) return sqliteDb;
+  const nb = nodeBuiltins;
+  if (!nb) throw new Error('D1 数据库未绑定');
+  const file = process.env.LOCAL_DB_PATH || nb.path.join(process.cwd(), 'data', 'local.db');
+  seedFromMiniflare(file);
+  nb.fs.mkdirSync(nb.path.dirname(file), { recursive: true });
+  const native = new nb.sqlite.DatabaseSync(file);
+  const wrap = (query: string, params: unknown[]): MiniRunner => {
+    const stmt = native.prepare(query);
+    const list = params as never[];
+    return {
+      first: (async <T>(column?: string) => {
+        const row = stmt.get(...list) as MiniRow | undefined;
+        if (!row) return null;
+        return (column ? row[column] : row) as T;
+      }),
+      all: (async <T>() => ({ results: (stmt.all(...list) as MiniRow[] as unknown as T[]) ?? [] })),
+      run: (async () => { stmt.run(...list); return { success: true }; }),
+    };
+  };
+  sqliteDb = {
+    prepare: (query: string) => {
+      const unbound = wrap(query, []);
+      return { bind: (...params: unknown[]) => wrap(query, params), ...unbound };
+    },
+    batch: (async (statements: Array<{ run(): Promise<unknown> }>) => {
+      const out: unknown[] = [];
+      for (const s of statements) out.push(await s.run());
+      return out;
+    }),
+  };
+  return sqliteDb;
+}
+
+export function db(): MiniDb {
+  const w = workerEnvSync() as { DB?: MiniDb };
+  if (w.DB) return w.DB;
+  return nodeDb();
 }
 
 export async function ensureSchema() {
@@ -239,7 +333,7 @@ export async function ensureSchema() {
       d1.prepare(`INSERT OR IGNORE INTO settings(key,value,updated_at) VALUES('rules','{"brands":["飞鹤","启萃","卓睿"],"competitors":["爱他美","合生元","派星","A2","a2","至初","美素","金领冠"],"positiveWords":["好吸收","长肉","长个","适应","好转奶","抵抗力","体质","便便正常","爱喝","放心","稳当","细腻","溶解"],"negativeWords":["不好","踩雷","过敏","便秘","拉肚子","胀气","吐奶","不长肉","腥","难喝","结块","发货慢","不发货","客服","核销","假货","贵","后悔"]}',?)`).bind(new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO settings(key,value,updated_at) VALUES('acceptance','{"reportCount":200,"baseCount":30,"brandTopRate":0.4}',?)`).bind(new Date().toISOString()),
     ]);
-    const runtime = env as unknown as Record<string,string | undefined>;
+    const runtime = runtimeVars();
     const xhsBaseUrl = runtime.XHS_BASE_URL || process.env.XHS_BASE_URL || '';
     await d1.prepare(`INSERT OR IGNORE INTO integrations(id,project_id,provider,name,base_url,enabled,config_json,status,created_at,updated_at)
       VALUES(?,?,?,?,?,1,?,'未检测',?,?)`).bind(`${DEFAULT_PROJECT_ID}:redtrend`,DEFAULT_PROJECT_ID,'redtrend','RedTrend 内容与评论接口',xhsBaseUrl,
