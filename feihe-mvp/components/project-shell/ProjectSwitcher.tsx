@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import type { Project } from '../../lib/types/project';
 
 export function ProjectSwitcher({
@@ -14,7 +14,6 @@ export function ProjectSwitcher({
   currentProject: Project | null;
   loading?: boolean;
 }) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -25,7 +24,7 @@ export function ProjectSwitcher({
     const subpath = match ? match[1] : '';
     const qs = searchParams?.toString();
     const fullQuery = qs ? '?' + qs : '';
-    router.push('/projects/' + encodeURIComponent(nextId) + subpath + fullQuery);
+    window.location.assign('/projects/' + encodeURIComponent(nextId) + subpath + fullQuery);
   }
 
   return (

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
 import type { Dashboard } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { SectionTabs } from '../../components/ui/SectionTabs';
@@ -30,7 +30,6 @@ export function ContentWorkspace({
 }) {
   const [tab, setTab] = useProjectTab('pool', ['pool', 'linkage', 'performance']);
   const searchParams = useSearchParams();
-  const router = useRouter();
   const pathname = usePathname();
   const { showToast } = useProject();
   const { openNote, renderDrawer } = useNoteDetail({
@@ -53,9 +52,9 @@ export function ContentWorkspace({
       else p.delete('to');
       if (nextSource) p.set('source', nextSource);
       else p.delete('source');
-      router.push(pathname + '?' + p.toString());
+      window.location.assign(pathname + '?' + p.toString());
     },
-    [searchParams, router, pathname]
+    [searchParams, pathname]
   );
 
   async function runFetch(ids = noteIds) {

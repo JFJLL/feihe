@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '../../components/ui/AppLink';
 import { useCallback, useEffect, useState } from 'react';
 import type { Project, Workspace } from '../../lib/types/project';
 import { LoadingState } from '../../components/ui/LoadingState';

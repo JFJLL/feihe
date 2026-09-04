@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
+import Link from '../ui/AppLink';
 import { api } from '../../lib/hooks/use-project-data';
 import type { Plan, Spec } from '../../lib/types/project';
 

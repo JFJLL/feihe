@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import Link from '../../components/ui/AppLink';
 import type { Dashboard, Ops, Project, Plan, Spec } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { PanelHead } from '../../components/ui/PanelHead';

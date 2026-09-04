@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import Link from 'next/link';
+import Link from '../../components/ui/AppLink';
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';

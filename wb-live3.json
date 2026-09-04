@@ -1,0 +1,1 @@
+{"action":"evaluate","args":{"code":"(function(){var els=[...document.querySelectorAll('a')].map(function(a){return a.textContent.slice(0,20)+'|'+a.href});return els.slice(0,20).join('\\n');})()"},"session":"live-debug"}

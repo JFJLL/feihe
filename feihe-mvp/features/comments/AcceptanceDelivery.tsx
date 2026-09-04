@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import Link from 'next/link';
+import Link from '../../components/ui/AppLink';
 import type { Dashboard, Acceptance } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { pct } from '../../lib/hooks/use-project-data';

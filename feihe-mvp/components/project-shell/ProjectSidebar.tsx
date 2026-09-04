@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '../ui/AppLink';
 import { usePathname } from 'next/navigation';
 import { PROJECT_NAV_ITEMS } from '../../lib/navigation/project-navigation';
 import { ProjectSwitcher } from './ProjectSwitcher';

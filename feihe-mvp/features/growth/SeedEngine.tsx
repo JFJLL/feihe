@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import Link from 'next/link';
+import Link from '../../components/ui/AppLink';
 import type { Dashboard, GrowthSettings, GrowthKeyword, Note } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
