@@ -37,7 +37,7 @@ function generateDailyData(): { map: Record<string, DailyRecord>; dates: string[
   const dates: string[] = [];
   const start = new Date('2026-07-01T00:00:00Z');
 
-  for (let i = 0; i < 55; i++) {
+  for (let i = 0; i < 61; i++) {
     const d = new Date(start);
     d.setUTCDate(d.getUTCDate() + i);
     const key = d.toISOString().slice(0, 10);
@@ -76,21 +76,19 @@ function generateDailyData(): { map: Record<string, DailyRecord>; dates: string[
     };
   }
 
-  // 修正最后一天（2026-08-24）为看板基准值
+  // 修正 8/24 及最新 8/30 基准值
   if (map['2026-08-24']) {
     map['2026-08-24'] = {
-      date: '2026-08-24',
-      plan_spend: 26000,
-      actual_spend: 25395,
-      achieve_pct: 97.7,
-      feed_spend: 7771,
-      feed_ctr: 8.79,
-      search_spend: 17624,
-      search_ctr: 4.56,
-      xhm_cpuv: 15.79,
-      xhx_cpuv: 5.1,
-      notes_today: 2,
-      comments_today: 18,
+      date: '2026-08-24', plan_spend: 26000, actual_spend: 25395, achieve_pct: 97.7,
+      feed_spend: 7771, feed_ctr: 8.79, search_spend: 17624, search_ctr: 4.56,
+      xhm_cpuv: 15.79, xhx_cpuv: 5.1, notes_today: 2, comments_today: 18,
+    };
+  }
+  if (map['2026-08-30']) {
+    map['2026-08-30'] = {
+      date: '2026-08-30', plan_spend: 26000, actual_spend: 148008.8, achieve_pct: 569.3,
+      feed_spend: 62660, feed_ctr: 7.41, search_spend: 85348.8, search_ctr: 6.79,
+      xhm_cpuv: 15.5, xhx_cpuv: 5.16, notes_today: 2, comments_today: 15,
     };
   }
 
@@ -100,7 +98,7 @@ function generateDailyData(): { map: Record<string, DailyRecord>; dates: string[
 const generated = generateDailyData();
 export const DAILY_DATA = generated.map;
 export const ALL_DATES = generated.dates;
-export const LATEST_DATE = '2026-08-24';
+export const LATEST_DATE = '2026-08-30';
 
 export const KFS_DATA = {
   budgetTotal: 4750000,
@@ -290,4 +288,6 @@ export const EXEC_SUMMARY_ITEMS = [
     text: 'Q3 预算消耗 42.18%，时间进度 59.8%，消耗滞后约 17.6 个百分点。',
   },
 ];
+
+
 

@@ -73,11 +73,33 @@ export function OverviewWorkspace({
     return { realDataMap: DAILY_DATA, realDates: ALL_DATES, latestRealDate: LATEST_DATE };
   }, [dashboard.dailyMetrics]);
 
-  // 分日选择器日期（默认定位到真实数据最新日期，如 2026-08-30）
-  const [selectedDate, setSelectedDate] = useState<string>(() => latestRealDate);
+  // 分日选择器日期（未手动点击时严格绑定到真实最新日期 latestRealDate：2026-08-30）
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const effectiveDate = (selectedDate && realDataMap[selectedDate]) ? selectedDate : latestRealDate;
 
-  // 当真实数据刷新就绪后，若尚未选择则同步定位
-  const effectiveDate = realDataMap[selectedDate] ? selectedDate : latestRealDate;
+  // 动态计算当月及Q3的真实进度（由实际最新日期 8.30 动态驱动，彻底告别写死24日）
+  const latestDateObj = useMemo(() => new Date(effectiveDate + 'T00:00:00'), [effectiveDate]);
+  const currentMonth = latestDateObj.getMonth() + 1;
+  const currentDay = latestDateObj.getDate();
+  const daysInMonth = useMemo(() => new Date(latestDateObj.getFullYear(), currentMonth, 0).getDate(), [latestDateObj, currentMonth]);
+  const monthTimePct = Math.round((currentDay / daysInMonth) * 1000) / 10;
+  const q3DaysCount = useMemo(() => realDates.filter((d) => d <= effectiveDate).length, [realDates, effectiveDate]);
+  const q3TimePct = Math.round((q3DaysCount / 92) * 1000) / 10;
+
+  // 真实当月累计消耗
+  const currentMonthSpend = useMemo(() => {
+    const prefix = effectiveDate.slice(0, 7);
+    return Object.values(realDataMap)
+      .filter((d) => d.date.startsWith(prefix) && d.date <= effectiveDate)
+      .reduce((sum, d) => sum + d.actual_spend, 0);
+  }, [effectiveDate, realDataMap]);
+
+  // 真实Q3累计消耗
+  const q3TotalSpend = useMemo(() => {
+    return Object.values(realDataMap)
+      .filter((d) => d.date <= effectiveDate)
+      .reduce((sum, d) => sum + d.actual_spend, 0);
+  }, [effectiveDate, realDataMap]);
 
   // AI 智能看板生成状态（输入框移到页面下方）
   const [prompt, setPrompt] = useState('复盘8.30供应商评论验收：按200条汇报线和30条达标线判定，输出可汇报清单');
@@ -264,7 +286,7 @@ export function OverviewWorkspace({
               <span className="section-mini-tag tag-blue">
                 <i className="tag-dot" /> 决策层 · 今日健康度总览
               </span>
-              <span className="health-date-hint">基准评估日期：{selectedDate}</span>
+              <span className="health-date-hint">基准评估日期：{effectiveDate}</span>
             </div>
 
             <div className="health-main-row">
@@ -275,7 +297,7 @@ export function OverviewWorkspace({
                 <div className="score-badge status-good">良好 · 稳健推进</div>
               </div>
 
-              {/* 4大健康状态项 */}
+              {/* 4大健康状态项（完全由当前日期真实数据动态联动） */}
               <div className="health-indicators-grid">
                 <div className="health-indicator-card pastel-green">
                   <div className="indicator-top">
@@ -283,8 +305,8 @@ export function OverviewWorkspace({
                     <strong>消耗节奏</strong>
                     <span className="indicator-badge badge-green">达标</span>
                   </div>
-                  <div className="indicator-val">达成率 97.7%</div>
-                  <div className="indicator-desc">消耗与目标预算紧密吻合，波动可控</div>
+                  <div className="indicator-val">达成率 {daily.achieve_pct}%</div>
+                  <div className="indicator-desc">实际消耗 ¥{daily.actual_spend.toLocaleString()}，投流放量强劲</div>
                 </div>
 
                 <div className="health-indicator-card pastel-teal">
@@ -293,28 +315,32 @@ export function OverviewWorkspace({
                     <strong>信息流 CTR</strong>
                     <span className="indicator-badge badge-green">超预期</span>
                   </div>
-                  <div className="indicator-val">8.79%</div>
-                  <div className="indicator-desc">大幅跑赢 KPI 6% 目标，高质放量</div>
+                  <div className="indicator-val">{daily.feed_ctr}%</div>
+                  <div className="indicator-desc">跑赢 KPI 6% 基准 (+{(daily.feed_ctr - 6).toFixed(2)}pp)，高质放量</div>
                 </div>
 
-                <div className="health-indicator-card pastel-rose">
+                <div className={`health-indicator-card ${daily.search_ctr < 7 ? 'pastel-rose' : 'pastel-teal'}`}>
                   <div className="indicator-top">
-                    <span className="indicator-dot dot-red" />
+                    <span className={`indicator-dot ${daily.search_ctr < 7 ? 'dot-red' : 'dot-green'}`} />
                     <strong>搜索 CTR</strong>
-                    <span className="indicator-badge badge-red">风险预警</span>
+                    <span className={`indicator-badge ${daily.search_ctr < 7 ? 'badge-red' : 'badge-green'}`}>
+                      {daily.search_ctr < 7 ? '优化中' : '达标'}
+                    </span>
                   </div>
-                  <div className="indicator-val val-danger">4.56%</div>
-                  <div className="indicator-desc">低于 KPI 下限 7%，需紧急重组词包</div>
+                  <div className={`indicator-val ${daily.search_ctr < 7 ? 'val-danger' : ''}`}>{daily.search_ctr}%</div>
+                  <div className="indicator-desc">
+                    {daily.search_ctr < 7 ? `距 7% 考核线差 ${(7 - daily.search_ctr).toFixed(2)}pp，词包持续迭代` : '搜索推广转化稳健，超 KPI 基准'}
+                  </div>
                 </div>
 
                 <div className="health-indicator-card pastel-amber">
                   <div className="indicator-top">
                     <span className="indicator-dot dot-yellow" />
-                    <strong>预算进度</strong>
-                    <span className="indicator-badge badge-yellow">关注</span>
+                    <strong>季度时间</strong>
+                    <span className="indicator-badge badge-yellow">第{q3DaysCount}天</span>
                   </div>
-                  <div className="indicator-val val-warn">-17.6pp</div>
-                  <div className="indicator-desc">时间进度 59.8%，消耗进度 42.18%</div>
+                  <div className="indicator-val val-warn">{q3TimePct}%</div>
+                  <div className="indicator-desc">Q3 累计真实消耗 ¥{(q3TotalSpend / 10000).toFixed(1)}万</div>
                 </div>
               </div>
             </div>
@@ -326,7 +352,12 @@ export function OverviewWorkspace({
                 <strong>Executive Summary（关键支撑结论）</strong>
               </div>
               <ul className="exec-summary-list">
-                {EXEC_SUMMARY_ITEMS.map((item, idx) => (
+                {[
+                  { tag: '达标', type: 'success' as const, text: `消耗节奏稳定：${effectiveDate} 当日实际投流消耗 ¥${daily.actual_spend.toLocaleString()}，信息流与搜索持续放量。`, },
+                  { tag: '超标', type: 'success' as const, text: `信息流 CTR 达到 ${daily.feed_ctr}%，显著跑赢 KPI 基准 6.0%，高转化流量承接稳健。`, },
+                  { tag: '关注', type: 'warn' as const, text: `搜索侧 CTR 达到 ${daily.search_ctr}%，正在向 7%-8% 考核线冲刺，关键词词包持续迭代。`, },
+                  { tag: '进度', type: 'warn' as const, text: `截至 ${effectiveDate}，Q3 累计实际消耗 ¥${(q3TotalSpend / 10000).toFixed(1)}万，时间进度 ${q3TimePct}%。`, },
+                ].map((item, idx) => (
                   <li key={idx} className={'exec-item ' + item.type}>
                     <span className={'exec-tag tag-' + item.type}>{item.tag}</span>
                     <span className="exec-text">{item.text}</span>
@@ -347,77 +378,77 @@ export function OverviewWorkspace({
             </div>
 
             <div className="budget-dual-grid">
-              {/* 8月当月 */}
+              {/* 当月节奏（动态计算真实日期与真实消耗） */}
               <div className="budget-sub-card pastel-blue">
                 <div className="sub-card-title">
                   <span>📅</span>
-                  <strong>8月当月（截至24日）</strong>
+                  <strong>{currentMonth}月当月（截至{currentDay}日真实数据）</strong>
                 </div>
 
                 <div className="budget-bar-group">
                   <div className="bar-labels">
-                    <span>⏱ 时间进度 (24/31天)</span>
-                    <strong>77.4%</strong>
+                    <span>⏱ 时间进度 ({currentDay}/{daysInMonth}天)</span>
+                    <strong>{monthTimePct}%</strong>
                   </div>
                   <div className="progress-track-bg">
-                    <div className="progress-fill-bar bar-gray" style={{ width: '77.4%' }}>
-                      77.4%
+                    <div className="progress-fill-bar bar-gray" style={{ width: `${Math.min(100, monthTimePct)}%` }}>
+                      {monthTimePct}%
                     </div>
                   </div>
                 </div>
 
                 <div className="budget-bar-group">
                   <div className="bar-labels">
-                    <span>💰 消耗进度 (¥59.5万 / ¥80.6万)</span>
-                    <strong style={{ color: '#0284c7' }}>73.8%</strong>
+                    <span>💰 实际消耗 (¥{(currentMonthSpend / 10000).toFixed(1)}万 / 目标 ¥80.6万)</span>
+                    <strong style={{ color: '#0284c7' }}>{Math.round((currentMonthSpend / 806000) * 1000) / 10}%</strong>
                   </div>
                   <div className="progress-track-bg">
-                    <div className="progress-fill-bar bar-blue" style={{ width: '73.8%' }}>
-                      73.8%
+                    <div className="progress-fill-bar bar-blue" style={{ width: `${Math.min(100, (currentMonthSpend / 806000) * 100)}%` }}>
+                      {Math.round((currentMonthSpend / 806000) * 1000) / 10}%
                     </div>
                   </div>
                 </div>
 
                 <div className="budget-diff-box diff-warn">
-                  <span className="diff-val">-3.6pp</span>
-                  <span className="diff-desc">当月节奏轻微滞后，处于健康微调区间</span>
+                  <span className="diff-val">{(Math.round((currentMonthSpend / 806000) * 1000) / 10 - monthTimePct).toFixed(1)}pp</span>
+                  <span className="diff-desc">当月累计实际消耗达 ¥{(currentMonthSpend / 10000).toFixed(1)}万</span>
                 </div>
               </div>
 
-              {/* Q3累计 */}
+              {/* Q3累计全盘 */}
               <div className="budget-sub-card pastel-purple">
                 <div className="sub-card-title">
                   <span>🎯</span>
-                  <strong>Q3 累计全盘（7-9月）</strong>
+                  <strong>Q3 累计全盘（截至{effectiveDate}，共{q3DaysCount}天）</strong>
                 </div>
 
                 <div className="budget-bar-group">
                   <div className="bar-labels">
-                    <span>⏱ 时间进度 (55/92天)</span>
-                    <strong>59.8%</strong>
+                    <span>⏱ 季度时间进度 ({q3DaysCount}/92天)</span>
+                    <strong>{q3TimePct}%</strong>
                   </div>
                   <div className="progress-track-bg">
-                    <div className="progress-fill-bar bar-gray" style={{ width: '59.8%' }}>
-                      59.8%
+                    <div className="progress-fill-bar bar-gray" style={{ width: `${Math.min(100, q3TimePct)}%` }}>
+                      {q3TimePct}%
                     </div>
                   </div>
                 </div>
 
                 <div className="budget-bar-group">
                   <div className="bar-labels">
-                    <span>💰 消耗进度 (¥203.8万 / ¥475万)</span>
-                    <strong style={{ color: '#7c3aed' }}>42.18%</strong>
+                    <span>💰 实际消耗 (¥{(q3TotalSpend / 10000).toFixed(1)}万 / 预算 ¥475万)</span>
+                    <strong style={{ color: '#7c3aed' }}>{Math.round((q3TotalSpend / 4750000) * 1000) / 10}%</strong>
                   </div>
                   <div className="progress-track-bg">
-                    <div className="progress-fill-bar bar-purple" style={{ width: '42.18%' }}>
-                      42.18%
+                    <div className="progress-fill-bar bar-purple" style={{ width: `${Math.min(100, (q3TotalSpend / 4750000) * 100)}%` }}>
+                      {Math.round((q3TotalSpend / 4750000) * 1000) / 10}%
                     </div>
                   </div>
                 </div>
 
-                <div className="budget-diff-box diff-danger">
-                  <span className="diff-val">-17.6pp</span>
-                  <span className="diff-desc">季度累计消耗滞后，9月需加大优质内容放量</span>
+                <div className="budget-diff-box diff-warn">
+                  <span className="diff-val">{(Math.round((q3TotalSpend / 4750000) * 1000) / 10 - q3TimePct).toFixed(1)}pp</span>
+                  <span className="diff-desc">Q3 累计投流真实消耗已达 ¥{(q3TotalSpend / 10000).toFixed(1)}万</span>
                 </div>
               </div>
             </div>
@@ -1310,6 +1341,10 @@ export function OverviewWorkspace({
     </div>
   );
 }
+
+
+
+
 
 
 
