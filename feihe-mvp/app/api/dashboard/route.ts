@@ -79,6 +79,7 @@ export async function GET(request: Request) {
     adsTotals,
     adsAccounts,
     cachedCoversList,
+    dailyKpiList,
   ] = await Promise.all([
     d1.prepare('SELECT key AS id,name,target_count AS targetCount,delivered_count AS deliveredCount,budget,spent FROM project_pipelines WHERE project_id=? ORDER BY rowid').bind(project).all(),
     bind(`SELECT COUNT(*) AS noteCount, COALESCE(SUM(pn.comment_total),0) AS commentTotal,
@@ -167,6 +168,7 @@ export async function GET(request: Request) {
     d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
       FROM paid_ad_metrics WHERE project_id=? ORDER BY metric_date DESC, spend DESC LIMIT 60`).bind(project).all(),
     d1.prepare(`SELECT note_id AS noteId FROM note_covers WHERE project_id=? AND status='已缓存'`).bind(project).all<{ noteId: string }>(),
+    d1.prepare(`SELECT date, plan_spend, actual_spend, achieve_pct, feed_spend, feed_ctr, search_spend, search_ctr, xhm_cpuv, xhx_cpuv, notes_today, comments_today, impressions, clicks, interactions FROM daily_kpi_metrics WHERE project_id=? ORDER BY date ASC`).bind(project).all<Row>(),
   ]);
 
   const topNoteRows = resultRows(topNotes);
@@ -242,6 +244,7 @@ export async function GET(request: Request) {
     keyComments: keyComments.results,
     notes: notes.results,
     ads: { totals: adsTotals || {}, accounts: adsAccounts.results || [] },
+    dailyMetrics: resultRows(dailyKpiList),
     projectId: project,
     filters: { from, to, source, status, scope },
     syncedAt: new Date().toISOString(),
@@ -259,4 +262,6 @@ export async function GET(request: Request) {
     },
   });
 }
+
+
 

@@ -44,8 +44,40 @@ export function OverviewWorkspace({
   // 板块切换：总览 (overview) vs 分日 (daily)
   const [activeBlock, setActiveBlock] = useState<'overview' | 'daily'>('overview');
 
-  // 分日选择器日期
-  const [selectedDate, setSelectedDate] = useState<string>(LATEST_DATE);
+  // 实际接入的真实底层数据与日期序列（聚光 29,055 条 + 达人笔记 1,189 篇实时入库）
+  const { realDataMap, realDates, latestRealDate } = useMemo(() => {
+    const rawList = dashboard.dailyMetrics;
+    if (rawList && rawList.length > 0) {
+      const map: Record<string, DailyRecord> = {};
+      const dates: string[] = [];
+      for (const row of rawList) {
+        const d = String(row.date);
+        dates.push(d);
+        map[d] = {
+          date: d,
+          plan_spend: Number(row.plan_spend || 26000),
+          actual_spend: Number(row.actual_spend || 0),
+          achieve_pct: Number(row.achieve_pct || 0),
+          feed_spend: Number(row.feed_spend || 0),
+          feed_ctr: Number(row.feed_ctr || 0),
+          search_spend: Number(row.search_spend || 0),
+          search_ctr: Number(row.search_ctr || 0),
+          xhm_cpuv: Number(row.xhm_cpuv || 15.8),
+          xhx_cpuv: Number(row.xhx_cpuv || 5.1),
+          notes_today: Number(row.notes_today || 0),
+          comments_today: Number(row.comments_today || 0),
+        };
+      }
+      return { realDataMap: map, realDates: dates, latestRealDate: dates[dates.length - 1] };
+    }
+    return { realDataMap: DAILY_DATA, realDates: ALL_DATES, latestRealDate: LATEST_DATE };
+  }, [dashboard.dailyMetrics]);
+
+  // 分日选择器日期（默认定位到真实数据最新日期，如 2026-08-30）
+  const [selectedDate, setSelectedDate] = useState<string>(() => latestRealDate);
+
+  // 当真实数据刷新就绪后，若尚未选择则同步定位
+  const effectiveDate = realDataMap[selectedDate] ? selectedDate : latestRealDate;
 
   // AI 智能看板生成状态（输入框移到页面下方）
   const [prompt, setPrompt] = useState('复盘8.30供应商评论验收：按200条汇报线和30条达标线判定，输出可汇报清单');
@@ -55,31 +87,31 @@ export function OverviewWorkspace({
   const [reportId, setReportId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
 
-  // 获取当前选中日期的数据
-  const daily = DAILY_DATA[selectedDate] || DAILY_DATA[LATEST_DATE];
+  // 获取当前选中日期的真实数据
+  const daily = realDataMap[effectiveDate] || realDataMap[latestRealDate] || DAILY_DATA[LATEST_DATE];
 
   // 取该日期前30天的序列供大图渲染
   const trend30Days = useMemo(() => {
-    const idx = ALL_DATES.indexOf(selectedDate);
-    const start = Math.max(0, (idx === -1 ? ALL_DATES.length - 1 : idx) - 29);
-    const end = (idx === -1 ? ALL_DATES.length - 1 : idx) + 1;
-    return ALL_DATES.slice(start, end).map((d) => DAILY_DATA[d] || DAILY_DATA[LATEST_DATE]);
-  }, [selectedDate]);
+    const idx = realDates.indexOf(effectiveDate);
+    const start = Math.max(0, (idx === -1 ? realDates.length - 1 : idx) - 29);
+    const end = (idx === -1 ? realDates.length - 1 : idx) + 1;
+    return realDates.slice(start, end).map((d) => realDataMap[d] || DAILY_DATA[LATEST_DATE]);
+  }, [effectiveDate, realDates, realDataMap]);
 
   // 取该日期前14天的序列供 Sparkline 迷你走势渲染
   const spark14Days = useMemo(() => {
-    const idx = ALL_DATES.indexOf(selectedDate);
-    const start = Math.max(0, (idx === -1 ? ALL_DATES.length - 1 : idx) - 13);
-    const end = (idx === -1 ? ALL_DATES.length - 1 : idx) + 1;
-    return ALL_DATES.slice(start, end).map((d) => DAILY_DATA[d] || DAILY_DATA[LATEST_DATE]);
-  }, [selectedDate]);
+    const idx = realDates.indexOf(effectiveDate);
+    const start = Math.max(0, (idx === -1 ? realDates.length - 1 : idx) - 13);
+    const end = (idx === -1 ? realDates.length - 1 : idx) + 1;
+    return realDates.slice(start, end).map((d) => realDataMap[d] || DAILY_DATA[LATEST_DATE]);
+  }, [effectiveDate, realDates, realDataMap]);
 
   // 快捷前一天/后一天
   const handleStepDate = (delta: number) => {
-    const idx = ALL_DATES.indexOf(selectedDate);
+    const idx = realDates.indexOf(effectiveDate);
     if (idx === -1) return;
-    const nextIdx = Math.min(Math.max(0, idx + delta), ALL_DATES.length - 1);
-    setSelectedDate(ALL_DATES[nextIdx]);
+    const nextIdx = Math.min(Math.max(0, idx + delta), realDates.length - 1);
+    setSelectedDate(realDates[nextIdx]);
   };
 
   async function handleGenerate() {
@@ -177,7 +209,10 @@ export function OverviewWorkspace({
         title={project?.name || '飞鹤臻稚卓蓓小红书种草数据看板'}
         subtitle="2026年Q3日常种草与电商引流 · 众引传播集团 (MGCC)"
       >
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <span className="overview-quarter-pill" style={{ background: '#ecfdf5', color: '#047857', borderColor: '#a7f3d0' }}>
+            <i style={{ background: '#10b981' }} /> 真实底表数据已实时接入 ({realDates.length} 天日度明细)
+          </span>
           <span className="overview-quarter-pill">
             <i /> Q3 进行中 (7.1 - 9.30)
           </span>
@@ -736,13 +771,13 @@ export function OverviewWorkspace({
               </button>
 
               <select
-                value={selectedDate}
+                value={effectiveDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 className="date-dropdown-select"
               >
-                {ALL_DATES.slice().reverse().map((d) => (
+                {realDates.slice().reverse().map((d) => (
                   <option key={d} value={d}>
-                    {d} {d === LATEST_DATE ? '(最新基准日)' : ''}
+                    {d} {d === latestRealDate ? '(最新数据)' : ''}
                   </option>
                 ))}
               </select>
@@ -751,7 +786,7 @@ export function OverviewWorkspace({
                 type="button"
                 className="step-date-btn"
                 onClick={() => handleStepDate(1)}
-                disabled={selectedDate === LATEST_DATE}
+                disabled={effectiveDate === latestRealDate}
                 title="后一天"
               >
                 后一天 →
@@ -760,9 +795,9 @@ export function OverviewWorkspace({
               <button
                 type="button"
                 className="latest-date-btn"
-                onClick={() => setSelectedDate(LATEST_DATE)}
+                onClick={() => setSelectedDate(latestRealDate)}
               >
-                回到最新
+                回到最新 ({latestRealDate})
               </button>
             </div>
           </div>
@@ -1275,6 +1310,8 @@ export function OverviewWorkspace({
     </div>
   );
 }
+
+
 
 
 

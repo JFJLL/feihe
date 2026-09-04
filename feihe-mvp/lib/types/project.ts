@@ -150,6 +150,24 @@ export type DashboardMetrics = {
   actions: Record<string, number>;
 };
 
+export type DailyMetricRow = {
+  date: string;
+  plan_spend: number;
+  actual_spend: number;
+  achieve_pct: number;
+  feed_spend: number;
+  feed_ctr: number;
+  search_spend: number;
+  search_ctr: number;
+  xhm_cpuv: number;
+  xhx_cpuv: number;
+  notes_today: number;
+  comments_today: number;
+  impressions?: number;
+  clicks?: number;
+  interactions?: number;
+};
+
 export type Dashboard = {
   projectId?: string;
   pipelines: Pipeline[];
@@ -158,6 +176,7 @@ export type Dashboard = {
   keyComments: KeyComment[];
   notes: Note[];
   ads?: Ads;
+  dailyMetrics?: DailyMetricRow[];
   syncedAt: string;
 };
 
@@ -443,3 +462,5 @@ export type Spec = {
   }>;
   quality: Array<{ label: string; value: number; status: string }>;
 };
+
+
