@@ -17,7 +17,7 @@ export function useProjectTab(defaultTab: string, allowedTabs: string[]): [strin
       params.set('tab', nextTab);
       window.location.assign(pathname + '?' + params.toString());
     },
-    [activeTab, searchParams, router, pathname]
+    [activeTab, searchParams, pathname]
   );
 
   return [activeTab, setTab];

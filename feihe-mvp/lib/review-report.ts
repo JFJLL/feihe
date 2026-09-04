@@ -1,5 +1,6 @@
 import type { ReportSpec } from './report-agent';
 import type { ClassifiedNote, ReviewResult } from './comment-review';
+import type { MiniDb } from './db';
 export function shortLink(link: string): string {
   const m = link.match(/notes\/([a-z0-9]{6,})/i) || link.match(/([a-f0-9]{10,})/i);
   return m ? m[1].slice(0, 16) : link.slice(0, 24);
@@ -47,7 +48,7 @@ export function reviewSummary(result: ReviewResult): string[] {
     '待补充 ' + result.counts.needSupplement + ' 篇（不足30条），需回复 ' + result.counts.needReply + ' 篇，需删除处置 ' + result.counts.needDelete + ' 篇（已存处置队列，不进入汇报）。',
   ];
 }
-export async function persistReviewBatch(d1: any, project: string, result: ReviewResult): Promise<string> {
+export async function persistReviewBatch(d1: MiniDb, project: string, result: ReviewResult): Promise<string> {
   const batchId = crypto.randomUUID();
   const now = new Date().toISOString();
   await d1.prepare('INSERT INTO note_review_batches(id,project_id,date_key,counts_json,created_at) VALUES(?,?,?,?,?)')
@@ -63,7 +64,7 @@ export async function persistReviewBatch(d1: any, project: string, result: Revie
   return batchId;
 }
 
-export async function ensureReviewTables(d1: any): Promise<void> {
+export async function ensureReviewTables(d1: MiniDb): Promise<void> {
   await d1.prepare('CREATE TABLE IF NOT EXISTS note_review_batches(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,date_key TEXT NOT NULL,counts_json TEXT NOT NULL DEFAULT "{}",created_at TEXT NOT NULL)').run();
   await d1.prepare('CREATE TABLE IF NOT EXISTS review_action_items(id INTEGER PRIMARY KEY AUTOINCREMENT,batch_id TEXT NOT NULL,project_id TEXT NOT NULL,date_key TEXT NOT NULL,link TEXT NOT NULL DEFAULT "",blogger TEXT NOT NULL DEFAULT "",action TEXT NOT NULL,reason TEXT NOT NULL DEFAULT "",sample_json TEXT NOT NULL DEFAULT "[]",status TEXT NOT NULL DEFAULT "待处理",created_at TEXT NOT NULL)').run();
 }
