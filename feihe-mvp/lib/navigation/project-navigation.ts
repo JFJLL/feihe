@@ -1,4 +1,4 @@
-﻿export type NavItem = {
+export type NavItem = {
   id: string;
   path: string;
   number: string;
@@ -23,7 +23,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     number: '02',
     label: '增长机会',
     title: '增长机会',
-    description: '机会雷达、灵感选题与种子池',
+    description: '机会雷达与灵感选题',
     defaultTab: 'radar',
   },
   {
@@ -71,8 +71,8 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
   growth: { module: 'growth', tab: 'radar' },
   radar: { module: 'growth', tab: 'radar' },
   inspiration: { module: 'growth', tab: 'inspiration' },
-  seeds: { module: 'growth', tab: 'seed' },
-  seed: { module: 'growth', tab: 'seed' },
+  seeds: { module: 'growth', tab: 'radar' },
+  seed: { module: 'growth', tab: 'radar' },
   lingxi_track: { module: 'growth', tab: 'radar' },
   content: { module: 'content', tab: 'pool' },
   notes: { module: 'content', tab: 'pool' },
@@ -104,7 +104,7 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
 
 export function resolveProjectRoute(projectId: string, section?: string, searchParams?: URLSearchParams): string {
   const base = '/projects/' + encodeURIComponent(projectId);
-  const cleanSection = section ? section.replace(/^\//, '') : '';
+  const cleanSection = section ? section.startsWith('/') ? section.slice(1) : section : '';
   const pathPart = cleanSection ? base + '/' + cleanSection : base;
   const qs = searchParams && searchParams.toString() ? '?' + searchParams.toString() : '';
   return pathPart + qs;
@@ -118,3 +118,6 @@ export function getLegacyRedirectUrl(projectId: string, section: string, searchP
   if (tab) params.set('tab', tab);
   return resolveProjectRoute(projectId, targetModule, params);
 }
+
+
+

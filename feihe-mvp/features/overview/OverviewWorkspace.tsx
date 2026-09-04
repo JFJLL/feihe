@@ -1,15 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from '../../components/ui/AppLink';
 import type { Dashboard, Ops, Project, Plan, Spec } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { compact, num, cnTime, api, shown } from '../../lib/hooks/use-project-data';
+import { num, cnTime, api, shown } from '../../lib/hooks/use-project-data';
+import {
+  DAILY_DATA,
+  ALL_DATES,
+  LATEST_DATE,
+  KFS_DATA,
+  CHANNEL_DATA,
+  TIER_DATA,
+  ANGLE_DATA,
+  LEARNING_ITEMS,
+  NEXT_STEP_ITEMS,
+  EXEC_SUMMARY_ITEMS,
+} from './overview-data';
+import {
+  Sparkline,
+  SpendTrendChart,
+  CtrTrendChart,
+  TierDoughnutChart,
+  HorizontalBarList,
+} from './OverviewCharts';
 
 export function OverviewWorkspace({
   projectId,
+  project,
   dashboard,
   ops,
   onRefresh,
@@ -21,12 +41,46 @@ export function OverviewWorkspace({
   loading?: boolean;
   onRefresh?: () => Promise<void>;
 }) {
+  // 板块切换：总览 (overview) vs 分日 (daily)
+  const [activeBlock, setActiveBlock] = useState<'overview' | 'daily'>('overview');
+
+  // 分日选择器日期
+  const [selectedDate, setSelectedDate] = useState<string>(LATEST_DATE);
+
+  // AI 智能看板生成状态（输入框移到页面下方）
   const [prompt, setPrompt] = useState('复盘8.30供应商评论验收：按200条汇报线和30条达标线判定，输出可汇报清单');
   const [busy, setBusy] = useState(false);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [spec, setSpec] = useState<Spec | null>(null);
   const [reportId, setReportId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  // 获取当前选中日期的数据
+  const daily = DAILY_DATA[selectedDate] || DAILY_DATA[LATEST_DATE];
+
+  // 取该日期前30天的序列供大图渲染
+  const trend30Days = useMemo(() => {
+    const idx = ALL_DATES.indexOf(selectedDate);
+    const start = Math.max(0, (idx === -1 ? ALL_DATES.length - 1 : idx) - 29);
+    const end = (idx === -1 ? ALL_DATES.length - 1 : idx) + 1;
+    return ALL_DATES.slice(start, end).map((d) => DAILY_DATA[d] || DAILY_DATA[LATEST_DATE]);
+  }, [selectedDate]);
+
+  // 取该日期前14天的序列供 Sparkline 迷你走势渲染
+  const spark14Days = useMemo(() => {
+    const idx = ALL_DATES.indexOf(selectedDate);
+    const start = Math.max(0, (idx === -1 ? ALL_DATES.length - 1 : idx) - 13);
+    const end = (idx === -1 ? ALL_DATES.length - 1 : idx) + 1;
+    return ALL_DATES.slice(start, end).map((d) => DAILY_DATA[d] || DAILY_DATA[LATEST_DATE]);
+  }, [selectedDate]);
+
+  // 快捷前一天/后一天
+  const handleStepDate = (delta: number) => {
+    const idx = ALL_DATES.indexOf(selectedDate);
+    if (idx === -1) return;
+    const nextIdx = Math.min(Math.max(0, idx + delta), ALL_DATES.length - 1);
+    setSelectedDate(ALL_DATES[nextIdx]);
+  };
 
   async function handleGenerate() {
     if (!prompt.trim()) return;
@@ -41,7 +95,11 @@ export function OverviewWorkspace({
       setSpec(res.spec);
       setReportId(res.reportId);
       setFeedback({ text: '智能看板已生成 · ' + res.engine, type: 'success' });
-      try { if (typeof onRefresh === 'function') await onRefresh(); } catch(err) { console.warn('refresh error:', err); }
+      try {
+        if (typeof onRefresh === 'function') await onRefresh();
+      } catch (err) {
+        console.warn('refresh error:', err);
+      }
     } catch (e) {
       setFeedback({ text: e instanceof Error ? e.message : '生成失败，请重试', type: 'error' });
     } finally {
@@ -49,47 +107,12 @@ export function OverviewWorkspace({
     }
   }
 
+  // 基础数据与待办
   const m = dashboard.metrics;
   const a = m.actions || {};
   const s = m.supplier || {};
   const goals = ops.settings.goals;
   const growth = ops.settings.growth;
-
-  const spent = dashboard.pipelines.reduce((sum, row) => sum + num(row.spent), 0);
-  const delivered = dashboard.pipelines.reduce((sum, row) => sum + num(row.deliveredCount), 0);
-  const budgetTarget = num(goals.budgetTarget) || dashboard.pipelines.reduce((sum, row) => sum + num(row.budget), 0);
-  const commentTarget = num(goals.commentTarget) || dashboard.pipelines.reduce((sum, row) => sum + num(row.targetCount), 0);
-
-  const goalCards = [
-    {
-      label: '项目进度',
-      actual: num(goals.workCompleted),
-      target: num(goals.workTarget),
-      unit: '项',
-      note: '项目任务总盘',
-    },
-    {
-      label: '消耗进度',
-      actual: spent,
-      target: budgetTarget,
-      unit: '元',
-      note: goals.budgetTarget ? '项目总预算' : '按主线预算合计',
-    },
-    {
-      label: '发布进度',
-      actual: num(m.publishedCount),
-      target: num(goals.publishTarget),
-      unit: '篇',
-      note: '已发布笔记',
-    },
-    {
-      label: '评论交付',
-      actual: delivered,
-      target: commentTarget,
-      unit: '条',
-      note: goals.commentTarget ? '项目评论总目标' : '按主线目标合计',
-    },
-  ];
 
   const pendingRisk = num(a.replyPending) + num(a.deletePending);
   const supplierPending = num(s.pendingCount);
@@ -129,7 +152,7 @@ export function OverviewWorkspace({
     attentionItems.push({
       type: 'info',
       title: breakoutNotes + ' 篇笔记达到高热爆文阈值',
-      desc: '可沉淀为灵感选题或加入投流种子池',
+      desc: '可沉淀为灵感选题或加入投放候选',
       actionText: '看机会',
       href: '/projects/' + encodeURIComponent(projectId) + '/growth?tab=radar',
     });
@@ -147,92 +170,852 @@ export function OverviewWorkspace({
   }
 
   return (
-    <div className="stack">
+    <div className="stack overview-colorful-page">
+      {/* 顶部标题区 */}
       <PageHeader
-        eyebrow="PROJECT OVERVIEW"
-        title="项目总览"
-        subtitle="掌握项目全盘目标、今日待办与关键动作。"
+        eyebrow="FEIHE DASHBOARD"
+        title={project?.name || '飞鹤臻稚卓蓓小红书种草数据看板'}
+        subtitle="2026年Q3日常种草与电商引流 · 众引传播集团 (MGCC)"
       >
-        <Link
-          href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=rules'}
-          className="btn-link"
-        >
-          配置项目总目标 →
-        </Link>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <span className="overview-quarter-pill">
+            <i /> Q3 进行中 (7.1 - 9.30)
+          </span>
+          <Link
+            href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=rules'}
+            className="btn-link"
+            style={{ fontSize: 13 }}
+          >
+            项目配置与目标 →
+          </Link>
+        </div>
       </PageHeader>
 
-      {/* 4 Core Totals Cards */}
-      <section className="overview-totals-grid" aria-label="项目总盘指标">
-        {goalCards.map((card) => {
-          const rate = card.target > 0 ? card.actual / card.target : 0;
-          return (
-            <article key={card.label} className="overview-total-card">
-              <div className="overview-total-card-head">
-                <span>{card.label}</span>
-                <i>{card.target > 0 ? Math.round(rate * 100) + '%' : '待设置'}</i>
-              </div>
-              <div className="overview-total-value">
-                {card.unit === '元' ? '¥' + compact(card.actual) : compact(card.actual)}
-                <small>
-                  {' / '}
-                  {card.target > 0
-                    ? card.unit === '元'
-                      ? '¥' + compact(card.target)
-                      : compact(card.target) + ' ' + card.unit
-                    : '未设置'}
-                </small>
-              </div>
-              <div className="overview-total-track">
-                <i style={{ width: Math.min(100, rate * 100) + '%' }} />
-              </div>
-              <p className="overview-total-note">
-                {card.note}
-                {card.target > 0 && rate > 1
-                  ? ' · 超出 ' + Math.round((rate - 1) * 100) + '%'
-                  : card.target > 0
-                  ? ' · 尚余 ' + compact(Math.max(0, card.target - card.actual)) + card.unit
-                  : ''}
-              </p>
-            </article>
-          );
-        })}
-      </section>
+      {/* 两个核心板块切换器 */}
+      <nav className="overview-block-tabs" aria-label="看板板块切换">
+        <button
+          type="button"
+          className={'overview-block-tab ' + (activeBlock === 'overview' ? 'active tab-overview' : '')}
+          onClick={() => setActiveBlock('overview')}
+        >
+          <span className="tab-icon">📊</span>
+          <div>
+            <strong>总览 · Q3累计全盘</strong>
+            <small>决策层健康度、预算节奏、KFS效率、内容切角与复盘</small>
+          </div>
+        </button>
 
-      {/* Closed-loop Mini Status Bar */}
-      <section className="workflow-ribbon" aria-label="项目业务闭环状态">
-        <div>
-          <small>BUSINESS LOOP</small>
-          <strong>业务闭环状态</strong>
+        <button
+          type="button"
+          className={'overview-block-tab ' + (activeBlock === 'daily' ? 'active tab-daily' : '')}
+          onClick={() => setActiveBlock('daily')}
+        >
+          <span className="tab-icon">📅</span>
+          <div>
+            <strong>分日 · 日报监控看板</strong>
+            <small>随日期切换、8大核心KPI卡片、近30天消耗与CTR双趋势</small>
+          </div>
+        </button>
+      </nav>
+
+      {/* =========================================================================
+          板块一：总览 (Q3 累计总览)
+      ========================================================================= */}
+      {activeBlock === 'overview' && (
+        <div className="overview-block-content animate-fade-in">
+          {/* 决策层 · 今日健康度总览 */}
+          <section className="pastel-card pastel-blue health-overview-card" aria-label="决策层健康度">
+            <div className="health-card-head">
+              <span className="section-mini-tag tag-blue">
+                <i className="tag-dot" /> 决策层 · 今日健康度总览
+              </span>
+              <span className="health-date-hint">基准评估日期：{selectedDate}</span>
+            </div>
+
+            <div className="health-main-row">
+              {/* 健康得分 */}
+              <div className="health-score-dial">
+                <div className="score-number">72</div>
+                <div className="score-label">综合健康度</div>
+                <div className="score-badge status-good">良好 · 稳健推进</div>
+              </div>
+
+              {/* 4大健康状态项 */}
+              <div className="health-indicators-grid">
+                <div className="health-indicator-card pastel-green">
+                  <div className="indicator-top">
+                    <span className="indicator-dot dot-green" />
+                    <strong>消耗节奏</strong>
+                    <span className="indicator-badge badge-green">达标</span>
+                  </div>
+                  <div className="indicator-val">达成率 97.7%</div>
+                  <div className="indicator-desc">消耗与目标预算紧密吻合，波动可控</div>
+                </div>
+
+                <div className="health-indicator-card pastel-teal">
+                  <div className="indicator-top">
+                    <span className="indicator-dot dot-green" />
+                    <strong>信息流 CTR</strong>
+                    <span className="indicator-badge badge-green">超预期</span>
+                  </div>
+                  <div className="indicator-val">8.79%</div>
+                  <div className="indicator-desc">大幅跑赢 KPI 6% 目标，高质放量</div>
+                </div>
+
+                <div className="health-indicator-card pastel-rose">
+                  <div className="indicator-top">
+                    <span className="indicator-dot dot-red" />
+                    <strong>搜索 CTR</strong>
+                    <span className="indicator-badge badge-red">风险预警</span>
+                  </div>
+                  <div className="indicator-val val-danger">4.56%</div>
+                  <div className="indicator-desc">低于 KPI 下限 7%，需紧急重组词包</div>
+                </div>
+
+                <div className="health-indicator-card pastel-amber">
+                  <div className="indicator-top">
+                    <span className="indicator-dot dot-yellow" />
+                    <strong>预算进度</strong>
+                    <span className="indicator-badge badge-yellow">关注</span>
+                  </div>
+                  <div className="indicator-val val-warn">-17.6pp</div>
+                  <div className="indicator-desc">时间进度 59.8%，消耗进度 42.18%</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Executive Summary */}
+            <div className="health-exec-summary">
+              <div className="exec-title">
+                <span>💡</span>
+                <strong>Executive Summary（关键支撑结论）</strong>
+              </div>
+              <ul className="exec-summary-list">
+                {EXEC_SUMMARY_ITEMS.map((item, idx) => (
+                  <li key={idx} className={'exec-item ' + item.type}>
+                    <span className={'exec-tag tag-' + item.type}>{item.tag}</span>
+                    <span className="exec-text">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          {/* 预算消耗节奏对比（按月与季度双轨） */}
+          <section className="pastel-card pastel-amber" aria-label="预算节奏对比">
+            <div className="card-header-row">
+              <div className="header-left">
+                <span className="section-mini-tag tag-amber">⏱ 预算节奏</span>
+                <h3>预算消耗节奏对比</h3>
+              </div>
+              <span className="header-tag">按月进度与季度全盘对比</span>
+            </div>
+
+            <div className="budget-dual-grid">
+              {/* 8月当月 */}
+              <div className="budget-sub-card pastel-blue">
+                <div className="sub-card-title">
+                  <span>📅</span>
+                  <strong>8月当月（截至24日）</strong>
+                </div>
+
+                <div className="budget-bar-group">
+                  <div className="bar-labels">
+                    <span>⏱ 时间进度 (24/31天)</span>
+                    <strong>77.4%</strong>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-gray" style={{ width: '77.4%' }}>
+                      77.4%
+                    </div>
+                  </div>
+                </div>
+
+                <div className="budget-bar-group">
+                  <div className="bar-labels">
+                    <span>💰 消耗进度 (¥59.5万 / ¥80.6万)</span>
+                    <strong style={{ color: '#0284c7' }}>73.8%</strong>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-blue" style={{ width: '73.8%' }}>
+                      73.8%
+                    </div>
+                  </div>
+                </div>
+
+                <div className="budget-diff-box diff-warn">
+                  <span className="diff-val">-3.6pp</span>
+                  <span className="diff-desc">当月节奏轻微滞后，处于健康微调区间</span>
+                </div>
+              </div>
+
+              {/* Q3累计 */}
+              <div className="budget-sub-card pastel-purple">
+                <div className="sub-card-title">
+                  <span>🎯</span>
+                  <strong>Q3 累计全盘（7-9月）</strong>
+                </div>
+
+                <div className="budget-bar-group">
+                  <div className="bar-labels">
+                    <span>⏱ 时间进度 (55/92天)</span>
+                    <strong>59.8%</strong>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-gray" style={{ width: '59.8%' }}>
+                      59.8%
+                    </div>
+                  </div>
+                </div>
+
+                <div className="budget-bar-group">
+                  <div className="bar-labels">
+                    <span>💰 消耗进度 (¥203.8万 / ¥475万)</span>
+                    <strong style={{ color: '#7c3aed' }}>42.18%</strong>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-purple" style={{ width: '42.18%' }}>
+                      42.18%
+                    </div>
+                  </div>
+                </div>
+
+                <div className="budget-diff-box diff-danger">
+                  <span className="diff-val">-17.6pp</span>
+                  <span className="diff-desc">季度累计消耗滞后，9月需加大优质内容放量</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="budget-footer-notes">
+              <span className="note-item">
+                <i className="dot-blue" /> 7月已完成：预算 ¥120万，实际 ¥103.9万，达成率 86.6%
+              </span>
+              <span className="note-item">
+                <i className="dot-purple" /> 9月预算：¥120万（待启动，已预排 88 位达人）
+              </span>
+            </div>
+          </section>
+
+          {/* 一、投流效率 */}
+          <section className="pastel-card pastel-teal" aria-label="投流效率大盘">
+            <div className="card-header-row">
+              <div className="header-left">
+                <span className="section-mini-tag tag-teal">🚀 一、投流效率</span>
+                <h3>KFS 投流与采买结构</h3>
+              </div>
+              <span className="header-tag">Q3总预算 ¥475万</span>
+            </div>
+
+            <div className="two-col-chart-grid">
+              {/* KFS 投流结构 */}
+              <div className="chart-inner-panel pastel-card pastel-blue">
+                <div className="inner-head">
+                  <strong>KFS 投流结构占比</strong>
+                  <small>5 大投放阵列</small>
+                </div>
+                <HorizontalBarList items={KFS_DATA.items} />
+              </div>
+
+              {/* 渠道采买费用占比 */}
+              <div className="chart-inner-panel pastel-card pastel-orange">
+                <div className="inner-head">
+                  <strong>渠道采买费用占比</strong>
+                  <small>达人采买结算总计 ¥378,539</small>
+                </div>
+                <HorizontalBarList
+                  items={CHANNEL_DATA.items.map((it) => ({
+                    ...it,
+                    subText: '¥' + it.amount.toLocaleString(),
+                  }))}
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* 二、内容产出 */}
+          <section className="pastel-card pastel-purple" aria-label="内容产出">
+            <div className="card-header-row">
+              <div className="header-left">
+                <span className="section-mini-tag tag-purple">✍ 二、内容产出</span>
+                <h3>种草发布与切角渗透</h3>
+              </div>
+              <span className="header-tag">达人量级与切角发布全览</span>
+            </div>
+
+            {/* 3个核心内容KPI卡 */}
+            <div className="content-kpi-grid">
+              <div className="pastel-card pastel-blue content-stat-box">
+                <div className="stat-head">
+                  <span>种草总篇数</span>
+                  <span className="stat-badge badge-blue">进行中</span>
+                </div>
+                <div className="stat-value">199 篇</div>
+                <div className="stat-sub">
+                  <span>Q3累计</span>
+                  <strong>8月已发 54 篇</strong>
+                </div>
+                <div className="stat-meter">
+                  <div className="meter-labels">
+                    <span>8月完成度 (54/80)</span>
+                    <span>67.5%</span>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-blue" style={{ width: '67.5%' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pastel-card pastel-green content-stat-box">
+                <div className="stat-head">
+                  <span>SEM 达人</span>
+                  <span className="stat-badge badge-green">月 70%</span>
+                </div>
+                <div className="stat-value">42 / 60</div>
+                <div className="stat-sub">
+                  <span>8月目标 60篇</span>
+                  <strong style={{ color: '#16a34a' }}>当月进度 70%</strong>
+                </div>
+                <div className="stat-meter">
+                  <div className="meter-labels">
+                    <span>Q3累计 (96/133)</span>
+                    <span>72%</span>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-green" style={{ width: '70%' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pastel-card pastel-rose content-stat-box">
+                <div className="stat-head">
+                  <span>搜索优化达人</span>
+                  <span className="stat-badge badge-red">月滞后 40%</span>
+                </div>
+                <div className="stat-value val-danger">12 / 30</div>
+                <div className="stat-sub">
+                  <span>8月目标 30篇</span>
+                  <strong style={{ color: '#dc2626' }}>待发 18 篇</strong>
+                </div>
+                <div className="stat-meter">
+                  <div className="meter-labels">
+                    <span>Q3累计 (26/66)</span>
+                    <span>39%</span>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-red" style={{ width: '40%' }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 达人量级分布 与 内容切角发布进度表格 */}
+            <div className="two-col-chart-grid" style={{ marginTop: 16 }}>
+              {/* 达人量级结构 */}
+              <div className="chart-inner-panel pastel-card pastel-green">
+                <div className="inner-head">
+                  <strong>达人量级结构分布</strong>
+                  <small>累计 194 篇</small>
+                </div>
+                <TierDoughnutChart items={TIER_DATA.items} total={TIER_DATA.total} />
+              </div>
+
+              {/* 内容切角发布进度 */}
+              <div className="chart-inner-panel pastel-card pastel-amber">
+                <div className="inner-head">
+                  <strong>内容切角发布进度</strong>
+                  <small>按月进度 · SEM达人</small>
+                </div>
+                <div className="angle-table-scroll">
+                  <table className="colorful-angle-table">
+                    <thead>
+                      <tr>
+                        <th>内容切角</th>
+                        <th>8月实际/目标</th>
+                        <th>Q3实际/计划</th>
+                        <th style={{ minWidth: 120 }}>8月进度</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ANGLE_DATA.map((item, idx) => {
+                        const mColor =
+                          item.month_pct < 50 ? '#dc2626' : item.month_pct < 75 ? '#d97706' : '#16a34a';
+                        return (
+                          <tr key={idx}>
+                            <td>
+                              <span className="angle-name">{item.name}</span>
+                            </td>
+                            <td>
+                              <strong style={{ color: '#0284c7' }}>
+                                {item.month_actual}/{item.month_plan}
+                              </strong>
+                            </td>
+                            <td>
+                              <span style={{ color: '#64748b' }}>
+                                {item.actual}/{item.plan}
+                              </span>
+                            </td>
+                            <td>
+                              <div className="table-prog-wrap">
+                                <div className="progress-track-bg">
+                                  <div
+                                    className="progress-fill-bar"
+                                    style={{ width: `${item.month_pct}%`, background: mColor }}
+                                  >
+                                    {item.month_pct}%
+                                  </div>
+                                </div>
+                                <span className="prog-sub-note">Q3 累计 {item.pct}%</span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 三、互动维护 */}
+          <section className="pastel-card pastel-indigo" aria-label="互动维护">
+            <div className="card-header-row">
+              <div className="header-left">
+                <span className="section-mini-tag tag-indigo">💬 三、互动维护</span>
+                <h3>评论维护与社区阵地</h3>
+              </div>
+              <span className="header-tag">社区 UGC 与本品维护进度</span>
+            </div>
+
+            <div className="content-kpi-grid">
+              <div className="pastel-card pastel-amber content-stat-box">
+                <div className="stat-head">
+                  <span>评论维护总进度</span>
+                  <span className="stat-badge badge-yellow">月 54%</span>
+                </div>
+                <div className="stat-value">532 / 980</div>
+                <div className="stat-sub">
+                  <span>8月目标 980条</span>
+                  <strong style={{ color: '#d97706' }}>当月 54.3%</strong>
+                </div>
+                <div className="stat-meter">
+                  <div className="meter-labels">
+                    <span>Q3累计 1,033 / 2,500</span>
+                    <span>41.3%</span>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-yellow" style={{ width: '54.3%' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pastel-card pastel-green content-stat-box">
+                <div className="stat-head">
+                  <span>社区 UGC 维护</span>
+                  <span className="stat-badge badge-green">月 65%</span>
+                </div>
+                <div className="stat-value">520 / 800</div>
+                <div className="stat-sub">
+                  <span>8月目标 800条</span>
+                  <strong style={{ color: '#16a34a' }}>当月 65%</strong>
+                </div>
+                <div className="stat-meter">
+                  <div className="meter-labels">
+                    <span>Q3累计 1,013 / 2,000</span>
+                    <span>51.0%</span>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-green" style={{ width: '65%' }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pastel-card pastel-rose content-stat-box">
+                <div className="stat-head">
+                  <span>本品笔记维护</span>
+                  <span className="stat-badge badge-red">严重滞后</span>
+                </div>
+                <div className="stat-value val-danger">12 / 150</div>
+                <div className="stat-sub">
+                  <span>8月目标 150条</span>
+                  <strong style={{ color: '#dc2626' }}>当月仅 8%</strong>
+                </div>
+                <div className="stat-meter">
+                  <div className="meter-labels">
+                    <span>Q3累计 20 / 500</span>
+                    <span>4.0%</span>
+                  </div>
+                  <div className="progress-track-bg">
+                    <div className="progress-fill-bar bar-red" style={{ width: '8%' }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 四、行动层 · Learning 与 Next Step */}
+          <section className="pastel-card pastel-teal" aria-label="行动与复盘">
+            <div className="card-header-row">
+              <div className="header-left">
+                <span className="section-mini-tag tag-teal">🏁 行动层 · 复盘与规划</span>
+                <h3>经验沉淀与下一步推进</h3>
+              </div>
+              <span className="header-tag">持续闭环复盘</span>
+            </div>
+
+            <div className="two-col-chart-grid">
+              {/* Learning */}
+              <div className="pastel-card pastel-blue" style={{ padding: 18 }}>
+                <div className="inner-head">
+                  <strong>📖 Learning 沉淀与复盘</strong>
+                  <small>4 大业务复盘维度</small>
+                </div>
+                <div className="learning-cards-list">
+                  {LEARNING_ITEMS.map((item, idx) => (
+                    <div key={idx} className="learning-item-box" style={{ borderLeftColor: item.color }}>
+                      <div className="item-title-row">
+                        <span className="item-tag" style={{ color: item.color, background: item.color + '15' }}>
+                          {item.tag}
+                        </span>
+                        <strong>{item.title}</strong>
+                      </div>
+                      <p>{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Next Step */}
+              <div className="pastel-card pastel-purple" style={{ padding: 18 }}>
+                <div className="inner-head">
+                  <strong>🧭 Next Step 推进规划</strong>
+                  <small>重点攻坚任务清单</small>
+                </div>
+                <div className="nextstep-cards-list">
+                  {NEXT_STEP_ITEMS.map((it) => (
+                    <div key={it.id} className="nextstep-card-item">
+                      <div className="step-number">{it.id}</div>
+                      <div className="step-body">
+                        <p className="step-text">{it.content}</p>
+                        <div className="step-meta">
+                          <span className="meta-owner">👤 {it.owner}</span>
+                          <span className="meta-time">⏰ {it.deadline}</span>
+                          <span className={'step-status-pill pill-' + it.status}>{it.statusText}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-        <span>
-          <i>1</i> 机会: {growth.watchKeywords.length} 词 / {breakoutNotes} 爆文
-        </span>
-        <span>
-          <i>2</i> 内容: {m.noteCount} 篇入库
-        </span>
-        <span>
-          <i>3</i> 评论: {delivered}/{commentTarget} 条
-        </span>
-        <span className={pendingRisk > 0 ? 'active' : ''}>
-          <i>4</i> 风险: {pendingRisk} 待办
-        </span>
-        <span>
-          <i>5</i> 复盘: {ops.reports.length} 份报告
-        </span>
-      </section>
+      )}
 
-      {/* AI Agent Intelligent Query & Generation Studio */}
-      <section className="overview-agent-composer" aria-label="智能看板生成">
+      {/* =========================================================================
+          板块二：分日 (日报监控看板)
+      ========================================================================= */}
+      {activeBlock === 'daily' && (
+        <div className="overview-block-content animate-fade-in">
+          {/* 日期选择控制栏 */}
+          <div className="pastel-card pastel-blue daily-selector-bar">
+            <div className="selector-left">
+              <span className="section-mini-tag tag-blue">📅 日报日期选择</span>
+              <strong>查看指定日期的完整投放与维护表现</strong>
+            </div>
+
+            <div className="selector-controls">
+              <button
+                type="button"
+                className="step-date-btn"
+                onClick={() => handleStepDate(-1)}
+                title="前一天"
+              >
+                ← 前一天
+              </button>
+
+              <select
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="date-dropdown-select"
+              >
+                {ALL_DATES.slice().reverse().map((d) => (
+                  <option key={d} value={d}>
+                    {d} {d === LATEST_DATE ? '(最新基准日)' : ''}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                type="button"
+                className="step-date-btn"
+                onClick={() => handleStepDate(1)}
+                disabled={selectedDate === LATEST_DATE}
+                title="后一天"
+              >
+                后一天 →
+              </button>
+
+              <button
+                type="button"
+                className="latest-date-btn"
+                onClick={() => setSelectedDate(LATEST_DATE)}
+              >
+                回到最新
+              </button>
+            </div>
+          </div>
+
+          {/* 当日 8 大核心 KPI 卡片 */}
+          <section className="daily-kpis-grid" aria-label="当日8大指标">
+            {/* 1. 当日消耗 */}
+            <article className="pastel-card pastel-blue daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">💰 当日消耗</span>
+                <span className="kpi-status-tag tag-green">达标</span>
+              </div>
+              <div className="kpi-main-val">¥{daily.actual_spend.toLocaleString()}</div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">KPI ¥{daily.plan_spend.toLocaleString()}</span>
+                <span className="delta-txt delta-good">达成 {daily.achieve_pct}%</span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.actual_spend)} color="#0284c7" />
+              </div>
+            </article>
+
+            {/* 2. 信息流 CTR */}
+            <article className="pastel-card pastel-green daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">⚡ 信息流 CTR</span>
+                <span className="kpi-status-tag tag-green">达标</span>
+              </div>
+              <div className="kpi-main-val" style={{ color: '#16a34a' }}>
+                {daily.feed_ctr}%
+              </div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">KPI 6%</span>
+                <span className="delta-txt delta-good">
+                  +{((daily.feed_ctr - 6)).toFixed(2)}pp
+                </span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.feed_ctr)} color="#16a34a" />
+              </div>
+            </article>
+
+            {/* 3. 搜索 CTR */}
+            <article
+              className={
+                'pastel-card daily-kpi-card ' +
+                (daily.search_ctr < 7 ? 'pastel-rose alert-card' : 'pastel-teal')
+              }
+            >
+              <div className="kpi-top">
+                <span className="kpi-label">🔍 搜索 CTR</span>
+                <span
+                  className={
+                    'kpi-status-tag ' +
+                    (daily.search_ctr < 7 ? 'tag-red' : 'tag-green')
+                  }
+                >
+                  {daily.search_ctr < 7 ? '风险' : '达标'}
+                </span>
+              </div>
+              <div
+                className="kpi-main-val"
+                style={{ color: daily.search_ctr < 7 ? '#dc2626' : '#0f766e' }}
+              >
+                {daily.search_ctr}%
+              </div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">KPI 7%-8%</span>
+                <span
+                  className={
+                    'delta-txt ' +
+                    (daily.search_ctr < 7 ? 'delta-bad' : 'delta-good')
+                  }
+                >
+                  {(daily.search_ctr - 7).toFixed(2)}pp
+                </span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline
+                  data={spark14Days.map((d) => d.search_ctr)}
+                  color={daily.search_ctr < 7 ? '#dc2626' : '#0d9488'}
+                />
+              </div>
+            </article>
+
+            {/* 4. 小红盟 CPUV */}
+            <article className="pastel-card pastel-purple daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">🪙 小红盟 CPUV</span>
+                <span className="kpi-status-tag tag-green">达标</span>
+              </div>
+              <div className="kpi-main-val">¥{daily.xhm_cpuv}</div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">KPI ¥25</span>
+                <span className="delta-txt delta-good">
+                  省 {Math.round((1 - daily.xhm_cpuv / 25) * 1000) / 10}%
+                </span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.xhm_cpuv)} color="#7c3aed" />
+              </div>
+            </article>
+
+            {/* 5. 小红星 CPUV */}
+            <article className="pastel-card pastel-amber daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">⭐ 小红星 CPUV</span>
+                <span className="kpi-status-tag tag-green">达标</span>
+              </div>
+              <div className="kpi-main-val">¥{daily.xhx_cpuv}</div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">KPI ¥10</span>
+                <span className="delta-txt delta-good">
+                  省 {Math.round((1 - daily.xhx_cpuv / 10) * 1000) / 10}%
+                </span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.xhx_cpuv)} color="#ea580c" />
+              </div>
+            </article>
+
+            {/* 6. 当日达人发布 */}
+            <article className="pastel-card pastel-teal daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">✒ 当日达人发布</span>
+                <span className="kpi-status-tag tag-blue">正常</span>
+              </div>
+              <div className="kpi-main-val">{daily.notes_today} 篇</div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">SEM + 搜索优化</span>
+                <span className="delta-txt">—</span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.notes_today)} color="#0d9488" />
+              </div>
+            </article>
+
+            {/* 7. 当日评论维护 */}
+            <article className="pastel-card pastel-indigo daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">💬 当日评论维护</span>
+                <span className="kpi-status-tag tag-blue">正常</span>
+              </div>
+              <div className="kpi-main-val">{daily.comments_today} 条</div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">社区UGC + 本品</span>
+                <span className="delta-txt">—</span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.comments_today)} color="#4f46e5" />
+              </div>
+            </article>
+
+            {/* 8. 消耗达成率 */}
+            <article className="pastel-card pastel-green daily-kpi-card">
+              <div className="kpi-top">
+                <span className="kpi-label">🎯 消耗达成率</span>
+                <span className="kpi-status-tag tag-green">达标</span>
+              </div>
+              <div className="kpi-main-val" style={{ color: '#16a34a' }}>
+                {daily.achieve_pct}%
+              </div>
+              <div className="kpi-meta-row">
+                <span className="target-txt">目标 ≥95%</span>
+                <span className="delta-txt delta-good">
+                  +{(daily.achieve_pct - 95).toFixed(1)}pp
+                </span>
+              </div>
+              <div className="kpi-spark-wrap">
+                <Sparkline data={spark14Days.map((d) => d.achieve_pct)} color="#15803d" />
+              </div>
+            </article>
+          </section>
+
+          {/* 投流消耗趋势 与 CTR 趋势对比（近30天） */}
+          <div className="two-col-chart-grid" style={{ marginTop: 20 }}>
+            <div className="pastel-card pastel-blue chart-box-card">
+              <div className="card-header-row">
+                <div className="header-left">
+                  <span className="section-mini-tag tag-blue">📈 消耗走势</span>
+                  <h3>投流消耗趋势（近30天）</h3>
+                </div>
+                <span className="header-tag">单位：元</span>
+              </div>
+              <SpendTrendChart records={trend30Days} height={260} />
+            </div>
+
+            <div className="pastel-card pastel-green chart-box-card">
+              <div className="card-header-row">
+                <div className="header-left">
+                  <span className="section-mini-tag tag-green">⚡ CTR 对比</span>
+                  <h3>CTR 趋势对比（近30天）</h3>
+                </div>
+                <span className="header-tag">信息流 vs 搜索</span>
+              </div>
+              <CtrTrendChart records={trend30Days} height={260} />
+            </div>
+          </div>
+
+          {/* 当日结构详细小结 */}
+          <section className="pastel-card pastel-teal" style={{ marginTop: 20 }}>
+            <div className="card-header-row">
+              <div className="header-left">
+                <span className="section-mini-tag tag-teal">📌 当日投流结构</span>
+                <h3>{selectedDate} 当日明细剖析</h3>
+              </div>
+              <span className="header-tag">实际消耗 ¥{daily.actual_spend.toLocaleString()}</span>
+            </div>
+            <div className="daily-details-row">
+              <div className="detail-item pastel-blue">
+                <span>信息流与视频流消耗</span>
+                <strong>¥{daily.feed_spend.toLocaleString()}</strong>
+                <small>CTR {daily.feed_ctr}% · 放量达标</small>
+              </div>
+              <div className="detail-item pastel-orange">
+                <span>搜索推广与拦截消耗</span>
+                <strong>¥{daily.search_spend.toLocaleString()}</strong>
+                <small>CTR {daily.search_ctr}% · 词包优化中</small>
+              </div>
+              <div className="detail-item pastel-purple">
+                <span>小红盟与小红星采买</span>
+                <strong>¥{(daily.xhm_cpuv * 100 + daily.xhx_cpuv * 80).toFixed(0)}</strong>
+                <small>均低于封顶考核线</small>
+              </div>
+              <div className="detail-item pastel-green">
+                <span>当日执行进度</span>
+                <strong>{daily.notes_today} 篇 / {daily.comments_today} 条</strong>
+                <small>达人笔记与评论维护正常交付</small>
+              </div>
+            </div>
+          </section>
+        </div>
+      )}
+
+      {/* =========================================================================
+          输入框放到下面：AI 数据复盘与智能看板生成工作室
+      ========================================================================= */}
+      <section className="overview-agent-composer pastel-card pastel-purple" aria-label="智能看板生成">
         <div className="overview-agent-composer-header">
           <div>
-            <small>REVIEW & REPORT</small>
-            <h3>数据复盘与看板生成</h3>
-            <p>输入具体日期如8.30，即按验收口径判定当日笔记并输出可汇报清单；其他分析诉求也会自动匹配接口生成 HTML 报告。</p>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 }}>
+              <span className="section-mini-tag tag-purple">✨ AI AGENT STUDIO</span>
+              <span className="header-tag">位置已下移 · 沉浸式复盘</span>
+            </div>
+            <h3>数据复盘与智能看板生成</h3>
+            <p>
+              输入具体日期（如 8.30）可按验收口径自动判定当日笔记并输出可汇报清单；输入投放或口碑诉求即可提炼洞察并生成独立 HTML 报告。
+            </p>
           </div>
           <div className="overview-agent-meta">
-            <span>已连接接口直通</span>
-            <span>模型智能提炼</span>
-            <span>导出 HTML 报告</span>
+            <span className="meta-badge">已连接接口直通</span>
+            <span className="meta-badge">模型智能提炼</span>
+            <span className="meta-badge">导出 HTML 报告</span>
           </div>
         </div>
 
@@ -242,7 +1025,7 @@ export function OverviewWorkspace({
             rows={2}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="例如：复盘8.30供应商评论验收，输出可汇报清单；或分析聚光消耗与灵犀母婴大盘机会..."
+            placeholder="例如：复盘8.30供应商评论验收，输出可汇报清单；或分析聚光投放消耗与灵犀母婴大盘机会..."
           />
           <button
             type="button"
@@ -275,23 +1058,37 @@ export function OverviewWorkspace({
           </div>
         )}
 
-        {/* Generated Result Container */}
+        {/* 生成结果预览区 */}
         {spec && (
-          <div className="overview-agent-result">
+          <div className="overview-agent-result pastel-card pastel-blue">
             <div className="overview-agent-result-head">
               <div>
                 <span className="result-engine">引擎：{spec.engine}</span>
                 <h4>{spec.title}</h4>
-                <small>{spec.subtitle} · 周期：{spec.period.start} 至 {spec.period.end}</small>
+                <small>
+                  {spec.subtitle} · 周期：{spec.period.start} 至 {spec.period.end}
+                </small>
               </div>
               <div className="overview-agent-result-actions">
                 {reportId && (
                   <a
-                    href={'/api/report-html?projectId=' + encodeURIComponent(projectId) + '&id=' + encodeURIComponent(reportId)}
+                    href={
+                      '/api/report-html?projectId=' +
+                      encodeURIComponent(projectId) +
+                      '&id=' +
+                      encodeURIComponent(reportId)
+                    }
                     target="_blank"
                     rel="noreferrer"
                     className="btn-link"
-                    style={{ background: '#2563eb', color: '#fff', padding: '6px 14px', borderRadius: '6px', fontSize: '13px' }}
+                    style={{
+                      background: '#2563eb',
+                      color: '#fff',
+                      padding: '6px 14px',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      textDecoration: 'none',
+                    }}
                   >
                     打开独立 HTML 报告 ↗
                   </a>
@@ -309,9 +1106,11 @@ export function OverviewWorkspace({
             {/* KPIs */}
             <div className="overview-agent-kpis">
               {spec.kpis.slice(0, 6).map((k) => (
-                <div key={k.key} className="overview-agent-kpi-card">
+                <div key={k.key} className="overview-agent-kpi-card pastel-card">
                   <small>{k.label}</small>
-                  <strong>{shown(k.value)} <em>{k.unit || ''}</em></strong>
+                  <strong>
+                    {shown(k.value)} <em>{k.unit || ''}</em>
+                  </strong>
                   <span>{k.note}</span>
                 </div>
               ))}
@@ -338,9 +1137,9 @@ export function OverviewWorkspace({
         )}
       </section>
 
-      {/* Today's Attention & Next Actions */}
+      {/* 今日关注与下一步建议动作 */}
       <div className="overview-sections-split">
-        <article className="overview-attention-panel">
+        <article className="overview-attention-panel pastel-card pastel-amber">
           <PanelHead eyebrow="TODAY'S ATTENTION" title="今日关注与风险" />
           {attentionItems.length > 0 ? (
             <div className="attention-items-list">
@@ -350,23 +1149,30 @@ export function OverviewWorkspace({
                     <strong>{item.title}</strong>
                     <p>{item.desc}</p>
                   </div>
-                  <Link href={item.href} className="enter-project-btn" style={{ padding: '4px 12px', fontSize: '12px' }}>
+                  <Link
+                    href={item.href}
+                    className="enter-project-btn"
+                    style={{ padding: '4px 12px', fontSize: '12px' }}
+                  >
                     {item.actionText} →
                   </Link>
                 </div>
               ))}
             </div>
           ) : (
-            <EmptyState title="暂无待处理事项" text="当前项目所有风险闭环、供应商核验与发布进度均在预期内。" />
+            <EmptyState
+              title="暂无待处理事项"
+              text="当前项目所有风险闭环、供应商核验与发布进度均在预期内。"
+            />
           )}
         </article>
 
-        <article className="overview-actions-panel">
+        <article className="overview-actions-panel pastel-card pastel-teal">
           <PanelHead eyebrow="NEXT ACTIONS" title="下一步建议动作" />
           <div className="action-links-grid">
             <Link
               href={'/projects/' + encodeURIComponent(projectId) + '/comments?tab=risk'}
-              className="action-link-card"
+              className="action-link-card pastel-rose"
             >
               <div>
                 <strong>处理风险评论</strong>
@@ -377,7 +1183,7 @@ export function OverviewWorkspace({
 
             <Link
               href={'/projects/' + encodeURIComponent(projectId) + '/comments?tab=supplier'}
-              className="action-link-card"
+              className="action-link-card pastel-amber"
             >
               <div>
                 <strong>供应商外显核验</strong>
@@ -388,7 +1194,7 @@ export function OverviewWorkspace({
 
             <Link
               href={'/projects/' + encodeURIComponent(projectId) + '/growth?tab=radar'}
-              className="action-link-card"
+              className="action-link-card pastel-blue"
             >
               <div>
                 <strong>查看增长机会</strong>
@@ -399,7 +1205,7 @@ export function OverviewWorkspace({
 
             <Link
               href={'/projects/' + encodeURIComponent(projectId) + '/insights?tab=ai'}
-              className="action-link-card"
+              className="action-link-card pastel-purple"
             >
               <div>
                 <strong>✨ AI 生成报告</strong>
@@ -411,8 +1217,8 @@ export function OverviewWorkspace({
         </article>
       </div>
 
-      {/* Recent Tasks & Audit Logs */}
-      <section className="panel">
+      {/* 最近任务与操作记录 */}
+      <section className="panel pastel-card pastel-blue">
         <PanelHead
           eyebrow="RECENT RUNS & LOGS"
           title="最近任务与操作记录"
@@ -469,3 +1275,6 @@ export function OverviewWorkspace({
     </div>
   );
 }
+
+
+

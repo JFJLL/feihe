@@ -5,7 +5,6 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { SectionTabs } from '../../components/ui/SectionTabs';
 import { KeywordRadar } from './KeywordRadar';
 import { InspirationLibrary } from './InspirationLibrary';
-import { SeedEngine } from './SeedEngine';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import { useProject } from '../../components/project-shell/ProjectContext';
@@ -22,7 +21,7 @@ export function GrowthWorkspace({
   ops: Ops;
   onRefresh: () => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('radar', ['radar', 'inspiration', 'seed']);
+  const [tab, setTab] = useProjectTab('radar', ['radar', 'inspiration']);
   const { showToast } = useProject();
   const { openNote, renderDrawer } = useNoteDetail({
     projectId,
@@ -48,7 +47,6 @@ export function GrowthWorkspace({
   const tabs: Array<[string, string, string]> = [
     ['radar', '机会雷达', '关键词与高热笔记（支持灵犀大盘）'],
     ['inspiration', '灵感选题', '高热样本沉淀与选题流转'],
-    ['seed', '种子池', '种子筛选与投流候选验证'],
   ];
 
   return (
@@ -97,17 +95,8 @@ export function GrowthWorkspace({
         />
       )}
 
-      {tab === 'seed' && (
-        <SeedEngine
-          data={dashboard}
-          growth={growth}
-          save={saveGrowth}
-          openNote={openNote}
-          projectId={projectId}
-        />
-      )}
-
       {renderDrawer()}
     </div>
   );
 }
+
