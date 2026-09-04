@@ -1,24 +1,38 @@
-﻿'use client';
+'use client';
 
 import { useSearchParams, usePathname } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 export function useProjectTab(defaultTab: string, allowedTabs: string[]): [string, (tab: string) => void] {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
   const rawTab = searchParams.get('tab');
-  const activeTab = rawTab && allowedTabs.includes(rawTab) ? rawTab : defaultTab;
+  const initialTab = rawTab && allowedTabs.includes(rawTab) ? rawTab : defaultTab;
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // Sync state if URL query changes externally (e.g. browser back/forward)
+  useEffect(() => {
+    if (rawTab && allowedTabs.includes(rawTab) && rawTab !== activeTab) {
+      setActiveTab(rawTab);
+    }
+  }, [rawTab, allowedTabs, activeTab]);
 
   const setTab = useCallback(
     (nextTab: string) => {
       if (nextTab === activeTab) return;
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('tab', nextTab);
-      window.location.assign(pathname + '?' + params.toString());
+      setActiveTab(nextTab);
+      try {
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', nextTab);
+        window.history.replaceState(null, '', pathname + '?' + params.toString());
+      } catch {
+        // Fallback
+      }
     },
-    [activeTab, searchParams, pathname]
+    [activeTab, pathname]
   );
 
   return [activeTab, setTab];
 }
+
