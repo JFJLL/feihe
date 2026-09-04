@@ -3923,3 +3923,327 @@ button.primary:disabled {
   color: #ffffff;
 }
 
+
+
+/* ==========================================================================
+   High-Contrast Crisp Pastel Theme (Matching Reference HTML)
+   ========================================================================== */
+
+.overview-colorful-page {
+  gap: 20px;
+}
+
+/* Section Mini Tags */
+.section-mini-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+.tag-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+.tag-green { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.tag-amber { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+.tag-purple { background: #ede9fe; color: #6d28d9; border: 1px solid #c4b5fd; }
+.tag-rose { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.tag-teal { background: #ccfbf1; color: #0f766e; border: 1px solid #5eead4; }
+.tag-indigo { background: #e0e7ff; color: #4338ca; border: 1px solid #a5b4fc; }
+
+/* 决策层健康度卡片 - 高对比度清晰视觉 */
+.health-overview-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  padding: 22px !important;
+}
+
+.health-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.health-date-hint {
+  font-size: 12.5px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.health-main-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.health-score-dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  padding: 18px 16px;
+  background: #fffbeb;
+  border: 2px solid #fde68a;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+}
+.score-number {
+  font-size: 46px;
+  font-weight: 900;
+  line-height: 1;
+  color: #b45309 !important;
+}
+.score-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #78350f;
+  margin-top: 4px;
+}
+.score-badge {
+  margin-top: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+.score-badge.status-good {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.health-indicators-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.health-indicator-card {
+  padding: 14px 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+.health-indicator-card.pastel-green {
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+}
+.health-indicator-card.pastel-teal {
+  background: #f0fdfa !important;
+  border-color: #99f6e4 !important;
+}
+.health-indicator-card.pastel-rose {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+}
+.health-indicator-card.pastel-amber {
+  background: #fffbeb !important;
+  border-color: #fde68a !important;
+}
+
+.indicator-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.indicator-top strong {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  flex: 1;
+}
+
+.indicator-val {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+  margin-bottom: 4px;
+}
+.val-danger { color: #b91c1c !important; }
+.val-warn { color: #b45309 !important; }
+
+.indicator-desc {
+  font-size: 12px !important;
+  color: #334155 !important;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Executive Summary 高对比 */
+.health-exec-summary {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 16px 20px !important;
+  margin-top: 14px;
+}
+.exec-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 10px;
+}
+.exec-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px !important;
+  line-height: 1.55;
+  color: #1e293b !important;
+  padding: 6px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.exec-text {
+  color: #1e293b !important;
+  font-weight: 500;
+}
+.exec-tag {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+}
+.tag-success { background: #dcfce7 !important; color: #15803d !important; border: 1px solid #86efac; }
+.tag-danger { background: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fca5a5; }
+.tag-warn { background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fcd34d; }
+
+/* 预算节奏卡片高对比 */
+.budget-sub-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+.sub-card-title {
+  font-size: 14.5px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 14px;
+}
+.bar-labels {
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+  margin-bottom: 6px;
+}
+.progress-track-bg {
+  height: 22px !important;
+  background: #f1f5f9 !important;
+  border-radius: 11px !important;
+}
+.progress-fill-bar {
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+}
+.budget-diff-box {
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+}
+.diff-val {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
+.diff-desc {
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+.budget-footer-notes {
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+
+/* 分日 8 大核心 KPI 卡片高对比度 */
+.daily-kpi-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  padding: 18px !important;
+  border-radius: 14px !important;
+}
+.kpi-label {
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+}
+.kpi-main-val {
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  color: #0f172a !important;
+  margin-bottom: 6px;
+}
+.kpi-meta-row {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+.target-txt {
+  color: #64748b !important;
+}
+
+/* 内容切角表格高对比 */
+.colorful-angle-table {
+  font-size: 13px !important;
+}
+.colorful-angle-table th {
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  color: #334155 !important;
+  background: #f1f5f9 !important;
+  padding: 10px 12px !important;
+}
+.colorful-angle-table td {
+  padding: 11px 12px !important;
+  color: #0f172a !important;
+}
+.angle-name {
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+
+/* Learning & Next Step 高对比 */
+.learning-item-box {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 12px 14px !important;
+  border-left-width: 4px !important;
+}
+.learning-item-box strong {
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+.learning-item-box p {
+  font-size: 12.5px !important;
+  color: #334155 !important;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.nextstep-card-item {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 12px 14px !important;
+}
+.step-text {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+.step-meta {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+

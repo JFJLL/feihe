@@ -1,7 +1,6 @@
 'use client';
 
 import Link from '../ui/AppLink';
-import { usePathname } from 'next/navigation';
 import { PROJECT_NAV_ITEMS } from '../../lib/navigation/project-navigation';
 import { ProjectSwitcher } from './ProjectSwitcher';
 import { useProject } from './ProjectContext';
@@ -14,11 +13,15 @@ export function ProjectSidebar({
   userName: string;
   signedIn?: boolean;
 }) {
-  const pathname = usePathname();
-  const { projectId, projects, currentProject, loading, error } = useProject();
-
-  const match = pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
-  const activeSegment = match ? match[1] || '' : '';
+  const {
+    projectId,
+    projects,
+    currentProject,
+    loading,
+    error,
+    activeSection,
+    navigateTo,
+  } = useProject();
 
   const connectionStatus = error
     ? { text: '项目资料加载失败', ok: false }
@@ -53,21 +56,22 @@ export function ProjectSidebar({
             item.path === ''
               ? '/projects/' + encodeURIComponent(projectId)
               : '/projects/' + encodeURIComponent(projectId) + '/' + item.path;
-          const isActive =
-            item.path === ''
-              ? activeSegment === ''
-              : activeSegment === item.path;
+          const isActive = activeSection === item.path;
 
           return (
-            <Link
+            <a
               key={item.id}
               href={href}
               className={isActive ? 'active' : ''}
               aria-current={isActive ? 'page' : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo(href);
+              }}
             >
               <span className="nav-num">{item.number}</span>
               <span className="nav-label">{item.label}</span>
-            </Link>
+            </a>
           );
         })}
       </nav>
@@ -83,3 +87,4 @@ export function ProjectSidebar({
     </aside>
   );
 }
+

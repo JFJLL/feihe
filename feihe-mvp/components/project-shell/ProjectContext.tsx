@@ -1,8 +1,15 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useSyncExternalStore } from 'react';
-import type { Project, Source, Workspace } from '../../lib/types/project';
-import { api } from '../../lib/hooks/use-project-data';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useSyncExternalStore,
+} from 'react';
+import type { Project, Source, Workspace, Dashboard, Ops } from '../../lib/types/project';
+import { api, useProjectData } from '../../lib/hooks/use-project-data';
 import { readSessionCache, writeSessionCache } from '../../lib/browser-cache';
 
 export type ToastMessage = {
@@ -24,6 +31,15 @@ type ProjectContextType = {
   toasts: ToastMessage[];
   showToast: (text: string, type?: 'success' | 'error' | 'info') => void;
   removeToast: (id: string) => void;
+  // 高性能客户端单页导航与全盘数据共享
+  activeSection: string;
+  setActiveSection: (sec: string) => void;
+  navigateTo: (href: string) => void;
+  dashboard: Dashboard | null;
+  ops: Ops | null;
+  dataLoading: boolean;
+  dataError: string | null;
+  refreshData: () => Promise<void>;
 };
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
@@ -56,6 +72,65 @@ export function ProjectProvider({
   const [loading, setLoading] = useState(!cachedWorkspace && !initialWorkspace);
   const [error, setError] = useState<string | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  // 共享项目数据（一次加载，全盘秒级复用，消除各板块切换白屏）
+  const {
+    dashboard,
+    ops,
+    loading: dataLoading,
+    error: dataError,
+    refresh: refreshData,
+  } = useProjectData(projectId);
+
+  // 解析当前激活板块（'' 为总览，'growth' 为增长机会，等等）
+  const [activeSection, setActiveSection] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const match = window.location.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
+      return match ? match[1] || '' : '';
+    }
+    return '';
+  });
+
+  const navigateTo = useCallback((href: string) => {
+    if (typeof window === 'undefined') return;
+    try {
+      const targetUrl = new URL(href, window.location.origin);
+      const match = targetUrl.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
+      if (match) {
+        const nextSec = match[1] || '';
+        setActiveSection(nextSec);
+        window.history.pushState(null, '', href);
+        window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+        return;
+      }
+    } catch {
+      // 容错降级
+    }
+    window.location.href = href;
+  }, []);
+
+  // 监听浏览器前进/后退
+  useEffect(() => {
+    const handlePop = () => {
+      const match = window.location.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
+      setActiveSection(match ? match[1] || '' : '');
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, []);
+
+  // 监听应用内跨组件超链接广播
+  useEffect(() => {
+    const onAppNav = (e: Event) => {
+      const custom = e as CustomEvent<{ href: string }>;
+      if (custom.detail?.href) {
+        navigateTo(custom.detail.href);
+      }
+    };
+    window.addEventListener('app:navigate', onAppNav);
+    return () => window.removeEventListener('app:navigate', onAppNav);
+  }, [navigateTo]);
+
   const storedWorkspace = useSyncExternalStore(
     subscribeWorkspaceCache,
     restoredWorkspace,
@@ -119,6 +194,14 @@ export function ProjectProvider({
         toasts,
         showToast,
         removeToast,
+        activeSection,
+        setActiveSection,
+        navigateTo,
+        dashboard,
+        ops,
+        dataLoading,
+        dataError,
+        refreshData,
       }}
     >
       {children}
@@ -133,3 +216,4 @@ export function useProject() {
   }
   return ctx;
 }
+
