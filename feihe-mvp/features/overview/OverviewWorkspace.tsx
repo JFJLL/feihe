@@ -44,25 +44,31 @@ export function OverviewWorkspace({
 }) {
   // 板块切换：总览 (overview) vs 分日 (daily)
   const [activeBlock, setActiveBlock] = useState<'overview' | 'daily'>('overview');
-  const [syncingFeishu, setSyncingFeishu] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
   const [syncMsg, setSyncMsg] = useState<string | null>(null);
 
   async function handleSyncFeishu() {
-    setSyncingFeishu(true);
+    setSyncStatus('syncing');
     setSyncMsg(null);
     try {
       const res = await api<{ ok: boolean; message: string; latestDate?: string }>('/api/feishu/sync', {
         method: 'POST',
         body: JSON.stringify({ projectId, all: true }),
       });
-      setSyncMsg(res.message || '飞书在线数据同步完成！');
+      setSyncStatus('success');
+      setSyncMsg(res.message || '在线数据同步完成，看板数据已刷新！');
       if (typeof onRefresh === 'function') {
         await onRefresh();
       }
+      setTimeout(() => {
+        setSyncStatus('idle');
+      }, 5000);
     } catch (e) {
-      setSyncMsg(e instanceof Error ? e.message : '飞书数据拉取失败');
-    } finally {
-      setSyncingFeishu(false);
+      setSyncStatus('error');
+      setSyncMsg(e instanceof Error ? e.message : '数据拉取失败，请检查网络或权限');
+      setTimeout(() => {
+        setSyncStatus('idle');
+      }, 4000);
     }
   }
 
@@ -263,24 +269,52 @@ export function OverviewWorkspace({
             <button
               type="button"
               onClick={handleSyncFeishu}
-              disabled={syncingFeishu}
+              disabled={syncStatus === 'syncing'}
               className="btn-link"
               style={{
-                background: '#2563eb',
+                background:
+                  syncStatus === 'syncing'
+                    ? '#3b82f6'
+                    : syncStatus === 'success'
+                    ? '#16a34a'
+                    : syncStatus === 'error'
+                    ? '#dc2626'
+                    : '#2563eb',
                 color: '#ffffff',
                 padding: '6px 14px',
                 borderRadius: '8px',
                 fontSize: 13,
                 fontWeight: 600,
                 border: 'none',
-                cursor: syncingFeishu ? 'wait' : 'pointer',
+                cursor: syncStatus === 'syncing' ? 'wait' : 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6,
+                boxShadow:
+                  syncStatus === 'success'
+                    ? '0 0 0 3px rgba(22, 163, 74, 0.25)'
+                    : 'none',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
-              <span>{syncingFeishu ? '⟳' : '⚡'}</span>
-              <span>{syncingFeishu ? '正在同步最新数据…' : '同步最新数据'}</span>
+              <span
+                style={{
+                  display: 'inline-block',
+                  animation: syncStatus === 'syncing' ? 'spin 1s linear infinite' : 'none',
+                  fontSize: 14,
+                }}
+              >
+                {syncStatus === 'syncing' ? '⟳' : syncStatus === 'success' ? '✓' : syncStatus === 'error' ? '⚠' : '⚡'}
+              </span>
+              <span>
+                {syncStatus === 'syncing'
+                  ? '正在同步最新数据…'
+                  : syncStatus === 'success'
+                  ? '数据已同步（已更新）'
+                  : syncStatus === 'error'
+                  ? '同步失败，重试'
+                  : '同步最新数据'}
+              </span>
             </button>
             <Link
               href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=rules'}
@@ -1403,6 +1437,5 @@ export function OverviewWorkspace({
     </div>
   );
 }
-
 
 
