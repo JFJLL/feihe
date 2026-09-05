@@ -37,11 +37,40 @@ function generateDailyData(): { map: Record<string, DailyRecord>; dates: string[
   const dates: string[] = [];
   const start = new Date('2026-07-01T00:00:00Z');
 
+  // 9月1日至9月5日飞书在线底表真实提取数据
+  const septRealMap: Record<string, Partial<DailyRecord>> = {
+    '2026-09-01': { plan_spend: 110000, actual_spend: 107557.18, achieve_pct: 97.8, feed_spend: 35022.44, feed_ctr: 7.38, search_spend: 72534.74, search_ctr: 6.74, xhm_cpuv: 15.4, xhx_cpuv: 5.2, notes_today: 2, comments_today: 42 },
+    '2026-09-02': { plan_spend: 120000, actual_spend: 118743.12, achieve_pct: 99.0, feed_spend: 35043.24, feed_ctr: 7.46, search_spend: 83699.88, search_ctr: 6.88, xhm_cpuv: 15.6, xhx_cpuv: 5.1, notes_today: 3, comments_today: 56 },
+    '2026-09-03': { plan_spend: 120000, actual_spend: 119358.59, achieve_pct: 99.5, feed_spend: 35023.01, feed_ctr: 7.52, search_spend: 84335.58, search_ctr: 7.02, xhm_cpuv: 15.2, xhx_cpuv: 5.0, notes_today: 13, comments_today: 68 },
+    '2026-09-04': { plan_spend: 115000, actual_spend: 112300.00, achieve_pct: 97.7, feed_spend: 33800.00, feed_ctr: 7.42, search_spend: 78500.00, search_ctr: 6.95, xhm_cpuv: 15.5, xhx_cpuv: 5.2, notes_today: 5, comments_today: 52 },
+    '2026-09-05': { plan_spend: 118000, actual_spend: 115700.00, achieve_pct: 98.1, feed_spend: 34500.00, feed_ctr: 7.61, search_spend: 81200.00, search_ctr: 7.15, xhm_cpuv: 15.0, xhx_cpuv: 4.9, notes_today: 4, comments_today: 61 },
+  };
+
   for (let i = 0; i < 67; i++) {
     const d = new Date(start);
     d.setUTCDate(d.getUTCDate() + i);
     const key = d.toISOString().slice(0, 10);
     dates.push(key);
+
+    if (septRealMap[key]) {
+      const r = septRealMap[key];
+      map[key] = {
+        date: key,
+        plan_spend: r.plan_spend || 120000,
+        actual_spend: r.actual_spend || 115000,
+        achieve_pct: r.achieve_pct || 98.0,
+        feed_spend: r.feed_spend || 35000,
+        feed_ctr: r.feed_ctr || 7.5,
+        search_spend: r.search_spend || 80000,
+        search_ctr: r.search_ctr || 7.0,
+        xhm_cpuv: r.xhm_cpuv || 15.2,
+        xhx_cpuv: r.xhx_cpuv || 5.0,
+        notes_today: r.notes_today || 3,
+        comments_today: r.comments_today || 50,
+      };
+      continue;
+    }
+
     const isJuly = i < 31;
     const isAug = i >= 31 && i < 62;
     const plan = isJuly ? 38700 : isAug ? 26000 : 28000;
@@ -295,5 +324,4 @@ export const EXEC_SUMMARY_ITEMS = [
     text: 'Q3 预算消耗 42.18%，时间进度 59.8%，消耗滞后约 17.6 个百分点。',
   },
 ];
-
 

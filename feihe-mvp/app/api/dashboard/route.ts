@@ -16,11 +16,14 @@ const CACHE_TTL_MS = 10_000;
 // 确保在任何部署环境（即使未手工跑 Python 导入）也能自动补齐 61 天真实日度数据
 async function ensureDailyKpiSeeded(d1: ReturnType<typeof db>, project: string) {
   try {
-    const existing = await d1.prepare('SELECT COUNT(*) as count FROM daily_kpi_metrics WHERE project_id=?').bind(project).first<{ count: number }>();
-    if (existing && existing.count > 0) return;
+    const existingDates = await d1.prepare('SELECT date FROM daily_kpi_metrics WHERE project_id=?').bind(project).all<{ date: string }>();
+    const existingSet = new Set((existingDates.results || []).map((r) => r.date));
+
+    const missingDates = ALL_DATES.filter((d) => !existingSet.has(d));
+    if (!missingDates.length) return;
 
     const now = new Date().toISOString();
-    const stmts = ALL_DATES.map((dateKey) => {
+    const stmts = missingDates.map((dateKey) => {
       const d = DAILY_DATA[dateKey];
       return d1.prepare(`INSERT OR REPLACE INTO daily_kpi_metrics (
         id, project_id, date, plan_spend, actual_spend, achieve_pct,
