@@ -280,7 +280,7 @@ export function OverviewWorkspace({
               }}
             >
               <span>{syncingFeishu ? '⟳' : '⚡'}</span>
-              <span>{syncingFeishu ? '正在拉取飞书最新文档…' : '从飞书同步最新数据'}</span>
+              <span>{syncingFeishu ? '正在同步最新数据…' : '同步最新数据'}</span>
             </button>
             <Link
               href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=rules'}
@@ -1403,7 +1403,6 @@ export function OverviewWorkspace({
     </div>
   );
 }
-
 
 
 
