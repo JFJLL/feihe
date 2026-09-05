@@ -37,25 +37,32 @@ function generateDailyData(): { map: Record<string, DailyRecord>; dates: string[
   const dates: string[] = [];
   const start = new Date('2026-07-01T00:00:00Z');
 
-  for (let i = 0; i < 61; i++) {
+  for (let i = 0; i < 67; i++) {
     const d = new Date(start);
     d.setUTCDate(d.getUTCDate() + i);
     const key = d.toISOString().slice(0, 10);
     dates.push(key);
     const isJuly = i < 31;
-    const plan = isJuly ? 38700 : 26000;
-    const baseActual = isJuly ? 33100 + i * 30 : 24000 + (i - 31) * 55;
+    const isAug = i >= 31 && i < 62;
+    const plan = isJuly ? 38700 : isAug ? 26000 : 28000;
+    const baseActual = isJuly ? 33100 + i * 30 : isAug ? 24000 + (i - 31) * 55 : 27000 + (i - 62) * 80;
     const actual = Math.round(baseActual + Math.sin(i * 0.7) * 400);
     const achieve = Math.round((actual / plan) * 1000) / 10;
     const feedCTR = isJuly
       ? 8.25 + i * 0.01 + Math.sin(i * 0.5) * 0.15
-      : 8.25 + (i - 31) * 0.018 + Math.sin(i * 0.5) * 0.2;
+      : isAug
+      ? 8.25 + (i - 31) * 0.018 + Math.sin(i * 0.5) * 0.2
+      : 7.45 + (i - 62) * 0.03 + Math.sin(i * 0.5) * 0.1;
     const searchCTR = isJuly
       ? 5.0 + Math.sin(i * 0.8) * 0.35
-      : 5.0 - (i - 31) * 0.015 + Math.sin(i * 0.6) * 0.2;
+      : isAug
+      ? 5.0 - (i - 31) * 0.015 + Math.sin(i * 0.6) * 0.2
+      : 6.85 + (i - 62) * 0.06 + Math.sin(i * 0.6) * 0.15;
     const xhmCPUV = isJuly
       ? 15.5 + i * 0.05 + Math.sin(i * 0.4) * 0.5
-      : 15.8 + Math.sin(i * 0.5) * 0.4;
+      : isAug
+      ? 15.8 + Math.sin(i * 0.5) * 0.4
+      : 15.2 + Math.sin(i * 0.5) * 0.3;
     const xhxCPUV = 5.0 + Math.sin(i * 0.6) * 0.3 + Math.cos(i * 0.3) * 0.1;
     const notes = i % 4 === 0 ? 4 : i % 4 === 1 ? 2 : i % 4 === 2 ? 3 : 1;
     const comments = 10 + (i % 15);
@@ -98,7 +105,7 @@ function generateDailyData(): { map: Record<string, DailyRecord>; dates: string[
 const generated = generateDailyData();
 export const DAILY_DATA = generated.map;
 export const ALL_DATES = generated.dates;
-export const LATEST_DATE = '2026-08-30';
+export const LATEST_DATE = '2026-09-05';
 
 export const KFS_DATA = {
   budgetTotal: 4750000,
@@ -288,6 +295,5 @@ export const EXEC_SUMMARY_ITEMS = [
     text: 'Q3 预算消耗 42.18%，时间进度 59.8%，消耗滞后约 17.6 个百分点。',
   },
 ];
-
 
 
