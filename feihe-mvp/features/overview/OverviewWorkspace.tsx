@@ -44,6 +44,27 @@ export function OverviewWorkspace({
 }) {
   // 板块切换：总览 (overview) vs 分日 (daily)
   const [activeBlock, setActiveBlock] = useState<'overview' | 'daily'>('overview');
+  const [syncingFeishu, setSyncingFeishu] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
+
+  async function handleSyncFeishu() {
+    setSyncingFeishu(true);
+    setSyncMsg(null);
+    try {
+      const res = await api<{ ok: boolean; message: string; latestDate?: string }>('/api/feishu/sync', {
+        method: 'POST',
+        body: JSON.stringify({ projectId, all: true }),
+      });
+      setSyncMsg(res.message || '飞书在线数据同步完成！');
+      if (typeof onRefresh === 'function') {
+        await onRefresh();
+      }
+    } catch (e) {
+      setSyncMsg(e instanceof Error ? e.message : '飞书数据拉取失败');
+    } finally {
+      setSyncingFeishu(false);
+    }
+  }
 
   // 实际接入的真实底层数据与日期序列（聚光 29,055 条 + 达人笔记 1,189 篇实时入库）
   const { realDataMap, realDates, latestRealDate } = useMemo(() => {
@@ -232,24 +253,71 @@ export function OverviewWorkspace({
         title={project?.name || '飞鹤臻稚卓蓓小红书种草数据看板'}
         subtitle="2026年Q3日常种草与电商引流 · 众引传播集团 (MGCC)"
       >
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span className="overview-quarter-pill" style={{ background: '#ecfdf5', color: '#047857', borderColor: '#a7f3d0' }}>
-            <i style={{ background: '#10b981' }} /> 真实底表数据已实时接入 ({realDates.length} 天日度明细)
-          </span>
-          <span className="overview-quarter-pill">
-            <i /> Q3 进行中 (7.1 - 9.30)
-          </span>
-          <Link
-            href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=rules'}
-            className="btn-link"
-            style={{ fontSize: 13 }}
-          >
-            项目配置与目标 →
-          </Link>
-        </div>
-      </PageHeader>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+            <span className="overview-quarter-pill" style={{ background: '#ecfdf5', color: '#047857', borderColor: '#a7f3d0' }}>
+              <i style={{ background: '#10b981' }} /> 真实底表数据已实时接入 ({realDates.length} 天日度明细)
+            </span>
+            <span className="overview-quarter-pill">
+              <i /> Q3 进行中 (7.1 - 9.30)
+            </span>
+            <button
+              type="button"
+              onClick={handleSyncFeishu}
+              disabled={syncingFeishu}
+              className="btn-link"
+              style={{
+                background: '#2563eb',
+                color: '#ffffff',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                fontSize: 13,
+                fontWeight: 600,
+                border: 'none',
+                cursor: syncingFeishu ? 'wait' : 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <span>{syncingFeishu ? '⟳' : '⚡'}</span>
+              <span>{syncingFeishu ? '正在拉取飞书最新文档…' : '从飞书同步最新数据'}</span>
+            </button>
+            <Link
+              href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=rules'}
+              className="btn-link"
+              style={{ fontSize: 13 }}
+            >
+              项目配置与目标 →
+            </Link>
+          </div>
+        </PageHeader>
 
-      {/* 两个核心板块切换器 */}
+        {syncMsg && (
+          <div
+            style={{
+              padding: '10px 16px',
+              borderRadius: '8px',
+              background: syncMsg.includes('失败') ? '#fef2f2' : '#f0fdf4',
+              border: syncMsg.includes('失败') ? '1px solid #fecaca' : '1px solid #bbf7d0',
+              color: syncMsg.includes('失败') ? '#b91c1c' : '#15803d',
+              fontSize: '13px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <span>{syncMsg}</span>
+            <button
+              type="button"
+              onClick={() => setSyncMsg(null)}
+              style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', fontWeight: 700 }}
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* 两个核心板块切换器 */}
       <nav className="overview-block-tabs" aria-label="看板板块切换">
         <button
           type="button"
@@ -1335,7 +1403,6 @@ export function OverviewWorkspace({
     </div>
   );
 }
-
 
 
 

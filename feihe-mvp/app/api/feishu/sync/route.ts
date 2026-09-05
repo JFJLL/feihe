@@ -4,6 +4,7 @@ import { importRows, type ImportKind, type ImportRow } from '@/lib/import-rows';
 import { failJob, finishJob, logAction, startJob } from '@/lib/ops';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
+import { syncFeishuSpreadsheets } from '@/lib/feishu-sync';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,10 +27,26 @@ async function resolveSpreadsheetToken(value: string, token: string): Promise<st
 
 export async function POST(request: Request) {
   if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: { spreadsheet?: string; sheetId?: string; range?: string; kind?: ImportKind; projectId?: string; sourceId?: string; all?: boolean } = {};
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {}
+
+  const project = projectId(body.projectId);
+
+  // 如果用户请求同步全部飞书文档（一键更新）
+  if (body.all || (!body.spreadsheet && !body.sheetId)) {
+    try {
+      const result = await syncFeishuSpreadsheets(project);
+      return Response.json(result);
+    } catch (error) {
+      return jsonError(error instanceof Error ? error.message : '飞书全量同步失败', 500);
+    }
+  }
+
   let jobId = ''; let sourceId=''; let activeProject='qicui';
   try {
-    const body = await request.json() as { spreadsheet?: string; sheetId?: string; range?: string; kind?: ImportKind; projectId?: string; sourceId?: string };
-    const project=projectId(body.projectId);activeProject=project;sourceId=body.sourceId||'';
+    activeProject=project;sourceId=body.sourceId||'';
     if (!body.spreadsheet || !body.sheetId || !body.kind) return jsonError('请填写飞书表格链接/Token、工作表 ID 和同步类型');
     if (!envVar('FEISHU_APP_ID') || !envVar('FEISHU_APP_SECRET')) return jsonError('飞书应用凭证尚未配置');
     jobId = await startJob('feishu_sync',`飞书同步：${body.kind === 'owned' ? '自有笔记' : '供应商交付'}`,0,project);
