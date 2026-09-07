@@ -4,6 +4,7 @@
 @import '../styles/workspace.css';
 @import '../styles/operations-workspaces.css';
 @import '../styles/data-workspaces.css';
+@import '../styles/reference-dashboard.css';
 @import 'tailwindcss';
 
 /* Core Base & Shared UI Utilities */

@@ -153,7 +153,7 @@ export function ContentPerformance({
         />
       </section>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+      <div className="workspace-two-col">
         <DashboardSection
           eyebrow="CONTENT STRATEGY"
           title="一级内容方向分布"

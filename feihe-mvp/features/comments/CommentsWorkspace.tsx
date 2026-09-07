@@ -140,49 +140,9 @@ export function CommentsWorkspace({
 
       {tab === 'actions' && (
         <div className="stack animate-fade-in">
-          <div style={{ display: 'flex', gap: '8px', padding: '4px', background: '#f1f5f9', borderRadius: '10px', width: 'fit-content' }}>
-            <button
-              type="button"
-              onClick={() => setSubView('voice')}
-              style={{
-                border: 'none',
-                background: subView === 'voice' ? '#ffffff' : 'transparent',
-                color: subView === 'voice' ? '#0f172a' : '#64748b',
-                fontWeight: subView === 'voice' ? 700 : 500,
-                padding: '6px 16px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                cursor: 'pointer',
-                boxShadow: subView === 'voice' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              <span>📊</span>
-              <span>口碑大盘 (主看板)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSubView('triage')}
-              style={{
-                border: 'none',
-                background: subView === 'triage' ? '#ffffff' : 'transparent',
-                color: subView === 'triage' ? '#0f172a' : '#64748b',
-                fontWeight: subView === 'triage' ? 700 : 500,
-                padding: '6px 16px',
-                borderRadius: '8px',
-                fontSize: '13px',
-                cursor: 'pointer',
-                boxShadow: subView === 'triage' ? '0 1px 3px rgba(0,0,0,0.06)' : 'none',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              <span>⚡</span>
-              <span>待办处置清单 ({pendingRisk})</span>
-            </button>
+          <div className="reference-subtabs" aria-label="口碑与处置视图">
+            <button type="button" aria-pressed={subView === 'voice'} onClick={() => setSubView('voice')}>口碑大盘</button>
+            <button type="button" aria-pressed={subView === 'triage'} onClick={() => setSubView('triage')}>待办处置清单 ({pendingRisk})</button>
           </div>
 
           {subView === 'voice' ? (

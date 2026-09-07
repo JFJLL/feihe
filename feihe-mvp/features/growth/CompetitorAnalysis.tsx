@@ -41,12 +41,6 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
 
   return (
     <div className="stack animate-fade-in">
-      <DashboardSection title="飞书月报 · 品牌搜索指数" eyebrow="MONTHLY SEARCH" desc="来源：七张品牌工作表的品牌/品线月度搜索指数。源表存在数字与“万”混写，保留原值，不与已抓取评论声量混算。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{months.map(m=><option key={m}>{m}</option>)}</select></label>}>
-        {monthly.length?<div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>品牌 / 品线</th><th>{month}搜索指数（源表原值）</th><th>来源 Sheet</th></tr></thead><tbody>{monthly.filter(r=>r.month===month).map((r,i)=><tr key={r.sheetId+r.brand+i}><td>{r.brand}</td><td><strong>{r.value}</strong></td><td><a href={`https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=${r.sheetId}`} target="_blank" rel="noreferrer">{r.sheetId} ↗</a></td></tr>)}</tbody></table></div>:<EmptyState title="尚未同步竞品月报" text="点击页面顶部同步最新数据，读取各品牌已填写的月份。"/>}
-      </DashboardSection>
-      <DashboardSection title="启萃 · 站内搜索指数趋势" desc="来源：周趋势底表 PNZ39H；灵犀与聚光为不同平台口径，分别展示。">
-        <TimeSeriesChart rows={(data.feishu?.search||[]).slice(-30).map(r=>({...r}))} title="启萃搜索指数" unit="" series={[{key:'lingxi',label:'灵犀',color:'#0284c7'},{key:'spotlight',label:'聚光',color:'#8b5cf6'}]}/>
-      </DashboardSection>
       {/* 顶部指标卡 */}
       <section className="ops-metric-grid">
         <MetricCard
@@ -82,6 +76,15 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
           tag="互动格局"
         />
       </section>
+
+      <div className="workspace-two-col competitor-source-grid">
+      <DashboardSection title="飞书月报 · 品牌搜索指数" eyebrow="MONTHLY SEARCH" desc="各品牌工作表的月度搜索指数，保留源表数值与单位。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{months.map(m=><option key={m}>{m}</option>)}</select></label>}>
+        {monthly.length?<div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>品牌 / 品线</th><th>{month}搜索指数（源表原值）</th><th>数据来源</th></tr></thead><tbody>{monthly.filter(r=>r.month===month).map((r,i)=><tr key={r.sheetId+r.brand+i}><td>{r.brand}</td><td><strong>{r.value}</strong></td><td><a href={`https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=${r.sheetId}`} target="_blank" rel="noreferrer">打开工作表 ↗</a></td></tr>)}</tbody></table></div>:<EmptyState title="尚未同步竞品月报" text="点击页面顶部同步最新数据，读取各品牌已填写的月份。"/>}
+      </DashboardSection>
+      <DashboardSection title="启萃 · 站内搜索指数趋势" desc="来自周趋势底表，灵犀与聚光指数分别展示。">
+        <TimeSeriesChart rows={(data.feishu?.search||[]).slice(-30).map(r=>({...r}))} title="启萃搜索指数" unit="" series={[{key:'lingxi',label:'灵犀',color:'#0284c7'},{key:'spotlight',label:'聚光',color:'#8b5cf6'}]}/>
+      </DashboardSection>
+      </div>
 
       {/* 品牌竞争格局卡片 */}
       <DashboardSection

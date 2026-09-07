@@ -83,7 +83,7 @@ export function SettingsWorkspace({
   ];
 
   return (
-    <div className="stack">
+    <div className="stack reference-workspace settings-workspace">
       <PageHeader
         eyebrow="PROJECT SETTINGS"
         title="项目设置"

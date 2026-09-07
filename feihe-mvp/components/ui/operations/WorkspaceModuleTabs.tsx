@@ -30,7 +30,6 @@ export function WorkspaceModuleTabs({
             className={`ops-module-tab ${isActive ? 'active' : ''}`}
             onClick={() => onChange(t.id)}
           >
-            <span className="tab-icon">{t.icon}</span>
             <div className="ops-module-tab-body">
               <div className="ops-module-tab-title">
                 <strong>{t.title}</strong>

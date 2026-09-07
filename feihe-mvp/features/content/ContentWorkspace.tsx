@@ -96,8 +96,8 @@ export function ContentWorkspace({
         badge={<span>{dashboard.metrics.noteCount} 篇笔记资产</span>}
       ><SyncButton projectId={projectId} onRefresh={onRefresh} /></PageHeader>
 
-      <FeishuSources data={dashboard.feishu} projectId={projectId} />
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       {tab === 'analysis' && (
         <ContentPerformance

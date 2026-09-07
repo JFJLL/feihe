@@ -65,8 +65,8 @@ export function GrowthWorkspace({
         <SyncButton projectId={projectId} onRefresh={onRefresh} />
       </PageHeader>
 
-      <FeishuSources data={dashboard.feishu} projectId={projectId} />
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       {tab === 'competitor' && (
         <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} />
