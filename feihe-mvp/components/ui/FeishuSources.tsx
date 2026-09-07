@@ -19,9 +19,15 @@ export function SyncButton({ projectId, onRefresh }: { projectId: string; onRefr
     } catch(e){setStatus('error');setMessage(e instanceof Error?e.message:'同步失败，请重试');}
   }
   return <div className="sync-control"><button type="button" className={`sync-button sync-${status}`} onClick={sync} disabled={status==='syncing'} aria-busy={status==='syncing'}>
-    {status==='syncing'?<span className="sync-dots" aria-hidden="true"><i/><i/><i/></span>:<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">{status==='success'?<path d="m5 12 4 4L19 6"/>:<><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 7a7 7 0 0 1 12-1l2 6M4 12l2 6a7 7 0 0 0 12-1"/></>}</svg>}
+    {status==='syncing'?<span className="sync-spinner" aria-hidden="true" />:<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">{status==='success'?<path d="m5 12 4 4L19 6"/>:<><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 7a7 7 0 0 1 12-1l2 6M4 12l2 6a7 7 0 0 0 12-1"/></>}</svg>}
     {status==='syncing'?'正在同步最新数据':status==='success'?'已核对 · 再次同步':status==='error'?'同步异常 · 重试':'同步最新数据'}
-  </button>{message&&<p className={`sync-feedback sync-feedback-${status}`} role={status==='error'?'alert':'status'}>{message}</p>}</div>;
+  </button>{message&&<div className={`sync-feedback sync-feedback-${status}`} role={status==='error'?'alert':'status'}>
+    <div className="sync-feedback-arrow" />
+    <div className="sync-feedback-content">
+      {status==='syncing'&&<span className="sync-feedback-dot" />}
+      <span>{message}</span>
+    </div>
+  </div>}</div>;
 }
 export function FeishuSources({data,projectId}:{data?:FeishuData;projectId:string}) {
   if(projectId!=='qicui')return null;

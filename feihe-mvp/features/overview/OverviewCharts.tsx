@@ -1,62 +1,106 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { DailyRecord } from './overview-data';
 
 // ======================== Mini Sparkline ========================
 export function Sparkline({
   data,
-  color = '#0284c7',
+  color = '#1e6091',
   height = 36,
 }: {
   data: number[];
   color?: string;
   height?: number;
 }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !data || data.length < 2) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const render = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.max(60, Math.floor(rect.width));
+      const h = height;
+
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, w, h);
+
+      const min = Math.min(...data);
+      const max = Math.max(...data);
+      const range = max - min || 1;
+      const padY = 5;
+      const plotH = h - padY * 2;
+
+      const points = data.map((val, idx) => ({
+        x: (idx / (data.length - 1)) * w,
+        y: h - padY - ((val - min) / range) * plotH,
+      }));
+
+      const tension = 0.35;
+      const buildPath = () => {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 0; i < points.length - 1; i++) {
+          const p0 = points[i === 0 ? 0 : i - 1];
+          const p1 = points[i];
+          const p2 = points[i + 1];
+          const p3 = points[i + 2 < points.length ? i + 2 : i + 1];
+          const cp1x = p1.x + (p2.x - p0.x) * tension;
+          const cp1y = p1.y + (p2.y - p0.y) * tension;
+          const cp2x = p2.x - (p3.x - p1.x) * tension;
+          const cp2y = p2.y - (p3.y - p1.y) * tension;
+          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        }
+      };
+
+      // 渐变填充背景 (匹配参考 HTML 的 Chart.js 填充风格)
+      buildPath();
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, color + '2e');
+      grad.addColorStop(1, color + '03');
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // 正常均匀平滑曲线 (全段 2px 匀称实线，无粗细变形)
+      buildPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+    };
+
+    render();
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => render());
+      ro.observe(canvas);
+    }
+    return () => { ro?.disconnect(); };
+  }, [data, color, height]);
+
   if (!data || data.length < 2) {
     return <div style={{ height }} />;
   }
 
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const paddingY = 4;
-  const h = height - paddingY * 2;
-  const w = 120;
-
-  const points = data.map((val, idx) => {
-    const x = (idx / (data.length - 1)) * w;
-    const y = height - paddingY - ((val - min) / range) * h;
-    return { x, y };
-  });
-
-  const pathD = points.reduce((acc, pt, i) => {
-    if (i === 0) return `M ${pt.x} ${pt.y}`;
-    const prev = points[i - 1];
-    const cx = (prev.x + pt.x) / 2;
-    return `${acc} C ${cx} ${prev.y}, ${cx} ${pt.y}, ${pt.x} ${pt.y}`;
-  }, '');
-
-  const areaD = `${pathD} L ${points[points.length - 1].x} ${height} L ${points[0].x} ${height} Z`;
-  const last = points[points.length - 1];
-  const gradId = 'spark-grad-' + color.replace('#', '') + '-' + Math.round(data[0] * 10);
-
   return (
-    <svg
-      viewBox={`0 0 ${w} ${height}`}
-      style={{ width: '100%', height, overflow: 'visible', display: 'block' }}
-      preserveAspectRatio="none"
-    >
-      <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity={0.28} />
-          <stop offset="100%" stopColor={color} stopOpacity={0.02} />
-        </linearGradient>
-      </defs>
-      <path d={areaD} fill={`url(#${gradId})`} />
-      <path d={pathD} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={last.x} cy={last.y} r="3" fill={color} stroke="#ffffff" strokeWidth="1.5" />
-    </svg>
+    <div className="sparkline" style={{ height, width: '100%', marginTop: 8 }}>
+      <canvas
+        ref={canvasRef}
+        style={{ width: '100%', height, display: 'block' }}
+      />
+    </div>
   );
 }
 
@@ -578,6 +622,5 @@ export function HorizontalBarList({
     </div>
   );
 }
-
 
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Dashboard, Ops } from '../../lib/types/project';
+import { FeishuSources, SyncButton } from '../../components/ui/FeishuSources';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { VoiceIntelligence } from './VoiceIntelligence';
@@ -115,20 +116,26 @@ export function CommentsWorkspace({
   ];
 
   return (
-    <div className="ops-workspace">
+    <div className="ops-workspace overview-colorful-page reference-workspace">
       <PageHeader
-        eyebrow="COMMENT OPERATIONS"
+        eyebrow="FEIHE · Q3 COMMENTS"
         title="评论运营"
-        subtitle="口碑分析、评论采集、处置、验收与供应商核验"
+        subtitle="2026年 Q3 · 小红书口碑分析、评论采集、风险处置与供应商核验"
         badge={
           <span>
             {verifiedCount} 已确认外显 · {pendingRisk} 风险待办
           </span>
         }
-      />
+      >
+        <div className="workspace-header-actions">
+          <SyncButton projectId={projectId} onRefresh={onRefresh} />
+        </div>
+      </PageHeader>
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
+      <div className="overview-block-content">
       {tab === 'collection' && (
         <CommentCollection
           projectId={projectId}
@@ -182,6 +189,7 @@ export function CommentsWorkspace({
           toast={showToast}
         />
       )}
+      </div>
 
       {renderDrawer()}
     </div>

@@ -55,45 +55,49 @@ export function GrowthWorkspace({
   ];
 
   return (
-    <div className="ops-workspace">
+    <div className="ops-workspace overview-colorful-page reference-workspace">
       <PageHeader
-        eyebrow="COMPETITOR ANALYSIS"
+        eyebrow="FEIHE · Q3 COMPETITOR"
         title="竞品分析"
-        subtitle="声量格局与内容策略横向对比，结合机会雷达挖掘行业高热信号。"
+        subtitle="2026年 Q3 · 声量格局与内容策略横向对比 · 机会雷达监测"
         badge={<span>{dashboard.analytics.brands?.length || 0} 家重点监测品牌</span>}
       >
-        <SyncButton projectId={projectId} onRefresh={onRefresh} />
+        <div className="workspace-header-actions">
+          <SyncButton projectId={projectId} onRefresh={onRefresh} />
+        </div>
       </PageHeader>
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
-      {tab === 'competitor' && (
-        <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} />
-      )}
+      <div className="overview-block-content">
+        {tab === 'competitor' && (
+          <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} />
+        )}
 
-      {tab === 'radar' && (
-        <KeywordRadar
-          data={dashboard}
-          growth={growth}
-          rules={ops.settings.rules}
-          save={saveGrowth}
-          openNote={openNote}
-          projectId={projectId}
-          toast={showToast}
-        />
-      )}
+        {tab === 'radar' && (
+          <KeywordRadar
+            data={dashboard}
+            growth={growth}
+            rules={ops.settings.rules}
+            save={saveGrowth}
+            openNote={openNote}
+            projectId={projectId}
+            toast={showToast}
+          />
+        )}
 
-      {tab === 'inspiration' && (
-        <InspirationLibrary
-          data={dashboard}
-          growth={growth}
-          save={saveGrowth}
-          openNote={openNote}
-        />
-      )}
+        {tab === 'inspiration' && (
+          <InspirationLibrary
+            data={dashboard}
+            growth={growth}
+            save={saveGrowth}
+            openNote={openNote}
+          />
+        )}
 
-      {tab === 'inspiration' && <PlanningLibrary data={dashboard.feishu} />}
+        {tab === 'inspiration' && <PlanningLibrary data={dashboard.feishu} />}
+      </div>
       {renderDrawer()}
     </div>
   );

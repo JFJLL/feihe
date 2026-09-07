@@ -78,7 +78,7 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
       </section>
 
       <div className="workspace-two-col competitor-source-grid">
-      <DashboardSection title="飞书月报 · 品牌搜索指数" eyebrow="MONTHLY SEARCH" desc="各品牌工作表的月度搜索指数，保留源表数值与单位。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{months.map(m=><option key={m}>{m}</option>)}</select></label>}>
+      <DashboardSection title="飞书月报 · 品牌搜索指数" eyebrow="MONTHLY SEARCH" desc="各品牌工作表的月度搜索指数，保留源表数值与单位。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{[...months].reverse().map(m=><option key={m} value={m}>{m}{m===months.at(-1)?' (最新)':''}</option>)}</select></label>}>
         {monthly.length?<div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>品牌 / 品线</th><th>{month}搜索指数（源表原值）</th><th>数据来源</th></tr></thead><tbody>{monthly.filter(r=>r.month===month).map((r,i)=><tr key={r.sheetId+r.brand+i}><td>{r.brand}</td><td><strong>{r.value}</strong></td><td><a href={`https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=${r.sheetId}`} target="_blank" rel="noreferrer">打开工作表 ↗</a></td></tr>)}</tbody></table></div>:<EmptyState title="尚未同步竞品月报" text="点击页面顶部同步最新数据，读取各品牌已填写的月份。"/>}
       </DashboardSection>
       <DashboardSection title="启萃 · 站内搜索指数趋势" desc="来自周趋势底表，灵犀与聚光指数分别展示。">

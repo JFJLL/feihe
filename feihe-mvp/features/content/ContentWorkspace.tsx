@@ -88,55 +88,61 @@ export function ContentWorkspace({
   ];
 
   return (
-    <div className="ops-workspace">
+    <div className="ops-workspace overview-colorful-page reference-workspace">
       <PageHeader
-        eyebrow="CONTENT OPERATIONS"
+        eyebrow="FEIHE · Q3 CONTENT"
         title="内容管理"
-        subtitle="全盘内容效率拆解、内容资产台账、发布管理与单篇监测。"
-        badge={<span>{dashboard.metrics.noteCount} 篇笔记资产</span>}
-      ><SyncButton projectId={projectId} onRefresh={onRefresh} /></PageHeader>
+        subtitle="2026年 Q3 · 全盘内容效率拆解、切角渗透与达人表现"
+        badge={<span>{dashboard.metrics.noteCount.toLocaleString()} 篇笔记资产</span>}
+      >
+        <div className="workspace-header-actions">
+          <SyncButton projectId={projectId} onRefresh={onRefresh} />
+        </div>
+      </PageHeader>
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
-      {tab === 'analysis' && (
-        <ContentPerformance
-          data={dashboard}
-          openNote={openNote}
-        />
-      )}
+      <div className="overview-block-content">
+        {tab === 'analysis' && (
+          <ContentPerformance
+            data={dashboard}
+            openNote={openNote}
+          />
+        )}
 
-      {tab === 'registry' && (
-        <ContentRegistry
-          projectId={projectId}
-          openNote={openNote}
-          uploadWorkbook={uploadWorkbook}
-          runSearch={runSearch}
-          loading={loading}
-          onRefresh={onRefresh}
-          toast={showToast}
-        />
-      )}
+        {tab === 'registry' && (
+          <ContentRegistry
+            projectId={projectId}
+            openNote={openNote}
+            uploadWorkbook={uploadWorkbook}
+            runSearch={runSearch}
+            loading={loading}
+            onRefresh={onRefresh}
+            toast={showToast}
+          />
+        )}
 
-      {tab === 'publishing' && (
-        <PublishingManagement
-          projectId={projectId}
-          dashboard={dashboard}
-          ops={ops}
-          openNote={openNote}
-          toast={showToast}
-        />
-      )}
+        {tab === 'publishing' && (
+          <PublishingManagement
+            projectId={projectId}
+            dashboard={dashboard}
+            ops={ops}
+            openNote={openNote}
+            toast={showToast}
+          />
+        )}
 
-      {tab === 'monitoring' && (
-        <ContentMonitoring
-          projectId={projectId}
-          openNote={openNote}
-          toast={showToast}
-        />
-      )}
+        {tab === 'monitoring' && (
+          <ContentMonitoring
+            projectId={projectId}
+            openNote={openNote}
+            toast={showToast}
+          />
+        )}
 
-      {tab === 'analysis' && <PlanningLibrary data={dashboard.feishu} />}
+        {tab === 'analysis' && <PlanningLibrary data={dashboard.feishu} />}
+      </div>
       {renderDrawer()}
     </div>
   );
