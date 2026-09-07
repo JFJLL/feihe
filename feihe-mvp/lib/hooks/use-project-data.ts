@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import type { Dashboard, Ops } from '../types/project';
 import { readSessionCache, writeSessionCache } from '../browser-cache';
+import type { ProjectBootstrap } from '../project-bootstrap';
 
 export const emptyAnalytics = {
   trend: [],
@@ -163,13 +164,14 @@ function restoredProjectData(cacheKey: string) {
 
 export function useProjectData(
   projectId: string,
-  filters?: ProjectDataFilters
+  filters?: ProjectDataFilters,
+  initialData?: ProjectBootstrap | null
 ) {
   const from = filters?.from;
   const to = filters?.to;
   const source = filters?.source;
   const cacheKey = projectId + '_' + (from || '') + '_' + (to || '') + '_' + (source || '');
-  const cached = projectDataCache.get(cacheKey);
+  const cached = initialData || projectDataCache.get(cacheKey);
   const restored = useSyncExternalStore(
     subscribeCache,
     () => restoredProjectData(cacheKey),
@@ -210,13 +212,18 @@ export function useProjectData(
   }, [projectId, from, to, source, cacheKey]);
 
   useEffect(() => {
+    if (initialData) {
+      const { dashboard, ops, timestamp } = initialData;
+      projectDataCache.set(cacheKey, { dashboard, ops, timestamp });
+      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard, ops }, timestamp);
+    }
     const current = restoredProjectData(cacheKey);
     if (current && Date.now() - current.timestamp < REVALIDATE_AFTER) return;
     const timer = setTimeout(() => {
       void refresh({ fresh: false });
     }, 0);
     return () => clearTimeout(timer);
-  }, [refresh, cacheKey]);
+  }, [refresh, cacheKey, initialData]);
 
   const visibleDashboard = dashboard || restored?.dashboard || null;
   const visibleOps = ops || restored?.ops || null;

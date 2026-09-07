@@ -516,6 +516,16 @@ async function runAll() {
   console.log('✅ PASS: TEST K (真实快照优先、项目隔离、真实零值、无内置假日期)\n');
 
   console.log('==================================================');
+  console.log('--- TEST L: 首屏直接包含数据与正确板块 ---');
+  for (const [section, marker] of [['', 'Q3 DASHBOARD'], ['/comments', 'Q3 COMMENTS'], ['/content', '内容管理'], ['/growth', '竞品分析'], ['/settings', '项目设置']]) {
+    const response = await httpRequest(BASE_URL + '/projects/proj-j' + section);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
+    assert.ok(main?.includes(marker), `${section || 'overview'} must render its own workspace before JavaScript runs`);
+    assert.ok(!main.includes('正在准备项目全盘数据'), 'initial HTML must not wait for client API round trips');
+  }
+  console.log('✅ PASS: TEST L (5个板块首屏服务端直出，无客户端取数等待)\n');
   console.log('ALL TESTS PASSED SUCCESSFULLY! 100% OPERATIONAL FIDELITY');
   console.log('==================================================\n');
   db.close();

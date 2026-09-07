@@ -11,6 +11,8 @@ import React, {
 import type { Project, Source, Workspace, Dashboard, Ops } from '../../lib/types/project';
 import { api, useProjectData } from '../../lib/hooks/use-project-data';
 import { readSessionCache, writeSessionCache } from '../../lib/browser-cache';
+import { usePathname } from 'next/navigation';
+import type { ProjectBootstrap } from '../../lib/project-bootstrap';
 
 export type ToastMessage = {
   id: string;
@@ -69,13 +71,15 @@ function routeSection() {
 export function ProjectProvider({
   projectId,
   initialWorkspace = null,
+  initialData = null,
   children,
 }: {
   projectId: string;
   initialWorkspace?: Workspace | null;
+  initialData?: ProjectBootstrap | null;
   children: React.ReactNode;
 }) {
-  const [workspace, setWorkspace] = useState<Workspace | null>(cachedWorkspace || initialWorkspace);
+  const [workspace, setWorkspace] = useState<Workspace | null>(initialWorkspace || cachedWorkspace);
   const [loading, setLoading] = useState(!cachedWorkspace && !initialWorkspace);
   const [error, setError] = useState<string | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -87,10 +91,11 @@ export function ProjectProvider({
     loading: dataLoading,
     error: dataError,
     refresh: refreshData,
-  } = useProjectData(projectId);
+  } = useProjectData(projectId, undefined, initialData);
 
   // 解析当前激活板块（'' 为总览，'growth' 为增长机会，等等）
-  const activeSection = useSyncExternalStore(subscribeRoute, routeSection, () => '');
+  const pathname = usePathname();
+  const activeSection = useSyncExternalStore(subscribeRoute, routeSection, () => pathname?.match(/^\/projects\/[^/]+(?:\/([^/]+))?/)?.[1] || '');
 
   const navigateTo = useCallback((href: string) => {
     if (typeof window === 'undefined') return;
@@ -144,13 +149,18 @@ export function ProjectProvider({
   }, []);
 
   useEffect(() => {
+    if (initialWorkspace) {
+      cachedWorkspace = initialWorkspace;
+      cachedWorkspaceAt = initialData?.timestamp || Date.now();
+      writeSessionCache(WORKSPACE_CACHE_KEY, initialWorkspace, cachedWorkspaceAt);
+    }
     restoredWorkspace();
     if (cachedWorkspace && Date.now() - cachedWorkspaceAt < WORKSPACE_REVALIDATE_AFTER) return;
     const timer = setTimeout(() => {
       void refreshWorkspace();
     }, 0);
     return () => clearTimeout(timer);
-  }, [refreshWorkspace]);
+  }, [refreshWorkspace, initialWorkspace, initialData]);
 
   const showToast = useCallback((text: string, type: 'success' | 'error' | 'info' = 'success') => {
     const id = 'toast-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);

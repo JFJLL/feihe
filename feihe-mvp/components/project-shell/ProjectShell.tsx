@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import type { ProjectBootstrap } from '../../lib/project-bootstrap';
 import { ProjectProvider, useProject } from './ProjectContext';
 import { ProjectSidebar } from './ProjectSidebar';
 import { FeedbackToastContainer } from '../ui/FeedbackToast';
@@ -149,17 +150,19 @@ function ProjectShellContent({
 
 export function ProjectShell({
   projectId,
+  initialData,
   userName = '内部用户',
   signedIn = true,
   children,
 }: {
   projectId: string;
+  initialData?: ProjectBootstrap | null;
   userName?: string;
   signedIn?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <ProjectProvider projectId={projectId}>
+    <ProjectProvider key={projectId} projectId={projectId} initialData={initialData} initialWorkspace={initialData?.workspace}>
       <ProjectShellContent userName={userName} signedIn={signedIn}>
         {children}
       </ProjectShellContent>
