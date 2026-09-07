@@ -71,7 +71,7 @@ export type CompetitorAction = {
 
 export type CompetitorSearchFlow = {
   keyword: string;
-  brand: string;
+  brand: string | null;
   level: string;
   upstream: string[];
   downstream: string[];
@@ -129,7 +129,7 @@ export function getCompetitorIntelligence(): CompetitorIntelligenceData {
   } catch (err) {
     console.error('Failed to load competitor_data.json:', err);
   }
-  const fallback = defaultCompetitorData as any;
+  const fallback = defaultCompetitorData;
   return {
     updatedAt: fallback.meta?.updatedAt || '2026-09-04 19:59',
     snapshotMonth: fallback.meta?.snapshotMonth || '2026-08',

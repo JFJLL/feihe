@@ -303,12 +303,12 @@ export function VoiceIntelligence({
         <DashboardSection
           eyebrow="VOICE TREND"
           title="口碑趋势动态走势"
-          desc="基于真实评论监测快照（近30天）：全盘评论总数、正向好评、负向风险与问询建议走势。鼠标悬停查看各日期数值。"
+          desc="仅显示真实抓取快照；不同日期的监测笔记范围可能不同，数值不是每日新增评论。"
         >
-          <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="口碑趋势动态走势" series={[
+          {(data.analytics?.trend || []).length < 3 ? <div className="empty">真实历史快照不足，暂不展示趋势。积累至少 3 个观测日期后显示。</div> : <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="口碑趋势动态走势" series={[
             {key:'total',label:'总评论',color:'#0284c7'}, {key:'positive',label:'正向',color:'#16a34a'},
             {key:'negative',label:'负向',color:'#dc2626'}, {key:'question',label:'问询',color:'#ea580c'},
-          ]} />
+          ]} />}
         </DashboardSection>
       </div>
 

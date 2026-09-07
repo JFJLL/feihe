@@ -40,11 +40,11 @@ function MultiBrandPerformanceChart({
   const maxRate = Math.max(15, ...brandData.map((d) => d.viralRate));
 
   const w = 780;
-  const h = 260;
+  const h = 280;
   const padL = 60;
   const padR = 60;
   const padT = 30;
-  const padB = 40;
+  const padB = 60;
   const plotW = w - padL - padR;
   const plotH = h - padT - padB;
 
@@ -116,26 +116,13 @@ function MultiBrandPerformanceChart({
                 x={xCenter - barW / 2}
                 y={y}
                 width={barW}
-                height={Math.max(2, barH)}
+                height={d.hasData ? Math.max(0, barH) : 0}
                 rx="4"
                 fill={isHovered ? d.color : d.color + 'bb'}
                 stroke={isHovered ? '#0f172a' : 'transparent'}
                 strokeWidth={isHovered ? 1.5 : 0}
                 style={{ transition: 'all 0.2s ease' }}
               />
-              {/* Value label above bar */}
-              {d.hasData && (
-                <text
-                  x={xCenter}
-                  y={y - 6}
-                  textAnchor="middle"
-                  fontSize="10.5"
-                  fontWeight="700"
-                  fill={isHovered ? d.color : '#475569'}
-                >
-                  ¥{d.spendWan.toFixed(0)}万
-                </text>
-              )}
             </g>
           );
         })}
@@ -196,13 +183,13 @@ function MultiBrandPerformanceChart({
               />
               <text
                 x={cx}
-                y={cy - 9}
+                y={h - 12}
                 textAnchor="middle"
                 fontSize="10"
                 fontWeight="700"
-                fill="#d97706"
+                fill="#92400e"
               >
-                {d.viralRate.toFixed(1)}%
+                爆文率 {d.viralRate.toFixed(1)}%
               </text>
             </g>
           );
@@ -220,9 +207,13 @@ function MultiBrandPerformanceChart({
               onMouseLeave={() => setHoveredBrand(null)}
               onClick={() => onSelectBrand(d.id)}
             >
+              {d.hasData && <text x={cx} y={getYSpend(d.spendWan) - 10} textAnchor="middle"
+                fontSize="10.5" fontWeight="700" fill="#334155" stroke="#fafcff" strokeWidth="4" paintOrder="stroke">
+                ¥{d.spendWan.toFixed(0)}万
+              </text>}
               <text
                 x={cx}
-                y={h - 14}
+                y={h - 34}
                 textAnchor="middle"
                 fontSize="11.5"
                 fontWeight={isHovered ? '700' : '600'}

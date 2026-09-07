@@ -1,8 +1,6 @@
-import { getSeedNote } from '@/lib/notes-seed';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
-import { cacheNoteCovers } from '@/lib/note-covers';
 import { readFeishuData } from '@/lib/feishu-sync';
 
 export const dynamic = 'force-dynamic';
@@ -76,7 +74,7 @@ export async function GET(request: Request) {
     const snapshotCounts = ['comment_total','positive_count','negative_count','question_count'];
     const snapshotCols = ['total_count','positive_count','negative_count','question_count'];
     const currentNotes = `WITH ranked_snapshots AS (
-      SELECT *,ROW_NUMBER() OVER(PARTITION BY project_id,note_id ORDER BY captured_at DESC,id DESC) AS rn FROM comment_snapshots
+      SELECT *,ROW_NUMBER() OVER(PARTITION BY project_id,note_id ORDER BY captured_at DESC,id DESC) AS rn FROM comment_snapshots WHERE quarantine_reason=''
     ), current_project_notes AS (
       SELECT pn.id,pn.project_id,pn.note_id,pn.source_type,pn.pipeline,pn.level,pn.product_scope,pn.status,
       pn.last_fetched_at,pn.brand_mention_top5,pn.added_at,
@@ -107,7 +105,6 @@ export async function GET(request: Request) {
       topNotes,
       adsTotals,
       adsAccounts,
-      cachedCoversList,
     ] = await Promise.all([
       d1.prepare('SELECT key AS id,name,target_count AS targetCount,delivered_count AS deliveredCount,budget,spent FROM project_pipelines WHERE project_id=? ORDER BY rowid').bind(project).all(),
       bind(`SELECT COUNT(*) AS noteCount, COALESCE(SUM(pn.comment_total),0) AS commentTotal,
@@ -150,7 +147,7 @@ export async function GET(request: Request) {
         ORDER BY COALESCE(pn.last_fetched_at,n.published_at) DESC LIMIT 500`).all(),
       d1.prepare(`WITH latest AS (
         SELECT *,ROW_NUMBER() OVER(PARTITION BY note_id,date(captured_at) ORDER BY captured_at DESC) AS rn
-        FROM comment_snapshots WHERE project_id=? AND date(captured_at) BETWEEN date(?) AND date(?)
+        FROM comment_snapshots WHERE quarantine_reason='' AND project_id=? AND date(captured_at) BETWEEN date(?) AND date(?)
       ) SELECT date(captured_at) AS date,SUM(total_count) AS total,SUM(positive_count) AS positive,
         SUM(negative_count) AS negative,SUM(question_count) AS question,SUM(irrelevant_count) AS irrelevant
         FROM latest WHERE rn=1 GROUP BY date(captured_at) ORDER BY date(captured_at)`).bind(project,...trendValues).all(),
@@ -195,30 +192,21 @@ export async function GET(request: Request) {
         FROM paid_ad_metrics WHERE project_id=?`).bind(project).first(),
       d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
         FROM paid_ad_metrics WHERE project_id=? ORDER BY metric_date DESC, spend DESC LIMIT 60`).bind(project).all(),
-      d1.prepare(`SELECT note_id AS noteId FROM note_covers WHERE project_id=? AND status='已缓存'`).bind(project).all<{ noteId: string }>(),
     ]);
 
     const topNoteRows = resultRows(topNotes);
-    const cachedCoverSet = new Set(cachedCoversList.results.map((c) => c.noteId));
 
     for (const row of topNoteRows) {
-      if (cachedCoverSet.has(String(row.id))) {
-        row.coverUrl = `/api/note-covers?projectId=${encodeURIComponent(project)}&noteId=${encodeURIComponent(String(row.id))}`;
+      if (row.id) {
+        row.coverUrl = `/api/note-covers?resolve=1&projectId=${encodeURIComponent(project)}&noteId=${encodeURIComponent(String(row.id))}`;
       }
     }
     for (const row of resultRows(notes)) {
-      if (cachedCoverSet.has(String(row.id))) {
-        row.coverUrl = `/api/note-covers?projectId=${encodeURIComponent(project)}&noteId=${encodeURIComponent(String(row.id))}`;
+      if (row.id) {
+        row.coverUrl = `/api/note-covers?resolve=1&projectId=${encodeURIComponent(project)}&noteId=${encodeURIComponent(String(row.id))}`;
       }
     }
 
-    const missingCoverIds = topNoteRows
-      .filter((row) => !cachedCoverSet.has(String(row.id)))
-      .map((row) => String(row.id))
-      .slice(0, 6);
-    if (missingCoverIds.length > 0) {
-      void cacheNoteCovers(missingCoverIds, project, 6).catch(() => {});
-    }
 
     const note = noteAgg || {};
     const positive = Number(note.positiveCount || 0);
@@ -268,13 +256,13 @@ export async function GET(request: Request) {
       },
       keyComments: keyComments.results,
       notes: ((notes.results || []) as Array<Record<string, unknown>>).map((row) => {
-        const seed = getSeedNote(String(row.id));
+
         const rawCover = typeof row.coverUrl === 'string' ? row.coverUrl : '';
-        const coverUrl = (rawCover && !rawCover.startsWith('/api')) ? rawCover : (seed?.coverUrl || rawCover || '');
+        const coverUrl = rawCover;
         const rawTitle = typeof row.title === 'string' ? row.title : '';
-        const title = (rawTitle && rawTitle !== '#N/A') ? rawTitle : (seed?.title || rawTitle || '启萃笔记');
+        const title = (rawTitle && rawTitle !== '#N/A') ? rawTitle : '标题待同步';
         const rawAuthor = typeof row.author === 'string' ? row.author : '';
-        const author = (rawAuthor && rawAuthor !== '未知作者') ? rawAuthor : (seed?.author || rawAuthor || '飞鹤达人');
+        const author = (rawAuthor && rawAuthor !== '未知作者') ? rawAuthor : '作者待同步';
         return { ...row, coverUrl, title, author };
       }),
       ads: { totals: adsTotals || {}, accounts: adsAccounts.results || [] },

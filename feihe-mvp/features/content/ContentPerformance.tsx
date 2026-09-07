@@ -60,6 +60,11 @@ function NoteCover({ src, label, eager }: { src: string; label: string; eager: b
   );
 }
 
+function displayTag(value: unknown, fallback: string) {
+  const text = String(value || '').trim();
+  return !text || /https?:\/\/|\uFFFD/.test(text) || text.length > 30 ? fallback : text;
+}
+
 function TopNotes({
   rows,
   openNote,
@@ -77,15 +82,14 @@ function TopNotes({
                 src={String(note.coverUrl || '')}
                 title={String(note.title || '')}
                 author={String(note.author || '')}
-                category={String(note.category1 || '笔记')}
+                category={displayTag(note.category1, '分类待补充')}
                 className="note-radar-cover"
                 eager={index < 3}
               />
-              <i>TOP {String(index + 1).padStart(2, '0')} · {String(note.category1 || note.creatorLevel || '笔记')}</i>
             </div>
             <strong>{String(note.title || note.id)}</strong>
             <p>
-              {String(note.author || '未知作者')} · {String(note.brand || note.productScope || '本品')}
+              {String(note.author || '未知作者')} · {displayTag(note.brand || note.productScope, '品牌待补充')}
             </p>
             <dl>
               <div>

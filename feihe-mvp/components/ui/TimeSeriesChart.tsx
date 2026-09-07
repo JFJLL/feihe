@@ -47,7 +47,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条' }: { rows: R
       {series.map(s=><span key={s.key}><i style={{background:s.color}} />{s.label} <b>{fmt(current[s.key])}</b>{typeof current[s.key]==='number'?` ${unit}`:''}</span>)}
     </div>
     <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={title} onMouseLeave={() => setHoverIdx(null)} style={{ overflow: 'visible' }}>
-      <title>{title}，{data.length} 个日期。下方可选择日期查看数值。</title>
+      <title>{title}，{data.length} 个日期。悬停查看数值。</title>
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.22" />

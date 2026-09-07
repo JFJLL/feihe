@@ -1,4 +1,3 @@
-import { getSeedNote } from '@/lib/notes-seed';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
@@ -277,13 +276,12 @@ export async function GET(request: Request) {
   };
 
   const enrichedItems = ((itemsRows.results || []) as Array<Record<string, unknown>>).map((row) => {
-    const seed = getSeedNote(String(row.id));
-    const rawCover = typeof row.coverUrl === 'string' ? row.coverUrl : '';
-    const coverUrl = (rawCover && !rawCover.startsWith('/api')) ? rawCover : (seed?.coverUrl || rawCover || '');
+
+    const coverUrl = `/api/note-covers?resolve=1&projectId=${encodeURIComponent(project)}&noteId=${encodeURIComponent(String(row.id))}`;
     const rawTitle = typeof row.title === 'string' ? row.title : '';
-    const title = (rawTitle && rawTitle !== '#N/A' && rawTitle !== '启萃笔记') ? rawTitle : (seed?.title || rawTitle || '启萃笔记');
+    const title = (rawTitle && rawTitle !== '#N/A' && rawTitle !== '启萃笔记') ? rawTitle : '标题待同步';
     const rawAuthor = typeof row.author === 'string' ? row.author : '';
-    const author = (rawAuthor && rawAuthor !== '未知作者') ? rawAuthor : (seed?.author || rawAuthor || '飞鹤达人');
+    const author = (rawAuthor && rawAuthor !== '未知作者') ? rawAuthor : '作者待同步';
     return {
       ...row,
       coverUrl,
@@ -300,7 +298,7 @@ export async function GET(request: Request) {
     pageSize,
     summary: {
       ...summary,
-      coverCount: Math.max(summary.coverCount, enrichedItems.filter(i => Boolean(i.coverUrl)).length),
+      coverCount: summary.coverCount,
     },
     coverageFeedback: feedbackRows.results || [],
   });

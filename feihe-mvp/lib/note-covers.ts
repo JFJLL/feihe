@@ -18,6 +18,46 @@ export type NoteCoverResult = CoverRow & { coverUrl: string; cached: boolean };
 const internalUrl = (project: string, noteId: string) =>
   `/api/note-covers?projectId=${encodeURIComponent(project)}&noteId=${encodeURIComponent(noteId)}`;
 
+const pendingUrls = new Map<string, Promise<string>>();
+let urlQueue = Promise.resolve();
+
+/** Resolve the live note's URL. No bundled metadata or image files are needed. */
+export async function resolveNoteCoverUrl(project: string, noteId: string): Promise<string> {
+  await ensureSchema();
+  const member = await db().prepare('SELECT note_id FROM project_notes WHERE project_id=? AND note_id=?').bind(project, noteId).first();
+  if (!member) throw new Error('笔记不属于当前项目');
+  const key = `${project}:${noteId}`;
+  const pending = pendingUrls.get(key);
+  if (pending) return pending;
+  const task = urlQueue.then(async () => {
+    const row = await existing(project, noteId);
+    if (row?.sourceUrl && /^https:\/\//.test(row.sourceUrl) && row.fetchedAt && Date.now() - Date.parse(row.fetchedAt) < 6 * 60 * 60 * 1000) return row.sourceUrl;
+    const failure = await db().prepare("SELECT updated_at FROM note_covers WHERE project_id=? AND note_id=? AND status='失败'").bind(project, noteId).first<{updated_at: string}>();
+    if (failure && Date.now() - Date.parse(failure.updated_at) < 60000) throw new Error('封面暂不可用，请稍后重试');
+    try {
+      const fetchDetail = await createNoteDetailFetcher(project);
+      const sourceUrl = firstImage(await fetchDetail(noteId));
+      if (!/^https:\/\//.test(sourceUrl)) throw new Error('笔记接口未返回有效封面 URL');
+      const now = new Date().toISOString();
+      await db().batch([
+        db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,status,fetched_at,last_error,updated_at)
+          VALUES(?,?,?,?,'URL已获取',?,'',?) ON CONFLICT(id) DO UPDATE SET source_url=excluded.source_url,
+          status=excluded.status,fetched_at=excluded.fetched_at,last_error='',updated_at=excluded.updated_at`)
+          .bind(key, noteId, project, sourceUrl, now, now),
+        db().prepare(`INSERT INTO note_profiles(note_id,cover_url,updated_at) VALUES(?,?,?)
+          ON CONFLICT(note_id) DO UPDATE SET cover_url=excluded.cover_url,updated_at=excluded.updated_at`).bind(noteId, sourceUrl, now),
+      ]);
+      return sourceUrl;
+    } catch (error) {
+      await persistFailure(project, noteId, error instanceof Error ? error.message : '封面获取失败');
+      throw error;
+    }
+  });
+  pendingUrls.set(key, task);
+  urlQueue = task.then(() => {}, () => {});
+  try { return await task; } finally { pendingUrls.delete(key); }
+}
+
 function firstImage(detail: Record<string, unknown>) {
   const images = Array.isArray(detail.imagesList) ? detail.imagesList : [];
   const first = images.find((item) => item && typeof item === 'object' && typeof (item as Record<string, unknown>).url === 'string') as Record<string, unknown> | undefined;

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const PASTEL_PALETTES = [
   { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', text: '#0369a1', border: '#7dd3fc' },
@@ -37,12 +37,34 @@ export function NoteThumbnail({
   className?: string;
   eager?: boolean;
 }) {
-  const [failed, setFailed] = useState(false);
-  const cleanSrc = (src && !src.startsWith('/api') && src.startsWith('http')) ? src : '';
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const [resolved, setResolved] = useState<{ key: string; url: string } | null>(null);
+  const needsResolve = Boolean(src?.startsWith('/api/note-covers?resolve=1&'));
+  useEffect(() => {
+    if (!needsResolve || !src) return;
+    const controller = new AbortController();
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    const load = async (attempt = 0) => {
+      try {
+        const response = await fetch(src + '&format=json', { signal: controller.signal });
+        if (!response.ok) throw new Error('封面暂不可用');
+        const data = await response.json() as { coverUrl?: string };
+        if (!data.coverUrl?.startsWith('https://')) throw new Error('无有效封面');
+        if (!controller.signal.aborted) setResolved({ key: src, url: data.coverUrl });
+      } catch {
+        if (!controller.signal.aborted && attempt < 2) retryTimer = setTimeout(() => void load(attempt + 1), 1500 * (attempt + 1));
+      }
+    };
+    // Resolve metadata on mount: restored/background tabs can defer intersection
+    // callbacks indefinitely. The image itself still uses native lazy loading.
+    void load();
+    return () => { controller.abort(); clearTimeout(retryTimer); };
+  }, [src, needsResolve]);
+  const cleanSrc = needsResolve ? (resolved && resolved.key === src ? resolved.url : '') : src && (/^https?:\/\//.test(src) || src.startsWith('/api/note-covers?')) ? src : '';
   const palette = hashColor(author || title || category);
   const initial = (author || title || category || '笔').trim().slice(0, 1);
 
-  if (!cleanSrc || failed) {
+  if (!cleanSrc || failedSrc === cleanSrc) {
     return (
       <div
         className={className}
@@ -60,7 +82,7 @@ export function NoteThumbnail({
           position: 'relative',
           overflow: 'hidden',
         }}
-        title={title || author}
+        title={`${title || author} · 暂无可用封面`}
       >
         <span>{initial}</span>
         {className.includes('card') && (
@@ -91,8 +113,7 @@ export function NoteThumbnail({
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
+      onError={() => setFailedSrc(cleanSrc)}
     />
   );
 }
-

@@ -426,32 +426,13 @@ export async function ensureSchema() {
           .bind(sId, sName, sUrl, sSheet, sKind, new Date().toISOString(), new Date().toISOString()).run();
       }
     } catch {}
-        try {
-      const snapCount = await d1.prepare("SELECT count(*) as c FROM comment_snapshots WHERE project_id='qicui'").first<{ c: number }>();
-      if (!snapCount || snapCount.c < 30) {
-        const snapshots = (await import('./snapshots_seed.json')).default;
-        for (const s of snapshots) {
-          await d1.prepare(`INSERT OR IGNORE INTO comment_snapshots(note_id, captured_at, l1_count, l2_count, total_count, positive_count, negative_count, question_count, irrelevant_count, project_id)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, 'qicui')`).bind(s.note_id, s.captured_at, s.l1_count, s.l2_count, s.total_count, s.positive_count, s.negative_count, s.question_count, s.irrelevant_count).run();
-        }
-      }
-    } catch {}
-    try {
-      const seedNotes = (await import('./notes_metadata_seed.json')).default;
-      for (const n of seedNotes) {
-        if (n.coverUrl) {
-          await d1.prepare(`INSERT INTO note_profiles(note_id, cover_url, category1, note_type, brand, updated_at)
-            VALUES(?, ?, ?, ?, '启萃', datetime('now'))
-            ON CONFLICT(note_id) DO UPDATE SET 
-              cover_url = CASE WHEN cover_url IS NULL OR cover_url = '' THEN excluded.cover_url ELSE cover_url END,
-              category1 = CASE WHEN category1 IS NULL OR category1 = '' THEN excluded.category1 ELSE category1 END,
-              note_type = CASE WHEN note_type IS NULL OR note_type = '' THEN excluded.note_type ELSE note_type END`).bind(n.id, n.coverUrl, n.category1 || '母婴育儿', n.noteType || '图文').run();
-        }
-        if (n.title && n.title !== '#N/A') {
-          await d1.prepare(`UPDATE notes SET title = ? WHERE id = ? AND (title IS NULL OR title = '' OR title = '#N/A')`).bind(n.title, n.id).run();
-        }
-      }
-    } catch {}
+    // Quarantine only exact records inserted by the withdrawn historical seed.
+    // Keep them for audit; real captures and future snapshots remain untouched.
+    await ensureColumn('comment_snapshots', 'quarantine_reason', "TEXT NOT NULL DEFAULT ''");
+    const rejected = (await import('./migrations/rejected-snapshot-signatures.json')).default;
+    await d1.prepare(`UPDATE comment_snapshots SET quarantine_reason='withdrawn-preset-history'
+      WHERE quarantine_reason='' AND (project_id || '|' || note_id || '|' || captured_at || '|' || l1_count || '|' || l2_count || '|' || total_count || '|' || positive_count || '|' || negative_count || '|' || question_count || '|' || irrelevant_count) IN (${rejected.map(() => '?').join(',')})`)
+      .bind(...rejected).run();
     await d1.prepare('PRAGMA optimize').run();
   })().catch((error) => {
     schemaReady = null;

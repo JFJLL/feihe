@@ -498,6 +498,18 @@ async function runAll() {
   console.log('✅ PASS: TEST J (缓存预热、mutation 后 fresh 请求立即一致，无 10s 延迟)\n');
 
   console.log('--- TEST K: 真实评论快照与旧汇总一致性 ---');
+  const presetArgs = ['5bec388461d4df00014a2e26','qicui','2026-08-01 22:00:00',122,17,7,23,85,36,75];
+  const insertSnapshot = db.prepare(`INSERT INTO comment_snapshots(note_id,project_id,captured_at,total_count,positive_count,negative_count,question_count,l1_count,l2_count,irrelevant_count) VALUES(?,?,?,?,?,?,?,?,?,?)`);
+  insertSnapshot.run(...presetArgs);
+  insertSnapshot.run(...presetArgs.map((v,i)=>i===1?'real-other-project':v));
+  insertSnapshot.run(...presetArgs.map((v,i)=>i===3?123:v));
+  stopServer();
+  await startServer();
+  await httpRequest(BASE_URL+'/api/dashboard?projectId=qicui&fresh=1');
+  assert.equal(db.prepare("SELECT COUNT(*) AS c FROM comment_snapshots WHERE quarantine_reason='withdrawn-preset-history'").get().c,1,'only exact rejected seed is quarantined');
+  assert.equal(db.prepare("SELECT COUNT(*) AS c FROM comment_snapshots WHERE note_id=? AND quarantine_reason=''").get(presetArgs[0]).c,2,'other projects and differing genuine values stay intact');
+  const quarantinedDashboard = await (await httpRequest(BASE_URL+'/api/dashboard?projectId=qicui&fresh=1')).json();
+  assert.equal(quarantinedDashboard.analytics.trend.find(r=>r.date==='2026-08-01').total,123,'preset does not contribute to chart');
   db.prepare(`INSERT INTO comment_snapshots(note_id,project_id,captured_at,total_count,positive_count,negative_count,question_count,l1_count,l2_count,irrelevant_count)
     VALUES(?,?,?,?,?,?,?,0,0,0)`).run('note-j-1','proj-j','2026-09-03T00:00:00Z',343,49,22,65);
   const snapshotDashboard = await (await httpRequest(BASE_URL+'/api/dashboard?projectId=proj-j&fresh=1')).json();
