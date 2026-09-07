@@ -169,6 +169,7 @@ export type DailyMetricRow = {
 };
 
 export type Dashboard = {
+  feishu?: import('../feishu-model').FeishuData;
   projectId?: string;
   pipelines: Pipeline[];
   metrics: DashboardMetrics;
@@ -462,5 +463,4 @@ export type Spec = {
   }>;
   quality: Array<{ label: string; value: number; status: string }>;
 };
-
 

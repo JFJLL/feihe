@@ -183,7 +183,11 @@ export function CommentActionWorkbench({
   }, [projectId, page, sourceFilter, statusFilter, actionFilter, sentimentFilter, categoryFilter, selectedDate, debouncedQuery, toast]);
 
   useEffect(() => {
-    void loadWorkbenchData();
+    const timer = setTimeout(() => { void loadWorkbenchData(); }, 0);
+    return () => {
+      clearTimeout(timer);
+      reqSeqRef.current += 1;
+    };
   }, [loadWorkbenchData]);
 
   // Action handlers with optimistic updates

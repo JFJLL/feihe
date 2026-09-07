@@ -2,7 +2,7 @@ import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
 import { cacheNoteCovers } from '@/lib/note-covers';
-import { DAILY_DATA, ALL_DATES } from '@/features/overview/overview-data';
+import { readFeishuData } from '@/lib/feishu-sync';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,34 +12,6 @@ const resultRows = (value: { results?: unknown[] } | null | undefined) => ((valu
 type CacheEntry = { json: string; timestamp: number };
 const memoryCache = new Map<string, CacheEntry>();
 const CACHE_TTL_MS = 10_000;
-
-// 确保在任何部署环境（即使未手工跑 Python 导入）也能自动补齐 61 天真实日度数据
-async function ensureDailyKpiSeeded(d1: ReturnType<typeof db>, project: string) {
-  try {
-    const existingDates = await d1.prepare('SELECT date FROM daily_kpi_metrics WHERE project_id=?').bind(project).all<{ date: string }>();
-    const existingSet = new Set((existingDates.results || []).map((r) => r.date));
-
-    const missingDates = ALL_DATES.filter((d) => !existingSet.has(d));
-    if (!missingDates.length) return;
-
-    const now = new Date().toISOString();
-    const stmts = missingDates.map((dateKey) => {
-      const d = DAILY_DATA[dateKey];
-      return d1.prepare(`INSERT OR REPLACE INTO daily_kpi_metrics (
-        id, project_id, date, plan_spend, actual_spend, achieve_pct,
-        feed_spend, feed_ctr, search_spend, search_ctr, xhm_cpuv, xhx_cpuv,
-        notes_today, comments_today, impressions, clicks, interactions, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).bind(
-        `${project}:${dateKey}`, project, dateKey, d.plan_spend, d.actual_spend, d.achieve_pct,
-        d.feed_spend, d.feed_ctr, d.search_spend, d.search_ctr, d.xhm_cpuv, d.xhx_cpuv,
-        d.notes_today, d.comments_today, d.actual_spend * 12, d.actual_spend * 0.8, d.comments_today * 20, now
-      );
-    });
-    await d1.batch(stmts);
-  } catch (err) {
-    console.warn('ensureDailyKpiSeeded warning:', err);
-  }
-}
 
 export async function GET(request: Request) {
   try {
@@ -75,7 +47,7 @@ export async function GET(request: Request) {
    }
 
     // 确保日度表已就绪
-    await ensureDailyKpiSeeded(d1, project);
+    const feishu = await readFeishuData(project);
 
     const clauses: string[] = ['pn.project_id=?'];
     const values: string[] = [project];
@@ -98,7 +70,19 @@ export async function GET(request: Request) {
     if (scope) { clauses.push('pn.product_scope=?'); values.push(scope); }
 
     const where = clauses.length ? ` WHERE ${clauses.join(' AND ')}` : '';
-    const bind = (sql: string) => d1.prepare(sql).bind(...values);
+    // Old imports sometimes left summary counts at zero despite newer captured snapshots.
+    // Prefer a newer project-scoped snapshot, including genuine zero counts after a fresh crawl.
+    const snapshotCounts = ['comment_total','positive_count','negative_count','question_count'];
+    const snapshotCols = ['total_count','positive_count','negative_count','question_count'];
+    const currentNotes = `WITH ranked_snapshots AS (
+      SELECT *,ROW_NUMBER() OVER(PARTITION BY project_id,note_id ORDER BY captured_at DESC,id DESC) AS rn FROM comment_snapshots
+    ), current_project_notes AS (
+      SELECT pn.id,pn.project_id,pn.note_id,pn.source_type,pn.pipeline,pn.level,pn.product_scope,pn.status,
+      pn.last_fetched_at,pn.brand_mention_top5,pn.added_at,
+      ${snapshotCounts.map((c,i)=>`CASE WHEN s.captured_at IS NOT NULL AND (pn.last_fetched_at IS NULL OR s.captured_at >= pn.last_fetched_at) THEN s.${snapshotCols[i]} ELSE pn.${c} END AS ${c}`).join(',')}
+      FROM project_notes pn LEFT JOIN ranked_snapshots s ON s.note_id=pn.note_id AND s.project_id=pn.project_id AND s.rn=1
+    ) `;
+    const bind = (sql: string) => d1.prepare(currentNotes + sql.replaceAll('JOIN project_notes pn','JOIN current_project_notes pn')).bind(...values);
     const trendValues = [from || '2000-01-01', to || '2999-12-31'];
 
     const [
@@ -123,7 +107,6 @@ export async function GET(request: Request) {
       adsTotals,
       adsAccounts,
       cachedCoversList,
-      dailyKpiList,
     ] = await Promise.all([
       d1.prepare('SELECT key AS id,name,target_count AS targetCount,delivered_count AS deliveredCount,budget,spent FROM project_pipelines WHERE project_id=? ORDER BY rowid').bind(project).all(),
       bind(`SELECT COUNT(*) AS noteCount, COALESCE(SUM(pn.comment_total),0) AS commentTotal,
@@ -212,13 +195,6 @@ export async function GET(request: Request) {
       d1.prepare(`SELECT account_name AS account, brand_name AS brand, metric_date AS metricDate, spend, impressions, clicks, ctr, interactions, balance
         FROM paid_ad_metrics WHERE project_id=? ORDER BY metric_date DESC, spend DESC LIMIT 60`).bind(project).all(),
       d1.prepare(`SELECT note_id AS noteId FROM note_covers WHERE project_id=? AND status='已缓存'`).bind(project).all<{ noteId: string }>(),
-      (async (): Promise<{ results: Row[] }> => {
-        try {
-          return await d1.prepare(`SELECT date, plan_spend, actual_spend, achieve_pct, feed_spend, feed_ctr, search_spend, search_ctr, xhm_cpuv, xhx_cpuv, notes_today, comments_today, impressions, clicks, interactions FROM daily_kpi_metrics WHERE project_id=? ORDER BY date ASC`).bind(project).all<Row>();
-        } catch {
-          return { results: [] };
-        }
-      })(),
     ]);
 
     const topNoteRows = resultRows(topNotes);
@@ -292,7 +268,8 @@ export async function GET(request: Request) {
       keyComments: keyComments.results,
       notes: notes.results,
       ads: { totals: adsTotals || {}, accounts: adsAccounts.results || [] },
-      dailyMetrics: resultRows(dailyKpiList),
+      dailyMetrics: feishu.daily,
+      feishu,
       projectId: project,
       filters: { from, to, source, status, scope },
       syncedAt: new Date().toISOString(),

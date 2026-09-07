@@ -36,7 +36,7 @@ export function ProjectSidebar({
       </Link>
 
       <div className="brand">
-        <span>智</span>
+        <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a5f3fc" strokeWidth="4" strokeLinecap="round"/></svg></span>
         <div>
           社媒增长中台
           <small>PROJECT WORKSPACE</small>
@@ -87,4 +87,3 @@ export function ProjectSidebar({
     </aside>
   );
 }
-

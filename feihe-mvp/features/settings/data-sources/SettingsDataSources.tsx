@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { FeishuSources, SyncButton } from '../../../components/ui/FeishuSources';
+import type { FeishuData } from '../../../lib/feishu-model';
 import type { Source, Workspace } from '../../../lib/types/project';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { api, cnTime } from '../../../lib/hooks/use-project-data';
@@ -29,6 +31,18 @@ export function SettingsDataSources({
 }) {
   const [source, setSource] = useState<Record<string, unknown>>(emptySource);
   const [busy, setBusy] = useState('');
+  const [feishu, setFeishu] = useState<FeishuData>();
+  const loadSources = useCallback(async () => {
+    const data = await api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`);
+    setFeishu(data);
+  }, [projectId]);
+  useEffect(() => {
+    let cancelled = false;
+    api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`).then(data => {
+      if (!cancelled) setFeishu(data);
+    }).catch(() => { /* Keep manual sync available when status loading fails. */ });
+    return () => { cancelled = true; };
+  }, [projectId]);
 
   const sources = (workspace?.sources || []).filter((item) => item.projectId === projectId);
   const currentProject = workspace?.projects.find((item) => item.id === projectId);
@@ -43,6 +57,7 @@ export function SettingsDataSources({
       toast('数据源已保存', 'success');
       setSource(emptySource);
       await onDone();
+      await loadSources();
     } catch (err) {
       toast(err instanceof Error ? err.message : '保存失败', 'error');
     } finally {
@@ -63,6 +78,7 @@ export function SettingsDataSources({
       toast(err instanceof Error ? err.message : '同步失败', 'error');
     } finally {
       setBusy('');
+      await loadSources();
     }
   }
 
@@ -85,6 +101,7 @@ export function SettingsDataSources({
 
   return (
     <div className="stack">
+      {projectId==='qicui'&&<><SyncButton projectId={projectId} onRefresh={async()=>{await onDone();await loadSources();}}/><FeishuSources data={feishu} projectId={projectId}/></>}
       <section className="platform-split">
         <article className="platform-panel side-form-panel">
           <div className="section-kicker">FEISHU SHEET</div>

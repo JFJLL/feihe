@@ -1,103 +1,11 @@
 'use client';
 
 import React from 'react';
+import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
-import { EmptyState } from '../../components/ui/EmptyState';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
-
-function TrendChart({ data, multi = false }: { data: AnalyticRow[]; multi?: boolean }) {
-  if (!data.length) return <EmptyState title="完成至少两轮评论抓取后生成趋势" />;
-  const width = 760;
-  const height = 220;
-  const pad = 28;
-  const max = Math.max(1, ...data.map((x) => num(x.total)));
-  const points = (key: string) =>
-    data
-      .map(
-        (row, index) =>
-          (pad + (index * (width - pad * 2)) / Math.max(1, data.length - 1)) +
-          ',' +
-          (height - pad - (num(row[key]) / max) * (height - pad * 2))
-      )
-      .join(' ');
-
-  return (
-    <div className="trend-wrap" style={{ background: '#ffffff', borderRadius: '10px', padding: '12px' }}>
-      <svg viewBox={'0 0 ' + width + ' ' + height} role="img" aria-label="评论声量趋势">
-        <defs>
-          <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#2e7be7" stopOpacity=".24" />
-            <stop offset="1" stopColor="#2e7be7" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        {[0, 0.25, 0.5, 0.75, 1].map((v) => (
-          <line
-            key={v}
-            x1={pad}
-            x2={width - pad}
-            y1={pad + v * (height - pad * 2)}
-            y2={pad + v * (height - pad * 2)}
-            stroke="#edf1f6"
-          />
-        ))}
-        <polyline
-          points={points('total')}
-          fill="none"
-          stroke="#176be0"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {multi && (
-          <>
-            <polyline
-              points={points('positive')}
-              fill="none"
-              stroke="#16a34a"
-              strokeWidth="2"
-            />
-            <polyline
-              points={points('negative')}
-              fill="none"
-              stroke="#dc2626"
-              strokeWidth="2"
-            />
-            <polyline
-              points={points('question')}
-              fill="none"
-              stroke="#ea580c"
-              strokeWidth="2"
-            />
-          </>
-        )}
-      </svg>
-      <div className="trend-axis" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#64748b', marginTop: '6px' }}>
-        <span>{String(data[0]?.date || '')}</span>
-        <span>{String(data.at(-1)?.date || '')}</span>
-      </div>
-      <div className="trend-legend" style={{ display: 'flex', gap: '16px', justifyContent: 'center', fontSize: '12px', color: '#475569', marginTop: '8px' }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <i style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#176be0', display: 'inline-block' }} /> 总评论
-        </span>
-        {multi && (
-          <>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <i style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#16a34a', display: 'inline-block' }} /> 正向
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <i style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#dc2626', display: 'inline-block' }} /> 负向
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <i style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ea580c', display: 'inline-block' }} /> 问询
-            </span>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
 
 function DistributionBars({
   rows,
@@ -155,7 +63,7 @@ export function VoiceIntelligence({
         <MetricCard
           theme="blue"
           label="正向口碑率"
-          value={pct(m.positiveRate)}
+          value={m.commentTotal ? pct(m.positiveRate) : '—'}
           unit=""
           desc="高好评赞誉占比"
           tag="口碑定调"
@@ -187,7 +95,7 @@ export function VoiceIntelligence({
       </section>
 
       {/* 消费者反馈结构与口碑趋势 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+      <div className="workspace-two-col">
         <DashboardSection
           eyebrow="SENTIMENT COMPOSITION"
           title="消费者反馈情感结构"
@@ -204,7 +112,7 @@ export function VoiceIntelligence({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background:
-                  'conic-gradient(#16a34a 0 ' +
+                  m.commentTotal === 0 ? '#e2e8f0' : 'conic-gradient(#16a34a 0 ' +
                   m.positiveRate * 100 +
                   '%,#94a3b8 ' +
                   m.positiveRate * 100 +
@@ -230,7 +138,7 @@ export function VoiceIntelligence({
                   boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)',
                 }}
               >
-                <strong style={{ fontSize: '18px', color: '#0f172a' }}>{pct(m.positiveRate)}</strong>
+                <strong style={{ fontSize: '18px', color: '#0f172a' }}>{m.commentTotal ? pct(m.positiveRate) : '—'}</strong>
                 <span style={{ fontSize: '11px', color: '#64748b' }}>正向口碑</span>
               </div>
             </div>
@@ -260,14 +168,17 @@ export function VoiceIntelligence({
         <DashboardSection
           eyebrow="VOICE TREND"
           title="口碑趋势动态走势"
-          desc="按时间监测正向、负向与问询评论的走势波动。"
+          desc="按抓取日期汇总每篇笔记当天最后一次评论快照。不同日期的抓取范围可能不同；这不是每日新增评论。"
         >
-          <TrendChart data={data.analytics?.trend || []} multi />
+          <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="口碑趋势动态走势" series={[
+            {key:'total',label:'总评论',color:'#0284c7'}, {key:'positive',label:'正向',color:'#16a34a'},
+            {key:'negative',label:'负向',color:'#dc2626'}, {key:'question',label:'问询',color:'#ea580c'},
+          ]} />
         </DashboardSection>
       </div>
 
       {/* 动态话题与核心口碑结论 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+      <div className="workspace-two-col">
         <DashboardSection
           eyebrow="TOPIC TAXONOMY"
           title="动态话题分类与分布"

@@ -4,9 +4,16 @@ import { importRows, type ImportKind, type ImportRow } from '@/lib/import-rows';
 import { failJob, finishJob, logAction, startJob } from '@/lib/ops';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
-import { syncFeishuSpreadsheets } from '@/lib/feishu-sync';
+import { readFeishuData, syncFeishuSpreadsheets } from '@/lib/feishu-sync';
+import { FEISHU_DOCUMENTS } from '@/lib/feishu-model';
 
 export const dynamic = 'force-dynamic';
+
+export async function GET(request: Request) {
+  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const project=projectId(new URL(request.url).searchParams.get('projectId'));
+  return Response.json(await readFeishuData(project), { headers: { 'Cache-Control': 'no-store' } });
+}
 
 async function resolveSpreadsheetToken(value: string, token: string): Promise<string> {
   const wikiMatch = value.match(/wiki\/([a-zA-Z0-9]+)/);
@@ -35,10 +42,10 @@ export async function POST(request: Request) {
   const project = projectId(body.projectId);
 
   // 如果用户请求同步全部飞书文档（一键更新）
-  if (body.all || (!body.spreadsheet && !body.sheetId)) {
+  if (body.all || FEISHU_DOCUMENTS.some(d => d.id===body.sourceId) || (!body.spreadsheet && !body.sheetId)) {
     try {
       const result = await syncFeishuSpreadsheets(project);
-      return Response.json(result);
+      return Response.json({ ...result, error: result.ok ? undefined : result.message });
     } catch (error) {
       return jsonError(error instanceof Error ? error.message : '飞书全量同步失败', 500);
     }

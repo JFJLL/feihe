@@ -1,6 +1,7 @@
 'use client';
 
 import type { Dashboard, Ops, GrowthSettings } from '../../lib/types/project';
+import { FeishuSources, PlanningLibrary, SyncButton } from '../../components/ui/FeishuSources';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { CompetitorAnalysis } from './CompetitorAnalysis';
@@ -61,22 +62,10 @@ export function GrowthWorkspace({
         subtitle="声量格局与内容策略横向对比，结合机会雷达挖掘行业高热信号。"
         badge={<span>{dashboard.analytics.brands?.length || 0} 家重点监测品牌</span>}
       >
-        <section className="source-coverage" style={{ margin: 0 }}>
-          <span className="connected">
-            <i />
-            项目内容库<strong>已接入</strong>
-          </span>
-          <span className="connected">
-            <i />
-            灵犀行业洞察<strong>直连</strong>
-          </span>
-          <span>
-            <i />
-            聚光投放<strong>待授权</strong>
-          </span>
-        </section>
+        <SyncButton projectId={projectId} onRefresh={onRefresh} />
       </PageHeader>
 
+      <FeishuSources data={dashboard.feishu} projectId={projectId} />
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
 
       {tab === 'competitor' && (
@@ -104,6 +93,7 @@ export function GrowthWorkspace({
         />
       )}
 
+      {tab === 'inspiration' && <PlanningLibrary data={dashboard.feishu} />}
       {renderDrawer()}
     </div>
   );

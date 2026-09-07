@@ -17,7 +17,7 @@ export function WorkspaceModuleTabs({
   activeTab: string;
   onChange: (id: string) => void;
 }) {
-  const gridClass = tabs.length === 3 ? 'ops-module-tabs-3' : tabs.length === 4 ? 'ops-module-tabs-4' : tabs.length === 5 ? 'ops-module-tabs-5' : '';
+  const gridClass = `ops-module-tabs-${tabs.length}`;
   return (
     <nav className={`ops-module-tabs ${gridClass}`} aria-label="模块切换">
       {tabs.map((t) => {
@@ -26,8 +26,7 @@ export function WorkspaceModuleTabs({
           <button
             key={t.id}
             type="button"
-            role="tab"
-            aria-selected={isActive}
+            aria-pressed={isActive}
             className={`ops-module-tab ${isActive ? 'active' : ''}`}
             onClick={() => onChange(t.id)}
           >

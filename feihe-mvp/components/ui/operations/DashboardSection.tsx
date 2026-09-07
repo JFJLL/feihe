@@ -19,7 +19,7 @@ export function DashboardSection({
     <section className={`ops-section-card ${className}`}>
       <div className="ops-section-card-head">
         <div className="ops-section-card-title-group">
-          {eyebrow && <small style={{ color: '#0284c7' }}>{eyebrow}</small>}
+          {eyebrow && <span className="section-mini-tag tag-blue">{eyebrow}</span>}
           <h3>{title}</h3>
           {desc && <span className="ops-section-card-desc">{desc}</span>}
         </div>

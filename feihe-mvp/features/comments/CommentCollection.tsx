@@ -25,7 +25,9 @@ export function CommentCollection({
   const searchParams = useSearchParams();
   const prefilledNoteId = searchParams.get('noteId') || '';
 
-  const [noteInput, setNoteInput] = useState(prefilledNoteId);
+  const [inputDraft, setInputDraft] = useState({ source: prefilledNoteId, value: prefilledNoteId });
+  const noteInput = inputDraft.source === prefilledNoteId ? inputDraft.value : prefilledNoteId;
+  const setNoteInput = (value: string) => setInputDraft({ source: prefilledNoteId, value });
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
@@ -71,12 +73,6 @@ export function CommentCollection({
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  useEffect(() => {
-    if (prefilledNoteId) {
-      setNoteInput(prefilledNoteId);
-    }
-  }, [prefilledNoteId]);
-
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
@@ -90,6 +86,7 @@ export function CommentCollection({
       if (monitored) p.set('monitored', monitored);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
       setItems(res.items || []);
+      setSelectedIds(prev => prev.filter(id => (res.items || []).some(item => item.id === id)));
       setTotal(res.total || 0);
       if (res.summary) setSummary(res.summary);
     } catch (e) {
@@ -106,9 +103,6 @@ export function CommentCollection({
     return () => clearTimeout(timer);
   }, [loadData]);
 
-  useEffect(() => {
-    setSelectedIds((prev) => prev.filter((id) => items.some((it) => it.id === id)));
-  }, [items]);
   async function executeFetch(ids: string[]) {
     if (!ids.length) return;
     if (ids.length > 20) {

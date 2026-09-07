@@ -497,6 +497,24 @@ async function runAll() {
   assert.equal(d4.metrics.noteCount, 2, 'Subsequent normal GET hits new cache (count=2)');
   console.log('✅ PASS: TEST J (缓存预热、mutation 后 fresh 请求立即一致，无 10s 延迟)\n');
 
+  console.log('--- TEST K: 真实评论快照与旧汇总一致性 ---');
+  db.prepare(`INSERT INTO comment_snapshots(note_id,project_id,captured_at,total_count,positive_count,negative_count,question_count,l1_count,l2_count,irrelevant_count)
+    VALUES(?,?,?,?,?,?,?,0,0,0)`).run('note-j-1','proj-j','2026-09-03T00:00:00Z',343,49,22,65);
+  const snapshotDashboard = await (await httpRequest(BASE_URL+'/api/dashboard?projectId=proj-j&fresh=1')).json();
+  assert.equal(snapshotDashboard.metrics.commentTotal,343,'newer snapshot repairs stale zero summary at read time');
+  assert.equal(snapshotDashboard.metrics.positiveCount,49);
+  assert.equal(snapshotDashboard.analytics.trend.at(-1).total,343);
+  assert.equal(snapshotDashboard.dailyMetrics.length,0,'unrelated projects must never receive seeded or Feishu daily data');
+  db.prepare(`INSERT INTO comment_snapshots(note_id,project_id,captured_at,total_count,positive_count,negative_count,question_count,l1_count,l2_count,irrelevant_count)
+    VALUES(?,?,?,?,?,?,?,0,0,0)`).run('note-j-1','another-project','2026-09-04T00:00:00Z',999,999,0,0);
+  const isolatedSnapshot = await (await httpRequest(BASE_URL+'/api/dashboard?projectId=proj-j&fresh=1')).json();
+  assert.equal(isolatedSnapshot.metrics.commentTotal,343,'same note in another project cannot replace snapshot');
+  db.prepare(`INSERT INTO comment_snapshots(note_id,project_id,captured_at,total_count,positive_count,negative_count,question_count,l1_count,l2_count,irrelevant_count)
+    VALUES(?,?,?,?,?,?,?,0,0,0)`).run('note-j-1','proj-j','2026-09-05T00:00:00Z',0,0,0,0);
+  const zeroSnapshot = await (await httpRequest(BASE_URL+'/api/dashboard?projectId=proj-j&fresh=1')).json();
+  assert.equal(zeroSnapshot.metrics.commentTotal,0,'newer real zero must not resurrect previous counts');
+  console.log('✅ PASS: TEST K (真实快照优先、项目隔离、真实零值、无内置假日期)\n');
+
   console.log('==================================================');
   console.log('ALL TESTS PASSED SUCCESSFULLY! 100% OPERATIONAL FIDELITY');
   console.log('==================================================\n');

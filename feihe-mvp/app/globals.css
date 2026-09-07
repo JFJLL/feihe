@@ -3,6 +3,7 @@
 @import '../styles/platform.css';
 @import '../styles/workspace.css';
 @import '../styles/operations-workspaces.css';
+@import '../styles/data-workspaces.css';
 @import 'tailwindcss';
 
 /* Core Base & Shared UI Utilities */

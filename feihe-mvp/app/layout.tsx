@@ -5,6 +5,8 @@ export const metadata: Metadata = {
   title: '社媒增长中台',
   description: '支持多项目与多 SPU 的内容增长、评论执行、舆情与竞品分析平台',
   referrer: 'no-referrer',
+  icons: { icon: [{ url: '/app-icon.svg?v=2', type: 'image/svg+xml' }] },
+  manifest: '/manifest.webmanifest',
   metadataBase: new URL(process.env.SITE_ORIGIN || 'http://localhost:5173'),
   openGraph: {
     title: '社媒增长中台',
@@ -20,5 +22,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="zh-CN"><head><meta name="referrer" content="no-referrer" /><script defer src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" /></head><body>{children}</body></html>;
+  return <html lang="zh-CN"><head><meta name="referrer" content="no-referrer" /><link rel="icon" href="/app-icon.svg?v=2" type="image/svg+xml" /><link rel="manifest" href="/manifest.webmanifest" /><meta name="theme-color" content="#0284c7" /><script defer src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" /></head><body>{children}</body></html>;
 }

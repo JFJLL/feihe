@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Dashboard, Ops } from '../../lib/types/project';
+import { FeishuSources, PlanningLibrary, SyncButton } from '../../components/ui/FeishuSources';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { ContentPerformance } from './ContentPerformance';
@@ -93,8 +94,9 @@ export function ContentWorkspace({
         title="内容管理"
         subtitle="全盘内容效率拆解、内容资产台账、发布管理与单篇监测。"
         badge={<span>{dashboard.metrics.noteCount} 篇笔记资产</span>}
-      />
+      ><SyncButton projectId={projectId} onRefresh={onRefresh} /></PageHeader>
 
+      <FeishuSources data={dashboard.feishu} projectId={projectId} />
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
 
       {tab === 'analysis' && (
@@ -134,6 +136,7 @@ export function ContentWorkspace({
         />
       )}
 
+      {tab === 'analysis' && <PlanningLibrary data={dashboard.feishu} />}
       {renderDrawer()}
     </div>
   );

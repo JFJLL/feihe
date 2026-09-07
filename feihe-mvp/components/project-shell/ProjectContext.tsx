@@ -33,7 +33,6 @@ type ProjectContextType = {
   removeToast: (id: string) => void;
   // 高性能客户端单页导航与全盘数据共享
   activeSection: string;
-  setActiveSection: (sec: string) => void;
   navigateTo: (href: string) => void;
   dashboard: Dashboard | null;
   ops: Ops | null;
@@ -57,6 +56,14 @@ function restoredWorkspace() {
   cachedWorkspace = stored.value;
   cachedWorkspaceAt = stored.timestamp;
   return cachedWorkspace;
+}
+
+function subscribeRoute(listener: () => void) {
+  window.addEventListener('popstate', listener);
+  return () => window.removeEventListener('popstate', listener);
+}
+function routeSection() {
+  return window.location.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/)?.[1] || '';
 }
 
 export function ProjectProvider({
@@ -83,13 +90,7 @@ export function ProjectProvider({
   } = useProjectData(projectId);
 
   // 解析当前激活板块（'' 为总览，'growth' 为增长机会，等等）
-  const [activeSection, setActiveSection] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      const match = window.location.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
-      return match ? match[1] || '' : '';
-    }
-    return '';
-  });
+  const activeSection = useSyncExternalStore(subscribeRoute, routeSection, () => '');
 
   const navigateTo = useCallback((href: string) => {
     if (typeof window === 'undefined') return;
@@ -97,9 +98,8 @@ export function ProjectProvider({
       const targetUrl = new URL(href, window.location.origin);
       const match = targetUrl.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
       if (match) {
-        const nextSec = match[1] || '';
-        setActiveSection(nextSec);
         window.history.pushState(null, '', href);
+        window.dispatchEvent(new PopStateEvent('popstate'));
         window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
         return;
       }
@@ -107,16 +107,6 @@ export function ProjectProvider({
       // 容错降级
     }
     window.location.href = href;
-  }, []);
-
-  // 监听浏览器前进/后退
-  useEffect(() => {
-    const handlePop = () => {
-      const match = window.location.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
-      setActiveSection(match ? match[1] || '' : '');
-    };
-    window.addEventListener('popstate', handlePop);
-    return () => window.removeEventListener('popstate', handlePop);
   }, []);
 
   // 监听应用内跨组件超链接广播
@@ -195,7 +185,6 @@ export function ProjectProvider({
         showToast,
         removeToast,
         activeSection,
-        setActiveSection,
         navigateTo,
         dashboard,
         ops,

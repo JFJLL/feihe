@@ -92,11 +92,9 @@ export function ContentRegistry({
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
   // External sample scan inputs
-  const defaultTo = new Date().toISOString().slice(0, 10);
-  const defaultFrom = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
   const [keywords, setKeywords] = useState('启萃,飞鹤奶粉');
-  const [scanFrom, setScanFrom] = useState(defaultFrom);
-  const [scanTo, setScanTo] = useState(defaultTo);
+  const [scanFrom, setScanFrom] = useState(() => new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10));
+  const [scanTo, setScanTo] = useState(() => new Date().toISOString().slice(0, 10));
   const [scanning, setScanning] = useState(false);
   const [scanResult, setScanResult] = useState('');
 
