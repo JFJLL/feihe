@@ -38,13 +38,23 @@ async function accessToken() {
   return data.tenant_access_token;
 }
 async function importNotes(rows: unknown[][], project: string, kind: string) {
-  const notes = new Map<string, unknown[]>();
-  for(const r of rows.slice(1)) {
-    const id=cellText(r[kind==='notes'?13:5]);
-    if(!/^[a-f\d]{24}$/i.test(id)) continue;
-    const previous=notes.get(id);
-    if(!previous || kind!=='notes' || cellDate(r[3])>=cellDate(previous[3])) notes.set(id,r);
-  }
+ const notes = new Map<string, unknown[]>();
+ for(const r of rows.slice(1)) {
+   const id=cellText(r[kind==='notes'?13:5]);
+   if(!/^[a-f\d]{24}$/i.test(id)) continue;
+    if (kind === 'notes') {
+      const date = cellDate(r[11]);
+      if (date) {
+        const parsed = new Date(date + 'T00:00:00Z');
+        const now = new Date();
+        const diffDays = (now.getTime() - parsed.getTime()) / 86400000;
+        // 只收录近90天内的笔记（按发布日期判断，兼顾时区微小偏差）
+        if (diffDays > 90 || diffDays < -7) continue;
+      }
+    }
+   const previous=notes.get(id);
+   if(!previous || kind!=='notes' || cellDate(r[3])>=cellDate(previous[3])) notes.set(id,r);
+ }
   if(!notes.size) throw new Error('未找到有效笔记ID，保留已有数据；请检查表头');
   const statements=[];
   for(const [id,r] of notes) {

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   if (!(await apiUser(true))) return jsonError('请先登录', 401);
   try {
-    const body = await request.json() as { projectId?: string; rules?: Record<string, unknown>; acceptance?: { reportCount?: number; baseCount?: number; brandTopRate?: number; freshnessHours?:number; supplierSimilarity?:number }; goals?: { workTarget?:number;workCompleted?:number;publishTarget?:number;budgetTarget?:number;commentTarget?:number }; growth?: { watchKeywords?:Array<Record<string,unknown>>;inspirations?:Array<Record<string,unknown>>;seedNoteIds?:unknown[];thresholds?:Record<string,unknown> }; pipelines?: Array<Record<string, unknown>> }; const project=projectId(body.projectId);
+    const body = await request.json() as { projectId?: string; rules?: Record<string, unknown>; acceptance?: { reportCount?: number; baseCount?: number; brandTopRate?: number; freshnessHours?:number; supplierSimilarity?:number }; goals?: { workTarget?:number;workCompleted?:number;monthlyTarget?:number;quarterlyTarget?:number;publishTarget?:number;budgetTarget?:number;commentTarget?:number }; growth?: { watchKeywords?:Array<Record<string,unknown>>;inspirations?:Array<Record<string,unknown>>;seedNoteIds?:unknown[];thresholds?:Record<string,unknown> }; pipelines?: Array<Record<string, unknown>> }; const project=projectId(body.projectId);
     if (body.rules) await saveSetting('rules',body.rules,project);
     if (body.acceptance) {
       const value = { reportCount: Math.max(1,Number(body.acceptance.reportCount||200)),baseCount:Math.max(1,Number(body.acceptance.baseCount||30)),brandTopRate:Math.min(1,Math.max(0,Number(body.acceptance.brandTopRate??.4))),freshnessHours:Math.max(1,Number(body.acceptance.freshnessHours||24)),supplierSimilarity:Math.min(1,Math.max(.3,Number(body.acceptance.supplierSimilarity??.58))) };
@@ -18,6 +18,8 @@ export async function POST(request: Request) {
       await saveSetting('goals',{
         workTarget:Math.max(0,Number(body.goals.workTarget||0)),
         workCompleted:Math.max(0,Number(body.goals.workCompleted||0)),
+        monthlyTarget:Math.max(0,Number(body.goals.monthlyTarget||0)),
+        quarterlyTarget:Math.max(0,Number(body.goals.quarterlyTarget||0)),
         publishTarget:Math.max(0,Number(body.goals.publishTarget||0)),
         budgetTarget:Math.max(0,Number(body.goals.budgetTarget||0)),
         commentTarget:Math.max(0,Number(body.goals.commentTarget||0)),

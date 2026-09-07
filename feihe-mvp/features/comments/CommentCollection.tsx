@@ -369,7 +369,12 @@ export function CommentCollection({
                           </div>
                         )}
                         <div className="ops-table-note-info">
-                          <span className="ops-table-note-title" title={note.title || note.id}>
+                          <span
+                            className="ops-table-note-title"
+                            title={note.title || note.id}
+                            style={{ cursor: 'pointer', color: '#0284c7' }}
+                            onClick={() => openNote(note.id)}
+                          >
                             {note.title || '未命名笔记'}
                           </span>
                           <span className="ops-table-note-sub">

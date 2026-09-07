@@ -13,10 +13,12 @@ import type { ActionWorkbenchItem } from './comment-view-model';
 
 export function CommentActionWorkbench({
   projectId,
+  openNote,
   onRefresh,
   toast,
 }: {
   projectId: string;
+  openNote?: (id: string) => void;
   onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
@@ -539,7 +541,30 @@ export function CommentActionWorkbench({
                           查看笔记 ↗
                         </a>
                       ) : (
-                        item.noteId && <small style={{ color: '#94a3b8' }}>{item.noteId.slice(0, 10)}…</small>
+                        item.noteId && (
+                          openNote ? (
+                            <button
+                              type="button"
+                              className="text-link"
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '12px', textAlign: 'left' }}
+                              onClick={() => openNote(item.noteId!)}
+                            >
+                              笔记明细 ({item.noteId.slice(0, 8)}…) →
+                            </button>
+                          ) : (
+                            <small style={{ color: '#94a3b8' }}>{item.noteId.slice(0, 10)}…</small>
+                          )
+                        )
+                      )}
+                      {item.noteId && openNote && item.link && (
+                        <button
+                          type="button"
+                          className="text-link"
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '12px', color: '#0284c7', textAlign: 'left' }}
+                          onClick={() => openNote(item.noteId!)}
+                        >
+                          笔记明细 →
+                        </button>
                       )}
                     </div>
                   </td>

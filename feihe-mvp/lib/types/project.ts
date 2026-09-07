@@ -58,6 +58,7 @@ export type Note = {
   brandMentionTop5: number;
   status: string;
   coverUrl?: string;
+  content?: string;
   category1?: string;
   category2?: string;
   cooperation?: number;
@@ -260,6 +261,8 @@ export type Acceptance = {
 export type Goals = {
   workTarget: number;
   workCompleted: number;
+  monthlyTarget?: number;
+  quarterlyTarget?: number;
   publishTarget: number;
   budgetTarget: number;
   commentTarget: number;
@@ -463,4 +466,3 @@ export type Spec = {
   }>;
   quality: Array<{ label: string; value: number; status: string }>;
 };
-

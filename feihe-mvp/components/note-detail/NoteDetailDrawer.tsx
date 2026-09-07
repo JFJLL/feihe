@@ -110,12 +110,51 @@ export function NoteDetailDrawer({
           ×
         </button>
         <small style={{ color: '#0284c7', fontWeight: 700 }}>NOTE DETAIL</small>
-        <h2 style={{ fontSize: '18px', marginTop: '4px', marginBottom: '8px' }}>{n?.title || n?.id || '笔记明细'}</h2>
-        <p className="drawer-meta" style={{ fontSize: '12.5px', color: '#64748b' }}>
-          {n?.author || '未知博主'} · {n?.status || '待抓取'} · 最近抓取 {cnTime(n?.lastFetchedAt)}
-        </p>
+       <h2 style={{ fontSize: '18px', marginTop: '4px', marginBottom: '8px' }}>{n?.title || n?.id || '笔记明细'}</h2>
+       <p className="drawer-meta" style={{ fontSize: '12.5px', color: '#64748b' }}>
+         {n?.author || '未知博主'} · {n?.status || '待抓取'} · 最近抓取 {cnTime(n?.lastFetchedAt)}
+       </p>
 
-        <nav className="ops-drawer-tabs" role="tablist" aria-label="明细标签">
+        {/* 笔记封面与正文内容速览 */}
+        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+          {n?.coverUrl ? (
+            <img
+              src={n.coverUrl}
+              alt=""
+              style={{ width: '84px', height: '112px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #cbd5e1', flexShrink: 0 }}
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="84" height="112" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
+              }}
+            />
+          ) : (
+            <div style={{ width: '84px', height: '112px', background: '#e2e8f0', color: '#64748b', borderRadius: '6px', display: 'grid', placeItems: 'center', fontSize: '24px', fontWeight: 700, flexShrink: 0 }}>
+              {(n?.author || '笔').slice(0, 1)}
+            </div>
+          )}
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ fontSize: '12px', color: '#475569', fontWeight: 600 }}>
+              笔记正文与切角：
+            </div>
+            <div style={{ fontSize: '12.5px', color: '#1e293b', lineHeight: 1.5, maxHeight: '72px', overflowY: 'auto', background: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '6px', padding: '6px 8px' }}>
+              {n?.content ? n.content : n?.title ? `【${n.title}】${n.category1 ? ` · 切角：${n.category1}` : ''} · ${n.category2 ? `场景：${n.category2}` : ''}` : '笔记正文由蒲公英/小红书抓取同步，当前尚未提取正文长文本。'}
+            </div>
+            {n?.url && (
+              <a
+                href={n.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-link"
+                style={{ fontSize: '12px', color: '#0284c7', alignSelf: 'flex-start', fontWeight: 500 }}
+              >
+                在小红书前台查看原笔记 ↗
+              </a>
+            )}
+          </div>
+        </div>
+
+       <nav className="ops-drawer-tabs" role="tablist" aria-label="明细标签">
           <button
             type="button"
             role="tab"
@@ -154,10 +193,54 @@ export function NoteDetailDrawer({
           </button>
         </nav>
 
-        {tab === 'basic' && (
-          <div className="drawer-tab-content" role="tabpanel" aria-label="基础资料">
-            {draft && (
-              <section className="note-editor">
+       {tab === 'basic' && (
+         <div className="drawer-tab-content" role="tabpanel" aria-label="基础资料">
+           {draft && (
+             <section className="note-editor">
+                {context === 'comments' || context === 'acceptance' ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
+                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>笔记标题</span>
+                      <div style={{ fontSize: '13.5px', color: '#0f172a', fontWeight: 600, marginTop: '2px' }}>{draft.title || '未命名笔记'}</div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>作者 / 博主</span>
+                        <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>{draft.author || '未知博主'}</div>
+                      </div>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>产品范围</span>
+                        <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>{draft.productScope || '本品'}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>来源分类</span>
+                        <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>
+                          {draft.sourceType === 'owned' ? '自有发布' : draft.sourceType === 'commercial' ? '商业合作' : '关键词扫描'}
+                        </div>
+                      </div>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>验收状态</span>
+                        <div style={{ fontSize: '13px', color: '#1e293b', fontWeight: 600, marginTop: '2px' }}>{draft.status || '待抓取'}</div>
+                      </div>
+                    </div>
+                    {draft.url && (
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
+                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>笔记链接</span>
+                        <div style={{ marginTop: '2px', wordBreak: 'break-all' }}>
+                          <a href={draft.url} target="_blank" rel="noreferrer" className="text-link" style={{ fontSize: '12.5px' }}>
+                            {draft.url} ↗
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                    <div style={{ fontSize: '12px', color: '#64748b', background: '#f1f5f9', padding: '8px 12px', borderRadius: '6px' }}>
+                      ℹ️ 评论运营与验收模式下基础资料为只读锁定状态；如需调整状态请前往“验收与处置”标签进行校正。
+                    </div>
+                  </div>
+                ) : (
+                  <>
                 <label>
                   标题
                   <input
@@ -220,6 +303,8 @@ export function NoteDetailDrawer({
                     </button>
                   )}
                 </div>
+                  </>
+                )}
               </section>
             )}
           </div>

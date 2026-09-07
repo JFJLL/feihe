@@ -69,6 +69,8 @@ export const emptyOps: Ops = {
     goals: {
       workTarget: 0,
       workCompleted: 0,
+      monthlyTarget: 0,
+      quarterlyTarget: 0,
       publishTarget: 0,
       budgetTarget: 0,
       commentTarget: 0,

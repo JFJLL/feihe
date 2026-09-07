@@ -153,38 +153,40 @@ export function CommentsWorkspace({
             <button type="button" aria-pressed={subView === 'triage'} onClick={() => setSubView('triage')}>待办处置清单 ({pendingRisk})</button>
           </div>
 
-          {subView === 'voice' ? (
-            <VoiceIntelligence
-              data={dashboard}
-              onSwitchTab={() => setSubView('triage')}
-            />
-          ) : (
-            <CommentActionWorkbench
-              projectId={projectId}
-              onRefresh={onRefresh}
-              toast={showToast}
-            />
-          )}
-        </div>
-      )}
+           {subView === 'voice' ? (
+             <VoiceIntelligence
+               data={dashboard}
+               onSwitchTab={() => setSubView('triage')}
+             />
+           ) : (
+             <CommentActionWorkbench
+               projectId={projectId}
+                openNote={openNote}
+               onRefresh={onRefresh}
+               toast={showToast}
+             />
+           )}
+         </div>
+       )}
 
-      {tab === 'acceptance' && (
-        <AcceptanceDelivery
-          projectId={projectId}
-          dashboard={dashboard}
-          acceptance={ops.settings.acceptance}
-          openNote={openNote}
-          toast={showToast}
-        />
-      )}
+       {tab === 'acceptance' && (
+         <AcceptanceDelivery
+           projectId={projectId}
+           dashboard={dashboard}
+           acceptance={ops.settings.acceptance}
+           openNote={openNote}
+           toast={showToast}
+         />
+       )}
 
-      {tab === 'supplier' && (
-        <SupplierVerification
-          projectId={projectId}
-          ops={ops}
-          uploadWorkbook={uploadWorkbook}
-          verifySupplier={verifySupplier}
-          loading={loading}
+       {tab === 'supplier' && (
+         <SupplierVerification
+           projectId={projectId}
+           ops={ops}
+            openNote={openNote}
+           uploadWorkbook={uploadWorkbook}
+           verifySupplier={verifySupplier}
+           loading={loading}
           runResult={runResult}
           onDone={onRefresh}
           toast={showToast}

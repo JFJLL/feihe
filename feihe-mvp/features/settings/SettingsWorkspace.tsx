@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { SectionTabs } from '../../components/ui/SectionTabs';
+import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { ProjectProfile } from './ProjectProfile';
 import { RulesAndTargets } from './RulesAndTargets';
 import { SettingsDataSources } from './data-sources/SettingsDataSources';
@@ -74,12 +74,12 @@ export function SettingsWorkspace({
     await onRefresh();
   };
 
-  const tabs: Array<[string, string, string]> = [
-    ['profile', '项目资料', '品牌、SPU 与基本信息维护'],
-    ['rules', '目标与规则', '总盘目标、验收阈值与审查词库'],
-    ['data-sources', '数据源', '飞书发布表与供应商交付表'],
-    ['integrations', '工具集成', 'RedTrend、飞书与外部接口'],
-    ['data-map', '数据地图', '账户、接口与语义指标映射'],
+  const tabs: ModuleTab[] = [
+    { id: 'profile', title: '项目资料', desc: '品牌、SPU 与基本信息维护', icon: '📋' },
+    { id: 'rules', title: '目标与规则', desc: '总盘目标、月季任务与审查词库', icon: '🎯' },
+    { id: 'data-sources', title: '数据源', desc: '飞书多表溯源与交付源配置', icon: '📊' },
+    { id: 'integrations', title: '工具集成', desc: 'RedTrend、飞书与外部接口', icon: '🔌' },
+    { id: 'data-map', title: '数据地图', desc: '账户、接口与语义指标映射', icon: '🗺️' },
   ];
 
   return (
@@ -96,7 +96,7 @@ export function SettingsWorkspace({
         }
       />
 
-      <SectionTabs value={tab} onChange={setTab} items={tabs} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
 
       {tab === 'profile' && (
         <ProjectProfile

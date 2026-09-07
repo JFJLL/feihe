@@ -149,11 +149,58 @@
 .ops-workspace .planning-item { background:#f8fafc; border:1px solid #e2e8f0; }
 .competitor-source-grid .ops-table-wrap { max-height:360px; overflow:auto; }
 .competitor-source-grid thead { position:sticky; top:0; z-index:1; }
-.settings-workspace .section-tabs { gap:10px; }
-.settings-workspace .section-tabs button { border-radius:8px; padding:12px 14px; border:1px solid #dce4ef; box-shadow:none; }
-.settings-workspace .section-tabs button.active { background:#eaf4fb; border-color:#6ba9d1; box-shadow:inset 0 3px 0 #1e6091; }
-.settings-workspace .section-tabs strong { font-size:13px; }
-.settings-workspace .section-tabs small { font-size:11px; }
+/* Settings Workspace: Complete UI Visual Overhaul to match reference theme */
+.settings-workspace .panel,
+.settings-workspace .platform-panel,
+.settings-workspace .side-form-panel {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+  padding: 20px 22px !important;
+}
+.settings-workspace input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+.settings-workspace select,
+.settings-workspace textarea {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  padding: 8px 12px !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  outline: none !important;
+}
+.settings-workspace input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):focus,
+.settings-workspace select:focus,
+.settings-workspace textarea:focus {
+  border-color: #1e6091 !important;
+  box-shadow: 0 0 0 3px rgba(30, 96, 145, 0.12) !important;
+}
+.settings-workspace button.primary,
+.settings-workspace .editor-actions button.primary,
+.settings-workspace .save-row button.primary {
+  background: #1e6091 !important;
+  border: 1px solid #1e6091 !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  padding: 8px 16px !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08) !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+}
+.settings-workspace button.primary:hover:not(:disabled) {
+  background: #184e77 !important;
+  border-color: #184e77 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12) !important;
+}
+.settings-workspace .section-kicker {
+  color: #1e6091 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+}
 .reference-subtabs { display:flex; gap:6px; width:fit-content; max-width:100%; overflow-x:auto; padding:4px; background:#edf2f7; border-radius:8px; }
 .reference-subtabs button { white-space:nowrap; padding:7px 13px; border:0; border-radius:6px; background:transparent; color:#64748b; font-size:12px; cursor:pointer; }
 .reference-subtabs button[aria-pressed=true] { background:#fff; color:#184e77; font-weight:700; box-shadow:0 1px 3px #0f172a12; }

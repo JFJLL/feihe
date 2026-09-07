@@ -56,6 +56,7 @@ export async function GET(request: Request) {
     growth,
     reviewRules,
     reports,
+    completedJobsRow,
   ] = await Promise.all([
     d1.prepare('SELECT id,type,title,status,progress,total,succeeded,failed,message,created_at AS createdAt,finished_at AS finishedAt FROM jobs WHERE project_id=? ORDER BY created_at DESC LIMIT 40').bind(project).all(),
     d1.prepare('SELECT id,action,target_type AS targetType,target_id AS targetId,detail,created_at AS createdAt FROM action_logs WHERE project_id=? ORDER BY created_at DESC LIMIT 60').bind(project).all(),
@@ -67,11 +68,18 @@ export async function GET(request: Request) {
     d1.prepare(`SELECT category,sentiment,COUNT(*) AS count FROM key_comments WHERE project_id=? AND disappeared_at IS NULL GROUP BY category,sentiment ORDER BY count DESC LIMIT 12`).bind(project).all(),
     getSetting('rules', DEFAULT_RULES, project),
     getSetting('acceptance', { reportCount: 200, baseCount: 30, brandTopRate: 0.4, freshnessHours: 24, supplierSimilarity: 0.58 }, project),
-    getSetting('goals', { workTarget: 0, workCompleted: 0, publishTarget: 0, budgetTarget: 0, commentTarget: 0 }, project),
+    getSetting('goals', { workTarget: 0, workCompleted: 0, monthlyTarget: 0, quarterlyTarget: 0, publishTarget: 0, budgetTarget: 0, commentTarget: 0 }, project),
     getSetting('growth', { watchKeywords: [], inspirations: [], seedNoteIds: [], thresholds: { breakoutInteractions: 1000, seedScore: 65, ctr: 0.15, cpuv: 0.7 } }, project),
     d1.prepare(`SELECT id,name,keywords,sentiment,category,action,priority,enabled,updated_at AS updatedAt FROM review_rules WHERE project_id=? ORDER BY priority,updated_at DESC`).bind(project).all(),
     d1.prepare(`SELECT id,title,period_start AS periodStart,period_end AS periodEnd,status,summary_json AS summaryJson,created_at AS createdAt,updated_at AS updatedAt FROM saved_reports WHERE project_id=? ORDER BY updated_at DESC LIMIT 30`).bind(project).all(),
+    d1.prepare(`SELECT COUNT(*) AS count FROM jobs WHERE project_id=? AND status='已完成'`).bind(project).first<{ count: number }>(),
   ]);
+
+  const actualCompleted = Number(completedJobsRow?.count || 0);
+  const resolvedGoals = {
+    ...goals,
+    workCompleted: actualCompleted,
+  };
 
   const payload = {
     ok: true,
@@ -82,7 +90,7 @@ export async function GET(request: Request) {
     categories: categories.results,
     reviewRules: reviewRules.results,
     reports: reports.results,
-    settings: { rules, acceptance, goals, growth },
+    settings: { rules, acceptance, goals: resolvedGoals, growth },
   };
 
   const jsonStr = JSON.stringify(payload);

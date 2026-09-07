@@ -104,29 +104,51 @@ export function RulesAndTargets({
         <p className="settings-hint">
           这些值决定首页项目进度、消耗进度、发布进度和评论交付的总值。预算或评论目标填 0 时，自动使用主线合计。
         </p>
-        <div className="goal-form-grid">
+       <div className="goal-form-grid">
+         <label>
+           项目总任务数
+           <input
+             type="number"
+             min="0"
+             value={goals.workTarget}
+             onChange={(e) => setGoals({ ...goals, workTarget: num(e.target.value) })}
+           />
+           <small>整个项目计划完成的任务数</small>
+         </label>
           <label>
-            项目总任务数
+            月度总任务数
             <input
               type="number"
               min="0"
-              value={goals.workTarget}
-              onChange={(e) => setGoals({ ...goals, workTarget: num(e.target.value) })}
+              value={goals.monthlyTarget ?? 0}
+              onChange={(e) => setGoals({ ...goals, monthlyTarget: num(e.target.value) })}
             />
-            <small>整个项目计划完成的任务数</small>
+            <small>当前月份计划承接任务总数</small>
           </label>
           <label>
-            已完成任务数
+            季度总任务数
             <input
               type="number"
               min="0"
-              value={goals.workCompleted}
-              onChange={(e) => setGoals({ ...goals, workCompleted: num(e.target.value) })}
+              value={goals.quarterlyTarget ?? 0}
+              onChange={(e) => setGoals({ ...goals, quarterlyTarget: num(e.target.value) })}
             />
-            <small>当前项目已完成的任务数</small>
+            <small>当前季度全周期计划任务数</small>
           </label>
-          <label>
-            计划发布总量
+         <label>
+           已完成任务数
+           <input
+             type="number"
+             min="0"
+             value={goals.workCompleted}
+              disabled
+              readOnly
+              style={{ background: '#f1f5f9', cursor: 'not-allowed', color: '#64748b' }}
+           />
+            <small>系统被动自动刷新（来自作业执行已完成统计，不可手动编辑）</small>
+         </label>
+         <label>
+           计划发布总量
             <input
               type="number"
               min="0"

@@ -31,13 +31,62 @@ export function SyncButton({ projectId, onRefresh }: { projectId: string; onRefr
 }
 export function FeishuSources({data,projectId}:{data?:FeishuData;projectId:string}) {
   if(projectId!=='qicui')return null;
-  return <details className="source-map"><summary>数据来源与更新明细 {data?.reports.some(r=>r.status==='error')&&<b className="source-error"> · 部分读取失败</b>}<span>{data?.checkedAt?`最近核对 ${cnTime(data.checkedAt)}`:'尚未在线核对 · 点击同步最新数据'}</span></summary>
-    <p>投放日期以实际填写的数据为准；同步时间不等于数据日期。失败时保留上次成功数据。评论情感来自评论抓取与分类，不由投放表推算。</p>
-    <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>文档 / 工作表</th><th>网站使用位置</th><th>数据日期 / 月份</th><th>读取行数</th><th>本次核对</th></tr></thead><tbody>{FEISHU_DOCUMENTS.flatMap(d=>d.sheets.map(s=>{
+  return <details className="source-map"><summary>数据来源与多工作表溯源明细 {data?.reports.some(r=>r.status==='error')&&<b className="source-error"> · 部分读取失败</b>}<span>{data?.checkedAt?`最近核对 ${cnTime(data.checkedAt)}`:'尚未在线核对 · 点击同步最新数据'}</span></summary>
+    <div style={{ margin: '8px 0 12px', fontSize: '12.5px', color: '#475569', lineHeight: 1.6 }}>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '4px' }}>
+        <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#0284c7' }} />
+        <strong style={{ color: '#0f172a' }}>飞书多文档·多Sheet溯源机制：</strong>
+        <span>当前项目数据分别接入飞书4大专项文档及14张子工作表，每条数据支持追溯至文档名、Sheet名称、唯一Sheet ID及行范围。</span>
+      </div>
+      <div style={{ fontSize: '12px', color: '#64748b' }}>
+        投放日期以源表实际填写的日期行为准；同步时间不等于数据日期。蒲公英内容源按发布日期自动筛选近90天。失败时保留上次成功数据。评论情感来自评论抓取与分类，不由投放表推算。
+      </div>
+    </div>
+    <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>所属飞书文档</th><th>源工作表 (Sheet Name & ID)</th><th>对应网站系统位置与模块</th><th>读取范围 / 字段口径</th><th>数据日期 / 月份</th><th>读取有效行数</th><th>本次核对状态</th></tr></thead><tbody>{FEISHU_DOCUMENTS.flatMap(d=>d.sheets.map(s=>{
       const r=data?.reports.find(r=>r.sheetId===s.id);
-      return <tr key={s.id}><td><small>{d.title}</small><br/><a href={`https://yimeichuanbo.feishu.cn/wiki/${d.wiki}?sheet=${s.id}`} target="_blank" rel="noreferrer">{r?.sheetName||s.name}</a><br/><code>{s.id}</code></td><td>{s.use}</td><td>{!r?'未核对':r.status==='error'?'读取失败':r.latestDate||'无日期字段'}</td><td>{r?.rows??'—'}</td><td>{!r?'未核对':r.status==='error'?<span className="source-error">{r.error}（已有数据可能过期）</span>:r.changed?'已同步 · 内容有变化':'已核对 · 内容无变化'}</td></tr>;
+      return <tr key={s.id}>
+        <td>
+          <strong style={{ color: '#0f172a', fontSize: '12.5px' }}>{d.title}</strong>
+          <br/>
+          <small style={{ color: '#64748b' }}>Wiki: <code>{d.wiki}</code></small>
+        </td>
+        <td>
+          <a href={`https://yimeichuanbo.feishu.cn/wiki/${d.wiki}?sheet=${s.id}`} target="_blank" rel="noreferrer" style={{ fontWeight: 600, color: '#0284c7' }}>
+            {r?.sheetName||s.name} ↗
+          </a>
+          <br/>
+          <small style={{ color: '#475569' }}>Sheet ID: <code>{s.id}</code></small>
+        </td>
+        <td>
+          <span style={{ fontSize: '12px', color: '#1e293b' }}>{s.use}</span>
+        </td>
+        <td>
+          <code style={{ fontSize: '11.5px', color: '#475569' }}>A1:{s.end}</code>
+          <br/>
+          <small style={{ color: '#64748b' }}>类型: {s.kind}</small>
+        </td>
+        <td>
+          <span style={{ fontWeight: 600, color: '#0f172a' }}>
+            {!r ? '未核对' : r.status === 'error' ? '读取失败' : r.latestDate || '全周期/无日期'}
+          </span>
+        </td>
+        <td>
+          <strong>{r?.rows ?? '—'}</strong>
+        </td>
+        <td>
+          {!r ? (
+            <span style={{ color: '#94a3b8' }}>未核对</span>
+          ) : r.status === 'error' ? (
+            <span className="source-error">{r.error}（保留旧版本）</span>
+          ) : r.changed ? (
+            <span style={{ color: '#15803d', fontWeight: 600 }}>✓ 已同步 · 内容有更新</span>
+          ) : (
+            <span style={{ color: '#64748b' }}>✓ 已核对 · 内容无变化</span>
+          )}
+        </td>
+      </tr>;
     }))}</tbody></table></div>
-    <p>“各品线分工明细”（ldZDsR）是分工说明，不是月度指标源；其他未列出的工作表暂未接入。内容规划没有统一更新日期，按内容变化核对。</p>
+    <p style={{ marginTop: '10px', fontSize: '12px', color: '#64748b' }}>溯源说明：“各品线分工明细”（ldZDsR）是协作分工说明，不是月度指标源；其他未列出的工作表暂未接入。内容规划无固定日期列，系统自动计算内容哈希指纹进行无损比对溯源。</p>
   </details>;
 }
 

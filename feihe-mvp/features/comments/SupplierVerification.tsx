@@ -16,6 +16,7 @@ import type { SupplierCommentItem } from './comment-view-model';
 export function SupplierVerification({
   projectId,
   ops,
+  openNote,
   uploadWorkbook,
   verifySupplier,
   loading: actionLoading,
@@ -25,6 +26,7 @@ export function SupplierVerification({
 }: {
   projectId: string;
   ops: Ops;
+  openNote?: (id: string) => void;
   uploadWorkbook: (f: File | undefined, k: 'owned' | 'supplier') => Promise<void> | void;
   verifySupplier: () => Promise<void> | void;
   loading: boolean;
@@ -385,15 +387,37 @@ export function SupplierVerification({
                 <tr key={row.id}>
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      <a
-                        href={row.noteUrl || `https://www.xiaohongshu.com/explore/${row.noteId}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-link"
-                        style={{ fontWeight: 600 }}
-                      >
-                        {row.noteId.slice(0, 14)}… ↗
-                      </a>
+                      {openNote ? (
+                        <button
+                          type="button"
+                          className="text-link"
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600, textAlign: 'left', color: '#0284c7' }}
+                          onClick={() => openNote(row.noteId)}
+                        >
+                          {row.noteId.slice(0, 14)}… 查看明细
+                        </button>
+                      ) : (
+                        <a
+                          href={row.noteUrl || `https://www.xiaohongshu.com/explore/${row.noteId}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-link"
+                          style={{ fontWeight: 600 }}
+                        >
+                          {row.noteId.slice(0, 14)}… ↗
+                        </a>
+                      )}
+                      {row.noteUrl && (
+                        <a
+                          href={row.noteUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-link"
+                          style={{ fontSize: '11.5px', color: '#64748b' }}
+                        >
+                          原笔记 ↗
+                        </a>
+                      )}
                       <span style={{ fontSize: '12px', color: '#64748b' }}>{row.creator || '未知达人'}</span>
                     </div>
                   </td>
