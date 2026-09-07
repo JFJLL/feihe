@@ -1,3 +1,4 @@
+import { getSeedNote } from '@/lib/notes-seed';
 import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
@@ -275,13 +276,32 @@ export async function GET(request: Request) {
     totalInteractions: Number(summaryRow?.totalInteractions || 0),
   };
 
+  const enrichedItems = ((itemsRows.results || []) as Array<Record<string, unknown>>).map((row) => {
+    const seed = getSeedNote(String(row.id));
+    const rawCover = typeof row.coverUrl === 'string' ? row.coverUrl : '';
+    const coverUrl = (rawCover && !rawCover.startsWith('/api')) ? rawCover : (seed?.coverUrl || rawCover || '');
+    const rawTitle = typeof row.title === 'string' ? row.title : '';
+    const title = (rawTitle && rawTitle !== '#N/A' && rawTitle !== '启萃笔记') ? rawTitle : (seed?.title || rawTitle || '启萃笔记');
+    const rawAuthor = typeof row.author === 'string' ? row.author : '';
+    const author = (rawAuthor && rawAuthor !== '未知作者') ? rawAuthor : (seed?.author || rawAuthor || '飞鹤达人');
+    return {
+      ...row,
+      coverUrl,
+      title,
+      author,
+    };
+  });
+
   return Response.json({
     ok: true,
-    items: itemsRows.results || [],
+    items: enrichedItems,
     total,
     page,
     pageSize,
-    summary,
+    summary: {
+      ...summary,
+      coverCount: Math.max(summary.coverCount, enrichedItems.filter(i => Boolean(i.coverUrl)).length),
+    },
     coverageFeedback: feedbackRows.results || [],
   });
 }

@@ -1,4 +1,6 @@
-﻿'use client';
+'use client';
+
+import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 
 import { useState } from 'react';
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
@@ -71,9 +73,12 @@ function TopNotes({
         rows.slice(0, 12).map((note, index) => (
           <article key={String(note.id)}>
             <div>
-              <NoteCover
+              <NoteThumbnail
                 src={String(note.coverUrl || '')}
-                label={String(note.author || note.title || '笔')}
+                title={String(note.title || '')}
+                author={String(note.author || '')}
+                category={String(note.category1 || '笔记')}
+                className="note-radar-cover"
                 eager={index < 3}
               />
               <i>TOP {String(index + 1).padStart(2, '0')} · {String(note.category1 || note.creatorLevel || '笔记')}</i>

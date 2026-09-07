@@ -1,0 +1,5339 @@
+{
+  "meta": {
+    "title": "飞鹤小红书竞品情报台",
+    "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?from=from_copylink&sheet=xEsZPK",
+    "sourceName": "【代理共填】飞鹤竞品月报数据收集表by月更新",
+    "updatedAt": "2026-09-04 19:59",
+    "snapshotMonth": "2026-08",
+    "months": [
+      "2026-01",
+      "2026-02",
+      "2026-03",
+      "2026-04",
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08"
+    ]
+  },
+  "brands": [
+    {
+      "id": "feihe",
+      "name": "飞鹤",
+      "short": "飞鹤",
+      "color": "#BF2638",
+      "self": true,
+      "agency": "ym"
+    },
+    {
+      "id": "jlg",
+      "name": "金领冠",
+      "short": "金领冠",
+      "color": "#32658A",
+      "self": false,
+      "agency": "yx"
+    },
+    {
+      "id": "aptamil",
+      "name": "爱他美",
+      "short": "爱他美",
+      "color": "#7657A6",
+      "self": false,
+      "agency": "ym"
+    },
+    {
+      "id": "friso",
+      "name": "美素佳儿",
+      "short": "美素",
+      "color": "#458071",
+      "self": false,
+      "agency": "yx"
+    },
+    {
+      "id": "a2",
+      "name": "a2",
+      "short": "a2",
+      "color": "#A66D28",
+      "self": false,
+      "agency": "bw"
+    },
+    {
+      "id": "biostime",
+      "name": "合生元",
+      "short": "合生元",
+      "color": "#B64F71",
+      "self": false,
+      "agency": "bw"
+    },
+    {
+      "id": "junlebao",
+      "name": "君乐宝",
+      "short": "君乐宝",
+      "color": "#596A82",
+      "self": false,
+      "agency": "zy"
+    }
+  ],
+  "performance": [
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "spend": 8251900,
+      "notes": 1839,
+      "viral": 382,
+      "exposure": 187000000,
+      "reads": 30050000,
+      "interactions": 1870000,
+      "reported": {
+        "viralRate": 0.2077,
+        "ctr": 0.1606951872,
+        "engagementRate": 0.0622296173
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "spend": 4214100,
+      "notes": 1012,
+      "viral": 156,
+      "exposure": 86803200,
+      "reads": 11942700,
+      "interactions": 807700,
+      "reported": {
+        "viralRate": 0.1542,
+        "ctr": 0.1375836375,
+        "engagementRate": 0.0676312727
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "spend": 5521300,
+      "notes": 1629,
+      "viral": 152,
+      "exposure": 114000000,
+      "reads": 16557700,
+      "interactions": 1232500,
+      "reported": {
+        "viralRate": 0.0929,
+        "ctr": 0.1452429825,
+        "engagementRate": 0.0744366669
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-01",
+      "spend": 7545300,
+      "notes": 464,
+      "viral": 381,
+      "exposure": 147000000,
+      "reads": 26695000,
+      "interactions": 1938000,
+      "reported": {
+        "viralRate": 0.8211206897,
+        "ctr": 0.1815986395,
+        "engagementRate": 0.0725978648
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-02",
+      "spend": 8382100,
+      "notes": 623,
+      "viral": 289,
+      "exposure": 188000000,
+      "reads": 22537600,
+      "interactions": 1808000,
+      "reported": {
+        "viralRate": 0.4638844302,
+        "ctr": 0.1198808511,
+        "engagementRate": 0.0802214965
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-03",
+      "spend": 7190900,
+      "notes": 358,
+      "viral": 302,
+      "exposure": 108000000,
+      "reads": 16744600,
+      "interactions": 1513900,
+      "reported": {
+        "viralRate": 0.843575419,
+        "ctr": 0.1550425926,
+        "engagementRate": 0.0904112371
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-04",
+      "spend": 7528100,
+      "notes": 460,
+      "viral": 308,
+      "exposure": 100000000,
+      "reads": 14959200,
+      "interactions": 1326700,
+      "reported": {
+        "viralRate": 0.6814159292,
+        "ctr": 0.149592,
+        "engagementRate": 0.0886878977
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-05",
+      "spend": 8117000,
+      "notes": 725,
+      "viral": 394,
+      "exposure": 192000000,
+      "reads": 26335700,
+      "interactions": 2112700,
+      "reported": {
+        "viralRate": 0.5434482759,
+        "ctr": 0.1371651042,
+        "engagementRate": 0.0802219041
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "spend": 11987400,
+      "notes": 1272,
+      "viral": 578,
+      "exposure": 211000000,
+      "reads": 21838400,
+      "interactions": 2490600,
+      "reported": {
+        "viralRate": 0.4540455617,
+        "ctr": 0.1034995261,
+        "engagementRate": 0.1140468166
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "spend": 7327400,
+      "notes": 927,
+      "viral": 371,
+      "exposure": 183000000,
+      "reads": 27692500,
+      "interactions": 2246300,
+      "reported": {
+        "viralRate": 0.4002157497,
+        "ctr": 0.1513251366,
+        "engagementRate": 0.0811158256
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-08",
+      "spend": 12467000,
+      "notes": 1396,
+      "viral": 412,
+      "exposure": 229000000,
+      "reads": 31195900,
+      "interactions": 2909100,
+      "reported": {
+        "viralRate": 0.2951289398,
+        "ctr": 0.1362266376,
+        "engagementRate": 0.093252639
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "spend": 20078600,
+      "notes": 2114,
+      "viral": 697,
+      "exposure": 474000000,
+      "reads": 65366500,
+      "interactions": 40171000,
+      "reported": {
+        "viralRate": 0.3297067171,
+        "ctr": 0.1379040084,
+        "engagementRate": 0.6145502666
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "spend": 16374200,
+      "notes": 1791,
+      "viral": 622,
+      "exposure": 313000000,
+      "reads": 43908300,
+      "interactions": 3274600,
+      "reported": {
+        "viralRate": 0.3472920156,
+        "ctr": 0.1402821086,
+        "engagementRate": 0.0745781549
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "spend": 12711800,
+      "notes": 1885,
+      "viral": 390,
+      "exposure": 280000000,
+      "reads": 32241400,
+      "interactions": 2435500,
+      "reported": {
+        "viralRate": 0.2068965517,
+        "ctr": 0.1151478571,
+        "engagementRate": 0.0755395237
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-01",
+      "spend": 7673000,
+      "notes": 1043,
+      "viral": 306,
+      "exposure": 275000000,
+      "reads": 50744200,
+      "interactions": 3692700,
+      "reported": {
+        "viralRate": 0.2931034483,
+        "ctr": 0.1845243636,
+        "engagementRate": 0.0727708782
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-02",
+      "spend": 5803800,
+      "notes": 805,
+      "viral": 265,
+      "exposure": 181000000,
+      "reads": 33240300,
+      "interactions": 2604200,
+      "reported": {
+        "viralRate": 0.3188929001,
+        "ctr": 0.1836480663,
+        "engagementRate": 0.0783446599
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-03",
+      "spend": 6131100,
+      "notes": 1559,
+      "viral": 354,
+      "exposure": 252000000,
+      "reads": 43923800,
+      "interactions": 3064000,
+      "reported": {
+        "viralRate": 0.2270686337,
+        "ctr": 0.1743007937,
+        "engagementRate": 0.0697571704
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-04",
+      "spend": 11154500,
+      "notes": 1664,
+      "viral": 339,
+      "exposure": 223000000,
+      "reads": 27457200,
+      "interactions": 2528700,
+      "reported": {
+        "viralRate": 0.2072127139,
+        "ctr": 0.1231264574,
+        "engagementRate": 0.0920960622
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-05",
+      "spend": 7843800,
+      "notes": 1601,
+      "viral": 279,
+      "exposure": 193000000,
+      "reads": 26933200,
+      "interactions": 1932400,
+      "reported": {
+        "viralRate": 0.1742660837,
+        "ctr": 0.1395502591,
+        "engagementRate": 0.0717478799
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "spend": 5704700,
+      "notes": 1453,
+      "viral": 147,
+      "exposure": 109000000,
+      "reads": 16930087,
+      "interactions": 1596000,
+      "reported": {
+        "viralRate": 0.1011699931,
+        "ctr": 0.1553218991,
+        "engagementRate": 0.0942700413
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "spend": 7040200,
+      "notes": 1340,
+      "viral": 206,
+      "exposure": 140000000,
+      "reads": 17228300,
+      "interactions": 1629200,
+      "reported": {
+        "viralRate": 0.1537313433,
+        "ctr": 0.1230592857,
+        "engagementRate": 0.0945653373
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-08",
+      "spend": 7714100,
+      "notes": 1485,
+      "viral": 214,
+      "exposure": 132000000,
+      "reads": 16603700,
+      "interactions": 1421700,
+      "reported": {
+        "viralRate": 0.1441077441,
+        "ctr": 0.1257856061,
+        "engagementRate": 0.0856254931
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-01",
+      "spend": 2407100,
+      "notes": 4945,
+      "viral": 132,
+      "exposure": 3560000000,
+      "reads": 43233500,
+      "interactions": 1968200,
+      "reported": {
+        "viralRate": 0.0266936299,
+        "ctr": 0.0121442416,
+        "engagementRate": 0.0455248823
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-02",
+      "spend": 1238400,
+      "notes": 1180,
+      "viral": 28,
+      "exposure": 73842400,
+      "reads": 9453200,
+      "interactions": 532700,
+      "reported": {
+        "viralRate": 0.0237288136,
+        "ctr": 0.1280185909,
+        "engagementRate": 0.0563512885
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-03",
+      "spend": 2109400,
+      "notes": 1553,
+      "viral": 70,
+      "exposure": 1150000000,
+      "reads": 15298500,
+      "interactions": 974800,
+      "reported": {
+        "viralRate": 0.0450740502,
+        "ctr": 0.0133030435,
+        "engagementRate": 0.0637186652
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-04",
+      "spend": 1770000,
+      "notes": 1603,
+      "viral": 60,
+      "exposure": 1240000000,
+      "reads": 13075900,
+      "interactions": 875100,
+      "reported": {
+        "viralRate": 0.0374298191,
+        "ctr": 0.0105450806,
+        "engagementRate": 0.0669246476
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-05",
+      "spend": 2068000,
+      "notes": 1323,
+      "viral": 85,
+      "exposure": 1410000000,
+      "reads": 8534200,
+      "interactions": 912800,
+      "reported": {
+        "viralRate": 0.0642479214,
+        "ctr": 0.0060526241,
+        "engagementRate": 0.1069578871
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "spend": 765700,
+      "notes": 851,
+      "viral": 23,
+      "exposure": 46102400,
+      "reads": 5367800,
+      "interactions": 366300,
+      "reported": {
+        "viralRate": 0.027027027,
+        "ctr": 0.1164321163,
+        "engagementRate": 0.0682402474
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "spend": 1919200,
+      "notes": 412,
+      "viral": 21,
+      "exposure": 20491100,
+      "reads": 2053400,
+      "interactions": 186300,
+      "reported": {
+        "viralRate": 0.0509708738,
+        "ctr": 0.1002093592,
+        "engagementRate": 0.0907275738
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "spend": 2835300,
+      "notes": 950,
+      "viral": 68,
+      "exposure": 82433500,
+      "reads": 8967900,
+      "interactions": 603500,
+      "reported": {
+        "viralRate": 0.0715789474,
+        "ctr": 0.1087895091,
+        "engagementRate": 0.0672955764
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-01",
+      "spend": 2774100,
+      "notes": 887,
+      "viral": 58,
+      "exposure": 122000000,
+      "reads": 12615800,
+      "interactions": 590000,
+      "reported": {
+        "viralRate": 0.0339,
+        "ctr": 0.1034081967,
+        "engagementRate": 0.0467667528
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-02",
+      "spend": 1709100,
+      "notes": 690,
+      "viral": 23,
+      "exposure": 61884500,
+      "reads": 6461900,
+      "interactions": 256000,
+      "reported": {
+        "viralRate": 0.0182,
+        "ctr": 0.1044187155,
+        "engagementRate": 0.039616831
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-03",
+      "spend": 4375400,
+      "notes": 1804,
+      "viral": 62,
+      "exposure": 163000000,
+      "reads": 14886700,
+      "interactions": 829600,
+      "reported": {
+        "viralRate": 0.0209,
+        "ctr": 0.0913294479,
+        "engagementRate": 0.0557275958
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-04",
+      "spend": 5038800,
+      "notes": 1759,
+      "viral": 70,
+      "exposure": 184000000,
+      "reads": 23937400,
+      "interactions": 996200,
+      "reported": {
+        "viralRate": 0.0245,
+        "ctr": 0.1300945652,
+        "engagementRate": 0.041616884
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-05",
+      "spend": 4124100,
+      "notes": 1672,
+      "viral": 49,
+      "exposure": 146000000,
+      "reads": 12739200,
+      "interactions": 915300,
+      "reported": {
+        "viralRate": 0.0167,
+        "ctr": 0.0872547945,
+        "engagementRate": 0.0718490957
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "spend": 4871800,
+      "notes": 1723,
+      "viral": 41,
+      "exposure": 161000000,
+      "reads": 11910000,
+      "interactions": 398100,
+      "reported": {
+        "viralRate": 0.033081834,
+        "ctr": 0.0739751553,
+        "engagementRate": 0.0334256927
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "spend": 5310900,
+      "notes": 1947,
+      "viral": 39,
+      "exposure": 139000000,
+      "reads": 12290000,
+      "interactions": 936700,
+      "reported": {
+        "viralRate": 0.051874679,
+        "ctr": 0.0884172662,
+        "engagementRate": 0.0762164361
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-08",
+      "spend": 5109900,
+      "notes": 3680,
+      "viral": 67,
+      "exposure": 195000000,
+      "reads": 42620500,
+      "interactions": 1454000,
+      "reported": {
+        "viralRate": 0.0118,
+        "ctr": 0.2185666667,
+        "engagementRate": 0.0341150385
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-01",
+      "spend": 1967680,
+      "notes": 352,
+      "viral": 122,
+      "exposure": 55850200,
+      "reads": 15092600,
+      "interactions": 566700,
+      "reported": {
+        "viralRate": 0.3465909091,
+        "ctr": 0.2702335891,
+        "engagementRate": 0.0375482024
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-02",
+      "spend": 1544797,
+      "notes": 333,
+      "viral": 121,
+      "exposure": 42677400,
+      "reads": 10826800,
+      "interactions": 508600,
+      "reported": {
+        "viralRate": 0.3633633634,
+        "ctr": 0.2536893063,
+        "engagementRate": 0.0469760225
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-03",
+      "spend": 1896680,
+      "notes": 524,
+      "viral": 141,
+      "exposure": 44136500,
+      "reads": 9435100,
+      "interactions": 502700,
+      "reported": {
+        "viralRate": 0.2690839695,
+        "ctr": 0.2137709152,
+        "engagementRate": 0.0532797745
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-04",
+      "spend": 1890686,
+      "notes": 446,
+      "viral": 135,
+      "exposure": 55004800,
+      "reads": 14343000,
+      "interactions": 604800,
+      "reported": {
+        "viralRate": 0.302690583,
+        "ctr": 0.260759061,
+        "engagementRate": 0.0421669107
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-05",
+      "spend": 1569540,
+      "notes": 225,
+      "viral": 108,
+      "exposure": 28502200,
+      "reads": 5312300,
+      "interactions": 422700,
+      "reported": {
+        "viralRate": 0.48,
+        "ctr": 0.1863821038,
+        "engagementRate": 0.0795700544
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "spend": 1645340,
+      "notes": 806,
+      "viral": 89,
+      "exposure": 3483800,
+      "reads": 4089500,
+      "interactions": 375700,
+      "reported": {
+        "viralRate": 0.1104218362,
+        "ctr": 1.173861875,
+        "engagementRate": 0.0918694217
+      },
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "spend": 2385600,
+      "notes": 648,
+      "viral": 170,
+      "exposure": 52053000,
+      "reads": 8610600,
+      "interactions": 721400,
+      "reported": {
+        "viralRate": 0.262345679,
+        "ctr": 0.1654198605,
+        "engagementRate": 0.0837804566
+      },
+      "source": "千瓜（三方）"
+    }
+  ],
+  "creatorMix": [
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "star": 0,
+      "known": 0.0021751,
+      "head": 0.0076128,
+      "waist": 0.194671,
+      "junior": 0.5829255,
+      "amateur": 0.1571506,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "star": 0,
+      "known": 0.0009881,
+      "head": 0.006917,
+      "waist": 0.1709486,
+      "junior": 0.5918972,
+      "amateur": 0.208498,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "star": 0.0006139,
+      "known": 0,
+      "head": 0.0036832,
+      "waist": 0.1313689,
+      "junior": 0.4493554,
+      "amateur": 0.3615715,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "star": 0,
+      "known": 0.0007855,
+      "head": 0.0196386,
+      "waist": 0.4414768,
+      "junior": 0.4846819,
+      "amateur": 0.0337785,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "star": 0.0054,
+      "known": 0,
+      "head": 0.0229,
+      "waist": 0.349,
+      "junior": 0.602,
+      "amateur": 0.0207,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-08",
+      "star": 0,
+      "known": 0.0015,
+      "head": 0.0189,
+      "waist": 0.43,
+      "junior": 0.525,
+      "amateur": 0.0247,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "star": 0.0018921,
+      "known": 0.0037843,
+      "head": 0.0279092,
+      "waist": 0.2682119,
+      "junior": 0.4560076,
+      "amateur": 0.1636708,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "star": 0.0005583,
+      "known": 0.0039084,
+      "head": 0.0212172,
+      "waist": 0.2936907,
+      "junior": 0.4818537,
+      "amateur": 0.1083194,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "star": 0.0005305,
+      "known": 0.001061,
+      "head": 0.0153846,
+      "waist": 0.2419098,
+      "junior": 0.5458886,
+      "amateur": 0.1342175,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "star": 0,
+      "known": 0.0020647,
+      "head": 0.0103235,
+      "waist": 0.0777701,
+      "junior": 0.503097,
+      "amateur": 0.3647626,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "star": 0.0014925,
+      "known": 0.0014925,
+      "head": 0.0186567,
+      "waist": 0.108209,
+      "junior": 0.4283582,
+      "amateur": 0.4149254,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-08",
+      "star": 0.0006734,
+      "known": 0.0013468,
+      "head": 0.0195286,
+      "waist": 0.1252525,
+      "junior": 0.5535354,
+      "amateur": 0.2875421,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "star": 0,
+      "known": 0,
+      "head": 0.0261,
+      "waist": 0.3456,
+      "junior": 0.2542,
+      "amateur": 0.3741,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "star": 0,
+      "known": 0,
+      "head": 0.01,
+      "waist": 0.05,
+      "junior": 0.2767,
+      "amateur": 0.6633,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "star": 0,
+      "known": 0.0011,
+      "head": 0.0033,
+      "waist": 0.1129,
+      "junior": 0.5657,
+      "amateur": 0.317,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "star": 0,
+      "known": 0,
+      "head": 0.0145096,
+      "waist": 0.082,
+      "junior": 0.646,
+      "amateur": 0.271,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "star": 0,
+      "known": 0,
+      "head": 0.0005,
+      "waist": 0.0355,
+      "junior": 0.5874,
+      "amateur": 0.3767,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-08",
+      "star": 0,
+      "known": 0,
+      "head": 0,
+      "waist": 0.198,
+      "junior": 0.5191,
+      "amateur": 0.2308,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "star": 0.0003,
+      "known": 0,
+      "head": 0.0046,
+      "waist": 0.0742,
+      "junior": 0.2584,
+      "amateur": 0.6628,
+      "source": "千瓜（三方）"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "star": 0,
+      "known": 0,
+      "head": 0.009,
+      "waist": 0.1003,
+      "junior": 0.3179,
+      "amateur": 0.5725,
+      "source": "千瓜（三方）"
+    }
+  ],
+  "formatMix": [
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "image": 0.8597064,
+      "video": 0.1402936
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "image": 0.798419,
+      "video": 0.201581
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "image": 0.883364,
+      "video": 0.116636
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "image": 0.7637795,
+      "video": 0.2362205
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "image": 0.917,
+      "video": 0.083
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-08",
+      "image": 0.7034,
+      "video": 0.2966
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "image": 0.8065279,
+      "video": 0.1934721
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "image": 0.8615,
+      "video": 0.1390285
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "image": 0.8833,
+      "video": 0.1167109
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "image": 0.845148,
+      "video": 0.154852
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "image": 0.7358209,
+      "video": 0.0985075
+    },
+    {
+      "brand": "friso",
+      "month": "2026-08",
+      "image": 0.8781145,
+      "video": 0.1232323
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "image": 0.9485,
+      "video": 0.0515
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "image": 0.958,
+      "video": 0.042
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "image": 0.8526,
+      "video": 0.1474
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "image": 0.95,
+      "video": 0.049
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "image": 0.982,
+      "video": 0.017
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-08",
+      "image": 0.9803,
+      "video": 0.0197
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "image": 0.1184,
+      "video": 0.8816
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "image": 0.8287,
+      "video": 0.1713
+    }
+  ],
+  "searchIndex": [
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-06",
+      "value": 2531000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-07",
+      "value": 2084000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "飞鹤",
+      "level": "brand",
+      "brand": "feihe",
+      "month": "2026-08",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-06",
+      "value": 464300,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-07",
+      "value": 331500,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "爱他美",
+      "level": "brand",
+      "brand": "aptamil",
+      "month": "2026-08",
+      "value": 468500,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-06",
+      "value": 281000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-07",
+      "value": 306000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "迹萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-08",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-06",
+      "value": 731000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-07",
+      "value": 383000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "启萃",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-08",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-06",
+      "value": 672000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-07",
+      "value": 605000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓睿",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-08",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-06",
+      "value": 72000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-07",
+      "value": 73000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓蓓",
+      "level": "line",
+      "brand": "feihe",
+      "month": "2026-08",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-01",
+      "value": 353000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-02",
+      "value": 245000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-03",
+      "value": 317000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-04",
+      "value": 275000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-05",
+      "value": 299000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-06",
+      "value": 296000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-07",
+      "value": 227000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "金领冠珍护",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-08",
+      "value": 270000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-01",
+      "value": 72000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-02",
+      "value": 75000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-03",
+      "value": 105000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-04",
+      "value": 118000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-05",
+      "value": 143000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-06",
+      "value": 130000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-07",
+      "value": 172000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "源初",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-08",
+      "value": 623000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-01",
+      "value": 141000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-02",
+      "value": 107000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-03",
+      "value": 124000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-04",
+      "value": 113000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-05",
+      "value": 107000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-06",
+      "value": 94000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-07",
+      "value": 85000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "珍护铂萃",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-08",
+      "value": 103011,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-01",
+      "value": 83000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-02",
+      "value": 63000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-03",
+      "value": 91000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-04",
+      "value": 74000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-05",
+      "value": 78000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-06",
+      "value": 399000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-07",
+      "value": 372000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "塞纳牧",
+      "level": "line",
+      "brand": "jlg",
+      "month": "2026-08",
+      "value": 379000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-01",
+      "value": 37000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-02",
+      "value": 37000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-03",
+      "value": 63000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-04",
+      "value": 110000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-05",
+      "value": 158000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-06",
+      "value": 118000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-07",
+      "value": 130000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿1段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-08",
+      "value": 24000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-01",
+      "value": 104000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-02",
+      "value": 79000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-03",
+      "value": 104000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-04",
+      "value": 100000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-05",
+      "value": 129000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-06",
+      "value": 118000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-07",
+      "value": 97000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿2段",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-08",
+      "value": 11000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-01",
+      "value": 97000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-02",
+      "value": 97000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-03",
+      "value": 123000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-04",
+      "value": 92000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-05",
+      "value": 166000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-06",
+      "value": 120000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-07",
+      "value": 143000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "港版皇家美素佳儿",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-08",
+      "value": 40000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-01",
+      "value": 23000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-02",
+      "value": 30000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-03",
+      "value": 27000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-04",
+      "value": 31000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-05",
+      "value": 34000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-06",
+      "value": 19000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-07",
+      "value": 15000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "皇家美素佳儿莼悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-08",
+      "value": 8122,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-01",
+      "value": 70000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-02",
+      "value": 40000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-03",
+      "value": 74000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-04",
+      "value": 240000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-05",
+      "value": 77000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-06",
+      "value": 69000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-07",
+      "value": 90000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "美素佳儿源悦",
+      "level": "line",
+      "brand": "friso",
+      "month": "2026-08",
+      "value": 52000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-06",
+      "value": 665000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-07",
+      "value": 45400,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "领熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-08",
+      "value": 39700,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-06",
+      "value": 30700,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-07",
+      "value": 16300,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "卓傲",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-08",
+      "value": 15400,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-01",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-02",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-03",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-04",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-05",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-06",
+      "value": 47800,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-07",
+      "value": 34000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "至熠",
+      "level": "line",
+      "brand": "aptamil",
+      "month": "2026-08",
+      "value": 31800,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-01",
+      "value": 197000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-02",
+      "value": 173000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-03",
+      "value": 329000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-04",
+      "value": 152000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-05",
+      "value": 71000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-06",
+      "value": 74000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-07",
+      "value": 133000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫曜",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-08",
+      "value": 177000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-01",
+      "value": 667000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-02",
+      "value": 590000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-03",
+      "value": 833000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-04",
+      "value": 561000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-05",
+      "value": 544000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-06",
+      "value": 315000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-07",
+      "value": 310000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "紫白金",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-08",
+      "value": 340000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-01",
+      "value": 714000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-02",
+      "value": 590000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-03",
+      "value": 838000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-04",
+      "value": 1223000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-05",
+      "value": 719000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-06",
+      "value": 442000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-07",
+      "value": 274000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "a2至初",
+      "level": "line",
+      "brand": "a2",
+      "month": "2026-08",
+      "value": 365000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-01",
+      "value": 20616,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-02",
+      "value": 14843,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-03",
+      "value": 22939,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-04",
+      "value": 29902,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-05",
+      "value": 35220,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-06",
+      "value": 19936,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-07",
+      "value": 22949,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-08",
+      "value": 18121,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-01",
+      "value": 222484,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-02",
+      "value": 177750,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-03",
+      "value": 222002,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-04",
+      "value": 141788,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-05",
+      "value": 125282,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-06",
+      "value": 100769,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-07",
+      "value": 130369,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "合生元派星",
+      "level": "line",
+      "brand": "biostime",
+      "month": "2026-08",
+      "value": 196373,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-01",
+      "value": 63000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-02",
+      "value": 51000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-03",
+      "value": 80000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-04",
+      "value": 452000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-05",
+      "value": 66700,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-06",
+      "value": 68776,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-07",
+      "value": 68000,
+      "source": "小红书官方·灵犀"
+    },
+    {
+      "entity": "君乐宝优萃宝爱",
+      "level": "line",
+      "brand": "junlebao",
+      "month": "2026-08",
+      "value": null,
+      "source": "小红书官方·灵犀"
+    }
+  ],
+  "tagNames": [
+    "本品纵测",
+    "竞品横测",
+    "1v1转奶",
+    "干货科普",
+    "喂养经验",
+    "生活场景",
+    "情感关怀",
+    "随手po",
+    "小白文/大字报",
+    "敏宝选奶",
+    "单品直推",
+    "品牌活动类",
+    "电商活动类",
+    "其他"
+  ],
+  "contentMix": [
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 584
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 111
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 133
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 27
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 375
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 36
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 40
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 3
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 29
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 54
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 41
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 174
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 177
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 55
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 289
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 68
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 94
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 15
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 268
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 41
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 39
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 4
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 14
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 12
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 37
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 6
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 2
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 123
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "本品纵测",
+      "count": 504
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "竞品横测",
+      "count": 52
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "1v1转奶",
+      "count": 68
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "干货科普",
+      "count": 50
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "喂养经验",
+      "count": 549
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "生活场景",
+      "count": 72
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "情感关怀",
+      "count": 66
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "随手po",
+      "count": 20
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "小白文/大字报",
+      "count": 36
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "敏宝选奶",
+      "count": 25
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "单品直推",
+      "count": 77
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "品牌活动类",
+      "count": 0
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "电商活动类",
+      "count": 8
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "tag": "其他",
+      "count": 102
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 0
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 384
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 37
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 161
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 152
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 66
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 54
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 8
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 24
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 8
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 230
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 21
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 125
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 0
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 88
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 4
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 29
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 35
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 50
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 16
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 5
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 145
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 0
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 12
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 76
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 0
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 411
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 224
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 93
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 62
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 297
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 100
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 131
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 8
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 4
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 260
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 36
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 38
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 416
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 41
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 459
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 169
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 72
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 22
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 223
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 48
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 62
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 7
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 29
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 60
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 33
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 0
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 2
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 46
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "本品纵测",
+      "count": 847
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "竞品横测",
+      "count": 86
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "1v1转奶",
+      "count": 76
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "干货科普",
+      "count": 23
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "喂养经验",
+      "count": 429
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "生活场景",
+      "count": 42
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "情感关怀",
+      "count": 86
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "随手po",
+      "count": 15
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "小白文/大字报",
+      "count": 24
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "敏宝选奶",
+      "count": 119
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "单品直推",
+      "count": 43
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "品牌活动类",
+      "count": 2
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "电商活动类",
+      "count": 5
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "tag": "其他",
+      "count": 38
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 18
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 140
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 124
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 120
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 283
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 215
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 113
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 41
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 131
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 30
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 225
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 6
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 7
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 9
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 63
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 20
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 279
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 247
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 162
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 73
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 76
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 317
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 31
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 32
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 22
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 3
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 6
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 47
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 1
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 3
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 16
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 2
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 64
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 11
+    },
+    {
+      "brand": "a2",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 6
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 33
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 40
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 17
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 20
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 4
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 1
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 29
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 9
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 12
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 28
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 2
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 1
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "本品纵测",
+      "count": 16
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "竞品横测",
+      "count": 63
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "1v1转奶",
+      "count": 34
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "干货科普",
+      "count": 90
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "喂养经验",
+      "count": 198
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "生活场景",
+      "count": 7
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "情感关怀",
+      "count": 4
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "随手po",
+      "count": 89
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "小白文/大字报",
+      "count": 30
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "敏宝选奶",
+      "count": 0
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "单品直推",
+      "count": 130
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "品牌活动类",
+      "count": 8
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "电商活动类",
+      "count": 8
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 46
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 405
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 142
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 0
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 182
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 40
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 2
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 0
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 147
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 18
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 115
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 2
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 2
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 28
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 800
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 364
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 603
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 514
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 3
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 9
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 54
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 0
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 94
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 156
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 1
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 7
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 0
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "本品纵测",
+      "count": 8
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "竞品横测",
+      "count": 17
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "1v1转奶",
+      "count": 86
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "干货科普",
+      "count": 19
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "喂养经验",
+      "count": 67
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "生活场景",
+      "count": 90
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "情感关怀",
+      "count": 3
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "随手po",
+      "count": 3
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "小白文/大字报",
+      "count": 5
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "敏宝选奶",
+      "count": 14
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "单品直推",
+      "count": 247
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "品牌活动类",
+      "count": 255
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "电商活动类",
+      "count": 38
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "tag": "其他",
+      "count": 18
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "本品纵测",
+      "count": 7
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "竞品横测",
+      "count": 33
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "1v1转奶",
+      "count": 62
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "干货科普",
+      "count": 7
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "喂养经验",
+      "count": 343
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "生活场景",
+      "count": 92
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "情感关怀",
+      "count": 58
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "随手po",
+      "count": 0
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "小白文/大字报",
+      "count": 6
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "敏宝选奶",
+      "count": 10
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "单品直推",
+      "count": 0
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "品牌活动类",
+      "count": 0
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "电商活动类",
+      "count": 16
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "tag": "其他",
+      "count": 14
+    }
+  ],
+  "productStrategies": [
+    {
+      "brand": "feihe",
+      "line": "迹萃",
+      "audience": "早阶、弱宝、追求顶配自护力、开学入园及换季家庭",
+      "proposition": "飞鹤顶配迹萃，突破性母源自护",
+      "scenarios": "入园换季、自护、断奶转奶、体质弱、实证数据种草",
+      "evidence": "原表·飞鹤-ym 板块六"
+    },
+    {
+      "brand": "feihe",
+      "line": "启萃",
+      "audience": "早阶、新生儿、混合喂养、选奶纠结家庭",
+      "proposition": "亲和母源，喂养出众",
+      "scenarios": "第一口奶、混合喂养、断奶转奶、选奶指南",
+      "evidence": "原表·飞鹤-ym 板块六"
+    },
+    {
+      "brand": "feihe",
+      "line": "卓睿",
+      "audience": "三段、成长型宝宝、销冠跟随型家庭",
+      "proposition": "母源黄金配比，9维营养全覆盖",
+      "scenarios": "升段转奶、不长肉、追重、囤货性价比",
+      "evidence": "原表·飞鹤-ym 板块六"
+    },
+    {
+      "brand": "feihe",
+      "line": "卓蓓",
+      "audience": "早阶、有机偏好、娇嫩肠胃宝宝家庭",
+      "proposition": "鲜活有机，5维亲和自护",
+      "scenarios": "有机喂养、肠胃娇嫩、吸收差、转奶",
+      "evidence": "原表·飞鹤-ym 板块六"
+    },
+    {
+      "brand": "jlg",
+      "line": "金领冠珍护",
+      "audience": "早阶、三段、弱宝",
+      "proposition": "鲜活A2生牛乳，六维更易吸收",
+      "scenarios": "选奶、过敏婴儿喂养",
+      "evidence": "原表·金领冠-yx 板块六"
+    },
+    {
+      "brand": "jlg",
+      "line": "塞纳牧",
+      "audience": "早阶、弱宝、纯净喂养偏好家庭",
+      "proposition": "顶配有机，首款HMOs有机奶粉",
+      "scenarios": "有机纯净、选奶、转奶、过敏婴儿喂养",
+      "evidence": "原表·金领冠-yx 板块六"
+    },
+    {
+      "brand": "jlg",
+      "line": "珍护铂萃",
+      "audience": "早阶、三段、弱宝",
+      "proposition": "中国专利配方，宝宝超凡守护",
+      "scenarios": "营养全面、活性营养",
+      "evidence": "原表·金领冠-yx 板块六"
+    },
+    {
+      "brand": "jlg",
+      "line": "源初",
+      "audience": "早阶、弱宝、顶奢配方关注家庭",
+      "proposition": "顶奢母源配方，42倍乳铁蛋白、64倍顶量HMO",
+      "scenarios": "母源守护力、转奶好吸收",
+      "evidence": "原表·金领冠-yx 板块六"
+    },
+    {
+      "brand": "aptamil",
+      "line": "领熠",
+      "audience": "早阶、剖宫产、肠道敏感、待产备奶家庭",
+      "proposition": "顶配共生元，长效自护",
+      "scenarios": "混合喂养腹泻、换季、第一口奶、便便调理",
+      "evidence": "原表·爱他美-ym 板块六"
+    },
+    {
+      "brand": "aptamil",
+      "line": "卓傲",
+      "audience": "新手、消化吸收、混合喂养家庭",
+      "proposition": "9:1自护益生元，5天黄金便便",
+      "scenarios": "便秘硬便、转奶、长高长肉",
+      "evidence": "原表·爱他美-ym 板块六"
+    },
+    {
+      "brand": "aptamil",
+      "line": "至熠",
+      "audience": "不长肉、奶量少、消化困难宝宝家庭",
+      "proposition": "3D乳黄金球，重构原生营养",
+      "scenarios": "高效吸收、长肉、认知发育、生长曲线",
+      "evidence": "原表·爱他美-ym 板块六"
+    },
+    {
+      "brand": "friso",
+      "line": "皇家美素佳儿",
+      "audience": "早阶、三段、弱宝、高线城市家庭",
+      "proposition": "双硬核，强内护",
+      "scenarios": "自护、三重臻萃营养、3D御护",
+      "evidence": "原表·美素佳儿-yx 板块六"
+    },
+    {
+      "brand": "friso",
+      "line": "美素佳儿莼悦",
+      "audience": "有机家庭、中产家庭",
+      "proposition": "皇家有机，自然奢养",
+      "scenarios": "有机纯净、易吸收、珍稀奶源",
+      "evidence": "原表·美素佳儿-yx 板块六"
+    },
+    {
+      "brand": "friso",
+      "line": "美素佳儿源悦",
+      "audience": "湾区、高线城市、白领妈妈",
+      "proposition": "5维科学实证，减少宝宝肚肚难题",
+      "scenarios": "肠道健康、消化吸收、自护力",
+      "evidence": "原表·美素佳儿-yx 板块六"
+    },
+    {
+      "brand": "a2",
+      "line": "紫白金",
+      "audience": "新手妈妈、剖宫产家庭",
+      "proposition": "母源亲和，消化吸收更进阶",
+      "scenarios": "母源自护、混合喂养、消化吸收",
+      "evidence": "原表·a2-bw 板块六"
+    },
+    {
+      "brand": "a2",
+      "line": "a2至初",
+      "audience": "肠胃功能弱、混合喂养家庭",
+      "proposition": "a2至初好吸收强自护",
+      "scenarios": "好吸收、倍自护",
+      "evidence": "原表·a2-bw 板块六"
+    },
+    {
+      "brand": "biostime",
+      "line": "合生元派星",
+      "audience": "断奶转奶、脆皮宝、待产孕妈、混合喂养家庭",
+      "proposition": "6重HMO，提升体质 + 长肉稳",
+      "scenarios": "第一口奶、体质差、长肉、转奶",
+      "evidence": "原表·合生元-bw 板块六"
+    },
+    {
+      "brand": "junlebao",
+      "line": "优萃宝爱",
+      "audience": "新手妈妈、断奶转奶期家庭",
+      "proposition": "脑体双优，营养全面",
+      "scenarios": "断奶转奶、吸收差、不长肉",
+      "evidence": "原表·君乐宝-zy 板块六"
+    },
+    {
+      "brand": "junlebao",
+      "line": "乐铂",
+      "audience": "精打细算、瘦宝、玻璃肚、混合喂养家庭",
+      "proposition": "高性价比高配HMO，吸收自护双进阶",
+      "scenarios": "换季自护、断奶追重、大促囤货",
+      "evidence": "原表·君乐宝-zy 板块六"
+    }
+  ],
+  "comparisonGroups": [
+    {
+      "id": "jicui",
+      "selfLine": "迹萃",
+      "title": "迹萃战场",
+      "basis": "原分工表",
+      "lines": [
+        "迹萃",
+        "领熠",
+        "皇家美素佳儿"
+      ],
+      "note": "顶配自护与高端早阶竞争"
+    },
+    {
+      "id": "qicui",
+      "selfLine": "启萃",
+      "title": "启萃战场",
+      "basis": "原分工表",
+      "lines": [
+        "启萃",
+        "a2至初",
+        "合生元派星"
+      ],
+      "note": "第一口奶、混合喂养与亲和吸收竞争"
+    },
+    {
+      "id": "zhuorui",
+      "selfLine": "卓睿",
+      "title": "卓睿战场",
+      "basis": "原分工表",
+      "lines": [
+        "卓睿",
+        "卓傲",
+        "珍护铂萃"
+      ],
+      "note": "成长营养、追重与全面自护竞争"
+    },
+    {
+      "id": "zhuobei",
+      "selfLine": "卓蓓",
+      "title": "卓蓓战场",
+      "basis": "方案补充",
+      "lines": [
+        "卓蓓",
+        "塞纳牧",
+        "美素佳儿莼悦"
+      ],
+      "note": "有机、纯净与娇嫩肠胃竞争"
+    }
+  ],
+  "actions": [
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "type": "代言",
+      "title": "刘浩存与唐艺昕双线官宣",
+      "detail": "刘浩存担任新鲜奶源地品牌大使，唐艺昕绑定迹萃与《乘风2026》，强化“顶配舞台 × 顶配喂养”。"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-07",
+      "type": "溯源",
+      "title": "飞鹤溯源季上线",
+      "detail": "围绕北纬47°纯净牧场、自然新鲜与自产原料，双账号承接品牌和产品种草。"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "type": "节点",
+      "title": "开学入园与换季口粮",
+      "detail": "以迹萃自护底气为主线，推出入园过关指南、开学体检单与换季口粮内容。"
+    },
+    {
+      "brand": "feihe",
+      "month": "2026-08",
+      "type": "KOS",
+      "title": "多圈层 KOS 联合背书",
+      "detail": "旅行博主、精致妈妈与专业妈妈共同输出溯源、松弛育儿和迹萃体验。"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-04",
+      "type": "代言",
+      "title": "陈伟霆成为全球品牌代言人",
+      "detail": "以专业守护和新鲜心智为核心，配套杨澜对话及明星专题短片。"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-06",
+      "type": "IP",
+      "title": "足球观赛季战略合作",
+      "detail": "绑定赛事与世界杯语境，触达球迷宝爸，并升级五重新鲜领航体系。"
+    },
+    {
+      "brand": "jlg",
+      "month": "2026-07",
+      "type": "溯源",
+      "title": "鲜活的敕勒川专项",
+      "detail": "上线溯源纪实短片、互动 H5 和长期 UGC，强化奶源鲜活与可追溯。"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-06",
+      "type": "品牌活动",
+      "title": "爱的日常有奇迹 130 周年",
+      "detail": "联动六位跨领域相信者，通过 H5、话题和抽奖强化百年科研背书。"
+    },
+    {
+      "brand": "aptamil",
+      "month": "2026-08",
+      "type": "UGC",
+      "title": "母爱含金量主题征集",
+      "detail": "邀请用户分享妈妈守护宝宝的瞬间，以黄金摆件奖励促进原生内容共创。"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-06",
+      "type": "IP",
+      "title": "韩庚卢靖姗与综艺联动",
+      "detail": "品牌大使与《地球超新鲜2》共同主推皇家美素 3D 御护配方。"
+    },
+    {
+      "brand": "friso",
+      "month": "2026-07",
+      "type": "IP",
+      "title": "喜剧之王单口季 3",
+      "detail": "以节目赞助和户二代活动持续经营家庭成长与户外自然心智。"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-07",
+      "type": "溯源",
+      "title": "品质溯源升级",
+      "detail": "结合新华社品质访谈、澳洲本土博主与新客礼遇，强化严选和奶源可信度。"
+    },
+    {
+      "brand": "a2",
+      "month": "2026-08",
+      "type": "UGC",
+      "title": "紫白金笔记征集",
+      "detail": "以参与笔记有奖和月子中心线下活动强化产品心智。"
+    },
+    {
+      "brand": "biostime",
+      "month": "2026-06",
+      "type": "UGC",
+      "title": "有求必应合生元",
+      "detail": "免费派送适配奶粉盖，以宝妈互助氛围推动长期互动传播。"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-06",
+      "type": "线下",
+      "title": "宝爱音乐节",
+      "detail": "围绕优萃宝爱展开线下事件，连接年轻家庭与产品心智。"
+    },
+    {
+      "brand": "junlebao",
+      "month": "2026-07",
+      "type": "节点",
+      "title": "优萃宝爱七夕礼盒",
+      "detail": "以节点礼盒和推荐官活动拉动试喝、晒照与产品曝光。"
+    }
+  ],
+  "quality": {
+    "revision": 5151,
+    "updatedAt": "2026-09-04 19:59",
+    "formulaScan": {
+      "total": 733,
+      "errors": 213,
+      "byType": {
+        "#DIV/0!": 144,
+        "#REF!": 57,
+        "#VALUE!": 12
+      }
+    },
+    "latestHealth": {
+      "feihe": {
+        "search": "missing",
+        "keywords": "complete",
+        "media": "complete",
+        "product": "complete",
+        "creator": "complete",
+        "strategy": "complete",
+        "content": "complete",
+        "actions": "complete"
+      },
+      "jlg": {
+        "search": "complete",
+        "keywords": "partial",
+        "media": "complete",
+        "product": "partial",
+        "creator": "complete",
+        "strategy": "complete",
+        "content": "missing",
+        "actions": "missing"
+      },
+      "aptamil": {
+        "search": "complete",
+        "keywords": "complete",
+        "media": "complete",
+        "product": "complete",
+        "creator": "complete",
+        "strategy": "complete",
+        "content": "complete",
+        "actions": "complete"
+      },
+      "friso": {
+        "search": "complete",
+        "keywords": "partial",
+        "media": "complete",
+        "product": "partial",
+        "creator": "complete",
+        "strategy": "complete",
+        "content": "missing",
+        "actions": "missing"
+      },
+      "a2": {
+        "search": "complete",
+        "keywords": "missing",
+        "media": "complete",
+        "product": "complete",
+        "creator": "complete",
+        "strategy": "complete",
+        "content": "partial",
+        "actions": "complete"
+      },
+      "biostime": {
+        "search": "complete",
+        "keywords": "missing",
+        "media": "complete",
+        "product": "complete",
+        "creator": "complete",
+        "strategy": "complete",
+        "content": "missing",
+        "actions": "missing"
+      },
+      "junlebao": {
+        "search": "missing",
+        "keywords": "missing",
+        "media": "missing",
+        "product": "missing",
+        "creator": "missing",
+        "strategy": "complete",
+        "content": "missing",
+        "actions": "missing"
+      }
+    },
+    "issues": [
+      {
+        "severity": "critical",
+        "brand": "全局",
+        "code": "formula_errors",
+        "title": "213 个运行时公式错误",
+        "detail": "733 个公式中 144 个 #DIV/0!、57 个 #REF!、12 个 #VALUE!；未来月份的空值被公式计算为错误或 0。"
+      },
+      {
+        "severity": "critical",
+        "brand": "合生元",
+        "code": "rate_mismatch",
+        "title": "8 月爆文率口径冲突",
+        "detail": "原表填报 1.18%，按 67 ÷ 3,680 重算为 1.82%，差异 0.64 个百分点。Dashboard 使用重算值。"
+      },
+      {
+        "severity": "high",
+        "brand": "君乐宝",
+        "code": "stale_data",
+        "title": "8 月主数据未填报",
+        "detail": "最近完整投放月为 7 月。选择 8 月时不参与排名，也不会以 0 替代。"
+      },
+      {
+        "severity": "high",
+        "brand": "爱他美",
+        "code": "rate_outlier",
+        "title": "6 月互动率 61.46%",
+        "detail": "互动量 4,017.1 万、阅读量 6,536.7 万，数值远高于其余月份，建议核查单位或原始导出。"
+      },
+      {
+        "severity": "high",
+        "brand": "君乐宝",
+        "code": "rate_over_100",
+        "title": "6 月点击率 117.39%",
+        "detail": "阅读量高于曝光量，说明曝光或阅读单位、抓取范围、去重口径至少一项不一致。"
+      },
+      {
+        "severity": "medium",
+        "brand": "a2",
+        "code": "tag_coverage",
+        "title": "8 月内容标签覆盖 71.3%",
+        "detail": "标签合计 677，商业笔记 950，未打标差额 273 篇。"
+      },
+      {
+        "severity": "medium",
+        "brand": "飞鹤",
+        "code": "creator_gap",
+        "title": "8 月达人结构缺口 5.33%",
+        "detail": "已分类达人占比合计 94.67%，Dashboard 显式增加“未分类”。"
+      },
+      {
+        "severity": "medium",
+        "brand": "爱他美",
+        "code": "creator_gap",
+        "title": "8 月达人结构缺口 6.10%",
+        "detail": "已分类达人占比合计约 93.90%，Dashboard 不静默拉伸。"
+      },
+      {
+        "severity": "medium",
+        "brand": "合生元",
+        "code": "creator_overage",
+        "title": "6 月达人结构合计超过 100%",
+        "detail": "已分类达人占比合计约 101.35%。图表保留原值并放宽坐标轴，需回查源表口径。"
+      }
+    ]
+  },
+  "searchFlow": {
+    "month": "2026-08",
+    "platform": "蒲公英",
+    "source": "飞鹤8月｜竞品搜索分析底表",
+    "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/PPHRwSsdNiHfzokSsSGcqo60nlL",
+    "note": "平台关联的上下游 Top20 词表，非流量占比，不直接代表用户转化路径",
+    "keywords": [
+      {
+        "keyword": "飞鹤",
+        "brand": "feihe",
+        "level": "brand",
+        "upstream": [
+          "奶粉",
+          "爱他美",
+          "皇家美素佳儿",
+          "奶粉口碑最好的前十名",
+          "爱他美奶粉",
+          "合生元",
+          "合生元派星",
+          "a2",
+          "爱他美领熠",
+          "金领冠珍护",
+          "卓睿",
+          "能恩全护",
+          "奶粉新生儿怎么选",
+          "飞鹤迹萃惊喜盒子",
+          "能恩全护 7hmo",
+          "贝因美",
+          "金领冠奶粉哪个系列好",
+          "星飞帆卓睿",
+          "a2 至初",
+          "育护"
+        ],
+        "downstream": [
+          "飞鹤启萃",
+          "飞鹤哪个系列最好",
+          "飞鹤迹萃",
+          "飞鹤奶粉",
+          "飞鹤卓睿",
+          "金领冠",
+          "飞鹤臻爱倍护",
+          "飞鹤星飞帆卓睿",
+          "飞鹤星飞帆一段",
+          "奶粉推荐",
+          "飞鹤飞帆",
+          "君乐宝",
+          "飞鹤启萃亲和母源",
+          "飞鹤星飞帆",
+          "飞鹤各系列价格",
+          "飞鹤星飞帆三段",
+          "飞鹤卓耀",
+          "美素佳儿",
+          "飞鹤牧场",
+          "飞鹤奶粉更新鲜"
+        ]
+      },
+      {
+        "keyword": "卓睿",
+        "brand": "feihe",
+        "level": "line",
+        "upstream": [
+          "启萃",
+          "卓傲",
+          "迹萃",
+          "奶粉",
+          "飞鹤卓睿",
+          "合生元派星",
+          "派星",
+          "珍护",
+          "卓耀",
+          "皇家美素佳儿",
+          "a2",
+          "卓蓓",
+          "塞纳牧",
+          "飞鹤哪个系列最好",
+          "君乐宝",
+          "飞鹤启萃",
+          "领熠",
+          "爱他美领熠",
+          "奶粉推荐",
+          "臻爱倍护"
+        ],
+        "downstream": [
+          "卓睿 1 段",
+          "卓睿 3 段",
+          "卓睿 2 段",
+          "星飞帆",
+          "飞鹤",
+          "卓睿和卓睿 pro 区别",
+          "卓睿 pro",
+          "卓睿和启萃哪个好",
+          "卓睿二段",
+          "爱他美",
+          "卓睿奶粉怎么样",
+          "卓睿 1 段多少钱一罐",
+          "金领冠",
+          "卓睿和卓耀哪个更好",
+          "卓睿价格",
+          "奶粉口碑最好的前十名",
+          "卓睿和星飞帆哪个好",
+          "卓睿奶粉",
+          "卓睿 4 段奶粉",
+          "卓睿新旧版本区别"
+        ]
+      },
+      {
+        "keyword": "卓蓓",
+        "brand": "feihe",
+        "level": "line",
+        "upstream": [
+          "有机奶粉排行榜前十名",
+          "处方粮",
+          "适度水解奶粉可以长期喝吗",
+          "菁稚非凡",
+          "飞鹤绿罐",
+          "出奶粉",
+          "有机奶粉有必要吗",
+          "启萃",
+          "迹萃",
+          "vivo 线条小狗联名",
+          "vivo 折叠屏 fold6",
+          "平价气垫",
+          "吃菌客野生菌火锅丽江美食推荐",
+          "特爱敏佳",
+          "老版卓蓓",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "臻稚卓蓓",
+          "官栈",
+          "卓耀",
+          "卓睿",
+          "元乳",
+          "奶粉",
+          "适度水解奶粉",
+          "卓钰",
+          "恬适康敏",
+          "官栈花胶",
+          "闲置奶粉",
+          "卓蓓 130g",
+          "塞纳牧",
+          "卓蓓 1 段",
+          "星飞帆",
+          "卓蓓 2 段",
+          "卓傲",
+          "飞鹤臻稚卓蓓奶粉怎么样",
+          "卓舒",
+          "卓蓓黄盖和绿盖的区别"
+        ]
+      },
+      {
+        "keyword": "合生元派星出事",
+        "brand": "biostime",
+        "level": "line",
+        "upstream": [
+          "合生元派星",
+          "合生元",
+          "合生元派星怎样",
+          "爱他美奶粉出事的是哪款",
+          "合生元派星出事",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "合生元派星",
+          "合生元派星是国产还是进口",
+          "合生元官方回应奶粉事件",
+          "合生元派星3段怎么样",
+          "老爸测评合生元派星奶粉",
+          "合生元派星怎么样",
+          "合生元",
+          "合生元派星出事了吗最新",
+          "合生元派星彻底塌了",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ]
+      },
+      {
+        "keyword": "启萃",
+        "brand": "feihe",
+        "level": "line",
+        "upstream": [
+          "迹萃",
+          "飞鹤迹萃",
+          "星飞帆",
+          "卓睿",
+          "飞鹤哪个系列最好",
+          "奶粉",
+          "启赋奶粉",
+          "星飞帆卓睿",
+          "皇家美素佳儿",
+          "奶粉推荐",
+          "能恩全护",
+          "新生儿奶粉",
+          "金领冠珍护",
+          "迹萃一段",
+          "新生儿奶粉怎么选",
+          "珍护一段",
+          "家有萌宝礼盒",
+          "二段奶粉推荐",
+          "飞鹤奶粉",
+          "迹萃和启萃的区别"
+        ],
+        "downstream": [
+          "启萃和迹萃哪个好",
+          "启萃 1 段",
+          "启萃 2 段",
+          "飞鹤启萃",
+          "启萃 3 段",
+          "启萃和卓睿哪个好",
+          "启萃奶粉怎么样",
+          "启萃价格",
+          "启萃 1 段多少钱",
+          "合生元派星",
+          "飞鹤",
+          "启萃 1 段 130g",
+          "启萃 130g",
+          "飞鹤启萃亲和母源",
+          "珍护",
+          "启萃和迹萃",
+          "启萃收",
+          "奶粉口碑最好的前十名",
+          "君乐宝",
+          "启萃 1 段 260g"
+        ]
+      },
+      {
+        "keyword": "爱他美卓傲2段",
+        "brand": "aptamil",
+        "level": "line",
+        "upstream": [
+          "爱他美卓傲2段",
+          "爱他美",
+          "爱他美卓傲1段",
+          "爱他美领熠",
+          "爱他美奶粉",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "爱他美卓傲2段优缺点",
+          "爱他美卓傲",
+          "爱他美卓傲2段价格",
+          "爱他美卓傲3段",
+          "爱他美卓傲2段配料表",
+          "爱他美卓傲2段奶粉怎么样",
+          "爱他美卓傲一段",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ]
+      },
+      {
+        "keyword": "迹萃",
+        "brand": "feihe",
+        "level": "line",
+        "upstream": [
+          "启萃",
+          "卓睿",
+          "飞鹤哪个系列最好",
+          "飞鹤",
+          "飞鹤迹萃",
+          "皇家美素佳儿",
+          "源初",
+          "飞鹤启萃",
+          "合生元派星",
+          "爱他美领熠",
+          "蓝臻",
+          "新生儿奶粉",
+          "飞鹤奶粉",
+          "飞鹤卓睿",
+          "派星",
+          "a2",
+          "臻爱倍护",
+          "至初",
+          "a2 至初",
+          "源初金领冠"
+        ],
+        "downstream": [
+          "迹萃和启萃的区别",
+          "迹萃 3 段",
+          "迹萃一段",
+          "迹萃 2 段",
+          "迹萃多少钱一桶",
+          "迹萃 1 段",
+          "迹萃价格",
+          "迹萃和卓睿",
+          "迹萃 260 克 1 段",
+          "迹萃怎么样",
+          "收迹萃",
+          "迹萃一段 130g",
+          "迹萃和皇家美素佳儿哪个好",
+          "迹萃新生儿喝的真实测评",
+          "启萃 1 段",
+          "迹萃买一送一",
+          "迹萃多少钱",
+          "金领冠",
+          "迹萃配方",
+          "迹萃小罐"
+        ]
+      },
+      {
+        "keyword": "金领冠奶粉哪个系列好",
+        "brand": "jlg",
+        "level": "line",
+        "upstream": [
+          "金领冠奶粉哪个系列好",
+          "金领冠",
+          "飞鹤哪个系列最好",
+          "金领冠育护",
+          "金领冠奶粉",
+          "金领冠珍护",
+          "奶粉口碑最好的前十名",
+          "奶粉新生儿怎么选",
+          "君乐宝奶粉哪个系列好",
+          "奶粉推荐",
+          "金领冠塞纳牧",
+          "合生元派星",
+          "奶粉",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "金领冠育护",
+          "金领冠珍护",
+          "金领冠奶粉哪个系列好1段",
+          "金领冠奶粉哪个系列好3段",
+          "金领冠奶粉",
+          "金领冠奶粉哪个系列好二段",
+          "金领冠奶粉哪个系列好新生儿",
+          "飞鹤哪个系列最好",
+          "金领冠奶粉价格排行",
+          "金领冠铂萃",
+          "金领冠塞纳牧",
+          "金领冠最贵的一款奶粉",
+          "金领冠opo结构脂奶粉",
+          "金领冠源初",
+          "金领冠珍护铂萃奶粉",
+          "金领冠",
+          "珍护铂萃",
+          "金领冠奶粉被召回的是哪款",
+          "金领冠珍护源初",
+          "金领冠孕妇奶粉"
+        ]
+      },
+      {
+        "keyword": "飞鹤哪个系列最好",
+        "brand": "feihe",
+        "level": "line",
+        "upstream": [
+          "飞鹤",
+          "奶粉口碑最好的前十名",
+          "金领冠奶粉哪个系列好",
+          "飞鹤启萃",
+          "飞鹤星飞帆卓睿",
+          "爱他美哪个系列最好",
+          "奶粉",
+          "奶粉新生儿怎么选",
+          "飞鹤迹萃",
+          "飞鹤哪个系列最好",
+          "爱他美奶粉",
+          "合生元派星",
+          "皇家美素佳儿",
+          "飞鹤启萃和迹萃什么区别",
+          "飞鹤卓睿",
+          "奶粉推荐",
+          "爱他美领熠",
+          "君乐宝奶粉哪个系列好",
+          "金领冠珍护",
+          "新生儿奶粉怎么选"
+        ],
+        "downstream": [
+          "飞鹤卓睿",
+          "飞鹤哪个系列最好一段",
+          "飞鹤启萃",
+          "飞鹤迹萃",
+          "飞鹤哪个系列最好新生儿",
+          "飞鹤哪个系列最好3段",
+          "奶粉口碑最好的前十名",
+          "飞鹤臻爱倍护",
+          "飞鹤最高端是哪款",
+          "飞鹤",
+          "金领冠奶粉哪个系列好",
+          "飞鹤星飞帆卓睿",
+          "飞鹤价目表",
+          "飞鹤星飞帆一段",
+          "飞鹤哪个系列最好二段",
+          "飞鹤启萃和迹萃什么区别",
+          "飞鹤系列档次排名",
+          "飞鹤奶粉",
+          "飞鹤卓耀",
+          "皇家美素佳儿"
+        ]
+      },
+      {
+        "keyword": "飞鹤星飞帆卓睿",
+        "brand": "feihe",
+        "level": "line",
+        "upstream": [
+          "飞鹤星飞帆卓睿",
+          "飞鹤",
+          "飞鹤哪个系列最好",
+          "飞鹤星飞帆一段",
+          "合生元派星",
+          "飞鹤启萃",
+          "奶粉口碑最好的前十名",
+          "飞鹤星飞帆",
+          "飞鹤迹萃",
+          "摩飞mr9409佐料机",
+          "飞鹤奶粉",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "飞鹤星飞帆",
+          "飞鹤星飞帆卓睿2段",
+          "飞鹤星飞帆卓睿3段",
+          "飞鹤星飞帆卓睿一段怎么样",
+          "飞鹤星飞帆一段",
+          "飞鹤星飞帆卓睿一段多少钱",
+          "飞鹤星飞帆卓耀",
+          "飞鹤星飞帆卓睿pro",
+          "飞鹤哪个系列最好",
+          "飞鹤卓睿",
+          "飞鹤星飞帆三段",
+          "飞鹤星飞帆卓睿怎么冲泡",
+          "飞鹤",
+          "奶粉口碑最好的前十名",
+          "合生元派星",
+          "飞鹤启萃",
+          "飞鹤星飞帆卓睿一段",
+          "飞鹤迹萃",
+          "飞鹤星飞帆卓初",
+          "皇家美素佳儿"
+        ]
+      },
+      {
+        "keyword": "奶粉",
+        "brand": null,
+        "level": "category",
+        "upstream": [
+          "新生儿奶粉",
+          "爱他美奶粉",
+          "待产包",
+          "金领冠育护",
+          "奶粉推荐",
+          "a2紫白金",
+          "金领冠奶粉哪个系列好",
+          "优时通",
+          "金领冠",
+          "贝因美",
+          "飞鹤启萃",
+          "皇家美素佳儿",
+          "美素佳儿",
+          "爱他美",
+          "转奶的正确方法",
+          "三段奶粉推荐",
+          "爱他美哪个系列最好",
+          "一段奶粉",
+          "a2至初",
+          "安儿宁能恩"
+        ],
+        "downstream": [
+          "新生儿奶粉",
+          "待产包",
+          "转奶的正确方法",
+          "二段奶粉推荐",
+          "a2紫白金",
+          "启赋hmo",
+          "hmo",
+          "二段奶粉",
+          "金领冠育护",
+          "hmo奶粉",
+          "金领冠珍护",
+          "金领冠奶粉哪个系列好1段",
+          "启赋",
+          "3段奶粉推荐好吸收长肉肉长个子",
+          "三段奶粉推荐",
+          "金领冠奶粉哪个系列好3段",
+          "三段奶粉推荐长个长肉",
+          "接近母乳的奶粉推荐",
+          "大灌篮奶粉",
+          "新生儿奶粉推荐"
+        ]
+      },
+      {
+        "keyword": "奶粉口碑最好的前十名",
+        "brand": null,
+        "level": "category",
+        "upstream": [
+          "金领冠育护",
+          "金领冠",
+          "金领冠奶粉哪个系列好",
+          "金领冠珍护",
+          "金领冠奶粉",
+          "奶粉",
+          "合生元派星",
+          "伊利金领冠哪个系列好",
+          "金领冠奶粉各系列对比",
+          "新生儿奶粉",
+          "奶粉新生儿怎么选",
+          "奶粉推荐",
+          "飞鹤飞帆3段",
+          "奶粉口碑最好的前十名",
+          "飞鹤星飞帆一段",
+          "爱他美领熠",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "金领冠珍护",
+          "金领冠育护紫盖和黄盖区别",
+          "金领冠育护和珍护哪个好",
+          "金领冠育护3段奶粉怎么样",
+          "金领冠育护1段奶粉怎么样",
+          "金领冠",
+          "金领冠育护三段",
+          "金领冠奶粉哪个系列好",
+          "金领冠菁护",
+          "金领冠育护4段",
+          "金领冠育护2段奶粉怎么样",
+          "金领冠育护紫盖",
+          "金领冠育护1段",
+          "金领冠育护1段好价",
+          "金领冠塞纳牧",
+          "金领冠育护试用装免费领取",
+          "金领冠育护绿盖和黄盖区别",
+          "金领冠铂萃",
+          "金领冠育护3段",
+          "金领冠育护盒装"
+        ]
+      },
+      {
+        "keyword": "奶粉口碑最好的前十名",
+        "brand": null,
+        "level": "category",
+        "upstream": [
+          "奶粉口碑最好的前十名",
+          "沐u婚纱",
+          "三段奶粉推荐",
+          "香港豪宅",
+          "香港买房",
+          "显示器推荐",
+          "有机奶粉排行榜",
+          "显示器推荐微星星芒y28",
+          "项链叠戴",
+          "降噪耳机",
+          "音乐节怎么买票",
+          "戒指叠戴",
+          "适度水解奶粉",
+          "1段奶粉口碑最好的前十名",
+          "有机奶粉排行榜前十名",
+          "臻稚卓蓓",
+          "昆明婚纱",
+          "二段奶粉推荐哪个",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "暖水袋子",
+          "暖水袋子小月龄",
+          "沐u婚纱",
+          "戒指叠戴",
+          "香港房产",
+          "适度水解奶粉",
+          "香港豪宅",
+          "香港买房",
+          "昆明婚纱",
+          "音乐节怎么买票",
+          "臻稚卓蓓",
+          "显示器推荐微星星芒y28",
+          "显示器推荐",
+          "降噪耳机",
+          "办公室好物",
+          "香港塑妍萃逸苗",
+          "1段奶粉口碑最好的前十名暖水袋子",
+          "有机奶粉排行榜",
+          "水解奶粉推荐",
+          "vivo头戴式耳机"
+        ]
+      },
+      {
+        "keyword": "新生儿准备的物品清单",
+        "brand": null,
+        "level": "category",
+        "upstream": [
+          "待产包准备清单",
+          "新生儿",
+          "新生儿衣服",
+          "新生儿用品清单",
+          "新生儿奶粉",
+          "宝宝出生必备物品清单",
+          "待产包",
+          "婴儿用品清单",
+          "新生儿准备",
+          "纸尿裤",
+          "斜坡枕推荐",
+          "新生儿用品",
+          "新生儿枕头",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "新生儿礼物",
+          "新生儿送什么礼物好",
+          "新生儿奶粉怎么选",
+          "新生儿准备的物品清单宝宝以及妈妈的物品",
+          "新生儿纸尿裤哪个牌子好用",
+          "新生儿准备的物品清单多少钱",
+          "新生儿奶瓶",
+          "新生儿衣服准备什么码几件",
+          "尿布台",
+          "新生儿准备的物品清单 10 月",
+          "新生儿准备的物品清单 12 月",
+          "新生儿准备的物品清单 11 月初",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ]
+      },
+      {
+        "keyword": "新生儿奶粉",
+        "brand": null,
+        "level": "category",
+        "upstream": [
+          "新生儿奶粉",
+          "新生儿奶粉自护力飞鹤迹萃",
+          "一段奶粉推荐自护力飞鹤迹萃",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ],
+        "downstream": [
+          "干眼症眼药水脂质",
+          "新生儿奶粉怎么选自护力飞鹤迹萃",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/",
+          "/"
+        ]
+      }
+    ]
+  }
+}

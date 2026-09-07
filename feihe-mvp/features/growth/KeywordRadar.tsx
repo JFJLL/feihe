@@ -1,3 +1,4 @@
+import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 'use client';
 
 import { useState } from 'react';
@@ -269,19 +270,12 @@ export function KeywordRadar({
               {hotNotes.slice(0, 12).map((note) => (
                 <article key={note.id}>
                   <div>
-                    <img
-                      src={note.coverUrl && !note.coverUrl.startsWith('/api') ? note.coverUrl : `/api/note-covers?projectId=${encodeURIComponent(projectId)}&noteId=${encodeURIComponent(note.id)}`}
-                      alt=""
-                      referrerPolicy="no-referrer"
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => {
-                        if (!e.currentTarget.src.includes('/api/note-covers')) {
-                          e.currentTarget.src = `/api/note-covers?projectId=${encodeURIComponent(projectId)}&noteId=${encodeURIComponent(note.id)}`;
-                        } else {
-                          e.currentTarget.style.display = 'none';
-                        }
-                      }}
+                    <NoteThumbnail
+                      src={note.coverUrl}
+                      title={note.title}
+                      author={note.author}
+                      category={note.category1 || (isOwnedNote(note) ? '自有发布' : '自然内容')}
+                      className="note-radar-cover"
                     />
                     <i>{isOwnedNote(note) ? '自有发布' : '自然内容'}</i>
                   </div>

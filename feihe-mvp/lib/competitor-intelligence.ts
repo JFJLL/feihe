@@ -92,6 +92,7 @@ export type CompetitorIntelligenceData = {
   searchFlow: CompetitorSearchFlow[];
 };
 
+import defaultCompetitorData from './competitor_intelligence.json';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -128,18 +129,19 @@ export function getCompetitorIntelligence(): CompetitorIntelligenceData {
   } catch (err) {
     console.error('Failed to load competitor_data.json:', err);
   }
+  const fallback = defaultCompetitorData as any;
   return {
-    updatedAt: '2026-09-04 19:59',
-    snapshotMonth: '2026-08',
-    months: ['2026-06', '2026-07', '2026-08'],
-    brands: [],
-    performance: [],
-    creatorMix: [],
-    formatMix: [],
-    tagNames: [],
-    contentMix: [],
-    productStrategies: [],
-    actions: [],
-    searchFlow: [],
+    updatedAt: fallback.meta?.updatedAt || '2026-09-04 19:59',
+    snapshotMonth: fallback.meta?.snapshotMonth || '2026-08',
+    months: fallback.meta?.months || ['2026-06', '2026-07', '2026-08'],
+    brands: fallback.brands || [],
+    performance: fallback.performance || [],
+    creatorMix: fallback.creatorMix || [],
+    formatMix: fallback.formatMix || [],
+    tagNames: fallback.tagNames || [],
+    contentMix: fallback.contentMix || [],
+    productStrategies: fallback.productStrategies || [],
+    actions: fallback.actions || [],
+    searchFlow: fallback.searchFlow?.keywords || [],
   };
 }

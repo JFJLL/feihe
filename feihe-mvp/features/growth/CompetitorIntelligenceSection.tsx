@@ -1,3 +1,291 @@
+
+function MultiBrandPerformanceChart({
+  brands,
+  performance,
+  curMonth,
+  activeBrand,
+  onSelectBrand,
+}: {
+  brands: Array<{ id: string; name: string; short: string; color: string; self: boolean }>;
+  performance: Array<{
+    brand: string;
+    month: string;
+    spend: number;
+    notes: number;
+    viral: number;
+    interactions: number;
+    reported: { viralRate: number; engagementRate: number };
+  }>;
+  curMonth: string;
+  activeBrand: string;
+  onSelectBrand: (brandId: string) => void;
+}) {
+  const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
+
+  const brandData = brands.map((b) => {
+    const p = performance.find((item) => item.brand === b.id && item.month === curMonth);
+    return {
+      ...b,
+      spendWan: p ? p.spend / 10000 : 0,
+      notes: p ? p.notes : 0,
+      viral: p ? p.viral : 0,
+      viralRate: p ? p.reported.viralRate * 100 : 0,
+      interactions: p ? p.interactions : 0,
+      engagementRate: p ? p.reported.engagementRate * 100 : 0,
+      hasData: Boolean(p),
+    };
+  });
+
+  const maxSpend = Math.max(50, ...brandData.map((d) => d.spendWan));
+  const maxRate = Math.max(15, ...brandData.map((d) => d.viralRate));
+
+  const w = 780;
+  const h = 260;
+  const padL = 60;
+  const padR = 60;
+  const padT = 30;
+  const padB = 40;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+
+  const colW = plotW / brands.length;
+  const barW = Math.min(36, colW * 0.55);
+
+  const getX = (idx: number) => padL + idx * colW + colW / 2;
+  const getYSpend = (val: number) => padT + plotH - (val / maxSpend) * plotH;
+  const getYRate = (val: number) => padT + plotH - (val / maxRate) * plotH;
+
+  const activeData = hoveredBrand
+    ? brandData.find((d) => d.id === hoveredBrand)
+    : activeBrand !== 'all'
+    ? brandData.find((d) => d.id === activeBrand)
+    : null;
+
+  return (
+    <div style={{ position: 'relative', width: '100%', marginTop: '16px', background: '#fafcff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+        <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span>📊 各品牌商单投入（万元）与爆文率（%）复合对比</span>
+        </div>
+        <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: '#64748b' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <i style={{ width: '12px', height: '12px', background: '#38bdf8', borderRadius: '2px', display: 'inline-block' }} />
+            商单投入（万元·柱状）
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <i style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
+            爆文率（%·折线）
+          </span>
+        </div>
+      </div>
+
+      <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+        {/* Y Axis Grid Lines & Left Labels (Spend) */}
+        {[0, 0.25, 0.5, 0.75, 1].map((t) => {
+          const y = padT + plotH * (1 - t);
+          const spendVal = (maxSpend * t).toFixed(0);
+          const rateVal = (maxRate * t).toFixed(0) + '%';
+          return (
+            <g key={t}>
+              <line x1={padL} x2={w - padR} y1={y} y2={y} stroke="#e2e8f0" strokeDasharray="3 3" />
+              <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="11" fill="#64748b">
+                ¥{spendVal}万
+              </text>
+              <text x={w - padR + 8} y={y + 4} textAnchor="start" fontSize="11" fill="#d97706">
+                {rateVal}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Bars for Spend */}
+        {brandData.map((d, idx) => {
+          const xCenter = getX(idx);
+          const barH = (d.spendWan / maxSpend) * plotH;
+          const y = padT + plotH - barH;
+          const isHovered = hoveredBrand === d.id || (hoveredBrand === null && activeBrand === d.id);
+          return (
+            <g
+              key={d.id}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredBrand(d.id)}
+              onMouseLeave={() => setHoveredBrand(null)}
+              onClick={() => onSelectBrand(d.id)}
+            >
+              <rect
+                x={xCenter - barW / 2}
+                y={y}
+                width={barW}
+                height={Math.max(2, barH)}
+                rx="4"
+                fill={isHovered ? d.color : d.color + 'bb'}
+                stroke={isHovered ? '#0f172a' : 'transparent'}
+                strokeWidth={isHovered ? 1.5 : 0}
+                style={{ transition: 'all 0.2s ease' }}
+              />
+              {/* Value label above bar */}
+              {d.hasData && (
+                <text
+                  x={xCenter}
+                  y={y - 6}
+                  textAnchor="middle"
+                  fontSize="10.5"
+                  fontWeight="700"
+                  fill={isHovered ? d.color : '#475569'}
+                >
+                  ¥{d.spendWan.toFixed(0)}万
+                </text>
+              )}
+            </g>
+          );
+        })}
+
+        {/* Connecting Smooth Line for Viral Rate */}
+        {(() => {
+          const validPoints = brandData
+            .map((d, idx) => (d.hasData ? { x: getX(idx), y: getYRate(d.viralRate) } : null))
+            .filter((p): p is { x: number; y: number } => p !== null);
+          if (validPoints.length < 2) return null;
+          let pathD = `M ${validPoints[0].x} ${validPoints[0].y}`;
+          for (let i = 0; i < validPoints.length - 1; i++) {
+            const p0 = validPoints[i === 0 ? 0 : i - 1];
+            const p1 = validPoints[i];
+            const p2 = validPoints[i + 1];
+            const p3 = validPoints[i + 2 < validPoints.length ? i + 2 : i + 1];
+            const cp1x = p1.x + (p2.x - p0.x) * 0.25;
+            const cp1y = p1.y + (p2.y - p0.y) * 0.25;
+            const cp2x = p2.x - (p3.x - p1.x) * 0.25;
+            const cp2y = p2.y - (p3.y - p1.y) * 0.25;
+            pathD += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)} ${cp2x.toFixed(1)} ${cp2y.toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+          }
+          return (
+            <path
+              d={pathD}
+              fill="none"
+              stroke="#f59e0b"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ pointerEvents: 'none' }}
+            />
+          );
+        })()}
+
+        {/* Rate Dots */}
+        {brandData.map((d, idx) => {
+          if (!d.hasData) return null;
+          const cx = getX(idx);
+          const cy = getYRate(d.viralRate);
+          const isHovered = hoveredBrand === d.id || (hoveredBrand === null && activeBrand === d.id);
+          return (
+            <g
+              key={'dot-' + d.id}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredBrand(d.id)}
+              onMouseLeave={() => setHoveredBrand(null)}
+              onClick={() => onSelectBrand(d.id)}
+            >
+              <circle
+                cx={cx}
+                cy={cy}
+                r={isHovered ? 6 : 4}
+                fill="#f59e0b"
+                stroke="#ffffff"
+                strokeWidth={isHovered ? 2.5 : 1.5}
+                style={{ transition: 'all 0.15s ease' }}
+              />
+              <text
+                x={cx}
+                y={cy - 9}
+                textAnchor="middle"
+                fontSize="10"
+                fontWeight="700"
+                fill="#d97706"
+              >
+                {d.viralRate.toFixed(1)}%
+              </text>
+            </g>
+          );
+        })}
+
+        {/* X Axis Brand Labels */}
+        {brandData.map((d, idx) => {
+          const cx = getX(idx);
+          const isHovered = hoveredBrand === d.id || (hoveredBrand === null && activeBrand === d.id);
+          return (
+            <g
+              key={'lbl-' + d.id}
+              style={{ cursor: 'pointer' }}
+              onMouseEnter={() => setHoveredBrand(d.id)}
+              onMouseLeave={() => setHoveredBrand(null)}
+              onClick={() => onSelectBrand(d.id)}
+            >
+              <text
+                x={cx}
+                y={h - 14}
+                textAnchor="middle"
+                fontSize="11.5"
+                fontWeight={isHovered ? '700' : '600'}
+                fill={isHovered ? d.color : '#334155'}
+              >
+                {d.short}
+                {d.self ? '★' : ''}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* Floating Interactive Tooltip */}
+      {activeData && activeData.hasData && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '48px',
+            right: '24px',
+            background: 'rgba(15, 23, 42, 0.94)',
+            color: '#ffffff',
+            padding: '10px 14px',
+            borderRadius: '8px',
+            fontSize: '12px',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+            zIndex: 10,
+            lineHeight: 1.6,
+            backdropFilter: 'blur(4px)',
+            border: `1px solid ${activeData.color}`,
+            minWidth: '180px',
+          }}
+        >
+          <div style={{ fontWeight: 700, fontSize: '13px', color: '#38bdf8', marginBottom: '4px', display: 'flex', justifyContent: 'space-between' }}>
+            <span>{activeData.name} {activeData.self ? '(本品)' : ''}</span>
+            <span style={{ fontSize: '11px', color: '#94a3b8' }}>{curMonth}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>商单总投入:</span>
+            <strong>¥{activeData.spendWan.toFixed(1)} 万元</strong>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>商业笔记数:</span>
+            <strong>{activeData.notes} 篇</strong>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>产出爆文数:</span>
+            <strong>{activeData.viral} 篇</strong>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#f59e0b' }}>
+            <span>爆文产出率:</span>
+            <strong>{activeData.viralRate.toFixed(1)}%</strong>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>总互动沉淀:</span>
+            <strong>{compact(activeData.interactions)} 次</strong>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 'use client';
 
 import React, { useState } from 'react';
@@ -99,6 +387,13 @@ export function CompetitorIntelligenceSection({
             );
           })}
         </div>
+        <MultiBrandPerformanceChart
+          brands={brands}
+          performance={performance}
+          curMonth={curMonth}
+          activeBrand={activeBrand}
+          onSelectBrand={(bId) => setActiveBrand(activeBrand === bId ? 'all' : bId)}
+        />
       </DashboardSection>
 
       {/* 2. 达人量级矩阵分布 & 内容形式对比 (两栏) */}

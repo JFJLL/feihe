@@ -42,41 +42,45 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
 
   return (
     <div className="stack animate-fade-in">
-      {/* 顶部指标卡 */}
-      <section className="ops-metric-grid">
-        <MetricCard
-          theme="blue"
-          label="监测品牌总数"
-          value={brands.length}
-          unit="个"
-          desc="覆盖本品与核心竞品"
-          tag="竞品大盘"
-        />
-        <MetricCard
-          theme="teal"
-          label="竞品横向总声量"
-          value={compact(totalBrandComments)}
-          unit="条"
-          desc="已抓取项目评论样本累计"
-          tag="声量池"
-        />
-        <MetricCard
-          theme="green"
-          label="累计内容样本"
-          value={totalBrandNotes.toLocaleString()}
-          unit="篇"
-          desc="全品牌关联笔记总数"
-          tag="内容矩阵"
-        />
-        <MetricCard
-          theme="purple"
-          label="总互动量"
-          value={compact(totalBrandInteractions)}
-          unit="次"
-          desc={leadBrand ? '声量领先：' + String(leadBrand.brand) : '互动样本已汇聚'}
-          tag="互动格局"
-        />
-      </section>
+      {/* 顶部指标卡 (统一项目总览马卡龙风格) */}
+      <div className="reference-daily-grid">
+        <article className="pastel-card pastel-blue reference-kpi">
+          <div className="stat-head">
+            <span>监测品牌总数</span>
+            <span className="section-mini-tag tag-blue">竞品大盘</span>
+          </div>
+          <div className="stat-value">{brands.length}<small> 个</small></div>
+          <div className="reference-kpi-meta">覆盖本品与核心竞品</div>
+          <div className="reference-kpi-delta">7大品牌全维度收录</div>
+        </article>
+        <article className="pastel-card pastel-teal reference-kpi">
+          <div className="stat-head">
+            <span>竞品横向总声量</span>
+            <span className="section-mini-tag tag-teal">声量池</span>
+          </div>
+          <div className="stat-value">{compact(totalBrandComments)}<small> 条</small></div>
+          <div className="reference-kpi-meta">已抓取项目评论样本累计</div>
+          <div className="reference-kpi-delta">包含竞品1v1横测声量</div>
+        </article>
+        <article className="pastel-card pastel-green reference-kpi">
+          <div className="stat-head">
+            <span>累计内容样本</span>
+            <span className="section-mini-tag tag-green">内容矩阵</span>
+          </div>
+          <div className="stat-value">{totalBrandNotes.toLocaleString()}<small> 篇</small></div>
+          <div className="reference-kpi-meta">全品牌关联笔记总数</div>
+          <div className="reference-kpi-delta">商单与自然多源聚合</div>
+        </article>
+        <article className="pastel-card pastel-purple reference-kpi">
+          <div className="stat-head">
+            <span>总互动量</span>
+            <span className="section-mini-tag tag-purple">互动格局</span>
+          </div>
+          <div className="stat-value">{compact(totalBrandInteractions)}<small> 次</small></div>
+          <div className="reference-kpi-meta">{leadBrand ? '声量领先：' + String(leadBrand.brand) : '互动样本已汇聚'}</div>
+          <div className="reference-kpi-delta">大盘互动保持活跃</div>
+        </article>
+      </div>
 
       <div className="workspace-two-col competitor-source-grid">
       <DashboardSection title="飞书月报 · 品牌搜索指数" eyebrow="MONTHLY SEARCH" desc="各品牌工作表的月度搜索指数，保留源表数值与单位。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{[...months].reverse().map(m=><option key={m} value={m}>{m}{m===months.at(-1)?' (最新)':''}</option>)}</select></label>}>

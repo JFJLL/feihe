@@ -1,3 +1,4 @@
+import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
@@ -392,29 +393,13 @@ export function ContentRegistry({
                 <tr key={note.id}>
                   <td>
                     <div className="ops-table-note-cell">
-                      {note.coverUrl && !note.coverUrl.startsWith('/api') ? (
-                        <img
-                          src={note.coverUrl}
-                          alt=""
-                          className="ops-table-note-cover"
-                          loading="lazy"
-                          decoding="async"
-                          referrerPolicy="no-referrer"
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = 'https://ci.xiaohongshu.com/notes_pre_post/1040g3k8323q50baq0od05pj1qjj0u2g19pmm6io?imageView2/2/w/540/format/jpg/q/75';
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src="https://ci.xiaohongshu.com/notes_pre_post/1040g3k8323q50baq0od05pj1qjj0u2g19pmm6io?imageView2/2/w/540/format/jpg/q/75"
-                          alt=""
-                          className="ops-table-note-cover"
-                          loading="lazy"
-                          decoding="async"
-                          referrerPolicy="no-referrer"
-                        />
-                      )}
+                      <NoteThumbnail
+                        src={note.coverUrl}
+                        title={note.title}
+                        author={note.author}
+                        category={note.category1 || '图文'}
+                        className="ops-table-note-cover"
+                      />
                       <div className="ops-table-note-info">
                         <span className="ops-table-note-title" title={note.title || note.id}>
                           {note.title || '未命名笔记'}

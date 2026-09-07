@@ -486,7 +486,7 @@ export function CtrTrendChart({
   );
 }
 
-// ======================== Tier Doughnut Chart ========================
+// ======================== Tier Doughnut Chart (Interactive) ========================
 export function TierDoughnutChart({
   items,
   total = 194,
@@ -494,47 +494,60 @@ export function TierDoughnutChart({
   items: Array<{ label: string; count: number; pct: number; color: string }>;
   total?: number;
 }) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const size = 160;
-  const strokeWidth = 26;
-  const radius = (size - strokeWidth) / 2;
+  const baseStroke = 24;
   const center = size / 2;
-  const circumference = 2 * Math.PI * radius;
 
+  const validTotal = Math.max(1, total);
   const slices = items.map((item, idx) => {
-    const ratio = item.count / total;
-    const prevSum = items.slice(0, idx).reduce((sum, it) => sum + it.count / total, 0);
+    const ratio = item.count / validTotal;
+    const prevSum = items.slice(0, idx).reduce((sum, it) => sum + it.count / validTotal, 0);
+    const radius = (size - (hoveredIdx === idx ? 30 : baseStroke)) / 2;
+    const circumference = 2 * Math.PI * radius;
     const strokeDasharray = `${ratio * circumference} ${circumference}`;
     const strokeDashoffset = -prevSum * circumference;
-    return { ...item, strokeDasharray, strokeDashoffset };
+    return { ...item, strokeDasharray, strokeDashoffset, radius };
   });
+
+  const activeItem = hoveredIdx !== null ? items[hoveredIdx] : null;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap', justifyContent: 'center' }}>
       <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
           <circle
             cx={center}
             cy={center}
-            r={radius}
+            r={(size - baseStroke) / 2}
             fill="none"
             stroke="#f1f5f9"
-            strokeWidth={strokeWidth}
+            strokeWidth={baseStroke}
           />
-          {slices.map((s, idx) => (
-            <circle
-              key={idx}
-              cx={center}
-              cy={center}
-              r={radius}
-              fill="none"
-              stroke={s.color}
-              strokeWidth={strokeWidth}
-              strokeDasharray={s.strokeDasharray}
-              strokeDashoffset={s.strokeDashoffset}
-              transform={`rotate(-90 ${center} ${center})`}
-              style={{ transition: 'stroke-dashoffset 0.6s ease' }}
-            />
-          ))}
+          {slices.map((s, idx) => {
+            const isHovered = hoveredIdx === idx;
+            return (
+              <circle
+                key={idx}
+                cx={center}
+                cy={center}
+                r={s.radius}
+                fill="none"
+                stroke={s.color}
+                strokeWidth={isHovered ? 30 : baseStroke}
+                strokeDasharray={s.strokeDasharray}
+                strokeDashoffset={s.strokeDashoffset}
+                transform={`rotate(-90 ${center} ${center})`}
+                style={{
+                  cursor: 'pointer',
+                  transition: 'stroke-width 0.2s ease, opacity 0.2s ease',
+                  opacity: hoveredIdx === null || isHovered ? 1 : 0.6,
+                }}
+                onMouseEnter={() => setHoveredIdx(idx)}
+                onMouseLeave={() => setHoveredIdx(null)}
+              />
+            );
+          })}
         </svg>
         <div
           style={{
@@ -545,80 +558,129 @@ export function TierDoughnutChart({
             alignItems: 'center',
             justifyContent: 'center',
             pointerEvents: 'none',
+            textAlign: 'center',
+            padding: '0 8px',
           }}
         >
-          <span style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{total}</span>
-          <span style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>总篇数</span>
+          {activeItem ? (
+            <>
+              <span style={{ fontSize: 18, fontWeight: 800, color: activeItem.color, lineHeight: 1.1 }}>
+                {activeItem.count}篇
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#334155', marginTop: 3 }}>
+                {activeItem.label}
+              </span>
+              <span style={{ fontSize: 10.5, color: '#64748b' }}>
+                {typeof activeItem.pct === 'number' ? activeItem.pct.toFixed(1) : activeItem.pct}%
+              </span>
+            </>
+          ) : (
+            <>
+              <span style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{total}</span>
+              <span style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>总篇数</span>
+            </>
+          )}
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1, minWidth: 160 }}>
-        {items.map((item, idx) => (
-          <div
-            key={idx}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: 12,
-              padding: '4px 8px',
-              borderRadius: 6,
-              background: '#f8fafc',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: item.color, display: 'inline-block' }} />
-              <span style={{ color: '#334155', fontWeight: 500 }}>{item.label}</span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1, minWidth: 160 }}>
+        {items.map((item, idx) => {
+          const isHovered = hoveredIdx === idx;
+          return (
+            <div
+              key={idx}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                fontSize: 12,
+                padding: '6px 10px',
+                borderRadius: 6,
+                background: isHovered ? '#f0f9ff' : '#f8fafc',
+                border: isHovered ? `1px solid ${item.color}` : '1px solid transparent',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: item.color, display: 'inline-block' }} />
+                <span style={{ color: isHovered ? '#0369a1' : '#334155', fontWeight: isHovered ? 700 : 500 }}>{item.label}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
+                <b style={{ color: '#0f172a' }}>{item.count}篇</b>
+                <span style={{ color: isHovered ? item.color : '#94a3b8', fontSize: 11, fontWeight: isHovered ? 600 : 400 }}>
+                  ({typeof item.pct === 'number' ? item.pct.toFixed(1) : item.pct}%)
+                </span>
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
-              <b style={{ color: '#0f172a' }}>{item.count}篇</b>
-              <span style={{ color: '#94a3b8', fontSize: 11 }}>({item.pct}%)</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 }
 
-// ======================== Horizontal Bar List ========================
+// ======================== Horizontal Bar List (Interactive) ========================
 export function HorizontalBarList({
   items,
 }: {
   items: Array<{ label: string; amount: number; pct: number; color: string; bg?: string; subText?: string }>;
 }) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {items.map((it, idx) => (
-        <div key={idx}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
-            <span style={{ fontWeight: 600, color: '#1e293b' }}>{it.label}</span>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span style={{ color: '#64748b' }}>{it.subText || `¥${it.amount}万`}</span>
-              <strong style={{ color: it.color }}>{it.pct}%</strong>
-            </div>
-          </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {items.map((it, idx) => {
+        const isHovered = hoveredIdx === idx;
+        const pctNum = typeof it.pct === 'number' ? it.pct : parseFloat(String(it.pct)) || 0;
+        return (
           <div
+            key={idx}
+            onMouseEnter={() => setHoveredIdx(idx)}
+            onMouseLeave={() => setHoveredIdx(null)}
             style={{
-              height: 10,
-              background: '#f1f5f9',
-              borderRadius: 5,
-              overflow: 'hidden',
-              position: 'relative',
+              padding: '6px 8px',
+              borderRadius: 8,
+              background: isHovered ? '#f8fafc' : 'transparent',
+              border: isHovered ? '1px solid #e2e8f0' : '1px solid transparent',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
             }}
           >
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5 }}>
+              <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#0f172a' : '#1e293b' }}>
+                {it.label}
+              </span>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <span style={{ color: '#64748b', fontSize: 12 }}>{it.subText || `¥${it.amount}万`}</span>
+                <strong style={{ color: it.color, fontSize: 13 }}>{pctNum.toFixed(1)}%</strong>
+              </div>
+            </div>
             <div
               style={{
-                width: `${it.pct}%`,
-                height: '100%',
-                background: it.color,
+                height: 10,
+                background: '#f1f5f9',
                 borderRadius: 5,
-                transition: 'width 0.6s ease',
+                overflow: 'hidden',
+                position: 'relative',
               }}
-            />
+            >
+              <div
+                style={{
+                  width: `${Math.min(100, Math.max(2, pctNum))}%`,
+                  height: '100%',
+                  background: it.color,
+                  borderRadius: 5,
+                  transition: 'width 0.6s ease, transform 0.2s ease',
+                  transform: isHovered ? 'scaleY(1.2)' : 'none',
+                }}
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

@@ -57,7 +57,7 @@ export function ReviewActionQueue({ projectId }: { projectId: string }) {
       <PanelHead eyebrow="REVIEW QUEUE" title="判定处置队列" />
       <div className="filterbar">
         <select value={date} onChange={(e) => { setDate(e.target.value); load(e.target.value); }}>
-          {dates.map((d) => (
+          {[...dates].sort().reverse().map((d) => (
             <option key={d} value={d}>{d} 判定批次</option>
           ))}
         </select>
