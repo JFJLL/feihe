@@ -7,6 +7,8 @@ export function MetricCard({
   desc,
   tag,
   theme = 'blue',
+  onClick,
+  clickable = false,
 }: {
   label: string;
   value: string | number;
@@ -14,10 +16,19 @@ export function MetricCard({
   desc?: string;
   tag?: string;
   theme?: 'blue' | 'green' | 'yellow' | 'red' | 'teal' | 'purple' | 'indigo';
+  onClick?: () => void;
+  clickable?: boolean;
 }) {
   const tone = theme === 'yellow' ? 'amber' : theme === 'red' ? 'rose' : theme;
   return (
-    <article className={`pastel-card pastel-${tone} reference-kpi ops-metric-card ops-metric-card-${theme}`}>
+    <article
+      className={`pastel-card pastel-${tone} reference-kpi ops-metric-card ops-metric-card-${theme}`}
+      onClick={onClick}
+      style={clickable || onClick ? { cursor: 'pointer', transition: 'transform 0.15s ease, box-shadow 0.15s ease' } : undefined}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+    >
       <div className="stat-head ops-metric-card-head">
         <span className="ops-metric-card-label">{label}</span>
         {tag && <span className={`section-mini-tag tag-${tone}`}>{tag}</span>}

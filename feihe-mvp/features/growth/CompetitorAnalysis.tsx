@@ -23,6 +23,17 @@ function formatTenThousand(val: unknown) {
   const inTenThousand = Math.round((n / 10000) * 10) / 10;
   return inTenThousand.toFixed(1) + "万";
 }
+function parseRawValueToNumber(val: unknown): number {
+  if (val === null || val === undefined || val === "") return 0;
+  const str = String(val).trim();
+  if (str.endsWith("万")) {
+    const n = parseFloat(str.slice(0, -1));
+    return Number.isFinite(n) ? n * 10000 : 0;
+  }
+  const clean = str.replace(/,/g, "");
+  const n = parseFloat(clean);
+  return Number.isFinite(n) ? n : 0;
+}
 function bestBrand(rows: AnalyticRow[], key: 'positive' | 'negative', inverse = false) {
   const valid = rows.filter((x) => num(x.comments) > 0);
   if (!valid.length) return '暂无足够评论样本。';
@@ -53,53 +64,149 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
   const totalBrandInteractions = brands.reduce((sum, b) => sum + num(b.interactions), 0);
   const leadBrand = brands[0];
 
+  // 灵犀与聚光指数大盘衍生计算
+  const searchData = data.feishu?.search || [];
+  const latestSearch = searchData[searchData.length - 1] || { date: '—', lingxi: null, spotlight: null };
+  const prevSearch = searchData[searchData.length - 2] || null;
+  const lingxiVal = num(latestSearch.lingxi);
+  const spotlightVal = num(latestSearch.spotlight);
+  const totalSearchVal = lingxiVal + spotlightVal;
+  const prevLingxi = prevSearch ? num(prevSearch.lingxi) : null;
+  const lingxiDelta = prevLingxi !== null && prevLingxi > 0 ? Math.round(((lingxiVal - prevLingxi) / prevLingxi) * 1000) / 10 : null;
+  const prevSpotlight = prevSearch ? num(prevSearch.spotlight) : null;
+  const spotlightDelta = prevSpotlight !== null && prevSpotlight > 0 ? Math.round(((spotlightVal - prevSpotlight) / prevSpotlight) * 1000) / 10 : null;
+
+  // 飞书月报当月各品牌搜索指数排行
+  const currentMonthPoints = monthly.filter((r) => r.month === month).map((r) => ({
+    ...r,
+    numericVal: parseRawValueToNumber(r.value),
+  })).sort((a, b) => b.numericVal - a.numericVal);
+  const maxMonthVal = Math.max(1, ...currentMonthPoints.map((x) => x.numericVal));
+  const totalMonthSearch = currentMonthPoints.reduce((s, x) => s + x.numericVal, 0);
+
   return (
     <div className="stack animate-fade-in">
       {/* 顶部指标卡 (统一项目总览马卡龙风格) */}
       <div className="reference-daily-grid">
         <article className="pastel-card pastel-blue reference-kpi">
           <div className="stat-head">
-            <span>监测品牌总数</span>
-            <span className="section-mini-tag tag-blue">竞品大盘</span>
+            <span>启萃灵犀搜索指数</span>
+            <span className="section-mini-tag tag-blue">最新日度</span>
           </div>
-          <div className="stat-value">{brands.length}<small> 个</small></div>
-          <div className="reference-kpi-meta">覆盖本品与核心竞品</div>
-          <div className="reference-kpi-delta">7大品牌全维度收录</div>
+          <div className="stat-value">{compact(lingxiVal)}<small> 指数</small></div>
+          <div className="reference-kpi-meta">日期：{latestSearch.date || '—'}</div>
+          <div className="reference-kpi-delta">{lingxiDelta !== null ? (lingxiDelta >= 0 ? `较前日 +${lingxiDelta}%` : `较前日 ${lingxiDelta}%`) : '灵犀大盘指数'}</div>
         </article>
         <article className="pastel-card pastel-teal reference-kpi">
           <div className="stat-head">
-            <span>竞品横向总声量</span>
-            <span className="section-mini-tag tag-teal">声量池</span>
+            <span>启萃聚光搜索指数</span>
+            <span className="section-mini-tag tag-teal">商投大盘</span>
           </div>
-          <div className="stat-value">{compact(totalBrandComments)}<small> 条</small></div>
-          <div className="reference-kpi-meta">已抓取项目评论样本累计</div>
-          <div className="reference-kpi-delta">包含竞品1v1横测声量</div>
+          <div className="stat-value">{compact(spotlightVal)}<small> 指数</small></div>
+          <div className="reference-kpi-meta">日期：{latestSearch.date || '—'}</div>
+          <div className="reference-kpi-delta">{spotlightDelta !== null ? (spotlightDelta >= 0 ? `较前日 +${spotlightDelta}%` : `较前日 ${spotlightDelta}%`) : '聚光广告大盘'}</div>
         </article>
         <article className="pastel-card pastel-green reference-kpi">
           <div className="stat-head">
-            <span>累计内容样本</span>
-            <span className="section-mini-tag tag-green">内容矩阵</span>
+            <span>双端搜索聚合大盘</span>
+            <span className="section-mini-tag tag-green">全域需求</span>
           </div>
-          <div className="stat-value">{totalBrandNotes.toLocaleString()}<small> 篇</small></div>
-          <div className="reference-kpi-meta">全品牌关联笔记总数</div>
-          <div className="reference-kpi-delta">商单与自然多源聚合</div>
+          <div className="stat-value">{compact(totalSearchVal)}<small> 综合</small></div>
+          <div className="reference-kpi-meta">灵犀自然 + 聚光商业检索</div>
+          <div className="reference-kpi-delta">大盘搜索心智强盛</div>
         </article>
         <article className="pastel-card pastel-purple reference-kpi">
           <div className="stat-head">
-            <span>总互动量</span>
-            <span className="section-mini-tag tag-purple">互动格局</span>
+            <span>竞品月报全网搜索池</span>
+            <span className="section-mini-tag tag-purple">{month || '月度'}大盘</span>
           </div>
-          <div className="stat-value">{compact(totalBrandInteractions)}<small> 次</small></div>
-          <div className="reference-kpi-meta">{leadBrand ? '声量领先：' + String(leadBrand.brand) : '互动样本已汇聚'}</div>
-          <div className="reference-kpi-delta">大盘互动保持活跃</div>
+          <div className="stat-value">{formatTenThousand(totalMonthSearch)}<small></small></div>
+          <div className="reference-kpi-meta">{currentMonthPoints[0] ? `月榜首位：${currentMonthPoints[0].brand}` : '竞品月报跨端追踪'}</div>
+          <div className="reference-kpi-delta">{currentMonthPoints.length} 个重点品线纳管</div>
         </article>
       </div>
 
       <div className="workspace-two-col competitor-source-grid">
-      <DashboardSection title="飞书月报 · 品牌搜索指数" eyebrow="MONTHLY SEARCH" desc="各品牌工作表的月度搜索指数，统一以万为单位展示。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{[...months].reverse().map(m=><option key={m} value={m}>{m}{m===months.at(-1)?' (最新)':''}</option>)}</select></label>}>
-        {monthly.length?<div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>品牌 / 品线</th><th>{month}搜索指数</th><th>数据来源</th></tr></thead><tbody>{monthly.filter(r=>r.month===month).map((r,i)=><tr key={r.sheetId+r.brand+i}><td>{r.brand}</td><td><strong>{formatTenThousand(r.value)}</strong></td><td><a href={`https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=${r.sheetId}`} target="_blank" rel="noreferrer">打开工作表 ↗</a></td></tr>)}</tbody></table></div>:<EmptyState title="尚未同步竞品月报" text="点击页面顶部同步最新数据，读取各品牌已填写的月份。"/>}
+      <DashboardSection title="飞书月报 · 品牌搜索指数全盘与份额" eyebrow="MONTHLY SEARCH" desc="各品牌工作表的月度搜索指数，统一以万为单位展示，并附带大盘占比与横向对比排行榜。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e=>setSelectedMonth(e.target.value)}>{[...months].reverse().map(m=><option key={m} value={m}>{m}{m===months.at(-1)?' (最新)':''}</option>)}</select></label>}>
+        {monthly.length ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '2px' }}>
+                <span>{month} 品牌搜索热度横向排行榜 (Top 6)</span>
+                <span>搜索指数 (万) · 占比份额</span>
+              </div>
+              {currentMonthPoints.slice(0, 6).map((item, idx) => {
+                const pctOfTotal = totalMonthSearch > 0 ? Math.round((item.numericVal / totalMonthSearch) * 1000) / 10 : 0;
+                const barRatio = maxMonthVal > 0 ? Math.max(4, Math.round((item.numericVal / maxMonthVal) * 100)) : 0;
+                const isTop1 = idx === 0;
+                return (
+                  <div key={item.brand + item.sheetId} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 110px', alignItems: 'center', gap: '10px', fontSize: '12.5px' }}>
+                    <span style={{ fontWeight: isTop1 ? 700 : 500, color: isTop1 ? '#1e3a8a' : '#1e293b', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }} title={item.brand}>
+                      {idx + 1}. {item.brand}
+                    </span>
+                    <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ width: `${barRatio}%`, height: '100%', background: isTop1 ? '#1e6091' : '#38bdf8', borderRadius: '4px' }} />
+                    </div>
+                    <span style={{ textAlign: 'right', fontSize: '12px', color: '#0f172a', fontWeight: 600 }}>
+                      {formatTenThousand(item.value)} <small style={{ color: '#64748b', fontWeight: 400 }}>({pctOfTotal}%)</small>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="ops-table-wrap">
+              <table className="ops-table">
+                <thead>
+                  <tr>
+                    <th>品牌 / 品线</th>
+                    <th>{month} 搜索指数</th>
+                    <th>大盘份额</th>
+                    <th>数据来源</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentMonthPoints.map((r, i) => {
+                    const pctOfTotal = totalMonthSearch > 0 ? Math.round((r.numericVal / totalMonthSearch) * 1000) / 10 : 0;
+                    return (
+                      <tr key={r.sheetId + r.brand + i}>
+                        <td><strong>{r.brand}</strong></td>
+                        <td><strong style={{ color: '#1e6091' }}>{formatTenThousand(r.value)}</strong></td>
+                        <td><span className="section-mini-tag tag-blue">{pctOfTotal}%</span></td>
+                        <td>
+                          <a href={`https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=${r.sheetId}`} target="_blank" rel="noreferrer" style={{ fontSize: '12px', color: '#0284c7' }}>
+                            打开工作表 ↗
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
+          <EmptyState title="尚未同步竞品月报" text="点击页面顶部同步最新数据，读取各品牌已填写的月份。" />
+        )}
       </DashboardSection>
       <DashboardSection title="启萃 · 站内搜索指数趋势" desc="来自周趋势底表，灵犀与聚光指数分别展示。">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '12px' }}>
+          <div style={{ background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: '8px', padding: '10px 12px' }}>
+            <div style={{ fontSize: '11.5px', color: '#0369a1' }}>灵犀自然搜索最新</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#0284c7', marginTop: '2px' }}>{compact(lingxiVal)}</div>
+            <div style={{ fontSize: '11px', color: '#64748b' }}>自然搜索意图大盘</div>
+          </div>
+          <div style={{ background: '#f5f3ff', border: '1px solid #ddd6fe', borderRadius: '8px', padding: '10px 12px' }}>
+            <div style={{ fontSize: '11.5px', color: '#6d28d9' }}>聚光商业搜索最新</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#7c3aed', marginTop: '2px' }}>{compact(spotlightVal)}</div>
+            <div style={{ fontSize: '11px', color: '#64748b' }}>商业投放联动大盘</div>
+          </div>
+          <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '10px 12px' }}>
+            <div style={{ fontSize: '11.5px', color: '#15803d' }}>双端搜索聚合总和</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: '#16a34a', marginTop: '2px' }}>{compact(totalSearchVal)}</div>
+            <div style={{ fontSize: '11px', color: '#64748b' }}>大盘全域搜索池</div>
+          </div>
+        </div>
         <TimeSeriesChart rows={(data.feishu?.search||[]).slice(-30).map(r=>({...r}))} title="启萃搜索指数" unit="" series={[{key:'lingxi',label:'灵犀',color:'#0284c7'},{key:'spotlight',label:'聚光',color:'#8b5cf6'}]}/>
       </DashboardSection>
       </div>

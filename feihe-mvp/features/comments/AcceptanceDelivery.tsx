@@ -34,6 +34,18 @@ export function AcceptanceDelivery({
   const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
   const [loading, setLoading] = useState(false);
+  // 弹窗状态：展示卡片对应的笔记列表
+  const [modalFilter, setModalFilter] = useState<{
+    title: string;
+    tag: string;
+    theme: string;
+    status?: string;
+    type?: 'replyPending';
+  } | null>(null);
+  const [modalItems, setModalItems] = useState<NoteListItem[]>([]);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalPage, setModalPage] = useState(1);
+  const [modalTotal, setModalTotal] = useState(0);
 
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   useEffect(() => {
@@ -96,6 +108,39 @@ export function AcceptanceDelivery({
     return () => clearTimeout(timer);
   }, [loadAcceptanceNotes]);
 
+  // 弹窗数据加载
+  const loadModalNotes = useCallback(async () => {
+    if (!modalFilter) return;
+    setModalLoading(true);
+    try {
+      const p = new URLSearchParams({
+        projectId,
+        view: 'acceptance',
+        page: String(modalPage),
+        pageSize: '12',
+      });
+      if (modalFilter.status) p.set('status', modalFilter.status);
+      const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
+      let list = res.items || [];
+      if (modalFilter.type === 'replyPending') {
+        // 需达人回复维度：优先展示有待办/问询/负向风险的笔记
+        list = [...list].sort((a, b) => (b.pendingRiskCount || (b.questionCount + b.negativeCount)) - (a.pendingRiskCount || (a.questionCount + a.negativeCount)));
+      }
+      setModalItems(list);
+      setModalTotal(res.total || 0);
+    } catch (e) {
+      toast(e instanceof Error ? e.message : '加载笔记列表失败', 'error');
+    } finally {
+      setModalLoading(false);
+    }
+  }, [projectId, modalFilter, modalPage, toast]);
+
+  useEffect(() => {
+    if (modalFilter) {
+      void loadModalNotes();
+    }
+  }, [modalFilter, modalPage, loadModalNotes]);
+
   const reportReq = acceptance.reportCount || 200;
   const baseReq = acceptance.baseCount || 30;
   const brandReqRate = acceptance.brandTopRate || 0.4;
@@ -111,6 +156,8 @@ export function AcceptanceDelivery({
           unit="篇"
           desc={`≥${reportReq}条评论 且 前5提及率≥${pct(brandReqRate)}`}
           tag="最高档交付"
+          clickable
+          onClick={() => { setModalPage(1); setModalFilter({ title: '符合且能汇报的笔记', tag: '最高档交付', theme: 'green', status: '符合且能汇报' }); }}
         />
         <MetricCard
           theme="blue"
@@ -119,6 +166,8 @@ export function AcceptanceDelivery({
           unit="篇"
           desc={`有效评论达到 ${baseReq} 条考核基线`}
           tag="基础达标"
+          clickable
+          onClick={() => { setModalPage(1); setModalFilter({ title: '符合基础要求的笔记', tag: '基础达标', theme: 'blue', status: '符合基础要求' }); }}
         />
         <MetricCard
           theme="yellow"
@@ -127,6 +176,8 @@ export function AcceptanceDelivery({
           unit="篇"
           desc={`不足 ${baseReq} 条，进入供应商/达人补量`}
           tag="补量缺口"
+          clickable
+          onClick={() => { setModalPage(1); setModalFilter({ title: '需补充评论的笔记', tag: '补量缺口', theme: 'yellow', status: '需补充' }); }}
         />
         <MetricCard
           theme="red"
@@ -135,6 +186,8 @@ export function AcceptanceDelivery({
           unit="条"
           desc="高价值问询或轻负面，24小时内承接"
           tag="回复待办"
+          clickable
+          onClick={() => { setModalPage(1); setModalFilter({ title: '涉及达人回复与风险待办的笔记', tag: '回复待办', theme: 'red', type: 'replyPending' }); }}
         />
       </section>
 
@@ -383,6 +436,148 @@ export function AcceptanceDelivery({
           </table>
         </DataTableShell>
       </DashboardSection>
+
+      {/* 点击顶部指标卡弹出的笔记明细列表弹窗 */}
+      {modalFilter && (
+        <div className="entity-backdrop" onMouseDown={() => setModalFilter(null)}>
+          <div
+            className="entity-editor"
+            onMouseDown={(e) => e.stopPropagation()}
+            style={{ width: '860px', maxWidth: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
+          >
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px', marginBottom: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span className={`section-mini-tag tag-${modalFilter.theme === 'yellow' ? 'amber' : modalFilter.theme === 'red' ? 'rose' : modalFilter.theme}`}>
+                  {modalFilter.tag}
+                </span>
+                <h2 style={{ fontSize: '17px', margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                  {modalFilter.title} ({modalTotal} 篇)
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalFilter(null)}
+                aria-label="关闭弹窗"
+                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#64748b' }}
+              >
+                ×
+              </button>
+            </header>
+
+            <div style={{ flex: 1, overflowY: 'auto', minHeight: '320px' }}>
+              {modalLoading ? (
+                <div style={{ padding: '40px 0', textAlign: 'center', color: '#64748b' }}>正在加载笔记列表…</div>
+              ) : modalItems.length > 0 ? (
+                <table className="ops-table">
+                  <thead>
+                    <tr>
+                      <th>笔记信息</th>
+                      <th>评论总量</th>
+                      <th>前5提及率</th>
+                      <th>风险待办</th>
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {modalItems.map((note) => (
+                      <tr key={note.id}>
+                        <td>
+                          <div className="ops-table-note-cell">
+                            {note.coverUrl ? (
+                              <img src={note.coverUrl} alt="" className="ops-table-note-cover" loading="lazy" />
+                            ) : (
+                              <div className="ops-table-note-cover">{(note.author || '笔').slice(0, 1)}</div>
+                            )}
+                            <div className="ops-table-note-info">
+                              <span
+                                className="ops-table-note-title"
+                                title={note.title || note.id}
+                                style={{ cursor: 'pointer', color: '#0284c7' }}
+                                onClick={() => openNote(note.id)}
+                              >
+                                {note.title || '未命名笔记'}
+                              </span>
+                              <span className="ops-table-note-sub">
+                                {note.author || '未知博主'} · <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 8)}…</small>
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td><strong>{note.commentTotal}</strong> 条</td>
+                        <td>
+                          <span style={{ fontWeight: 600, color: (note.brandMentionTop5 || 0) >= brandReqRate ? '#15803d' : '#b45309' }}>
+                            {pct(note.brandMentionTop5 || 0)}
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ color: (note.pendingRiskCount || 0) > 0 ? '#dc2626' : '#64748b', fontWeight: 600 }}>
+                            {note.pendingRiskCount || 0} 项
+                          </span>
+                        </td>
+                        <td><StatusBadge status={note.status || '待抓取'} /></td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', whiteSpace: 'nowrap' }}>
+                            <button
+                              type="button"
+                              className="text-link"
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#0284c7', fontWeight: 600 }}
+                              onClick={() => openNote(note.id)}
+                            >
+                              查看明细 →
+                            </button>
+                            {note.url && (
+                              <a href={note.url} target="_blank" rel="noreferrer" className="text-link" style={{ color: '#64748b' }}>
+                                原笔记 ↗
+                              </a>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div style={{ padding: '40px 0', textAlign: 'center', color: '#94a3b8' }}>
+                  暂无符合此条件的笔记记录
+                </div>
+              )}
+            </div>
+
+            <footer style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #e2e8f0', paddingTop: '12px', marginTop: '12px' }}>
+              <span style={{ fontSize: '12.5px', color: '#64748b' }}>
+                共 {modalTotal} 篇笔记 · 第 {modalPage} / {Math.max(1, Math.ceil(modalTotal / 12))} 页
+              </span>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="button"
+                  disabled={modalPage <= 1 || modalLoading}
+                  onClick={() => setModalPage((p) => Math.max(1, p - 1))}
+                  style={{ padding: '4px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: '12.5px' }}
+                >
+                  上一页
+                </button>
+                <button
+                  type="button"
+                  disabled={modalPage >= Math.ceil(modalTotal / 12) || modalLoading}
+                  onClick={() => setModalPage((p) => p + 1)}
+                  style={{ padding: '4px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: '12.5px' }}
+                >
+                  下一页
+                </button>
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() => setModalFilter(null)}
+                  style={{ padding: '4px 14px', fontSize: '12.5px' }}
+                >
+                  关闭
+                </button>
+              </div>
+            </footer>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
