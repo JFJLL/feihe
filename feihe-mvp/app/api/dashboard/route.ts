@@ -157,7 +157,7 @@ export async function GET(request: Request) {
       d1.prepare(`SELECT category AS name,sentiment,COUNT(*) AS count,
         SUM(CASE WHEN treatment_status='待处理' THEN 1 ELSE 0 END) AS pending
         FROM key_comments WHERE project_id=? AND disappeared_at IS NULL GROUP BY category,sentiment ORDER BY count DESC LIMIT 16`).bind(project).all(),
-      bind(`SELECT COALESCE(NULLIF(p.brand,''),CASE WHEN pn.product_scope='竞品' THEN '其他竞品' ELSE '本品' END) AS brand,
+      bind(`SELECT CASE WHEN p.brand IN ('启萃','飞鹤启萃','飞鹤') OR (pn.product_scope != '竞品' AND (p.brand IS NULL OR p.brand = '' OR p.brand = '本品')) THEN '启萃' WHEN pn.product_scope = '竞品' THEN COALESCE(NULLIF(p.brand,''), '其他竞品') ELSE COALESCE(NULLIF(p.brand,''), '启萃') END AS brand,
         COUNT(*) AS notes,SUM(pn.comment_total) AS comments,SUM(pn.positive_count) AS positive,
         SUM(pn.negative_count) AS negative,SUM(pn.question_count) AS question,
         SUM(p.read_count) AS reads,SUM(p.interaction_count) AS interactions,SUM(p.note_price) AS cost
