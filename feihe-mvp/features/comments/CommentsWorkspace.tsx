@@ -1,4 +1,5 @@
 'use client';
+import { loadXLSX } from '../../lib/xlsx-loader';
 
 import { useState } from 'react';
 import type { Dashboard, Ops } from '../../lib/types/project';
@@ -64,9 +65,9 @@ export function CommentsWorkspace({
     setLoading(true);
     setRunResult('');
     try {
-      if (!window.XLSX) throw new Error('Excel 解析组件尚未加载');
-      const book = window.XLSX.read(await file.arrayBuffer());
-      const rows = window.XLSX.utils.sheet_to_json(book.Sheets[book.SheetNames[0]], { defval: '' });
+      const XLSX = await loadXLSX();
+      const book = XLSX.read(await file.arrayBuffer());
+      const rows = XLSX.utils.sheet_to_json(book.Sheets[book.SheetNames[0]], { defval: '' });
       const result = await api<{ imported: number; skipped: number }>('/api/import', {
         method: 'POST',
         body: JSON.stringify({ kind, rows, projectId }),

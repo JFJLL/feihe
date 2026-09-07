@@ -22,5 +22,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="zh-CN"><head><meta name="referrer" content="no-referrer" /><link rel="icon" href="/app-icon.svg?v=2" type="image/svg+xml" /><link rel="manifest" href="/manifest.webmanifest" /><meta name="theme-color" content="#0284c7" /><script defer src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" /></head><body>{children}</body></html>;
+  return <html lang="zh-CN"><head><meta name="referrer" content="no-referrer" /><link rel="icon" href="/app-icon.svg?v=2" type="image/svg+xml" /><link rel="manifest" href="/manifest.webmanifest" /><meta name="theme-color" content="#0284c7" /></head><body>{children}</body></html>;
 }
