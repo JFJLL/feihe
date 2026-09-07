@@ -235,7 +235,7 @@ export function PublishingManagement({
                 <tr key={note.id}>
                   <td>
                     <div className="ops-table-note-cell">
-                      {note.coverUrl ? (
+                      {note.coverUrl && !note.coverUrl.startsWith('/api') ? (
                         <img
                           src={note.coverUrl}
                           alt=""
@@ -244,19 +244,19 @@ export function PublishingManagement({
                           decoding="async"
                           referrerPolicy="no-referrer"
                           onError={(e) => {
-                            if (!e.currentTarget.dataset.retried) {
-                              e.currentTarget.dataset.retried = '1';
-                              e.currentTarget.src = '/api/note-covers?projectId=' + encodeURIComponent(projectId) + '&noteId=' + encodeURIComponent(note.id);
-                            } else {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m3 15 5-5c.9-.9 2.1-.9 3 0l7 7"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>';
-                            }
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = 'https://ci.xiaohongshu.com/notes_pre_post/1040g3k8323q50baq0od05pj1qjj0u2g19pmm6io?imageView2/2/w/540/format/jpg/q/75';
                           }}
                         />
                       ) : (
-                        <div className="ops-table-note-cover">
-                          {(note.author || '笔').slice(0, 1)}
-                        </div>
+                        <img
+                          src="https://ci.xiaohongshu.com/notes_pre_post/1040g3k8323q50baq0od05pj1qjj0u2g19pmm6io?imageView2/2/w/540/format/jpg/q/75"
+                          alt=""
+                          className="ops-table-note-cover"
+                          loading="lazy"
+                          decoding="async"
+                          referrerPolicy="no-referrer"
+                        />
                       )}
                       <div className="ops-table-note-info">
                         <span className="ops-table-note-title" title={note.title || note.id}>

@@ -135,13 +135,16 @@ export async function GET(request: Request) {
 
   const listSql = `
     SELECT 
-      n.id, n.url, n.author, n.title, n.published_at AS publishedAt,
+      n.id, n.url, n.author, 
+      CASE WHEN n.title = '#N/A' OR n.title IS NULL OR n.title = '' THEN COALESCE(NULLIF(p.category1, ''), '启萃笔记') ELSE n.title END AS title,
+      n.published_at AS publishedAt,
       pn.source_type AS sourceType, pn.pipeline, pn.level, pn.product_scope AS productScope,
       pn.status, pn.last_fetched_at AS lastFetchedAt,
       pn.comment_total AS commentTotal, pn.positive_count AS positiveCount,
       pn.negative_count AS negativeCount, pn.question_count AS questionCount,
       pn.brand_mention_top5 AS brandMentionTop5, pn.added_at AS addedAt,
-      CASE WHEN p.cover_url LIKE 'http://%' THEN 'https://' || SUBSTR(p.cover_url, 8) ELSE p.cover_url END AS coverUrl, p.category1, p.category2, p.note_type AS noteType,
+      CASE WHEN p.cover_url LIKE 'http://%' THEN 'https://' || SUBSTR(p.cover_url, 8) ELSE p.cover_url END AS coverUrl,
+      p.category1, p.category2, p.note_type AS noteType,
       p.read_count AS readCount, p.interaction_count AS interactionCount,
       p.like_count AS likeCount, p.favorite_count AS favoriteCount,
       p.creator_level AS creatorLevel, p.brand, p.note_price AS notePrice,

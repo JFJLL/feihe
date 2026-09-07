@@ -34,6 +34,7 @@
 .data-trend-tooltip-row { display:flex; align-items:center; gap:6px; margin-top:2px; font-size:11.5px; }
 .data-trend-tooltip-row i { width:7px; height:7px; border-radius:50%; display:inline-block; flex-shrink:0; }
 .data-trend-tooltip-row strong { margin-left:auto; color:#fff; font-weight:600; padding-left:8px; }
+.data-trend-picker { display:none !important; }
 .ops-module-tabs { gap:12px; margin:0; }
 .ops-module-tab { min-width:0; padding:13px 18px; border:1px solid #dce4ef; border-radius:10px; box-shadow:0 1px 3px #0f172a06; }
 .ops-module-tab.active { background:#eaf4fb; border-color:#6ba9d1; box-shadow:inset 0 3px 0 #1e6091; }

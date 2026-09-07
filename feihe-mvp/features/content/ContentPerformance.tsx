@@ -43,7 +43,7 @@ function DistributionBars({
 
 function NoteCover({ src, label, eager }: { src: string; label: string; eager: boolean }) {
   const [failed, setFailed] = useState(false);
-  if (!src || failed) return <span>{label.slice(0, 1)}</span>;
+  if (!src || failed) return <span style={{ background: '#f1f5f9', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px' }}>{label.slice(0, 1)}</span>;
   return (
     <img
       src={src}
@@ -51,7 +51,9 @@ function NoteCover({ src, label, eager }: { src: string; label: string; eager: b
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       referrerPolicy="no-referrer"
-      onError={() => setFailed(true)}
+      onError={(e) => {
+        if (!failed) setFailed(true);
+      }}
     />
   );
 }

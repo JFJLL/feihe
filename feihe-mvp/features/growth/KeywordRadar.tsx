@@ -269,11 +269,20 @@ export function KeywordRadar({
               {hotNotes.slice(0, 12).map((note) => (
                 <article key={note.id}>
                   <div>
-                    {note.coverUrl ? (
-                      <img src={note.coverUrl} alt="" referrerPolicy="no-referrer" loading="lazy" decoding="async" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                    ) : (
-                      <span>{(note.author || '笔').slice(0, 1)}</span>
-                    )}
+                    <img
+                      src={note.coverUrl && !note.coverUrl.startsWith('/api') ? note.coverUrl : `/api/note-covers?projectId=${encodeURIComponent(projectId)}&noteId=${encodeURIComponent(note.id)}`}
+                      alt=""
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        if (!e.currentTarget.src.includes('/api/note-covers')) {
+                          e.currentTarget.src = `/api/note-covers?projectId=${encodeURIComponent(projectId)}&noteId=${encodeURIComponent(note.id)}`;
+                        } else {
+                          e.currentTarget.style.display = 'none';
+                        }
+                      }}
+                    />
                     <i>{isOwnedNote(note) ? '自有发布' : '自然内容'}</i>
                   </div>
                   <strong>{note.title || note.id}</strong>

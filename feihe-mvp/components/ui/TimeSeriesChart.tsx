@@ -102,14 +102,8 @@ export function TimeSeriesChart({ rows, series, title, unit = '条' }: { rows: R
             <span>{s.label}:</span>
             <strong>{fmt(current[s.key])}{typeof current[s.key] === 'number' ? ` ${unit}` : ''}</strong>
           </div>
-        ))}
+        ))} 
       </div>
     )}
-    <label className="data-trend-picker">
-      查看日期 <select value={current.date} onChange={e=>{ setSelected(e.target.value); setHoverIdx(null); }}>
-        {[...data].reverse().map(r=><option key={r.date} value={r.date}>{r.date}{r.date===data.at(-1)?.date?' (最新)':''}</option>)}
-      </select>
-      <span>{data.length===1?'当前只有一个日期，显示真实数据点':`${data.length} 个观测日期 · 悬停曲线或切换日期交互`}</span>
-    </label>
   </div>;
 }

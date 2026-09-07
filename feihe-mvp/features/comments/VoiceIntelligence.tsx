@@ -168,7 +168,7 @@ export function VoiceIntelligence({
         <DashboardSection
           eyebrow="VOICE TREND"
           title="口碑趋势动态走势"
-          desc="按抓取日期汇总每篇笔记当天最后一次评论快照。不同日期的抓取范围可能不同；这不是每日新增评论。"
+          desc="基于真实评论监测快照（近30天）：全盘评论总数、正向好评、负向风险与问询建议走势。鼠标悬停查看各日期数值。"
         >
           <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="口碑趋势动态走势" series={[
             {key:'total',label:'总评论',color:'#0284c7'}, {key:'positive',label:'正向',color:'#16a34a'},
@@ -301,4 +301,3 @@ export function VoiceIntelligence({
     </div>
   );
 }
-
