@@ -1,4 +1,5 @@
 import { runtimeVars, warmWorkerEnv, workerEnvSync } from './runtime-env';
+import { invalidBrandSql } from './brand-validation';
 
 let schemaReady: Promise<void> | null = null;
 export const DEFAULT_PROJECT_ID = 'qicui';
@@ -433,6 +434,22 @@ export async function ensureSchema() {
     await d1.prepare(`UPDATE comment_snapshots SET quarantine_reason='withdrawn-preset-history'
       WHERE quarantine_reason='' AND (project_id || '|' || note_id || '|' || captured_at || '|' || l1_count || '|' || l2_count || '|' || total_count || '|' || positive_count || '|' || negative_count || '|' || question_count || '|' || irrelevant_count) IN (${rejected.map(() => '?').join(',')})`)
       .bind(...rejected).run();
+    // Recover damaged brand values only when the note is present in an
+    // authoritative Qicui source snapshot. Preserve the original for audit.
+    const sourceTable = await d1.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='feishu_sheet_snapshots'").first();
+    if (sourceTable) {
+      await d1.prepare(`CREATE TABLE IF NOT EXISTS brand_repairs (
+        note_id TEXT PRIMARY KEY, original_brand TEXT NOT NULL, repaired_brand TEXT NOT NULL,
+        source TEXT NOT NULL, repaired_at TEXT NOT NULL)`).run();
+      const sourceNotes = `SELECT json_extract(j.value,'$.id') FROM feishu_sheet_snapshots s,
+        json_each(CASE WHEN json_valid(s.payload_json) THEN s.payload_json ELSE '[]' END) j
+        WHERE s.project_id='qicui' AND s.sheet_id IN ('3Wsban','4bTvDu')`;
+      await d1.prepare(`INSERT OR IGNORE INTO brand_repairs
+        SELECT note_id,brand,'启萃','feishu:qicui:3Wsban/4bTvDu',datetime('now') FROM note_profiles
+        WHERE ${invalidBrandSql} AND note_id IN (${sourceNotes})`).run();
+      await d1.prepare(`UPDATE note_profiles SET brand='启萃'
+        WHERE ${invalidBrandSql} AND note_id IN (${sourceNotes})`).run();
+    }
     await d1.prepare('PRAGMA optimize').run();
   })().catch((error) => {
     schemaReady = null;

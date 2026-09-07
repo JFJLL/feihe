@@ -499,6 +499,12 @@ async function runAll() {
 
   console.log('--- TEST K: 真实评论快照与旧汇总一致性 ---');
   const presetArgs = ['5bec388461d4df00014a2e26','qicui','2026-08-01 22:00:00',122,17,7,23,85,36,75];
+  const brokenBrand = 'T/\uFFFD\u0003';
+  for (const [id,brand] of [['brand-known',brokenBrand],['brand-unknown',brokenBrand],['brand-valid','爱他美']]) {
+    db.prepare('INSERT INTO note_profiles(note_id,brand,updated_at) VALUES(?,?,?)').run(id,brand,new Date().toISOString());
+  }
+  db.prepare(`INSERT OR REPLACE INTO feishu_sheet_snapshots(project_id,sheet_id,payload_json,report_json,fingerprint)
+    VALUES('qicui','3Wsban',?,'{}','test')`).run(JSON.stringify([{id:'brand-known'},{id:'brand-valid'}]));
   const insertSnapshot = db.prepare(`INSERT INTO comment_snapshots(note_id,project_id,captured_at,total_count,positive_count,negative_count,question_count,l1_count,l2_count,irrelevant_count) VALUES(?,?,?,?,?,?,?,?,?,?)`);
   insertSnapshot.run(...presetArgs);
   insertSnapshot.run(...presetArgs.map((v,i)=>i===1?'real-other-project':v));
@@ -506,6 +512,10 @@ async function runAll() {
   stopServer();
   await startServer();
   await httpRequest(BASE_URL+'/api/dashboard?projectId=qicui&fresh=1');
+  assert.equal(db.prepare("SELECT brand FROM note_profiles WHERE note_id='brand-known'").get().brand,'启萃');
+  assert.equal(db.prepare("SELECT brand FROM note_profiles WHERE note_id='brand-unknown'").get().brand,brokenBrand,'unknown source must not be guessed');
+  assert.equal(db.prepare("SELECT brand FROM note_profiles WHERE note_id='brand-valid'").get().brand,'爱他美','valid brand must remain unchanged');
+  assert.equal(db.prepare("SELECT original_brand FROM brand_repairs WHERE note_id='brand-known'").get().original_brand,brokenBrand);
   assert.equal(db.prepare("SELECT COUNT(*) AS c FROM comment_snapshots WHERE quarantine_reason='withdrawn-preset-history'").get().c,1,'only exact rejected seed is quarantined');
   assert.equal(db.prepare("SELECT COUNT(*) AS c FROM comment_snapshots WHERE note_id=? AND quarantine_reason=''").get(presetArgs[0]).c,2,'other projects and differing genuine values stay intact');
   const quarantinedDashboard = await (await httpRequest(BASE_URL+'/api/dashboard?projectId=qicui&fresh=1')).json();

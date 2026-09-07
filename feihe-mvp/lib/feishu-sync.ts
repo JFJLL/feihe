@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { invalidBrandSql } from './brand-validation';
 import { db, ensureSchema } from './db';
 import { envVar } from './runtime-env';
 import { projectId } from './projects';
@@ -66,12 +67,14 @@ async function importNotes(rows: unknown[][], project: string, kind: string) {
       const vals=[6,19,23,24,31,33,34,36].map(i=>cellNumber(r[i]));
       statements.push(db().prepare(`INSERT INTO note_profiles(note_id,brand,note_type,${cols.join(',')},updated_at)
         VALUES(?,'启萃',?,${cols.map(()=>'?').join(',')},?) ON CONFLICT(note_id) DO UPDATE SET
+        brand=CASE WHEN note_profiles.brand='' OR ${invalidBrandSql} THEN excluded.brand ELSE note_profiles.brand END,
         note_type=COALESCE(NULLIF(excluded.note_type,''),note_profiles.note_type),
         ${cols.map(c=>`${c}=COALESCE(excluded.${c},note_profiles.${c})`).join(',')},updated_at=excluded.updated_at`)
         .bind(id,cellText(r[10]),...vals.map(v=>v??0),new Date().toISOString()));
     } else {
       statements.push(db().prepare(`INSERT INTO note_profiles(note_id,brand,creator_level,note_type,category1,category2,updated_at)
         VALUES(?,'启萃',?,?,?,?,?) ON CONFLICT(note_id) DO UPDATE SET
+        brand=CASE WHEN note_profiles.brand='' OR ${invalidBrandSql} THEN excluded.brand ELSE note_profiles.brand END,
         creator_level=COALESCE(NULLIF(excluded.creator_level,''),note_profiles.creator_level),
         note_type=COALESCE(NULLIF(excluded.note_type,''),note_profiles.note_type),
         category1=COALESCE(NULLIF(excluded.category1,''),note_profiles.category1),
