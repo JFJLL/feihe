@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { db, ensureSchema } from './db';
 import { envVar } from './runtime-env';
 import { projectId } from './projects';
+import { getCompetitorIntelligence } from './competitor-intelligence';
 import { FEISHU_DOCUMENTS, cellDate, cellText, cellNumber, aggregateAds, parseWeekly, parseSearch, parseMonthly, parsePlanning, type FeishuData, type SheetReport, type SheetDefinition } from './feishu-model';
 
 type Stored = { sheet_id: string; payload_json: string; report_json: string; fingerprint: string };
@@ -117,9 +118,11 @@ export async function readFeishuData(project: string): Promise<FeishuData> {
       impressions:a?.impressions??null,clicks:a?.clicks??null,interactions:a?.interactions??null,
       notes_today:notes.filter(n=>n.date===date).length,comments_today:null};
   });
+  const intelligence = getCompetitorIntelligence();
   return {checkedAt:reports.map(r=>r.checkedAt).sort().at(-1)||'',reports,
     daily,latestDate:dates.at(-1)||'',search:payload('PNZ39H'),
-    competitor:FEISHU_DOCUMENTS[3].sheets.flatMap(s=>payload(s.id)),planning:[...payload('7XkqoO'),...payload('7G0dkc')]};
+    competitor:FEISHU_DOCUMENTS[3].sheets.flatMap(s=>payload(s.id)),planning:[...payload('7XkqoO'),...payload('7G0dkc')],
+    intelligence};
 }
 const pending = new Map<string,Promise<FeishuSyncResult>>();
 export function syncFeishuSpreadsheets(rawProject?: string): Promise<FeishuSyncResult> {

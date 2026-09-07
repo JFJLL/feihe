@@ -21,7 +21,16 @@ export type SheetReport = { document: string; sheetId: string; sheetName: string
 export type SearchPoint = { date: string; lingxi: number | null; spotlight: number | null };
 export type MonthlyPoint = { brand: string; month: string; value: string; sheetId: string };
 export type PlanningRow = { audience: string; stage: string; scene: string; detail: string; format: string };
-export type FeishuData = { checkedAt: string; reports: SheetReport[]; search: SearchPoint[]; competitor: MonthlyPoint[]; planning: PlanningRow[]; latestDate: string; daily: Record<string, number | string | null>[] };
+export type FeishuData = {
+  checkedAt: string;
+  reports: SheetReport[];
+  search: SearchPoint[];
+  competitor: MonthlyPoint[];
+  planning: PlanningRow[];
+  latestDate: string;
+  daily: Record<string, number | string | null>[];
+  intelligence?: import('./competitor-intelligence').CompetitorIntelligenceData;
+};
 
 export function cellText(v: unknown): string {
   if (Array.isArray(v)) return v.map(x => x && typeof x === 'object' ? String(x.text || '') : String(x ?? '')).join('').trim();

@@ -7,6 +7,7 @@ import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { StatusBadge } from '../../components/ui/operations/StatusBadge';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { CompetitorIntelligenceSection } from './CompetitorIntelligenceSection';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
 
 function bestBrand(rows: AnalyticRow[], key: 'positive' | 'negative', inverse = false) {
@@ -317,6 +318,9 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
           </div>
         </div>
       </DashboardSection>
+
+      {/* 补充全盘竞品月报深层情报：商单投入、达人矩阵、14大内容切角热力、品线战略与动作时间轴 */}
+      <CompetitorIntelligenceSection intelligence={data.feishu?.intelligence} />
     </div>
   );
 }
