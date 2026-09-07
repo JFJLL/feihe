@@ -1,58 +1,100 @@
 export type XLSXType = NonNullable<Window['XLSX']>;
 
-let xlsxLoadingPromise: Promise<XLSXType> | null = null;
+export const XLSX_LOAD_TIMEOUT_MS = 15_000;
 
-export function loadXLSX(): Promise<XLSXType> {
-  if (typeof window === 'undefined') {
+let activeLoadingPromise: Promise<XLSXType> | null = null;
+let currentTaskId = 0;
+
+export function isValidXLSX(candidate: unknown): candidate is XLSXType {
+  if (!candidate || typeof candidate !== 'object') return false;
+  const obj = candidate as Record<string, unknown>;
+  const utils = obj.utils as Record<string, unknown> | undefined;
+  if (!utils || typeof utils !== 'object') return false;
+  return (
+    typeof obj.read === 'function' &&
+    typeof utils.sheet_to_json === 'function'
+  );
+}
+
+export function loadXLSX(timeoutMs = XLSX_LOAD_TIMEOUT_MS): Promise<XLSXType> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
     return Promise.reject(new Error('XLSX 只能在客户端环境中加载'));
   }
 
-  if (window.XLSX) {
+  if (isValidXLSX(window.XLSX)) {
     return Promise.resolve(window.XLSX);
   }
 
-  if (xlsxLoadingPromise) {
-    return xlsxLoadingPromise;
+  if (activeLoadingPromise) {
+    return activeLoadingPromise;
   }
 
-  xlsxLoadingPromise = new Promise<XLSXType>((resolve, reject) => {
-    const existingScript = document.querySelector<HTMLScriptElement>('script[data-xlsx-loader="true"]');
-    if (existingScript) {
-      existingScript.addEventListener('load', () => {
-        if (window.XLSX) resolve(window.XLSX);
-        else reject(new Error('Excel 解析库加载完成但未导出 XLSX 对象'));
-      });
-      existingScript.addEventListener('error', () => {
-        reject(new Error('Excel 解析库加载失败，请检查网络后重试'));
-      });
-      return;
-    }
+  const oldScript = document.querySelector<HTMLScriptElement>('script[data-xlsx-loader="true"]');
+  if (oldScript) {
+    oldScript.remove();
+  }
 
-    const script = document.createElement('script');
-    script.src = '/vendor/xlsx-0.20.3.full.min.js';
-    script.async = true;
-    script.dataset.xlsxLoader = 'true';
+  const taskId = ++currentTaskId;
 
-    script.onload = () => {
-      if (window.XLSX) {
-        resolve(window.XLSX);
-      } else {
-        xlsxLoadingPromise = null;
-        reject(new Error('Excel 解析库加载完成但未导出 XLSX 对象'));
+  activeLoadingPromise = new Promise<XLSXType>((resolve, reject) => {
+    let settled = false;
+    let scriptNode: HTMLScriptElement | null = null;
+
+    const cleanup = () => {
+      clearTimeout(timer);
+      if (scriptNode) {
+        scriptNode.onload = null;
+        scriptNode.onerror = null;
+      }
+      if (currentTaskId === taskId) {
+        activeLoadingPromise = null;
       }
     };
 
-    script.onerror = () => {
-      xlsxLoadingPromise = null;
-      script.remove();
-      reject(new Error('Excel 解析库加载失败，请检查网络后重试'));
+    const finishSuccess = (xlsx: XLSXType) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(xlsx);
     };
 
-    document.head.appendChild(script);
-  }).catch((err) => {
-    xlsxLoadingPromise = null;
-    throw err;
+    const finishError = (message: string) => {
+      if (settled) return;
+      settled = true;
+      if (scriptNode) {
+        scriptNode.remove();
+      }
+      cleanup();
+      reject(new Error(message));
+    };
+
+    const timer = setTimeout(() => {
+      finishError('Excel 解析库加载超时，请检查网络后重试');
+    }, timeoutMs);
+
+    try {
+      scriptNode = document.createElement('script');
+      scriptNode.src = '/vendor/xlsx-0.20.3.full.min.js';
+      scriptNode.async = true;
+      scriptNode.dataset.xlsxLoader = 'true';
+
+      scriptNode.onload = () => {
+        if (isValidXLSX(window.XLSX)) {
+          finishSuccess(window.XLSX);
+        } else {
+          finishError('Excel 解析库加载完成但未导出有效的 XLSX 对象');
+        }
+      };
+
+      scriptNode.onerror = () => {
+        finishError('Excel 解析库加载失败，请检查网络后重试');
+      };
+
+      document.head.appendChild(scriptNode);
+    } catch (err) {
+      finishError(err instanceof Error ? err.message : '创建脚本节点失败');
+    }
   });
 
-  return xlsxLoadingPromise;
+  return activeLoadingPromise;
 }
