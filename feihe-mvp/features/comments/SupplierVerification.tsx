@@ -428,14 +428,22 @@ export function SupplierVerification({
                     </div>
                   </td>
                   <td style={{ maxWidth: '300px' }}>
-                    <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: '#0f172a' }}>
-                      {row.plannedContent}
-                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <span className="section-mini-tag tag-blue" style={{ fontSize: '10px', padding: '1px 6px', width: 'fit-content' }}>计划交付</span>
+                      <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: '#0f172a' }}>
+                        {row.plannedContent}
+                      </p>
+                    </div>
                   </td>
                   <td style={{ maxWidth: '300px' }}>
-                    <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: row.matchedContent ? '#15803d' : '#94a3b8' }}>
-                      {row.matchedContent || '—'}
-                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <span className="section-mini-tag" style={{ fontSize: '10px', padding: '1px 6px', width: 'fit-content', background: row.matchedContent ? '#dcfce7' : '#f1f5f9', color: row.matchedContent ? '#15803d' : '#94a3b8' }}>
+                        {row.matchedContent ? '实际抓取外显' : '未匹配到评论'}
+                      </span>
+                      <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: row.matchedContent ? '#15803d' : '#94a3b8' }}>
+                        {row.matchedContent || '—'}
+                      </p>
+                    </div>
                   </td>
                   <td>
                     <StatusBadge status={row.visibility} />

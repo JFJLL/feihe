@@ -11,6 +11,7 @@ import { WorkspaceModuleTabs } from '../../components/ui/operations/WorkspaceMod
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import { HorizontalBarList, TierDoughnutChart, Sparkline } from './OverviewCharts';
 import { api, compact, num } from '../../lib/hooks/use-project-data';
+import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
@@ -37,7 +38,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   projectId: string; project?: Project; dashboard: Dashboard; ops: Ops; loading?: boolean;
   onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useState('overview');
+  const [tab, setTab] = useProjectTab('overview', ['overview', 'daily']);
   const [selected, setSelected] = useState('');
   const [prompt, setPrompt] = useState('根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。');
   const [busy, setBusy] = useState(false);

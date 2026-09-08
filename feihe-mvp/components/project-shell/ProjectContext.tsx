@@ -43,7 +43,7 @@ type ProjectContextType = {
   refreshData: (opts?: { fresh?: boolean }) => Promise<void>;
 };
 
-const ProjectContext = createContext<ProjectContextType | null>(null);
+export const ProjectContext = createContext<ProjectContextType | null>(null);
 
 let cachedWorkspace: Workspace | null = null;
 let cachedWorkspaceAt = 0;

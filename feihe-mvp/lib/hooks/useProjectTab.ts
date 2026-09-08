@@ -11,7 +11,7 @@ export function useProjectTab(
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const rawTab = searchParams.get('tab');
+  const rawTab = searchParams?.get('tab');
   const resolvedRawTab = (rawTab && aliases && aliases[rawTab]) ? aliases[rawTab] : rawTab;
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
 

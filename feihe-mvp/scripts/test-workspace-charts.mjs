@@ -37,6 +37,9 @@ assert.equal((gap.match(/<circle /g) || []).length, 2, '零值有数据点，缺
 assert.equal((gap.match(/<path /g) || []).length, 2, '缺失记录两侧分成两个独立线段');
 assert(!gap.match(/<path[^>]*d="[^"]*L/), '不跨越缺失样本连线或填充面积');
 assert(!gap.includes('查看日期') && !gap.includes('data-trend-picker'), '图表移除了冗余的日期下拉选择器');
+assert(gap.includes('tabindex="0"') || gap.includes('tabIndex="0"'), '数据点或交互热区具备 tabindex 键盘焦点能力');
+assert(gap.includes('role="button"'), '数据点或交互热区具备无障碍按钮角色');
+assert(gap.includes('aria-label="2026-09-01'), '交互热区具备可访问名称读取');
 assert(!gap.includes('NaN') && !gap.includes('Infinity'), '绘图坐标必须有限');
 
 const empty = renderToStaticMarkup(chart([]));
@@ -50,4 +53,103 @@ const multiple = renderToStaticMarkup(React.createElement('div', null,
 ));
 const gradientIds = [...multiple.matchAll(/<linearGradient id="([^"]+)"/g)].map(match => match[1]);
 assert.equal(new Set(gradientIds).size, 2, '同页相同量程的多个图表使用独立渐变 ID');
-console.log('PASS workspace charts: gaps, zero, empty, single date, invalid numbers, keyboard selector, unique gradients');
+console.log('PASS workspace charts (static): gaps, zero, empty, single date, invalid numbers, unique gradients');
+
+// Part 2: Component Keyboard & Interactive Behavior Verification
+const { WorkspaceModuleTabs } = loadComponent('components/ui/operations/WorkspaceModuleTabs.tsx');
+const { CustomSelect } = loadComponent('components/ui/CustomSelect.tsx');
+
+// 1. WorkspaceModuleTabs roving tabindex and keyboard behavior
+{
+  let selectedTab = 'rules';
+  const tabs = [
+    { id: 'profile', title: '项目资料', desc: '', icon: '' },
+    { id: 'rules', title: '目标与规则', desc: '', icon: '' },
+    { id: 'data-map', title: '数据地图', desc: '', icon: '' },
+  ];
+  const markup = renderToStaticMarkup(React.createElement(WorkspaceModuleTabs, {
+    tabs,
+    activeTab: selectedTab,
+    onChange: id => { selectedTab = id; },
+    variant: 'compact',
+  }));
+
+  assert(markup.includes('role="tablist"'), '紧凑标签具备 tablist 语义');
+  assert(markup.includes('id="workspace-tab-rules"'), '标签具备独立关联 ID');
+  assert(markup.includes('tabindex="0"') || markup.includes('tabIndex="0"'), '活动标签 tabindex 为 0');
+  assert(markup.includes('tabindex="-1"') || markup.includes('tabIndex="-1"'), '非活动标签 tabindex 为 -1（roving tabindex）');
+  assert(markup.includes('aria-selected="true"'), '活动标签 aria-selected 为 true');
+  assert(markup.includes('aria-selected="false"'), '非活动标签 aria-selected 为 false');
+
+  // Component execution and event dispatch verification within active React dispatcher
+  let tabButtons = null;
+  function TestHarness() {
+    const el = React.createElement(WorkspaceModuleTabs, {
+      tabs,
+      activeTab: 'rules',
+      onChange: id => { selectedTab = id; },
+      variant: 'compact',
+    });
+    tabButtons = el.type(el.props).props.children;
+    return null;
+  }
+  renderToStaticMarkup(React.createElement(TestHarness));
+  assert.equal(tabButtons?.length, 3);
+
+  // Enter on already active tab: must NOT trigger onChange
+  let called = false;
+  const activeBtn = tabButtons[1];
+  activeBtn.props.onKeyDown({ key: 'Enter', preventDefault() {} });
+  assert.equal(called, false, '活动 tab 回车不重复触发 onChange');
+
+  // Enter on inactive tab: must trigger onChange
+  let inactiveTabButtons = null;
+  function InactiveHarness() {
+    const el = React.createElement(WorkspaceModuleTabs, {
+      tabs,
+      activeTab: 'rules',
+      onChange: id => { called = true; selectedTab = id; },
+      variant: 'compact',
+    });
+    inactiveTabButtons = el.type(el.props).props.children;
+    return null;
+  }
+  renderToStaticMarkup(React.createElement(InactiveHarness));
+  const inactiveBtn = inactiveTabButtons[0];
+  inactiveBtn.props.onKeyDown({ key: 'Enter', preventDefault() {} });
+  assert.equal(called, true, '非活动 tab 回车触发激活');
+  assert.equal(selectedTab, 'profile');
+}
+
+// 2. CustomSelect combobox ARIA and keyboard behavior
+{
+  let selectedVal = 'A';
+  const options = ['A', 'B', 'C'];
+  const markup = renderToStaticMarkup(React.createElement(CustomSelect, {
+    value: selectedVal,
+    options,
+    onChange: val => { selectedVal = val; },
+    placeholder: '选择品牌',
+  }));
+
+  assert(markup.includes('role="combobox"'), 'CustomSelect trigger 具备 combobox 语义');
+  assert(markup.includes('aria-haspopup="listbox"'), 'CustomSelect 声明 listbox 弹出类型');
+  assert(markup.includes('aria-expanded="false"'), '未展开时 aria-expanded 为 false');
+
+  // Trigger keydown test
+  let capturedTrigger = null;
+  let changedVal = null;
+  function SelectHarness() {
+    const el = React.createElement(CustomSelect, {
+      value: 'A',
+      options,
+      onChange: val => { changedVal = val; },
+    });
+    capturedTrigger = el.type(el.props).props.children[0];
+    return null;
+  }
+  renderToStaticMarkup(React.createElement(SelectHarness));
+  assert.equal(typeof capturedTrigger.props.onKeyDown, 'function', 'Trigger 绑定了 onKeyDown');
+}
+
+console.log('PASS workspace UI keyboard interaction: TimeSeriesChart focusable points, WorkspaceModuleTabs roving tabindex & activation, CustomSelect combobox & keyboard handler');

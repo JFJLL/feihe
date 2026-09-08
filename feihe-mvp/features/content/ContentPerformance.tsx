@@ -22,20 +22,26 @@ function DistributionBars({
   empty: string;
   secondaryKey?: string;
 }) {
-  const max = Math.max(1, ...rows.map((x) => num(x[valueKey])));
+  const validVals = rows.map((x) => num(x[valueKey])).filter((v): v is number => Number.isFinite(v) && v > 0);
+  const max = validVals.length ? Math.max(0, ...validVals) : 0;
   return (
     <div className="distribution-bars">
       {rows.length ? (
-        rows.slice(0, 10).map((row, index) => (
-          <div key={row[labelKey] + '-' + index}>
-            <span>{String(row[labelKey] || '待补充')}</span>
-            <i>
-              <b style={{ width: Math.max(3, (num(row[valueKey]) / max) * 100) + '%' }} />
-            </i>
-            <strong>{compact(row[valueKey])}</strong>
-            {secondaryKey && <em>{compact(row[secondaryKey])} 互动</em>}
-          </div>
-        ))
+        rows.slice(0, 10).map((row, index) => {
+          const val = num(row[valueKey]);
+          const isPos = Number.isFinite(val) && val > 0;
+          const pct = isPos && max > 0 ? (val / max) * 100 : 0;
+          return (
+            <div key={row[labelKey] + '-' + index}>
+              <span>{String(row[labelKey] || '待补充')}</span>
+              <i>
+                <b style={{ width: `${pct}%` }} />
+              </i>
+              <strong>{compact(row[valueKey])}</strong>
+              {secondaryKey && <em>{compact(row[secondaryKey])} 互动</em>}
+            </div>
+          );
+        })
       ) : (
         <div className="empty">{empty}</div>
       )}

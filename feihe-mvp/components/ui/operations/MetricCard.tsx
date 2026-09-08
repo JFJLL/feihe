@@ -34,8 +34,8 @@ export function MetricCard({
         {tag && <span className={`section-mini-tag tag-${tone}`}>{tag}</span>}
       </div>
       <div className="stat-value ops-metric-card-value-row">
-        <span>{value}</span>
-        {unit && <small> {unit}</small>}
+        <span className="ops-metric-card-value">{value}</span>
+        {unit && <small className="ops-metric-card-unit"> {unit}</small>}
       </div>
       {desc && <div className="reference-kpi-meta ops-metric-card-desc">{desc}</div>}
     </article>

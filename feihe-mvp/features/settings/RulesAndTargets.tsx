@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Dashboard, Ops, Pipeline, ReviewRule, Goals } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -36,6 +36,29 @@ export function RulesAndTargets({
   const [pipelineName, setPipelineName] = useState('');
   const [loading, setLoading] = useState(false);
   const [showCompletedJobs, setShowCompletedJobs] = useState(false);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  const initialSimilarity = acceptance.supplierSimilarity ?? 0.58;
+  const [similarityDraft, setSimilarityDraft] = useState(() => {
+    return Number.isFinite(initialSimilarity) ? String(Number((initialSimilarity * 100).toPrecision(12))) : '58';
+  });
+
+  useEffect(() => {
+    if (acceptance.supplierSimilarity !== undefined) {
+      setSimilarityDraft(String(Number((acceptance.supplierSimilarity * 100).toPrecision(12))));
+    }
+  }, [acceptance.supplierSimilarity]);
+
+  useEffect(() => {
+    if (showCompletedJobs) {
+      const closeBtn = dialogRef.current?.querySelector<HTMLButtonElement>('button[data-dialog-close]');
+      closeBtn?.focus();
+    } else if (triggerRef.current) {
+      triggerRef.current.focus();
+      triggerRef.current = null;
+    }
+  }, [showCompletedJobs]);
 
   const list = (value: string) =>
     value
@@ -107,10 +130,13 @@ export function RulesAndTargets({
           value={num(ops.settings.goals.workCompleted)}
           unit="项"
           theme="green"
-          tag="点击查看明细 ↗"
-          desc={`项目总目标 ${num(ops.settings.goals.workTarget)} 项 · 点击卡片可查看完成的具体任务明细`}
+          tag="查看最近明细 ↗"
+          desc={`项目总目标 ${num(ops.settings.goals.workTarget)} 项 · 累计完成 ${num(ops.settings.goals.workCompleted)} 项 · 点击查看最近任务中的完成记录`}
           clickable
-          onClick={() => setShowCompletedJobs(true)}
+          onClick={() => {
+            triggerRef.current = (document.activeElement as HTMLElement) || null;
+            setShowCompletedJobs(true);
+          }}
         />
         <MetricCard label="月度 / 季度目标" value={`${num(ops.settings.goals.monthlyTarget)} / ${num(ops.settings.goals.quarterlyTarget)}`} unit="项" theme="purple" tag="已保存" desc="月度与季度独立维护；0 表示尚未设置目标" />
         <MetricCard label="已发布笔记" value={num(data.metrics.publishedCount)} unit="篇" theme="blue" desc={`来自项目笔记库 · 发布目标 ${num(ops.settings.goals.publishTarget)} 篇`} />
@@ -247,14 +273,28 @@ export function RulesAndTargets({
              供应商相似度阈值（%）
              <input
                type="number"
-                step="1"
-                value={Math.round((acceptance.supplierSimilarity ?? 0.58) * 100)}
-               onChange={(e) =>
-                 setAcceptance({
-                   ...acceptance,
-                    supplierSimilarity: Math.round(num(e.target.value)) / 100,
-                 })
-               }
+               step="any"
+               value={similarityDraft}
+               onChange={(e) => {
+                 const raw = e.target.value;
+                 setSimilarityDraft(raw);
+                 if (raw.trim() !== '') {
+                   const parsed = parseFloat(raw);
+                   if (Number.isFinite(parsed)) {
+                     const decimalVal = Number((parsed / 100).toPrecision(12));
+                     setAcceptance((prev) => ({
+                       ...prev,
+                       supplierSimilarity: decimalVal,
+                     }));
+                   }
+                 }
+               }}
+               onBlur={() => {
+                 if (similarityDraft.trim() === '') {
+                   const fallback = acceptance.supplierSimilarity ?? 0.58;
+                   setSimilarityDraft(String(Number((fallback * 100).toPrecision(12))));
+                 }
+               }}
              />
            </label>
           </div>
@@ -489,65 +529,108 @@ export function RulesAndTargets({
 
       {/* 已完成任务明细查看弹窗 */}
       {showCompletedJobs && (
-        <div className="entity-backdrop" onMouseDown={() => setShowCompletedJobs(false)}>
+        <div
+          className="entity-backdrop"
+          onMouseDown={() => setShowCompletedJobs(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              e.stopPropagation();
+              setShowCompletedJobs(false);
+            }
+          }}
+        >
           <div
+            ref={dialogRef}
             className="entity-editor"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="completed-jobs-dialog-title"
             onMouseDown={(e) => e.stopPropagation()}
-            style={{ width: '840px', maxWidth: '95vw', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}
+            style={{ width: '880px', maxWidth: '95vw', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}
           >
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px', marginBottom: '14px' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span className="section-mini-tag tag-green">系统记录</span>
-                <h2 style={{ fontSize: '17px', margin: 0, fontWeight: 700, color: '#0f172a' }}>
-                  已完成任务明细 ({completedJobs.length} 项)
+                <span className="section-mini-tag tag-green">最近任务</span>
+                <h2 id="completed-jobs-dialog-title" style={{ fontSize: '17px', margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                  最近任务中的已完成记录
                 </h2>
               </div>
               <button
                 type="button"
+                data-dialog-close
                 onClick={() => setShowCompletedJobs(false)}
-                aria-label="关闭弹窗"
-                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#64748b' }}
+                aria-label="关闭已完成任务明细弹窗"
+                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#64748b', padding: '4px 8px' }}
               >
                 ×
               </button>
             </header>
 
-            <div style={{ flex: 1, overflowY: 'auto', minHeight: '260px' }}>
+            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 14px', marginBottom: '14px', fontSize: '12.5px', color: '#475569', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+              <span>
+                系统当前展示最近 <strong>{ops.jobs?.length ?? 0}</strong> 条任务中已完成的 <strong>{completedJobs.length}</strong> 项
+              </span>
+              <span style={{ color: '#64748b' }}>
+                全历史累计完成：<strong style={{ color: '#16a34a' }}>{num(ops.settings.goals.workCompleted)}</strong> 项（受系统接口限制，明细仅回溯最近 40 条任务）
+              </span>
+            </div>
+
+            <div style={{ flex: 1, overflowY: 'auto', minHeight: '260px', maxHeight: 'calc(85vh - 180px)' }}>
               {completedJobs.length > 0 ? (
                 <table className="ops-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
                     <tr>
                       <th style={{ textAlign: 'left', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>任务名称</th>
                       <th style={{ textAlign: 'left', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>类型</th>
-                      <th style={{ textAlign: 'center', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>处理进度</th>
+                      <th style={{ textAlign: 'center', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>处理数量</th>
+                      <th style={{ textAlign: 'center', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>进度</th>
                       <th style={{ textAlign: 'left', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>执行结果</th>
-                      <th style={{ textAlign: 'right', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>完成时间</th>
+                      <th style={{ textAlign: 'right', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>时间</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {completedJobs.map((job) => (
+                    {completedJobs.map((job) => {
+                      const hasSucceeded = typeof job.succeeded === 'number' && Number.isFinite(job.succeeded);
+                      const hasTotal = typeof job.total === 'number' && Number.isFinite(job.total);
+                      const progressPct = typeof job.progress === 'number' && Number.isFinite(job.progress) ? job.progress : null;
+                      return (
                       <tr key={job.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 600, color: '#0f172a' }}>
-                          {job.title}
+                          {job.title || '未命名任务'}
                         </td>
                         <td style={{ padding: '10px 12px', fontSize: '12.5px', color: '#64748b' }}>
                           <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>
                             {job.type}
                           </span>
                         </td>
-                        <td style={{ padding: '10px 12px', textAlign: 'center', fontSize: '12.5px', color: '#16a34a', fontWeight: 600 }}>
-                          {job.succeeded || job.progress} / {job.total || job.progress}
+                        <td style={{ padding: '10px 12px', textAlign: 'center', fontSize: '12.5px', color: '#0f172a' }}>
+                          {hasSucceeded || hasTotal ? `${hasSucceeded ? job.succeeded : '—'} / ${hasTotal ? job.total : '—'}` : '—'}
+                        </td>
+                        <td style={{ padding: '10px 12px', textAlign: 'center', fontSize: '12px', color: '#16a34a', fontWeight: 600 }}>
+                          {progressPct !== null ? `${progressPct}%` : '—'}
                         </td>
                         <td style={{ padding: '10px 12px', fontSize: '12px', color: '#475569', maxWidth: '260px' }}>
                           {job.message || '执行成功完成'}
                         </td>
                         <td style={{ padding: '10px 12px', textAlign: 'right', fontSize: '12px', color: '#94a3b8', whiteSpace: 'nowrap' }}>
-                          {job.finishedAt || job.createdAt}
+                          {job.finishedAt ? (
+                            <span>完成于 {job.finishedAt}</span>
+                          ) : job.createdAt ? (
+                            <span style={{ color: '#64748b' }}>创建于 {job.createdAt}</span>
+                          ) : (
+                            '—'
+                          )}
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
+              ) : num(ops.settings.goals.workCompleted) > 0 ? (
+                <EmptyState
+                  title="最近任务中无已完成记录"
+                  text={`系统接口仅保留最近 40 条任务记录，当前这批任务中暂无已完成项（全历史累计已完成 ${num(ops.settings.goals.workCompleted)} 项）。`}
+                />
               ) : (
                 <EmptyState title="暂无已完成任务记录" text="系统作业执行完成后将在此处归档留痕。" />
               )}

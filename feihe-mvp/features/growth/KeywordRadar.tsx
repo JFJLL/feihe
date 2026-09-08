@@ -123,7 +123,7 @@ export function KeywordRadar({
         <LingxiTrackLive projectId={projectId} toast={toast || (() => undefined)} />
       ) : (
         <>
-          <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} />
+          {/* 1. 关键词控制与阈值设置 */}
           <section className="panel keyword-control" id="growth-keywords">
             <div>
               <PanelHead eyebrow="WATCHLIST" title="关键词观察清单" />
@@ -164,13 +164,6 @@ export function KeywordRadar({
             )}
           </section>
 
-          <section className="reference-daily-grid">
-            <MetricCard label="观察关键词" value={growth.watchKeywords.length} desc="由当前项目独立维护" />
-            <MetricCard label="去重匹配笔记" value={new Set(rows.flatMap(row => row.matches.map(n => n.id))).size} theme="teal" desc="跨关键词按笔记 ID 去重" />
-            <MetricCard label="项目高热样本" value={hotNotes.length} theme="purple" desc={'互动量 > ' + display(growth.thresholds.breakoutInteractions)} />
-            <MetricCard label="有命中关键词" value={rows.filter(row => row.matches.length > 0).length} theme="green" desc="关键词可交叉命中，明细不可直接相加" />
-          </section>
-
           <section className="panel threshold-strip">
             <div>
               <strong>爆文判断阈值</strong>
@@ -201,6 +194,14 @@ export function KeywordRadar({
             >
               保存阈值
             </button>
+          </section>
+
+          {/* 2. 观察分析结果 */}
+          <section className="reference-daily-grid">
+            <MetricCard label="观察关键词" value={growth.watchKeywords.length} desc="由当前项目独立维护" />
+            <MetricCard label="去重匹配笔记" value={new Set(rows.flatMap(row => row.matches.map(n => n.id))).size} theme="teal" desc="跨关键词按笔记 ID 去重" />
+            <MetricCard label="项目高热样本" value={hotNotes.length} theme="purple" desc={'互动量 > ' + display(growth.thresholds.breakoutInteractions)} />
+            <MetricCard label="有命中关键词" value={rows.filter(row => row.matches.length > 0).length} theme="green" desc="关键词可交叉命中，明细不可直接相加" />
           </section>
 
           <section className="panel">
@@ -255,6 +256,9 @@ export function KeywordRadar({
               )}
             </div>
           </section>
+
+          {/* 3. 机会分布与相关高热样本 */}
+          <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} />
 
           <section className="panel">
             <PanelHead eyebrow="BREAKOUT NOTES" title="项目高热笔记样本" />

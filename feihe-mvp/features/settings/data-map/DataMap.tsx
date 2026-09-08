@@ -142,39 +142,86 @@ export function DataMap({
 
 
           <section className="platform-split" style={{ gridTemplateColumns: '1.4fr 1fr', gap: '16px' }}>
+            {(() => {
+              const k = data.keystone;
+              const isConfigured = Boolean(k.configured);
+              const isFailed = k.status === '连接失败' || Boolean(k.error);
+              const hasTextModel = Boolean(k.textModels?.includes(k.textModel));
+              const hasImageModel = Boolean(k.imageModels?.includes(k.imageModel));
+
+              let statusColor = '#94a3b8';
+              let statusText = k.status || '未配置密钥';
+              if (!isConfigured) {
+                statusColor = '#94a3b8';
+                statusText = k.status || '未配置密钥';
+              } else if (isFailed) {
+                statusColor = '#dc2626';
+                statusText = k.error ? `连接失败 (${k.error})` : '连接失败';
+              } else if (hasTextModel) {
+                statusColor = '#16a34a';
+                statusText = k.status || '文本与生图模型可用';
+              } else {
+                statusColor = '#ea580c';
+                statusText = k.status || '已连接 · 目标模型待验证';
+              }
+
+              let poolContent: React.ReactNode;
+              if (!isConfigured) {
+                poolContent = <span style={{ color: '#94a3b8' }}>未配置网关密钥</span>;
+              } else if (isFailed) {
+                poolContent = <span style={{ color: '#dc2626' }}>连接失败：{k.error || '无法获取模型列表'}</span>;
+              } else if (!k.models || k.models.length === 0) {
+                poolContent = <span style={{ color: '#b45309' }}>已连接但可用模型列表为空</span>;
+              } else {
+                poolContent = <span style={{ color: '#334155' }}>{k.models.join(', ')}</span>;
+              }
+
+              return (
             <article className="platform-panel pastel-card reference-section section-blue" style={{ padding: '20px' }}>
               <div className="card-header-row" style={{ marginBottom: '16px' }}>
                 <div className="header-left">
                   <span className="section-mini-tag tag-blue">AI GATEWAY</span>
                   <h3 style={{ margin: 0 }}>Keystone 模型网关配置与状态</h3>
                 </div>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: data.keystone.textModels.includes(data.keystone.textModel) ? '#16a34a' : '#ea580c' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: data.keystone.textModels.includes(data.keystone.textModel) ? '#16a34a' : '#ea580c' }} />
-                  {data.keystone.status}
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: statusColor }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: statusColor }} />
+                  {statusText}
                 </span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12.5px' }}>
                 <div>
                   <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>Base URL</span>
-                  <code style={{ color: '#0f172a', wordBreak: 'break-all' }}>{data.keystone.baseUrl}</code>
+                  <code style={{ color: '#0f172a', wordBreak: 'break-all' }}>{k.baseUrl}</code>
                 </div>
                 <div>
                   <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>文本推理模型</span>
-                  <strong style={{ color: '#0f172a' }}>{data.keystone.textModel}</strong>{' '}
-                  <span className="section-mini-tag tag-green" style={{ fontSize: '10px' }}>
-                    {data.keystone.textModels.includes(data.keystone.textModel) ? '已验证' : '待验证'}
-                  </span>
+                  <strong style={{ color: '#0f172a' }}>{k.textModel}</strong>{' '}
+                  {!isConfigured ? (
+                    <span className="section-mini-tag" style={{ fontSize: '10px', background: '#f1f5f9', color: '#64748b', border: '1px solid #e2e8f0' }}>未配置</span>
+                  ) : isFailed ? (
+                    <span className="section-mini-tag tag-rose" style={{ fontSize: '10px' }}>不可用</span>
+                  ) : hasTextModel ? (
+                    <span className="section-mini-tag tag-green" style={{ fontSize: '10px' }}>已验证可用</span>
+                  ) : (
+                    <span className="section-mini-tag tag-amber" style={{ fontSize: '10px' }}>待验证（未在列表中）</span>
+                  )}
                 </div>
                 <div>
                   <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>生图模型</span>
-                  <strong style={{ color: '#0f172a' }}>{data.keystone.imageModel}</strong>{' '}
-                  <span className="section-mini-tag tag-purple" style={{ fontSize: '10px' }}>
-                    {data.keystone.imageModels.includes(data.keystone.imageModel) ? '已授权' : '配置已保留'}
-                  </span>
+                  <strong style={{ color: '#0f172a' }}>{k.imageModel}</strong>{' '}
+                  {!isConfigured ? (
+                    <span className="section-mini-tag" style={{ fontSize: '10px', background: '#f1f5f9', color: '#64748b', border: '1px solid #e2e8f0' }}>未配置</span>
+                  ) : isFailed ? (
+                    <span className="section-mini-tag tag-rose" style={{ fontSize: '10px' }}>不可用</span>
+                  ) : hasImageModel ? (
+                    <span className="section-mini-tag tag-purple" style={{ fontSize: '10px' }}>已授权可用</span>
+                  ) : (
+                    <span className="section-mini-tag tag-blue" style={{ fontSize: '10px' }}>配置已保留（未在列表中）</span>
+                  )}
                 </div>
                 <div>
                   <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>可用模型令牌池</span>
-                  <span style={{ color: '#334155' }}>{data.keystone.models.join(', ') || '托管环境已连接'}</span>
+                  {poolContent}
                 </div>
               </div>
               <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
@@ -189,6 +236,8 @@ export function DataMap({
                 </button>
               </div>
             </article>
+              );
+            })()}
 
             <article className="platform-panel pastel-card reference-section section-teal" style={{ padding: '20px' }}>
               <div className="card-header-row" style={{ marginBottom: '14px' }}>
@@ -202,8 +251,8 @@ export function DataMap({
                   { done: Boolean(coverage.accounts), text: '配置各聚光主账户与子账户' },
                   { done: Boolean(coverage.endpoints), text: '登记账户级报表接口和请求参数' },
                   { done: Boolean(coverage.bindings), text: '完成原始字段到标准指标映射' },
-                  { done: data.keystone.textModels.includes(data.keystone.textModel), text: '验证 gpt-5.6-terra 文本推理' },
-                  { done: true, text: '保留 gpt-image-2 生图模型配置' },
+                  { done: Boolean(data.keystone.configured && data.keystone.textModels?.includes(data.keystone.textModel)), text: `验证 ${data.keystone.textModel} 文本推理` },
+                  { done: Boolean(data.keystone.configured && data.keystone.imageModels?.includes(data.keystone.imageModel)), text: `验证 ${data.keystone.imageModel} 生图模型` },
                 ].map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: item.done ? '#0f172a' : '#64748b' }}>
                     <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: item.done ? '#dcfce7' : '#f1f5f9', color: item.done ? '#15803d' : '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold' }}>

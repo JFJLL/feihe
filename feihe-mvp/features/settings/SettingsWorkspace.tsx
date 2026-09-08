@@ -52,6 +52,20 @@ export function SettingsWorkspace({
   const [tab, setTab] = useProjectTab('profile', ['profile', 'rules', 'data-sources', 'integrations', 'data-map']);
   const { currentProject, workspace, refreshWorkspace, showToast } = useProject();
 
+  // Per-project visited tabs set: lazy-mounts on first visit, preserves drafts thereafter.
+  const [visitedByProject, setVisitedByProject] = useState<Record<string, Set<string>>>({});
+  const visited = visitedByProject[projectId] ?? new Set([tab]);
+
+  useEffect(() => {
+    setVisitedByProject((prev) => {
+      const current = prev[projectId];
+      if (current && current.has(tab)) return prev;
+      const next = new Set(current || []);
+      next.add(tab);
+      return { ...prev, [projectId]: next };
+    });
+  }, [projectId, tab]);
+
   const [map, setMap] = useState<MapData>(emptyMap);
   const [mapError, setMapError] = useState('');
   const [mapLoadedFor, setMapLoadedFor] = useState('');
@@ -106,15 +120,19 @@ export function SettingsWorkspace({
 
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
 
+      {visited.has('profile') && (
       <div style={{ display: tab === 'profile' ? 'block' : 'none' }}>
         <ProjectProfile
+          key={projectId}
           project={currentProject}
           projectId={projectId}
           onDone={handleProfileOrSourceUpdate}
           toast={showToast}
         />
       </div>
+      )}
 
+      {visited.has('rules') && (
       <div style={{ display: tab === 'rules' ? 'block' : 'none' }}>
         <RulesAndTargets
           key={projectId}
@@ -125,7 +143,9 @@ export function SettingsWorkspace({
           toast={showToast}
         />
       </div>
+      )}
 
+      {visited.has('data-sources') && (
       <div style={{ display: tab === 'data-sources' ? 'block' : 'none' }}>
         <SettingsDataSources
           key={projectId}
@@ -135,7 +155,9 @@ export function SettingsWorkspace({
           toast={showToast}
         />
       </div>
+      )}
 
+      {visited.has('integrations') && (
       <div style={{ display: tab === 'integrations' ? 'block' : 'none' }}>
         <SettingsIntegrations
           key={projectId}
@@ -143,7 +165,9 @@ export function SettingsWorkspace({
           toast={showToast}
         />
       </div>
+      )}
 
+      {visited.has('data-map') && (
       <div style={{ display: tab === 'data-map' ? 'block' : 'none' }}>
         {mapError ? (
           <ErrorState error={mapError} onRetry={reloadMap} />
@@ -159,6 +183,7 @@ export function SettingsWorkspace({
           />
         )}
       </div>
+      )}
     </div>
   );
 }

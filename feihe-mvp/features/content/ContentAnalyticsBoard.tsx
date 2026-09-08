@@ -24,17 +24,13 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
   const maxInteraction = Math.max(0, ...levels.map(row => count(row.avgInteraction)));
 
   return (
-    <div className="workspace-two-col">
-      <DashboardSection eyebrow="CONTENT STRATEGY" title="内容资产来源结构" desc="按当前统计范围内的全部笔记汇总，识别内容来源集中度。">
+    <div className="stack">
+      {/* 核心主分析 */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+      <DashboardSection eyebrow="CORE STRATEGY" title="内容资产来源结构" desc="按当前统计范围内的全部笔记汇总，识别内容来源集中度。">
         {sourceTotal > 0 ? <TierDoughnutChart total={sourceTotal} items={sources.map((row, index) => ({
           label: sourceLabel(row.name), count: count(row.count), pct: count(row.count) / sourceTotal * 100, color: colors[index % colors.length],
         }))} /> : <div className="empty">暂无内容来源数据</div>}
-      </DashboardSection>
-      <DashboardSection eyebrow="FORMAT MIX" title="数据覆盖与分析缺口" desc="各项独立统计；表现指标指阅读或互动大于 0，未覆盖不等于表现为零。">
-        {total > 0 ? <>
-          <HorizontalBarList items={coverage.filter(item => item.amount > 0)} />
-          {coverage.filter(item => item.amount === 0).map(item => <p className="muted" key={item.label}>{item.label}：0 / {total.toLocaleString()} 篇（0%）</p>)}
-        </> : <div className="empty">暂无笔记，暂不计算覆盖率</div>}
       </DashboardSection>
       <DashboardSection eyebrow="CREATOR EFFICIENCY" title="达人层级篇均互动效率" desc="百分比以最高篇均互动层级为 100%；均值沿用已同步指标口径，不代表互动贡献占比。">
         {levels.length ? <HorizontalBarList items={levels.map((row, index) => ({
@@ -42,6 +38,16 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
           pct: count(row.avgInteraction) / maxInteraction * 100, color: colors[index % colors.length],
           subText: `${count(row.avgInteraction).toLocaleString('zh-CN', { maximumFractionDigits: 1 })} 次/篇 · ${count(row.count)} 篇`,
         }))} /> : <div className="empty">暂无大于 0 的篇均互动数据</div>}
+      </DashboardSection>
+      </div>
+
+      {/* 辅助分析与数据质量诊断 */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+      <DashboardSection eyebrow="DATA INTEGRITY" title="数据覆盖与分析缺口" desc="各项独立统计；表现指标指阅读或互动大于 0，未覆盖不等于表现为零。">
+        {total > 0 ? <>
+          <HorizontalBarList items={coverage.filter(item => item.amount > 0)} />
+          {coverage.filter(item => item.amount === 0).map(item => <p className="muted" key={item.label}>{item.label}：0 / {total.toLocaleString()} 篇（0%）</p>)}
+        </> : <div className="empty">暂无笔记，暂不计算覆盖率</div>}
       </DashboardSection>
       <DashboardSection eyebrow="FORMAT MIX" title="内容形式互动贡献" desc="按已同步互动次数计算贡献占比；缺失互动指标的内容不参与占比计算。">
         {(() => {
@@ -53,6 +59,7 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
           }))} /> : <div className="empty">暂无已同步互动贡献</div>;
         })()}
       </DashboardSection>
+    </div>
     </div>
   );
 }

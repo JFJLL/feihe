@@ -72,11 +72,13 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
               </thead>
               <tbody>
             {(() => {
-              const maxVal = Math.max(1, ...current.map(c => numeric(c.value) || 0));
+              const validVals = current.map(c => numeric(c.value)).filter((v): v is number => v !== null && Number.isFinite(v));
+              const maxVal = validVals.length ? Math.max(0, ...validVals) : 0;
               const prevMonth = previousMonth(month);
               return current.map((row, i) => {
-                const val = numeric(row.value) || 0;
-                const pct = (val / maxVal) * 100;
+                const val = numeric(row.value);
+                const isPositive = val !== null && val > 0;
+                const pct = isPositive && maxVal > 0 ? (val / maxVal) * 100 : 0;
                 const prev = monthly.filter(r => r.month === prevMonth && r.brand === row.brand && r.sheetId === row.sheetId);
                 const unique = current.filter(r => r.brand === row.brand && r.sheetId === row.sheetId).length === 1;
                 return (
@@ -84,7 +86,7 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
                     <td>
                       <div style={{ marginBottom: 4 }}><strong>{row.brand}</strong></div>
                       <div style={{ height: 5, background: '#edf2f7', borderRadius: 3, overflow: 'hidden', width: '100%' }}>
-                        <div style={{ width: `${Math.max(4, pct)}%`, height: '100%', background: paletteColor('brand:' + row.brand), borderRadius: 3 }} />
+                        <div style={{ width: `${pct}%`, height: '100%', background: paletteColor('brand:' + row.brand), borderRadius: 3 }} />
                       </div>
                     </td>
                     <td><GrowthReadout value={row.value} /></td>

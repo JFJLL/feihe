@@ -18,15 +18,18 @@ function DistributionBars({
   empty: string;
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const max = Math.max(1, ...rows.map((x) => num(x[valueKey])));
-  const sum = rows.reduce((s, x) => s + num(x[valueKey]), 0) || 1;
+  const validVals = rows.map((x) => num(x[valueKey])).filter((v): v is number => Number.isFinite(v) && v > 0);
+  const max = validVals.length ? Math.max(0, ...validVals) : 0;
+  const sum = rows.reduce((s, x) => s + (num(x[valueKey]) || 0), 0) || 1;
 
   return (
     <div className="distribution-bars">
       {rows.length ? (
         rows.slice(0, 10).map((row, index) => {
           const val = num(row[valueKey]);
-          const pctVal = ((val / sum) * 100).toFixed(1);
+          const isPos = Number.isFinite(val) && val > 0;
+          const barWidth = isPos && max > 0 ? (val / max) * 100 : 0;
+          const pctVal = isPos ? ((val / sum) * 100).toFixed(1) : '0.0';
           const isHovered = hoveredIdx === index;
           return (
             <div
@@ -62,7 +65,7 @@ function DistributionBars({
               <div style={{ flex: 1, height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
                 <div
                   style={{
-                    width: Math.max(3, (val / max) * 100) + '%',
+                    width: `${barWidth}%`,
                     height: '100%',
                     background: isHovered ? '#0284c7' : '#3b82f6',
                     borderRadius: '4px',

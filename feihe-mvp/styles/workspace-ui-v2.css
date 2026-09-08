@@ -69,6 +69,14 @@
   gap: 16px;
   align-items: flex-start;
 }
+[data-workspace-ui='v2'] .ui-page-header-eyebrow {
+  color: var(--ws-interactive);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
 [data-workspace-ui='v2'] .ui-page-header-title {
   color: var(--ws-text);
   font-size: 24px;
@@ -106,10 +114,10 @@
 }
 /* Sync button: quiet secondary in workspaces (kept prominent inside overview banner). */
 [data-workspace-ui='v2'] .ui-page-header .sync-button {
-  background: var(--ws-surface);
-  color: var(--ws-interactive);
-  border: 1px solid #c6d7e6;
-  box-shadow: none;
+  background: var(--ws-surface) !important;
+  color: var(--ws-interactive) !important;
+  border: 1px solid #c6d7e6 !important;
+  box-shadow: none !important;
   min-height: 36px;
   padding: 8px 14px;
   font-size: 13px;
@@ -117,18 +125,18 @@
   border-radius: var(--ws-radius-control);
 }
 [data-workspace-ui='v2'] .ui-page-header .sync-button:hover:not(:disabled) {
-  background: var(--ws-interactive-soft);
-  box-shadow: none;
+  background: var(--ws-interactive-soft) !important;
+  box-shadow: none !important;
 }
 [data-workspace-ui='v2'] .ui-page-header .sync-button.sync-error {
-  color: var(--ws-state-danger);
-  border-color: #e4c4bf;
-  background: var(--ws-state-danger-soft);
+  color: var(--ws-state-danger) !important;
+  border-color: #e4c4bf !important;
+  background: var(--ws-state-danger-soft) !important;
 }
 [data-workspace-ui='v2'] .ui-page-header .sync-button.sync-success {
-  color: var(--ws-state-good);
-  border-color: #c4ddcd;
-  background: var(--ws-state-good-soft);
+  color: var(--ws-state-good) !important;
+  border-color: #c4ddcd !important;
+  background: var(--ws-state-good-soft) !important;
 }
 
 /* ---------- Compact tab navigation ---------- */
@@ -226,7 +234,7 @@
 }
 
 /* Secondary + ghost/text buttons: every workspace button that is not primary. */
-[data-workspace-ui='v2'] button:not(.primary):not(.primary-btn):not(.sync-button):not(.ops-module-tab):not(.workspace-compact-tab):not(.reference-subtabs button):not(.section-tabs button):not(.map-tabs button):not(.ops-drawer-tab):not(.custom-select-trigger):not(.custom-select-option):not(.upload):not(.drawer-close):not(.toast-close):not(.pagination-btn) {
+[data-workspace-ui='v2'] button:not(.primary, .primary-btn, .sync-button, .ops-module-tab, .workspace-compact-tab, .reference-subtabs button, .section-tabs button, .map-tabs button, .ops-drawer-tab, .custom-select-trigger, .custom-select-option, .upload, .drawer-close, .toast-close, .pagination-btn, .danger-link, .danger, .text-link, .btn-link) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -242,11 +250,11 @@
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
-[data-workspace-ui='v2'] button:not(.primary):not(.primary-btn):not(.sync-button):not(.ops-module-tab):not(.workspace-compact-tab):not(.reference-subtabs button):not(.section-tabs button):not(.map-tabs button):not(.ops-drawer-tab):not(.custom-select-trigger):not(.custom-select-option):not(.upload):not(.drawer-close):not(.toast-close):not(.pagination-btn):hover:not(:disabled) {
+[data-workspace-ui='v2'] button:not(.primary, .primary-btn, .sync-button, .ops-module-tab, .workspace-compact-tab, .reference-subtabs button, .section-tabs button, .map-tabs button, .ops-drawer-tab, .custom-select-trigger, .custom-select-option, .upload, .drawer-close, .toast-close, .pagination-btn, .danger-link, .danger, .text-link, .btn-link):hover:not(:disabled) {
   background: var(--ws-interactive-soft);
   border-color: #a9c4dc;
 }
-[data-workspace-ui='v2'] button:not(.primary):not(.primary-btn):not(.sync-button):not(.ops-module-tab):not(.workspace-compact-tab):not(.reference-subtabs button):not(.section-tabs button):not(.map-tabs button):not(.ops-drawer-tab):not(.custom-select-trigger):not(.custom-select-option):not(.upload):not(.drawer-close):not(.toast-close):not(.pagination-btn):disabled {
+[data-workspace-ui='v2'] button:not(.primary, .primary-btn, .sync-button, .ops-module-tab, .workspace-compact-tab, .reference-subtabs button, .section-tabs button, .map-tabs button, .ops-drawer-tab, .custom-select-trigger, .custom-select-option, .upload, .drawer-close, .toast-close, .pagination-btn, .danger-link, .danger, .text-link, .btn-link):disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
@@ -276,28 +284,31 @@
 [data-workspace-ui='v2'] input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='range']),
 [data-workspace-ui='v2'] select,
 [data-workspace-ui='v2'] textarea {
-  min-height: 36px;
-  padding: 7px 11px;
-  background: var(--ws-surface);
-  border: 1px solid #c9d5e0;
-  border-radius: var(--ws-radius-control);
-  color: var(--ws-text);
-  font: inherit;
-  font-size: 13px;
+  min-height: 36px !important;
+  padding: 7px 11px !important;
+  background: var(--ws-surface) !important;
+  border: 1px solid #c9d5e0 !important;
+  border-radius: var(--ws-radius-control) !important;
+  color: var(--ws-text) !important;
+  font: inherit !important;
+  font-size: 13px !important;
   max-width: 100%;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
 }
 [data-workspace-ui='v2'] textarea {
   min-height: 72px;
   line-height: 1.6;
   resize: vertical;
 }
+[data-workspace-ui='v2'] input:focus,
+[data-workspace-ui='v2'] select:focus,
+[data-workspace-ui='v2'] textarea:focus,
 [data-workspace-ui='v2'] input:focus-visible,
 [data-workspace-ui='v2'] select:focus-visible,
 [data-workspace-ui='v2'] textarea:focus-visible {
-  outline: none;
-  border-color: var(--ws-interactive);
-  box-shadow: 0 0 0 3px rgba(30, 96, 145, 0.14);
+  outline: none !important;
+  border-color: var(--ws-interactive) !important;
+  box-shadow: 0 0 0 3px rgba(30, 96, 145, 0.14) !important;
 }
 [data-workspace-ui='v2'] input:disabled,
 [data-workspace-ui='v2'] select:disabled,
@@ -317,7 +328,7 @@
 [data-workspace-ui='v2'] input[type='date'] {
   font-variant-numeric: tabular-nums;
 }
-[data-workspace-ui='v2'] label:has(> input):has(> select):has(> textarea),
+[data-workspace-ui='v2'] label:has(> :is(input, select, textarea)),
 [data-workspace-ui='v2'] .form-grid label,
 [data-workspace-ui='v2'] .goal-form-grid label,
 [data-workspace-ui='v2'] .platform-form label,
@@ -366,7 +377,7 @@
 }
 [data-workspace-ui='v2'] .ops-table td.num,
 [data-workspace-ui='v2'] .ops-table th.num {
-  text-align: right;
+  text-align: right !important;
   font-variant-numeric: tabular-nums;
 }
 [data-workspace-ui='v2'] .ops-table-wrap {
@@ -411,23 +422,23 @@
 [data-workspace-ui='v2'] .ops-section-card-title-group small {
   color: var(--ws-text-faint);
 }
-/* Metric cards: flat white surface + colored top rule; no gradient fills. */
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-blue,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-teal,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-green,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-purple,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-indigo,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-yellow,
-[data-workspace-ui='v2'] .ops-workspace .ops-metric-card-red {
-  background: var(--ws-surface);
-  background-image: none;
-  border: 1px solid var(--ws-border);
-  border-top: 3px solid var(--metric-accent, var(--ws-data-blue));
-  border-radius: var(--ws-radius-card);
-  padding: 16px 18px;
+/* Metric cards: flat white surface + colored top rule; no gradient fills; works regardless of nesting. */
+[data-workspace-ui='v2'] .ops-metric-card,
+[data-workspace-ui='v2'] .ops-metric-card-blue,
+[data-workspace-ui='v2'] .ops-metric-card-teal,
+[data-workspace-ui='v2'] .ops-metric-card-green,
+[data-workspace-ui='v2'] .ops-metric-card-purple,
+[data-workspace-ui='v2'] .ops-metric-card-indigo,
+[data-workspace-ui='v2'] .ops-metric-card-yellow,
+[data-workspace-ui='v2'] .ops-metric-card-red {
+  background: var(--ws-surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--ws-border) !important;
+  border-top: 3px solid var(--metric-accent, var(--ws-data-blue)) !important;
+  border-radius: var(--ws-radius-card) !important;
+  padding: 16px 18px !important;
   gap: 5px;
-  box-shadow: var(--ws-shadow-card);
+  box-shadow: var(--ws-shadow-card) !important;
 }
 [data-workspace-ui='v2'] .ops-metric-card-blue { --metric-accent: var(--ws-data-blue); }
 [data-workspace-ui='v2'] .ops-metric-card-teal { --metric-accent: var(--ws-data-teal); }
@@ -440,15 +451,22 @@
   font-size: 12.5px;
   color: var(--ws-text-muted);
 }
-[data-workspace-ui='v2'] .ops-metric-card-value {
+[data-workspace-ui='v2'] :is(.ops-metric-card-value, .ops-metric-card-value-row, .ops-metric-card .stat-value) {
   font-size: 28px;
   line-height: 1.2;
   font-weight: 800;
   color: var(--ws-text);
   font-variant-numeric: tabular-nums;
 }
-[data-workspace-ui='v2'] .ops-metric-card-unit {
+[data-workspace-ui='v2'] :is(.ops-metric-card-value, .ops-metric-card-value-row) span {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ws-text);
+  font-variant-numeric: tabular-nums;
+}
+[data-workspace-ui='v2'] :is(.ops-metric-card-unit, .ops-metric-card-value-row small, .ops-metric-card .stat-value small) {
   font-size: 12px;
+  font-weight: normal;
   color: var(--ws-text-muted);
 }
 [data-workspace-ui='v2'] .ops-metric-card-tag {
@@ -621,12 +639,14 @@
     padding: 9px 12px;
     font-size: 13px;
   }
-  [data-workspace-ui='v2'] button:not(.primary):not(.primary-btn):not(.sync-button):not(.ops-module-tab):not(.workspace-compact-tab):not(.reference-subtabs button):not(.section-tabs button):not(.map-tabs button):not(.ops-drawer-tab):not(.custom-select-trigger):not(.custom-select-option):not(.upload):not(.drawer-close):not(.toast-close):not(.pagination-btn) {
+  [data-workspace-ui='v2'] button:not(.primary, .primary-btn, .sync-button, .ops-module-tab, .workspace-compact-tab, .reference-subtabs button, .section-tabs button, .map-tabs button, .ops-drawer-tab, .custom-select-trigger, .custom-select-option, .upload, .drawer-close, .toast-close, .pagination-btn, .danger-link, .danger, .text-link, .btn-link) {
     min-height: 40px;
   }
   [data-workspace-ui='v2'] input:not([type='checkbox']):not([type='radio']):not([type='color']):not([type='range']),
   [data-workspace-ui='v2'] select {
-    min-height: 40px;
+    min-height: 44px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
   }
 }
 

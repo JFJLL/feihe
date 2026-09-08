@@ -48,6 +48,25 @@ export function ContentRegistry({
   const [loading, setLoading] = useState(true);
   const [boardError, setBoardError] = useState('');
   const reqSeqRef = useRef(0);
+  const [activeIngestion, setActiveIngestion] = useState<'import' | 'scan' | null>(null);
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
+
+  const hasAdvancedFilters = Boolean(category || from || to || sort);
+  const activeFilterCount = [source, scope, status, category, from, to, query, sort].filter(Boolean).length;
+
+  const resetFilters = () => {
+    setQuery('');
+    setDebouncedQuery('');
+    setSource('');
+    setScope('');
+    setStatus('');
+    setCategory('');
+    setFrom('');
+    setTo('');
+    setSort('');
+    setOrder('desc');
+    setPage(1);
+  };
 
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   useEffect(() => {
@@ -200,37 +219,10 @@ export function ContentRegistry({
         />
       </section>
 
-      <NoteSummaryBoard mode="registry" summary={summary} loading={loading} error={boardError} />
-
-      {/* 入库操作区 */}
-      <DashboardSection
-        eyebrow="INGESTION WORKSPACE"
-        title="内容入库与数据同步"
-        desc="支持自有发布内容批量导入与外部自然样本扫描入库。"
-        extra={
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <button
-              type="button"
-              className="primary"
-              style={{ fontSize: '13px', padding: '6px 14px' }}
-              onClick={() => { loadData(); onRefresh(); }}
-              disabled={loading}
-            >
-              {loading ? '刷新中…' : '刷新台账'}
-            </button>
-            <Link
-              className="btn-link"
-              style={{ fontSize: '13px' }}
-              href={'/api/export?type=notes&projectId=' + encodeURIComponent(projectId)}
-            >
-              导出内容台账 ↗
-            </Link>
-          </div>
-        }
-      >
-        <div className="ops-action-grid">
-          {/* A. 导入自有内容 */}
-          <article className="ops-action-card ops-action-card-blue">
+      {/* 按需展开的入库操作抽屉/区域 */}
+      {activeIngestion === 'import' && (
+        <div className="ops-action-card ops-action-card-blue animate-scale-in" style={{ marginBottom: '14px', border: '1px solid #bfdbfe' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>📥</span>
               <div>
@@ -238,85 +230,126 @@ export function ContentRegistry({
                 <div style={{ fontSize: '12px', color: '#64748b' }}>支持 .xlsx / .xls 格式，自动识别笔记 ID、达人与产品范围</div>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
-              <label className="upload" style={{ margin: 0, cursor: 'pointer' }}>
-                选择 Excel 文件
-                <input
-                  type="file"
-                  accept=".xlsx,.xls"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setUploadFileName(file.name);
-                      try {
-                        await uploadWorkbook(file, 'owned');
-                        await loadData();
-                        await onRefresh();
-                      } catch (err) {
-                        toast(err instanceof Error ? err.message : '导入失败', 'error');
-                      }
+            <button type="button" onClick={() => setActiveIngestion(null)} style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: '#64748b' }}>✕ 收起</button>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '10px' }}>
+            <label className="upload" style={{ margin: 0, cursor: 'pointer' }}>
+              选择 Excel 文件
+              <input
+                type="file"
+                accept=".xlsx,.xls"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setUploadFileName(file.name);
+                    try {
+                      await uploadWorkbook(file, 'owned');
+                      await loadData();
+                      await onRefresh();
+                    } catch (err) {
+                      toast(err instanceof Error ? err.message : '导入失败', 'error');
                     }
-                  }}
-                />
-              </label>
-              {uploadFileName && (
-                <span style={{ fontSize: '12px', color: '#0284c7', fontWeight: 500 }}>
-                  已选：{uploadFileName}
-                </span>
-              )}
-              {globalLoading && <span style={{ fontSize: '12px', color: '#64748b' }}>上传导入中…</span>}
-            </div>
-          </article>
+                  }
+                }}
+              />
+            </label>
+            {uploadFileName && (
+              <span style={{ fontSize: '12px', color: '#0284c7', fontWeight: 500 }}>
+                已选：{uploadFileName}
+              </span>
+            )}
+            {globalLoading && <span style={{ fontSize: '12px', color: '#64748b' }}>上传导入中…</span>}
+          </div>
+        </div>
+      )}
 
-          {/* B. 外部样本扫描 */}
-          <article className="ops-action-card ops-action-card-purple">
+      {activeIngestion === 'scan' && (
+        <div className="ops-action-card ops-action-card-purple animate-scale-in" style={{ marginBottom: '14px', border: '1px solid #ddd6fe' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '20px' }}>🔍</span>
               <div>
                 <strong style={{ fontSize: '14px', color: '#0f172a' }}>关键词扫描外部样本</strong>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>作为辅助入库方式，补充自然讨论样本</div>
+                <div style={{ fontSize: '12px', color: '#64748b' }}>补充自然讨论样本池</div>
               </div>
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-              <input
-                style={{ flex: 1, minWidth: '180px', padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
-                value={keywords}
-                onChange={(e) => setKeywords(e.target.value)}
-                placeholder="关键词用逗号分隔"
-              />
-              <input
-                type="date"
-                style={{ padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '12px' }}
-                value={scanFrom}
-                onChange={(e) => setScanFrom(e.target.value)}
-              />
-              <span style={{ fontSize: '12px', color: '#64748b' }}>至</span>
-              <input
-                type="date"
-                style={{ padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '12px' }}
-                value={scanTo}
-                onChange={(e) => setScanTo(e.target.value)}
-              />
-              <button
-                type="button"
-                className="primary"
-                style={{ fontSize: '12.5px', padding: '6px 12px', background: '#6d28d9', borderColor: '#5b21b6' }}
-                disabled={scanning || !keywords.trim()}
-                onClick={handleScan}
-              >
-                {scanning ? '扫描中…' : '扫描外部样本'}
-              </button>
-            </div>
-            {scanResult && <div style={{ fontSize: '12px', color: '#6d28d9' }}>{scanResult}</div>}
-          </article>
+            <button type="button" onClick={() => setActiveIngestion(null)} style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: '#64748b' }}>✕ 收起</button>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', marginTop: '10px' }}>
+            <input
+              style={{ flex: 1, minWidth: '180px', padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+              placeholder="关键词用逗号分隔"
+            />
+            <input
+              type="date"
+              style={{ padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '12px' }}
+              value={scanFrom}
+              onChange={(e) => setScanFrom(e.target.value)}
+            />
+            <span style={{ fontSize: '12px', color: '#64748b' }}>至</span>
+            <input
+              type="date"
+              style={{ padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '12px' }}
+              value={scanTo}
+              onChange={(e) => setScanTo(e.target.value)}
+            />
+            <button
+              type="button"
+              className="primary"
+              style={{ fontSize: '12.5px', padding: '6px 12px', background: '#6d28d9', borderColor: '#5b21b6' }}
+              disabled={scanning || !keywords.trim()}
+              onClick={handleScan}
+            >
+              {scanning ? '扫描中…' : '执行扫描'}
+            </button>
+          </div>
+          {scanResult && <div style={{ fontSize: '12px', color: '#6d28d9', marginTop: '6px' }}>{scanResult}</div>}
         </div>
-      </DashboardSection>
+      )}
 
       {/* 第三部分：筛选与内容台账 */}
       <DashboardSection
         eyebrow="NOTE REGISTRY"
         title="内容资产明细台账"
         desc="集中管理单篇内容元数据与最新评论监测摘要，评论采集与运营请前往评论运营。"
+        extra={
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="subtle-btn"
+              style={{ fontSize: '12.5px', padding: '5px 12px', background: activeIngestion === 'import' ? '#eff6ff' : '#fff', color: activeIngestion === 'import' ? '#0284c7' : '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+              onClick={() => setActiveIngestion(activeIngestion === 'import' ? null : 'import')}
+            >
+              📥 批量导入内容
+            </button>
+            <button
+              type="button"
+              className="subtle-btn"
+              style={{ fontSize: '12.5px', padding: '5px 12px', background: activeIngestion === 'scan' ? '#f5f3ff' : '#fff', color: activeIngestion === 'scan' ? '#7c3aed' : '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+              onClick={() => setActiveIngestion(activeIngestion === 'scan' ? null : 'scan')}
+            >
+              🔍 扫描外部样本
+            </button>
+            <button
+              type="button"
+              className="subtle-btn"
+              style={{ fontSize: '12.5px', padding: '5px 12px', background: '#ffffff', color: '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+              onClick={() => { loadData(); onRefresh(); }}
+              disabled={loading}
+            >
+              {loading ? '刷新中…' : '刷新台账'}
+            </button>
+            <Link
+              className="subtle-btn"
+              style={{ fontSize: '12.5px', padding: '5px 12px', background: '#ffffff', color: '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+              href={'/api/export?type=notes&projectId=' + encodeURIComponent(projectId)}
+            >
+              导出台账 ↗
+            </Link>
+          </div>
+        }
       >
         <WorkspaceToolbar>
           <input
@@ -324,7 +357,7 @@ export function ContentRegistry({
             placeholder="搜索标题 / 博主 / 笔记ID"
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
-            style={{ width: '220px' }}
+            style={{ width: '200px' }}
           />
           <select value={source} onChange={(e) => { setSource(e.target.value); setPage(1); }}>
             <option value="">全部来源</option>
@@ -345,6 +378,19 @@ export function ContentRegistry({
             <option value="不够30条需补充">不够30条需补充</option>
             <option value="待抓取">待抓取</option>
           </select>
+          <button
+            type="button"
+            className="subtle-btn"
+            style={{ fontSize: '12.5px', padding: '5px 10px', background: showMoreFilters || hasAdvancedFilters ? '#f0f9ff' : '#ffffff', color: showMoreFilters || hasAdvancedFilters ? '#0284c7' : '#475569', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+            onClick={() => setShowMoreFilters(!showMoreFilters)}
+          >
+            更多筛选 {hasAdvancedFilters ? '(已设)' : '▾'}
+          </button>
+        </WorkspaceToolbar>
+
+        {showMoreFilters && (
+          <div style={{ marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed #e2e8f0' }}>
+          <WorkspaceToolbar>
           <select value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
             <option value="">全部内容方向</option>
             <option value="母婴育儿">母婴育儿</option>
@@ -373,7 +419,30 @@ export function ContentRegistry({
             title="结束日期"
             aria-label="结束日期"
           />
-        </WorkspaceToolbar>
+          </WorkspaceToolbar>
+          </div>
+        )}
+
+        {activeFilterCount > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', margin: '8px 0 12px', fontSize: '12px', color: '#64748b' }}>
+            <span>已生效筛选 ({activeFilterCount})：</span>
+            {query && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>搜索: {query}</span>}
+            {source && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>来源: {source === 'owned' ? '自有发布' : source === 'commercial' ? '商业合作' : '关键词扫描'}</span>}
+            {scope && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>范围: {scope}</span>}
+            {status && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>状态: {status}</span>}
+            {category && <span className="section-mini-tag tag-teal" style={{ fontSize: '11px' }}>方向: {category}</span>}
+            {sort && <span className="section-mini-tag tag-purple" style={{ fontSize: '11px' }}>排序: {sort}</span>}
+            {(from || to) && <span className="section-mini-tag tag-teal" style={{ fontSize: '11px' }}>日期: {from || '不限'} ~ {to || '不限'}</span>}
+            <button
+              type="button"
+              className="text-link"
+              style={{ fontSize: '11.5px', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}
+              onClick={resetFilters}
+            >
+              清除全部筛选
+            </button>
+          </div>
+        )}
 
         <DataTableShell
           page={page}
@@ -389,8 +458,8 @@ export function ContentRegistry({
                 <th>来源 / 范围</th>
                 <th>内容方向</th>
                 <th>发布时间</th>
-                <th>阅读 / 互动</th>
-                <th>评论监测摘要</th>
+                <th className="num" style={{ textAlign: 'right' }}>阅读 / 互动</th>
+                <th className="num" style={{ textAlign: 'right' }}>评论监测摘要</th>
                 <th>验收状态</th>
                 <th>操作</th>
               </tr>
@@ -435,13 +504,13 @@ export function ContentRegistry({
                       {note.publishedAt ? note.publishedAt.slice(0, 10) : '—'}
                     </span>
                   </td>
-                  <td>
+                  <td className="num" style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '12.5px' }}>
                       <div>阅读：<strong>{compact(note.readCount)}</strong></div>
                       <div style={{ color: '#64748b' }}>互动：{compact(note.interactionCount)}</div>
                     </div>
                   </td>
-                  <td>
+                  <td className="num" style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '12px' }}>
                       <div>总评：<strong>{note.commentTotal}</strong></div>
                       <div style={{ color: '#64748b' }}>

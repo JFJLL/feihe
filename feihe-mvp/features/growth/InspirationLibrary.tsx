@@ -9,6 +9,7 @@ import { keywordMatches, noteDirection } from './KeywordRadar';
 import { GrowthSampleBoard } from './GrowthSampleBoard';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { display, percent, ratio } from './metrics';
+import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 
 export function InspirationLibrary({
   data,
@@ -99,24 +100,37 @@ export function InspirationLibrary({
           </p>
           <div className="idea-source-list">
             {auto.slice(0, 10).map((note) => (
-              <div key={note.id}>
-                <span>
-                  <strong>{note.title || note.id}</strong>
-                  <small>
-                    {noteDirection(note)} · 互动 {compact(note.interactionCount)} · 评论{' '}
-                    {display(note.commentTotal)}
+              <div key={note.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
+                <NoteThumbnail
+                  src={note.coverUrl}
+                  title={note.title}
+                  author={note.author}
+                  category={noteDirection(note)}
+                />
+                </div>
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  <strong style={{ display: 'block', fontSize: '13px', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {note.title || note.id}
+                  </strong>
+                  <small style={{ display: 'block', fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
+                    {noteDirection(note)} · 互动 {compact(note.interactionCount)} · 评论 {display(note.commentTotal)}
                   </small>
                 </span>
-                {openNote && <button onClick={() => openNote(note.id)}>明细</button>}
-                <button
-                  className="primary"
-                  disabled={growth.inspirations.some((item) => item.sourceNoteId === note.id)}
-                  onClick={() => void addFromNote(note)}
-                >
-                  {growth.inspirations.some((item) => item.sourceNoteId === note.id)
-                    ? '已沉淀'
-                    : '沉淀灵感'}
-                </button>
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
+                  {openNote && <button type="button" className="subtle-btn" style={{ padding: '4px 8px', fontSize: '12px' }} onClick={() => openNote(note.id)}>明细</button>}
+                  <button
+                    type="button"
+                    className="primary"
+                    style={{ padding: '4px 10px', fontSize: '12px' }}
+                    disabled={growth.inspirations.some((item) => item.sourceNoteId === note.id)}
+                    onClick={() => void addFromNote(note)}
+                  >
+                    {growth.inspirations.some((item) => item.sourceNoteId === note.id)
+                      ? '已沉淀'
+                      : '沉淀灵感'}
+                  </button>
+                </div>
               </div>
             ))}
             {!auto.length && <EmptyState title="暂无高热样本" text="当前项目暂无达到爆文阈值的笔记。" />}
@@ -170,18 +184,39 @@ export function InspirationLibrary({
               </header>
               {growth.inspirations
                 .filter((item) => item.stage === stage)
-                .map((item) => (
-                  <article key={item.id}>
-                    <small>
-                      {item.sourceType} · {item.keyword || '未关联关键词'}
-                    </small>
-                    <strong>{item.title}</strong>
-                    <p>{item.reason || '尚未补充判断理由'}</p>
-                    <div>
+                .map((item) => {
+                  const srcNote = item.sourceNoteId ? data.notes.find((n) => n.id === item.sourceNoteId) : null;
+                  return (
+                  <article key={item.id} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {srcNote && (
+                        <div style={{ width: '36px', height: '36px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
+                        <NoteThumbnail
+                          src={srcNote.coverUrl}
+                          title={srcNote.title}
+                          author={srcNote.author}
+                          category={noteDirection(srcNote)}
+                        />
+                        </div>
+                      )}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                          <span className="section-mini-tag tag-blue" style={{ fontSize: '10px', padding: '1px 6px' }}>{item.sourceType}</span>
+                          {item.keyword && <span className="section-mini-tag tag-teal" style={{ fontSize: '10px', padding: '1px 6px' }}>{item.keyword}</span>}
+                          <span className="section-mini-tag tag-purple" style={{ fontSize: '10px', padding: '1px 6px' }}>{item.stage}</span>
+                        </div>
+                        <strong style={{ display: 'block', fontSize: '13px', marginTop: '4px', color: '#0f172a' }}>{item.title}</strong>
+                      </div>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>{item.reason || '尚未补充判断理由'}</p>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '4px', borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>
                       {item.sourceNoteId && openNote && (
-                        <button onClick={() => openNote(item.sourceNoteId!)}>来源笔记</button>
+                        <button type="button" className="subtle-btn" style={{ padding: '3px 8px', fontSize: '11.5px' }} onClick={() => openNote(item.sourceNoteId!)}>来源笔记</button>
                       )}
                       <button
+                        type="button"
+                        className="subtle-btn"
+                        style={{ padding: '3px 8px', fontSize: '11.5px', color: '#0284c7' }}
                         onClick={() => {
                           const next = stages[Math.min(stages.length - 1, stages.indexOf(stage) + 1)];
                           void save(
@@ -196,10 +231,12 @@ export function InspirationLibrary({
                         }}
                         disabled={stage === '已发布'}
                       >
-                        推进
+                        推进 ➔
                       </button>
                       <button
+                        type="button"
                         className="danger-link"
+                        style={{ padding: '3px 6px', fontSize: '11.5px', marginLeft: 'auto' }}
                         onClick={() =>
                           void save(
                             {
@@ -216,7 +253,8 @@ export function InspirationLibrary({
                       </button>
                     </div>
                   </article>
-                ))}
+                  );
+                })}
             </section>
           ))}
         </div>

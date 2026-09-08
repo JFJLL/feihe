@@ -167,7 +167,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
               <div style={{ fontSize: 11.5, color: '#64748b' }}>{step.sub}</div>
               {step.rate && <div style={{ fontSize: 11.5, color: '#0369a1', fontWeight: 600, marginTop: 4 }}>转化率: {step.rate}</div>}
               <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2, overflow: 'hidden', marginTop: 8 }}>
-                <div style={{ width: `${Math.min(100, Math.max(10, step.pct))}%`, height: '100%', background: step.color }} />
+                <div style={{ width: `${step.val && step.pct ? Math.min(100, Math.max(0, step.pct)) : 0}%`, height: '100%', background: step.color }} />
               </div>
             </div>
           ))}
@@ -207,7 +207,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
                       </div>
                     </div>
                     <div style={{ height: 6, background: '#e2e8f0', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{ width: `${Math.max(3, pct)}%`, height: '100%', background: b.color, borderRadius: 3 }} />
+                      <div style={{ width: `${count > 0 && maxNotes > 0 ? (count / maxNotes) * 100 : 0}%`, height: '100%', background: b.color, borderRadius: 3 }} />
                     </div>
                   </div>
                 );
@@ -247,7 +247,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
                       </div>
                     </div>
                     <div style={{ height: 6, background: '#e2e8f0', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{ width: `${Math.max(3, pct)}%`, height: '100%', background: b.color, borderRadius: 3 }} />
+                      <div style={{ width: `${spend > 0 && maxSpendVal > 0 ? (spend / maxSpendVal) * 100 : 0}%`, height: '100%', background: b.color, borderRadius: 3 }} />
                     </div>
                   </div>
                 );

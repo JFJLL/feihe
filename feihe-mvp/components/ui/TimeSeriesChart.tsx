@@ -82,8 +82,50 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
       })}
       {/* 悬停竖向对齐虚线 */}
       <line x1={x(activeIndex)} y1={top} x2={x(activeIndex)} y2={h-bottom} stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="4 4" pointerEvents="none" />
-      {/* 交互热区 */}
-      {data.map((r,i)=><rect key={r.date} x={x(i)-Math.max(8,(w-left-right)/data.length/2)} y={top} width={Math.max(16,(w-left-right)/data.length)} height={h-top-bottom} fill="transparent" onMouseEnter={()=>{ setHoverIdx(i); setSelected(r.date); }} onClick={()=>setSelected(r.date)} />)}
+      {/* 交互热区与键盘导航点 */}
+      {data.map((r, i) => (
+        <rect
+          key={r.date}
+          x={x(i) - Math.max(8, (w - left - right) / data.length / 2)}
+          y={top}
+          width={Math.max(16, (w - left - right) / data.length)}
+          height={h - top - bottom}
+          fill="transparent"
+          tabIndex={0}
+          role="button"
+          aria-label={`${r.date} ${series.map(s => `${s.label}: ${fmt(r[s.key])}`).join('，')}`}
+          onMouseEnter={() => { setHoverIdx(i); setSelected(r.date); }}
+          onClick={() => setSelected(r.date)}
+          onFocus={() => { setHoverIdx(i); setSelected(r.date); }}
+          onBlur={() => setHoverIdx(null)}
+          onKeyDown={(e) => {
+            const parent = e.currentTarget.parentElement;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              const next = Math.min(data.length - 1, i + 1);
+              setHoverIdx(next);
+              setSelected(data[next].date);
+              parent?.querySelectorAll<SVGRectElement>('rect[role="button"]')[next]?.focus();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              const prev = Math.max(0, i - 1);
+              setHoverIdx(prev);
+              setSelected(data[prev].date);
+              parent?.querySelectorAll<SVGRectElement>('rect[role="button"]')[prev]?.focus();
+            } else if (e.key === 'Home') {
+              e.preventDefault();
+              setHoverIdx(0);
+              setSelected(data[0].date);
+              parent?.querySelectorAll<SVGRectElement>('rect[role="button"]')[0]?.focus();
+            } else if (e.key === 'End') {
+              e.preventDefault();
+              setHoverIdx(data.length - 1);
+              setSelected(data[data.length - 1].date);
+              parent?.querySelectorAll<SVGRectElement>('rect[role="button"]')[data.length - 1]?.focus();
+            }
+          }}
+        />
+      ))}
       <text x={left} y={h-12} fill="#64748b" fontSize="12">{data[0].date}</text><text x={w-right} y={h-12} textAnchor="end" fill="#64748b" fontSize="12">{data.length>1?data.at(-1)?.date:''}</text>
     </svg>
     {/* 浮动交互提示框 */}

@@ -32,14 +32,15 @@ function hashKey(key: string) {
 }
 
 /**
- * Assign colors from an explicit list of stable keys. Position in the list,
- * not row order, decides the tone; a brand keeps its color everywhere.
+ * Assign colors from an explicit list of stable keys.
+ * Colors are deterministically mapped by key identity so that reordering
+ * or filtering the keys never changes any individual key's color.
  */
 export function paletteForKeys(keys: string[]): Record<string, string> {
   const map: Record<string, string> = {};
-  keys.forEach((key, index) => {
-    map[key] = DATA_TONES[DATA_TONE_LIST[index % DATA_TONE_LIST.length]];
-  });
+  for (const key of keys) {
+    map[key] = paletteColor(key);
+  }
   return map;
 }
 

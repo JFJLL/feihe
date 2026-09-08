@@ -24,7 +24,7 @@ export function PageHeader({
       data-header-variant={variant}
     >
       <div className="ui-page-header-main">
-        {eyebrow && variant === 'banner' && (
+        {eyebrow && (
           <small className="ui-page-header-eyebrow">{eyebrow}</small>
         )}
         <div className="ui-page-header-title-row">
