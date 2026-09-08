@@ -70,7 +70,13 @@ export function GrowthWorkspace({
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
-      <div className="overview-block-content">
+      <div
+        id={`workspace-tabpanel-${tab}`}
+        role="tabpanel"
+        aria-labelledby={`workspace-tab-${tab}`}
+        tabIndex={0}
+        className="overview-block-content"
+      >
         {tab === 'competitor' && (
           <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} />
         )}

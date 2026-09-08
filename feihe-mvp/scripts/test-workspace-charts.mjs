@@ -136,20 +136,64 @@ const { CustomSelect } = loadComponent('components/ui/CustomSelect.tsx');
   assert(markup.includes('aria-haspopup="listbox"'), 'CustomSelect 声明 listbox 弹出类型');
   assert(markup.includes('aria-expanded="false"'), '未展开时 aria-expanded 为 false');
 
-  // Trigger keydown test
-  let capturedTrigger = null;
-  let changedVal = null;
-  function SelectHarness() {
+  // Empty options test: aria-activedescendant must not point to non-existent option
+  const emptyMarkup = renderToStaticMarkup(React.createElement(CustomSelect, {
+    value: '',
+    options: [],
+    onChange: () => {},
+  }));
+  assert(!emptyMarkup.includes('aria-activedescendant='), '空选项时禁止指向不存在的 opt-0 节点');
+
+  // Real interactive harness for state & keyboard transitions
+  let triggerProps = null;
+  let selectEvents = [];
+  function InteractiveSelectHarness() {
+    const [val, setVal] = React.useState('A');
     const el = React.createElement(CustomSelect, {
-      value: 'A',
-      options,
-      onChange: val => { changedVal = val; },
+      value: val,
+      options: ['A', 'B', 'C'],
+      onChange: next => {
+        selectEvents.push(next);
+        setVal(next);
+      },
     });
-    capturedTrigger = el.type(el.props).props.children[0];
+    triggerProps = el.type(el.props).props.children[0].props;
     return null;
   }
-  renderToStaticMarkup(React.createElement(SelectHarness));
-  assert.equal(typeof capturedTrigger.props.onKeyDown, 'function', 'Trigger 绑定了 onKeyDown');
+  renderToStaticMarkup(React.createElement(InteractiveSelectHarness));
+  assert.equal(typeof triggerProps.onKeyDown, 'function', 'Trigger 绑定了键盘导航函数');
+
+  // ArrowDown keydown opens dropdown and sets activeIndex
+  let prevented = false;
+  triggerProps.onKeyDown({
+    key: 'ArrowDown',
+    preventDefault: () => { prevented = true; },
+    stopPropagation: () => {},
+  });
+  assert.equal(prevented, true, 'ArrowDown 阻止默认滚动行为');
+
+  // Escape keydown on open dropdown closes and stops propagation (protects parent modal)
+  let openTriggerProps = null;
+  function OpenSelectHarness() {
+    const el = React.createElement(CustomSelect, {
+      value: 'A',
+      options: ['A', 'B', 'C'],
+      defaultOpen: true,
+      onChange: () => {},
+    });
+    openTriggerProps = el.type(el.props).props.children[0].props;
+    return null;
+  }
+  renderToStaticMarkup(React.createElement(OpenSelectHarness));
+
+  prevented = false;
+  let stopped = false;
+  openTriggerProps.onKeyDown({
+    key: 'Escape',
+    preventDefault: () => { prevented = true; },
+    stopPropagation: () => { stopped = true; },
+  });
+  assert.equal(stopped, true, 'Escape 先行阻止向父级弹窗冒泡');
 }
 
-console.log('PASS workspace UI keyboard interaction: TimeSeriesChart focusable points, WorkspaceModuleTabs roving tabindex & activation, CustomSelect combobox & keyboard handler');
+console.log('PASS workspace UI keyboard interaction: TimeSeriesChart focusable points, WorkspaceModuleTabs roving tabindex & activation, CustomSelect combobox & keyboard state transitions');

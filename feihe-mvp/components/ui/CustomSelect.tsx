@@ -17,6 +17,7 @@ export function CustomSelect({
   placeholder = '请选择',
   ariaLabel,
   disabled = false,
+  defaultOpen = false,
   className = '',
   style,
 }: {
@@ -26,10 +27,11 @@ export function CustomSelect({
   placeholder?: string;
   ariaLabel?: string;
   disabled?: boolean;
+  defaultOpen?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -44,13 +46,31 @@ export function CustomSelect({
 
   const selectedIndex = normalizedOptions.findIndex((o) => o.value === value);
   const selectedOption = selectedIndex >= 0 ? normalizedOptions[selectedIndex] : undefined;
-  const [activeIndex, setActiveIndex] = useState<number>(() => Math.max(0, selectedIndex));
+  const [activeIndex, setActiveIndex] = useState<number>(() => (normalizedOptions.length === 0 ? -1 : Math.max(0, selectedIndex)));
+  const [openUpward, setOpenUpward] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+      if (normalizedOptions.length === 0) {
+        setActiveIndex(-1);
+      } else if (selectedIndex >= 0 && selectedIndex < normalizedOptions.length) {
+        setActiveIndex(selectedIndex);
+      } else {
+        setActiveIndex(0);
+      }
+      if (triggerRef.current && typeof window !== 'undefined') {
+        const rect = triggerRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        setOpenUpward(spaceBelow < 250 && rect.top > 250);
+      }
     }
-  }, [open, selectedIndex]);
+  }, [open, selectedIndex, normalizedOptions.length]);
+
+  useEffect(() => {
+    if (disabled && open) {
+      setOpen(false);
+    }
+  }, [disabled, open]);
 
   useEffect(() => {
     if (!open) return;
@@ -71,7 +91,7 @@ export function CustomSelect({
   }, [open, activeIndex]);
 
   const selectOption = (opt: SelectOption) => {
-    if (opt.disabled) return;
+    if (disabled || opt.disabled) return;
     if (opt.value !== value) {
       onChange(opt.value);
     }
@@ -150,7 +170,7 @@ export function CustomSelect({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listboxId : undefined}
-        aria-activedescendant={open && activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined}
+        aria-activedescendant={open && normalizedOptions.length > 0 && activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined}
         disabled={disabled}
         onClick={() => {
           if (!disabled) setOpen(!open);
@@ -185,6 +205,7 @@ export function CustomSelect({
           role="listbox"
           aria-labelledby={`${listboxId}-trigger`}
           tabIndex={-1}
+          style={openUpward ? { top: 'auto', bottom: 'calc(100% + 5px)' } : undefined}
         >
           {normalizedOptions.length === 0 ? (
             <li className="custom-select-option" style={{ color: '#94a3b8', cursor: 'default' }}>

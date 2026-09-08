@@ -137,7 +137,13 @@ export function CommentsWorkspace({
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
-      <div className="overview-block-content">
+      <div
+        id={`workspace-tabpanel-${tab}`}
+        role="tabpanel"
+        aria-labelledby={`workspace-tab-${tab}`}
+        tabIndex={0}
+        className="overview-block-content"
+      >
       {tab === 'collection' && (
         <CommentCollection
           projectId={projectId}

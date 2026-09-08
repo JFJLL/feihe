@@ -47,7 +47,8 @@ export function WorkspaceModuleTabs({
     if (targetIndex >= 0 && targetIndex !== currentIndex) {
       const btn = tabsRef.current[targetIndex];
       btn?.focus();
-      btn?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const isReduced = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+      btn?.scrollIntoView({ behavior: isReduced ? 'auto' : 'smooth', block: 'nearest', inline: 'nearest' });
     }
   };
 

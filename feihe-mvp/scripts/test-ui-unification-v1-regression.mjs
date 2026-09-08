@@ -84,23 +84,33 @@ const { RulesAndTargets } = loadComponent('features/settings/RulesAndTargets.tsx
 
 // Test threshold precision decimal handling
 {
-  function formatSimilarity(similarity) {
-    const initial = similarity ?? 0.58;
-    return Number.isFinite(initial) ? String(Number((initial * 100).toPrecision(12))) : '58';
-  }
-  function parseSimilarityDraft(raw) {
-    const parsed = parseFloat(raw);
-    return Number.isFinite(parsed) ? Number((parsed / 100).toPrecision(12)) : 0.58;
+  function validateSimilarityInput(raw) {
+    const text = String(raw).trim();
+    const pct = parseFloat(text);
+    if (!text || !Number.isFinite(pct) || pct < 30 || pct > 100) {
+      return { valid: false, error: '供应商相似度阈值超出有效范围，请输入 30% 至 100% 之间的数值' };
+    }
+    return { valid: true, decimal: Number((pct / 100).toPrecision(12)) };
   }
 
-  assert.equal(formatSimilarity(0.585), '58.5', '已保存 0.585 展示为 58.5%（不被 Math.round 取整为 59%）');
-  assert.equal(formatSimilarity(0.5855), '58.55', '已保存 0.5855 展示为 58.55%');
-  assert.equal(formatSimilarity(0.58), '58', '现有正常值 0.58 格式化为 58%');
-  assert.equal(formatSimilarity(0), '0', '合法零值展示为 0%（不被 || 默认值替换）');
+  // 1. Business range check: 30% to 100% (0.3 to 1.0)
+  assert.equal(validateSimilarityInput('0').valid, false, '0% 低于业务下限 30%，必须拒绝保存');
+  assert.equal(validateSimilarityInput('10').valid, false, '10% 低于业务下限 30%，必须拒绝保存');
+  assert.equal(validateSimilarityInput('120').valid, false, '120% 超出业务上限 100%，必须拒绝保存');
+  assert.equal(validateSimilarityInput('abc').valid, false, '非数值必须拒绝保存');
 
-  assert.equal(parseSimilarityDraft('58.5'), 0.585, '输入 58.5 保存为 0.585');
-  assert.equal(parseSimilarityDraft('58.55'), 0.5855, '输入 58.55 保存为 0.5855');
-  assert.equal(parseSimilarityDraft('0'), 0, '输入 0 保存为 0');
+  // 2. High precision decimal input within valid range
+  const res58_5 = validateSimilarityInput('58.5');
+  assert.equal(res58_5.valid, true);
+  assert.equal(res58_5.decimal, 0.585, '输入 58.5 保存为 0.585');
+
+  const res58_55 = validateSimilarityInput('58.55');
+  assert.equal(res58_55.valid, true);
+  assert.equal(res58_55.decimal, 0.5855, '输入 58.55 保存为 0.5855');
+
+  const res58 = validateSimilarityInput('58');
+  assert.equal(res58.valid, true);
+  assert.equal(res58.decimal, 0.58, '现有正常值 58% 保存为 0.58');
 }
 
 // Test Completed Jobs Modal: distinguish 60 from 40, succeeded=0 / total=0, finishedAt vs createdAt
@@ -154,8 +164,9 @@ const { RulesAndTargets } = loadComponent('features/settings/RulesAndTargets.tsx
   assert(markup.includes('60'), '顶部历史已完成任务展示全量真实累计 60 项');
   assert(markup.includes('最近任务中的完成记录'), '卡片说明明确指出回溯范围');
 
-  // Verify threshold input value contains 58.5
+  // Verify threshold input value contains 58.5 and shows 30%-100% valid range hint
   assert(markup.includes('value="58.5"'), '供应商相似度阈值输入框保留 58.5% 高精度');
+  assert(markup.includes('有效范围 30% – 100%'), '界面明确标注相似度阈值有效范围 30%–100%');
 }
 console.log('✅ PASS regression: RulesAndTargets Completed Jobs Scope & Similarity Precision');
 
@@ -304,6 +315,9 @@ const { ProjectContext } = loadComponent('components/project-shell/ProjectContex
   // SettingsDataSources (飞书多维表格溯源), SettingsIntegrations, DataMap are NOT rendered!
   assert(html.includes('品牌与项目基本信息') || html.includes('项目资料'), '初始渲染仅挂载资料子页');
   assert(!html.includes('外部数据集成与能力连接'), '未访问的工具集成子页未挂载');
+  assert(html.includes('id="workspace-tabpanel-profile"'), '挂载面板具备匹配的 tabpanel ID');
+  assert(html.includes('role="tabpanel"'), '挂载面板具备 tabpanel 语义');
+  assert(html.includes('aria-labelledby="workspace-tab-profile"'), '挂载面板具备 aria-labelledby 关联');
 }
 console.log('✅ PASS regression: SettingsWorkspace Lazy Mounting & Subpage Isolation');
 

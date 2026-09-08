@@ -44,6 +44,63 @@ export function RulesAndTargets({
     return Number.isFinite(initialSimilarity) ? String(Number((initialSimilarity * 100).toPrecision(12))) : '58';
   });
 
+  // Saved baseline tracking & conflict detection
+  const baselineRef = useRef({
+    goals: JSON.stringify(ops.settings.goals),
+    rules: JSON.stringify(ops.settings.rules),
+    acceptance: JSON.stringify(ops.settings.acceptance),
+    pipelines: JSON.stringify(data.pipelines),
+  });
+  const [serverConflictWarning, setServerConflictWarning] = useState(false);
+
+  const isGoalsDirty = JSON.stringify(goals) !== baselineRef.current.goals;
+  const isRulesDirty = JSON.stringify(rules) !== baselineRef.current.rules;
+  const isAcceptanceDirty = JSON.stringify(acceptance) !== baselineRef.current.acceptance ||
+    similarityDraft !== String(Number(((acceptance.supplierSimilarity ?? 0.58) * 100).toPrecision(12)));
+  const isPipelinesDirty = JSON.stringify(pipelines) !== baselineRef.current.pipelines;
+
+  useEffect(() => {
+    const incomingGoals = JSON.stringify(ops.settings.goals);
+    const incomingRules = JSON.stringify(ops.settings.rules);
+    const incomingAcceptance = JSON.stringify(ops.settings.acceptance);
+    const incomingPipelines = JSON.stringify(data.pipelines);
+
+    let hasConflict = false;
+
+    if (!isGoalsDirty) {
+      setGoals(ops.settings.goals);
+      baselineRef.current.goals = incomingGoals;
+    } else if (incomingGoals !== baselineRef.current.goals) {
+      hasConflict = true;
+    }
+
+    if (!isRulesDirty) {
+      setRules(ops.settings.rules);
+      baselineRef.current.rules = incomingRules;
+    } else if (incomingRules !== baselineRef.current.rules) {
+      hasConflict = true;
+    }
+
+    if (!isAcceptanceDirty) {
+      setAcceptance(ops.settings.acceptance);
+      baselineRef.current.acceptance = incomingAcceptance;
+      if (ops.settings.acceptance.supplierSimilarity !== undefined) {
+        setSimilarityDraft(String(Number((ops.settings.acceptance.supplierSimilarity * 100).toPrecision(12))));
+      }
+    } else if (incomingAcceptance !== baselineRef.current.acceptance) {
+      hasConflict = true;
+    }
+
+    if (!isPipelinesDirty) {
+      setPipelines(data.pipelines);
+      baselineRef.current.pipelines = incomingPipelines;
+    } else if (incomingPipelines !== baselineRef.current.pipelines) {
+      hasConflict = true;
+    }
+
+    setServerConflictWarning(hasConflict);
+  }, [ops.settings, data.pipelines, isGoalsDirty, isRulesDirty, isAcceptanceDirty, isPipelinesDirty]);
+
   useEffect(() => {
     if (acceptance.supplierSimilarity !== undefined) {
       setSimilarityDraft(String(Number((acceptance.supplierSimilarity * 100).toPrecision(12))));
@@ -52,13 +109,48 @@ export function RulesAndTargets({
 
   useEffect(() => {
     if (showCompletedJobs) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
       const closeBtn = dialogRef.current?.querySelector<HTMLButtonElement>('button[data-dialog-close]');
       closeBtn?.focus();
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
     } else if (triggerRef.current) {
       triggerRef.current.focus();
       triggerRef.current = null;
     }
   }, [showCompletedJobs]);
+
+  const handleDialogKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      e.preventDefault();
+      setShowCompletedJobs(false);
+      return;
+    }
+
+    if (e.key === 'Tab' && dialogRef.current) {
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first || !dialogRef.current.contains(document.activeElement)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last || !dialogRef.current.contains(document.activeElement)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  };
 
   const list = (value: string) =>
     value
@@ -67,13 +159,33 @@ export function RulesAndTargets({
       .filter(Boolean);
 
   async function saveAll() {
+    const rawSimilarity = similarityDraft.trim();
+    const similarityPct = parseFloat(rawSimilarity);
+    if (!rawSimilarity || !Number.isFinite(similarityPct) || similarityPct < 30 || similarityPct > 100) {
+      toast('供应商相似度阈值超出有效范围，请输入 30% 至 100% 之间的数值', 'error');
+      return;
+    }
+
+    const finalSimilarity = Number((similarityPct / 100).toPrecision(12));
+    const finalAcceptance = {
+      ...acceptance,
+      supplierSimilarity: finalSimilarity,
+    };
+
     setLoading(true);
     try {
       await api('/api/settings', {
         method: 'POST',
-        body: JSON.stringify({ projectId, rules, acceptance, pipelines, goals }),
+        body: JSON.stringify({ projectId, rules, acceptance: finalAcceptance, pipelines, goals }),
       });
       toast('项目目标与规则已保存', 'success');
+      baselineRef.current = {
+        goals: JSON.stringify(goals),
+        rules: JSON.stringify(rules),
+        acceptance: JSON.stringify(finalAcceptance),
+        pipelines: JSON.stringify(pipelines),
+      };
+      setServerConflictWarning(false);
       await onDone();
     } catch (err) {
       toast(err instanceof Error ? err.message : '保存失败', 'error');
@@ -274,6 +386,8 @@ export function RulesAndTargets({
              <input
                type="number"
                step="any"
+               min="30"
+               max="100"
                value={similarityDraft}
                onChange={(e) => {
                  const raw = e.target.value;
@@ -296,9 +410,12 @@ export function RulesAndTargets({
                  }
                }}
              />
+             <small style={{ display: 'block', color: '#64748b', marginTop: '4px', fontSize: '11.5px' }}>
+               有效范围 30% – 100%（对应底层阈值 0.3 – 1.0）
+             </small>
            </label>
-          </div>
-        </article>
+         </div>
+       </article>
 
         <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="BRAND SCOPE" title="品牌与情绪词库" />
@@ -519,6 +636,11 @@ export function RulesAndTargets({
             </article>
           ))}
         </div>
+        {serverConflictWarning && (
+          <div style={{ background: '#fffbeb', border: '1px solid #fde68a', color: '#b45309', padding: '10px 14px', borderRadius: '8px', fontSize: '12.5px', margin: '14px 0 6px' }}>
+            ⚠️ 检测到服务端规则或目标已有外部变更，当前已保留您的本地草稿。请核对后再保存。
+          </div>
+        )}
         <div className="save-row">
           <p>保存后立即更新当前项目规则与总盘目标，不影响其他项目。</p>
           <button className="primary" disabled={loading} onClick={saveAll}>
@@ -532,12 +654,7 @@ export function RulesAndTargets({
         <div
           className="entity-backdrop"
           onMouseDown={() => setShowCompletedJobs(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') {
-              e.stopPropagation();
-              setShowCompletedJobs(false);
-            }
-          }}
+          onKeyDown={handleDialogKeyDown}
         >
           <div
             ref={dialogRef}

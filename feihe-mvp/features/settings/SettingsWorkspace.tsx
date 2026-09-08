@@ -121,7 +121,13 @@ export function SettingsWorkspace({
       <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
 
       {visited.has('profile') && (
-      <div style={{ display: tab === 'profile' ? 'block' : 'none' }}>
+      <div
+        id="workspace-tabpanel-profile"
+        role="tabpanel"
+        aria-labelledby="workspace-tab-profile"
+        tabIndex={0}
+        style={{ display: tab === 'profile' ? 'block' : 'none' }}
+      >
         <ProjectProfile
           key={projectId}
           project={currentProject}
@@ -133,7 +139,13 @@ export function SettingsWorkspace({
       )}
 
       {visited.has('rules') && (
-      <div style={{ display: tab === 'rules' ? 'block' : 'none' }}>
+      <div
+        id="workspace-tabpanel-rules"
+        role="tabpanel"
+        aria-labelledby="workspace-tab-rules"
+        tabIndex={0}
+        style={{ display: tab === 'rules' ? 'block' : 'none' }}
+      >
         <RulesAndTargets
           key={projectId}
           data={dashboard}
@@ -146,7 +158,13 @@ export function SettingsWorkspace({
       )}
 
       {visited.has('data-sources') && (
-      <div style={{ display: tab === 'data-sources' ? 'block' : 'none' }}>
+      <div
+        id="workspace-tabpanel-data-sources"
+        role="tabpanel"
+        aria-labelledby="workspace-tab-data-sources"
+        tabIndex={0}
+        style={{ display: tab === 'data-sources' ? 'block' : 'none' }}
+      >
         <SettingsDataSources
           key={projectId}
           projectId={projectId}
@@ -158,7 +176,13 @@ export function SettingsWorkspace({
       )}
 
       {visited.has('integrations') && (
-      <div style={{ display: tab === 'integrations' ? 'block' : 'none' }}>
+      <div
+        id="workspace-tabpanel-integrations"
+        role="tabpanel"
+        aria-labelledby="workspace-tab-integrations"
+        tabIndex={0}
+        style={{ display: tab === 'integrations' ? 'block' : 'none' }}
+      >
         <SettingsIntegrations
           key={projectId}
           projectId={projectId}
@@ -168,7 +192,13 @@ export function SettingsWorkspace({
       )}
 
       {visited.has('data-map') && (
-      <div style={{ display: tab === 'data-map' ? 'block' : 'none' }}>
+      <div
+        id="workspace-tabpanel-data-map"
+        role="tabpanel"
+        aria-labelledby="workspace-tab-data-map"
+        tabIndex={0}
+        style={{ display: tab === 'data-map' ? 'block' : 'none' }}
+      >
         {mapError ? (
           <ErrorState error={mapError} onRetry={reloadMap} />
         ) : mapLoadedFor !== projectId ? (

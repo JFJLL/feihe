@@ -193,6 +193,18 @@ label:has(select),
   color: #0369a1;
   font-weight: 600;
 }
+.custom-select-option.is-active:not(.is-selected) {
+  background: #f1f5f9;
+  color: #0f172a;
+  outline: 1px dashed #94a3b8;
+  outline-offset: -1px;
+}
+.custom-select-option.is-active.is-selected {
+  background: #bae6fd;
+  color: #0284c7;
+  outline: 1px solid #0284c7;
+  outline-offset: -1px;
+}
 
 /* Shared with the overview: navy headings, soft colour cues and quiet surfaces.
    Keep selectors scoped to workspaces so project centre and login stay independent. */
