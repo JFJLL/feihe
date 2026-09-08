@@ -10,7 +10,7 @@ const resultRows = (value: { results?: unknown[] } | null | undefined) => ((valu
 
 type CacheEntry = { json: string; timestamp: number };
 const memoryCache = new Map<string, CacheEntry>();
-const CACHE_TTL_MS = 10_000;
+const CACHE_TTL_MS = 120_000;
 
 export async function GET(request: Request) {
   try {
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Cache-Control': 'private, max-age=10, stale-while-revalidate=30',
+          'Cache-Control': 'private, max-age=60, stale-while-revalidate=180',
           'X-Cache': 'HIT',
         },
       });
@@ -287,7 +287,7 @@ export async function GET(request: Request) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'private, max-age=10, stale-while-revalidate=30',
+        'Cache-Control': 'private, max-age=60, stale-while-revalidate=180',
         'X-Cache': 'MISS',
       },
     });

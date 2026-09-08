@@ -217,7 +217,9 @@ export function useProjectData(
     if (initialData) {
       const { dashboard, ops, timestamp } = initialData;
       projectDataCache.set(cacheKey, { dashboard, ops, timestamp });
-      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard, ops }, timestamp);
+      setTimeout(() => {
+        writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard, ops }, timestamp);
+      }, 60);
     }
     const current = restoredProjectData(cacheKey);
     if (current && Date.now() - current.timestamp < REVALIDATE_AFTER) return;

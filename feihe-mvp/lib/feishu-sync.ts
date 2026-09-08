@@ -10,6 +10,15 @@ type Stored = { sheet_id: string; payload_json: string; report_json: string; fin
 type FeishuResponse = { code?: number; msg?: string; tenant_access_token?: string; data?: { node?: { obj_token?: string }; sheets?: { sheet_id: string; title: string; grid_properties: { row_count: number; column_count: number } }[]; valueRange?: { values?: unknown[][] } } };
 export type FeishuSyncResult = { ok: boolean; importedNotes: number; dailyMetricsUpdated: number; sourcesUpdated: number; latestDate: string; message: string; reports: SheetReport[]; errors?: string[] };
 
+type FeishuMemoryCache = { data: FeishuData; timestamp: number };
+const feishuDataCache = new Map<string, FeishuMemoryCache>();
+const FEISHU_CACHE_TTL = 120_000;
+
+export function invalidateFeishuCache(project?: string) {
+  if (project) feishuDataCache.delete(project);
+  else feishuDataCache.clear();
+}
+
 async function storage() {
   await ensureSchema();
   await db().prepare(`CREATE TABLE IF NOT EXISTS feishu_sheet_snapshots (
@@ -111,6 +120,10 @@ async function normalize(rows: unknown[][], sheet: SheetDefinition, project: str
 }
 
 export async function readFeishuData(project: string): Promise<FeishuData> {
+  const cached = feishuDataCache.get(project);
+  if (cached && Date.now() - cached.timestamp < FEISHU_CACHE_TTL) {
+    return cached.data;
+  }
   await storage();
   const stored=(await db().prepare('SELECT * FROM feishu_sheet_snapshots WHERE project_id=?').bind(project).all<Stored>()).results || [];
   const reports=stored.map(s=>JSON.parse(s.report_json) as SheetReport);
@@ -132,10 +145,18 @@ export async function readFeishuData(project: string): Promise<FeishuData> {
       notes_today:notes.filter(n=>n.date===date).length,comments_today:null};
   });
   const intelligence = getCompetitorIntelligence();
-  return {checkedAt:reports.map(r=>r.checkedAt).sort().at(-1)||'',reports,
-    daily,latestDate:dates.at(-1)||'',search:payload('PNZ39H'),
-    competitor:FEISHU_DOCUMENTS[3].sheets.flatMap(s=>payload(s.id)),planning:[...payload('7XkqoO'),...payload('7G0dkc')],
-    intelligence};
+  const result: FeishuData = {
+    checkedAt: reports.map(r => r.checkedAt).sort().at(-1) || '',
+    reports,
+    daily,
+    latestDate: dates.at(-1) || '',
+    search: payload('PNZ39H'),
+    competitor: FEISHU_DOCUMENTS[3].sheets.flatMap(s => payload(s.id)),
+    planning: [...payload('7XkqoO'), ...payload('7G0dkc')],
+    intelligence,
+  };
+  feishuDataCache.set(project, { data: result, timestamp: Date.now() });
+  return result;
 }
 const pending = new Map<string,Promise<FeishuSyncResult>>();
 export function syncFeishuSpreadsheets(rawProject?: string): Promise<FeishuSyncResult> {
@@ -196,6 +217,7 @@ async function runSync(project: string): Promise<FeishuSyncResult> {
     await db().prepare(`UPDATE data_sources SET status=?,last_synced_at=CASE WHEN ?=0 THEN ? ELSE last_synced_at END,last_row_count=?,last_error=?,updated_at=? WHERE project_id=? AND id=?`)
       .bind(failed.length?'同步失败':'同步正常',failed.length,now,docReports.reduce((a,b)=>a+b.rows,0),failed.map(r=>`${r.sheetName}: ${r.error}`).join('；'),now,project,doc.id).run();
   }
+  invalidateFeishuCache(project);
   const data=await readFeishuData(project), errors=reports.filter(r=>r.status==='error').map(r=>`${r.sheetName}：${r.error}`);
   const succeeded=reports.length-errors.length,changed=reports.filter(r=>r.status==='success'&&r.changed).length;
   return {ok:!errors.length,importedNotes,dailyMetricsUpdated:data.daily.length,sourcesUpdated:FEISHU_DOCUMENTS.filter(d=>reports.filter(r=>r.document===d.title).every(r=>r.status==='success')).length,
