@@ -185,29 +185,45 @@ export function useProjectData(
   const [loading, setLoading] = useState(!cached);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async (opts?: { fresh?: boolean }) => {
+  const refresh = useCallback(async (opts?: { fresh?: boolean; throwOnError?: boolean }) => {
     const isFresh = opts?.fresh ?? false;
     setLoading(true);
     setError(null);
     try {
       const query = new URLSearchParams({ projectId });
-      if (isFresh) query.set('fresh', '1');
+      const now = Date.now();
+      if (isFresh) {
+        query.set('fresh', '1');
+        query.set('_t', String(now));
+      }
       if (from) query.set('from', from);
       if (to) query.set('to', to);
       if (source) query.set('source', source);
-      const opsUrl = '/api/ops?projectId=' + encodeURIComponent(projectId) + (isFresh ? '&fresh=1' : '');
+
+      const opsQuery = new URLSearchParams({ projectId });
+      if (isFresh) {
+        opsQuery.set('fresh', '1');
+        opsQuery.set('_t', String(now));
+      }
+      const opsUrl = '/api/ops?' + opsQuery.toString();
+      const fetchOpts: RequestInit = isFresh ? { cache: 'no-store' } : {};
+
       const [dashRes, opsRes] = await Promise.all([
-        api<Dashboard>('/api/dashboard?' + query.toString()),
-        api<Ops>(opsUrl),
+        api<Dashboard>('/api/dashboard?' + query.toString(), fetchOpts),
+        api<Ops>(opsUrl, fetchOpts),
       ]);
-      const timestamp = Date.now();
-      projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp });
-      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard: dashRes, ops: opsRes }, timestamp);
+      projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp: now });
+      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard: dashRes, ops: opsRes }, now);
       setDashboard(dashRes);
       setOps(opsRes);
+      return { dashboard: dashRes, ops: opsRes };
     } catch (err) {
       const msg = err instanceof Error ? err.message : '数据加载失败';
       setError(msg);
+      if (opts?.throwOnError) {
+        throw err;
+      }
+      return null;
     } finally {
       setLoading(false);
     }
@@ -237,6 +253,8 @@ export function useProjectData(
     ops: visibleOps,
     loading: loading && !visibleDashboard,
     error,
-    refresh,
+    refresh: (async (opts?: { fresh?: boolean; throwOnError?: boolean }) => {
+      await refresh(opts);
+    }),
   };
 }

@@ -46,34 +46,21 @@ export function CustomSelect({
 
   const selectedIndex = normalizedOptions.findIndex((o) => o.value === value);
   const selectedOption = selectedIndex >= 0 ? normalizedOptions[selectedIndex] : undefined;
-  const [activeIndex, setActiveIndex] = useState<number>(() => (normalizedOptions.length === 0 ? -1 : Math.max(0, selectedIndex)));
+  const [internalActiveIndex, setInternalActiveIndex] = useState<number>(-1);
   const [openUpward, setOpenUpward] = useState(false);
 
-  useEffect(() => {
-    if (open) {
-      if (normalizedOptions.length === 0) {
-        setActiveIndex(-1);
-      } else if (selectedIndex >= 0 && selectedIndex < normalizedOptions.length) {
-        setActiveIndex(selectedIndex);
-      } else {
-        setActiveIndex(0);
-      }
-      if (triggerRef.current && typeof window !== 'undefined') {
-        const rect = triggerRef.current.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - rect.bottom;
-        setOpenUpward(spaceBelow < 250 && rect.top > 250);
-      }
-    }
-  }, [open, selectedIndex, normalizedOptions.length]);
+  const isActualOpen = open && !disabled;
+  const activeIndex =
+    normalizedOptions.length === 0
+      ? -1
+      : internalActiveIndex >= 0 && internalActiveIndex < normalizedOptions.length
+      ? internalActiveIndex
+      : selectedIndex >= 0
+      ? selectedIndex
+      : 0;
 
   useEffect(() => {
-    if (disabled && open) {
-      setOpen(false);
-    }
-  }, [disabled, open]);
-
-  useEffect(() => {
-    if (!open) return;
+    if (!isActualOpen) return;
     const handleOutsideClick = (e: MouseEvent | PointerEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setOpen(false);
@@ -81,14 +68,22 @@ export function CustomSelect({
     };
     document.addEventListener('pointerdown', handleOutsideClick);
     return () => document.removeEventListener('pointerdown', handleOutsideClick);
-  }, [open]);
+  }, [isActualOpen]);
 
   useEffect(() => {
-    if (open && listRef.current && activeIndex >= 0) {
+    if (isActualOpen && listRef.current && activeIndex >= 0) {
       const activeEl = listRef.current.children[activeIndex] as HTMLElement | undefined;
       activeEl?.scrollIntoView({ block: 'nearest' });
     }
-  }, [open, activeIndex]);
+  }, [isActualOpen, activeIndex]);
+
+  const checkUpward = () => {
+    if (triggerRef.current && typeof window !== 'undefined') {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      setOpenUpward(spaceBelow < 250 && rect.top > 250);
+    }
+  };
 
   const selectOption = (opt: SelectOption) => {
     if (disabled || opt.disabled) return;
@@ -96,6 +91,7 @@ export function CustomSelect({
       onChange(opt.value);
     }
     setOpen(false);
+    setInternalActiveIndex(-1);
     triggerRef.current?.focus();
   };
 
@@ -104,13 +100,14 @@ export function CustomSelect({
 
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      if (!open) {
+      if (!isActualOpen) {
+        checkUpward();
         setOpen(true);
-        setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        setInternalActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
       } else {
         const delta = e.key === 'ArrowDown' ? 1 : -1;
-        setActiveIndex((prev) => {
-          let next = prev + delta;
+        setInternalActiveIndex(() => {
+          let next = activeIndex + delta;
           if (next < 0) next = normalizedOptions.length - 1;
           if (next >= normalizedOptions.length) next = 0;
           return next;
@@ -121,8 +118,10 @@ export function CustomSelect({
 
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      if (!open) {
+      if (!isActualOpen) {
+        checkUpward();
         setOpen(true);
+        setInternalActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
       } else {
         const current = normalizedOptions[activeIndex];
         if (current) selectOption(current);
@@ -130,35 +129,37 @@ export function CustomSelect({
       return;
     }
 
-    if (e.key === 'Home' && open) {
+    if (e.key === 'Home' && isActualOpen) {
       e.preventDefault();
-      setActiveIndex(0);
+      setInternalActiveIndex(0);
       return;
     }
 
-    if (e.key === 'End' && open) {
+    if (e.key === 'End' && isActualOpen) {
       e.preventDefault();
-      setActiveIndex(normalizedOptions.length - 1);
+      setInternalActiveIndex(normalizedOptions.length - 1);
       return;
     }
 
-    if (e.key === 'Escape' && open) {
+    if (e.key === 'Escape' && isActualOpen) {
       e.preventDefault();
       e.stopPropagation();
       setOpen(false);
+      setInternalActiveIndex(-1);
       triggerRef.current?.focus();
       return;
     }
 
-    if (e.key === 'Tab' && open) {
+    if (e.key === 'Tab' && isActualOpen) {
       setOpen(false);
+      setInternalActiveIndex(-1);
     }
   };
 
   return (
     <div
       ref={containerRef}
-      className={`custom-select-container ${className} ${open ? 'is-open' : ''} ${disabled ? 'is-disabled' : ''}`}
+      className={`custom-select-container ${className} ${isActualOpen ? 'is-open' : ''} ${disabled ? 'is-disabled' : ''}`}
       style={{ position: 'relative', display: 'inline-block', ...style }}
     >
       <button
@@ -168,12 +169,15 @@ export function CustomSelect({
         aria-label={ariaLabel || placeholder}
         role="combobox"
         aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-controls={open ? listboxId : undefined}
-        aria-activedescendant={open && normalizedOptions.length > 0 && activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined}
+        aria-expanded={isActualOpen}
+        aria-controls={isActualOpen ? listboxId : undefined}
+        aria-activedescendant={isActualOpen && normalizedOptions.length > 0 && activeIndex >= 0 ? `${listboxId}-opt-${activeIndex}` : undefined}
         disabled={disabled}
         onClick={() => {
-          if (!disabled) setOpen(!open);
+          if (!disabled) {
+            if (!isActualOpen) checkUpward();
+            setOpen(!isActualOpen);
+          }
         }}
         onKeyDown={handleTriggerKeyDown}
         className="custom-select-trigger"
@@ -185,7 +189,7 @@ export function CustomSelect({
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg
-          className={`custom-select-chevron ${open ? 'is-rotated' : ''}`}
+          className={`custom-select-chevron ${isActualOpen ? 'is-rotated' : ''}`}
           width="12"
           height="12"
           viewBox="0 0 20 20"
@@ -197,7 +201,7 @@ export function CustomSelect({
         </svg>
       </button>
 
-      {open && (
+      {isActualOpen && (
         <ul
           ref={listRef}
           id={listboxId}
@@ -223,7 +227,7 @@ export function CustomSelect({
                 aria-selected={isSelected}
                 aria-disabled={opt.disabled}
                 onClick={() => selectOption(opt)}
-                onMouseEnter={() => setActiveIndex(idx)}
+                onMouseEnter={() => setInternalActiveIndex(idx)}
                 className={`custom-select-option ${isSelected ? 'is-selected' : ''} ${isActive ? 'is-active' : ''} ${opt.disabled ? 'is-disabled' : ''}`}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: opt.disabled ? 0.5 : 1 }}>

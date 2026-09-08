@@ -40,9 +40,11 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
   const [activeBrand, setActiveBrand] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [activeBattle, setActiveBattle] = useState('jicui');
-  if (!intelligence || !intelligence.brands.length) return <EmptyState title="暂无月报情报" text="读取来源月报后显示品牌策略与内容结构。" />;
-  const { brands, performance, creatorMix, formatMix, tagNames, contentMix, productStrategies, actions, searchFlow, comparisonGroups, searchIndex } = intelligence;
-  const months = [...intelligence.months].sort();
+  const brands = intelligence?.brands || [];
+  const performance = intelligence?.performance || [];
+  const searchIndex = intelligence?.searchIndex || [];
+  const comparisonGroups = intelligence?.comparisonGroups || [];
+  const months = [...(intelligence?.months || [])].sort();
   const month = months.includes(selectedMonth) ? selectedMonth : months.at(-1) || '';
   const filtered = activeBrand === 'all' ? brands : brands.filter(b => b.id === activeBrand);
   const includes = (brand: string | null) => activeBrand === 'all' || brand === activeBrand;
@@ -98,6 +100,10 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
       };
     });
   }, [allMonthRows, brands]);
+
+  if (!intelligence || !intelligence.brands.length) return <EmptyState title="暂无月报情报" text="读取来源月报后显示品牌策略与内容结构。" />;
+  const { creatorMix, formatMix, tagNames, contentMix, productStrategies, actions, searchFlow } = intelligence;
+
   const observedMonths = months.map(m => ({
     date: m,
     notes: completeSum(performance.filter(p => p.month === m && includes(p.brand)).map(p => p.notes)),

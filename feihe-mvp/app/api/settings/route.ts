@@ -2,6 +2,7 @@ import { apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { logAction, saveSetting } from '@/lib/ops';
 import { projectId } from '@/lib/projects';
+import { invalidateOpsCache } from '@/app/api/ops/route';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
       for (const item of body.pipelines.slice(0,3)) await d1.prepare('UPDATE project_pipelines SET target_count=?,delivered_count=?,budget=?,spent=? WHERE project_id=? AND key=?')
         .bind(Math.max(0,Number(item.targetCount||0)),Math.max(0,Number(item.deliveredCount||0)),Math.max(0,Number(item.budget||0)),Math.max(0,Number(item.spent||0)),project,String(item.id||'')).run();
     }
+    invalidateOpsCache(project);
     await logAction('更新项目配置','settings','','项目总盘、验收阈值、关键词或主线进度已更新',project);
     return Response.json({ ok: true });
   } catch (error) { return jsonError(error instanceof Error ? error.message : '保存失败', 500); }

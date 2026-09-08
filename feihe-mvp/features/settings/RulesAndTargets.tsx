@@ -17,7 +17,7 @@ export function RulesAndTargets({
   data: Dashboard;
   ops: Ops;
   projectId: string;
-  onDone: () => Promise<void>;
+  onDone: (opts?: { fresh?: boolean; throwOnError?: boolean }) => Promise<void>;
   toast: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const [goals, setGoals] = useState<Goals>(ops.settings.goals);
@@ -45,7 +45,9 @@ export function RulesAndTargets({
   });
 
   // Saved baseline tracking & conflict detection
-  const baselineRef = useRef({
+  const isSavingRef = useRef(false);
+  const [readBackError, setReadBackError] = useState<string | null>(null);
+  const [savedBaseline, setSavedBaseline] = useState({
     goals: JSON.stringify(ops.settings.goals),
     rules: JSON.stringify(ops.settings.rules),
     acceptance: JSON.stringify(ops.settings.acceptance),
@@ -53,53 +55,46 @@ export function RulesAndTargets({
   });
   const [serverConflictWarning, setServerConflictWarning] = useState(false);
 
-  const isGoalsDirty = JSON.stringify(goals) !== baselineRef.current.goals;
-  const isRulesDirty = JSON.stringify(rules) !== baselineRef.current.rules;
-  const isAcceptanceDirty = JSON.stringify(acceptance) !== baselineRef.current.acceptance ||
+  const isGoalsDirty = JSON.stringify(goals) !== savedBaseline.goals;
+  const isRulesDirty = JSON.stringify(rules) !== savedBaseline.rules;
+  const isAcceptanceDirty = JSON.stringify(acceptance) !== savedBaseline.acceptance ||
     similarityDraft !== String(Number(((acceptance.supplierSimilarity ?? 0.58) * 100).toPrecision(12)));
-  const isPipelinesDirty = JSON.stringify(pipelines) !== baselineRef.current.pipelines;
+  const isPipelinesDirty = JSON.stringify(pipelines) !== savedBaseline.pipelines;
 
   useEffect(() => {
+    if (isSavingRef.current) return;
     const incomingGoals = JSON.stringify(ops.settings.goals);
     const incomingRules = JSON.stringify(ops.settings.rules);
     const incomingAcceptance = JSON.stringify(ops.settings.acceptance);
     const incomingPipelines = JSON.stringify(data.pipelines);
 
-    let hasConflict = false;
+    const hasNewGoals = incomingGoals !== savedBaseline.goals;
+    const hasNewRules = incomingRules !== savedBaseline.rules;
+    const hasNewAcceptance = incomingAcceptance !== savedBaseline.acceptance;
+    const hasNewPipelines = incomingPipelines !== savedBaseline.pipelines;
 
-    if (!isGoalsDirty) {
-      setGoals(ops.settings.goals);
-      baselineRef.current.goals = incomingGoals;
-    } else if (incomingGoals !== baselineRef.current.goals) {
-      hasConflict = true;
+    if (!hasNewGoals && !hasNewRules && !hasNewAcceptance && !hasNewPipelines) return;
+
+    if (isGoalsDirty || isRulesDirty || isAcceptanceDirty || isPipelinesDirty) {
+      setServerConflictWarning(true);
+      return;
     }
 
-    if (!isRulesDirty) {
-      setRules(ops.settings.rules);
-      baselineRef.current.rules = incomingRules;
-    } else if (incomingRules !== baselineRef.current.rules) {
-      hasConflict = true;
+    setGoals(ops.settings.goals);
+    setRules(ops.settings.rules);
+    setAcceptance(ops.settings.acceptance);
+    setPipelines(data.pipelines);
+    if (ops.settings.acceptance.supplierSimilarity !== undefined) {
+      setSimilarityDraft(String(Number((ops.settings.acceptance.supplierSimilarity * 100).toPrecision(12))));
     }
-
-    if (!isAcceptanceDirty) {
-      setAcceptance(ops.settings.acceptance);
-      baselineRef.current.acceptance = incomingAcceptance;
-      if (ops.settings.acceptance.supplierSimilarity !== undefined) {
-        setSimilarityDraft(String(Number((ops.settings.acceptance.supplierSimilarity * 100).toPrecision(12))));
-      }
-    } else if (incomingAcceptance !== baselineRef.current.acceptance) {
-      hasConflict = true;
-    }
-
-    if (!isPipelinesDirty) {
-      setPipelines(data.pipelines);
-      baselineRef.current.pipelines = incomingPipelines;
-    } else if (incomingPipelines !== baselineRef.current.pipelines) {
-      hasConflict = true;
-    }
-
-    setServerConflictWarning(hasConflict);
-  }, [ops.settings, data.pipelines, isGoalsDirty, isRulesDirty, isAcceptanceDirty, isPipelinesDirty]);
+    setSavedBaseline({
+      goals: incomingGoals,
+      rules: incomingRules,
+      acceptance: incomingAcceptance,
+      pipelines: incomingPipelines,
+    });
+    setServerConflictWarning(false);
+  }, [ops.settings, data.pipelines, savedBaseline, isGoalsDirty, isRulesDirty, isAcceptanceDirty, isPipelinesDirty]);
 
   useEffect(() => {
     if (acceptance.supplierSimilarity !== undefined) {
@@ -171,27 +166,64 @@ export function RulesAndTargets({
       ...acceptance,
       supplierSimilarity: finalSimilarity,
     };
+    const submitted = { goals, rules, acceptance: finalAcceptance, pipelines };
 
+    isSavingRef.current = true;
     setLoading(true);
+    setReadBackError(null);
+
     try {
       await api('/api/settings', {
         method: 'POST',
-        body: JSON.stringify({ projectId, rules, acceptance: finalAcceptance, pipelines, goals }),
+        body: JSON.stringify({ projectId, rules: submitted.rules, acceptance: submitted.acceptance, pipelines: submitted.pipelines, goals: submitted.goals }),
       });
-      toast('项目目标与规则已保存', 'success');
-      baselineRef.current = {
-        goals: JSON.stringify(goals),
-        rules: JSON.stringify(rules),
-        acceptance: JSON.stringify(finalAcceptance),
-        pipelines: JSON.stringify(pipelines),
-      };
-      setServerConflictWarning(false);
-      await onDone();
     } catch (err) {
+      isSavingRef.current = false;
       toast(err instanceof Error ? err.message : '保存失败', 'error');
-    } finally {
       setLoading(false);
+      return;
     }
+
+    // POST succeeded! Now execute fresh read-back
+    try {
+      await onDone({ fresh: true, throwOnError: true });
+    } catch (readErr) {
+      isSavingRef.current = false;
+      const msg = readErr instanceof Error ? readErr.message : '最新数据回读失败';
+      setReadBackError(msg);
+      toast('配置已保存至服务端，但最新数据回读未完成，请重试', 'info');
+      setLoading(false);
+      return;
+    }
+
+    // Both save and read-back succeeded!
+    isSavingRef.current = false;
+    setReadBackError(null);
+    setServerConflictWarning(false);
+
+    setSavedBaseline({
+      goals: JSON.stringify(submitted.goals),
+      rules: JSON.stringify(submitted.rules),
+      acceptance: JSON.stringify(submitted.acceptance),
+      pipelines: JSON.stringify(submitted.pipelines),
+    });
+
+    if (JSON.stringify(goals) === JSON.stringify(submitted.goals)) {
+      setGoals(submitted.goals);
+    }
+    if (JSON.stringify(rules) === JSON.stringify(submitted.rules)) {
+      setRules(submitted.rules);
+    }
+    if (JSON.stringify(acceptance) === JSON.stringify(submitted.acceptance)) {
+      setAcceptance(submitted.acceptance);
+      setSimilarityDraft(String(Number((finalSimilarity * 100).toPrecision(12))));
+    }
+    if (JSON.stringify(pipelines) === JSON.stringify(submitted.pipelines)) {
+      setPipelines(submitted.pipelines);
+    }
+
+    toast('项目目标与规则已保存并同步', 'success');
+    setLoading(false);
   }
 
   async function mutate(action: string, payload: Record<string, unknown>, message: string) {
@@ -639,6 +671,30 @@ export function RulesAndTargets({
         {serverConflictWarning && (
           <div style={{ background: '#fffbeb', border: '1px solid #fde68a', color: '#b45309', padding: '10px 14px', borderRadius: '8px', fontSize: '12.5px', margin: '14px 0 6px' }}>
             ⚠️ 检测到服务端规则或目标已有外部变更，当前已保留您的本地草稿。请核对后再保存。
+          </div>
+        )}
+        {readBackError && (
+          <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', color: '#1e40af', padding: '10px 14px', borderRadius: '8px', fontSize: '12.5px', margin: '14px 0 6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <span>配置已保存至服务器，但最新数据回读未完成（{readBackError}）。</span>
+            <button
+              type="button"
+              className="subtle-btn"
+              style={{ padding: '4px 10px', fontSize: '12px' }}
+              onClick={async () => {
+                setLoading(true);
+                try {
+                  await onDone({ fresh: true, throwOnError: true });
+                  setReadBackError(null);
+                  toast('最新数据回读成功', 'success');
+                } catch (e) {
+                  toast('重试回读失败：' + (e instanceof Error ? e.message : '未知错误'), 'error');
+                } finally {
+                  setLoading(false);
+                }
+              }}
+            >
+              重试回读最新数据
+            </button>
           </div>
         )}
         <div className="save-row">

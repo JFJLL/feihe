@@ -47,24 +47,27 @@ export function SettingsWorkspace({
   project?: Project | null;
   dashboard: Dashboard;
   ops: Ops;
-  onRefresh: () => Promise<void>;
+  onRefresh: (opts?: { fresh?: boolean; throwOnError?: boolean }) => Promise<void>;
 }) {
   const [tab, setTab] = useProjectTab('profile', ['profile', 'rules', 'data-sources', 'integrations', 'data-map']);
   const { currentProject, workspace, refreshWorkspace, showToast } = useProject();
 
   // Per-project visited tabs set: lazy-mounts on first visit, preserves drafts thereafter.
-  const [visitedByProject, setVisitedByProject] = useState<Record<string, Set<string>>>({});
+  const [visitedByProject, setVisitedByProject] = useState<Record<string, Set<string>>>(() => ({
+    [projectId]: new Set([tab]),
+  }));
   const visited = visitedByProject[projectId] ?? new Set([tab]);
 
-  useEffect(() => {
+  const handleTabChange = (nextTab: string) => {
     setVisitedByProject((prev) => {
       const current = prev[projectId];
-      if (current && current.has(tab)) return prev;
-      const next = new Set(current || []);
-      next.add(tab);
+      if (current && current.has(nextTab)) return prev;
+      const next = new Set(current || ['profile']);
+      next.add(nextTab);
       return { ...prev, [projectId]: next };
     });
-  }, [projectId, tab]);
+    setTab(nextTab);
+  };
 
   const [map, setMap] = useState<MapData>(emptyMap);
   const [mapError, setMapError] = useState('');
@@ -93,7 +96,7 @@ export function SettingsWorkspace({
 
   const handleProfileOrSourceUpdate = async () => {
     await refreshWorkspace();
-    await onRefresh();
+    await onRefresh({ fresh: true });
   };
 
   const tabs: ModuleTab[] = [
@@ -118,7 +121,7 @@ export function SettingsWorkspace({
         }
       />
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={handleTabChange} variant="compact" />
 
       {visited.has('profile') && (
       <div

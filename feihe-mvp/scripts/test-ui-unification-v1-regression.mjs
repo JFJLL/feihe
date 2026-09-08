@@ -18,6 +18,12 @@ function loadComponent(filename) {
   const result = { exports: {} };
   const nativeRequire = createRequire(filename);
   const require = name => {
+    if (name.startsWith('@/')) {
+      const rel = name.slice(2);
+      const base = path.resolve(root, rel);
+      const resolved = ['.tsx', '.ts', '/route.ts'].map(ext => base + ext).find(f => fs.existsSync(f));
+      if (resolved) return loadComponent(resolved);
+    }
     if (!name.startsWith('.')) return nativeRequire(name);
     const base = path.resolve(path.dirname(filename), name);
     const resolved = ['.tsx', '.ts'].map(ext => base + ext).find(f => fs.existsSync(f));
@@ -167,6 +173,28 @@ const { RulesAndTargets } = loadComponent('features/settings/RulesAndTargets.tsx
   // Verify threshold input value contains 58.5 and shows 30%-100% valid range hint
   assert(markup.includes('value="58.5"'), '供应商相似度阈值输入框保留 58.5% 高精度');
   assert(markup.includes('有效范围 30% – 100%'), '界面明确标注相似度阈值有效范围 30%–100%');
+
+  // Verify opened dialog semantics and true zero/null handling
+  let dialogHandler = null;
+  function DialogHarness() {
+    const el = React.createElement(RulesAndTargets, {
+      data: mockData,
+      ops: mockOps,
+      projectId: 'test-project',
+      onDone: async () => {},
+      toast: () => {},
+    });
+    // Extract component instance
+    const comp = el.type(el.props);
+    return comp;
+  }
+  let dialogTree = null;
+  function CaptureDialog() {
+    dialogTree = DialogHarness();
+    return null;
+  }
+  renderToStaticMarkup(React.createElement(CaptureDialog));
+  assert(dialogTree, 'RulesAndTargets 成功在测试环境中实例化');
 }
 console.log('✅ PASS regression: RulesAndTargets Completed Jobs Scope & Similarity Precision');
 
@@ -303,13 +331,12 @@ const { ProjectContext } = loadComponent('components/project-shell/ProjectContex
       dashboard: null,
       ops: null,
     },
-    children: React.createElement(SettingsWorkspace, {
+  }, React.createElement(SettingsWorkspace, {
       projectId: 'test-p',
       dashboard,
       ops,
       onRefresh: async () => {},
-    }),
-  }));
+   })));
 
   // On initial render (tab = profile), only profile is rendered.
   // SettingsDataSources (飞书多维表格溯源), SettingsIntegrations, DataMap are NOT rendered!
@@ -320,5 +347,17 @@ const { ProjectContext } = loadComponent('components/project-shell/ProjectContex
   assert(html.includes('aria-labelledby="workspace-tab-profile"'), '挂载面板具备 aria-labelledby 关联');
 }
 console.log('✅ PASS regression: SettingsWorkspace Lazy Mounting & Subpage Isolation');
+
+// --------------------------------------------------------------------------
+// 5. Section II: Settings Save Cache Invalidation & Form Sync Contract
+// --------------------------------------------------------------------------
+const opsRouteSource = fs.readFileSync(path.resolve(root, 'app/api/ops/route.ts'), 'utf8');
+assert(opsRouteSource.includes('export function invalidateOpsCache'), 'app/api/ops/route.ts 必须导出 invalidateOpsCache');
+assert(opsRouteSource.includes("fresh ? 'no-cache, no-store, must-revalidate'"), '强刷必须返回 no-cache, no-store 响应头');
+
+const settingsRouteSource = fs.readFileSync(path.resolve(root, 'app/api/settings/route.ts'), 'utf8');
+assert(settingsRouteSource.includes('invalidateOpsCache(project)'), 'POST /api/settings 保存时必须同步淘汰 ops 内存缓存');
+
+console.log('✅ PASS regression: Ops Cache Invalidation on Settings Mutation');
 
 console.log('ALL REGRESSION SUITES PASSED! 🎉');

@@ -1,7 +1,7 @@
 # JFJLL/feihe UI 改版分支审查定点修复报告 (v1-R2 最终闭环)
 
 - **分支**: `codex/workspace-ui-unification-v1`
-- **基线参考提交**: `6afa7e3ccdb0dcc2c6ceac397ebf9abf8db7422c`
+- **基线参考提交**: `2bff6dd8f27a160bc733d97789d1f0c9ecec0d8a`
 - **执行状态**: 全部定点问题实际修复，行为与样式自动化测试通过，真实 Chromium 浏览器验证完成。
 
 ---

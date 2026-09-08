@@ -40,7 +40,7 @@ type ProjectContextType = {
   ops: Ops | null;
   dataLoading: boolean;
   dataError: string | null;
-  refreshData: (opts?: { fresh?: boolean }) => Promise<void>;
+  refreshData: (opts?: { fresh?: boolean; throwOnError?: boolean }) => Promise<void>;
 };
 
 export const ProjectContext = createContext<ProjectContextType | null>(null);

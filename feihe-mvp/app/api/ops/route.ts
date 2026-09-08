@@ -10,6 +10,18 @@ type CacheEntry = { json: string; timestamp: number };
 const memoryCache = new Map<string, CacheEntry>();
 const CACHE_TTL_MS = 120_000;
 
+export function invalidateOpsCache(project?: string) {
+  if (!project) {
+    memoryCache.clear();
+    return;
+  }
+  for (const k of memoryCache.keys()) {
+    if (k.startsWith(`ops:${project}:`)) {
+      memoryCache.delete(k);
+    }
+  }
+}
+
 export async function GET(request: Request) {
   if (!(await apiUser())) return jsonError('请先登录', 401);
   await ensureSchema();
@@ -100,7 +112,7 @@ export async function GET(request: Request) {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'private, max-age=60, stale-while-revalidate=180',
+      'Cache-Control': fresh ? 'no-cache, no-store, must-revalidate' : 'private, max-age=60, stale-while-revalidate=180',
       'X-Cache': 'MISS',
     },
   });

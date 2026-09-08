@@ -45,7 +45,7 @@ export function ContentRegistry({
   const [sort, setSort] = useState(searchParams.get('sort') || '');
   const [order, setOrder] = useState(searchParams.get('order') || 'desc');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [boardError, setBoardError] = useState('');
   const reqSeqRef = useRef(0);
   const [activeIngestion, setActiveIngestion] = useState<'import' | 'scan' | null>(null);
@@ -161,10 +161,14 @@ export function ContentRegistry({
   }, [projectId, page, debouncedQuery, source, scope, status, category, from, to, sort, order, toast]);
 
   useEffect(() => {
+    let cancelled = false;
     const timer = setTimeout(() => {
-      void loadData();
+      if (!cancelled) void loadData();
     }, 0);
-    return () => { clearTimeout(timer); reqSeqRef.current += 1; };
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [loadData]);
 
   async function handleScan() {
