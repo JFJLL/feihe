@@ -90,6 +90,42 @@ export type CompetitorIntelligenceData = {
   productStrategies: CompetitorProductStrategy[];
   actions: CompetitorAction[];
   searchFlow: CompetitorSearchFlow[];
+  comparisonGroups?: CompetitorComparisonGroup[];
+  searchIndex?: CompetitorSearchIndexPoint[];
+  quality?: CompetitorQualityData | null;
+};
+
+export type CompetitorComparisonGroup = {
+  id: string;
+  selfLine: string;
+  title: string;
+  basis: string;
+  lines: string[];
+  note: string;
+};
+
+export type CompetitorSearchIndexPoint = {
+  entity: string;
+  level: 'brand' | 'line';
+  brand: string;
+  month: string;
+  value: number | null;
+  source: string;
+};
+
+export type CompetitorQualityIssue = {
+  level: 'P0' | 'P1' | 'P2';
+  brand: string;
+  issue: string;
+  detail: string;
+};
+
+export type CompetitorQualityData = {
+  revision: string;
+  updatedAt: string;
+  formulaScan: Record<string, number>;
+  latestHealth: Record<string, unknown>;
+  issues: CompetitorQualityIssue[];
 };
 
 import defaultCompetitorData from './competitor_intelligence.json';
@@ -123,13 +159,16 @@ export function getCompetitorIntelligence(): CompetitorIntelligenceData {
         productStrategies: raw.productStrategies || [],
         actions: raw.actions || [],
         searchFlow: raw.searchFlow?.keywords || [],
+        comparisonGroups: raw.comparisonGroups || [],
+        searchIndex: raw.searchIndex || [],
+        quality: raw.quality || null,
       };
       return cachedData;
     }
   } catch (err) {
     console.error('Failed to load competitor_data.json:', err);
   }
-  const fallback = defaultCompetitorData;
+  const fallback = defaultCompetitorData as any;
   return {
     updatedAt: fallback.meta?.updatedAt || '2026-09-04 19:59',
     snapshotMonth: fallback.meta?.snapshotMonth || '2026-08',
@@ -143,5 +182,8 @@ export function getCompetitorIntelligence(): CompetitorIntelligenceData {
     productStrategies: fallback.productStrategies || [],
     actions: fallback.actions || [],
     searchFlow: fallback.searchFlow?.keywords || [],
+    comparisonGroups: fallback.comparisonGroups || [],
+    searchIndex: fallback.searchIndex || [],
+    quality: fallback.quality || null,
   };
 }

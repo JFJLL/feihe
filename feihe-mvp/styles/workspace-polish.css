@@ -1,3 +1,88 @@
+/* ==========================================================================
+   Global Custom Styled Select Dropdowns (Eliminate Browser Native Styles)
+   ========================================================================== */
+select,
+.ops-workspace select,
+.overview-colorful-page select,
+.reference-date-controls select,
+.field select,
+label select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+  background-size: 16px 16px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 6px 32px 6px 12px !important;
+  min-height: 36px !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+select:hover,
+.ops-workspace select:hover,
+.overview-colorful-page select:hover,
+.reference-date-controls select:hover,
+label select:hover {
+  border-color: #94a3b8 !important;
+  background-color: #f8fafc !important;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08) !important;
+}
+
+select:focus,
+select:focus-visible,
+.ops-workspace select:focus,
+.ops-workspace select:focus-visible,
+.overview-colorful-page select:focus,
+.overview-colorful-page select:focus-visible,
+label select:focus {
+  outline: none !important;
+  border-color: #0284c7 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18) !important;
+}
+
+select:disabled,
+.ops-workspace select:disabled {
+  background-color: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+}
+
+select option,
+.ops-workspace select option {
+  padding: 10px 14px !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+label:has(select),
+.reference-date-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.competitor-source-grid {
+  align-items: start !important;
+}
+
 /* Shared with the overview: navy headings, soft colour cues and quiet surfaces.
    Keep selectors scoped to workspaces so project centre and login stay independent. */
 .ops-workspace {

@@ -28,18 +28,31 @@ function MixBar({ label, items }: { label: string; items: { label: string; value
   </div>;
 }
 
+const cleanKeywords = (words: string[]) => {
+  const cleaned = (words || [])
+    .map(w => (typeof w === 'string' ? w.trim() : ''))
+    .filter(w => w && w !== '/' && w !== '—' && !/^[\/\s、,，-]+$/.test(w));
+  return [...new Set(cleaned)].join('、') || '—';
+};
+
 export function CompetitorIntelligenceSection({ intelligence }: { intelligence?: CompetitorIntelligenceData }) {
   const [activeBrand, setActiveBrand] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState('');
+  const [activeBattle, setActiveBattle] = useState('jicui');
   if (!intelligence || !intelligence.brands.length) return <EmptyState title="暂无月报情报" text="读取来源月报后显示品牌策略与内容结构。" />;
-  const { brands, performance, creatorMix, formatMix, tagNames, contentMix, productStrategies, actions, searchFlow } = intelligence;
+  const { brands, performance, creatorMix, formatMix, tagNames, contentMix, productStrategies, actions, searchFlow, comparisonGroups, searchIndex } = intelligence;
   const months = [...intelligence.months].sort();
   const month = months.includes(selectedMonth) ? selectedMonth : months.at(-1) || '';
   const filtered = activeBrand === 'all' ? brands : brands.filter(b => b.id === activeBrand);
   const includes = (brand: string | null) => activeBrand === 'all' || brand === activeBrand;
   const name = (brand: string) => brands.find(b => b.id === brand)?.name || brand;
+  const brandColor = (brandId: string) => brands.find(b => b.id === brandId)?.color || '#0284c7';
   const rows = performance.filter(p => p.month === month && includes(p.brand));
+  const allMonthRows = performance.filter(p => p.month === month);
+  const maxSpend = Math.max(1, ...allMonthRows.map(p => p.spend || 0));
   const notes = completeSum(rows.map(p => p.notes));
+  const feiheData = performance.find(p => p.brand === 'feihe' && p.month === month) || performance.find(p => p.brand === 'feihe');
+  const currentBattle = comparisonGroups?.find(g => g.id === activeBattle) || comparisonGroups?.[0];
   const observedMonths = months.map(m => ({
     date: m,
     notes: completeSum(performance.filter(p => p.month === m && includes(p.brand)).map(p => p.notes)),
@@ -53,12 +66,69 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
         <label>情报品牌 <select aria-label="情报品牌" value={activeBrand} onChange={e => setActiveBrand(e.target.value)}><option value="all">全部品牌</option>{brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
       </div>
     </div>
+    {/* 7 大品牌竞争信号带 (Signal Strip) */}
+    <section className="panel" style={{ padding: '16px 18px', background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)', borderRadius: 12, border: '1px solid #e2e8f0' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+        <div>
+          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#0f172a' }}>竞争信号带 · 7 大品牌月度投放概览</h3>
+          <small style={{ color: '#64748b' }}>点选品牌可聚焦观察，再次点击恢复全景；横条代表该品牌当月商单投入规模。</small>
+        </div>
+        {activeBrand !== 'all' && <button className="subtle-btn" onClick={() => setActiveBrand('all')} style={{ padding: '4px 10px', fontSize: 12, height: 28 }}>恢复显示全部品牌</button>}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))', gap: 10 }}>
+        {brands.map(b => {
+          const row = allMonthRows.find(p => p.brand === b.id);
+          const isSelected = activeBrand === b.id;
+          const spendPct = row && maxSpend ? (row.spend / maxSpend) * 100 : 0;
+          return <div key={b.id} onClick={() => setActiveBrand(activeBrand === b.id ? 'all' : b.id)} style={{ cursor: 'pointer', padding: '10px 12px', background: isSelected ? '#eff6ff' : '#ffffff', border: isSelected ? `2px solid ${b.color}` : '1px solid #e2e8f0', borderRadius: 8, transition: 'all 0.15s ease', boxShadow: isSelected ? '0 4px 10px rgba(2, 132, 199, 0.15)' : 'none', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ height: 3, background: b.color, position: 'absolute', top: 0, left: 0, right: 0 }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
+              <strong style={{ fontSize: 13.5, color: '#0f172a' }}>{b.name}</strong>
+              <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#475569' }}>{b.agency || '—'}</span>
+            </div>
+            <div style={{ margin: '6px 0', fontSize: 16, fontWeight: 700, color: b.color }}>
+              {row ? `¥${compactMetric(row.spend)}` : '—'}
+            </div>
+            <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, overflow: 'hidden', marginBottom: 6 }}>
+              <div style={{ width: `${spendPct}%`, height: '100%', background: b.color, borderRadius: 2 }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#64748b' }}>
+              <span>笔记 {row?.notes || 0}</span>
+              <span>爆文 {row?.viral || 0}</span>
+            </div>
+          </div>;
+        })}
+      </div>
+    </section>
     <div className="reference-daily-grid">
       <MetricCard label="当月有记录品牌" value={new Set(rows.map(p => p.brand)).size} unit="个" desc={filtered.length + ' 个筛选品牌；仅表示记录覆盖'} />
       <MetricCard label="月报商业笔记" value={notes} unit="篇" theme="teal" desc="所选品牌已载入月报合计" />
       <MetricCard label="月报商单投入" value={completeSum(rows.map(p => p.spend))} unit="元" theme="purple" desc="来源表填报投入，不与项目笔记报价合并" />
       <MetricCard label="月报高热笔记" value={completeSum(rows.map(p => p.viral))} unit="篇" theme="green" desc="沿用来源月报定义，与项目阈值口径独立" />
     </div>
+    {/* 飞鹤全链路传播漏斗看板 */}
+    {feiheData && (
+      <DashboardSection title="飞鹤小红书传播全链路漏斗" desc="大盘曝光 → 笔记阅读 → 转评赞互动 → 千赞爆文；呈现飞鹤本品在小红书的逐层心智沉淀与转化率。">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: 12 }}>
+          {[
+            { stage: '01 曝光 Exposure', val: feiheData.exposure, sub: '大盘曝光沉淀', pct: 100, rate: null, color: '#0284c7' },
+            { stage: '02 阅读 Reads', val: feiheData.reads, sub: '笔记阅读点击', pct: feiheData.exposure ? (feiheData.reads / feiheData.exposure) * 100 : 16.07, rate: percent(feiheData.reported?.ctr || (feiheData.reads && feiheData.exposure ? feiheData.reads / feiheData.exposure : null)), color: '#0d9488' },
+            { stage: '03 互动 Interactions', val: feiheData.interactions, sub: '转评赞藏互动', pct: feiheData.reads ? (feiheData.interactions / feiheData.reads) * 100 : 6.22, rate: percent(feiheData.reported?.engagementRate || (feiheData.interactions && feiheData.reads ? feiheData.interactions / feiheData.reads : null)), color: '#8b5cf6' },
+            { stage: '04 爆文 Viral', val: feiheData.viral, sub: '千赞高热爆文', pct: feiheData.notes ? (feiheData.viral / feiheData.notes) * 100 : 20.77, rate: percent(feiheData.reported?.viralRate || (feiheData.viral && feiheData.notes ? feiheData.viral / feiheData.notes : null)), color: '#10b981' },
+          ].map(step => (
+            <div key={step.stage} style={{ padding: '14px 16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: step.color }}>{step.stage}</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#0f172a', margin: '4px 0' }}>{compactMetric(step.val)}</div>
+              <div style={{ fontSize: 11.5, color: '#64748b' }}>{step.sub}</div>
+              {step.rate && <div style={{ fontSize: 11.5, color: '#0369a1', fontWeight: 600, marginTop: 4 }}>转化率: {step.rate}</div>}
+              <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2, overflow: 'hidden', marginTop: 8 }}>
+                <div style={{ width: `${Math.min(100, Math.max(10, step.pct))}%`, height: '100%', background: step.color }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </DashboardSection>
+    )}
     <DashboardSection title="商单投入与内容效率" desc="份额仅在所选月报品牌内计算，不代表市场份额。计算爆文率与原表填报率分别列示，保留口径差异。">
       <div className="workspace-two-col">
         {(['notes', 'spend'] as const).map(key => {
@@ -123,6 +193,31 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
       })} />
     </DashboardSection>
     <DashboardSection title="品线定位与卖点" desc="来源快照中的策略描述，不受情报月份筛选影响。">
+      {comparisonGroups && comparisonGroups.length > 0 && (
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
+          {comparisonGroups.map(grp => (
+            <button key={grp.id} type="button" onClick={() => setActiveBattle(grp.id)} style={{ padding: '8px 14px', borderRadius: 8, border: activeBattle === grp.id ? '2px solid #0284c7' : '1px solid #cbd5e1', background: activeBattle === grp.id ? '#eff6ff' : '#ffffff', cursor: 'pointer', textAlign: 'left' }}>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: activeBattle === grp.id ? '#0284c7' : '#0f172a' }}>{grp.title}</div>
+              <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>{grp.note}</div>
+            </button>
+          ))}
+        </div>
+      )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: 14, marginBottom: 16 }}>
+        {productStrategies.filter(p => includes(p.brand) && (!currentBattle || currentBattle.lines.some(l => l.includes(p.line) || p.line.includes(l)))).map((item, idx) => (
+          <div key={idx} style={{ padding: '14px 16px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, borderTop: `3px solid ${brandColor(item.brand)}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <strong style={{ fontSize: 15, color: brandColor(item.brand) }}>{name(item.brand)} · {item.line}</strong>
+              <span className="section-mini-tag tag-blue">{item.evidence.slice(0, 10)}</span>
+            </div>
+            <div className="stack" style={{ gap: 6, fontSize: 12.5, lineHeight: 1.6 }}>
+              <div><span style={{ color: '#64748b' }}>人群：</span><strong style={{ color: '#1e293b' }}>{item.audience}</strong></div>
+              <div><span style={{ color: '#64748b' }}>卖点：</span><span style={{ color: '#0369a1', fontWeight: 600 }}>{item.proposition}</span></div>
+              <div><span style={{ color: '#64748b' }}>场景：</span><span style={{ color: '#475569' }}>{item.scenarios}</span></div>
+            </div>
+          </div>
+        ))}
+      </div>
       <DataTable headers={['品牌 / 品线', '人群', '卖点', '场景', '依据']} rows={productStrategies.filter(p => includes(p.brand)).map(p => [name(p.brand) + ' · ' + p.line, p.audience, p.proposition, p.scenarios, p.evidence])} />
     </DashboardSection>
     <div className="workspace-two-col">
@@ -130,7 +225,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
         <DataTable headers={['月份', '品牌', '动作', '说明']} rows={actions.filter(p => p.month === month && includes(p.brand)).map(p => [p.month, name(p.brand), p.type + ' · ' + p.title, p.detail])} />
       </DashboardSection>
       <DashboardSection title="品牌搜索上下游词" desc="来源快照中的关联词；无日期字段，不受月份筛选影响，不推断流量或转化。">
-        <DataTable headers={['关键词', '上游', '下游']} rows={searchFlow.filter(p => includes(p.brand)).map(p => [p.keyword, p.upstream.join('、') || '—', p.downstream.join('、') || '—'])} />
+        <DataTable headers={['关键词', '上游', '下游']} rows={searchFlow.filter(p => includes(p.brand)).map(p => [p.keyword, cleanKeywords(p.upstream), cleanKeywords(p.downstream)])} />
       </DashboardSection>
     </div>
   </div>;

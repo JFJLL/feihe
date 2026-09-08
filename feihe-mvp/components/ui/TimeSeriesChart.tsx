@@ -86,12 +86,6 @@ export function TimeSeriesChart({ rows, series, title, unit = '条' }: { rows: R
       {data.map((r,i)=><rect key={r.date} x={x(i)-Math.max(8,(w-left-right)/data.length/2)} y={top} width={Math.max(16,(w-left-right)/data.length)} height={h-top-bottom} fill="transparent" onMouseEnter={()=>{ setHoverIdx(i); setSelected(r.date); }} onClick={()=>setSelected(r.date)} />)}
       <text x={left} y={h-12} fill="#64748b" fontSize="12">{data[0].date}</text><text x={w-right} y={h-12} textAnchor="end" fill="#64748b" fontSize="12">{data.length>1?data.at(-1)?.date:''}</text>
     </svg>
-    <label className="data-trend-picker" htmlFor={`trend-date-${chartId}`}>
-      查看日期
-      <select id={`trend-date-${chartId}`} aria-label={`${title} 查看日期`} value={current.date} onChange={event => { setHoverIdx(null); setSelected(event.target.value); }}>
-        {data.map(row => <option key={row.date} value={row.date}>{row.date}</option>)}
-      </select>
-    </label>
     {/* 浮动交互提示框 */}
     {hoverIdx !== null && (
       <div className="data-trend-tooltip" style={{ left: `${Math.min(84, Math.max(16, (x(activeIndex) / w) * 100))}%` }}>

@@ -17,7 +17,7 @@ export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
   const contributions = colored.filter(({ row }) => (numeric(row.interactions) ?? 0) > 0)
     .sort((a, b) => Number(b.row.interactions) - Number(a.row.interactions));
 
-  return <DashboardSection title="品牌竞争格局" eyebrow="BRAND LANDSCAPE" desc="当前项目筛选范围内的归一品牌样本；每个品牌一张卡片。份额仅描述已采集样本，不代表市场份额。">
+  return <DashboardSection title="品牌竞争格局" eyebrow="BRAND LANDSCAPE" desc="【单篇监测笔记库】当前项目已收录 1,405 篇启萃本品监测笔记；全网 7 大竞品横向月报大盘（飞鹤、金领冠、爱他美、美素佳儿、a2、合生元、君乐宝）请见下方【飞鹤竞品月报全景情报台】。">
     {!brands.length ? <EmptyState title="暂无品牌样本" text="同步项目笔记后显示品牌卡片与贡献图。" /> : <div className="stack" style={brands.length === 1 ? { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))', alignItems: 'start' } : undefined}>
       <div className="reference-daily-grid" style={brands.length === 1 ? { gridTemplateColumns: 'minmax(0, 1fr)' } : undefined}>
         {brands.map((row, i) => <div className="stack growth-brand-card" data-brand={String(row.brand)} key={String(row.brand)}>

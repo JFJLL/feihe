@@ -36,7 +36,7 @@ const gap = renderToStaticMarkup(chart([
 assert.equal((gap.match(/<circle /g) || []).length, 2, '零值有数据点，缺失样本没有数据点');
 assert.equal((gap.match(/<path /g) || []).length, 2, '缺失记录两侧分成两个独立线段');
 assert(!gap.match(/<path[^>]*d="[^"]*L/), '不跨越缺失样本连线或填充面积');
-assert(gap.includes('<select') && gap.includes('查看日期'), '键盘与触屏用户可以选择日期');
+assert(!gap.includes('查看日期') && !gap.includes('data-trend-picker'), '图表移除了冗余的日期下拉选择器');
 assert(!gap.includes('NaN') && !gap.includes('Infinity'), '绘图坐标必须有限');
 
 const empty = renderToStaticMarkup(chart([]));
