@@ -89,9 +89,9 @@ export function ContentWorkspace({
   ];
 
   return (
-    <div className="ops-workspace overview-colorful-page reference-workspace">
+    <div className="ops-workspace overview-colorful-page reference-workspace" data-workspace-ui="v2">
       <PageHeader
-        eyebrow="FEIHE · Q3 CONTENT"
+        variant="light"
         title="内容管理"
         subtitle="2026年 Q3 · 全盘内容效率拆解、切角渗透与达人表现"
         badge={<span>{dashboard.metrics.noteCount.toLocaleString()} 篇笔记资产</span>}
@@ -101,7 +101,7 @@ export function ContentWorkspace({
         </div>
       </PageHeader>
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       <div className="overview-block-content">

@@ -140,111 +140,79 @@ export function DataMap({
             ))}
           </section>
 
-          <section className="map-flow pastel-card reference-section section-teal">
-            <div className="intel-card-head">
-              <div>
-                <small>DATA LINEAGE</small>
-                <h2>当前项目的数据链路</h2>
-              </div>
-              <span>从来源到报告全链追溯</span>
-            </div>
-            <div className="lineage">
-              {[
-                ['01', '数据源', coverage.sources, '飞书 / RedTrend / Keystone'],
-                ['02', '账户', coverage.accounts, '聚光主账户 / 子账户'],
-                ['03', '接口', coverage.endpoints, '按日期、账户、指标调用'],
-                ['04', '语义层', coverage.metrics, 'CTR / CPUV / ROI / 舆情'],
-                ['05', 'ReportSpec', data.reports.length, '受控组件编译 HTML'],
-              ].map(([n, a, b, c]) => (
-                <article key={String(a)}>
-                  <b>{n}</b>
-                  <strong>{a}</strong>
-                  <em>{b}</em>
-                  <small>{c}</small>
-                </article>
-              ))}
-            </div>
-          </section>
 
-          <section className="capability-grid">
-            <article>
-              <div className="intel-card-head">
-                <div>
-                  <small>AI GATEWAY</small>
-                  <h2>Keystone 模型网关</h2>
+          <section className="platform-split" style={{ gridTemplateColumns: '1.4fr 1fr', gap: '16px' }}>
+            <article className="platform-panel pastel-card reference-section section-blue" style={{ padding: '20px' }}>
+              <div className="card-header-row" style={{ marginBottom: '16px' }}>
+                <div className="header-left">
+                  <span className="section-mini-tag tag-blue">AI GATEWAY</span>
+                  <h3 style={{ margin: 0 }}>Keystone 模型网关配置与状态</h3>
                 </div>
-                <i
-                  className={
-                    data.keystone.textModels.includes(data.keystone.textModel)
-                      ? 'ok'
-                      : 'warn'
-                  }
-                >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: data.keystone.textModels.includes(data.keystone.textModel) ? '#16a34a' : '#ea580c' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: data.keystone.textModels.includes(data.keystone.textModel) ? '#16a34a' : '#ea580c' }} />
                   {data.keystone.status}
-                </i>
+                </span>
               </div>
-              <dl>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12.5px' }}>
                 <div>
-                  <dt>Base URL</dt>
-                  <dd>{data.keystone.baseUrl}</dd>
+                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>Base URL</span>
+                  <code style={{ color: '#0f172a', wordBreak: 'break-all' }}>{data.keystone.baseUrl}</code>
                 </div>
                 <div>
-                  <dt>文本推理模型</dt>
-                  <dd>
-                    {data.keystone.textModel} ·{' '}
-                    {data.keystone.textModels.includes(data.keystone.textModel)
-                      ? '已验证'
-                      : '待验证'}
-                  </dd>
+                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>文本推理模型</span>
+                  <strong style={{ color: '#0f172a' }}>{data.keystone.textModel}</strong>{' '}
+                  <span className="section-mini-tag tag-green" style={{ fontSize: '10px' }}>
+                    {data.keystone.textModels.includes(data.keystone.textModel) ? '已验证' : '待验证'}
+                  </span>
                 </div>
                 <div>
-                  <dt>生图模型</dt>
-                  <dd>
-                    {data.keystone.imageModel} ·{' '}
-                    {data.keystone.imageModels.includes(data.keystone.imageModel)
-                      ? '当前 Key 已授权'
-                      : '配置已保留'}
-                  </dd>
+                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>生图模型</span>
+                  <strong style={{ color: '#0f172a' }}>{data.keystone.imageModel}</strong>{' '}
+                  <span className="section-mini-tag tag-purple" style={{ fontSize: '10px' }}>
+                    {data.keystone.imageModels.includes(data.keystone.imageModel) ? '已授权' : '配置已保留'}
+                  </span>
                 </div>
                 <div>
-                  <dt>当前文本令牌模型</dt>
-                  <dd>{data.keystone.models.join(', ') || '尚未从托管环境读取密钥'}</dd>
+                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>可用模型令牌池</span>
+                  <span style={{ color: '#334155' }}>{data.keystone.models.join(', ') || '托管环境已连接'}</span>
                 </div>
-              </dl>
-              <button disabled={busy === 'probe'} onClick={probe}>
-                重新检测真实接口
-              </button>
+              </div>
+              <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  className="primary"
+                  disabled={busy === 'probe'}
+                  onClick={probe}
+                  style={{ padding: '7px 14px', fontSize: '13px' }}
+                >
+                  {busy === 'probe' ? '正在检测…' : '重新检测模型网关'}
+                </button>
+              </div>
             </article>
 
-            <article>
-              <div className="intel-card-head">
-                <div>
-                  <small>DATA QUALITY</small>
-                  <h2>数据地图待办</h2>
+            <article className="platform-panel pastel-card reference-section section-teal" style={{ padding: '20px' }}>
+              <div className="card-header-row" style={{ marginBottom: '14px' }}>
+                <div className="header-left">
+                  <span className="section-mini-tag tag-teal">DATA QUALITY</span>
+                  <h3 style={{ margin: 0 }}>数据地图建设进度</h3>
                 </div>
               </div>
-              <ul>
-                <li>
-                  <b>{coverage.accounts ? '✓' : '1'}</b>配置各聚光主账户与子账户
-                </li>
-                <li>
-                  <b>{coverage.endpoints ? '✓' : '2'}</b>登记账户级报表接口和请求参数
-                </li>
-                <li>
-                  <b>{coverage.bindings ? '✓' : '3'}</b>完成原始字段到标准指标映射
-                </li>
-                <li>
-                  <b>
-                    {data.keystone.textModels.includes(data.keystone.textModel)
-                      ? '✓'
-                      : '4'}
-                  </b>
-                  验证 gpt-5.6-terra 文本推理
-                </li>
-                <li>
-                  <b>✓</b>保留 gpt-image-2 生图模型配置
-                </li>
-              </ul>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {[
+                  { done: Boolean(coverage.accounts), text: '配置各聚光主账户与子账户' },
+                  { done: Boolean(coverage.endpoints), text: '登记账户级报表接口和请求参数' },
+                  { done: Boolean(coverage.bindings), text: '完成原始字段到标准指标映射' },
+                  { done: data.keystone.textModels.includes(data.keystone.textModel), text: '验证 gpt-5.6-terra 文本推理' },
+                  { done: true, text: '保留 gpt-image-2 生图模型配置' },
+                ].map((item, idx) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: item.done ? '#0f172a' : '#64748b' }}>
+                    <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: item.done ? '#dcfce7' : '#f1f5f9', color: item.done ? '#15803d' : '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold' }}>
+                      {item.done ? '✓' : (idx + 1)}
+                    </span>
+                    <span>{item.text}</span>
+                  </div>
+                ))}
+              </div>
             </article>
           </section>
         </>
@@ -365,41 +333,75 @@ function MapList({
           </button>
         )}
       </div>
-      <div className="map-table">
-        <div className="map-tr map-th">
-          {c.cols.map((x) => (
-            <span key={x[0]}>{x[1]}</span>
-          ))}
-          <span>操作</span>
-        </div>
-        {c.rows.map((row) => (
-          <div className="map-tr" key={String(row.id)}>
-            {c.cols.map(([key]) => (
-              <span key={key}>
-                {key === 'size'
-                  ? size(row[key])
-                  : key.includes('At')
-                  ? cnTime(String(row[key]))
-                  : key === 'enabled'
-                  ? Number(row[key])
-                    ? '是'
-                    : '否'
-                  : shown(row[key])}
-              </span>
-            ))}
-            <span>
-              {c.entity !== 'asset' && (
-                <>
-                  <button onClick={() => edit(c.entity, { ...row })}>编辑</button>
-                  <button className="danger" onClick={() => remove(c.entity, row)}>
-                    删除
-                  </button>
-                </>
-              )}
-            </span>
-          </div>
-        ))}
-        {!c.rows.length && <EmptyState title={'尚未配置' + c.title} />}
+      <div className="ops-table-wrap" style={{ marginTop: '14px', background: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', overflowX: 'auto' }}>
+        <table className="ops-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              {c.cols.map((x) => (
+                <th key={x[0]} style={{ whiteSpace: 'nowrap', textAlign: 'left', padding: '12px 14px', background: '#f8fafc', color: '#475569', fontSize: '12.5px', borderBottom: '1px solid #e2e8f0' }}>
+                  {x[1]}
+                </th>
+              ))}
+              <th style={{ whiteSpace: 'nowrap', textAlign: 'right', padding: '12px 14px', background: '#f8fafc', color: '#475569', fontSize: '12.5px', borderBottom: '1px solid #e2e8f0', width: '120px' }}>
+                操作
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {c.rows.length > 0 ? (
+              c.rows.map((row) => (
+                <tr key={String(row.id)} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  {c.cols.map(([key]) => (
+                    <td key={key} style={{ padding: '12px 14px', fontSize: '13px', color: '#1e293b' }}>
+                      {key === 'size' ? (
+                        size(row[key])
+                      ) : key.includes('At') ? (
+                        <span style={{ color: '#64748b', fontSize: '12px' }}>{cnTime(String(row[key]))}</span>
+                      ) : key === 'enabled' ? (
+                        <span className={`section-mini-tag tag-${Number(row[key]) ? 'green' : 'gray'}`} style={{ fontSize: '11px' }}>
+                          {Number(row[key]) ? '是' : '否'}
+                        </span>
+                      ) : key === 'path' ? (
+                        <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '12px', color: '#0369a1' }}>
+                          {shown(row[key])}
+                        </code>
+                      ) : (
+                        shown(row[key])
+                      )}
+                    </td>
+                  ))}
+                  <td style={{ padding: '12px 14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                    {c.entity !== 'asset' && (
+                      <div style={{ display: 'inline-flex', gap: '6px' }}>
+                        <button
+                          type="button"
+                          onClick={() => edit(c.entity, { ...row })}
+                          style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#ffffff', cursor: 'pointer' }}
+                        >
+                          编辑
+                        </button>
+                        <button
+                          type="button"
+                          className="danger"
+                          onClick={() => remove(c.entity, row)}
+                          style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '6px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer' }}
+                        >
+                          删除
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={c.cols.length + 1} style={{ padding: '32px 0' }}>
+                  <EmptyState title={'尚未配置' + c.title} />
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </section>
   );

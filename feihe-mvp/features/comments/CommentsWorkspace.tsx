@@ -117,9 +117,9 @@ export function CommentsWorkspace({
   ];
 
   return (
-    <div className="ops-workspace overview-colorful-page reference-workspace">
+    <div className="ops-workspace overview-colorful-page reference-workspace" data-workspace-ui="v2">
       <PageHeader
-        eyebrow="FEIHE · Q3 COMMENTS"
+        variant="light"
         title="评论运营"
         subtitle="2026年 Q3 · 小红书口碑分析、评论采集、风险处置与供应商核验"
         badge={
@@ -133,7 +133,7 @@ export function CommentsWorkspace({
         </div>
       </PageHeader>
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       <div className="overview-block-content">
@@ -161,7 +161,7 @@ export function CommentsWorkspace({
            ) : (
              <CommentActionWorkbench
                projectId={projectId}
-                openNote={openNote}
+               openNote={openNote}
                onRefresh={onRefresh}
                toast={showToast}
              />
@@ -183,7 +183,7 @@ export function CommentsWorkspace({
          <SupplierVerification
            projectId={projectId}
            ops={ops}
-            openNote={openNote}
+           openNote={openNote}
            uploadWorkbook={uploadWorkbook}
            verifySupplier={verifySupplier}
            loading={loading}

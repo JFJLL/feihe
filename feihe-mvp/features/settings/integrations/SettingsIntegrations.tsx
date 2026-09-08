@@ -39,6 +39,7 @@ export function SettingsIntegrations({
     credentialStatus: { redtrend: false, oss: false, feishu: false, keystone: false },
   });
   const [integration, setIntegration] = useState<Record<string, unknown>>(emptyIntegration);
+  const [isAdding, setIsAdding] = useState(false);
   const [busy, setBusy] = useState('');
   const [loadError, setLoadError] = useState('');
   const [loaded, setLoaded] = useState(false);
@@ -70,6 +71,7 @@ export function SettingsIntegrations({
       });
       toast('工具集成已保存', 'success');
       setIntegration(emptyIntegration);
+      setIsAdding(false);
       await load();
     } catch (err) {
       toast(err instanceof Error ? err.message : '保存失败', 'error');
@@ -145,113 +147,206 @@ export function SettingsIntegrations({
         </span>
       </section>
 
-      <section className="platform-split">
-        <article className="platform-panel side-form-panel pastel-card reference-section section-blue">
-          <div className="section-kicker">CONNECTION PROFILE</div>
-          <h2>{integration.id ? '编辑集成' : '新增工具集成'}</h2>
-          <p className="section-copy">敏感凭证由托管环境管理，不写入数据库。</p>
-          <div className="platform-form">
-            <label>
-              集成名称
-              <input
-                value={String(integration.name || '')}
-                onChange={(e) => setIntegration({ ...integration, name: e.target.value })}
-              />
-            </label>
-            <label>
-              提供方
-              <select
-                value={String(integration.provider || 'redtrend')}
-                onChange={(e) => setIntegration({ ...integration, provider: e.target.value })}
-              >
-                <option value="redtrend">RedTrend / 内容与评论</option>
-                <option value="feishu">飞书开放平台</option>
-                <option value="oss">阿里云 OSS</option>
-                <option value="custom_http">自定义 HTTP API</option>
-              </select>
-            </label>
-            <label className="full">
-              Base URL
-              <input
-                value={String(integration.baseUrl || '')}
-                onChange={(e) => setIntegration({ ...integration, baseUrl: e.target.value })}
-                placeholder="https://..."
-              />
-            </label>
-            <label className="full">
-              接口路径与参数 JSON
-              <textarea
-                rows={7}
-                value={String(integration.configJson || '{}')}
-                onChange={(e) => setIntegration({ ...integration, configJson: e.target.value })}
-              />
-            </label>
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={integration.enabled !== false}
-                onChange={(e) => setIntegration({ ...integration, enabled: e.target.checked })}
-              />
-              启用此集成
-            </label>
-          </div>
-          <div className="editor-actions">
-            {Boolean(integration.id) && (
-              <button onClick={() => setIntegration(emptyIntegration)}>取消编辑</button>
-            )}
-            <button
-              className="primary"
-              disabled={busy === 'integration' || !integration.name}
-              onClick={saveIntegration}
-            >
-              保存集成
-            </button>
-          </div>
-        </article>
-
+      <section className="settings-integrations-section">
         <article className="platform-panel pastel-card reference-section section-teal">
-          <div className="list-head">
+          <div className="list-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <div className="section-kicker">ACTIVE CONNECTIONS</div>
-              <h2>当前项目的工具与接口</h2>
-              <p>抓取任务会优先使用这里启用的接口配置。</p>
+              <h2 style={{ margin: '2px 0 4px' }}>当前项目的工具与接口</h2>
+              <p style={{ margin: 0 }}>抓取任务会优先使用这里启用的接口配置；凭证由安全环境托管。</p>
             </div>
-            <b>{integrations.length}</b>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span className="section-mini-tag tag-blue" style={{ fontSize: '12px', padding: '4px 10px' }}>
+                共 {integrations.length} 个接口
+              </span>
+              {!isAdding && !integration.id && (
+                <button
+                  type="button"
+                  className="primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '13px' }}
+                  onClick={() => {
+                    setIntegration(emptyIntegration);
+                    setIsAdding(true);
+                  }}
+                >
+                  <span>＋</span> 新增工具集成
+                </button>
+              )}
+            </div>
           </div>
-          <div className="integration-list">
+
+          {(isAdding || Boolean(integration.id)) && (
+            <div
+              style={{
+                marginTop: '18px',
+                marginBottom: '18px',
+                padding: '20px',
+                background: '#f8fafc',
+                border: '1.5px solid #cbd5e1',
+                borderRadius: '10px',
+                boxShadow: '0 4px 12px rgba(15, 23, 42, 0.04)',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>
+                <div>
+                  <span className="section-mini-tag tag-blue" style={{ marginBottom: '4px' }}>
+                    {integration.id ? '编辑模式' : '新增模式'}
+                  </span>
+                  <h3 style={{ margin: '4px 0 0', fontSize: '16px', color: '#0f172a' }}>
+                    {integration.id ? ('编辑集成：' + String(integration.name || '')) : '新增工具接口集成'}
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  style={{ background: 'transparent', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b' }}
+                  onClick={() => {
+                    setIntegration(emptyIntegration);
+                    setIsAdding(false);
+                  }}
+                  title="关闭"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="platform-form" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+                <label>
+                  集成名称
+                  <input
+                    value={String(integration.name || '')}
+                    placeholder="如：RedTrend 内容与评论接口"
+                    onChange={(e) => setIntegration({ ...integration, name: e.target.value })}
+                  />
+                </label>
+                <label>
+                  提供方
+                  <select
+                    value={String(integration.provider || 'redtrend')}
+                    onChange={(e) => setIntegration({ ...integration, provider: e.target.value })}
+                  >
+                    <option value="redtrend">RedTrend / 内容与评论</option>
+                    <option value="feishu">飞书开放平台</option>
+                    <option value="oss">阿里云 OSS</option>
+                    <option value="custom_http">自定义 HTTP API</option>
+                  </select>
+                </label>
+                <label className="full">
+                  Base URL
+                  <input
+                    value={String(integration.baseUrl || '')}
+                    onChange={(e) => setIntegration({ ...integration, baseUrl: e.target.value })}
+                    placeholder="https://...（留空使用系统默认）"
+                  />
+                </label>
+                <label className="full">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>接口路径与参数 JSON（高级参数）</span>
+                    <small style={{ color: '#94a3b8', fontWeight: 'normal' }}>普通业务人员通常无需修改</small>
+                  </div>
+                  <textarea
+                    rows={5}
+                    style={{ fontFamily: 'monospace', fontSize: '12px' }}
+                    value={String(integration.configJson || '{}')}
+                    onChange={(e) => setIntegration({ ...integration, configJson: e.target.value })}
+                  />
+                </label>
+                <label className="check" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={integration.enabled !== false}
+                    onChange={(e) => setIntegration({ ...integration, enabled: e.target.checked })}
+                  />
+                  启用此集成服务
+                </label>
+              </div>
+
+              <div className="editor-actions" style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIntegration(emptyIntegration);
+                    setIsAdding(false);
+                  }}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+                >
+                  取消
+                </button>
+                <button
+                  type="button"
+                  className="primary"
+                  disabled={busy === 'integration' || !integration.name}
+                  onClick={saveIntegration}
+                >
+                  {busy === 'integration' ? '正在保存…' : '保存集成'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="integration-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '14px' }}>
             {integrations.length ? (
               integrations.map((item) => (
-                <div key={item.id}>
-                  <span>
-                    <strong>{item.name}</strong>
-                    <small>
-                      {item.enabled ? '已启用' : '已停用'} · {item.provider} · {item.baseUrl || '使用环境默认地址'}
-                    </small>
-                    <em>
-                      最近检测 {cnTime(item.lastTestedAt)}
-                      {item.lastError ? ' · ' + item.lastError : ''}
-                    </em>
-                  </span>
-                  <i className={item.lastTestedAt && !item.lastError && item.status === '连接正常' ? 'ok' : 'warn'}>
-                    {item.lastError ? '检测异常' : !item.lastTestedAt ? '尚无检测记录' : item.status}
-                  </i>
-                  <button
-                    onClick={() =>
-                      setIntegration({ ...item, enabled: Boolean(item.enabled) })
-                    }
-                  >
-                    编辑
-                  </button>
-                  <button disabled={busy === item.id} onClick={() => testIntegration(item)}>
-                    检测
-                  </button>
-                  <button className="danger-link" onClick={() => removeIntegration(item)}>
-                    删除
-                  </button>
+                <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <strong style={{ fontSize: '14px', color: '#0f172a' }}>{item.name}</strong>
+                      <span className={`section-mini-tag tag-${item.enabled ? 'green' : 'gray'}`} style={{ fontSize: '11px' }}>
+                        {item.enabled ? '已启用' : '已停用'}
+                      </span>
+                      <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>
+                        {item.provider}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#64748b' }}>
+                      地址：<code style={{ color: '#0369a1' }}>{item.baseUrl || '使用环境默认托管配置'}</code>
+                    </div>
+                    {item.lastError && (
+                      <div style={{ fontSize: '11.5px', color: '#e11d48' }}>
+                        ⚠ 检测异常：{item.lastError}
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: 600, color: item.lastTestedAt && !item.lastError && item.status === '连接正常' ? '#16a34a' : '#ea580c' }}>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: item.lastTestedAt && !item.lastError && item.status === '连接正常' ? '#16a34a' : '#ea580c' }} />
+                      {item.lastError ? '检测异常' : !item.lastTestedAt ? '尚无检测记录' : item.status}
+                    </span>
+                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+                      {item.lastTestedAt ? cnTime(item.lastTestedAt) : '未检测'}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                    <button
+                      type="button"
+                      disabled={busy === item.id}
+                      onClick={() => testIntegration(item)}
+                      style={{ padding: '6px 12px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #0284c7', background: '#f0f9ff', color: '#0284c7', cursor: 'pointer', fontWeight: 500 }}
+                    >
+                      {busy === item.id ? '检测中…' : '检测连接'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIntegration({ ...item, enabled: Boolean(item.enabled) });
+                        setIsAdding(false);
+                      }}
+                      style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+                    >
+                      编辑
+                    </button>
+                    <button
+                      type="button"
+                      className="danger-link"
+                      style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer' }}
+                      onClick={() => removeIntegration(item)}
+                    >
+                      删除
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (
-              <EmptyState title="当前项目尚未配置工具集成" />
+              <EmptyState title="当前项目尚未配置工具集成" text="点击右上角「新增工具集成」添加自定义接口。" />
             )}
           </div>
         </article>

@@ -6,6 +6,8 @@ import { numeric, completeSum, display, ratio, percent } from './metrics';
 import { HorizontalBarList } from '../overview/OverviewCharts';
 import { GrowthReadout } from './GrowthReadout';
 import { sampleDirection, REVIEW_DIRECTION } from './directions';
+import { paletteColor } from '../../lib/workspace-palette';
+
 
 export function GrowthSampleBoard({ notes, threshold }: { notes: Note[]; threshold: number }) {
   const observed = notes.filter(n => numeric(n.interactionCount) !== null);
@@ -33,7 +35,7 @@ export function GrowthSampleBoard({ notes, threshold }: { notes: Note[]; thresho
         <section className="panel" style={{ minWidth: 0, overflowWrap: 'anywhere' }} aria-label="有效内容方向贡献图">
           <h3>有效方向样本贡献</h3>
           <p className="metric-note">展示前 8 个方向；分母为全部 {classified} 篇有效分类样本，未展示方向仍计入分母。</p>
-          {validGroups.length ? <HorizontalBarList items={validGroups.slice(0, 8).map((g, i) => ({ label: g.direction, amount: g.count, pct: Number(ratio(g.count, classified)) * 100, color: ['#0284c7', '#0d9488', '#8b5cf6', '#16a34a'][i % 4], subText: g.count + ' 篇 · 高热 ' + g.hot + ' 篇' }))} /> : <EmptyState title="暂无有效内容方向" text="请核对分类字段后查看方向贡献；待核对样本不会作为方向上榜。" />}
+          {validGroups.length ? <HorizontalBarList items={validGroups.slice(0, 8).map((g) => ({ label: g.direction, amount: g.count, pct: Number(ratio(g.count, classified)) * 100, color: paletteColor('direction:' + g.direction), subText: g.count + ' 篇 · 高热 ' + g.hot + ' 篇' }))} /> : <EmptyState title="暂无有效内容方向" text="请核对分类字段后查看方向贡献；待核对样本不会作为方向上榜。" />}
         </section>
         <div style={{ minWidth: 0, maxWidth: '100%' }}>
           {groups.length ? <div className="ops-table-wrap" style={{ width: '100%', maxWidth: '100%', overflowX: 'auto' }}><table className="ops-table" style={{ tableLayout: 'fixed', width: '100%', minWidth: '720px' }}><thead><tr><th style={directionStyle}>方向</th><th>样本数</th><th>样本份额</th><th>互动覆盖</th><th>高热样本</th><th>高热率</th><th>篇均互动</th></tr></thead><tbody>{[...validGroups, ...groups.filter(g => g.direction === REVIEW_DIRECTION)].map(g => <tr key={g.direction}><td style={directionStyle}>{g.direction}</td><td>{g.count}</td><td>{percent(ratio(g.count, notes.length))}</td><td>{g.valid} / {g.count}</td><td>{g.hot}</td><td>{percent(ratio(g.hot, g.valid))}</td><td><GrowthReadout value={ratio(g.interactions, g.valid)} /></td></tr>)}</tbody></table></div> : <EmptyState title="暂无样本" text="同步项目内容后显示机会分布。" />}

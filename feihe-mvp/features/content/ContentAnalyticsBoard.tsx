@@ -5,7 +5,7 @@ import { sourceLabel } from './content-view-model';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { TierDoughnutChart, HorizontalBarList } from '../overview/OverviewCharts';
 
-const colors = ['#0284c7', '#16a34a', '#9333ea', '#ea580c', '#64748b'];
+const colors = ['#1e6091', '#3f815e', '#7864a5', '#a66f22', '#64748b'];
 const count = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : 0;
 
 export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {

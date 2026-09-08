@@ -35,6 +35,7 @@ export function RulesAndTargets({
   });
   const [pipelineName, setPipelineName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showCompletedJobs, setShowCompletedJobs] = useState(false);
 
   const list = (value: string) =>
     value
@@ -96,11 +97,21 @@ export function RulesAndTargets({
 
   const pipelineBudget = pipelines.reduce((sum, row) => sum + num(row.budget), 0);
   const pipelineComments = pipelines.reduce((sum, row) => sum + num(row.targetCount), 0);
+  const completedJobs = (ops.jobs || []).filter(j => j.status === '已完成');
 
   return (
     <div className="stack">
       <section className="ops-metric-grid" aria-label="已保存的目标与执行概况">
-        <MetricCard label="历史已完成任务" value={num(ops.settings.goals.workCompleted)} unit="项" theme="green" tag="系统只读" desc={`项目总目标 ${num(ops.settings.goals.workTarget)} 项 · 来自已保存的执行统计`} />
+        <MetricCard
+          label="历史已完成任务"
+          value={num(ops.settings.goals.workCompleted)}
+          unit="项"
+          theme="green"
+          tag="点击查看明细 ↗"
+          desc={`项目总目标 ${num(ops.settings.goals.workTarget)} 项 · 点击卡片可查看完成的具体任务明细`}
+          clickable
+          onClick={() => setShowCompletedJobs(true)}
+        />
         <MetricCard label="月度 / 季度目标" value={`${num(ops.settings.goals.monthlyTarget)} / ${num(ops.settings.goals.quarterlyTarget)}`} unit="项" theme="purple" tag="已保存" desc="月度与季度独立维护；0 表示尚未设置目标" />
         <MetricCard label="已发布笔记" value={num(data.metrics.publishedCount)} unit="篇" theme="blue" desc={`来自项目笔记库 · 发布目标 ${num(ops.settings.goals.publishTarget)} 篇`} />
         <MetricCard label="启用的补充规则" value={ops.reviewRules.filter(item => Boolean(item.enabled)).length} unit="条" theme="teal" desc={`已登记 ${ops.reviewRules.length} 条 · 执行主线 ${data.pipelines.length} 条`} />
@@ -213,38 +224,39 @@ export function RulesAndTargets({
               />
             </label>
             <label>
-              前排产品提及率（%）
-              <input
-                type="number"
-                value={acceptance.brandTopRate * 100}
-                onChange={(e) =>
-                  setAcceptance({ ...acceptance, brandTopRate: num(e.target.value) / 100 })
-                }
-              />
-            </label>
-            <label>
-              数据新鲜度（小时）
-              <input
-                type="number"
-                value={acceptance.freshnessHours || 24}
-                onChange={(e) =>
-                  setAcceptance({ ...acceptance, freshnessHours: num(e.target.value) })
-                }
-              />
-            </label>
-            <label>
-              供应商相似度阈值（%）
-              <input
-                type="number"
-                value={(acceptance.supplierSimilarity || 0.58) * 100}
-                onChange={(e) =>
-                  setAcceptance({
-                    ...acceptance,
-                    supplierSimilarity: num(e.target.value) / 100,
-                  })
-                }
-              />
-            </label>
+             前排产品提及率（%）
+             <input
+               type="number"
+               value={acceptance.brandTopRate * 100}
+               onChange={(e) =>
+                 setAcceptance({ ...acceptance, brandTopRate: num(e.target.value) / 100 })
+               }
+             />
+           </label>
+           <label>
+             数据新鲜度（小时）
+             <input
+               type="number"
+               value={acceptance.freshnessHours || 24}
+               onChange={(e) =>
+                 setAcceptance({ ...acceptance, freshnessHours: num(e.target.value) })
+               }
+             />
+           </label>
+           <label>
+             供应商相似度阈值（%）
+             <input
+               type="number"
+                step="1"
+                value={Math.round((acceptance.supplierSimilarity ?? 0.58) * 100)}
+               onChange={(e) =>
+                 setAcceptance({
+                   ...acceptance,
+                    supplierSimilarity: Math.round(num(e.target.value)) / 100,
+                 })
+               }
+             />
+           </label>
           </div>
         </article>
 
@@ -309,15 +321,16 @@ export function RulesAndTargets({
                 onChange={(e) => setRules({ ...rules, irrelevantWords: list(e.target.value) })}
               />
             </label>
-            <label className="check-label">
+            <label className="check-label full-width-check" style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginTop: '4px', userSelect: 'none' }}>
               <input
                 type="checkbox"
+                style={{ width: '16px', height: '16px', margin: 0, cursor: 'pointer' }}
                 checked={rules.deleteCompetitorMentions !== false}
                 onChange={(e) =>
                   setRules({ ...rules, deleteCompetitorMentions: e.target.checked })
                 }
               />
-              竞品提及默认进入“需删除”
+              <span>竞品提及默认进入“需删除”</span>
             </label>
           </div>
         </article>
@@ -473,6 +486,86 @@ export function RulesAndTargets({
           </button>
         </div>
       </section>
+
+      {/* 已完成任务明细查看弹窗 */}
+      {showCompletedJobs && (
+        <div className="entity-backdrop" onMouseDown={() => setShowCompletedJobs(false)}>
+          <div
+            className="entity-editor"
+            onMouseDown={(e) => e.stopPropagation()}
+            style={{ width: '840px', maxWidth: '95vw', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}
+          >
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px', marginBottom: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span className="section-mini-tag tag-green">系统记录</span>
+                <h2 style={{ fontSize: '17px', margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                  已完成任务明细 ({completedJobs.length} 项)
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowCompletedJobs(false)}
+                aria-label="关闭弹窗"
+                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#64748b' }}
+              >
+                ×
+              </button>
+            </header>
+
+            <div style={{ flex: 1, overflowY: 'auto', minHeight: '260px' }}>
+              {completedJobs.length > 0 ? (
+                <table className="ops-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'left', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>任务名称</th>
+                      <th style={{ textAlign: 'left', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>类型</th>
+                      <th style={{ textAlign: 'center', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>处理进度</th>
+                      <th style={{ textAlign: 'left', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>执行结果</th>
+                      <th style={{ textAlign: 'right', padding: '10px 12px', background: '#f8fafc', color: '#475569', fontSize: '12.5px' }}>完成时间</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {completedJobs.map((job) => (
+                      <tr key={job.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '10px 12px', fontSize: '13px', fontWeight: 600, color: '#0f172a' }}>
+                          {job.title}
+                        </td>
+                        <td style={{ padding: '10px 12px', fontSize: '12.5px', color: '#64748b' }}>
+                          <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>
+                            {job.type}
+                          </span>
+                        </td>
+                        <td style={{ padding: '10px 12px', textAlign: 'center', fontSize: '12.5px', color: '#16a34a', fontWeight: 600 }}>
+                          {job.succeeded || job.progress} / {job.total || job.progress}
+                        </td>
+                        <td style={{ padding: '10px 12px', fontSize: '12px', color: '#475569', maxWidth: '260px' }}>
+                          {job.message || '执行成功完成'}
+                        </td>
+                        <td style={{ padding: '10px 12px', textAlign: 'right', fontSize: '12px', color: '#94a3b8', whiteSpace: 'nowrap' }}>
+                          {job.finishedAt || job.createdAt}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <EmptyState title="暂无已完成任务记录" text="系统作业执行完成后将在此处归档留痕。" />
+              )}
+            </div>
+
+            <footer style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #e2e8f0', paddingTop: '12px' }}>
+              <button
+                type="button"
+                className="primary"
+                onClick={() => setShowCompletedJobs(false)}
+                style={{ padding: '7px 16px', fontSize: '13px' }}
+              >
+                关闭
+              </button>
+            </footer>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

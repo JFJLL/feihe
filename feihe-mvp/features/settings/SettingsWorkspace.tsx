@@ -91,9 +91,9 @@ export function SettingsWorkspace({
   ];
 
   return (
-    <div className="stack ops-workspace reference-workspace settings-workspace">
+    <div className="stack ops-workspace reference-workspace settings-workspace" data-workspace-ui="v2">
       <PageHeader
-        eyebrow="PROJECT SETTINGS"
+        variant="light"
         title="项目设置"
         subtitle="集中管理当前项目的低频配置、目标规则、数据源与数据地图。"
         badge={
@@ -104,18 +104,18 @@ export function SettingsWorkspace({
         }
       />
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
 
-      {tab === 'profile' && (
+      <div style={{ display: tab === 'profile' ? 'block' : 'none' }}>
         <ProjectProfile
           project={currentProject}
           projectId={projectId}
           onDone={handleProfileOrSourceUpdate}
           toast={showToast}
         />
-      )}
+      </div>
 
-      {tab === 'rules' && (
+      <div style={{ display: tab === 'rules' ? 'block' : 'none' }}>
         <RulesAndTargets
           key={projectId}
           data={dashboard}
@@ -124,9 +124,9 @@ export function SettingsWorkspace({
           onDone={onRefresh}
           toast={showToast}
         />
-      )}
+      </div>
 
-      {tab === 'data-sources' && (
+      <div style={{ display: tab === 'data-sources' ? 'block' : 'none' }}>
         <SettingsDataSources
           key={projectId}
           projectId={projectId}
@@ -134,27 +134,31 @@ export function SettingsWorkspace({
           onDone={handleProfileOrSourceUpdate}
           toast={showToast}
         />
-      )}
+      </div>
 
-      {tab === 'integrations' && (
+      <div style={{ display: tab === 'integrations' ? 'block' : 'none' }}>
         <SettingsIntegrations
           key={projectId}
           projectId={projectId}
           toast={showToast}
         />
-      )}
+      </div>
 
-      {tab === 'data-map' && (
-        mapError ? <ErrorState error={mapError} onRetry={reloadMap} /> :
-        mapLoadedFor !== projectId ? <LoadingState text="正在加载当前项目的数据地图…" /> :
-        <DataMap
-          key={projectId}
-          projectId={projectId}
-          data={map}
-          reload={reloadMap}
-          toast={showToast}
-        />
-      )}
+      <div style={{ display: tab === 'data-map' ? 'block' : 'none' }}>
+        {mapError ? (
+          <ErrorState error={mapError} onRetry={reloadMap} />
+        ) : mapLoadedFor !== projectId ? (
+          <LoadingState text="正在加载当前项目的数据地图…" />
+        ) : (
+          <DataMap
+            key={projectId}
+            projectId={projectId}
+            data={map}
+            reload={reloadMap}
+            toast={showToast}
+          />
+        )}
+      </div>
     </div>
   );
 }

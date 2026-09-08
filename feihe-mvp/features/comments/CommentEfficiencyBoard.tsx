@@ -8,9 +8,9 @@ type Summary = { totalPending: number; replyPending: number; deletePending: numb
 
 export function CommentEfficiencyBoard({ summary, onSelectAction }: { summary: Summary; onSelectAction: (action: string) => void }) {
   const actions = [
-    { action: 'reply', label: '需回复', amount: summary.replyPending, color: '#0284c7' },
-    { action: 'delete', label: '需删除', amount: summary.deletePending, color: '#dc2626' },
-    { action: 'supplement', label: '需补充', amount: summary.supplementPending, color: '#ea580c' },
+    { action: 'reply', label: '需回复', amount: summary.replyPending, color: '#1e6091' },
+    { action: 'delete', label: '需删除', amount: summary.deletePending, color: '#b0483f' },
+    { action: 'supplement', label: '需补充', amount: summary.supplementPending, color: '#a66f22' },
     { action: 'observe', label: '保留观察', amount: summary.observePending, color: '#64748b' },
   ];
   // Each pending field counts independent action matches, while handledCount

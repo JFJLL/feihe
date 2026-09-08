@@ -55,9 +55,9 @@ export function GrowthWorkspace({
   ];
 
   return (
-    <div className="ops-workspace overview-colorful-page reference-workspace">
+    <div className="ops-workspace overview-colorful-page reference-workspace" data-workspace-ui="v2">
       <PageHeader
-        eyebrow="FEIHE · COMPETITOR"
+        variant="light"
         title="竞品分析"
         subtitle="项目样本竞争格局 · 独立来源搜索趋势 · 关键词机会与选题流转"
         badge={<span>{dashboard.analytics.brands?.length || 0} 个品牌分组</span>}
@@ -67,7 +67,7 @@ export function GrowthWorkspace({
         </div>
       </PageHeader>
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} />
+      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       <div className="overview-block-content">

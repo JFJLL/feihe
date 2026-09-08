@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 export type PageHeaderProps = {
   title: string;
@@ -6,6 +6,8 @@ export type PageHeaderProps = {
   eyebrow?: string;
   badge?: React.ReactNode;
   children?: React.ReactNode;
+  /** 'banner' keeps the overview navy hero; 'light' is the compact workspace header. */
+  variant?: 'banner' | 'light';
 };
 
 export function PageHeader({
@@ -14,11 +16,17 @@ export function PageHeader({
   eyebrow,
   badge,
   children,
+  variant = 'banner',
 }: PageHeaderProps) {
   return (
-    <section className="ui-page-header">
+    <section
+      className={`ui-page-header${variant === 'light' ? ' ui-page-header-light' : ''}`}
+      data-header-variant={variant}
+    >
       <div className="ui-page-header-main">
-        {eyebrow && <small className="ui-page-header-eyebrow">{eyebrow}</small>}
+        {eyebrow && variant === 'banner' && (
+          <small className="ui-page-header-eyebrow">{eyebrow}</small>
+        )}
         <div className="ui-page-header-title-row">
           <h1 className="ui-page-header-title">{title}</h1>
           {badge && <div className="ui-page-header-badge">{badge}</div>}

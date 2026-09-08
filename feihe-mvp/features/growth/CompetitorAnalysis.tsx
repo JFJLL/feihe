@@ -10,7 +10,7 @@ import { CustomSelect } from '../../components/ui/CustomSelect';
 import { BrandLandscape } from './BrandLandscape';
 import { CompetitorIntelligenceSection } from './CompetitorIntelligenceSection';
 import { numeric, percent, ratio, completeSum, change, previousMonth, compactMetric } from './metrics';
-import { HorizontalBarList } from '../overview/OverviewCharts';
+import { paletteColor } from '../../lib/workspace-palette';
 
 export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onSwitchTab?: (tab: string) => void }) {
   const [selectedMonth, setSelectedMonth] = useState('');
@@ -74,22 +74,17 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
             {(() => {
               const maxVal = Math.max(1, ...current.map(c => numeric(c.value) || 0));
               const prevMonth = previousMonth(month);
-              const barColors = ['#0284c7', '#0d9488', '#8b5cf6', '#16a34a', '#d97706', '#6366f1', '#ec4899', '#f43f5e', '#84cc16'];
               return current.map((row, i) => {
                 const val = numeric(row.value) || 0;
                 const pct = (val / maxVal) * 100;
                 const prev = monthly.filter(r => r.month === prevMonth && r.brand === row.brand && r.sheetId === row.sheetId);
                 const unique = current.filter(r => r.brand === row.brand && r.sheetId === row.sheetId).length === 1;
-                const diff = change(row.value, unique && prev.length === 1 ? prev[0].value : null);
-                const diffPct = percent(diff);
-                const isPositive = diff !== null && diff > 0;
-                const isNegative = diff !== null && diff < 0;
                 return (
                   <tr key={row.sheetId + row.brand + i}>
                     <td>
                       <div style={{ marginBottom: 4 }}><strong>{row.brand}</strong></div>
                       <div style={{ height: 5, background: '#edf2f7', borderRadius: 3, overflow: 'hidden', width: '100%' }}>
-                        <div style={{ width: `${Math.max(4, pct)}%`, height: '100%', background: barColors[i % barColors.length], borderRadius: 3 }} />
+                        <div style={{ width: `${Math.max(4, pct)}%`, height: '100%', background: paletteColor('brand:' + row.brand), borderRadius: 3 }} />
                       </div>
                     </td>
                     <td><GrowthReadout value={row.value} /></td>

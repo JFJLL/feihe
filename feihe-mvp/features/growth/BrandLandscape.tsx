@@ -2,18 +2,19 @@ import type { AnalyticRow } from '../../lib/types/project';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { HorizontalBarList, TierDoughnutChart } from '../overview/OverviewCharts';
-import { GrowthMetricCard, GrowthReadout } from './GrowthReadout';
+import { GrowthReadout } from './GrowthReadout';
 import { numeric, compactMetric, display, completeSum, percent, ratio } from './metrics';
+import { paletteColor } from '../../lib/workspace-palette';
 
-const colors = ['#0284c7', '#0d9488', '#8b5cf6', '#16a34a', '#d97706', '#4f46e5'];
-const themes = ['blue', 'teal', 'purple', 'green', 'yellow', 'indigo'] as const;
+/** Brand colors come from the stable brand key, not the current row order. */
+const brandColor = (brand: string) => paletteColor('brand:' + brand);
 
 /** Cards, charts and detail table share the SQL-normalized brand rows. */
 export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
   const totalNotes = completeSum(brands.map(row => row.notes));
   const observed = brands.filter(row => numeric(row.interactions) !== null);
   const totalInteractions = completeSum(observed.map(row => row.interactions));
-  const colored = brands.map((row, i) => ({ row, color: colors[i % colors.length] }));
+  const colored = brands.map((row) => ({ row, color: brandColor(String(row.brand)) }));
   const contributions = colored.filter(({ row }) => (numeric(row.interactions) ?? 0) > 0)
     .sort((a, b) => Number(b.row.interactions) - Number(a.row.interactions));
   const single = brands.length === 1 ? brands[0] : null;
