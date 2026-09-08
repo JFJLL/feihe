@@ -24,6 +24,10 @@ async function storage() {
   await db().prepare(`CREATE TABLE IF NOT EXISTS feishu_sheet_snapshots (
     project_id TEXT NOT NULL,sheet_id TEXT NOT NULL,payload_json TEXT NOT NULL DEFAULT 'null',
     report_json TEXT NOT NULL,fingerprint TEXT NOT NULL DEFAULT '',PRIMARY KEY(project_id,sheet_id))`).run();
+  await db().prepare(`CREATE TABLE IF NOT EXISTS feishu_aggregated_cache (
+    project_id TEXT PRIMARY KEY,
+    data_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL)`).run();
 }
 async function request(path: string, token?: string, body?: unknown, attempt = 0): Promise<FeishuResponse> {
   const response = await fetch('https://open.feishu.cn/open-apis/'+path, {
@@ -119,12 +123,24 @@ async function normalize(rows: unknown[][], sheet: SheetDefinition, project: str
   return parsePlanning(rows,sheet.kind);
 }
 
-export async function readFeishuData(project: string): Promise<FeishuData> {
-  const cached = feishuDataCache.get(project);
-  if (cached && Date.now() - cached.timestamp < FEISHU_CACHE_TTL) {
-    return cached.data;
+export async function readFeishuData(project: string, fresh = false): Promise<FeishuData> {
+  if (!fresh) {
+    const cached = feishuDataCache.get(project);
+    if (cached && Date.now() - cached.timestamp < FEISHU_CACHE_TTL) {
+      return cached.data;
+    }
+    await storage();
+    const persisted = await db().prepare('SELECT data_json FROM feishu_aggregated_cache WHERE project_id=?').bind(project).first<{ data_json: string }>();
+    if (persisted?.data_json) {
+      try {
+        const parsed = JSON.parse(persisted.data_json) as FeishuData;
+        feishuDataCache.set(project, { data: parsed, timestamp: Date.now() });
+        return parsed;
+      } catch {}
+    }
+  } else {
+    await storage();
   }
-  await storage();
   const stored=(await db().prepare('SELECT * FROM feishu_sheet_snapshots WHERE project_id=?').bind(project).all<Stored>()).results || [];
   const reports=stored.map(s=>JSON.parse(s.report_json) as SheetReport);
   const payload=(id:string)=>JSON.parse(stored.find(s=>s.sheet_id===id)?.payload_json || '[]') || [];
@@ -155,6 +171,12 @@ export async function readFeishuData(project: string): Promise<FeishuData> {
     planning: [...payload('7XkqoO'), ...payload('7G0dkc')],
     intelligence,
   };
+  try {
+    await db().prepare(`INSERT INTO feishu_aggregated_cache(project_id, data_json, updated_at)
+      VALUES(?, ?, ?)
+      ON CONFLICT(project_id) DO UPDATE SET data_json=excluded.data_json, updated_at=excluded.updated_at`)
+      .bind(project, JSON.stringify(result), new Date().toISOString()).run();
+  } catch {}
   feishuDataCache.set(project, { data: result, timestamp: Date.now() });
   return result;
 }
@@ -218,7 +240,7 @@ async function runSync(project: string): Promise<FeishuSyncResult> {
       .bind(failed.length?'同步失败':'同步正常',failed.length,now,docReports.reduce((a,b)=>a+b.rows,0),failed.map(r=>`${r.sheetName}: ${r.error}`).join('；'),now,project,doc.id).run();
   }
   invalidateFeishuCache(project);
-  const data=await readFeishuData(project), errors=reports.filter(r=>r.status==='error').map(r=>`${r.sheetName}：${r.error}`);
+  const data=await readFeishuData(project, true), errors=reports.filter(r=>r.status==='error').map(r=>`${r.sheetName}：${r.error}`);
   const succeeded=reports.length-errors.length,changed=reports.filter(r=>r.status==='success'&&r.changed).length;
   return {ok:!errors.length,importedNotes,dailyMetricsUpdated:data.daily.length,sourcesUpdated:FEISHU_DOCUMENTS.filter(d=>reports.filter(r=>r.document===d.title).every(r=>r.status==='success')).length,
     latestDate:data.latestDate,reports,errors:errors.length?errors:undefined,

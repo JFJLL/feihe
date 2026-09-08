@@ -45,10 +45,10 @@ export async function GET(request: Request) {
     }
    }
 
-    // 确保日度表已就绪
-    const feishu = await readFeishuData(project);
+   // 确保日度表已就绪
+   const feishu = await readFeishuData(project, fresh);
 
-    const clauses: string[] = ['pn.project_id=?'];
+   const clauses: string[] = ['pn.project_id=?'];
     const values: string[] = [project];
     const from = params.get('from');
     const to = params.get('to');
