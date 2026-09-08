@@ -218,9 +218,44 @@ label:has(select),
 .ops-workspace .ops-metric-card-teal { --metric-tint: #effbf9; --metric-line: #b6e7df; --metric-accent: #32998d; }
  .ops-workspace .ops-metric-card-green { --metric-tint: #f0fdf4; --metric-line: #bbf7d0; --metric-accent: #10b981; }
  .ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: #faf5ff; --metric-line: #e9d5ff; --metric-accent: #8b5cf6; }
- .ops-workspace .ops-metric-card-yellow { --metric-tint: #fffbeb; --metric-line: #fde68a; --metric-accent: #f59e0b; }
- .ops-workspace .ops-metric-card-red { --metric-tint: #fff1f2; --metric-line: #fecdd3; --metric-accent: #f43f5e; }
- .ops-workspace .ops-metric-card-cyan { --metric-tint: #ecfeff; --metric-line: #a5f3fc; --metric-accent: #06b6d4; }
+.ops-workspace .ops-metric-card-yellow { --metric-tint: #fffbeb; --metric-line: #fde68a; --metric-accent: #f59e0b; }
+.ops-workspace .ops-metric-card-red { --metric-tint: #fff1f2; --metric-line: #fecdd3; --metric-accent: #f43f5e; }
+.ops-workspace .ops-metric-card-cyan { --metric-tint: #ecfeff; --metric-line: #a5f3fc; --metric-accent: #06b6d4; }
+
+/* ==========================================================================
+   Project-Wide Rich & Harmonious Multi-Module Palette (Beyond All-Blue)
+   ========================================================================== */
+/* 侧边导航 5 大板块专属色彩识别 */
+.project-nav a:nth-child(1).active, .project-nav [data-nav="overview"].active { border-left-color: #d97706 !important; background: linear-gradient(90deg, #fffbeb, #ffffff) !important; color: #b45309 !important; }
+.project-nav a:nth-child(2).active, .project-nav [data-nav="growth"].active { border-left-color: #8b5cf6 !important; background: linear-gradient(90deg, #faf5ff, #ffffff) !important; color: #6d28d9 !important; }
+.project-nav a:nth-child(3).active, .project-nav [data-nav="content"].active { border-left-color: #f97316 !important; background: linear-gradient(90deg, #fff7ed, #ffffff) !important; color: #c2410c !important; }
+.project-nav a:nth-child(4).active, .project-nav [data-nav="comments"].active { border-left-color: #10b981 !important; background: linear-gradient(90deg, #f0fdf4, #ffffff) !important; color: #047857 !important; }
+.project-nav a:nth-child(5).active, .project-nav [data-nav="settings"].active { border-left-color: #6366f1 !important; background: linear-gradient(90deg, #eef2ff, #ffffff) !important; color: #4338ca !important; }
+
+/* 各板块卡片多样化微渐变与呼吸感 */
+.pastel-card.pastel-blue { background: linear-gradient(135deg, #ffffff 40%, #eff6ff 100%) !important; border: 1px solid #bfdbfe !important; border-top: 3px solid #2563eb !important; }
+.pastel-card.pastel-teal { background: linear-gradient(135deg, #ffffff 40%, #ecfeff 100%) !important; border: 1px solid #a5f3fc !important; border-top: 3px solid #0891b2 !important; }
+.pastel-card.pastel-green { background: linear-gradient(135deg, #ffffff 40%, #f0fdf4 100%) !important; border: 1px solid #bbf7d0 !important; border-top: 3px solid #10b981 !important; }
+.pastel-card.pastel-purple { background: linear-gradient(135deg, #ffffff 40%, #faf5ff 100%) !important; border: 1px solid #e9d5ff !important; border-top: 3px solid #8b5cf6 !important; }
+.pastel-card.pastel-yellow { background: linear-gradient(135deg, #ffffff 40%, #fffbeb 100%) !important; border: 1px solid #fde68a !important; border-top: 3px solid #f59e0b !important; }
+.pastel-card.pastel-red { background: linear-gradient(135deg, #ffffff 40%, #fff1f2 100%) !important; border: 1px solid #fecdd3 !important; border-top: 3px solid #f43f5e !important; }
+.pastel-card.pastel-orange { background: linear-gradient(135deg, #ffffff 40%, #fff7ed 100%) !important; border: 1px solid #fed7aa !important; border-top: 3px solid #ea580c !important; }
+
+/* 胶囊标签色彩库 */
+.section-mini-tag.tag-orange { background: #fff7ed !important; color: #c2410c !important; border: 1px solid #ffedd5 !important; }
+.section-mini-tag.tag-emerald { background: #ecfdf5 !important; color: #047857 !important; border: 1px solid #d1fae5 !important; }
+.section-mini-tag.tag-rose { background: #fff1f2 !important; color: #be123c !important; border: 1px solid #ffe4e6 !important; }
+.section-mini-tag.tag-amber { background: #fffbeb !important; color: #b45309 !important; border: 1px solid #fef3c7 !important; }
+.section-mini-tag.tag-indigo { background: #eef2ff !important; color: #4338ca !important; border: 1px solid #e0e7ff !important; }
+
+/* 提升各面板立体光影与留白 */
+.ops-workspace .panel, .ops-workspace .pastel-card, .ops-workspace .ops-section-card {
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02) !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.ops-workspace .panel:hover, .ops-workspace .pastel-card:hover {
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07), 0 2px 5px rgba(15, 23, 42, 0.03) !important;
+}
 .ops-workspace .ops-metric-card .stat-value { margin: 7px 0 3px; font-size: clamp(24px, 2.2vw, 32px); line-height: 1.25; overflow-wrap: anywhere; }
 .ops-workspace .ops-metric-card .stat-value small { font-size: 12px; font-weight: 500; color: #52657c; }
 .ops-workspace .ops-metric-card[role="button"]:hover { transform: translateY(-2px); box-shadow: 0 6px 16px #1e609113; }

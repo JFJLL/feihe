@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState, useMemo, type ReactNode } from 'react';
 import type { CompetitorIntelligenceData } from '../../lib/competitor-intelligence';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { GrowthMetricCard as MetricCard, GrowthReadout } from './GrowthReadout';
@@ -54,6 +54,50 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
   const notes = completeSum(rows.map(p => p.notes));
   const feiheData = performance.find(p => p.brand === 'feihe' && p.month === month) || performance.find(p => p.brand === 'feihe');
   const currentBattle = comparisonGroups?.find(g => g.id === activeBattle) || comparisonGroups?.[0];
+  const prevMonth = months[months.indexOf(month) - 1] || '';
+
+  // 灵犀多品牌搜索走势数据
+  const brandSearchTrends = useMemo(() => {
+    if (!searchIndex || !searchIndex.length) return [];
+    const brandEntities = searchIndex.filter(s => s.level === 'brand');
+    const monthList = [...new Set(brandEntities.map(s => s.month))].sort();
+    return monthList.map(m => {
+      const row: { date: string; [key: string]: number | string | null } = { date: m };
+      brands.forEach(b => {
+        const match = brandEntities.find(s => s.brand === b.id && s.month === m);
+        row[b.id] = match ? match.value : null;
+      });
+      return row;
+    });
+  }, [searchIndex, brands]);
+
+  // 搜索动量增跌幅排行榜
+  const searchMomentum = useMemo(() => {
+    if (!searchIndex || !searchIndex.length || !prevMonth) return [];
+    const items = searchIndex.filter(s => s.level === 'brand' && s.month === month);
+    return items.map(item => {
+      const prev = searchIndex.find(s => s.entity === item.entity && s.month === prevMonth);
+      const diff = item.value !== null && prev?.value ? (item.value - prev.value) / prev.value : null;
+      return { entity: item.entity, brand: item.brand, current: item.value, prev: prev?.value || null, diff };
+    }).filter(x => x.diff !== null).sort((a, b) => (b.diff || 0) - (a.diff || 0));
+  }, [searchIndex, month, prevMonth]);
+
+  // 投放效率排名
+  const efficiencyRankings = useMemo(() => {
+    return allMonthRows.map(p => {
+      const cpe = p.interactions > 0 ? p.spend / p.interactions : null;
+      const viralRate = p.notes > 0 ? p.viral / p.notes : null;
+      return {
+        brand: p.brand,
+        name: name(p.brand),
+        color: brandColor(p.brand),
+        spend: p.spend,
+        notes: p.notes,
+        cpe,
+        viralRate,
+      };
+    });
+  }, [allMonthRows, brands]);
   const observedMonths = months.map(m => ({
     date: m,
     notes: completeSum(performance.filter(p => p.month === m && includes(p.brand)).map(p => p.notes)),
@@ -213,6 +257,65 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
         </section>
       </div>
     </DashboardSection>
+
+    {/* 多品牌投放效率横向对标图表看板 */}
+    <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+      <DashboardSection title="单次互动成本效率榜 (CPE)" desc="衡量商单采买性价比；单次互动成本越低，投放性价比越高。">
+        <div style={{ padding: '4px 0' }}>
+          <HorizontalBarList items={efficiencyRankings.filter(x => x.cpe !== null && x.cpe > 0).sort((a, b) => (a.cpe || 0) - (b.cpe || 0)).map(item => {
+            const minCpe = Math.min(...efficiencyRankings.map(x => x.cpe || Infinity).filter(Number.isFinite));
+            return {
+              label: item.name,
+              amount: item.cpe || 0,
+              pct: item.cpe ? (minCpe / item.cpe) * 100 : 0,
+              color: item.color,
+              subText: `¥${(item.cpe || 0).toFixed(2)} / 次互动`,
+            };
+          })} />
+        </div>
+      </DashboardSection>
+      <DashboardSection title="商业笔记爆文转化率榜" desc="衡量商单的千赞爆文转化效率；爆文率越高，内容穿透力越强。">
+        <div style={{ padding: '4px 0' }}>
+          <HorizontalBarList items={efficiencyRankings.filter(x => x.viralRate !== null).sort((a, b) => (b.viralRate || 0) - (a.viralRate || 0)).map(item => ({
+            label: item.name,
+            amount: (item.viralRate || 0) * 100,
+            pct: (item.viralRate || 0) * 100,
+            color: item.color,
+            subText: `${((item.viralRate || 0) * 100).toFixed(1)}% 爆文率`,
+          }))} />
+        </div>
+      </DashboardSection>
+    </div>
+
+    {/* 搜索战场走势与动量排行榜看板 */}
+    <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+      <DashboardSection title="各品牌灵犀搜索指数走势 (2026)" desc="官方灵犀搜索热度多月对比走势；展现各大核心品牌搜索心智占有变化。">
+        {brandSearchTrends.length ? (
+          <TimeSeriesChart
+            rows={brandSearchTrends}
+            title="各品牌灵犀搜索指数走势"
+            unit="指数"
+            series={brands.slice(0, 5).map(b => ({
+              key: b.id,
+              label: b.name,
+              color: b.color,
+            }))}
+          />
+        ) : <EmptyState title="暂无搜索趋势" text="已载入月份较少。" />}
+      </DashboardSection>
+      <DashboardSection title="本月搜索热度动量增幅榜" desc={`较 ${prevMonth || '前一月'} 搜索热度异动，正值表示搜索心智加速放量：`}>
+        {searchMomentum.length ? (
+          <HorizontalBarList items={searchMomentum.map(item => ({
+            label: item.entity,
+            amount: Math.abs(item.diff || 0),
+            pct: Math.min(100, Math.abs(item.diff || 0) * 100),
+            color: (item.diff || 0) >= 0 ? '#10b981' : '#ef4444',
+            subText: `${(item.diff || 0) >= 0 ? '↑ +' : '↓ '}${((item.diff || 0) * 100).toFixed(1)}% (${item.current ? (item.current / 10000).toFixed(1) + '万' : '—'})`,
+          }))} />
+        ) : <EmptyState title="暂无动量数据" text="需要连续两月有效记录以计算动量。" />}
+      </DashboardSection>
+    </div>
+
     <DashboardSection title="月报样本趋势" desc="仅展示已载入月份；品牌覆盖发生变化会影响合计，不能解读为同样本增速。空值不补零。">
       <div className="workspace-two-col">
         <TimeSeriesChart rows={observedMonths} title="月报笔记趋势" unit="篇" series={[{key: 'notes', label: '商业笔记', color: '#0284c7'}]} />
@@ -233,10 +336,6 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
             ]} />;
           })}
         </div>
-        <DataTable headers={['品牌', '明星/知名', '头部', '腰部', '初级', '素人']} rows={filtered.map(b => {
-          const p = creatorMix.find(r => r.brand === b.id && r.month === month);
-          return [b.name, percent(completeSum([p?.star, p?.known])), percent(p?.head), percent(p?.waist), percent(p?.junior), percent(p?.amateur)];
-        })} />
       </DashboardSection>
       <DashboardSection title="图文与视频构成" desc="原表占比独立展示，不把缺失补为其他形式。">
         <div className="stack" style={{ marginBottom: 20 }}>
@@ -245,10 +344,6 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
             return <MixBar key={b.id} label={b.name} items={[{label:'图文',value:p?.image,color:'#0284c7'},{label:'视频',value:p?.video,color:'#8b5cf6'}]} />;
           })}
         </div>
-        <DataTable headers={['品牌', '图文', '视频']} rows={filtered.map(b => {
-          const p = formatMix.find(r => r.brand === b.id && r.month === month);
-          return [b.name, percent(p?.image), percent(p?.video)];
-        })} />
       </DashboardSection>
     </div>
     <DashboardSection title="内容切角样本矩阵" desc="按所选月份和品牌展示打标篇数；不同切角可能重叠，不跨切角推算去重笔记总数。">
@@ -284,11 +379,21 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
           </div>
         ))}
       </div>
-      <DataTable headers={['品牌 / 品线', '人群', '卖点', '场景', '依据']} rows={productStrategies.filter(p => includes(p.brand)).map(p => [name(p.brand) + ' · ' + p.line, p.audience, p.proposition, p.scenarios, p.evidence])} />
     </DashboardSection>
     <div className="workspace-two-col">
       <DashboardSection title="品牌动作记录" desc="按所选月份和品牌筛选来源月报中的营销动作。">
-        <DataTable headers={['月份', '品牌', '动作', '说明']} rows={actions.filter(p => p.month === month && includes(p.brand)).map(p => [p.month, name(p.brand), p.type + ' · ' + p.title, p.detail])} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 12 }}>
+          {actions.filter(p => p.month === month && includes(p.brand)).map((act, i) => (
+            <div key={i} style={{ padding: '12px 14px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, borderLeft: `4px solid ${brandColor(act.brand)}` }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 6px', borderRadius: 4, background: '#f1f5f9', color: '#1e293b' }}>{act.type}</span>
+                <span style={{ fontSize: 12, fontWeight: 600, color: brandColor(act.brand) }}>{name(act.brand)}</span>
+              </div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>{act.title}</div>
+              <p style={{ fontSize: 12, color: '#475569', lineHeight: 1.5, margin: 0 }}>{act.detail}</p>
+            </div>
+          ))}
+        </div>
       </DashboardSection>
       <DashboardSection title="品牌搜索上下游词" desc="来源快照中的关联词；无日期字段，不受月份筛选影响，不推断流量或转化。">
         <DataTable headers={['关键词', '上游', '下游']} rows={searchFlow.filter(p => includes(p.brand)).map(p => [p.keyword, cleanKeywords(p.upstream), cleanKeywords(p.downstream)])} />
