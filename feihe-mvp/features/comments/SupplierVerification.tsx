@@ -9,6 +9,7 @@ import { ResultNotice } from '../../components/ui/operations/ResultNotice';
 import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolbar';
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
 import type { Ops } from '../../lib/types/project';
 import type { SupplierCommentItem } from './comment-view-model';
@@ -339,13 +340,18 @@ export function SupplierVerification({
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             style={{ width: '240px' }}
           />
-          <select value={visibilityFilter} onChange={(e) => { setVisibilityFilter(e.target.value); setPage(1); }}>
-            <option value="">全部核验状态</option>
-            <option value="待核验">待核验</option>
-            <option value="当前外显-原文一致">当前外显-原文一致</option>
-            <option value="当前外显-有修改">当前外显-有修改</option>
-            <option value="当前未外显">当前未外显</option>
-          </select>
+          <CustomSelect
+            value={visibilityFilter}
+            onChange={(val) => { setVisibilityFilter(val); setPage(1); }}
+            options={[
+              { value: '', label: '全部核验状态' },
+              { value: '待核验', label: '待核验' },
+              { value: '当前外显-原文一致', label: '当前外显-原文一致' },
+              { value: '当前外显-有修改', label: '当前外显-有修改' },
+              { value: '当前未外显', label: '当前未外显' },
+            ]}
+            style={{ minWidth: 150 }}
+          />
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '12.5px', color: '#64748b' }}>核验时间：</span>
             <input

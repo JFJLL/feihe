@@ -2,6 +2,7 @@
 
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { Project } from '../../lib/types/project';
+import { CustomSelect } from '../ui/CustomSelect';
 
 export function ProjectSwitcher({
   projects,
@@ -30,29 +31,18 @@ export function ProjectSwitcher({
   return (
     <div className="project-switcher">
       <small>当前项目</small>
-      <div className="switcher-control">
-        <i
-          className="project-dot"
-          style={{ background: currentProject?.color || '#2563eb' }}
-        />
-        <select
+      <div className="switcher-control" style={{ width: '100%', marginTop: 4 }}>
+        <CustomSelect
           value={currentProjectId}
-          onChange={(e) => handleChange(e.target.value)}
-          aria-label="切换项目"
-          disabled={loading && !projects.length}
-        >
-          {projects.length > 0 ? (
-            projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))
-          ) : (
-            <option value={currentProjectId}>
-              {loading ? '项目加载中…' : currentProjectId}
-            </option>
-          )}
-        </select>
+          onChange={handleChange}
+          ariaLabel="切换项目"
+          style={{ width: '100%' }}
+          options={projects.length > 0 ? projects.map(p => ({
+            value: p.id,
+            label: p.name,
+            color: p.color || '#2563eb',
+          })) : [{ value: currentProjectId, label: loading ? '项目加载中…' : currentProjectId }]}
+        />
       </div>
       {currentProject ? (
         <p className="project-subtext">

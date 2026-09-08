@@ -6,6 +6,7 @@ import { GrowthMetricCard as MetricCard, GrowthReadout } from './GrowthReadout';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { BrandLandscape } from './BrandLandscape';
 import { CompetitorIntelligenceSection } from './CompetitorIntelligenceSection';
 import { numeric, percent, ratio, completeSum, change, previousMonth } from './metrics';
@@ -23,6 +24,11 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
   const search = [...(data.feishu?.search || [])].sort((a, b) => a.date.localeCompare(b.date));
   const latest = search.at(-1);
   const previous = search.at(-2);
+  const combinedTrend = search.slice(-30).map(r => ({
+    date: r.date,
+    lingxi: numeric(r.lingxi),
+    spotlight: numeric(r.spotlight),
+  }));
 
   return <div className="stack animate-fade-in growth-analysis">
     <div className="reference-daily-grid">
@@ -46,35 +52,74 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
       <p className="metric-note">阅读、互动为已记录值之和；互动/阅读仅使用两项均有记录的笔记，CPE 仅使用费用与互动均有记录的笔记。零分母不计算比率。费用口径为笔记报价，非实际投放结算。</p>
     </DashboardSection>
     <div className="workspace-two-col competitor-source-grid">
-      <DashboardSection title="竞品月报 · 搜索指数对比" eyebrow="MONTHLY SEARCH" desc="按来源工作表展示，不跨来源求和或推断市场份额。较前月仅比较同工作表、同品牌的唯一记录；缺月或重复记录不计算。" extra={<label>月份 <select aria-label="竞品月报月份" value={month} onChange={e => setSelectedMonth(e.target.value)}>{[...months].reverse().map(m => <option key={m}>{m}</option>)}</select></label>}>
-        {current.length ? <div className="stack" style={{ gap: 14 }}>
-          <div style={{ padding: '4px 0 6px' }}>
-            <p className="metric-note" style={{ marginBottom: 8 }}>当月各品牌/品线搜索热度横向对比：</p>
-            <HorizontalBarList items={current.slice(0, 7).map((r, i) => {
-              const val = numeric(r.value) || 0;
+      {/* 左侧：合并图表与表格，直接使用高信息密度横向柱状图展示全部数据 */}
+      <DashboardSection
+        title="竞品月报 · 搜索指数对比"
+        eyebrow="MONTHLY SEARCH RANKING"
+        desc="合并展示搜索热度走势条、数值、环比增跌幅与工作表来源。柱条等比缩放，融合图表与明细数据。"
+        extra={<label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>月份 <CustomSelect value={month} onChange={setSelectedMonth} options={[...months].reverse()} /></label>}
+      >
+        {current.length ? (
+          <div className="ops-table-wrap" style={{ maxHeight: '380px', overflowY: 'auto' }}>
+            <table className="ops-table" style={{ width: '100%', tableLayout: 'auto' }}>
+              <thead>
+                <tr>
+                  <th style={{ width: '38%' }}>品牌 / 品线与热度</th>
+                  <th style={{ width: '22%' }}>搜索指数</th>
+                  <th style={{ width: '22%' }}>较前月</th>
+                  <th style={{ width: '18%' }}>来源</th>
+                </tr>
+              </thead>
+              <tbody>
+            {(() => {
               const maxVal = Math.max(1, ...current.map(c => numeric(c.value) || 0));
-              return {
-                label: r.brand,
-                amount: val,
-                pct: (val / maxVal) * 100,
-                color: ['#0284c7', '#0d9488', '#8b5cf6', '#16a34a', '#d97706', '#6366f1', '#ec4899'][i % 7],
-                subText: `${(val / 10000).toFixed(1)}万 指数`,
-              };
-            })} />
-          </div>
-          <div className="ops-table-wrap" style={{ maxHeight: '280px', overflowY: 'auto' }}><table className="ops-table">
-            <thead><tr><th>品牌 / 品线</th><th>搜索指数</th><th>较前月</th><th>来源</th></tr></thead>
-            <tbody>{current.map((row, i) => {
               const prevMonth = previousMonth(month);
-              const prev = monthly.filter(r => r.month === prevMonth && r.brand === row.brand && r.sheetId === row.sheetId);
-              const unique = current.filter(r => r.brand === row.brand && r.sheetId === row.sheetId).length === 1;
-              return <tr key={row.sheetId + row.brand + i}><td>{row.brand}</td><td><GrowthReadout value={row.value} /></td><td>{percent(change(row.value, unique && prev.length === 1 ? prev[0].value : null))}</td><td><a href={'https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=' + encodeURIComponent(row.sheetId)} target="_blank" rel="noreferrer">工作表 ↗</a></td></tr>;
-            })}</tbody>
-          </table></div>
-        </div> : <EmptyState title="暂无月报数据" text="同步已填写的竞品月份后显示。" />}
+              const barColors = ['#0284c7', '#0d9488', '#8b5cf6', '#16a34a', '#d97706', '#6366f1', '#ec4899', '#f43f5e', '#84cc16'];
+              return current.map((row, i) => {
+                const val = numeric(row.value) || 0;
+                const pct = (val / maxVal) * 100;
+                const prev = monthly.filter(r => r.month === prevMonth && r.brand === row.brand && r.sheetId === row.sheetId);
+                const unique = current.filter(r => r.brand === row.brand && r.sheetId === row.sheetId).length === 1;
+                const diff = change(row.value, unique && prev.length === 1 ? prev[0].value : null);
+                const diffPct = percent(diff);
+                const isPositive = diff !== null && diff > 0;
+                const isNegative = diff !== null && diff < 0;
+                return (
+                  <tr key={row.sheetId + row.brand + i}>
+                    <td>
+                      <div style={{ marginBottom: 4 }}><strong>{row.brand}</strong></div>
+                      <div style={{ height: 5, background: '#edf2f7', borderRadius: 3, overflow: 'hidden', width: '100%' }}>
+                        <div style={{ width: `${Math.max(4, pct)}%`, height: '100%', background: barColors[i % barColors.length], borderRadius: 3 }} />
+                      </div>
+                    </td>
+                    <td><GrowthReadout value={row.value} /></td>
+                    <td>{percent(change(row.value, unique && prev.length === 1 ? prev[0].value : null))}</td>
+                    <td><a href={'https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=' + encodeURIComponent(row.sheetId)} target="_blank" rel="noreferrer">工作表 ↗</a></td>
+                  </tr>
+                );
+              });
+            })()}
+              </tbody>
+            </table>
+          </div>
+        ) : <EmptyState title="暂无月报数据" text="同步已填写的竞品月份后显示。" />}
       </DashboardSection>
-      <DashboardSection title="启萃搜索指数趋势" desc="灵犀与聚光分别展示，单位与采集口径可能不同，不相加。缺失观测不补零；仅有已记录日期参与展示。">
-        {(['lingxi', 'spotlight'] as const).map((key, i) => <TimeSeriesChart key={key} rows={search.slice(-30).map(r => ({ date: r.date, [key]: numeric(r[key]) }))} title={i ? '聚光搜索指数' : '灵犀搜索指数'} unit="指数" series={[{ key, label: i ? '聚光' : '灵犀', color: i ? '#8b5cf6' : '#0284c7' }]} />)}
+
+      {/* 右侧：将灵犀和聚光合并为一个双曲线对比折线图，消除卡片紧贴与重复 */}
+      <DashboardSection
+        title="启萃灵犀与聚光搜索指数趋势对比"
+        eyebrow="SEARCH TREND BENCHMARK"
+        desc="灵犀官方大盘搜索（蓝线）与聚光商业搜索（紫线）合并同轴展示；近30天变化轨迹一目了然。"
+      >
+        <TimeSeriesChart
+          rows={combinedTrend}
+          title="启萃搜索指数双线对比趋势"
+          unit="指数"
+          series={[
+            { key: 'lingxi', label: '灵犀搜索指数', color: '#0284c7' },
+            { key: 'spotlight', label: '聚光搜索指数', color: '#8b5cf6' },
+          ]}
+        />
       </DashboardSection>
     </div>
     <CompetitorIntelligenceSection intelligence={data.feishu?.intelligence} />

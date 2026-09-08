@@ -8,6 +8,7 @@ import { ResultNotice } from '../../components/ui/operations/ResultNotice';
 import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolbar';
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from '../content/content-view-model';
 import { NoteSummaryBoard } from '../content/NoteSummaryBoard';
@@ -310,11 +311,16 @@ export function CommentCollection({
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             style={{ width: '220px' }}
           />
-          <select value={monitored} onChange={(e) => { setMonitored(e.target.value); setPage(1); }}>
-            <option value="">全部监测状态</option>
-            <option value="1">已抓取快照</option>
-            <option value="0">未抓取</option>
-          </select>
+          <CustomSelect
+            value={monitored}
+            onChange={(val) => { setMonitored(val); setPage(1); }}
+            options={[
+              { value: '', label: '全部监测状态' },
+              { value: '1', label: '已抓取快照' },
+              { value: '0', label: '未抓取' },
+            ]}
+            style={{ minWidth: 140 }}
+          />
         </WorkspaceToolbar>
 
         <DataTableShell

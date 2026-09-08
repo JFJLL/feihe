@@ -7,6 +7,7 @@ import { useState } from 'react';
 import type { Dashboard, GrowthSettings, Rules, Note } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { num } from '../../lib/hooks/use-project-data';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { sampleDirection } from './directions';
@@ -140,12 +141,13 @@ export function KeywordRadar({
                 aria-label="观察关键词"
                 placeholder="输入品牌词、场景词或痛点词"
               />
-              <select aria-label="关键词范围标签" value={scope} onChange={(e) => setScope(e.target.value)}>
-                <option>本品</option>
-                <option>竞品</option>
-                <option>场景</option>
-                <option>痛点</option>
-              </select>
+              <CustomSelect
+                ariaLabel="关键词范围标签"
+                value={scope}
+                onChange={(val) => setScope(val)}
+                options={['本品', '竞品', '场景', '痛点']}
+                style={{ minWidth: 90 }}
+              />
               <button className="primary" onClick={() => void add()}>
                 加入观察
               </button>

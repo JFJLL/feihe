@@ -6,6 +6,7 @@ import { DashboardSection } from '../../components/ui/operations/DashboardSectio
 import { GrowthMetricCard as MetricCard, GrowthReadout } from './GrowthReadout';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { display, compactMetric, numeric, percent, ratio, completeSum } from './metrics';
 import { HorizontalBarList } from '../overview/OverviewCharts';
 
@@ -62,8 +63,8 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
     <div className="reference-date-toolbar">
       <div><strong>竞品月报情报</strong><p className="metric-note">来源快照：{intelligence.snapshotMonth || '—'} · 更新标记：{intelligence.updatedAt || '—'}。此处为已载入月报快照，非实时平台数据。</p></div>
       <div className="reference-date-controls">
-        <label>情报月份 <select aria-label="情报月份" value={month} onChange={e => setSelectedMonth(e.target.value)}>{[...months].reverse().map(m => <option key={m}>{m}</option>)}</select></label>
-        <label>情报品牌 <select aria-label="情报品牌" value={activeBrand} onChange={e => setActiveBrand(e.target.value)}><option value="all">全部品牌</option>{brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}</select></label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>情报月份 <CustomSelect value={month} onChange={setSelectedMonth} options={[...months].reverse()} /></label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>情报品牌 <CustomSelect value={activeBrand} onChange={setActiveBrand} options={[{ value: 'all', label: '全部 7 个品牌' }, ...brands.map(b => ({ value: b.id, label: b.name, color: b.color }))]} /></label>
       </div>
     </div>
     {/* 7 大品牌竞争信号带 (Signal Strip) */}
@@ -130,22 +131,87 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
       </DashboardSection>
     )}
     <DashboardSection title="商单投入与内容效率" desc="份额仅在所选月报品牌内计算，不代表市场份额。计算爆文率与原表填报率分别列示，保留口径差异。">
-      <div className="workspace-two-col">
-        {(['notes', 'spend'] as const).map(key => {
-          const samples = rows.filter(p => rows.filter(other => other.brand === p.brand).length === 1 && numeric(p[key]) !== null);
-          const total = completeSum(samples.map(p => p[key]));
-          return <section className="panel" key={key}>
-            <h3>{key === 'notes' ? '商业笔记样本贡献' : '填报商单投入贡献'}</h3>
-            <p className="metric-note">分母为所选月份、所选品牌的有效唯一记录合计 {compactMetric(total)} {key === 'notes' ? '篇' : '元'}；缺失和重复记录不参与，零值见明细。</p>
-            {total !== null && total > 0 ? <HorizontalBarList items={samples.filter(p => Number(p[key]) > 0).sort((a, b) => b[key] - a[key]).map((p, i) => ({ label: name(p.brand), amount: p[key], pct: Number(ratio(p[key], total)) * 100, color: ['#0284c7', '#0d9488', '#8b5cf6', '#16a34a'][i % 4], subText: compactMetric(p[key]) + (key === 'notes' ? ' 篇' : ' 元') }))} /> : <EmptyState title="暂无可计算的贡献" text="所选来源缺失或合计为零；不生成比例。" />}
-          </section>;
-        })}
+      {/* 彻底去除重复的死板数据表格，通过高信息密度直观图表展示全部投放与产出效率 */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+        {/* 左侧：商业笔记投放规模与爆文产出图表 */}
+        <section className="panel" style={{ padding: '18px 20px', borderRadius: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>商业笔记投放规模与爆文产出</h3>
+            <span style={{ fontSize: 11, color: '#64748b' }}>共计 {compactMetric(notes)} 篇</span>
+          </div>
+          <div className="stack" style={{ gap: 10 }}>
+            {(() => {
+              const maxNotes = Math.max(1, ...filtered.map(b => rows.find(p => p.brand === b.id)?.notes || 0));
+              return filtered.map(b => {
+                const p = rows.find(x => x.brand === b.id);
+                const count = p?.notes || 0;
+                const pct = (count / maxNotes) * 100;
+                const viralCount = p?.viral || 0;
+                const viralRate = count > 0 ? ((viralCount / count) * 100).toFixed(1) + '%' : '—';
+                return (
+                  <div key={b.id} style={{ padding: '10px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: b.color }} />
+                        <strong style={{ fontSize: 13.5, color: '#0f172a' }}>{b.name}</strong>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>{count} 篇</span>
+                        <span style={{ fontSize: 11, padding: '2px 6px', borderRadius: 4, background: '#ecfdf5', color: '#059669', fontWeight: 600 }}>
+                          爆文 {viralCount} · 率 {viralRate}
+                        </span>
+                      </div>
+                    </div>
+                    <div style={{ height: 6, background: '#e2e8f0', borderRadius: 3, overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.max(3, pct)}%`, height: '100%', background: b.color, borderRadius: 3 }} />
+                    </div>
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </section>
+
+        {/* 右侧：商单投入规模与互动产出效率图表 */}
+        <section className="panel" style={{ padding: '18px 20px', borderRadius: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>商单投入金额与互动效率 (CPE)</h3>
+            <span style={{ fontSize: 11, color: '#64748b' }}>共计 ¥{compactMetric(completeSum(rows.map(p => p.spend)))}</span>
+          </div>
+          <div className="stack" style={{ gap: 10 }}>
+            {(() => {
+              const maxSpendVal = Math.max(1, ...filtered.map(b => rows.find(p => p.brand === b.id)?.spend || 0));
+              return filtered.map(b => {
+                const p = rows.find(x => x.brand === b.id);
+                const spend = p?.spend || 0;
+                const pct = (spend / maxSpendVal) * 100;
+                const inter = p?.interactions || 0;
+                const cpe = inter > 0 ? (spend / inter).toFixed(2) : '—';
+                const avgInter = p?.notes ? Math.round(inter / p.notes) : 0;
+                return (
+                  <div key={b.id} style={{ padding: '10px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: b.color }} />
+                        <strong style={{ fontSize: 13.5, color: '#0f172a' }}>{b.name}</strong>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>¥{compactMetric(spend)}</span>
+                        <span style={{ fontSize: 11, padding: '2px 6px', borderRadius: 4, background: '#eff6ff', color: '#0284c7', fontWeight: 600 }}>
+                          篇均 {avgInter} · CPE ¥{cpe}
+                        </span>
+                      </div>
+                    </div>
+                    <div style={{ height: 6, background: '#e2e8f0', borderRadius: 3, overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.max(3, pct)}%`, height: '100%', background: b.color, borderRadius: 3 }} />
+                    </div>
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </section>
       </div>
-      <DataTable headers={['品牌', '笔记', '所选样本份额', '投入（元）', '互动', '篇均互动', '投入/互动（元）', '计算爆文率', '原表爆文率', '来源']} rows={filtered.map(b => {
-        const matches = rows.filter(p => p.brand === b.id);
-        const p = matches.length === 1 ? matches[0] : undefined;
-        return [b.name, <GrowthReadout key="notes" value={p?.notes} />, percent(ratio(p?.notes, notes)), <GrowthReadout key="spend" value={p?.spend} />, <GrowthReadout key="interactions" value={p?.interactions} />, <GrowthReadout key="average" value={ratio(p?.interactions, p?.notes)} />, <GrowthReadout key="cost" value={ratio(p?.spend, p?.interactions)} />, percent(ratio(p?.viral, p?.notes)), percent(p?.reported?.viralRate), matches.length > 1 ? '重复来源记录，需核对' : p?.source || '—'];
-      })} />
     </DashboardSection>
     <DashboardSection title="月报样本趋势" desc="仅展示已载入月份；品牌覆盖发生变化会影响合计，不能解读为同样本增速。空值不补零。">
       <div className="workspace-two-col">

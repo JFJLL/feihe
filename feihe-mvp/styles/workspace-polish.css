@@ -83,6 +83,90 @@ label:has(select),
   align-items: start !important;
 }
 
+/* ==========================================================================
+   Custom Non-Native Dropdown Component
+   ========================================================================== */
+.custom-select-container {
+  min-width: 100px;
+  font-family: inherit;
+}
+.custom-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 12px;
+  min-height: 34px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: all 0.15s ease-in-out;
+}
+.custom-select-trigger:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.08);
+}
+.custom-select-container.is-open .custom-select-trigger,
+.custom-select-trigger:focus-visible {
+  outline: none;
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+}
+.custom-select-chevron {
+  transition: transform 0.2s ease;
+  color: #64748b;
+  flex-shrink: 0;
+}
+.custom-select-chevron.is-rotated {
+  transform: rotate(180deg);
+}
+.custom-select-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  min-width: 100%;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+  z-index: 9999;
+}
+.custom-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.1s ease;
+}
+.custom-select-option:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+.custom-select-option.is-selected {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+}
+
 /* Shared with the overview: navy headings, soft colour cues and quiet surfaces.
    Keep selectors scoped to workspaces so project centre and login stay independent. */
 .ops-workspace {
@@ -132,10 +216,11 @@ label:has(select),
   border-radius: 12px; padding: 18px; gap: 7px;
 }
 .ops-workspace .ops-metric-card-teal { --metric-tint: #effbf9; --metric-line: #b6e7df; --metric-accent: #32998d; }
-.ops-workspace .ops-metric-card-green { --metric-tint: #f0faf3; --metric-line: #bee3c8; --metric-accent: #58a575; }
-.ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: #f7f3fd; --metric-line: #d9cbed; --metric-accent: #9474bd; }
-.ops-workspace .ops-metric-card-yellow { --metric-tint: #fffaec; --metric-line: #eddcac; --metric-accent: #c79a37; }
-.ops-workspace .ops-metric-card-red { --metric-tint: #fff4f3; --metric-line: #edc6c2; --metric-accent: #ca7770; }
+ .ops-workspace .ops-metric-card-green { --metric-tint: #f0fdf4; --metric-line: #bbf7d0; --metric-accent: #10b981; }
+ .ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: #faf5ff; --metric-line: #e9d5ff; --metric-accent: #8b5cf6; }
+ .ops-workspace .ops-metric-card-yellow { --metric-tint: #fffbeb; --metric-line: #fde68a; --metric-accent: #f59e0b; }
+ .ops-workspace .ops-metric-card-red { --metric-tint: #fff1f2; --metric-line: #fecdd3; --metric-accent: #f43f5e; }
+ .ops-workspace .ops-metric-card-cyan { --metric-tint: #ecfeff; --metric-line: #a5f3fc; --metric-accent: #06b6d4; }
 .ops-workspace .ops-metric-card .stat-value { margin: 7px 0 3px; font-size: clamp(24px, 2.2vw, 32px); line-height: 1.25; overflow-wrap: anywhere; }
 .ops-workspace .ops-metric-card .stat-value small { font-size: 12px; font-weight: 500; color: #52657c; }
 .ops-workspace .ops-metric-card[role="button"]:hover { transform: translateY(-2px); box-shadow: 0 6px 16px #1e609113; }

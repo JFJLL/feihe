@@ -8,6 +8,7 @@ import { ProgressBar } from '../../components/ui/operations/ProgressBar';
 import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolbar';
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api, cnTime, pct } from '../../lib/hooks/use-project-data';
 import type { Dashboard, Acceptance } from '../../lib/types/project';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from '../content/content-view-model';
@@ -287,14 +288,19 @@ export function AcceptanceDelivery({
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             style={{ width: '220px' }}
           />
-          <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}>
-            <option value="">全部验收状态</option>
-            <option value="符合且能汇报">符合且能汇报</option>
-            <option value="符合基础要求">符合基础要求</option>
-            <option value={`不够${baseReq}条需补充`}>不够{baseReq}条需补充</option>
-            <option value="需补充">需补充</option>
-            <option value="待抓取">待抓取</option>
-          </select>
+          <CustomSelect
+            value={statusFilter}
+            onChange={(val) => { setStatusFilter(val); setPage(1); }}
+            options={[
+              { value: '', label: '全部验收状态' },
+              { value: '符合且能汇报', label: '符合且能汇报' },
+              { value: '符合基础要求', label: '符合基础要求' },
+              { value: `不够${baseReq}条需补充`, label: `不够${baseReq}条需补充` },
+              { value: '需补充', label: '需补充' },
+              { value: '待抓取', label: '待抓取' },
+            ]}
+            style={{ minWidth: 140 }}
+          />
         </WorkspaceToolbar>
 
         <DataTableShell
