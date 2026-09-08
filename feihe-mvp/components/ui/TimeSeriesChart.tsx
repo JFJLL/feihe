@@ -20,7 +20,7 @@ function segments(points: (Point | null)[]) {
   return result;
 }
 
-export function TimeSeriesChart({ rows, series, title, unit = '条' }: { rows: Row[]; series: { key: string; label: string; color: string }[]; title: string; unit?: string }) {
+export function TimeSeriesChart({ rows, series, title, unit = '条', height = 240 }: { rows: Row[]; series: { key: string; label: string; color: string }[]; title: string; unit?: string; height?: number }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const chartId = useId().replace(/[^a-zA-Z0-9_-]/g, '');
@@ -29,7 +29,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条' }: { rows: R
   const selectedIndex = data.findIndex(r=>r.date===selected);
   const activeIndex = hoverIdx !== null && hoverIdx < data.length ? hoverIdx : selectedIndex >= 0 ? selectedIndex : data.length - 1;
   const current = data[activeIndex] || data[data.length-1];
-  const w=760,h=240,left=64,right=20,top=20,bottom=40;
+  const w=760,h=height,left=64,right=20,top=20,bottom=40;
   const rawMax = Math.max(1,...data.flatMap(r=>series.map(s=>typeof r[s.key]==='number' && Number.isFinite(r[s.key]) ? Number(r[s.key]):0)));
   const max = unit==='条' ? Math.ceil(rawMax / 4) * 4 : rawMax;
   const x=(i:number)=>data.length===1?w/2:left+i*(w-left-right)/(data.length-1);

@@ -111,27 +111,30 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
         eyebrow="SEARCH TREND BENCHMARK"
         desc="灵犀官方大盘搜索（蓝线）与聚光商业搜索（紫线）合并同轴展示；近30天变化轨迹一目了然。"
       >
-        <TimeSeriesChart
-          rows={combinedTrend}
-          title="启萃搜索指数双线对比趋势"
-          unit="指数"
-          series={[
-            { key: 'lingxi', label: '灵犀搜索指数', color: '#0284c7' },
-            { key: 'spotlight', label: '聚光搜索指数', color: '#8b5cf6' },
-          ]}
-        />
-        <div style={{ marginTop: 'auto', paddingTop: 14, borderTop: '1px solid #f1f5f9', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
-          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 11, color: '#64748b' }}>灵犀搜索峰值</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#0284c7', marginTop: 2 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.lingxi || 0)))}</div>
-          </div>
-          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 11, color: '#64748b' }}>聚光搜索峰值</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#8b5cf6', marginTop: 2 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.spotlight || 0)))}</div>
-          </div>
-          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 11, color: '#64748b' }}>近30天监测样本</div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', marginTop: 2 }}>{combinedTrend.length} 天</div>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', marginTop: 14 }}>
+          <TimeSeriesChart
+            rows={combinedTrend}
+            title="启萃搜索指数双线对比趋势"
+            unit="指数"
+            height={265}
+            series={[
+              { key: 'lingxi', label: '灵犀搜索指数', color: '#0284c7' },
+              { key: 'spotlight', label: '聚光搜索指数', color: '#8b5cf6' },
+            ]}
+          />
+          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f1f5f9', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+            <div style={{ padding: '10px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: 11.5, color: '#64748b' }}>灵犀搜索峰值</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#0284c7', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.lingxi || 0)))}</div>
+            </div>
+            <div style={{ padding: '10px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: 11.5, color: '#64748b' }}>聚光搜索峰值</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#8b5cf6', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.spotlight || 0)))}</div>
+            </div>
+            <div style={{ padding: '10px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+              <div style={{ fontSize: 11.5, color: '#64748b' }}>近30天监测样本</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginTop: 3 }}>{combinedTrend.length} 天</div>
+            </div>
           </div>
         </div>
       </DashboardSection>

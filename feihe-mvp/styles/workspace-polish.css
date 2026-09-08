@@ -91,6 +91,13 @@ label:has(select),
   justify-content: space-between !important;
   height: 100% !important;
 }
+.competitor-source-grid .data-trend {
+  padding: 14px 16px 12px !important;
+  margin: 4px 0 !important;
+}
+.competitor-source-grid .data-trend-readout {
+  padding: 2px 4px 12px !important;
+}
 
 /* 彻底消除卡片套卡片结构：将内部嵌套的 metric card 融为单一卡片 */
 .single-seamless-card .ops-metric-card {
