@@ -9,7 +9,7 @@ import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { BrandLandscape } from './BrandLandscape';
 import { CompetitorIntelligenceSection } from './CompetitorIntelligenceSection';
-import { numeric, percent, ratio, completeSum, change, previousMonth } from './metrics';
+import { numeric, percent, ratio, completeSum, change, previousMonth, compactMetric } from './metrics';
 import { HorizontalBarList } from '../overview/OverviewCharts';
 
 export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onSwitchTab?: (tab: string) => void }) {
@@ -120,6 +120,20 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
             { key: 'spotlight', label: '聚光搜索指数', color: '#8b5cf6' },
           ]}
         />
+        <div style={{ marginTop: 'auto', paddingTop: 14, borderTop: '1px solid #f1f5f9', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: 11, color: '#64748b' }}>灵犀搜索峰值</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#0284c7', marginTop: 2 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.lingxi || 0)))}</div>
+          </div>
+          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: 11, color: '#64748b' }}>聚光搜索峰值</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#8b5cf6', marginTop: 2 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.spotlight || 0)))}</div>
+          </div>
+          <div style={{ padding: '8px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: 11, color: '#64748b' }}>近30天监测样本</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', marginTop: 2 }}>{combinedTrend.length} 天</div>
+          </div>
+        </div>
       </DashboardSection>
     </div>
     <CompetitorIntelligenceSection intelligence={data.feishu?.intelligence} />

@@ -80,7 +80,16 @@ label:has(select),
 }
 
 .competitor-source-grid {
-  align-items: start !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  align-items: stretch !important;
+}
+.competitor-source-grid > section {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 100% !important;
 }
 
 /* 彻底消除卡片套卡片结构：将内部嵌套的 metric card 融为单一卡片 */
