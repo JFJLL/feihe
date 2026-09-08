@@ -1,3 +1,8 @@
+export function sourceLabel(value: unknown): string {
+  const source = String(value || '').trim();
+  return ({ owned: '自有发布', commercial: '商业合作', keyword_scan: '关键词扫描' } as Record<string, string>)[source] || source || '来源待补充';
+}
+
 export type NoteListItem = {
   id: string;
   url: string;
@@ -37,6 +42,7 @@ export type NoteListItem = {
   isFetched: number;
   isProfileComplete: number;
   pendingRiskCount: number;
+  replyPendingCount?: number;
 };
 
 export type NotesListResponse = {
@@ -72,6 +78,7 @@ export type NotesListResponse = {
     reportableCount: number;
     baseCount: number;
     supplementCount: number;
+    replyPendingCount: number;
     fetchedCount: number;
     unfetchedCount: number;
     totalComments: number;
@@ -115,6 +122,7 @@ export const emptyNotesSummary: NotesListResponse['summary'] = {
   reportableCount: 0,
   baseCount: 0,
   supplementCount: 0,
+  replyPendingCount: 0,
   fetchedCount: 0,
   unfetchedCount: 0,
   totalComments: 0,

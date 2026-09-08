@@ -52,7 +52,7 @@ export function ContentMonitoring({
       if (nextState.page > 1) p.set('page', String(nextState.page)); else p.delete('page');
       window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p.toString() : ''));
     } catch {}
-  }, []);
+  }, [hasMetrics]);
 
   useEffect(() => {
     syncToUrl({ query: debouncedQuery, source, category, sort, order, page });
@@ -154,7 +154,7 @@ export function ContentMonitoring({
       <DashboardSection
         eyebrow="DATA INTEGRITY"
         title="内容表现数据质量分布"
-        desc="监控各关键指标的入库完整率，确保分析结论具备真实数据支撑。"
+        desc="项目全量笔记，不随列表筛选变化；阅读与互动均大于 0 才计为双指标完整，原文链接仅检查是否已填写。"
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
@@ -173,9 +173,9 @@ export function ContentMonitoring({
             <div style={{ fontSize: '11.5px', color: '#0f766e' }}>指标有效 {summary.performanceMetricCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>原文链接有效率</div>
+            <div style={{ fontSize: '12px', color: '#64748b' }}>原文链接填写率</div>
             <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{linkRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#6366f1' }}>有效原文 {summary.linkCount} / {summary.total} 篇</div>
+            <div style={{ fontSize: '11.5px', color: '#6366f1' }}>已填原文 {summary.linkCount} / {summary.total} 篇</div>
           </div>
         </div>
       </DashboardSection>

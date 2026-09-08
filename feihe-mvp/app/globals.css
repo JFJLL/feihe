@@ -6,6 +6,7 @@
 @import '../styles/data-workspaces.css';
 @import '../styles/reference-dashboard.css';
 @import 'tailwindcss';
+@import '../styles/workspace-polish.css';
 
 /* Core Base & Shared UI Utilities */
 .stack { display: flex; flex-direction: column; gap: 20px; }

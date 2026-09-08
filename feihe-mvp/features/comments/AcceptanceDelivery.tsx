@@ -108,38 +108,29 @@ export function AcceptanceDelivery({
     return () => clearTimeout(timer);
   }, [loadAcceptanceNotes]);
 
-  // 弹窗数据加载
-  const loadModalNotes = useCallback(async () => {
-    if (!modalFilter) return;
-    setModalLoading(true);
-    try {
-      const p = new URLSearchParams({
-        projectId,
-        view: 'acceptance',
-        page: String(modalPage),
-        pageSize: '12',
-      });
-      if (modalFilter.status) p.set('status', modalFilter.status);
-      const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
-      let list = res.items || [];
-      if (modalFilter.type === 'replyPending') {
-        // 需达人回复维度：优先展示有待办/问询/负向风险的笔记
-        list = [...list].sort((a, b) => (b.pendingRiskCount || (b.questionCount + b.negativeCount)) - (a.pendingRiskCount || (a.questionCount + a.negativeCount)));
-      }
-      setModalItems(list);
-      setModalTotal(res.total || 0);
-    } catch (e) {
-      toast(e instanceof Error ? e.message : '加载笔记列表失败', 'error');
-    } finally {
-      setModalLoading(false);
-    }
-  }, [projectId, modalFilter, modalPage, toast]);
-
+  // Page/loading changes originate in selection and pagination events.
+  // This effect only subscribes to the response for the selected page.
   useEffect(() => {
-    if (modalFilter) {
-      void loadModalNotes();
-    }
-  }, [modalFilter, modalPage, loadModalNotes]);
+    if (!modalFilter) return;
+    const controller = new AbortController();
+    const p = new URLSearchParams({ projectId, view: 'acceptance', page: String(modalPage), pageSize: '12' });
+    if (modalFilter.status) p.set('status', modalFilter.status);
+    if (modalFilter.type === 'replyPending') p.set('replyPending', '1');
+    void api<NotesListResponse>('/api/notes/list?' + p.toString(), { signal: controller.signal })
+      .then(res => {
+        if (controller.signal.aborted) return;
+        setModalItems(res.items || []);
+        setModalTotal(res.total || 0);
+      })
+      .catch(e => {
+        if (controller.signal.aborted) return;
+        setModalItems([]);
+        setModalTotal(0);
+        toast(e instanceof Error ? e.message : '加载笔记列表失败', 'error');
+      })
+      .finally(() => { if (!controller.signal.aborted) setModalLoading(false); });
+    return () => controller.abort();
+  }, [projectId, modalFilter, modalPage, toast]);
 
   const reportReq = acceptance.reportCount || 200;
   const baseReq = acceptance.baseCount || 30;
@@ -157,7 +148,7 @@ export function AcceptanceDelivery({
           desc={`≥${reportReq}条评论 且 前5提及率≥${pct(brandReqRate)}`}
           tag="最高档交付"
           clickable
-          onClick={() => { setModalPage(1); setModalFilter({ title: '符合且能汇报的笔记', tag: '最高档交付', theme: 'green', status: '符合且能汇报' }); }}
+          onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '符合且能汇报的笔记', tag: '最高档交付', theme: 'green', status: '符合且能汇报' }); }}
         />
         <MetricCard
           theme="blue"
@@ -167,7 +158,7 @@ export function AcceptanceDelivery({
           desc={`有效评论达到 ${baseReq} 条考核基线`}
           tag="基础达标"
           clickable
-          onClick={() => { setModalPage(1); setModalFilter({ title: '符合基础要求的笔记', tag: '基础达标', theme: 'blue', status: '符合基础要求' }); }}
+          onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '符合基础要求的笔记', tag: '基础达标', theme: 'blue', status: '符合基础要求' }); }}
         />
         <MetricCard
           theme="yellow"
@@ -177,17 +168,17 @@ export function AcceptanceDelivery({
           desc={`不足 ${baseReq} 条，进入供应商/达人补量`}
           tag="补量缺口"
           clickable
-          onClick={() => { setModalPage(1); setModalFilter({ title: '需补充评论的笔记', tag: '补量缺口', theme: 'yellow', status: '需补充' }); }}
+          onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '需补充评论的笔记', tag: '补量缺口', theme: 'yellow', status: '需补充' }); }}
         />
         <MetricCard
           theme="red"
           label="需达人回复"
-          value={Number(dashboard.metrics.actions.replyPending || 0)}
+          value={summary.replyPendingCount}
           unit="条"
-          desc="高价值问询或轻负面，24小时内承接"
+          desc="待处理且动作明确为需达人回复的评论条数；点击查看涉及的去重笔记"
           tag="回复待办"
           clickable
-          onClick={() => { setModalPage(1); setModalFilter({ title: '涉及达人回复与风险待办的笔记', tag: '回复待办', theme: 'red', type: 'replyPending' }); }}
+          onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '有待回复评论的笔记', tag: '回复待办', theme: 'red', type: 'replyPending' }); }}
         />
       </section>
 
@@ -451,7 +442,7 @@ export function AcceptanceDelivery({
                   {modalFilter.tag}
                 </span>
                 <h2 style={{ fontSize: '17px', margin: 0, fontWeight: 700, color: '#0f172a' }}>
-                  {modalFilter.title} ({modalTotal} 篇)
+                  {modalFilter.title} ({modalLoading ? '加载中' : `${modalTotal} 篇${modalFilter.type === 'replyPending' ? ' · 已去重' : ''}`})
                 </h2>
               </div>
               <button
@@ -474,7 +465,7 @@ export function AcceptanceDelivery({
                       <th>笔记信息</th>
                       <th>评论总量</th>
                       <th>前5提及率</th>
-                      <th>风险待办</th>
+                      <th>{modalFilter.type === 'replyPending' ? '待回复评论（条）' : '风险待办'}</th>
                       <th>状态</th>
                       <th>操作</th>
                     </tr>
@@ -512,7 +503,7 @@ export function AcceptanceDelivery({
                         </td>
                         <td>
                           <span style={{ color: (note.pendingRiskCount || 0) > 0 ? '#dc2626' : '#64748b', fontWeight: 600 }}>
-                            {note.pendingRiskCount || 0} 项
+                            {modalFilter.type === 'replyPending' ? `${note.replyPendingCount || 0} 条` : `${note.pendingRiskCount || 0} 项`}
                           </span>
                         </td>
                         <td><StatusBadge status={note.status || '待抓取'} /></td>
@@ -552,7 +543,7 @@ export function AcceptanceDelivery({
                 <button
                   type="button"
                   disabled={modalPage <= 1 || modalLoading}
-                  onClick={() => setModalPage((p) => Math.max(1, p - 1))}
+                  onClick={() => { setModalLoading(true); setModalPage((p) => Math.max(1, p - 1)); }}
                   style={{ padding: '4px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: '12.5px' }}
                 >
                   上一页
@@ -560,7 +551,7 @@ export function AcceptanceDelivery({
                 <button
                   type="button"
                   disabled={modalPage >= Math.ceil(modalTotal / 12) || modalLoading}
-                  onClick={() => setModalPage((p) => p + 1)}
+                  onClick={() => { setModalLoading(true); setModalPage((p) => p + 1); }}
                   style={{ padding: '4px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: '12.5px' }}
                 >
                   下一页

@@ -5,6 +5,9 @@ import { FeishuSources, SyncButton } from '../../../components/ui/FeishuSources'
 import type { FeishuData } from '../../../lib/feishu-model';
 import type { Source, Workspace } from '../../../lib/types/project';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { ErrorState } from '../../../components/ui/ErrorState';
+import { LoadingState } from '../../../components/ui/LoadingState';
+import { MetricCard } from '../../../components/ui/operations/MetricCard';
 import { api, cnTime } from '../../../lib/hooks/use-project-data';
 
 const emptySource: Record<string, unknown> = {
@@ -32,20 +35,29 @@ export function SettingsDataSources({
   const [source, setSource] = useState<Record<string, unknown>>(emptySource);
   const [busy, setBusy] = useState('');
   const [feishu, setFeishu] = useState<FeishuData>();
+  const [statusError, setStatusError] = useState('');
   const loadSources = useCallback(async () => {
-    const data = await api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`);
-    setFeishu(data);
+    try {
+      const data = await api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`);
+      setFeishu(data);
+      setStatusError('');
+    } catch (e) {
+      setStatusError(e instanceof Error ? e.message : '同步状态加载失败');
+    }
   }, [projectId]);
   useEffect(() => {
     let cancelled = false;
     api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`).then(data => {
       if (!cancelled) setFeishu(data);
-    }).catch(() => { /* Keep manual sync available when status loading fails. */ });
+    }).catch((e) => { if (!cancelled) setStatusError(e instanceof Error ? e.message : '同步状态加载失败'); });
     return () => { cancelled = true; };
   }, [projectId]);
 
   const sources = (workspace?.sources || []).filter((item) => item.projectId === projectId);
   const currentProject = workspace?.projects.find((item) => item.id === projectId);
+  const syncedSources = sources.filter(item => item.lastSyncedAt);
+  const failedSources = sources.filter(item => item.lastError);
+  const latestSync = syncedSources.map(item => item.lastSyncedAt).sort().at(-1);
 
   async function saveSource() {
     setBusy('source');
@@ -92,6 +104,7 @@ export function SettingsDataSources({
       });
       toast('数据源已移除', 'success');
       await onDone();
+      await loadSources();
     } catch (err) {
       toast(err instanceof Error ? err.message : '移除失败', 'error');
     } finally {
@@ -101,9 +114,22 @@ export function SettingsDataSources({
 
   return (
     <div className="stack">
+      <section className="ops-metric-grid" aria-label="项目数据源同步概况">
+        <MetricCard label="已配置数据源" value={workspace ? sources.length : '—'} unit="个" theme="blue" desc="当前项目手动登记的数据源，不含内置工作表" />
+        <MetricCard label="有同步记录" value={workspace ? syncedSources.length : '—'} unit="个" theme="green" desc={latestSync ? `最近同步 ${cnTime(latestSync)}` : '尚无同步记录'} />
+        <MetricCard label="需处理的数据源" value={workspace ? failedSources.length : '—'} unit="个" theme={failedSources.length ? 'red' : 'teal'} desc="按最近错误记录统计；详情见下方数据源列表" />
+        <MetricCard label="最近读取行数合计" value={workspace && syncedSources.length ? syncedSources.reduce((sum, item) => sum + (Number(item.lastRowCount) || 0), 0).toLocaleString() : '—'} unit="行" theme="purple" desc="各源最近一次读取量相加，未经跨表去重；无记录显示 —" />
+      </section>
+      {statusError && <ErrorState error={`${statusError}${feishu ? '；下方保留上次读取的状态。' : ''}`} onRetry={loadSources} />}
+      {!feishu && !statusError && <LoadingState text="正在读取同步核对状态…" />}
+      {projectId === 'qicui' && feishu && <section className="pastel-card reference-section section-teal">
+        <div className="card-header-row"><div className="header-left"><span className="section-mini-tag tag-teal">内置工作表核对</span><h3>真实同步快照</h3></div><span className="header-tag">{feishu.checkedAt ? cnTime(feishu.checkedAt) : '尚未核对'}</span></div>
+        <p className="reference-note">已返回 {feishu.reports.length} 张工作表报告，其中 {feishu.reports.filter(report => report.status === 'error').length} 张读取失败。投放数据截至 {feishu.latestDate || '暂无日期'}；同步核对时间不代表业务数据日期。</p>
+        <p className="reference-note">展开下方溯源明细查看原表链接、工作表 ID、读取范围与逐表错误。</p>
+      </section>}
       {projectId==='qicui'&&<><SyncButton projectId={projectId} onRefresh={async()=>{await onDone();await loadSources();}}/><FeishuSources data={feishu} projectId={projectId}/></>}
       <section className="platform-split">
-        <article className="platform-panel side-form-panel">
+        <article className="platform-panel side-form-panel pastel-card reference-section section-blue">
           <div className="section-kicker">FEISHU SHEET</div>
           <h2>{source.id ? '编辑数据源' : '新增数据源'}</h2>
           <p className="section-copy">配置飞书表格位置、同步策略与字段映射。</p>
@@ -179,7 +205,7 @@ export function SettingsDataSources({
           </div>
         </article>
 
-        <article className="platform-panel">
+        <article className="platform-panel pastel-card reference-section section-teal">
           <div className="list-head">
             <div>
               <div className="section-kicker">CONNECTED SOURCES</div>
@@ -196,16 +222,16 @@ export function SettingsDataSources({
                   <span>
                     <strong>{item.name}</strong>
                     <small>
-                      {item.kind === 'owned' ? '发布进度' : '供应商交付'} ·{' '}
+                      {item.kind === 'owned' ? '发布进度' : item.kind === 'supplier' ? '供应商交付' : item.kind || '未标注用途'} ·{' '}
                       {item.sheetId || '未填写 Sheet ID'} · {item.range}
                     </small>
                     <em>
-                      最近同步 {cnTime(item.lastSyncedAt)} · {item.lastRowCount} 条
+                      最近同步 {cnTime(item.lastSyncedAt)} · {item.lastSyncedAt ? item.lastRowCount : '—'} 行
                       {item.lastError ? ' · ' + item.lastError : ''}
                     </em>
                   </span>
-                  <i className={item.status.includes('正常') ? 'ok' : 'warn'}>
-                    {item.status}
+                  <i className={!item.lastError && item.status.includes('正常') ? 'ok' : 'warn'}>
+                    {item.lastError ? '同步异常' : item.status || '未同步'}
                   </i>
                   <button onClick={() => setSource({ ...item })}>编辑</button>
                   <button

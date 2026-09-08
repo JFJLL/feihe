@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
@@ -10,6 +10,8 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from '../content/content-view-model';
+import { NoteSummaryBoard } from '../content/NoteSummaryBoard';
+import { CollectionSnapshotBoard } from './CollectionSnapshotBoard';
 
 export function CommentCollection({
   projectId,
@@ -35,7 +37,9 @@ export function CommentCollection({
   const [query, setQuery] = useState(searchParams.get('query') || '');
   const [monitored, setMonitored] = useState(searchParams.get('monitored') || '');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [boardError, setBoardError] = useState('');
+  const requestSequence = useRef(0);
   const [fetching, setFetching] = useState(false);
   const [fetchResult, setFetchResult] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -74,7 +78,9 @@ export function CommentCollection({
   }, []);
 
   const loadData = useCallback(async () => {
+    const sequence = ++requestSequence.current;
     setLoading(true);
+    setBoardError('');
     try {
       const p = new URLSearchParams({
         projectId,
@@ -85,14 +91,17 @@ export function CommentCollection({
       if (debouncedQuery) p.set('query', debouncedQuery);
       if (monitored) p.set('monitored', monitored);
       const res = await api<NotesListResponse>('/api/notes/list?' + p.toString());
+      if (sequence !== requestSequence.current) return;
       setItems(res.items || []);
       setSelectedIds(prev => prev.filter(id => (res.items || []).some(item => item.id === id)));
       setTotal(res.total || 0);
       if (res.summary) setSummary(res.summary);
     } catch (e) {
+      if (sequence !== requestSequence.current) return;
+      setBoardError(e instanceof Error ? e.message : '加载失败');
       toast(e instanceof Error ? e.message : '加载采集监测列表失败', 'error');
     } finally {
-      setLoading(false);
+      if (sequence === requestSequence.current) setLoading(false);
     }
   }, [projectId, page, debouncedQuery, monitored, toast]);
 
@@ -100,7 +109,7 @@ export function CommentCollection({
     const timer = setTimeout(() => {
       void loadData();
     }, 0);
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); requestSequence.current += 1; };
   }, [loadData]);
 
   async function executeFetch(ids: string[]) {
@@ -196,6 +205,11 @@ export function CommentCollection({
         />
       </section>
 
+      <div className="workspace-two-col">
+        <NoteSummaryBoard mode="collection" summary={summary} loading={loading} error={boardError} />
+        <CollectionSnapshotBoard items={items} loading={loading} error={boardError} />
+      </div>
+
       {/* 醒目的青色采集操作卡 */}
       <DashboardSection
         eyebrow="COMMENT INGESTION"
@@ -208,7 +222,7 @@ export function CommentCollection({
           </label>
           <textarea
             rows={3}
-            placeholder="粘贴小红书笔记链接或 24 位十六进制 ID，例如：\n6a01be210000000035033cb8\nhttps://www.xiaohongshu.com/explore/6a01be210000000035033cb8"
+            placeholder={'粘贴小红书笔记链接或 24 位十六进制 ID，例如：\n6a01be210000000035033cb8\nhttps://www.xiaohongshu.com/explore/6a01be210000000035033cb8'}
             value={noteInput}
             onChange={(e) => setNoteInput(e.target.value)}
             style={{

@@ -7,6 +7,7 @@ import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
 
 export function ProjectProfile({
   project,
@@ -24,14 +25,14 @@ export function ProjectProfile({
   if (!project) {
     if (error) {
       return (
-        <article className="panel">
+        <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="PROJECT PROFILE" title="项目基本资料" />
           <ErrorState error={error} onRetry={refreshWorkspace} />
         </article>
       );
     }
     return (
-      <article className="panel">
+      <article className="panel pastel-card reference-section section-blue">
         <PanelHead eyebrow="PROJECT PROFILE" title="项目基本资料" />
         <LoadingState text="正在获取项目资料…" />
       </article>
@@ -39,6 +40,11 @@ export function ProjectProfile({
   }
 
   return (
+    <div className="stack">
+      <section className="two-col-chart-grid" aria-label="已保存的项目资料">
+        <MetricCard label="项目状态" value={project.status || '未设置'} theme="green" tag="已保存" desc={`项目标识：${project.id}`} />
+        <MetricCard label="品牌 / SPU" value={project.brand || '未填写'} theme="purple" desc={`SPU：${project.spu || '未填写'} · 品类：${project.category || '未填写'}`} />
+      </section>
     <ProjectProfileForm
       key={project.id + '-' + project.updatedAt}
       project={project}
@@ -46,6 +52,7 @@ export function ProjectProfile({
       onDone={onDone}
       toast={toast}
     />
+    </div>
   );
 }
 
@@ -80,7 +87,7 @@ function ProjectProfileForm({
   }
 
   return (
-    <article className="panel">
+    <article className="panel pastel-card reference-section section-blue">
       <PanelHead eyebrow="PROJECT PROFILE" title="项目基本资料" />
       <div className="project-form compact-form">
         <label>

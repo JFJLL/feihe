@@ -1,13 +1,6 @@
 import React from 'react';
 
-const sectionLabels: Record<string, [string, string]> = {
-  'CONTENT STRATEGY': ['内容策略', 'blue'], 'FORMAT MIX': ['形式分析', 'teal'],
-  'CREATOR EFFICIENCY': ['达人效率', 'purple'], 'GEOGRAPHY': ['地域分布', 'green'],
-  'CONTENT RANKING': ['内容排行', 'blue'], 'MONTHLY SEARCH': ['竞品月报', 'purple'],
-  'BRAND LANDSCAPE': ['竞争格局', 'blue'], 'SENTIMENT COMPOSITION': ['口碑结构', 'green'],
-  'VOICE TREND': ['动态走势', 'blue'], 'TOPIC TAXONOMY': ['话题分析', 'teal'],
-  'VOICE OF CUSTOMER': ['消费者洞察', 'purple'], 'ACTION SLA': ['行动闭环', 'amber'],
-};
+import { sectionLabels } from '../section-labels';
 
 export function DashboardSection({
   eyebrow,

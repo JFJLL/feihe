@@ -6,6 +6,9 @@ import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { compact, num } from '../../lib/hooks/use-project-data';
 import { keywordMatches, noteDirection } from './KeywordRadar';
+import { GrowthSampleBoard } from './GrowthSampleBoard';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
+import { display, percent, ratio } from './metrics';
 
 export function InspirationLibrary({
   data,
@@ -43,7 +46,7 @@ export function InspirationLibrary({
               '项目高热样本：互动 ' +
               num(note.interactionCount).toLocaleString() +
               '，评论 ' +
-              num(note.commentTotal).toLocaleString(),
+              display(note.commentTotal),
             sourceNoteId: note.id,
             sourceType: '项目高热',
             owner: '',
@@ -84,11 +87,15 @@ export function InspirationLibrary({
 
   return (
     <div className="stack">
+      <div className="reference-daily-grid">
+        {stages.map((stage, i) => <MetricCard key={stage} label={stage} value={growth.inspirations.filter(item => item.stage === stage).length} unit="条" theme={(['blue', 'teal', 'purple', 'green'] as const)[i]} desc={'当前阶段占比 ' + percent(ratio(growth.inspirations.filter(item => item.stage === stage).length, growth.inspirations.length)) + ' · 非历史转化率'} />)}
+      </div>
+      <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} />
       <section className="inspiration-split">
         <article className="panel">
           <PanelHead eyebrow="PLATFORM SIGNAL" title="项目高热灵感" />
           <p className="metric-note">
-            自动取自当前项目高热样本；当全站趋势源接入后，可扩展为行业热点与实时增速。
+            取自本次载入笔记中超过互动阈值的样本，展示前 10 条；可查看来源并沉淀选题。
           </p>
           <div className="idea-source-list">
             {auto.slice(0, 10).map((note) => (
@@ -97,7 +104,7 @@ export function InspirationLibrary({
                   <strong>{note.title || note.id}</strong>
                   <small>
                     {noteDirection(note)} · 互动 {compact(note.interactionCount)} · 评论{' '}
-                    {compact(note.commentTotal)}
+                    {display(note.commentTotal)}
                   </small>
                 </span>
                 {openNote && <button onClick={() => openNote(note.id)}>明细</button>}

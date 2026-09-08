@@ -20,6 +20,7 @@ export async function GET(request: Request) {
   const category = (url.searchParams.get('category') || '').trim();
   const monitored = (url.searchParams.get('monitored') || '').trim();
   const hasMetrics = (url.searchParams.get('hasMetrics') || '').trim();
+  const replyPending = url.searchParams.get('replyPending') === '1';
   const sort = (url.searchParams.get('sort') || '').trim();
   const order = (url.searchParams.get('order') || 'desc').toLowerCase() === 'asc' ? 'ASC' : 'DESC';
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
@@ -31,6 +32,14 @@ export async function GET(request: Request) {
 
   if (view === 'publishing') {
     conditions.push("pn.source_type IN ('owned', 'commercial')");
+  }
+
+  if (replyPending) {
+    conditions.push(`EXISTS (
+      SELECT 1 FROM key_comments reply
+      WHERE reply.note_id = n.id AND reply.project_id = pn.project_id
+        AND reply.treatment_status = '待处理' AND reply.action = '需达人回复'
+    )`);
   }
 
   if (query) {
@@ -122,6 +131,10 @@ export async function GET(request: Request) {
       SUM(CASE WHEN pn.status = '符合且能汇报' THEN 1 ELSE 0 END) AS reportableCount,
       SUM(CASE WHEN pn.status = '符合基础要求' THEN 1 ELSE 0 END) AS baseCount,
       SUM(CASE WHEN pn.status LIKE '%补充%' THEN 1 ELSE 0 END) AS supplementCount,
+      SUM((SELECT COUNT(*) FROM key_comments reply
+        WHERE reply.note_id = n.id AND reply.project_id = pn.project_id
+          AND reply.treatment_status = '待处理' AND reply.action = '需达人回复'
+      )) AS replyPendingCount,
       SUM(CASE WHEN pn.status != '待抓取' OR pn.last_fetched_at IS NOT NULL THEN 1 ELSE 0 END) AS fetchedCount,
       SUM(CASE WHEN pn.status = '待抓取' AND pn.last_fetched_at IS NULL THEN 1 ELSE 0 END) AS unfetchedCount,
       COALESCE(SUM(pn.comment_total), 0) AS totalComments,
@@ -159,7 +172,8 @@ export async function GET(request: Request) {
       CASE WHEN (p.cover_url IS NOT NULL AND p.cover_url != '') 
             AND (p.read_count IS NOT NULL AND p.read_count > 0) 
             AND (p.category1 IS NOT NULL AND p.category1 != '') THEN 1 ELSE 0 END AS isProfileComplete,
-      COALESCE(kc.pendingCount, 0) AS pendingRiskCount
+      COALESCE(kc.pendingCount, 0) AS pendingRiskCount,
+      COALESCE(kc.replyPendingCount, 0) AS replyPendingCount
     FROM notes n
     JOIN project_notes pn ON pn.note_id = n.id
     LEFT JOIN note_profiles p ON p.note_id = n.id
@@ -174,7 +188,8 @@ export async function GET(request: Request) {
       FROM comment_snapshots WHERE project_id = ?
     ) prev_snap ON prev_snap.note_id = n.id AND prev_snap.rn = 2
     LEFT JOIN (
-      SELECT note_id, COUNT(*) AS pendingCount
+      SELECT note_id, COUNT(*) AS pendingCount,
+        SUM(CASE WHEN action = '需达人回复' THEN 1 ELSE 0 END) AS replyPendingCount
       FROM key_comments
       WHERE project_id = ? AND treatment_status = '待处理'
       GROUP BY note_id
@@ -225,6 +240,7 @@ export async function GET(request: Request) {
       reportableCount: number;
       baseCount: number;
       supplementCount: number;
+      replyPendingCount: number;
       fetchedCount: number;
       unfetchedCount: number;
       totalComments: number;
@@ -236,13 +252,14 @@ export async function GET(request: Request) {
   ]);
 
   const total = Number(totalRow?.total || 0);
+  const summaryTotal = Number(summaryRow?.total || 0);
   const basicProfileCount = Number(summaryRow?.basicProfileCount || 0);
-  const missingBasicProfileCount = Math.max(0, total - basicProfileCount);
+  const missingBasicProfileCount = Math.max(0, summaryTotal - basicProfileCount);
   const performanceMetricCount = Number(summaryRow?.performanceMetricCount || 0);
-  const missingPerformanceCount = Math.max(0, total - performanceMetricCount);
+  const missingPerformanceCount = Math.max(0, summaryTotal - performanceMetricCount);
 
   const summary = {
-    total,
+    total: summaryTotal,
     coverCount: Number(summaryRow?.coverCount || 0),
     categoryCount: Number(summaryRow?.categoryCount || 0),
     basicProfileCount,
@@ -268,6 +285,7 @@ export async function GET(request: Request) {
     reportableCount: Number(summaryRow?.reportableCount || 0),
     baseCount: Number(summaryRow?.baseCount || 0),
     supplementCount: Number(summaryRow?.supplementCount || 0),
+    replyPendingCount: Number(summaryRow?.replyPendingCount || 0),
     fetchedCount: Number(summaryRow?.fetchedCount || 0),
     unfetchedCount: Number(summaryRow?.unfetchedCount || 0),
     totalComments: Number(summaryRow?.totalComments || 0),

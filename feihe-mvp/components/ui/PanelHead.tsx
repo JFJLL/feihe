@@ -1,5 +1,7 @@
 ﻿import React from 'react';
 
+import { sectionLabels } from './section-labels';
+
 export function PanelHead({
   eyebrow,
   title,
@@ -12,7 +14,7 @@ export function PanelHead({
   return (
     <div className="panel-title">
       <div>
-        {eyebrow && <small>{eyebrow}</small>}
+        {eyebrow && <small>{sectionLabels[eyebrow]?.[0] || eyebrow}</small>}
         <h2>{title}</h2>
       </div>
       {extra}

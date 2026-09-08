@@ -57,10 +57,10 @@ export function GrowthWorkspace({
   return (
     <div className="ops-workspace overview-colorful-page reference-workspace">
       <PageHeader
-        eyebrow="FEIHE · Q3 COMPETITOR"
+        eyebrow="FEIHE · COMPETITOR"
         title="竞品分析"
-        subtitle="2026年 Q3 · 声量格局与内容策略横向对比 · 机会雷达监测"
-        badge={<span>{dashboard.analytics.brands?.length || 0} 家重点监测品牌</span>}
+        subtitle="项目样本竞争格局 · 独立来源搜索趋势 · 关键词机会与选题流转"
+        badge={<span>{dashboard.analytics.brands?.length || 0} 个品牌分组</span>}
       >
         <div className="workspace-header-actions">
           <SyncButton projectId={projectId} onRefresh={onRefresh} />

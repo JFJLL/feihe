@@ -12,11 +12,9 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact } from '../../lib/hooks/use-project-data';
 import type { Dashboard, Ops } from '../../lib/types/project';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
-import { isOwnedNote, noteDirection } from '../../lib/business/note-utils';
 
 export function PublishingManagement({
   projectId,
-  dashboard,
   ops,
   openNote,
   toast,
@@ -114,7 +112,7 @@ export function PublishingManagement({
   // 次级区域：全库服务端 SQL 聚合覆盖反馈分析（不截断 500 条）
   const { feedbackRows, opportunitiesCount, naturalTotalInteractions } = useMemo(() => {
     const rows = [...coverageFeedback].sort((a, b) => b.natural - a.natural);
-    const opps = rows.filter((r) => r.natural > r.owned).length;
+    const opps = rows.filter((r) => r.natural > r.owned + r.commercial).length;
     const naturalSum = rows.reduce((sum, r) => sum + Number(r.interactions || 0), 0);
     return { feedbackRows: rows, opportunitiesCount: opps, naturalTotalInteractions: naturalSum };
   }, [coverageFeedback]);
@@ -134,8 +132,8 @@ export function PublishingManagement({
         <MetricCard
           theme={hasPublishTarget && achievePct >= 100 ? 'green' : 'yellow'}
           label="发布目标完成度"
-          value={hasPublishTarget ? `${achievePct}%` : '尚未配置发布目标'}
-          desc={hasPublishTarget ? `目标 ${publishTarget} 篇 · 差额 ${gap} 篇` : '可在项目设置-目标中配置发布计划'}
+          value={hasPublishTarget ? `${achievePct}%` : '未设置'}
+          desc={hasPublishTarget ? `目标 ${publishTarget} 篇 · 差额 ${gap} 篇` : '前往项目设置 → 规则与目标，配置发布目标'}
           tag="目标节奏"
         />
         <MetricCard
@@ -151,7 +149,7 @@ export function PublishingManagement({
           label="方向缺口"
           value={opportunitiesCount}
           unit="个"
-          desc={`自然互动 ${compact(naturalTotalInteractions)} · 自然讨论高但自有未覆盖`}
+          desc={`自然互动 ${compact(naturalTotalInteractions)} · 自然样本数高于自有与商业合计`}
           tag="覆盖缺口"
         />
       </section>
@@ -172,7 +170,8 @@ export function PublishingManagement({
               实际已发布 <strong>{publishedCount}</strong> 篇 / 目标 <strong>{hasPublishTarget ? publishTarget : '—'}</strong> 篇
             </span>
           </div>
-          <ProgressBar value={publishedCount} max={publishTarget || publishedCount || 100} theme={achievePct >= 100 ? 'green' : 'blue'} />
+          {hasPublishTarget && <ProgressBar value={publishedCount} max={publishTarget} theme={achievePct >= 100 ? 'green' : 'blue'} />}
+          {!hasPublishTarget && <Link className="subtle-btn" href={`/projects/${encodeURIComponent(projectId)}/settings?tab=rules`}>设置发布目标 →</Link>}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '12px', color: '#64748b' }}>
             <span>{hasPublishTarget ? `已完成 ${achievePct}%` : '暂无约束目标'}</span>
             <span>{hasPublishTarget ? `还需发布 ${gap} 篇即可达成` : ''}</span>

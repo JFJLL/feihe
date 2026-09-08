@@ -1,0 +1,58 @@
+'use client';
+
+import type { Analytics } from '../../lib/types/project';
+import { sourceLabel } from './content-view-model';
+import { DashboardSection } from '../../components/ui/operations/DashboardSection';
+import { TierDoughnutChart, HorizontalBarList } from '../overview/OverviewCharts';
+
+const colors = ['#0284c7', '#16a34a', '#9333ea', '#ea580c', '#64748b'];
+const count = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : 0;
+
+export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
+  const sources = analytics.sourceDistribution.filter(row => count(row.count) > 0);
+  const sourceTotal = sources.reduce((sum, row) => sum + count(row.count), 0);
+  const total = count(analytics.dataQuality.total);
+  const coverage = [
+    ['表现指标', 'metricCount'], ['内容分类', 'categoryCount'],
+    ['达人层级', 'creatorCount'], ['评论已抓取', 'commentFetched'],
+  ].map(([label, key], index) => {
+    const amount = Math.min(total, count(analytics.dataQuality[key]));
+    return { label, amount, pct: total ? amount / total * 100 : 0, color: colors[index], subText: `${amount.toLocaleString()} / ${total.toLocaleString()} 篇` };
+  });
+  const levels = analytics.creatorLevels.filter(row => count(row.avgInteraction) > 0)
+    .slice().sort((a, b) => count(b.avgInteraction) - count(a.avgInteraction));
+  const maxInteraction = Math.max(0, ...levels.map(row => count(row.avgInteraction)));
+
+  return (
+    <div className="workspace-two-col">
+      <DashboardSection eyebrow="CONTENT STRATEGY" title="内容资产来源结构" desc="按当前统计范围内的全部笔记汇总，识别内容来源集中度。">
+        {sourceTotal > 0 ? <TierDoughnutChart total={sourceTotal} items={sources.map((row, index) => ({
+          label: sourceLabel(row.name), count: count(row.count), pct: count(row.count) / sourceTotal * 100, color: colors[index % colors.length],
+        }))} /> : <div className="empty">暂无内容来源数据</div>}
+      </DashboardSection>
+      <DashboardSection eyebrow="FORMAT MIX" title="数据覆盖与分析缺口" desc="各项独立统计；表现指标指阅读或互动大于 0，未覆盖不等于表现为零。">
+        {total > 0 ? <>
+          <HorizontalBarList items={coverage.filter(item => item.amount > 0)} />
+          {coverage.filter(item => item.amount === 0).map(item => <p className="muted" key={item.label}>{item.label}：0 / {total.toLocaleString()} 篇（0%）</p>)}
+        </> : <div className="empty">暂无笔记，暂不计算覆盖率</div>}
+      </DashboardSection>
+      <DashboardSection eyebrow="CREATOR EFFICIENCY" title="达人层级篇均互动效率" desc="百分比以最高篇均互动层级为 100%；均值沿用已同步指标口径，不代表互动贡献占比。">
+        {levels.length ? <HorizontalBarList items={levels.map((row, index) => ({
+          label: String(row.name || '待补充'), amount: count(row.avgInteraction),
+          pct: count(row.avgInteraction) / maxInteraction * 100, color: colors[index % colors.length],
+          subText: `${count(row.avgInteraction).toLocaleString('zh-CN', { maximumFractionDigits: 1 })} 次/篇 · ${count(row.count)} 篇`,
+        }))} /> : <div className="empty">暂无大于 0 的篇均互动数据</div>}
+      </DashboardSection>
+      <DashboardSection eyebrow="FORMAT MIX" title="内容形式互动贡献" desc="按已同步互动次数计算贡献占比；缺失互动指标的内容不参与占比计算。">
+        {(() => {
+          const formats = analytics.formats.filter(row => count(row.interactions) > 0);
+          const interactions = formats.reduce((sum, row) => sum + count(row.interactions), 0);
+          return interactions > 0 ? <HorizontalBarList items={formats.map((row, index) => ({
+            label: String(row.name || '待补充'), amount: count(row.interactions), pct: count(row.interactions) / interactions * 100,
+            color: colors[index % colors.length], subText: `${count(row.interactions).toLocaleString()} 次互动 · ${count(row.count)} 篇`,
+          }))} /> : <div className="empty">暂无已同步互动贡献</div>;
+        })()}
+      </DashboardSection>
+    </div>
+  );
+}

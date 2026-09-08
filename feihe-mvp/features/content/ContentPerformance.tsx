@@ -1,8 +1,8 @@
 'use client';
 
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { ContentAnalyticsBoard } from './ContentAnalyticsBoard';
 
-import { useState } from 'react';
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -40,23 +40,6 @@ function DistributionBars({
         <div className="empty">{empty}</div>
       )}
     </div>
-  );
-}
-
-function NoteCover({ src, label, eager }: { src: string; label: string; eager: boolean }) {
-  const [failed, setFailed] = useState(false);
-  if (!src || failed) return <span style={{ background: '#f1f5f9', color: '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px' }}>{label.slice(0, 1)}</span>;
-  return (
-    <img
-      src={src}
-      alt=""
-      loading={eager ? 'eager' : 'lazy'}
-      decoding="async"
-      referrerPolicy="no-referrer"
-      onError={(e) => {
-        if (!failed) setFailed(true);
-      }}
-    />
   );
 }
 
@@ -124,7 +107,7 @@ export function ContentPerformance({
 }) {
   const m = data.metrics;
   const q = data.analytics.dataQuality;
-  const total = Math.max(1, num(q.total));
+  const total = num(q.total);
 
   return (
     <div className="stack animate-fade-in">
@@ -163,6 +146,8 @@ export function ContentPerformance({
           tag="达人采买"
         />
       </section>
+
+      <ContentAnalyticsBoard analytics={data.analytics} />
 
       <div className="workspace-two-col">
         <DashboardSection
@@ -244,7 +229,7 @@ export function ContentPerformance({
       <DashboardSection
         eyebrow="CONTENT RANKING"
         title="高热内容表现排行"
-        desc="按阅读、互动与评论三维综合指标排序的高价值笔记。"
+        desc="按互动与评论总量排序，阅读量辅助评估；点击查看笔记明细。"
       >
         <TopNotes rows={data.analytics.topNotes} openNote={openNote} />
       </DashboardSection>

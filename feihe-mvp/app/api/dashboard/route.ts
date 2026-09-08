@@ -160,8 +160,15 @@ export async function GET(request: Request) {
       bind(`SELECT CASE WHEN p.brand IN ('启萃','飞鹤启萃','飞鹤') OR (pn.product_scope != '竞品' AND (p.brand IS NULL OR p.brand = '' OR p.brand = '本品')) THEN '启萃' WHEN pn.product_scope = '竞品' THEN COALESCE(NULLIF(p.brand,''), '其他竞品') ELSE COALESCE(NULLIF(p.brand,''), '启萃') END AS brand,
         COUNT(*) AS notes,SUM(pn.comment_total) AS comments,SUM(pn.positive_count) AS positive,
         SUM(pn.negative_count) AS negative,SUM(pn.question_count) AS question,
-        SUM(p.read_count) AS reads,SUM(p.interaction_count) AS interactions,SUM(p.note_price) AS cost
-        FROM notes n JOIN project_notes pn ON pn.note_id=n.id LEFT JOIN note_profiles p ON p.note_id=n.id${where} GROUP BY brand ORDER BY comments DESC,notes DESC LIMIT 12`).all(),
+        SUM(p.read_count) AS reads,SUM(p.interaction_count) AS interactions,SUM(p.note_price) AS cost,
+        COUNT(p.interaction_count) AS interactionSamples,
+        SUM(CASE WHEN p.read_count IS NOT NULL AND p.interaction_count IS NOT NULL THEN p.read_count END) AS pairedReads,
+        SUM(CASE WHEN p.read_count IS NOT NULL AND p.interaction_count IS NOT NULL THEN p.interaction_count END) AS pairedInteractions,
+        SUM(CASE WHEN p.note_price IS NOT NULL AND p.interaction_count IS NOT NULL THEN p.note_price END) AS pairedCost,
+        SUM(CASE WHEN p.note_price IS NOT NULL AND p.interaction_count IS NOT NULL THEN p.interaction_count END) AS costInteractions
+        FROM notes n JOIN project_notes pn ON pn.note_id=n.id LEFT JOIN note_profiles p ON p.note_id=n.id${where}
+        /* SQLite resolves GROUP BY brand to p.brand; ordinal 1 groups the normalized CASE expression. */
+        GROUP BY 1 ORDER BY comments DESC,notes DESC,brand`).all(),
       bind(`SELECT COALESCE(NULLIF(p.note_type,''),'待补充') AS name,COUNT(*) AS count,SUM(p.interaction_count) AS interactions
         FROM notes n JOIN project_notes pn ON pn.note_id=n.id LEFT JOIN note_profiles p ON p.note_id=n.id${where} GROUP BY name ORDER BY count DESC`).all(),
       bind(`SELECT COALESCE(NULLIF(p.creator_level,''),'待补充') AS name,COUNT(*) AS count,AVG(p.read_count) AS avgRead,

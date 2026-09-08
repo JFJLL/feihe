@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
+import { ErrorState } from '../../components/ui/ErrorState';
+import { LoadingState } from '../../components/ui/LoadingState';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { ProjectProfile } from './ProjectProfile';
 import { RulesAndTargets } from './RulesAndTargets';
@@ -51,21 +53,27 @@ export function SettingsWorkspace({
   const { currentProject, workspace, refreshWorkspace, showToast } = useProject();
 
   const [map, setMap] = useState<MapData>(emptyMap);
+  const [mapError, setMapError] = useState('');
+  const [mapLoadedFor, setMapLoadedFor] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     if (tab === 'data-map') {
       api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId))
-        .then((m) => setMap(m))
-        .catch((e) => showToast(e instanceof Error ? e.message : '数据地图加载失败', 'error'));
+        .then((m) => { if (!cancelled) { setMap(m); setMapError(''); setMapLoadedFor(projectId); } })
+        .catch((e) => { if (!cancelled) setMapError(e instanceof Error ? e.message : '数据地图加载失败'); });
     }
+    return () => { cancelled = true; };
   }, [tab, projectId, showToast]);
 
   const reloadMap = async () => {
     try {
       const m = await api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId));
       setMap(m);
-    } catch {
-      // ignore
+      setMapError('');
+      setMapLoadedFor(projectId);
+    } catch (e) {
+      setMapError(e instanceof Error ? e.message : '数据地图加载失败');
     }
   };
 
@@ -83,7 +91,7 @@ export function SettingsWorkspace({
   ];
 
   return (
-    <div className="stack reference-workspace settings-workspace">
+    <div className="stack ops-workspace reference-workspace settings-workspace">
       <PageHeader
         eyebrow="PROJECT SETTINGS"
         title="项目设置"
@@ -109,6 +117,7 @@ export function SettingsWorkspace({
 
       {tab === 'rules' && (
         <RulesAndTargets
+          key={projectId}
           data={dashboard}
           ops={ops}
           projectId={projectId}
@@ -119,6 +128,7 @@ export function SettingsWorkspace({
 
       {tab === 'data-sources' && (
         <SettingsDataSources
+          key={projectId}
           projectId={projectId}
           workspace={workspace}
           onDone={handleProfileOrSourceUpdate}
@@ -128,13 +138,17 @@ export function SettingsWorkspace({
 
       {tab === 'integrations' && (
         <SettingsIntegrations
+          key={projectId}
           projectId={projectId}
           toast={showToast}
         />
       )}
 
       {tab === 'data-map' && (
+        mapError ? <ErrorState error={mapError} onRetry={reloadMap} /> :
+        mapLoadedFor !== projectId ? <LoadingState text="正在加载当前项目的数据地图…" /> :
         <DataMap
+          key={projectId}
           projectId={projectId}
           data={map}
           reload={reloadMap}

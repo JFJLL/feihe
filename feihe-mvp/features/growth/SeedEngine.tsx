@@ -3,19 +3,19 @@
 import Link from '../../components/ui/AppLink';
 import type { Dashboard, GrowthSettings, GrowthKeyword, Note } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
-import { compact, num, pct } from '../../lib/hooks/use-project-data';
+import { num, pct } from '../../lib/hooks/use-project-data';
+import { numeric, display, ratio } from './metrics';
 import { isOwnedNote, keywordMatches } from './KeywordRadar';
 
 function growthScore(note: Note, keywords: GrowthKeyword[]) {
   const parts: Array<{ value: number; weight: number }> = [];
-  if (num(note.interactionCount) > 0) {
+  if (numeric(note.interactionCount) !== null && num(note.interactionCount) >= 0) {
     parts.push({
       value: Math.min(100, (Math.log10(num(note.interactionCount) + 1) / 4) * 100),
       weight: 35,
     });
   }
-  const conversion =
-    num(note.exposure) > 0 ? num(note.readCount) / num(note.exposure) : null;
+  const conversion = ratio(note.readCount, note.exposure);
   if (conversion !== null) {
     parts.push({ value: Math.min(100, (conversion / 0.15) * 100), weight: 25 });
   }
@@ -61,10 +61,9 @@ export function SeedEngine({
       <section className="seed-explainer">
         <div>
           <small>SEED LOGIC</small>
-          <strong>现阶段种子分 = 项目内容可证明的表现</strong>
+          <strong>种子分为内部选题排序参考</strong>
           <p>
-            按互动表现、阅读转化、观察关键词命中和本品适配加权；字段缺失时同步显示完整度。接入蒲公英和聚光后，再加入真实
-            CTR、CPUV 与投放消耗。
+            按互动表现、阅读/曝光比值、关键词命中和本品标签加权；权重是内部启发式规则，未经过投放效果验证，不代表转化预测。缺失指标不按零参与评分。
           </p>
         </div>
         <dl>
@@ -91,7 +90,7 @@ export function SeedEngine({
             <span>建议分</span>
             <span>数据完整度</span>
             <span>互动</span>
-            <span>阅读转化</span>
+            <span>阅读/曝光</span>
             <span>关键词</span>
             <span>种子池</span>
           </div>
@@ -100,7 +99,7 @@ export function SeedEngine({
               <span>
                 <strong>{note.title || note.id}</strong>
                 <small>
-                  {note.author || '未知作者'} · {isOwnedNote(note) ? '自有发布' : '自然内容'}
+                  {note.author || '未知作者'} · {note.sourceType || '来源未标注'}
                 </small>
               </span>
               <span>
@@ -113,7 +112,7 @@ export function SeedEngine({
                 </b>
               </span>
               <span>{coverage}/4</span>
-              <span>{compact(note.interactionCount)}</span>
+              <span>{display(note.interactionCount)}</span>
               <span>{conversion === null ? '—' : pct(conversion)}</span>
               <span>
                 {growth.watchKeywords

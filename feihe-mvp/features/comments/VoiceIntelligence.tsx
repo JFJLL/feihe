@@ -235,7 +235,7 @@ export function VoiceIntelligence({
   onSwitchTab?: (tab: string) => void;
 }) {
   const m = data.metrics;
-  const total = Math.max(1, m.commentTotal);
+  const total = m.commentTotal;
   const topPositive = data.analytics?.topics?.find((x) => x.sentiment === '正向');
   const topNegative = data.analytics?.topics?.find((x) => x.sentiment === '负向');
   const actions = m.actions || {};
@@ -252,7 +252,7 @@ export function VoiceIntelligence({
           </div>
           <div className="stat-value">{m.commentTotal ? pct(m.positiveRate) : '—'}</div>
           <div className="reference-kpi-meta">高好评赞誉占比</div>
-          <div className="reference-kpi-delta">正向口碑基调稳定</div>
+          <div className="reference-kpi-delta">{total ? `基于 ${compact(total)} 条已监测评论` : '暂无监测评论，暂不判断口碑'}</div>
         </article>
         <article className="pastel-card pastel-green reference-kpi">
           <div className="stat-head">
@@ -260,8 +260,8 @@ export function VoiceIntelligence({
             <span className="section-mini-tag tag-green">正向沉淀</span>
           </div>
           <div className="stat-value">{compact(m.positiveCount)}<small> 条</small></div>
-          <div className="reference-kpi-meta">功效、吸收与口感好评</div>
-          <div className="reference-kpi-delta">高频词：好吸收、转奶顺</div>
+          <div className="reference-kpi-meta">已识别为正向的评论</div>
+          <div className="reference-kpi-delta">{topPositive ? `主要主题：${String(topPositive.name)}` : '暂无正向主题分类'}</div>
         </article>
         <article className={`pastel-card pastel-${m.negativeCount > 0 ? 'amber' : 'teal'} reference-kpi`}>
           <div className="stat-head">
@@ -270,7 +270,7 @@ export function VoiceIntelligence({
           </div>
           <div className="stat-value">{compact(m.negativeCount)}<small> 条</small></div>
           <div className="reference-kpi-meta">需闭环处置的负面舆情</div>
-          <div className="reference-kpi-delta">重点：胀气、核销问题</div>
+          <div className="reference-kpi-delta">{topNegative ? `重点：${String(topNegative.name)}` : '暂无负向主题分类'}</div>
         </article>
         <article className="pastel-card pastel-purple reference-kpi">
           <div className="stat-head">
@@ -278,7 +278,7 @@ export function VoiceIntelligence({
             <span className="section-mini-tag tag-purple">转化契机</span>
           </div>
           <div className="stat-value">{compact(m.questionCount)}<small> 条</small></div>
-          <div className="reference-kpi-meta">段位、转奶与真伪咨询</div>
+          <div className="reference-kpi-meta">已识别为问询的评论</div>
           <div className="reference-kpi-delta">购买前核心决策阻力</div>
         </article>
       </div>
@@ -340,7 +340,7 @@ export function VoiceIntelligence({
               <div style={{ fontSize: '13px', color: '#334155', lineHeight: 1.5 }}>
                 {topPositive
                   ? '“' + String(topPositive.name) + '”是当前最集中的正向体验，累计共 ' + num(topPositive.count) + ' 条。'
-                  : '正向样本持续积累，形成集中正向讨论。'}
+                  : '暂无可用的正向主题样本，暂不生成结论。'}
               </div>
             </div>
 
@@ -351,7 +351,7 @@ export function VoiceIntelligence({
               <div style={{ fontSize: '13px', color: '#334155', lineHeight: 1.5 }}>
                 {topNegative
                   ? '“' + String(topNegative.name) + '”为当前首要风险主题，共 ' + num(topNegative.count) + ' 条，需重点处置。'
-                  : '当前尚未形成集中的高危负向主题，舆情态势平稳。'}
+                  : '暂无可用的负向主题样本，不能据此判断风险已消除。'}
               </div>
             </div>
 
@@ -399,7 +399,7 @@ export function VoiceIntelligence({
           <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
             <div style={{ fontSize: '12px', color: '#64748b' }}>整体闭环率</div>
             <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f172a', margin: '4px 0' }}>
-              {pct(num(actions.handled) / handledTotal)}
+              {num(actions.total) > 0 ? pct(num(actions.handled) / handledTotal) : '—'}
             </div>
             <div style={{ fontSize: '11.5px', color: '#15803d', fontWeight: 600 }}>已处置完成比例</div>
           </div>

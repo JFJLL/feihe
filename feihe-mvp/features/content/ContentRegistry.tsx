@@ -10,6 +10,7 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact, cnTime, pct } from '../../lib/hooks/use-project-data';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
+import { NoteSummaryBoard } from './NoteSummaryBoard';
 
 export function ContentRegistry({
   projectId,
@@ -44,7 +45,8 @@ export function ContentRegistry({
   const [sort, setSort] = useState(searchParams.get('sort') || '');
   const [order, setOrder] = useState(searchParams.get('order') || 'desc');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [boardError, setBoardError] = useState('');
   const reqSeqRef = useRef(0);
 
   const [debouncedQuery, setDebouncedQuery] = useState(query);
@@ -105,6 +107,7 @@ export function ContentRegistry({
   const loadData = useCallback(async () => {
     const seq = ++reqSeqRef.current;
     setLoading(true);
+    setBoardError('');
     try {
       const p = new URLSearchParams({
         projectId,
@@ -130,9 +133,11 @@ export function ContentRegistry({
       setTotal(res.total || 0);
       if (res.summary) setSummary(res.summary);
     } catch (e) {
+      if (seq !== reqSeqRef.current) return;
+      setBoardError(e instanceof Error ? e.message : '加载失败');
       toast(e instanceof Error ? e.message : '加载失败', 'error');
     } finally {
-      setLoading(false);
+      if (seq === reqSeqRef.current) setLoading(false);
     }
   }, [projectId, page, debouncedQuery, source, scope, status, category, from, to, sort, order, toast]);
 
@@ -140,7 +145,7 @@ export function ContentRegistry({
     const timer = setTimeout(() => {
       void loadData();
     }, 0);
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); reqSeqRef.current += 1; };
   }, [loadData]);
 
   async function handleScan() {
@@ -194,6 +199,8 @@ export function ContentRegistry({
           tag="数据质量"
         />
       </section>
+
+      <NoteSummaryBoard mode="registry" summary={summary} loading={loading} error={boardError} />
 
       {/* 入库操作区 */}
       <DashboardSection

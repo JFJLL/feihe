@@ -1,11 +1,15 @@
-import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 'use client';
 
+import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { GrowthSampleBoard } from './GrowthSampleBoard';
+import { display, completeSum, ratio, percent } from './metrics';
 import { useState } from 'react';
 import type { Dashboard, GrowthSettings, Rules, Note } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { compact, num } from '../../lib/hooks/use-project-data';
+import { num } from '../../lib/hooks/use-project-data';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
+import { sampleDirection } from './directions';
 import { LingxiTrackLive } from '../../app/lingxi-track';
 
 function noteSearchText(note: Note) {
@@ -16,7 +20,7 @@ function noteSearchText(note: Note) {
 }
 
 export function keywordMatches(note: Note, keyword: string) {
-  return Boolean(keyword) && noteSearchText(note).includes(keyword.trim().toLowerCase());
+  return Boolean(keyword.trim()) && noteSearchText(note).includes(keyword.trim().toLowerCase());
 }
 
 export function isOwnedNote(note: Note) {
@@ -24,7 +28,7 @@ export function isOwnedNote(note: Note) {
 }
 
 export function noteDirection(note: Note) {
-  return note.category1 || note.category2 || note.brand || '待补充内容方向';
+  return sampleDirection(note);
 }
 
 export function KeywordRadar({
@@ -55,7 +59,7 @@ export function KeywordRadar({
 
   async function add(keyword = draft) {
     const value = keyword.trim();
-    if (!value) return;
+    if (!value || growth.watchKeywords.some(item => item.keyword.trim().toLowerCase() === value.toLowerCase())) return;
     await save(
       {
         ...growth,
@@ -85,8 +89,8 @@ export function KeywordRadar({
       item,
       matches,
       breakout,
-      interactions: matches.reduce((sum, note) => sum + num(note.interactionCount), 0),
-      comments: matches.reduce((sum, note) => sum + num(note.commentTotal), 0),
+      interactions: completeSum(matches.map(note => note.interactionCount)),
+      comments: completeSum(matches.map(note => note.commentTotal)),
     };
   });
 
@@ -110,7 +114,7 @@ export function KeywordRadar({
           style={dataView !== 'lingxi' ? { background: '#ffffff', color: '#475569', borderColor: '#cbd5e1' } : {}}
           onClick={() => setDataView('lingxi')}
         >
-          🌐 灵犀行业大盘（实时）
+          🌐 灵犀数据查询
         </button>
       </div>
 
@@ -118,11 +122,12 @@ export function KeywordRadar({
         <LingxiTrackLive projectId={projectId} toast={toast || (() => undefined)} />
       ) : (
         <>
+          <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} />
           <section className="panel keyword-control" id="growth-keywords">
             <div>
               <PanelHead eyebrow="WATCHLIST" title="关键词观察清单" />
               <p style={{ margin: '4px 0 12px', color: 'var(--text-muted)', fontSize: '13px' }}>
-                计算项目内容库中匹配关键词的笔记、互动量与爆文样本；平台搜索趋势需接入趋势数据源后显示。
+                匹配本次载入最多 500 篇笔记的标题、作者、分类、品牌与范围。范围为观察标签，不额外过滤笔记；关键词可能交叉命中。任一匹配样本缺少指标时，该项合计显示 —。
               </p>
             </div>
             <div className="keyword-add">
@@ -132,9 +137,10 @@ export function KeywordRadar({
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') void add();
                 }}
+                aria-label="观察关键词"
                 placeholder="输入品牌词、场景词或痛点词"
               />
-              <select value={scope} onChange={(e) => setScope(e.target.value)}>
+              <select aria-label="关键词范围标签" value={scope} onChange={(e) => setScope(e.target.value)}>
                 <option>本品</option>
                 <option>竞品</option>
                 <option>场景</option>
@@ -156,27 +162,11 @@ export function KeywordRadar({
             )}
           </section>
 
-          <section className="growth-kpis">
-            <article>
-              <small>观察关键词</small>
-              <strong>{growth.watchKeywords.length}</strong>
-              <p>由当前项目独立维护</p>
-            </article>
-            <article>
-              <small>匹配笔记</small>
-              <strong>{new Set(rows.flatMap((row) => row.matches.map((n) => n.id))).size}</strong>
-              <p>标题、方向、品牌命中</p>
-            </article>
-            <article>
-              <small>爆文样本</small>
-              <strong>{hotNotes.length}</strong>
-              <p>互动量 &gt; {growth.thresholds.breakoutInteractions.toLocaleString()}</p>
-            </article>
-            <article className="pending">
-              <small>平台实时增速</small>
-              <strong>—</strong>
-              <p>待接入 RedTrend 趋势源</p>
-            </article>
+          <section className="reference-daily-grid">
+            <MetricCard label="观察关键词" value={growth.watchKeywords.length} desc="由当前项目独立维护" />
+            <MetricCard label="去重匹配笔记" value={new Set(rows.flatMap(row => row.matches.map(n => n.id))).size} theme="teal" desc="跨关键词按笔记 ID 去重" />
+            <MetricCard label="项目高热样本" value={hotNotes.length} theme="purple" desc={'互动量 > ' + display(growth.thresholds.breakoutInteractions)} />
+            <MetricCard label="有命中关键词" value={rows.filter(row => row.matches.length > 0).length} theme="green" desc="关键词可交叉命中，明细不可直接相加" />
           </section>
 
           <section className="panel threshold-strip">
@@ -220,7 +210,7 @@ export function KeywordRadar({
                 <span>爆文样本</span>
                 <span>样本互动</span>
                 <span>样本评论</span>
-                <span>平台环比</span>
+                <span>样本覆盖率</span>
                 <span>操作</span>
               </div>
               {rows.length ? (
@@ -234,10 +224,10 @@ export function KeywordRadar({
                     </span>
                     <span>{matches.length}</span>
                     <span>{breakout.length}</span>
-                    <span>{compact(interactions)}</span>
-                    <span>{compact(comments)}</span>
+                    <span>{display(interactions)}</span>
+                    <span>{display(comments)}</span>
                     <span>
-                      <i className="pending-pill">待接入</i>
+                      {percent(ratio(matches.length, data.notes.length))}
                     </span>
                     <span>
                       <button
@@ -274,10 +264,10 @@ export function KeywordRadar({
                       src={note.coverUrl}
                       title={note.title}
                       author={note.author}
-                      category={note.category1 || (isOwnedNote(note) ? '自有发布' : '自然内容')}
+                      category={noteDirection(note)}
                       className="note-radar-cover"
                     />
-                    <i>{isOwnedNote(note) ? '自有发布' : '自然内容'}</i>
+                    <i>{note.sourceType === 'commercial' ? '商业笔记' : note.sourceType || '来源未标注'}</i>
                   </div>
                   <strong>{note.title || note.id}</strong>
                   <p>
@@ -286,15 +276,15 @@ export function KeywordRadar({
                   <dl>
                     <div>
                       <dt>互动</dt>
-                      <dd>{compact(note.interactionCount)}</dd>
+                      <dd>{display(note.interactionCount)}</dd>
                     </div>
                     <div>
                       <dt>评论</dt>
-                      <dd>{compact(note.commentTotal)}</dd>
+                      <dd>{display(note.commentTotal)}</dd>
                     </div>
                     <div>
                       <dt>阅读</dt>
-                      <dd>{compact(note.readCount)}</dd>
+                      <dd>{display(note.readCount)}</dd>
                     </div>
                   </dl>
                   {openNote && (

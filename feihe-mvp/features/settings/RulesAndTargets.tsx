@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { Dashboard, Ops, Pipeline, ReviewRule, Goals } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { num, api } from '../../lib/hooks/use-project-data';
 
 export function RulesAndTargets({
@@ -98,8 +99,14 @@ export function RulesAndTargets({
 
   return (
     <div className="stack">
+      <section className="ops-metric-grid" aria-label="已保存的目标与执行概况">
+        <MetricCard label="历史已完成任务" value={num(ops.settings.goals.workCompleted)} unit="项" theme="green" tag="系统只读" desc={`项目总目标 ${num(ops.settings.goals.workTarget)} 项 · 来自已保存的执行统计`} />
+        <MetricCard label="月度 / 季度目标" value={`${num(ops.settings.goals.monthlyTarget)} / ${num(ops.settings.goals.quarterlyTarget)}`} unit="项" theme="purple" tag="已保存" desc="月度与季度独立维护；0 表示尚未设置目标" />
+        <MetricCard label="已发布笔记" value={num(data.metrics.publishedCount)} unit="篇" theme="blue" desc={`来自项目笔记库 · 发布目标 ${num(ops.settings.goals.publishTarget)} 篇`} />
+        <MetricCard label="启用的补充规则" value={ops.reviewRules.filter(item => Boolean(item.enabled)).length} unit="条" theme="teal" desc={`已登记 ${ops.reviewRules.length} 条 · 执行主线 ${data.pipelines.length} 条`} />
+      </section>
       {/* Project Totals & Goals */}
-      <section className="panel project-goal-settings" id="project-totals">
+      <section className="panel project-goal-settings pastel-card reference-section section-purple" id="project-totals">
         <PanelHead eyebrow="PROJECT TOTALS" title="项目总盘与进度目标" />
         <p className="settings-hint">
           这些值决定首页项目进度、消耗进度、发布进度和评论交付的总值。预算或评论目标填 0 时，自动使用主线合计。
@@ -182,7 +189,7 @@ export function RulesAndTargets({
 
       {/* Acceptance Thresholds & Keywords */}
       <section className="settings-grid">
-        <article className="panel">
+        <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="ACCEPTANCE" title="验收与更新阈值" />
           <div className="form-grid">
             <label>
@@ -241,7 +248,7 @@ export function RulesAndTargets({
           </div>
         </article>
 
-        <article className="panel">
+        <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="BRAND SCOPE" title="品牌与情绪词库" />
           <div className="form-grid">
             <label>
@@ -278,7 +285,7 @@ export function RulesAndTargets({
 
       {/* Supplemental Rules & Action Logic */}
       <section className="settings-grid">
-        <article className="panel">
+        <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="SUPPLEMENTAL REVIEW" title="补充审查规则" />
           <div className="form-grid">
             <label>
@@ -315,7 +322,7 @@ export function RulesAndTargets({
           </div>
         </article>
 
-        <article className="panel">
+        <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="ACTION LOGIC" title="审查动作说明" />
           <ul className="insight-list">
             <li>
@@ -340,8 +347,8 @@ export function RulesAndTargets({
 
       {/* Pipelines & Custom Rules CRUD */}
       <section className="advanced-crud">
-        <article className="panel">
-          <PanelHead eyebrow="CUSTOM REVIEW RULES" title="补充审查规则 CRUD" />
+        <article className="panel pastel-card reference-section section-blue">
+          <PanelHead eyebrow="CUSTOM REVIEW RULES" title="补充审查规则管理" />
           <div className="compact-crud-form">
             <input
               placeholder="规则名称"
@@ -396,7 +403,7 @@ export function RulesAndTargets({
           </div>
         </article>
 
-        <article className="panel">
+        <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="PIPELINE CRUD" title="执行主线管理" />
           <div className="compact-crud-form pipeline-add">
             <input
@@ -429,7 +436,7 @@ export function RulesAndTargets({
         </article>
       </section>
 
-      <section className="panel">
+      <section className="panel pastel-card reference-section section-blue">
         <PanelHead eyebrow="EXECUTION TARGET" title="项目主线目标与费用" />
         <div className="pipeline-editor">
           {pipelines.map((p, pIdx) => (

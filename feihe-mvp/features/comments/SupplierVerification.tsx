@@ -247,7 +247,7 @@ export function SupplierVerification({
       </DashboardSection>
 
       {/* C. 外显率与审核共性 */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '16px' }}>
+      <div className="workspace-two-col">
         <DashboardSection
           eyebrow="VISIBILITY RATE"
           title="整体外显达成率"

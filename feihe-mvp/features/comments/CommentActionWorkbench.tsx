@@ -10,6 +10,7 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api } from '../../lib/hooks/use-project-data';
 import type { ActionWorkbenchItem } from './comment-view-model';
+import { CommentEfficiencyBoard } from './CommentEfficiencyBoard';
 
 export function CommentActionWorkbench({
   projectId,
@@ -37,6 +38,7 @@ export function CommentActionWorkbench({
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
 
   const [loading, setLoading] = useState(false);
+  const [summaryReady, setSummaryReady] = useState(false);
   const [needsRecalculation, setNeedsRecalculation] = useState(false);
   const [recalculating, setRecalculating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +55,19 @@ export function CommentActionWorkbench({
   });
 
   const reqSeqRef = useRef(0);
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const scrollAfterLoadRef = useRef(false);
+  const [resultFocusRequest, setResultFocusRequest] = useState(0);
+
+  useEffect(() => {
+    if (loading || !scrollAfterLoadRef.current) return;
+    const frame = requestAnimationFrame(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'auto', block: 'start' });
+      resultsRef.current?.focus({ preventScroll: true });
+      scrollAfterLoadRef.current = false;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [loading, items, error, resultFocusRequest]);
 
   // Sync state to URL with replaceState
   const syncToUrl = useCallback(
@@ -163,6 +178,7 @@ export function CommentActionWorkbench({
       if (seq !== reqSeqRef.current) return;
 
       setItems(res.items || []);
+      setSummaryReady(true);
       setTotal(res.total || 0);
       setNeedsRecalculation(Boolean(res.needsRecalculation));
       if (res.summary) setSummary(res.summary);
@@ -190,7 +206,7 @@ export function CommentActionWorkbench({
       clearTimeout(timer);
       reqSeqRef.current += 1;
     };
-  }, [loadWorkbenchData]);
+  }, [loadWorkbenchData, resultFocusRequest]);
 
   // Action handlers with optimistic updates
   async function handleRecalculate() {
@@ -235,14 +251,9 @@ export function CommentActionWorkbench({
           prev.map((x) => (x.id === item.id ? { ...x, status: 'handled' } : x))
         );
       }
-      setSummary((prev) => ({
-        ...prev,
-        totalPending: Math.max(0, prev.totalPending - 1),
-        replyPending: item.action === 'reply' ? Math.max(0, prev.replyPending - 1) : prev.replyPending,
-        deletePending: item.action === 'delete' ? Math.max(0, prev.deletePending - 1) : prev.deletePending,
-        supplementPending: item.action === 'supplement' ? Math.max(0, prev.supplementPending - 1) : prev.supplementPending,
-        handledCount: prev.handledCount + 1,
-      }));
+      // A record can match several summary actions. Reload authoritative counts
+      // instead of subtracting one action and inventing an optimistic ratio.
+      setSummaryReady(false);
 
       toast(`已标记${method}`, 'success');
       void loadWorkbenchData();
@@ -282,37 +293,51 @@ export function CommentActionWorkbench({
       <section className="ops-metric-grid">
         <MetricCard
           theme="indigo"
-          label="全部待办任务"
-          value={summary.totalPending}
-          unit="项"
-          desc="整合关键评论舆情与规则判定队列待办"
+          label="待办动作命中"
+          value={summaryReady ? summary.totalPending : '—'}
+          unit="次"
+          desc="动作命中合计；同一记录可能计入多类"
           tag="待办总盘"
         />
         <MetricCard
           theme="blue"
           label="需达人回复"
-          value={summary.replyPending}
-          unit="项"
-          desc="正向问询或轻负面，需引导官方/达人回复"
+          value={summaryReady ? summary.replyPending : '—'}
+          unit="次"
+          desc="命中回复动作的待办记录次数"
           tag="舆情承接"
         />
         <MetricCard
           theme="red"
           label="需删除违规"
-          value={summary.deletePending}
-          unit="项"
-          desc="严重负面、竞品拉踩或违规广告评论"
+          value={summaryReady ? summary.deletePending : '—'}
+          unit="次"
+          desc="命中删除动作的待办记录次数"
           tag="风险处置"
         />
         <MetricCard
           theme="yellow"
-          label="需补充笔记"
-          value={summary.supplementPending}
-          unit="篇"
-          desc="评论达标数或品牌提及不足需追加"
+          label="需补充动作"
+          value={summaryReady ? summary.supplementPending : '—'}
+          unit="次"
+          desc="命中补充动作的次数，不等于去重笔记数"
           tag="交付缺口"
         />
       </section>
+
+      {summaryReady && !error && !loading && !needsRecalculation && <CommentEfficiencyBoard summary={summary} onSelectAction={(action) => {
+        scrollAfterLoadRef.current = true;
+        setLoading(true);
+        setResultFocusRequest(value => value + 1);
+        setActionFilter(action);
+        setStatusFilter('pending');
+        setSourceFilter('all');
+        setQuery('');
+        setDebouncedQuery('');
+        setSentimentFilter('');
+        setCategoryFilter('');
+        setPage(1);
+      }} />}
 
       {/* 统一处置工作台列表 */}
       <DashboardSection
@@ -462,6 +487,7 @@ export function CommentActionWorkbench({
           </div>
         )}
 
+        <div ref={resultsRef} tabIndex={-1} role="region" aria-label="待办筛选结果" style={{ scrollMarginTop: 24 }}>
         <DataTableShell
           page={page}
           pageSize={20}
@@ -647,6 +673,7 @@ export function CommentActionWorkbench({
             </tbody>
           </table>
         </DataTableShell>
+        </div>
       </DashboardSection>
     </div>
   );

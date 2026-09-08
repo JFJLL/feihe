@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import type { MapData, Keystone, Row } from '../../../lib/types/project';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { MetricCard } from '../../../components/ui/operations/MetricCard';
 import { api, shown, cnTime, size } from '../../../lib/hooks/use-project-data';
 
 const entityLabels: Record<string, string> = {
@@ -108,12 +109,12 @@ export function DataMap({
 
   return (
     <div className="intel-stack">
-      <section className="map-hero">
+      <section className="pastel-card reference-section section-blue">
         <div>
           <small>DATA SEMANTIC LAYER</small>
-          <h2>告诉 Agent：数据在哪里、能问什么、口径是什么</h2>
+          <h2>数据来源、业务指标与映射关系</h2>
           <p>
-            项目 → 数据源 → 账户 → 接口 → 原始字段 → 标准指标。每次生成报告只调用当前需求需要的最小数据集合。
+            从项目数据源追溯到账户、接口与标准指标。下方数量表示已登记的配置，实际连接状态以检测结果为准。
           </p>
         </div>
       </section>
@@ -122,6 +123,7 @@ export function DataMap({
         {tabs.map(([id, label]) => (
           <button
             key={id}
+            aria-current={tab === id ? 'page' : undefined}
             className={tab === id ? 'active' : ''}
             onClick={() => setTab(id)}
           >
@@ -132,41 +134,13 @@ export function DataMap({
 
       {tab === 'overview' && (
         <>
-          <section className="map-kpis">
+          <section className="ops-metric-grid" aria-label="数据地图登记概况">
             {Object.entries(coverage).map(([k, v]) => (
-              <article key={k}>
-                <small>
-                  {
-                    (
-                      {
-                        sources: '数据能力',
-                        accounts: '业务账户',
-                        endpoints: '可调用接口',
-                        metrics: '标准指标',
-                        bindings: '字段映射',
-                      } as Record<string, string>
-                    )[k]
-                  }
-                </small>
-                <strong>{v}</strong>
-                <span>
-                  {
-                    (
-                      {
-                        sources: '飞书、RedTrend、Keystone 等',
-                        accounts: '品牌/广告子账户',
-                        endpoints: '按需调用，避免全量拉取',
-                        metrics: '统一跨来源业务口径',
-                        bindings: '原始字段到标准指标',
-                      } as Record<string, string>
-                    )[k]
-                  }
-                </span>
-              </article>
+              <MetricCard key={k} label={({ sources: '数据源与集成', accounts: '业务账户', endpoints: '已登记接口', metrics: '标准指标', bindings: '字段映射' } as Record<string, string>)[k]} value={v} unit="项" theme={k === 'metrics' ? 'purple' : k === 'bindings' ? 'teal' : 'blue'} tag="已登记" desc={({ sources: '来源：项目数据源与工具集成配置', accounts: '来源：业务账户目录', endpoints: '登记数量不等于已验证可用数量', metrics: '来源：标准指标字典', bindings: '来源：原始字段与标准指标映射' } as Record<string, string>)[k]} />
             ))}
           </section>
 
-          <section className="map-flow">
+          <section className="map-flow pastel-card reference-section section-teal">
             <div className="intel-card-head">
               <div>
                 <small>DATA LINEAGE</small>
@@ -379,7 +353,7 @@ function MapList({
   if (!c) return null;
 
   return (
-    <section className="map-list">
+    <section className="map-list pastel-card reference-section section-blue">
       <div className="intel-card-head">
         <div>
           <small>CATALOG</small>
