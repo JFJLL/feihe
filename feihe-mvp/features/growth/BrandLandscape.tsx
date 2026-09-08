@@ -21,24 +21,49 @@ export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
   return <DashboardSection title="品牌竞争格局" eyebrow="BRAND LANDSCAPE" desc="【单篇监测笔记库】当前项目已收录 1,405 篇启萃本品监测笔记；全网 7 大竞品横向月报大盘（飞鹤、金领冠、爱他美、美素佳儿、a2、合生元、君乐宝）请见下方【飞鹤竞品月报全景情报台】。">
     {!brands.length ? <EmptyState title="暂无品牌样本" text="同步项目笔记后显示品牌卡片与贡献图。" /> : (
       <div className="stack" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: 16, alignItems: 'stretch' }}>
-        {brands.map((row, i) => <div className="stack growth-brand-card panel" data-brand={String(row.brand)} key={String(row.brand)} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', margin: 0, padding: '18px', borderRadius: 12 }}>
-          <div>
-            <GrowthMetricCard label={String(row.brand)} value={row.interactions} unit="互动" theme={themes[i % themes.length]}
-              tag={'笔记份额 ' + percent(ratio(row.notes, totalNotes))}
-              desc={'已记录互动 · ' + display(row.interactionSamples) + ' / ' + display(row.notes) + ' 篇有记录'} />
-          </div>
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: '10px 12px', border: '1px solid #e2e8f0', marginTop: 12 }}>
-            <div className="reference-kpi-meta" style={{ marginBottom: 4 }}>
-              <span>笔记 <strong><GrowthReadout value={row.notes} /></strong> 篇</span>{' · '}
-              <span>评论 <strong><GrowthReadout value={row.comments} /></strong> 条</span>
+        {brands.map((row, i) => (
+          <div
+            className="growth-brand-card single-seamless-card panel"
+            data-brand={String(row.brand)}
+            key={String(row.brand)}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: '100%',
+              margin: 0,
+              padding: '20px',
+              borderRadius: 12,
+              background: '#ffffff',
+              border: '1px solid #e2e8f0',
+            }}
+          >
+            <div className="seamless-card-main">
+              <GrowthMetricCard
+                label={String(row.brand)}
+                value={row.interactions}
+                unit="互动"
+                theme={themes[i % themes.length]}
+                tag={'笔记份额 ' + percent(ratio(row.notes, totalNotes))}
+                desc={'已记录互动 · ' + display(row.interactionSamples) + ' / ' + display(row.notes) + ' 篇有记录'}
+              />
             </div>
-            <div className="reference-kpi-meta" style={{ marginBottom: 4 }}>
-              <span>正向率 <strong>{percent(ratio(row.positive, row.comments))}</strong></span>{' · '}
-              <span>负向率 <strong>{percent(ratio(row.negative, row.comments))}</strong></span>
+            <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 14, marginTop: 14 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#334155', marginBottom: 6 }}>
+                <span>笔记 <strong><GrowthReadout value={row.notes} /></strong> 篇</span>
+                <span>评论 <strong><GrowthReadout value={row.comments} /></strong> 条</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#334155', marginBottom: 6 }}>
+                <span>正向率 <strong style={{ color: '#10b981' }}>{percent(ratio(row.positive, row.comments))}</strong></span>
+                <span>负向率 <strong style={{ color: '#ef4444' }}>{percent(ratio(row.negative, row.comments))}</strong></span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, color: '#64748b' }}>
+                <span>篇均互动</span>
+                <strong style={{ color: '#0284c7' }}><GrowthReadout value={ratio(row.interactions, row.interactionSamples)} /> 次/篇</strong>
+              </div>
             </div>
-            <div className="reference-kpi-meta" style={{ marginBottom: 0 }}>篇均互动 <strong><GrowthReadout value={ratio(row.interactions, row.interactionSamples)} /></strong></div>
           </div>
-        </div>)}
+        ))}
         <section className="panel" aria-label="品牌笔记样本贡献" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', margin: 0, padding: '18px', borderRadius: 12 }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>笔记样本构成</h3>

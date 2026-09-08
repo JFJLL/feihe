@@ -83,6 +83,17 @@ label:has(select),
   align-items: start !important;
 }
 
+/* 彻底消除卡片套卡片结构：将内部嵌套的 metric card 融为单一卡片 */
+.single-seamless-card .ops-metric-card {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.single-seamless-card .ops-metric-card-head {
+  margin-bottom: 6px !important;
+}
+
 /* ==========================================================================
    Custom Non-Native Dropdown Component
    ========================================================================== */
