@@ -144,6 +144,9 @@ export type DashboardMetrics = {
   commercialCount?: number;
   publishedCount?: number;
   engagementRate?: number;
+  likeCount?: number;
+  favoriteCount?: number;
+  shareCount?: number;
   cpm?: number;
   cpr?: number;
   cpe?: number;

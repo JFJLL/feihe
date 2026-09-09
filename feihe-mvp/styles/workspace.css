@@ -2001,7 +2001,7 @@
 
 .distribution-bars > div {
   display: grid;
-  grid-template-columns: 130px 1fr 60px;
+  grid-template-columns: minmax(90px, 140px) 1fr auto;
   align-items: center;
   gap: 12px;
   font-size: 13px;

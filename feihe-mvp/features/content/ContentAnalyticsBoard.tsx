@@ -23,7 +23,7 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
     const amount = Math.min(total, count(analytics.dataQuality[key]));
     return { label, amount, pct: total ? amount / total * 100 : 0, color: colors[index], subText: `${amount.toLocaleString()} / ${total.toLocaleString()} 篇` };
   });
-  const levels = analytics.creatorLevels.filter(row => count(row.avgInteraction) > 0)
+  const levels = analytics.creatorLevels.filter(row => count(row.count) > 0)
     .slice().sort((a, b) => count(b.avgInteraction) - count(a.avgInteraction));
   const maxInteraction = Math.max(0, ...levels.map(row => count(row.avgInteraction)));
   const formats = analytics.formats.filter(row => count(row.interactions) > 0);
