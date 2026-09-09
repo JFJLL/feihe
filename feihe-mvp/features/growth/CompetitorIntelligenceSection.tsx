@@ -40,11 +40,11 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
   const [activeBrand, setActiveBrand] = useState('all');
   const [selectedMonth, setSelectedMonth] = useState('');
   const [activeBattle, setActiveBattle] = useState('jicui');
-  const brands = intelligence?.brands || [];
+  const brands = useMemo(() => intelligence?.brands || [], [intelligence?.brands]);
   const performance = intelligence?.performance || [];
-  const searchIndex = intelligence?.searchIndex || [];
+  const searchIndex = useMemo(() => intelligence?.searchIndex || [], [intelligence?.searchIndex]);
   const comparisonGroups = intelligence?.comparisonGroups || [];
-  const months = [...(intelligence?.months || [])].sort();
+  const months = useMemo(() => [...(intelligence?.months || [])].sort(), [intelligence?.months]);
   const month = months.includes(selectedMonth) ? selectedMonth : months.at(-1) || '';
   const filtered = activeBrand === 'all' ? brands : brands.filter(b => b.id === activeBrand);
   const includes = (brand: string | null) => activeBrand === 'all' || brand === activeBrand;

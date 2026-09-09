@@ -76,31 +76,29 @@ export function RulesAndTargets({
     if (!hasNewGoals && !hasNewRules && !hasNewAcceptance && !hasNewPipelines) return;
 
     if (isGoalsDirty || isRulesDirty || isAcceptanceDirty || isPipelinesDirty) {
-      setServerConflictWarning(true);
+      queueMicrotask(() => {
+        setServerConflictWarning(true);
+      });
       return;
     }
 
-    setGoals(ops.settings.goals);
-    setRules(ops.settings.rules);
-    setAcceptance(ops.settings.acceptance);
-    setPipelines(data.pipelines);
-    if (ops.settings.acceptance.supplierSimilarity !== undefined) {
-      setSimilarityDraft(String(Number((ops.settings.acceptance.supplierSimilarity * 100).toPrecision(12))));
-    }
-    setSavedBaseline({
-      goals: incomingGoals,
-      rules: incomingRules,
-      acceptance: incomingAcceptance,
-      pipelines: incomingPipelines,
+    queueMicrotask(() => {
+      setGoals(ops.settings.goals);
+      setRules(ops.settings.rules);
+      setAcceptance(ops.settings.acceptance);
+      setPipelines(data.pipelines);
+      if (ops.settings.acceptance.supplierSimilarity !== undefined) {
+        setSimilarityDraft(String(Number((ops.settings.acceptance.supplierSimilarity * 100).toPrecision(12))));
+      }
+      setSavedBaseline({
+        goals: incomingGoals,
+        rules: incomingRules,
+        acceptance: incomingAcceptance,
+        pipelines: incomingPipelines,
+      });
+      setServerConflictWarning(false);
     });
-    setServerConflictWarning(false);
   }, [ops.settings, data.pipelines, savedBaseline, isGoalsDirty, isRulesDirty, isAcceptanceDirty, isPipelinesDirty]);
-
-  useEffect(() => {
-    if (acceptance.supplierSimilarity !== undefined) {
-      setSimilarityDraft(String(Number((acceptance.supplierSimilarity * 100).toPrecision(12))));
-    }
-  }, [acceptance.supplierSimilarity]);
 
   useEffect(() => {
     if (showCompletedJobs) {
