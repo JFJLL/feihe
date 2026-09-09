@@ -9,7 +9,7 @@ import { CustomSelect } from '../../components/ui/CustomSelect';
 import { FeishuSources, SyncButton } from '../../components/ui/FeishuSources';
 import { WorkspaceModuleTabs } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
-import { HorizontalBarList, TierDoughnutChart, Sparkline } from './OverviewCharts';
+import { HorizontalBarList, TierDoughnutChart, Sparkline, KfsStackedAreaChart, TierSpendDistribution } from './OverviewCharts';
 import { api, compact, num } from '../../lib/hooks/use-project-data';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
@@ -62,9 +62,23 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const creatorRows = dashboard.analytics.creatorLevels || [];
   const creatorTotal = creatorRows.reduce((sum, r) => sum + num(r.count), 0);
   const tierItems = creatorRows.map((r, i) => ({ label: String(r.name || '未标注'), count: num(r.count), pct: creatorTotal ? num(r.count) / creatorTotal * 100 : 0, color: colors[i % colors.length] }));
+  // 达人层级采买金额分布（从笔记库聚合）
+  const tierSpendMap = new Map<string, { spend: number; count: number }>();
+  for (const note of dashboard.notes || []) {
+    const level = note.creatorLevel || '未标注';
+    const price = num(note.notePrice);
+    const existing = tierSpendMap.get(level) || { spend: 0, count: 0 };
+    existing.spend += price;
+    existing.count += 1;
+    tierSpendMap.set(level, existing);
+  }
+  const tierSpendItems = [...tierSpendMap.entries()]
+    .filter(([, v]) => v.spend > 0)
+    .sort((a, b) => b[1].spend - a[1].spend)
+    .map(([label, v], i) => ({ label, spend: v.spend, count: v.count, color: colors[i % colors.length] }));
   const formatRows = dashboard.analytics.formats || [];
   const formatTotal = formatRows.reduce((sum, r) => sum + num(r.count), 0);
-  const recent = quarterRows.slice(-30).map(r => ({ ...r, date: String(r.date) }));
+  const recent: Array<Record<string, string | number | null> & { date: string }> = quarterRows.slice(-30).map(r => ({ ...r, date: String(r.date) }));
   const previous = quarterRows.at(-2);
   const latestNoteDate = dashboard.feishu?.reports.find(r => r.sheetId === '3Wsban')?.latestDate;
   const summary = [
@@ -146,6 +160,12 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           </div>
           <div className="chart-inner-panel"><div className="inner-head"><strong>达人 K · 内容采买</strong><small>项目笔记报价合计</small></div><div className="reference-big-number">¥{compact(m.creatorCost)}</div><div className="reference-stat-pair"><span>商业合作笔记<strong>{num(m.commercialCount)} 篇</strong></span><span>内容平均 CPE<strong>¥{amount(m.cpe)}</strong></span></div><p className="reference-note">使用笔记库已有报价与互动表现；采买费用与投流消耗为不同口径。</p></div>
         </div>
+        <div className="chart-inner-panel" style={{ marginTop: 14 }}>
+          <div className="inner-head"><strong>KFS 分渠道消耗趋势（堆叠面积）</strong><small>近 {recent.length} 个数据日 · 信息流 F + 搜索 S</small></div>
+          {recent.some(r => finiteMetric(r.feed_spend) !== null || finiteMetric(r.search_spend) !== null)
+            ? <KfsStackedAreaChart rows={recent.map(r => ({ date: String(r.date), feed_spend: finiteMetric(r.feed_spend), search_spend: finiteMetric(r.search_spend) }))} />
+            : <EmptyState title="暂无分渠道日度消耗" text="同步周投放表的信息流与搜索分渠道消耗后显示堆叠趋势。" />}
+        </div>
       </Section>
 
       <Section tag="二、内容产出" title="种草发布与切角渗透" tone="purple" hint="当前项目累计笔记库">
@@ -158,6 +178,10 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <div className="chart-inner-panel"><div className="inner-head"><strong>达人量级结构分布</strong><small>{creatorTotal} 篇已收录笔记</small></div>{creatorTotal ? <TierDoughnutChart items={tierItems} total={creatorTotal} /> : <EmptyState title="达人层级待补充" text="同步笔记库后显示层级分布。" />}</div>
           <div className="chart-inner-panel"><div className="inner-head"><strong>内容形式分布</strong><small>已收录笔记</small></div><HorizontalBarList items={formatRows.map((r, i) => ({ label: String(r.name), amount: num(r.count), pct: formatTotal ? num(r.count) / formatTotal * 100 : 0, color: colors[i % colors.length], subText: `${num(r.count)} 篇 · ${compact(r.interactions)} 互动` }))} /></div>
         </div>
+        {tierSpendItems.length > 0 && <div className="chart-inner-panel reference-content-detail" style={{ marginTop: 14 }}>
+          <div className="inner-head"><strong>达人层级采买金额分布</strong><small>基于笔记库报价聚合 · 按采买金额排序</small></div>
+          <TierSpendDistribution items={tierSpendItems} />
+        </div>}
         <div className="ops-table-wrap reference-content-detail"><table className="ops-table"><thead><tr><th>内容切角 / 场景</th><th>笔记数</th><th>阅读量</th><th>互动量</th><th>笔记分布</th></tr></thead><tbody>{dashboard.analytics.categories.slice(0, 8).map((r, i) => <tr key={`${r.name}-${i}`}><td>{String(r.name || '未标注')}</td><td>{num(r.count)}</td><td>{compact(r.reads)}</td><td>{compact(r.interactions)}</td><td><Progress label="占项目笔记" value={m.noteCount ? num(r.count) / m.noteCount * 100 : null} /></td></tr>)}</tbody></table></div>
       </Section>
 
@@ -181,6 +205,33 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           return <article className={`pastel-card pastel-${item.tone} reference-kpi`} key={item.key}><div className="stat-head"><span>{item.title}</span><span className={`section-mini-tag tag-${item.tone}`}>日报</span></div><div className="stat-value">{amount(currentValue)}<small> {item.unit}</small></div><div className="reference-kpi-meta">{item.desc}</div><div className="reference-kpi-delta">{delta === null ? '暂无可比前期' : `较前一数据日 ${delta >= 0 ? '+' : ''}${amount(delta)}%`}</div>{spark.every(v => v !== null) && <Sparkline data={spark as number[]} color={item.tone === 'purple' ? colors[2] : colors[0]} />}</article>;
         })}</div>
         <div className="workspace-two-col"><Section tag="消耗趋势" title="近30个数据日 · 计划与实际"><TimeSeriesChart rows={recent} title="计划与实际消耗" unit="元" series={[{ key: 'plan_spend', label: '计划', color: '#94a3b8' }, { key: 'actual_spend', label: '实际', color: colors[0] }]} /></Section><Section tag="CTR趋势" title="信息流与搜索 · 点击效率" tone="teal"><TimeSeriesChart rows={recent} title="信息流与搜索CTR" unit="%" series={[{ key: 'feed_ctr', label: '信息流', color: '#0d9488' }, { key: 'search_ctr', label: '搜索', color: colors[2] }]} /></Section></div>
+        <div className="workspace-two-col" style={{ marginTop: 14 }}><Section tag="CPUV趋势" title="小红盟 / 小红星 · UV成本趋势" tone="amber"><TimeSeriesChart rows={recent} title="CPUV 周趋势" unit="元" series={[{ key: 'xhm_cpuv', label: '小红盟 CPUV', color: '#f59e0b' }, { key: 'xhx_cpuv', label: '小红星 CPUV', color: '#ea580c' }]} /></Section><Section tag="效率对比" title="核心效率指标 · 当日 vs 前一日" tone="purple">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {([
+              { label: '信息流 CTR', current: finiteMetric(daily?.feed_ctr), prev: finiteMetric(previous?.feed_ctr), unit: '%', tone: 'teal' as const, benchmark: 6 as number | null, lowerIsBetter: false },
+              { label: '搜索 CTR', current: finiteMetric(daily?.search_ctr), prev: finiteMetric(previous?.search_ctr), unit: '%', tone: 'purple' as const, benchmark: 7 as number | null, lowerIsBetter: false },
+              { label: '小红盟 CPUV', current: finiteMetric(daily?.xhm_cpuv), prev: finiteMetric(previous?.xhm_cpuv), unit: '元', tone: 'amber' as const, benchmark: null as number | null, lowerIsBetter: true },
+              { label: '小红星 CPUV', current: finiteMetric(daily?.xhx_cpuv), prev: finiteMetric(previous?.xhx_cpuv), unit: '元', tone: 'orange' as const, benchmark: null as number | null, lowerIsBetter: true },
+            ] as Array<{ label: string; current: number | null; prev: number | null; unit: string; tone: string; benchmark: number | null; lowerIsBetter: boolean }>).map(item => {
+              const delta = item.current !== null && item.prev !== null && item.prev !== 0 ? (item.current - item.prev) / Math.abs(item.prev) * 100 : null;
+              const isGood = delta === null ? null : item.lowerIsBetter ? delta <= 0 : delta >= 0;
+              const meetsBench = item.benchmark === null || item.current === null ? null : item.lowerIsBetter ? item.current <= item.benchmark : item.current >= item.benchmark;
+              return (
+                <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: item.tone === 'teal' ? '#0d9488' : item.tone === 'purple' ? '#7c3aed' : item.tone === 'amber' ? '#f59e0b' : '#ea580c' }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: '#1e293b' }}>{item.label}</span>
+                    {item.benchmark !== null && <span style={{ fontSize: 10.5, color: meetsBench ? '#16a34a' : '#dc2626', background: meetsBench ? '#f0fdf4' : '#fef2f2', padding: '2px 6px', borderRadius: 4 }}>基准 {item.benchmark}{item.unit}</span>}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                    <strong style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>{item.current === null ? '—' : amount(item.current)}<small style={{ fontSize: 11, color: '#64748b', fontWeight: 400 }}> {item.unit}</small></strong>
+                    <span style={{ fontSize: 11.5, fontWeight: 600, color: delta === null ? '#94a3b8' : isGood ? '#16a34a' : '#dc2626' }}>{delta === null ? '无前期对比' : `${delta >= 0 ? '+' : ''}${amount(delta)}%`}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Section></div>
         <p className="reference-note">投流消耗优先使用周投放表 F+S；聚光全量当日消耗 ¥{amount(daily.ads_spend)}，CTR、互动来自聚光全量样本，两者范围不同。缺失值显示 —。</p>
       </>}
     </div>}

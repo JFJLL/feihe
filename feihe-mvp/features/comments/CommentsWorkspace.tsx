@@ -11,6 +11,7 @@ import { CommentCollection } from './CommentCollection';
 import { CommentActionWorkbench } from './CommentActionWorkbench';
 import { AcceptanceDelivery } from './AcceptanceDelivery';
 import { SupplierVerification } from './SupplierVerification';
+import { ExecutionOverview } from './ExecutionOverview';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import { useProject } from '../../components/project-shell/ProjectContext';
@@ -27,7 +28,7 @@ export function CommentsWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('actions', ['actions', 'collection', 'acceptance', 'supplier'], {
+  const [tab, setTab] = useProjectTab('actions', ['actions', 'collection', 'acceptance', 'supplier', 'execution'], {
     insights: 'actions',
     sentiment: 'actions',
     voice: 'actions',
@@ -59,6 +60,7 @@ export function CommentsWorkspace({
   const actions = dashboard.metrics.actions || {};
   const pendingRisk = num(actions.replyPending) + num(actions.deletePending);
   const verifiedCount = num(supplier.exactCount) + num(supplier.modifiedCount);
+  const totalActions = num(actions.total) || 0;
 
   async function uploadWorkbook(file: File | undefined, kind: 'owned' | 'supplier') {
     if (!file) return;
@@ -114,6 +116,7 @@ export function CommentsWorkspace({
     { id: 'collection', title: '采集监测', desc: '按ID/链接抓取、批量采集与快照变动', badge: dashboard.metrics.commentTotal || 0, icon: '🛰️' },
     { id: 'acceptance', title: '交付验收', desc: '主线交付、可汇报线与品牌提及率', badge: dashboard.metrics.noteCount || 0, icon: '🎯' },
     { id: 'supplier', title: '供应商核验', desc: '交付Excel导入、隔天外显与共性分析', badge: verifiedCount || 0, icon: '🛡️' },
+    { id: 'execution', title: '执行总览', desc: '执行量、闭环进度、质量监控与任务管线', badge: totalActions || 0, icon: '📊' },
   ];
 
   return (
@@ -198,6 +201,10 @@ export function CommentsWorkspace({
           onDone={onRefresh}
           toast={showToast}
         />
+      )}
+
+      {tab === 'execution' && (
+        <ExecutionOverview dashboard={dashboard} ops={ops} />
       )}
       </div>
 

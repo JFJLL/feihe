@@ -622,6 +622,156 @@ export function TierDoughnutChart({
   );
 }
 
+// ======================== KFS Stacked Area Chart ========================
+export function KfsStackedAreaChart({
+  rows,
+  height = 260,
+}: {
+  rows: Array<{ date: string; feed_spend: number | null; search_spend: number | null }>;
+  height?: number;
+}) {
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const data = rows.filter(r => r.date && (r.feed_spend !== null || r.search_spend !== null));
+  if (!data.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无 KFS 分渠道消耗数据</div>;
+
+  const w = 680;
+  const padL = 56, padR = 20, padT = 28, padB = 36;
+  const plotW = w - padL - padR;
+  const plotH = height - padT - padB;
+
+  const totals = data.map(r => (r.feed_spend || 0) + (r.search_spend || 0));
+  const maxVal = Math.max(...totals) * 1.08 || 1;
+  const getX = (i: number) => data.length === 1 ? w / 2 : padL + (i / (data.length - 1)) * plotW;
+  const getY = (v: number) => padT + plotH - (v / maxVal) * plotH;
+
+  // Build stacked area paths
+  const feedPoints = data.map((r, i) => ({ x: getX(i), y: getY(r.feed_spend || 0) }));
+  const searchTopPoints = data.map((r, i) => ({ x: getX(i), y: getY((r.feed_spend || 0) + (r.search_spend || 0)) }));
+  const baseline = data.map((r, i) => ({ x: getX(i), y: padT + plotH }));
+
+  const smoothPath = (pts: { x: number; y: number }[]) => {
+    if (pts.length < 2) return pts.length ? `M ${pts[0].x} ${pts[0].y}` : '';
+    return pts.reduce((acc, p, i) => {
+      if (i === 0) return `M ${p.x} ${p.y}`;
+      const prev = pts[i - 1];
+      const cx = (prev.x + p.x) / 2;
+      return `${acc} C ${cx} ${prev.y}, ${cx} ${p.y}, ${p.x} ${p.y}`;
+    }, '');
+  };
+
+  const feedArea = `${smoothPath(feedPoints)} L ${feedPoints.at(-1)!.x} ${padT + plotH} L ${feedPoints[0].x} ${padT + plotH} Z`;
+  const reversedFeed = [...feedPoints].reverse();
+  const searchArea = `${smoothPath(searchTopPoints)} L ${reversedFeed.map(p => `${p.x} ${p.y}`).join(' L ')} Z`;
+
+  const step = Math.ceil(data.length / 7);
+  const xIndices = data.map((_, i) => i).filter(i => i % step === 0 || i === data.length - 1);
+  const yTicks = [0.25, 0.5, 0.75, 1].map(t => maxVal * t);
+
+  const hovered = hoverIdx !== null ? data[hoverIdx] : null;
+
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 12, marginBottom: 6, justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 14, height: 10, background: '#1e6091', borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ color: '#0c4a6e', fontWeight: 600 }}>信息流 F</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 14, height: 10, background: '#7c3aed', borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ color: '#5b21b6', fontWeight: 600 }}>搜索 S</span>
+        </div>
+      </div>
+      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
+        <defs>
+          <linearGradient id="kfs-feed-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1e6091" stopOpacity={0.7} />
+            <stop offset="100%" stopColor="#1e6091" stopOpacity={0.15} />
+          </linearGradient>
+          <linearGradient id="kfs-search-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.65} />
+            <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.1} />
+          </linearGradient>
+        </defs>
+        {yTicks.map((val, i) => {
+          const y = getY(val);
+          return (
+            <g key={i}>
+              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#e2e8f0" strokeDasharray="3 3" />
+              <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#94a3b8">¥{(val / 10000).toFixed(1)}w</text>
+            </g>
+          );
+        })}
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
+        <path d={feedArea} fill="url(#kfs-feed-grad)" />
+        <path d={searchArea} fill="url(#kfs-search-grad)" />
+        <path d={smoothPath(searchTopPoints)} fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" />
+        <path d={smoothPath(feedPoints)} fill="none" stroke="#1e6091" strokeWidth="2" strokeLinecap="round" />
+        {xIndices.map(i => (
+          <text key={i} x={getX(i)} y={height - 10} textAnchor="middle" fontSize="10" fill="#94a3b8">{data[i].date.slice(5)}</text>
+        ))}
+        {hoverIdx !== null && (
+          <g>
+            <line x1={getX(hoverIdx)} y1={padT} x2={getX(hoverIdx)} y2={padT + plotH} stroke="#64748b" strokeWidth="1" strokeDasharray="3 3" />
+            <circle cx={getX(hoverIdx)} cy={getY(hovered?.feed_spend || 0)} r="4" fill="#1e6091" stroke="#fff" strokeWidth="1.5" />
+            <circle cx={getX(hoverIdx)} cy={getY((hovered?.feed_spend || 0) + (hovered?.search_spend || 0))} r="4" fill="#7c3aed" stroke="#fff" strokeWidth="1.5" />
+          </g>
+        )}
+        {data.map((_, i) => (
+          <rect key={i} x={getX(i) - plotW / data.length / 2} y={padT} width={Math.max(12, plotW / data.length)} height={plotH} fill="transparent" onMouseEnter={() => setHoverIdx(i)} />
+        ))}
+      </svg>
+      {hovered && hoverIdx !== null && (
+        <div style={{ position: 'absolute', left: `${Math.min(82, Math.max(10, (getX(hoverIdx) / w) * 100))}%`, top: 28, transform: 'translateX(-50%)', background: 'rgba(15,23,42,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 11.5, pointerEvents: 'none', zIndex: 10, whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>{hovered.date}</div>
+          <div style={{ color: '#93c5fd' }}>信息流 F：¥{(hovered.feed_spend || 0).toLocaleString()}</div>
+          <div style={{ color: '#c4b5fd' }}>搜索 S：¥{(hovered.search_spend || 0).toLocaleString()}</div>
+          <div style={{ color: '#e2e8f0', marginTop: 2, borderTop: '1px solid #334155', paddingTop: 3 }}>合计：¥{((hovered.feed_spend || 0) + (hovered.search_spend || 0)).toLocaleString()}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ======================== Creator Tier Spend Distribution ========================
+export function TierSpendDistribution({
+  items,
+}: {
+  items: Array<{ label: string; spend: number; count: number; color: string }>;
+}) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const total = items.reduce((s, it) => s + it.spend, 0) || 1;
+  const max = Math.max(...items.map(it => it.spend), 1);
+
+  if (!items.length) return <div style={{ padding: 20, textAlign: 'center', color: '#94a3b8', fontSize: 13 }}>暂无达人层级采买数据</div>;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {items.map((it, idx) => {
+        const isHovered = hoveredIdx === idx;
+        const pct = (it.spend / total) * 100;
+        const barW = (it.spend / max) * 100;
+        return (
+          <div key={it.label} onMouseEnter={() => setHoveredIdx(idx)} onMouseLeave={() => setHoveredIdx(null)}
+            style={{ padding: '7px 10px', borderRadius: 8, background: isHovered ? '#f8fafc' : 'transparent', border: isHovered ? '1px solid #e2e8f0' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.15s ease' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5, alignItems: 'baseline' }}>
+              <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#0f172a' : '#1e293b' }}>{it.label}</span>
+              <div style={{ display: 'flex', gap: 10, alignItems: 'baseline' }}>
+                <span style={{ color: '#64748b', fontSize: 11.5 }}>{it.count} 篇</span>
+                <strong style={{ color: it.color, fontSize: 13 }}>¥{(it.spend / 10000).toFixed(1)}w</strong>
+                <span style={{ color: isHovered ? it.color : '#94a3b8', fontSize: 11, fontWeight: isHovered ? 600 : 400, width: 38, textAlign: 'right' }}>{pct.toFixed(1)}%</span>
+              </div>
+            </div>
+            <div style={{ height: 9, background: '#f1f5f9', borderRadius: 5, overflow: 'hidden', position: 'relative' }}>
+              <div style={{ width: `${Math.min(100, Math.max(2, barW))}%`, height: '100%', background: `linear-gradient(90deg, ${it.color}cc, ${it.color})`, borderRadius: 5, transition: 'width 0.5s ease' }} />
+            </div>
+          </div>
+        );
+      })}
+      <div style={{ textAlign: 'right', fontSize: 11, color: '#94a3b8', marginTop: 2 }}>采买总金额 ¥{(total / 10000).toFixed(1)}w · 基于笔记库已填报价</div>
+    </div>
+  );
+}
+
 // ======================== Horizontal Bar List (Interactive) ========================
 export function HorizontalBarList({
   items,
