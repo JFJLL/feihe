@@ -206,44 +206,76 @@ export function EfficiencyRadarChart({
 // ======================== Funnel Chart (转化漏斗图) ========================
 export function ConversionFunnelChart({
   stages,
-  height = 280,
+  height = 320,
 }: {
-  stages: Array<{ label: string; value: number; color?: string }>;
+  stages: Array<{ label: string; value: number; color?: string; desc?: string }>;
   height?: number;
 }) {
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   if (!stages.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无漏斗数据</div>;
 
-  const w = 680;
   const max = stages[0].value || 1;
-  const stageH = (height - 20) / stages.length;
-  const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#64748b'];
+  const colors = ['#1e40af', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#475569'];
+  const stageH = Math.min(52, (height - 20) / stages.length);
+  const totalDrop = stages.length > 1 ? ((stages[0].value - stages[stages.length - 1].value) / stages[0].value * 100).toFixed(1) : '0';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
-      {stages.map((s, i) => {
-        const pct = (s.value / max) * 100;
-        const nextPct = i < stages.length - 1 ? (stages[i + 1].value / max) * 100 : 0;
-        const convRate = i > 0 && stages[i - 1].value > 0 ? (s.value / stages[i - 1].value * 100).toFixed(1) : null;
-        const color = s.color || colors[i % colors.length];
-        return (
-          <div key={i} style={{ position: 'relative', height: stageH - 4, display: 'flex', alignItems: 'center' }}>
-            <svg viewBox={`0 0 ${w} ${stageH}`} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }} preserveAspectRatio="none">
-              <polygon
-                points={`${(w - w * pct / 100) / 2},0 ${(w + w * pct / 100) / 2},0 ${(w + w * nextPct / 100) / 2},${stageH} ${(w - w * nextPct / 100) / 2},${stageH}`}
-                fill={color}
-                fillOpacity={0.75}
-              />
-            </svg>
-            <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '0 20px' }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>{s.label}</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                {convRate && <span style={{ fontSize: 11, color: '#fff', background: 'rgba(0,0,0,0.25)', padding: '2px 8px', borderRadius: 4 }}>转化率 {convRate}%</span>}
-                <span style={{ fontSize: 14, fontWeight: 800, color: '#fff', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>{s.value.toLocaleString()}</span>
+    <div style={{ width: '100%' }}>
+      {/* 顶部汇总条 */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, padding: '10px 16px', background: 'linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)', borderRadius: 10, border: '1px solid #e0e7ff' }}>
+        <div>
+          <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, letterSpacing: '0.5px' }}>全链路转化</div>
+          <div style={{ fontSize: 20, fontWeight: 800, color: '#1e293b', marginTop: 2 }}>{stages[0].value.toLocaleString()} <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>to {stages[stages.length - 1].value.toLocaleString()}</span></div>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>整体流失率</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: '#dc2626', marginTop: 2 }}>{totalDrop}%</div>
+        </div>
+      </div>
+
+      {/* 漏斗主体 */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {stages.map((s, i) => {
+          const pct = Math.max(8, (s.value / max) * 100);
+          const convRate = i > 0 && stages[i - 1].value > 0 ? (s.value / stages[i - 1].value * 100).toFixed(1) : null;
+          const dropRate = i > 0 && stages[i - 1].value > 0 ? ((stages[i - 1].value - s.value) / stages[i - 1].value * 100).toFixed(1) : null;
+          const color = s.color || colors[i % colors.length];
+          const isHovered = hoverIdx === i;
+          return (
+            <div key={i} style={{ position: 'relative' }} onMouseEnter={() => setHoverIdx(i)} onMouseLeave={() => setHoverIdx(null)}>
+              {/* 阶段序号 */}
+              <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 28, height: 28, borderRadius: '50%', background: color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, zIndex: 2, boxShadow: `0 2px 8px ${color}40` }}>
+                {i + 1}
               </div>
+              {/* 漏斗条 */}
+              <div style={{ marginLeft: 38, position: 'relative', height: stageH, borderRadius: 8, overflow: 'hidden', background: '#f1f5f9', transition: 'all 0.25s ease', transform: isHovered ? 'scale(1.01)' : 'scale(1)', boxShadow: isHovered ? `0 4px 16px ${color}30` : '0 1px 3px rgba(0,0,0,0.06)' }}>
+                <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${color} 0%, ${color}dd 100%)`, borderRadius: 8, transition: 'width 0.5s ease' }} />
+                {/* 文字内容 */}
+                <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%', padding: '0 16px 0 14px' }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: pct > 35 ? '#fff' : '#1e293b', textShadow: pct > 35 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none', whiteSpace: 'nowrap' }}>{s.label}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    {convRate && (
+                      <span style={{ fontSize: 11.5, fontWeight: 600, color: pct > 50 ? '#fff' : '#059669', background: pct > 50 ? 'rgba(255,255,255,0.2)' : '#d1fae5', padding: '3px 10px', borderRadius: 999, whiteSpace: 'nowrap' }}>
+                        转化 {convRate}%
+                      </span>
+                    )}
+                    {dropRate && Number(dropRate) > 0 && (
+                      <span style={{ fontSize: 11, fontWeight: 600, color: pct > 55 ? '#fecaca' : '#dc2626', whiteSpace: 'nowrap' }}>-{dropRate}%</span>
+                    )}
+                    <span style={{ fontSize: 16, fontWeight: 800, color: pct > 30 ? '#fff' : '#0f172a', textShadow: pct > 30 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none', fontVariantNumeric: 'tabular-nums', minWidth: 70, textAlign: 'right' }}>{s.value.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+              {/* 连接箭头 */}
+              {i < stages.length - 1 && (
+                <div style={{ marginLeft: 52, height: 14, display: 'flex', alignItems: 'center', color: '#cbd5e1' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                </div>
+              )}
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

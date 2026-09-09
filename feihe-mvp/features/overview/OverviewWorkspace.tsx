@@ -128,6 +128,39 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     .filter(n => num(n.interactionCount) > 0 || num(n.readCount) > 0)
     .sort((a, b) => num(b.interactionCount) - num(a.interactionCount))
     .slice(0, 20);
+
+  // ===== 新增精美看板数据 =====
+  // 内容健康度评分（0-100）
+  const healthScore = Math.min(100, Math.round(
+    (num(m.engagementRate) > 0 ? Math.min(40, num(m.engagementRate) * 400) : 15) +
+    (num(m.noteCount) > 0 ? 20 : 0) +
+    (num(m.readCount) > 0 ? 20 : 0) +
+    (pending === 0 ? 20 : Math.max(0, 20 - pending / 5))
+  ));
+  const healthColor = healthScore >= 70 ? '#16a34a' : healthScore >= 40 ? '#f59e0b' : '#dc2626';
+  const healthLabel = healthScore >= 70 ? '健康' : healthScore >= 40 ? '需关注' : '需改善';
+
+  // 达人效率排行榜
+  const creatorEfficiency = (dashboard.analytics.creatorLevels || [])
+    .map(row => ({
+      name: String(row.name),
+      count: num(row.count),
+      avgRead: num(row.avgRead),
+      avgInteraction: num(row.avgInteraction),
+      avgCpe: num(row.avgCpe),
+      efficiency: num(row.avgInteraction) > 0 && num(row.avgCpe) > 0 ? num(row.avgInteraction) / num(row.avgCpe) : 0,
+    }))
+    .filter(r => r.count > 0)
+    .sort((a, b) => b.efficiency - a.efficiency);
+
+  // 互动质量分析（点赞/收藏/分享/评论占比）
+  const totalInteraction = num(m.likeCount) + num(m.favoriteCount) + num(m.shareCount) + num(m.commentTotal);
+  const interactionQuality = [
+    { label: '点赞', value: num(m.likeCount), pct: totalInteraction ? num(m.likeCount) / totalInteraction * 100 : 0, color: '#3b82f6', icon: '♥' },
+    { label: '收藏', value: num(m.favoriteCount), pct: totalInteraction ? num(m.favoriteCount) / totalInteraction * 100 : 0, color: '#f59e0b', icon: '★' },
+    { label: '分享', value: num(m.shareCount), pct: totalInteraction ? num(m.shareCount) / totalInteraction * 100 : 0, color: '#10b981', icon: '↗' },
+    { label: '评论', value: num(m.commentTotal), pct: totalInteraction ? num(m.commentTotal) / totalInteraction * 100 : 0, color: '#8b5cf6', icon: '💬' },
+  ].filter(i => i.value > 0);
   const recent: Array<Record<string, string | number | null> & { date: string }> = quarterRows.slice(-30).map(r => ({ ...r, date: String(r.date) }));
   const previous = quarterRows.at(-2);
   const latestNoteDate = dashboard.feishu?.reports.find(r => r.sheetId === '3Wsban')?.latestDate;
@@ -263,6 +296,116 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
 
       <Section tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="按互动量排序">
         {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)}><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{String(n.category1 || '未标注')}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
+      </Section>
+
+      {/* ===== 新增：内容健康度仪表盘 + 达人效率排行 ===== */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+        <Section tag="健康度" title="内容健康度仪表盘" tone="green" hint="综合评分">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 0' }}>
+            {/* 仪表盘 */}
+            <div style={{ position: 'relative', width: 180, height: 100, overflow: 'hidden' }}>
+              <svg viewBox="0 0 180 100" style={{ width: '100%', height: 'auto' }}>
+                <path d="M 15 90 A 75 75 0 0 1 165 90" fill="none" stroke="#e2e8f0" strokeWidth="14" strokeLinecap="round" />
+                <path d={`M 15 90 A 75 75 0 0 1 ${15 + 150 * (healthScore / 100)} ${90 - Math.sin(Math.PI * healthScore / 100) * 75}`} fill="none" stroke={healthColor} strokeWidth="14" strokeLinecap="round" style={{ transition: 'all 0.8s ease' }} />
+              </svg>
+              <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
+                <div style={{ fontSize: 36, fontWeight: 800, color: healthColor, lineHeight: 1 }}>{healthScore}</div>
+                <div style={{ fontSize: 11, color: '#64748b', marginTop: 2, fontWeight: 600 }}>{healthLabel}</div>
+              </div>
+            </div>
+            {/* 评分维度 */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, width: '100%', marginTop: 20 }}>
+              {[
+                { label: '互动质量', score: num(m.engagementRate) > 0 ? Math.min(100, num(m.engagementRate) * 1000) : 30, desc: '互动率表现' },
+                { label: '内容覆盖', score: num(m.noteCount) > 50 ? 100 : num(m.noteCount) * 2, desc: `${m.noteCount}篇笔记` },
+                { label: '阅读规模', score: num(m.readCount) > 10000 ? 100 : num(m.readCount) / 100, desc: `${compact(m.readCount)}次阅读` },
+                { label: '风险处置', score: pending === 0 ? 100 : Math.max(0, 100 - pending * 2), desc: `${pending}条待处理` },
+              ].map((item, i) => (
+                <div key={i} style={{ padding: '10px 12px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <span style={{ fontSize: 11.5, fontWeight: 600, color: '#475569' }}>{item.label}</span>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: item.score >= 70 ? '#16a34a' : item.score >= 40 ? '#f59e0b' : '#dc2626' }}>{Math.round(item.score)}</span>
+                  </div>
+                  <div style={{ height: 4, background: '#e2e8f0', borderRadius: 2, overflow: 'hidden' }}>
+                    <div style={{ width: `${item.score}%`, height: '100%', background: item.score >= 70 ? '#16a34a' : item.score >= 40 ? '#f59e0b' : '#dc2626', borderRadius: 2, transition: 'width 0.5s ease' }} />
+                  </div>
+                  <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 3 }}>{item.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        <Section tag="达人效率" title="达人层级效率排行榜" tone="teal" hint="按互动/成本排序">
+          {creatorEfficiency.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {creatorEfficiency.map((c, i) => (
+                <div key={i} style={{ padding: '12px 14px', background: i === 0 ? 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' : '#f8fafc', borderRadius: 10, border: `1px solid ${i === 0 ? '#fbbf24' : '#e2e8f0'}`, position: 'relative' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: i === 0 ? '#f59e0b' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7f32' : '#e2e8f0', color: i < 3 ? '#fff' : '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800 }}>{i + 1}</span>
+                      <strong style={{ fontSize: 14, color: '#1e293b' }}>{c.name}</strong>
+                    </div>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#0d9488', background: '#ccfbf1', padding: '3px 10px', borderRadius: 999 }}>效率 {c.efficiency.toFixed(1)}</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, fontSize: 11 }}>
+                    <div><span style={{ color: '#94a3b8' }}>笔记数</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{c.count}</strong></div>
+                    <div><span style={{ color: '#94a3b8' }}>均阅读</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{compact(c.avgRead)}</strong></div>
+                    <div><span style={{ color: '#94a3b8' }}>均互动</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{compact(c.avgInteraction)}</strong></div>
+                    <div><span style={{ color: '#94a3b8' }}>均CPE</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{c.avgCpe > 0 ? '¥' + c.avgCpe.toFixed(1) : '—'}</strong></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : <EmptyState title="暂无达人效率数据" text="同步达人层级表现指标后生成效率排行榜。" />}
+        </Section>
+      </div>
+
+      {/* ===== 新增：互动质量分析 ===== */}
+      <Section tag="互动质量" title="互动质量深度分析" tone="purple" hint="点赞/收藏/分享/评论构成">
+        <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+          <div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '10px 0' }}>
+              {interactionQuality.map((item, i) => (
+                <div key={i}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ width: 28, height: 28, borderRadius: 8, background: item.color + '15', color: item.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>{item.icon}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>{item.label}</span>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>{item.value.toLocaleString()}</span>
+                      <span style={{ fontSize: 11, color: '#94a3b8', marginLeft: 6 }}>{item.pct.toFixed(1)}%</span>
+                    </div>
+                  </div>
+                  <div style={{ height: 10, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
+                    <div style={{ width: `${item.pct}%`, height: '100%', background: `linear-gradient(90deg, ${item.color}cc, ${item.color})`, borderRadius: 999, transition: 'width 0.6s ease' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ padding: '16px', background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', borderRadius: 12, border: '1px solid #e2e8f0' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#475569', marginBottom: 12, letterSpacing: '0.5px' }}>互动质量洞察</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #3b82f6' }}>
+                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>点赞占比</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{interactionQuality.find(i => i.label === '点赞')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 10.5, color: '#94a3b8' }}>浅层互动，反映内容吸引力</div>
+              </div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #f59e0b' }}>
+                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>收藏占比</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{interactionQuality.find(i => i.label === '收藏')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 10.5, color: '#94a3b8' }}>深度互动，反映内容价值密度</div>
+              </div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #8b5cf6' }}>
+                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>评论占比</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{interactionQuality.find(i => i.label === '评论')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 10.5, color: '#94a3b8' }}>参与度互动，反映话题讨论性</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </Section>
 
       <Section tag="行动层" title="复盘洞察与下一步行动" tone="purple" hint="从数据直接进入运营">
