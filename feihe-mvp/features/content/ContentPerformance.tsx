@@ -5,6 +5,7 @@ import { ContentAnalyticsBoard } from './ContentAnalyticsBoard';
 
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
+import { MatrixHeatmap, WordCloudChart, TreeMapChart } from '../overview/AdvancedCharts';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
@@ -180,6 +181,54 @@ export function ContentPerformance({
     { name: '全盘平均互动率', count: Number((num(m.engagementRate) * 100).toFixed(2)), desc: '高于行业均值', unit: '%' },
     { name: '达人合作总支出', count: num(m.creatorCost), desc: `覆盖 ${num(q.metricCount)} 篇`, isCurrency: 1 },
   ];
+
+  // ===== 第二、三阶段新增看板数据 =====
+  // 人群×阶段矩阵热力图
+  const planning = data.feishu?.planning || [];
+  const audiences = [...new Set(planning.map(p => p.audience).filter((a): a is string => !!a))].slice(0, 6);
+  const stages = [...new Set(planning.map(p => p.stage).filter((s): s is string => !!s))].slice(0, 6);
+  const heatmapData = audiences.map(a => stages.map(s => planning.filter(p => p.audience === a && p.stage === s).length));
+
+  // 场景分布树状图
+  const sceneMap = new Map<string, number>();
+  for (const p of planning) {
+    if (p.scene) sceneMap.set(p.scene, (sceneMap.get(p.scene) || 0) + 1);
+  }
+  const treeMapItems = [...sceneMap.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([label, value], i) => ({ label, value, color: ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#0891b2', '#65a30d', '#db2777'][i % 8] }));
+
+  // 痛点词云（从 topics 数据）
+  const wordCloudWords = (data.analytics.topics || [])
+    .filter(t => t.name && num(t.count) > 0)
+    .slice(0, 30)
+    .map(t => ({ text: String(t.name), count: num(t.count), sentiment: (t.sentiment === 'negative' ? 'negative' : t.sentiment === 'positive' ? 'positive' : 'neutral') as 'positive' | 'negative' | 'neutral' }));
+
+  // 月度产出趋势
+  const monthMap = new Map<string, number>();
+  for (const note of data.notes || []) {
+    if (note.publishedAt) {
+      const month = String(note.publishedAt).slice(0, 7);
+      monthMap.set(month, (monthMap.get(month) || 0) + 1);
+    }
+  }
+  const monthlyOutput = [...monthMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+
+  // 达人类型×场景效果矩阵
+  const creatorLevels = [...new Set((data.notes || []).map(n => n.creatorLevel).filter((c): c is string => !!c))].slice(0, 5);
+  const categories = [...new Set((data.notes || []).map(n => n.category1).filter((c): c is string => !!c))].slice(0, 6);
+  const creatorSceneData = creatorLevels.map(cl =>
+    categories.map(cat => (data.notes || []).filter(n => n.creatorLevel === cl && n.category1 === cat).length)
+  );
+
+  // 消费者反馈分类（评论情感分布）
+  const feedbackCategories = [
+    { label: '正向赞誉', value: num(m.positiveCount), color: '#16a34a' },
+    { label: '求助/购买问询', value: num(m.questionCount), color: '#3b82f6' },
+    { label: '中性讨论', value: Math.max(0, num(m.commentTotal) - num(m.positiveCount) - num(m.negativeCount) - num(m.questionCount)), color: '#64748b' },
+    { label: '负向敏感', value: num(m.negativeCount), color: '#dc2626' },
+  ].filter(c => c.value > 0);
 
   return (
     <div className="stack animate-fade-in">
@@ -446,6 +495,102 @@ export function ContentPerformance({
               </div>
             ))}
           </div>
+        </DashboardSection>
+      </div>
+
+      {/* ===== 第二阶段：内容规划矩阵与场景分析 ===== */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+        <DashboardSection
+          eyebrow="AUDIENCE × STAGE"
+          title="人群×阶段内容矩阵热力图"
+          desc="内容规划中各人群在不同决策阶段的选题覆盖密度。"
+        >
+          {audiences.length > 0 && stages.length > 0 ? (
+            <MatrixHeatmap rows={audiences} cols={stages} data={heatmapData} />
+          ) : <EmptyState title="暂无规划数据" text="同步内容规划all in one表格后生成人群×阶段矩阵。" />}
+        </DashboardSection>
+
+        <DashboardSection
+          eyebrow="SCENE TREEMAP"
+          title="内容场景分布树状图"
+          desc="一级场景的选题数量占比，面积越大代表该场景覆盖越密集。"
+        >
+          {treeMapItems.length > 0 ? (
+            <TreeMapChart items={treeMapItems} />
+          ) : <EmptyState title="暂无场景数据" text="同步内容规划场景库后生成场景分布树状图。" />}
+        </DashboardSection>
+      </div>
+
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+        <DashboardSection
+          eyebrow="PAIN POINTS"
+          title="用户痛点与高频话题词云"
+          desc="笔记与评论中高频提及的核心诉求，字号越大代表讨论热度越高。"
+        >
+          {wordCloudWords.length > 0 ? (
+            <WordCloudChart words={wordCloudWords} />
+          ) : <EmptyState title="暂无话题数据" text="同步笔记与评论话题标签后生成痛点词云。" />}
+        </DashboardSection>
+
+        <DashboardSection
+          eyebrow="CREATOR × SCENE"
+          title="达人类型×内容场景效果矩阵"
+          desc="不同达人层级在各内容方向上的笔记投放数量分布。"
+        >
+          {creatorLevels.length > 0 && categories.length > 0 ? (
+            <MatrixHeatmap rows={creatorLevels} cols={categories} data={creatorSceneData} colorScale={['#f0fdf4', '#22c55e', '#14532d']} />
+          ) : <EmptyState title="暂无矩阵数据" text="同步笔记达人层级与内容方向后生成效果矩阵。" />}
+        </DashboardSection>
+      </div>
+
+      {/* ===== 第三阶段：消费者反馈与月度产出 ===== */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+        <DashboardSection
+          eyebrow="CONSUMER FEEDBACK"
+          title="消费者反馈分类构成"
+          desc="全盘评论的情感与意图分类：正向赞誉、求助问询、中性讨论、负向敏感。"
+        >
+          {feedbackCategories.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {feedbackCategories.map((c, i) => {
+                const total = feedbackCategories.reduce((s, x) => s + x.value, 0);
+                const pct = total > 0 ? (c.value / total * 100) : 0;
+                return (
+                  <div key={i}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
+                      <span style={{ fontWeight: 600, color: '#334155' }}>{c.label}</span>
+                      <span style={{ color: '#64748b' }}>{c.value.toLocaleString()} 条 · {pct.toFixed(1)}%</span>
+                    </div>
+                    <div style={{ height: 10, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: c.color, borderRadius: 999, transition: 'width 0.3s ease' }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : <EmptyState title="暂无反馈数据" text="同步评论情感分类后生成消费者反馈构成。" />}
+        </DashboardSection>
+
+        <DashboardSection
+          eyebrow="MONTHLY OUTPUT"
+          title="月度内容产出趋势"
+          desc="按发布日期统计的月度笔记产出数量变化。"
+        >
+          {monthlyOutput.length > 0 ? (
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, height: 200, padding: '10px 0' }}>
+              {monthlyOutput.map(([month, count], i) => {
+                const max = Math.max(...monthlyOutput.map(([, c]) => c), 1);
+                const h = (count / max) * 160;
+                return (
+                  <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>{count}</span>
+                    <div style={{ width: '100%', maxWidth: 40, height: h, background: 'linear-gradient(180deg, #3b82f6, #1e40af)', borderRadius: '4px 4px 0 0', minHeight: 4 }} />
+                    <span style={{ fontSize: 10.5, color: '#64748b', whiteSpace: 'nowrap' }}>{month}</span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : <EmptyState title="暂无产出数据" text="同步笔记发布日期后生成月度产出趋势。" />}
         </DashboardSection>
       </div>
 

@@ -10,6 +10,7 @@ import { FeishuSources, SyncButton } from '../../components/ui/FeishuSources';
 import { WorkspaceModuleTabs } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import { HorizontalBarList, TierDoughnutChart, Sparkline, KfsStackedAreaChart, TierSpendDistribution } from './OverviewCharts';
+import { EffectScatterChart, DistributionHistogram, EfficiencyRadarChart, ConversionFunnelChart, BoxPlotChart } from './AdvancedCharts';
 import { api, compact, num } from '../../lib/hooks/use-project-data';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
@@ -78,6 +79,55 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     .map(([label, v], i) => ({ label, spend: v.spend, count: v.count, color: colors[i % colors.length] }));
   const formatRows = dashboard.analytics.formats || [];
   const formatTotal = formatRows.reduce((sum, r) => sum + num(r.count), 0);
+  // 内容效果散点图数据（阅读量 vs 互动量，按内容方向着色）
+  const categoryColorMap = new Map<string, string>();
+  const scatterPoints = (dashboard.notes || [])
+    .filter(n => num(n.readCount) > 0 && num(n.interactionCount) > 0)
+    .slice(0, 60)
+    .map((n, i) => {
+      const cat = String(n.category1 || '未标注');
+      if (!categoryColorMap.has(cat)) categoryColorMap.set(cat, colors[categoryColorMap.size % colors.length]);
+      return { x: num(n.readCount), y: num(n.interactionCount), size: num(n.commentTotal), color: categoryColorMap.get(cat) || colors[0], label: cat, id: String(n.id || i) };
+    });
+  // 笔记阅读量分布直方图
+  const readValues = (dashboard.notes || []).map(n => num(n.readCount)).filter(v => v > 0);
+  const readMax = readValues.length ? Math.max(...readValues) : 1;
+  const histBins = [0, 0.1, 0.25, 0.5, 0.75, 1].map((t, i, arr) => {
+    const lo = readMax * t;
+    const hi = i < arr.length - 1 ? readMax * arr[i + 1] : readMax * 1.1;
+    const count = readValues.filter(v => v >= lo && v < hi).length;
+    const fmt = (v: number) => v >= 10000 ? (v / 10000).toFixed(0) + 'w' : v >= 1000 ? (v / 1000).toFixed(0) + 'k' : Math.round(v).toString();
+    return { label: `${fmt(lo)}-${fmt(hi)}`, count };
+  });
+  // 效率雷达图数据
+  const radarMetrics = [
+    { label: '互动率', value: num(m.engagementRate) * 100, max: 10 },
+    { label: 'CTR(信息流)', value: num(daily?.feed_ctr), max: 5 },
+    { label: 'CTR(搜索)', value: num(daily?.search_ctr), max: 10 },
+    { label: 'CPE效率', value: m.cpe ? Math.max(0, 20 - num(m.cpe) / 5) : 0, max: 20 },
+    { label: '计划达成', value: num(daily?.achieve_pct), max: 120 },
+  ];
+  // 转化漏斗数据
+  const funnelStages = [
+    { label: '内容曝光', value: num(m.exposure) },
+    { label: '内容阅读', value: num(m.readCount) },
+    { label: '内容互动', value: num(m.interactionCount) },
+    { label: '真实评论', value: num(m.commentTotal) },
+    { label: '正向口碑', value: num(m.positiveCount) },
+  ].filter(s => s.value > 0);
+  // 达人层级效果箱线图数据
+  const boxPlotGroups = (dashboard.analytics.creatorLevels || [])
+    .map(level => {
+      const levelNotes = (dashboard.notes || []).filter(n => (n.creatorLevel || '') === level.name);
+      const interactions = levelNotes.map(n => num(n.interactionCount)).filter(v => v > 0);
+      return { label: String(level.name), values: interactions.length ? interactions : [0] };
+    })
+    .filter(g => g.values.some(v => v > 0));
+  // 爆文TOP20
+  const top20Notes = [...(dashboard.notes || [])]
+    .filter(n => num(n.interactionCount) > 0 || num(n.readCount) > 0)
+    .sort((a, b) => num(b.interactionCount) - num(a.interactionCount))
+    .slice(0, 20);
   const recent: Array<Record<string, string | number | null> & { date: string }> = quarterRows.slice(-30).map(r => ({ ...r, date: String(r.date) }));
   const previous = quarterRows.at(-2);
   const latestNoteDate = dashboard.feishu?.reports.find(r => r.sheetId === '3Wsban')?.latestDate;
@@ -185,12 +235,96 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <div className="ops-table-wrap reference-content-detail"><table className="ops-table"><thead><tr><th>内容切角 / 场景</th><th>笔记数</th><th>阅读量</th><th>互动量</th><th>笔记分布</th></tr></thead><tbody>{dashboard.analytics.categories.slice(0, 8).map((r, i) => <tr key={`${r.name}-${i}`}><td>{String(r.name || '未标注')}</td><td>{num(r.count)}</td><td>{compact(r.reads)}</td><td>{compact(r.interactions)}</td><td><Progress label="占项目笔记" value={m.noteCount ? num(r.count) / m.noteCount * 100 : null} /></td></tr>)}</tbody></table></div>
       </Section>
 
+      <Section tag="三、内容效果" title="内容效果深度分析" tone="blue" hint="散点矩阵 · 分布直方图 · 箱线图">
+        <div className="two-col-chart-grid">
+          <div className="chart-inner-panel"><div className="inner-head"><strong>内容方向效果矩阵（散点图）</strong><small>X=阅读量 Y=互动量 点大小=评论数 颜色=内容方向</small></div>
+            {scatterPoints.length > 0 ? <EffectScatterChart points={scatterPoints} /> : <EmptyState title="暂无散点数据" text="同步笔记阅读与互动指标后生成效果矩阵。" />}
+          </div>
+          <div className="chart-inner-panel"><div className="inner-head"><strong>笔记阅读量分布直方图</strong><small>{readValues.length} 篇有阅读数据的笔记</small></div>
+            {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
+          </div>
+        </div>
+        {boxPlotGroups.length > 0 && <div className="chart-inner-panel" style={{ marginTop: 14 }}>
+          <div className="inner-head"><strong>达人层级互动量箱线图</strong><small>各层级笔记互动量分布（中位数、四分位、极值）</small></div>
+          <BoxPlotChart groups={boxPlotGroups} unit="互动" />
+        </div>}
+      </Section>
+
+      <Section tag="四、效率转化" title="效率雷达与转化漏斗" tone="teal" hint="多维效率 · 全链路转化">
+        <div className="two-col-chart-grid">
+          <div className="chart-inner-panel"><div className="inner-head"><strong>投放效率多维雷达图</strong><small>互动率 · CTR · CPE效率 · 计划达成</small></div>
+            {radarMetrics.some(m => m.value > 0) ? <EfficiencyRadarChart metrics={radarMetrics} /> : <EmptyState title="暂无效率数据" text="同步投放效率指标后生成雷达图。" />}
+          </div>
+          <div className="chart-inner-panel"><div className="inner-head"><strong>内容转化全链路漏斗</strong><small>曝光→阅读→互动→评论→正向口碑</small></div>
+            {funnelStages.length > 0 ? <ConversionFunnelChart stages={funnelStages} /> : <EmptyState title="暂无漏斗数据" text="同步曝光、阅读、互动数据后生成转化漏斗。" />}
+          </div>
+        </div>
+      </Section>
+
+      <Section tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="按互动量排序">
+        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)}><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{String(n.category1 || '未标注')}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
+      </Section>
+
       <Section tag="行动层" title="复盘洞察与下一步行动" tone="purple" hint="从数据直接进入运营">
         <div className="two-col-chart-grid"><div className="reference-learning"><strong>当前观察</strong><p>内容库共 {m.noteCount} 篇，累计互动 {compact(m.interactionCount)} 次。已标注的内容方向中，{String(dashboard.analytics.categories[0]?.name || '暂无方向')}收录最多。</p><p>当前真实评论快照合计 {m.commentTotal} 条，正向 {m.positiveCount} 条，负向 {m.negativeCount} 条。继续优先处理待回复和待删除事项。</p></div><div className="reference-actions">
           <Link href={`/projects/${encodeURIComponent(projectId)}/comments?tab=actions`}><span><strong>处理 {pending} 条风险待办</strong><small>达人回复与删除处置</small></span><b>去处理 →</b></Link>
           <Link href={`/projects/${encodeURIComponent(projectId)}/content?tab=analysis`}><span><strong>复盘高热内容与切角</strong><small>阅读、互动与达人效率</small></span><b>看内容 →</b></Link>
           <Link href={`/projects/${encodeURIComponent(projectId)}/growth?tab=competitor`}><span><strong>对照竞品月报与搜索趋势</strong><small>使用已接入的品牌工作表</small></span><b>看竞品 →</b></Link>
         </div></div>
+      </Section>
+      {/* ===== 跨表整合：待接入数据看板框架 ===== */}
+      <Section tag="六、待接入" title="进阶看板（数据接入后自动启用）" tone="gray" hint="第二、三阶段预留">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
+          {[
+            { title: '流量来源结构', desc: '搜索/推荐/关注/分享等流量渠道占比', source: '需接入笔记流量来源字段' },
+            { title: '关键词消耗TOP20', desc: '投放关键词消耗与转化效率排行', source: '需接入搜索广告关键词报表' },
+            { title: 'SEO效果追踪', desc: '自然搜索排名与流量增长趋势', source: '需接入SEO排名监测数据' },
+            { title: '回搜量与成本', desc: '种草后品牌搜索回搜量及单次回搜成本', source: '需接入灵犀回搜量指标' },
+            { title: '星盟周消耗对比', desc: '小红盟与小红星周度消耗与效率对比', source: '周趋势表现有CPUV，消耗待补全' },
+            { title: 'I+TI人群资产趋势', desc: '兴趣人群(I)与转化人群(TI)资产积累', source: '需接入星图人群资产数据' },
+          ].map((item, i) => (
+            <div key={i} style={{ padding: '14px', background: '#f8fafc', borderRadius: 10, border: '1px dashed #cbd5e1', opacity: 0.85 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, color: '#64748b', background: '#e2e8f0', padding: '2px 6px', borderRadius: 4 }}>待接入</span>
+                <strong style={{ fontSize: 13, color: '#334155' }}>{item.title}</strong>
+              </div>
+              <p style={{ fontSize: 11.5, color: '#64748b', margin: '0 0 6px 0', lineHeight: 1.5 }}>{item.desc}</p>
+              <p style={{ fontSize: 10.5, color: '#94a3b8', margin: 0, fontStyle: 'italic' }}>数据源：{item.source}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* ===== 跨表整合：统一指标字典 ===== */}
+      <Section tag="七、指标字典" title="统一指标定义与口径说明" tone="blue" hint="跨模块一致性保障">
+        <div className="ops-table-wrap">
+          <table className="ops-table">
+            <thead><tr><th>指标名称</th><th>定义公式</th><th>数据来源</th><th>适用模块</th><th>注意事项</th></tr></thead>
+            <tbody>
+              {[
+                { name: 'CTR（点击率）', formula: '点击量 / 展现量 × 100%', source: '聚光投放报表', module: 'Overview/日报', note: '信息流与搜索分开计算' },
+                { name: 'CPUV（单次访问成本）', formula: '消耗 / 独立访客数(UV)', source: '小红盟/小红星报表', module: 'Overview/日报', note: '区分盟/星两个平台' },
+                { name: 'CPE（单次互动成本）', formula: '达人采买费用 / 互动总量', source: '笔记库报价+互动数据', module: 'Overview/Content', note: '费用为笔记报价，非实际结算' },
+                { name: '互动率', formula: '互动量 / 阅读量 × 100%', source: '笔记表现数据', module: 'Overview/Content', note: '互动=点赞+收藏+分享+评论' },
+                { name: '计划达成率', formula: '实际消耗 / 当日计划消耗 × 100%', source: '周趋势底表', module: 'Overview/日报', note: '仅已填计划日期有效' },
+                { name: '外显率', formula: '已外显评论数 / 供应商交付总数 × 100%', source: '评论区执行数据', module: 'Comments/执行总览', note: '区分原文一致与改写外显' },
+                { name: '闭环率', formula: '已闭环风险评论数 / 风险评论总数 × 100%', source: '评论处置actions', module: 'Comments/执行总览', note: '闭环=达人回复/删除下架/自然消失' },
+                { name: '篇均互动', formula: '互动总量 / 有互动数据的笔记数', source: '笔记表现数据', module: 'Content/Growth', note: '仅使用已提供互动的笔记' },
+                { name: '搜索指数', formula: '灵犀/聚光平台品牌搜索热度值', source: '站内搜索指数表', module: 'Growth/竞品分析', note: '灵犀=官方大盘，聚光=商业搜索' },
+                { name: '采买金额', formula: 'Σ笔记报价(notePrice)', source: '笔记库', module: 'Overview/Content', note: '按达人层级聚合，报价非结算' },
+              ].map((row, i) => (
+                <tr key={i}>
+                  <td><strong>{row.name}</strong></td>
+                  <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{row.formula}</td>
+                  <td>{row.source}</td>
+                  <td>{row.module}</td>
+                  <td style={{ color: '#64748b', fontSize: 12 }}>{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="metric-note" style={{ marginTop: 10 }}>以上指标口径在 Overview、Content、Comments、Growth 四大模块中保持一致。新增看板时必须遵循本字典定义，确保跨模块数据可比。</p>
       </Section>
     </div>}
 

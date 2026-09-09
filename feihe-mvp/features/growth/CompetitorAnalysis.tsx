@@ -136,6 +136,50 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
         </div>
       </DashboardSection>
     </div>
+    {/* 第二阶段：竞品问题类别分布 */}
+    <DashboardSection
+      title="竞品问题类别与风险等级分布"
+      eyebrow="COMPETITOR ISSUES"
+      desc="各竞品品牌的质量问题按P0/P1/P2风险等级分类统计，帮助识别竞品弱点与自身机会。"
+    >
+      {(() => {
+        const issues = data.feishu?.intelligence?.quality?.issues || [];
+        if (!issues.length) return <EmptyState title="暂无竞品问题数据" text="同步竞品质量情报后生成问题类别分布。" />;
+        const byBrand = new Map<string, { P0: number; P1: number; P2: number; total: number }>();
+        for (const issue of issues) {
+          const brand = issue.brand || '未标注';
+          const existing = byBrand.get(brand) || { P0: 0, P1: 0, P2: 0, total: 0 };
+          existing[issue.level] = (existing[issue.level] || 0) + 1;
+          existing.total += 1;
+          byBrand.set(brand, existing);
+        }
+        const sorted = [...byBrand.entries()].sort((a, b) => b[1].total - a[1].total);
+        const maxTotal = Math.max(...sorted.map(([, v]) => v.total), 1);
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {sorted.map(([brand, counts]) => (
+              <div key={brand}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                  <strong style={{ fontSize: 13, color: '#0f172a' }}>{brand}</strong>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>共 {counts.total} 个问题</span>
+                </div>
+                <div style={{ display: 'flex', height: 22, borderRadius: 6, overflow: 'hidden', background: '#f1f5f9' }}>
+                  {counts.P0 > 0 && <div style={{ width: `${counts.P0 / maxTotal * 100}%`, background: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, fontWeight: 700, color: '#fff', minWidth: counts.P0 > 0 ? 28 : 0 }}>P0 {counts.P0}</div>}
+                  {counts.P1 > 0 && <div style={{ width: `${counts.P1 / maxTotal * 100}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, fontWeight: 700, color: '#fff', minWidth: counts.P1 > 0 ? 28 : 0 }}>P1 {counts.P1}</div>}
+                  {counts.P2 > 0 && <div style={{ width: `${counts.P2 / maxTotal * 100}%`, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, fontWeight: 700, color: '#fff', minWidth: counts.P2 > 0 ? 28 : 0 }}>P2 {counts.P2}</div>}
+                </div>
+              </div>
+            ))}
+            <div style={{ display: 'flex', gap: 16, marginTop: 8, paddingTop: 10, borderTop: '1px solid #e2e8f0' }}>
+              <span style={{ fontSize: 11.5, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, background: '#dc2626', borderRadius: 2 }} />P0 严重问题</span>
+              <span style={{ fontSize: 11.5, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, background: '#f59e0b', borderRadius: 2 }} />P1 中等问题</span>
+              <span style={{ fontSize: 11.5, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, background: '#3b82f6', borderRadius: 2 }} />P2 轻微问题</span>
+            </div>
+          </div>
+        );
+      })()}
+    </DashboardSection>
+
     <CompetitorIntelligenceSection intelligence={data.feishu?.intelligence} />
     {onSwitchTab && <div className="workspace-header-actions"><button onClick={() => onSwitchTab('radar')}>查看关键词机会</button><button onClick={() => onSwitchTab('inspiration')}>进入灵感选题</button></div>}
   </div>;
