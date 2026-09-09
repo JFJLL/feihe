@@ -168,7 +168,11 @@ export function getCompetitorIntelligence(): CompetitorIntelligenceData {
   } catch (err) {
     console.error('Failed to load competitor_data.json:', err);
   }
-  const fallback = defaultCompetitorData as any;
+  const fallback = defaultCompetitorData as unknown as Omit<CompetitorIntelligenceData, 'searchFlow'> & {
+    meta?: { updatedAt?: string; snapshotMonth?: string; months?: string[] };
+    searchFlow?: { keywords?: CompetitorSearchFlow[] } | CompetitorSearchFlow[];
+    quality?: CompetitorQualityData;
+  };
   return {
     updatedAt: fallback.meta?.updatedAt || '2026-09-04 19:59',
     snapshotMonth: fallback.meta?.snapshotMonth || '2026-08',
@@ -181,7 +185,7 @@ export function getCompetitorIntelligence(): CompetitorIntelligenceData {
     contentMix: fallback.contentMix || [],
     productStrategies: fallback.productStrategies || [],
     actions: fallback.actions || [],
-    searchFlow: fallback.searchFlow?.keywords || [],
+    searchFlow: Array.isArray(fallback.searchFlow) ? fallback.searchFlow : (fallback.searchFlow?.keywords || []),
     comparisonGroups: fallback.comparisonGroups || [],
     searchIndex: fallback.searchIndex || [],
     quality: fallback.quality || null,

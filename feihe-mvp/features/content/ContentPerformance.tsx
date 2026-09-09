@@ -9,6 +9,12 @@ import { DashboardSection } from '../../components/ui/operations/DashboardSectio
 import { EmptyState } from '../../components/ui/EmptyState';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
 
+function cleanLabelText(value: unknown, fallback = '其他') {
+  const text = String(value || '').trim();
+  if (!text || /https?:\/\/|\uFFFD/.test(text) || text.length > 30) return fallback;
+  return text;
+}
+
 function DistributionBars({
   rows,
   valueKey,
@@ -33,7 +39,7 @@ function DistributionBars({
           const pct = isPos && max > 0 ? (val / max) * 100 : 0;
           return (
             <div key={row[labelKey] + '-' + index}>
-              <span>{String(row[labelKey] || '待补充')}</span>
+              <span title={String(row[labelKey] || '')}>{cleanLabelText(row[labelKey], '其他')}</span>
               <i>
                 <b style={{ width: `${pct}%` }} />
               </i>
@@ -155,7 +161,8 @@ export function ContentPerformance({
 
       <ContentAnalyticsBoard analytics={data.analytics} />
 
-      <div className="workspace-two-col">
+      {/* 第一组：内容方向与选题讨论格局（双列自然均衡） */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
         <DashboardSection
           eyebrow="CONTENT STRATEGY"
           title="一级内容方向分布"
@@ -169,20 +176,37 @@ export function ContentPerformance({
           />
         </DashboardSection>
 
-        <DashboardSection
-          eyebrow="FORMAT MIX"
-          title="内容形式与互动贡献"
-          desc="图文 vs 视频形式的内容分布与互动贡献拆解。"
-        >
-          <DistributionBars
-            rows={data.analytics.formats}
-            valueKey="count"
-            labelKey="name"
-            empty="待同步图文/视频字段"
-            secondaryKey="interactions"
-          />
-        </DashboardSection>
+        <div className="stack" style={{ gap: 20 }}>
+          <DashboardSection
+            eyebrow="CONTENT STATUS"
+            title="内容建档与监测状态"
+            desc="项目全盘笔记的收录、达标、待补与抓取状态分布。"
+          >
+            <DistributionBars
+              rows={data.analytics.statusDistribution}
+              valueKey="count"
+              labelKey="name"
+              empty="暂无状态数据"
+            />
+          </DashboardSection>
 
+          <DashboardSection
+            eyebrow="TOPICS"
+            title="高频讨论话题与标签"
+            desc="笔记与评论高频提及的核心诉求分类与讨论热度。"
+          >
+            <DistributionBars
+              rows={data.analytics.topics}
+              valueKey="count"
+              labelKey="name"
+              empty="暂无话题数据"
+            />
+          </DashboardSection>
+        </div>
+      </div>
+
+      {/* 第二组：达人层级效率矩阵与地域渗透格局（双列自然均衡） */}
+      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
         <DashboardSection
           eyebrow="CREATOR EFFICIENCY"
           title="达人层级效率矩阵"
@@ -218,6 +242,7 @@ export function ContentPerformance({
           </div>
         </DashboardSection>
 
+        <div className="stack" style={{ gap: 20 }}>
         <DashboardSection
           eyebrow="GEOGRAPHY"
           title="内容达人地域分布"
@@ -230,6 +255,21 @@ export function ContentPerformance({
             empty="待同步达人地域字段"
           />
         </DashboardSection>
+
+        <DashboardSection
+          eyebrow="BRAND LANDSCAPE"
+          title="品牌提及与声量集中度"
+          desc="全库内容中各品牌提及频次与互动声量对比。"
+        >
+          <DistributionBars
+            rows={data.analytics.brands}
+            valueKey="notes"
+            labelKey="brand"
+            empty="暂无品牌提及数据"
+            secondaryKey="interactions"
+          />
+        </DashboardSection>
+        </div>
       </div>
 
       <DashboardSection

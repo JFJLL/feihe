@@ -9,7 +9,7 @@ const colors = ['#1e6091', '#3f815e', '#7864a5', '#a66f22', '#64748b'];
 const count = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : 0;
 const cleanName = (val: unknown) => {
   const str = String(val || '').trim();
-  return !str || /\uFFFD/.test(str) ? '其他层级' : str;
+  return !str || /\uFFFD/.test(str) ? '其他' : str;
 };
 
 export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
@@ -28,6 +28,8 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
   const maxInteraction = Math.max(0, ...levels.map(row => count(row.avgInteraction)));
   const formats = analytics.formats.filter(row => count(row.interactions) > 0);
   const interactions = formats.reduce((sum, row) => sum + count(row.interactions), 0);
+  const scopes = (analytics.scopeDistribution || []).filter(row => count(row.count) > 0);
+  const scopeTotal = scopes.reduce((sum, row) => sum + count(row.count), 0);
 
   return (
     <div className="stack">
@@ -66,6 +68,24 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
               <div className="empty">暂无已同步互动贡献</div>
             )}
           </DashboardSection>
+
+          {scopes.length > 0 && (
+            <DashboardSection
+              eyebrow="PRODUCT SCOPE"
+              title="内容产品范围分布"
+              desc="本品投放与竞品讨论、行业泛内容声量分布结构。"
+            >
+              <HorizontalBarList
+                items={scopes.map((row, index) => ({
+                  label: cleanName(row.name),
+                  amount: count(row.count),
+                  pct: scopeTotal > 0 ? (count(row.count) / scopeTotal) * 100 : 0,
+                  color: colors[(index + 2) % colors.length],
+                  subText: `${count(row.count).toLocaleString()} 篇 · ${count(row.comments).toLocaleString()} 评论`,
+                }))}
+              />
+            </DashboardSection>
+          )}
         </div>
 
         {/* 右列：达人层级篇均互动效率 */}
