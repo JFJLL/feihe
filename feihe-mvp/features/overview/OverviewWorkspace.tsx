@@ -15,6 +15,11 @@ import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
+const formatDateZh = (val: string | null | undefined) => {
+  if (!val) return '';
+  const match = String(val).match(/(\d{4}-)?(\d{1,2})-(\d{1,2})/);
+  return match ? `${Number(match[2])}月${Number(match[3])}日` : String(val);
+};
 const colors = ['#1e6091', '#16a34a', '#7c3aed', '#f59e0b', '#0d9488', '#64748b'];
 
 function Section({ tag, title, tone = 'blue', hint, children }: {
@@ -123,8 +128,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
 
       <Section tag="预算节奏" title="预算消耗节奏对比" tone="amber" hint="当月进度与季度全盘">
         {date ? <div className="budget-dual-grid">{[
-          { title: `${Number(date.slice(5, 7))}月当月 · 截至${monthDay}日`, spend: monthSpend, budget: monthBudget, time: monthDay / monthDays * 100, days: `${monthDay}/${monthDays}`, tone: 'blue', count: monthRows.length },
-          { title: `Q3 累计 · 7月1日—${date.slice(5)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / 92 * 100, days: `${quarterDay}/92`, tone: 'purple', count: quarterRows.length },
+          { title: `${Number(date.slice(5, 7))}月当月 · 截至${formatDateZh(date)}`, spend: monthSpend, budget: monthBudget, time: monthDay / monthDays * 100, days: `${monthDay}/${monthDays}`, tone: 'blue', count: monthRows.length },
+          { title: `Q3 累计 · 7月1日—${formatDateZh(date)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / 92 * 100, days: `${quarterDay}/92`, tone: 'purple', count: quarterRows.length },
         ].map(item => <div key={item.title} className={`budget-sub-card pastel-${item.tone}`}>
           <div className="sub-card-title"><strong>{item.title}</strong></div>
           <Progress label={`时间进度（${item.days} 天）`} value={item.time} tone="gray" />
