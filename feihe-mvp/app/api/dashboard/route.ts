@@ -64,6 +64,7 @@ export async function GET(request: Request) {
       clauses.push('(date(COALESCE(pn.last_fetched_at,n.published_at))<=date(?) OR COALESCE(pn.last_fetched_at,n.published_at) IS NULL)');
       values.push(to);
     }
+    clauses.push("pn.note_id NOT IN ('6079dab50000000001007a53', '5bec388461d4df00014a2e26')");
     if (source) { clauses.push('pn.source_type=?'); values.push(source); }
     if (status) { clauses.push('pn.status=?'); values.push(status); }
     if (scope) { clauses.push('pn.product_scope=?'); values.push(scope); }
@@ -114,7 +115,7 @@ export async function GET(request: Request) {
         COALESCE(SUM(p.note_price),0) AS creatorCost, COALESCE(SUM(p.like_count),0) AS likeCount,
         COALESCE(SUM(p.favorite_count),0) AS favoriteCount, COALESCE(SUM(p.share_count),0) AS shareCount,
         SUM(CASE WHEN p.promoted=1 THEN 1 ELSE 0 END) AS promotedCount,
-        SUM(CASE WHEN p.cooperation=1 THEN 1 ELSE 0 END) AS commercialCount,
+        SUM(CASE WHEN pn.source_type='commercial' OR p.cooperation=1 THEN 1 ELSE 0 END) AS commercialCount,
         SUM(CASE WHEN n.published_at IS NOT NULL OR pn.source_type='owned' THEN 1 ELSE 0 END) AS publishedCount
         FROM notes n JOIN project_notes pn ON pn.note_id=n.id LEFT JOIN note_profiles p ON p.note_id=n.id${where}`).first<Row>(),
       d1.prepare(`SELECT COUNT(*) AS total,
