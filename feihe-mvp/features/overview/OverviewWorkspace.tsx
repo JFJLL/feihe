@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, type ReactNode } from 'react';
 import Link from '../../components/ui/AppLink';
@@ -415,6 +415,65 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <Link href={`/projects/${encodeURIComponent(projectId)}/growth?tab=competitor`}><span><strong>对照竞品月报与搜索趋势</strong><small>使用已接入的品牌工作表</small></span><b>看竞品 →</b></Link>
         </div></div>
       </Section>
+      {/* ===== KPI / I+TI 人群资产看板 ===== */}
+      {(() => {
+        const itiRows = (dashboard.feishu?.itiRetention || []) as Array<{ date: string; feiheIti: number | null; qicuiIti: number | null }>;
+        const kpiWeeklyRows = (dashboard.feishu?.kpiWeekly || []) as Array<{ period: string; dimension: string; cost: number | null; viralRate: number | null }>;
+        const kpiInternalRows = (dashboard.feishu?.kpiInternal || []) as Array<{ month: string; dimension: string; cost: number | null; exposure: number | null; interaction: number | null }>;
+        const hasIti = itiRows.some(r => r.feiheIti || r.qicuiIti);
+        const hasKpi = kpiWeeklyRows.length > 0 || kpiInternalRows.length > 0;
+        if (!hasIti && !hasKpi) return null;
+        const itiTrend = itiRows.map(r => ({ date: r.date, feihe: r.feiheIti || 0, qicui: r.qicuiIti || 0 })).filter(r => r.feihe > 0 || r.qicui > 0);
+        const kpiActual = kpiWeeklyRows.filter(r => r.dimension === '实际');
+        const kpiTarget = kpiWeeklyRows.filter(r => r.dimension === 'KPI');
+        const totalActualCost = kpiActual.reduce((s, r) => s + (r.cost || 0), 0);
+        const totalTargetCost = kpiTarget.reduce((s, r) => s + (r.cost || 0), 0);
+        const costAchieveRate = totalTargetCost > 0 ? (totalActualCost / totalTargetCost * 100).toFixed(1) : '\u2014';
+        const viralRows = kpiActual.filter(r => r.viralRate !== null);
+        const avgViralRate = viralRows.length > 0 ? (viralRows.reduce((s, r) => s + (r.viralRate || 0), 0) / viralRows.length * 100).toFixed(1) : '\u2014';
+        return (
+          <Section tag="五、KPI人群" title="KPI达成与I+TI人群资产" tone="indigo" hint="飞书KPI表同步">
+            <div className="two-col-chart-grid">
+              {hasIti && itiTrend.length >= 2 && (
+                <div className="chart-inner-panel">
+                  <div className="inner-head"><strong>I+TI人群资产月度趋势</strong><small>飞鹤整体 vs 启萃品牌</small></div>
+                  <TimeSeriesChart rows={itiTrend} title="I+TI人群资产趋势" unit="人" series={[{ key: 'feihe', label: '飞鹤I+TI', color: '#1e40af' }, { key: 'qicui', label: '启萃I+TI', color: '#7c3aed' }]} />
+                </div>
+              )}
+              {hasKpi && (
+                <div className="chart-inner-panel">
+                  <div className="inner-head"><strong>Q3 KPI达成率概览</strong><small>实际 vs KPI目标</small></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: '8px 0' }}>
+                    <div style={{ background: 'linear-gradient(135deg,#eef2ff,#e0e7ff)', padding: '14px', borderRadius: 10, textAlign: 'center' }}>
+                      <div style={{ fontSize: 11, color: '#4338ca', fontWeight: 600 }}>消耗达成率</div>
+                      <div style={{ fontSize: 32, fontWeight: 900, color: '#3730a3', margin: '4px 0' }}>{costAchieveRate}<small style={{ fontSize: 14 }}>%</small></div>
+                      <div style={{ fontSize: 10.5, color: '#6366f1' }}>实际 \u00a5{compact(totalActualCost)} / 目标 \u00a5{compact(totalTargetCost)}</div>
+                    </div>
+                    <div style={{ background: 'linear-gradient(135deg,#fdf4ff,#fae8ff)', padding: '14px', borderRadius: 10, textAlign: 'center' }}>
+                      <div style={{ fontSize: 11, color: '#86198f', fontWeight: 600 }}>平均爆文率</div>
+                      <div style={{ fontSize: 32, fontWeight: 900, color: '#701a75', margin: '4px 0' }}>{avgViralRate}<small style={{ fontSize: 14 }}>%</small></div>
+                      <div style={{ fontSize: 10.5, color: '#a21caf' }}>近{viralRows.length}周实际爆文率均值</div>
+                    </div>
+                  </div>
+                  {kpiInternalRows.filter(r => r.dimension === '实际').length > 0 && (
+                    <div style={{ marginTop: 8, padding: '10px 12px', background: '#f8fafc', borderRadius: 8 }}>
+                      <div style={{ fontSize: 11.5, fontWeight: 700, color: '#1e293b', marginBottom: 6 }}>月度KPI实际数据</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {kpiInternalRows.filter(r => r.dimension === '实际').slice(0, 4).map((r, i) => (
+                          <span key={i} style={{ fontSize: 11, padding: '4px 10px', background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0', color: '#475569' }}>
+                            {r.month}月: 消耗\u00a5{compact(r.cost || 0)} \u00b7 曝光{compact(r.exposure || 0)} \u00b7 互动{compact(r.interaction || 0)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </Section>
+        );
+      })()}
+
       {/* ===== 跨表整合：待接入数据看板框架 ===== */}
       <Section tag="六、待接入" title="进阶看板（数据接入后自动启用）" tone="gray" hint="第二、三阶段预留">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
@@ -424,7 +483,6 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
             { title: 'SEO效果追踪', desc: '自然搜索排名与流量增长趋势', source: '需接入SEO排名监测数据' },
             { title: '回搜量与成本', desc: '种草后品牌搜索回搜量及单次回搜成本', source: '需接入灵犀回搜量指标' },
             { title: '星盟周消耗对比', desc: '小红盟与小红星周度消耗与效率对比', source: '周趋势表现有CPUV，消耗待补全' },
-            { title: 'I+TI人群资产趋势', desc: '兴趣人群(I)与转化人群(TI)资产积累', source: '需接入星图人群资产数据' },
           ].map((item, i) => (
             <div key={i} style={{ padding: '14px', background: '#f8fafc', borderRadius: 10, border: '1px dashed #cbd5e1', opacity: 0.85 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>

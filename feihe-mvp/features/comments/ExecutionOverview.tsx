@@ -56,7 +56,7 @@ export function ExecutionOverview({
   const activeJobs = ops.jobs?.filter(j => j.status === 'running' || j.status === 'pending') || [];
   const completedJobs = ops.jobs?.filter(j => j.status === 'completed') || [];
 
-  // 从笔记快照聚合日执行趋势（评论数变化作为执行量代理指标）
+  // 从笔记快照聚合日执行趋势
   const trendData = (dashboard.analytics?.trend || []).map(r => ({
     date: String(r.date),
     total: num(r.total),
@@ -64,43 +64,228 @@ export function ExecutionOverview({
     negative: num(r.negative),
   })).filter(r => r.date);
 
+  // === 评论区执行数据（飞书同步） ===
+  const execRows = (dashboard.feishu?.commentExecution || []) as Array<{
+    date: string; type: string; textCount: number; emojiCount: number; total: number;
+    progress: string; settlement: string; month: string;
+  }>;
+  const brokenRows = (dashboard.feishu?.commentBroken || []) as Array<{ blogger: string; status: string }>;
+  const modifiedRows = (dashboard.feishu?.commentModified || []) as Array<{ blogger: string; internalReview: string }>;
+
+  const hasExecData = execRows.length > 0;
+
+  // 月度汇总
+  const monthlyStats = execRows.reduce((acc, r) => {
+    const key = r.month || '未知';
+    if (!acc[key]) acc[key] = { total: 0, text: 0, emoji: 0, darent: 0, amateur: 0, completed: 0, settled: 0 };
+    acc[key].total += r.total || 0;
+    acc[key].text += r.textCount || 0;
+    acc[key].emoji += r.emojiCount || 0;
+    if (r.type?.includes('达人')) acc[key].darent += r.total || 0;
+    if (r.type?.includes('素人')) acc[key].amateur += r.total || 0;
+    if (r.progress === '已完成') acc[key].completed += r.total || 0;
+    if (r.settlement === '已结算') acc[key].settled += r.total || 0;
+    return acc;
+  }, {} as Record<string, { total: number; text: number; emoji: number; darent: number; amateur: number; completed: number; settled: number }>);
+
+  const totalExec = Object.values(monthlyStats).reduce((s, v) => s + v.total, 0);
+  const totalText = Object.values(monthlyStats).reduce((s, v) => s + v.text, 0);
+  const totalEmoji = Object.values(monthlyStats).reduce((s, v) => s + v.emoji, 0);
+  const totalDarent = Object.values(monthlyStats).reduce((s, v) => s + v.darent, 0);
+  const totalAmateur = Object.values(monthlyStats).reduce((s, v) => s + v.amateur, 0);
+  const emojiRatio = totalExec > 0 ? pct(totalEmoji / totalExec) : '—';
+
+  // 日执行趋势
+  const dailyTrend = execRows.reduce((acc, r) => {
+    const key = r.date;
+    if (!acc[key]) acc[key] = { date: key, total: 0, darent: 0, amateur: 0 };
+    acc[key].total += r.total || 0;
+    if (r.type?.includes('达人')) acc[key].darent += r.total || 0;
+    if (r.type?.includes('素人')) acc[key].amateur += r.total || 0;
+    return acc;
+  }, {} as Record<string, { date: string; total: number; darent: number; amateur: number }>);
+  const dailyTrendArr = Object.values(dailyTrend).sort((a, b) => a.date.localeCompare(b.date));
+
+  // 链接失效统计
+  const brokenCount = brokenRows.length;
+  const brokenApproved = brokenRows.filter(r => r.status === '审核通过').length;
+  // 修改评论统计
+  const modifiedCount = modifiedRows.length;
+  const modifiedReasons = modifiedRows.reduce((acc, r) => {
+    const reason = r.internalReview || '未知';
+    acc[reason] = (acc[reason] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
   return (
     <div className="stack animate-fade-in">
-      {/* 顶部 KPI 卡片 */}
-      <section className="ops-metric-grid">
-        <MetricCard
-          theme="blue"
-          label="风险评论总任务"
-          value={totalActions.toLocaleString()}
-          unit="条"
-          desc="纳入闭环管理的关键风险评论总数"
-          tag="执行池"
-        />
-        <MetricCard
-          theme="green"
-          label="已闭环完成"
-          value={handled.toLocaleString()}
-          unit="条"
-          desc="达人回复、删除下架或自然消失的已处理记录"
-          tag={`闭环率 ${closureRate}`}
-        />
-        <MetricCard
-          theme="yellow"
-          label="待处置风险"
-          value={(replyPending + deletePending).toLocaleString()}
-          unit="条"
-          desc={`待达人回复 ${replyPending} · 待删除 ${deletePending}`}
-          tag="需跟进"
-        />
-        <MetricCard
-          theme="purple"
-          label="供应商外显率"
-          value={supplierTotal > 0 ? supplierVisibleRate : '—'}
-          unit={supplierTotal > 0 ? '' : '待导入'}
-          desc={`原文一致 ${supplierExact} · 改写外显 ${supplierModified} · 未外显 ${supplierMissing}`}
-          tag={`共 ${supplierTotal} 条交付`}
-        />
-      </section>
+      {/* === 评论执行核心 KPI === */}
+      {hasExecData && (
+        <section className="ops-metric-grid">
+          <MetricCard
+            theme="blue"
+            label="评论执行总量"
+            value={totalExec.toLocaleString()}
+            unit="条"
+            desc={`纯文案 ${totalText.toLocaleString()} · 表情包 ${totalEmoji.toLocaleString()}`}
+            tag={`表情包占比 ${emojiRatio}`}
+          />
+          <MetricCard
+            theme="green"
+            label="达人评论执行"
+            value={totalDarent.toLocaleString()}
+            unit="条"
+            desc="达人账号发布的评论执行量"
+            tag={`占比 ${totalExec > 0 ? pct(totalDarent / totalExec) : '—'}`}
+          />
+          <MetricCard
+            theme="purple"
+            label="素人评论执行"
+            value={totalAmateur.toLocaleString()}
+            unit="条"
+            desc="素人账号发布的评论执行量"
+            tag={`占比 ${totalExec > 0 ? pct(totalAmateur / totalExec) : '—'}`}
+          />
+          <MetricCard
+            theme="yellow"
+            label="链接失效 / 需修改"
+            value={(brokenCount + modifiedCount).toLocaleString()}
+            unit="条"
+            desc={`链接失效 ${brokenCount} · 需修改 ${modifiedCount}`}
+            tag="质量监控"
+          />
+        </section>
+      )}
+
+      {/* === 月度执行仪表盘 === */}
+      {hasExecData && (
+        <DashboardSection
+          eyebrow="MONTHLY EXECUTION DASHBOARD"
+          title="月度执行量仪表盘"
+          desc="按月统计评论执行总量、达人/素人构成、纯文案/表情包占比与完成结算进度。"
+        >
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+            {Object.entries(monthlyStats).map(([month, stats]) => {
+              const completeRate = stats.total > 0 ? pct(stats.completed / stats.total) : '—';
+              const settleRate = stats.total > 0 ? pct(stats.settled / stats.total) : '0%';
+              return (
+                <div key={month} style={{ padding: '16px 18px', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)', borderRadius: 12, border: '1px solid #bae6fd' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: '#0c4a6e' }}>{month}执行统计</span>
+                    <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 20, background: '#0284c7', color: '#fff', fontWeight: 700 }}>完成率 {completeRate}</span>
+                  </div>
+                  <div style={{ fontSize: 32, fontWeight: 900, color: '#0369a1', marginBottom: 4 }}>{stats.total.toLocaleString()}<span style={{ fontSize: 14, fontWeight: 500, color: '#0369a1', marginLeft: 6 }}>条</span></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
+                    <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
+                      <div style={{ fontSize: 10.5, color: '#64748b' }}>达人评论</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#1e40af' }}>{stats.darent.toLocaleString()}</div>
+                    </div>
+                    <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
+                      <div style={{ fontSize: 10.5, color: '#64748b' }}>素人评论</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#7c3aed' }}>{stats.amateur.toLocaleString()}</div>
+                    </div>
+                    <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
+                      <div style={{ fontSize: 10.5, color: '#64748b' }}>纯文案</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#0f766e' }}>{stats.text.toLocaleString()}</div>
+                    </div>
+                    <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
+                      <div style={{ fontSize: 10.5, color: '#64748b' }}>表情包</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#b45309' }}>{stats.emoji.toLocaleString()}</div>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: 12 }}>
+                    <ProgressRow label="完成进度" done={stats.completed} total={stats.total} tone="green" />
+                    <ProgressRow label="结算进度" done={stats.settled} total={stats.total} tone="blue" detail={settleRate === '0%' ? '当前均为未结算状态' : undefined} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </DashboardSection>
+      )}
+
+      {/* === 日执行量趋势 + 达人vs素人对比 === */}
+      {hasExecData && dailyTrendArr.length >= 3 && (
+        <div className="workspace-two-col">
+          <DashboardSection
+            eyebrow="DAILY EXECUTION TREND"
+            title="日执行量趋势图"
+            desc="按日展示评论执行数量，区分达人评论与素人评论，识别执行节奏波动。"
+          >
+            <TimeSeriesChart
+              rows={dailyTrendArr}
+              title="日执行量趋势"
+              unit="条"
+              series={[
+                { key: 'total', label: '总执行', color: '#1e6091' },
+                { key: 'darent', label: '达人评论', color: '#2563eb' },
+                { key: 'amateur', label: '素人评论', color: '#7c3aed' },
+              ]}
+            />
+          </DashboardSection>
+
+          <DashboardSection
+            eyebrow="DARRENT VS AMATEUR"
+            title="达人 vs 素人执行对比"
+            desc="对比达人评论与素人评论的执行数量、纯文案占比与表情包占比。"
+          >
+            <div style={{ padding: '8px 0' }}>
+              <ProgressRow label="达人评论执行量" done={totalDarent} total={totalExec} tone="blue" detail={`纯文案为主，占比 ${totalDarent > 0 ? pct(totalDarent / totalExec) : '—'}`} />
+              <ProgressRow label="素人评论执行量" done={totalAmateur} total={totalExec} tone="purple" detail={`占比 ${totalAmateur > 0 ? pct(totalAmateur / totalExec) : '—'}`} />
+              <div style={{ marginTop: 16, padding: '12px 14px', background: '#f8fafc', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#1e293b', marginBottom: 8 }}>执行形式构成</div>
+                <div style={{ display: 'flex', height: 24, borderRadius: 6, overflow: 'hidden' }}>
+                  <div style={{ width: `${totalExec > 0 ? (totalText / totalExec) * 100 : 0}%`, background: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11, fontWeight: 700 }}>
+                    {totalExec > 0 && totalText / totalExec > 0.15 ? `纯文案 ${pct(totalText / totalExec)}` : ''}
+                  </div>
+                  <div style={{ width: `${totalExec > 0 ? (totalEmoji / totalExec) * 100 : 0}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11, fontWeight: 700 }}>
+                    {totalExec > 0 && totalEmoji / totalExec > 0.15 ? `表情包 ${pct(totalEmoji / totalExec)}` : ''}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: '#64748b' }}>
+                  <span>纯文案 {totalText.toLocaleString()} 条</span>
+                  <span>表情包 {totalEmoji.toLocaleString()} 条</span>
+                </div>
+              </div>
+            </div>
+          </DashboardSection>
+        </div>
+      )}
+
+      {/* === 执行质量监控 === */}
+      {(brokenCount > 0 || modifiedCount > 0) && (
+        <DashboardSection
+          eyebrow="EXECUTION QUALITY"
+          title="执行质量监控"
+          desc="监控评论执行过程中的链接失效、内容修改与审核异常。"
+        >
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+            <div className="pastel-card pastel-red" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 12, color: '#991b1b' }}>链接失效评论</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: '#dc2626', margin: '4px 0' }}>{brokenCount}</div>
+              <div style={{ fontSize: 11.5, color: '#991b1b' }}>审核通过 {brokenApproved} 条</div>
+            </div>
+            <div className="pastel-card pastel-amber" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 12, color: '#92400e' }}>需修改评论</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: '#d97706', margin: '4px 0' }}>{modifiedCount}</div>
+              <div style={{ fontSize: 11.5, color: '#92400e' }}>内部审核不通过需修改</div>
+            </div>
+            <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 12, color: '#1e40af' }}>质量异常率</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', margin: '4px 0' }}>{totalExec > 0 ? pct((brokenCount + modifiedCount) / totalExec) : '—'}</div>
+              <div style={{ fontSize: 11.5, color: '#1e40af' }}>失效+修改占总执行量</div>
+            </div>
+            <div className="pastel-card pastel-teal" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 12, color: '#115e59' }}>修改原因分布</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#0f766e', marginTop: 6 }}>
+                {Object.entries(modifiedReasons).slice(0, 2).map(([reason, count]) => (
+                  <div key={reason} style={{ marginBottom: 3 }}>{reason}: {count}条</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </DashboardSection>
+      )}
 
       {/* 完成进度追踪 */}
       <div className="workspace-two-col">
@@ -267,32 +452,6 @@ export function ExecutionOverview({
           </div>
         </DashboardSection>
       </div>
-
-      {/* 数据接入说明 */}
-      <DashboardSection
-        eyebrow="DATA INTEGRATION NOTE"
-        title="执行数据接入说明"
-        desc="以下看板维度待接入「评论区执行文档」飞书表格后可自动填充。"
-      >
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
-          {[
-            { title: '月度执行量仪表盘', desc: '按月统计评论发布、达人回复、删除处置的执行总量与目标达成率', status: '待接入' },
-            { title: '日执行量趋势', desc: '按日追踪执行团队的评论发布量、回复量与删引量，识别执行节奏波动', status: '待接入' },
-            { title: '完成进度甘特图', desc: '按执行批次或项目阶段展示任务起止时间与完成进度的甘特视图', status: '待接入' },
-            { title: '链接失效量趋势', desc: '追踪已发布评论的链接失效/被屏蔽数量随时间的变化趋势', status: '待接入' },
-            { title: '达人 vs 素人对比', desc: '对比达人评论与素人评论在外显率、互动量、转化效果上的差异', status: '待接入' },
-            { title: '表情包占比趋势', desc: '监控评论中表情包/纯表情评论的占比变化，评估内容质量', status: '待接入' },
-          ].map(item => (
-            <div key={item.title} style={{ padding: '12px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{item.title}</span>
-                <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 4, background: '#fef3c7', color: '#92400e', fontWeight: 600 }}>{item.status}</span>
-              </div>
-              <p style={{ margin: 0, fontSize: 11.5, color: '#64748b', lineHeight: 1.5 }}>{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </DashboardSection>
     </div>
   );
 }

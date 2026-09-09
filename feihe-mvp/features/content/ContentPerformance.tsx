@@ -594,6 +594,38 @@ export function ContentPerformance({
         </DashboardSection>
       </div>
 
+      {/* 卡审话术风险看板 */}
+      {(() => {
+        const riskRows = (data.feishu?.contentRisk || []) as Array<{ riskType: string; reason: string; originalScript: string; replacementScript: string; tips: string }>;
+        if (!riskRows.length) return null;
+        const typeCounts = riskRows.reduce((acc, r) => { acc[r.riskType] = (acc[r.riskType] || 0) + 1; return acc; }, {} as Record<string, number>);
+        const colors = ['#dc2626', '#d97706', '#7c3aed', '#2563eb', '#0891b2', '#16a34a'];
+        return (
+          <DashboardSection
+            eyebrow="CONTENT RISK"
+            title="卡审话术风险分类与替换指南"
+            desc="基于飞书卡审话术总结，分类展示高频卡审类型、原因与合规替换话术。"
+          >
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+              {Object.entries(typeCounts).map(([type, count], i) => (
+                <div key={type} style={{ padding: '14px 16px', background: `linear-gradient(135deg, ${colors[i % colors.length]}15, ${colors[i % colors.length]}08)`, borderRadius: 10, border: `1px solid ${colors[i % colors.length]}30` }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: colors[i % colors.length] }}>{type}</span>
+                    <span style={{ fontSize: 20, fontWeight: 900, color: colors[i % colors.length] }}>{count}</span>
+                  </div>
+                  {riskRows.filter(r => r.riskType === type).slice(0, 2).map((r, j) => (
+                    <div key={j} style={{ marginBottom: 8, fontSize: 11.5 }}>
+                      <div style={{ color: '#64748b', marginBottom: 2 }}><strong style={{ color: '#dc2626' }}>风险：</strong>{r.reason?.substring(0, 50)}{r.reason?.length > 50 ? '...' : ''}</div>
+                      <div style={{ color: '#16a34a' }}><strong>替换：</strong>{r.replacementScript?.substring(0, 50)}{r.replacementScript?.length > 50 ? '...' : ''}</div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </DashboardSection>
+        );
+      })()}
+
       <DashboardSection
         eyebrow="CONTENT RANKING"
         title="高热内容表现排行"

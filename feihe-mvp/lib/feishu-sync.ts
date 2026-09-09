@@ -4,7 +4,7 @@ import { db, ensureSchema } from './db';
 import { envVar } from './runtime-env';
 import { projectId } from './projects';
 import { getCompetitorIntelligence } from './competitor-intelligence';
-import { FEISHU_DOCUMENTS, cellDate, cellText, cellNumber, aggregateAds, parseWeekly, parseSearch, parseMonthly, parsePlanning, type FeishuData, type SheetReport, type SheetDefinition } from './feishu-model';
+import { FEISHU_DOCUMENTS, cellDate, cellText, cellNumber, aggregateAds, parseWeekly, parseSearch, parseMonthly, parsePlanning, parseCommentSummary, parseCommentBroken, parseCommentModified, parseKpiInternal, parseKpiWeekly, parseItiRetention, parseContentRisk, parseCompetitorIssues, parseConsumerFeedback, parseViralNotes, type FeishuData, type SheetReport, type SheetDefinition } from './feishu-model';
 
 type Stored = { sheet_id: string; payload_json: string; report_json: string; fingerprint: string };
 type FeishuResponse = { code?: number; msg?: string; tenant_access_token?: string; data?: { node?: { obj_token?: string }; sheets?: { sheet_id: string; title: string; grid_properties: { row_count: number; column_count: number } }[]; valueRange?: { values?: unknown[][] } } };
@@ -120,6 +120,16 @@ async function normalize(rows: unknown[][], sheet: SheetDefinition, project: str
   }
   if(sheet.kind==='search') return parseSearch(rows);
   if(sheet.kind==='competitor') return parseMonthly(rows,sheet.id);
+  if(sheet.kind==='comment_summary') return parseCommentSummary(rows);
+  if(sheet.kind==='comment_broken') return parseCommentBroken(rows);
+  if(sheet.kind==='comment_modified') return parseCommentModified(rows);
+  if(sheet.kind==='kpi_internal') return parseKpiInternal(rows);
+  if(sheet.kind==='kpi_weekly') return parseKpiWeekly(rows);
+  if(sheet.kind==='iti_retention') return parseItiRetention(rows);
+  if(sheet.kind==='content_risk') return parseContentRisk(rows);
+  if(sheet.kind==='competitor_issues') return parseCompetitorIssues(rows);
+  if(sheet.kind==='consumer_feedback') return parseConsumerFeedback(rows);
+  if(sheet.kind==='viral_notes') return parseViralNotes(rows);
   return parsePlanning(rows,sheet.kind);
 }
 
@@ -170,6 +180,16 @@ export async function readFeishuData(project: string, fresh = false): Promise<Fe
     competitor: FEISHU_DOCUMENTS[3].sheets.flatMap(s => payload(s.id)),
     planning: [...payload('7XkqoO'), ...payload('7G0dkc')],
     intelligence,
+    commentExecution: payload('RMwjy9'),
+    commentBroken: payload('q79OwB'),
+    commentModified: payload('f4berX'),
+    kpiInternal: payload('FZqyGk'),
+    kpiWeekly: payload('Kg5KCQ'),
+    itiRetention: payload('bBV9tp'),
+    contentRisk: payload('V5bEy9'),
+    competitorIssues: payload('ctIAHL'),
+    consumerFeedback: payload('vKuDWB'),
+    viralNotes: payload('ICUwp9'),
   };
   try {
     await db().prepare(`INSERT INTO feishu_aggregated_cache(project_id, data_json, updated_at)
