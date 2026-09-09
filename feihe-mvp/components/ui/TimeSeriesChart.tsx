@@ -71,17 +71,17 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
         }));
         if (!runs.length) return null;
         return <g key={s.key}>
-          {runs.map((points, index) => <path key={index} d={buildPath(points)} fill="none" stroke={s.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />)}
+          {runs.map((points, index) => <path key={index} d={buildPath(points)} fill="none" stroke={s.color} strokeWidth="1.8" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />)}
           {data.map((r,i)=>{
             const val = r[s.key];
             if (typeof val !== 'number' || !Number.isFinite(val)) return null;
             const isActive = r.date === current.date;
-            return <circle key={r.date} cx={x(i)} cy={y(val)} r={isActive ? 5.5 : 3.5} fill={s.color} stroke="#ffffff" strokeWidth={isActive ? 2 : 1}><title>{`${r.date} ${s.label} ${fmt(val)}${unit}`}</title></circle>;
+            return <circle key={r.date} cx={x(i)} cy={y(val)} r={isActive ? 4 : 2.5} fill={s.color} stroke="#ffffff" strokeWidth={isActive ? 1.8 : 1} vectorEffect="non-scaling-stroke"><title>{`${r.date} ${s.label} ${fmt(val)}${unit}`}</title></circle>;
           })}
         </g>;
       })}
       {/* 悬停竖向对齐虚线 */}
-      <line x1={x(activeIndex)} y1={top} x2={x(activeIndex)} y2={h-bottom} stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="4 4" pointerEvents="none" />
+      <line x1={x(activeIndex)} y1={top} x2={x(activeIndex)} y2={h-bottom} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" pointerEvents="none" />
       {/* 交互热区与键盘导航点 */}
       {data.map((r, i) => (
         <rect

@@ -86,7 +86,7 @@ export function EffectScatterChart({
 export function DistributionHistogram({
   bins,
   color = '#1e6091',
-  height = 240,
+  height = 280,
   unit = '篇',
 }: {
   bins: Array<{ label: string; count: number }>;
@@ -98,7 +98,7 @@ export function DistributionHistogram({
   if (!bins.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无分布数据</div>;
 
   const w = 680;
-  const padL = 50, padR = 20, padT = 20, padB = 40;
+  const padL = 50, padR = 20, padT = 24, padB = 44;
   const plotW = w - padL - padR;
   const plotH = height - padT - padB;
   const max = Math.max(...bins.map(b => b.count), 1);
@@ -107,7 +107,7 @@ export function DistributionHistogram({
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
-      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
+      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', maxHeight: height + 20, display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
         <defs>
           <linearGradient id="hist-grad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={color} stopOpacity={0.85} />
@@ -371,6 +371,7 @@ export function BoxPlotChart({
   unit?: string;
 }) {
   const [active, setActive] = useState<number | null>(null);
+  const [focusMain, setFocusMain] = useState(true);
   if (!groups.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无箱线图数据</div>;
 
   const w = 680;
@@ -381,7 +382,10 @@ export function BoxPlotChart({
   const allVals = groups.flatMap(g => g.values);
   const min = Math.min(...allVals, 0);
   const max = Math.max(...allVals, 1);
-  const range = max - min || 1;
+  const sortedVals = [...allVals].filter(Number.isFinite).sort((a, b) => a - b);
+  const p95 = sortedVals[Math.floor(sortedVals.length * 0.95)] || 1000;
+  const plotMax = focusMain ? Math.max(1600, p95 * 1.25) : max;
+  const range = plotMax - min || 1;
   const getY = (v: number) => padT + plotH - ((v - min) / range) * plotH;
   const groupW = plotW / groups.length;
   const boxW = Math.min(40, groupW * 0.5);
@@ -390,7 +394,20 @@ export function BoxPlotChart({
   const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626'];
 
   return (
-    <div><div aria-live="polite" style={{ minHeight: 36, fontSize: 12, color: '#334155', padding: '6px 0' }}>{active !== null && groups[active] ? `${groups[active].label} · ${stats[active].count} 篇 · 最小 ${stats[active].min} · 下四分位 ${stats[active].q1} · 中位 ${stats[active].median} · 上四分位 ${stats[active].q3} · 最大 ${stats[active].max} ${unit}` : '悬停、点击或用 Tab 聚焦层级，查看样本数与五项分布值'}</div><svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height, maxHeight: height, display: 'block' }}>
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, minHeight: 36, padding: '4px 0' }}>
+        <div aria-live="polite" style={{ fontSize: 12, color: '#334155' }}>
+          {active !== null && groups[active] ? `${groups[active].label} · ${stats[active].count} 篇 · 最小 ${stats[active].min} · 下四分位 ${stats[active].q1} · 中位 ${stats[active].median} · 上四分位 ${stats[active].q3} · 最大 ${stats[active].max} ${unit}` : '悬停、点击或用 Tab 聚焦层级，查看样本数与五项分布值'}
+        </div>
+        <button
+          type="button"
+          onClick={() => setFocusMain(!focusMain)}
+          style={{ padding: '3px 10px', fontSize: '11px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#f8fafc', color: '#475569', cursor: 'pointer' }}
+        >
+          {focusMain ? '当前：主体分布 (P95)' : '当前：全量跨度 (含极端爆文)'}
+        </button>
+      </div>
+      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height, maxHeight: height, display: 'block' }}>
       {[0, 0.25, 0.5, 0.75, 1].map((t, i) => {
         const v = min + range * t;
         const y = getY(v);
@@ -405,14 +422,28 @@ export function BoxPlotChart({
         const s = stats[i];
         const cx = padL + i * groupW + groupW / 2;
         const color = g.color || colors[i % colors.length];
+        const iqr = s.q3 - s.q1;
+        const upperWhisker = focusMain ? Math.min(s.max, Math.max(s.q3 + 1.5 * iqr, s.median * 2)) : s.max;
+        const clampedUpper = Math.min(upperWhisker, plotMax);
+        const q1Y = getY(s.q1);
+        const q3Y = getY(s.q3);
+        const rawH = q1Y - q3Y;
+        const boxH = Math.max(4, rawH);
+        const boxY = rawH < 4 ? q1Y - 4 : q3Y;
+        const hasOutlier = focusMain && s.max > plotMax;
         return (
           <g key={i} tabIndex={0} role="button" aria-label={`${g.label}，${g.values.length} 篇，中位数 ${s.median} ${unit}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); } }} style={{ cursor: 'pointer' }}>
             <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#e0f2fe' : 'transparent'} />
-            <line x1={cx} y1={getY(s.min)} x2={cx} y2={getY(s.max)} stroke={color} strokeWidth={1.5} />
+            <line x1={cx} y1={getY(s.min)} x2={cx} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(s.min)} x2={cx + boxW / 3} y2={getY(s.min)} stroke={color} strokeWidth={1.5} />
-            <line x1={cx - boxW / 3} y1={getY(s.max)} x2={cx + boxW / 3} y2={getY(s.max)} stroke={color} strokeWidth={1.5} />
-            <rect x={cx - boxW / 2} y={getY(s.q3)} width={boxW} height={getY(s.q1) - getY(s.q3)} fill={color} fillOpacity={0.3} stroke={color} strokeWidth={1.5} rx={2} />
+            <line x1={cx - boxW / 3} y1={getY(clampedUpper)} x2={cx + boxW / 3} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
+            <rect x={cx - boxW / 2} y={boxY} width={boxW} height={boxH} fill={color} fillOpacity={0.35} stroke={color} strokeWidth={1.5} rx={2} />
             <line x1={cx - boxW / 2} y1={getY(s.median)} x2={cx + boxW / 2} y2={getY(s.median)} stroke={color} strokeWidth={2.5} />
+            {hasOutlier && (
+              <circle cx={cx} cy={padT + 4} r={3.5} fill={color} stroke="#fff" strokeWidth={1}>
+                <title>{`最高爆文：${s.max >= 10000 ? (s.max / 10000).toFixed(1) + 'w' : s.max}`}</title>
+              </circle>
+            )}
             <text x={cx} y={height - 14} textAnchor="middle" fontSize="10.5" fontWeight={600} fill="#475569">{g.label}</text>
             <text x={cx} y={height - 2} textAnchor="middle" fontSize="9" fill="#94a3b8">n={g.values.length}</text>
           </g>

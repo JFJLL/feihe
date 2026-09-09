@@ -211,17 +211,26 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       </Section>
 
       <Section tag="一、投流效率" title="KFS 投流与采买结构" tone="teal" hint="投流与达人采买分开展示">
-        <div className="two-col-chart-grid">
-          <div className="chart-inner-panel"><div className="inner-head"><strong>信息流 / 搜索投流结构</strong><small>Q3 已同步日期</small></div>
-            {channelTotal ? <HorizontalBarList items={[{ label: '信息流 F', amount: num(feedSpend), pct: num(feedSpend) / channelTotal * 100, color: colors[0], subText: `¥${amount(feedSpend)}` }, { label: '搜索 S', amount: num(searchSpend), pct: num(searchSpend) / channelTotal * 100, color: colors[2], subText: `¥${amount(searchSpend)}` }]} /> : <EmptyState title="暂无投流结构" text="同步已填写的信息流与搜索消耗后显示。" />}
+        <div className="two-col-chart-grid" style={{ alignItems: 'stretch' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div className="chart-inner-panel"><div className="inner-head"><strong>信息流 / 搜索投流结构</strong><small>Q3 已同步日期</small></div>
+              {channelTotal ? <HorizontalBarList items={[{ label: '信息流 F', amount: num(feedSpend), pct: num(feedSpend) / channelTotal * 100, color: colors[0], subText: `¥${amount(feedSpend)}` }, { label: '搜索 S', amount: num(searchSpend), pct: num(searchSpend) / channelTotal * 100, color: colors[2], subText: `¥${amount(searchSpend)}` }]} /> : <EmptyState title="暂无投流结构" text="同步已填写的信息流与搜索消耗后显示。" />}
+            </div>
+            <div className="chart-inner-panel" style={{ flex: 1 }}>
+              <div className="inner-head"><strong>达人 K · 内容采买</strong><small>项目笔记报价合计</small></div>
+              <div className="reference-big-number">¥{compact(m.creatorCost)}</div>
+              <div className="reference-stat-pair"><span>商业合作笔记<strong>{num(m.commercialCount)} 篇</strong></span><span>内容平均 CPE<strong>¥{amount(m.cpe)}</strong></span></div>
+              <p className="reference-note" style={{ margin: 0 }}>使用笔记库已有报价与互动表现；采买费用与投流消耗为不同口径。</p>
+            </div>
           </div>
-          <div className="chart-inner-panel"><div className="inner-head"><strong>达人 K · 内容采买</strong><small>项目笔记报价合计</small></div><div className="reference-big-number">¥{compact(m.creatorCost)}</div><div className="reference-stat-pair"><span>商业合作笔记<strong>{num(m.commercialCount)} 篇</strong></span><span>内容平均 CPE<strong>¥{amount(m.cpe)}</strong></span></div><p className="reference-note">使用笔记库已有报价与互动表现；采买费用与投流消耗为不同口径。</p></div>
-        </div>
-        <div className="chart-inner-panel" style={{ marginTop: 14 }}>
-          <div className="inner-head"><strong>KFS 分渠道消耗趋势（堆叠面积）</strong><small>近 {recent.length} 个数据日 · 信息流 F + 搜索 S</small></div>
-          {recent.some(r => finiteMetric(r.feed_spend) !== null || finiteMetric(r.search_spend) !== null)
-            ? <KfsStackedAreaChart rows={recent.map(r => ({ date: String(r.date), feed_spend: finiteMetric(r.feed_spend), search_spend: finiteMetric(r.search_spend) }))} />
-            : <EmptyState title="暂无分渠道日度消耗" text="同步周投放表的信息流与搜索分渠道消耗后显示堆叠趋势。" />}
+          <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="inner-head"><strong>KFS 分渠道消耗趋势（堆叠面积）</strong><small>近 {recent.length} 个数据日 · 信息流 F + 搜索 S</small></div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              {recent.some(r => finiteMetric(r.feed_spend) !== null || finiteMetric(r.search_spend) !== null)
+                ? <KfsStackedAreaChart height={220} rows={recent.map(r => ({ date: String(r.date), feed_spend: finiteMetric(r.feed_spend), search_spend: finiteMetric(r.search_spend) }))} />
+                : <EmptyState title="暂无分渠道日度消耗" text="同步周投放表的信息流与搜索分渠道消耗后显示堆叠趋势。" />}
+            </div>
+          </div>
         </div>
       </Section>
 
@@ -235,11 +244,31 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <div className="chart-inner-panel"><div className="inner-head"><strong>达人量级结构分布</strong><small>{creatorTotal} 篇已收录笔记</small></div>{creatorTotal ? <TierDoughnutChart items={tierItems} total={creatorTotal} /> : <EmptyState title="达人层级待补充" text="同步笔记库后显示层级分布。" />}</div>
           <div className="chart-inner-panel"><div className="inner-head"><strong>内容形式分布</strong><small>已收录笔记</small></div><HorizontalBarList items={formatRows.map((r, i) => ({ label: String(r.name), amount: num(r.count), pct: formatTotal ? num(r.count) / formatTotal * 100 : 0, color: colors[i % colors.length], subText: `${num(r.count)} 篇 · ${compact(r.interactions)} 互动` }))} /></div>
         </div>
-        {tierSpendItems.length > 0 && <div className="chart-inner-panel reference-content-detail" style={{ marginTop: 14 }}>
-          <div className="inner-head"><strong>达人层级采买金额分布</strong><small>项目全量笔记的已记录报价分布</small></div>
-          <TierSpendDistribution items={tierSpendItems} />
-        </div>}
-        <div className="ops-table-wrap reference-content-detail"><table className="ops-table"><thead><tr><th>内容切角 / 场景</th><th>笔记数</th><th>阅读量</th><th>互动量</th><th>笔记分布</th></tr></thead><tbody>{dashboard.analytics.categories.slice(0, 8).map((r, i) => <tr key={`${r.name}-${i}`}><td>{contentDirectionLabel(r.name)}</td><td>{num(r.count)}</td><td>{compact(r.reads)}</td><td>{compact(r.interactions)}</td><td><Progress label="占项目笔记" value={m.noteCount ? num(r.count) / m.noteCount * 100 : null} /></td></tr>)}</tbody></table></div>
+        <div className="two-col-chart-grid reference-content-detail" style={{ marginTop: 14, alignItems: 'stretch' }}>
+          {tierSpendItems.length > 0 ? (
+            <div className="chart-inner-panel">
+              <div className="inner-head"><strong>达人层级采买金额分布</strong><small>项目全量笔记报价分布</small></div>
+              <TierSpendDistribution items={tierSpendItems} />
+            </div>
+          ) : <div className="chart-inner-panel"><EmptyState title="暂无采买分布" text="记录报价后显示达人层级采买分布。" /></div>}
+          <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="inner-head"><strong>内容切角 / 场景渗透</strong><small>TOP 8 方向笔记与互动</small></div>
+            <div className="ops-table-wrap" style={{ flex: 1, margin: 0, overflowX: 'auto' }}>
+              <table className="ops-table" style={{ width: '100%' }}>
+                <thead><tr><th>切角 / 场景</th><th>篇数</th><th>阅读</th><th>互动</th><th>分布</th></tr></thead>
+                <tbody>{dashboard.analytics.categories.slice(0, 8).map((r, i) => (
+                  <tr key={`${r.name}-${i}`}>
+                    <td>{contentDirectionLabel(r.name)}</td>
+                    <td>{num(r.count)}</td>
+                    <td>{compact(r.reads)}</td>
+                    <td>{compact(r.interactions)}</td>
+                    <td><Progress label="" value={m.noteCount ? num(r.count) / m.noteCount * 100 : null} /></td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </Section>
 
       <Section tag="三、内容效果" title="内容效果深度分析" tone="blue" hint="散点矩阵 · 分布直方图 · 箱线图">
@@ -248,8 +277,14 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>内容方向<CustomSelect ariaLabel="散点图内容方向" value={scatterCategory} onChange={setScatterCategory} options={[{ value: '', label: '全部方向' }, ...[...new Set(dashboard.notes.map(n => contentDirectionLabel(n.category1)))].sort().map(value => ({ value, label: value }))]} /></label>
             {scatterPoints.length > 0 ? <EffectScatterChart points={scatterPoints} /> : <EmptyState title="暂无散点数据" text="同步笔记阅读与互动指标后生成效果矩阵。" />}
           </div>
-          <div className="chart-inner-panel"><div className="inner-head"><strong>笔记阅读量分布直方图</strong><small>{readValues.length} 篇有阅读数据的笔记</small></div>
-            {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
+          <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="inner-head"><strong>笔记阅读量分布直方图</strong><small>{readValues.length} 篇有阅读数据的笔记</small></div>
+            <div style={{ display: 'flex', alignItems: 'center', height: 38, marginBottom: 10, fontSize: 12, color: '#64748b' }}>
+              <span>主流分布集中于 <strong style={{ color: '#0f172a' }}>1千~5千</strong> 区间（占比最高）</span>
+            </div>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" height={280} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
+            </div>
           </div>
         </div>
         {boxPlotGroups.length > 0 && <div className="chart-inner-panel" style={{ marginTop: 14 }}>

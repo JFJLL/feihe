@@ -625,7 +625,7 @@ export function TierDoughnutChart({
 // ======================== KFS Stacked Area Chart ========================
 export function KfsStackedAreaChart({
   rows,
-  height = 260,
+  height = 220,
 }: {
   rows: Array<{ date: string; feed_spend: number | null; search_spend: number | null }>;
   height?: number;
@@ -681,7 +681,7 @@ export function KfsStackedAreaChart({
           <span style={{ color: '#5b21b6', fontWeight: 600 }}>搜索 S</span>
         </div>
       </div>
-      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
+      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', maxHeight: 240, display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
         <defs>
           <linearGradient id="kfs-feed-grad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#1e6091" stopOpacity={0.7} />
@@ -834,5 +834,4 @@ export function HorizontalBarList({
     </div>
   );
 }
-
 

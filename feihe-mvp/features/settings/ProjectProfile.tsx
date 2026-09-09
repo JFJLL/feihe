@@ -123,6 +123,7 @@ function ProjectProfileForm({
           <select
             value={form.status}
             onChange={(e) => setForm({ ...form, status: e.target.value })}
+            style={{ width: '100%', height: 38, padding: '0 12px', borderRadius: 8, border: '1px solid #cbd5e1', background: '#fff', fontSize: 13, color: '#1e293b' }}
           >
             <option>进行中</option>
             <option>筹备中</option>
@@ -131,11 +132,39 @@ function ProjectProfileForm({
         </label>
         <label>
           识别色
-          <input
-            type="color"
-            value={form.color || '#2563eb'}
-            onChange={(e) => setForm({ ...form, color: e.target.value })}
-          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 38, padding: '0 10px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: 8 }}>
+            <input
+              type="color"
+              value={form.color || '#2563eb'}
+              onChange={(e) => setForm({ ...form, color: e.target.value })}
+              style={{ width: 26, height: 26, padding: 0, border: 'none', borderRadius: 4, cursor: 'pointer', background: 'transparent' }}
+            />
+            <span style={{ fontSize: 13, fontFamily: 'monospace', color: '#334155', fontWeight: 600 }}>{form.color || '#2563eb'}</span>
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
+              {[
+                { label: '品牌蓝', color: '#1e40af' },
+                { label: '活力黄', color: '#eab308' },
+                { label: '清新绿', color: '#0d9488' },
+                { label: '优雅紫', color: '#7c3aed' },
+              ].map(preset => (
+                <button
+                  key={preset.color}
+                  type="button"
+                  title={preset.label}
+                  onClick={() => setForm({ ...form, color: preset.color })}
+                  style={{
+                    width: 18,
+                    height: 18,
+                    borderRadius: '50%',
+                    background: preset.color,
+                    border: form.color === preset.color ? '2px solid #0f172a' : '1px solid rgba(0,0,0,0.15)',
+                    cursor: 'pointer',
+                    padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
         </label>
         <label className="wide-field">
           项目说明

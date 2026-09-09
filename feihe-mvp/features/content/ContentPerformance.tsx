@@ -24,7 +24,7 @@ function DistributionBars({
   labelKey,
   empty,
   secondaryKey,
-  secondaryUnit = '互动',
+  secondaryUnit = '',
   valueUnit = '',
   limit = 10,
 }: {
@@ -47,6 +47,10 @@ function DistributionBars({
           const val = num(row[valueKey]);
           const isPos = Number.isFinite(val) && val > 0;
           const pctWidth = isPos && max > 0 ? (val / max) * 100 : 0;
+          const secVal = secondaryKey ? row[secondaryKey] : undefined;
+          const secText = secVal !== undefined && secVal !== null
+            ? (typeof secVal === 'number' && Number.isFinite(secVal) ? compact(secVal) + (secondaryUnit ? ` ${secondaryUnit}` : '') : String(secVal))
+            : null;
           return (
             <div key={String(row[labelKey] || index) + '-' + index}>
               <span title={String(row[labelKey] || '')}>{cleanLabelText(row[labelKey], '其他')}</span>
@@ -58,9 +62,9 @@ function DistributionBars({
                   {compact(row[valueKey])}
                   {valueUnit ? ` ${valueUnit}` : ''}
                 </strong>
-                {secondaryKey && row[secondaryKey] !== undefined && row[secondaryKey] !== null && (
+                {secText && (
                   <em style={{ color: '#64748b', fontSize: '11px', fontStyle: 'normal' }}>
-                    {compact(row[secondaryKey])} {secondaryUnit}
+                    {secText}
                   </em>
                 )}
               </div>
@@ -139,11 +143,17 @@ export function ContentPerformance({
   const m = data.metrics;
   const q = data.analytics.dataQuality;
   const total = num(q.total);
+  const totalCategoryNotes = (data.analytics.categories || []).reduce((sum, r) => sum + num(r.count), 0) || 1;
+  const categoriesWithShare = (data.analytics.categories || []).slice(0, 10).map(r => ({
+    ...r,
+    shareText: `${((num(r.count) / totalCategoryNotes) * 100).toFixed(1)}% 占比`,
+  }));
 
   // 1. 一级方向互动贡献（按互动总量降序排列，与左侧发文篇数形成深度比照，双列等高）
   const categoryInteractions = [...(data.analytics.categories || [])]
     .filter((row) => num(row.interactions) > 0 || num(row.count) > 0)
-    .sort((a, b) => num(b.interactions) - num(a.interactions));
+    .sort((a, b) => num(b.interactions) - num(a.interactions))
+    .slice(0, 10);
 
   // 2. 核心互动类型构成（点赞、收藏、分享、真实评论转化结构）
   const interactionTotal = num(m.interactionCount) || 1;
@@ -266,17 +276,19 @@ export function ContentPerformance({
       <ContentAnalyticsBoard analytics={data.analytics} />
 
       {/* 第一组：内容选题战略对比（篇数供给 vs 互动吸收，双列 10 项严格等高） */}
-      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+      <div className="workspace-two-col" style={{ alignItems: 'stretch' }}>
         <DashboardSection
           eyebrow="CONTENT STRATEGY"
           title="一级内容方向分布"
           desc="按选题方向拆解发文篇数与内容供给规模。"
         >
           <DistributionBars
-            rows={data.analytics.categories}
+            rows={categoriesWithShare}
             valueKey="count"
             labelKey="name"
             valueUnit="篇"
+            secondaryKey="shareText"
+            limit={10}
             empty="导入 RedTrend 字段后生成"
           />
         </DashboardSection>
@@ -293,6 +305,7 @@ export function ContentPerformance({
             valueUnit="互动"
             secondaryKey="reads"
             secondaryUnit="阅读"
+            limit={10}
             empty="暂无选题互动统计"
           />
         </DashboardSection>

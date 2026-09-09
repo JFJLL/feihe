@@ -337,24 +337,6 @@ export function SettingsDataSources({
                     >
                       {busy === item.id ? '同步中…' : '立即同步'}
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSource({ ...item });
-                        setIsAdding(false);
-                      }}
-                      style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
-                    >
-                      编辑
-                    </button>
-                    <button
-                      type="button"
-                      className="danger-link"
-                      style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer' }}
-                      onClick={() => removeSource(item)}
-                    >
-                      删除
-                    </button>
                   </div>
                 </div>
               ))

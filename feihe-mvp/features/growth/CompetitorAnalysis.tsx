@@ -24,6 +24,12 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
   const search = [...(data.feishu?.search || [])].sort((a, b) => a.date.localeCompare(b.date));
   const latest = search.at(-1);
   const previous = search.at(-2);
+  const validLingxi = search.filter(r => typeof r.lingxi === 'number' && Number.isFinite(r.lingxi));
+  const displayLingxi = (latest && typeof latest.lingxi === 'number') ? latest : validLingxi.at(-1);
+  const prevLingxi = displayLingxi ? search.filter(r => r.date < displayLingxi.date && typeof r.lingxi === 'number').at(-1) : previous;
+  const validSpotlight = search.filter(r => typeof r.spotlight === 'number' && Number.isFinite(r.spotlight));
+  const displaySpotlight = (latest && typeof latest.spotlight === 'number') ? latest : validSpotlight.at(-1);
+  const prevSpotlight = displaySpotlight ? search.filter(r => r.date < displaySpotlight.date && typeof r.spotlight === 'number').at(-1) : previous;
   const combinedTrend = search.slice(-30).map(r => ({
     date: r.date,
     lingxi: numeric(r.lingxi),
@@ -32,8 +38,19 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
 
   return <div className="stack animate-fade-in growth-analysis">
     <div className="reference-daily-grid">
-      <MetricCard label="启萃灵犀搜索指数" value={latest?.lingxi} tag={latest?.date || '未同步'} desc={'较上一条记录 ' + percent(change(latest?.lingxi, previous?.lingxi)) + ' · ' + (previous?.date || '无比较基期')} />
-      <MetricCard label="启萃聚光搜索指数" value={latest?.spotlight} theme="teal" tag={latest?.date || '未同步'} desc={'较上一条记录 ' + percent(change(latest?.spotlight, previous?.spotlight)) + ' · ' + (previous?.date || '无比较基期')} />
+      <MetricCard
+        label="启萃灵犀搜索指数"
+        value={displayLingxi?.lingxi}
+        tag={displayLingxi?.date || '未同步'}
+        desc={'较上一条记录 ' + percent(change(displayLingxi?.lingxi, prevLingxi?.lingxi)) + (displayLingxi ? ' · 翠娴源表最新录入至 ' + displayLingxi.date.slice(5) + (displayLingxi.date < '2026-09-08' ? '（暂未更新至9-08）' : '') : ' · 无比较基期')}
+      />
+      <MetricCard
+        label="启萃聚光搜索指数"
+        value={displaySpotlight?.spotlight}
+        theme="teal"
+        tag={displaySpotlight?.date || '未同步'}
+        desc={'较上一条记录 ' + percent(change(displaySpotlight?.spotlight, prevSpotlight?.spotlight)) + (displaySpotlight ? ' · 源表最新至 ' + displaySpotlight.date.slice(5) : ' · 无比较基期')}
+      />
       <MetricCard label="项目监测笔记" value={totalNotes} unit="篇" theme="green" desc={brands.length + ' 个归一品牌分组（含未标注竞品）'} />
       <MetricCard label="项目评论样本" value={totalComments} unit="条" theme="purple" desc="来自当前项目筛选范围；不代表全平台声量" />
     </div>

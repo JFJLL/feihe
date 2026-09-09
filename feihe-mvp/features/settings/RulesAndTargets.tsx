@@ -639,32 +639,85 @@ export function RulesAndTargets({
       <section className="panel pastel-card reference-section section-blue">
         <PanelHead eyebrow="EXECUTION TARGET" title="项目主线目标与费用" />
         <div className="pipeline-editor">
-          {pipelines.map((p, pIdx) => (
-            <article key={p.id}>
-              <strong>{p.name}</strong>
-              {[
-                ['目标', 'targetCount'],
-                ['已交付', 'deliveredCount'],
-                ['预算', 'budget'],
-                ['已花费', 'spent'],
-              ].map(([label, key]) => (
-                <label key={key}>
-                  {label}
-                  <input
-                    type="number"
-                    value={num(p[key as keyof Pipeline])}
-                    onChange={(e) =>
-                      setPipelines(
-                        pipelines.map((x, i) =>
-                          i === pIdx ? { ...x, [key]: num(e.target.value) } : x
-                        )
-                      )
-                    }
-                  />
-                </label>
-              ))}
-            </article>
-          ))}
+          {pipelines.map((p, pIdx) => {
+            const target = num(p.targetCount) || 0;
+            const delivered = num(p.deliveredCount) || 0;
+            const budget = num(p.budget) || 0;
+            const spent = num(p.spent) || 0;
+            const deliveryPct = target > 0 ? Math.min(100, Math.round((delivered / target) * 100)) : null;
+            const spendPct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : null;
+            return (
+              <article key={p.id} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 14, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: 10 }}>
+                  <strong style={{ fontSize: 15, color: '#0f172a', fontWeight: 700 }}>{p.name}</strong>
+                  {deliveryPct !== null && (
+                    <span style={{ fontSize: 11.5, fontWeight: 600, color: '#0284c7', background: '#e0f2fe', padding: '2px 8px', borderRadius: 999 }}>
+                      交付率 {deliveryPct}%
+                    </span>
+                  )}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>目标篇数</span>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <input
+                        type="number"
+                        value={num(p.targetCount)}
+                        onChange={(e) => setPipelines(pipelines.map((x, i) => i === pIdx ? { ...x, targetCount: num(e.target.value) } : x))}
+                        style={{ width: '100%', height: 36, padding: '0 28px 0 10px', fontSize: 13, fontWeight: 600, color: '#1e293b', border: '1px solid #cbd5e1', borderRadius: 6, background: '#f8fafc', textAlign: 'right' }}
+                      />
+                      <span style={{ position: 'absolute', right: 8, fontSize: 11.5, color: '#94a3b8', pointerEvents: 'none' }}>篇</span>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>已交付篇数</span>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <input
+                        type="number"
+                        value={num(p.deliveredCount)}
+                        onChange={(e) => setPipelines(pipelines.map((x, i) => i === pIdx ? { ...x, deliveredCount: num(e.target.value) } : x))}
+                        style={{ width: '100%', height: 36, padding: '0 28px 0 10px', fontSize: 13, fontWeight: 600, color: '#0284c7', border: '1px solid #cbd5e1', borderRadius: 6, background: '#f8fafc', textAlign: 'right' }}
+                      />
+                      <span style={{ position: 'absolute', right: 8, fontSize: 11.5, color: '#94a3b8', pointerEvents: 'none' }}>篇</span>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>预算费用</span>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <span style={{ position: 'absolute', left: 8, fontSize: 12, color: '#94a3b8', pointerEvents: 'none' }}>¥</span>
+                      <input
+                        type="number"
+                        value={num(p.budget)}
+                        onChange={(e) => setPipelines(pipelines.map((x, i) => i === pIdx ? { ...x, budget: num(e.target.value) } : x))}
+                        style={{ width: '100%', height: 36, padding: '0 10px 0 22px', fontSize: 13, fontWeight: 600, color: '#1e293b', border: '1px solid #cbd5e1', borderRadius: 6, background: '#f8fafc', textAlign: 'right' }}
+                      />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>已花费费用</span>
+                    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      <span style={{ position: 'absolute', left: 8, fontSize: 12, color: '#94a3b8', pointerEvents: 'none' }}>¥</span>
+                      <input
+                        type="number"
+                        value={num(p.spent)}
+                        onChange={(e) => setPipelines(pipelines.map((x, i) => i === pIdx ? { ...x, spent: num(e.target.value) } : x))}
+                        style={{ width: '100%', height: 36, padding: '0 10px 0 22px', fontSize: 13, fontWeight: 600, color: '#0d9488', border: '1px solid #cbd5e1', borderRadius: 6, background: '#f8fafc', textAlign: 'right' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {spendPct !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: '#64748b' }}>
+                    <span>预算消耗进度</span>
+                    <div style={{ flex: 1, height: 6, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
+                      <div style={{ width: `${spendPct}%`, height: '100%', background: '#0d9488', borderRadius: 999 }} />
+                    </div>
+                    <span style={{ fontWeight: 600, color: '#0d9488' }}>{spendPct}%</span>
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
         {serverConflictWarning && (
           <div style={{ background: '#fffbeb', border: '1px solid #fde68a', color: '#b45309', padding: '10px 14px', borderRadius: '8px', fontSize: '12.5px', margin: '14px 0 6px' }}>
