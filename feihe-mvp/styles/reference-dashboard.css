@@ -141,7 +141,7 @@
 .reference-date-controls { font-size:12px; }
 .reference-date-controls button { background:#fff; border:1px solid #dbe3ed; padding:7px 10px; border-radius:6px; color:#1e6091; cursor:pointer; }
 .reference-daily-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
-.reference-kpi { padding:16px 18px; min-width:0; }
+.reference-kpi { padding:16px 18px; min-width:0; height:100%; display:flex; flex-direction:column; justify-content:space-between; }
 .reference-kpi .stat-head { display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .reference-kpi-meta, .reference-kpi-delta { font-size:11px; color:#64748b; margin-bottom:8px; }
 .reference-kpi-delta { color:#52657c; }

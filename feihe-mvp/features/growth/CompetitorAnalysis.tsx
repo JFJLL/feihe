@@ -37,12 +37,12 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
   }));
 
   return <div className="stack animate-fade-in growth-analysis">
-    <div className="reference-daily-grid">
+    <div className="reference-daily-grid" style={{ alignItems: 'stretch' }}>
       <MetricCard
         label="启萃灵犀搜索指数"
         value={displayLingxi?.lingxi}
         tag={displayLingxi?.date || '未同步'}
-        desc={'较上一条记录 ' + percent(change(displayLingxi?.lingxi, prevLingxi?.lingxi)) + (displayLingxi ? ' · 翠娴源表最新录入至 ' + displayLingxi.date.slice(5) + (displayLingxi.date < '2026-09-08' ? '（暂未更新至9-08）' : '') : ' · 无比较基期')}
+        desc={'较上一条记录 ' + percent(change(displayLingxi?.lingxi, prevLingxi?.lingxi)) + (displayLingxi ? ' · 源表最新录入至 ' + displayLingxi.date.slice(5) + (displayLingxi.date < '2026-09-08' ? '（暂未更新至9-08）' : '') : ' · 无比较基期')}
       />
       <MetricCard
         label="启萃聚光搜索指数"

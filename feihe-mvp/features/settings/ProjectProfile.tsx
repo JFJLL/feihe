@@ -118,8 +118,8 @@ function ProjectProfileForm({
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           />
         </label>
-        <label>
-          状态
+        <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', width: '100%', gap: 6 }}>
+          <span>状态</span>
           <select
             value={form.status}
             onChange={(e) => setForm({ ...form, status: e.target.value })}
@@ -130,8 +130,8 @@ function ProjectProfileForm({
             <option>已结束</option>
           </select>
         </label>
-        <label>
-          识别色
+        <label style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left', width: '100%', gap: 6 }}>
+          <span>识别色</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, height: 38, padding: '0 10px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: 8 }}>
             <input
               type="color"
@@ -153,9 +153,12 @@ function ProjectProfileForm({
                   title={preset.label}
                   onClick={() => setForm({ ...form, color: preset.color })}
                   style={{
-                    width: 18,
-                    height: 18,
-                    borderRadius: '50%',
+                    width: 20,
+                    height: 20,
+                    minWidth: 20,
+                    minHeight: 20,
+                    borderRadius: 4,
+                    flexShrink: 0,
                     background: preset.color,
                     border: form.color === preset.color ? '2px solid #0f172a' : '1px solid rgba(0,0,0,0.15)',
                     cursor: 'pointer',

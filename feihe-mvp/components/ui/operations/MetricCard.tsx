@@ -9,6 +9,7 @@ export function MetricCard({
   theme = 'blue',
   onClick,
   clickable = false,
+  title,
 }: {
   label: string;
   value: string | number;
@@ -18,10 +19,12 @@ export function MetricCard({
   theme?: 'blue' | 'green' | 'yellow' | 'red' | 'teal' | 'purple' | 'indigo';
   onClick?: () => void;
   clickable?: boolean;
+  title?: string;
 }) {
   const tone = theme === 'yellow' ? 'amber' : theme === 'red' ? 'rose' : theme;
   return (
     <article
+      title={title}
       className={`pastel-card pastel-${tone} reference-kpi ops-metric-card ops-metric-card-${theme}`}
       onClick={onClick}
       style={clickable || onClick ? { cursor: 'pointer', transition: 'transform 0.15s ease, box-shadow 0.15s ease' } : undefined}

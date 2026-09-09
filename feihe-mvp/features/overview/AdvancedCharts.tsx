@@ -382,15 +382,14 @@ export function BoxPlotChart({
   const allVals = groups.flatMap(g => g.values);
   const min = Math.min(...allVals, 0);
   const max = Math.max(...allVals, 1);
-  const sortedVals = [...allVals].filter(Number.isFinite).sort((a, b) => a - b);
-  const p95 = sortedVals[Math.floor(sortedVals.length * 0.95)] || 1000;
-  const plotMax = focusMain ? Math.max(1600, p95 * 1.25) : max;
+  const stats = groups.map(g => boxStatistics(g.values));
+  const maxQ3 = Math.max(1000, ...stats.map(s => s.q3));
+  const plotMax = focusMain ? Math.max(Math.ceil((maxQ3 * 1.3) / 1000) * 1000, 14000) : max;
   const range = plotMax - min || 1;
-  const getY = (v: number) => padT + plotH - ((v - min) / range) * plotH;
+  const getY = (v: number) => padT + plotH - (Math.min(Math.max(v - min, 0), range) / range) * plotH;
   const groupW = plotW / groups.length;
   const boxW = Math.min(40, groupW * 0.5);
 
-  const stats = groups.map(g => boxStatistics(g.values));
   const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626'];
 
   return (
@@ -404,10 +403,10 @@ export function BoxPlotChart({
           onClick={() => setFocusMain(!focusMain)}
           style={{ padding: '3px 10px', fontSize: '11px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#f8fafc', color: '#475569', cursor: 'pointer' }}
         >
-          {focusMain ? '当前：主体分布 (P95)' : '当前：全量跨度 (含极端爆文)'}
+          {focusMain ? '当前：主体分布（常规范围）' : '当前：全量跨度（含6.1w爆文）'}
         </button>
       </div>
-      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height, maxHeight: height, display: 'block' }}>
+      <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height, maxHeight: height, display: 'block', overflow: 'hidden' }}>
       {[0, 0.25, 0.5, 0.75, 1].map((t, i) => {
         const v = min + range * t;
         const y = getY(v);

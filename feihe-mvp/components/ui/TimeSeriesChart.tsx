@@ -29,28 +29,31 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
   const selectedIndex = data.findIndex(r=>r.date===selected);
   const activeIndex = hoverIdx !== null && hoverIdx < data.length ? hoverIdx : selectedIndex >= 0 ? selectedIndex : data.length - 1;
   const current = data[activeIndex] || data[data.length-1];
-  const w=760,h=height,left=64,right=20,top=20,bottom=40;
+  const w=760,h=height,left=56,right=20,top=20,bottom=40;
   const rawMax = Math.max(1,...data.flatMap(r=>series.map(s=>typeof r[s.key]==='number' && Number.isFinite(r[s.key]) ? Number(r[s.key]):0)));
   const max = unit==='条' ? Math.ceil(rawMax / 4) * 4 : rawMax;
   const x=(i:number)=>data.length===1?w/2:left+i*(w-left-right)/(data.length-1);
   const y=(v:number)=>h-bottom-v/max*(h-top-bottom);
   const fmt=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)?v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'未提供';
+  const fmtY=(v:number)=>v>=100000000?(v/100000000).toFixed(1)+'亿':v>=10000?(v/10000).toFixed(v>=1000000?0:1)+'w':Math.round(v).toString();
   const gradId = `trend-gradient-${chartId}`;
+  const step = Math.max(1, Math.floor((data.length - 1) / 4));
+  const dateTicks = data.filter((_, i) => i === 0 || i === data.length - 1 || i % step === 0);
 
   return <div className="data-trend">
     <div className="data-trend-readout" aria-live="polite">
       <strong>{current.date}</strong>
       {series.map(s=><span key={s.key}><i style={{background:s.color}} />{s.label} <b>{fmt(current[s.key])}</b>{typeof current[s.key]==='number'?` ${unit}`:''}</span>)}
     </div>
-    <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={title} onMouseLeave={() => setHoverIdx(null)} style={{ overflow: 'visible' }}>
+    <svg viewBox={`0 0 ${w} ${h}`} role="img" aria-label={title} onMouseLeave={() => setHoverIdx(null)} style={{ width: '100%', height: 'auto', display: 'block', overflow: 'hidden' }}>
       <title>{`${title}，${data.length} 个日期。悬停或使用下方日期选择查看数值；缺失样本断开显示。`}</title>
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.22" />
-          <stop offset="100%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.01" />
+          <stop offset="0%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.10" />
+          <stop offset="100%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.00" />
         </linearGradient>
       </defs>
-      {[0,.25,.5,.75,1].map(t=><g key={t}><line x1={left} x2={w-right} y1={y(max*t)} y2={y(max*t)} stroke="#e2e8f0"/><text x={left-8} y={y(max*t)+4} textAnchor="end" fill="#64748b" fontSize="11">{fmt(max*t)}</text></g>)}
+      {[0,.25,.5,.75,1].map(t=><g key={t}><line x1={left} x2={w-right} y1={y(max*t)} y2={y(max*t)} stroke="#e2e8f0" strokeDasharray="3 3"/><text x={left-8} y={y(max*t)+4} textAnchor="end" fill="#64748b" fontSize="10.5">{fmtY(max*t)}</text></g>)}
       {/* 渐变面积填充 (主要指标) */}
       {(() => {
         if (!series[0]) return null;
@@ -121,13 +124,17 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
               e.preventDefault();
               setHoverIdx(data.length - 1);
               setSelected(data[data.length - 1].date);
-              parent?.querySelectorAll<SVGRectElement>('rect[role="button"]')[data.length - 1]?.focus();
-            }
-          }}
-        />
-      ))}
-      <text x={left} y={h-12} fill="#64748b" fontSize="12">{data[0].date}</text><text x={w-right} y={h-12} textAnchor="end" fill="#64748b" fontSize="12">{data.length>1?data.at(-1)?.date:''}</text>
-    </svg>
+          parent?.querySelectorAll<SVGRectElement>('rect[role="button"]')[data.length - 1]?.focus();
+        }
+      }}
+    />
+  ))}
+  {dateTicks.map(r => {
+    const idx = data.findIndex(d => d.date === r.date);
+    const anchor = idx === 0 ? 'start' : idx === data.length - 1 ? 'end' : 'middle';
+    return <text key={r.date} x={x(idx)} y={h-12} textAnchor={anchor} fill="#64748b" fontSize="11">{r.date.length > 7 ? r.date.slice(5) : r.date}</text>;
+  })}
+</svg>
     {/* 浮动交互提示框 */}
     {hoverIdx !== null && (
       <div className="data-trend-tooltip" style={{ left: `${Math.min(84, Math.max(16, (x(activeIndex) / w) * 100))}%` }}>

@@ -7,7 +7,6 @@ export function GrowthReadout({ value }: { value: unknown }) {
 }
 
 export function GrowthMetricCard({ value, ...props }: Omit<ComponentProps<typeof MetricCard>, 'value'> & { value: unknown }) {
-  return <div title={props.label + '：' + (numeric(value) === null ? '未提供' : display(value)) + (props.unit || '')}>
-    <MetricCard {...props} value={compactMetric(value)} />
-  </div>;
+  const tooltip = props.label + '：' + (numeric(value) === null ? '未提供' : display(value)) + (props.unit || '');
+  return <MetricCard {...props} title={tooltip} value={compactMetric(value)} />;
 }
