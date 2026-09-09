@@ -33,7 +33,7 @@ export type SheetReport = { document: string; sheetId: string; sheetName: string
 export type SearchPoint = { date: string; lingxi: number | null; spotlight: number | null };
 export type MonthlyPoint = { brand: string; month: string; value: string; sheetId: string };
 export type PlanningRow = { audience: string; stage: string; scene: string; detail: string; format: string };
-export type CommentExecutionRow = { date: string; type: string; textCount: number; emojiCount: number; total: number; progress: string; settlement: string; month: string };
+export type CommentExecutionRow = { date: string; type: string; textCount: number; emojiCount: number; total: number; progress: string; settlement: string; month: string; dateLabel?: string };
 export type CommentBrokenRow = { index: number; blogger: string; noteUrl: string; commentForm: string; replyForm: string; script: string; status: string; remark: string };
 export type CommentModifiedRow = { index: number; blogger: string; noteUrl: string; commentForm: string; replyForm: string; script: string; internalReview: string; remark: string; reviewStatus: string };
 export type KpiInternalRow = { month: string; project: string; dimension: string; lat: string; cost: number | null; cpuv: number | null; storeUv: number | null; exposure: number | null; readCount: number | null; interaction: number | null; cpm: number | null; cpc: number | null; cpe: number | null; itiTotal: number | null; cpIti: number | null; earlyRatio: number | null; searchUv: number | null; cpSearchUv: number | null; viralCount: number | null; topKol: number | null; waist: number | null; junior: number | null; amateur: number | null; seoJunior: number | null; seoAmateur: number | null; totalCreators: number | null };
@@ -44,6 +44,7 @@ export type CompetitorIssueRow = { time: string; week: string; brand: string; pr
 export type ConsumerFeedbackRow = { postTime: string; collector: string; platform: string; dimension: string; publishDate: string; noteTitle: string; noteContent: string; noteUrl: string; interaction: number | null; product: string; complaintPoint: string; complaintType: string; commentComplaint: string; responseScript: string };
 export type ViralNoteRow = { title: string; author: string; interaction: number | null; comments: number | null; url: string };
 export type FeishuData = {
+  schemaVersion?: number;
   checkedAt: string;
   reports: SheetReport[];
   search: SearchPoint[];
@@ -149,31 +150,26 @@ export function parseWeekly(rows: unknown[][]) {
 
 export function parseCommentSummary(rows: unknown[][]): CommentExecutionRow[] {
   const out: CommentExecutionRow[] = [];
-  // 7月数据在 A-G 列（索引0-6）：执行时间,执行类型,纯文案,表情包,执行数量,完成进度,结算进度
-  // 8月数据在 I-N 列（索引8-13）：执行时间,执行类型,纯文案,执行数量,完成进度,结算进度（无表情包列）
-  const months = [
-    { month: '7月', cols: { date: 0, type: 1, text: 2, emoji: 3, total: 4, progress: 5, settlement: 6 } },
-    { month: '8月', cols: { date: 8, type: 9, text: 10, emoji: -1, total: 11, progress: 12, settlement: 13 } },
-  ];
-  for (const m of months) {
-    for (let i = 2; i < rows.length; i++) {
-      const r = rows[i];
-      const date = cellDate(r[m.cols.date]);
-      const type = cellText(r[m.cols.type]);
-      if (!date || !type) continue;
-      const textCount = cellNumber(r[m.cols.text]) ?? 0;
-      const total = cellNumber(r[m.cols.total]) ?? 0;
-      const emojiCount = m.cols.emoji >= 0 ? (cellNumber(r[m.cols.emoji]) ?? 0) : Math.max(0, total - textCount);
-      out.push({
-        date,
-        type,
-        textCount,
-        emojiCount,
-        total,
-        progress: cellText(r[m.cols.progress]),
-        settlement: cellText(r[m.cols.settlement]),
-        month: m.month,
-      });
+  const headerIndex = rows.findIndex(r => r.some(v => cellText(v) === '执行时间'));
+  if (headerIndex < 0) return out;
+  const header = rows[headerIndex].map(cellText);
+  const starts = header.flatMap((v, i) => v === '执行时间' ? [i] : []);
+  for (const [block, start] of starts.entries()) {
+    const end = starts[block + 1] ?? header.length;
+    const column = (name: string) => header.findIndex((v, i) => i >= start && i < end && v === name);
+    const title = cellText(rows[headerIndex - 1]?.[start]);
+    const month = title.match(/\d{1,2}月/)?.[0] || '月份待核对';
+    for (const r of rows.slice(headerIndex + 1)) {
+      const total = cellNumber(r[column('执行数量')]);
+      const type = cellText(r[column('执行类型')]);
+      const dateLabel = cellText(r[start]);
+      if (total === null || !dateLabel || !type || dateLabel.includes('合计')) continue;
+      // Without an explicit year, preserve the source label instead of inventing a date.
+      const date = cellDate(r[start]);
+      out.push({ date, dateLabel, type, total, month,
+        textCount: cellNumber(r[column('纯文案')]) ?? 0,
+        emojiCount: cellNumber(r[column('表情包')]) ?? 0,
+        progress: cellText(r[column('完成进度')]), settlement: cellText(r[column('结算进度')]) });
     }
   }
   return out.sort((a, b) => a.date.localeCompare(b.date));
@@ -228,39 +224,46 @@ export function parseCommentModified(rows: unknown[][]): CommentModifiedRow[] {
 
 export function parseKpiInternal(rows: unknown[][]): KpiInternalRow[] {
   const out: KpiInternalRow[] = [];
+  let month = '', project = '', lat = '';
   // 表头在第2行（索引1），数据从第3行（索引2）开始
   for (let i = 2; i < rows.length; i++) {
     const r = rows[i];
-    const month = cellText(r[0]);
+    if (!r.slice(0, 5).some(v => cellText(v))) { month = ''; project = ''; lat = ''; continue; }
+    const nextMonth = cellText(r[0]);
+    if (nextMonth && nextMonth !== month) { project = ''; lat = ''; }
+    month = nextMonth || month;
+    if (cellText(r[1]) && cellText(r[1]) !== project) lat = '';
+    project = cellText(r[1]) || project;
+    lat = cellText(r[2]) || lat;
     const dimension = cellText(r[3]);
-    if (!month || !dimension) continue;
+    if (!month || !project || !lat || !['KPI', '实际', '达成率'].includes(dimension)) continue;
     out.push({
       month,
-      project: cellText(r[1]),
+      project,
       dimension,
-      lat: cellText(r[4]),
-      cost: cellNumber(r[5]),
-      cpuv: cellNumber(r[6]),
-      storeUv: cellNumber(r[7]),
-      exposure: cellNumber(r[8]),
+      lat,
+      cost: cellNumber(r[4]),
+      cpuv: cellNumber(r[5]),
+      storeUv: cellNumber(r[6]),
+      exposure: cellNumber(r[7]),
       readCount: cellNumber(r[9]),
-      interaction: cellNumber(r[11]),
-      cpm: cellNumber(r[12]),
+      interaction: cellNumber(r[10]),
+      cpm: cellNumber(r[11]),
       cpc: cellNumber(r[13]),
-      cpe: cellNumber(r[15]),
-      itiTotal: cellNumber(r[16]),
-      cpIti: cellNumber(r[17]),
-      earlyRatio: cellNumber(r[18]),
-      searchUv: cellNumber(r[19]),
-      cpSearchUv: cellNumber(r[20]),
-      viralCount: cellNumber(r[21]),
-      topKol: cellNumber(r[22]),
-      waist: cellNumber(r[23]),
-      junior: cellNumber(r[24]),
-      amateur: cellNumber(r[25]),
-      seoJunior: cellNumber(r[26]),
-      seoAmateur: cellNumber(r[27]),
-      totalCreators: cellNumber(r[28]),
+      cpe: cellNumber(r[14]),
+      itiTotal: cellNumber(r[15]),
+      cpIti: cellNumber(r[16]),
+      earlyRatio: cellNumber(r[17]),
+      searchUv: cellNumber(r[18]),
+      cpSearchUv: cellNumber(r[19]),
+      viralCount: cellNumber(r[20]),
+      topKol: cellNumber(r[21]),
+      waist: cellNumber(r[22]),
+      junior: cellNumber(r[23]),
+      amateur: cellNumber(r[24]),
+      seoJunior: cellNumber(r[25]),
+      seoAmateur: cellNumber(r[26]),
+      totalCreators: cellNumber(r[27]),
     });
   }
   return out;
@@ -268,19 +271,28 @@ export function parseKpiInternal(rows: unknown[][]): KpiInternalRow[] {
 
 export function parseKpiWeekly(rows: unknown[][]): KpiWeeklyRow[] {
   const out: KpiWeeklyRow[] = [];
+  let phase = '', agency = '', period = '', project = '', subItem = '';
   // 表头在第2行（索引1），数据从第3行（索引2）开始
   for (let i = 2; i < rows.length; i++) {
     const r = rows[i];
-    const phase = cellText(r[0]);
-    const period = cellText(r[2]);
+    if (!r.slice(0, 7).some(v => cellText(v))) {
+      phase = ''; agency = ''; period = ''; project = ''; subItem = ''; continue;
+    }
+    if (cellText(r[2]) && cellText(r[2]) !== period) { project = ''; subItem = ''; }
+    if (cellText(r[3]) && cellText(r[3]) !== project) subItem = '';
+    phase = cellText(r[0]) || phase;
+    agency = cellText(r[1]) || agency;
+    period = cellText(r[2]) || period;
+    project = cellText(r[3]) || project;
+    subItem = cellText(r[4]) || subItem;
     const dimension = cellText(r[5]);
-    if (!period || !dimension) continue;
+    if (!period || !project || !subItem || !['KPI', '实际', '达成率'].includes(dimension)) continue;
     out.push({
-      phase: phase || 'Q3',
-      agency: cellText(r[1]),
+      phase,
+      agency,
       period,
-      project: cellText(r[3]),
-      subItem: cellText(r[4]),
+      project,
+      subItem,
       dimension,
       cost: cellNumber(r[6]),
       settlementCost: cellNumber(r[7]),
@@ -354,17 +366,18 @@ export function parseCompetitorIssues(rows: unknown[][]): CompetitorIssueRow[] {
     const r = rows[i];
     const brand = cellText(r[2]);
     const category = cellText(r[4]);
-    if (!brand || !category) continue;
+    const discussion = cellText(r[6]);
+    if (!brand && !category && !cellText(r[5]) && !discussion) continue;
     const linkVal = r[5];
     const noteUrl = Array.isArray(linkVal) ? linkVal.find(x => x?.link)?.link || '' : cellText(linkVal);
     out.push({
       time: cellText(r[0]),
       week: cellText(r[1]),
-      brand,
+      brand: brand || '未标注',
       productLine: cellText(r[3]),
-      category,
+      category: category || '未分类',
       noteUrl,
-      discussion: cellText(r[6]),
+      discussion,
       remark: cellText(r[7]),
     });
   }

@@ -7,10 +7,10 @@ import { ProgressBar } from '../../components/ui/operations/ProgressBar';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import type { Dashboard, Ops } from '../../lib/types/project';
-import { num, pct, compact } from '../../lib/hooks/use-project-data';
+import { num, pct } from '../../lib/hooks/use-project-data';
 
 function ProgressRow({ label, done, total, tone = 'blue', detail }: {
-  label: string; done: number; total: number; tone?: string; detail?: string;
+  label: string; done: number; total: number; tone?: React.ComponentProps<typeof ProgressBar>['theme']; detail?: string;
 }) {
   const rate = total > 0 ? Math.round((done / total) * 1000) / 10 : 0;
   return (
@@ -22,7 +22,7 @@ function ProgressRow({ label, done, total, tone = 'blue', detail }: {
           <span style={{ marginLeft: 8, color: tone === 'green' ? '#16a34a' : tone === 'red' ? '#dc2626' : '#2563eb', fontWeight: 700 }}>{rate}%</span>
         </span>
       </div>
-      <ProgressBar value={done} max={total || 1} theme={tone as any} />
+      <ProgressBar value={done} max={total || 1} theme={tone} />
       {detail && <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 3 }}>{detail}</div>}
     </div>
   );
@@ -44,14 +44,12 @@ export function ExecutionOverview({
   const replyPending = num(actions.replyPending);
   const deletePending = num(actions.deletePending);
   const disappeared = num(actions.disappeared);
-  const closureRate = totalActions > 0 ? pct(handled / totalActions) : '—';
 
   const supplierTotal = num(supplier.total) || num(supplier.exactCount) + num(supplier.modifiedCount) + num(supplier.missingCount) + num(supplier.pendingCount);
   const supplierExact = num(supplier.exactCount);
   const supplierModified = num(supplier.modifiedCount);
   const supplierMissing = num(supplier.missingCount);
   const supplierVisible = supplierExact + supplierModified;
-  const supplierVisibleRate = supplierTotal > 0 ? pct(supplierVisible / supplierTotal) : '—';
 
   const activeJobs = ops.jobs?.filter(j => j.status === 'running' || j.status === 'pending') || [];
   const completedJobs = ops.jobs?.filter(j => j.status === 'completed') || [];
@@ -97,6 +95,7 @@ export function ExecutionOverview({
 
   // 日执行趋势
   const dailyTrend = execRows.reduce((acc, r) => {
+    if (!r.date) return acc;
     const key = r.date;
     if (!acc[key]) acc[key] = { date: key, total: 0, darent: 0, amateur: 0 };
     acc[key].total += r.total || 0;
@@ -119,6 +118,8 @@ export function ExecutionOverview({
 
   return (
     <div className="stack animate-fade-in">
+      {hasExecData && <p className="metric-note">执行量按源表月份区块归属统计；链接失效和修改记录当前仅覆盖7月。缺少完整日期的记录保留在月度统计中，不进入日趋势。</p>}
+      {execRows.some(r => !r.date) && <details><summary>查看 {execRows.filter(r => !r.date).length} 条日期待核对记录</summary><div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>归属月份</th><th>原始执行时间</th><th>类型</th><th>数量</th></tr></thead><tbody>{dashboard.feishu?.commentExecution?.filter(r => !r.date).map((r, i) => <tr key={i}><td>{r.month}</td><td>{r.dateLabel || '未填写'}</td><td>{r.type}</td><td>{r.total}</td></tr>)}</tbody></table></div></details>}
       {/* === 评论执行核心 KPI === */}
       {hasExecData && (
         <section className="ops-metric-grid">
@@ -135,7 +136,7 @@ export function ExecutionOverview({
             label="达人评论执行"
             value={totalDarent.toLocaleString()}
             unit="条"
-            desc="达人账号发布的评论执行量"
+            desc="源表标记为达人评论的执行量"
             tag={`占比 ${totalExec > 0 ? pct(totalDarent / totalExec) : '—'}`}
           />
           <MetricCard
@@ -143,7 +144,7 @@ export function ExecutionOverview({
             label="素人评论执行"
             value={totalAmateur.toLocaleString()}
             unit="条"
-            desc="素人账号发布的评论执行量"
+            desc="源表标记为素人评论的执行量"
             tag={`占比 ${totalExec > 0 ? pct(totalAmateur / totalExec) : '—'}`}
           />
           <MetricCard
@@ -165,7 +166,7 @@ export function ExecutionOverview({
           desc="按月统计评论执行总量、达人/素人构成、纯文案/表情包占比与完成结算进度。"
         >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-            {Object.entries(monthlyStats).map(([month, stats]) => {
+            {Object.entries(monthlyStats).sort(([a], [b]) => a.localeCompare(b, 'zh-CN', { numeric: true })).map(([month, stats]) => {
               const completeRate = stats.total > 0 ? pct(stats.completed / stats.total) : '—';
               const settleRate = stats.total > 0 ? pct(stats.settled / stats.total) : '0%';
               return (
@@ -231,7 +232,7 @@ export function ExecutionOverview({
           >
             <div style={{ padding: '8px 0' }}>
               <ProgressRow label="达人评论执行量" done={totalDarent} total={totalExec} tone="blue" detail={`纯文案为主，占比 ${totalDarent > 0 ? pct(totalDarent / totalExec) : '—'}`} />
-              <ProgressRow label="素人评论执行量" done={totalAmateur} total={totalExec} tone="purple" detail={`占比 ${totalAmateur > 0 ? pct(totalAmateur / totalExec) : '—'}`} />
+              <ProgressRow label="素人评论执行量" done={totalAmateur} total={totalExec} tone="teal" detail={`占比 ${totalAmateur > 0 ? pct(totalAmateur / totalExec) : '—'}`} />
               <div style={{ marginTop: 16, padding: '12px 14px', background: '#f8fafc', borderRadius: 8 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#1e293b', marginBottom: 8 }}>执行形式构成</div>
                 <div style={{ display: 'flex', height: 24, borderRadius: 6, overflow: 'hidden' }}>
@@ -271,14 +272,14 @@ export function ExecutionOverview({
               <div style={{ fontSize: 11.5, color: '#92400e' }}>内部审核不通过需修改</div>
             </div>
             <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 12, color: '#1e40af' }}>质量异常率</div>
-              <div style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', margin: '4px 0' }}>{totalExec > 0 ? pct((brokenCount + modifiedCount) / totalExec) : '—'}</div>
-              <div style={{ fontSize: 11.5, color: '#1e40af' }}>失效+修改占总执行量</div>
+              <div style={{ fontSize: 12, color: '#1e40af' }}>7月异常记录数</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', margin: '4px 0' }}>{brokenCount + modifiedCount}</div>
+              <div style={{ fontSize: 11.5, color: '#1e40af' }}>两张异常表的记录合计，未去重，不计算跨月异常率</div>
             </div>
             <div className="pastel-card pastel-teal" style={{ padding: '14px 16px' }}>
               <div style={{ fontSize: 12, color: '#115e59' }}>修改原因分布</div>
               <div style={{ fontSize: 13, fontWeight: 600, color: '#0f766e', marginTop: 6 }}>
-                {Object.entries(modifiedReasons).slice(0, 2).map(([reason, count]) => (
+                {Object.entries(modifiedReasons).sort(([, a], [, b]) => b - a).map(([reason, count]) => (
                   <div key={reason} style={{ marginBottom: 3 }}>{reason}: {count}条</div>
                 ))}
               </div>

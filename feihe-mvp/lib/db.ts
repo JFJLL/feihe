@@ -349,6 +349,7 @@ export async function ensureSchema() {
       const existing = await d1.prepare(`PRAGMA table_info(${table})`).all<{ name: string }>();
       if (!(existing.results || []).some((item) => item.name === column)) await d1.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
     };
+    await ensureColumn('note_profiles', 'source_metrics_json', 'TEXT');
     await ensureColumn('comment_snapshots', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('data_sources', 'mapping_json', `TEXT NOT NULL DEFAULT '{}'`);
     await ensureColumn('data_sources', 'last_error', `TEXT NOT NULL DEFAULT ''`);

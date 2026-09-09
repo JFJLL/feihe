@@ -13,6 +13,9 @@ export type FeishuSyncResult = { ok: boolean; importedNotes: number; dailyMetric
 type FeishuMemoryCache = { data: FeishuData; timestamp: number };
 const feishuDataCache = new Map<string, FeishuMemoryCache>();
 const FEISHU_CACHE_TTL = 120_000;
+const NORMALIZATION_VERSION = 3;
+const REPARSE_SHEETS = new Set(['FZqyGk', 'Kg5KCQ', 'RMwjy9', '3Wsban', '4bTvDu', 'ctIAHL']);
+const NORMALIZATION_PREFIX = `v${NORMALIZATION_VERSION}:`;
 
 export function invalidateFeishuCache(project?: string) {
   if (project) feishuDataCache.delete(project);
@@ -55,16 +58,6 @@ async function importNotes(rows: unknown[][], project: string, kind: string) {
  for(const r of rows.slice(1)) {
    const id=cellText(r[kind==='notes'?13:5]);
    if(!/^[a-f\d]{24}$/i.test(id)) continue;
-    if (kind === 'notes') {
-      const date = cellDate(r[11]);
-      if (date) {
-        const parsed = new Date(date + 'T00:00:00Z');
-        const now = new Date();
-        const diffDays = (now.getTime() - parsed.getTime()) / 86400000;
-        // 只收录近90天内的笔记（按发布日期判断，兼顾时区微小偏差）
-        if (diffDays > 90 || diffDays < -7) continue;
-      }
-    }
    const previous=notes.get(id);
    if(!previous || kind!=='notes' || cellDate(r[3])>=cellDate(previous[3])) notes.set(id,r);
  }
@@ -88,12 +81,12 @@ async function importNotes(rows: unknown[][], project: string, kind: string) {
     if(pgy) {
       const cols=['fans_count','note_price','exposure','read_count','interaction_count','like_count','favorite_count','share_count'];
       const vals=[6,19,23,24,31,33,34,36].map(i=>cellNumber(r[i]));
-      statements.push(db().prepare(`INSERT INTO note_profiles(note_id,brand,note_type,${cols.join(',')},updated_at)
-        VALUES(?,'启萃',?,${cols.map(()=>'?').join(',')},?) ON CONFLICT(note_id) DO UPDATE SET
+      statements.push(db().prepare(`INSERT INTO note_profiles(note_id,brand,note_type,${cols.join(',')},source_metrics_json,updated_at)
+        VALUES(?,'启萃',?,${cols.map(()=>'?').join(',')},?,?) ON CONFLICT(note_id) DO UPDATE SET
         brand=CASE WHEN note_profiles.brand='' OR ${invalidBrandSql} THEN excluded.brand ELSE note_profiles.brand END,
         note_type=COALESCE(NULLIF(excluded.note_type,''),note_profiles.note_type),
-        ${cols.map(c=>`${c}=COALESCE(excluded.${c},note_profiles.${c})`).join(',')},updated_at=excluded.updated_at`)
-        .bind(id,cellText(r[10]),...vals.map(v=>v??0),new Date().toISOString()));
+        ${cols.map(c=>`${c}=excluded.${c}`).join(',')},source_metrics_json=excluded.source_metrics_json,updated_at=excluded.updated_at`)
+        .bind(id,cellText(r[10]),...vals.map(v=>v??0),JSON.stringify(Object.fromEntries(cols.map((c,i)=>[c,vals[i]]))),new Date().toISOString()));
     } else {
       statements.push(db().prepare(`INSERT INTO note_profiles(note_id,brand,creator_level,note_type,category1,category2,updated_at)
         VALUES(?,'启萃',?,?,?,?,?) ON CONFLICT(note_id) DO UPDATE SET
@@ -102,7 +95,7 @@ async function importNotes(rows: unknown[][], project: string, kind: string) {
         note_type=COALESCE(NULLIF(excluded.note_type,''),note_profiles.note_type),
         category1=COALESCE(NULLIF(excluded.category1,''),note_profiles.category1),
         category2=COALESCE(NULLIF(excluded.category2,''),note_profiles.category2),updated_at=excluded.updated_at`)
-        .bind(id,cellText(r[7]),cellText(r[9]),cellText(r[11]),cellText(r[12]),new Date().toISOString()));
+        .bind(id,cellText(r[7]),cellText(r[9]),(cellText(r[17]) || cellText(r[11])),(cellText(r[18]) || cellText(r[12])),new Date().toISOString()));
     }
   }
   for(let i=0;i<statements.length;i+=150) await db().batch(statements.slice(i,i+150));
@@ -144,16 +137,25 @@ export async function readFeishuData(project: string, fresh = false): Promise<Fe
     if (persisted?.data_json) {
       try {
         const parsed = JSON.parse(persisted.data_json) as FeishuData;
-        feishuDataCache.set(project, { data: parsed, timestamp: Date.now() });
-        return parsed;
+        if (parsed.schemaVersion === NORMALIZATION_VERSION) {
+          feishuDataCache.set(project, { data: parsed, timestamp: Date.now() });
+          return parsed;
+        }
       } catch {}
     }
   } else {
     await storage();
   }
   const stored=(await db().prepare('SELECT * FROM feishu_sheet_snapshots WHERE project_id=?').bind(project).all<Stored>()).results || [];
-  const reports=stored.map(s=>JSON.parse(s.report_json) as SheetReport);
-  const payload=(id:string)=>JSON.parse(stored.find(s=>s.sheet_id===id)?.payload_json || '[]') || [];
+  const stale = (s: Stored) => REPARSE_SHEETS.has(s.sheet_id) && !s.fingerprint.startsWith(NORMALIZATION_PREFIX);
+  const reports=stored.map(s=> {
+    const report = JSON.parse(s.report_json) as SheetReport;
+    return stale(s) ? { ...report, status: 'error' as const, error: '数据口径已更新，请同步最新数据重新核对源表' } : report;
+  });
+  const payload=(id:string)=> {
+    const snapshot = stored.find(s=>s.sheet_id===id);
+    return snapshot && !stale(snapshot) ? JSON.parse(snapshot.payload_json || '[]') || [] : [];
+  };
   const ads=payload('1XSPsH') as Record<string,number|string|null>[];
   const weekly=payload('kMYs9o') as Record<string,number|string|null>[];
   const adMap=new Map(ads.map(r=>[String(r.date),r]));
@@ -172,6 +174,7 @@ export async function readFeishuData(project: string, fresh = false): Promise<Fe
   });
   const intelligence = getCompetitorIntelligence();
   const result: FeishuData = {
+    schemaVersion: NORMALIZATION_VERSION,
     checkedAt: reports.map(r => r.checkedAt).sort().at(-1) || '',
     reports,
     daily,
@@ -229,7 +232,13 @@ async function runSync(project: string): Promise<FeishuSyncResult> {
         const chunkSize=sheet.kind==='ads'?1000:2000;
         for(let start=1;start<=meta.grid_properties.row_count;start+=chunkSize) {
           // J:AR contains raw paid metrics; avoid evaluating thousands of unrelated A:I lookup formulas.
-          const range=`${sheet.id}!${sheet.kind==='ads'?'J':'A'}${start}:${sheet.end}${Math.min(start+chunkSize-1,meta.grid_properties.row_count)}`;
+          let end = sheet.end;
+          if (sheet.kind === 'comment_summary') {
+            let column = meta.grid_properties.column_count;
+            end = '';
+            while (column > 0) { column--; end = String.fromCharCode(65 + column % 26) + end; column = Math.floor(column / 26); }
+          }
+          const range=`${sheet.id}!${sheet.kind==='ads'?'J':'A'}${start}:${end}${Math.min(start+chunkSize-1,meta.grid_properties.row_count)}`;
           const response=await request(`sheets/v2/spreadsheets/${spreadsheet}/values/${encodeURIComponent(range)}?valueRenderOption=UnformattedValue`,token);
           const values=response.data?.valueRange?.values;
           if(!values)throw new Error('飞书未返回工作表数据');
@@ -237,7 +246,7 @@ async function runSync(project: string): Promise<FeishuSyncResult> {
         }
         report.rows=rows.filter(r=>r.some(c=>cellText(c)!=='')).length;
         if(report.rows<2)throw new Error('工作表为空，保留上次成功的数据');
-        const fingerprint=createHash('sha256').update(JSON.stringify(rows)).digest('hex');
+        const fingerprint=(REPARSE_SHEETS.has(sheet.id) ? NORMALIZATION_PREFIX : '') + createHash('sha256').update(JSON.stringify(rows)).digest('hex');
         const previous=await db().prepare('SELECT fingerprint FROM feishu_sheet_snapshots WHERE project_id=? AND sheet_id=?').bind(project,sheet.id).first<{fingerprint:string}>();
         report.changed=previous?.fingerprint!==fingerprint;
         const normalized=await normalize(rows,sheet,project);

@@ -1,7 +1,9 @@
 'use client';
 
+import { contentDirectionLabel, aggregateTopics } from '../../lib/dashboard-display';
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 import { ContentAnalyticsBoard } from './ContentAnalyticsBoard';
+import { ScenePerformanceBoard } from './ScenePerformanceBoard';
 
 import type { Dashboard, AnalyticRow } from '../../lib/types/project';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
@@ -13,7 +15,7 @@ import { compact, num, pct } from '../../lib/hooks/use-project-data';
 function cleanLabelText(value: unknown, fallback = '其他') {
   const text = String(value || '').trim();
   if (!text || /https?:\/\/|\uFFFD/.test(text) || text.length > 30) return fallback;
-  return text;
+  return contentDirectionLabel(text, fallback);
 }
 
 function DistributionBars({
@@ -51,7 +53,7 @@ function DistributionBars({
               <i>
                 <b style={{ width: `${pctWidth}%` }} />
               </i>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'baseline', justifyContent: 'flex-end', whiteSpace: 'nowrap' }}>
+              <div style={{ display: 'flex', gap: 2, flexDirection: 'column', alignItems: 'flex-end', whiteSpace: 'nowrap' }}>
                 <strong style={{ color: '#0f172a', fontWeight: 600 }}>
                   {compact(row[valueKey])}
                   {valueUnit ? ` ${valueUnit}` : ''}
@@ -94,7 +96,7 @@ function TopNotes({
                 src={String(note.coverUrl || '')}
                 title={String(note.title || '')}
                 author={String(note.author || '')}
-                category={displayTag(note.category1, '分类待补充')}
+                category={contentDirectionLabel(note.category1, '分类待补充')}
                 className="note-radar-cover"
                 eager={index < 3}
               />
@@ -176,9 +178,9 @@ export function ContentPerformance({
   // 6. 品牌声量与千次投放成效
   const brandEfficiencyRows: AnalyticRow[] = [
     { name: '累计全盘曝光', count: num(m.exposure), desc: num(m.cpm) ? `CPM ¥${num(m.cpm).toFixed(2)}` : '曝光大盘' },
-    { name: '累计总阅读量', count: num(m.readCount), desc: num(m.cpr) ? `CPR ¥${num(m.cpr).toFixed(2)}` : '均篇 2.5万' },
-    { name: '累计总互动量', count: num(m.interactionCount), desc: num(m.cpe) ? `CPE ¥${num(m.cpe).toFixed(2)}` : '均篇 874' },
-    { name: '全盘平均互动率', count: Number((num(m.engagementRate) * 100).toFixed(2)), desc: '高于行业均值', unit: '%' },
+    { name: '累计总阅读量', count: num(m.readCount), desc: num(m.cpr) ? `CPR ¥${num(m.cpr).toFixed(2)}` : '阅读成本未提供' },
+    { name: '累计总互动量', count: num(m.interactionCount), desc: num(m.cpe) ? `CPE ¥${num(m.cpe).toFixed(2)}` : '互动成本未提供' },
+    { name: '全盘平均互动率', count: Number((num(m.engagementRate) * 100).toFixed(2)), desc: '项目已记录互动/阅读', unit: '%' },
     { name: '达人合作总支出', count: num(m.creatorCost), desc: `覆盖 ${num(q.metricCount)} 篇`, isCurrency: 1 },
   ];
 
@@ -200,10 +202,8 @@ export function ContentPerformance({
     .map(([label, value], i) => ({ label, value, color: ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#0891b2', '#65a30d', '#db2777'][i % 8] }));
 
   // 痛点词云（从 topics 数据）
-  const wordCloudWords = (data.analytics.topics || [])
-    .filter(t => t.name && num(t.count) > 0)
-    .slice(0, 30)
-    .map(t => ({ text: String(t.name), count: num(t.count), sentiment: (t.sentiment === 'negative' ? 'negative' : t.sentiment === 'positive' ? 'positive' : 'neutral') as 'positive' | 'negative' | 'neutral' }));
+  const topicSummary = aggregateTopics(data.analytics.topics || []);
+  const wordCloudWords = topicSummary.words;
 
   // 月度产出趋势
   const monthMap = new Map<string, number>();
@@ -216,11 +216,6 @@ export function ContentPerformance({
   const monthlyOutput = [...monthMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 
   // 达人类型×场景效果矩阵
-  const creatorLevels = [...new Set((data.notes || []).map(n => n.creatorLevel).filter((c): c is string => !!c))].slice(0, 5);
-  const categories = [...new Set((data.notes || []).map(n => n.category1).filter((c): c is string => !!c))].slice(0, 6);
-  const creatorSceneData = creatorLevels.map(cl =>
-    categories.map(cat => (data.notes || []).filter(n => n.creatorLevel === cl && n.category1 === cat).length)
-  );
 
   // 消费者反馈分类（评论情感分布）
   const feedbackCategories = [
@@ -484,7 +479,7 @@ export function ContentPerformance({
                 <i>
                   <b style={{ width: `${100 - idx * 15}%` }} />
                 </i>
-                <div style={{ display: 'flex', gap: 6, alignItems: 'baseline', justifyContent: 'flex-end', whiteSpace: 'nowrap' }}>
+                <div style={{ display: 'flex', gap: 2, flexDirection: 'column', alignItems: 'flex-end', whiteSpace: 'nowrap' }}>
                   <strong style={{ color: '#0f172a', fontWeight: 600 }}>
                     {item.isCurrency ? '¥' + compact(item.count) : item.unit ? `${item.count}${item.unit}` : compact(item.count)}
                   </strong>
@@ -522,29 +517,16 @@ export function ContentPerformance({
       </div>
 
       <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+        <div className="stack">
         <DashboardSection
           eyebrow="PAIN POINTS"
-          title="用户痛点与高频话题词云"
-          desc="笔记与评论中高频提及的核心诉求，字号越大代表讨论热度越高。"
+          title="评论高频话题"
+          desc="按评论话题分类汇总，同一话题合并不同情绪；字号与数量对应。"
         >
           {wordCloudWords.length > 0 ? (
-            <WordCloudChart words={wordCloudWords} />
+            <><WordCloudChart words={wordCloudWords} /><p className="metric-note">其他及未分类评论 {topicSummary.unclassified.toLocaleString()} 条，单独列示，不作为具体话题。</p></>
           ) : <EmptyState title="暂无话题数据" text="同步笔记与评论话题标签后生成痛点词云。" />}
         </DashboardSection>
-
-        <DashboardSection
-          eyebrow="CREATOR × SCENE"
-          title="达人类型×内容场景效果矩阵"
-          desc="不同达人层级在各内容方向上的笔记投放数量分布。"
-        >
-          {creatorLevels.length > 0 && categories.length > 0 ? (
-            <MatrixHeatmap rows={creatorLevels} cols={categories} data={creatorSceneData} colorScale={['#f0fdf4', '#22c55e', '#14532d']} />
-          ) : <EmptyState title="暂无矩阵数据" text="同步笔记达人层级与内容方向后生成效果矩阵。" />}
-        </DashboardSection>
-      </div>
-
-      {/* ===== 第三阶段：消费者反馈与月度产出 ===== */}
-      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
         <DashboardSection
           eyebrow="CONSUMER FEEDBACK"
           title="消费者反馈分类构成"
@@ -570,15 +552,23 @@ export function ContentPerformance({
             </div>
           ) : <EmptyState title="暂无反馈数据" text="同步评论情感分类后生成消费者反馈构成。" />}
         </DashboardSection>
-
+        </div>
+        <DashboardSection
+          eyebrow="CREATOR × SCENE"
+          title="达人×内容方向：覆盖与效果"
+          desc="对照发布数量、篇均互动和报价成本，筛选值得复盘的内容方向。"
+        >
+          <ScenePerformanceBoard notes={data.notes || []} />
+        </DashboardSection>
+      </div>
         <DashboardSection
           eyebrow="MONTHLY OUTPUT"
           title="月度内容产出趋势"
-          desc="按发布日期统计的月度笔记产出数量变化。"
+          desc="当前项目全量笔记按发布日期分月统计；未填写日期的笔记不参与月度趋势。"
         >
           {monthlyOutput.length > 0 ? (
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, height: 200, padding: '10px 0' }}>
-              {monthlyOutput.map(([month, count], i) => {
+              {monthlyOutput.map(([month, count]) => {
                 const max = Math.max(...monthlyOutput.map(([, c]) => c), 1);
                 const h = (count / max) * 160;
                 return (
@@ -592,7 +582,6 @@ export function ContentPerformance({
             </div>
           ) : <EmptyState title="暂无产出数据" text="同步笔记发布日期后生成月度产出趋势。" />}
         </DashboardSection>
-      </div>
 
       {/* 卡审话术风险看板 */}
       {(() => {

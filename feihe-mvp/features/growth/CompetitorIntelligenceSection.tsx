@@ -1,5 +1,6 @@
 'use client';
 
+import { trimEmptyTrendEdges } from '../../lib/dashboard-display';
 import { useState, useMemo, type ReactNode } from 'react';
 import type { CompetitorIntelligenceData } from '../../lib/competitor-intelligence';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -61,17 +62,17 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
   // 灵犀多品牌搜索走势数据
   const brandSearchTrends = useMemo(() => {
     if (!searchIndex || !searchIndex.length) return [];
-    const brandEntities = searchIndex.filter(s => s.level === 'brand');
+    const brandEntities = searchIndex.filter(s => s.level === 'brand' && (activeBrand === 'all' || s.brand === activeBrand));
     const monthList = [...new Set(brandEntities.map(s => s.month))].sort();
-    return monthList.map(m => {
+    return trimEmptyTrendEdges(monthList.map(m => {
       const row: { date: string; [key: string]: number | string | null } = { date: m };
       brands.forEach(b => {
         const match = brandEntities.find(s => s.brand === b.id && s.month === m);
         row[b.id] = match ? match.value : null;
       });
       return row;
-    });
-  }, [searchIndex, brands]);
+    }), brands.filter(b => activeBrand === 'all' || b.id === activeBrand).map(b => b.id));
+  }, [searchIndex, brands, activeBrand]);
 
   // 搜索动量增跌幅排行榜
   const searchMomentum = useMemo(() => {
@@ -301,7 +302,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
             rows={brandSearchTrends}
             title="各品牌灵犀搜索指数走势"
             unit="指数"
-            series={brands.slice(0, 5).map(b => ({
+            series={filtered.filter(b => brandSearchTrends.some(r => typeof r[b.id] === 'number')).map(b => ({
               key: b.id,
               label: b.name,
               color: b.color,
@@ -386,9 +387,10 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
         ))}
       </div>
     </DashboardSection>
-    <div className="workspace-two-col">
+    <div className="stack">
       <DashboardSection title="品牌动作记录" desc="按所选月份和品牌筛选来源月报中的营销动作。">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 12 }}>
+          {!actions.some(p => p.month === month && includes(p.brand)) && <p className="metric-note">该月份与品牌没有动作记录。</p>}
           {actions.filter(p => p.month === month && includes(p.brand)).map((act, i) => (
             <div key={i} style={{ padding: '12px 14px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, borderLeft: `4px solid ${brandColor(act.brand)}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>

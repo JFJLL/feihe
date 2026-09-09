@@ -74,7 +74,14 @@ export async function GET(request: Request) {
     // Prefer a newer project-scoped snapshot, including genuine zero counts after a fresh crawl.
     const snapshotCounts = ['comment_total','positive_count','negative_count','question_count'];
     const snapshotCols = ['total_count','positive_count','negative_count','question_count'];
-    const currentNotes = `WITH ranked_snapshots AS (
+    const metricColumns = ['fans_count','note_price','exposure','read_count','interaction_count','like_count','favorite_count','share_count'];
+    const profileColumns = ['note_id','cover_url','category1','category2','cooperation','promoted','note_type','creator_level','province','city','gender','brand'];
+    // Legacy defaults cannot prove an observed zero. A successful source sync records
+    // explicit null/zero provenance; all aggregate and chart queries share this view.
+    const currentNotes = `WITH current_profiles AS (
+      SELECT ${profileColumns.join(',')},${metricColumns.map(c => `CASE WHEN source_metrics_json IS NULL THEN NULLIF(${c},0) WHEN json_type(source_metrics_json,'$.${c}')='null' THEN NULL ELSE ${c} END AS ${c}`).join(',')}
+      FROM note_profiles
+    ), ranked_snapshots AS (
       SELECT *,ROW_NUMBER() OVER(PARTITION BY project_id,note_id ORDER BY captured_at DESC,id DESC) AS rn FROM comment_snapshots WHERE quarantine_reason=''
     ), current_project_notes AS (
       SELECT pn.id,pn.project_id,pn.note_id,pn.source_type,pn.pipeline,pn.level,pn.product_scope,pn.status,
@@ -82,7 +89,7 @@ export async function GET(request: Request) {
       ${snapshotCounts.map((c,i)=>`CASE WHEN s.captured_at IS NOT NULL AND (pn.last_fetched_at IS NULL OR s.captured_at >= pn.last_fetched_at) THEN s.${snapshotCols[i]} ELSE pn.${c} END AS ${c}`).join(',')}
       FROM project_notes pn LEFT JOIN ranked_snapshots s ON s.note_id=pn.note_id AND s.project_id=pn.project_id AND s.rn=1
     ) `;
-    const bind = (sql: string) => d1.prepare(currentNotes + sql.replaceAll('JOIN project_notes pn','JOIN current_project_notes pn')).bind(...values);
+    const bind = (sql: string) => d1.prepare(currentNotes + sql.replaceAll('JOIN project_notes pn','JOIN current_project_notes pn').replaceAll('JOIN note_profiles p','JOIN current_profiles p')).bind(...values);
     const trendValues = [from || '2000-01-01', to || '2999-12-31'];
 
     const [
@@ -145,7 +152,7 @@ export async function GET(request: Request) {
         CASE WHEN p.interaction_count>0 THEN p.note_price*1.0/p.interaction_count ELSE 0 END AS cpe,
         CASE WHEN p.read_count>0 THEN p.interaction_count*1.0/p.read_count ELSE 0 END AS engagementRate
         FROM notes n JOIN project_notes pn ON pn.note_id=n.id LEFT JOIN note_profiles p ON p.note_id=n.id${where}
-        ORDER BY COALESCE(pn.last_fetched_at,n.published_at) DESC LIMIT 500`).all(),
+        ORDER BY COALESCE(pn.last_fetched_at,n.published_at) DESC,n.id`).all(),
       d1.prepare(`WITH latest AS (
         SELECT *,ROW_NUMBER() OVER(PARTITION BY note_id,date(captured_at) ORDER BY captured_at DESC) AS rn
         FROM comment_snapshots WHERE quarantine_reason='' AND project_id=? AND date(captured_at) BETWEEN date(?) AND date(?)
@@ -157,7 +164,7 @@ export async function GET(request: Request) {
       bind(`SELECT pn.status AS name,COUNT(*) AS count FROM notes n JOIN project_notes pn ON pn.note_id=n.id LEFT JOIN note_profiles p ON p.note_id=n.id${where} GROUP BY pn.status ORDER BY count DESC`).all(),
       d1.prepare(`SELECT category AS name,sentiment,COUNT(*) AS count,
         SUM(CASE WHEN treatment_status='待处理' THEN 1 ELSE 0 END) AS pending
-        FROM key_comments WHERE project_id=? AND disappeared_at IS NULL GROUP BY category,sentiment ORDER BY count DESC LIMIT 16`).bind(project).all(),
+        FROM key_comments WHERE project_id=? AND disappeared_at IS NULL GROUP BY category,sentiment ORDER BY count DESC`).bind(project).all(),
       bind(`SELECT CASE WHEN p.brand IN ('启萃','飞鹤启萃','飞鹤') OR (pn.product_scope != '竞品' AND (p.brand IS NULL OR p.brand = '' OR p.brand = '本品')) THEN '启萃' WHEN pn.product_scope = '竞品' THEN COALESCE(NULLIF(p.brand,''), '其他竞品') ELSE COALESCE(NULLIF(p.brand,''), '启萃') END AS brand,
         COUNT(*) AS notes,SUM(pn.comment_total) AS comments,SUM(pn.positive_count) AS positive,
         SUM(pn.negative_count) AS negative,SUM(pn.question_count) AS question,

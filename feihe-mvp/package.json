@@ -14,7 +14,7 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "verify:operations": "node scripts/verify-operations.mjs",
     "verify:feishu": "node scripts/verify-feishu.mjs",
-    "verify:dashboards": "node scripts/verify-growth.mjs && node scripts/test-workspace-charts.mjs && node scripts/test-content-comment-boards.mjs && node scripts/test-acceptance-reply-pending.mjs && node scripts/test-ui-unification-v1-regression.mjs",
+    "verify:dashboards": "node scripts/test-dashboard-feedback.mjs && node scripts/verify-growth.mjs && node scripts/test-workspace-charts.mjs && node scripts/test-content-comment-boards.mjs && node scripts/test-acceptance-reply-pending.mjs && node scripts/test-ui-unification-v1-regression.mjs",
     "verify:styles": "node scripts/test-computed-styles.mjs",
     "db:generate": "drizzle-kit generate",
     "verify:xlsx": "node scripts/test-xlsx-loader.mjs"

@@ -136,47 +136,19 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
         </div>
       </DashboardSection>
     </div>
-    {/* 第二阶段：竞品问题类别分布 */}
-    <DashboardSection
-      title="竞品问题类别与风险等级分布"
-      eyebrow="COMPETITOR ISSUES"
-      desc="各竞品品牌的质量问题按P0/P1/P2风险等级分类统计，帮助识别竞品弱点与自身机会。"
-    >
+    <DashboardSection title="品牌问题反馈分布" eyebrow="SOURCE FEEDBACK" desc="来自内容规划表的品牌问题收集记录；为收集到的讨论，不代表已证实的产品问题。源表未提供 P0/P1/P2 等级。">
       {(() => {
-        const issues = data.feishu?.intelligence?.quality?.issues || [];
-        if (!issues.length) return <EmptyState title="暂无竞品问题数据" text="同步竞品质量情报后生成问题类别分布。" />;
-        const byBrand = new Map<string, { P0: number; P1: number; P2: number; total: number }>();
+        const issues = data.feishu?.competitorIssues || [];
+        if (!issues.length) return <EmptyState title="暂无来源记录" text="同步内容规划表中的品牌问题收集工作表后展示。" />;
+        const counts = new Map<string, number>();
+        const categories = new Map<string, number>();
         for (const issue of issues) {
-          const brand = issue.brand || '未标注';
-          const existing = byBrand.get(brand) || { P0: 0, P1: 0, P2: 0, total: 0 };
-          existing[issue.level] = (existing[issue.level] || 0) + 1;
-          existing.total += 1;
-          byBrand.set(brand, existing);
+          counts.set(issue.brand, (counts.get(issue.brand) || 0) + 1);
+          categories.set(issue.category, (categories.get(issue.category) || 0) + 1);
         }
-        const sorted = [...byBrand.entries()].sort((a, b) => b[1].total - a[1].total);
-        const maxTotal = Math.max(...sorted.map(([, v]) => v.total), 1);
-        return (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {sorted.map(([brand, counts]) => (
-              <div key={brand}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
-                  <strong style={{ fontSize: 13, color: '#0f172a' }}>{brand}</strong>
-                  <span style={{ fontSize: 12, color: '#64748b' }}>共 {counts.total} 个问题</span>
-                </div>
-                <div style={{ display: 'flex', height: 22, borderRadius: 6, overflow: 'hidden', background: '#f1f5f9' }}>
-                  {counts.P0 > 0 && <div style={{ width: `${counts.P0 / maxTotal * 100}%`, background: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, fontWeight: 700, color: '#fff', minWidth: counts.P0 > 0 ? 28 : 0 }}>P0 {counts.P0}</div>}
-                  {counts.P1 > 0 && <div style={{ width: `${counts.P1 / maxTotal * 100}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, fontWeight: 700, color: '#fff', minWidth: counts.P1 > 0 ? 28 : 0 }}>P1 {counts.P1}</div>}
-                  {counts.P2 > 0 && <div style={{ width: `${counts.P2 / maxTotal * 100}%`, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10.5, fontWeight: 700, color: '#fff', minWidth: counts.P2 > 0 ? 28 : 0 }}>P2 {counts.P2}</div>}
-                </div>
-              </div>
-            ))}
-            <div style={{ display: 'flex', gap: 16, marginTop: 8, paddingTop: 10, borderTop: '1px solid #e2e8f0' }}>
-              <span style={{ fontSize: 11.5, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, background: '#dc2626', borderRadius: 2 }} />P0 严重问题</span>
-              <span style={{ fontSize: 11.5, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, background: '#f59e0b', borderRadius: 2 }} />P1 中等问题</span>
-              <span style={{ fontSize: 11.5, color: '#64748b', display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ width: 10, height: 10, background: '#3b82f6', borderRadius: 2 }} />P2 轻微问题</span>
-            </div>
-          </div>
-        );
+        const renderCounts = (entries: Map<string, number>) => [...entries].sort((a, b) => b[1] - a[1]).map(([label, count]) => <div key={label} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 48px', alignItems: 'center', gap: 10, marginBottom: 10 }}><span style={{ fontSize: 12 }}>{label}</span><div style={{ background: '#e2e8f0', borderRadius: 6, height: 12 }}><div style={{ height: '100%', borderRadius: 6, width: `${count / Math.max(...entries.values()) * 100}%`, background: '#1e6091' }} /></div><strong style={{ fontSize: 12 }}>{count} 条</strong></div>);
+        return <><div className="workspace-two-col" style={{ alignItems: 'start' }}><div><h4>按品牌 · {issues.length} 条记录</h4>{renderCounts(counts)}</div><div><h4>按问题类别</h4>{renderCounts(categories)}</div></div>
+          <details><summary>查看全部 {issues.length} 条来源讨论</summary><div className="ops-table-wrap" style={{ maxHeight: 360, overflowY: 'auto' }}><table className="ops-table"><thead><tr><th>时间</th><th>品牌 / 品线</th><th>类别</th><th>讨论摘要</th></tr></thead><tbody>{issues.map((issue, i) => <tr key={i}><td>{issue.time} {issue.week}</td><td>{issue.brand} {issue.productLine}</td><td>{issue.category}</td><td style={{ whiteSpace: 'normal', minWidth: 200 }}>{issue.discussion || '未填写'}</td></tr>)}</tbody></table></div></details></>;
       })()}
     </DashboardSection>
 

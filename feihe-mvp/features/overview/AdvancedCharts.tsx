@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import { boxStatistics } from '../../lib/dashboard-display';
 
 // ======================== Scatter Chart (内容方向效果矩阵) ========================
 export function EffectScatterChart({
@@ -68,13 +69,10 @@ export function EffectScatterChart({
             onMouseEnter={() => setHoverIdx(i)}
           />
         ))}
-        {points.map((_, i) => (
-          <rect key={`hit${i}`} x={getX(points[i].x) - 20} y={getY(points[i].y) - 20} width={40} height={40} fill="transparent" onMouseEnter={() => setHoverIdx(i)} />
-        ))}
       </svg>
       {hovered && (
-        <div style={{ position: 'absolute', left: `${Math.min(85, Math.max(5, (getX(hovered.x) / w) * 100))}%`, top: 20, transform: 'translateX(-50%)', background: 'rgba(15,23,42,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 11.5, pointerEvents: 'none', zIndex: 10, whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
-          <div style={{ fontWeight: 700, marginBottom: 3, color: hovered.color }}>{hovered.label}</div>
+        <div style={{ position: 'absolute', left: 8, right: 8, top: 20, background: 'rgba(15,23,42,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 11.5, pointerEvents: 'none', zIndex: 10, whiteSpace: 'normal', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
+          <div style={{ fontWeight: 700, marginBottom: 3 }}>{hovered.label}</div>
           <div>{xLabel}：{fmt(hovered.x)}</div>
           <div>{yLabel}：{fmt(hovered.y)}</div>
           <div>评论数：{hovered.size}</div>
@@ -372,6 +370,7 @@ export function BoxPlotChart({
   height?: number;
   unit?: string;
 }) {
+  const [active, setActive] = useState<number | null>(null);
   if (!groups.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无箱线图数据</div>;
 
   const w = 680;
@@ -387,18 +386,11 @@ export function BoxPlotChart({
   const groupW = plotW / groups.length;
   const boxW = Math.min(40, groupW * 0.5);
 
-  const stats = groups.map(g => {
-    const sorted = [...g.values].sort((a, b) => a - b);
-    const q1 = sorted[Math.floor(sorted.length * 0.25)] || sorted[0];
-    const median = sorted[Math.floor(sorted.length * 0.5)] || sorted[0];
-    const q3 = sorted[Math.floor(sorted.length * 0.75)] || sorted[sorted.length - 1];
-    return { min: sorted[0], q1, median, q3, max: sorted[sorted.length - 1] };
-  });
-
+  const stats = groups.map(g => boxStatistics(g.values));
   const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626'];
 
   return (
-    <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
+    <div><div aria-live="polite" style={{ minHeight: 36, fontSize: 12, color: '#334155', padding: '6px 0' }}>{active !== null && groups[active] ? `${groups[active].label} · ${stats[active].count} 篇 · 最小 ${stats[active].min} · 下四分位 ${stats[active].q1} · 中位 ${stats[active].median} · 上四分位 ${stats[active].q3} · 最大 ${stats[active].max} ${unit}` : '悬停、点击或用 Tab 聚焦层级，查看样本数与五项分布值'}</div><svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height, maxHeight: height, display: 'block' }}>
       {[0, 0.25, 0.5, 0.75, 1].map((t, i) => {
         const v = min + range * t;
         const y = getY(v);
@@ -414,7 +406,8 @@ export function BoxPlotChart({
         const cx = padL + i * groupW + groupW / 2;
         const color = g.color || colors[i % colors.length];
         return (
-          <g key={i}>
+          <g key={i} tabIndex={0} role="button" aria-label={`${g.label}，${g.values.length} 篇，中位数 ${s.median} ${unit}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); } }} style={{ cursor: 'pointer' }}>
+            <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#e0f2fe' : 'transparent'} />
             <line x1={cx} y1={getY(s.min)} x2={cx} y2={getY(s.max)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(s.min)} x2={cx + boxW / 3} y2={getY(s.min)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(s.max)} x2={cx + boxW / 3} y2={getY(s.max)} stroke={color} strokeWidth={1.5} />
@@ -426,29 +419,29 @@ export function BoxPlotChart({
         );
       })}
       <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
-    </svg>
+    </svg></div>
   );
 }
 
 // ======================== Word Cloud (词云) ========================
 export function WordCloudChart({
   words,
-  height = 240,
+  height = 160,
 }: {
   words: Array<{ text: string; count: number; sentiment?: 'positive' | 'negative' | 'neutral' }>;
   height?: number;
 }) {
-  if (!words.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无词云数据</div>;
+  if (!words.length) return <div style={{ height, display: 'flex', alignItems: 'center', alignContent: 'center', justifyContent: 'flex-start', color: '#94a3b8', fontSize: 13 }}>暂无词云数据</div>;
 
   const max = Math.max(...words.map(w => w.count), 1);
   const colors = { positive: '#16a34a', negative: '#dc2626', neutral: '#64748b' };
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px', alignItems: 'center', justifyContent: 'center', padding: '16px', minHeight: height }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px', alignItems: 'center', alignContent: 'center', justifyContent: 'flex-start', padding: '16px', minHeight: height }}>
       {words.slice(0, 40).map((w, i) => {
-        const size = 12 + (w.count / max) * 28;
+        const size = 14 + Math.sqrt(w.count / max) * 18;
         const color = w.sentiment ? colors[w.sentiment] : '#334155';
-        const opacity = 0.5 + (w.count / max) * 0.5;
+        const opacity = 1;
         return (
           <span
             key={i}
@@ -463,7 +456,7 @@ export function WordCloudChart({
             }}
             title={`${w.text}：${w.count} 次`}
           >
-            {w.text}
+            {w.text}<small style={{ fontSize: 12, marginLeft: 6, color: '#475569' }}>{w.count.toLocaleString()} 条</small>
           </span>
         );
       })}
@@ -487,11 +480,10 @@ export function TreeMapChart({
   const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#0891b2', '#65a30d', '#db2777'];
 
   // Simple horizontal split layout
-  let x = 0;
   const rects = items.map((it, i) => {
     const width = (it.value / total) * w;
+    const x = items.slice(0, i).reduce((sum, item) => sum + item.value, 0) / total * w;
     const rect = { ...it, x, width, color: it.color || colors[i % colors.length] };
-    x += width;
     return rect;
   });
 
