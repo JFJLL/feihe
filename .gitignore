@@ -6,6 +6,7 @@ token.txt
 data/
 outputs/
 *.xlsx
+!docs/*.xlsx
 *.xls
 *.csv
 
