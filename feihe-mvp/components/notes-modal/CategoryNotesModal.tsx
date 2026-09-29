@@ -160,14 +160,6 @@ export function CategoryNotesModal({
             {/* Detail Navigation Header */}
             <div className="category-notes-header category-notes-detail-header">
               <div className="category-notes-detail-nav">
-                <button
-                  type="button"
-                  className="category-notes-back-btn"
-                  onClick={() => setSelectedNote(null)}
-                  title="返回列表 (Esc)"
-                >
-                  ← 返回笔记列表
-                </button>
                 <div className="category-notes-breadcrumb">
                   <span>{title}</span>
                   <span className="breadcrumb-sep">/</span>
@@ -337,7 +329,7 @@ export function CategoryNotesModal({
             {/* Detail Footer */}
             <div className="category-notes-footer">
               <div className="category-notes-footer-hint">
-                💡 当前为只读数据洞察视图；点击左上角「← 返回笔记列表」可重新浏览分类笔记。
+                💡 当前为只读数据洞察视图；点击右下角「返回列表」可重新浏览分类笔记。
               </div>
               <button
                 type="button"
