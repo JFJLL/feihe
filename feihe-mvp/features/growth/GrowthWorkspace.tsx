@@ -35,7 +35,7 @@ export function GrowthWorkspace({
   });
 
   const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
-    onOpenNote: openNote,
+    projectId,
   });
 
   const growth = ops.settings.growth;

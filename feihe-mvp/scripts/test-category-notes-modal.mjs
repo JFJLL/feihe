@@ -73,7 +73,6 @@ const html = renderToStaticMarkup(
     notes: mockNotes,
     maxCount: 50,
     onClose: () => {},
-    onOpenNote: () => {},
   })
 );
 
@@ -103,8 +102,7 @@ const closedHtml = renderToStaticMarkup(
 assert.equal(closedHtml, '', 'Closed modal should render nothing');
 console.log('✅ PASS: Closed state renders nothing');
 
-console.log('ALL CATEGORY NOTES MODAL TESTS PASSED! 🎉');
-console.log('--- TEST 4: Keyword Search in Modal ---');
+console.log('--- TEST 4: Keyword Search & Filter ---');
 const searchHtml = renderToStaticMarkup(
   React.createElement(CategoryNotesModal, {
     isOpen: true,

@@ -44,7 +44,7 @@ export function ContentWorkspace({
   });
 
   const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
-    onOpenNote: openNote,
+    projectId,
   });
 
   const [loading, setLoading] = useState(false);

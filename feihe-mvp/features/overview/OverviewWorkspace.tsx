@@ -57,7 +57,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     context: 'insights',
   });
   const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
-    onOpenNote: openNote,
+    projectId,
   });
 
   const handleCategoryClick = (categoryName: string) => {
