@@ -45,17 +45,17 @@ export function CategoryNotesModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Reset on open
+  // Reset on open: if single note, open directly to detail view
   useEffect(() => {
     if (isOpen) {
       setKeyword('');
-      setSelectedNote(null);
+      setSelectedNote(notes.length === 1 ? notes[0] : null);
       setExtraComments([]);
       setExtraContent('');
       const timer = setTimeout(() => searchInputRef.current?.focus(), 60);
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [isOpen, notes]);
 
   // Handle escape & back navigation
   useEffect(() => {
@@ -63,7 +63,7 @@ export function CategoryNotesModal({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation();
-        if (selectedNote) {
+        if (selectedNote && notes.length > 1) {
           setSelectedNote(null);
         } else {
           onClose();
@@ -72,7 +72,7 @@ export function CategoryNotesModal({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedNote, onClose]);
+  }, [isOpen, selectedNote, notes, onClose]);
 
   // When a note is selected, asynchronously load comments and full content if projectId is provided
   useEffect(() => {
@@ -329,14 +329,20 @@ export function CategoryNotesModal({
             {/* Detail Footer */}
             <div className="category-notes-footer">
               <div className="category-notes-footer-hint">
-                💡 当前为只读数据洞察视图；点击右下角「返回列表」可重新浏览分类笔记。
+                💡 当前为只读数据洞察视图；点击右下角「{notes.length === 1 ? '关闭' : '返回列表'}」即可退出。
               </div>
               <button
                 type="button"
                 className="category-notes-close-action"
-                onClick={() => setSelectedNote(null)}
+                onClick={() => {
+                  if (notes.length === 1) {
+                    onClose();
+                  } else {
+                    setSelectedNote(null);
+                  }
+                }}
               >
-                返回列表
+                {notes.length === 1 ? '关闭' : '返回列表'}
               </button>
             </div>
           </div>

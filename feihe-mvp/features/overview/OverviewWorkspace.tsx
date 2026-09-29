@@ -15,7 +15,6 @@ import { EffectScatterChart, DistributionHistogram, BoxPlotChart } from './Advan
 import { api, compact, num } from '../../lib/hooks/use-project-data';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { KpiComparison } from './KpiComparison';
-import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
@@ -50,12 +49,19 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
   const { showToast } = useProject();
-  const { openNote, renderDrawer } = useNoteDetail({
-    projectId,
-    onRefresh,
-    toast: showToast,
-    context: 'insights',
-  });
+
+  const handleNoteInspect = (noteId: string) => {
+    const targetNote = (dashboard.notes || []).find(n => String(n.id) === String(noteId));
+    if (targetNote) {
+      openCategoryNotes({
+        title: '散点笔记画像 · ' + (targetNote.title || '无标题'),
+        subtitle: '博主：' + (targetNote.author || '未知') + ' · 互动：' + compact(targetNote.interactionCount),
+        tag: '笔记画像',
+        notes: [targetNote],
+        maxCount: 1,
+      });
+    }
+  };
   const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
     projectId,
   });
@@ -106,7 +112,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
 
   const handleScatterPointClick = (point: { id?: string }) => {
     if (point.id) {
-      openNote(point.id);
+      handleNoteInspect(point.id);
     }
   };
 
@@ -381,7 +387,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       <KpiComparison data={dashboard.feishu} />
 
       <Section tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="项目全量笔记按互动量排序">
-        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)} onClick={() => openNote(String(n.id || i))} style={{ cursor: 'pointer' }} title="点击查看该笔记画像"><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
+        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)} onClick={() => handleNoteInspect(String(n.id || i))} style={{ cursor: 'pointer' }} title="点击查看该笔记画像"><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
       </Section>
 
       {/* ===== 新增：内容健康度仪表盘 + 达人效率排行 ===== */}
@@ -564,7 +570,6 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     </div>}
 
     <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple"><div className="report-prompt"><textarea aria-label="报告需求" value={prompt} onChange={e => setPrompt(e.target.value)} /><button className="primary-btn" onClick={generate} disabled={busy || !prompt.trim()}>{busy ? '正在生成…' : '生成复盘报告'}</button></div>{error && <p role="alert">{error}</p>}{report && <Link href={`/api/report-html?id=${encodeURIComponent(report)}&projectId=${encodeURIComponent(projectId)}`} target="_blank">查看生成报告 →</Link>}</Section>
-      {renderDrawer()}
     {renderCategoryNotesModal()}
   </div>;
 }
