@@ -253,7 +253,7 @@ export function ContentPerformance({
       const s = n.sourceType || '';
       if (clean === '自有发布') return s === 'owned';
       if (clean === '商业合作') return s === 'commercial';
-      if (clean === '外部扫描') return s === 'scanned';
+      if (clean === '外部扫描' || clean === '关键词扫描') return s === 'scanned' || s === 'keyword_scan';
       return s === clean;
     });
     openCategoryNotes({

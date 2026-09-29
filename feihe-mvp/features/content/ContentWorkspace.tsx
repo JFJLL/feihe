@@ -120,6 +120,7 @@ export function ContentWorkspace({
           <ContentPerformance
             data={dashboard}
             openNote={openNote}
+            openCategoryNotes={openCategoryNotes}
           />
         )}
 
