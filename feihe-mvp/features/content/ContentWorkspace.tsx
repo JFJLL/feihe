@@ -12,6 +12,7 @@ import { PublishingManagement } from './PublishingManagement';
 import { ContentMonitoring } from './ContentMonitoring';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 
@@ -40,6 +41,10 @@ export function ContentWorkspace({
     toast: showToast,
     context: 'content',
     defaultTab: tab === 'publishing' || tab === 'monitoring' ? 'performance' : 'basic',
+  });
+
+  const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
+    onOpenNote: openNote,
   });
 
   const [loading, setLoading] = useState(false);
@@ -151,6 +156,7 @@ export function ContentWorkspace({
         {tab === 'analysis' && <PlanningLibrary data={dashboard.feishu} />}
       </div>
       {renderDrawer()}
+      {renderCategoryNotesModal()}
     </div>
   );
 }

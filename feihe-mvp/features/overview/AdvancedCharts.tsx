@@ -9,11 +9,13 @@ export function EffectScatterChart({
   xLabel = '阅读量',
   yLabel = '互动量',
   height = 320,
+  onPointClick,
 }: {
   points: Array<{ x: number; y: number; size: number; color: string; label: string; id?: string }>;
   xLabel?: string;
   yLabel?: string;
   height?: number;
+  onPointClick?: (point: { x: number; y: number; size: number; color: string; label: string; id?: string }) => void;
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const w = 680;
@@ -66,8 +68,7 @@ export function EffectScatterChart({
             stroke={p.color}
             strokeWidth={hoverIdx === i ? 2.5 : 1}
             style={{ cursor: 'pointer', transition: 'all 0.2s ease' }}
-            onMouseEnter={() => setHoverIdx(i)}
-          />
+            onMouseEnter={() => setHoverIdx(i)} onClick={() => onPointClick && onPointClick(p)} />
         ))}
       </svg>
       {hovered && (
@@ -88,11 +89,13 @@ export function DistributionHistogram({
   color = '#1e6091',
   height = 280,
   unit = '篇',
+  onBinClick,
 }: {
   bins: Array<{ label: string; count: number }>;
   color?: string;
   height?: number;
   unit?: string;
+  onBinClick?: (bin: { label: string; count: number }, index: number) => void;
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   if (!bins.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无分布数据</div>;
@@ -126,7 +129,7 @@ export function DistributionHistogram({
           const y = padT + plotH - h;
           const isHovered = hoverIdx === i;
           return (
-            <g key={i} onMouseEnter={() => setHoverIdx(i)} style={{ cursor: 'pointer' }}>
+            <g key={i} onMouseEnter={() => setHoverIdx(i)} onClick={() => onBinClick && onBinClick(b, i)} style={{ cursor: 'pointer' }}>
               <rect x={x} y={y} width={barW} height={h} fill="url(#hist-grad)" rx={3} style={{ transition: 'all 0.2s ease', opacity: hoverIdx === null || isHovered ? 1 : 0.5 }} />
               {isHovered && <text x={x + barW / 2} y={y - 6} textAnchor="middle" fontSize="11" fontWeight={700} fill="#0f172a">{b.count} {unit}</text>}
               <text x={x + barW / 2} y={height - 14} textAnchor="middle" fontSize="9.5" fill="#64748b">{b.label}</text>
@@ -285,12 +288,14 @@ export function MatrixHeatmap({
   data,
   colorScale = ['#eff6ff', '#3b82f6', '#1e3a8a'],
   height = 300,
+  onCellClick,
 }: {
   rows: string[];
   cols: string[];
   data: number[][];
   colorScale?: [string, string, string];
   height?: number;
+  onCellClick?: (row: string, col: string, value: number) => void;
 }) {
   const [hover, setHover] = useState<{ r: number; c: number } | null>(null);
   if (!rows.length || !cols.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无热力图数据</div>;
@@ -325,7 +330,7 @@ export function MatrixHeatmap({
             const v = data[i]?.[j] || 0;
             const isHovered = hover?.r === i && hover?.c === j;
             return (
-              <g key={`${i}-${j}`} onMouseEnter={() => setHover({ r: i, c: j })} style={{ cursor: 'pointer' }}>
+              <g key={`${i}-${j}`} onMouseEnter={() => setHover({ r: i, c: j })} onClick={() => onCellClick && onCellClick(rows[i], cols[j], v)} style={{ cursor: 'pointer' }}>
                 <rect
                   x={80 + j * cellW + 1}
                   y={28 + i * cellH + 1}
@@ -365,10 +370,12 @@ export function BoxPlotChart({
   groups,
   height = 260,
   unit = '',
+  onGroupClick,
 }: {
   groups: Array<{ label: string; values: number[]; color?: string }>;
   height?: number;
   unit?: string;
+  onGroupClick?: (group: { label: string; values: number[]; color?: string }, index: number) => void;
 }) {
   const [active, setActive] = useState<number | null>(null);
   const [focusMain, setFocusMain] = useState(true);
@@ -431,7 +438,7 @@ export function BoxPlotChart({
         const boxY = rawH < 4 ? q1Y - 4 : q3Y;
         const hasOutlier = focusMain && s.max > plotMax;
         return (
-          <g key={i} tabIndex={0} role="button" aria-label={`${g.label}，${g.values.length} 篇，中位数 ${s.median} ${unit}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); } }} style={{ cursor: 'pointer' }}>
+          <g key={i} tabIndex={0} role="button" aria-label={`${g.label}，${g.values.length} 篇，中位数 ${s.median} ${unit}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => { setActive(i); if (onGroupClick) onGroupClick(g, i); }} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); if (onGroupClick) onGroupClick(g, i); } }} style={{ cursor: 'pointer' }}>
             <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#e0f2fe' : 'transparent'} />
             <line x1={cx} y1={getY(s.min)} x2={cx} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(s.min)} x2={cx + boxW / 3} y2={getY(s.min)} stroke={color} strokeWidth={1.5} />
@@ -498,9 +505,11 @@ export function WordCloudChart({
 export function TreeMapChart({
   items,
   height = 280,
+  onItemClick,
 }: {
   items: Array<{ label: string; value: number; subItems?: Array<{ label: string; value: number }>; color?: string }>;
   height?: number;
+  onItemClick?: (item: { label: string; value: number }) => void;
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   if (!items.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无树状图数据</div>;
@@ -523,7 +532,7 @@ export function TreeMapChart({
         {rects.map((r, i) => {
           const isHovered = hoverIdx === i;
           return (
-            <g key={i} onMouseEnter={() => setHoverIdx(i)} style={{ cursor: 'pointer' }}>
+            <g key={i} onMouseEnter={() => setHoverIdx(i)} onClick={() => onItemClick && onItemClick(r)} style={{ cursor: 'pointer' }}>
               <rect
                 x={r.x + 1}
                 y={1}

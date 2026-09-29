@@ -5,7 +5,7 @@ import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 import { ContentAnalyticsBoard } from './ContentAnalyticsBoard';
 import { ScenePerformanceBoard } from './ScenePerformanceBoard';
 
-import type { Dashboard, AnalyticRow } from '../../lib/types/project';
+import type { Dashboard, AnalyticRow, Note } from '../../lib/types/project';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { MatrixHeatmap, WordCloudChart, TreeMapChart } from '../overview/AdvancedCharts';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -27,6 +27,7 @@ function DistributionBars({
   secondaryUnit = '',
   valueUnit = '',
   limit = 10,
+  onItemClick,
 }: {
   rows: AnalyticRow[];
   valueKey: string;
@@ -36,6 +37,7 @@ function DistributionBars({
   secondaryUnit?: string;
   valueUnit?: string;
   limit?: number;
+  onItemClick?: (row: AnalyticRow) => void;
 }) {
   const validVals = rows.map((x) => num(x[valueKey])).filter((v): v is number => Number.isFinite(v) && v > 0);
   const max = validVals.length ? Math.max(0, ...validVals) : 0;
@@ -52,7 +54,7 @@ function DistributionBars({
             ? (typeof secVal === 'number' && Number.isFinite(secVal) ? compact(secVal) + (secondaryUnit ? ` ${secondaryUnit}` : '') : String(secVal))
             : null;
           return (
-            <div key={String(row[labelKey] || index) + '-' + index}>
+            <div key={String(row[labelKey] || index) + '-' + index} onClick={() => onItemClick && onItemClick(row)} style={{ cursor: onItemClick ? 'pointer' : 'default' }} title={onItemClick ? '点击查看该分类下的笔记' : undefined}>
               <span title={String(row[labelKey] || '')}>{cleanLabelText(row[labelKey], '其他')}</span>
               <i>
                 <b style={{ width: `${pctWidth}%` }} />
@@ -136,10 +138,117 @@ function TopNotes({
 export function ContentPerformance({
   data,
   openNote,
+  openCategoryNotes,
 }: {
   data: Dashboard;
   openNote: (id: string) => void;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
 }) {
+  const handleCategoryClick = (categoryName: string) => {
+    if (!openCategoryNotes) return;
+    const normTarget = contentDirectionLabel(categoryName);
+    const matched = (data.notes || []).filter(n => {
+      return (n.category1 === categoryName) || (contentDirectionLabel(n.category1) === normTarget);
+    });
+    openCategoryNotes({
+      title: '内容切角 / 场景 · ' + normTarget,
+      subtitle: '该分类下共关联 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '内容切角',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleTierClick = (tierLabel: string) => {
+    if (!openCategoryNotes) return;
+    const cleanLabel = tierLabel.trim();
+    const matched = (data.notes || []).filter(n => {
+      const l = (n.creatorLevel || '未标注').trim();
+      return l === cleanLabel || l.includes(cleanLabel) || cleanLabel.includes(l);
+    });
+    openCategoryNotes({
+      title: '达人层级 · ' + cleanLabel,
+      subtitle: '该层级共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '达人层级',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleLocationClick = (locName: string) => {
+    if (!openCategoryNotes) return;
+    const clean = locName.trim();
+    const matched = (data.notes || []).filter(n => (n.province || '').trim() === clean || (n.city || '').trim() === clean);
+    openCategoryNotes({
+      title: '达人地域 · ' + clean,
+      subtitle: '该地域共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '达人地域',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleSceneRowClick = (scene: string, level: string, matchedNotes: Note[]) => {
+    if (!openCategoryNotes) return;
+    const normScene = contentDirectionLabel(scene);
+    openCategoryNotes({
+      title: '方向×达人层级 · ' + normScene + ' / ' + level,
+      subtitle: '该交叉维度下共关联 ' + matchedNotes.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '细分场景',
+      notes: matchedNotes,
+      maxCount: 50,
+    });
+  };
+
+  const handleTreeMapClick = (item: { label: string; value: number }) => {
+    if (!openCategoryNotes) return;
+    const clean = item.label.trim();
+    const normClean = contentDirectionLabel(clean);
+    const matched = (data.notes || []).filter(n => {
+      const c = (n.category1 || '').trim();
+      return c === clean || contentDirectionLabel(c) === normClean || c.includes(clean);
+    });
+    openCategoryNotes({
+      title: '内容场景 · ' + clean,
+      subtitle: '场景下共关联 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '场景树状图',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleFormatClick = (formatName: string) => {
+    if (!openCategoryNotes) return;
+    const clean = formatName.trim();
+    const matched = (data.notes || []).filter(n => (n.noteType || '待补充').trim() === clean);
+    openCategoryNotes({
+      title: '内容形式 · ' + clean,
+      subtitle: '该形式共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '内容形式',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleSourceClick = (sourceName: string) => {
+    if (!openCategoryNotes) return;
+    const clean = sourceName.trim();
+    const matched = (data.notes || []).filter(n => {
+      const s = n.sourceType || '';
+      if (clean === '自有发布') return s === 'owned';
+      if (clean === '商业合作') return s === 'commercial';
+      if (clean === '外部扫描') return s === 'scanned';
+      return s === clean;
+    });
+    openCategoryNotes({
+      title: '内容来源 · ' + clean,
+      subtitle: '该来源下共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '内容来源',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
   const m = data.metrics;
   const q = data.analytics.dataQuality;
   const total = num(q.total);
@@ -273,7 +382,7 @@ export function ContentPerformance({
         />
       </section>
 
-      <ContentAnalyticsBoard analytics={data.analytics} />
+      <ContentAnalyticsBoard analytics={data.analytics} onSourceClick={handleSourceClick} onFormatClick={handleFormatClick} />
 
       {/* 第一组：内容选题战略对比（篇数供给 vs 互动吸收，双列 10 项严格等高） */}
       <div className="workspace-two-col" style={{ alignItems: 'stretch' }}>
@@ -283,6 +392,7 @@ export function ContentPerformance({
           desc="按选题方向拆解发文篇数与内容供给规模。"
         >
           <DistributionBars
+            onItemClick={r => handleCategoryClick(String(r.name))}
             rows={categoriesWithShare}
             valueKey="count"
             labelKey="name"
@@ -299,6 +409,7 @@ export function ContentPerformance({
           desc="按选题方向累计互动总量降序拆解，对比各切角互动吸收效能。"
         >
           <DistributionBars
+            onItemClick={r => handleCategoryClick(String(r.name))}
             rows={categoryInteractions}
             valueKey="interactions"
             labelKey="name"
@@ -524,7 +635,7 @@ export function ContentPerformance({
           desc="一级场景的选题数量占比，面积越大代表该场景覆盖越密集。"
         >
           {treeMapItems.length > 0 ? (
-            <TreeMapChart items={treeMapItems} />
+            <TreeMapChart items={treeMapItems} onItemClick={handleTreeMapClick} />
           ) : <EmptyState title="暂无场景数据" text="同步内容规划场景库后生成场景分布树状图。" />}
         </DashboardSection>
       </div>
@@ -571,7 +682,7 @@ export function ContentPerformance({
           title="达人×内容方向：覆盖与效果"
           desc="对照发布数量、篇均互动和报价成本，筛选值得复盘的内容方向。"
         >
-          <ScenePerformanceBoard notes={data.notes || []} />
+          <ScenePerformanceBoard notes={data.notes || []} onRowClick={handleSceneRowClick} />
         </DashboardSection>
       </div>
         <DashboardSection

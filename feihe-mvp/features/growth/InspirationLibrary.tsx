@@ -10,18 +10,36 @@ import { GrowthSampleBoard } from './GrowthSampleBoard';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { display, percent, ratio } from './metrics';
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { contentDirectionLabel } from '../../lib/dashboard-display';
 
 export function InspirationLibrary({
   data,
   growth,
   save,
   openNote,
+  openCategoryNotes,
 }: {
   data: Dashboard;
   growth: GrowthSettings;
   save: (next: GrowthSettings, message: string) => Promise<void>;
   openNote?: (id: string) => void;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
 }) {
+  const handleDirectionClick = (direction: string) => {
+    if (!openCategoryNotes) return;
+    const normTarget = contentDirectionLabel(direction);
+    const matched = (data.notes || []).filter(n => {
+      return (n.category1 === direction) || (n.category2 === direction) || (contentDirectionLabel(n.category1) === normTarget);
+    });
+    openCategoryNotes({
+      title: '内容方向机会 · ' + normTarget,
+      subtitle: '方向下共收录 ' + matched.length + ' 篇样本，展示前 50 篇（按互动量降序）',
+      tag: '灵感方向',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
   const [title, setTitle] = useState('');
   const [keyword, setKeyword] = useState('');
   const [reason, setReason] = useState('');
@@ -91,7 +109,7 @@ export function InspirationLibrary({
       <div className="reference-daily-grid">
         {stages.map((stage, i) => <MetricCard key={stage} label={stage} value={growth.inspirations.filter(item => item.stage === stage).length} unit="条" theme={(['blue', 'teal', 'purple', 'green'] as const)[i]} desc={'当前阶段占比 ' + percent(ratio(growth.inspirations.filter(item => item.stage === stage).length, growth.inspirations.length)) + ' · 非历史转化率'} />)}
       </div>
-      <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} />
+      <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} onDirectionClick={handleDirectionClick} />
       <section className="inspiration-split">
         <article className="panel">
           <PanelHead eyebrow="PLATFORM SIGNAL" title="项目高热灵感" />

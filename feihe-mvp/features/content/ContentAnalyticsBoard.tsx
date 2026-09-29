@@ -12,7 +12,7 @@ const cleanName = (val: unknown) => {
   return !str || /\uFFFD/.test(str) ? '其他' : str;
 };
 
-export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
+export function ContentAnalyticsBoard({ analytics, onSourceClick, onFormatClick }: { analytics: Analytics; onSourceClick?: (source: string) => void; onFormatClick?: (format: string) => void; }) {
   const sources = analytics.sourceDistribution.filter(row => count(row.count) > 0);
   const sourceTotal = sources.reduce((sum, row) => sum + count(row.count), 0);
   const total = count(analytics.dataQuality.total);
@@ -41,6 +41,7 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
             {sourceTotal > 0 ? (
               <TierDoughnutChart
                 total={sourceTotal}
+                onItemClick={it => onSourceClick && onSourceClick(it.label)}
                 items={sources.map((row, index) => ({
                   label: sourceLabel(row.name),
                   count: count(row.count),
@@ -56,6 +57,7 @@ export function ContentAnalyticsBoard({ analytics }: { analytics: Analytics }) {
           <DashboardSection eyebrow="FORMAT MIX" title="内容形式互动贡献" desc="按已同步互动次数计算贡献占比；缺失互动指标的内容不参与占比计算。">
             {interactions > 0 ? (
               <HorizontalBarList
+                onItemClick={it => onFormatClick && onFormatClick(it.label)}
                 items={formats.map((row, index) => ({
                   label: String(row.name || '待补充'),
                   amount: count(row.interactions),

@@ -10,7 +10,7 @@ import { paletteColor } from '../../lib/workspace-palette';
 const brandColor = (brand: string) => paletteColor('brand:' + brand);
 
 /** Cards, charts and detail table share the SQL-normalized brand rows. */
-export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
+export function BrandLandscape({ brands, onBrandClick }: { brands: AnalyticRow[]; onBrandClick?: (brand: string) => void }) {
   const totalNotes = completeSum(brands.map(row => row.notes));
   const observed = brands.filter(row => numeric(row.interactions) !== null);
   const totalInteractions = completeSum(observed.map(row => row.interactions));
@@ -27,7 +27,7 @@ export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
           const titleStr = `${String(row.brand)}：${interVal === null ? '未提供' : display(row.interactions)}互动`;
           return (
             <div
-              className="growth-brand-card panel"
+              className="growth-brand-card panel" onClick={() => onBrandClick && onBrandClick(String(row.brand))}
               data-brand={String(row.brand)}
               key={String(row.brand)}
               title={titleStr}
@@ -41,7 +41,7 @@ export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
                 borderRadius: 14,
                 background: '#ffffff',
                 border: '1px solid #e2e8f0',
-                boxShadow: '0 2px 7px rgba(22, 52, 76, 0.04)',
+                boxShadow: '0 2px 7px rgba(22, 52, 76, 0.04)', cursor: onBrandClick ? 'pointer' : 'default',
               }}
             >
               <div>
@@ -84,7 +84,7 @@ export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
             <p className="metric-note">分母：当前筛选全部品牌 {compactMetric(totalNotes)} 篇笔记。单品牌 100% 仅表示当前样本构成。</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, padding: '8px 0' }}>
-            {totalNotes !== null && totalNotes > 0 ? <TierDoughnutChart total={totalNotes} items={colored.map(({ row, color }) => ({ label: String(row.brand), count: Number(row.notes), pct: Number(ratio(row.notes, totalNotes)) * 100, color }))} /> : <EmptyState title="暂无可计算的笔记份额" text="笔记总数为 0 或缺失时不绘制占比。" />}
+            {totalNotes !== null && totalNotes > 0 ? <TierDoughnutChart total={totalNotes} onItemClick={it => onBrandClick && onBrandClick(it.label)} items={colored.map(({ row, color }) => ({ label: String(row.brand), count: Number(row.notes), pct: Number(ratio(row.notes, totalNotes)) * 100, color }))} /> : <EmptyState title="暂无可计算的笔记份额" text="笔记总数为 0 或缺失时不绘制占比。" />};
           </div>
           <div style={{ fontSize: 12, color: '#64748b', textAlign: 'center', borderTop: '1px solid #f1f5f9', paddingTop: 6 }}>
             单品精细化运营样本，覆盖蒲公英达人与KFS投放笔记
@@ -97,7 +97,7 @@ export function BrandLandscape({ brands }: { brands: AnalyticRow[] }) {
           </div>
           <div style={{ margin: '10px 0', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             {totalInteractions !== null && totalInteractions > 0 ? contributions.map(({ row, color }) => <div key={String(row.brand)} title={String(row.brand) + '：' + display(row.interactions) + ' 次互动'}>
-              <HorizontalBarList items={[{ label: String(row.brand), amount: Number(row.interactions), pct: Number(ratio(row.interactions, totalInteractions)) * 100, color, subText: compactMetric(row.interactions) + ' 次互动' }]} />
+              <HorizontalBarList onItemClick={it => onBrandClick && onBrandClick(it.label)} items={[{ label: String(row.brand), amount: Number(row.interactions), pct: Number(ratio(row.interactions, totalInteractions)) * 100, color, subText: compactMetric(row.interactions) + ' 次互动' }]} />;
             </div>) : <EmptyState title="暂无可计算的互动贡献" text="已记录互动合计为 0 或缺失，不生成份额。" />}
           </div>
           <div style={{ background: '#f8fafc', borderRadius: 8, padding: '8px 12px', border: '1px solid #e2e8f0' }}>

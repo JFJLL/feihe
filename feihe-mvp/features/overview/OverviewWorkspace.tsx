@@ -15,6 +15,9 @@ import { EffectScatterChart, DistributionHistogram, BoxPlotChart } from './Advan
 import { api, compact, num } from '../../lib/hooks/use-project-data';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { KpiComparison } from './KpiComparison';
+import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
+import { useProject } from '../../components/project-shell/ProjectContext';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
@@ -46,6 +49,83 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   projectId: string; project?: Project; dashboard: Dashboard; ops: Ops; loading?: boolean;
   onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
+  const { showToast } = useProject();
+  const { openNote, renderDrawer } = useNoteDetail({
+    projectId,
+    onRefresh,
+    toast: showToast,
+    context: 'insights',
+  });
+  const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
+    onOpenNote: openNote,
+  });
+
+  const handleCategoryClick = (categoryName: string) => {
+    const normTarget = contentDirectionLabel(categoryName);
+    const matched = (dashboard.notes || []).filter(n => {
+      return (n.category1 === categoryName) || (contentDirectionLabel(n.category1) === normTarget);
+    });
+    openCategoryNotes({
+      title: '内容切角 / 场景 · ' + normTarget,
+      subtitle: '该分类下共关联 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '内容切角',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleTierClick = (tierLabel: string) => {
+    const cleanLabel = tierLabel.trim();
+    const matched = (dashboard.notes || []).filter(n => {
+      const l = (n.creatorLevel || '未标注').trim();
+      return l === cleanLabel || l.includes(cleanLabel) || cleanLabel.includes(l);
+    });
+    openCategoryNotes({
+      title: '达人层级 · ' + cleanLabel,
+      subtitle: '该层级共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '达人层级',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleFormatClick = (formatLabel: string) => {
+    const cleanLabel = formatLabel.trim();
+    const matched = (dashboard.notes || []).filter(n => {
+      const t = (n.noteType || '待补充').trim();
+      return t === cleanLabel;
+    });
+    openCategoryNotes({
+      title: '内容形式 · ' + cleanLabel,
+      subtitle: '该形式共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '内容形式',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
+  const handleScatterPointClick = (point: { id?: string }) => {
+    if (point.id) {
+      openNote(point.id);
+    }
+  };
+
+  const handleHistogramBinClick = (bin: { label: string; count: number }, index: number) => {
+    const lo = readBands[index];
+    const hi = readBands[index + 1] ?? Infinity;
+    const matched = (dashboard.notes || []).filter(n => {
+      const r = finiteMetric(n.readCount);
+      return r !== null && r >= lo && r < hi;
+    });
+    openCategoryNotes({
+      title: '阅读量区间 · ' + bin.label,
+      subtitle: '区间内共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '阅读量分布',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
   const [tab, setTab] = useProjectTab('overview', ['overview', 'daily']);
   const [selected, setSelected] = useState('');
   const [scatterCategory, setScatterCategory] = useState('');
@@ -241,14 +321,14 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           { label: '累计内容互动', value: compact(m.interactionCount), unit: '次', tone: 'purple', desc: `项目发布目标 ${ops.settings.goals.publishTarget || '未设置'}` },
         ].map(item => <div key={item.label} className={`pastel-card pastel-${item.tone} content-stat-box`}><div className="stat-head">{item.label}</div><div className="stat-value">{item.value}<small> {item.unit}</small></div><div className="stat-sub">{item.desc}</div></div>)}</div>
         <div className="two-col-chart-grid reference-content-detail">
-          <div className="chart-inner-panel"><div className="inner-head"><strong>达人量级结构分布</strong><small>{creatorTotal} 篇已收录笔记</small></div>{creatorTotal ? <TierDoughnutChart items={tierItems} total={creatorTotal} /> : <EmptyState title="达人层级待补充" text="同步笔记库后显示层级分布。" />}</div>
-          <div className="chart-inner-panel"><div className="inner-head"><strong>内容形式分布</strong><small>已收录笔记</small></div><HorizontalBarList items={formatRows.map((r, i) => ({ label: String(r.name), amount: num(r.count), pct: formatTotal ? num(r.count) / formatTotal * 100 : 0, color: colors[i % colors.length], subText: `${num(r.count)} 篇 · ${compact(r.interactions)} 互动` }))} /></div>
+          <div className="chart-inner-panel"><div className="inner-head"><strong>达人量级结构分布</strong><small>{creatorTotal} 篇已收录笔记</small></div>{creatorTotal ? <TierDoughnutChart items={tierItems} total={creatorTotal} onItemClick={it => handleTierClick(it.label)} /> : <EmptyState title="达人层级待补充" text="同步笔记库后显示层级分布。" />}</div>
+          <div className="chart-inner-panel"><div className="inner-head"><strong>内容形式分布</strong><small>已收录笔记</small></div><HorizontalBarList items={formatRows.map((r, i) => ({ label: String(r.name), amount: num(r.count), pct: formatTotal ? num(r.count) / formatTotal * 100 : 0, color: colors[i % colors.length], subText: `${num(r.count)} 篇 · ${compact(r.interactions)} 互动` }))} onItemClick={it => handleFormatClick(it.label)} /></div>
         </div>
         <div className="two-col-chart-grid reference-content-detail" style={{ marginTop: 14, alignItems: 'stretch' }}>
           {tierSpendItems.length > 0 ? (
             <div className="chart-inner-panel">
               <div className="inner-head"><strong>达人层级采买金额分布</strong><small>项目全量笔记报价分布</small></div>
-              <TierSpendDistribution items={tierSpendItems} />
+              <TierSpendDistribution items={tierSpendItems} onItemClick={it => handleTierClick(it.label)} />
             </div>
           ) : <div className="chart-inner-panel"><EmptyState title="暂无采买分布" text="记录报价后显示达人层级采买分布。" /></div>}
           <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -257,8 +337,13 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               <table className="ops-table" style={{ width: '100%' }}>
                 <thead><tr><th>切角 / 场景</th><th>篇数</th><th>阅读</th><th>互动</th><th>分布</th></tr></thead>
                 <tbody>{dashboard.analytics.categories.slice(0, 8).map((r, i) => (
-                  <tr key={`${r.name}-${i}`}>
-                    <td>{contentDirectionLabel(r.name)}</td>
+                  <tr key={`${r.name}-${i}`} onClick={() => handleCategoryClick(String(r.name))} style={{ cursor: 'pointer' }} title="点击查看该切角下的具体笔记">
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontWeight: 600, color: '#0369a1' }}>{contentDirectionLabel(r.name)}</span>
+                        <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>
+                      </div>
+                    </td>
                     <td>{num(r.count)}</td>
                     <td>{compact(r.reads)}</td>
                     <td>{compact(r.interactions)}</td>
@@ -275,7 +360,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <div className="two-col-chart-grid">
           <div className="chart-inner-panel"><div className="inner-head"><strong>笔记阅读与互动效果（散点图）</strong><small>X=阅读量 Y=互动量 · {scatterPoints.length}篇完整记录（含零值）· 点大小=采集评论数</small></div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>内容方向<CustomSelect ariaLabel="散点图内容方向" value={scatterCategory} onChange={setScatterCategory} options={[{ value: '', label: '全部方向' }, ...[...new Set(dashboard.notes.map(n => contentDirectionLabel(n.category1)))].sort().map(value => ({ value, label: value }))]} /></label>
-            {scatterPoints.length > 0 ? <EffectScatterChart points={scatterPoints} /> : <EmptyState title="暂无散点数据" text="同步笔记阅读与互动指标后生成效果矩阵。" />}
+            {scatterPoints.length > 0 ? <EffectScatterChart points={scatterPoints} onPointClick={handleScatterPointClick} /> : <EmptyState title="暂无散点数据" text="同步笔记阅读与互动指标后生成效果矩阵。" />}
           </div>
           <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
             <div className="inner-head"><strong>笔记阅读量分布直方图</strong><small>{readValues.length} 篇有阅读数据的笔记</small></div>
@@ -283,20 +368,20 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               <span>主流分布集中于 <strong style={{ color: '#0f172a' }}>1千~5千</strong> 区间（占比最高）</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" height={280} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
+              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" height={280} onBinClick={handleHistogramBinClick} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
             </div>
           </div>
         </div>
         {boxPlotGroups.length > 0 && <div className="chart-inner-panel" style={{ marginTop: 14 }}>
           <div className="inner-head"><strong>达人层级互动量箱线图</strong><small>各层级已记录互动量分布（含零值，缺失不参与）</small></div>
-          <BoxPlotChart groups={boxPlotGroups} unit="互动" />
+          <BoxPlotChart groups={boxPlotGroups} unit="互动" onGroupClick={g => handleTierClick(g.label)} />
         </div>}
       </Section>
 
       <KpiComparison data={dashboard.feishu} />
 
       <Section tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="项目全量笔记按互动量排序">
-        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)}><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
+        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)} onClick={() => openNote(String(n.id || i))} style={{ cursor: 'pointer' }} title="点击查看该笔记画像"><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
       </Section>
 
       {/* ===== 新增：内容健康度仪表盘 + 达人效率排行 ===== */}
@@ -328,7 +413,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           {creatorEfficiency.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
               {creatorEfficiency.map((c, i) => (
-                <div key={i} style={{ padding: '12px 14px', background: i === 0 ? 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' : '#f8fafc', borderRadius: 10, border: `1px solid ${i === 0 ? '#fbbf24' : '#e2e8f0'}`, position: 'relative' }}>
+                <div key={i} onClick={() => handleTierClick(c.name)} title="点击查看该层级笔记" style={{ padding: '12px 14px', background: i === 0 ? 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' : '#f8fafc', borderRadius: 10, border: "1px solid " + (i === 0 ? "#fbbf24" : "#e2e8f0"), position: 'relative', cursor: 'pointer' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ width: 22, height: 22, borderRadius: '50%', background: i === 0 ? '#f59e0b' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7f32' : '#e2e8f0', color: i < 3 ? '#fff' : '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800 }}>{i + 1}</span>
@@ -479,5 +564,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     </div>}
 
     <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple"><div className="report-prompt"><textarea aria-label="报告需求" value={prompt} onChange={e => setPrompt(e.target.value)} /><button className="primary-btn" onClick={generate} disabled={busy || !prompt.trim()}>{busy ? '正在生成…' : '生成复盘报告'}</button></div>{error && <p role="alert">{error}</p>}{report && <Link href={`/api/report-html?id=${encodeURIComponent(report)}&projectId=${encodeURIComponent(projectId)}`} target="_blank">查看生成报告 →</Link>}</Section>
+      {renderDrawer()}
+    {renderCategoryNotesModal()}
   </div>;
 }

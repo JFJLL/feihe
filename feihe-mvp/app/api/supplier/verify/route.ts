@@ -19,8 +19,12 @@ export async function POST(request: Request) {
     const MAX_BATCHES = 5;
     let batch = 0;
     const jobId = await startJob('supplier_verify', '核验供应商评论', 0, project);
+    const startTime = Date.now();
+    const TIME_BUDGET_MS = 25000;
+    const commentCache = new Map<string, Array<{ content: string }>>();
 
     while (batch < MAX_BATCHES) {
+      if (batch > 0 && Date.now() - startTime > TIME_BUDGET_MS) break;
       batch++;
       const rows = selected.length && batch === 1
         ? await d1.prepare(`SELECT id,note_id AS noteId,planned_content AS plannedContent FROM supplier_comments WHERE project_id=? AND note_id IN (${selected.map(() => '?').join(',')})`).bind(project,...selected).all<{ id: number; noteId: string; plannedContent: string }>()
@@ -32,17 +36,21 @@ export async function POST(request: Request) {
       for (const row of rows.results) grouped.set(row.noteId, [...(grouped.get(row.noteId) || []), row]);
 
       for (const [noteId, planned] of grouped) {
-        let comments: Array<{ content: string }> = [];
-        try {
-          const live = await fetchAllComments(noteId, project);
-          comments = live.comments || [];
-        } catch {
+        if (Date.now() - startTime > TIME_BUDGET_MS) break;
+        let comments: Array<{ content: string }> = commentCache.get(noteId) || [];
+        if (!commentCache.has(noteId)) {
           const localKc = await d1.prepare('SELECT content FROM key_comments WHERE project_id=? AND note_id=?').bind(project, noteId).all<{ content: string }>().catch(() => ({ results: [] }));
           if (localKc.results && localKc.results.length > 0) {
             comments = localKc.results;
           } else {
-            summary.failedNotes += 1;
+            try {
+              const live = await fetchAllComments(noteId, project);
+              comments = live.comments || [];
+            } catch {
+              summary.failedNotes += 1;
+            }
           }
+          commentCache.set(noteId, comments);
         }
 
         const now = new Date().toISOString();

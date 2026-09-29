@@ -9,6 +9,7 @@ import { KeywordRadar } from './KeywordRadar';
 import { InspirationLibrary } from './InspirationLibrary';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 
@@ -31,6 +32,10 @@ export function GrowthWorkspace({
     projectId,
     onRefresh,
     toast: showToast,
+  });
+
+  const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
+    onOpenNote: openNote,
   });
 
   const growth = ops.settings.growth;
@@ -78,7 +83,7 @@ export function GrowthWorkspace({
         className="overview-block-content"
       >
         {tab === 'competitor' && (
-          <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} />
+          <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} openCategoryNotes={openCategoryNotes} />
         )}
 
         {tab === 'radar' && (
@@ -99,12 +104,14 @@ export function GrowthWorkspace({
             growth={growth}
             save={saveGrowth}
             openNote={openNote}
+            openCategoryNotes={openCategoryNotes}
           />
         )}
 
         {tab === 'inspiration' && <PlanningLibrary data={dashboard.feishu} />}
       </div>
       {renderDrawer()}
+      {renderCategoryNotesModal()}
     </div>
   );
 }

@@ -86,22 +86,45 @@ export function CommentsWorkspace({
 
   async function verifySupplier() {
     setLoading(true);
-    setRunResult('');
+    setRunResult('正在初始化供应商评论核验…');
     try {
-      const result = await api<{
-        summary: { exact: number; modified: number; missing: number; failedNotes: number };
-        processed?: number;
-        remaining?: number;
-        failedNotes?: number;
-      }>('/api/supplier/verify', {
-        method: 'POST',
-        body: JSON.stringify({ projectId }),
-      });
-      const processed = result.processed ?? (result.summary.exact + result.summary.modified + result.summary.missing);
-      const remaining = result.remaining ?? 0;
-      showToast(`供应商评论核验完成，处理 ${processed} 条，剩余 ${remaining} 条`, 'success');
+      let totalExact = 0;
+      let totalModified = 0;
+      let totalMissing = 0;
+      let totalFailedNotes = 0;
+      let totalProcessed = 0;
+      let remaining = 1;
+      let round = 0;
+
+      while (remaining > 0) {
+        round++;
+        const result = await api<{
+          summary: { exact: number; modified: number; missing: number; failedNotes: number };
+          processed?: number;
+          remaining?: number;
+          failedNotes?: number;
+        }>('/api/supplier/verify', {
+          method: 'POST',
+          body: JSON.stringify({ projectId }),
+        });
+        const processed = result.processed ?? (result.summary.exact + result.summary.modified + result.summary.missing);
+        totalProcessed += processed;
+        totalExact += result.summary.exact;
+        totalModified += result.summary.modified;
+        totalMissing += result.summary.missing;
+        totalFailedNotes += (result.failedNotes ?? 0);
+        remaining = result.remaining ?? 0;
+
+        if (processed === 0) break;
+
+        setRunResult(
+          `外显核验进行中（第 ${round} 轮）：已处理 ${totalProcessed} 条${remaining > 0 ? `，剩余待核验 ${remaining} 条…` : '，全部完成'}`
+        );
+      }
+
+      showToast(`供应商评论核验完成，累计处理 ${totalProcessed} 条`, 'success');
       setRunResult(
-        `外显核验：原文一致 ${result.summary.exact}，有修改 ${result.summary.modified}，未外显 ${result.summary.missing}。本次共处理 ${processed} 条${remaining > 0 ? `，剩余待核验 ${remaining} 条` : ''}。`
+        `外显核验完成：原文一致 ${totalExact}，有修改 ${totalModified}，未外显 ${totalMissing}。共处理 ${totalProcessed} 条。`
       );
       await onRefresh({ fresh: true });
     } catch (err) {

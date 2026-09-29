@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Dashboard } from '../../lib/types/project';
+import type { Dashboard, Note } from '../../lib/types/project';
 import { GrowthMetricCard as MetricCard, GrowthReadout } from './GrowthReadout';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -12,7 +12,35 @@ import { CompetitorIntelligenceSection } from './CompetitorIntelligenceSection';
 import { numeric, percent, ratio, completeSum, change, previousMonth, compactMetric } from './metrics';
 import { paletteColor } from '../../lib/workspace-palette';
 
-export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onSwitchTab?: (tab: string) => void }) {
+export function CompetitorAnalysis({
+  data,
+  onSwitchTab,
+  openCategoryNotes,
+}: {
+  data: Dashboard;
+  onSwitchTab?: (tab: string) => void;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
+}) {
+  const handleBrandClick = (brandName: string) => {
+    if (!openCategoryNotes) return;
+    const clean = brandName.trim();
+    const matched = (data.notes || []).filter(n => {
+      const b = (n.brand || '').trim();
+      const scope = (n.productScope || '').trim();
+      if (clean === '启萃' || clean === '飞鹤' || clean === '飞鹤启萃') {
+        return b === '启萃' || b === '飞鹤' || b === '飞鹤启萃' || b === '本品' || scope !== '竞品';
+      }
+      return b === clean || scope === clean;
+    });
+    openCategoryNotes({
+      title: '品牌样本 · ' + clean,
+      subtitle: '归属于 ' + clean + ' 的样本共 ' + matched.length + ' 篇，展示前 50 篇（按互动量降序）',
+      tag: '品牌样本',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
   const [selectedMonth, setSelectedMonth] = useState('');
   const monthly = data.feishu?.competitor || [];
   const months = [...new Set(monthly.map(r => r.month))].sort();
@@ -54,11 +82,11 @@ export function CompetitorAnalysis({ data, onSwitchTab }: { data: Dashboard; onS
       <MetricCard label="项目监测笔记" value={totalNotes} unit="篇" theme="green" desc={brands.length + ' 个归一品牌分组（含未标注竞品）'} />
       <MetricCard label="项目评论样本" value={totalComments} unit="条" theme="purple" desc="来自当前项目筛选范围；不代表全平台声量" />
     </div>
-    <BrandLandscape brands={brands} />
+    <BrandLandscape brands={brands} onBrandClick={handleBrandClick} />
     <DashboardSection title="品牌样本份额与内容效率" eyebrow="PROJECT SAMPLE" desc="份额分母为当前项目全部品牌样本。互动/阅读为记录比值，非去重用户转化率；篇均互动仅使用已提供互动的笔记。缺失显示 —，真实零显示 0。">
       {brands.length ? <div className="ops-table-wrap"><table className="ops-table">
         <thead><tr><th>品牌</th><th>笔记</th><th>笔记份额</th><th>评论</th><th>评论份额</th><th>正向评论率</th><th>负向评论率</th><th>阅读</th><th>互动</th><th>篇均互动</th><th>互动/阅读</th><th>样本 CPE（元）</th></tr></thead>
-        <tbody>{brands.map(row => <tr key={String(row.brand)}>
+        <tbody>{brands.map(row => <tr key={String(row.brand)} onClick={() => handleBrandClick(String(row.brand))} style={{ cursor: 'pointer' }} title="点击查看该品牌样本笔记">
           <td><strong>{String(row.brand)}</strong></td><td><GrowthReadout value={row.notes} /></td><td>{percent(ratio(row.notes, totalNotes))}</td>
           <td><GrowthReadout value={row.comments} /></td><td>{percent(ratio(row.comments, totalComments))}</td>
           <td>{percent(ratio(row.positive, row.comments))}</td><td>{percent(ratio(row.negative, row.comments))}</td>

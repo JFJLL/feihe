@@ -490,9 +490,11 @@ export function CtrTrendChart({
 export function TierDoughnutChart({
   items,
   total = 194,
+  onItemClick,
 }: {
   items: Array<{ label: string; count: number; pct: number; color: string }>;
   total?: number;
+  onItemClick?: (item: { label: string; count: number; pct: number; color: string }) => void;
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const size = 160;
@@ -545,6 +547,7 @@ export function TierDoughnutChart({
                 }}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
+                onClick={() => onItemClick && onItemClick(s)}
               />
             );
           })}
@@ -591,6 +594,7 @@ export function TierDoughnutChart({
               key={idx}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
+              onClick={() => onItemClick && onItemClick(item)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -735,8 +739,10 @@ export function KfsStackedAreaChart({
 // ======================== Creator Tier Spend Distribution ========================
 export function TierSpendDistribution({
   items,
+  onItemClick,
 }: {
   items: Array<{ label: string; spend: number; count: number; color: string }>;
+  onItemClick?: (item: { label: string; spend: number; count: number; color: string }) => void;
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const total = items.reduce((s, it) => s + it.spend, 0) || 1;
@@ -751,7 +757,7 @@ export function TierSpendDistribution({
         const pct = (it.spend / total) * 100;
         const barW = (it.spend / max) * 100;
         return (
-          <div key={it.label} onMouseEnter={() => setHoveredIdx(idx)} onMouseLeave={() => setHoveredIdx(null)}
+          <div key={it.label} onMouseEnter={() => setHoveredIdx(idx)} onMouseLeave={() => setHoveredIdx(null)} onClick={() => onItemClick && onItemClick(it)}
             style={{ padding: '7px 10px', borderRadius: 8, background: isHovered ? '#f8fafc' : 'transparent', border: isHovered ? '1px solid #e2e8f0' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.15s ease' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5, alignItems: 'baseline' }}>
               <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#0f172a' : '#1e293b' }}>{it.label}</span>
@@ -775,8 +781,10 @@ export function TierSpendDistribution({
 // ======================== Horizontal Bar List (Interactive) ========================
 export function HorizontalBarList({
   items,
+  onItemClick,
 }: {
   items: Array<{ label: string; amount: number; pct: number; color: string; bg?: string; subText?: string }>;
+  onItemClick?: (item: { label: string; amount: number; pct: number; color: string; subText?: string }) => void;
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 

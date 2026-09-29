@@ -133,7 +133,13 @@ export async function api<T>(url: string, options?: RequestInit): Promise<T> {
     data = JSON.parse(rawText) as T & { ok?: boolean; error?: string };
   } catch {
     if (!response.ok) {
-      throw new Error(`服务响应异常 (HTTP ${response.status}): ${rawText.slice(0, 150) || '无响应体'}`);
+      const isHtml = /^\s*<(!DOCTYPE|html)/i.test(rawText);
+      const friendlyMsg = response.status === 504
+        ? '网关响应超时 (504)，请稍后重试'
+        : response.status === 502
+        ? '网关服务暂时不可用 (502)，请稍后重试'
+        : `服务响应异常 (HTTP ${response.status})`;
+      throw new Error(isHtml ? friendlyMsg : `${friendlyMsg}: ${rawText.slice(0, 150) || '无响应体'}`);
     }
     throw new Error(`数据格式解析异常: ${rawText.slice(0, 150)}`);
   }
