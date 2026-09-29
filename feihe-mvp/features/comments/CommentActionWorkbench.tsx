@@ -12,6 +12,48 @@ import { api } from '../../lib/hooks/use-project-data';
 import type { ActionWorkbenchItem } from './comment-view-model';
 import { CommentEfficiencyBoard } from './CommentEfficiencyBoard';
 
+// ======================== Client Cache for Workbench ========================
+type WorkbenchCacheData = {
+  items: ActionWorkbenchItem[];
+  total: number;
+  summary: {
+    totalPending: number;
+    replyPending: number;
+    deletePending: number;
+    supplementPending: number;
+    observePending: number;
+    handledCount: number;
+  };
+  availableDates: string[];
+  needsRecalculation: boolean;
+  timestamp: number;
+};
+const workbenchCache = new Map<string, WorkbenchCacheData>();
+const CACHE_FRESH_MS = 60 * 1000;
+function getCache(key: string): WorkbenchCacheData | null {
+  const mem = workbenchCache.get(key);
+  if (mem) return mem;
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = sessionStorage.getItem('wb_cache:' + key);
+    if (raw) {
+      const parsed = JSON.parse(raw) as WorkbenchCacheData;
+      workbenchCache.set(key, parsed);
+      return parsed;
+    }
+  } catch {}
+  return null;
+}
+function setCache(key: string, data: Omit<WorkbenchCacheData, 'timestamp'>) {
+  const entry = { ...data, timestamp: Date.now() };
+  workbenchCache.set(key, entry);
+  if (typeof window !== 'undefined') {
+    try {
+      sessionStorage.setItem('wb_cache:' + key, JSON.stringify(entry));
+    } catch {}
+  }
+}
+
 export function CommentActionWorkbench({
   projectId,
   openNote,
@@ -141,7 +183,21 @@ export function CommentActionWorkbench({
   // Server-side paginated data loader
   const loadWorkbenchData = useCallback(async () => {
     const seq = ++reqSeqRef.current;
-    setLoading(true);
+    const currentCacheKey = [projectId, sourceFilter, statusFilter, actionFilter, sentimentFilter, categoryFilter, selectedDate, debouncedQuery, page].join(":");
+    const cached = getCache(currentCacheKey);
+    if (cached) {
+      setItems(cached.items);
+      setTotal(cached.total);
+      setSummary(cached.summary);
+      setSummaryReady(true);
+      setAvailableDates(cached.availableDates);
+      setNeedsRecalculation(cached.needsRecalculation);
+      if (Date.now() - cached.timestamp < CACHE_FRESH_MS) {
+        setLoading(false);
+      }
+    } else {
+      setLoading(true);
+    }
     setError(null);
     try {
       const p = new URLSearchParams({
@@ -177,11 +233,17 @@ export function CommentActionWorkbench({
 
       if (seq !== reqSeqRef.current) return;
 
-      setItems(res.items || []);
+      const finalItems = res.items || [];
+      const finalTotal = res.total || 0;
+      const finalRecalc = Boolean(res.needsRecalculation);
+      const finalSummary = res.summary || summary;
+      const finalDates = res.availableDates || availableDates;
+      setItems(finalItems);
       setSummaryReady(true);
-      setTotal(res.total || 0);
-      setNeedsRecalculation(Boolean(res.needsRecalculation));
+      setTotal(finalTotal);
+      setNeedsRecalculation(finalRecalc);
       if (res.summary) setSummary(res.summary);
+      setCache(currentCacheKey, { items: finalItems, total: finalTotal, summary: finalSummary, availableDates: finalDates, needsRecalculation: finalRecalc });
       if (res.availableDates) {
         setAvailableDates(res.availableDates);
         if (!selectedDate && res.availableDates.length > 0 && sourceFilter === 'review-batch') {

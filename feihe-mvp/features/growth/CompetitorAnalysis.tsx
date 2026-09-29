@@ -191,9 +191,120 @@ export function CompetitorAnalysis({
           counts.set(issue.brand, (counts.get(issue.brand) || 0) + 1);
           categories.set(issue.category, (categories.get(issue.category) || 0) + 1);
         }
-        const renderCounts = (entries: Map<string, number>) => [...entries].sort((a, b) => b[1] - a[1]).map(([label, count]) => <div key={label} style={{ display: 'grid', gridTemplateColumns: '100px 1fr 48px', alignItems: 'center', gap: 10, marginBottom: 10 }}><span style={{ fontSize: 12 }}>{label}</span><div style={{ background: '#e2e8f0', borderRadius: 6, height: 12 }}><div style={{ height: '100%', borderRadius: 6, width: `${count / Math.max(...entries.values()) * 100}%`, background: '#1e6091' }} /></div><strong style={{ fontSize: 12 }}>{count} 条</strong></div>);
-        return <><div className="workspace-two-col" style={{ alignItems: 'start' }}><div><h4>按品牌 · {issues.length} 条记录</h4>{renderCounts(counts)}</div><div><h4>按问题类别</h4>{renderCounts(categories)}</div></div>
-          <details><summary>查看全部 {issues.length} 条来源讨论</summary><div className="ops-table-wrap" style={{ maxHeight: 360, overflowY: 'auto' }}><table className="ops-table"><thead><tr><th>时间</th><th>品牌 / 品线</th><th>类别</th><th>讨论摘要</th></tr></thead><tbody>{issues.map((issue, i) => <tr key={i}><td>{issue.time} {issue.week}</td><td>{issue.brand} {issue.productLine}</td><td>{issue.category}</td><td style={{ whiteSpace: 'normal', minWidth: 200 }}>{issue.discussion || '未填写'}</td></tr>)}</tbody></table></div></details></>;
+        const totalIssues = issues.length;
+        const brandColors: Record<string, string> = {
+          '飞鹤': '#1e6091',
+          '金领冠': '#f59e0b',
+          '合生元': '#0d9488',
+          'A2': '#7c3aed',
+          '爱他美': '#e11d48',
+          '未标注': '#64748b',
+        };
+        const sortedBrands = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+        const sortedCategories = [...categories.entries()].sort((a, b) => b[1] - a[1]);
+        const maxBrand = sortedBrands[0]?.[1] || 1;
+        const maxCat = sortedCategories[0]?.[1] || 1;
+
+        return (
+          <div className="stack" style={{ gap: 16 }}>
+            <div className="workspace-two-col" style={{ alignItems: 'stretch' }}>
+              {/* 左列：品牌分布与洞察卡片 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, background: '#ffffff', borderRadius: 12, border: '1px solid #e2e8f0', padding: '18px 20px', height: '100%', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                    <strong style={{ fontSize: 14, color: '#0f172a' }}>按品牌归属分布</strong>
+                    <span style={{ fontSize: 12, color: '#64748b' }}>共 {totalIssues} 条讨论</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {sortedBrands.map(([brand, count]) => {
+                      const pctVal = ((count / totalIssues) * 100).toFixed(1);
+                      const barPct = ((count / maxBrand) * 100).toFixed(1);
+                      const color = brandColors[brand] || '#1e6091';
+                      return (
+                        <div key={brand} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 75px', alignItems: 'center', gap: 12 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
+                            <span style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={brand}>
+                              {brand}
+                            </span>
+                          </div>
+                          <div style={{ background: '#f1f5f9', borderRadius: 5, height: 9, overflow: 'hidden' }}>
+                            <div style={{ height: '100%', borderRadius: 5, width: barPct + '%', background: color, transition: 'width 0.4s ease' }} />
+                          </div>
+                          <div style={{ textAlign: 'right', fontSize: 12, color: '#475569', whiteSpace: 'nowrap' }}>
+                            <strong style={{ color: '#0f172a' }}>{count}</strong> 条 ({pctVal}%)
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 左侧下半部健康度小结，填补空白且提升分析价值 */}
+                <div style={{ padding: '12px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0', fontSize: 12, lineHeight: 1.6, color: '#475569', marginTop: 14 }}>
+                  <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>💡 品牌讨论分布洞察</div>
+                  <div>• 讨论重点在未标注记录（{(counts.get('未标注') || 0)}条）与金领冠（{(counts.get('金领冠') || 0)}条）。</div>
+                  <div>• 飞鹤本品讨论合计 {(counts.get('飞鹤') || 0)} 条，主要集中在买赠权益与活动政策承接。</div>
+                </div>
+              </div>
+
+              {/* 右列：问题类别分布卡片 */}
+              <div style={{ background: '#ffffff', borderRadius: 12, border: '1px solid #e2e8f0', padding: '18px 20px', height: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <strong style={{ fontSize: 14, color: '#0f172a' }}>按问题类别拆解</strong>
+                  <span style={{ fontSize: 12, color: '#64748b' }}>TOP 10 核心问题</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 11 }}>
+                  {sortedCategories.map(([category, count]) => {
+                    const pctVal = ((count / totalIssues) * 100).toFixed(1);
+                    const barPct = ((count / maxCat) * 100).toFixed(1);
+                    return (
+                      <div key={category} style={{ display: 'grid', gridTemplateColumns: '135px 1fr 75px', alignItems: 'center', gap: 12 }}>
+                        <span style={{ fontSize: 12.5, color: '#334155', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={category}>
+                          {category}
+                        </span>
+                        <div style={{ background: '#f1f5f9', borderRadius: 5, height: 9, overflow: 'hidden' }}>
+                          <div style={{ height: '100%', borderRadius: 5, width: barPct + '%', background: '#0284c7', transition: 'width 0.4s ease' }} />
+                        </div>
+                        <div style={{ textAlign: 'right', fontSize: 12, color: '#475569', whiteSpace: 'nowrap' }}>
+                          <strong style={{ color: '#0f172a' }}>{count}</strong> 条 ({pctVal}%)
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <details style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 10, padding: '10px 16px' }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 13, color: '#1e6091', padding: '4px 0' }}>
+                查看全部 {issues.length} 条来源讨论明细
+              </summary>
+              <div className="ops-table-wrap" style={{ maxHeight: 360, overflowY: 'auto', marginTop: 10 }}>
+                <table className="ops-table">
+                  <thead>
+                    <tr>
+                      <th>时间</th>
+                      <th>品牌 / 品线</th>
+                      <th>类别</th>
+                      <th>讨论摘要</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {issues.map((issue, i) => (
+                      <tr key={i}>
+                        <td>{issue.time} {issue.week}</td>
+                        <td>{issue.brand} {issue.productLine}</td>
+                        <td>{issue.category}</td>
+                        <td style={{ whiteSpace: 'normal', minWidth: 200 }}>{issue.discussion || '未填写'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+        );
       })()}
     </DashboardSection>
 

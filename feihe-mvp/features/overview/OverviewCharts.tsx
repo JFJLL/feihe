@@ -796,6 +796,8 @@ export function HorizontalBarList({
         return (
           <div
             key={idx}
+            onClick={() => onItemClick && onItemClick(it)}
+            title={onItemClick ? `点击查看「${it.label}」相关笔记` : undefined}
             onMouseEnter={() => setHoveredIdx(idx)}
             onMouseLeave={() => setHoveredIdx(null)}
             style={{
@@ -803,7 +805,7 @@ export function HorizontalBarList({
               borderRadius: 8,
               background: isHovered ? '#f8fafc' : 'transparent',
               border: isHovered ? '1px solid #e2e8f0' : '1px solid transparent',
-              cursor: 'pointer',
+              cursor: onItemClick ? 'pointer' : 'default',
               transition: 'all 0.15s ease',
             }}
           >

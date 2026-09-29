@@ -6,7 +6,7 @@ import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { ProgressBar } from '../../components/ui/operations/ProgressBar';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
-import type { Dashboard, Ops } from '../../lib/types/project';
+import type { Dashboard, Ops, Note } from '../../lib/types/project';
 import { num, pct } from '../../lib/hooks/use-project-data';
 
 function ProgressRow({ label, done, total, tone = 'blue', detail }: {
@@ -31,9 +31,11 @@ function ProgressRow({ label, done, total, tone = 'blue', detail }: {
 export function ExecutionOverview({
   dashboard,
   ops,
+  openCategoryNotes,
 }: {
   dashboard: Dashboard;
   ops: Ops;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
 }) {
   const m = dashboard.metrics;
   const actions = m.actions || {};
@@ -61,6 +63,25 @@ export function ExecutionOverview({
     positive: num(r.positive),
     negative: num(r.negative),
   })).filter(r => r.date);
+
+  const handleCreatorTypeClick = (type: '达人' | '素人') => {
+    if (!openCategoryNotes) return;
+    const isAmateur = type === '素人';
+    const matched = (dashboard.notes || []).filter(n => {
+      const lvl = (n.creatorLevel || '').trim();
+      if (isAmateur) {
+        return lvl.includes('素人') || lvl.includes('KOC') || !lvl || lvl === '未标注';
+      }
+      return lvl.includes('头部') || lvl.includes('腰部') || lvl.includes('初级') || lvl.includes('达人');
+    });
+    openCategoryNotes({
+      title: type + '笔记发布样本',
+      subtitle: type + '类别下共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: type + '发布',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
 
   // === 评论区执行数据（飞书同步） ===
   const execRows = (dashboard.feishu?.commentExecution || []) as Array<{
@@ -231,8 +252,8 @@ export function ExecutionOverview({
             desc="对比达人评论与素人评论的执行数量、纯文案占比与表情包占比。"
           >
             <div style={{ padding: '8px 0' }}>
-              <ProgressRow label="达人评论执行量" done={totalDarent} total={totalExec} tone="blue" detail={`纯文案为主，占比 ${totalDarent > 0 ? pct(totalDarent / totalExec) : '—'}`} />
-              <ProgressRow label="素人评论执行量" done={totalAmateur} total={totalExec} tone="teal" detail={`占比 ${totalAmateur > 0 ? pct(totalAmateur / totalExec) : '—'}`} />
+              <div onClick={() => handleCreatorTypeClick('达人')} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? '点击查看达人笔记' : undefined}><ProgressRow label="达人评论执行量" done={totalDarent} total={totalExec} tone="blue" detail={`纯文案为主，占比 ${totalDarent > 0 ? pct(totalDarent / totalExec) : '—'}`} /></div>
+              <div onClick={() => handleCreatorTypeClick('素人')} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? '点击查看素人笔记' : undefined}><ProgressRow label="素人评论执行量" done={totalAmateur} total={totalExec} tone="teal" detail={`占比 ${totalAmateur > 0 ? pct(totalAmateur / totalExec) : '—'}`} /></div>
               <div style={{ marginTop: 16, padding: '12px 14px', background: '#f8fafc', borderRadius: 8 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#1e293b', marginBottom: 8 }}>执行形式构成</div>
                 <div style={{ display: 'flex', height: 24, borderRadius: 6, overflow: 'hidden' }}>

@@ -14,6 +14,7 @@ import { SupplierVerification } from './SupplierVerification';
 import { ExecutionOverview } from './ExecutionOverview';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
+import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api, num, pct } from '../../lib/hooks/use-project-data';
 
@@ -51,6 +52,10 @@ export function CommentsWorkspace({
     toast: showToast,
     context: tab === 'acceptance' ? 'acceptance' : 'comments',
     defaultTab: tab === 'acceptance' ? 'acceptance' : 'comments',
+  });
+
+  const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
+    projectId,
   });
 
   const [loading, setLoading] = useState(false);
@@ -206,6 +211,7 @@ export function CommentsWorkspace({
          <AcceptanceDelivery
            projectId={projectId}
            dashboard={dashboard}
+           openCategoryNotes={openCategoryNotes}
            acceptance={ops.settings.acceptance}
            openNote={openNote}
            toast={showToast}
@@ -227,11 +233,12 @@ export function CommentsWorkspace({
       )}
 
       {tab === 'execution' && (
-        <ExecutionOverview dashboard={dashboard} ops={ops} />
+        <ExecutionOverview dashboard={dashboard} ops={ops} openCategoryNotes={openCategoryNotes} />
       )}
       </div>
 
       {renderDrawer()}
+      {renderCategoryNotesModal()}
     </div>
   );
 }

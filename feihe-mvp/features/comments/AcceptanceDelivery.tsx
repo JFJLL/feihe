@@ -18,6 +18,7 @@ export function AcceptanceDelivery({
   dashboard,
   acceptance,
   openNote,
+  openCategoryNotes,
   toast,
 }: {
   projectId: string;
@@ -25,7 +26,24 @@ export function AcceptanceDelivery({
   acceptance: Acceptance;
   openNote: (id: string) => void;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: any[]; maxCount?: number }) => void;
 }) {
+  const handlePipelineClick = (pipeName: string) => {
+    if (!openCategoryNotes) return;
+    const clean = pipeName.trim();
+    const matched = (dashboard.notes || []).filter(n => {
+      const p = (n.pipeline || '').trim();
+      return p === clean || clean.includes(p) || (n.title || '').includes(clean);
+    });
+    openCategoryNotes({
+      title: '投放主线 · ' + clean,
+      subtitle: '该主线已收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
+      tag: '投放主线',
+      notes: matched.length ? matched : (dashboard.notes || []).slice(0, 30),
+      maxCount: 50,
+    });
+  };
+
   const [items, setItems] = useState<NoteListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [summary, setSummary] = useState<NotesListResponse['summary']>(emptyNotesSummary);
@@ -184,7 +202,8 @@ export function AcceptanceDelivery({
       </section>
 
       {/* 真实验收规则展示卡 */}
-      <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '14px 18px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+      <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '14px 18px', display: 'flex',
+                  cursor: openCategoryNotes ? 'pointer' : 'default', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontSize: '18px' }}>📋</span>
           <div>
@@ -232,6 +251,8 @@ export function AcceptanceDelivery({
             return (
               <article
                 key={p.id}
+                onClick={() => handlePipelineClick(p.name)}
+                title={openCategoryNotes ? ('点击查看「' + p.name + '」主线笔记') : undefined}
                 style={{
                   background: '#ffffff',
                   border: '1px solid #e2e8f0',

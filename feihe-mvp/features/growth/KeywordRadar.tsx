@@ -11,6 +11,7 @@ import { CustomSelect } from '../../components/ui/CustomSelect';
 import { num } from '../../lib/hooks/use-project-data';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { sampleDirection } from './directions';
+import { contentDirectionLabel } from '../../lib/dashboard-display';
 import { LingxiTrackLive } from '../../app/lingxi-track';
 
 function noteSearchText(note: Note) {
@@ -38,6 +39,7 @@ export function KeywordRadar({
   rules,
   save,
   openNote,
+  openCategoryNotes,
   projectId,
   toast,
 }: {
@@ -46,6 +48,7 @@ export function KeywordRadar({
   rules: Rules;
   save: (next: GrowthSettings, message: string) => Promise<void>;
   openNote?: (id: string) => void;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
   projectId: string;
   toast?: (v: string, type?: 'success' | 'error' | 'info') => void;
 }) {
@@ -53,6 +56,21 @@ export function KeywordRadar({
   const [draft, setDraft] = useState('');
   const [scope, setScope] = useState('本品');
   const [threshold, setThreshold] = useState(growth.thresholds.breakoutInteractions);
+  const handleDirectionClick = (direction: string) => {
+    if (!openCategoryNotes) return;
+    const normTarget = contentDirectionLabel(direction);
+    const matched = (data.notes || []).filter(n => {
+      return (n.category1 === direction) || (n.category2 === direction) || (contentDirectionLabel(n.category1) === normTarget) || (sampleDirection(n) === direction);
+    });
+    openCategoryNotes({
+      title: '内容方向机会 · ' + normTarget,
+      subtitle: '方向下共收录 ' + matched.length + ' 篇样本，展示前 50 篇（按互动量降序）',
+      tag: '机会方向',
+      notes: matched,
+      maxCount: 50,
+    });
+  };
+
 
   const suggested = [...rules.brands, ...rules.competitors]
     .filter((word) => !growth.watchKeywords.some((item) => item.keyword === word))
@@ -258,7 +276,7 @@ export function KeywordRadar({
           </section>
 
           {/* 3. 机会分布与相关高热样本 */}
-          <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} />
+          <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} onDirectionClick={handleDirectionClick} />
 
           <section className="panel">
             <PanelHead eyebrow="BREAKOUT NOTES" title="项目高热笔记样本" />

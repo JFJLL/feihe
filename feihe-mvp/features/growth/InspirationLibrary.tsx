@@ -10,6 +10,7 @@ import { GrowthSampleBoard } from './GrowthSampleBoard';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { display, percent, ratio } from './metrics';
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { sampleDirection } from './directions';
 import { contentDirectionLabel } from '../../lib/dashboard-display';
 
 export function InspirationLibrary({
@@ -29,7 +30,7 @@ export function InspirationLibrary({
     if (!openCategoryNotes) return;
     const normTarget = contentDirectionLabel(direction);
     const matched = (data.notes || []).filter(n => {
-      return (n.category1 === direction) || (n.category2 === direction) || (contentDirectionLabel(n.category1) === normTarget);
+      return (n.category1 === direction) || (n.category2 === direction) || (contentDirectionLabel(n.category1) === normTarget) || (sampleDirection(n) === direction);
     });
     openCategoryNotes({
       title: '内容方向机会 · ' + normTarget,

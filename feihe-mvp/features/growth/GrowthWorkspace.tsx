@@ -93,6 +93,7 @@ export function GrowthWorkspace({
             rules={ops.settings.rules}
             save={saveGrowth}
             openNote={openNote}
+            openCategoryNotes={openCategoryNotes}
             projectId={projectId}
             toast={showToast}
           />

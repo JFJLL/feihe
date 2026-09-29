@@ -144,6 +144,22 @@ export function ContentPerformance({
   openNote: (id: string) => void;
   openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
 }) {
+  const handlePipelineClick = (pipeName: string) => {
+    if (!openCategoryNotes) return;
+    const clean = pipeName.trim();
+    const matched = (data.notes || []).filter(n => {
+      const p = (n.pipeline || "").trim();
+      return p === clean || clean.includes(p) || (n.title || "").includes(clean);
+    });
+    openCategoryNotes({
+      title: "投放管线 · " + clean,
+      subtitle: "该管线共归属 " + matched.length + " 篇笔记，展示前 50 篇（按互动量降序）",
+      tag: "投放管线",
+      notes: matched.length ? matched : (data.notes || []).slice(0, 30),
+      maxCount: 50,
+    });
+  };
+
   const handleCategoryClick = (categoryName: string) => {
     if (!openCategoryNotes) return;
     const normTarget = contentDirectionLabel(categoryName);
@@ -492,8 +508,8 @@ export function ContentPerformance({
               </thead>
               <tbody>
                 {data.analytics.creatorLevels.map((row, index) => (
-                  <tr key={row.name + '-' + index}>
-                    <td><strong>{String(row.name)}</strong></td>
+                  <tr key={row.name + '-' + index} onClick={() => handleTierClick(String(row.name))} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? ("点击查看「" + row.name + "」层级笔记") : undefined}>
+                    <td><div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><strong style={{ color: openCategoryNotes ? '#0284c7' : 'inherit' }}>{String(row.name)}</strong>{openCategoryNotes && <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe', whiteSpace: 'nowrap' }}>查看 ↗</span>}</div></td>
                     <td>{num(row.count)}</td>
                     <td>{compact(row.avgRead)}</td>
                     <td>{compact(row.avgInteraction)}</td>
@@ -516,6 +532,7 @@ export function ContentPerformance({
             desc={`达人分布主要省市与地域渗透格局（已定位 ${mappedCount} 位达人${unmappedCount > 0 ? `，待回填归属地 ${unmappedCount.toLocaleString()} 篇` : ''}）。`}
           >
             <DistributionBars
+              onItemClick={r => handleLocationClick(String(r.name))}
               rows={validLocations}
               valueKey="count"
               labelKey="name"
@@ -539,7 +556,7 @@ export function ContentPerformance({
                   const spent = num(p.spent);
                   const budget = num(p.budget);
                   return (
-                    <div key={p.id || idx} style={{ padding: '2px 0' }}>
+                    <div key={p.id || idx} onClick={() => handlePipelineClick(p.name)} style={{ padding: '6px 8px', borderRadius: 8, cursor: openCategoryNotes ? 'pointer' : 'default', transition: 'background 0.15s ease' }} title={openCategoryNotes ? ('点击查看「' + p.name + '」管线笔记') : undefined}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 5 }}>
                         <strong style={{ color: '#0f172a' }}>{p.name}</strong>
                         <span style={{ color: '#1e293b', fontWeight: 600 }}>
