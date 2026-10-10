@@ -53,11 +53,28 @@ async function accessToken() {
   if(!data.tenant_access_token) throw new Error('未获取到飞书访问凭证');
   return data.tenant_access_token;
 }
+function extractNoteId(r: unknown[], kind: string): string {
+  if (kind === 'notes') {
+    const raw = cellText(r[13]);
+    return /^[a-f\d]{24}$/i.test(raw) ? raw : '';
+  }
+  const raw6 = cellText(r[6]);
+  if (/^[a-f\d]{24}$/i.test(raw6)) return raw6;
+  const raw5 = cellText(r[5]);
+  if (/^[a-f\d]{24}$/i.test(raw5)) return raw5;
+  const linkVal = Array.isArray(r[5]) ? (r[5].find((x: any) => x?.link)?.link || '') : raw5;
+  const m = String(linkVal).match(/[a-f\d]{24}/i);
+  return m ? m[0] : '';
+}
+function cleanCategory(v: unknown): string {
+  const t = cellText(v);
+  return t && t !== '/' && t !== '-' ? t : '';
+}
 async function importNotes(rows: unknown[][], project: string, kind: string) {
  const notes = new Map<string, unknown[]>();
  for(const r of rows.slice(1)) {
-   const id=cellText(r[kind==='notes'?13:5]);
-   if(!/^[a-f\d]{24}$/i.test(id)) continue;
+   const id = extractNoteId(r, kind);
+   if(!id) continue;
    const previous=notes.get(id);
    if(!previous || kind!=='notes' || cellDate(r[3])>=cellDate(previous[3])) notes.set(id,r);
  }
@@ -68,7 +85,7 @@ async function importNotes(rows: unknown[][], project: string, kind: string) {
     const author=cellText(r[pgy?4:3]);
     const title=cellText(r[pgy?8:16]);
     const date=cellDate(r[pgy?11:4]);
-    const urlValue=r[pgy?9:6];
+    const urlValue=pgy ? r[9] : (r[5] || r[6]);
     const link=Array.isArray(urlValue)?urlValue.find(x=>x?.link)?.link:cellText(urlValue);
     const url=typeof link==='string' && /^https:\/\/(www\.)?xiaohongshu\.com\//.test(link)?link:`https://www.xiaohongshu.com/explore/${id}`;
     statements.push(db().prepare(`INSERT INTO notes(id,url,author,title,source_type,pipeline,level,product_scope,published_at,status)
@@ -95,7 +112,7 @@ async function importNotes(rows: unknown[][], project: string, kind: string) {
         note_type=COALESCE(NULLIF(excluded.note_type,''),note_profiles.note_type),
         category1=COALESCE(NULLIF(excluded.category1,''),note_profiles.category1),
         category2=COALESCE(NULLIF(excluded.category2,''),note_profiles.category2),updated_at=excluded.updated_at`)
-        .bind(id,cellText(r[7]),cellText(r[9]),(cellText(r[17]) || cellText(r[11])),(cellText(r[18]) || cellText(r[12])),new Date().toISOString()));
+        .bind(id,cellText(r[7]),cellText(r[9]),(cleanCategory(r[17]) || cleanCategory(r[11])),(cleanCategory(r[18]) || cleanCategory(r[12])),new Date().toISOString()));
     }
   }
   for(let i=0;i<statements.length;i+=150) await db().batch(statements.slice(i,i+150));

@@ -38,7 +38,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
   const fmtY=(v:number)=>v>=100000000?(v/100000000).toFixed(1)+'亿':v>=10000?(v/10000).toFixed(v>=1000000?0:1)+'w':Math.round(v).toString();
   const gradId = `trend-gradient-${chartId}`;
   const step = Math.max(1, Math.floor((data.length - 1) / 4));
-  const dateTicks = data.filter((_, i) => i === 0 || i === data.length - 1 || i % step === 0);
+  const dateTicks = data.filter((_, i) => i === 0 || i === data.length - 1 || (i % step === 0 && (data.length - 1 - i) >= Math.floor(step * 0.75)));
 
   return <div className="data-trend">
     <div className="data-trend-readout" aria-live="polite">
