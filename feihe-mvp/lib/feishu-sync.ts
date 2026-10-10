@@ -125,7 +125,9 @@ async function normalize(rows: unknown[][], sheet: SheetDefinition, project: str
     return aggregateAds(rows);
   }
   if(sheet.kind==='weekly') {
-    if(!cellText(rows[1]?.[15]).includes('信息流')) throw new Error('周投放表结构发生变化，请检查表头');
+    const isQ3 = cellText(rows[1]?.[15]).includes('信息流');
+    const isQ4 = cellText(rows[1]?.[17]).includes('信息流') || cellText(rows[0]?.[15]).includes('结算指标');
+    if(!isQ3 && !isQ4) throw new Error('周投放表结构发生变化，请检查表头');
     return parseWeekly(rows);
   }
   if(sheet.kind==='search') return parseSearch(rows);
