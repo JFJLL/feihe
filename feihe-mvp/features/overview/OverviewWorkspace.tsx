@@ -139,7 +139,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const [busy, setBusy] = useState(false);
   const [report, setReport] = useState('');
   const [error, setError] = useState('');
-  const { rows, daily, date, monthRows, quarterRows, monthDay, monthDays, quarterDay } = overviewPeriod(dashboard.feishu?.daily || [], selected);
+  const { rows, daily, date, monthRows, quarterRows, monthDay, monthDays, quarterDay, quarterName, quarterTotalDays, quarterStartZh } = overviewPeriod(dashboard.feishu?.daily || [], selected);
   const monthSpend = sumMetric(monthRows, 'actual_spend');
   const quarterSpend = sumMetric(quarterRows, 'actual_spend');
   const monthBudget = matchedBudget(monthRows);
@@ -259,11 +259,11 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   }
 
   return <div className="ops-workspace overview-colorful-page reference-workspace">
-    <PageHeader eyebrow="FEIHE · Q3 DASHBOARD" title={project?.name || '项目总览'} subtitle="2026年 Q3 · 小红书种草与电商引流 · 项目数据看板">
+    <PageHeader eyebrow={`FEIHE · ${quarterName} DASHBOARD`} title={project?.name || '项目总览'} subtitle={`2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`}>
       <div className="workspace-header-actions"><span className="overview-quarter-pill">投放截至 {date || '待同步'}</span><SyncButton projectId={projectId} onRefresh={onRefresh} /></div>
     </PageHeader>
     <WorkspaceModuleTabs tabs={[
-      { id: 'overview', title: '总览 · Q3累计全盘', desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
+      { id: 'overview', title: `总览 · ${quarterName}累计全盘`, desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
       { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
     ]} activeTab={tab} onChange={setTab} />
     <FeishuSources data={dashboard.feishu} projectId={projectId} />
@@ -286,7 +286,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       <Section tag="预算节奏" title="预算消耗节奏对比" tone="amber" hint="当月进度与季度全盘">
         {date ? <div className="budget-dual-grid">{[
           { title: `${Number(date.slice(5, 7))}月当月 · 截至${formatDateZh(date)}`, spend: monthSpend, budget: monthBudget, time: monthDay / monthDays * 100, days: `${monthDay}/${monthDays}`, tone: 'blue', count: monthRows.length },
-          { title: `Q3 累计 · 7月1日—${formatDateZh(date)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / 92 * 100, days: `${quarterDay}/92`, tone: 'purple', count: quarterRows.length },
+          { title: `${quarterName} 累计 · ${quarterStartZh}—${formatDateZh(date)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / quarterTotalDays * 100, days: `${quarterDay}/${quarterTotalDays}`, tone: 'purple', count: quarterRows.length },
         ].map(item => <div key={item.title} className={`budget-sub-card pastel-${item.tone}`}>
           <div className="sub-card-title"><strong>{item.title}</strong></div>
           <Progress label={`时间进度（${item.days} 天）`} value={item.time} tone="gray" />
@@ -299,7 +299,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       <Section tag="一、投流效率" title="KFS 投流与采买结构" tone="teal" hint="投流与达人采买分开展示">
         <div className="two-col-chart-grid" style={{ alignItems: 'stretch' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div className="chart-inner-panel"><div className="inner-head"><strong>信息流 / 搜索投流结构</strong><small>Q3 已同步日期</small></div>
+            <div className="chart-inner-panel"><div className="inner-head"><strong>信息流 / 搜索投流结构</strong><small>{quarterName} 已同步日期</small></div>
               {channelTotal ? <HorizontalBarList items={[{ label: '信息流 F', amount: num(feedSpend), pct: num(feedSpend) / channelTotal * 100, color: colors[0], subText: `¥${amount(feedSpend)}` }, { label: '搜索 S', amount: num(searchSpend), pct: num(searchSpend) / channelTotal * 100, color: colors[2], subText: `¥${amount(searchSpend)}` }]} /> : <EmptyState title="暂无投流结构" text="同步已填写的信息流与搜索消耗后显示。" />}
             </div>
             <div className="chart-inner-panel" style={{ flex: 1 }}>

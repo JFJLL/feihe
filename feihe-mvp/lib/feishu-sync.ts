@@ -14,7 +14,7 @@ type FeishuMemoryCache = { data: FeishuData; timestamp: number };
 const feishuDataCache = new Map<string, FeishuMemoryCache>();
 const FEISHU_CACHE_TTL = 120_000;
 const NORMALIZATION_VERSION = 3;
-const REPARSE_SHEETS = new Set(['FZqyGk', 'Kg5KCQ', 'RMwjy9', '3Wsban', '4bTvDu', 'ctIAHL']);
+const REPARSE_SHEETS = new Set(['FZqyGk', 'Kg5KCQ', 'RMwjy9', '3Wsban', '4bTvDu', 'ctIAHL', 'kMYs9o', 'loIsK8']);
 const NORMALIZATION_PREFIX = `v${NORMALIZATION_VERSION}:`;
 
 export function invalidateFeishuCache(project?: string) {
@@ -174,10 +174,16 @@ export async function readFeishuData(project: string, fresh = false): Promise<Fe
     return snapshot && !stale(snapshot) ? JSON.parse(snapshot.payload_json || '[]') || [] : [];
   };
   const ads=payload('1XSPsH') as Record<string,number|string|null>[];
-  const weekly=payload('kMYs9o') as Record<string,number|string|null>[];
+  const weeklyQ3=payload('kMYs9o') as Record<string,number|string|null>[];
+  const weeklyQ4=payload('loIsK8') as Record<string,number|string|null>[];
+  const weeklyCombinedMap=new Map<string, Record<string,number|string|null>>();
+  for (const r of [...weeklyQ3, ...weeklyQ4]) {
+    if (r?.date) weeklyCombinedMap.set(String(r.date), { ...(weeklyCombinedMap.get(String(r.date)) || {}), ...r });
+  }
+  const weekly=[...weeklyCombinedMap.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date)));
   const adMap=new Map(ads.map(r=>[String(r.date),r]));
   const dates=[...new Set([...ads,...weekly].map(r=>String(r.date)))].sort();
-  const weeklyMap=new Map(weekly.map(r=>[String(r.date),r]));
+  const weeklyMap=weeklyCombinedMap;
   const notes=payload('3Wsban') as {id:string;date:string}[];
   const daily=dates.map(date=>{
     const a=adMap.get(date),w=weeklyMap.get(date);

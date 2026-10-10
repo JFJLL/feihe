@@ -8,6 +8,7 @@ export const FEISHU_DOCUMENTS = [
   ] },
   { id: 'feishu-weekly-trend', title: '【飞鹤启萃】周趋势变化底表', wiki: 'SVwkw52kZiSlLEkQuaNcHvrynGg', sheets: [
     { id: 'kMYs9o', name: '【日更】A-kfsop周投资数据（Q3）', use: '项目总览：预算、星盟消耗、CPUV', end: 'BE', kind: 'weekly' },
+    { id: 'loIsK8', name: '【日更】A-kfsop周投资数据（Q4）', use: '项目总览：Q4预算、星盟消耗、CPUV', end: 'BE', kind: 'weekly' },
     { id: 'PNZ39H', name: '【日更】站内搜索指数@翠娴', use: '竞品分析：启萃灵犀/聚光搜索指数趋势', end: 'D', kind: 'search' },
     { id: 'Kg5KCQ', name: '【周五更】启萃日常周KPI监测表@翠娴', use: '项目总览：周度KPI达成率、I+TI人群、爆文率', end: 'AQ', kind: 'kpi_weekly' },
     { id: 'bBV9tp', name: '【月更】I+TI留存@翠娴', use: '项目总览：I+TI人群资产月度趋势', end: 'T', kind: 'iti_retention' },
@@ -134,15 +135,24 @@ export function aggregateAds(rows: unknown[][]) {
   return [...map.values()].sort((a,b)=>String(a.date).localeCompare(String(b.date))).map(p=>({...p,feed_ctr:Number(p.feedImpressions)>0?Number(p.feedClicks)/Number(p.feedImpressions)*100:null,search_ctr:Number(p.searchImpressions)>0?Number(p.searchClicks)/Number(p.searchImpressions)*100:null}));
 }
 export function parseWeekly(rows: unknown[][]) {
+  const header1_15 = cellText(rows[1]?.[15]);
+  const header1_17 = cellText(rows[1]?.[17]);
+  const header0_15 = cellText(rows[0]?.[15]);
+  const isQ4 = (header1_17.includes('信息流')) || (header0_15.includes('结算指标'));
+  const feedCols = isQ4 ? [17, 18, 29, 30] : [15, 16, 27, 28];
+  const searchCols = isQ4 ? [20, 32] : [18, 30];
+  const xhxCol = isQ4 ? 22 : 20;
+  const xhmCol = isQ4 ? 34 : 32;
+
   return rows.flatMap(r=>{
     const date=cellDate(r[1]);
-    const actual=[15,16,18,27,28,30].map(i=>cellNumber(r[i]));
+    const actual=[...feedCols, ...searchCols].map(i=>cellNumber(r[i]));
     if(!date || actual.every(n=>n===null)) return [];
-    const feed=(actual[0]??0)+(actual[1]??0)+(actual[3]??0)+(actual[4]??0);
-    const search=(actual[2]??0)+(actual[5]??0);
+    const feed=feedCols.reduce((sum, c) => sum + (cellNumber(r[c]) ?? 0), 0);
+    const search=searchCols.reduce((sum, c) => sum + (cellNumber(r[c]) ?? 0), 0);
     const plan=[7,8,9,10].map(i=>cellNumber(r[i]));
-    const planSpend=plan.every(n=>n===null)?null:plan.reduce<number>((a,b)=>a+(b??0),0);
-    return [{date,plan_spend:planSpend,actual_spend:feed+search,feed_spend:feed,search_spend:search,achieve_pct:planSpend?(feed+search)/planSpend*100:null,xhm_cpuv:cellNumber(r[32]),xhx_cpuv:cellNumber(r[20])}];
+    const planSpend=plan.some(n=>n!==null)?plan.reduce<number>((a,b)=>a+(b??0),0):(cellNumber(r[13]) ?? null);
+    return [{date,plan_spend:planSpend,actual_spend:feed+search,feed_spend:feed,search_spend:search,achieve_pct:planSpend?(feed+search)/planSpend*100:null,xhm_cpuv:cellNumber(r[xhmCol]),xhx_cpuv:cellNumber(r[xhxCol])}];
   }).sort((a,b)=>a.date.localeCompare(b.date));
 }
 

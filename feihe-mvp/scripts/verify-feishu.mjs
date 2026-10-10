@@ -11,11 +11,15 @@ try {
   const {overviewPeriod,sumMetric,finiteMetric,matchedBudget}=await vite.ssrLoadModule('/features/overview/overview-view-model.ts');
   const series=[{date:'2026-09-03',actual_spend:20,plan_spend:40},{date:'2026-07-01',actual_spend:10,plan_spend:20},{date:'2026-10-01',actual_spend:999}];
   const period=overviewPeriod(series,'');
-  assert.equal(period.date,'2026-09-03','latest date is sorted, outside-quarter data excluded');
-  assert.equal(period.quarterDay,65,'calendar progress includes dates without a data row');
-  assert.equal(period.monthDays,30);
-  assert.equal(sumMetric(period.quarterRows,'actual_spend'),30);
-  assert.equal(sumMetric(period.monthRows,'actual_spend'),20);
+  assert.equal(period.date,'2026-10-01','latest date is sorted and includes latest Q4 data');
+  assert.equal(period.quarterDay,1,'Q4 calendar progress includes dates without a data row');
+  assert.equal(period.monthDays,31);
+  assert.equal(period.quarterName,'Q4');
+  assert.equal(sumMetric(period.quarterRows,'actual_spend'),999);
+  assert.equal(sumMetric(period.monthRows,'actual_spend'),999);
+  const q3Period=overviewPeriod(series,'2026-09-03');
+  assert.equal(q3Period.quarterName,'Q3');
+  assert.equal(sumMetric(q3Period.quarterRows,'actual_spend'),30);
   assert.equal(overviewPeriod(series,'2026-07-01').quarterRows.length,1,'historical view excludes later spend');
   assert.equal(overviewPeriod([],'').daily,undefined,'empty source must not use demo data');
   assert.equal(sumMetric([{date:'2026-07-01',x:null}],'x'),null,'missing totals stay missing');
@@ -96,6 +100,7 @@ try {
     '3Wsban':[Array(40).fill('header'),pgy,historical], '4bTvDu':[Array(20).fill('header'),creator],
     '1XSPsH':[...ads,...Array.from({length:2100},()=>Array(44).fill(null)),ad(46269,'搜索推广',0,50,0)],
     'kMYs9o':[Array(57).fill(null),weekHead,weekly,future],
+    'loIsK8':[Array(57).fill(null),weekHead,weekly,future],
     'PNZ39H':[['周期','日期','灵犀','聚光'],['',46268,100,200]],
     '7XkqoO':[['人群','','新手妈妈'],['阶段','','孕期'],['痛点','','选奶'],['达人','','KOL']],
     '7G0dkc':[['阶段'],['孕期','妈妈','','','喂养','转奶','图文']],
@@ -133,7 +138,7 @@ try {
   assert.equal(sync.syncFeishuSpreadsheets('qicui'),first,'concurrent clicks must share one sync');
   const result=await first;
   assert.equal(result.ok,true,JSON.stringify(result.errors));
-  assert.equal(result.reports.length,24);assert.equal(result.sourcesUpdated,5);
+  assert.equal(result.reports.length,25);assert.equal(result.sourcesUpdated,5);
   assert.ok(ranges.some(r=>r.startsWith('1XSPsH!J2001:')),'read appended rows beyond old limits');
   assert.equal(result.latestDate,'2026-09-04','explicit zero row still counts');
   const dbmod=await vite.ssrLoadModule('/lib/db.ts');
