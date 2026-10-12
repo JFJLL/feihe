@@ -1,15 +1,19 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { apiUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const url = new URL(request.url);
+  const rawProject = url.searchParams.get('projectId');
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, rawProject, 'read')
+    : (await apiUser() ? { ok: true, status: 200, error: '', context: { projectId: String(rawProject || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
   await ensureSchema();
   const d1 = db();
-  const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
   const view = (url.searchParams.get('view') || 'registry').trim();
   const query = (url.searchParams.get('query') || '').trim();
   const from = (url.searchParams.get('from') || '').trim();

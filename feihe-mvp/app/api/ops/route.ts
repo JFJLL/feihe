@@ -1,4 +1,4 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { apiUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { DEFAULT_RULES } from '@/lib/classify';
 import { getSetting } from '@/lib/ops';
@@ -23,11 +23,15 @@ export function invalidateOpsCache(project?: string) {
 }
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const url = new URL(request.url);
+  const rawProject = url.searchParams.get('projectId');
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, rawProject, 'read')
+    : (await apiUser() ? { ok: true, status: 200, error: '', context: { projectId: String(rawProject || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
   await ensureSchema();
   const d1 = db();
-  const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
   const visibility = url.searchParams.get('visibility') || '';
   const fresh = url.searchParams.get('fresh') === '1' || Boolean(url.searchParams.get('_t'));
   const cacheKey = `ops:${project}:${visibility}`;

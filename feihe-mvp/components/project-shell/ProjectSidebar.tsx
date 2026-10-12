@@ -51,7 +51,15 @@ export function ProjectSidebar({
       />
 
       <nav className="project-main-nav" aria-label="项目模块">
-        {PROJECT_NAV_ITEMS.map((item) => {
+        {PROJECT_NAV_ITEMS.filter((item) => {
+          if (currentProject?.templateId === 'general_workbench') {
+            return item.id === 'overview' || item.id === 'settings';
+          }
+          if (currentProject?.templateId === 'comment_qc') {
+            return item.id === 'overview' || item.id === 'comments' || item.id === 'settings';
+          }
+          return true;
+        }).map((item) => {
           const href =
             item.path === ''
               ? '/projects/' + encodeURIComponent(projectId)

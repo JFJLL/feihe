@@ -1,15 +1,16 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
-import { projectId } from '@/lib/projects';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const params = new URL(request.url).searchParams;
+  const access = await requireProjectAccess(request, params.get('projectId'), 'read');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
   await ensureSchema();
   const d1 = db();
-  const params = new URL(request.url).searchParams;
-  const project = projectId(params.get('projectId'));
   const from = params.get('from');
   const to = params.get('to');
   const where = ['project_id=?'];
@@ -28,5 +29,6 @@ export async function GET(request: Request) {
     d1.prepare(`SELECT metric_date AS date, SUM(spend) AS spend, SUM(impressions) AS impressions, SUM(clicks) AS clicks,
       SUM(interactions) AS interactions FROM paid_ad_metrics${clause} GROUP BY metric_date ORDER BY metric_date`).bind(...values).all(),
   ]);
-  return Response.json({ ok: true, totals: totals || {}, accounts: byAccount.results || [], trend: byDate.results || [] });
+
+  return Response.json({ ok: true, totals, byAccount: byAccount.results, byDate: byDate.results });
 }

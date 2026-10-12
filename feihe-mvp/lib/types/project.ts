@@ -3,10 +3,10 @@ export type Row = Record<string, unknown>;
 export type Project = {
   id: string;
   name: string;
-  spu: string;
-  brand: string;
-  category: string;
-  description: string;
+  spu?: string;
+  brand?: string;
+  category?: string;
+  description?: string;
   status: string;
   color: string;
   startAt?: string;
@@ -14,6 +14,16 @@ export type Project = {
   updatedAt: string;
   noteCount: number;
   reportableCount: number;
+  orgId?: string;
+  departmentId?: string;
+  clientId?: string | null;
+  ownerId?: string;
+  templateId?: string;
+  isArchived?: number;
+  onboardingStatus?: string;
+  departmentName?: string;
+  clientName?: string;
+  templateName?: string;
 };
 
 export type Pipeline = {
@@ -391,6 +401,12 @@ export type Integration = {
 export type Workspace = {
   projects: Project[];
   sources: Source[];
+  metadata?: {
+    departments: Array<{ id: string; name: string }>;
+    clients: Array<{ id: string; name: string; industry?: string }>;
+    templates: Array<{ id: string; name: string; description: string; icon: string; modulesJson: string }>;
+    currentUser?: { userId: string; email: string; displayName: string; role: string };
+  };
 };
 
 export type IntegrationData = {

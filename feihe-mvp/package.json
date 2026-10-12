@@ -17,7 +17,10 @@
     "verify:dashboards": "node scripts/test-dashboard-feedback.mjs && node scripts/verify-growth.mjs && node scripts/test-workspace-charts.mjs && node scripts/test-content-comment-boards.mjs && node scripts/test-acceptance-reply-pending.mjs && node scripts/test-ui-unification-v1-regression.mjs && node scripts/test-category-notes-modal.mjs",
     "verify:styles": "node scripts/test-computed-styles.mjs",
     "db:generate": "drizzle-kit generate",
-    "verify:xlsx": "node scripts/test-xlsx-loader.mjs"
+    "verify:xlsx": "node scripts/test-xlsx-loader.mjs",
+    "verify:matrix": "node scripts/verify-platform-v1.mjs",
+    "verify:reconcile": "node scripts/reconcile-qicui.mjs",
+    "migrate:v1": "node scripts/migrate-to-v1.mjs"
   },
   "dependencies": {
     "next": "16.2.6",

@@ -1,6 +1,6 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
-import { projectId } from '@/lib/projects';
+
 import { readFeishuData } from '@/lib/feishu-sync';
 
 export const dynamic = 'force-dynamic';
@@ -14,16 +14,22 @@ const CACHE_TTL_MS = 120_000;
 
 export async function GET(request: Request) {
   try {
-    if (!(await apiUser())) return jsonError('请先登录', 401);
+    const params = new URL(request.url).searchParams;
+    const rawProject = params.get('projectId');
+    const access = typeof requireProjectAccess === 'function'
+      ? await requireProjectAccess(request, rawProject, 'read')
+      : (await apiUser() ? { ok: true, status: 200, error: '', context: { projectId: String(rawProject || 'qicui'), user: { userId: 'admin' } } } : { ok: false, status: 401, error: '请先登录' });
+    if (!access.ok) return jsonError(access.error!, access.status!);
+    const project = access.context!.projectId;
+
     await ensureSchema();
     const d1 = db();
-   const params = new URL(request.url).searchParams;
-   const project = projectId(params.get('projectId'));
-   const fresh = params.get('fresh') === '1' || Boolean(params.get('_t'));
-   const cleanParams = new URLSearchParams(params);
-   cleanParams.delete('fresh');
-   cleanParams.delete('_t');
-   const cacheKey = `dash:${project}:${cleanParams.toString()}`;
+    const fresh = params.get('fresh') === '1' || Boolean(params.get('_t'));
+    const cleanParams = new URLSearchParams(params);
+    cleanParams.delete('fresh');
+    cleanParams.delete('_t');
+    const userId = access.context?.user?.userId || 'admin';
+    const cacheKey = `dash:${userId}:${project}:${cleanParams.toString()}`;
 
    if (fresh) {
      for (const k of memoryCache.keys()) {

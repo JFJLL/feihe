@@ -1,4 +1,4 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema, DEFAULT_PROJECT_ID } from '@/lib/db';
 import { logAction } from '@/lib/ops';
 import { projectId } from '@/lib/projects';
@@ -8,9 +8,14 @@ const value=(input:unknown)=>String(input??'').trim();
 const number=(input:unknown,fallback=0)=>{const n=Number(input);return Number.isFinite(n)?n:fallback};
 
 export async function POST(request:Request){
-  const user=await apiUser(true);if(!user)return jsonError('请先登录',401);
-  try{
-    const body=await request.json() as Record<string,unknown>;const action=value(body.action);const project=projectId(body.projectId);const d1=db();await ensureSchema();const now=new Date().toISOString();
+  let body: Record<string, unknown> = {};
+  try { body = await request.json() as Record<string, unknown>; } catch { return jsonError('无效的请求体'); }
+  const action = value(body.action);
+  const access = await requireProjectAccess(request, body.projectId, action === 'project_delete' ? 'admin' : 'write');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+  const user = access.context!.user;
+  try {const d1=db();await ensureSchema();const now=new Date().toISOString();
     if(action==='project_delete'){
       if(project===DEFAULT_PROJECT_ID)return jsonError('默认项目不能删除，可将状态设为“已结束”');
       await d1.batch([

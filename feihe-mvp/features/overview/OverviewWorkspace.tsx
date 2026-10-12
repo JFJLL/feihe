@@ -18,6 +18,8 @@ import { KpiComparison } from './KpiComparison';
 import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
+import { OnboardingWizard } from '../onboarding/OnboardingWizard';
+import { GeneralWorkbenchBoard } from './GeneralWorkbenchBoard';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
 const formatDateZh = (val: string | null | undefined) => {
@@ -268,6 +270,16 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     ]} activeTab={tab} onChange={setTab} />
     <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
+    {project?.onboardingStatus !== 'ready' && (
+      <OnboardingWizard projectId={projectId} project={project} />
+    )}
+
+    {project?.templateId === 'general_workbench' ? (
+      <div className="overview-block-content" style={{ marginTop: 20 }}>
+        <GeneralWorkbenchBoard projectId={projectId} project={project} />
+      </div>
+    ) : (
+      <>
     {tab === 'overview' && <div className="overview-block-content">
       <section className="pastel-card health-overview-card">
         <div className="health-card-head"><span className="section-mini-tag tag-blue">决策层 · 今日指标与待办</span><span className="health-date-hint">投放 {date || '待同步'} · 笔记 {latestNoteDate || '待同步'}</span></div>
@@ -568,6 +580,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <p className="reference-note">投流消耗优先使用周投放表 F+S；聚光全量当日消耗 ¥{amount(daily.ads_spend)}，CTR、互动来自聚光全量样本，两者范围不同。缺失值显示 —。</p>
       </>}
     </div>}
+    </>
+    )}
 
     <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple"><div className="report-prompt"><textarea aria-label="报告需求" value={prompt} onChange={e => setPrompt(e.target.value)} /><button className="primary-btn" onClick={generate} disabled={busy || !prompt.trim()}>{busy ? '正在生成…' : '生成复盘报告'}</button></div>{error && <p role="alert">{error}</p>}{report && <Link href={`/api/report-html?id=${encodeURIComponent(report)}&projectId=${encodeURIComponent(projectId)}`} target="_blank">查看生成报告 →</Link>}</Section>
     {renderCategoryNotesModal()}

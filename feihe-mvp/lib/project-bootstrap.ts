@@ -18,7 +18,7 @@ export async function loadProjectBootstrap(projectId: string): Promise<ProjectBo
     const responses = await Promise.all([
       dashboard(new Request(`http://localhost/api/dashboard?${query}`)),
       operations(new Request(`http://localhost/api/ops?${query}`)),
-      workspace(),
+      workspace(new Request('http://localhost/api/projects')),
     ]);
     if (responses.some(response => !response.ok)) return null;
     const [dashboardData, ops, workspaceData] = await Promise.all([

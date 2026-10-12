@@ -1,6 +1,6 @@
 import { runtimeVars, warmWorkerEnv } from '@/lib/runtime-env';
 void warmWorkerEnv();
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
 import { buildQueryPlan, reportHtml, type MetricDefinition, type ReportSpec } from '@/lib/report-agent';
@@ -17,10 +17,11 @@ const number = (v: unknown) => Number(v || 0);
 const runtime = () => runtimeVars();
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
-  await ensureSchema();
   const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
+  const access = await requireProjectAccess(request, url.searchParams.get('projectId'), 'read');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+  await ensureSchema();
   const id = url.searchParams.get('id');
   const type = url.searchParams.get('type');
 
@@ -176,12 +177,14 @@ async function aiReviewInsight(prompt: string, result: { counts: Record<string, 
   } catch { return fallback; }
 }
 export async function POST(request: Request) {
-  const user = await apiUser(true);
-  if (!user) return jsonError('请先登录', 401);
+  let body: Record<string, unknown> = {};
+  try { body = await request.json() as Record<string, unknown>; } catch { return jsonError('无效的请求体'); }
+  const access = await requireProjectAccess(request, body.projectId, 'write');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+  const user = access.context!.user;
   try {
-    const body = await request.json() as Record<string, unknown>;
     const action = text(body.action) || 'generate';
-    const project = projectId(body.projectId);
     const d1 = db();
     await ensureSchema();
 

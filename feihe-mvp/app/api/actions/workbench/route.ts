@@ -1,4 +1,4 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
 import { ensureReviewTables, persistReviewBatch } from '@/lib/review-report';
@@ -8,13 +8,17 @@ import { logAction } from '@/lib/ops';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const url = new URL(request.url);
+  const rawProject = url.searchParams.get('projectId');
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, rawProject, 'read')
+    : (await apiUser() ? { ok: true, status: 200, error: '', context: { projectId: String(rawProject || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
   await ensureSchema();
   const d1 = db();
   await ensureReviewTables(d1);
-
-  const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
   const pageSize = Math.min(100, Math.max(1, parseInt(url.searchParams.get('pageSize') || '20', 10)));
   const offset = (page - 1) * pageSize;
@@ -279,21 +283,26 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: {
+    id?: string;
+    rawId?: string;
+    source?: 'key-comment' | 'review-batch';
+    action?: 'resolve' | 'delete' | 'recalculate';
+    method?: string;
+    projectId?: string;
+    date?: string;
+  } = {};
+  try { body = await request.json() as typeof body; } catch { return jsonError('无效的请求体'); }
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, body.projectId, 'write')
+    : (await apiUser(true) ? { ok: true, status: 200, error: '', context: { projectId: String(body.projectId || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
   await ensureSchema();
   const d1 = db();
   await ensureReviewTables(d1);
   try {
-    const body = await request.json() as {
-      id?: string;
-      rawId?: string;
-      source?: 'key-comment' | 'review-batch';
-      action?: 'resolve' | 'delete' | 'recalculate';
-      method?: string;
-      projectId?: string;
-      date?: string;
-    };
-    const project = projectId(body.projectId);
 
     if (body.action === 'recalculate') {
       const dateKey = (body.date || '').trim();
