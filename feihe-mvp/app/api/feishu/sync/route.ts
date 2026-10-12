@@ -61,6 +61,8 @@ export async function POST(request: Request) {
 
   let jobId = '';
   let sourceId = body.sourceId || '';
+  let sourceName = '飞书数据源';
+  let realSpreadsheetToken = '';
   const now = new Date().toISOString();
 
   // If sourceId is provided, enforce that the source belongs to the project
@@ -83,6 +85,7 @@ export async function POST(request: Request) {
     sheetId = sheetId || sourceRecord.sheet_id;
     kind = (sourceRecord.kind as ImportKind) || kind;
     rangeStr = sourceRecord.range || rangeStr;
+    sourceName = (sourceRecord as any).name || sourceName;
   } else {
     // If setting up ad-hoc spreadsheet without registered source, require manage permission
     if (!access.context!.canManage) {
@@ -110,26 +113,54 @@ export async function POST(request: Request) {
       throw new Error(tokenData.msg || '获取飞书访问凭证失败');
     }
 
-    const realSpreadsheetToken = await resolveSpreadsheetToken(spreadsheet, tokenData.tenant_access_token);
-    const range = `${sheetId}!${rangeStr}`;
-    const valuesResponse = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${realSpreadsheetToken}/values/${encodeURIComponent(range)}`, {
-      headers: { Authorization: `Bearer ${tokenData.tenant_access_token}` },
-    });
-    const valuesData = (await valuesResponse.json()) as { code?: number; msg?: string; data?: { valueRange?: { values?: unknown[][] } } };
-    if (!valuesResponse.ok || valuesData.code) {
-      throw new Error(valuesData.msg || '读取飞书表格失败');
-    }
+    const bitableMatch = spreadsheet.match(/(?:base|bitable)\/([a-zA-Z0-9_-]+)/);
+    const isBitable = Boolean(bitableMatch) || String(sourceId).includes("bitable");
+    let rows: ImportRow[] = [];
 
-    const values = valuesData.data?.valueRange?.values || [];
-    const headers = (values[0] || []).map(String);
-    const rows: ImportRow[] = values
-      .slice(1)
-      .filter((row) => row.some((cell) => String(cell ?? '').trim()))
-      .map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index] ?? ''])));
+    if (isBitable) {
+      const bitableAppToken = bitableMatch ? bitableMatch[1] : await resolveSpreadsheetToken(spreadsheet, tokenData.tenant_access_token);
+      let pageToken = "";
+      let hasMore = true;
+
+      while (hasMore && rows.length < 5000) {
+        const pageUrl = `https://open.feishu.cn/open-apis/bitable/v1/apps/${bitableAppToken}/tables/${sheetId}/records?page_size=100${pageToken ? `&page_token=${pageToken}` : ""}`;
+        const recRes = await fetch(pageUrl, {
+          headers: { Authorization: `Bearer ${tokenData.tenant_access_token}` },
+        });
+        const recData = (await recRes.json()) as { code?: number; msg?: string; data?: { has_more?: boolean; page_token?: string; items?: Array<{ fields?: Record<string, unknown> }> } };
+        if (!recRes.ok || recData.code) {
+          throw new Error(recData.msg || "读取飞书多维表格记录失败");
+        }
+        for (const item of recData.data?.items || []) {
+          if (item.fields && typeof item.fields === "object") {
+            rows.push(item.fields);
+          }
+        }
+        hasMore = Boolean(recData.data?.has_more);
+        pageToken = recData.data?.page_token || "";
+      }
+    } else {
+      realSpreadsheetToken = await resolveSpreadsheetToken(spreadsheet, tokenData.tenant_access_token);
+      const range = `${sheetId}!${rangeStr}`;
+      const valuesResponse = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${realSpreadsheetToken}/values/${encodeURIComponent(range)}`, {
+        headers: { Authorization: `Bearer ${tokenData.tenant_access_token}` },
+      });
+      const valuesData = (await valuesResponse.json()) as { code?: number; msg?: string; data?: { valueRange?: { values?: unknown[][] } } };
+      if (!valuesResponse.ok || valuesData.code) {
+        throw new Error(valuesData.msg || "读取飞书表格失败");
+      }
+
+      const values = valuesData.data?.valueRange?.values || [];
+      const headers = (values[0] || []).map(String);
+      rows = values
+        .slice(1)
+        .filter((row) => row.some((cell) => String(cell ?? "").trim()))
+        .map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index] ?? ""])));
+    }
 
     if (!rows.length) throw new Error('指定范围内没有可同步的数据');
 
-    const result = await importRows(kind, rows, true, project, sourceId || 'feishu_sync');
+    const result = await importRows(kind, rows, true, project, sourceId || 'feishu_sync', sourceName);
 
     await finishJob(jobId, { succeeded: result.imported, failed: result.skipped, message: `同步 ${result.imported} 条` });
     await logAction('飞书表格同步', kind, realSpreadsheetToken, `${sheetId} · ${result.imported} 条`, project);

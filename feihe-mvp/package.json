@@ -19,6 +19,7 @@
     "db:generate": "drizzle-kit generate",
     "verify:xlsx": "node scripts/test-xlsx-loader.mjs",
     "verify:matrix": "node scripts/verify-platform-v1.mjs",
+    "verify:closure": "node scripts/verify-frontend-closure.mjs",
     "verify:reconcile": "node scripts/reconcile-qicui.mjs",
     "migrate:v1": "node scripts/migrate-to-v1.mjs"
   },

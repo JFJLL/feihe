@@ -1,5 +1,15 @@
 import { db, ensureSchema } from '../db';
 
+
+export function isStatusCompleted(status: unknown): boolean {
+  const s = String(status ?? "").trim();
+  if (!s) return false;
+  if (/^(未完成|尚未完成|未开始|待开始|进行中|排队中|待处理|异常|失败)$/i.test(s) || /未完成|尚未完成|not done|unfinished/i.test(s)) {
+    return false;
+  }
+  return /^(已完成|完成|done|finished|已达成|已结项|外显成功|已外显)$/i.test(s) || /^完成$/i.test(s);
+}
+
 export type AggregationType = 'sum' | 'count' | 'distinct_count' | 'avg' | 'min' | 'max' | 'ratio';
 export type MetricStatus = 'ok' | 'zero' | 'empty' | 'missing_source' | 'zero_division' | 'error';
 
@@ -79,12 +89,151 @@ export async function computeMetric(
   const d1 = db();
 
   // 1. Check general dataset metrics first
-  const datasetRow = await d1.prepare('SELECT id, name FROM datasets WHERE project_id=? LIMIT 1').bind(projectId).first<{ id: string; name: string }>();
+  const datasetQuery = options.source
+    ? d1.prepare('SELECT id, name FROM datasets WHERE project_id=? AND (id=? OR source_id=?) LIMIT 1').bind(projectId, options.source, options.source)
+    : d1.prepare('SELECT id, name FROM datasets WHERE project_id=? ORDER BY row_count DESC, created_at ASC LIMIT 1').bind(projectId);
+  const datasetRow = await datasetQuery.first<{ id: string; name: string }>();
+
   if (datasetRow) {
-    const rows = await d1.prepare('SELECT row_key, data_json FROM dataset_rows WHERE dataset_id=?').bind(datasetRow.id).all<{ row_key: string; data_json: string }>();
-    const datasetItems = (rows.results || []).map(r => {
+    const rows = await d1.prepare('SELECT row_key, data_json FROM dataset_rows WHERE dataset_id=? ORDER BY rowid ASC').bind(datasetRow.id).all<{ row_key: string; data_json: string }>();
+    let datasetItems = (rows.results || []).map(r => {
       try { return JSON.parse(r.data_json); } catch { return {}; }
     });
+
+    // Apply time filters if requested
+    if (options.from || options.to) {
+      datasetItems = datasetItems.filter(item => {
+        const d = String(item['日期'] || item.date || item['时间'] || item.created_at || '').trim();
+        if (!d) return true;
+        if (options.from && d < options.from) return false;
+        if (options.to && d > options.to) return false;
+        return true;
+      });
+    }
+
+    // Check custom definition in metric_definitions
+    const customDef = await d1.prepare('SELECT * FROM metric_definitions WHERE project_id=? AND key=?').bind(projectId, metricKey).first<{
+      key: string;
+      name: string;
+      unit: string;
+      aggregation: string;
+      formula: string;
+      format: string;
+    }>();
+
+    if (customDef) {
+      const agg = customDef.aggregation || 'sum';
+      const formula = customDef.formula || customDef.name;
+      const unit = customDef.unit || '';
+      const format = customDef.format || 'number';
+
+      if (agg === 'ratio' || formula.includes('/')) {
+        const parts = formula.split('/').map(s => s.trim());
+        const numKey = parts[0] || '成交人数';
+        const denKey = parts[1] || '咨询人数';
+
+        let numSum = 0;
+        let denSum = 0;
+        for (const item of datasetItems) {
+          const nv = Number(String(item[numKey] ?? '').replace(/[,￥¥%]/g, ''));
+          const dv = Number(String(item[denKey] ?? '').replace(/[,￥¥%]/g, ''));
+          if (Number.isFinite(nv)) numSum += nv;
+          if (Number.isFinite(dv)) denSum += dv;
+        }
+
+        if (denSum === 0) {
+          return {
+            key: metricKey,
+            name: customDef.name,
+            unit: unit || '%',
+            value: null,
+            formattedValue: '—',
+            sampleSize: datasetItems.length,
+            numerator: numSum,
+            denominator: 0,
+            status: 'zero_division',
+            statusLabel: '分母为0，无法计算比率',
+          };
+        }
+
+        const ratio = (numSum / denSum) * 100;
+        let groups: Array<{ label: string; value: number | null; count: number }> | undefined;
+        if (options.groupBy) {
+          const gMap = new Map<string, { num: number; den: number; count: number }>();
+          for (const item of datasetItems) {
+            const g = String(item[options.groupBy] || '未分类');
+            const entry = gMap.get(g) || { num: 0, den: 0, count: 0 };
+            const nv = Number(String(item[numKey] ?? '').replace(/[,￥¥%]/g, ''));
+            const dv = Number(String(item[denKey] ?? '').replace(/[,￥¥%]/g, ''));
+            if (Number.isFinite(nv)) entry.num += nv;
+            if (Number.isFinite(dv)) entry.den += dv;
+            entry.count += 1;
+            gMap.set(g, entry);
+          }
+          groups = Array.from(gMap.entries()).map(([label, st]) => ({
+            label,
+            value: st.den > 0 ? (st.num / st.den) * 100 : null,
+            count: st.count,
+          }));
+        }
+
+        return {
+          key: metricKey,
+          name: customDef.name,
+          unit: unit || '%',
+          value: ratio,
+          formattedValue: formatMetricValue(ratio, 'percent', '%'),
+          sampleSize: datasetItems.length,
+          numerator: numSum,
+          denominator: denSum,
+          groups,
+          status: 'ok',
+          statusLabel: '计算完成',
+        };
+      }
+
+      // Sum / Avg / Count
+      let totalVal = 0;
+      let validCount = 0;
+      for (const item of datasetItems) {
+        const v = Number(String(item[formula] ?? '').replace(/[,￥¥%]/g, ''));
+        if (Number.isFinite(v)) {
+          totalVal += v;
+          validCount += 1;
+        }
+      }
+
+      const finalVal = agg === 'avg' ? (validCount > 0 ? totalVal / validCount : 0) : agg === 'count' ? datasetItems.length : totalVal;
+      let groups: Array<{ label: string; value: number | null; count: number }> | undefined;
+      if (options.groupBy) {
+        const gMap = new Map<string, { sum: number; count: number }>();
+        for (const item of datasetItems) {
+          const g = String(item[options.groupBy] || '未分类');
+          const entry = gMap.get(g) || { sum: 0, count: 0 };
+          const v = Number(String(item[formula] ?? '').replace(/[,￥¥%]/g, ''));
+          if (Number.isFinite(v)) entry.sum += v;
+          entry.count += 1;
+          gMap.set(g, entry);
+        }
+        groups = Array.from(gMap.entries()).map(([label, st]) => ({
+          label,
+          value: agg === 'avg' ? (st.count > 0 ? st.sum / st.count : 0) : st.sum,
+          count: st.count,
+        }));
+      }
+
+      return {
+        key: metricKey,
+        name: customDef.name,
+        unit,
+        value: finalVal,
+        formattedValue: formatMetricValue(finalVal, format, unit),
+        sampleSize: datasetItems.length,
+        groups,
+        status: datasetItems.length > 0 ? 'ok' : 'empty',
+        statusLabel: '计算完成',
+      };
+    }
 
     if (metricKey === 'task_total') {
       const count = datasetItems.length;
@@ -102,8 +251,8 @@ export async function computeMetric(
 
     if (metricKey === 'task_completed') {
       const completed = datasetItems.filter(item => {
-        const s = String(item.status || item['状态'] || item.state || '').trim();
-        return /已完成|完成|done|finished/i.test(s);
+        const s = item.status || item['状态'] || item.state;
+        return isStatusCompleted(s);
       }).length;
       return {
         key: metricKey,
@@ -134,8 +283,8 @@ export async function computeMetric(
         };
       }
       const completed = datasetItems.filter(item => {
-        const s = String(item.status || item['状态'] || item.state || '').trim();
-        return /已完成|完成|done|finished/i.test(s);
+        const s = item.status || item['状态'] || item.state;
+        return isStatusCompleted(s);
       }).length;
       const rate = (completed / total) * 100;
       return {
@@ -148,6 +297,94 @@ export async function computeMetric(
         numerator: completed,
         denominator: total,
         status: completed === 0 ? 'zero' : 'ok',
+        statusLabel: '计算完成',
+      };
+    }
+
+    // Dynamic field detection for consultation/conversion
+    if (metricKey === 'consultation_total' || metricKey === 'inquiry_total' || metricKey === '咨询人数') {
+      const total = datasetItems.reduce((acc, it) => acc + (Number(it['咨询人数'] ?? it.inquiries ?? it.consultations ?? 0) || 0), 0);
+      return {
+        key: metricKey,
+        name: '总咨询人数',
+        unit: '人',
+        value: total,
+        formattedValue: formatMetricValue(total, 'number', '人'),
+        sampleSize: datasetItems.length,
+        status: datasetItems.length > 0 ? 'ok' : 'empty',
+        statusLabel: '计算完成',
+      };
+    }
+
+    if (metricKey === 'conversion_total' || metricKey === 'order_total' || metricKey === '成交人数') {
+      const total = datasetItems.reduce((acc, it) => acc + (Number(it['成交人数'] ?? it.orders ?? it.conversions ?? 0) || 0), 0);
+      return {
+        key: metricKey,
+        name: '总成交人数',
+        unit: '人',
+        value: total,
+        formattedValue: formatMetricValue(total, 'number', '人'),
+        sampleSize: datasetItems.length,
+        status: datasetItems.length > 0 ? 'ok' : 'empty',
+        statusLabel: '计算完成',
+      };
+    }
+
+    if (metricKey === 'conversion_rate' || metricKey === '成交率') {
+      let inqTotal = 0;
+      let convTotal = 0;
+      for (const it of datasetItems) {
+        const inq = Number(it['咨询人数'] ?? it.inquiries ?? 0);
+        const conv = Number(it['成交人数'] ?? it.orders ?? 0);
+        if (Number.isFinite(inq)) inqTotal += inq;
+        if (Number.isFinite(conv)) convTotal += conv;
+      }
+      if (inqTotal === 0) {
+        return {
+          key: metricKey,
+          name: '成交率',
+          unit: '%',
+          value: null,
+          formattedValue: '—',
+          sampleSize: datasetItems.length,
+          numerator: convTotal,
+          denominator: 0,
+          status: 'zero_division',
+          statusLabel: '咨询人数为0，无法计算成交率',
+        };
+      }
+      const rate = (convTotal / inqTotal) * 100;
+      let groups: Array<{ label: string; value: number | null; count: number }> | undefined;
+      if (options.groupBy) {
+        const gMap = new Map<string, { inq: number; conv: number; count: number }>();
+        for (const it of datasetItems) {
+          const g = String(it[options.groupBy] || '未分类');
+          const entry = gMap.get(g) || { inq: 0, conv: 0, count: 0 };
+          const inq = Number(it['咨询人数'] ?? it.inquiries ?? 0);
+          const conv = Number(it['成交人数'] ?? it.orders ?? 0);
+          if (Number.isFinite(inq)) entry.inq += inq;
+          if (Number.isFinite(conv)) entry.conv += conv;
+          entry.count += 1;
+          gMap.set(g, entry);
+        }
+        groups = Array.from(gMap.entries()).map(([label, st]) => ({
+          label,
+          value: st.inq > 0 ? (st.conv / st.inq) * 100 : null,
+          count: st.count,
+        }));
+      }
+
+      return {
+        key: metricKey,
+        name: '成交率',
+        unit: '%',
+        value: rate,
+        formattedValue: rate.toFixed(1) + '%',
+        sampleSize: datasetItems.length,
+        numerator: convTotal,
+        denominator: inqTotal,
+        groups,
+        status: 'ok',
         statusLabel: '计算完成',
       };
     }

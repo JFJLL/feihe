@@ -18,6 +18,44 @@ export async function GET(request?: Request) {
   await ensureSchema();
   const d1 = db();
 
+  const url = request ? new URL(request.url) : null;
+  const targetProjectId = url?.searchParams.get('projectId');
+  if (targetProjectId) {
+    const access = await requireProjectAccess(request!, targetProjectId, 'read');
+    if (!access.ok) return jsonError(access.error!, access.status!);
+    const pId = access.context!.projectId;
+
+    const [project, members, availableUsers, onboarding] = await Promise.all([
+      d1.prepare(`SELECT p.id, p.name, p.spu, p.brand, p.category, p.description, p.status, p.color,
+        p.start_at AS startAt, p.end_at AS endAt, p.org_id AS orgId, p.department_id AS departmentId,
+        p.client_id AS clientId, p.owner_id AS ownerId, p.template_id AS templateId,
+        p.is_archived AS isArchived, p.onboarding_status AS onboardingStatus,
+        p.updated_at AS updatedAt,
+        d.name AS departmentName, c.name AS clientName, t.name AS templateName
+        FROM projects p
+        LEFT JOIN departments d ON d.id=p.department_id
+        LEFT JOIN clients c ON c.id=p.client_id
+        LEFT JOIN project_templates t ON t.id=p.template_id
+        WHERE p.id=?`).bind(pId).first(),
+      d1.prepare(`SELECT pm.id, pm.project_id AS projectId, pm.user_id AS userId, pm.role,
+        COALESCE(u.name, pm.user_id) AS name, COALESCE(u.email, '') AS email, u.department_id AS departmentId
+        FROM project_members pm
+        LEFT JOIN users u ON u.id=pm.user_id
+        WHERE pm.project_id=? ORDER BY pm.created_at ASC`).bind(pId).all(),
+      d1.prepare('SELECT id, name, email, role, department_id AS departmentId FROM users ORDER BY name').all(),
+      d1.prepare('SELECT current_step AS currentStep, completed_steps_json AS completedStepsJson, selected_template_id AS selectedTemplateId FROM project_onboarding WHERE project_id=?').bind(pId).first(),
+    ]);
+
+    return Response.json({
+      ok: true,
+      project,
+      members: members.results || [],
+      availableUsers: availableUsers.results || [],
+      onboarding,
+      currentUser: access.context!.user,
+    });
+  }
+
   const isPlatformAdmin = user.role === 'platform_admin';
   const filterClause = isPlatformAdmin
     ? '1=1'
@@ -203,29 +241,65 @@ export async function POST(request: Request) {
 
   const id = access.context!.projectId;
 
+  if (action === 'update_onboarding') {
+    const statusVal = text(body.onboardingStatus) || 'ready';
+    await d1.prepare(`UPDATE projects SET onboarding_status=?, updated_at=? WHERE id=?`).bind(statusVal, now, id).run();
+    await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json='["template","source","first_sync","metrics","members"]', updated_at=? WHERE project_id=?`).bind(now, id).run();
+    return Response.json({ ok: true, id, onboardingStatus: statusVal });
+  }
+
   if (action === 'update') {
+    if (body.onboardingStatus !== undefined && body.name === undefined) {
+      const statusVal = text(body.onboardingStatus) || 'ready';
+      await d1.prepare(`UPDATE projects SET onboarding_status=?, updated_at=? WHERE id=?`).bind(statusVal, now, id).run();
+      await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json='["template","source","first_sync","metrics","members"]', updated_at=? WHERE project_id=?`).bind(now, id).run();
+      return Response.json({ ok: true, id, onboardingStatus: statusVal });
+    }
+
+    const existing = await d1.prepare('SELECT * FROM projects WHERE id=?').bind(id).first<Record<string, unknown>>();
+    if (!existing) return jsonError('项目不存在', 404);
+
+    const name = body.name !== undefined ? text(body.name) : (existing.name as string);
+    const spu = body.spu !== undefined ? text(body.spu) : (existing.spu as string);
+    const brand = body.brand !== undefined ? text(body.brand) : (existing.brand as string);
+    const category = body.category !== undefined ? text(body.category) : (existing.category as string);
+    const description = body.description !== undefined ? text(body.description) : (existing.description as string);
+    const status = body.status !== undefined ? text(body.status) : (existing.status as string);
+    const color = body.color !== undefined ? text(body.color) : (existing.color as string);
+    const departmentId = body.departmentId !== undefined ? text(body.departmentId) : (existing.department_id as string);
+    const clientId = body.clientId !== undefined ? text(body.clientId) || null : (existing.client_id as string | null);
+    const ownerId = body.ownerId !== undefined ? text(body.ownerId) : (existing.owner_id as string);
+    const startAt = body.startAt !== undefined ? text(body.startAt) || null : (existing.start_at as string | null);
+    const endAt = body.endAt !== undefined ? text(body.endAt) || null : (existing.end_at as string | null);
+    const onboardingStatus = body.onboardingStatus !== undefined ? text(body.onboardingStatus) : (existing.onboarding_status as string);
+
     await d1
       .prepare(
         `UPDATE projects SET name=?, spu=?, brand=?, category=?, description=?, status=?, color=?,
-        department_id=?, client_id=?, owner_id=?, start_at=?, end_at=?, updated_at=? WHERE id=?`
+        department_id=?, client_id=?, owner_id=?, start_at=?, end_at=?, onboarding_status=?, updated_at=? WHERE id=?`
       )
       .bind(
-        text(body.name),
-        text(body.spu),
-        text(body.brand),
-        text(body.category),
-        text(body.description),
-        text(body.status) || '进行中',
-        text(body.color) || '#1769d5',
-        text(body.departmentId) || 'dept-general',
-        text(body.clientId) || null,
-        text(body.ownerId) || access.context!.user.userId,
-        text(body.startAt) || null,
-        text(body.endAt) || null,
+        name,
+        spu,
+        brand,
+        category,
+        description,
+        status || '进行中',
+        color || '#1769d5',
+        departmentId || 'dept-general',
+        clientId,
+        ownerId || access.context!.user.userId,
+        startAt,
+        endAt,
+        onboardingStatus || 'pending',
         now,
         id
       )
       .run();
+
+    if (body.onboardingStatus === 'ready') {
+      await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json='["template","source","first_sync","metrics","members"]', updated_at=? WHERE project_id=?`).bind(now, id).run();
+    }
     return Response.json({ ok: true, id });
   }
 
@@ -314,12 +388,15 @@ export async function POST(request: Request) {
       return Response.json({ ok: true, removed: true });
     }
 
-    await d1
-      .prepare(`INSERT INTO project_members(id, project_id, user_id, role, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET role=excluded.role, updated_at=excluded.updated_at`)
-      .bind(`${id}:${targetUserId}`, id, targetUserId, role, now, now)
-      .run();
-
-    return Response.json({ ok: true, memberId: `${id}:${targetUserId}`, role });
+    const existingMem = await d1.prepare('SELECT id FROM project_members WHERE project_id=? AND user_id=?').bind(id, targetUserId).first<{ id: string }>();
+    if (existingMem) {
+      await d1.prepare('UPDATE project_members SET role=?, updated_at=? WHERE id=?').bind(role, now, existingMem.id).run();
+      return Response.json({ ok: true, memberId: existingMem.id, role });
+    } else {
+      const newId = `${id}:${targetUserId}`;
+      await d1.prepare('INSERT INTO project_members(id, project_id, user_id, role, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?)').bind(newId, id, targetUserId, role, now, now).run();
+      return Response.json({ ok: true, memberId: newId, role });
+    }
   }
 
   return jsonError('不支持的操作');

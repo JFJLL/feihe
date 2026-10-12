@@ -8,6 +8,7 @@ import { EmptyState } from '../../../components/ui/EmptyState';
 import { ErrorState } from '../../../components/ui/ErrorState';
 import { LoadingState } from '../../../components/ui/LoadingState';
 import { MetricCard } from '../../../components/ui/operations/MetricCard';
+import { CustomSelect } from '../../../components/ui/CustomSelect';
 import { api, cnTime } from '../../../lib/hooks/use-project-data';
 
 const emptySource: Record<string, unknown> = {
@@ -270,28 +271,32 @@ export function SettingsDataSources({
                     onChange={(e) => setSource({ ...source, name: e.target.value })}
                   />
                 </label>
-                <label>
-                  数据用途
-                  <select
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <span>数据用途</span>
+                  <CustomSelect
                     value={String(source.kind || 'general')}
-                    onChange={(e) => setSource({ ...source, kind: e.target.value })}
-                  >
-                    <option value="general">通用表格数据集（任务、活动、预算）</option>
-                    <option value="owned">发布进度 / 自有笔记</option>
-                    <option value="supplier">供应商评论交付</option>
-                    <option value="competitor">竞品监测数据</option>
-                  </select>
+                    onChange={(val) => setSource({ ...source, kind: val })}
+                    options={[
+                      { value: 'general', label: '通用表格数据集（任务、活动、预算）', badge: '通用' },
+                      { value: 'owned', label: '发布进度 / 自有笔记', badge: '内容' },
+                      { value: 'supplier', label: '供应商评论交付', badge: '评论' },
+                      { value: 'competitor', label: '竞品监测数据', badge: '竞品' },
+                    ]}
+                    style={{ width: '100%' }}
+                  />
                 </label>
-                <label>
-                  同步策略
-                  <select
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <span>同步策略</span>
+                  <CustomSelect
                     value={String(source.syncFrequency || 'manual')}
-                    onChange={(e) => setSource({ ...source, syncFrequency: e.target.value })}
-                  >
-                    <option value="manual">手动同步（已就绪）</option>
-                    <option value="hourly">每小时自动同步（调度待部署启用）</option>
-                    <option value="daily">每日自动同步（调度待部署启用）</option>
-                  </select>
+                    onChange={(val) => setSource({ ...source, syncFrequency: val })}
+                    options={[
+                      { value: 'manual', label: '手动同步 (已就绪)', color: '#16a34a' },
+                      { value: 'hourly', label: '每小时自动 (调度待启用)', color: '#d97706' },
+                      { value: 'daily', label: '每日自动 (调度待启用)', color: '#64748b' },
+                    ]}
+                    style={{ width: '100%' }}
+                  />
                 </label>
 
                 <label className="full">
@@ -314,25 +319,28 @@ export function SettingsDataSources({
                   </div>
                 </label>
 
-                <label>
-                  工作表 ID (Sheet ID)
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <span>工作表 ID (Sheet / Table ID)</span>
                   {detectedSheets.length > 0 ? (
-                    <select
+                    <CustomSelect
                       value={String(source.sheetId || '')}
-                      onChange={(e) => setSource({ ...source, sheetId: e.target.value })}
-                    >
-                      <option value="">-- 请选择工作表 --</option>
-                      {detectedSheets.map((s) => (
-                        <option key={s.sheetId} value={s.sheetId}>
-                          {s.title} ({s.sheetId})
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(val) => setSource({ ...source, sheetId: val })}
+                      placeholder="-- 请选择工作表 / 数据表 --"
+                      options={[
+                        { value: '', label: '-- 请选择工作表 / 数据表 --' },
+                        ...detectedSheets.map((s) => ({
+                          value: s.sheetId,
+                          label: `${s.title} (${s.sheetId})`,
+                        })),
+                      ]}
+                      style={{ width: '100%' }}
+                    />
                   ) : (
                     <input
                       value={String(source.sheetId || '')}
-                      placeholder="例如：kMYs9o 或点击上方检测自动填入"
+                      placeholder="例如：kMYs9o 或点击上方智能检测自动填入"
                       onChange={(e) => setSource({ ...source, sheetId: e.target.value })}
+                      style={{ height: 38, padding: '0 12px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 13 }}
                     />
                   )}
                 </label>

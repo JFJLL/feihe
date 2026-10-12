@@ -19,8 +19,9 @@ export async function GET(request: Request) {
     const source = url.searchParams.get('source') || undefined;
     const status = url.searchParams.get('status') || undefined;
     const scope = url.searchParams.get('scope') || undefined;
+    const groupBy = url.searchParams.get('groupBy') || undefined;
 
-    const result = await computeMetric(project, key, { from, to, source, status, scope });
+    const result = await computeMetric(project, key, { from, to, source, status, scope, groupBy });
     return Response.json({ ok: true, metric: result });
   }
 

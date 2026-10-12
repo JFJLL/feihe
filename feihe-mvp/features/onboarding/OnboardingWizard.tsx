@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from '../../components/ui/AppLink';
 import type { Project } from '../../lib/types/project';
 import { api } from '../../lib/hooks/use-project-data';
+import { useProject } from '../../components/project-shell/ProjectContext';
 
 interface Step {
   id: string;
@@ -25,49 +26,102 @@ export function OnboardingWizard({
   role?: string;
   onFinish?: () => Promise<void>;
 }) {
+  const { showToast } = useProject();
   const [busy, setBusy] = useState(false);
   const [completed, setCompleted] = useState<string[]>(['template']);
+  const [feedback, setFeedback] = useState<string>('');
+
+  // Compute dynamic onboarding progress from real resources
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      api<{ ok: boolean; sources?: Array<{ lastSyncedAt?: string; lastRowCount?: number }> }>(`/api/projects`),
+      api<{ ok: boolean; datasets?: Array<{ rowCount: number }> }>(`/api/datasets?projectId=${encodeURIComponent(projectId)}`),
+      api<{ ok: boolean; members?: unknown[]; onboarding?: { completedStepsJson?: string } }>(`/api/projects?projectId=${encodeURIComponent(projectId)}`),
+    ]).then(([ws, ds, pDetail]) => {
+      if (cancelled) return;
+      const done = new Set<string>(['template']);
+      const projectSources = (ws.sources || []).filter((s: any) => s.projectId === projectId);
+      const datasets = ds.datasets || [];
+      const members = pDetail.members || [];
+
+      if (projectSources.length > 0 || datasets.length > 0) {
+        done.add('source');
+      }
+      if (datasets.some(d => d.rowCount > 0) || projectSources.some(s => Boolean(s.lastSyncedAt))) {
+        done.add('first_sync');
+      }
+      if (datasets.length > 0 || project?.templateId === 'general_workbench') {
+        done.add('metrics');
+      }
+      if (members.length > 0) {
+        done.add('members');
+      }
+
+      // Merge saved steps if available
+      if (pDetail.onboarding?.completedStepsJson) {
+        try {
+          const saved = JSON.parse(pDetail.onboarding.completedStepsJson);
+          if (Array.isArray(saved)) saved.forEach(s => done.add(s));
+        } catch {}
+      }
+
+      setCompleted(Array.from(done));
+    }).catch(() => {});
+
+    return () => { cancelled = true; };
+  }, [projectId, project?.templateId]);
+
+  const templateTitle =
+    project?.templateName ||
+    (project?.templateId === 'general_workbench'
+      ? '通用数据工作台'
+      : project?.templateId === 'comment_qc'
+      ? '评论质检项目'
+      : project?.templateId === 'ad_performance'
+      ? '投放分析项目'
+      : '内容营销项目');
 
   const steps: Step[] = [
     {
       id: 'template',
       title: '1. 业务模板确认',
-      desc: `已选择「${project?.templateName || (project?.templateId === 'general_workbench' ? '通用数据工作台' : project?.templateId === 'comment_qc' ? '评论质检项目' : project?.templateId === 'ad_performance' ? '投放分析项目' : '内容营销项目') }」`,
+      desc: `已选定「${templateTitle}」，定义项目推荐指标与看板结构。`,
       unlockedAbility: '确立项目数据边界、推荐指标集与默认看板布局。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings`,
-      linkLabel: '查看模板设定',
+      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=profile`,
+      linkLabel: '查看项目设定',
     },
     {
       id: 'source',
       title: '2. 接入业务数据源',
-      desc: '绑定飞书表格、多维表格或本地文件，无需技术人员介入。',
-      unlockedAbility: '建立项目数据管道，为指标计算提供原始快照。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings`,
+      desc: '绑定飞书表格、多维表格或业务数据，无需技术人员写代码。',
+      unlockedAbility: '建立项目专属数据管道，隔离不同来源与客户数据。',
+      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`,
       linkLabel: '接入飞书数据源',
     },
     {
       id: 'first_sync',
       title: '3. 字段映射与首次同步',
-      desc: '确认主键、时间字段、数值类型与空值策略，触发首次安全同步。',
-      unlockedAbility: '生成结构化业务数据集，留存版本快照与血缘记录。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings`,
-      linkLabel: '配置字段映射',
+      desc: '确认数据类型、主键与空值策略，执行安全来源级同步。',
+      unlockedAbility: '生成结构化数据集，留存版本快照与血缘记录。',
+      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`,
+      linkLabel: '配置字段与同步',
     },
     {
       id: 'metrics',
       title: '4. 确认指标与发布看板',
-      desc: '根据数据类型计算关键指标，生成适合业务角色的看板卡片。',
-      unlockedAbility: '获得实时更新的动态看板，支持周期对比与异常告警。',
+      desc: '根据业务字段计算求和、比率与分组，自定义卡片与看板。',
+      unlockedAbility: '获得动态更新的业务看板，支持卡片增删与指标切换。',
       link: `/projects/${encodeURIComponent(projectId)}`,
-      linkLabel: '查看看板效果',
+      linkLabel: '查看看板与配置',
     },
     {
       id: 'members',
       title: '5. 邀请团队成员协作',
-      desc: '按管理员、编辑者、只读成员划分权限，隔离敏感凭证。',
+      desc: '按项目管理员、编辑者、只读成员划分权限，隔离敏感凭证。',
       unlockedAbility: '多人协同查看数据、处置异常与导出经营报告。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings`,
-      linkLabel: '分配成员角色',
+      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=members`,
+      linkLabel: '管理团队成员',
     },
   ];
 
@@ -75,21 +129,28 @@ export function OnboardingWizard({
 
   async function markFinished() {
     setBusy(true);
+    setFeedback('');
     try {
       await api('/api/projects', {
         method: 'POST',
         body: JSON.stringify({
-          action: 'update',
+          action: 'update_onboarding',
           projectId,
           onboardingStatus: 'ready',
         }),
       });
+      showToast('项目初始化已完成，已正式就绪！', 'success');
+      setFeedback('初始化完成！项目已进入就绪状态。');
       await onFinish();
-      window.location.reload();
-    } catch {
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '初始化失败';
+      setFeedback(msg);
+      showToast(msg, 'error');
+    } finally {
       setBusy(false);
     }
   }
+
   return (
     <div
       style={{
@@ -114,6 +175,11 @@ export function OnboardingWizard({
               ? '您是当前项目的管理员，具备完整的数据接入、指标配置与成员邀请权限。'
               : '您当前为业务协作成员，可查看数据并执行允许的业务操作。如需接入新数据源请联系项目管理员。'}
           </p>
+          {feedback && (
+            <div style={{ marginTop: 8, fontSize: 12, color: feedback.includes('失败') ? '#ef4444' : '#16a34a' }}>
+              {feedback}
+            </div>
+          )}
         </div>
 
         <div style={{ display: 'flex', gap: 10 }}>
@@ -129,10 +195,11 @@ export function OnboardingWizard({
                 padding: '8px 16px',
                 fontWeight: 600,
                 fontSize: 13,
-                cursor: 'pointer',
+                cursor: busy ? 'default' : 'pointer',
+                opacity: busy ? 0.7 : 1,
               }}
             >
-              {busy ? '正在完成…' : '完成初始化（发布项目）'}
+              {busy ? '正在就绪…' : '完成初始化（发布项目）'}
             </button>
           )}
         </div>

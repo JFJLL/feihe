@@ -2,8 +2,9 @@ import { db, ensureSchema } from './db';
 import { noteIdFrom } from './store';
 import { projectId } from './projects';
 import { validBrand } from './brand-validation';
+import { saveDataset } from './datasets';
 
-export type ImportKind = 'owned' | 'supplier' | 'dataset';
+export type ImportKind = 'owned' | 'supplier' | 'dataset' | 'general';
 export type ImportRow = Record<string, unknown>;
 const value = (row: ImportRow, names: string[]) => { for (const name of names) if (row[name] != null) return String(row[name]); return ''; };
 const number = (row: ImportRow, names: string[]) => { const result = Number(value(row, names).replace(/[,￥¥%]/g, '')); return Number.isFinite(result) ? result : 0; };
@@ -13,13 +14,19 @@ export async function importRows(
   input: ImportRow[],
   replaceSupplier = true,
   project = '',
-  sourceId = 'default_supplier'
+  sourceId = 'default_supplier',
+  sourceName = '通用业务数据'
 ) {
   const rows = input;
   await ensureSchema();
   const d1 = db();
   const currentProject = projectId(project, false);
   if (!currentProject) throw new Error('缺少项目 ID (projectId 必填)');
+
+  if (kind === 'dataset' || kind === 'general') {
+    const dataset = await saveDataset(currentProject, sourceId, sourceName, rows);
+    return { imported: dataset.rowCount, skipped: 0, total: rows.length };
+  }
 
   let imported = 0;
   let skipped = 0;

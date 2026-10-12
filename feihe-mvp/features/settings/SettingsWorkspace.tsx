@@ -7,6 +7,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { ProjectProfile } from './ProjectProfile';
+import { MemberManagement } from './members/MemberManagement';;
 import { RulesAndTargets } from './RulesAndTargets';
 import { SettingsDataSources } from './data-sources/SettingsDataSources';
 import { SettingsIntegrations } from './integrations/SettingsIntegrations';
@@ -49,7 +50,7 @@ export function SettingsWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean; throwOnError?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('profile', ['profile', 'rules', 'data-sources', 'integrations', 'data-map']);
+  const [tab, setTab] = useProjectTab('profile', ['profile', 'members', 'rules', 'data-sources', 'integrations', 'data-map']);
   const { currentProject, workspace, refreshWorkspace, showToast } = useProject();
 
   // Per-project visited tabs set: lazy-mounts on first visit, preserves drafts thereafter.
@@ -99,10 +100,12 @@ export function SettingsWorkspace({
     await onRefresh({ fresh: true });
   };
 
+  const isGeneral = currentProject?.templateId === 'general_workbench';
   const tabs: ModuleTab[] = [
-    { id: 'profile', title: '项目资料', desc: '品牌、SPU 与基本信息维护', icon: '📋' },
-    { id: 'rules', title: '目标与规则', desc: '总盘目标、月季任务与审查词库', icon: '🎯' },
-    { id: 'data-sources', title: '数据源', desc: '飞书多表溯源与交付源配置', icon: '📊' },
+    { id: 'profile', title: '项目资料', desc: '项目名称、部门、客户与基本信息', icon: '📋' },
+    { id: 'members', title: '成员与权限', desc: '团队成员管理、角色分配与权限矩阵', icon: '👥' },
+    ...(isGeneral ? [] : [{ id: 'rules', title: '目标与规则', desc: '总盘目标、月季任务与审查词库', icon: '🎯' }]),
+    { id: 'data-sources', title: '数据源', desc: '飞书表格、多维表格与数据集配置', icon: '📊' },
     { id: 'integrations', title: '工具集成', desc: 'RedTrend、飞书与外部接口', icon: '🔌' },
     { id: 'data-map', title: '数据地图', desc: '账户、接口与语义指标映射', icon: '🗺️' },
   ];
@@ -134,6 +137,23 @@ export function SettingsWorkspace({
         <ProjectProfile
           key={projectId}
           project={currentProject}
+          projectId={projectId}
+          onDone={handleProfileOrSourceUpdate}
+          toast={showToast}
+        />
+      </div>
+      )}
+
+      {visited.has('members') && (
+      <div
+        id="workspace-tabpanel-members"
+        role="tabpanel"
+        aria-labelledby="workspace-tab-members"
+        tabIndex={0}
+        style={{ display: tab === 'members' ? 'block' : 'none' }}
+      >
+        <MemberManagement
+          key={projectId}
           projectId={projectId}
           onDone={handleProfileOrSourceUpdate}
           toast={showToast}

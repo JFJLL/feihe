@@ -1,5 +1,5 @@
 import { requireProjectAccess, jsonError } from '@/lib/api-auth';
-import { detectFeishuUrl, fetchFeishuAccessToken, inspectFeishuSpreadsheet } from '@/lib/feishu-detector';
+import { detectFeishuUrl, fetchFeishuAccessToken, inspectFeishuSpreadsheet, inspectFeishuBitable } from '@/lib/feishu-detector';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,11 +47,15 @@ export async function POST(request: Request) {
       } else if (nodeObj?.obj_type === 'bitable') {
         detected.type = 'feishu_bitable';
         detected.bitableToken = nodeObj.obj_token;
+        const meta = await inspectFeishuBitable(nodeObj.obj_token!, token);
+        const tablesAsSheets = meta.tables.map(t => ({ sheetId: t.tableId, title: t.title, rowCount: 0, columnCount: 0 }));
         return Response.json({
           ok: true,
           detected: {
             ...detected,
             title: '飞书多维表格 (Base)',
+            sheets: tablesAsSheets,
+            tables: meta.tables,
           },
         });
       }
@@ -65,6 +69,20 @@ export async function POST(request: Request) {
           ...detected,
           spreadsheetToken: realSpreadsheetToken,
           sheets: meta.sheets,
+        },
+      });
+    }
+
+    if (detected.type === 'feishu_bitable' && detected.bitableToken) {
+      const meta = await inspectFeishuBitable(detected.bitableToken, token);
+      const tablesAsSheets = meta.tables.map(t => ({ sheetId: t.tableId, title: t.title, rowCount: 0, columnCount: 0 }));
+      return Response.json({
+        ok: true,
+        detected: {
+          ...detected,
+          title: '飞书多维表格 (Base)',
+          sheets: tablesAsSheets,
+          tables: meta.tables,
         },
       });
     }

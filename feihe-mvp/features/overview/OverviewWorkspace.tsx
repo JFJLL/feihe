@@ -260,18 +260,49 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     if (next) setSelected(String(next.date));
   }
 
+  const isGeneral = project?.templateId === 'general_workbench';
+  const isCommentQc = project?.templateId === 'comment_qc';
+  const isAd = project?.templateId === 'ad_performance';
+
+  const headerEyebrow = isGeneral
+    ? 'PROJECT DASHBOARD · 通用数据工作台'
+    : isCommentQc
+    ? 'COMMENT QC · 评论口碑质检看板'
+    : isAd
+    ? 'AD PERFORMANCE · 投放效果分析看板'
+    : `FEIHE · ${quarterName} DASHBOARD`;
+
+  const headerSubtitle = isGeneral
+    ? `${project?.departmentName || '业务部门'} · 结构化数据集与度量监控看板`
+    : isCommentQc
+    ? '评论口碑采集、处置待办与供应商核验分析'
+    : isAd
+    ? '广告投放消耗、点击效率与转化监控'
+    : `2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`;
+
   return <div className="ops-workspace overview-colorful-page reference-workspace">
-    <PageHeader eyebrow={`FEIHE · ${quarterName} DASHBOARD`} title={project?.name || '项目总览'} subtitle={`2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`}>
-      <div className="workspace-header-actions"><span className="overview-quarter-pill">投放截至 {date || '待同步'}</span><SyncButton projectId={projectId} onRefresh={onRefresh} /></div>
+    <PageHeader eyebrow={headerEyebrow} title={project?.name || '项目总览'} subtitle={headerSubtitle}>
+      <div className="workspace-header-actions">
+        {!isGeneral && <span className="overview-quarter-pill">投放截至 {date || '待同步'}</span>}
+        <SyncButton projectId={projectId} onRefresh={onRefresh} />
+      </div>
     </PageHeader>
-    <WorkspaceModuleTabs tabs={[
-      { id: 'overview', title: `总览 · ${quarterName}累计全盘`, desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
-      { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
-    ]} activeTab={tab} onChange={setTab} />
-    <FeishuSources data={dashboard.feishu} projectId={projectId} />
+    {!isGeneral && (
+      <WorkspaceModuleTabs tabs={[
+        { id: 'overview', title: `总览 · ${quarterName}累计全盘`, desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
+        { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
+      ]} activeTab={tab} onChange={setTab} />
+    )}
+    {!isGeneral && <FeishuSources data={dashboard.feishu} projectId={projectId} />}
 
     {project?.onboardingStatus !== 'ready' && (
-      <OnboardingWizard projectId={projectId} project={project} />
+      <OnboardingWizard
+        projectId={projectId}
+        project={project}
+        onFinish={async () => {
+          if (onRefresh) await onRefresh({ fresh: true });
+        }}
+      />
     )}
 
     {project?.templateId === 'general_workbench' ? (

@@ -113,3 +113,36 @@ export async function inspectFeishuSpreadsheet(spreadsheetToken: string, token: 
 
   return { sheets };
 }
+
+export async function inspectFeishuBitable(bitableToken: string, token: string): Promise<{
+  tables: Array<{ tableId: string; title: string }>;
+}> {
+  const res = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${bitableToken}/tables`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const payload = (await res.json()) as {
+    code?: number;
+    msg?: string;
+    data?: {
+      items?: Array<{
+        table_id: string;
+        name: string;
+      }>;
+    };
+  };
+
+  if (!res.ok || payload.code) {
+    if (payload.code === 99991663 || payload.code === 99991668 || payload.code === 1254003) {
+      throw new Error("应用没有该多维表格的读取权限。请在文档右上角「···」-「添加文档应用」中授权当前应用。");
+    }
+    throw new Error(`飞书多维表格数据表读取失败: ${payload.msg || `HTTP ${res.status}`}`);
+  }
+
+  const tables = (payload.data?.items || []).map((t) => ({
+    tableId: t.table_id,
+    title: t.name,
+  }));
+
+  return { tables };
+}

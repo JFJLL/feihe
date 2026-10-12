@@ -6,6 +6,7 @@ import type { Project, Workspace } from '../../lib/types/project';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api } from '../../lib/hooks/use-project-data';
 
 const PRESET_COLORS = [
@@ -279,30 +280,45 @@ export function ProjectCenter({ userName }: { userName: string }) {
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <span style={{ fontSize: 13, color: '#64748b' }}>状态:</span>
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '7px 10px', fontSize: 13, borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff' }}>
-              <option value="ALL">全部状态 ({allProjects.length})</option>
-              <option value="进行中">进行中 ({activeCount})</option>
-              <option value="筹备中">筹备中 ({pendingCount})</option>
-              <option value="已结束">已结束</option>
-              <option value="ARCHIVED">已归档 ({archivedCount})</option>
-            </select>
+            <CustomSelect
+              value={statusFilter}
+              onChange={setStatusFilter}
+              options={[
+                { value: 'ALL', label: `全部状态 (${allProjects.length})` },
+                { value: '进行中', label: `进行中 (${activeCount})`, color: '#16a34a' },
+                { value: '筹备中', label: `筹备中 (${pendingCount})`, color: '#d97706' },
+                { value: '已结束', label: '已结束', color: '#64748b' },
+                { value: 'ARCHIVED', label: `已归档 (${archivedCount})`, color: '#94a3b8' },
+              ]}
+              style={{ width: 150 }}
+            />
           </div>
           {departments.length > 0 && (
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <span style={{ fontSize: 13, color: '#64748b' }}>部门:</span>
-              <select value={deptFilter} onChange={(e) => setDeptFilter(e.target.value)} style={{ padding: '7px 10px', fontSize: 13, borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff' }}>
-                <option value="ALL">全部部门</option>
-                {departments.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
-              </select>
+              <CustomSelect
+                value={deptFilter}
+                onChange={setDeptFilter}
+                options={[
+                  { value: 'ALL', label: '全部部门' },
+                  ...departments.map((d) => ({ value: d.id, label: d.name })),
+                ]}
+                style={{ width: 150 }}
+              />
             </div>
           )}
           {templates.length > 0 && (
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <span style={{ fontSize: 13, color: '#64748b' }}>模板:</span>
-              <select value={templateFilter} onChange={(e) => setTemplateFilter(e.target.value)} style={{ padding: '7px 10px', fontSize: 13, borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff' }}>
-                <option value="ALL">全部业务模板</option>
-                {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-              </select>
+              <CustomSelect
+                value={templateFilter}
+                onChange={setTemplateFilter}
+                options={[
+                  { value: 'ALL', label: '全部业务模板' },
+                  ...templates.map((t) => ({ value: t.id, label: t.name })),
+                ]}
+                style={{ width: 170 }}
+              />
             </div>
           )}
         </section>
@@ -367,47 +383,44 @@ export function ProjectCenter({ userName }: { userName: string }) {
 
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>负责部门</label>
-                <select
+                <CustomSelect
                   value={String(editingProject.departmentId || 'dept-general')}
-                  onChange={(e) => setEditingProject({ ...editingProject, departmentId: e.target.value })}
-                  style={{ width: '100%', padding: '9px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', boxSizing: 'border-box' }}
-                >
-                  {departments.length > 0 ? (
-                    departments.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)
-                  ) : (
-                    <>
-                      <option value="dept-marketing">市场与营销部</option>
-                      <option value="dept-operations">渠道与运营部</option>
-                      <option value="dept-brand">品牌战略部</option>
-                      <option value="dept-general">综合管理部</option>
-                    </>
-                  )}
-                </select>
+                  onChange={(val) => setEditingProject({ ...editingProject, departmentId: val })}
+                  options={departments.length > 0 ? departments.map((d) => ({ value: d.id, label: d.name })) : [
+                    { value: 'dept-marketing', label: '市场与营销部' },
+                    { value: 'dept-operations', label: '渠道与运营部' },
+                    { value: 'dept-brand', label: '品牌战略部' },
+                    { value: 'dept-general', label: '综合管理部' },
+                  ]}
+                  style={{ width: '100%' }}
+                />
               </div>
 
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>所属客户 (可选)</label>
-                <select
+                <CustomSelect
                   value={String(editingProject.clientId || '')}
-                  onChange={(e) => setEditingProject({ ...editingProject, clientId: e.target.value })}
-                  style={{ width: '100%', padding: '9px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', boxSizing: 'border-box' }}
-                >
-                  <option value="">内部部门项目 (无特定客户)</option>
-                  {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
+                  onChange={(val) => setEditingProject({ ...editingProject, clientId: val })}
+                  options={[
+                    { value: '', label: '内部部门项目 (无特定客户)' },
+                    ...clients.map((c) => ({ value: c.id, label: c.name })),
+                  ]}
+                  style={{ width: '100%' }}
+                />
               </div>
 
               <div>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>业务状态</label>
-                <select
+                <CustomSelect
                   value={String(editingProject.status || '筹备中')}
-                  onChange={(e) => setEditingProject({ ...editingProject, status: e.target.value })}
-                  style={{ width: '100%', padding: '9px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', boxSizing: 'border-box' }}
-                >
-                  <option value="筹备中">筹备中</option>
-                  <option value="进行中">进行中</option>
-                  <option value="已结束">已结束</option>
-                </select>
+                  onChange={(val) => setEditingProject({ ...editingProject, status: val })}
+                  options={[
+                    { value: '筹备中', label: '筹备中', color: '#d97706' },
+                    { value: '进行中', label: '进行中', color: '#16a34a' },
+                    { value: '已结束', label: '已结束', color: '#64748b' },
+                  ]}
+                  style={{ width: '100%' }}
+                />
               </div>
             </div>
 

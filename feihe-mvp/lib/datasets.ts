@@ -53,12 +53,20 @@ export async function saveDataset(
   const now = new Date().toISOString();
   const datasetId = `ds-${projectId}-${sourceId || 'default'}`;
 
-  // Infer columns if not provided
+  // Infer columns if not provided, gathering all unique keys from all rows
   let columns: DatasetColumn[] = customColumns || [];
   if (!columns.length && rows.length > 0) {
-    const keys = Object.keys(rows[0] || {});
+    const keySet = new Set<string>();
+    for (const r of rows) {
+      if (r && typeof r === "object") {
+        for (const k of Object.keys(r)) {
+          if (k) keySet.add(k);
+        }
+      }
+    }
+    const keys = Array.from(keySet);
     columns = keys.map((key) => {
-      const sample = rows.slice(0, 50).map((r) => r[key]);
+      const sample = rows.slice(0, 100).map((r) => r[key]);
       return {
         key,
         name: key,

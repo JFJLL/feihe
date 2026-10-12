@@ -38,7 +38,7 @@ export function ProjectSidebar({
       <div className="brand">
         <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a5f3fc" strokeWidth="4" strokeLinecap="round"/></svg></span>
         <div>
-          社媒增长中台
+          {currentProject?.templateId === 'general_workbench' ? '通用项目中台' : '项目协同中台'}
           <small>PROJECT WORKSPACE</small>
         </div>
       </div>
@@ -88,8 +88,8 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {signedIn ? userName : '公开访问'} · 无需登录 ·{' '}
-          {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '实时连接'}
+          {signedIn ? userName : '协作用户'} ·{' '}
+          {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '就绪'}
         </small>
       </div>
     </aside>
