@@ -1,0 +1,12 @@
+Baseline: 78f56d8b6d9d02d4d66ddb97b11f1ebd30b47787
+Command: node --test scripts/test-v3-remediation.mjs
+Exit code: 1
+Tests: 2; pass: 0; fail: 2
+
+unit: custom + count + empty field counts three records
+AssertionError: actual 0 !== expected 3
+
+API: count preview uses the real stored three records
+HTTP 200, metric.value = 0; expected 3.
+
+The assertions above were executed against the unchanged baseline application.

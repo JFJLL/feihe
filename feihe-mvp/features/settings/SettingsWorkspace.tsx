@@ -7,7 +7,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { ProjectProfile } from './ProjectProfile';
-import { MemberManagement } from './members/MemberManagement';;
+import { MemberManagement } from './members/MemberManagement';
 import { RulesAndTargets } from './RulesAndTargets';
 import { SettingsDataSources } from './data-sources/SettingsDataSources';
 import { SettingsIntegrations } from './integrations/SettingsIntegrations';
@@ -59,7 +59,7 @@ export function SettingsWorkspace({
   }));
   const visited = new Set([...(visitedByProject[projectId] ?? []), tab]);
 
-  useEffect(() => {
+  if (!visitedByProject[projectId]?.has(tab)) {
     setVisitedByProject((prev) => {
       const current = prev[projectId];
       if (current && current.has(tab)) return prev;
@@ -67,7 +67,7 @@ export function SettingsWorkspace({
       next.add(tab);
       return { ...prev, [projectId]: next };
     });
-  }, [projectId, tab]);
+  }
 
   const handleTabChange = (nextTab: string) => {
     setVisitedByProject((prev) => {
@@ -198,7 +198,7 @@ export function SettingsWorkspace({
         tabIndex={0}
         style={{ display: tab === 'data-sources' ? 'block' : 'none' }}
       >
-        <SettingsDataSources
+        <SettingsDataSources active={tab === 'data-sources'}
           key={projectId}
           projectId={projectId}
           workspace={workspace}

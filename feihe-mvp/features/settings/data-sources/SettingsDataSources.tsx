@@ -11,13 +11,16 @@ import { MetricCard } from '../../../components/ui/operations/MetricCard';
 import { CustomSelect } from '../../../components/ui/CustomSelect';
 import { api, cnTime } from '../../../lib/hooks/use-project-data';
 import { FieldMappingEditor, type FieldMappingRule } from './FieldMappingEditor';
+import { Dialog } from '../../../components/ui/Dialog';
+import { inferColumnType } from '../../../lib/column-types';
+import { transformMappedRows, mappingContextMatches, type MappingContext } from '../../../lib/field-mapping';
 
 const emptySource: Record<string, unknown> = {
   name: '业务数据表',
   type: 'feishu_sheet',
   spreadsheet: '',
   sheetId: '',
-  range: 'A1:AZ5000',
+  range: '',
   kind: 'general',
   syncFrequency: 'manual',
   mappingJson: '[]',
@@ -28,8 +31,10 @@ export function SettingsDataSources({
   workspace,
   onDone,
   toast,
+  active = true,
 }: {
   projectId: string;
+  active?: boolean;
   workspace: Workspace | null;
   onDone: () => Promise<void>;
   toast: (v: string, type?: 'success' | 'error' | 'info') => void;
@@ -47,6 +52,19 @@ export function SettingsDataSources({
   const [mappingRules, setMappingRules] = useState<FieldMappingRule[]>([]);
 
   const inspectRequestId = useRef(0);
+  const inspectAbort = useRef<AbortController | null>(null);
+  const [mappingContext, setMappingContext] = useState<MappingContext | null>(null);
+  const [inspectError, setInspectError] = useState('');
+  function invalidateInspect() { inspectRequestId.current++; inspectAbort.current?.abort(); setInspecting(false); }
+  function closeEditor() { if (busy === 'source') return; invalidateInspect(); setIsAdding(false); setSource(emptySource); setMappingContext(null); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]); }
+  useEffect(() => () => { inspectRequestId.current++; inspectAbort.current?.abort(); }, [projectId]);
+  useEffect(() => {
+    if (!active) { inspectRequestId.current++; inspectAbort.current?.abort(); }
+  }, [active]);
+  if (!active && (isAdding || inspecting || Boolean(source.id))) {
+    setIsAdding(false); setInspecting(false); setSource(emptySource);
+  }
+  const mappingErrors = transformMappedRows(rawPreviewRows, mappingRules).errors;
 
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
@@ -60,13 +78,16 @@ export function SettingsDataSources({
     onConfirm: async () => {},
   });
 
+  const statusRequest = useRef(0);
   const loadSources = useCallback(async () => {
+    const requestId = ++statusRequest.current;
     try {
       const data = await api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`);
+      if (requestId !== statusRequest.current) return;
       setFeishu(data);
       setStatusError('');
     } catch (e) {
-      setStatusError(e instanceof Error ? e.message : '同步状态加载失败');
+      if (requestId === statusRequest.current) setStatusError(e instanceof Error ? e.message : '同步状态加载失败');
     }
   }, [projectId]);
 
@@ -77,7 +98,7 @@ export function SettingsDataSources({
     }).catch((e) => {
       if (!cancelled) setStatusError(e instanceof Error ? e.message : '同步状态加载失败');
     });
-    return () => { cancelled = true; };
+    return () => { cancelled = true; statusRequest.current++; };
   }, [projectId]);
 
   const sources = (workspace?.sources || []).filter((item) => item.projectId === projectId);
@@ -87,6 +108,7 @@ export function SettingsDataSources({
   const latestSync = syncedSources.map((item) => item.lastSyncedAt).sort().at(-1);
 
   function handleUrlChange(newUrl: string) {
+    invalidateInspect(); setMappingContext(null); setInspectError('');
     setSource((prev) => ({
       ...prev,
       spreadsheet: newUrl,
@@ -99,14 +121,17 @@ export function SettingsDataSources({
     setMappingRules([]);
   }
 
-  async function handleInspectLink(targetSheetId?: string) {
-    const url = String(source.spreadsheet || '').trim();
+  async function handleInspectLink(targetSheetId?: string, draft = source) {
+    const url = String(draft.spreadsheet || '').trim();
     if (!url) {
       toast('请先粘贴飞书表格链接', 'error');
       return;
     }
 
+    invalidateInspect();
     const currentReqId = ++inspectRequestId.current;
+    const controller = new AbortController(); inspectAbort.current = controller;
+    setInspectError(''); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]); setMappingContext(null);
     setInspecting(true);
 
     try {
@@ -118,14 +143,14 @@ export function SettingsDataSources({
           documentToken?: string;
           sheetId?: string;
           sheets?: Array<{ sheetId: string; title: string; rowCount: number }>;
-          preview?: { headers: string[]; rows: Array<Record<string, unknown>> };
+          preview?: { headers: string[]; rows: Array<Record<string, unknown>>; schema?: Array<{ key: string; type: string }> };
         };
       }>('/api/feishu/inspect', {
-        method: 'POST',
+        method: 'POST', signal: controller.signal,
         body: JSON.stringify({
           url,
           projectId,
-          sheetId: targetSheetId || source.sheetId || undefined,
+          sheetId: targetSheetId || draft.sheetId || undefined,
         }),
       });
 
@@ -136,7 +161,7 @@ export function SettingsDataSources({
         const sheetsList = res.detected.sheets || [];
         setDetectedSheets(sheetsList);
 
-        const chosenSheetId = targetSheetId || source.sheetId || (sheetsList[0] ? sheetsList[0].sheetId : '');
+        const chosenSheetId = targetSheetId || draft.sheetId || (sheetsList[0] ? sheetsList[0].sheetId : '');
         setSource((prev) => ({
           ...prev,
           sheetId: chosenSheetId,
@@ -150,38 +175,20 @@ export function SettingsDataSources({
           setRawHeaders(hdrs);
           setRawPreviewRows(rows);
 
-          let currentRules: FieldMappingRule[] = [];
-          try {
-            const parsed = JSON.parse(String(source.mappingJson || '[]'));
-            if (Array.isArray(parsed) && parsed.length > 0) currentRules = parsed;
-          } catch {}
-
-          if (!currentRules.length) {
-            currentRules = hdrs.map((h) => {
-              const sampleVals = rows.map((r) => r[h]);
-              const isNum = sampleVals.some((v) => v !== '' && v !== null && !isNaN(Number(String(v).replace(/[,￥¥%]/g, ''))));
-              const isDate = sampleVals.some((v) => /^\d{4}[-/.]\d{1,2}/.test(String(v || '')));
-              const isKey = h.includes('ID') || h.includes('编号') || h === '序号';
-
-              return {
-                sourceField: h,
-                targetField: h,
-                type: isNum ? 'number' : isDate ? 'date' : 'text',
-                isKey,
-                isDate,
-                required: isKey,
-                nullPolicy: isNum ? 'zero' : 'null',
-              };
-            });
-            setMappingRules(currentRules);
-            setSource((prev) => ({ ...prev, mappingJson: JSON.stringify(currentRules) }));
-          } else {
-            setMappingRules(currentRules);
-          }
+          const context: MappingContext = { projectId, documentToken: res.detected.documentToken || url, sheetId: String(chosenSheetId), fields: res.detected.preview.schema || hdrs.map(key => ({ key, type: inferColumnType(rows.map(r => r[key])) })) };
+          let savedRules: FieldMappingRule[] = [];
+          let savedContext: MappingContext | null = null;
+          try { const saved = JSON.parse(String(draft.mappingJson || '{}')); savedRules = Array.isArray(saved) ? saved : saved.rules || []; savedContext = saved.context || null; } catch {}
+          const sameContext = mappingContextMatches(savedContext, context);
+          const rules: FieldMappingRule[] = sameContext ? savedRules : hdrs.map(h => ({ sourceField: h, targetField: h, type: inferColumnType(rows.map(r => r[h])) as FieldMappingRule['type'], nullPolicy: 'null' }));
+          if (savedRules.length && !sameContext) toast('工作表或字段结构已变化，已清除旧映射，请重新确认', 'info');
+          setMappingRules(rules); setMappingContext(context);
+          setSource(prev => ({ ...prev, mappingJson: JSON.stringify({ rules, context }) }));
         }
       }
     } catch (err) {
       if (currentReqId === inspectRequestId.current) {
+        setInspectError(err instanceof Error ? err.message : '检测链接失败');
         toast(err instanceof Error ? err.message : '检测链接失败', 'error');
       }
     } finally {
@@ -192,18 +199,21 @@ export function SettingsDataSources({
   }
 
   function handleSheetChange(sheetId: string) {
-    setSource((prev) => ({ ...prev, sheetId }));
-    void handleInspectLink(sheetId);
+    invalidateInspect(); setMappingContext(null); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]);
+    const draft = { ...source, sheetId, mappingJson: '[]' };
+    setSource(draft);
+    void handleInspectLink(sheetId, draft);
   }
 
   async function saveSource(andSync = false) {
+    if (busy || inspecting || !mappingContext || mappingErrors.length) return;
     setBusy('source');
     try {
       const payload = {
         action: 'save_source',
         projectId,
         ...source,
-        mappingJson: JSON.stringify(mappingRules.length ? mappingRules : JSON.parse(String(source.mappingJson || '[]'))),
+        mappingJson: JSON.stringify({ rules: mappingRules, context: mappingContext }),
       };
 
       const saveRes = await api<{ ok: boolean; id: string }>('/api/projects', {
@@ -233,6 +243,7 @@ export function SettingsDataSources({
         }
       }
 
+      invalidateInspect();
       setSource(emptySource);
       setIsAdding(false);
       setDetectedSheets([]);
@@ -249,30 +260,10 @@ export function SettingsDataSources({
   }
 
   function handleEditExistingSource(item: Source) {
-    let rules: FieldMappingRule[] = [];
-    try {
-      const parsed = JSON.parse(item.mappingJson || '[]');
-      if (Array.isArray(parsed)) rules = parsed;
-    } catch {}
-
-    setSource({
-      id: item.id,
-      name: item.name,
-      type: item.type,
-      spreadsheet: item.spreadsheet,
-      sheetId: item.sheetId,
-      range: item.range || 'A1:AZ5000',
-      kind: item.kind || 'general',
-      syncFrequency: item.syncFrequency || 'manual',
-      mappingJson: item.mappingJson || '[]',
-    });
-    setMappingRules(rules);
-    setIsAdding(true);
-    if (item.spreadsheet) {
-      setTimeout(() => {
-        void handleInspectLink(item.sheetId);
-      }, 50);
-    }
+    invalidateInspect(); setMappingContext(null); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]);
+    const draft = { id: item.id, name: item.name, type: item.type, spreadsheet: item.spreadsheet, sheetId: item.sheetId, range: item.range || '', kind: item.kind || 'general', syncFrequency: item.syncFrequency || 'manual', mappingJson: item.mappingJson || '[]' };
+    setSource(draft); setIsAdding(true);
+    if (item.spreadsheet) void handleInspectLink(item.sheetId, draft);
   }
 
   async function syncSource(item: Source) {
@@ -365,6 +356,7 @@ export function SettingsDataSources({
                   className="primary"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '13px' }}
                   onClick={() => {
+                    invalidateInspect(); setMappingContext(null);
                     setSource(emptySource);
                     setDetectedSheets([]);
                     setRawHeaders([]);
@@ -380,39 +372,34 @@ export function SettingsDataSources({
           </div>
 
           {(isAdding || Boolean(source.id)) && (
-            <div
-              style={{
-                marginTop: '18px',
-                marginBottom: '18px',
-                padding: '22px',
-                background: '#f8fafc',
-                border: '1.5px solid #cbd5e1',
-                borderRadius: '12px',
-                boxShadow: '0 4px 16px rgba(15, 23, 42, 0.05)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', paddingBottom: '12px' }}>
-                <div>
-                  <span className="section-mini-tag tag-blue" style={{ marginBottom: '4px' }}>
-                    {source.id ? '编辑与映射模式' : '新增接入流程'}
-                  </span>
-                  <h3 style={{ margin: '4px 0 0', fontSize: '16px', color: '#0f172a' }}>
-                    {source.id ? (`配置字段映射：${String(source.name || '')}`) : '接入飞书表格与可视化字段映射'}
-                  </h3>
-                </div>
+            <Dialog title={source.id ? '配置字段映射：' + String(source.name || '') : '接入飞书表格与可视化字段映射'} width={960} onClose={closeEditor} footer={<>              {/* Actions */}
+              <div className="editor-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: '10px' }}>
                 <button
                   type="button"
-                  style={{ background: 'transparent', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b' }}
-                  onClick={() => {
-                    setSource(emptySource);
-                    setIsAdding(false);
-                  }}
-                  title="关闭"
+                  onClick={closeEditor}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
                 >
-                  ✕
+                  取消
+                </button>
+                <button
+                  type="button"
+                  disabled={busy === 'source' || inspecting || !mappingContext || mappingErrors.length > 0 || !source.name || !source.spreadsheet || !source.sheetId}
+                  onClick={() => saveSource(false)}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  仅保存配置
+                </button>
+                <button
+                  type="button"
+                  className="primary"
+                  disabled={busy === 'source' || inspecting || !mappingContext || mappingErrors.length > 0 || !source.name || !source.spreadsheet || !source.sheetId}
+                  onClick={() => saveSource(true)}
+                  style={{ padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  {busy === 'source' ? '正在执行…' : '✓ 保存并首次同步'}
                 </button>
               </div>
-
+</>}>
               {/* Step 1: Basic Information */}
               <div className="platform-form" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 <label>
@@ -443,8 +430,8 @@ export function SettingsDataSources({
                     onChange={(val) => setSource({ ...source, syncFrequency: val })}
                     options={[
                       { value: 'manual', label: '手动同步 (已就绪)', color: '#16a34a' },
-                      { value: 'hourly', label: '每小时自动 (调度待启用)', color: '#d97706' },
-                      { value: 'daily', label: '每日自动 (调度待启用)', color: '#64748b' },
+                      { value: 'hourly', label: '每小时自动 (调度待启用)', color: '#d97706', disabled: true },
+                      { value: 'daily', label: '每日自动 (调度待启用)', color: '#64748b', disabled: true },
                     ]}
                     style={{ width: '100%' }}
                   />
@@ -457,6 +444,7 @@ export function SettingsDataSources({
                     <input
                       style={{ flex: 1 }}
                       value={String(source.spreadsheet || '')}
+                      aria-label="飞书表格链接"
                       placeholder="https://yimeichuanbo.feishu.cn/wiki/... 或 sheets/... 或 base/..."
                       onChange={(e) => handleUrlChange(e.target.value)}
                     />
@@ -475,6 +463,7 @@ export function SettingsDataSources({
                   <span>目标工作表 (Sheet / Table ID)</span>
                   {detectedSheets.length > 0 ? (
                     <CustomSelect
+                      ariaLabel="目标工作表"
                       value={String(source.sheetId || '')}
                       onChange={(val) => handleSheetChange(val)}
                       placeholder="-- 请选择工作表 / 数据表 --"
@@ -501,12 +490,14 @@ export function SettingsDataSources({
                   读取范围 (普通电子表格适用)
                   <input
                     value={String(source.range || '')}
-                    placeholder="例如：A1:AZ5000"
+                    placeholder="留空为全表；填入范围将明确限制读取"
                     onChange={(e) => setSource({ ...source, range: e.target.value })}
                   />
                 </label>
               </div>
 
+              {inspectError && <div role="alert">{inspectError}</div>}
+              <p>读取范围留空表示完整工作表；指定范围时只同步该范围。</p>
               {/* Visual Field Mapping Editor */}
               {rawHeaders.length > 0 && (
                 <FieldMappingEditor
@@ -515,42 +506,12 @@ export function SettingsDataSources({
                   mappingRules={mappingRules}
                   onChange={(updated) => {
                     setMappingRules(updated);
-                    setSource((prev) => ({ ...prev, mappingJson: JSON.stringify(updated) }));
+                    setSource((prev) => ({ ...prev, mappingJson: JSON.stringify({ rules: updated, context: mappingContext }) }));
                   }}
                 />
               )}
 
-              {/* Actions */}
-              <div className="editor-actions" style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSource(emptySource);
-                    setIsAdding(false);
-                  }}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
-                >
-                  取消
-                </button>
-                <button
-                  type="button"
-                  disabled={busy === 'source' || !source.name || !source.spreadsheet || !source.sheetId}
-                  onClick={() => saveSource(false)}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 600 }}
-                >
-                  仅保存配置
-                </button>
-                <button
-                  type="button"
-                  className="primary"
-                  disabled={busy === 'source' || !source.name || !source.spreadsheet || !source.sheetId}
-                  onClick={() => saveSource(true)}
-                  style={{ padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
-                >
-                  {busy === 'source' ? '正在执行…' : '✓ 保存并首次同步'}
-                </button>
-              </div>
-            </div>
+            </Dialog>
           )}
 
           <div className="management-list" style={{ marginTop: '14px' }}>
@@ -572,7 +533,7 @@ export function SettingsDataSources({
                     </div>
                     <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                       <span>工作表：<code style={{ color: '#0369a1' }}>{item.sheetId || '未填写 Sheet ID'}</code></span>
-                      <span>范围：<code>{item.range}</code></span>
+                      <span>范围：<code>{item.range || '全表'}</code></span>
                       <span>最近读取：<strong>{item.lastSyncedAt ? (String(item.lastRowCount) + ' 行') : '—'}</strong></span>
                     </div>
                     {item.lastError && (
@@ -625,29 +586,7 @@ export function SettingsDataSources({
         </article>
       </section>
 
-      {/* Confirmation Modal */}
-      {confirmDialog.open && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.45)', display: 'grid', placeItems: 'center', zIndex: 9999 }}>
-          <div style={{ background: '#fff', borderRadius: 12, padding: '24px', maxWidth: 440, width: '90%', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ margin: '0 0 10px 0', fontSize: 18, fontWeight: 700, color: '#0f172a' }}>{confirmDialog.title}</h3>
-            <p style={{ margin: '0 0 24px 0', fontSize: 14, color: '#475569', lineHeight: 1.5 }}>{confirmDialog.description}</p>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-              <button
-                onClick={() => setConfirmDialog((prev) => ({ ...prev, open: false }))}
-                style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: 14 }}
-              >
-                取消
-              </button>
-              <button
-                onClick={confirmDialog.onConfirm}
-                style={{ padding: '8px 18px', borderRadius: 6, border: 'none', background: '#ef4444', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
-              >
-                确认移除
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={confirmDialog.open} title={confirmDialog.title} onClose={() => { if (!busy) setConfirmDialog(prev => ({ ...prev, open: false })); }} width={460} footer={<><button disabled={Boolean(busy)} onClick={() => setConfirmDialog(prev => ({ ...prev, open: false }))}>取消</button><button disabled={Boolean(busy)} onClick={() => void confirmDialog.onConfirm()}>{busy ? '正在移除…' : '确认移除'}</button></>}><p>{confirmDialog.description}</p></Dialog>
     </div>
   );
 }

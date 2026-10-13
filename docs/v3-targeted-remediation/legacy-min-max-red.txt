@@ -1,0 +1,59 @@
+(node:22172) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ unit: custom + count + empty field counts three records (4.2545ms)
+✔ API: count preview uses the real stored three records (3.3309ms)
+✔ unit: explicit aggregation overrides old task_total binding (0.4972ms)
+✔ unit: global and grouped average share valid samples (0.5376ms)
+✔ unit: absent numerator must not become 0% (0.298ms)
+✔ unit: null numerator must not become 0% (0.2856ms)
+✔ unit: invalid numerator must not become 0% (0.2819ms)
+✔ unit: record, nonempty and distinct counts are different operations (0.267ms)
+✔ unit: missing, all-null, actual zero, invalid numeric and zero denominator stay distinct (0.1832ms)
+✔ unit: explicit zero fill applies identically to grouped and whole averages (0.2288ms)
+✔ unit: inference considers all observed values and never fills blanks (1.1021ms)
+✔ unit: shared mapping preview matches stored values and preserved column metadata (9.9311ms)
+✔ unit: mapping context changes for project, document, sheet or schema (0.1245ms)
+✔ unit: card validation covers dataset, numeric types, ratio, grouping and date compatibility (3.8329ms)
+✔ unit: date range includes noon on end day and excludes next midnight and undated rows (1.4274ms)
+✔ unit: mapping rejects required (0.3408ms)
+✔ unit: mapping rejects duplicate key (0.1063ms)
+✔ unit: mapping rejects invalid date (0.0585ms)
+✔ unit: mapping rejects unknown boolean (0.073ms)
+✔ unit: mapping rejects duplicate target (0.0498ms)
+✔ unit: mapping rejects invalid number with zero fill (0.0479ms)
+✔ unit: malformed numeric text is not coerced into legitimate zero (0.2478ms)
+✔ unit: zoneless timestamps preserve milliseconds and invalid epochs fail (1.3562ms)
+✔ unit: unsupported and malformed mapping options are explicitly rejected (0.1192ms)
+✔ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.5129ms)
+✖ unit: legacy minimum and maximum definitions retain their aggregation semantics (0.857ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 25
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 577.9492
+
+✖ failing tests:
+
+test at scripts\test-v3-remediation.mjs:149:1
+✖ unit: legacy minimum and maximum definitions retain their aggregation semantics (0.857ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  30 !== 10
+
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-v3-remediation.mjs:151:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 30,
+    expected: 10,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

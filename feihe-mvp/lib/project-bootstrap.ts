@@ -12,13 +12,13 @@ export type ProjectBootstrap = {
 
 // Reuse the authenticated read handlers in-process, without HTTP round trips.
 // A failed read falls back to the existing client retry/error flow.
-export async function loadProjectBootstrap(projectId: string): Promise<ProjectBootstrap | null> {
+export async function loadProjectBootstrap(projectId: string, headers?: Headers): Promise<ProjectBootstrap | null> {
   try {
     const query = new URLSearchParams({ projectId });
     const responses = await Promise.all([
-      dashboard(new Request(`http://localhost/api/dashboard?${query}`)),
-      operations(new Request(`http://localhost/api/ops?${query}`)),
-      workspace(new Request('http://localhost/api/projects')),
+      dashboard(new Request(`http://localhost/api/dashboard?${query}`, { headers })),
+      operations(new Request(`http://localhost/api/ops?${query}`, { headers })),
+      workspace(new Request('http://localhost/api/projects', { headers })),
     ]);
     if (responses.some(response => !response.ok)) return null;
     const [dashboardData, ops, workspaceData] = await Promise.all([

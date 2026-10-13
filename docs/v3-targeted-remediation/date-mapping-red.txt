@@ -1,0 +1,61 @@
+(node:31016) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ unit: custom + count + empty field counts three records (4.1227ms)
+✔ API: count preview uses the real stored three records (3.5212ms)
+✔ unit: explicit aggregation overrides old task_total binding (0.6119ms)
+✔ unit: global and grouped average share valid samples (0.5795ms)
+✔ unit: absent numerator must not become 0% (0.3474ms)
+✔ unit: null numerator must not become 0% (0.2815ms)
+✔ unit: invalid numerator must not become 0% (0.2445ms)
+✔ unit: record, nonempty and distinct counts are different operations (0.2894ms)
+✔ unit: missing, all-null, actual zero, invalid numeric and zero denominator stay distinct (0.1787ms)
+✔ unit: explicit zero fill applies identically to grouped and whole averages (0.2721ms)
+✔ unit: inference considers all observed values and never fills blanks (1.5183ms)
+✔ unit: shared mapping preview matches stored values and preserved column metadata (5.6522ms)
+✔ unit: mapping context changes for project, document, sheet or schema (0.1223ms)
+✔ unit: card validation covers dataset, numeric types, ratio, grouping and date compatibility (3.4638ms)
+✔ unit: date range includes noon on end day and excludes next midnight and undated rows (1.4841ms)
+✔ unit: mapping rejects required (0.3358ms)
+✔ unit: mapping rejects duplicate key (0.0896ms)
+✔ unit: mapping rejects invalid date (0.0659ms)
+✔ unit: mapping rejects unknown boolean (0.0758ms)
+✔ unit: mapping rejects duplicate target (0.0525ms)
+✔ unit: mapping rejects invalid number with zero fill (0.0541ms)
+✔ unit: malformed numeric text is not coerced into legitimate zero (0.263ms)
+✔ unit: zoneless timestamps preserve milliseconds and invalid epochs fail (1.2074ms)
+✔ unit: unsupported and malformed mapping options are explicitly rejected (0.0964ms)
+✖ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.9143ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 24
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 559.7735
+
+✖ failing tests:
+
+test at scripts\test-v3-remediation.mjs:141:1
+✖ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.9143ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + '2026-10-01T12:00:00-123+08:00'
+  - '2026-10-01T12:00:00.123+08:00'
+                        ^
+
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-v3-remediation.mjs:145:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '2026-10-01T12:00:00-123+08:00',
+    expected: '2026-10-01T12:00:00.123+08:00',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

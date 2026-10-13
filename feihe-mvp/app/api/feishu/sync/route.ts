@@ -1,12 +1,28 @@
 import { envVar } from '@/lib/runtime-env';
-import { requireProjectAccess, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError, type ProjectAuthContext } from '@/lib/api-auth';
 import { importRows, type ImportKind, type ImportRow } from '@/lib/import-rows';
 import { failJob, finishJob, logAction, startJob } from '@/lib/ops';
 import { db, ensureSchema } from '@/lib/db';
 import { readFeishuData, syncFeishuSpreadsheets } from '@/lib/feishu-sync';
 import { FEISHU_DOCUMENTS } from '@/lib/feishu-model';
+import { inspectFeishuSpreadsheet, inspectFeishuBitableFields } from '@/lib/feishu-detector';
+import { normalizeBitableFields, spreadsheetColumn } from '@/lib/feishu-values';
+export { normalizeBitableValue, normalizeBitableFields } from '@/lib/feishu-values';
+import type { MappingContext } from '@/lib/field-mapping';
+type SyncBody = { spreadsheet?: string; sheetId?: string; range?: string; kind?: ImportKind; projectId?: string; sourceId?: string; all?: boolean; mappingJson?: string };
 
 export const dynamic = 'force-dynamic';
+
+async function syncHistoricalSources(context: ProjectAuthContext) {
+  if (!context.canWrite) return jsonError('权限不足：只读成员不可同步', 403);
+  try {
+    const result = await syncFeishuSpreadsheets(context.projectId);
+    await logAction('飞书历史表格同步', 'qicui', context.projectId, result.message, context.projectId, context.user.userId);
+    return Response.json({ ...result, actorUserId: context.user.userId, error: result.ok ? undefined : result.message });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : '飞书全量同步失败', 500);
+  }
+}
 
 export async function GET(request: Request) {
   const rawProject = new URL(request.url).searchParams.get('projectId');
@@ -15,39 +31,6 @@ export async function GET(request: Request) {
 
   const project = access.context!.projectId;
   return Response.json(await readFeishuData(project), { headers: { 'Cache-Control': 'no-store' } });
-}
-
-export function normalizeBitableValue(val: unknown): unknown {
-  if (val === null || val === undefined) return '';
-  if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
-    return val;
-  }
-  if (Array.isArray(val)) {
-    return val.map((v) => normalizeBitableValue(v)).filter((v) => v !== '').join(', ');
-  }
-  if (typeof val === 'object') {
-    const obj = val as Record<string, unknown>;
-    if (obj.text !== undefined) return normalizeBitableValue(obj.text);
-    if (obj.name !== undefined) return normalizeBitableValue(obj.name);
-    if (obj.label !== undefined) return normalizeBitableValue(obj.label);
-    if (obj.link !== undefined) return String(obj.link);
-    if (obj.value !== undefined) return normalizeBitableValue(obj.value);
-    if (obj.en_name) return String(obj.name || obj.en_name);
-    try {
-      return JSON.stringify(obj);
-    } catch {
-      return '';
-    }
-  }
-  return String(val);
-}
-
-export function normalizeBitableFields(fields: Record<string, unknown>): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(fields)) {
-    result[k] = normalizeBitableValue(v);
-  }
-  return result;
 }
 
 async function resolveWikiNode(wikiToken: string, token: string): Promise<{ obj_type: string; obj_token: string } | null> {
@@ -80,7 +63,7 @@ async function fetchAccessToken(): Promise<string> {
 }
 
 export async function POST(request: Request) {
-  let body: { spreadsheet?: string; sheetId?: string; range?: string; kind?: ImportKind; projectId?: string; sourceId?: string; all?: boolean; mappingJson?: string } = {};
+  let body: SyncBody = {};
   try {
     body = (await request.json()) as typeof body;
   } catch {
@@ -97,15 +80,10 @@ export async function POST(request: Request) {
   // Top Bar or Full Project Sync
   if (body.all) {
     if (project === 'qicui') {
-      try {
-        const result = await syncFeishuSpreadsheets(project);
-        return Response.json({ ...result, error: result.ok ? undefined : result.message });
-      } catch (error) {
-        return jsonError(error instanceof Error ? error.message : '飞书全量同步失败', 500);
-      }
+      return syncHistoricalSources(access.context!);
     } else {
       // Sync project-specific data sources
-      const sourcesRes = await d1.prepare('SELECT * FROM data_sources WHERE project_id=? AND is_paused=0').bind(project).all<any>();
+      const sourcesRes = await d1.prepare('SELECT * FROM data_sources WHERE project_id=? AND is_paused=0').bind(project).all<{ id: string; name: string }>();
       const sourcesList = sourcesRes.results || [];
       if (sourcesList.length === 0) {
         return Response.json({
@@ -121,20 +99,7 @@ export async function POST(request: Request) {
 
       for (const src of sourcesList) {
         try {
-          const syncUrl = new URL(request.url);
-          const singleReq = new Request(syncUrl.toString(), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              projectId: project,
-              sourceId: src.id,
-              spreadsheet: src.spreadsheet,
-              sheetId: src.sheet_id,
-              kind: src.kind,
-              range: src.range,
-            }),
-          });
-          const singleRes = await POST(singleReq);
+          const singleRes = await syncSingleSource(access.context!, { projectId: project, sourceId: src.id });
           const singleData = (await singleRes.json()) as { ok?: boolean; imported?: number; error?: string };
           if (singleData.ok) {
             totalImported += singleData.imported || 0;
@@ -163,23 +128,26 @@ export async function POST(request: Request) {
 
   // Legacy Qicui built-in source fallback
   if (FEISHU_DOCUMENTS.some((d) => d.id === body.sourceId) || (!body.spreadsheet && !body.sheetId && !body.sourceId && project === 'qicui')) {
-    try {
-      const result = await syncFeishuSpreadsheets(project);
-      return Response.json({ ...result, error: result.ok ? undefined : result.message });
-    } catch (error) {
-      return jsonError(error instanceof Error ? error.message : '飞书全量同步失败', 500);
-    }
+    return syncHistoricalSources(access.context!);
   }
 
+  return syncSingleSource(access.context!, body);
+}
+
+export async function syncSingleSource(context: ProjectAuthContext, body: SyncBody) {
+  const project = context.projectId;
+  if (!context.canWrite) return jsonError('权限不足：只读成员不可同步', 403);
+  await ensureSchema();
+  const d1 = db();
   let jobId = '';
-  let sourceId = body.sourceId || '';
+  const sourceId = body.sourceId || '';
   let sourceName = '飞书数据源';
   const now = new Date().toISOString();
 
   let spreadsheet = body.spreadsheet || '';
   let sheetId = body.sheetId || '';
   let kind: ImportKind = body.kind || 'general';
-  let rangeStr = body.range || 'A1:AZ5000';
+  let rangeStr = body.range || '';
   let mappingJson = body.mappingJson || '';
   let sourceType = '';
 
@@ -196,15 +164,15 @@ export async function POST(request: Request) {
     if (!sourceRecord) {
       return jsonError('数据源不存在或不属于当前项目', 404);
     }
-    spreadsheet = spreadsheet || sourceRecord.spreadsheet;
-    sheetId = sheetId || sourceRecord.sheet_id;
+    spreadsheet = sourceRecord.spreadsheet;
+    sheetId = sourceRecord.sheet_id;
     kind = (sourceRecord.kind as ImportKind) || kind;
-    rangeStr = sourceRecord.range || rangeStr;
+    rangeStr = sourceRecord.range || '';
     sourceName = sourceRecord.name || sourceName;
     sourceType = sourceRecord.type || '';
-    mappingJson = mappingJson || sourceRecord.mapping_json || '';
+    mappingJson = sourceRecord.mapping_json || '';
   } else {
-    if (!access.context!.canManage) {
+    if (!context.canManage) {
       return jsonError('仅项目管理员可直接配置外部表格链接', 403);
     }
   }
@@ -246,9 +214,11 @@ export async function POST(request: Request) {
     }
 
     let rows: ImportRow[] = [];
+    let sourceSchema: Array<{ key: string; type: string }> | undefined;
 
     if (isBitable) {
       const bitableAppToken = resolvedToken;
+      sourceSchema = await inspectFeishuBitableFields(bitableAppToken, sheetId, tenantToken);
       let pageToken = '';
       let hasMore = true;
       const visitedTokens = new Set<string>();
@@ -280,11 +250,14 @@ export async function POST(request: Request) {
           throw new Error(recData.msg || '读取飞书多维表格记录失败');
         }
 
-        const items = recData.data?.items || [];
+        if (!recData.data || !Array.isArray(recData.data.items) || typeof recData.data.has_more !== 'boolean') throw new Error('多维表格分页响应缺少完整性标记，保留旧快照');
+        if (recData.data.has_more && !recData.data.page_token) throw new Error('多维表格分页不完整：has_more=true 但缺少 page_token，保留旧快照');
+        const items = recData.data.items;
         for (const item of items) {
-          if (item.fields && typeof item.fields === 'object') {
-            rows.push(normalizeBitableFields(item.fields));
-          }
+          if (!item.fields || typeof item.fields !== 'object') throw new Error('多维表格记录缺少字段，保留旧快照');
+          const normalized = normalizeBitableFields(item.fields);
+          if (Object.keys(normalized).some(key => !sourceSchema?.some(f => f.key === key))) throw new Error('多维表格记录与字段结构不一致');
+          rows.push(Object.fromEntries(sourceSchema.map(f => [f.key, normalized[f.key] ?? null])));
         }
 
         if (rows.length > MAX_BITABLE_ROWS) {
@@ -293,33 +266,47 @@ export async function POST(request: Request) {
 
         hasMore = Boolean(recData.data?.has_more);
         pageToken = recData.data?.page_token || '';
-        if (hasMore && !pageToken) break;
+        if (hasMore && !pageToken) throw new Error('多维表格分页不完整：has_more=true 但缺少 page_token，保留旧快照');
       }
     } else {
       const realSpreadsheetToken = resolvedToken;
-      const range = `${sheetId}!${rangeStr}`;
-      const valuesResponse = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${realSpreadsheetToken}/values/${encodeURIComponent(range)}`, {
-        headers: { Authorization: `Bearer ${tenantToken}` },
-      });
-      const valuesData = (await valuesResponse.json()) as { code?: number; msg?: string; data?: { valueRange?: { values?: unknown[][] } } };
-      if (!valuesResponse.ok || valuesData.code) {
-        throw new Error(valuesData.msg || '读取飞书表格失败');
+      const meta = await inspectFeishuSpreadsheet(realSpreadsheetToken, tenantToken);
+      const sheet = meta.sheets.find(s => s.sheetId === sheetId);
+      if (!sheet) throw new Error('工作表不存在，请重新检测链接');
+      const ranges: string[] = [];
+      if (rangeStr) ranges.push(rangeStr);
+      else {
+        if (!sheet.rowCount || !sheet.columnCount) throw new Error('缺少工作表行列总数，无法确认全表完整性');
+        for (let start = 1; start <= sheet.rowCount; start += 1000) ranges.push('A' + start + ':' + spreadsheetColumn(sheet.columnCount) + Math.min(sheet.rowCount, start + 999));
       }
-
-      const values = valuesData.data?.valueRange?.values || [];
+      const values: unknown[][] = [];
+      for (const rangePart of ranges) {
+        const range = sheetId + '!' + rangePart;
+        const response = await fetch('https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/' + realSpreadsheetToken + '/values/' + encodeURIComponent(range), { headers: { Authorization: 'Bearer ' + tenantToken } });
+        const data = await response.json() as { code?: number; msg?: string; data?: { valueRange?: { values?: unknown[][] } } };
+        if (!response.ok || data.code || !data.data?.valueRange || !Array.isArray(data.data.valueRange.values)) throw new Error(data.msg || '电子表格范围读取不完整，保留旧快照');
+        values.push(...data.data.valueRange.values);
+      }
       const headers = (values[0] || []).map(String);
-      rows = values
-        .slice(1)
-        .filter((row) => row.some((cell) => String(cell ?? '').trim()))
-        .map((row) => Object.fromEntries(headers.map((header, index) => [header, row[index] ?? ''])));
+      if (!headers.length || headers.some(h => !h.trim()) || new Set(headers).size !== headers.length) throw new Error('工作表表头为空或重名，请修正后同步');
+      rows = values.slice(1).filter(row => row.some(cell => String(cell ?? '').trim())).map(row => Object.fromEntries(headers.map((header, index) => [header, row[index] ?? ''])));
     }
 
     if (!rows.length) throw new Error('指定范围内没有可同步的数据');
 
+    if (mappingJson) {
+      const saved = JSON.parse(mappingJson) as { context?: MappingContext };
+      if (saved.context) {
+        const context = saved.context;
+        const actualKeys = [...new Set(rows.flatMap(row => Object.keys(row)))].sort();
+        const expectedKeys = context.fields.map(f => f.key).sort();
+        if (context.projectId !== project || context.documentToken !== resolvedToken || context.sheetId !== sheetId || JSON.stringify(actualKeys) !== JSON.stringify(expectedKeys) || (sourceSchema && context.fields.some(f => sourceSchema?.find(s => s.key === f.key)?.type !== f.type))) throw new Error('映射上下文或字段结构已变化，请重新检测并确认映射');
+      }
+    }
     const result = await importRows(kind, rows, true, project, sourceId || 'feishu_sync', sourceName, mappingJson);
 
     await finishJob(jobId, { succeeded: result.imported, failed: result.skipped, message: `同步 ${result.imported} 条` });
-    await logAction('飞书表格同步', kind, resolvedToken, `${sheetId} · ${result.imported} 条`, project);
+    await logAction('飞书表格同步', kind, resolvedToken, `${sheetId} · ${result.imported} 条`, project, context.user.userId);
 
     if (sourceId) {
       await d1
@@ -333,7 +320,7 @@ export async function POST(request: Request) {
       .bind(jobId || `sync-${Date.now()}`, project, sourceId || 'default', rows.length, result.imported, result.skipped, now, new Date().toISOString())
       .run();
 
-    return Response.json({ ok: true, ...result, jobId, rowsRead: rows.length });
+    return Response.json({ ok: true, ...result, jobId, rowsRead: rows.length, scope: rangeStr ? 'limited_range' : 'full_table', range: rangeStr || undefined, actorUserId: context.user.userId });
   } catch (error) {
     if (jobId) await failJob(jobId, error instanceof Error ? error.message : '同步失败');
     if (sourceId) {

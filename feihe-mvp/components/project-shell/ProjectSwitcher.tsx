@@ -3,6 +3,7 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { Project } from '../../lib/types/project';
 import { CustomSelect } from '../ui/CustomSelect';
+import { useProject } from './ProjectContext';
 
 export function ProjectSwitcher({
   projects,
@@ -17,15 +18,16 @@ export function ProjectSwitcher({
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { navigateTo } = useProject();
 
   function handleChange(nextId: string) {
     if (!nextId || nextId === currentProjectId) return;
     // Maintain current subpath e.g. /projects/qicui/comments -> /projects/other/comments
-    const match = pathname.match(/^\/projects\/[^/]+(\/?.*)$/);
+    const match = window.location.pathname.match(/^\/projects\/[^/]+(\/?.*)$/);
     const subpath = match ? match[1] : '';
-    const qs = searchParams?.toString();
+    const qs = new URLSearchParams(window.location.search).toString();
     const fullQuery = qs ? '?' + qs : '';
-    window.location.assign('/projects/' + encodeURIComponent(nextId) + subpath + fullQuery);
+    navigateTo('/projects/' + encodeURIComponent(nextId) + subpath + fullQuery);
   }
 
   return (

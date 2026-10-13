@@ -20,6 +20,7 @@ export function ProjectSidebar({
     loading,
     error,
     activeSection,
+    activeTab,
     navigateTo,
   } = useProject();
 
@@ -68,7 +69,8 @@ export function ProjectSidebar({
               : item.path.includes('?')
               ? '/projects/' + encodeURIComponent(projectId) + '/' + item.path
               : '/projects/' + encodeURIComponent(projectId) + '/' + item.path;
-          const isActive = activeSection === item.path || (item.id === 'data' && activeSection === 'settings' && typeof window !== 'undefined' && window.location.search.includes('data-sources'));
+          const inData = activeSection === 'data' || (activeSection === 'settings' && activeTab === 'data-sources');
+          const isActive = item.id === 'data' ? inData : item.id === 'settings' ? activeSection === 'settings' && !inData : activeSection === item.path;
 
           return (
             <a

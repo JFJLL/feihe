@@ -1,0 +1,197 @@
+{
+  "baseline": "78f56d8b6d9d02d4d66ddb97b11f1ebd30b47787",
+  "errors": [
+    {
+      "file": "feihe-mvp/app/api/feishu/sync/route.ts",
+      "line": 108,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/app/api/feishu/sync/route.ts",
+      "line": 175,
+      "rule": "prefer-const",
+      "message": "'sourceId' is never reassigned. Use 'const' instead."
+    },
+    {
+      "file": "feihe-mvp/components/notes-modal/CategoryNotesModal.tsx",
+      "line": 51,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/components/notes-modal/CategoryNotesModal.tsx",
+      "line": 80,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/components/notes-modal/CategoryNotesModal.tsx",
+      "line": 87,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/components/project-shell/ProjectShell.tsx",
+      "line": 66,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/components/project-shell/ProjectShell.tsx",
+      "line": 73,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/comments/AcceptanceDelivery.tsx",
+      "line": 29,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/onboarding/OnboardingWizard.tsx",
+      "line": 43,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/onboarding/OnboardingWizard.tsx",
+      "line": 50,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/CardEditModal.tsx",
+      "line": 76,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/features/overview/CardEditModal.tsx",
+      "line": 77,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/CardEditModal.tsx",
+      "line": 147,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/CardEditModal.tsx",
+      "line": 160,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 67,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 112,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 117,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 147,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 158,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 169,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 183,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 194,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 208,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/features/overview/GeneralWorkbenchBoard.tsx",
+      "line": 266,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/settings/SettingsWorkspace.tsx",
+      "line": 63,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/features/settings/data-sources/FieldMappingEditor.tsx",
+      "line": 126,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/settings/data-sources/FieldMappingEditor.tsx",
+      "line": 160,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/features/settings/members/MemberManagement.tsx",
+      "line": 84,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    },
+    {
+      "file": "feihe-mvp/lib/feishu-detector.ts",
+      "line": 182,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/lib/feishu-detector.ts",
+      "line": 182,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/lib/feishu-sync.ts",
+      "line": 65,
+      "rule": "@typescript-eslint/no-explicit-any",
+      "message": "Unexpected any. Specify a different type."
+    },
+    {
+      "file": "feihe-mvp/lib/hooks/useProjectTab.ts",
+      "line": 26,
+      "rule": "react-hooks/set-state-in-effect",
+      "message": "Error: Calling setState synchronously within an effect can trigger cascading renders"
+    }
+  ]
+}

@@ -75,7 +75,7 @@ export async function GET(request: Request) {
     completedJobsRow,
   ] = await Promise.all([
     d1.prepare('SELECT id,type,title,status,progress,total,succeeded,failed,message,created_at AS createdAt,finished_at AS finishedAt FROM jobs WHERE project_id=? ORDER BY created_at DESC LIMIT 40').bind(project).all(),
-    d1.prepare('SELECT id,action,target_type AS targetType,target_id AS targetId,detail,created_at AS createdAt FROM action_logs WHERE project_id=? ORDER BY created_at DESC LIMIT 60').bind(project).all(),
+    d1.prepare('SELECT id,action,target_type AS targetType,target_id AS targetId,detail,actor_user_id AS actorUserId,created_at AS createdAt FROM action_logs WHERE project_id=? ORDER BY created_at DESC LIMIT 60').bind(project).all(),
     visibility ? d1.prepare(supplierSql).bind(project, visibility).all() : d1.prepare(supplierSql).bind(project).all(),
     d1.prepare(`SELECT visibility,COUNT(*) AS count,ROUND(AVG(LENGTH(planned_content)),1) AS avgLength,
       ROUND(AVG(CASE WHEN planned_content LIKE '%，%' OR planned_content LIKE '%,%' THEN 1.0 ELSE 0 END)*100,1) AS commaRate,

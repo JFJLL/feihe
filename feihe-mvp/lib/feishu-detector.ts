@@ -1,3 +1,4 @@
+import { normalizeBitableFields, spreadsheetColumn } from './feishu-values';
 import { envVar } from './runtime-env';
 
 export interface FeishuLinkInfo {
@@ -114,44 +115,43 @@ export async function inspectFeishuSpreadsheet(spreadsheetToken: string, token: 
   return { sheets };
 }
 
-export async function inspectFeishuBitable(bitableToken: string, token: string): Promise<{
-  tables: Array<{ tableId: string; title: string }>;
-}> {
-  const res = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${bitableToken}/tables`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+async function readBitableCollection(apiPath: string, token: string): Promise<Array<Record<string, unknown>>> {
+  const items: Array<Record<string, unknown>> = [];
+  const seen = new Set<string>(); let next = '';
+  do {
+    const url = 'https://open.feishu.cn/open-apis/bitable/v1/' + apiPath + '?page_size=100' + (next ? '&page_token=' + encodeURIComponent(next) : '');
+    const response = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+    const payload = await response.json() as { code?: number; msg?: string; data?: { items?: Array<Record<string, unknown>>; has_more?: boolean; page_token?: string } };
+    if (!response.ok || payload.code) throw new Error(payload.msg || '多维表格结构读取失败');
+    if (!Array.isArray(payload.data?.items) || typeof payload.data.has_more !== 'boolean') throw new Error('多维表格结构分页缺少完整性标记');
+    items.push(...payload.data.items);
+    next = payload.data.has_more ? payload.data.page_token || '' : '';
+    if (payload.data.has_more && !next) throw new Error('多维表格结构分页缺少 page_token');
+    if (next && seen.has(next)) throw new Error('多维表格结构分页重复');
+    if (next) seen.add(next);
+  } while (next);
+  return items;
+}
 
-  const payload = (await res.json()) as {
-    code?: number;
-    msg?: string;
-    data?: {
-      items?: Array<{
-        table_id: string;
-        name: string;
-      }>;
-    };
-  };
-
-  if (!res.ok || payload.code) {
-    if (payload.code === 99991663 || payload.code === 99991668 || payload.code === 1254003) {
-      throw new Error('应用没有该多维表格的读取权限。请在文档右上角「···」-「添加文档应用」中授权当前应用。');
-    }
-    throw new Error(`飞书多维表格数据表读取失败: ${payload.msg || `HTTP ${res.status}`}`);
-  }
-
-  const tables = (payload.data?.items || []).map((t) => ({
-    tableId: t.table_id,
-    title: t.name,
-  }));
-
-  return { tables };
+export async function inspectFeishuBitable(bitableToken: string, token: string): Promise<{ tables: Array<{ tableId: string; title: string }> }> {
+  const items = await readBitableCollection('apps/' + bitableToken + '/tables', token);
+  return { tables: items.map(t => ({ tableId: String(t.table_id), title: String(t.name) })) };
+}
+export async function inspectFeishuBitableFields(bitableToken: string, tableId: string, token: string) {
+  const items = await readBitableCollection('apps/' + bitableToken + '/tables/' + tableId + '/fields', token);
+  const fields = items.map(f => ({ key: String(f.field_name || ''), type: 'feishu:' + String(f.type), id: String(f.field_id || '') }));
+  if (!fields.length || fields.some(f => !f.key) || new Set(fields.map(f => f.key)).size !== fields.length) throw new Error('多维表格字段结构为空或重名');
+  return fields;
 }
 
 export async function previewFeishuSpreadsheet(spreadsheetToken: string, sheetId: string, token: string): Promise<{
   headers: string[];
   rows: Array<Record<string, unknown>>;
 }> {
-  const range = `${sheetId}!A1:AZ10`;
+  const meta = await inspectFeishuSpreadsheet(spreadsheetToken, token);
+  const columnCount = meta.sheets.find(s => s.sheetId === sheetId)?.columnCount;
+  if (!columnCount) throw new Error('工作表列数未知');
+  const range = sheetId + '!A1:' + spreadsheetColumn(columnCount) + '10';
   const res = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${spreadsheetToken}/values/${encodeURIComponent(range)}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -166,22 +166,21 @@ export async function previewFeishuSpreadsheet(spreadsheetToken: string, sheetId
 export async function previewFeishuBitable(bitableToken: string, tableId: string, token: string): Promise<{
   headers: string[];
   rows: Array<Record<string, unknown>>;
+  schema: Array<{ key: string; type: string }>;
 }> {
+  const schema = await inspectFeishuBitableFields(bitableToken, tableId, token);
   const res = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${bitableToken}/tables/${tableId}/records?page_size=10`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const data = (await res.json()) as { code?: number; msg?: string; data?: { items?: Array<{ fields?: Record<string, unknown> }> } };
   if (!res.ok || data.code) throw new Error(data.msg || '读取多维表格预览失败');
   const items = data.data?.items || [];
-  const keySet = new Set<string>();
+  const keySet = new Set(schema.map(f => f.key));
   const rows = items.map((it) => {
     const fields = it.fields || {};
-    const normalized: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(fields)) {
-      keySet.add(k);
-      normalized[k] = typeof v === 'object' && v !== null ? (v as any).text || (v as any).name || JSON.stringify(v) : v;
-    }
-    return normalized;
+    for (const key of Object.keys(fields)) keySet.add(key);
+    const normalized = normalizeBitableFields(fields);
+    return Object.fromEntries([...keySet].map(key => [key, normalized[key] ?? null]));
   });
-  return { headers: Array.from(keySet), rows };
+  return { headers: Array.from(keySet), rows, schema };
 }

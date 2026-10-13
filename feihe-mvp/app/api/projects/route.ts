@@ -1,6 +1,8 @@
 import { getAuthenticatedUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
+import { projectReadiness } from '@/lib/onboarding';
+import { transformMappedRows, type FieldMappingRule, type MappingContext } from '@/lib/field-mapping';
 
 export const dynamic = 'force-dynamic';
 const text = (value: unknown) => String(value || '').trim();
@@ -53,6 +55,8 @@ export async function GET(request?: Request) {
       availableUsers: availableUsers.results || [],
       onboarding,
       currentUser: access.context!.user,
+      projectRole: access.context!.projectRole,
+      readiness: await projectReadiness(pId, (() => { try { return JSON.parse((onboarding as { completedStepsJson?: string })?.completedStepsJson || '[]'); } catch { return []; } })()),
     });
   }
 
@@ -236,14 +240,23 @@ export async function POST(request: Request) {
 
   // All other actions require existing project access check
   const rawId = body.projectId;
-  const access = await requireProjectAccess(request, rawId, action === 'delete' ? 'admin' : 'manage');
+  const access = await requireProjectAccess(request, rawId, action === 'delete' ? 'admin' : action === 'restore' ? 'restore' : 'manage');
   if (!access.ok) return jsonError(access.error!, access.status!);
 
   const id = access.context!.projectId;
 
+  let readiness: Awaited<ReturnType<typeof projectReadiness>> | undefined;
+  if (body.onboardingStatus === 'ready') {
+    const previous = await d1.prepare('SELECT completed_steps_json FROM project_onboarding WHERE project_id=?').bind(id).first<{ completed_steps_json: string }>();
+    let savedSteps: string[] = []; try { savedSteps = JSON.parse(previous?.completed_steps_json || '[]'); } catch {}
+    const requestedSteps = [...savedSteps.filter(s => s === 'skip:members'), ...(Array.isArray(body.completedSteps) ? body.completedSteps.map(String) : [])];
+    readiness = await projectReadiness(id, requestedSteps);
+    if (!readiness.ready) return Response.json({ ok: false, error: '初始化必要条件未完成：' + readiness.blockedSteps.join('、'), readiness }, { status: 400 });
+  }
+
   if (action === 'update_onboarding') {
-    const statusVal = text(body.onboardingStatus) || 'ready';
-    const completedSteps = Array.isArray(body.completedSteps) ? body.completedSteps : ['template', 'ready'];
+    const statusVal = text(body.onboardingStatus) || 'pending';
+    const completedSteps = readiness?.completedSteps || (Array.isArray(body.completedSteps) ? body.completedSteps.filter(s => s === 'skip:members') : []);
     const stepsJson = JSON.stringify(completedSteps);
     await d1.prepare(`UPDATE projects SET onboarding_status=?, updated_at=? WHERE id=?`).bind(statusVal, now, id).run();
     await d1.prepare(`UPDATE project_onboarding SET current_step=?, completed_steps_json=?, updated_at=? WHERE project_id=?`).bind(statusVal, stepsJson, now, id).run();
@@ -254,7 +267,7 @@ export async function POST(request: Request) {
     if (body.onboardingStatus !== undefined && body.name === undefined) {
       const statusVal = text(body.onboardingStatus) || 'ready';
       await d1.prepare(`UPDATE projects SET onboarding_status=?, updated_at=? WHERE id=?`).bind(statusVal, now, id).run();
-      await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json='["template","source","first_sync","metrics","members"]', updated_at=? WHERE project_id=?`).bind(now, id).run();
+      await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json=?, updated_at=? WHERE project_id=?`).bind(JSON.stringify(readiness?.completedSteps || []), now, id).run();
       return Response.json({ ok: true, id, onboardingStatus: statusVal });
     }
 
@@ -262,6 +275,7 @@ export async function POST(request: Request) {
     if (!existing) return jsonError('项目不存在', 404);
 
     const name = body.name !== undefined ? text(body.name) : (existing.name as string);
+    if (!name) return jsonError('请填写项目名称');
     const spu = body.spu !== undefined ? text(body.spu) : (existing.spu as string);
     const brand = body.brand !== undefined ? text(body.brand) : (existing.brand as string);
     const category = body.category !== undefined ? text(body.category) : (existing.category as string);
@@ -300,7 +314,7 @@ export async function POST(request: Request) {
       .run();
 
     if (body.onboardingStatus === 'ready') {
-      await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json='["template","source","first_sync","metrics","members"]', updated_at=? WHERE project_id=?`).bind(now, id).run();
+      await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json=?, updated_at=? WHERE project_id=?`).bind(JSON.stringify(readiness?.completedSteps || []), now, id).run();
     }
     return Response.json({ ok: true, id });
   }
@@ -338,6 +352,8 @@ export async function POST(request: Request) {
 
   if (action === 'save_source') {
     const sourceId = text(body.id) || crypto.randomUUID();
+    const ownership = await d1.prepare('SELECT project_id FROM data_sources WHERE id=?').bind(sourceId).first<{ project_id: string }>();
+    if (ownership && ownership.project_id !== id) return jsonError('数据源不属于当前项目', 403);
     const name = text(body.name);
     if (!name) return jsonError('请填写数据源名称');
     let mapping = '{}';
@@ -346,12 +362,18 @@ export async function POST(request: Request) {
     } catch {
       return jsonError('字段映射必须是合法 JSON');
     }
+    const parsedMapping = JSON.parse(mapping) as { rules?: FieldMappingRule[]; context?: MappingContext };
+    const rules = Array.isArray(parsedMapping) ? parsedMapping : parsedMapping.rules || [];
+    const mappingErrors = transformMappedRows([], rules).errors;
+    if (mappingErrors.length) return jsonError(mappingErrors.join('；'));
+    if (parsedMapping.context && (parsedMapping.context.projectId !== id || parsedMapping.context.sheetId !== text(body.sheetId))) return jsonError('映射上下文与项目或工作表不匹配');
+    if (!['general', 'dataset', 'owned', 'supplier'].includes(text(body.kind) || 'owned')) return jsonError('不支持的数据用途类型');
     const status = text(body.status) || (text(body.spreadsheet) && text(body.sheetId) ? '已连接' : '未连接');
     await d1
       .prepare(
         `INSERT INTO data_sources(id,project_id,type,name,spreadsheet,sheet_id,range,kind,sync_frequency,status,mapping_json,created_at,updated_at)
         VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
-        name=excluded.name,spreadsheet=excluded.spreadsheet,sheet_id=excluded.sheet_id,range=excluded.range,kind=excluded.kind,sync_frequency=excluded.sync_frequency,status=excluded.status,mapping_json=excluded.mapping_json,updated_at=excluded.updated_at`
+        type=excluded.type,name=excluded.name,spreadsheet=excluded.spreadsheet,sheet_id=excluded.sheet_id,range=excluded.range,kind=excluded.kind,sync_frequency=excluded.sync_frequency,status=excluded.status,mapping_json=excluded.mapping_json,updated_at=excluded.updated_at`
       )
       .bind(
         sourceId,
@@ -360,7 +382,7 @@ export async function POST(request: Request) {
         name,
         text(body.spreadsheet),
         text(body.sheetId),
-        text(body.range) || 'A1:AZ5000',
+        text(body.range),
         text(body.kind) || 'owned',
         text(body.syncFrequency) || 'manual',
         status,

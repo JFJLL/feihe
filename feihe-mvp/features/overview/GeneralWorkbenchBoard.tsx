@@ -1,16 +1,17 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import type { Project } from '../../lib/types/project';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorState } from '../../components/ui/ErrorState';
-import { api, cnTime } from '../../lib/hooks/use-project-data';
+import { api, cnTime, ApiError } from '../../lib/hooks/use-project-data';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import Link from '../../components/ui/AppLink';
 import { CardEditModal, type DashboardCardConfig } from './CardEditModal';
 import { CardRenderView } from './CardRenderView';
+import type { MetricComputeResult } from '../../lib/metrics/engine';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 import { ConflictResolutionDialog } from './ConflictResolutionDialog';
 
@@ -22,6 +23,12 @@ interface DatasetSummary {
   updatedAt: string;
 }
 
+interface DatasetDetail {
+  id: string; name: string; columns: Array<{ key: string; name: string; type: string }>;
+  rowCount: number; rows: Array<Record<string, unknown>>;
+  pagination?: { page: number; pageSize: number; total: number; totalPages: number };
+}
+
 export function GeneralWorkbenchBoard({
   projectId,
   project,
@@ -29,17 +36,10 @@ export function GeneralWorkbenchBoard({
   projectId: string;
   project?: Project;
 }) {
-  const { showToast } = useProject();
+  const { showToast, navigateTo } = useProject();
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [selectedDatasetId, setSelectedDatasetId] = useState<string>('');
-  const [activeDataset, setActiveDataset] = useState<{
-    id: string;
-    name: string;
-    columns: Array<{ key: string; name: string; type: string }>;
-    rowCount: number;
-    rows: Array<Record<string, unknown>>;
-    pagination?: { page: number; pageSize: number; total: number; totalPages: number };
-  } | null>(null);
+  const [detailSnapshot, setDetailSnapshot] = useState<{ key: string; data: DatasetDetail | null; error: string }>({ key: '', data: null, error: '' });
 
   const [loading, setLoading] = useState(true);
   const [dataError, setDataError] = useState('');
@@ -53,6 +53,15 @@ export function GeneralWorkbenchBoard({
   const [draftCards, setDraftCards] = useState<DashboardCardConfig[]>([]);
   const [savingBoard, setSavingBoard] = useState(false);
 
+  const saveLock = useRef(false);
+  const allowNavigation = useRef(false);
+  const workspaceRequest = useRef(0);
+  const detailRequest = useRef(0);
+  const summaryRequest = useRef(0);
+  const metricRequest = useRef(0);
+  const [datasetRevision, setDatasetRevision] = useState(0);
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+
   // Card modal state
   const [modalCard, setModalCard] = useState<DashboardCardConfig | null>(null);
   const [showCardModal, setShowCardModal] = useState(false);
@@ -64,13 +73,15 @@ export function GeneralWorkbenchBoard({
   const [conflictInfo, setConflictInfo] = useState<{ serverVersion: number; localVersion: number } | null>(null);
 
   // Metric evaluation results
-  const [metricResults, setMetricResults] = useState<Record<string, any>>({});
-  const [evaluatingMetrics, setEvaluatingMetrics] = useState(false);
+  const [metricSnapshot, setMetricSnapshot] = useState<{ key: string; results: Record<string, MetricComputeResult>; error: string }>({ key: '', results: {}, error: '' });
 
   // Table pagination and search
   const [searchTable, setSearchTable] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 15;
+  const detailKey = JSON.stringify({ projectId, selectedDatasetId, currentPage, searchTable, datasetRevision });
+  const activeDataset = detailSnapshot.key === detailKey ? detailSnapshot.data : null;
+  const detailError = detailSnapshot.key === detailKey ? detailSnapshot.error : '';
 
   const hasUnsavedChanges = useMemo(() => {
     return isEditingBoard && JSON.stringify(draftCards) !== JSON.stringify(publishedCards);
@@ -78,8 +89,7 @@ export function GeneralWorkbenchBoard({
 
   // Load datasets and dashboard configuration
   const loadWorkspaceData = useCallback(async () => {
-    setLoading(true);
-    setDataError('');
+    const requestId = ++workspaceRequest.current;
     try {
       const [dsRes, dashRes] = await Promise.all([
         api<{ ok: boolean; datasets: DatasetSummary[] }>(`/api/datasets?projectId=${encodeURIComponent(projectId)}`),
@@ -91,10 +101,12 @@ export function GeneralWorkbenchBoard({
         }>(`/api/dashboards?projectId=${encodeURIComponent(projectId)}`),
       ]);
 
+      if (requestId !== workspaceRequest.current) return;
+      setDataError('');
       const dsList = dsRes.datasets || [];
       setDatasets(dsList);
 
-      const chosenDsId = selectedDatasetId || dsList[0]?.id || '';
+      const chosenDsId = dsList[0]?.id || '';
       setSelectedDatasetId(chosenDsId);
 
       const targetDash = dashRes.dashboards?.find((d) => d.id === dashRes.targetDashboardId) || dashRes.dashboards?.[0];
@@ -109,13 +121,14 @@ export function GeneralWorkbenchBoard({
       // If cards are stored in database for this dashboard, parse them
       if (dashRes.cards) {
         const parsedCards: DashboardCardConfig[] = dashRes.cards.map((c) => {
-          let conf: any = {};
+          let conf: Partial<DashboardCardConfig> & { dimension?: string } = {};
           try { conf = JSON.parse(c.configJson || '{}'); } catch {}
           return {
+            ...conf,
             id: c.id,
             title: c.title,
-            type: (c.type as any) || 'metric_card',
-            ...conf,
+            type: c.type === 'bar_chart' ? 'breakdown' : (c.type as DashboardCardConfig['type']) || 'metric_card',
+            groupBy: conf.groupBy || (c.type === 'bar_chart' ? conf.dimension : undefined),
             sortOrder: c.sortOrder,
           };
         });
@@ -137,50 +150,77 @@ export function GeneralWorkbenchBoard({
         setDraftCards([]);
       }
     } catch (err) {
-      setDataError(err instanceof Error ? err.message : '获取工作台数据失败');
+      if (requestId === workspaceRequest.current) setDataError(err instanceof Error ? err.message : '获取工作台数据失败');
     } finally {
-      setLoading(false);
+      if (requestId === workspaceRequest.current) setLoading(false);
     }
-  }, [projectId, selectedDatasetId]);
+  }, [projectId]);
 
   useEffect(() => {
     void loadWorkspaceData();
+    return () => { workspaceRequest.current++; detailRequest.current++; metricRequest.current++; };
   }, [loadWorkspaceData]);
 
   // Load active dataset rows with server-side pagination & search
-  const loadDatasetDetail = useCallback(async (dsId: string, page = 1, search = '') => {
-    if (!dsId) {
-      setActiveDataset(null);
-      return;
-    }
+  const loadDatasetDetail = useCallback(async (dsId: string, page = 1, search = '', requestKey = detailKey) => {
+    const requestId = ++detailRequest.current;
+    if (!dsId) return;
     try {
       const url = `/api/datasets?projectId=${encodeURIComponent(projectId)}&id=${encodeURIComponent(dsId)}&page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`;
-      const detail = await api<{ ok: boolean; dataset: any }>(url);
+      const detail = await api<{ ok: boolean; dataset: DatasetDetail }>(url);
+      if (requestId !== detailRequest.current) return;
+      if (detail.dataset?.pagination && page > detail.dataset.pagination.totalPages) {
+        setCurrentPage(Math.max(1, detail.dataset.pagination.totalPages));
+        return;
+      }
       if (detail.dataset) {
-        setActiveDataset(detail.dataset);
+        setDetailSnapshot({ key: requestKey, data: detail.dataset, error: '' });
       }
     } catch (err) {
-      showToast(err instanceof Error ? err.message : '加载数据集记录失败', 'error');
+      if (requestId === detailRequest.current) setDetailSnapshot({ key: requestKey, data: null, error: err instanceof Error ? err.message : '加载数据集记录失败' });
     }
-  }, [projectId, showToast]);
+  }, [projectId, detailKey]);
 
   useEffect(() => {
     if (selectedDatasetId) {
       void loadDatasetDetail(selectedDatasetId, currentPage, searchTable);
     }
-  }, [selectedDatasetId, currentPage, searchTable, loadDatasetDetail]);
+  }, [selectedDatasetId, currentPage, searchTable, datasetRevision, loadDatasetDetail]);
+
+  // Data refresh updates summaries and detail independently of dashboard drafts.
+  useEffect(() => {
+    let cancelled = false;
+    const refreshDatasets = async (event?: Event) => {
+      const affected = (event as CustomEvent<{ projectId?: string }> | undefined)?.detail?.projectId;
+      if (affected && affected !== projectId) return;
+      const requestId = ++summaryRequest.current;
+      try {
+        const response = await api<{ datasets: DatasetSummary[] }>('/api/datasets?projectId=' + encodeURIComponent(projectId));
+        if (cancelled || requestId !== summaryRequest.current) return;
+        setDatasets(response.datasets);
+        setDatasetRevision(r => r + 1);
+      } catch (error) {
+        if (!cancelled && requestId === summaryRequest.current) setDetailSnapshot(previous => ({ ...previous, error: error instanceof Error ? error.message : '数据刷新失败' }));
+      }
+    };
+    window.addEventListener('app:datasets-changed', refreshDatasets);
+    window.addEventListener('focus', refreshDatasets);
+    return () => { cancelled = true; window.removeEventListener('app:datasets-changed', refreshDatasets); window.removeEventListener('focus', refreshDatasets); };
+  }, [projectId]);
 
   // Evaluate cards through unified backend metric engine
   const activeCards = isEditingBoard ? draftCards : publishedCards;
+  const metricKey = JSON.stringify({ projectId, selectedDatasetId, activeCards, datasetRevision });
+  const currentMetrics = metricSnapshot.key === metricKey;
+  const metricResults = currentMetrics ? metricSnapshot.results : {};
+  const metricError = currentMetrics ? metricSnapshot.error : '';
+  const evaluatingMetrics = activeCards.length > 0 && !currentMetrics;
 
   const evaluateCardsOnServer = useCallback(async (cardsToEval: DashboardCardConfig[]) => {
-    if (!cardsToEval.length) {
-      setMetricResults({});
-      return;
-    }
-    setEvaluatingMetrics(true);
+    const requestId = ++metricRequest.current;
+    if (!cardsToEval.length) return;
     try {
-      const res = await api<{ ok: boolean; metrics: any[] }>('/api/metrics', {
+      const res = await api<{ ok: boolean; metrics: MetricComputeResult[] }>('/api/metrics', {
         method: 'POST',
         body: JSON.stringify({
           projectId,
@@ -190,26 +230,27 @@ export function GeneralWorkbenchBoard({
           })),
         }),
       });
+      if (requestId !== metricRequest.current) return;
       if (res.metrics) {
-        const resultsMap: Record<string, any> = {};
+        const resultsMap: Record<string, MetricComputeResult> = {};
         cardsToEval.forEach((c, idx) => {
           const key = c.id || `card-${idx}`;
           resultsMap[key] = res.metrics[idx];
         });
-        setMetricResults(resultsMap);
+        setMetricSnapshot({ key: metricKey, results: resultsMap, error: '' });
       }
-    } catch {}
-    finally {
-      setEvaluatingMetrics(false);
+    } catch (error) {
+      if (requestId === metricRequest.current) setMetricSnapshot({ key: metricKey, results: {}, error: error instanceof Error ? error.message : '指标计算失败' });
     }
-  }, [projectId, selectedDatasetId]);
+  }, [projectId, selectedDatasetId, metricKey]);
 
   useEffect(() => {
     void evaluateCardsOnServer(activeCards);
-  }, [activeCards, evaluateCardsOnServer]);
+  }, [activeCards, evaluateCardsOnServer, datasetRevision]);
 
   // Dataset switching guard
   function requestDatasetSwitch(dsId: string) {
+    if (saveLock.current || dsId === selectedDatasetId) return;
     if (hasUnsavedChanges) {
       setPendingDatasetSwitch(dsId);
       setShowUnsavedDialog(true);
@@ -220,81 +261,107 @@ export function GeneralWorkbenchBoard({
     }
   }
 
-  // Save Dashboard with version lock
-  const saveDashboard = async (force = false) => {
+  // Only a confirmed server snapshot can advance a pending dataset or navigation.
+  const saveDashboard = async (force = false): Promise<boolean> => {
+    if (saveLock.current) return false;
+    saveLock.current = true;
     setSavingBoard(true);
+    const snapshot = draftCards.map((c, idx) => ({ id: c.id, title: c.title, type: c.type, metricKeys: c.metric ? [c.metric] : [], config: { ...c, datasetId: c.datasetId || selectedDatasetId }, sortOrder: idx }));
     try {
-      const res = await api<{ ok: boolean; version: number; conflict?: boolean; serverVersion?: number }>(
-        `/api/dashboards`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            projectId,
-            dashboardId: dashboardId || `dash-${projectId}-default`,
-            name: '默认工作台看板',
-            version: dashboardVersion,
-            force,
-            cards: draftCards.map((c, idx) => ({
-              id: c.id,
-              title: c.title,
-              type: c.type,
-              metricKeys: c.metric ? [c.metric] : [],
-              config: {
-                datasetId: c.datasetId || selectedDatasetId,
-                metric: c.metric,
-                aggregation: c.aggregation,
-                field: c.field,
-                numField: c.numField,
-                denField: c.denField,
-                groupBy: c.groupBy,
-                dateField: c.dateField,
-                unit: c.unit,
-                format: c.format,
-                desc: c.desc,
-              },
-              sortOrder: idx,
-            })),
-          }),
-        }
-      );
-
+      const res = await api<{ ok: boolean; dashboardId: string; version: number; cards: Array<{ id: string; title: string; type: string; configJson: string; sortOrder: number }> }>('/api/dashboards', {
+        method: 'POST', body: JSON.stringify({ projectId, dashboardId: dashboardId || 'dash-' + projectId + '-default', name: '默认工作台看板', version: dashboardVersion, force, cards: snapshot }),
+      });
+      const confirmed = res.cards.map(c => ({ ...JSON.parse(c.configJson), id: c.id, title: c.title, type: c.type, sortOrder: c.sortOrder } as DashboardCardConfig));
+      setDashboardId(res.dashboardId);
       setDashboardVersion(res.version);
-      setPublishedCards(draftCards);
-      showToast('看板已成功保存并发布！', 'success');
+      setPublishedCards(confirmed);
+      setDraftCards(confirmed);
       setIsEditingBoard(false);
       setConflictInfo(null);
-    } catch (err: any) {
-      if (err.status === 409 || err.message?.includes('冲突') || err.message?.includes('409')) {
-        setConflictInfo({
-          serverVersion: dashboardVersion + 1,
-          localVersion: dashboardVersion,
-        });
-      } else {
-        showToast(err instanceof Error ? err.message : '保存看板失败', 'error');
-      }
-    } finally {
-      setSavingBoard(false);
-    }
+      showToast('看板已成功保存并发布！', 'success');
+      return true;
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        const version = Number(err.data?.serverVersion);
+        if (Number.isFinite(version)) setConflictInfo({ serverVersion: version, localVersion: dashboardVersion });
+        else showToast('看板冲突响应缺少服务器版本，请保留草稿并重试', 'error');
+      } else showToast(err instanceof Error ? err.message : '保存看板失败', 'error');
+      return false;
+    } finally { saveLock.current = false; setSavingBoard(false); }
   };
 
+  function completePendingSwitch() {
+    setShowUnsavedDialog(false);
+    if (pendingDatasetSwitch) { setSelectedDatasetId(pendingDatasetSwitch); setCurrentPage(1); setSearchTable(''); setPendingDatasetSwitch(null); }
+    if (pendingNavigation) { const target = pendingNavigation; setPendingNavigation(null); allowNavigation.current = true; navigateTo(target); }
+  }
+
+  useEffect(() => {
+    if (!hasUnsavedChanges && !savingBoard) return;
+    const beforeUnload = (e: BeforeUnloadEvent) => { if (allowNavigation.current) return; e.preventDefault(); e.returnValue = ''; };
+    const navigation = (e: Event) => {
+      if (allowNavigation.current) return;
+      const target = (e as CustomEvent<{ href: string }>).detail?.href;
+      if (!target || target === window.location.pathname + window.location.search) return;
+      e.preventDefault();
+      if (!saveLock.current) { setPendingNavigation(target); setShowUnsavedDialog(true); }
+    };
+    const linkClick = (e: MouseEvent) => {
+      const anchor = (e.target as Element).closest?.('a[href]');
+      if (!anchor || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || anchor.getAttribute('target') === '_blank') return;
+      const href = anchor.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      e.preventDefault(); e.stopPropagation();
+      if (!saveLock.current) { setPendingNavigation(href); setShowUnsavedDialog(true); }
+    };
+    const protectedHref = window.location.pathname + window.location.search;
+    const historyNavigation = (e: PopStateEvent) => {
+      if (allowNavigation.current) { allowNavigation.current = false; return; }
+      const target = window.location.pathname + window.location.search;
+      if (target === protectedHref) return;
+      // Restore the protected screen before route subscribers can unmount the draft.
+      e.stopImmediatePropagation();
+      window.history.pushState(null, '', protectedHref);
+      if (!saveLock.current) { setPendingNavigation(target); setShowUnsavedDialog(true); }
+    };
+    const browserNavigation = (window as Window & { navigation?: EventTarget }).navigation;
+    const traversal = (event: Event) => {
+      const intent = event as Event & { navigationType?: string; destination?: { url: string } };
+      if (intent.navigationType !== 'traverse' || !intent.cancelable || allowNavigation.current || !intent.destination) return;
+      const target = new URL(intent.destination.url);
+      event.preventDefault();
+      if (!saveLock.current) { setPendingNavigation(target.pathname + target.search); setShowUnsavedDialog(true); }
+    };
+    browserNavigation?.addEventListener('navigate', traversal);
+    window.addEventListener('popstate', historyNavigation, true);
+    window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('app:before-navigate', navigation);
+    document.addEventListener('click', linkClick, true);
+    return () => { browserNavigation?.removeEventListener('navigate', traversal); window.removeEventListener('popstate', historyNavigation, true); window.removeEventListener('beforeunload', beforeUnload); window.removeEventListener('app:before-navigate', navigation); document.removeEventListener('click', linkClick, true); };
+  }, [hasUnsavedChanges, savingBoard]);
+
   function handleCancelEdit() {
+    if (saveLock.current) return;
     setDraftCards(publishedCards);
     setIsEditingBoard(false);
   }
 
   function handleAddCardClick() {
+    if (saveLock.current) return;
     setModalCard(null);
     setEditingCardIndex(null);
     setShowCardModal(true);
   }
 
   function handleEditCardClick(index: number) {
+    if (saveLock.current) return;
     setModalCard(draftCards[index]);
     setEditingCardIndex(index);
     setShowCardModal(true);
   }
 
   function handleSaveCardFromModal(savedCard: DashboardCardConfig) {
+    if (saveLock.current) return;
     if (editingCardIndex !== null && editingCardIndex >= 0) {
       const next = [...draftCards];
       next[editingCardIndex] = savedCard;
@@ -307,10 +374,12 @@ export function GeneralWorkbenchBoard({
   }
 
   function handleRemoveCard(index: number) {
+    if (saveLock.current) return;
     setDraftCards(draftCards.filter((_, i) => i !== index));
   }
 
   function handleMoveCard(index: number, delta: number) {
+    if (saveLock.current) return;
     const nextIdx = index + delta;
     if (nextIdx < 0 || nextIdx >= draftCards.length) return;
     const next = [...draftCards];
@@ -322,10 +391,10 @@ export function GeneralWorkbenchBoard({
 
   const availableColumns = useMemo(() => {
     if (activeDataset?.columns?.length) {
-      return activeDataset.columns.map((c) => c.name || c.key);
+      return activeDataset.columns;
     }
     if (activeDataset?.rows?.length) {
-      return Object.keys(activeDataset.rows[0] || {});
+      return Object.keys(activeDataset.rows[0] || {}).map(key => ({ key, name: key, type: 'text' }));
     }
     return [];
   }, [activeDataset]);
@@ -341,6 +410,7 @@ export function GeneralWorkbenchBoard({
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Top Header / View & Dataset Bar */}
       <div
+        className="workbench-toolbar"
         style={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -358,6 +428,8 @@ export function GeneralWorkbenchBoard({
           <span style={{ fontSize: 13, fontWeight: 600, color: '#475569' }}>当前业务数据集:</span>
           {datasets.length > 0 ? (
             <CustomSelect
+              ariaLabel="当前业务数据集"
+              disabled={savingBoard}
               value={selectedDatasetId}
               onChange={requestDatasetSwitch}
               options={datasets.map((d) => ({
@@ -409,6 +481,7 @@ export function GeneralWorkbenchBoard({
               {isEditingBoard ? (
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button
+                    disabled={savingBoard}
                     onClick={handleAddCardClick}
                     style={{
                       padding: '6px 12px',
@@ -440,6 +513,7 @@ export function GeneralWorkbenchBoard({
                     {savingBoard ? '正在发布…' : '✓ 保存并发布看板'}
                   </button>
                   <button
+                    disabled={savingBoard}
                     onClick={handleCancelEdit}
                     style={{
                       padding: '6px 12px',
@@ -479,6 +553,9 @@ export function GeneralWorkbenchBoard({
         </div>
       </div>
 
+      {metricError && <div role="alert">指标计算失败：{metricError}</div>}
+      {evaluatingMetrics && <div role="status">正在重新计算指标…</div>}
+      {detailError && <ErrorState error={detailError} onRetry={() => loadDatasetDetail(selectedDatasetId, currentPage, searchTable)} />}
       {viewMode === 'board' ? (
         <>
           {datasets.length === 0 ? (
@@ -542,7 +619,7 @@ export function GeneralWorkbenchBoard({
                         metric={metric}
                         index={idx}
                         totalCards={activeCards.length}
-                        isEditing={isEditingBoard}
+                        isEditing={isEditingBoard && !savingBoard}
                         onMove={(delta) => handleMoveCard(idx, delta)}
                         onEdit={() => handleEditCardClick(idx)}
                         onRemove={() => handleRemoveCard(idx)}
@@ -586,8 +663,8 @@ export function GeneralWorkbenchBoard({
                   <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
                     <th style={{ padding: '8px 12px', color: '#64748b' }}>#</th>
                     {availableColumns.map((col) => (
-                      <th key={col} style={{ padding: '8px 12px', color: '#475569', fontWeight: 600 }}>
-                        {col}
+                      <th key={col.key} style={{ padding: '8px 12px', color: '#475569', fontWeight: 600 }}>
+                        {col.name}
                       </th>
                     ))}
                   </tr>
@@ -599,8 +676,8 @@ export function GeneralWorkbenchBoard({
                         {(currentPage - 1) * pageSize + rIdx + 1}
                       </td>
                       {availableColumns.map((col) => (
-                        <td key={col} style={{ padding: '8px 12px', color: '#1e293b' }}>
-                          {String(row[col] ?? '—')}
+                        <td key={col.key} style={{ padding: '8px 12px', color: '#1e293b' }}>
+                          {String(row[col.key] ?? '—')}
                         </td>
                       ))}
                     </tr>
@@ -640,6 +717,7 @@ export function GeneralWorkbenchBoard({
           projectId={projectId}
           initialCard={modalCard}
           datasets={datasets}
+          defaultDatasetId={selectedDatasetId}
           onSave={handleSaveCardFromModal}
           onClose={() => setShowCardModal(false)}
         />
@@ -648,44 +726,27 @@ export function GeneralWorkbenchBoard({
       {/* Unsaved Changes Warning Dialog */}
       <UnsavedChangesDialog
         open={showUnsavedDialog}
-        onSave={async () => {
-          await saveDashboard(false);
-          setShowUnsavedDialog(false);
-          if (pendingDatasetSwitch) {
-            setSelectedDatasetId(pendingDatasetSwitch);
-            setPendingDatasetSwitch(null);
-            setCurrentPage(1);
-          }
-        }}
-        onDiscard={() => {
-          setDraftCards(publishedCards);
-          setIsEditingBoard(false);
-          setShowUnsavedDialog(false);
-          if (pendingDatasetSwitch) {
-            setSelectedDatasetId(pendingDatasetSwitch);
-            setPendingDatasetSwitch(null);
-            setCurrentPage(1);
-          }
-        }}
-        onCancel={() => {
-          setShowUnsavedDialog(false);
-          setPendingDatasetSwitch(null);
-        }}
+        busy={savingBoard}
+        onSave={async () => { if (await saveDashboard(false)) completePendingSwitch(); }}
+        onDiscard={() => { if (saveLock.current) return; setDraftCards(publishedCards); setIsEditingBoard(false); completePendingSwitch(); }}
+        onCancel={() => { if (saveLock.current) return; setShowUnsavedDialog(false); setPendingDatasetSwitch(null); setPendingNavigation(null); }}
       />
 
       {/* 409 Concurrency Conflict Dialog */}
       <ConflictResolutionDialog
         open={Boolean(conflictInfo)}
-        serverVersion={conflictInfo?.serverVersion || dashboardVersion + 1}
+        serverVersion={conflictInfo?.serverVersion ?? dashboardVersion}
         localVersion={conflictInfo?.localVersion || dashboardVersion}
         onReload={() => {
           setConflictInfo(null);
+          setShowUnsavedDialog(false);
+          setPendingDatasetSwitch(null);
+          setPendingNavigation(null);
+          setIsEditingBoard(false);
           void loadWorkspaceData();
         }}
-        onForceSave={() => {
-          setConflictInfo(null);
-          void saveDashboard(true);
-        }}
+        busy={savingBoard}
+        onForceSave={async () => { if (await saveDashboard(true)) completePendingSwitch(); }}
         onCancel={() => setConflictInfo(null)}
       />
     </div>

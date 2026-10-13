@@ -1,0 +1,132 @@
+{
+  "viewport": {
+    "ok": true,
+    "data": {
+      "type": "object",
+      "value": {
+        "dialog": {
+          "height": 758.9271240234375,
+          "width": 366,
+          "x": 12,
+          "y": 42.53125
+        },
+        "dialogClientHeight": 758,
+        "dialogClientWidth": 365,
+        "dialogScrollHeight": 758,
+        "dialogScrollWidth": 365,
+        "documentWidth": 390,
+        "focusInside": true,
+        "preview": true,
+        "viewport": {
+          "height": 844,
+          "width": 390
+        }
+      }
+    }
+  },
+  "keyboardEscape": {
+    "ok": true,
+    "data": {
+      "type": "object",
+      "value": {
+        "focus": "＋ 添加卡片",
+        "openDialogs": 0
+      }
+    }
+  },
+  "save": {
+    "url": "http://127.0.0.1:5186/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "requestBody": {
+      "projectId": "repro-1791865209821",
+      "dashboardId": "dash-repro-1791865209821-default",
+      "name": "默认工作台看板",
+      "version": 2,
+      "force": false,
+      "cards": [
+        {
+          "id": "card-be91b689-f93f-4f17-a502-2405a9dbde17",
+          "title": "原始任务总数",
+          "type": "metric_card",
+          "metricKeys": [
+            "task_total"
+          ],
+          "config": {
+            "metric": "task_total",
+            "datasetId": "ds-repro-1791865209821-a",
+            "id": "card-be91b689-f93f-4f17-a502-2405a9dbde17",
+            "title": "原始任务总数",
+            "type": "metric_card",
+            "sortOrder": 0
+          },
+          "sortOrder": 0
+        },
+        {
+          "id": "card-1791865831411",
+          "title": "Chrome 390px记录计数",
+          "type": "metric_card",
+          "metricKeys": [
+            "custom"
+          ],
+          "config": {
+            "id": "card-1791865831411",
+            "title": "Chrome 390px记录计数",
+            "type": "metric_card",
+            "datasetId": "ds-repro-1791865209821-a",
+            "aggregation": "count",
+            "metric": "custom",
+            "mode": "custom",
+            "missingPolicy": "skip",
+            "from": "",
+            "to": "",
+            "desc": "",
+            "field": "",
+            "numField": "",
+            "denField": "",
+            "groupBy": "",
+            "dateField": "",
+            "unit": "",
+            "format": "number"
+          },
+          "sortOrder": 1
+        }
+      ]
+    },
+    "body": {
+      "ok": true,
+      "dashboardId": "dash-repro-1791865209821-default",
+      "version": 3,
+      "cardCount": 2,
+      "cards": [
+        {
+          "id": "card-be91b689-f93f-4f17-a502-2405a9dbde17",
+          "title": "原始任务总数",
+          "type": "metric_card",
+          "configJson": "{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791865209821-a\",\"id\":\"card-be91b689-f93f-4f17-a502-2405a9dbde17\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}",
+          "metricKeysJson": "[\"task_total\"]",
+          "sortOrder": 0
+        },
+        {
+          "id": "card-1791865831411",
+          "title": "Chrome 390px记录计数",
+          "type": "metric_card",
+          "configJson": "{\"id\":\"card-1791865831411\",\"title\":\"Chrome 390px记录计数\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791865209821-a\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}",
+          "metricKeysJson": "[\"custom\"]",
+          "sortOrder": 1
+        }
+      ]
+    }
+  },
+  "refresh": {
+    "titlePresent": true,
+    "threeVisible": true,
+    "editingButtonPresent": true,
+    "url": "http://127.0.0.1:5186/projects/repro-1791865209821"
+  },
+  "actualCard": {
+    "card": "Chrome 390px记录计数3来源: 任务数据A有效样本: 3 行",
+    "titlePresent": true,
+    "titleTag": "DIV"
+  }
+}

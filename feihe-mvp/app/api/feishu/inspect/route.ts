@@ -63,11 +63,10 @@ export async function POST(request: Request) {
     if (detected.type === 'feishu_sheet' && realSpreadsheetToken) {
       const meta = await inspectFeishuSpreadsheet(realSpreadsheetToken, token);
       const chosenSheetId = body.sheetId || detected.sheetId || meta.sheets[0]?.sheetId;
-      let preview: { headers: string[]; rows: Array<Record<string, unknown>> } | undefined;
+      if (!meta.sheets.some(s => s.sheetId === chosenSheetId)) throw new Error('所选工作表不存在');
+      let preview: { headers: string[]; rows: Array<Record<string, unknown>>; schema?: Array<{ key: string; type: string }> } | undefined;
       if (chosenSheetId) {
-        try {
-          preview = await previewFeishuSpreadsheet(realSpreadsheetToken, chosenSheetId, token);
-        } catch {}
+        preview = await previewFeishuSpreadsheet(realSpreadsheetToken, chosenSheetId, token);
       }
 
       return Response.json({
@@ -88,11 +87,10 @@ export async function POST(request: Request) {
       const meta = await inspectFeishuBitable(realBitableToken, token);
       const tablesAsSheets = meta.tables.map((t) => ({ sheetId: t.tableId, title: t.title, rowCount: 0, columnCount: 0 }));
       const chosenTableId = body.sheetId || detected.sheetId || meta.tables[0]?.tableId;
-      let preview: { headers: string[]; rows: Array<Record<string, unknown>> } | undefined;
+      if (!meta.tables.some(t => t.tableId === chosenTableId)) throw new Error('所选数据表不存在');
+      let preview: { headers: string[]; rows: Array<Record<string, unknown>>; schema?: Array<{ key: string; type: string }> } | undefined;
       if (chosenTableId) {
-        try {
-          preview = await previewFeishuBitable(realBitableToken, chosenTableId, token);
-        } catch {}
+        preview = await previewFeishuBitable(realBitableToken, chosenTableId, token);
       }
 
       return Response.json({

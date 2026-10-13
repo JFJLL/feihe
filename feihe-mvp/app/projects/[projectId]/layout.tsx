@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 ﻿import { getChatGPTUser } from '../../chatgpt-auth';
 import { ProjectShell } from '../../../components/project-shell/ProjectShell';
 import { loadProjectBootstrap } from '../../../lib/project-bootstrap';
@@ -12,7 +13,7 @@ export default async function ProjectLayout({
   params: Promise<{ projectId: string }>;
 }) {
   const [{ projectId }, user] = await Promise.all([params, getChatGPTUser()]);
-  const initialData = await loadProjectBootstrap(projectId);
+  const initialData = await loadProjectBootstrap(projectId, new Headers(await headers()));
 
   return (
     <ProjectShell

@@ -1,58 +1,26 @@
 'use client';
 
-import { useSearchParams, usePathname } from 'next/navigation';
-import { useCallback, useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useCallback, useSyncExternalStore } from 'react';
 
-export function useProjectTab(
-  defaultTab: string,
-  allowedTabs: string[],
-  aliases?: Record<string, string>
-): [string, (tab: string) => void] {
+function subscribeUrl(onChange: () => void) {
+  window.addEventListener('popstate', onChange);
+  return () => window.removeEventListener('popstate', onChange);
+}
+
+export function useProjectTab(defaultTab: string, allowedTabs: string[], aliases?: Record<string, string>): [string, (tab: string) => void] {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-
-  const resolveTab = useCallback((raw: string | null | undefined): string | null => {
-    if (!raw) return null;
-    const mapped = aliases && aliases[raw] ? aliases[raw] : raw;
-    return allowedTabs.includes(mapped) ? mapped : null;
-  }, [aliases, allowedTabs]);
-
-  const urlTab = resolveTab(searchParams?.get('tab'));
-  const [activeTab, setActiveTab] = useState<string>(urlTab || defaultTab);
-
-  // Sync state whenever URL searchParams change
-  useEffect(() => {
-    const nextTab = resolveTab(searchParams?.get('tab')) || defaultTab;
-    setActiveTab(nextTab);
-  }, [searchParams, resolveTab, defaultTab]);
-
-  // Listen to popstate for browser Back / Forward
-  useEffect(() => {
-    const onPopState = () => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const popTab = resolveTab(params.get('tab')) || defaultTab;
-        setActiveTab(popTab);
-      } catch {}
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, [resolveTab, defaultTab]);
-
-  const setTab = useCallback(
-    (nextTab: string) => {
-      const target = resolveTab(nextTab) || defaultTab;
-      setActiveTab(target);
-      try {
-        const params = new URLSearchParams(window.location.search);
-        params.set('tab', target);
-        const newUrl = pathname + '?' + params.toString();
-        window.history.pushState({ tab: target }, '', newUrl);
-        window.dispatchEvent(new Event('popstate'));
-      } catch {}
-    },
-    [pathname, resolveTab, defaultTab]
-  );
-
+  const search = useSyncExternalStore(subscribeUrl, () => window.location.search, () => '?' + (searchParams?.toString() || ''));
+  const resolveTab = useCallback((raw: string | null | undefined) => {
+    const mapped = raw && aliases?.[raw] ? aliases[raw] : raw;
+    return mapped && allowedTabs.includes(mapped) ? mapped : defaultTab;
+  }, [aliases, allowedTabs, defaultTab]);
+  const activeTab = resolveTab(new URLSearchParams(search).get('tab'));
+  const setTab = useCallback((nextTab: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('tab', resolveTab(nextTab));
+    window.history.pushState({ tab: nextTab }, '', window.location.pathname + '?' + params.toString());
+    window.dispatchEvent(new Event('popstate'));
+  }, [resolveTab]);
   return [activeTab, setTab];
 }

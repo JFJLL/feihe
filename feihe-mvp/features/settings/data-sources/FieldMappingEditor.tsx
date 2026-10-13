@@ -2,16 +2,8 @@
 
 import { useState } from 'react';
 import { CustomSelect } from '../../../components/ui/CustomSelect';
-
-export interface FieldMappingRule {
-  sourceField: string;
-  targetField: string;
-  type: 'text' | 'number' | 'date' | 'boolean';
-  isKey?: boolean;
-  isDate?: boolean;
-  required?: boolean;
-  nullPolicy?: 'null' | 'zero' | 'empty' | 'skip';
-}
+import { transformMappedRows, type FieldMappingRule } from '../../../lib/field-mapping';
+export type { FieldMappingRule } from '../../../lib/field-mapping';
 
 export function FieldMappingEditor({
   rawHeaders,
@@ -32,24 +24,9 @@ export function FieldMappingEditor({
     onChange(updated);
   }
 
-  const mappedPreviewRows = rawPreviewRows.map((row) => {
-    const out: Record<string, unknown> = {};
-    for (const rule of mappingRules) {
-      if (!rule.sourceField || !rule.targetField) continue;
-      const raw = row[rule.sourceField];
-      if (raw === undefined || raw === null || String(raw).trim() === '') {
-        out[rule.targetField] = rule.nullPolicy === 'zero' ? 0 : '—';
-        continue;
-      }
-      if (rule.type === 'number') {
-        const num = Number(String(raw).replace(/[,￥¥%]/g, ''));
-        out[rule.targetField] = isNaN(num) ? (rule.nullPolicy === 'zero' ? 0 : '—') : num;
-      } else {
-        out[rule.targetField] = String(raw);
-      }
-    }
-    return out;
-  });
+  const transformed = transformMappedRows(rawPreviewRows, mappingRules);
+  const mappedPreviewRows = transformed.rows;
+  const mappedHeaders = [...new Set(mappedPreviewRows.flatMap(row => Object.keys(row)))];
 
   return (
     <div style={{ marginTop: 20, borderTop: '1px solid #e2e8f0', paddingTop: 16 }}>
@@ -94,6 +71,8 @@ export function FieldMappingEditor({
         </div>
       </div>
 
+      <p style={{ fontSize: 12 }}>多个主键字段组成联合主键；空主键、重复主键和非法值会拒绝整次导入。必填检查先于补值，未映射字段保留。</p>
+      {transformed.errors.length > 0 && <div role="alert">{transformed.errors.join('；')}</div>}
       <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', marginBottom: 14 }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
           <thead>
@@ -115,6 +94,7 @@ export function FieldMappingEditor({
                 </td>
                 <td style={{ padding: '8px 12px' }}>
                   <input
+                    aria-label={rule.sourceField + '目标字段'}
                     value={rule.targetField}
                     onChange={(e) => updateRule(idx, { targetField: e.target.value })}
                     style={{ height: 32, padding: '0 8px', borderRadius: 4, border: '1px solid #cbd5e1', fontSize: 13, width: 140 }}
@@ -122,8 +102,9 @@ export function FieldMappingEditor({
                 </td>
                 <td style={{ padding: '8px 12px' }}>
                   <CustomSelect
-                    value={rule.type}
-                    onChange={(val: any) => updateRule(idx, { type: val })}
+                    ariaLabel={rule.sourceField + '数据类型'}
+                    value={rule.type || 'text'}
+                    onChange={val => updateRule(idx, { type: val as FieldMappingRule['type'], isDate: val === 'date', nullPolicy: 'null' })}
                     options={[
                       { value: 'text', label: '文本 (text)' },
                       { value: 'number', label: '数值 (number)' },
@@ -132,10 +113,12 @@ export function FieldMappingEditor({
                     ]}
                     style={{ width: 125 }}
                   />
+                  {(rule.type === 'date' || rule.isDate) && <CustomSelect ariaLabel={rule.sourceField + '日期格式'} value={rule.dateFormat || 'auto'} onChange={value => updateRule(idx, { dateFormat: value as FieldMappingRule['dateFormat'] })} options={['auto', 'YYYY-MM-DD', 'YYYY-MM', 'ISO']} />}
                 </td>
                 <td style={{ padding: '8px 12px', textAlign: 'center' }}>
                   <input
                     type="checkbox"
+                    aria-label={rule.sourceField + '主键'}
                     checked={Boolean(rule.isKey)}
                     onChange={(e) => updateRule(idx, { isKey: e.target.checked })}
                   />
@@ -143,25 +126,28 @@ export function FieldMappingEditor({
                 <td style={{ padding: '8px 12px', textAlign: 'center' }}>
                   <input
                     type="checkbox"
-                    checked={Boolean(rule.isDate)}
-                    onChange={(e) => updateRule(idx, { isDate: e.target.checked })}
+                    aria-label={rule.sourceField + '日期字段'}
+                    checked={rule.type === 'date' || Boolean(rule.isDate)}
+                    onChange={(e) => updateRule(idx, { isDate: e.target.checked, type: e.target.checked ? 'date' : 'text', nullPolicy: 'null' })}
                   />
                 </td>
                 <td style={{ padding: '8px 12px', textAlign: 'center' }}>
                   <input
                     type="checkbox"
+                    aria-label={rule.sourceField + '必填'}
                     checked={Boolean(rule.required)}
                     onChange={(e) => updateRule(idx, { required: e.target.checked })}
                   />
                 </td>
                 <td style={{ padding: '8px 12px' }}>
                   <CustomSelect
+                    ariaLabel={rule.sourceField + '空值处理'}
                     value={rule.nullPolicy || 'null'}
-                    onChange={(val: any) => updateRule(idx, { nullPolicy: val })}
+                    onChange={val => updateRule(idx, { nullPolicy: val as FieldMappingRule['nullPolicy'] })}
                     options={[
                       { value: 'null', label: '保留为空 (null)' },
-                      { value: 'zero', label: '填充为 0' },
-                      { value: 'empty', label: '填充为空串' },
+                      { value: 'zero', label: '填充为 0', disabled: rule.type !== 'number' },
+                      { value: 'empty', label: '填充为空串', disabled: rule.type !== 'text' },
                     ]}
                     style={{ width: 125 }}
                   />
@@ -181,7 +167,7 @@ export function FieldMappingEditor({
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
             <thead>
               <tr style={{ background: '#f1f5f9' }}>
-                {(previewMode === 'mapped' ? mappingRules.map((r) => r.targetField) : rawHeaders).map((h) => (
+                {(previewMode === 'mapped' ? mappedHeaders : rawHeaders).map((h) => (
                   <th key={h} style={{ padding: '6px 10px', color: '#475569' }}>{h}</th>
                 ))}
               </tr>
@@ -189,7 +175,7 @@ export function FieldMappingEditor({
             <tbody>
               {(previewMode === 'mapped' ? mappedPreviewRows : rawPreviewRows).slice(0, 5).map((r, rIdx) => (
                 <tr key={rIdx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  {(previewMode === 'mapped' ? mappingRules.map((m) => m.targetField) : rawHeaders).map((h) => (
+                  {(previewMode === 'mapped' ? mappedHeaders : rawHeaders).map((h) => (
                     <td key={h} style={{ padding: '6px 10px', color: '#1e293b' }}>
                       {String(r[h] ?? '—')}
                     </td>

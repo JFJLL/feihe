@@ -438,6 +438,7 @@ export async function ensureSchema() {
     await ensureColumn('note_profiles', 'source_metrics_json', 'TEXT');
     await ensureColumn('comment_snapshots', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('data_sources', 'mapping_json', `TEXT NOT NULL DEFAULT '{}'`);
+    await ensureColumn('dashboards', 'save_token', "TEXT NOT NULL DEFAULT ''");
     await ensureColumn('data_sources', 'last_error', `TEXT NOT NULL DEFAULT ''`);
     await ensureColumn('project_notes', 'last_fetched_at', 'TEXT');
     await ensureColumn('project_notes', 'comment_total', 'INTEGER NOT NULL DEFAULT 0');
@@ -449,6 +450,7 @@ export async function ensureSchema() {
     await ensureColumn('supplier_comments', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('jobs', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('action_logs', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
+    await ensureColumn('action_logs', 'actor_user_id', "TEXT NOT NULL DEFAULT ''");
     await ensureColumn('projects', 'org_id', "TEXT NOT NULL DEFAULT 'org-default'");
     await ensureColumn('projects', 'department_id', "TEXT NOT NULL DEFAULT 'dept-marketing'");
     await ensureColumn('projects', 'client_id', "TEXT");

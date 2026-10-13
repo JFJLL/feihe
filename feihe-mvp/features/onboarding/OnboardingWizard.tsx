@@ -34,71 +34,21 @@ export function OnboardingWizard({
   const [dismissed, setDismissed] = useState(false);
   const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
-  // Compute dynamic onboarding progress from real resources
+  const readinessKey = projectId + ':' + (project?.updatedAt || '');
+  const [readinessState, setReadinessState] = useState({ key: '', failed: false });
+  const readinessLoading = readinessState.key !== readinessKey;
+  const [actualRole, setActualRole] = useState(role);
   useEffect(() => {
     let cancelled = false;
-    Promise.all([
-      api<{ ok: boolean; sources?: Array<{ lastSyncedAt?: string; lastRowCount?: number }> }>(`/api/projects`),
-      api<{ ok: boolean; datasets?: Array<{ rowCount: number }> }>(`/api/datasets?projectId=${encodeURIComponent(projectId)}`),
-      api<{ ok: boolean; cards?: any[] }>(`/api/dashboards?projectId=${encodeURIComponent(projectId)}`),
-      api<{ ok: boolean; members?: unknown[]; onboarding?: { completedStepsJson?: string } }>(`/api/projects?projectId=${encodeURIComponent(projectId)}`),
-    ]).then(([ws, ds, dash, pDetail]) => {
+    api<{ projectRole: string; readiness: { completedSteps: string[]; memberCount: number } }>(      '/api/projects?projectId=' + encodeURIComponent(projectId)    ).then(detail => {
       if (cancelled) return;
-      const done = new Set<string>(['template']);
-      const skipped = new Set<string>();
-
-      const projectSources = (ws.sources || []).filter((s: any) => s.projectId === projectId);
-      const datasets = ds.datasets || [];
-      const cards = dash.cards || [];
-      const members = pDetail.members || [];
-      setMemberCount(members.length);
-
-      // 1. Data Source Connected
-      if (projectSources.length > 0 || datasets.length > 0) {
-        done.add('source');
-      }
-
-      // 2. First Sync Executed
-      const hasRealData = datasets.some((d) => (d.rowCount || 0) > 0) || projectSources.some((s) => Boolean(s.lastSyncedAt) && (s.lastRowCount || 0) > 0);
-      if (hasRealData) {
-        done.add('first_sync');
-      }
-
-      // 3. Metrics and Dashboard (Only done if real data exists AND cards configured)
-      if (project?.templateId === 'general_workbench') {
-        if (hasRealData && cards.length > 0) {
-          done.add('metrics');
-        }
-      } else {
-        if (hasRealData || cards.length > 0) {
-          done.add('metrics');
-        }
-      }
-
-      // 4. Team Members Collaboration
-      if (members.length > 1) {
-        done.add('members');
-      }
-
-      // Merge saved steps if available
-      if (pDetail.onboarding?.completedStepsJson) {
-        try {
-          const saved = JSON.parse(pDetail.onboarding.completedStepsJson);
-          if (Array.isArray(saved)) {
-            saved.forEach((s) => {
-              if (s.startsWith('skip:')) skipped.add(s.replace('skip:', ''));
-              else done.add(s);
-            });
-          }
-        } catch {}
-      }
-
-      setCompletedSteps(Array.from(done));
-      setSkippedSteps(Array.from(skipped));
-    }).catch(() => {});
-
+      setReadinessState({ key: readinessKey, failed: false });
+      setActualRole(detail.projectRole); setMemberCount(detail.readiness.memberCount);
+      setCompletedSteps(detail.readiness.completedSteps.filter(s => !s.startsWith('skip:')));
+      setSkippedSteps(detail.readiness.completedSteps.filter(s => s.startsWith('skip:')).map(s => s.slice(5)));
+    }).catch(err => { if (!cancelled) { setReadinessState({ key: readinessKey, failed: true }); setFeedback({ type: 'error', message: err instanceof Error ? err.message : '初始化状态读取失败' }); } });
     return () => { cancelled = true; };
-  }, [projectId, project?.templateId]);
+  }, [projectId, project?.updatedAt, readinessKey]);
 
   const templateTitle =
     project?.templateName ||
@@ -153,14 +103,17 @@ export function OnboardingWizard({
     },
   ];
 
-  const canManage = role === 'project_admin' || role === 'platform_admin';
+  const canManage = actualRole === 'project_admin' || actualRole === 'platform_admin';
+  const readyToFinish = !readinessLoading && !readinessState.failed && ['template', 'source', 'first_sync', 'metrics'].every(step => completedSteps.includes(step)) && (completedSteps.includes('members') || skippedSteps.includes('members'));
 
   function handleSkipMembers() {
+    if (readinessLoading || busy) return;
     setSkippedSteps((prev) => Array.from(new Set([...prev, 'members'])));
     showToast('已跳过团队邀请步骤（单人独立管理）', 'info');
   }
 
   async function markFinished() {
+    if (!readyToFinish || busy) return;
     setBusy(true);
     setFeedback(null);
     try {
@@ -215,7 +168,7 @@ export function OnboardingWizard({
           <p style={{ fontSize: 13, color: '#475569', margin: 0 }}>
             {canManage
               ? '您是当前项目的管理员，具备完整的数据接入、指标配置与成员邀请权限。'
-              : '您当前为业务协作成员（只读），可查看数据并执行允许的业务操作。如需接入新数据源请联系项目管理员。'}
+              : '您当前为业务协作成员，可查看数据并执行允许的业务操作。如需接入新数据源请联系项目管理员。'}
           </p>
           {feedback && (
             <div style={{ marginTop: 8, fontSize: 12, color: feedback.type === 'error' ? '#ef4444' : '#16a34a' }}>
@@ -242,7 +195,7 @@ export function OnboardingWizard({
           {canManage && (
             <button
               onClick={markFinished}
-              disabled={busy}
+              disabled={busy || !readyToFinish}
               style={{
                 background: '#2563eb',
                 color: '#fff',
@@ -251,8 +204,8 @@ export function OnboardingWizard({
                 padding: '8px 16px',
                 fontWeight: 600,
                 fontSize: 13,
-                cursor: busy ? 'default' : 'pointer',
-                opacity: busy ? 0.7 : 1,
+                cursor: busy || !readyToFinish ? 'default' : 'pointer',
+                opacity: busy || !readyToFinish ? 0.7 : 1,
               }}
             >
               {busy ? '正在就绪…' : '完成初始化（发布项目）'}
@@ -315,6 +268,7 @@ export function OnboardingWizard({
 
                 {isOptional && canManage && (
                   <button
+                    disabled={readinessLoading || busy}
                     onClick={handleSkipMembers}
                     style={{
                       background: 'transparent',

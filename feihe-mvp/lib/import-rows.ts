@@ -7,51 +7,8 @@ import { saveDataset, type DatasetColumn } from './datasets';
 export type ImportKind = 'owned' | 'supplier' | 'dataset' | 'general';
 export type ImportRow = Record<string, unknown>;
 
-export interface FieldMappingRule {
-  sourceField: string;
-  targetField: string;
-  type?: 'text' | 'number' | 'date' | 'boolean';
-  isKey?: boolean;
-  isDate?: boolean;
-  required?: boolean;
-  nullPolicy?: 'null' | 'zero' | 'empty' | 'skip';
-}
-
-export function applyFieldMapping(rows: ImportRow[], rules: FieldMappingRule[]): ImportRow[] {
-  if (!rules || rules.length === 0) return rows;
-  return rows.map((row) => {
-    const out: ImportRow = {};
-    for (const rule of rules) {
-      if (!rule.sourceField || !rule.targetField) continue;
-      const raw = row[rule.sourceField];
-      if (raw === undefined || raw === null || String(raw).trim() === '') {
-        if (rule.nullPolicy === 'zero') out[rule.targetField] = 0;
-        else if (rule.nullPolicy === 'empty') out[rule.targetField] = '';
-        else out[rule.targetField] = null;
-        continue;
-      }
-      if (rule.type === 'number') {
-        const s = String(raw).replace(/[,￥¥%]/g, '').trim();
-        const num = Number(s);
-        out[rule.targetField] = Number.isFinite(num) ? num : (rule.nullPolicy === 'zero' ? 0 : null);
-      } else if (rule.type === 'boolean') {
-        out[rule.targetField] = /^(true|是|1|yes)$/i.test(String(raw).trim());
-      } else if (rule.type === 'date') {
-        out[rule.targetField] = String(raw).trim();
-      } else {
-        out[rule.targetField] = String(raw).trim();
-      }
-    }
-    // Retain unmapped original fields if target has not occupied them
-    for (const [k, v] of Object.entries(row)) {
-      if (!rules.some((r) => r.sourceField === k || r.targetField === k) && out[k] === undefined) {
-        out[k] = v;
-      }
-    }
-    return out;
-  });
-}
-
+export { applyFieldMapping } from './field-mapping';
+import { applyFieldMapping, type FieldMappingRule } from './field-mapping';
 const value = (row: ImportRow, names: string[]) => { for (const name of names) if (row[name] != null) return String(row[name]); return ''; };
 const number = (row: ImportRow, names: string[]) => { const result = Number(value(row, names).replace(/[,￥¥%]/g, '')); return Number.isFinite(result) ? result : 0; };
 
@@ -79,16 +36,16 @@ export async function importRows(
     const parsed = JSON.parse(mappingJson || '{}');
     if (Array.isArray(parsed)) mappingRules = parsed;
     else if (Array.isArray(parsed.rules)) mappingRules = parsed.rules;
-  } catch {}
+  } catch { throw new Error('字段映射必须是合法 JSON'); }
 
   let rows = input;
   let customColumns: DatasetColumn[] | undefined;
   if (mappingRules.length > 0) {
     rows = applyFieldMapping(input, mappingRules);
     customColumns = mappingRules.map((r) => ({
-      key: r.targetField,
-      name: r.targetField,
-      type: r.type || 'text',
+      key: r.targetField.trim(),
+      name: r.targetField.trim(),
+      type: r.isDate ? 'date' : (r.type || 'text'),
     }));
   }
 

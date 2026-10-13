@@ -1,0 +1,54 @@
+{
+  "static": {
+    "typecheck": "passed",
+    "build": "passed",
+    "targetedLint": {
+      "status": "passed",
+      "files": 54,
+      "errors": 0,
+      "warnings": 21
+    },
+    "fullLint": {
+      "status": "failed_existing_errors",
+      "errors": 8,
+      "warnings": 74,
+      "baselineErrors": 32
+    }
+  },
+  "unit": {
+    "passed": 25,
+    "total": 25
+  },
+  "api": {
+    "passed": 11,
+    "total": 11,
+    "standaloneCases": 10,
+    "metricPreviewCase": 1
+  },
+  "browser": {
+    "passed": 20,
+    "total": 20,
+    "retries": 0
+  },
+  "externalSimulation": {
+    "status": "executed",
+    "provider": "Feishu HTTP fixture only",
+    "browserCases": 5,
+    "standaloneApiCases": 7
+  },
+  "realFeishuBusinessAcceptance": {
+    "status": "not_executed"
+  },
+  "production": {
+    "status": "not_executed"
+  },
+  "legacy": {
+    "checkSections": 23,
+    "dashboardScripts": 7,
+    "status": "passed"
+  },
+  "manualChrome": {
+    "status": "passed",
+    "scope": "390px count, Dialog geometry, Escape/focus restoration, publish, refresh"
+  }
+}

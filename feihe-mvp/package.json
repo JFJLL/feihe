@@ -22,24 +22,29 @@
     "verify:closure": "node scripts/verify-frontend-closure.mjs",
     "verify:reconcile": "node scripts/reconcile-qicui.mjs",
     "migrate:v1": "node scripts/migrate-to-v1.mjs",
-    "verify:e2e": "node scripts/verify-frontend-v2-remediation.mjs"
+    "verify:e2e": "node node_modules/@playwright/test/cli.js test",
+    "verify:unit": "node scripts/test-v3-remediation.mjs",
+    "verify:api": "node scripts/test-v3-api.mjs",
+    "verify:unit-api:v2": "node scripts/verify-v2-unit-api.mjs"
   },
   "dependencies": {
+    "drizzle-orm": "0.45.2",
     "next": "16.2.6",
     "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "drizzle-orm": "0.45.2"
+    "react-dom": "19.2.6"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",
     "@cloudflare/workers-types": "4.20260515.1",
     "@openai/sites-vite-plugin": "^0.1.0 || ^0.2.0",
+    "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
+    "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",
@@ -47,8 +52,7 @@
     "typescript": "5.9.3",
     "vinext": "1.0.0-beta.3",
     "vite": "8.0.13",
-    "wrangler": "4.92.0",
-    "drizzle-kit": "0.31.10"
+    "wrangler": "4.92.0"
   },
   "type": "module"
 }

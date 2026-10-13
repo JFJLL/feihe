@@ -1,4 +1,5 @@
 'use client';
+import { Dialog } from '../../components/ui/Dialog';
 
 import Link from '../../components/ui/AppLink';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -545,7 +546,7 @@ export function ProjectCenter({ userName }: { userName: string }) {
             }
           />
         ) : (
-          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: 20 }}>
+          <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: 20 }}>
             {filteredProjects.map((item) => {
               const isArchived = Number(item.isArchived || 0) === 1 || item.status === '已归档';
               const templateTag =
@@ -730,59 +731,7 @@ export function ProjectCenter({ userName }: { userName: string }) {
           </section>
         )}
 
-        {/* Confirmation Modal */}
-        {confirmDialog.open && (
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(15,23,42,0.45)',
-              display: 'grid',
-              placeItems: 'center',
-              zIndex: 9999,
-            }}
-          >
-            <div
-              style={{
-                background: '#fff',
-                borderRadius: 12,
-                padding: '24px',
-                maxWidth: 440,
-                width: '90%',
-                boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)',
-              }}
-            >
-              <h3 style={{ margin: '0 0 10px 0', fontSize: 18, fontWeight: 700, color: '#0f172a' }}>{confirmDialog.title}</h3>
-              <p style={{ margin: '0 0 24px 0', fontSize: 14, color: '#475569', lineHeight: 1.5 }}>{confirmDialog.description}</p>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-                <button
-                  onClick={() => setConfirmDialog((prev) => ({ ...prev, open: false }))}
-                  style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: 14 }}
-                >
-                  取消
-                </button>
-                <button
-                  onClick={confirmDialog.onConfirm}
-                  style={{
-                    padding: '8px 18px',
-                    borderRadius: 6,
-                    border: 'none',
-                    background: confirmDialog.isDanger ? '#ef4444' : '#2563eb',
-                    color: '#fff',
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    fontSize: 14,
-                  }}
-                >
-                  {confirmDialog.confirmText}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <Dialog open={confirmDialog.open} title={confirmDialog.title} width={460} onClose={() => { if (!busy) setConfirmDialog(prev => ({ ...prev, open: false })); }} footer={<><button disabled={Boolean(busy)} onClick={() => setConfirmDialog(prev => ({ ...prev, open: false }))}>取消</button><button disabled={Boolean(busy)} className="primary" onClick={() => void confirmDialog.onConfirm()}>{busy ? '正在执行…' : confirmDialog.confirmText}</button></>}><p>{confirmDialog.description}</p></Dialog>
       </main>
     </div>
   );

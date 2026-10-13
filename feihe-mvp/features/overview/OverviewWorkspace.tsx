@@ -20,6 +20,8 @@ import { useProject } from '../../components/project-shell/ProjectContext';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
 import { OnboardingWizard } from '../onboarding/OnboardingWizard';
 import { GeneralWorkbenchBoard } from './GeneralWorkbenchBoard';
+import { CommentsWorkspace } from '../comments/CommentsWorkspace';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
 const formatDateZh = (val: string | null | undefined) => {
@@ -290,7 +292,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <SyncButton projectId={projectId} onRefresh={onRefresh} />
       </div>
     </PageHeader>
-    {!isGeneral && (
+    {!isGeneral && project?.templateId !== 'comment_qc' && project?.templateId !== 'ad_performance' && (
       <WorkspaceModuleTabs tabs={[
         { id: 'overview', title: `总览 · ${quarterName}累计全盘`, desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
         { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
@@ -312,7 +314,20 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
 
     {project?.templateId === 'general_workbench' ? (
       <div className="overview-block-content" style={{ marginTop: 20 }}>
-        <GeneralWorkbenchBoard projectId={projectId} project={project} />
+        <GeneralWorkbenchBoard key={projectId} projectId={projectId} project={project} />
+      </div>
+    ) : project?.templateId === 'comment_qc' ? (
+      <CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />
+    ) : project?.templateId === 'ad_performance' ? (
+      <div className="stack" data-testid="ad-performance-overview">
+        <section className="ops-metric-grid" aria-label="投放分析指标">
+          <MetricCard label="广告消耗" value={amount(feedSpend === null && searchSpend === null ? null : channelTotal)} unit="元" />
+          <MetricCard label="信息流消耗" value={amount(feedSpend)} unit="元" />
+          <MetricCard label="搜索消耗" value={amount(searchSpend)} unit="元" />
+          <MetricCard label="计划达成率" value={amount(daily?.achieve_pct)} unit="%" />
+        </section>
+        <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#2563eb' }, { key: 'feed_spend', label: '信息流消耗', color: '#16a34a' }, { key: 'search_spend', label: '搜索消耗', color: '#7c3aed' }]} /></Section>
+        <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#16a34a' }, { key: 'search_ctr', label: '搜索CTR', color: '#7c3aed' }]} /></Section>
       </div>
     ) : (
       <>

@@ -3,8 +3,8 @@ import { createServer } from 'vite';
 import path from 'node:path';
 
 console.log('====================================================');
-console.log('  FEIHE FRONTEND V2 REMEDIATION AUDIT SUITE');
-console.log('  Testing All 23 E2E Criteria & Precision Invariants');
+console.log('  FEIHE V2 UNIT / API / LEGACY SMOKE REGRESSIONS');
+console.log('  23 historical check sections; this script does not launch a browser');
 console.log('====================================================\n');
 
 process.env.LOCAL_DB_PATH = ':memory:';
@@ -12,7 +12,7 @@ process.env.LOCAL_DB_NO_SEED = 'true';
 process.env.ENABLE_TEST_AUTH = '1';
 
 const vite = await createServer({
-  configFile: false,
+  configFile: false, cacheDir: 'node_modules/.vite/v3-legacy',
   server: { middlewareMode: true },
   appType: 'custom',
   resolve: {
@@ -100,7 +100,7 @@ let activeReq = 1;
 const cancelPrev = () => { activeReq = 2; };
 cancelPrev();
 assert.equal(activeReq, 2);
-console.log('✅ PASS 4: 来源更换与请求取消屏障生效');
+console.log('✅ SMOKE 4: 局部变量赋值判断通过（不验证请求取消）');
 
 // ----------------------------------------------------
 // 5. 可视化映射陌生字段并实际生效
@@ -165,7 +165,7 @@ assert.equal(dsBig.rowCount, 5050);
 
 const bigCountInDb = await d1.prepare('SELECT COUNT(*) as c FROM dataset_rows WHERE dataset_id=?').bind(dsBig.id).first();
 assert.equal(bigCountInDb.c, 5050);
-console.log('✅ PASS 7: 5050 行无截断完整持久化');
+console.log('✅ API 7: saveDataset存储5050行（不验证飞书全表同步）');
 
 // ----------------------------------------------------
 // 8. 501 行全量 16.7% 计算及后续明细访问
@@ -253,7 +253,7 @@ const rowsAfterDb = await d1.prepare('SELECT COUNT(*) as c FROM dataset_rows WHE
 assert.equal(dsAfterDb.version, 1, '版本未被篡改');
 assert.equal(dsAfterDb.row_count, 2, '元数据行数维持 2');
 assert.equal(rowsAfterDb.c, 2, '实际行记录完整保留 2 行');
-console.log('✅ PASS 9: 故障注入后旧数据 100% 完整保留，暂存隔离成功');
+console.log('✅ PASS 9: 故障注入后旧数据完整保留，暂存隔离成功');
 
 // ----------------------------------------------------
 // 10. 首行缺失、后续出现字段仍可配置
@@ -281,7 +281,7 @@ console.log('11. 第4页切到只有1页的数据集显示正确...');
 const p11Ds = await saveDataset(p1Id, 'src-single', '单页数据集', [{ a: 1 }, { a: 2 }]);
 const clampPage = Math.min(4, Math.ceil(p11Ds.rowCount / 15) || 1);
 assert.equal(clampPage, 1);
-console.log('✅ PASS 11: 当前页越界重置为第 1 页');
+console.log('✅ SMOKE 11: 局部分页变量判断通过（不验证页面翻页）');
 
 // ----------------------------------------------------
 // 12. 分组求和、自定义比率、日期范围正确
@@ -301,6 +301,7 @@ const evalGroup = await evaluateCardMetric(p1Id, {
   numField: '成交',
   denField: '咨询',
   groupBy: '渠道',
+  dateField: '日期',
   from: '2026-10-01',
   to: '2026-10-05',
 });
@@ -322,7 +323,7 @@ const evalEmpty = await evaluateCardMetric(p1Id, {
   field: 'non_existent_field',
   aggregation: 'sum',
 });
-assert.equal(evalEmpty.status, 'empty');
+assert.equal(evalEmpty.status, 'missing_field');
 assert.equal(evalEmpty.value, null);
 assert.equal(evalEmpty.formattedValue, '—');
 
@@ -332,7 +333,7 @@ const evalZeroDiv = await evaluateCardMetric(p1Id, {
   numField: '成交',
   denField: 'non_existent_den',
 });
-assert.equal(evalZeroDiv.status, 'zero_division');
+assert.equal(evalZeroDiv.status, 'missing_field');
 assert.equal(evalZeroDiv.value, null);
 console.log('✅ PASS 13: 空值与无效字段正确表达，无伪造数值');
 
@@ -361,13 +362,13 @@ console.log('✅ PASS 14: 空看板持久化与空状态保持生效');
 console.log('15. 切换数据集不覆盖未保存草稿...');
 const draftCards = [{ id: 'card-user-draft', title: '用户临时草稿卡', type: 'metric_card' }];
 assert.ok(draftCards.length === 1);
-console.log('✅ PASS 15: 本地未保存草稿独立维护');
+console.log('✅ SMOKE 15: 常量数组判断通过（不验证草稿恢复）');
 
 // ----------------------------------------------------
 // 16. 来源绑定刷新后保持，旧请求不覆盖
 // ----------------------------------------------------
 console.log('16. 来源绑定刷新后保持，旧请求不覆盖...');
-const boundCard = { id: 'c-bound', title: '特定来源卡', type: 'metric_card', config: { datasetId: ds501.id } };
+const boundCard = { id: 'c-bound', title: '特定来源卡', type: 'metric_card', config: { datasetId: ds501.id, aggregation: 'count' } };
 const saveBoundRes = await dashboardsPost(req('POST', 'http://test/api/dashboards', {
   projectId: p1Id,
   dashboardId: `dash-${p1Id}-default`,
@@ -400,7 +401,7 @@ const forceRes = await dashboardsPost(req('POST', 'http://test/api/dashboards', 
   dashboardId: `dash-${p1Id}-default`,
   version: 1,
   force: true,
-  cards: [{ id: 'c-conflict', title: '冲突解决强制覆盖卡片', type: 'metric_card' }],
+  cards: [{ id: 'c-conflict', title: '冲突解决强制覆盖卡片', type: 'metric_card', config: { datasetId: ds501.id, aggregation: 'count' } }],
 }));
 assert.equal(forceRes.status, 200);
 console.log('✅ PASS 17: 409 冲突检测与强制解决恢复机制通过');
@@ -434,7 +435,7 @@ const initProjRes = await projectsPost(req('POST', 'http://test/api/projects', {
   action: 'update_onboarding',
   projectId: p1Id,
   onboardingStatus: 'ready',
-  completedSteps: ['template', 'source', 'first_sync', 'metrics'],
+  completedSteps: ['template', 'source', 'first_sync', 'metrics', 'skip:members'],
 }));
 const initProjData = await initProjRes.json();
 assert.equal(initProjData.ok, true);
@@ -443,7 +444,7 @@ const verifyP1 = await d1.prepare('SELECT * FROM projects WHERE id=?').bind(p1Id
 assert.equal(verifyP1.onboarding_status, 'ready');
 assert.equal(verifyP1.name, '华北综合运营中心');
 assert.equal(verifyP1.status, '筹备中');
-console.log('✅ PASS 19: 初始化状态更新且非目标字段 100% 完好');
+console.log('✅ PASS 19: 初始化状态更新且非目标字段完好');
 
 // ----------------------------------------------------
 // 20. 成员添加、改权、移除与角色界面一致
@@ -479,7 +480,7 @@ console.log('✅ PASS 20: 成员生命周期完整闭环');
 console.log('21. 不同模板主体不同，启萃主要功能无退化...');
 const qicuiNotes = await d1.prepare("SELECT COUNT(*) as c FROM notes WHERE id IN (SELECT note_id FROM project_notes WHERE project_id='qicui')").first();
 assert.ok(qicuiNotes.c >= 0);
-console.log('✅ PASS 21: 启萃与通用项目模板架构解耦且启萃无退化');
+console.log('✅ PASS 21: 空项目笔记计数烟测通过（未验证模板或历史图表）');
 
 // ----------------------------------------------------
 // 22. 分析接口故障时仍可进入设置修复
@@ -497,9 +498,9 @@ const isCompletedA = isStatusCompleted('已完成');
 const isCompletedB = isStatusCompleted('未完成');
 assert.equal(isCompletedA, true);
 assert.equal(isCompletedB, false);
-console.log('✅ PASS 23: 状态严格判定与核心交互验证通过');
+console.log('✅ PASS 23: 状态纯函数判断通过（未验证交互）');
 
 console.log('\n====================================================');
-console.log('  🎉 ALL 23 E2E CRITERIA VERIFIED AND PASSED 100%!');
+console.log('  Legacy unit/API/smoke checks passed; browser acceptance is verify:e2e');
 console.log('====================================================\n');
 process.exit(0);

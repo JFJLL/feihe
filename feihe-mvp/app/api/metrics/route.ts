@@ -2,6 +2,8 @@ import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { computeMetric, evaluateCardMetric, getProjectMetrics, type CardMetricConfig } from '@/lib/metrics/engine';
 import { logAction } from '@/lib/ops';
+import { getProjectDatasets } from '@/lib/datasets';
+import { validateCardConfig } from '@/lib/metrics/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,12 +60,18 @@ export async function POST(request: Request) {
     const project = access.context!.projectId;
 
     if (body.card) {
+      const errors = validateCardConfig(body.card, await getProjectDatasets(project));
+      if (errors.length) return Response.json({ ok: false, error: errors.join('；'), validationErrors: errors }, { status: 400 });
       const metric = await evaluateCardMetric(project, body.card);
       return Response.json({ ok: true, metric });
     }
 
     if (Array.isArray(body.cards)) {
-      const metrics = await Promise.all(body.cards.map((c) => evaluateCardMetric(project, c)));
+      const datasets = await getProjectDatasets(project);
+      const metrics = await Promise.all(body.cards.map(c => {
+        const errors = validateCardConfig(c, datasets);
+        return errors.length ? Promise.resolve({ key: c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: errors.join('；'), validationErrors: errors }) : evaluateCardMetric(project, c);
+      }));
       return Response.json({ ok: true, metrics });
     }
   }

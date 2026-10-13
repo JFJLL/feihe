@@ -105,7 +105,7 @@ export async function getAuthenticatedUser(request?: Request): Promise<AuthUser 
 export async function requireProjectAccess(
   request: Request,
   rawProjectId: unknown,
-  requiredActionOrRole: 'read' | 'write' | 'manage' | 'admin' | ProjectRole = 'read'
+  requiredActionOrRole: 'read' | 'write' | 'manage' | 'admin' | 'restore' | ProjectRole = 'read'
 ): Promise<ProjectAccessResult> {
   const slug = String(rawProjectId || '').trim();
   if (!slug) {
@@ -133,7 +133,7 @@ export async function requireProjectAccess(
   }
 
   const isArchived = Number(project.is_archived || 0) === 1 || project.status === '已归档';
-  if (isArchived && requiredActionOrRole !== 'read' && requiredActionOrRole !== 'viewer') {
+  if (isArchived && requiredActionOrRole !== 'read' && requiredActionOrRole !== 'viewer' && requiredActionOrRole !== 'restore') {
     return { ok: false, status: 403, error: '项目已归档，已暂停写操作与数据修改' };
   }
 
@@ -156,7 +156,7 @@ export async function requireProjectAccess(
   const canManage = isPlatformAdmin || projectRole === 'project_admin';
   const canWrite = canManage || projectRole === 'editor';
 
-  if ((requiredActionOrRole === 'admin' || requiredActionOrRole === 'manage' || requiredActionOrRole === 'project_admin') && !canManage) {
+  if ((requiredActionOrRole === 'admin' || requiredActionOrRole === 'manage' || requiredActionOrRole === 'restore' || requiredActionOrRole === 'project_admin') && !canManage) {
     return { ok: false, status: 403, error: '权限不足：需要项目管理员权限' };
   }
 

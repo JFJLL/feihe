@@ -119,6 +119,10 @@ export const size = (v: unknown) => {
     : Math.ceil(n / 1024) + ' KB';
 };
 
+export class ApiError extends Error {
+  constructor(message: string, public status: number, public data?: Record<string, unknown>) { super(message); this.name = 'ApiError'; }
+}
+
 export async function api<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...options,
@@ -139,12 +143,17 @@ export async function api<T>(url: string, options?: RequestInit): Promise<T> {
         : response.status === 502
         ? '网关服务暂时不可用 (502)，请稍后重试'
         : `服务响应异常 (HTTP ${response.status})`;
-      throw new Error(isHtml ? friendlyMsg : `${friendlyMsg}: ${rawText.slice(0, 150) || '无响应体'}`);
+      throw new ApiError(isHtml ? friendlyMsg : `${friendlyMsg}: ${rawText.slice(0, 150) || '无响应体'}`, response.status);
     }
     throw new Error(`数据格式解析异常: ${rawText.slice(0, 150)}`);
   }
+  if (response.ok && data?.ok !== false && typeof window !== 'undefined' && options?.method === 'POST' && /^\/api\/(datasets|feishu\/sync)(?:\?|$)/.test(url)) {
+    let affectedProject = '';
+    try { affectedProject = JSON.parse(String(options.body || '{}')).projectId || ''; } catch {}
+    window.dispatchEvent(new CustomEvent('app:datasets-changed', { detail: { projectId: affectedProject } }));
+  }
   if (!response.ok || (data && data.ok === false)) {
-    throw new Error(data?.error || `操作失败 (HTTP ${response.status})`);
+    throw new ApiError(data?.error || `操作失败 (HTTP ${response.status})`, response.status, data as Record<string, unknown>);
   }
   return data as T;
 }

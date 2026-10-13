@@ -19,27 +19,8 @@ export interface Dataset {
   rows?: Array<Record<string, unknown>>;
 }
 
-export function inferColumnType(values: unknown[]): 'text' | 'number' | 'date' | 'boolean' | 'category' {
-  const nonNull = values.filter((v) => v !== null && v !== undefined && String(v).trim() !== '');
-  if (nonNull.length === 0) return 'text';
-
-  const isNum = nonNull.every((v) => {
-    const s = String(v).replace(/[,￥¥%]/g, '').trim();
-    return Number.isFinite(Number(s));
-  });
-  if (isNum) return 'number';
-
-  const isDate = nonNull.every((v) => {
-    const s = String(v).trim();
-    return /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(s) || /^\d{1,2}[-/.]\d{1,2}/.test(s);
-  });
-  if (isDate) return 'date';
-
-  const isBool = nonNull.every((v) => /^(true|false|是|否|1|0)$/i.test(String(v).trim()));
-  if (isBool) return 'boolean';
-
-  return 'text';
-}
+export { inferColumnType } from './column-types';
+import { inferColumnType } from './column-types';
 
 export async function saveDataset(
   projectId: string,
@@ -53,26 +34,14 @@ export async function saveDataset(
   const now = new Date().toISOString();
   const datasetId = `ds-${projectId}-${sourceId || 'default'}`;
 
-  // Infer columns if not provided, gathering all unique keys from all rows
-  let columns: DatasetColumn[] = customColumns || [];
-  if (!columns.length && rows.length > 0) {
-    const keySet = new Set<string>();
-    for (const r of rows) {
-      if (r && typeof r === "object") {
-        for (const k of Object.keys(r)) {
-          if (k) keySet.add(k);
-        }
-      }
-    }
-    const keys = Array.from(keySet);
-    columns = keys.map((key) => {
-      const sample = rows.slice(0, 100).map((r) => r[key]);
-      return {
-        key,
-        name: key,
-        type: inferColumnType(sample),
-      };
-    });
+  // Every stored field has visible metadata; labels and storage keys stay separate.
+  const columns: DatasetColumn[] = (customColumns || []).map(c => ({ ...c }));
+  const seen = new Set(columns.map(c => c.key));
+  if (seen.size !== columns.length) throw new Error('目标字段重名');
+  for (const key of new Set(rows.flatMap(row => Object.keys(row)))) {
+    if (seen.has(key)) continue;
+    columns.push({ key, name: key, type: inferColumnType(rows.map(row => row[key])) });
+    seen.add(key);
   }
 
   const schemaJson = JSON.stringify(columns);

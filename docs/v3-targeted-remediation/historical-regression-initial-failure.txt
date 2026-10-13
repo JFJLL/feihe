@@ -1,0 +1,35 @@
+(node:36952) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+12:16:06 [vite] (client) Re-optimizing dependencies because vite config has changed
+PASS feedback: full notes SQL, project isolation, prefixes, merged topics, zero/gap domains, box quantiles and accessible compact rendering
+(node:8944) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS growth: real SQLite normalization, totals, scope, >12 brands, paired metrics, missing/zero and component rendering
+PASS workspace charts (static): gaps, zero, empty, single date, invalid numbers, unique gradients
+PASS workspace UI keyboard interaction: TimeSeriesChart focusable points, WorkspaceModuleTabs roving tabindex & activation, CustomSelect combobox & keyboard state transitions
+PASS subpage boards: empty/error states, coverage gaps, snapshot deltas, Chinese labels, actual SQL action overlap and consistent denominator, styled filter buttons. Fixtures stay in memory.
+(node:22504) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29644) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS actual route SQL/HTTP: no-pending exclusion, exact reply/status condition, project isolation, orphan exclusion, note deduplication, 3-page traversal, empty page, injection safety, all three status cards, comment KPI vs note totals, authorization gate. In-memory fixtures only.
+✅ PASS regression: Workspace Palette & Bar Width Zero/Missing/Proportionality
+✅ PASS regression: RulesAndTargets Completed Jobs Scope & Similarity Precision
+✅ PASS regression: DataMap Keystone Gateway Truthful Status (all 4 cases)
+evalmachine.<anonymous>:18
+    const activeTab = resolveTab(new URLSearchParams(search).get('tab'));
+                                     ^
+
+ReferenceError: URLSearchParams is not defined
+    at useProjectTab (evalmachine.<anonymous>:18:38)
+    at SettingsWorkspace (evalmachine.<anonymous>:42:61)
+    at Object.react_stack_bottom_frame (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:9808:18)
+    at renderWithHooks (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5062:19)
+    at renderElement (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:5497:23)
+    at retryNode (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:6417:31)
+    at renderNodeDestructive (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:6367:11)
+    at renderElement (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:6063:15)
+    at retryNode (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:6417:31)
+    at performWork (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\node_modules\react-dom\cjs\react-dom-server-legacy.node.development.js:7435:17)
+
+Node.js v24.11.1

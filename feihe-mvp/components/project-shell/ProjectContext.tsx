@@ -35,6 +35,7 @@ type ProjectContextType = {
   removeToast: (id: string) => void;
   // 高性能客户端单页导航与全盘数据共享
   activeSection: string;
+  activeTab: string;
   navigateTo: (href: string) => void;
   dashboard: Dashboard | null;
   ops: Ops | null;
@@ -64,8 +65,8 @@ function subscribeRoute(listener: () => void) {
   window.addEventListener('popstate', listener);
   return () => window.removeEventListener('popstate', listener);
 }
-function routeSection() {
-  return window.location.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/)?.[1] || '';
+function routeLocation() {
+  return window.location.pathname + window.location.search;
 }
 
 export function ProjectProvider({
@@ -95,14 +96,18 @@ export function ProjectProvider({
 
   // 解析当前激活板块（'' 为总览，'growth' 为增长机会，等等）
   const pathname = usePathname();
-  const activeSection = useSyncExternalStore(subscribeRoute, routeSection, () => pathname?.match(/^\/projects\/[^/]+(?:\/([^/]+))?/)?.[1] || '');
+  const location = useSyncExternalStore(subscribeRoute, routeLocation, () => pathname || '');
+  const activeTab = new URLSearchParams(location.split('?')[1] || '').get('tab') || '';
+  const activeSection = location.match(/^\/projects\/[^/]+(?:\/([^/?]+))?/)?.[1] || '';
 
   const navigateTo = useCallback((href: string) => {
     if (typeof window === 'undefined') return;
+    const intent = new CustomEvent('app:before-navigate', { cancelable: true, detail: { href } });
+    if (!window.dispatchEvent(intent)) return;
     try {
       const targetUrl = new URL(href, window.location.origin);
       const match = targetUrl.pathname.match(/^\/projects\/[^/]+(?:\/([^/]+))?/);
-      if (match) {
+      if (match && targetUrl.origin === window.location.origin && (targetUrl.pathname.startsWith(`/projects/${encodeURIComponent(projectId)}/`) || targetUrl.pathname === `/projects/${encodeURIComponent(projectId)}`)) {
         window.history.pushState(null, '', href);
         window.dispatchEvent(new PopStateEvent('popstate'));
         window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
@@ -112,7 +117,7 @@ export function ProjectProvider({
       // 容错降级
     }
     window.location.href = href;
-  }, []);
+  }, [projectId]);
 
   // 监听应用内跨组件超链接广播
   useEffect(() => {
@@ -195,6 +200,7 @@ export function ProjectProvider({
         showToast,
         removeToast,
         activeSection,
+        activeTab,
         navigateTo,
         dashboard,
         ops,
