@@ -80,7 +80,7 @@ npm run lint
 
 [逐例步骤、请求、快照、截图及trace](EVIDENCE.md) · [结构化索引](EVIDENCE-INDEX.json)。修复前6例与新增12例的trace、截图纳入本地提交；最终47例请求/持久化快照和机器报告也纳入提交。其余35例原始trace及HTML报告、中间运行保留本地，未纳入Git；raw路径在索引中明确列出。校验文件见 ARTIFACTS-SHA256.json。
 
-本轮在 codex/v3-card-result-unit-linkage 制作本地提交；不推送、不合并、不部署。提交后实际SHA与工作区状态由本地 DELIVERY-STATE.json 记录（避免提交自引用，此收据不纳入提交），最终答复也列出最终SHA。原先用户未跟踪的v3证据不加入本轮提交、不删除。
+本轮功能修复提交为 af8e8d191d038e843ab1bcdd99ef559c6f798f8d。用户后续追加授权：每次完成修复与验证后提交并推送，暂不合并；本轮推送目标为 origin/codex/v3-card-result-unit-linkage，不部署。推送后实际SHA、远端状态与工作区状态由本地 DELIVERY-STATE.json 记录（避免提交自引用，此收据不纳入提交），最终答复也列出最终SHA。原先用户未跟踪的v3证据不加入本轮提交、不删除。
 
 ## 未执行与现存限制
 
