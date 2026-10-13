@@ -1,0 +1,101 @@
+{
+  "scope": "Data workspace checkpoint; goal active",
+  "dataStats": {
+    "startTime": "2026-10-13T12:02:51.466Z",
+    "duration": 24226.601000000002,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "retainedRunStats": {
+    "startTime": "2026-10-13T11:50:10.052Z",
+    "duration": 165545.56499999997,
+    "expected": 53,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "retainedBrowserCases": 47,
+  "items": [
+    {
+      "id": "case-01",
+      "title": "数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通",
+      "status": "passed",
+      "files": [
+        "data-fields-and-rows.png",
+        "final-page.png",
+        "key-requests.json",
+        "persistence.json",
+        "test-finished-1.png",
+        "trace.zip"
+      ]
+    },
+    {
+      "id": "case-02",
+      "title": "数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限",
+      "status": "passed",
+      "files": [
+        "final-page.png",
+        "key-requests.json",
+        "persistence.json",
+        "test-finished-1.png",
+        "trace.zip"
+      ]
+    },
+    {
+      "id": "case-03",
+      "title": "数据同步失败 1280px：真实校验失败保留旧快照，记录失败与复用来源恢复",
+      "status": "passed",
+      "files": [
+        "final-page.png",
+        "key-requests.json",
+        "persistence.json",
+        "real-sync-failure-history.png",
+        "test-finished-1.png",
+        "trace.zip"
+      ]
+    },
+    {
+      "id": "case-04",
+      "title": "数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通",
+      "status": "passed",
+      "files": [
+        "390-quality-keyboard-scroll.png",
+        "data-fields-and-rows.png",
+        "final-page.png",
+        "key-requests.json",
+        "persistence.json",
+        "test-finished-1.png",
+        "trace.zip"
+      ]
+    },
+    {
+      "id": "case-05",
+      "title": "数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限",
+      "status": "passed",
+      "files": [
+        "final-page.png",
+        "key-requests.json",
+        "persistence.json",
+        "test-finished-1.png",
+        "trace.zip"
+      ]
+    },
+    {
+      "id": "case-06",
+      "title": "数据同步失败 390px：真实校验失败保留旧快照，记录失败与复用来源恢复",
+      "status": "passed",
+      "files": [
+        "390-sync-error-details.png",
+        "final-page.png",
+        "key-requests.json",
+        "persistence.json",
+        "real-sync-failure-history.png",
+        "test-finished-1.png",
+        "trace.zip"
+      ]
+    }
+  ],
+  "screenshotStatus": "Accepted saved representative images: case-01 fields, case-02 viewer sources, case-04 fields and keyboard scroll, case-06 failure history and keyboard error details; all are current isolated synthetic data."
+}

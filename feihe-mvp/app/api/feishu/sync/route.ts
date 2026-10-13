@@ -140,6 +140,7 @@ export async function syncSingleSource(context: ProjectAuthContext, body: SyncBo
   await ensureSchema();
   const d1 = db();
   let jobId = '';
+  let rowsRead = 0;
   const sourceId = body.sourceId || '';
   let sourceName = '飞书数据源';
   const now = new Date().toISOString();
@@ -186,8 +187,8 @@ export async function syncSingleSource(context: ProjectAuthContext, body: SyncBo
   }
 
   try {
-    const tenantToken = await fetchAccessToken();
     jobId = await startJob('feishu_sync', `飞书同步：${sourceName}`, 0, project);
+    const tenantToken = await fetchAccessToken();
 
     // Resolve document type and token
     let isBitable = sourceType === 'feishu_bitable' || spreadsheet.includes('/base/') || spreadsheet.includes('/bitable/');
@@ -292,6 +293,7 @@ export async function syncSingleSource(context: ProjectAuthContext, body: SyncBo
       rows = values.slice(1).filter(row => row.some(cell => String(cell ?? '').trim())).map(row => Object.fromEntries(headers.map((header, index) => [header, row[index] ?? ''])));
     }
 
+    rowsRead = rows.length;
     if (!rows.length) throw new Error('指定范围内没有可同步的数据');
 
     if (mappingJson) {
@@ -316,13 +318,19 @@ export async function syncSingleSource(context: ProjectAuthContext, body: SyncBo
     }
 
     await d1
-      .prepare(`INSERT OR REPLACE INTO sync_jobs(id, project_id, source_id, status, rows_read, rows_imported, rows_failed, error_summary, started_at, finished_at) VALUES(?, ?, ?, 'success', ?, ?, ?, '', ?, ?)`)
-      .bind(jobId || `sync-${Date.now()}`, project, sourceId || 'default', rows.length, result.imported, result.skipped, now, new Date().toISOString())
+      .prepare(`INSERT OR REPLACE INTO sync_jobs(id, project_id, source_id, status, rows_read, rows_imported, rows_failed, error_summary, started_at, finished_at, request_scope, requested_range) VALUES(?, ?, ?, 'success', ?, ?, ?, '', ?, ?, ?, ?)`)
+      .bind(jobId || `sync-${Date.now()}`, project, sourceId || 'default', rows.length, result.imported, result.skipped, now, new Date().toISOString(), rangeStr ? 'limited_range' : 'full_table', rangeStr)
       .run();
 
     return Response.json({ ok: true, ...result, jobId, rowsRead: rows.length, scope: rangeStr ? 'limited_range' : 'full_table', range: rangeStr || undefined, actorUserId: context.user.userId });
   } catch (error) {
-    if (jobId) await failJob(jobId, error instanceof Error ? error.message : '同步失败');
+    const message = error instanceof Error ? error.message : '同步失败';
+    if (jobId) {
+      await failJob(jobId, message);
+      await d1.prepare("INSERT OR REPLACE INTO sync_jobs(id,project_id,source_id,status,rows_read,rows_imported,rows_failed,error_summary,started_at,finished_at,request_scope,requested_range) VALUES(?,?,?,'failed',?,0,?,?,?,?,?,?)")
+        .bind(jobId, project, sourceId || 'default', rowsRead, rowsRead, message, now, new Date().toISOString(), rangeStr ? 'limited_range' : 'full_table', rangeStr).run();
+      await logAction('飞书表格同步失败', 'data_source', sourceId, message, project, context.user.userId);
+    }
     if (sourceId) {
       try {
         await d1

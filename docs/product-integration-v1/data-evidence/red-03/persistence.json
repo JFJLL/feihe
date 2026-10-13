@@ -1,0 +1,62 @@
+[
+  {
+    "projectId": "1791890976274",
+    "project": {
+      "id": "1791890976274",
+      "name": "陌生部门数据工作台1791890976274",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#2563eb",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T11:29:36.285Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template"
+      ],
+      "blockedSteps": [
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791890976274-default",
+          "projectId": "1791890976274",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T11:29:36.285Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791890976274-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

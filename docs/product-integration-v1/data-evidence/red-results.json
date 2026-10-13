@@ -1,0 +1,485 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-data.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/data-baseline/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/data-baseline/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/data-baseline/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-data.spec.ts",
+      "file": "product-data.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12285,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据工作台', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据工作台', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据工作台', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据工作台', exact: true })\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:22:77",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                      "column": 77,
+                      "line": 22
+                    },
+                    "snippet": "  20 |     expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows: raw } })).ok()).toBeTruthy();\n  21 |     await page.goto('/projects/' + projectId + '/data');\n> 22 |     await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();\n     |                                                                             ^\n  23 |     await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');\n  24 |     await page.getByRole('button', { name: /接入飞书数据源/ }).click();\n  25 |     await page.getByRole('textbox', { name: '飞书表格链接', exact: true }).fill('https://fixture.feishu.cn/sheets/' + token);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                        "column": 77,
+                        "line": 22
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据工作台', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据工作台', exact: true })\u001b[22m\n\n\n  20 |     expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows: raw } })).ok()).toBeTruthy();\n  21 |     await page.goto('/projects/' + projectId + '/data');\n> 22 |     await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();\n     |                                                                             ^\n  23 |     await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');\n  24 |     await page.getByRole('button', { name: /接入飞书数据源/ }).click();\n  25 |     await page.getByRole('textbox', { name: '飞书表格链接', exact: true }).fill('https://fixture.feishu.cn/sheets/' + token);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:22:77"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:29:11.125Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\关键请求-ff12261fee9969a8dde2ca58914afaa350cc6010.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\实际持久化快照-2bb8f9ccbec4fc9054e7cd01893f029aa7288fb6.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\最终页面-0acb9d9ac940f6bb5162cd2d66d3834127033d5d.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                    "column": 77,
+                    "line": 22
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-627dd328a40439dae539",
+          "file": "product-data.spec.ts",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10641,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据集明细', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据集明细', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据集明细', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据集明细', exact: true })\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:67:77",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                      "column": 77,
+                      "line": 67
+                    },
+                    "snippet": "  65 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });\n  66 |     await page.goto('/projects/' + projectId + '/data?tab=datasets');\n> 67 |     await expect(page.getByRole('heading', { name: '数据集明细', exact: true })).toBeVisible();\n     |                                                                             ^\n  68 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true }).getByRole('row')).toHaveCount(16);\n  69 |     await page.getByRole('button', { name: '下一页', exact: true }).click();\n  70 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true })).toContainText('渠道16');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                        "column": 77,
+                        "line": 67
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据集明细', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据集明细', exact: true })\u001b[22m\n\n\n  65 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });\n  66 |     await page.goto('/projects/' + projectId + '/data?tab=datasets');\n> 67 |     await expect(page.getByRole('heading', { name: '数据集明细', exact: true })).toBeVisible();\n     |                                                                             ^\n  68 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true }).getByRole('row')).toHaveCount(16);\n  69 |     await page.getByRole('button', { name: '下一页', exact: true }).click();\n  70 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true })).toContainText('渠道16');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:67:77"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:29:24.354Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\关键请求-a351a2eff2ea380e57a95bd47d0f1b3305667e5d.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\实际持久化快照-feb7626d4ed876e3c6892645295d309fbb7aae0e.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\最终页面-442645b25aaf2c071ace98c01fa80508f3cf06e6.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                    "column": 77,
+                    "line": 67
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-40c89bbb1b2a30210a9a",
+          "file": "product-data.spec.ts",
+          "line": 56,
+          "column": 3
+        },
+        {
+          "title": "数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10620,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据工作台', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据工作台', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据工作台', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据工作台', exact: true })\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:22:77",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                      "column": 77,
+                      "line": 22
+                    },
+                    "snippet": "  20 |     expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows: raw } })).ok()).toBeTruthy();\n  21 |     await page.goto('/projects/' + projectId + '/data');\n> 22 |     await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();\n     |                                                                             ^\n  23 |     await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');\n  24 |     await page.getByRole('button', { name: /接入飞书数据源/ }).click();\n  25 |     await page.getByRole('textbox', { name: '飞书表格链接', exact: true }).fill('https://fixture.feishu.cn/sheets/' + token);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                        "column": 77,
+                        "line": 22
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据工作台', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据工作台', exact: true })\u001b[22m\n\n\n  20 |     expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows: raw } })).ok()).toBeTruthy();\n  21 |     await page.goto('/projects/' + projectId + '/data');\n> 22 |     await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();\n     |                                                                             ^\n  23 |     await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');\n  24 |     await page.getByRole('button', { name: /接入飞书数据源/ }).click();\n  25 |     await page.getByRole('textbox', { name: '飞书表格链接', exact: true }).fill('https://fixture.feishu.cn/sheets/' + token);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:22:77"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:29:35.850Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\关键请求-af62a29ea5f9d3a33a941be5de68af370dee1886.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\实际持久化快照-ba2d933cf96d1188b00db933e251226066e532e9.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\最终页面-1accfd6f85b57db510ef0a6cda94f68e10038089.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                    "column": 77,
+                    "line": 22
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-ad009ec6d44cf44e1154",
+          "file": "product-data.spec.ts",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10578,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据集明细', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据集明细', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据集明细', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据集明细', exact: true })\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:67:77",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                      "column": 77,
+                      "line": 67
+                    },
+                    "snippet": "  65 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });\n  66 |     await page.goto('/projects/' + projectId + '/data?tab=datasets');\n> 67 |     await expect(page.getByRole('heading', { name: '数据集明细', exact: true })).toBeVisible();\n     |                                                                             ^\n  68 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true }).getByRole('row')).toHaveCount(16);\n  69 |     await page.getByRole('button', { name: '下一页', exact: true }).click();\n  70 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true })).toContainText('渠道16');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                        "column": 77,
+                        "line": 67
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '数据集明细', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '数据集明细', exact: true })\u001b[22m\n\n\n  65 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });\n  66 |     await page.goto('/projects/' + projectId + '/data?tab=datasets');\n> 67 |     await expect(page.getByRole('heading', { name: '数据集明细', exact: true })).toBeVisible();\n     |                                                                             ^\n  68 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true }).getByRole('row')).toHaveCount(16);\n  69 |     await page.getByRole('button', { name: '下一页', exact: true }).click();\n  70 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true })).toContainText('渠道16');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts:67:77"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:29:47.342Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\关键请求-5f2829328ce7555858874d6c10925df8f30b26ee.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\实际持久化快照-dc5c3b956b3a90da6726ff0c2a30c190cbb86726.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\最终页面-8657a5adc7973d9c197ab867fc0a806d8f5883b5.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-baseline\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-data.spec.ts",
+                    "column": 77,
+                    "line": 67
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-c64e6f4133e01ccc32f3",
+          "file": "product-data.spec.ts",
+          "line": 56,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T11:29:07.011Z",
+    "duration": 51573.441000000006,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

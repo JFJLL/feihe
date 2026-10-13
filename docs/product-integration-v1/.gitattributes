@@ -6,3 +6,4 @@
 # Preserve raw Windows test evidence without rewriting its bytes.
 *.log -whitespace
 *.txt -whitespace
+data-evidence/**/error-context.md -text -whitespace

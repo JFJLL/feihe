@@ -1,0 +1,16 @@
+[WebServer] (node:32356) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:33860) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:32356) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  ok 1 tests\browser\product-data.spec.ts:19:3 › 数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通 (4.7s)
+  ok 2 tests\browser\product-data.spec.ts:70:3 › 数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限 (1.5s)
+  ok 3 tests\browser\product-data.spec.ts:124:3 › 数据同步失败 1280px：真实校验失败保留旧快照，记录失败与复用来源恢复 (6.0s)
+  ok 4 tests\browser\product-data.spec.ts:19:3 › 数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通 (2.3s)
+  ok 5 tests\browser\product-data.spec.ts:70:3 › 数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限 (1.6s)
+  ok 6 tests\browser\product-data.spec.ts:124:3 › 数据同步失败 390px：真实校验失败保留旧快照，记录失败与复用来源恢复 (2.2s)
+
+  6 passed (24.2s)

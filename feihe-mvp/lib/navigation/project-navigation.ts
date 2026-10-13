@@ -19,12 +19,12 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
   },
   {
     id: 'data',
-    path: 'settings?tab=data-sources',
+    path: 'data',
     number: '02',
     label: '数据管理',
     title: '数据管理',
     description: '数据源、数据集与同步配置',
-    defaultTab: 'data-sources',
+    defaultTab: 'sources',
   },
   {
     id: 'growth',
@@ -107,7 +107,7 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
   tools: { module: 'settings', tab: 'integrations' },
   'data-map': { module: 'settings', tab: 'data-map' },
   map: { module: 'settings', tab: 'data-map' },
-  data: { module: 'settings', tab: 'data-sources' },
+  data: { module: 'data', tab: 'sources' },
 };
 
 export function resolveProjectRoute(projectId: string, section?: string, searchParams?: URLSearchParams): string {

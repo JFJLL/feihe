@@ -1,0 +1,489 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-data.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/data-final-delivery/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/data-final-delivery/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/data-final-delivery/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-data.spec.ts",
+      "file": "product-data.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4667,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:02:55.578Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\关键请求-62acbac21377d3615ddb9783cd8ab414330deefa.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\实际持久化快照-21bfcb72974806e649cea14b296a78673dc3c9a1.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\最终页面-9c2d5336dd10fee2680a011167fa753d804bfb98.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-627dd328a40439dae539",
+          "file": "product-data.spec.ts",
+          "line": 19,
+          "column": 3
+        },
+        {
+          "title": "数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1479,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:03:00.691Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\关键请求-0e96a937b935cd13d9ec002fef3092ac8f9cedef.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\实际持久化快照-01635ef0fe02c5ba0a07f72b48035509dfd17542.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\最终页面-b83c913bfbe99cf306e64af147bf3e6aa9a20d6b.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-40c89bbb1b2a30210a9a",
+          "file": "product-data.spec.ts",
+          "line": 70,
+          "column": 3
+        },
+        {
+          "title": "数据同步失败 1280px：真实校验失败保留旧快照，记录失败与复用来源恢复",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5986,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:03:02.305Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-1280px：真实校验失败保留旧快照，记录失败与复用来源恢复\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-1280px：真实校验失败保留旧快照，记录失败与复用来源恢复\\attachments\\关键请求-1e4a4e59552cd3b457847e44986aa03c9a642d79.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-1280px：真实校验失败保留旧快照，记录失败与复用来源恢复\\attachments\\实际持久化快照-bd16074822f859c0f4bcf4d002ae7973b032cb75.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-1280px：真实校验失败保留旧快照，记录失败与复用来源恢复\\attachments\\最终页面-a8df504f42226c374bff56847cd469b44e10432b.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-1280px：真实校验失败保留旧快照，记录失败与复用来源恢复\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-96235a0b9fb4c813bf0f",
+          "file": "product-data.spec.ts",
+          "line": 124,
+          "column": 3
+        },
+        {
+          "title": "数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2254,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:03:08.586Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\关键请求-f0241c972b3230332c6306debe7bd2c433165ebf.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\实际持久化快照-500213a3ddbca6955f4d1e2242ce29da99e634c1.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\attachments\\最终页面-58abf810e215e12591d56a019e6a5f1d02ccb83d.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-ad009ec6d44cf44e1154",
+          "file": "product-data.spec.ts",
+          "line": 19,
+          "column": 3
+        },
+        {
+          "title": "数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1589,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:03:10.990Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\关键请求-d0a4b04bf9c865fef0f1a119afd560e56f9982da.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\实际持久化快照-7e47ca6583dc6444ec1ba61faedcaff3fb3e1a44.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\attachments\\最终页面-0edf426e3872f60ab7ec5476664eaf3e28646f36.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-c64e6f4133e01ccc32f3",
+          "file": "product-data.spec.ts",
+          "line": 70,
+          "column": 3
+        },
+        {
+          "title": "数据同步失败 390px：真实校验失败保留旧快照，记录失败与复用来源恢复",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2206,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:03:12.692Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-390px：真实校验失败保留旧快照，记录失败与复用来源恢复\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-390px：真实校验失败保留旧快照，记录失败与复用来源恢复\\attachments\\关键请求-c7e62964a9a5f8ce7707694c25ba1efe6b900277.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-390px：真实校验失败保留旧快照，记录失败与复用来源恢复\\attachments\\实际持久化快照-aa1ae1fd58df5b00079663f79f180b97774d4713.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-390px：真实校验失败保留旧快照，记录失败与复用来源恢复\\attachments\\最终页面-89d754f44c831130b6984b85fe5169ebeff12635.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\data-final-delivery\\browser-results\\product-data-数据同步失败-390px：真实校验失败保留旧快照，记录失败与复用来源恢复\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "fe97da08886043dee7dc-c092e9a6037776b0ec03",
+          "file": "product-data.spec.ts",
+          "line": 124,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T12:02:51.466Z",
+    "duration": 24226.601000000002,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

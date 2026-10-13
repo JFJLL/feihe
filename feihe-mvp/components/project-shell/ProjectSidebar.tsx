@@ -54,14 +54,14 @@ export function ProjectSidebar({
 
       <nav className="project-main-nav" aria-label="项目模块">
         {PROJECT_NAV_ITEMS.filter((item) => {
+          if (item.id === 'data') return true;
           if (['general_workbench', 'blank'].includes(currentProject?.templateId || '')) {
             return item.id === 'overview' || item.id === 'data' || item.id === 'settings';
           }
           if (currentProject?.templateId === 'comment_qc') {
             return item.id === 'overview' || item.id === 'comments' || item.id === 'settings';
           }
-          // Do not show separate data tab in marketing template where data sources are under settings
-          if (item.id === 'data') return false;
+          // All project directions use the same data workspace.
           return true;
         }).map((item) => {
           const href =
@@ -77,6 +77,7 @@ export function ProjectSidebar({
             <a
               key={item.id}
               href={href}
+              aria-label={item.label}
               className={isActive ? 'active' : ''}
               aria-current={isActive ? 'page' : undefined}
               onClick={(e) => {

@@ -161,9 +161,10 @@ test('评论质检与投放分析进入各自业务主体，数据导航URL和�
   const { projectId } = await setup(request);
   await page.goto(`/projects/${projectId}`);
   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).waitFor();
-  await page.getByRole('link', { name: '02 数据管理' }).click();
-  await expect(page).toHaveURL(new RegExp(`/projects/${projectId}/settings\\?tab=data-sources$`));
+  await page.getByRole('link', { name: '数据管理', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/projects/${projectId}/data$`));
+  await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();
   await expect(page.getByRole('tab', { name: '数据源', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('link', { name: '02 数据管理' })).toHaveAttribute('aria-current', 'page');
-  await expect(page.getByRole('link', { name: '05 项目设置' })).not.toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('link', { name: '项目设置', exact: true })).not.toHaveAttribute('aria-current', 'page');
 });

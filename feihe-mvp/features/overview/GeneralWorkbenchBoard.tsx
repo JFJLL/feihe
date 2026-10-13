@@ -37,7 +37,7 @@ export function GeneralWorkbenchBoard({
   project?: Project;
 }) {
   const { showToast, navigateTo } = useProject();
-  const canConfigure = Boolean(project?.canManage);
+  const canConfigure = Boolean(project?.canManage && !project.isArchived);
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [selectedDatasetId, setSelectedDatasetId] = useState<string>('');
   const [detailSnapshot, setDetailSnapshot] = useState<{ key: string; data: DatasetDetail | null; error: string }>({ key: '', data: null, error: '' });
@@ -601,17 +601,18 @@ export function GeneralWorkbenchBoard({
                         onClick={handleAddCardClick}
                         style={{ padding: '8px 16px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
                       >
-                        ＋ 添加卡片
+                        添加第一张卡片
                       </button>
                     ) : (
                       <button
                         onClick={() => {
                           setDraftCards(publishedCards);
                           setIsEditingBoard(true);
+                          handleAddCardClick();
                         }}
                         style={{ padding: '8px 16px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
                       >
-                        ⚙ 自定义看板卡片
+                        创建第一张卡片
                       </button>
                     )
                   }

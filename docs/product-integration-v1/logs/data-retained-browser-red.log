@@ -1,0 +1,1220 @@
+[WebServer] (node:37428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 47 tests using 1 worker
+
+(node:24552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:37428) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  x   1 tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 (3.6s)
+(node:36692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   2 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 (1.0s)
+(node:4956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   3 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 (984ms)
+(node:40252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   4 tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 1280px：重复百分值非空3、去重2，平均与计数来回切换发布 (1.0s)
+(node:36016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   5 tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 1280px：金额与简写偏好保留，来源名字不触发货币单位 (1.0s)
+(node:35316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   6 tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 1280px：变更未知单位字段时阻止静默继承与错误发布 (1.0s)
+(node:20664) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   7 tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 (1.0s)
+(node:35352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   8 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率字段非空数显示计数2 (954ms)
+(node:40144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   9 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 (940ms)
+(node:20400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  10 tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 390px：重复百分值非空3、去重2，平均与计数来回切换发布 (954ms)
+(node:25124) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  11 tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 390px：金额与简写偏好保留，来源名字不触发货币单位 (953ms)
+(node:7480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  12 tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 390px：变更未知单位字段时阻止静默继承与错误发布 (1.0s)
+(node:13092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 13 tests\browser\flows.spec.ts:33:1 › 映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库 (2.9s)
+  ok 14 tests\browser\flows.spec.ts:70:1 › A 空项目接入、换表、映射校验、真实同步和重编辑 (1.7s)
+  ok 15 tests\browser\flows.spec.ts:105:1 › 来源慢请求：换链接、关闭与重编辑使旧结果失效 (5.5s)
+  ok 16 tests\browser\flows.spec.ts:129:1 › B 新建计数、平均、分组、比率卡，预览发布刷新保持正确 (2.8s)
+  ok 17 tests\browser\flows.spec.ts:163:3 › C 保存并切换500保留草稿，重试成功后才切换 (1.7s)
+  ok 18 tests\browser\flows.spec.ts:163:3 › C 保存并切换断网保留草稿，重试成功后才切换 (2.3s)
+  ok 19 tests\browser\flows.spec.ts:194:1 › 取消编辑恢复原稿，删光保存刷新仍为空 (1.7s)
+  ok 20 tests\browser\flows.spec.ts:209:1 › D 日期范围经编辑试算发布GET刷新重新打开完整保存 (1.9s)
+  x  21 tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% (1.8s)
+(node:34692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 22 tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 (1.8s)
+  x  23 tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 (1.7s)
+(node:13000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  24 tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新 (2.2s)
+(node:36148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  25 tests\browser\focused.spec.ts:83:3 › 百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑 (2.5s)
+(node:33116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 26 tests\browser\focused.spec.ts:144:5 › 首次同步 500 1280px：配置真实保存后失败，关闭重开复用原ID (4.5s)
+  ok 27 tests\browser\focused.spec.ts:144:5 › 首次同步 断网 1280px：配置真实保存后失败，关闭重开复用原ID (4.2s)
+  ok 28 tests\browser\focused.spec.ts:144:5 › 首次同步 样本外必填 1280px：配置真实保存后失败，关闭重开复用原ID (3.6s)
+  x  29 tests\browser\focused.spec.ts:212:3 › 比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布 (1.8s)
+(node:9476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  30 tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新 (1.8s)
+(node:34788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  31 tests\browser\focused.spec.ts:83:3 › 百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑 (2.5s)
+(node:14708) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 32 tests\browser\focused.spec.ts:144:5 › 首次同步 500 390px：配置真实保存后失败，关闭重开复用原ID (3.5s)
+  ok 33 tests\browser\focused.spec.ts:144:5 › 首次同步 断网 390px：配置真实保存后失败，关闭重开复用原ID (3.4s)
+  ok 34 tests\browser\focused.spec.ts:144:5 › 首次同步 样本外必填 390px：配置真实保存后失败，关闭重开复用原ID (3.2s)
+  x  35 tests\browser\focused.spec.ts:212:3 › 比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布 (1.7s)
+(node:32632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  36 tests\browser\lifecycle.spec.ts:12:1 › E 必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑 (1.0m)
+(node:23100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  37 tests\browser\lifecycle.spec.ts:65:1 › 离开模块、切换项目和浏览器后退均先保护草稿 (1.0m)
+(node:25232) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 38 tests\browser\lifecycle.spec.ts:107:1 › F 390px键盘完成卡片、选择器、未保存和冲突弹窗 (2.6s)
+  ok 39 tests\browser\lifecycle.spec.ts:148:1 › F 390px键盘映射、真实写入与确认弹窗 (2.3s)
+  ok 40 tests\browser\remediation.spec.ts:4:1 › 记录计数：普通三条任务的实时预览必须为3 (1.3s)
+  ok 41 tests\browser\remediation.spec.ts:18:1 › 409：保存并切换失败后仍保留数据集A、草稿和编辑状态 (1.4s)
+  ok 42 tests\browser\state.spec.ts:15:1 › 旧模板改为自定义求和后显示30，保存刷新仍按新配置计算 (1.7s)
+  ok 43 tests\browser\state.spec.ts:33:1 › 预览乱序忽略旧值，500错误清除成功预览并禁止加入 (2.3s)
+  ok 44 tests\browser\state.spec.ts:60:1 › 数据集迟到响应、搜索和金额显示名均使用当前内容和存储key (2.2s)
+  ok 45 tests\browser\state.spec.ts:86:1 › 数据更新使当前页越界时自动校正重读，同时保留编辑草稿 (1.6s)
+  ok 46 tests\browser\state.spec.ts:116:1 › 保存中冻结快照且重复操作只提交一次真实请求 (1.2s)
+  x  47 tests\browser\state.spec.ts:143:1 › 评论质检与投放分析进入各自业务主体，数据导航URL和标签一致 (1.0m)
+
+
+  1) tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 ──────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\attachments\关键请求-dc0dd160e103699c9d4d080eb81e152c11adb7ff.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\attachments\实际持久化快照-023652d4b48ea8d9f1c8aa7fbaedbb32cbd985e6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\attachments\最终页面-a21d640aa71f36e3a3580921b0bde9155ea1a830.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 ─────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:87:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\attachments\关键请求-618d8aead04cb73b51ecc2d0cf246b0f3ec33975.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\attachments\实际持久化快照-0fdc9724e0c93db2849cd6a6bbdbbe100f693178.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\attachments\最终页面-d86c1c72cc8374f2aad9f94bbbb5f98af4eb5a40.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 ──────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:87:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\attachments\关键请求-2d1daf59d19e199bde5638ff67121230fa71b676.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\attachments\实际持久化快照-16956eb845d04ae80d0f6d696ab9fd26cd0f1dbe.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\attachments\最终页面-38cec5d55fb4737036de7cffc60de56212b84323.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 1280px：重复百分值非空3、去重2，平均与计数来回切换发布 ───────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:109:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\attachments\关键请求-92c54b3dcdfcb104ba4feffc937532d06ee52bf1.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\attachments\实际持久化快照-9e8861b7316c4089798826fad911b20b29780893.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\attachments\最终页面-f21207f7b4748a24c3f2d7088d742ea710afc0e5.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-1280px：重复百分值非空3、去重2，平均与计数来回切换发布\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 1280px：金额与简写偏好保留，来源名字不触发货币单位 ──────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:130:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\attachments\关键请求-0046fcdc5872f7c58bb25af8aee3aaab15b6aa49.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\attachments\实际持久化快照-e6fa6c3e2d2e1b32e26f0dd9c004e8f40f93790b.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\attachments\最终页面-79e1a68a91fa6d1cdb2a653d22d55563f8f4a34a.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-1280px：金额与简写偏好保留，来源名字不触发货币单位\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 1280px：变更未知单位字段时阻止静默继承与错误发布 ─────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:147:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\attachments\关键请求-2e97b91640ead4e0e9091968739b11a703e5c90d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\attachments\实际持久化快照-8bf64a3a85096455f97704d304c2f83b4b587024.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\attachments\最终页面-90a26637a1c58031fa3059d7e54fd6217e74fc20.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-1280px：变更未知单位字段时阻止静默继承与错误发布\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 ───────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:51:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\attachments\关键请求-1ad71f9b726022ef0c89fe3c138a8ca3b04ff424.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\attachments\实际持久化快照-7fb1b7af2617362696706cc38890337eb3a1d292.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\attachments\最终页面-312542d35aced91e558008faacb7a047423f7946.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率字段非空数显示计数2 ──────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:87:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\attachments\关键请求-0ca829e35ef78a3e7fc66a0c554d0f06d5823986.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\attachments\实际持久化快照-44dbb7d707dee3f615d1ca0f17ce32976d3c718b.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\attachments\最终页面-d17598e0e5c9c36c67cca80f3549a9b4530e7ee9.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 ───────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:87:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\attachments\关键请求-9892baf26325fafadc28a9aedf4a27dd3c7df57e.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\attachments\实际持久化快照-97832fae4d628375d62c0fdef7062b136db20669.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\attachments\最终页面-56473125f4cf0250bce44848afb1657436dd13f0.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 390px：重复百分值非空3、去重2，平均与计数来回切换发布 ───────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:109:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\attachments\关键请求-bdfbe9b900988a9c798e2d716bca4ed55fd9485e.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\attachments\实际持久化快照-8be4e379f948d5ec5d4dafbd0a31a4c19279e242.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\attachments\最终页面-0a96ea6e42c05230a00ce27a3071853a8108f619.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-聚合循环-390px：重复百分值非空3、去重2，平均与计数来回切换发布\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 390px：金额与简写偏好保留，来源名字不触发货币单位 ──────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:130:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\attachments\关键请求-34f153daa3b8cb38aa9086c91bc7bc9df15e30a4.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\attachments\实际持久化快照-d4424867a5b4e6c38d140a638be14668420efd16.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\attachments\最终页面-3295c26c5c2eced684f714c0592822e128ef2825.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动偏好-390px：金额与简写偏好保留，来源名字不触发货币单位\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 390px：变更未知单位字段时阻止静默继承与错误发布 ─────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:147:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\attachments\关键请求-dee833cf89c4e8b909fd68f11292a7fb5946f850.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\attachments\实际持久化快照-9027ca0480b4bbbaf7634daa7f5f296f1c6724e4.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\attachments\最终页面-97fe50c5c8ec9241a5660d68aa5b7f73aa5d54b9.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\card-display-linkage-手动百分确认-390px：变更未知单位字段时阻止静默继承与错误发布\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% ─────────────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-red.spec.ts:8:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\attachments\关键请求-42d4e5cf9ced2085a92de0892a85c7d1e395661f.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\attachments\实际持久化快照-67a870059d14b3def91d5375fac3a03dc92b2dc7.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\attachments\最终页面-17b1a206e85a68c6328a3a939854d29fded15733.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 ────────────────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-red.spec.ts:52:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\attachments\关键请求-c6caa121afa5c11f2488e55227d81b663a56667b.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\attachments\实际持久化快照-625b92c19a5b39a38082244c8b0727dab7b0dfb8.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\attachments\最终页面-e22edf6d97724489a29c9b56a806d5f4c8fb12ff.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新 ──────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:63:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\attachments\关键请求-ba2c892ad76f40173138593acc32c26f884241fe.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\attachments\实际持久化快照-cb57e7006e03ff79d64ea99a711d2c5c315385b6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\attachments\最终页面-812bf977b8892e9c40300acf7ff1dd43b22f887f.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) tests\browser\focused.spec.ts:83:3 › 百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑 › 普通百分字段平均1.0%；卡片明确保存比例单位 
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:102:7
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:101:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\attachments\关键请求-64da20d40bbb262444e638bdaf380f3a91fec132.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\attachments\实际持久化快照-f848eebf0d6a98e9aae59ae33b2bef890312a36e.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\attachments\最终页面-f87c5afaaf3fad419ebf65912c35677992e28286.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) tests\browser\focused.spec.ts:212:3 › 比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布 ────────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:219:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\attachments\关键请求-1d83e1a0391e00a092458ac0bd0e9f68bbec15af.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\attachments\实际持久化快照-c0c0ded206bd47ebd4f13a9669c9c8b0386ab131.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\attachments\最终页面-894782061631d8acc215df5e93095d0da3910e3b.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新 ───────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:63:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\attachments\关键请求-8d3cb49d50678c048b049a321985a2a1d5b8e354.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\attachments\实际持久化快照-3cd964486251f093574b04b2675ece055575d277.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\attachments\最终页面-42dfec52699a461c33b64ce2a09064b102899260.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) tests\browser\focused.spec.ts:83:3 › 百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑 › 普通百分字段平均1.0%；卡片明确保存比例单位 
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:102:7
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:101:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\attachments\关键请求-1bf1339acf06ce65a88e891ff7e78e1adb4b1858.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\attachments\实际持久化快照-16143256e75e49b01574c9eeadf1c288865103d2.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\attachments\最终页面-dfa19a51ce3f9ce25c04738d890452b811c78ebf.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) tests\browser\focused.spec.ts:212:3 › 比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布 ─────────────────────
+
+    Error: locator.click: Error: strict mode violation: getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }) resolved to 2 elements:
+        1) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).first()
+        2) <button>⚙ 自定义看板卡片</button> aka getByRole('button', { name: '⚙ 自定义看板卡片' }).nth(1)
+
+    Call log:
+      - waiting for getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })
+
+
+       at focused-helpers.ts:29
+
+      27 | export async function newFocusedCard(page: Page, projectId: string, title: string) {
+      28 |   await page.goto(`/projects/${projectId}`);
+    > 29 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
+         |                                                                      ^
+      30 |   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+      31 |   await page.getByLabel('卡片标题', { exact: true }).fill(title);
+      32 | }
+        at newFocusedCard (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-helpers.ts:29:70)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused.spec.ts:219:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\attachments\关键请求-2a3f9b7dca4b52ed1bf63bc1d522af34c3f4dd09.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\attachments\实际持久化快照-ef5b5e346b035d038d0e0daf0ef3ceaf0490ddbe.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\attachments\最终页面-a48e7ca045586062ba14f9eb663ae49e8a67064d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) tests\browser\lifecycle.spec.ts:12:1 › E 必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑 ──────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.fill: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByPlaceholder('搜索项目名称、品牌或说明…')
+
+
+      41 |
+      42 |   await page.getByRole('link', { name: '返回项目中心' }).click();
+    > 43 |   await page.getByPlaceholder('搜索项目名称、品牌或说明…').fill('初始化恢复验收');
+         |                                                ^
+      44 |   const article = page.locator('article').filter({ has: page.locator(`a[href="/projects/${projectId}"]`) });
+      45 |   await article.getByRole('button', { name: '归档', exact: true }).click();
+      46 |   await expect(page.getByRole('dialog')).toContainText('归档');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\lifecycle.spec.ts:43:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\attachments\关键请求-a9fe3247ce5faeaac56f25fa3bd0f01938704d52.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\attachments\实际持久化快照-21c9f6e47d4cd988f5e3f565fcd7ef2077e44a45.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\attachments\最终页面-86c3dcf57b3e26d9d481689e5893b442afeb9f58.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) tests\browser\lifecycle.spec.ts:65:1 › 离开模块、切换项目和浏览器后退均先保护草稿 ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('link', { name: '01 项目总览' })
+
+
+      71 |   await page.goto(`/projects/${projectId}/settings?tab=data-sources`);
+      72 |   await settingsReady;
+    > 73 |   await page.getByRole('link', { name: '01 项目总览' }).click();
+         |                                                     ^
+      74 |   await edit(page, '导航保护草稿');
+      75 |   await page.getByRole('link', { name: '05 项目设置' }).click();
+      76 |   await expect(page.getByRole('dialog')).toContainText('未保存');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\lifecycle.spec.ts:73:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\attachments\关键请求-6dc5dba017cb0effd4b78f779aee68b3595d0a38.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\attachments\实际持久化快照-719646b6d537df66c4d627b2a4da2126e34ebe35.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\attachments\最终页面-69253eb0de3d5d9f6f2f30d57cc54307dfc0f650.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\lifecycle-离开模块、切换项目和浏览器后退均先保护草稿\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) tests\browser\state.spec.ts:143:1 › 评论质检与投放分析进入各自业务主体，数据导航URL和标签一致 ───────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('link', { name: '02 数据管理' })
+
+
+      162 |   await page.goto(`/projects/${projectId}`);
+      163 |   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).waitFor();
+    > 164 |   await page.getByRole('link', { name: '02 数据管理' }).click();
+          |                                                     ^
+      165 |   await expect(page).toHaveURL(new RegExp(`/projects/${projectId}/settings\\?tab=data-sources$`));
+      166 |   await expect(page.getByRole('tab', { name: '数据源', exact: true })).toHaveAttribute('aria-selected', 'true');
+      167 |   await expect(page.getByRole('link', { name: '02 数据管理' })).toHaveAttribute('aria-current', 'page');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\state.spec.ts:164:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\attachments\关键请求-a5dcd9ef7c70806d73df49f9b310ceabc46b81f0.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\attachments\实际持久化快照-e331094786501ea9ad00e004d9a1009fb27f58a6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\attachments\最终页面-b3d0f324cae140455715b31e6991e8ad55173f01.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-retained-browser\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23 failed
+    tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 ───────────────
+    tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 ──────────────────
+    tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 ───────────
+    tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 1280px：重复百分值非空3、去重2，平均与计数来回切换发布 ────────
+    tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 1280px：金额与简写偏好保留，来源名字不触发货币单位 ───────────
+    tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 1280px：变更未知单位字段时阻止静默继承与错误发布 ──────────
+    tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 ────────────────
+    tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率字段非空数显示计数2 ───────────────────
+    tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 ────────────
+    tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 390px：重复百分值非空3、去重2，平均与计数来回切换发布 ─────────
+    tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 390px：金额与简写偏好保留，来源名字不触发货币单位 ────────────
+    tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 390px：变更未知单位字段时阻止静默继承与错误发布 ───────────
+    tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% ───────────────────────────
+    tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 ──────────────────────────────
+    tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新 ────────────────────
+    tests\browser\focused.spec.ts:83:3 › 百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑 ─────────────────────────
+    tests\browser\focused.spec.ts:212:3 › 比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布 ──────────────────────
+    tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新 ─────────────────────
+    tests\browser\focused.spec.ts:83:3 › 百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑 ──────────────────────────
+    tests\browser\focused.spec.ts:212:3 › 比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布 ───────────────────────
+    tests\browser\lifecycle.spec.ts:12:1 › E 必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑 ────────────────────────────
+    tests\browser\lifecycle.spec.ts:65:1 › 离开模块、切换项目和浏览器后退均先保护草稿 ───────────────────────────────────
+    tests\browser\state.spec.ts:143:1 › 评论质检与投放分析进入各自业务主体，数据导航URL和标签一致 ─────────────────────────────
+  24 passed (5.1m)

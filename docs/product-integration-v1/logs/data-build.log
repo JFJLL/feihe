@@ -1,0 +1,85 @@
+
+  vinext build  (Vite 8.0.13)
+
+▲ [WARNING] Proxy environment variables detected. We'll use your proxy for fetch requests.
+
+
+[1/5] analyze client references...
+[2K
+transforming...✓ 303 modules transformed.
+rendering chunks...
+✓ built in 1.24s
+[2/5] analyze server references...
+[2K
+transforming...✓ 212 modules transformed.
+rendering chunks...
+✓ built in 270ms
+[3/5] build rsc environment...
+[2K
+transforming...✓ 301 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 1.16s
+[4/5] build client environment...
+[2K
+transforming...✓ 221 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 580ms
+[5/5] build ssr environment...
+[2K
+transforming...✓ 218 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 417ms
+[0m
+  Route (app)
+  ┌ ƒ /                            
+  ├ λ /api/actions                 
+  ├ λ /api/actions/workbench       
+  ├ λ /api/ads/import              
+  ├ λ /api/ads/summary             
+  ├ λ /api/agent                   
+  ├ λ /api/comments/fetch          
+  ├ λ /api/dashboard               
+  ├ λ /api/dashboards              
+  ├ λ /api/data-map                
+  ├ λ /api/data-workspace          
+  ├ λ /api/datasets                
+  ├ λ /api/export                  
+  ├ λ /api/feishu/inspect          
+  ├ λ /api/feishu/sync             
+  ├ λ /api/import                  
+  ├ λ /api/integrations            
+  ├ λ /api/lingxi/track            
+  ├ λ /api/metrics                 
+  ├ λ /api/note-covers             
+  ├ λ /api/notes/detail            
+  ├ λ /api/notes/list              
+  ├ λ /api/notes/search            
+  ├ λ /api/ops                     
+  ├ λ /api/projects                
+  ├ λ /api/report-html             
+  ├ λ /api/resources               
+  ├ λ /api/review                  
+  ├ λ /api/settings                
+  ├ λ /api/supplier/list           
+  ├ λ /api/supplier/verify         
+  ├ λ /api/uploads                 
+  ├ ƒ /data-sources                
+  ├ ƒ /integrations                
+  ├ ƒ /projects/:projectId         
+  ├ ƒ /projects/:projectId/:section
+  ├ ƒ /projects/:projectId/agent   
+  ├ ƒ /projects/:projectId/comments
+  ├ ƒ /projects/:projectId/content 
+  ├ ƒ /projects/:projectId/data    
+  ├ ƒ /projects/:projectId/data-map
+  ├ ƒ /projects/:projectId/growth  
+  ├ ƒ /projects/:projectId/insights
+  └ ƒ /projects/:projectId/settings
+
+  λ API  ƒ Dynamic
+
+  Build complete. Run `vinext start` to start the production server.
+

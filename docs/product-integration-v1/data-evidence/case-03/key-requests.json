@@ -1,0 +1,128 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/DataFailure-1791892982428\",\"projectId\":\"1791892982428\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/DataFailure-1791892982428\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"任务\\\",\\\"targetField\\\":\\\"任务\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"required\\\":true}],\\\"context\\\":{\\\"projectId\\\":\\\"1791892982428\\\",\\\"documentToken\\\":\\\"DataFailure-1791892982428\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"任务\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791892982428\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791892982428\",\"sourceId\":\"17a977d9-b2f7-4cd9-8e51-4fcc5e142260\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 500,
+    "body": "{\"id\":\"17a977d9-b2f7-4cd9-8e51-4fcc5e142260\",\"projectId\":\"1791892982428\",\"type\":\"feishu_sheet\",\"name\":\"补修数据\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/DataFailure-1791892982428\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"status\":\"已连接\",\"lastSyncedAt\":\"2026-10-13T12:03:03.202Z\",\"lastRowCount\":12,\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"任务\\\",\\\"targetField\\\":\\\"任务\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"required\\\":true}],\\\"context\\\":{\\\"projectId\\\":\\\"1791892982428\\\",\\\"documentToken\\\":\\\"DataFailure-1791892982428\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"任务\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"lastError\":\"\",\"updatedAt\":\"2026-10-13T12:03:03.202Z\",\"sourceId\":\"17a977d9-b2f7-4cd9-8e51-4fcc5e142260\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791892982428&id=ds-1791892982428-17a977d9-b2f7-4cd9-8e51-4fcc5e142260&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"id\":\"17a977d9-b2f7-4cd9-8e51-4fcc5e142260\",\"projectId\":\"1791892982428\",\"type\":\"feishu_sheet\",\"name\":\"补修数据\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/DataFailure-1791892982428\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"status\":\"同步失败\",\"lastSyncedAt\":\"2026-10-13T12:03:03.202Z\",\"lastRowCount\":12,\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"任务\\\",\\\"targetField\\\":\\\"任务\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"required\\\":true}],\\\"context\\\":{\\\"projectId\\\":\\\"1791892982428\\\",\\\"documentToken\\\":\\\"DataFailure-1791892982428\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"任务\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"lastError\":\"第 12 行「金额」必填，不能留空\",\"updatedAt\":\"2026-10-13T12:03:07.229Z\",\"sourceId\":\"17a977d9-b2f7-4cd9-8e51-4fcc5e142260\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791892982428",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791892982428&id=ds-1791892982428-17a977d9-b2f7-4cd9-8e51-4fcc5e142260&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

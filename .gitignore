@@ -4,6 +4,11 @@ token.txt
 
 # Large data files and raw sheets
 data/
+# Project data workspaces are source code, not raw data archives.
+!/feihe-mvp/features/data/
+!/feihe-mvp/features/data/**
+!/feihe-mvp/app/projects/*/data/
+!/feihe-mvp/app/projects/*/data/page.tsx
 outputs/
 *.xlsx
 !docs/*.xlsx

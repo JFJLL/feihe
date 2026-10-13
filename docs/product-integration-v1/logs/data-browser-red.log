@@ -1,0 +1,221 @@
+[WebServer] (node:32676) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:12740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:32676) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  x  1 tests\browser\product-data.spec.ts:15:3 › 数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通 (12.3s)
+(node:13092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\browser\product-data.spec.ts:56:3 › 数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限 (10.6s)
+(node:35792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\browser\product-data.spec.ts:15:3 › 数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通 (10.6s)
+(node:28016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 tests\browser\product-data.spec.ts:56:3 › 数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限 (10.6s)
+
+
+  1) tests\browser\product-data.spec.ts:15:3 › 数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通 ─────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '数据工作台', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '数据工作台', exact: true })
+
+
+      20 |     expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows: raw } })).ok()).toBeTruthy();
+      21 |     await page.goto('/projects/' + projectId + '/data');
+    > 22 |     await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();
+         |                                                                             ^
+      23 |     await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');
+      24 |     await page.getByRole('button', { name: /接入飞书数据源/ }).click();
+      25 |     await page.getByRole('textbox', { name: '飞书表格链接', exact: true }).fill('https://fixture.feishu.cn/sheets/' + token);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-data.spec.ts:22:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\attachments\关键请求-ff12261fee9969a8dde2ca58914afaa350cc6010.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\attachments\实际持久化快照-2bb8f9ccbec4fc9054e7cd01893f029aa7288fb6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\attachments\最终页面-0acb9d9ac940f6bb5162cd2d66d3834127033d5d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：四列原表经真实接入、明细、字段和同步记录贯通\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\product-data.spec.ts:56:3 › 数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限 ────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '数据集明细', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '数据集明细', exact: true })
+
+
+      65 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });
+      66 |     await page.goto('/projects/' + projectId + '/data?tab=datasets');
+    > 67 |     await expect(page.getByRole('heading', { name: '数据集明细', exact: true })).toBeVisible();
+         |                                                                             ^
+      68 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true }).getByRole('row')).toHaveCount(16);
+      69 |     await page.getByRole('button', { name: '下一页', exact: true }).click();
+      70 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true })).toContainText('渠道16');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-data.spec.ts:67:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\attachments\关键请求-a351a2eff2ea380e57a95bd47d0f1b3305667e5d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\attachments\实际持久化快照-feb7626d4ed876e3c6892645295d309fbb7aae0e.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\attachments\最终页面-442645b25aaf2c071ace98c01fa80508f3cf06e6.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-1280px：只读明细、分页搜索、项目隔离和来源权限\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests\browser\product-data.spec.ts:15:3 › 数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通 ──────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '数据工作台', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '数据工作台', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '数据工作台', exact: true })
+
+
+      20 |     expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows: raw } })).ok()).toBeTruthy();
+      21 |     await page.goto('/projects/' + projectId + '/data');
+    > 22 |     await expect(page.getByRole('heading', { name: '数据工作台', exact: true })).toBeVisible();
+         |                                                                             ^
+      23 |     await expect(page.getByRole('link', { name: '数据管理', exact: true })).toHaveAttribute('aria-current', 'page');
+      24 |     await page.getByRole('button', { name: /接入飞书数据源/ }).click();
+      25 |     await page.getByRole('textbox', { name: '飞书表格链接', exact: true }).fill('https://fixture.feishu.cn/sheets/' + token);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-data.spec.ts:22:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\attachments\关键请求-af62a29ea5f9d3a33a941be5de68af370dee1886.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\attachments\实际持久化快照-ba2d933cf96d1188b00db933e251226066e532e9.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\attachments\最终页面-1accfd6f85b57db510ef0a6cda94f68e10038089.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：四列原表经真实接入、明细、字段和同步记录贯通\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests\browser\product-data.spec.ts:56:3 › 数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限 ─────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '数据集明细', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '数据集明细', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '数据集明细', exact: true })
+
+
+      65 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });
+      66 |     await page.goto('/projects/' + projectId + '/data?tab=datasets');
+    > 67 |     await expect(page.getByRole('heading', { name: '数据集明细', exact: true })).toBeVisible();
+         |                                                                             ^
+      68 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true }).getByRole('row')).toHaveCount(16);
+      69 |     await page.getByRole('button', { name: '下一页', exact: true }).click();
+      70 |     await expect(page.getByRole('table', { name: '业务数据明细', exact: true })).toContainText('渠道16');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-data.spec.ts:67:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\attachments\关键请求-5f2829328ce7555858874d6c10925df8f30b26ee.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\attachments\实际持久化快照-dc5c3b956b3a90da6726ff0c2a30c190cbb86726.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\attachments\最终页面-8657a5adc7973d9c197ab867fc0a806d8f5883b5.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\data-baseline\browser-results\product-data-数据工作台-390px：只读明细、分页搜索、项目隔离和来源权限\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    tests\browser\product-data.spec.ts:15:3 › 数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通 ──────────────────
+    tests\browser\product-data.spec.ts:56:3 › 数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限 ─────────────────────
+    tests\browser\product-data.spec.ts:15:3 › 数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通 ───────────────────
+    tests\browser\product-data.spec.ts:56:3 › 数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限 ──────────────────────

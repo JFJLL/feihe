@@ -7,3 +7,15 @@
 !logs/*.log
 /foundation-layout-verified/
 /foundation-evidence/
+
+/data-red/
+/data-red-valid/
+/data-baseline/
+/data-iteration-*/
+/data-verified/
+/data-verified-late/
+/data-retained-browser/
+/data-retained-verified/
+/data-final-visual/
+/data-final-keyboard/
+/data-final-delivery/

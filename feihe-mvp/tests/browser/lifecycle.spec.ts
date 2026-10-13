@@ -40,13 +40,13 @@ test('E 必要资源受阻、单人跳过、就绪，归档刷新授权恢复再
   await request.post('/api/projects', { data: { action: 'add_member', projectId, userId: 'user-viewer', role: 'viewer' } });
 
   await page.getByRole('link', { name: '返回项目中心' }).click();
-  await page.getByPlaceholder('搜索项目名称、品牌或说明…').fill('初始化恢复验收');
+  await page.getByRole('textbox', { name: '搜索项目', exact: true }).fill('初始化恢复验收');
   const article = page.locator('article').filter({ has: page.locator(`a[href="/projects/${projectId}"]`) });
   await article.getByRole('button', { name: '归档', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('归档');
   await page.getByRole('dialog').getByRole('button', { name: /确认/ }).click();
   await page.reload();
-  await page.getByPlaceholder('搜索项目名称、品牌或说明…').fill('初始化恢复验收');
+  await page.getByRole('textbox', { name: '搜索项目', exact: true }).fill('初始化恢复验收');
   await expect(article.getByRole('button', { name: '恢复', exact: true })).toBeVisible();
   const refused = await request.post('/api/projects', { headers: { 'x-user-id': 'user-viewer' }, data: { action: 'restore', projectId } });
   expect(refused.status()).toBe(403);
@@ -70,9 +70,9 @@ test('离开模块、切换项目和浏览器后退均先保护草稿', async ({
   const settingsReady = page.waitForResponse(r => r.url().includes('/api/feishu/sync?projectId=' + projectId));
   await page.goto(`/projects/${projectId}/settings?tab=data-sources`);
   await settingsReady;
-  await page.getByRole('link', { name: '01 项目总览' }).click();
+  await page.getByRole('link', { name: '项目总览', exact: true }).click();
   await edit(page, '导航保护草稿');
-  await page.getByRole('link', { name: '05 项目设置' }).click();
+  await page.getByRole('link', { name: '项目设置', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('未保存');
   await expect(page).toHaveURL(new RegExp(`/projects/${projectId}$`));
   await page.getByRole('button', { name: '继续编辑', exact: true }).click();

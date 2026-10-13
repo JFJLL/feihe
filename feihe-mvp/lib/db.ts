@@ -464,6 +464,8 @@ export async function ensureSchema() {
     await ensureColumn('data_sources', 'schedule_enabled', "INTEGER NOT NULL DEFAULT 0");
     await ensureColumn('data_sources', 'last_probe_at', "TEXT");
     await ensureColumn('data_sources', 'probe_status', "TEXT NOT NULL DEFAULT '未检测'");
+    await ensureColumn('sync_jobs', 'request_scope', "TEXT NOT NULL DEFAULT 'unknown'");
+    await ensureColumn('sync_jobs', 'requested_range', "TEXT NOT NULL DEFAULT ''");
     await ensureColumn('supplier_comments', 'source_id', "TEXT NOT NULL DEFAULT 'default_supplier'");
     await ensureColumn('metric_definitions', 'is_standard', "INTEGER NOT NULL DEFAULT 1");
     await ensureColumn('metric_definitions', 'numerator_key', "TEXT");

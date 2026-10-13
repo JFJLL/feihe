@@ -16,6 +16,7 @@ import { GrowthWorkspace } from '../../features/growth/GrowthWorkspace';
 import { ContentWorkspace } from '../../features/content/ContentWorkspace';
 import { CommentsWorkspace } from '../../features/comments/CommentsWorkspace';
 import { SettingsWorkspace } from '../../features/settings/SettingsWorkspace';
+import { DataWorkspace } from '../../features/data/DataWorkspace';
 
 function ProjectShellContent({
   userName,
@@ -120,6 +121,8 @@ function ProjectShellContent({
       );
       break;
     case "data":
+      content = <DataWorkspace key={projectId} projectId={projectId} />;
+      break;
     case "settings":
       content = (
         <>
@@ -150,7 +153,7 @@ function ProjectShellContent({
         {content}
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>
-      {currentProject?.canWrite && <FloatingAgent projectId={projectId} />}
+      {currentProject?.canWrite && activeSection !== 'data' && <FloatingAgent projectId={projectId} />}
     </div>
   );
 }
