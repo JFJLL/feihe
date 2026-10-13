@@ -1,0 +1,115 @@
+[
+  {
+    "projectId": "flow-1791874495226",
+    "project": {
+      "id": "flow-1791874495226",
+      "name": "浏览器空项目",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T06:54:55.234Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "readiness": {
+      "completedSteps": [
+        "template"
+      ],
+      "blockedSteps": [
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-flow-1791874495226-default",
+          "projectId": "flow-1791874495226",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T06:54:55.234Z"
+        }
+      ],
+      "targetDashboardId": "dash-flow-1791874495226-default",
+      "cards": [
+        {
+          "id": "card-flow-1791874495226-c1",
+          "dashboardId": "dash-flow-1791874495226-default",
+          "projectId": "flow-1791874495226",
+          "title": "任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T06:54:55.234Z"
+        },
+        {
+          "id": "card-flow-1791874495226-c2",
+          "dashboardId": "dash-flow-1791874495226-default",
+          "projectId": "flow-1791874495226",
+          "title": "已完成数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T06:54:55.234Z"
+        },
+        {
+          "id": "card-flow-1791874495226-c3",
+          "dashboardId": "dash-flow-1791874495226-default",
+          "projectId": "flow-1791874495226",
+          "title": "任务完成率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completion_rate\"]",
+          "configJson": "{\"id\":\"c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T06:54:55.234Z"
+        },
+        {
+          "id": "card-flow-1791874495226-c4",
+          "dashboardId": "dash-flow-1791874495226-default",
+          "projectId": "flow-1791874495226",
+          "title": "预算执行率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"budget_spent_rate\"]",
+          "configJson": "{\"id\":\"c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T06:54:55.234Z"
+        },
+        {
+          "id": "card-flow-1791874495226-c5",
+          "dashboardId": "dash-flow-1791874495226-default",
+          "projectId": "flow-1791874495226",
+          "title": "按负责人状态分布",
+          "type": "bar_chart",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c5\",\"title\":\"按负责人状态分布\",\"type\":\"bar_chart\",\"dimension\":\"owner\",\"metric\":\"task_completed\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T06:54:55.234Z"
+        }
+      ]
+    },
+    "datasets": []
+  }
+]

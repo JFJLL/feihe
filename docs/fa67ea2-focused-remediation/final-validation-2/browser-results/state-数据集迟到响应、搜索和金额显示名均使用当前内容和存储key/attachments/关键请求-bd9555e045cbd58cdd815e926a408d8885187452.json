@@ -1,0 +1,68 @@
+[
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=repro-1791874637842",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874637842",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=repro-1791874637842",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791874637842\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791874637842-a\",\"id\":\"card-9d54f5b5-b1a8-4fc9-85f4-612d9c76fca6\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874637842&id=ds-repro-1791874637842-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791874637842\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791874637842-a\",\"id\":\"card-9d54f5b5-b1a8-4fc9-85f4-612d9c76fca6\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791874637842\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791874637842-a\",\"id\":\"card-9d54f5b5-b1a8-4fc9-85f4-612d9c76fca6\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874637842&id=ds-repro-1791874637842-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874637842&id=ds-repro-1791874637842-b&page=1&pageSize=15&search=%E6%9C%80%E6%96%B0B",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874637842&id=ds-repro-1791874637842-a&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874637842&id=ds-repro-1791874637842-b&page=1&pageSize=15&search=%E6%97%A7%E6%90%9C%E7%B4%A2",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

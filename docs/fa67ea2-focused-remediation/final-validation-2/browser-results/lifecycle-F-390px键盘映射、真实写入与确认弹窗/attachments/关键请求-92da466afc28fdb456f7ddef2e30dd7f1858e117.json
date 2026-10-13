@@ -1,0 +1,74 @@
+[
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=repro-1791874620574",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FixtureDoc\",\"projectId\":\"repro-1791874620574\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FixtureDoc\",\"projectId\":\"repro-1791874620574\",\"sheetId\":\"sheetB\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"结构A\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FixtureDoc\",\"sheetId\":\"sheetB\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"编号\\\",\\\"targetField\\\":\\\"编号\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"amount\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"已确认\\\",\\\"targetField\\\":\\\"已确认\\\",\\\"type\\\":\\\"boolean\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"业务日\\\",\\\"targetField\\\":\\\"业务日\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"订单\\\",\\\"targetField\\\":\\\"订单\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"访问\\\",\\\"targetField\\\":\\\"访问\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"repro-1791874620574\\\",\\\"documentToken\\\":\\\"FixtureDoc\\\",\\\"sheetId\\\":\\\"sheetB\\\",\\\"fields\\\":[{\\\"key\\\":\\\"编号\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"已确认\\\",\\\"type\\\":\\\"boolean\\\"},{\\\"key\\\":\\\"业务日\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"订单\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"访问\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"repro-1791874620574\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=repro-1791874620574&fresh=1&_t=1791874622409",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=repro-1791874620574&fresh=1&_t=1791874622409",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791874620574\",\"sourceId\":\"25c2cd8e-2252-4c37-85ae-3056cf9f6797\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=repro-1791874620574&fresh=1&_t=1791874622524",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=repro-1791874620574&fresh=1&_t=1791874622524",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=repro-1791874620574",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

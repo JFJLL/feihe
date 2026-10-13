@@ -87,7 +87,7 @@ test('数据更新使当前页越界时自动校正重读，同时保留编辑�
   const { projectId } = await setup(request);
   const sourceId = projectId + '-page';
   const documentToken = 'PageDoc' + projectId;
-  expect((await request.post('http://127.0.0.1:5187/__fixture/page-sheet', { data: { documentToken, rowCount: 31 } })).ok()).toBeTruthy();
+  expect((await request.post((process.env.FEIHE_TEST_VENDOR_ORIGIN || 'http://127.0.0.1:5187') + '/__fixture/page-sheet', { data: { documentToken, rowCount: 31 } })).ok()).toBeTruthy();
   expect((await request.post('/api/projects', { data: { action: 'save_source', projectId, id: sourceId, name: '分页业务', spreadsheet: 'https://fixture.feishu.cn/sheets/' + documentToken, sheetId: 'sheetA', kind: 'general', mappingJson: JSON.stringify([{ sourceField: '任务', targetField: 'task', type: 'text' }, { sourceField: '金额', targetField: 'amount', type: 'number' }]) } })).ok()).toBeTruthy();
   expect((await request.post('/api/feishu/sync', { data: { projectId, sourceId } })).ok()).toBeTruthy();
   await page.goto(`/projects/${projectId}`);
@@ -103,7 +103,7 @@ test('数据更新使当前页越界时自动校正重读，同时保留编辑�
   await page.getByRole('button', { name: '下一页', exact: true }).click();
   await expect(page.getByRole('cell', { name: '分页任务31', exact: true })).toBeVisible();
   // Change only the external vendor fixture, then use the real page sync button.
-  expect((await request.post('http://127.0.0.1:5187/__fixture/page-sheet', { data: { documentToken, rowCount: 1 } })).ok()).toBeTruthy();
+  expect((await request.post((process.env.FEIHE_TEST_VENDOR_ORIGIN || 'http://127.0.0.1:5187') + '/__fixture/page-sheet', { data: { documentToken, rowCount: 1 } })).ok()).toBeTruthy();
   await page.getByRole('button', { name: '同步最新数据', exact: true }).click();
   await expect(page.getByText('共 1 条记录 · 第 1 / 1 页')).toBeVisible();
   await expect(page.getByRole('cell', { name: '更新后唯一任务', exact: true })).toBeVisible();

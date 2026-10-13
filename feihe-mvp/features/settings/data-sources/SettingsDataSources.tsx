@@ -42,6 +42,11 @@ export function SettingsDataSources({
   const [source, setSource] = useState<Record<string, unknown>>(emptySource);
   const [isAdding, setIsAdding] = useState(false);
   const [busy, setBusy] = useState('');
+  const submitLock = useRef(false);
+  const confirmedSourceId = useRef('');
+  const savedSnapshot = useRef('');
+  const [saveFeedback, setSaveFeedback] = useState('');
+  const [clientSyncErrors, setClientSyncErrors] = useState<Record<string, string>>({});
   const [feishu, setFeishu] = useState<FeishuData>();
   const [statusError, setStatusError] = useState('');
   const [inspecting, setInspecting] = useState(false);
@@ -56,12 +61,13 @@ export function SettingsDataSources({
   const [mappingContext, setMappingContext] = useState<MappingContext | null>(null);
   const [inspectError, setInspectError] = useState('');
   function invalidateInspect() { inspectRequestId.current++; inspectAbort.current?.abort(); setInspecting(false); }
-  function closeEditor() { if (busy === 'source') return; invalidateInspect(); setIsAdding(false); setSource(emptySource); setMappingContext(null); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]); }
+  function closeEditor() { if (submitLock.current) return; confirmedSourceId.current = ''; savedSnapshot.current = ''; setSaveFeedback(''); invalidateInspect(); setIsAdding(false); setSource(emptySource); setMappingContext(null); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]); }
   useEffect(() => () => { inspectRequestId.current++; inspectAbort.current?.abort(); }, [projectId]);
   useEffect(() => {
     if (!active) { inspectRequestId.current++; inspectAbort.current?.abort(); }
   }, [active]);
   if (!active && (isAdding || inspecting || Boolean(source.id))) {
+    confirmedSourceId.current = ''; savedSnapshot.current = '';
     setIsAdding(false); setInspecting(false); setSource(emptySource);
   }
   const mappingErrors = transformMappedRows(rawPreviewRows, mappingRules).errors;
@@ -104,7 +110,7 @@ export function SettingsDataSources({
   const sources = (workspace?.sources || []).filter((item) => item.projectId === projectId);
   const currentProject = workspace?.projects.find((item) => item.id === projectId);
   const syncedSources = sources.filter((item) => item.lastSyncedAt);
-  const failedSources = sources.filter((item) => item.lastError);
+  const failedSources = sources.filter((item) => item.lastError || clientSyncErrors[item.id]);
   const latestSync = syncedSources.map((item) => item.lastSyncedAt).sort().at(-1);
 
   function handleUrlChange(newUrl: string) {
@@ -180,7 +186,12 @@ export function SettingsDataSources({
           let savedContext: MappingContext | null = null;
           try { const saved = JSON.parse(String(draft.mappingJson || '{}')); savedRules = Array.isArray(saved) ? saved : saved.rules || []; savedContext = saved.context || null; } catch {}
           const sameContext = mappingContextMatches(savedContext, context);
-          const rules: FieldMappingRule[] = sameContext ? savedRules : hdrs.map(h => ({ sourceField: h, targetField: h, type: inferColumnType(rows.map(r => r[h])) as FieldMappingRule['type'], nullPolicy: 'null' }));
+          const rules: FieldMappingRule[] = sameContext ? savedRules : hdrs.map(h => {
+            const values = rows.map(r => r[h]);
+            const type = inferColumnType(values) as FieldMappingRule['type'];
+            const percent = type === 'number' && values.some(value => typeof value === 'string' && /%$/.test(value.trim()));
+            return { sourceField: h, targetField: h, type, nullPolicy: 'null', ...(percent ? { numericUnit: 'percent', sourcePercentScale: 'fraction' } : {}) } as FieldMappingRule;
+          });
           if (savedRules.length && !sameContext) toast('工作表或字段结构已变化，已清除旧映射，请重新确认', 'info');
           setMappingRules(rules); setMappingContext(context);
           setSource(prev => ({ ...prev, mappingJson: JSON.stringify({ rules, context }) }));
@@ -206,67 +217,71 @@ export function SettingsDataSources({
   }
 
   async function saveSource(andSync = false) {
-    if (busy || inspecting || !mappingContext || mappingErrors.length) return;
+    if (submitLock.current || busy || inspecting || !mappingContext || mappingErrors.length) return;
+    submitLock.current = true;
     setBusy('source');
+    const mappingJson = JSON.stringify({ rules: mappingRules, context: mappingContext });
+    const snapshot = JSON.stringify({ ...source, id: undefined, mappingJson });
+    let effectiveSourceId = confirmedSourceId.current || String(source.id || '');
+    let saved = Boolean(effectiveSourceId);
+    let syncConfirmed = false;
     try {
-      const payload = {
-        action: 'save_source',
-        projectId,
-        ...source,
-        mappingJson: JSON.stringify({ rules: mappingRules, context: mappingContext }),
-      };
-
-      const saveRes = await api<{ ok: boolean; id: string }>('/api/projects', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-
-      const effectiveSourceId = String(source.id || saveRes.id || '');
-      toast('数据源配置已保存', 'success');
-
-      if (andSync && effectiveSourceId) {
-        toast('正在执行首次同步…', 'info');
-        const syncRes = await api<{ ok: boolean; imported: number }>('/api/feishu/sync', {
-          method: 'POST',
-          body: JSON.stringify({
-            projectId,
-            sourceId: effectiveSourceId,
-            spreadsheet: source.spreadsheet,
-            sheetId: source.sheetId,
-            kind: source.kind,
-            range: source.range,
-            mappingJson: payload.mappingJson,
-          }),
+      if (!andSync || savedSnapshot.current !== snapshot || !effectiveSourceId) {
+        const saveRes = await api<{ ok: boolean; id: string }>('/api/projects', {
+          method: 'POST', body: JSON.stringify({ ...source, id: effectiveSourceId || undefined, action: 'save_source', projectId, mappingJson }),
         });
-        if (syncRes.ok) {
-          toast(`首次同步完成！已成功入库 ${syncRes.imported} 行数据`, 'success');
-        }
+        if (!saveRes.ok || !saveRes.id) throw new Error('配置保存响应缺少已确认的来源 ID');
+        effectiveSourceId = saveRes.id;
+        confirmedSourceId.current = saveRes.id;
+        savedSnapshot.current = snapshot;
+        setSource(prev => ({ ...prev, id: saveRes.id, mappingJson }));
+        saved = true;
+        setSaveFeedback('配置已保存；等待同步。可关闭后从来源列表继续处理。');
+        toast('数据源配置已保存', 'success');
+        await onDone();
       }
-
-      invalidateInspect();
-      setSource(emptySource);
-      setIsAdding(false);
-      setDetectedSheets([]);
-      setRawHeaders([]);
-      setRawPreviewRows([]);
-      setMappingRules([]);
-      await onDone();
-      await loadSources();
+      if (andSync) {
+        setSaveFeedback('配置已保存，正在同步…');
+        const syncRes = await api<{ ok: boolean; imported: number }>('/api/feishu/sync', {
+          method: 'POST', body: JSON.stringify({ projectId, sourceId: effectiveSourceId }),
+        });
+        if (!syncRes.ok) throw new Error('同步未确认成功');
+        syncConfirmed = true;
+        setClientSyncErrors(prev => ({ ...prev, [effectiveSourceId]: '' }));
+        toast(`同步成功，已入库 ${syncRes.imported} 行数据`, 'success');
+        await onDone();
+      }
+      submitLock.current = false;
+      closeEditor();
     } catch (err) {
-      toast(err instanceof Error ? err.message : '保存失败', 'error');
+      const message = err instanceof Error ? err.message : '操作失败';
+      if (syncConfirmed) {
+        setSaveFeedback('同步已成功，列表刷新失败：' + message + '。配置与数据已保存，可刷新查看。');
+      } else if (saved) {
+        setSaveFeedback(andSync ? '配置已保存，同步未成功：' + message + '。可重试同步或修改映射后重试。' : '配置已保存，列表刷新失败：' + message + '。可刷新后继续同步。');
+        if (andSync) setClientSyncErrors(prev => ({ ...prev, [effectiveSourceId]: message }));
+        await onDone().catch(() => {});
+      } else setSaveFeedback('配置保存失败：' + message);
+      toast(message, 'error');
     } finally {
+      submitLock.current = false;
       setBusy('');
+      await loadSources();
     }
   }
 
   function handleEditExistingSource(item: Source) {
     invalidateInspect(); setMappingContext(null); setRawHeaders([]); setRawPreviewRows([]); setMappingRules([]);
+    confirmedSourceId.current = item.id; savedSnapshot.current = '';
+    setSaveFeedback(item.lastError || clientSyncErrors[item.id] ? '配置已保存，同步未成功。可重试同步或修改映射后重试。' : '配置已保存，可继续同步。');
     const draft = { id: item.id, name: item.name, type: item.type, spreadsheet: item.spreadsheet, sheetId: item.sheetId, range: item.range || '', kind: item.kind || 'general', syncFrequency: item.syncFrequency || 'manual', mappingJson: item.mappingJson || '[]' };
     setSource(draft); setIsAdding(true);
     if (item.spreadsheet) void handleInspectLink(item.sheetId, draft);
   }
 
   async function syncSource(item: Source) {
+    if (submitLock.current || busy) return;
+    submitLock.current = true;
     setBusy(item.id);
     try {
       const res = await api<{ ok: boolean; imported: number; message?: string }>('/api/feishu/sync', {
@@ -274,10 +289,14 @@ export function SettingsDataSources({
         body: JSON.stringify({ ...item, projectId: item.projectId, sourceId: item.id }),
       });
       toast(`${item.name} 同步完成（导入 ${res.imported} 行）`, 'success');
+      setClientSyncErrors(prev => ({ ...prev, [item.id]: '' }));
       await onDone();
     } catch (err) {
+      setClientSyncErrors(prev => ({ ...prev, [item.id]: err instanceof Error ? err.message : '同步失败' }));
       toast(err instanceof Error ? err.message : '同步失败', 'error');
+      await onDone().catch(() => {});
     } finally {
+      submitLock.current = false;
       setBusy('');
       await loadSources();
     }
@@ -356,6 +375,7 @@ export function SettingsDataSources({
                   className="primary"
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '13px' }}
                   onClick={() => {
+                    confirmedSourceId.current = ''; savedSnapshot.current = ''; setSaveFeedback('');
                     invalidateInspect(); setMappingContext(null);
                     setSource(emptySource);
                     setDetectedSheets([]);
@@ -396,10 +416,12 @@ export function SettingsDataSources({
                   onClick={() => saveSource(true)}
                   style={{ padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
                 >
-                  {busy === 'source' ? '正在执行…' : '✓ 保存并首次同步'}
+                  {busy === 'source' ? '正在执行…' : source.id ? (savedSnapshot.current === JSON.stringify({ ...source, id: undefined, mappingJson: JSON.stringify({ rules: mappingRules, context: mappingContext }) }) ? '重试同步' : '保存映射并重试同步') : '✓ 保存并首次同步'}
                 </button>
               </div>
 </>}>
+              {saveFeedback && <div role="status" data-testid="source-save-status" style={{ overflowWrap: 'anywhere', marginBottom: 12 }}>{saveFeedback} {source.id ? `来源 ID：${source.id}` : ''}</div>}
+              <fieldset disabled={busy === 'source'} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
               {/* Step 1: Basic Information */}
               <div className="platform-form" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 <label>
@@ -511,17 +533,18 @@ export function SettingsDataSources({
                 />
               )}
 
+              </fieldset>
             </Dialog>
           )}
 
           <div className="management-list" style={{ marginTop: '14px' }}>
             {sources.length ? (
               sources.map((item) => (
-                <div key={item.id} style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)' }}>
+                <div key={item.id} className="source-list-item" style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr) auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#eff6ff', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
                     飞
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0 }}>
+                  <div className="source-list-details" style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0, overflowWrap: 'anywhere' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                       <strong style={{ fontSize: '14px', color: '#0f172a' }}>{item.name}</strong>
                       <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>
@@ -536,25 +559,25 @@ export function SettingsDataSources({
                       <span>范围：<code>{item.range || '全表'}</code></span>
                       <span>最近读取：<strong>{item.lastSyncedAt ? (String(item.lastRowCount) + ' 行') : '—'}</strong></span>
                     </div>
-                    {item.lastError && (
+                    {(item.lastError || clientSyncErrors[item.id]) && (
                       <div style={{ fontSize: '11.5px', color: '#e11d48' }}>
-                        ⚠ 同步异常：{item.lastError}
+                        ⚠ 配置已保存，同步未成功：{item.lastError || clientSyncErrors[item.id]}
                       </div>
                     )}
                   </div>
-                  <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: 600, color: !item.lastError && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#16a34a' : '#ea580c' }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: !item.lastError && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#16a34a' : '#ea580c' }} />
-                      {item.lastError ? '异常' : item.status || '就绪'}
+                  <div className="source-list-status" style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: 600, color: !item.lastError && !clientSyncErrors[item.id] && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#16a34a' : '#ea580c' }}>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: !item.lastError && !clientSyncErrors[item.id] && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#16a34a' : '#ea580c' }} />
+                      {item.lastError || clientSyncErrors[item.id] ? '同步失败' : item.lastSyncedAt ? '同步成功' : '配置已保存 · 待首次同步'}
                     </span>
                     <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
                       {item.lastSyncedAt ? cnTime(item.lastSyncedAt) : '暂未同步'}
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+                  <div className="source-list-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
                     <button
                       type="button"
-                      disabled={busy === item.id}
+                      disabled={Boolean(busy)}
                       onClick={() => handleEditExistingSource(item)}
                       style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 500 }}
                     >
@@ -562,7 +585,7 @@ export function SettingsDataSources({
                     </button>
                     <button
                       type="button"
-                      disabled={busy === item.id || !item.spreadsheet || !item.sheetId}
+                      disabled={Boolean(busy) || !item.spreadsheet || !item.sheetId}
                       onClick={() => syncSource(item)}
                       style={{ padding: '6px 12px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #0284c7', background: '#f0f9ff', color: '#0284c7', cursor: 'pointer', fontWeight: 600 }}
                     >
@@ -570,7 +593,7 @@ export function SettingsDataSources({
                     </button>
                     <button
                       type="button"
-                      disabled={busy === item.id}
+                      disabled={Boolean(busy)}
                       onClick={() => removeSource(item)}
                       style={{ padding: '6px 10px', fontSize: '12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', color: '#ef4444', cursor: 'pointer' }}
                     >

@@ -1,0 +1,98 @@
+[
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=focused-1791871632269",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"projectId\":\"focused-1791871632269\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save_source\",\"projectId\":\"focused-1791871632269\",\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791871632269\\\",\\\"documentToken\\\":\\\"FocusedRatioDoc\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"}]}}\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791871632269\",\"sourceId\":\"3df6256c-550d-4c47-ad5a-a79210acc6e0\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"kind\":\"general\",\"range\":\"\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791871632269\\\",\\\"documentToken\\\":\\\"FocusedRatioDoc\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"}]}}\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=focused-1791871632269&fresh=1&_t=1791871633122",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=focused-1791871632269&fresh=1&_t=1791871633122",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=focused-1791871632269",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=focused-1791871632269",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791871632269",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=focused-1791871632269",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791871632269&id=ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791871632269\",\"cards\":[{\"id\":\"card-focused-1791871632269-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\"},{\"id\":\"card-focused-1791871632269-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\"},{\"id\":\"card-focused-1791871632269-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\"},{\"id\":\"card-focused-1791871632269-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\"},{\"id\":\"card-focused-1791871632269-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791871632269\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791871633537\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791871632269\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791871633537\",\"title\":\"互补缺失转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791871632269\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791871633537\",\"title\":\"互补缺失转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791871632269-3df6256c-550d-4c47-ad5a-a79210acc6e0\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  }
+]

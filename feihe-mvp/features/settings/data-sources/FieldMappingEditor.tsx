@@ -104,7 +104,7 @@ export function FieldMappingEditor({
                   <CustomSelect
                     ariaLabel={rule.sourceField + '数据类型'}
                     value={rule.type || 'text'}
-                    onChange={val => updateRule(idx, { type: val as FieldMappingRule['type'], isDate: val === 'date', nullPolicy: 'null' })}
+                    onChange={val => updateRule(idx, { type: val as FieldMappingRule['type'], isDate: val === 'date', nullPolicy: 'null', numericUnit: undefined, sourcePercentScale: undefined })}
                     options={[
                       { value: 'text', label: '文本 (text)' },
                       { value: 'number', label: '数值 (number)' },
@@ -113,6 +113,8 @@ export function FieldMappingEditor({
                     ]}
                     style={{ width: 125 }}
                   />
+                  {rule.type === 'number' && <CustomSelect ariaLabel={rule.sourceField + '数值单位'} value={rule.numericUnit || 'number'} onChange={value => updateRule(idx, { numericUnit: value as FieldMappingRule['numericUnit'], sourcePercentScale: value === 'percent' ? 'fraction' : undefined })} options={[{ value: 'number', label: '普通数值' }, { value: 'percent', label: '百分比（存为比例小数）' }]} />}
+                  {rule.type === 'number' && rule.numericUnit === 'percent' && <><CustomSelect ariaLabel={rule.sourceField + '来源百分比单位'} value={rule.sourcePercentScale || ''} onChange={value => updateRule(idx, { sourcePercentScale: value as FieldMappingRule['sourcePercentScale'] })} options={[{ value: 'fraction', label: '来源数值为比例：0.005 = 0.5%' }, { value: 'percentage_points', label: '来源数值为百分点：0.5 = 0.5%' }]} /><small>带 % 文本按自身单位转换一次；目标统一存比例小数。</small></>}
                   {(rule.type === 'date' || rule.isDate) && <CustomSelect ariaLabel={rule.sourceField + '日期格式'} value={rule.dateFormat || 'auto'} onChange={value => updateRule(idx, { dateFormat: value as FieldMappingRule['dateFormat'] })} options={['auto', 'YYYY-MM-DD', 'YYYY-MM', 'ISO']} />}
                 </td>
                 <td style={{ padding: '8px 12px', textAlign: 'center' }}>
@@ -128,7 +130,7 @@ export function FieldMappingEditor({
                     type="checkbox"
                     aria-label={rule.sourceField + '日期字段'}
                     checked={rule.type === 'date' || Boolean(rule.isDate)}
-                    onChange={(e) => updateRule(idx, { isDate: e.target.checked, type: e.target.checked ? 'date' : 'text', nullPolicy: 'null' })}
+                    onChange={(e) => updateRule(idx, { isDate: e.target.checked, type: e.target.checked ? 'date' : 'text', nullPolicy: 'null', numericUnit: undefined, sourcePercentScale: undefined })}
                   />
                 </td>
                 <td style={{ padding: '8px 12px', textAlign: 'center' }}>

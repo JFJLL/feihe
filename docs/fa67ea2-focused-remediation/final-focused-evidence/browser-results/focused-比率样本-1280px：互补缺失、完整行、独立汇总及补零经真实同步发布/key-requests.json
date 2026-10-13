@@ -1,0 +1,350 @@
+[
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FocusedRatio-focused-1791874857155\",\"projectId\":\"focused-1791874857155\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatio-focused-1791874857155\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"status\\\",\\\"targetField\\\":\\\"status\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"budget\\\",\\\"targetField\\\":\\\"budget\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"spent\\\",\\\"targetField\\\":\\\"spent\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"owner\\\",\\\"targetField\\\":\\\"owner\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791874857155\\\",\\\"documentToken\\\":\\\"FocusedRatio-focused-1791874857155\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"status\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"budget\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"spent\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"owner\\\",\\\"type\\\":\\\"text\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"focused-1791874857155\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=focused-1791874857155&fresh=1&_t=1791874858105",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=focused-1791874857155&fresh=1&_t=1791874858105",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"sourceId\":\"c6a9d4df-4542-408d-9e46-ef36935082d9\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=focused-1791874857155&fresh=1&_t=1791874858202",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=focused-1791874857155&fresh=1&_t=1791874858202",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155&id=ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874858742\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"dashboardId\":\"dash-focused-1791874857155-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_total\"],\"config\":{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":0},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_completed\"],\"config\":{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":1},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metricKeys\":[\"task_completion_rate\"],\"config\":{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":2},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metricKeys\":[\"budget_spent_rate\"],\"config\":{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":3},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"metricKeys\":[\"task_completed\"],\"config\":{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":4},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"},\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155&id=ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"id\":\"c6a9d4df-4542-408d-9e46-ef36935082d9\",\"projectId\":\"focused-1791874857155\",\"type\":\"feishu_sheet\",\"name\":\"补修数据\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatio-focused-1791874857155\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"status\":\"已连接\",\"lastSyncedAt\":\"2026-10-13T07:00:58.153Z\",\"lastRowCount\":2,\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"status\\\",\\\"targetField\\\":\\\"status\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"budget\\\",\\\"targetField\\\":\\\"budget\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"spent\\\",\\\"targetField\\\":\\\"spent\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"owner\\\",\\\"targetField\\\":\\\"owner\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791874857155\\\",\\\"documentToken\\\":\\\"FocusedRatio-focused-1791874857155\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"status\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"budget\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"spent\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"owner\\\",\\\"type\\\":\\\"text\\\"}]}}\",\"lastError\":\"\",\"updatedAt\":\"2026-10-13T07:00:58.153Z\",\"sourceId\":\"c6a9d4df-4542-408d-9e46-ef36935082d9\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=focused-1791874857155&fresh=1&_t=1791874860483",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=focused-1791874857155&fresh=1&_t=1791874860483",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155&id=ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874860867\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5},{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874861428\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5},{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"},{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"dashboardId\":\"dash-focused-1791874857155-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_total\"],\"config\":{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":0},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_completed\"],\"config\":{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":1},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metricKeys\":[\"task_completion_rate\"],\"config\":{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":2},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metricKeys\":[\"budget_spent_rate\"],\"config\":{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":3},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"metricKeys\":[\"task_completed\"],\"config\":{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},\"sortOrder\":4},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5},\"sortOrder\":5},{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"},\"sortOrder\":6},{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"},\"sortOrder\":7}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5},{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":6},{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":7}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=focused-1791874857155",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"cards\":[{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"},{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5},{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":6},{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":7}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=focused-1791874857155&id=ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791874857155\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}}"
+  }
+]

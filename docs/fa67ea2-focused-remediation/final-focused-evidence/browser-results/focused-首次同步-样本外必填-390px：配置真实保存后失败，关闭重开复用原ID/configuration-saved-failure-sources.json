@@ -1,0 +1,24 @@
+{
+  "projectId": "focused-1791874883856",
+  "saveStatus": 200,
+  "sourceId": "9679e0c3-4fcc-46e4-a50e-a172bc2476c5",
+  "sources": [
+    {
+      "id": "9679e0c3-4fcc-46e4-a50e-a172bc2476c5",
+      "projectId": "focused-1791874883856",
+      "type": "feishu_sheet",
+      "name": "补修数据",
+      "spreadsheet": "https://fixture.feishu.cn/sheets/FocusedLateRequiredDoc",
+      "sheetId": "sheetA",
+      "range": "",
+      "kind": "general",
+      "syncFrequency": "manual",
+      "status": "同步失败",
+      "lastSyncedAt": null,
+      "lastRowCount": 0,
+      "mappingJson": "{\"rules\":[{\"sourceField\":\"任务\",\"targetField\":\"任务\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"金额\",\"targetField\":\"金额\",\"type\":\"number\",\"nullPolicy\":\"null\",\"required\":true}],\"context\":{\"projectId\":\"focused-1791874883856\",\"documentToken\":\"FocusedLateRequiredDoc\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"任务\",\"type\":\"text\"},{\"key\":\"金额\",\"type\":\"number\"}]}}",
+      "lastError": "第 12 行「金额」必填，不能留空",
+      "updatedAt": "2026-10-13T07:01:24.836Z"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "projectId": "focused-1791874846722",
+  "saveStatus": 200,
+  "sourceId": "02adc763-a52c-4af5-9e4e-ff79a362ae44",
+  "sources": [
+    {
+      "id": "02adc763-a52c-4af5-9e4e-ff79a362ae44",
+      "projectId": "focused-1791874846722",
+      "type": "feishu_sheet",
+      "name": "补修数据",
+      "spreadsheet": "https://fixture.feishu.cn/sheets/FocusedRatioDoc",
+      "sheetId": "sheetA",
+      "range": "",
+      "kind": "general",
+      "syncFrequency": "manual",
+      "status": "已连接",
+      "lastSyncedAt": null,
+      "lastRowCount": 0,
+      "mappingJson": "{\"rules\":[{\"sourceField\":\"分组\",\"targetField\":\"分组\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"成交\",\"targetField\":\"成交\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"咨询\",\"targetField\":\"咨询\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"focused-1791874846722\",\"documentToken\":\"FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"分组\",\"type\":\"text\"},{\"key\":\"成交\",\"type\":\"number\"},{\"key\":\"咨询\",\"type\":\"number\"}]}}",
+      "lastError": "",
+      "updatedAt": "2026-10-13T07:00:47.580Z"
+    }
+  ]
+}

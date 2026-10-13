@@ -1,0 +1,20 @@
+✔ percent: tagged source text has a canonical fractional value (2.4451ms)
+✔ percent: explicit percentage-point formatting has no threshold amplification (0.393ms)
+✔ percent: tagged text and native values normalize exactly once (2.3457ms)
+✔ percent: ordinary average is 1.0 percent in whole and groups (1.0575ms)
+✔ ratio: complementary missing values have zero paired samples and no default rate (0.7448ms)
+✔ ratio: adding a complete record yields paired20 and explicit independent15 (0.4416ms)
+✔ ratio: explicit zero fill keeps observed pairs separate from imputed calculation rows (0.208ms)
+✔ ratio: intrinsic ratio points still display small, unit and over100 rates (0.2287ms)
+✔ percent: historical units require confirmation and never mutate the stored row (0.477ms)
+✔ percent: source numeric fractions, points and tagged scientific text normalize once (0.5341ms)
+✔ ratio: true zero, all-null, absent, invalid and zero-denominator keep paired statistics (0.484ms)
+✔ ratio: independent groups retain separate coverage and skip is distinct from zero fill (0.2354ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 883.0445

@@ -46,6 +46,7 @@ export async function importRows(
       key: r.targetField.trim(),
       name: r.targetField.trim(),
       type: r.isDate ? 'date' : (r.type || 'text'),
+      ...(r.numericUnit === 'percent' ? { numericUnit: 'percent' as const, percentScale: 'fraction' as const } : {}),
     }));
   }
 

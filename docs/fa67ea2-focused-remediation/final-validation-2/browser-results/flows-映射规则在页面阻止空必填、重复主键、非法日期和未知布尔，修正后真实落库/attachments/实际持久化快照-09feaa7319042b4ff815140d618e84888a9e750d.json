@@ -1,0 +1,202 @@
+[
+  {
+    "projectId": "flow-1791874471514",
+    "project": {
+      "id": "flow-1791874471514",
+      "name": "浏览器空项目",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T06:54:31.537Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync"
+      ],
+      "blockedSteps": [
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-flow-1791874471514-default",
+          "projectId": "flow-1791874471514",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T06:54:31.537Z"
+        }
+      ],
+      "targetDashboardId": "dash-flow-1791874471514-default",
+      "cards": [
+        {
+          "id": "card-flow-1791874471514-c1",
+          "dashboardId": "dash-flow-1791874471514-default",
+          "projectId": "flow-1791874471514",
+          "title": "任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T06:54:31.537Z"
+        },
+        {
+          "id": "card-flow-1791874471514-c2",
+          "dashboardId": "dash-flow-1791874471514-default",
+          "projectId": "flow-1791874471514",
+          "title": "已完成数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T06:54:31.537Z"
+        },
+        {
+          "id": "card-flow-1791874471514-c3",
+          "dashboardId": "dash-flow-1791874471514-default",
+          "projectId": "flow-1791874471514",
+          "title": "任务完成率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completion_rate\"]",
+          "configJson": "{\"id\":\"c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T06:54:31.537Z"
+        },
+        {
+          "id": "card-flow-1791874471514-c4",
+          "dashboardId": "dash-flow-1791874471514-default",
+          "projectId": "flow-1791874471514",
+          "title": "预算执行率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"budget_spent_rate\"]",
+          "configJson": "{\"id\":\"c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T06:54:31.537Z"
+        },
+        {
+          "id": "card-flow-1791874471514-c5",
+          "dashboardId": "dash-flow-1791874471514-default",
+          "projectId": "flow-1791874471514",
+          "title": "按负责人状态分布",
+          "type": "bar_chart",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c5\",\"title\":\"按负责人状态分布\",\"type\":\"bar_chart\",\"dimension\":\"owner\",\"metric\":\"task_completed\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T06:54:31.537Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-flow-1791874471514-fe39a659-8871-4559-872c-54ceafadd9a3",
+          "projectId": "flow-1791874471514",
+          "sourceId": "fe39a659-8871-4559-872c-54ceafadd9a3",
+          "name": "结构A",
+          "schemaJson": "[{\"key\":\"编号\",\"name\":\"编号\",\"type\":\"number\"},{\"key\":\"金额\",\"name\":\"金额\",\"type\":\"number\"},{\"key\":\"分组\",\"name\":\"分组\",\"type\":\"text\"},{\"key\":\"已确认\",\"name\":\"已确认\",\"type\":\"boolean\"},{\"key\":\"业务日\",\"name\":\"业务日\",\"type\":\"date\"},{\"key\":\"订单\",\"name\":\"订单\",\"type\":\"number\"},{\"key\":\"访问\",\"name\":\"访问\",\"type\":\"number\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T06:54:39.211Z",
+          "columns": [
+            {
+              "key": "编号",
+              "name": "编号",
+              "type": "number"
+            },
+            {
+              "key": "金额",
+              "name": "金额",
+              "type": "number"
+            },
+            {
+              "key": "分组",
+              "name": "分组",
+              "type": "text"
+            },
+            {
+              "key": "已确认",
+              "name": "已确认",
+              "type": "boolean"
+            },
+            {
+              "key": "业务日",
+              "name": "业务日",
+              "type": "date"
+            },
+            {
+              "key": "订单",
+              "name": "订单",
+              "type": "number"
+            },
+            {
+              "key": "访问",
+              "name": "访问",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "编号": 1,
+              "金额": 10,
+              "分组": "同组",
+              "已确认": true,
+              "业务日": "2026-10-01T12:00:00+08:00",
+              "订单": 0,
+              "访问": 100
+            },
+            {
+              "编号": 2,
+              "金额": null,
+              "分组": "同组",
+              "已确认": false,
+              "业务日": "2026-10-02T00:00:00+08:00",
+              "订单": 10,
+              "访问": 100
+            },
+            {
+              "编号": 3,
+              "金额": 20,
+              "分组": "另组",
+              "已确认": true,
+              "业务日": "2026-10-01",
+              "订单": 20,
+              "访问": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]

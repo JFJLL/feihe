@@ -1,4 +1,5 @@
 import { parseProjectDate } from '../date-values';
+import type { PercentScale } from '../numeric-values';
 
 export type CardAggregation = 'count' | 'nonempty_count' | 'distinct_count' | 'sum' | 'avg' | 'ratio';
 export interface CardMetricConfig {
@@ -17,11 +18,18 @@ export interface CardMetricConfig {
   from?: string;
   to?: string;
   missingPolicy?: 'skip' | 'zero';
+  percentScale?: PercentScale;
+  ratioBasis?: 'paired' | 'independent';
   unit?: string;
   format?: 'number' | 'percent' | 'currency' | 'compact';
 }
 export type MetricDataset = { id: string; sourceId?: string; columns?: Array<{ key: string; name: string; type: string }> };
 export const TEMPLATE_METRICS = ['task_total', 'task_completed', 'task_completion_rate', 'budget_total', 'spent_total', 'budget_spent_rate', 'conversion_rate'];
+export function ratioSampleLabel(metric: { pairedValidCount?: number; numeratorValidCount?: number; denominatorValidCount?: number; totalRows?: number; calculationSampleSize?: number; ratioBasis?: string }, fillZero = false) {
+  const total = metric.totalRows || 0;
+  const coverage = (count = 0) => `${count}/${total}（${(total ? count / total * 100 : 0).toFixed(1)}%）`;
+  return `${metric.ratioBasis === 'independent' ? '独立汇总' : '成对口径'} · 成对有效 ${metric.pairedValidCount || 0} 行 · 分子有效 ${coverage(metric.numeratorValidCount)} · 分母有效 ${coverage(metric.denominatorValidCount)}${fillZero ? ` · 明确补零，参与计算 ${metric.calculationSampleSize || 0} 行` : ''}`;
+}
 export function isTemplateCard(card: CardMetricConfig) {
   // Explicit aggregation always wins over a legacy template key.
   return card.mode !== 'custom' && !card.aggregation && TEMPLATE_METRICS.includes(card.metric || '');
@@ -72,5 +80,10 @@ export function validateCardConfig(card: CardMetricConfig, datasets: MetricDatas
   }
   if (card.from && card.to && card.from > card.to) errors.push('结束日期不能早于开始日期');
   if (card.missingPolicy && !['skip', 'zero'].includes(card.missingPolicy)) errors.push('不支持的缺失值规则');
+  if (card.percentScale && !['fraction', 'percentage_points'].includes(card.percentScale)) errors.push('不支持的百分比数值口径');
+  if (card.ratioBasis && !['paired', 'independent'].includes(card.ratioBasis)) errors.push('不支持的比率样本口径');
+  const ratio = card.aggregation === 'ratio' || (isTemplateCard(card) && ['task_completion_rate', 'budget_spent_rate', 'conversion_rate'].includes(card.metric || ''));
+  if (!ratio && (card.format === 'percent' || card.unit === '%') && !card.percentScale) errors.push('请确认百分比数值口径；历史配置不会按数值大小自动转换');
+  if (!ratio && card.ratioBasis) errors.push('当前计算方式不适用比率样本口径');
   return errors;
 }

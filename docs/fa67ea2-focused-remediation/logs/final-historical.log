@@ -1,0 +1,27 @@
+
+> sites-project@0.1.0 verify:dashboards
+> node scripts/test-dashboard-feedback.mjs && node scripts/verify-growth.mjs && node scripts/test-workspace-charts.mjs && node scripts/test-content-comment-boards.mjs && node scripts/test-acceptance-reply-pending.mjs && node scripts/test-ui-unification-v1-regression.mjs && node scripts/test-category-notes-modal.mjs
+
+PASS feedback: full notes SQL, project isolation, prefixes, merged topics, zero/gap domains, box quantiles and accessible compact rendering
+PASS growth: real SQLite normalization, totals, scope, >12 brands, paired metrics, missing/zero and component rendering
+PASS workspace charts (static): gaps, zero, empty, single date, invalid numbers, unique gradients
+PASS workspace UI keyboard interaction: TimeSeriesChart focusable points, WorkspaceModuleTabs roving tabindex & activation, CustomSelect combobox & keyboard state transitions
+PASS subpage boards: empty/error states, coverage gaps, snapshot deltas, Chinese labels, actual SQL action overlap and consistent denominator, styled filter buttons. Fixtures stay in memory.
+PASS actual route SQL/HTTP: no-pending exclusion, exact reply/status condition, project isolation, orphan exclusion, note deduplication, 3-page traversal, empty page, injection safety, all three status cards, comment KPI vs note totals, authorization gate. In-memory fixtures only.
+✅ PASS regression: Workspace Palette & Bar Width Zero/Missing/Proportionality
+✅ PASS regression: RulesAndTargets Completed Jobs Scope & Similarity Precision
+✅ PASS regression: DataMap Keystone Gateway Truthful Status (all 4 cases)
+✅ PASS regression: SettingsWorkspace Lazy Mounting & Subpage Isolation
+✅ PASS regression: Ops Cache Invalidation on Settings Mutation
+ALL REGRESSION SUITES PASSED! 🎉
+--- TEST 1: Modal Rendering & 50-limit ---
+✅ PASS: Modal limits exactly to 50 notes as requested
+--- TEST 2: Sorting by interactionCount desc ---
+✅ PASS: Sorts by interactionCount descending
+--- TEST 3: Closed State ---
+✅ PASS: Closed state renders nothing
+--- TEST 4: Keyword Search & Filter ---
+✅ PASS: Keyword & category isolation verified
+--- TEST 5: Code Integration Audit ---
+✅ PASS: All chart & table integrations verified in source
+ALL VERIFICATIONS SUCCESSFUL! 🚀

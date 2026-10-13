@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=template-comment_qc-179187464630",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/actions/workbench?projectId=template-comment_qc-179187464630&page=1&pageSize=20&source=all&status=pending",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=repro-1791874647466",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874647466",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=repro-1791874647466",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791874647466\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791874647466-a\",\"id\":\"card-078dc275-54dd-4ad1-b465-ccb30fd29ce3\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=repro-1791874647466&id=ds-repro-1791874647466-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/feishu/sync?projectId=repro-1791874647466",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

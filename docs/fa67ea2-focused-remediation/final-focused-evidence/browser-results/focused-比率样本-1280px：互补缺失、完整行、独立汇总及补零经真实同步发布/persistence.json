@@ -1,0 +1,254 @@
+[
+  {
+    "projectId": "focused-1791874857155",
+    "project": {
+      "id": "focused-1791874857155",
+      "name": "比率口径验收",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T07:00:57.158Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "c6a9d4df-4542-408d-9e46-ef36935082d9",
+        "projectId": "focused-1791874857155",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/FocusedRatio-focused-1791874857155",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T07:01:00.426Z",
+        "lastRowCount": 3,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"分组\",\"targetField\":\"分组\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"成交\",\"targetField\":\"成交\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"咨询\",\"targetField\":\"咨询\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"status\",\"targetField\":\"status\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"budget\",\"targetField\":\"budget\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"spent\",\"targetField\":\"spent\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"owner\",\"targetField\":\"owner\",\"type\":\"text\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"focused-1791874857155\",\"documentToken\":\"FocusedRatio-focused-1791874857155\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"分组\",\"type\":\"text\"},{\"key\":\"成交\",\"type\":\"number\"},{\"key\":\"咨询\",\"type\":\"number\"},{\"key\":\"status\",\"type\":\"text\"},{\"key\":\"budget\",\"type\":\"number\"},{\"key\":\"spent\",\"type\":\"number\"},{\"key\":\"owner\",\"type\":\"text\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T07:01:00.426Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        }
+      ],
+      "targetDashboardId": "dash-focused-1791874857155-default",
+      "cards": [
+        {
+          "id": "card-focused-1791874857155-c1",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"card-focused-1791874857155-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-focused-1791874857155-c2",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "已完成数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"card-focused-1791874857155-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-focused-1791874857155-c3",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "任务完成率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completion_rate\"]",
+          "configJson": "{\"id\":\"card-focused-1791874857155-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-focused-1791874857155-c4",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "预算执行率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"budget_spent_rate\"]",
+          "configJson": "{\"id\":\"card-focused-1791874857155-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-focused-1791874857155-c5",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "按负责人状态分布",
+          "type": "breakdown",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"card-focused-1791874857155-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-1791874858742",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "成对转化率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"custom\"]",
+          "configJson": "{\"id\":\"card-1791874858742\",\"title\":\"成对转化率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"sortOrder\":5}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-1791874860867",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "独立总量比",
+          "type": "metric_card",
+          "metricKeysJson": "[\"custom\"]",
+          "configJson": "{\"id\":\"card-1791874860867\",\"title\":\"独立总量比\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}",
+          "sortOrder": 6,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        },
+        {
+          "id": "card-1791874861428",
+          "dashboardId": "dash-focused-1791874857155-default",
+          "projectId": "focused-1791874857155",
+          "title": "明确补零比率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"custom\"]",
+          "configJson": "{\"id\":\"card-1791874861428\",\"title\":\"明确补零比率\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"zero\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交\",\"denField\":\"咨询\",\"groupBy\":\"分组\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\"}",
+          "sortOrder": 7,
+          "updatedAt": "2026-10-13T07:01:01.989Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-focused-1791874857155-c6a9d4df-4542-408d-9e46-ef36935082d9",
+          "projectId": "focused-1791874857155",
+          "sourceId": "c6a9d4df-4542-408d-9e46-ef36935082d9",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"分组\",\"name\":\"分组\",\"type\":\"text\"},{\"key\":\"成交\",\"name\":\"成交\",\"type\":\"number\"},{\"key\":\"咨询\",\"name\":\"咨询\",\"type\":\"number\"},{\"key\":\"status\",\"name\":\"status\",\"type\":\"text\"},{\"key\":\"budget\",\"name\":\"budget\",\"type\":\"number\"},{\"key\":\"spent\",\"name\":\"spent\",\"type\":\"number\"},{\"key\":\"owner\",\"name\":\"owner\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 2,
+          "updatedAt": "2026-10-13T07:01:00.437Z",
+          "columns": [
+            {
+              "key": "分组",
+              "name": "分组",
+              "type": "text"
+            },
+            {
+              "key": "成交",
+              "name": "成交",
+              "type": "number"
+            },
+            {
+              "key": "咨询",
+              "name": "咨询",
+              "type": "number"
+            },
+            {
+              "key": "status",
+              "name": "status",
+              "type": "text"
+            },
+            {
+              "key": "budget",
+              "name": "budget",
+              "type": "number"
+            },
+            {
+              "key": "spent",
+              "name": "spent",
+              "type": "number"
+            },
+            {
+              "key": "owner",
+              "name": "owner",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "分组": "互补",
+              "成交": 10,
+              "咨询": null,
+              "status": "已完成",
+              "budget": 100,
+              "spent": 10,
+              "owner": "验收负责人"
+            },
+            {
+              "分组": "互补",
+              "成交": null,
+              "咨询": 100,
+              "status": "已完成",
+              "budget": 100,
+              "spent": 10,
+              "owner": "验收负责人"
+            },
+            {
+              "分组": "完整",
+              "成交": 20,
+              "咨询": 100,
+              "status": "已完成",
+              "budget": 100,
+              "spent": 10,
+              "owner": "验收负责人"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]

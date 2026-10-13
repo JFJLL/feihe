@@ -1,4 +1,4 @@
-import { parseNumericValue } from '../numeric-values';
+import { parseNumericValue, type PercentScale } from '../numeric-values';
 import { db, ensureSchema } from '../db';
 import { isTemplateCard, type CardMetricConfig } from './config';
 import { parseProjectDate, endDayExclusive, DEFAULT_PROJECT_TIME_ZONE } from '../date-values';
@@ -14,7 +14,7 @@ export function isStatusCompleted(status: unknown): boolean {
 }
 
 export type AggregationType = 'sum' | 'count' | 'distinct_count' | 'avg' | 'min' | 'max' | 'ratio';
-export type MetricStatus = 'ok' | 'zero' | 'empty' | 'missing_source' | 'zero_division' | 'error' | 'missing_field' | 'invalid_value';
+export type MetricStatus = 'ok' | 'zero' | 'empty' | 'missing_source' | 'zero_division' | 'error' | 'missing_field' | 'invalid_value' | 'insufficient_samples' | 'needs_configuration';
 
 export interface MetricDefinition {
   id: string;
@@ -30,6 +30,8 @@ export interface MetricDefinition {
   denominatorKey?: string;
   missingPolicy?: 'null' | 'zero' | 'skip';
   filterJson?: string;
+  percentScale?: PercentScale;
+  ratioBasis?: 'paired' | 'independent';
 }
 
 export interface MetricComputeResult {
@@ -43,7 +45,15 @@ export interface MetricComputeResult {
   statusLabel: string;
   numerator?: number | null;
   denominator?: number | null;
-  groups?: Array<{ label: string; value: number | null; count: number }>;
+  ratioBasis?: 'paired' | 'independent';
+  totalRows?: number;
+  numeratorValidCount?: number;
+  denominatorValidCount?: number;
+  pairedValidCount?: number;
+  numeratorCoverage?: number;
+  denominatorCoverage?: number;
+  calculationSampleSize?: number;
+  groups?: Array<MetricComputeResult & { label: string; count: number }>;
 }
 
 export interface MetricFilterOptions {
@@ -56,12 +66,12 @@ export interface MetricFilterOptions {
   groupBy?: string;
 }
 
-export function formatMetricValue(val: number | null, format = 'number', unit = ''): string {
+export function formatMetricValue(val: number | null, format = 'number', unit = '', percentScale: PercentScale = 'percentage_points'): string {
   if (val === null || val === undefined || !Number.isFinite(val)) {
     return '—';
   }
   if (format === 'percent' || unit === '%') {
-    return (val * (val <= 1 && val > -1 ? 100 : 1)).toFixed(1) + '%';
+    return (val * (percentScale === 'fraction' ? 100 : 1)).toFixed(1) + '%';
   }
   if (format === 'currency' || unit === '元') {
     return '¥' + val.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -78,13 +88,20 @@ export async function getProjectMetrics(projectId: string): Promise<MetricDefini
   await ensureSchema();
   const d1 = db();
   const rows = await d1.prepare(
-    'SELECT id, project_id AS projectId, key, name, description, unit, aggregation, formula, format, aliases_json AS aliasesJson FROM metric_definitions WHERE project_id=? ORDER BY name'
+    'SELECT id, project_id AS projectId, key, name, description, unit, aggregation, formula, format, filter_json AS filterJson, aliases_json AS aliasesJson FROM metric_definitions WHERE project_id=? ORDER BY name'
   ).bind(projectId).all<MetricDefinition>();
-  return rows.results || [];
+  return (rows.results || []).map(row => ({ ...row, ...metricProtocol(row.filterJson) }));
 }
 
 
 export type { CardMetricConfig } from './config';
+
+function metricProtocol(raw?: string) {
+  try {
+    const parsed = JSON.parse(raw || '{}');
+    return { percentScale: parsed.percentScale as PercentScale | undefined, ratioBasis: parsed.ratioBasis as CardMetricConfig['ratioBasis'], missingPolicy: parsed.missingPolicy as CardMetricConfig['missingPolicy'] };
+  } catch { return {}; }
+}
 
 function isMissing(value: unknown) { return value === undefined || value === null || String(value).trim() === ''; }
 function numericValues(items: Record<string, unknown>[], field: string, fillZero = false) {
@@ -104,25 +121,38 @@ type EngineMetricConfig = Omit<CardMetricConfig, 'aggregation'> & { aggregation?
 
 export function evaluateMetricRows(card: EngineMetricConfig, items: Record<string, unknown>[]): MetricComputeResult {
   const base: MetricComputeResult = { key: card.metric || card.field || 'custom', name: card.title || '指标', unit: card.unit || '', value: null, formattedValue: '—', sampleSize: 0, status: 'empty', statusLabel: '无有效数据' };
-  const fail = (status: MetricStatus, label: string) => ({ ...base, status, statusLabel: label });
   const fillZero = card.missingPolicy === 'zero';
   const aggregation = card.aggregation || 'sum';
   const field = card.field || (card.metric !== 'custom' ? card.metric : '') || '';
-  let result: MetricComputeResult;
-  if (aggregation === 'count') {
-    result = { ...base, value: items.length, sampleSize: items.length, status: items.length ? 'ok' : 'empty', statusLabel: items.length ? '计算完成' : '无数据记录' };
-  } else if (aggregation === 'nonempty_count' || aggregation === 'distinct_count') {
-    if (!field || (items.length && !items.some(row => Object.prototype.hasOwnProperty.call(row, field)))) return fail('missing_field', '目标字段不存在');
-    const values = items.map(row => row[field]).filter(value => !isMissing(value));
-    const count = aggregation === 'nonempty_count' ? values.length : new Set(values.map(value => JSON.stringify(value))).size;
-    result = { ...base, value: count, sampleSize: values.length, status: count ? 'ok' : 'zero', statusLabel: '计算完成' };
-  } else if (aggregation === 'ratio') {
-    const numerator = numericValues(items, card.numField || '', fillZero), denominator = numericValues(items, card.denField || '', fillZero);
-    if (numerator.invalid || denominator.invalid) return fail('invalid_value', '分子/分母包含无效数值');
-    if (!numerator.values.length || !denominator.values.length) return fail(!numerator.observed || !denominator.observed ? 'missing_field' : 'empty', !numerator.observed || !denominator.observed ? '分子/分母字段不存在' : '分子/分母全空，无法计算');
-    if (denominator.sum === 0) return { ...fail('zero_division', '分母为0，无法计算比率'), numerator: numerator.sum, denominator: 0, sampleSize: Math.min(numerator.values.length, denominator.values.length) };
-    result = { ...base, value: numerator.sum / denominator.sum * 100, numerator: numerator.sum, denominator: denominator.sum, sampleSize: Math.min(numerator.values.length, denominator.values.length), status: numerator.sum === 0 ? 'zero' : 'ok', statusLabel: '计算完成' };
-  } else {
+  const calculate = (): MetricComputeResult => {
+    const fail = (status: MetricStatus, label: string) => ({ ...base, status, statusLabel: label });
+    if (aggregation !== 'ratio' && (card.format === 'percent' || card.unit === '%') && !card.percentScale) return fail('needs_configuration', '历史百分比单位待确认，请编辑选择数值口径');
+    if (aggregation === 'count') return { ...base, value: items.length, sampleSize: items.length, status: items.length ? 'ok' : 'empty', statusLabel: items.length ? '计算完成' : '无数据记录' };
+    if (aggregation === 'nonempty_count' || aggregation === 'distinct_count') {
+      if (!field || (items.length && !items.some(row => Object.hasOwn(row, field)))) return fail('missing_field', '目标字段不存在');
+      const values = items.map(row => row[field]).filter(value => !isMissing(value));
+      const count = aggregation === 'nonempty_count' ? values.length : new Set(values.map(value => JSON.stringify(value))).size;
+      return { ...base, value: count, sampleSize: values.length, status: count ? 'ok' : 'zero', statusLabel: '计算完成' };
+    }
+    if (aggregation === 'ratio') {
+      // Coverage is measured from observed values, never from independently counted minima.
+      const numField = card.numField || '', denField = card.denField || '';
+      const numerator = numericValues(items, numField), denominator = numericValues(items, denField);
+      const pairs = items.map(row => ({ n: isMissing(row[numField]) ? null : parseNumericValue(row[numField]), d: isMissing(row[denField]) ? null : parseNumericValue(row[denField]) }));
+      const pairedValidCount = pairs.filter(row => row.n !== null && row.d !== null).length;
+      const basis = card.ratioBasis || 'paired';
+      const eligible = fillZero ? pairs.map(row => ({ n: row.n ?? 0, d: row.d ?? 0 })) : pairs.filter(row => row.n !== null && row.d !== null);
+      const stats = { ratioBasis: basis, totalRows: items.length, numeratorValidCount: numerator.values.length, denominatorValidCount: denominator.values.length, pairedValidCount, sampleSize: pairedValidCount, numeratorCoverage: items.length ? numerator.values.length / items.length : 0, denominatorCoverage: items.length ? denominator.values.length / items.length : 0, calculationSampleSize: basis === 'independent' && !fillZero ? pairs.filter(row => row.n !== null || row.d !== null).length : eligible.length };
+      const ratioFail = (status: MetricStatus, label: string) => ({ ...fail(status, label), ...stats });
+      if (numerator.invalid || denominator.invalid) return ratioFail('invalid_value', '分子/分母包含无效数值');
+      if (!fillZero && (!numerator.observed || !denominator.observed)) return ratioFail('missing_field', '分子/分母字段不存在');
+      if (!fillZero && (!numerator.values.length || !denominator.values.length)) return ratioFail('empty', '分子/分母全空，无法计算');
+      if (basis === 'paired' && !eligible.length) return ratioFail('insufficient_samples', '成对样本不足，无法计算');
+      const n = basis === 'independent' ? numerator.sum : eligible.reduce((sum, row) => sum + (row.n ?? 0), 0);
+      const d = basis === 'independent' ? denominator.sum : eligible.reduce((sum, row) => sum + (row.d ?? 0), 0);
+      if (d === 0) return { ...ratioFail('zero_division', '分母为0，无法计算比率'), numerator: n, denominator: d };
+      return { ...base, ...stats, value: n / d * 100, numerator: n, denominator: d, status: n === 0 ? 'zero' : 'ok', statusLabel: basis === 'independent' ? '独立汇总（分别求和）' : '计算完成' };
+    }
     if (!field) return fail('error', '未选择目标字段');
     const stats = numericValues(items, field, fillZero);
     if (stats.invalid) return fail('invalid_value', '目标字段包含无效数值');
@@ -130,9 +160,10 @@ export function evaluateMetricRows(card: EngineMetricConfig, items: Record<strin
     const value = aggregation === 'avg' ? stats.sum / stats.values.length
       : aggregation === 'min' ? stats.values.reduce((a, b) => Math.min(a, b), Infinity)
       : aggregation === 'max' ? stats.values.reduce((a, b) => Math.max(a, b), -Infinity) : stats.sum;
-    result = { ...base, value, sampleSize: stats.values.length, status: value === 0 ? 'zero' : 'ok', statusLabel: '计算完成' };
-  }
-  result.formattedValue = aggregation === 'ratio' ? result.value!.toFixed(1) + '%' : formatMetricValue(result.value, card.format || 'number', card.unit || '');
+    return { ...base, value, sampleSize: stats.values.length, status: value === 0 ? 'zero' : 'ok', statusLabel: '计算完成' };
+  };
+  const result = calculate();
+  result.formattedValue = formatMetricValue(result.value, aggregation === 'ratio' ? 'percent' : card.format || 'number', card.unit || '', aggregation === 'ratio' ? 'percentage_points' : card.percentScale);
   if (card.groupBy) {
     const groups = new Map<string, Record<string, unknown>[]>();
     for (const row of items) {
@@ -141,7 +172,7 @@ export function evaluateMetricRows(card: EngineMetricConfig, items: Record<strin
     }
     result.groups = [...groups].map(([label, rows]) => {
       const grouped = evaluateMetricRows({ ...card, groupBy: undefined }, rows);
-      return { label, value: grouped.value, count: grouped.sampleSize };
+      return { ...grouped, label, count: grouped.sampleSize };
     });
   }
   return result;
@@ -197,13 +228,13 @@ export async function computeMetric(
   const datasetRow = await datasetQuery.first<{ id: string; name: string }>();
 
   if (datasetRow) {
-    const custom = await d1.prepare('SELECT name, unit, aggregation, formula, format FROM metric_definitions WHERE project_id=? AND key=?').bind(projectId, metricKey).first<{ name: string; unit: string; aggregation: string; formula: string; format: string }>();
+    const custom = await d1.prepare('SELECT name, unit, aggregation, formula, format, filter_json AS filterJson FROM metric_definitions WHERE project_id=? AND key=?').bind(projectId, metricKey).first<{ name: string; unit: string; aggregation: string; formula: string; format: string; filterJson: string }>();
     const columnsRow = await d1.prepare('SELECT schema_json FROM datasets WHERE id=?').bind(datasetRow.id).first<{ schema_json: string }>();
     const columns = JSON.parse(columnsRow?.schema_json || '[]') as Array<{ key: string; type: string }>;
     const dateField = columns.find(c => c.type === 'date')?.key;
     if (custom) {
       const parts = custom.formula.split('/').map(s => s.trim());
-      return evaluateCardMetric(projectId, { title: custom.name, datasetId: datasetRow.id, metric: 'custom', aggregation: custom.aggregation as CardMetricConfig['aggregation'], field: custom.aggregation === 'ratio' ? undefined : custom.formula, numField: custom.aggregation === 'ratio' ? parts[0] : undefined, denField: custom.aggregation === 'ratio' ? parts[1] : undefined, unit: custom.unit, format: custom.format as CardMetricConfig['format'], dateField, from: options.from, to: options.to, groupBy: options.groupBy });
+      return evaluateCardMetric(projectId, { ...metricProtocol(custom.filterJson), title: custom.name, datasetId: datasetRow.id, metric: 'custom', aggregation: custom.aggregation as CardMetricConfig['aggregation'], field: custom.aggregation === 'ratio' ? undefined : custom.formula, numField: custom.aggregation === 'ratio' ? parts[0] : undefined, denField: custom.aggregation === 'ratio' ? parts[1] : undefined, unit: custom.unit, format: custom.format as CardMetricConfig['format'], dateField, from: options.from, to: options.to, groupBy: options.groupBy });
     }
     return evaluateCardMetric(projectId, { datasetId: datasetRow.id, metric: metricKey, dateField, from: options.from, to: options.to, groupBy: options.groupBy });
   }

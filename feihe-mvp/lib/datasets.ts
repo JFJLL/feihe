@@ -1,9 +1,12 @@
 import { db, ensureSchema } from './db';
+import { parseNumericValue, percentagePointsToFraction } from './numeric-values';
 
 export interface DatasetColumn {
   key: string;
   name: string;
   type: 'text' | 'number' | 'date' | 'boolean' | 'category';
+  numericUnit?: 'number' | 'percent';
+  percentScale?: 'fraction' | 'percentage_points';
 }
 
 export interface Dataset {
@@ -36,12 +39,37 @@ export async function saveDataset(
 
   // Every stored field has visible metadata; labels and storage keys stay separate.
   const columns: DatasetColumn[] = (customColumns || []).map(c => ({ ...c }));
+  for (const column of columns) {
+    if (column.type === 'number' && column.numericUnit !== 'percent' && rows.some(row => typeof row[column.key] === 'string' && /%$/.test(String(row[column.key]).trim()))) throw new Error(`字段 ${column.key} 含百分比文本，请明确声明百分比数值口径`);
+  }
   const seen = new Set(columns.map(c => c.key));
   if (seen.size !== columns.length) throw new Error('目标字段重名');
   for (const key of new Set(rows.flatMap(row => Object.keys(row)))) {
     if (seen.has(key)) continue;
-    columns.push({ key, name: key, type: inferColumnType(rows.map(row => row[key])) });
+    const values = rows.map(row => row[key]);
+    const type = inferColumnType(values);
+    const taggedPercent = type === 'number' && values.some(value => typeof value === 'string' && /%$/.test(value.trim()));
+    if (taggedPercent && values.some(value => value !== null && value !== undefined && String(value).trim() && !(typeof value === 'string' && /%$/.test(value.trim())))) throw new Error(`字段 ${key} 混合百分比文本和普通数值，请声明来源数值单位`);
+    columns.push({ key, name: key, type, ...(taggedPercent ? { numericUnit: 'percent', percentScale: 'fraction' } : {}) });
     seen.add(key);
+  }
+
+  // Import mapping already emits fractions; explicit points on a direct write are normalized once.
+  const percentColumns = columns.filter(column => column.numericUnit === 'percent');
+  if (percentColumns.length) {
+    rows = rows.map((row, index) => {
+      const normalized = { ...row };
+      for (const column of percentColumns) {
+        if (column.type !== 'number' || !['fraction', 'percentage_points'].includes(column.percentScale || '')) throw new Error(`字段 ${column.key} 请声明合法百分比数值口径`);
+        const raw = row[column.key];
+        if (raw === undefined || raw === null || String(raw).trim() === '') continue;
+        const value = parseNumericValue(raw);
+        if (value === null) throw new Error(`第 ${index + 1} 行「${column.key}」包含非法百分比数值`);
+        normalized[column.key] = column.percentScale === 'percentage_points' && !(typeof raw === 'string' && /%$/.test(raw.trim())) ? percentagePointsToFraction(value) : value;
+      }
+      return normalized;
+    });
+    for (const column of percentColumns) column.percentScale = 'fraction';
   }
 
   const schemaJson = JSON.stringify(columns);

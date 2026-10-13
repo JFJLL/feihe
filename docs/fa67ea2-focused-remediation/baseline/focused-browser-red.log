@@ -1,0 +1,162 @@
+
+Running 3 tests using 1 worker
+
+(node:14476) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% (15.0s)
+(node:6592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 (1.8s)
+(node:9652) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 (12.3s)
+
+
+  1) tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% ──────────────────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "1.0%"
+    Received: "100.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>100.0%</span>
+           - unexpected value "100.0%"
+
+
+      10 |   await chooseFocused(page, '目标计算字段', '均值百分比');
+      11 |   await page.getByLabel('单位 (选填)', { exact: true }).fill('%');
+    > 12 |   await expect(focusedPreview(page).locator('span').first()).toHaveText('1.0%');
+         |                                                              ^
+      13 | });
+      14 |
+      15 | test('补修反例：配置保存200后首次同步500，重试复用同一来源', async ({ page, request }, info) => {
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-red.spec.ts:12:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\attachments\关键请求-006dcc7f1e9267085402fa535236675f13e7a48c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\attachments\实际持久化快照-e1f9cdae95ebfb6b80bc165a5386c610720377fb.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\attachments\最终页面-545fd8a1caf3f47a0fc50efb3a31d10c07871978.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 ────────────────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "85d3317d-a13b-40eb-99cf-f1e262f5964b"
+    Received: "437e970c-5754-4a15-9ea5-74cf7727a7b2"
+
+      39 |   const successful = await success;
+      40 |   expect(successful.status()).toBe(200);
+    > 41 |   expect(successful.request().postDataJSON().sourceId).toBe(originalId);
+         |                                                        ^
+      42 |   const workspace = await (await request.get('/api/projects')).json();
+      43 |   const sources = workspace.sources.filter((s: { projectId: string }) => s.projectId === projectId);
+      44 |   expect(sources).toHaveLength(1);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-red.spec.ts:41:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\attachments\关键请求-06d70c0aeaf66bfa4fffb578b00f580d370ec73d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\attachments\实际持久化快照-b31847a7613401fcf90115ba81d3e3f279880b57.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\attachments\最终页面-14753f126f577db08c841562674b5333a6f15258.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 ─────────────────────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "—"
+    Received: "10.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>10.0%</span>
+           - unexpected value "10.0%"
+
+
+      54 |   await chooseFocused(page, '分子字段', '成交');
+      55 |   await chooseFocused(page, '分母字段', '咨询');
+    > 56 |   await expect(focusedPreview(page).locator('span').first()).toHaveText('—');
+         |                                                              ^
+      57 |   await expect(focusedPreview(page)).toContainText('成对有效');
+      58 |   await expect(focusedPreview(page)).toContainText('0');
+      59 | });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\focused-red.spec.ts:56:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\attachments\关键请求-892fbd7e03a4afcf63701ce629cf64e653f0d84f.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\attachments\实际持久化快照-ce4fabde7af116650b1cb1488b9cfa5e65b39650.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\attachments\最终页面-715f5f2b22c5d36e6440aa990a823917f970e3c3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\fa67ea2-focused-remediation\baseline\browser-results\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% ───────────────────────────
+    tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 ─────────────────────────
+    tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 ──────────────────────────────

@@ -1,10 +1,12 @@
 import { parseProjectDate } from './date-values';
-import { parseNumericValue } from './numeric-values';
+import { parseNumericValue, percentagePointsToFraction, type PercentScale } from './numeric-values';
 
 export interface FieldMappingRule {
   sourceField: string;
   targetField: string;
   type?: 'text' | 'number' | 'date' | 'boolean';
+  numericUnit?: 'number' | 'percent';
+  sourcePercentScale?: PercentScale;
   isKey?: boolean;
   isDate?: boolean;
   required?: boolean;
@@ -35,6 +37,11 @@ export function transformMappedRows(rows: Array<Record<string, unknown>>, rules:
     targets.add(rule.targetField.trim()); sources.add(rule.sourceField);
     const type = rule.isDate ? 'date' : (rule.type || 'text');
     if (!['text', 'number', 'date', 'boolean'].includes(type)) errors.push('不支持的数据类型：' + type);
+    if (rule.numericUnit && !['number', 'percent'].includes(rule.numericUnit)) errors.push('不支持的数值单位');
+    if (rule.numericUnit === 'percent' && type !== 'number') errors.push('百分比字段必须为数值类型');
+    if (rule.sourcePercentScale && !['fraction', 'percentage_points'].includes(rule.sourcePercentScale)) errors.push('不支持的来源百分比单位');
+    if (rule.numericUnit === 'percent' && !rule.sourcePercentScale) errors.push(`字段 ${rule.targetField} 请确认来源数值的百分比单位`);
+    if (rule.sourcePercentScale && rule.numericUnit !== 'percent') errors.push('来源百分比单位只适用于百分比字段');
     if (rule.dateFormat && !['auto', 'YYYY-MM-DD', 'YYYY-MM', 'ISO'].includes(rule.dateFormat)) errors.push('不支持的日期格式');
     if (rule.nullPolicy && !['null', 'zero', 'empty', 'skip'].includes(rule.nullPolicy)) errors.push('不支持的空值规则');
     if (rule.nullPolicy === 'skip') errors.push('暂不支持跳过数据行，请选择保留空值');
@@ -58,7 +65,8 @@ export function transformMappedRows(rows: Array<Record<string, unknown>>, rules:
       if (type === 'number') {
         const n = parseNumericValue(raw);
         if (n === null) { error('包含非法数值'); out[target] = null; }
-        else out[target] = n;
+        else if (typeof raw === 'string' && /%$/.test(raw.trim()) && rule.numericUnit !== 'percent') { error('含百分比文本，请明确选择百分比单位后同步（历史值不会自动改写）'); out[target] = null; }
+        else out[target] = rule.numericUnit === 'percent' && rule.sourcePercentScale === 'percentage_points' && !(typeof raw === 'string' && /%$/.test(raw.trim())) ? percentagePointsToFraction(n) : n;
       } else if (type === 'boolean') {
         const value = String(raw).trim();
         if (/^(true|是|1|yes)$/i.test(value)) out[target] = true;

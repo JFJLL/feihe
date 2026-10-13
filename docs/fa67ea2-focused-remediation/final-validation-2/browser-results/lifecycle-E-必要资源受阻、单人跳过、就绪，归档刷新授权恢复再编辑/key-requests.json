@@ -1,0 +1,170 @@
+[
+  {
+    "url": "http://127.0.0.1:5196/api/projects?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"cards\":[{\"aggregation\":\"count\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"真实记录\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=ready-1791874608690&id=ds-ready-1791874608690-ready&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"update_onboarding\",\"projectId\":\"ready-1791874608690\",\"onboardingStatus\":\"ready\",\"completedSteps\":[\"template\",\"source\",\"first_sync\",\"metrics\",\"skip:members\"]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboard?projectId=ready-1791874608690&fresh=1&_t=1791874609843",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/ops?projectId=ready-1791874608690&fresh=1&_t=1791874609843",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"archive\",\"projectId\":\"ready-1791874608690\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"restore\",\"projectId\":\"ready-1791874608690\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"cards\":[{\"aggregation\":\"count\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"真实记录\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=ready-1791874608690&id=ds-ready-1791874608690-ready&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"真实记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"cards\":[{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"dashboardId\":\"dash-ready-1791874608690-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"},\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"cards\":[{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/dashboards?projectId=ready-1791874608690",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"ready-1791874608690\",\"cards\":[{\"id\":\"card-3d62d2d7-a153-4e8a-a688-ef78ae9def39\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791874608690-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5196/api/datasets?projectId=ready-1791874608690&id=ds-ready-1791874608690-ready&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

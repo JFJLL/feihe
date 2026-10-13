@@ -14,11 +14,15 @@ export const test = base.extend<{ evidence: void }>({
         requests.push({ url: response.url(), method: response.request().method(), status: response.status(), body });
       }
     });
+    page.on('requestfailed', failed => {
+      if (failed.url().includes('/api/')) requests.push({ url: failed.url(), method: failed.method(), body: failed.postData(), failure: failed.failure()?.errorText });
+    });
     await use();
     const requestsPath = info.outputPath('key-requests.json');
     await writeFile(requestsPath, JSON.stringify(requests, null, 2));
     await info.attach('关键请求', { path: requestsPath, contentType: 'application/json' });
     const persistence: unknown[] = [];
+    const workspace = projectIds.size ? await (await request.get('/api/projects')).json() : { sources: [] };
     for (const projectId of projectIds) {
       const query = '?projectId=' + encodeURIComponent(projectId);
       const project = await (await request.get('/api/projects' + query)).json();
@@ -26,7 +30,7 @@ export const test = base.extend<{ evidence: void }>({
       const datasets = await (await request.get('/api/datasets' + query)).json();
       const details = [];
       for (const dataset of datasets.datasets || []) details.push(await (await request.get('/api/datasets' + query + '&id=' + encodeURIComponent(dataset.id) + '&all=true')).json());
-      persistence.push({ projectId, project: project.project, readiness: project.readiness, dashboard, datasets: details });
+      persistence.push({ projectId, project: project.project, sourceConfigurations: workspace.sources?.filter((source: { projectId: string }) => source.projectId === projectId), readiness: project.readiness, dashboard, datasets: details });
     }
     const persistencePath = info.outputPath('persistence.json');
     await writeFile(persistencePath, JSON.stringify(persistence, null, 2));

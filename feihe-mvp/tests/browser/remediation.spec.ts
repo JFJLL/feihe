@@ -12,7 +12,7 @@ test('记录计数：普通三条任务的实时预览必须为3', async ({ page
   const preview = page.getByText('🔍 全量指标实时试算预览：').locator('..');
   await expect(preview).toContainText('[计算完成]');
   await expect(preview.locator('span').first()).toHaveText('3');
-  await page.screenshot({ path: '../docs/v3-targeted-remediation/count-preview.png' });
+  await page.screenshot({ path: test.info().outputPath('count-preview.png') });
 });
 
 test('409：保存并切换失败后仍保留数据集A、草稿和编辑状态', async ({ page, request }) => {

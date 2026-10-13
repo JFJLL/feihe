@@ -1,0 +1,20 @@
+
+Running 15 tests using 1 worker
+
+  ok  1 tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% (2.8s)
+  ok  2 tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 (1.8s)
+  ok  3 tests\browser\focused-red.spec.ts:48:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 (2.7s)
+  ok  4 tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新 (4.2s)
+  ok  5 tests\browser\focused.spec.ts:83:3 › 百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑 (5.8s)
+  ok  6 tests\browser\focused.spec.ts:144:5 › 首次同步 500 1280px：配置真实保存后失败，关闭重开复用原ID (5.2s)
+  ok  7 tests\browser\focused.spec.ts:144:5 › 首次同步 断网 1280px：配置真实保存后失败，关闭重开复用原ID (5.0s)
+  ok  8 tests\browser\focused.spec.ts:144:5 › 首次同步 样本外必填 1280px：配置真实保存后失败，关闭重开复用原ID (4.1s)
+  ok  9 tests\browser\focused.spec.ts:212:3 › 比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布 (7.2s)
+  ok 10 tests\browser\focused.spec.ts:55:3 › 历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新 (3.3s)
+  ok 11 tests\browser\focused.spec.ts:83:3 › 百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑 (4.8s)
+  ok 12 tests\browser\focused.spec.ts:144:5 › 首次同步 500 390px：配置真实保存后失败，关闭重开复用原ID (4.5s)
+  ok 13 tests\browser\focused.spec.ts:144:5 › 首次同步 断网 390px：配置真实保存后失败，关闭重开复用原ID (4.3s)
+  ok 14 tests\browser\focused.spec.ts:144:5 › 首次同步 样本外必填 390px：配置真实保存后失败，关闭重开复用原ID (3.7s)
+  ok 15 tests\browser\focused.spec.ts:212:3 › 比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布 (6.7s)
+
+  15 passed (1.3m)

@@ -1,0 +1,488 @@
+{
+  "fullRun": {
+    "startTime": "2026-10-13T06:54:28.730Z",
+    "duration": 183870.868,
+    "expected": 35,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "focusedEvidenceRun": {
+    "startTime": "2026-10-13T07:00:19.608Z",
+    "duration": 77469.889,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "uniqueBrowserCases": 35,
+  "cases": [
+    {
+      "title": "映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库/final-page.png",
+        "final-validation-2/browser-results/flows-映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "A 空项目接入、换表、映射校验、真实同步和重编辑",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-A-空项目接入、换表、映射校验、真实同步和重编辑/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-A-空项目接入、换表、映射校验、真实同步和重编辑/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-A-空项目接入、换表、映射校验、真实同步和重编辑/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-A-空项目接入、换表、映射校验、真实同步和重编辑/final-page.png",
+        "final-validation-2/browser-results/flows-A-空项目接入、换表、映射校验、真实同步和重编辑/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "来源慢请求：换链接、关闭与重编辑使旧结果失效",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-来源慢请求：换链接、关闭与重编辑使旧结果失效/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-来源慢请求：换链接、关闭与重编辑使旧结果失效/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-来源慢请求：换链接、关闭与重编辑使旧结果失效/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-来源慢请求：换链接、关闭与重编辑使旧结果失效/final-page.png",
+        "final-validation-2/browser-results/flows-来源慢请求：换链接、关闭与重编辑使旧结果失效/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "B 新建计数、平均、分组、比率卡，预览发布刷新保持正确",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-B-新建计数、平均、分组、比率卡，预览发布刷新保持正确/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-B-新建计数、平均、分组、比率卡，预览发布刷新保持正确/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-B-新建计数、平均、分组、比率卡，预览发布刷新保持正确/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-B-新建计数、平均、分组、比率卡，预览发布刷新保持正确/final-page.png",
+        "final-validation-2/browser-results/flows-B-新建计数、平均、分组、比率卡，预览发布刷新保持正确/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "C 保存并切换500保留草稿，重试成功后才切换",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/failed-save-dialog.png",
+        "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/failed-save-preserved.png",
+        "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/final-page.png",
+        "final-validation-2/browser-results/flows-C-保存并切换500保留草稿，重试成功后才切换/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "C 保存并切换断网保留草稿，重试成功后才切换",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/failed-save-dialog.png",
+        "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/failed-save-preserved.png",
+        "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/final-page.png",
+        "final-validation-2/browser-results/flows-C-保存并切换断网保留草稿，重试成功后才切换/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "取消编辑恢复原稿，删光保存刷新仍为空",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-取消编辑恢复原稿，删光保存刷新仍为空/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-取消编辑恢复原稿，删光保存刷新仍为空/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-取消编辑恢复原稿，删光保存刷新仍为空/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-取消编辑恢复原稿，删光保存刷新仍为空/final-page.png",
+        "final-validation-2/browser-results/flows-取消编辑恢复原稿，删光保存刷新仍为空/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "D 日期范围经编辑试算发布GET刷新重新打开完整保存",
+      "file": "flows.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/flows-D-日期范围经编辑试算发布GET刷新重新打开完整保存/trace.zip",
+      "requests": "final-validation-2/browser-results/flows-D-日期范围经编辑试算发布GET刷新重新打开完整保存/key-requests.json",
+      "persistence": "final-validation-2/browser-results/flows-D-日期范围经编辑试算发布GET刷新重新打开完整保存/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/flows-D-日期范围经编辑试算发布GET刷新重新打开完整保存/final-page.png",
+        "final-validation-2/browser-results/flows-D-日期范围经编辑试算发布GET刷新重新打开完整保存/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "补修反例：百分字段普通平均0.5%与1.5%显示1.0%",
+      "file": "focused-red.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-/final-page.png",
+        "final-focused-evidence/browser-results/focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "补修反例：配置保存200后首次同步500，重试复用同一来源",
+      "file": "focused-red.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源/final-page.png",
+        "final-focused-evidence/browser-results/focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源/saved-but-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "补修反例：互补缺失数据默认无可计算比率和成对样本",
+      "file": "focused-red.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本/final-page.png",
+        "final-focused-evidence/browser-results/focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新/final-page.png",
+        "final-focused-evidence/browser-results/focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新/legacy-unit-confirmation.png",
+        "final-focused-evidence/browser-results/focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/final-page.png",
+        "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/percent-mapping.png",
+        "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/percent-scale-selector.png",
+        "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/small-percent-preview.png",
+        "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/small-percent-published.png",
+        "final-focused-evidence/browser-results/focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "首次同步 500 1280px：配置真实保存后失败，关闭重开复用原ID",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/configuration-saved-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/failed-source-list.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/final-page.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/original-id-retry-success.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "首次同步 断网 1280px：配置真实保存后失败，关闭重开复用原ID",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/configuration-saved-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/failed-source-list.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/final-page.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/original-id-retry-success.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "首次同步 样本外必填 1280px：配置真实保存后失败，关闭重开复用原ID",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/configuration-saved-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/failed-source-list.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/final-page.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/original-id-retry-success.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/complementary-missing-preview.png",
+        "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/complementary-missing-published.png",
+        "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/final-page.png",
+        "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/paired-independent-zero-published.png",
+        "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/ratio-basis-selector.png",
+        "final-focused-evidence/browser-results/focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新/final-page.png",
+        "final-focused-evidence/browser-results/focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新/legacy-unit-confirmation.png",
+        "final-focused-evidence/browser-results/focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/final-page.png",
+        "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/percent-mapping.png",
+        "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/percent-scale-selector.png",
+        "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/small-percent-preview.png",
+        "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/small-percent-published.png",
+        "final-focused-evidence/browser-results/focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "首次同步 500 390px：配置真实保存后失败，关闭重开复用原ID",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/configuration-saved-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/failed-source-list.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/final-page.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/original-id-retry-success.png",
+        "final-focused-evidence/browser-results/focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "首次同步 断网 390px：配置真实保存后失败，关闭重开复用原ID",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/configuration-saved-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/failed-source-list.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/final-page.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/original-id-retry-success.png",
+        "final-focused-evidence/browser-results/focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "首次同步 样本外必填 390px：配置真实保存后失败，关闭重开复用原ID",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/configuration-saved-sync-failed.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/failed-source-list.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/final-page.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/original-id-retry-success.png",
+        "final-focused-evidence/browser-results/focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布",
+      "file": "focused.spec.ts",
+      "status": "passed",
+      "trace": "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/trace.zip",
+      "requests": "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/key-requests.json",
+      "persistence": "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/persistence.json",
+      "screenshots": [
+        "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/complementary-missing-preview.png",
+        "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/complementary-missing-published.png",
+        "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/final-page.png",
+        "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/paired-independent-zero-published.png",
+        "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/ratio-basis-selector.png",
+        "final-focused-evidence/browser-results/focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "E 必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑",
+      "file": "lifecycle.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑/trace.zip",
+      "requests": "final-validation-2/browser-results/lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑/key-requests.json",
+      "persistence": "final-validation-2/browser-results/lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑/final-page.png",
+        "final-validation-2/browser-results/lifecycle-E-必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "离开模块、切换项目和浏览器后退均先保护草稿",
+      "file": "lifecycle.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/lifecycle-离开模块、切换项目和浏览器后退均先保护草稿/trace.zip",
+      "requests": "final-validation-2/browser-results/lifecycle-离开模块、切换项目和浏览器后退均先保护草稿/key-requests.json",
+      "persistence": "final-validation-2/browser-results/lifecycle-离开模块、切换项目和浏览器后退均先保护草稿/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/lifecycle-离开模块、切换项目和浏览器后退均先保护草稿/final-page.png",
+        "final-validation-2/browser-results/lifecycle-离开模块、切换项目和浏览器后退均先保护草稿/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "F 390px键盘完成卡片、选择器、未保存和冲突弹窗",
+      "file": "lifecycle.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/trace.zip",
+      "requests": "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/key-requests.json",
+      "persistence": "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/390-card-select.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/390-conflict.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/390-unsaved.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/final-page.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘完成卡片、选择器、未保存和冲突弹窗/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "F 390px键盘映射、真实写入与确认弹窗",
+      "file": "lifecycle.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/trace.zip",
+      "requests": "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/key-requests.json",
+      "persistence": "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/390-confirmation.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/390-mapping.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/final-page.png",
+        "final-validation-2/browser-results/lifecycle-F-390px键盘映射、真实写入与确认弹窗/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "记录计数：普通三条任务的实时预览必须为3",
+      "file": "remediation.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/remediation-记录计数：普通三条任务的实时预览必须为3/trace.zip",
+      "requests": "final-validation-2/browser-results/remediation-记录计数：普通三条任务的实时预览必须为3/key-requests.json",
+      "persistence": "final-validation-2/browser-results/remediation-记录计数：普通三条任务的实时预览必须为3/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/remediation-记录计数：普通三条任务的实时预览必须为3/count-preview.png",
+        "final-validation-2/browser-results/remediation-记录计数：普通三条任务的实时预览必须为3/final-page.png",
+        "final-validation-2/browser-results/remediation-记录计数：普通三条任务的实时预览必须为3/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "409：保存并切换失败后仍保留数据集A、草稿和编辑状态",
+      "file": "remediation.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/remediation-409：保存并切换失败后仍保留数据集A、草稿和编辑状态/trace.zip",
+      "requests": "final-validation-2/browser-results/remediation-409：保存并切换失败后仍保留数据集A、草稿和编辑状态/key-requests.json",
+      "persistence": "final-validation-2/browser-results/remediation-409：保存并切换失败后仍保留数据集A、草稿和编辑状态/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/remediation-409：保存并切换失败后仍保留数据集A、草稿和编辑状态/final-page.png",
+        "final-validation-2/browser-results/remediation-409：保存并切换失败后仍保留数据集A、草稿和编辑状态/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "旧模板改为自定义求和后显示30，保存刷新仍按新配置计算",
+      "file": "state.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/state-旧模板改为自定义求和后显示30，保存刷新仍按新配置计算/trace.zip",
+      "requests": "final-validation-2/browser-results/state-旧模板改为自定义求和后显示30，保存刷新仍按新配置计算/key-requests.json",
+      "persistence": "final-validation-2/browser-results/state-旧模板改为自定义求和后显示30，保存刷新仍按新配置计算/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/state-旧模板改为自定义求和后显示30，保存刷新仍按新配置计算/final-page.png",
+        "final-validation-2/browser-results/state-旧模板改为自定义求和后显示30，保存刷新仍按新配置计算/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "预览乱序忽略旧值，500错误清除成功预览并禁止加入",
+      "file": "state.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/state-预览乱序忽略旧值，500错误清除成功预览并禁止加入/trace.zip",
+      "requests": "final-validation-2/browser-results/state-预览乱序忽略旧值，500错误清除成功预览并禁止加入/key-requests.json",
+      "persistence": "final-validation-2/browser-results/state-预览乱序忽略旧值，500错误清除成功预览并禁止加入/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/state-预览乱序忽略旧值，500错误清除成功预览并禁止加入/final-page.png",
+        "final-validation-2/browser-results/state-预览乱序忽略旧值，500错误清除成功预览并禁止加入/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "数据集迟到响应、搜索和金额显示名均使用当前内容和存储key",
+      "file": "state.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/state-数据集迟到响应、搜索和金额显示名均使用当前内容和存储key/trace.zip",
+      "requests": "final-validation-2/browser-results/state-数据集迟到响应、搜索和金额显示名均使用当前内容和存储key/key-requests.json",
+      "persistence": "final-validation-2/browser-results/state-数据集迟到响应、搜索和金额显示名均使用当前内容和存储key/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/state-数据集迟到响应、搜索和金额显示名均使用当前内容和存储key/final-page.png",
+        "final-validation-2/browser-results/state-数据集迟到响应、搜索和金额显示名均使用当前内容和存储key/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "数据更新使当前页越界时自动校正重读，同时保留编辑草稿",
+      "file": "state.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/state-数据更新使当前页越界时自动校正重读，同时保留编辑草稿/trace.zip",
+      "requests": "final-validation-2/browser-results/state-数据更新使当前页越界时自动校正重读，同时保留编辑草稿/key-requests.json",
+      "persistence": "final-validation-2/browser-results/state-数据更新使当前页越界时自动校正重读，同时保留编辑草稿/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/state-数据更新使当前页越界时自动校正重读，同时保留编辑草稿/final-page.png",
+        "final-validation-2/browser-results/state-数据更新使当前页越界时自动校正重读，同时保留编辑草稿/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "保存中冻结快照且重复操作只提交一次真实请求",
+      "file": "state.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/state-保存中冻结快照且重复操作只提交一次真实请求/trace.zip",
+      "requests": "final-validation-2/browser-results/state-保存中冻结快照且重复操作只提交一次真实请求/key-requests.json",
+      "persistence": "final-validation-2/browser-results/state-保存中冻结快照且重复操作只提交一次真实请求/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/state-保存中冻结快照且重复操作只提交一次真实请求/final-page.png",
+        "final-validation-2/browser-results/state-保存中冻结快照且重复操作只提交一次真实请求/test-finished-1.png"
+      ]
+    },
+    {
+      "title": "评论质检与投放分析进入各自业务主体，数据导航URL和标签一致",
+      "file": "state.spec.ts",
+      "status": "passed",
+      "trace": "final-validation-2/browser-results/state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致/trace.zip",
+      "requests": "final-validation-2/browser-results/state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致/key-requests.json",
+      "persistence": "final-validation-2/browser-results/state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致/persistence.json",
+      "screenshots": [
+        "final-validation-2/browser-results/state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致/final-page.png",
+        "final-validation-2/browser-results/state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致/test-finished-1.png"
+      ]
+    }
+  ]
+}

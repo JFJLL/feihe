@@ -1,0 +1,164 @@
+[
+  {
+    "projectId": "repro-1791874513762",
+    "project": {
+      "id": "repro-1791874513762",
+      "name": "定向返修测试",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T06:55:13.767Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-repro-1791874513762-default",
+          "projectId": "repro-1791874513762",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T06:55:15.777Z"
+        }
+      ],
+      "targetDashboardId": "dash-repro-1791874513762-default",
+      "cards": [
+        {
+          "id": "card-fc6d8e88-7e7b-4f13-8b34-73976b57e286",
+          "dashboardId": "dash-repro-1791874513762-default",
+          "projectId": "repro-1791874513762",
+          "title": "断网草稿",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"card-fc6d8e88-7e7b-4f13-8b34-73976b57e286\",\"title\":\"断网草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791874513762-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T06:55:15.777Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791874513762-b",
+          "projectId": "repro-1791874513762",
+          "sourceId": "b",
+          "name": "任务数据B",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-13T06:55:13.808Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "task": "其他",
+              "amount": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791874513762-a",
+          "projectId": "repro-1791874513762",
+          "sourceId": "a",
+          "name": "任务数据A",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"},{\"key\":\"group\",\"name\":\"group\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T06:55:13.796Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            },
+            {
+              "key": "group",
+              "name": "group",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "task": "任务1",
+              "amount": 10,
+              "group": "同组"
+            },
+            {
+              "task": "任务2",
+              "amount": null,
+              "group": "同组"
+            },
+            {
+              "task": "任务3",
+              "amount": 20,
+              "group": "另一组"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]

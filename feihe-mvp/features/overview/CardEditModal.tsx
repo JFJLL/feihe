@@ -5,7 +5,7 @@ import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api } from '../../lib/hooks/use-project-data';
 import { Dialog } from '../../components/ui/Dialog';
 import type { MetricComputeResult } from '../../lib/metrics/engine';
-import { isTemplateCard, validateCardConfig, type CardAggregation } from '../../lib/metrics/config';
+import { isTemplateCard, validateCardConfig, ratioSampleLabel, type CardAggregation } from '../../lib/metrics/config';
 
 export interface DashboardCardConfig {
   id?: string;
@@ -14,6 +14,8 @@ export interface DashboardCardConfig {
   datasetId?: string;
   mode?: 'template' | 'custom';
   missingPolicy?: 'skip' | 'zero';
+  percentScale?: 'fraction' | 'percentage_points';
+  ratioBasis?: 'paired' | 'independent';
   metric?: string;
   aggregation?: CardAggregation;
   field?: string;
@@ -39,7 +41,7 @@ export function CardEditModal({
 }: {
   projectId: string;
   initialCard?: DashboardCardConfig | null;
-  datasets: Array<{ id: string; name: string; columns?: Array<{ key: string; name: string; type: string }> }>;
+  datasets: Array<{ id: string; name: string; columns?: Array<{ key: string; name: string; type: string; numericUnit?: string; percentScale?: 'fraction' | 'percentage_points' }> }>;
   defaultDatasetId?: string;
   onSave: (card: DashboardCardConfig) => void;
   onClose: () => void;
@@ -53,6 +55,8 @@ export function CardEditModal({
     metric: initialCard?.metric || 'custom',
     mode: initialCard && isTemplateCard(initialCard) ? 'template' : 'custom',
     missingPolicy: initialCard?.missingPolicy || 'skip',
+    percentScale: initialCard?.percentScale,
+    ratioBasis: initialCard?.ratioBasis,
     from: initialCard?.from || '',
     to: initialCard?.to || '',
     desc: initialCard?.desc || '',
@@ -73,7 +77,7 @@ export function CardEditModal({
   const previewError = currentPreview ? previewSnapshot.error : '';
   const loadingPreview = !validationErrors.length && !currentPreview;
   const templateBound = isTemplateCard(card);
-  const invalidPreview = Boolean(preview && ['error', 'invalid_value', 'missing_source'].includes(preview.status));
+  const invalidPreview = Boolean(preview && ['error', 'invalid_value', 'missing_source', 'needs_configuration'].includes(preview.status));
 
   // Available columns from selected dataset
   const activeDataset = datasets.find((d) => d.id === card.datasetId);
@@ -153,7 +157,7 @@ export function CardEditModal({
             <CustomSelect
               value={card.datasetId || activeDataset?.id || ''}
               ariaLabel="绑定数据集"
-              onChange={(val) => setCard({ ...card, datasetId: val, metric: 'custom', mode: 'custom', aggregation: 'count', field: '', numField: '', denField: '', groupBy: '', dateField: '', from: '', to: '' })}
+              onChange={(val) => setCard({ ...card, datasetId: val, metric: 'custom', mode: 'custom', aggregation: 'count', field: '', numField: '', denField: '', groupBy: '', dateField: '', from: '', to: '', percentScale: undefined, ratioBasis: undefined, format: 'number', unit: '' })}
               options={datasets.map((d) => ({ value: d.id, label: d.name }))}
             />
           </label>
@@ -184,7 +188,7 @@ export function CardEditModal({
                   defaultUnit = '%';
                   defaultFormat = 'percent';
                 }
-                setCard({ ...card, metric: 'custom', mode: 'custom', aggregation: val as CardAggregation, field: '', numField: '', denField: '', unit: val === 'ratio' ? defaultUnit : (card.unit === '%' ? '' : defaultUnit), format: val === 'ratio' ? defaultFormat : (card.format === 'percent' ? 'number' : defaultFormat) });
+                setCard({ ...card, metric: 'custom', mode: 'custom', aggregation: val as CardAggregation, field: '', numField: '', denField: '', ratioBasis: val === 'ratio' ? 'paired' : undefined, percentScale: undefined, unit: val === 'ratio' ? defaultUnit : (card.unit === '%' ? '' : defaultUnit), format: val === 'ratio' ? defaultFormat : (card.format === 'percent' ? 'number' : defaultFormat) });
               }}
               options={[
                 ...(templateBound ? [{ value: 'template', label: '模板指标（选择下方计算方式可转为自定义）', disabled: true }] : []),
@@ -228,7 +232,10 @@ export function CardEditModal({
               <CustomSelect
                 ariaLabel="目标计算字段"
                 value={card.field || ''}
-                onChange={(val) => setCard({ ...card, field: val })}
+                onChange={(val) => {
+                  const column = columns.find(c => c.key === val);
+                  setCard({ ...card, field: val, ...(column?.numericUnit === 'percent' ? { format: 'percent', unit: '%', percentScale: column.percentScale } : {}) });
+                }}
                 placeholder="-- 选择字段 --"
                 options={fieldOptions}
               />
@@ -257,6 +264,10 @@ export function CardEditModal({
             </label>
           </div>
 
+          {card.aggregation === 'ratio' ? <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13 }}>比率样本口径<CustomSelect ariaLabel="比率样本口径" value={card.ratioBasis || 'paired'} onChange={value => setCard({ ...card, ratioBasis: value as DashboardCardConfig['ratioBasis'] })} options={[{ value: 'paired', label: '成对有效行（默认）' }, { value: 'independent', label: '独立汇总（分别求和）' }]} /><small>缺失不补零时，默认仅计算两字段均有效的行；独立汇总分别求和并展示各自覆盖率。</small></label> : <>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13 }}>显示格式<CustomSelect ariaLabel="显示格式" value={card.format || 'number'} onChange={value => setCard({ ...card, format: value as DashboardCardConfig['format'], unit: value === 'percent' ? '%' : (card.unit === '%' ? '' : card.unit) })} options={[{ value: 'number', label: '普通数值' }, { value: 'percent', label: '百分比' }, { value: 'currency', label: '金额' }, { value: 'compact', label: '简写数值' }]} /></label>
+            {(card.format === 'percent' || card.unit === '%') && <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13 }}>百分比数值口径<CustomSelect ariaLabel="百分比数值口径" value={card.percentScale || ''} placeholder="确认单位后可保存" onChange={value => setCard({ ...card, percentScale: value as DashboardCardConfig['percentScale'] })} options={[{ value: 'fraction', label: '比例小数：0.005 = 0.5%' }, { value: 'percentage_points', label: '百分点：0.5 = 0.5%' }]} /><small>历史配置须明确确认；不改写历史数据，不按大小猜单位。</small></label>}
+          </>}
           <label>缺失值规则<CustomSelect ariaLabel="缺失值规则" value={card.missingPolicy || 'skip'} onChange={value => setCard({ ...card, missingPolicy: value as 'skip' | 'zero' })} options={[{ value: 'skip', label: '缺失不补零（忽略空值）' }, { value: 'zero', label: '明确补零' }]} /></label>
           <label>日期字段<CustomSelect ariaLabel="日期字段" value={card.dateField || ''} onChange={value => setCard({ ...card, dateField: value, ...(value ? {} : { from: '', to: '' }) })} options={[{ value: '', label: '不限定日期' }, ...columns.filter(c => c.type === 'date').map(c => ({ value: c.key, label: c.name }))]} /></label>
           {card.dateField && <div className="card-edit-fields" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}><label>开始日期<input type="date" value={card.from || ''} onChange={e => setCard({ ...card, from: e.target.value })} /></label><label>结束日期<input type="date" value={card.to || ''} onChange={e => setCard({ ...card, to: e.target.value })} /></label></div>}
@@ -282,7 +293,7 @@ export function CardEditModal({
                   </span>
                 </div>
                 <div style={{ fontSize: 11, color: '#64748b' }}>
-                  有效样本量: {preview.sampleSize} 行
+                  {preview.pairedValidCount !== undefined ? ratioSampleLabel(preview, card.missingPolicy === 'zero') : `有效样本量: ${preview.sampleSize} 行`}
                   {preview.denominator !== undefined ? ` · 分子合计: ${preview.numerator?.toLocaleString()} · 分母合计: ${preview.denominator?.toLocaleString()}` : ''}
                 </div>
               </div>

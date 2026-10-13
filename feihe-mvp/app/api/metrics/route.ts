@@ -45,6 +45,9 @@ export async function POST(request: Request) {
     formula?: string;
     format?: string;
     filterJson?: string;
+    percentScale?: CardMetricConfig['percentScale'];
+    ratioBasis?: CardMetricConfig['ratioBasis'];
+    missingPolicy?: CardMetricConfig['missingPolicy'];
   } = {};
 
   try {
@@ -89,14 +92,24 @@ export async function POST(request: Request) {
   const d1 = db();
   const id = `${project}:${key}`;
   const now = new Date().toISOString();
+  let protocol: Record<string, unknown>;
+  try { protocol = JSON.parse(body.filterJson || '{}'); } catch { return jsonError('指标配置必须是合法 JSON'); }
+  if (!protocol || typeof protocol !== 'object' || Array.isArray(protocol)) return jsonError('指标配置必须是对象');
+  for (const option of ['percentScale', 'ratioBasis', 'missingPolicy'] as const) {
+    if (body[option] !== undefined) protocol[option] = body[option];
+  }
+  if (protocol.percentScale && !['fraction', 'percentage_points'].includes(String(protocol.percentScale))) return jsonError('不支持的百分比数值口径');
+  if (protocol.ratioBasis && !['paired', 'independent'].includes(String(protocol.ratioBasis))) return jsonError('不支持的比率样本口径');
+  if (protocol.missingPolicy && !['skip', 'zero'].includes(String(protocol.missingPolicy))) return jsonError('不支持的缺失值规则');
+  if (body.aggregation !== 'ratio' && (body.format === 'percent' || body.unit === '%') && !protocol.percentScale) return jsonError('请明确百分比数值口径，历史配置不会自动转换');
 
   try {
     await d1
       .prepare(
-        `INSERT INTO metric_definitions(id, project_id, key, name, description, unit, aggregation, formula, format, aliases_json, created_at, updated_at)
-      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, '[]', ?, ?)
+        `INSERT INTO metric_definitions(id, project_id, key, name, description, unit, aggregation, formula, format, filter_json, aliases_json, created_at, updated_at)
+      VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '[]', ?, ?)
       ON CONFLICT(id) DO UPDATE SET
-      name=excluded.name, description=excluded.description, unit=excluded.unit, aggregation=excluded.aggregation, formula=excluded.formula, format=excluded.format, updated_at=excluded.updated_at`
+      name=excluded.name, description=excluded.description, unit=excluded.unit, aggregation=excluded.aggregation, formula=excluded.formula, format=excluded.format, filter_json=excluded.filter_json, updated_at=excluded.updated_at`
       )
       .bind(
         id,
@@ -108,6 +121,7 @@ export async function POST(request: Request) {
         String(body.aggregation || 'sum'),
         String(body.formula || ''),
         String(body.format || 'number'),
+        JSON.stringify(protocol),
         now,
         now
       )

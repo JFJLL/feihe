@@ -1,0 +1,41 @@
+ M feihe-mvp/app/api/metrics/route.ts
+ M feihe-mvp/features/overview/CardEditModal.tsx
+ M feihe-mvp/features/overview/CardRenderView.tsx
+ M feihe-mvp/features/settings/data-sources/FieldMappingEditor.tsx
+ M feihe-mvp/features/settings/data-sources/SettingsDataSources.tsx
+ M feihe-mvp/lib/datasets.ts
+ M feihe-mvp/lib/field-mapping.ts
+ M feihe-mvp/lib/import-rows.ts
+ M feihe-mvp/lib/metrics/config.ts
+ M feihe-mvp/lib/metrics/engine.ts
+ M feihe-mvp/lib/numeric-values.ts
+ M feihe-mvp/package.json
+ M feihe-mvp/playwright.config.ts
+ M feihe-mvp/styles/workspace-polish.css
+ M feihe-mvp/tests/browser/evidence.ts
+ M feihe-mvp/tests/browser/feishu-fixture.mjs
+ M feihe-mvp/tests/browser/remediation.spec.ts
+ M feihe-mvp/tests/browser/server.mjs
+ M feihe-mvp/tests/browser/state.spec.ts
+?? docs/fa67ea2-focused-remediation/
+?? docs/v3-targeted-remediation/DELIVERY-STATE.json
+?? docs/v3-targeted-remediation/browser-report/
+?? docs/v3-targeted-remediation/browser-results/
+?? docs/v3-targeted-remediation/initial-browser-results/
+?? docs/v3-targeted-remediation/iteration-1-results/
+?? docs/v3-targeted-remediation/iteration-10-results/
+?? docs/v3-targeted-remediation/iteration-11-results/
+?? docs/v3-targeted-remediation/iteration-12-results/
+?? docs/v3-targeted-remediation/iteration-2-results/
+?? docs/v3-targeted-remediation/iteration-3-results/
+?? docs/v3-targeted-remediation/iteration-4-results/
+?? docs/v3-targeted-remediation/iteration-5-results/
+?? docs/v3-targeted-remediation/iteration-6-results/
+?? docs/v3-targeted-remediation/iteration-7-results/
+?? docs/v3-targeted-remediation/iteration-8-results/
+?? docs/v3-targeted-remediation/iteration-9-results/
+?? feihe-mvp/scripts/test-focused-api.mjs
+?? feihe-mvp/scripts/test-focused-remediation.mjs
+?? feihe-mvp/tests/browser/focused-helpers.ts
+?? feihe-mvp/tests/browser/focused-red.spec.ts
+?? feihe-mvp/tests/browser/focused.spec.ts

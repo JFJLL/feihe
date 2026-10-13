@@ -1,0 +1,1066 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/focused-red.spec.ts",
+      "tests/browser/focused.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/fa67ea2-focused-remediation/final-focused-evidence/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5196",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/fa67ea2-focused-remediation/final-focused-evidence/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/fa67ea2-focused-remediation/final-focused-evidence/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5196",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "focused-red.spec.ts",
+      "file": "focused-red.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "补修反例：百分字段普通平均0.5%与1.5%显示1.0%",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2820,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:20.281Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\\attachments\\关键请求-855707e55251f940dd8a1190c703af388b2f083f.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\\attachments\\实际持久化快照-3734805a503506e2c6328e667a783c0178f28176.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\\attachments\\最终页面-fb1e02b70a333f5bc6683a941b23952b5dbeafa7.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：百分字段普通平均0-5-与1-5-显示1-0-\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3c5692848a7834de501-1b9f302dceab12a97c4b",
+          "file": "focused-red.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "补修反例：配置保存200后首次同步500，重试复用同一来源",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1849,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:23.888Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\\attachments\\关键请求-f5dd7b80688f4b04ce83ce4f1f721fc02c221d11.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\\attachments\\实际持久化快照-1a5b6b38716479a6afdb69bef8464e2c046bd111.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\\attachments\\最终页面-cc72ca98d567545857998109d4d8b2dfdf5c24cf.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：配置保存200后首次同步500，重试复用同一来源\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3c5692848a7834de501-ec2188bd881688bde26d",
+          "file": "focused-red.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "补修反例：互补缺失数据默认无可计算比率和成对样本",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2675,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:26.020Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\\attachments\\关键请求-e225f34d3d3d2482e08a7446c83c66fb05cc1fc7.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\\attachments\\实际持久化快照-c1a50eaffd7e7c80cf949c71978eba6d736af932.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\\attachments\\最终页面-ea4ab7385c7499f6c1922f30dd4237d03045f088.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-red-补修反例：互补缺失数据默认无可计算比率和成对样本\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c3c5692848a7834de501-c318fa05fcc61fe9daf4",
+          "file": "focused-red.spec.ts",
+          "line": 48,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "focused.spec.ts",
+      "file": "focused.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4236,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:29.160Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\\attachments\\关键请求-f7031d7a2f4bef1907ee0ac2cadb7c246e08df01.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\\attachments\\实际持久化快照-1de0ab1881d00310151bfc1e723e6fbd6039258d.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\\attachments\\最终页面-0ac8de054b18dc445edb1a334f629d9337a14ada.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-1280px：普通来源数值不被猜单位，明确百分点后保存刷新\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-25f35aca87e4dc5d29e7",
+          "file": "focused.spec.ts",
+          "line": 55,
+          "column": 3
+        },
+        {
+          "title": "百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5801,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "页面接入并声明两种原生数值单位；映射与导入共用转换",
+                      "duration": 1633
+                    },
+                    {
+                      "title": "普通百分字段平均1.0%；卡片明确保存比例单位",
+                      "duration": 1896
+                    },
+                    {
+                      "title": "刷新读取真实发布配置，六档显示无阈值跳变，重新编辑口径不丢",
+                      "duration": 937
+                    }
+                  ],
+                  "startTime": "2026-10-13T07:00:33.962Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\\attachments\\关键请求-17c247f62386032c338d1fc5ceb93f3a7d2aed0d.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\\attachments\\实际持久化快照-a23ba29ccbce3446fe3a0144285806f60b24cc4a.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\\attachments\\最终页面-384c6b7da0d7e2c84c419d5769f7b7745962525c.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-1280px：六档文本和两种原生数值，预览发布刷新重编辑\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-3f51ec37fa70ae96a91d",
+          "file": "focused.spec.ts",
+          "line": 83,
+          "column": 3
+        },
+        {
+          "title": "首次同步 500 1280px：配置真实保存后失败，关闭重开复用原ID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5185,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:40.674Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\关键请求-e2bf1b9eab56ad74ced53835ea129e6e5f93241c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\实际持久化快照-31a28b3b21683504a3802269a1d431c9376cb90d.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\最终页面-8e2cbf99769ba80de8057db0d83ea06ad7a78be9.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-1280px：配置真实保存后失败，关闭重开复用原ID\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-f4d33425c704967da168",
+          "file": "focused.spec.ts",
+          "line": 144,
+          "column": 5
+        },
+        {
+          "title": "首次同步 断网 1280px：配置真实保存后失败，关闭重开复用原ID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5017,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:46.586Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\关键请求-53d44777aa2ef2ab0b24241565057d7f9c279ebf.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\实际持久化快照-34caf18d7f3deb4d5e4dd7178cc103db570b6401.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\最终页面-ae2d5e13369cf7748a02da9afce6cae08feea16c.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-1280px：配置真实保存后失败，关闭重开复用原ID\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-ab58601d7e3eb4147900",
+          "file": "focused.spec.ts",
+          "line": 144,
+          "column": 5
+        },
+        {
+          "title": "首次同步 样本外必填 1280px：配置真实保存后失败，关闭重开复用原ID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4137,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:52.291Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\关键请求-a4885f66a86661f76a5519eb87bdce025c68906e.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\实际持久化快照-017a5bbdf58b7689e28c099f134beef7fab93c2f.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID\\attachments\\最终页面-6982a84466a889d889ebbb3e33f56fb4e073e2a9.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-1280px：配置真实保存后失败，关闭重开复用原ID\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-798cf5fccdf13e6f7240",
+          "file": "focused.spec.ts",
+          "line": 144,
+          "column": 5
+        },
+        {
+          "title": "比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7237,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:00:57.016Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\\attachments\\关键请求-733d83e2143a07d25ff8166a49802b4d2f160d5f.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\\attachments\\实际持久化快照-8eb9edbbfd6439b23f82877d90fbc050af3358d4.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\\attachments\\最终页面-35497a5398bc6613b9fd1dbe13c5fd31596e66ce.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-1280px：互补缺失、完整行、独立汇总及补零经真实同步发布\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-998c42b01ae9ebef2123",
+          "file": "focused.spec.ts",
+          "line": 212,
+          "column": 3
+        },
+        {
+          "title": "历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3323,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:01:05.388Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\\attachments\\关键请求-772cd6ed83fc171ba5f850ae202b35a2c29c7db3.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\\attachments\\实际持久化快照-715be65332660c06cf6b70c262dc5bdf600512e5.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\\attachments\\最终页面-d616e9e1a451c0ffeee2f23236bc1e37a63540fc.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-历史百分口径确认-390px：普通来源数值不被猜单位，明确百分点后保存刷新\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-bfa4ecfeb5bd46d5b8d9",
+          "file": "focused.spec.ts",
+          "line": 55,
+          "column": 3
+        },
+        {
+          "title": "百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4836,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "steps": [
+                    {
+                      "title": "页面接入并声明两种原生数值单位；映射与导入共用转换",
+                      "duration": 1469
+                    },
+                    {
+                      "title": "普通百分字段平均1.0%；卡片明确保存比例单位",
+                      "duration": 1748
+                    },
+                    {
+                      "title": "刷新读取真实发布配置，六档显示无阈值跳变，重新编辑口径不丢",
+                      "duration": 775
+                    }
+                  ],
+                  "startTime": "2026-10-13T07:01:08.998Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\\attachments\\关键请求-ed818aa23f3350aaa50ff916a1aa732bde363f1b.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\\attachments\\实际持久化快照-b35f7e2f69614d829a2174a99b76e930f43cd9a6.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\\attachments\\最终页面-e2f1c4e0750e533c21cc4c004e5c1f7175ef4628.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-百分协议-390px：六档文本和两种原生数值，预览发布刷新重编辑\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-cea4fbc3704d6d9b97d0",
+          "file": "focused.spec.ts",
+          "line": 83,
+          "column": 3
+        },
+        {
+          "title": "首次同步 500 390px：配置真实保存后失败，关闭重开复用原ID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4487,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:01:14.237Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\关键请求-3e56faedeb5fe8aec024cbf36c2c56cb56f512e6.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\实际持久化快照-5849f3b56efb618e4ab176710b74b40d0c5f09ec.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\最终页面-3ea81359b83b9b91209f948a5764e494cf2929ad.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-500-390px：配置真实保存后失败，关闭重开复用原ID\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-de5fe3427763c4007333",
+          "file": "focused.spec.ts",
+          "line": 144,
+          "column": 5
+        },
+        {
+          "title": "首次同步 断网 390px：配置真实保存后失败，关闭重开复用原ID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:01:19.057Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\关键请求-95fb66b77993ca87ab28323e5bc1a4b094353c7d.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\实际持久化快照-9b29e6c28130327d95caa51098e5fc8f9b5caed1.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\最终页面-e65a3d4e0b38c5248c640b787c9405db2edb1be3.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-断网-390px：配置真实保存后失败，关闭重开复用原ID\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-0fe61e7a03b02b89def4",
+          "file": "focused.spec.ts",
+          "line": 144,
+          "column": 5
+        },
+        {
+          "title": "首次同步 样本外必填 390px：配置真实保存后失败，关闭重开复用原ID",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3658,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:01:23.710Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\关键请求-adbe88e20213896c482ee3cd279b73fa8a5fc5fe.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\实际持久化快照-75f470102de98f5bd35ef1cc71df778b82f398b2.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID\\attachments\\最终页面-77678fff6d692e9d95a924a16473c27ab577e0fe.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-首次同步-样本外必填-390px：配置真实保存后失败，关闭重开复用原ID\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-16948154578e4df491c7",
+          "file": "focused.spec.ts",
+          "line": 144,
+          "column": 5
+        },
+        {
+          "title": "比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6747,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:01:27.691Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\\attachments\\关键请求-5d61f0273dcd339d796bcd6071d1f5aba28f058a.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\\attachments\\实际持久化快照-a80d37ccd981b3b883e9e233eacdad387e163dac.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\\attachments\\最终页面-f36c85bd9a191343a6bcb426c7cdac1889ade19f.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\fa67ea2-focused-remediation\\final-focused-evidence\\browser-results\\focused-比率样本-390px：互补缺失、完整行、独立汇总及补零经真实同步发布\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f30bc518755a430fa4a3-910a8cb9d6b26ee89a2d",
+          "file": "focused.spec.ts",
+          "line": 212,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T07:00:19.608Z",
+    "duration": 77469.889,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

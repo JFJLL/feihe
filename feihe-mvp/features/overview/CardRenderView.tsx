@@ -1,6 +1,9 @@
 'use client';
 
 import type { DashboardCardConfig } from './CardEditModal';
+import { useState } from 'react';
+import type { MetricComputeResult } from '../../lib/metrics/engine';
+import { ratioSampleLabel } from '../../lib/metrics/config';
 
 export function CardRenderView({
   card,
@@ -14,16 +17,7 @@ export function CardRenderView({
   datasetName,
 }: {
   card: DashboardCardConfig;
-  metric?: {
-    value: number | null;
-    formattedValue: string;
-    sampleSize: number;
-    status: string;
-    statusLabel: string;
-    numerator?: number | null;
-    denominator?: number | null;
-    groups?: Array<{ label: string; value: number | null; count: number }>;
-  };
+  metric?: Omit<MetricComputeResult, 'key' | 'name' | 'unit'>;
   index: number;
   totalCards: number;
   isEditing: boolean;
@@ -32,14 +26,18 @@ export function CardRenderView({
   onRemove: () => void;
   datasetName?: string;
 }) {
+  const [showAllGroups, setShowAllGroups] = useState(false);
   const displayVal = metric?.formattedValue ?? '—';
   const sampleSize = metric?.sampleSize ?? 0;
   const isZeroDiv = metric?.status === 'zero_division';
   const isMissingSource = metric?.status === 'missing_source';
   const isEmpty = metric?.status === 'empty';
+  const progressValue = (metric?.value ?? 0) * (card.aggregation !== 'ratio' && card.percentScale === 'fraction' ? 100 : 1);
 
   return (
     <div
+      role="article"
+      aria-label={card.title}
       style={{
         background: '#fff',
         borderRadius: 12,
@@ -115,6 +113,7 @@ export function CardRenderView({
             分母为0，无法计算比率
           </div>
         )}
+        {metric && !['ok', 'zero', 'zero_division'].includes(metric.status) && <div style={{ fontSize: 12, color: '#b91c1c' }}>{metric.statusLabel}</div>}
 
         {/* Progress Card Display */}
         {card.type === 'progress_card' && (
@@ -122,9 +121,9 @@ export function CardRenderView({
             <div style={{ height: 6, background: '#f1f5f9', borderRadius: 3, overflow: 'hidden' }}>
               <div
                 style={{
-                  width: `${Math.min(100, Math.max(0, metric?.value ?? 0))}%`,
+                  width: `${Math.min(100, Math.max(0, progressValue))}%`,
                   height: '100%',
-                  background: (metric?.value ?? 0) >= 100 ? '#16a34a' : '#2563eb',
+                  background: progressValue >= 100 ? '#16a34a' : '#2563eb',
                   borderRadius: 3,
                 }}
               />
@@ -139,22 +138,24 @@ export function CardRenderView({
         {/* Group Breakdown Display */}
         {metric?.groups && metric.groups.length > 0 && (
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 5 }}>
-            {metric.groups.slice(0, 4).map((g) => (
-              <div key={g.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, borderBottom: '1px dashed #f1f5f9', paddingBottom: 2 }}>
+            {(showAllGroups ? metric.groups : metric.groups.slice(0, 4)).map((g) => (
+              <div key={g.label} data-testid="metric-group" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', fontSize: 12, borderBottom: '1px dashed #f1f5f9', paddingBottom: 2 }}>
                 <span style={{ color: '#475569' }}>{g.label}</span>
                 <strong style={{ color: '#0f172a' }}>
-                  {g.value !== null ? (card.format === 'percent' || card.aggregation === 'ratio' ? `${g.value.toFixed(1)}%` : g.value.toLocaleString()) : '—'}
+                  {g.formattedValue}
                   {g.count !== undefined && <small style={{ fontWeight: 400, color: '#64748b', marginLeft: 4 }}>({g.count})</small>}
                 </strong>
+                {g.pairedValidCount !== undefined && <small style={{ flexBasis: '100%' }}>{ratioSampleLabel(g, card.missingPolicy === 'zero')}</small>}
               </div>
             ))}
+            {metric.groups.length > 4 && <button type="button" onClick={() => setShowAllGroups(value => !value)}>{showAllGroups ? '收起分组' : '显示全部分组'}</button>}
           </div>
         )}
       </div>
 
-      <div style={{ marginTop: 14, paddingTop: 8, borderTop: '1px solid #f1f5f9', fontSize: 11, color: '#94a3b8', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ marginTop: 14, paddingTop: 8, borderTop: '1px solid #f1f5f9', fontSize: 11, color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'space-between' }}>
         <span>来源: {datasetName || '当前数据集'}</span>
-        <span>有效样本: {sampleSize} 行</span>
+        <span>{metric?.pairedValidCount !== undefined ? ratioSampleLabel(metric, card.missingPolicy === 'zero') : `有效样本: ${sampleSize} 行`}</span>
       </div>
     </div>
   );

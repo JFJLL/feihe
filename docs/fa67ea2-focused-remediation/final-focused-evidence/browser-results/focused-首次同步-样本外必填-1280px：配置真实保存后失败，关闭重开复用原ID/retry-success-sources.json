@@ -1,0 +1,23 @@
+{
+  "projectId": "focused-1791874852431",
+  "sourceId": "1d2318c9-0ea3-43fc-a588-f38cfaad6fab",
+  "sources": [
+    {
+      "id": "1d2318c9-0ea3-43fc-a588-f38cfaad6fab",
+      "projectId": "focused-1791874852431",
+      "type": "feishu_sheet",
+      "name": "补修数据",
+      "spreadsheet": "https://fixture.feishu.cn/sheets/FocusedLateRequiredDoc",
+      "sheetId": "sheetA",
+      "range": "",
+      "kind": "general",
+      "syncFrequency": "manual",
+      "status": "已连接",
+      "lastSyncedAt": "2026-10-13T07:00:54.617Z",
+      "lastRowCount": 12,
+      "mappingJson": "{\"rules\":[{\"sourceField\":\"任务\",\"targetField\":\"任务\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"金额\",\"targetField\":\"金额\",\"type\":\"number\",\"nullPolicy\":\"null\",\"required\":false}],\"context\":{\"projectId\":\"focused-1791874852431\",\"documentToken\":\"FocusedLateRequiredDoc\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"任务\",\"type\":\"text\"},{\"key\":\"金额\",\"type\":\"number\"}]}}",
+      "lastError": "",
+      "updatedAt": "2026-10-13T07:00:54.617Z"
+    }
+  ]
+}
