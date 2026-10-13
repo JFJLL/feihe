@@ -50,7 +50,10 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   projectId: string; project?: Project; dashboard: Dashboard; ops: Ops; loading?: boolean;
   onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const { showToast } = useProject();
+  const { showToast, workspace, refreshWorkspace } = useProject();
+  const currentMemberRole =
+    workspace?.metadata?.currentUser?.role ||
+    "project_admin";
 
   const handleNoteInspect = (noteId: string) => {
     const targetNote = (dashboard.notes || []).find(n => String(n.id) === String(noteId));
@@ -299,7 +302,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       <OnboardingWizard
         projectId={projectId}
         project={project}
+        role={currentMemberRole}
         onFinish={async () => {
+          if (refreshWorkspace) await refreshWorkspace();
           if (onRefresh) await onRefresh({ fresh: true });
         }}
       />

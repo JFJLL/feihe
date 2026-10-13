@@ -243,9 +243,11 @@ export async function POST(request: Request) {
 
   if (action === 'update_onboarding') {
     const statusVal = text(body.onboardingStatus) || 'ready';
+    const completedSteps = Array.isArray(body.completedSteps) ? body.completedSteps : ['template', 'ready'];
+    const stepsJson = JSON.stringify(completedSteps);
     await d1.prepare(`UPDATE projects SET onboarding_status=?, updated_at=? WHERE id=?`).bind(statusVal, now, id).run();
-    await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json='["template","source","first_sync","metrics","members"]', updated_at=? WHERE project_id=?`).bind(now, id).run();
-    return Response.json({ ok: true, id, onboardingStatus: statusVal });
+    await d1.prepare(`UPDATE project_onboarding SET current_step=?, completed_steps_json=?, updated_at=? WHERE project_id=?`).bind(statusVal, stepsJson, now, id).run();
+    return Response.json({ ok: true, id, onboardingStatus: statusVal, completedSteps });
   }
 
   if (action === 'update') {
@@ -377,10 +379,10 @@ export async function POST(request: Request) {
     return Response.json({ ok: true });
   }
 
-  if (action === 'manage_member') {
+  if (action === 'manage_member' || action === 'add_member' || action === 'update_member_role' || action === 'remove_member') {
     const targetUserId = text(body.userId);
     const role = text(body.role) || 'viewer';
-    const subAction = text(body.subAction) || 'upsert';
+    const subAction = action === 'remove_member' ? 'remove' : (text(body.subAction) || 'upsert');
     if (!targetUserId) return jsonError('缺少成员用户 ID');
 
     if (subAction === 'remove') {

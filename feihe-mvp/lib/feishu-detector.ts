@@ -134,7 +134,7 @@ export async function inspectFeishuBitable(bitableToken: string, token: string):
 
   if (!res.ok || payload.code) {
     if (payload.code === 99991663 || payload.code === 99991668 || payload.code === 1254003) {
-      throw new Error("应用没有该多维表格的读取权限。请在文档右上角「···」-「添加文档应用」中授权当前应用。");
+      throw new Error('应用没有该多维表格的读取权限。请在文档右上角「···」-「添加文档应用」中授权当前应用。');
     }
     throw new Error(`飞书多维表格数据表读取失败: ${payload.msg || `HTTP ${res.status}`}`);
   }
@@ -145,4 +145,43 @@ export async function inspectFeishuBitable(bitableToken: string, token: string):
   }));
 
   return { tables };
+}
+
+export async function previewFeishuSpreadsheet(spreadsheetToken: string, sheetId: string, token: string): Promise<{
+  headers: string[];
+  rows: Array<Record<string, unknown>>;
+}> {
+  const range = `${sheetId}!A1:AZ10`;
+  const res = await fetch(`https://open.feishu.cn/open-apis/sheets/v2/spreadsheets/${spreadsheetToken}/values/${encodeURIComponent(range)}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = (await res.json()) as { code?: number; msg?: string; data?: { valueRange?: { values?: unknown[][] } } };
+  if (!res.ok || data.code) throw new Error(data.msg || '读取工作表预览失败');
+  const values = data.data?.valueRange?.values || [];
+  const headers = (values[0] || []).map(String);
+  const rows = values.slice(1).map((r) => Object.fromEntries(headers.map((h, i) => [h, r[i] ?? ''])));
+  return { headers, rows };
+}
+
+export async function previewFeishuBitable(bitableToken: string, tableId: string, token: string): Promise<{
+  headers: string[];
+  rows: Array<Record<string, unknown>>;
+}> {
+  const res = await fetch(`https://open.feishu.cn/open-apis/bitable/v1/apps/${bitableToken}/tables/${tableId}/records?page_size=10`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = (await res.json()) as { code?: number; msg?: string; data?: { items?: Array<{ fields?: Record<string, unknown> }> } };
+  if (!res.ok || data.code) throw new Error(data.msg || '读取多维表格预览失败');
+  const items = data.data?.items || [];
+  const keySet = new Set<string>();
+  const rows = items.map((it) => {
+    const fields = it.fields || {};
+    const normalized: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      keySet.add(k);
+      normalized[k] = typeof v === 'object' && v !== null ? (v as any).text || (v as any).name || JSON.stringify(v) : v;
+    }
+    return normalized;
+  });
+  return { headers: Array.from(keySet), rows };
 }

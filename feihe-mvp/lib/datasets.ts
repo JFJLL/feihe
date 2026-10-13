@@ -77,38 +77,53 @@ export async function saveDataset(
 
   const schemaJson = JSON.stringify(columns);
 
+  // Read existing dataset metadata to determine version
+  const existing = await d1
+    .prepare("SELECT id, row_count AS rowCount, version, created_at AS createdAt, updated_at AS updatedAt FROM datasets WHERE id=?")
+    .bind(datasetId)
+    .first<{ id: string; rowCount: number; version: number; createdAt: string; updatedAt: string }>();
+
+  const newVersion = (existing?.version || 0) + 1;
+  const createdAt = existing?.createdAt || now;
+  const stagingId = datasetId + "_staging_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
+
+  // 1. Prepare statements for staging rows (does NOT touch existing dataset data)
+  const statements: Array<{ run(): Promise<unknown> }> = [];
+  for (const [index, row] of rows.entries()) {
+    const rowKey = datasetId + ":v" + newVersion + ":r" + (index + 1);
+    statements.push(
+      d1
+        .prepare("INSERT INTO dataset_rows(id, dataset_id, project_id, source_id, row_key, data_json, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(rowKey, stagingId, projectId, sourceId || "default", String(index + 1), JSON.stringify(row), now, now)
+    );
+  }
+
+  // 2. Insert into staging table in batches; clean up staging on failure without affecting old data
   try {
-    // 1. Upsert dataset record
-    await d1
-      .prepare(
-        `INSERT INTO datasets(id, project_id, source_id, name, schema_json, row_count, version, created_at, updated_at)
-      VALUES(?, ?, ?, ?, ?, ?, 1, ?, ?)
-      ON CONFLICT(id) DO UPDATE SET
-      name=excluded.name, schema_json=excluded.schema_json, row_count=excluded.row_count, version=version+1, updated_at=excluded.updated_at`
-      )
-      .bind(datasetId, projectId, sourceId || 'default', name || '通用数据集', schemaJson, rows.length, now, now)
-      .run();
-
-    // 2. Clear old rows for this dataset
-    await d1.prepare('DELETE FROM dataset_rows WHERE dataset_id=?').bind(datasetId).run();
-
-    // 3. Batch insert new rows
-    const statements: Array<{ run(): Promise<unknown> }> = [];
-    for (const [index, row] of rows.entries()) {
-      const rowKey = `${datasetId}:r${index + 1}`;
-      statements.push(
-        d1
-          .prepare(`INSERT INTO dataset_rows(id, dataset_id, project_id, source_id, row_key, data_json, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`)
-          .bind(rowKey, datasetId, projectId, sourceId || 'default', String(index + 1), JSON.stringify(row), now, now)
-      );
-    }
-
     for (let i = 0; i < statements.length; i += 80) {
       await d1.batch(statements.slice(i, i + 80));
     }
+  } catch (err) {
+    try {
+      await d1.prepare("DELETE FROM dataset_rows WHERE dataset_id=?").bind(stagingId).run();
+    } catch {}
+    throw err;
+  }
 
-    } catch (err) {
-    
+  // 3. Atomic switchover: replace old rows with staging rows and update dataset metadata
+  try {
+    await d1.batch([
+      d1.prepare("DELETE FROM dataset_rows WHERE dataset_id=?").bind(datasetId),
+      d1.prepare("UPDATE dataset_rows SET dataset_id=? WHERE dataset_id=?").bind(datasetId, stagingId),
+      d1.prepare(
+        "INSERT INTO datasets(id, project_id, source_id, name, schema_json, row_count, version, created_at, updated_at)" +
+        " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)" +
+        " ON CONFLICT(id) DO UPDATE SET" +
+        " name=excluded.name, schema_json=excluded.schema_json, row_count=excluded.row_count, version=excluded.version, updated_at=excluded.updated_at"
+      ).bind(datasetId, projectId, sourceId || "default", name || "通用数据集", schemaJson, rows.length, newVersion, createdAt, now),
+    ]);
+  } catch (err) {
+    try { await d1.prepare("DELETE FROM dataset_rows WHERE dataset_id=?").bind(stagingId).run(); } catch {}
     throw err;
   }
 
@@ -120,7 +135,7 @@ export async function saveDataset(
     schemaJson,
     columns,
     rowCount: rows.length,
-    version: 1,
+    version: newVersion,
     updatedAt: now,
   };
 }

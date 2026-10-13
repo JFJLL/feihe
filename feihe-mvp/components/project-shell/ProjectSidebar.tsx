@@ -53,18 +53,22 @@ export function ProjectSidebar({
       <nav className="project-main-nav" aria-label="项目模块">
         {PROJECT_NAV_ITEMS.filter((item) => {
           if (currentProject?.templateId === 'general_workbench') {
-            return item.id === 'overview' || item.id === 'settings';
+            return item.id === 'overview' || item.id === 'data' || item.id === 'settings';
           }
           if (currentProject?.templateId === 'comment_qc') {
             return item.id === 'overview' || item.id === 'comments' || item.id === 'settings';
           }
+          // Do not show separate data tab in marketing template where data sources are under settings
+          if (item.id === 'data') return false;
           return true;
         }).map((item) => {
           const href =
             item.path === ''
               ? '/projects/' + encodeURIComponent(projectId)
+              : item.path.includes('?')
+              ? '/projects/' + encodeURIComponent(projectId) + '/' + item.path
               : '/projects/' + encodeURIComponent(projectId) + '/' + item.path;
-          const isActive = activeSection === item.path;
+          const isActive = activeSection === item.path || (item.id === 'data' && activeSection === 'settings' && typeof window !== 'undefined' && window.location.search.includes('data-sources'));
 
           return (
             <a

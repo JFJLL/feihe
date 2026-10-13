@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FeishuSources, SyncButton } from '../../../components/ui/FeishuSources';
 import type { FeishuData } from '../../../lib/feishu-model';
 import type { Source, Workspace } from '../../../lib/types/project';
@@ -10,6 +10,7 @@ import { LoadingState } from '../../../components/ui/LoadingState';
 import { MetricCard } from '../../../components/ui/operations/MetricCard';
 import { CustomSelect } from '../../../components/ui/CustomSelect';
 import { api, cnTime } from '../../../lib/hooks/use-project-data';
+import { FieldMappingEditor, type FieldMappingRule } from './FieldMappingEditor';
 
 const emptySource: Record<string, unknown> = {
   name: '业务数据表',
@@ -19,7 +20,7 @@ const emptySource: Record<string, unknown> = {
   range: 'A1:AZ5000',
   kind: 'general',
   syncFrequency: 'manual',
-  mappingJson: '{}',
+  mappingJson: '[]',
 };
 
 export function SettingsDataSources({
@@ -40,6 +41,13 @@ export function SettingsDataSources({
   const [statusError, setStatusError] = useState('');
   const [inspecting, setInspecting] = useState(false);
   const [detectedSheets, setDetectedSheets] = useState<Array<{ sheetId: string; title: string; rowCount?: number }>>([]);
+
+  const [rawHeaders, setRawHeaders] = useState<string[]>([]);
+  const [rawPreviewRows, setRawPreviewRows] = useState<Array<Record<string, unknown>>>([]);
+  const [mappingRules, setMappingRules] = useState<FieldMappingRule[]>([]);
+
+  const inspectRequestId = useRef(0);
+
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
     title: string;
@@ -64,60 +72,173 @@ export function SettingsDataSources({
 
   useEffect(() => {
     let cancelled = false;
-    api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`).then(data => {
+    api<FeishuData>(`/api/feishu/sync?projectId=${encodeURIComponent(projectId)}`).then((data) => {
       if (!cancelled) setFeishu(data);
-    }).catch((e) => { if (!cancelled) setStatusError(e instanceof Error ? e.message : '同步状态加载失败'); });
+    }).catch((e) => {
+      if (!cancelled) setStatusError(e instanceof Error ? e.message : '同步状态加载失败');
+    });
     return () => { cancelled = true; };
   }, [projectId]);
 
   const sources = (workspace?.sources || []).filter((item) => item.projectId === projectId);
   const currentProject = workspace?.projects.find((item) => item.id === projectId);
-  const syncedSources = sources.filter(item => item.lastSyncedAt);
-  const failedSources = sources.filter(item => item.lastError);
-  const latestSync = syncedSources.map(item => item.lastSyncedAt).sort().at(-1);
+  const syncedSources = sources.filter((item) => item.lastSyncedAt);
+  const failedSources = sources.filter((item) => item.lastError);
+  const latestSync = syncedSources.map((item) => item.lastSyncedAt).sort().at(-1);
 
-  async function handleInspectLink() {
+  function handleUrlChange(newUrl: string) {
+    setSource((prev) => ({
+      ...prev,
+      spreadsheet: newUrl,
+      sheetId: '',
+      mappingJson: '[]',
+    }));
+    setDetectedSheets([]);
+    setRawHeaders([]);
+    setRawPreviewRows([]);
+    setMappingRules([]);
+  }
+
+  async function handleInspectLink(targetSheetId?: string) {
     const url = String(source.spreadsheet || '').trim();
     if (!url) {
       toast('请先粘贴飞书表格链接', 'error');
       return;
     }
+
+    const currentReqId = ++inspectRequestId.current;
     setInspecting(true);
+
     try {
-      const res = await api<{ ok: boolean; detected: { type: string; spreadsheetToken?: string; sheetId?: string; sheets?: Array<{ sheetId: string; title: string; rowCount: number }> } }>('/api/feishu/inspect', {
+      const res = await api<{
+        ok: boolean;
+        detected: {
+          type: string;
+          sourceType?: string;
+          documentToken?: string;
+          sheetId?: string;
+          sheets?: Array<{ sheetId: string; title: string; rowCount: number }>;
+          preview?: { headers: string[]; rows: Array<Record<string, unknown>> };
+        };
+      }>('/api/feishu/inspect', {
         method: 'POST',
-        body: JSON.stringify({ url, projectId }),
+        body: JSON.stringify({
+          url,
+          projectId,
+          sheetId: targetSheetId || source.sheetId || undefined,
+        }),
       });
+
+      if (currentReqId !== inspectRequestId.current) return;
+
       if (res.detected) {
         toast('链接解析成功', 'success');
-        if (res.detected.sheets && res.detected.sheets.length > 0) {
-          setDetectedSheets(res.detected.sheets);
-          if (!source.sheetId && res.detected.sheets[0]) {
-            setSource((prev) => ({ ...prev, sheetId: res.detected.sheets![0].sheetId, name: prev.name || res.detected.sheets![0].title }));
+        const sheetsList = res.detected.sheets || [];
+        setDetectedSheets(sheetsList);
+
+        const chosenSheetId = targetSheetId || source.sheetId || (sheetsList[0] ? sheetsList[0].sheetId : '');
+        setSource((prev) => ({
+          ...prev,
+          sheetId: chosenSheetId,
+          type: res.detected.sourceType || prev.type,
+          name: prev.name && prev.name !== '业务数据表' ? prev.name : (sheetsList.find((s) => s.sheetId === chosenSheetId)?.title || prev.name),
+        }));
+
+        if (res.detected.preview && res.detected.preview.headers?.length) {
+          const hdrs = res.detected.preview.headers;
+          const rows = res.detected.preview.rows || [];
+          setRawHeaders(hdrs);
+          setRawPreviewRows(rows);
+
+          let currentRules: FieldMappingRule[] = [];
+          try {
+            const parsed = JSON.parse(String(source.mappingJson || '[]'));
+            if (Array.isArray(parsed) && parsed.length > 0) currentRules = parsed;
+          } catch {}
+
+          if (!currentRules.length) {
+            currentRules = hdrs.map((h) => {
+              const sampleVals = rows.map((r) => r[h]);
+              const isNum = sampleVals.some((v) => v !== '' && v !== null && !isNaN(Number(String(v).replace(/[,￥¥%]/g, ''))));
+              const isDate = sampleVals.some((v) => /^\d{4}[-/.]\d{1,2}/.test(String(v || '')));
+              const isKey = h.includes('ID') || h.includes('编号') || h === '序号';
+
+              return {
+                sourceField: h,
+                targetField: h,
+                type: isNum ? 'number' : isDate ? 'date' : 'text',
+                isKey,
+                isDate,
+                required: isKey,
+                nullPolicy: isNum ? 'zero' : 'null',
+              };
+            });
+            setMappingRules(currentRules);
+            setSource((prev) => ({ ...prev, mappingJson: JSON.stringify(currentRules) }));
+          } else {
+            setMappingRules(currentRules);
           }
-        }
-        if (res.detected.sheetId) {
-          setSource((prev) => ({ ...prev, sheetId: res.detected.sheetId }));
         }
       }
     } catch (err) {
-      toast(err instanceof Error ? err.message : '检测链接失败', 'error');
+      if (currentReqId === inspectRequestId.current) {
+        toast(err instanceof Error ? err.message : '检测链接失败', 'error');
+      }
     } finally {
-      setInspecting(false);
+      if (currentReqId === inspectRequestId.current) {
+        setInspecting(false);
+      }
     }
   }
 
-  async function saveSource() {
+  function handleSheetChange(sheetId: string) {
+    setSource((prev) => ({ ...prev, sheetId }));
+    void handleInspectLink(sheetId);
+  }
+
+  async function saveSource(andSync = false) {
     setBusy('source');
     try {
-      await api('/api/projects', {
+      const payload = {
+        action: 'save_source',
+        projectId,
+        ...source,
+        mappingJson: JSON.stringify(mappingRules.length ? mappingRules : JSON.parse(String(source.mappingJson || '[]'))),
+      };
+
+      const saveRes = await api<{ ok: boolean; id: string }>('/api/projects', {
         method: 'POST',
-        body: JSON.stringify({ action: 'save_source', projectId, ...source }),
+        body: JSON.stringify(payload),
       });
-      toast('数据源已保存', 'success');
+
+      const effectiveSourceId = String(source.id || saveRes.id || '');
+      toast('数据源配置已保存', 'success');
+
+      if (andSync && effectiveSourceId) {
+        toast('正在执行首次同步…', 'info');
+        const syncRes = await api<{ ok: boolean; imported: number }>('/api/feishu/sync', {
+          method: 'POST',
+          body: JSON.stringify({
+            projectId,
+            sourceId: effectiveSourceId,
+            spreadsheet: source.spreadsheet,
+            sheetId: source.sheetId,
+            kind: source.kind,
+            range: source.range,
+            mappingJson: payload.mappingJson,
+          }),
+        });
+        if (syncRes.ok) {
+          toast(`首次同步完成！已成功入库 ${syncRes.imported} 行数据`, 'success');
+        }
+      }
+
       setSource(emptySource);
       setIsAdding(false);
       setDetectedSheets([]);
+      setRawHeaders([]);
+      setRawPreviewRows([]);
+      setMappingRules([]);
       await onDone();
       await loadSources();
     } catch (err) {
@@ -127,14 +248,41 @@ export function SettingsDataSources({
     }
   }
 
+  function handleEditExistingSource(item: Source) {
+    let rules: FieldMappingRule[] = [];
+    try {
+      const parsed = JSON.parse(item.mappingJson || '[]');
+      if (Array.isArray(parsed)) rules = parsed;
+    } catch {}
+
+    setSource({
+      id: item.id,
+      name: item.name,
+      type: item.type,
+      spreadsheet: item.spreadsheet,
+      sheetId: item.sheetId,
+      range: item.range || 'A1:AZ5000',
+      kind: item.kind || 'general',
+      syncFrequency: item.syncFrequency || 'manual',
+      mappingJson: item.mappingJson || '[]',
+    });
+    setMappingRules(rules);
+    setIsAdding(true);
+    if (item.spreadsheet) {
+      setTimeout(() => {
+        void handleInspectLink(item.sheetId);
+      }, 50);
+    }
+  }
+
   async function syncSource(item: Source) {
     setBusy(item.id);
     try {
-      await api('/api/feishu/sync', {
+      const res = await api<{ ok: boolean; imported: number; message?: string }>('/api/feishu/sync', {
         method: 'POST',
         body: JSON.stringify({ ...item, projectId: item.projectId, sourceId: item.id }),
       });
-      toast(item.name + ' 同步完成', 'success');
+      toast(`${item.name} 同步完成（导入 ${res.imported} 行）`, 'success');
       await onDone();
     } catch (err) {
       toast(err instanceof Error ? err.message : '同步失败', 'error');
@@ -193,7 +341,7 @@ export function SettingsDataSources({
             </div>
             <span className="header-tag">{feishu.checkedAt ? cnTime(feishu.checkedAt) : '尚未核对'}</span>
           </div>
-          <p className="reference-note">已返回 {feishu.reports.length} 张工作表报告，其中 {feishu.reports.filter(report => report.status === 'error').length} 张读取失败。投放数据截至 {feishu.latestDate || '暂无日期'}；同步核对时间不代表业务数据日期。</p>
+          <p className="reference-note">已返回 {feishu.reports.length} 张工作表报告，其中 {feishu.reports.filter((r) => r.status === 'error').length} 张读取失败。投放数据截至 {feishu.latestDate || '暂无日期'}；同步核对时间不代表业务数据日期。</p>
           <p className="reference-note">展开下方溯源明细查看原表链接、工作表 ID、读取范围与逐表错误。</p>
           <FeishuSources data={feishu} projectId={projectId} />
         </section>
@@ -205,7 +353,7 @@ export function SettingsDataSources({
             <div>
               <div className="section-kicker">CONNECTED SOURCES</div>
               <h2 style={{ margin: '2px 0 4px' }}>{currentProject?.name || '当前项目'}的数据源</h2>
-              <p style={{ margin: 0 }}>支持飞书电子表格、多维表格与通用任务表接入；同步记录与错误信息留痕。</p>
+              <p style={{ margin: 0 }}>支持飞书电子表格、多维表格与通用任务表接入；支持可视化字段映射与落库校验。</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span className="section-mini-tag tag-blue" style={{ fontSize: '12px', padding: '4px 10px' }}>
@@ -219,6 +367,9 @@ export function SettingsDataSources({
                   onClick={() => {
                     setSource(emptySource);
                     setDetectedSheets([]);
+                    setRawHeaders([]);
+                    setRawPreviewRows([]);
+                    setMappingRules([]);
                     setIsAdding(true);
                   }}
                 >
@@ -233,20 +384,20 @@ export function SettingsDataSources({
               style={{
                 marginTop: '18px',
                 marginBottom: '18px',
-                padding: '20px',
+                padding: '22px',
                 background: '#f8fafc',
                 border: '1.5px solid #cbd5e1',
-                borderRadius: '10px',
-                boxShadow: '0 4px 12px rgba(15, 23, 42, 0.04)',
+                borderRadius: '12px',
+                boxShadow: '0 4px 16px rgba(15, 23, 42, 0.05)',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', paddingBottom: '12px' }}>
                 <div>
                   <span className="section-mini-tag tag-blue" style={{ marginBottom: '4px' }}>
-                    {source.id ? '编辑模式' : '新增模式'}
+                    {source.id ? '编辑与映射模式' : '新增接入流程'}
                   </span>
                   <h3 style={{ margin: '4px 0 0', fontSize: '16px', color: '#0f172a' }}>
-                    {source.id ? ('编辑数据源：' + String(source.name || '')) : '接入飞书表格数据源'}
+                    {source.id ? (`配置字段映射：${String(source.name || '')}`) : '接入飞书表格与可视化字段映射'}
                   </h3>
                 </div>
                 <button
@@ -262,12 +413,13 @@ export function SettingsDataSources({
                 </button>
               </div>
 
+              {/* Step 1: Basic Information */}
               <div className="platform-form" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
                 <label>
                   数据源名称
                   <input
                     value={String(source.name || '')}
-                    placeholder="如：活动排期与执行进度表"
+                    placeholder="如：华北区门店咨询与签约表"
                     onChange={(e) => setSource({ ...source, name: e.target.value })}
                   />
                 </label>
@@ -277,10 +429,9 @@ export function SettingsDataSources({
                     value={String(source.kind || 'general')}
                     onChange={(val) => setSource({ ...source, kind: val })}
                     options={[
-                      { value: 'general', label: '通用表格数据集（任务、活动、预算）', badge: '通用' },
+                      { value: 'general', label: '通用表格数据集（任务、活动、预算、转化）', badge: '通用' },
                       { value: 'owned', label: '发布进度 / 自有笔记', badge: '内容' },
                       { value: 'supplier', label: '供应商评论交付', badge: '评论' },
-                      { value: 'competitor', label: '竞品监测数据', badge: '竞品' },
                     ]}
                     style={{ width: '100%' }}
                   />
@@ -299,32 +450,33 @@ export function SettingsDataSources({
                   />
                 </label>
 
+                {/* Link and Detect */}
                 <label className="full">
-                  飞书文档链接
+                  飞书表格链接（支持电子表格、多维表格与 Wiki 节点）
                   <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
                     <input
                       style={{ flex: 1 }}
                       value={String(source.spreadsheet || '')}
-                      placeholder="https://yimeichuanbo.feishu.cn/wiki/... 或 sheets/..."
-                      onChange={(e) => setSource({ ...source, spreadsheet: e.target.value })}
+                      placeholder="https://yimeichuanbo.feishu.cn/wiki/... 或 sheets/... 或 base/..."
+                      onChange={(e) => handleUrlChange(e.target.value)}
                     />
                     <button
                       type="button"
                       disabled={inspecting || !source.spreadsheet}
-                      onClick={handleInspectLink}
-                      style={{ padding: '0 14px', borderRadius: 6, border: '1px solid #0284c7', background: '#e0f2fe', color: '#0369a1', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: 13, fontWeight: 600 }}
+                      onClick={() => handleInspectLink()}
+                      style={{ padding: '0 16px', borderRadius: 6, border: '1px solid #0284c7', background: '#e0f2fe', color: '#0369a1', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: 13, fontWeight: 600 }}
                     >
-                      {inspecting ? '正在检测…' : '智能检测工作表'}
+                      {inspecting ? '正在检测…' : '智能检测工作表 ↗'}
                     </button>
                   </div>
                 </label>
 
                 <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <span>工作表 ID (Sheet / Table ID)</span>
+                  <span>目标工作表 (Sheet / Table ID)</span>
                   {detectedSheets.length > 0 ? (
                     <CustomSelect
                       value={String(source.sheetId || '')}
-                      onChange={(val) => setSource({ ...source, sheetId: val })}
+                      onChange={(val) => handleSheetChange(val)}
                       placeholder="-- 请选择工作表 / 数据表 --"
                       options={[
                         { value: '', label: '-- 请选择工作表 / 数据表 --' },
@@ -338,7 +490,7 @@ export function SettingsDataSources({
                   ) : (
                     <input
                       value={String(source.sheetId || '')}
-                      placeholder="例如：kMYs9o 或点击上方智能检测自动填入"
+                      placeholder="点击上方智能检测自动选择"
                       onChange={(e) => setSource({ ...source, sheetId: e.target.value })}
                       style={{ height: 38, padding: '0 12px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 13 }}
                     />
@@ -346,28 +498,30 @@ export function SettingsDataSources({
                 </label>
 
                 <label>
-                  读取范围
+                  读取范围 (普通电子表格适用)
                   <input
                     value={String(source.range || '')}
                     placeholder="例如：A1:AZ5000"
                     onChange={(e) => setSource({ ...source, range: e.target.value })}
                   />
                 </label>
-
-                <label className="full">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span>字段映射 JSON（可选）</span>
-                    <small style={{ color: '#94a3b8' }}>支持定义主键与字段类型转换；默认直接读取原表头</small>
-                  </div>
-                  <textarea
-                    rows={3}
-                    value={String(source.mappingJson || '{}')}
-                    onChange={(e) => setSource({ ...source, mappingJson: e.target.value })}
-                  />
-                </label>
               </div>
 
-              <div className="editor-actions" style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              {/* Visual Field Mapping Editor */}
+              {rawHeaders.length > 0 && (
+                <FieldMappingEditor
+                  rawHeaders={rawHeaders}
+                  rawPreviewRows={rawPreviewRows}
+                  mappingRules={mappingRules}
+                  onChange={(updated) => {
+                    setMappingRules(updated);
+                    setSource((prev) => ({ ...prev, mappingJson: JSON.stringify(updated) }));
+                  }}
+                />
+              )}
+
+              {/* Actions */}
+              <div className="editor-actions" style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
                 <button
                   type="button"
                   onClick={() => {
@@ -380,15 +534,25 @@ export function SettingsDataSources({
                 </button>
                 <button
                   type="button"
-                  className="primary"
-                  disabled={busy === 'source' || !source.name || !source.spreadsheet}
-                  onClick={saveSource}
+                  disabled={busy === 'source' || !source.name || !source.spreadsheet || !source.sheetId}
+                  onClick={() => saveSource(false)}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 600 }}
                 >
-                  {busy === 'source' ? '正在保存…' : '保存数据源'}
+                  仅保存配置
+                </button>
+                <button
+                  type="button"
+                  className="primary"
+                  disabled={busy === 'source' || !source.name || !source.spreadsheet || !source.sheetId}
+                  onClick={() => saveSource(true)}
+                  style={{ padding: '8px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  {busy === 'source' ? '正在执行…' : '✓ 保存并首次同步'}
                 </button>
               </div>
             </div>
           )}
+
           <div className="management-list" style={{ marginTop: '14px' }}>
             {sources.length ? (
               sources.map((item) => (
@@ -429,9 +593,17 @@ export function SettingsDataSources({
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
                     <button
                       type="button"
+                      disabled={busy === item.id}
+                      onClick={() => handleEditExistingSource(item)}
+                      style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 500 }}
+                    >
+                      ✏ 编辑/映射
+                    </button>
+                    <button
+                      type="button"
                       disabled={busy === item.id || !item.spreadsheet || !item.sheetId}
                       onClick={() => syncSource(item)}
-                      style={{ padding: '6px 12px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #0284c7', background: '#f0f9ff', color: '#0284c7', cursor: 'pointer', fontWeight: 500 }}
+                      style={{ padding: '6px 12px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #0284c7', background: '#f0f9ff', color: '#0284c7', cursor: 'pointer', fontWeight: 600 }}
                     >
                       {busy === item.id ? '同步中…' : '立即同步'}
                     </button>

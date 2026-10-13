@@ -57,7 +57,17 @@ export function SettingsWorkspace({
   const [visitedByProject, setVisitedByProject] = useState<Record<string, Set<string>>>(() => ({
     [projectId]: new Set([tab]),
   }));
-  const visited = visitedByProject[projectId] ?? new Set([tab]);
+  const visited = new Set([...(visitedByProject[projectId] ?? []), tab]);
+
+  useEffect(() => {
+    setVisitedByProject((prev) => {
+      const current = prev[projectId];
+      if (current && current.has(tab)) return prev;
+      const next = new Set(current || ['profile']);
+      next.add(tab);
+      return { ...prev, [projectId]: next };
+    });
+  }, [projectId, tab]);
 
   const handleTabChange = (nextTab: string) => {
     setVisitedByProject((prev) => {

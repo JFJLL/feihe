@@ -38,8 +38,10 @@ function ProjectShellContent({
     refreshData,
   } = useProject();
 
-  // 首屏未加载完时展示骨架加载
-  if (dataLoading && !dashboard) {
+  const isSettingsOrData = activeSection === "settings" || activeSection === "data";
+
+  // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞）
+  if (dataLoading && !dashboard && !isSettingsOrData) {
     return (
       <div className="app-shell">
         <ProjectSidebar userName={userName} signedIn={signedIn} />
@@ -50,7 +52,7 @@ function ProjectShellContent({
     );
   }
 
-  if (dataError && !dashboard) {
+  if (dataError && !dashboard && !isSettingsOrData) {
     return (
       <div className="app-shell">
         <ProjectSidebar userName={userName} signedIn={signedIn} />
@@ -61,79 +63,91 @@ function ProjectShellContent({
     );
   }
 
+  const effectiveDashboard: any = dashboard || {
+    pipelines: [],
+    notes: [],
+    summary: { totalNotes: 0, totalReads: 0, totalInteractions: 0, totalSpend: 0 },
+    analytics: { brands: [] },
+    feishu: null,
+  };
+  const effectiveOps: any = ops || {
+    settings: { rules: { brands: [], competitors: [] } },
+  };
+
   // 客户端单页即时切换（0ms 响应，彻底消除白屏刷新与等待）
   let content = children;
-  if (dashboard && ops) {
-    switch (activeSection) {
-      case '':
-      case 'overview':
+  switch (activeSection) {
+    case "":
+    case "overview":
+      if (dataError && !dashboard) {
+        content = <ErrorState error={dataError} onRetry={refreshData} />;
+      } else {
         content = (
           <OverviewWorkspace
             projectId={projectId}
             project={currentProject || undefined}
-            dashboard={dashboard}
-            ops={ops}
+            dashboard={effectiveDashboard}
+            ops={effectiveOps}
             loading={dataLoading}
             onRefresh={refreshData}
           />
         );
-        break;
-      case 'growth':
-      case 'competitor':
-        content = (
-          <GrowthWorkspace
-            projectId={projectId}
-            dashboard={dashboard}
-            ops={ops}
-            onRefresh={refreshData}
-          />
-        );
-        break;
-      case 'content':
+      }
+      break;
+    case "growth":
+    case "competitor":
       content = (
-        <ContentWorkspace
+        <GrowthWorkspace
           projectId={projectId}
-          dashboard={dashboard}
-          ops={ops}
+          dashboard={effectiveDashboard}
+          ops={effectiveOps}
           onRefresh={refreshData}
         />
       );
-        break;
-      case 'comments':
-        content = (
-          <CommentsWorkspace
-            projectId={projectId}
-            dashboard={dashboard}
-            ops={ops}
-            onRefresh={refreshData}
-          />
-        );
-        break;
-      case 'insights':
-        content = (
-          <CommentsWorkspace
-            projectId={projectId}
-            dashboard={dashboard}
-            ops={ops}
-            onRefresh={refreshData}
-          />
-        );
-        break;
-      case 'settings':
-        content = (
+      break;
+    case "content":
+      content = (
+        <ContentWorkspace
+          projectId={projectId}
+          dashboard={effectiveDashboard}
+          ops={effectiveOps}
+          onRefresh={refreshData}
+        />
+      );
+      break;
+    case "comments":
+    case "insights":
+      content = (
+        <CommentsWorkspace
+          projectId={projectId}
+          dashboard={effectiveDashboard}
+          ops={effectiveOps}
+          onRefresh={refreshData}
+        />
+      );
+      break;
+    case "data":
+    case "settings":
+      content = (
+        <>
+          {dataError && (
+            <div style={{ padding: "10px 16px", background: "#fef3c7", border: "1px solid #fde68a", color: "#92400e", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
+              ⚠️ 分析数据接口暂不可用，但您可以正常维护项目设置、数据源与成员权限。
+            </div>
+          )}
           <SettingsWorkspace
             projectId={projectId}
             project={currentProject}
-            dashboard={dashboard}
-            ops={ops}
+            dashboard={effectiveDashboard}
+            ops={effectiveOps}
             onRefresh={refreshData}
           />
-        );
-        break;
-      default:
-        content = children;
-        break;
-    }
+        </>
+      );
+      break;
+    default:
+      content = children;
+      break;
   }
 
   return (

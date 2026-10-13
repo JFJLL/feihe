@@ -2,10 +2,56 @@ import { db, ensureSchema } from './db';
 import { noteIdFrom } from './store';
 import { projectId } from './projects';
 import { validBrand } from './brand-validation';
-import { saveDataset } from './datasets';
+import { saveDataset, type DatasetColumn } from './datasets';
 
 export type ImportKind = 'owned' | 'supplier' | 'dataset' | 'general';
 export type ImportRow = Record<string, unknown>;
+
+export interface FieldMappingRule {
+  sourceField: string;
+  targetField: string;
+  type?: 'text' | 'number' | 'date' | 'boolean';
+  isKey?: boolean;
+  isDate?: boolean;
+  required?: boolean;
+  nullPolicy?: 'null' | 'zero' | 'empty' | 'skip';
+}
+
+export function applyFieldMapping(rows: ImportRow[], rules: FieldMappingRule[]): ImportRow[] {
+  if (!rules || rules.length === 0) return rows;
+  return rows.map((row) => {
+    const out: ImportRow = {};
+    for (const rule of rules) {
+      if (!rule.sourceField || !rule.targetField) continue;
+      const raw = row[rule.sourceField];
+      if (raw === undefined || raw === null || String(raw).trim() === '') {
+        if (rule.nullPolicy === 'zero') out[rule.targetField] = 0;
+        else if (rule.nullPolicy === 'empty') out[rule.targetField] = '';
+        else out[rule.targetField] = null;
+        continue;
+      }
+      if (rule.type === 'number') {
+        const s = String(raw).replace(/[,￥¥%]/g, '').trim();
+        const num = Number(s);
+        out[rule.targetField] = Number.isFinite(num) ? num : (rule.nullPolicy === 'zero' ? 0 : null);
+      } else if (rule.type === 'boolean') {
+        out[rule.targetField] = /^(true|是|1|yes)$/i.test(String(raw).trim());
+      } else if (rule.type === 'date') {
+        out[rule.targetField] = String(raw).trim();
+      } else {
+        out[rule.targetField] = String(raw).trim();
+      }
+    }
+    // Retain unmapped original fields if target has not occupied them
+    for (const [k, v] of Object.entries(row)) {
+      if (!rules.some((r) => r.sourceField === k || r.targetField === k) && out[k] === undefined) {
+        out[k] = v;
+      }
+    }
+    return out;
+  });
+}
+
 const value = (row: ImportRow, names: string[]) => { for (const name of names) if (row[name] != null) return String(row[name]); return ''; };
 const number = (row: ImportRow, names: string[]) => { const result = Number(value(row, names).replace(/[,￥¥%]/g, '')); return Number.isFinite(result) ? result : 0; };
 
@@ -15,16 +61,39 @@ export async function importRows(
   replaceSupplier = true,
   project = '',
   sourceId = 'default_supplier',
-  sourceName = '通用业务数据'
+  sourceName = '通用业务数据',
+  mappingJson?: string
 ) {
-  const rows = input;
+  const allowedKinds = ['general', 'dataset', 'owned', 'supplier'];
+  if (!allowedKinds.includes(kind)) {
+    throw new Error(`不支持的数据用途类型「${kind}」：竞品监测请使用内置竞品情报模块，暂不支持任意表格直接导入为竞品类型`);
+  }
+
   await ensureSchema();
   const d1 = db();
   const currentProject = projectId(project, false);
   if (!currentProject) throw new Error('缺少项目 ID (projectId 必填)');
 
+  let mappingRules: FieldMappingRule[] = [];
+  try {
+    const parsed = JSON.parse(mappingJson || '{}');
+    if (Array.isArray(parsed)) mappingRules = parsed;
+    else if (Array.isArray(parsed.rules)) mappingRules = parsed.rules;
+  } catch {}
+
+  let rows = input;
+  let customColumns: DatasetColumn[] | undefined;
+  if (mappingRules.length > 0) {
+    rows = applyFieldMapping(input, mappingRules);
+    customColumns = mappingRules.map((r) => ({
+      key: r.targetField,
+      name: r.targetField,
+      type: r.type || 'text',
+    }));
+  }
+
   if (kind === 'dataset' || kind === 'general') {
-    const dataset = await saveDataset(currentProject, sourceId, sourceName, rows);
+    const dataset = await saveDataset(currentProject, sourceId, sourceName, rows, customColumns);
     return { imported: dataset.rowCount, skipped: 0, total: rows.length };
   }
 
@@ -78,17 +147,12 @@ export async function importRows(
     if (imported === 0) {
       return { imported: 0, skipped: rows.length };
     }
-    // Only delete records for this specific project AND this specific sourceId!
     statements.unshift(d1.prepare('DELETE FROM supplier_comments WHERE project_id=? AND source_id=?').bind(currentProject, sourceId));
   }
 
   if (statements.length > 0) {
-    try {
-            for (let i = 0; i < statements.length; i += 80) {
-        await d1.batch(statements.slice(i, i + 80));
-      }
-          } catch (error) {
-            throw error;
+    for (let i = 0; i < statements.length; i += 80) {
+      await d1.batch(statements.slice(i, i + 80));
     }
   }
 

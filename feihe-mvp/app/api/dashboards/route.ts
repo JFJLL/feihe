@@ -14,14 +14,23 @@ export async function GET(request: Request) {
   await ensureSchema();
   const d1 = db();
 
-  const [dashboards, cards] = await Promise.all([
-    d1.prepare('SELECT id, project_id AS projectId, name, is_default AS isDefault, version, layout_json AS layoutJson, status, updated_at AS updatedAt FROM dashboards WHERE project_id=? ORDER BY is_default DESC, updated_at DESC').bind(project).all(),
-    d1.prepare('SELECT id, dashboard_id AS dashboardId, project_id AS projectId, title, type, metric_keys_json AS metricKeysJson, config_json AS configJson, sort_order AS sortOrder, updated_at AS updatedAt FROM dashboard_cards WHERE project_id=? ORDER BY sort_order ASC').bind(project).all(),
-  ]);
+  const dashboards = await d1
+    .prepare('SELECT id, project_id AS projectId, name, is_default AS isDefault, version, layout_json AS layoutJson, status, updated_at AS updatedAt FROM dashboards WHERE project_id=? ORDER BY is_default DESC, updated_at DESC')
+    .bind(project)
+    .all<{ id: string; name: string; version: number }>();
+
+  const requestedDashId = url.searchParams.get('dashboardId');
+  const targetDashId = requestedDashId || dashboards.results?.[0]?.id || `dash-${project}-default`;
+
+  const cards = await d1
+    .prepare('SELECT id, dashboard_id AS dashboardId, project_id AS projectId, title, type, metric_keys_json AS metricKeysJson, config_json AS configJson, sort_order AS sortOrder, updated_at AS updatedAt FROM dashboard_cards WHERE project_id=? AND dashboard_id=? ORDER BY sort_order ASC')
+    .bind(project, targetDashId)
+    .all();
 
   return Response.json({
     ok: true,
     dashboards: dashboards.results || [],
+    targetDashboardId: targetDashId,
     cards: cards.results || [],
   });
 }
@@ -32,6 +41,7 @@ export async function POST(request: Request) {
     dashboardId?: string;
     name?: string;
     version?: number;
+    force?: boolean;
     cards?: Array<{
       id?: string;
       title: string;
@@ -57,15 +67,21 @@ export async function POST(request: Request) {
   const now = new Date().toISOString();
   const dashboardId = String(body.dashboardId || `dash-${project}-default`);
 
-  // Optimistic concurrency check: version must match
-  if (body.version !== undefined) {
+  // Optimistic concurrency check: version must match unless force is true
+  if (body.version !== undefined && !body.force) {
     const existing = await d1.prepare('SELECT version FROM dashboards WHERE id=? AND project_id=?').bind(dashboardId, project).first<{ version: number }>();
     if (existing && existing.version > body.version) {
-      return jsonError('看板已被其他成员修改（检测到版本冲突），请刷新后再试', 409);
+      return Response.json({
+        ok: false,
+        error: `看板已被其他成员修改（当前版本 v${existing.version}，您的版本 v${body.version}），检测到并发冲突`,
+        conflict: true,
+        serverVersion: existing.version,
+      }, { status: 409 });
     }
   }
 
-  const newVersion = (body.version || 1) + 1;
+  const existingRecord = await d1.prepare('SELECT version FROM dashboards WHERE id=? AND project_id=?').bind(dashboardId, project).first<{ version: number }>();
+  const newVersion = Math.max(existingRecord?.version || 0, body.version || 0) + 1;
   const cards = Array.isArray(body.cards) ? body.cards : [];
 
   try {

@@ -11,41 +11,47 @@ export function useProjectTab(
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const rawTab = searchParams?.get('tab');
-  const resolvedRawTab = (rawTab && aliases && aliases[rawTab]) ? aliases[rawTab] : rawTab;
-  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+  const resolveTab = useCallback((raw: string | null | undefined): string | null => {
+    if (!raw) return null;
+    const mapped = aliases && aliases[raw] ? aliases[raw] : raw;
+    return allowedTabs.includes(mapped) ? mapped : null;
+  }, [aliases, allowedTabs]);
 
-  const activeTab =
-    selectedTab && allowedTabs.includes(selectedTab)
-      ? selectedTab
-      : resolvedRawTab && allowedTabs.includes(resolvedRawTab)
-      ? resolvedRawTab
-      : defaultTab;
+  const urlTab = resolveTab(searchParams?.get('tab'));
+  const [activeTab, setActiveTab] = useState<string>(urlTab || defaultTab);
 
+  // Sync state whenever URL searchParams change
   useEffect(() => {
-    if (rawTab && aliases && aliases[rawTab] && aliases[rawTab] !== rawTab) {
+    const nextTab = resolveTab(searchParams?.get('tab')) || defaultTab;
+    setActiveTab(nextTab);
+  }, [searchParams, resolveTab, defaultTab]);
+
+  // Listen to popstate for browser Back / Forward
+  useEffect(() => {
+    const onPopState = () => {
       try {
         const params = new URLSearchParams(window.location.search);
-        params.set('tab', aliases[rawTab]);
-        window.history.replaceState(null, '', pathname + '?' + params.toString());
+        const popTab = resolveTab(params.get('tab')) || defaultTab;
+        setActiveTab(popTab);
       } catch {}
-    }
-  }, [rawTab, aliases, pathname]);
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [resolveTab, defaultTab]);
 
   const setTab = useCallback(
     (nextTab: string) => {
-      if (nextTab === activeTab) return;
-      setSelectedTab(nextTab);
+      const target = resolveTab(nextTab) || defaultTab;
+      setActiveTab(target);
       try {
-        // Clear stale tab-specific filters when switching tabs
-        const params = new URLSearchParams();
-        params.set('tab', nextTab);
-        window.history.pushState(null, '', pathname + '?' + params.toString());
-      } catch {
-        // Fallback
-      }
+        const params = new URLSearchParams(window.location.search);
+        params.set('tab', target);
+        const newUrl = pathname + '?' + params.toString();
+        window.history.pushState({ tab: target }, '', newUrl);
+        window.dispatchEvent(new Event('popstate'));
+      } catch {}
     },
-    [activeTab, pathname, setSelectedTab]
+    [pathname, resolveTab, defaultTab]
   );
 
   return [activeTab, setTab];

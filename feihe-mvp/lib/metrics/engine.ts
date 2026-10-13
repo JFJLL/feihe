@@ -80,6 +80,382 @@ export async function getProjectMetrics(projectId: string): Promise<MetricDefini
   return rows.results || [];
 }
 
+
+export interface CardMetricConfig {
+  id?: string;
+  title?: string;
+  datasetId?: string;
+  metric?: string;
+  aggregation?: "sum" | "count" | "distinct_count" | "avg" | "ratio";
+  field?: string;
+  numField?: string;
+  denField?: string;
+  groupBy?: string;
+  dateField?: string;
+  from?: string;
+  to?: string;
+  unit?: string;
+  format?: "number" | "percent" | "currency" | "compact";
+}
+
+export async function evaluateCardMetric(
+  projectId: string,
+  card: CardMetricConfig
+): Promise<MetricComputeResult> {
+  await ensureSchema();
+  const d1 = db();
+
+  const datasetQuery = card.datasetId
+    ? d1.prepare("SELECT id, name, row_count FROM datasets WHERE project_id=? AND (id=? OR source_id=?) LIMIT 1").bind(projectId, card.datasetId, card.datasetId)
+    : d1.prepare("SELECT id, name, row_count FROM datasets WHERE project_id=? ORDER BY row_count DESC, created_at ASC LIMIT 1").bind(projectId);
+  const datasetRow = await datasetQuery.first<{ id: string; name: string; row_count: number }>();
+
+  if (!datasetRow) {
+    return {
+      key: card.metric || card.field || "unknown",
+      name: card.title || "指标",
+      unit: card.unit || "",
+      value: null,
+      formattedValue: "—",
+      sampleSize: 0,
+      status: "missing_source",
+      statusLabel: "数据源不存在或已移除",
+    };
+  }
+
+  const rows = await d1.prepare("SELECT row_key, data_json FROM dataset_rows WHERE dataset_id=? ORDER BY rowid ASC").bind(datasetRow.id).all<{ row_key: string; data_json: string }>();
+  let datasetItems = (rows.results || []).map((r) => {
+    try { return JSON.parse(r.data_json); } catch { return {}; }
+  });
+
+  if (card.from || card.to) {
+    datasetItems = datasetItems.filter((item) => {
+      const d = String(item[card.dateField || "日期"] || item.date || item["时间"] || item.created_at || "").trim();
+      if (!d) return true;
+      if (card.from && d < card.from) return false;
+      if (card.to && d > card.to) return false;
+      return true;
+    });
+  }
+
+  const sampleSize = datasetItems.length;
+
+  if (card.metric === "task_total") {
+    return {
+      key: "task_total",
+      name: card.title || "任务总数",
+      unit: card.unit || "项",
+      value: sampleSize,
+      formattedValue: formatMetricValue(sampleSize, "number", card.unit || "项"),
+      sampleSize,
+      status: sampleSize > 0 ? "ok" : "empty",
+      statusLabel: sampleSize > 0 ? "计算完成" : "无数据记录",
+    };
+  }
+
+  if (card.metric === "task_completed") {
+    const completed = datasetItems.filter((item) => isStatusCompleted(item.status || item["状态"] || item.state)).length;
+    return {
+      key: "task_completed",
+      name: card.title || "已完成任务数",
+      unit: card.unit || "项",
+      value: completed,
+      formattedValue: formatMetricValue(completed, "number", card.unit || "项"),
+      sampleSize,
+      status: sampleSize > 0 ? (completed > 0 ? "ok" : "zero") : "empty",
+      statusLabel: sampleSize > 0 ? "计算完成" : "无数据记录",
+    };
+  }
+
+  if (card.metric === "task_completion_rate") {
+    if (sampleSize === 0) {
+      return {
+        key: "task_completion_rate",
+        name: card.title || "任务完成率",
+        unit: card.unit || "%",
+        value: null,
+        formattedValue: "—",
+        sampleSize: 0,
+        numerator: 0,
+        denominator: 0,
+        status: "zero_division",
+        statusLabel: "分母为0（样本量不足）",
+      };
+    }
+    const completed = datasetItems.filter((item) => isStatusCompleted(item.status || item["状态"] || item.state)).length;
+    const rate = (completed / sampleSize) * 100;
+    return {
+      key: "task_completion_rate",
+      name: card.title || "任务完成率",
+      unit: card.unit || "%",
+      value: rate,
+      formattedValue: rate.toFixed(1) + "%",
+      sampleSize,
+      numerator: completed,
+      denominator: sampleSize,
+      status: completed === 0 ? "zero" : "ok",
+      statusLabel: "计算完成",
+    };
+  }
+
+  if (card.metric === "budget_total" || card.metric === "spent_total" || card.metric === "budget_spent_rate") {
+    let totalBudget = 0;
+    let totalSpent = 0;
+    for (const item of datasetItems) {
+      const b = Number(item.budget ?? item["预算"] ?? item.plan_budget ?? 0);
+      const s = Number(item.spent ?? item.actual_spent ?? item["实际支出"] ?? item["支出"] ?? 0);
+      if (Number.isFinite(b)) totalBudget += b;
+      if (Number.isFinite(s)) totalSpent += s;
+    }
+
+    if (card.metric === "budget_total") {
+      return {
+        key: "budget_total",
+        name: card.title || "总预算",
+        unit: card.unit || "元",
+        value: totalBudget,
+        formattedValue: formatMetricValue(totalBudget, "currency", card.unit || "元"),
+        sampleSize,
+        status: sampleSize > 0 ? "ok" : "empty",
+        statusLabel: "计算完成",
+      };
+    }
+    if (card.metric === "spent_total") {
+      return {
+        key: "spent_total",
+        name: card.title || "实际总支出",
+        unit: card.unit || "元",
+        value: totalSpent,
+        formattedValue: formatMetricValue(totalSpent, "currency", card.unit || "元"),
+        sampleSize,
+        status: sampleSize > 0 ? "ok" : "empty",
+        statusLabel: "计算完成",
+      };
+    }
+    if (card.metric === "budget_spent_rate") {
+      if (totalBudget === 0) {
+        return {
+          key: "budget_spent_rate",
+          name: card.title || "预算执行率",
+          unit: card.unit || "%",
+          value: null,
+          formattedValue: "—",
+          sampleSize,
+          numerator: totalSpent,
+          denominator: 0,
+          status: "zero_division",
+          statusLabel: "预算分母为0，无法计算执行率",
+        };
+      }
+      const rate = (totalSpent / totalBudget) * 100;
+      return {
+        key: "budget_spent_rate",
+        name: card.title || "预算执行率",
+        unit: card.unit || "%",
+        value: rate,
+        formattedValue: rate.toFixed(1) + "%",
+        sampleSize,
+        numerator: totalSpent,
+        denominator: totalBudget,
+        status: totalSpent === 0 ? "zero" : "ok",
+        statusLabel: "计算完成",
+      };
+    }
+  }
+
+  // Ratio calculation (numField / denField or conversion_rate)
+  if (card.aggregation === "ratio" || card.metric === "conversion_rate" || (card.numField && card.denField)) {
+    const numKey = card.numField || "成交人数";
+    const denKey = card.denField || "咨询人数";
+
+    let numSum = 0;
+    let denSum = 0;
+    let hasValidNum = false;
+    let hasValidDen = false;
+
+    for (const item of datasetItems) {
+      if (item[numKey] !== undefined && item[numKey] !== null && String(item[numKey]).trim() !== "") {
+        const nv = Number(String(item[numKey]).replace(/[,￥¥%]/g, ""));
+        if (Number.isFinite(nv)) { numSum += nv; hasValidNum = true; }
+      }
+      if (item[denKey] !== undefined && item[denKey] !== null && String(item[denKey]).trim() !== "") {
+        const dv = Number(String(item[denKey]).replace(/[,￥¥%]/g, ""));
+        if (Number.isFinite(dv)) { denSum += dv; hasValidDen = true; }
+      }
+    }
+
+    if (!hasValidNum && !hasValidDen && sampleSize > 0) {
+      return {
+        key: card.metric || "custom_ratio",
+        name: card.title || "比率指标",
+        unit: card.unit || "%",
+        value: null,
+        formattedValue: "—",
+        sampleSize,
+        status: "empty",
+        statusLabel: "分子/分母字段无有效数据",
+      };
+    }
+
+    if (denSum === 0) {
+      return {
+        key: card.metric || "custom_ratio",
+        name: card.title || "比率指标",
+        unit: card.unit || "%",
+        value: null,
+        formattedValue: "—",
+        sampleSize,
+        numerator: numSum,
+        denominator: 0,
+        status: "zero_division",
+        statusLabel: "分母为0，无法计算比率",
+      };
+    }
+
+    const ratio = (numSum / denSum) * 100;
+    let groups: Array<{ label: string; value: number | null; count: number }> | undefined;
+    if (card.groupBy) {
+      const gMap = new Map<string, { num: number; den: number; count: number }>();
+      for (const item of datasetItems) {
+        const g = String(item[card.groupBy] || "未分类");
+        const entry = gMap.get(g) || { num: 0, den: 0, count: 0 };
+        const nv = Number(String(item[numKey] ?? "").replace(/[,￥¥%]/g, ""));
+        const dv = Number(String(item[denKey] ?? "").replace(/[,￥¥%]/g, ""));
+        if (Number.isFinite(nv)) entry.num += nv;
+        if (Number.isFinite(dv)) entry.den += dv;
+        entry.count += 1;
+        gMap.set(g, entry);
+      }
+      groups = Array.from(gMap.entries()).map(([label, st]) => ({
+        label,
+        value: st.den > 0 ? (st.num / st.den) * 100 : null,
+        count: st.num,
+      }));
+    }
+
+    return {
+      key: card.metric || "custom_ratio",
+      name: card.title || "比率指标",
+      unit: card.unit || "%",
+      value: ratio,
+      formattedValue: ratio.toFixed(1) + "%",
+      sampleSize,
+      numerator: numSum,
+      denominator: denSum,
+      groups,
+      status: numSum === 0 ? "zero" : "ok",
+      statusLabel: "计算完成",
+    };
+  }
+
+  // Custom Field / Sum / Avg / Count / Distinct
+  const fieldKey = card.field || card.metric || "";
+  if (fieldKey) {
+    if (card.aggregation === "count") {
+      let count = 0;
+      for (const item of datasetItems) {
+        if (item[fieldKey] !== undefined && item[fieldKey] !== null && String(item[fieldKey]).trim() !== "") count++;
+      }
+      return {
+        key: card.metric || fieldKey,
+        name: card.title || fieldKey,
+        unit: card.unit || "",
+        value: count,
+        formattedValue: formatMetricValue(count, "number", card.unit || ""),
+        sampleSize,
+        status: count > 0 ? "ok" : "zero",
+        statusLabel: "计算完成",
+      };
+    }
+
+    if (card.aggregation === "distinct_count") {
+      const set = new Set<string>();
+      for (const item of datasetItems) {
+        const val = String(item[fieldKey] ?? "").trim();
+        if (val) set.add(val);
+      }
+      const count = set.size;
+      return {
+        key: card.metric || fieldKey,
+        name: card.title || fieldKey,
+        unit: card.unit || "",
+        value: count,
+        formattedValue: formatMetricValue(count, "number", card.unit || ""),
+        sampleSize,
+        status: count > 0 ? "ok" : "zero",
+        statusLabel: "计算完成",
+      };
+    }
+
+    let totalVal = 0;
+    let validCount = 0;
+    for (const item of datasetItems) {
+      if (item[fieldKey] !== undefined && item[fieldKey] !== null && String(item[fieldKey]).trim() !== "") {
+        const v = Number(String(item[fieldKey]).replace(/[,￥¥%]/g, ""));
+        if (Number.isFinite(v)) {
+          totalVal += v;
+          validCount += 1;
+        }
+      }
+    }
+
+    if (validCount === 0) {
+      return {
+        key: card.metric || fieldKey,
+        name: card.title || fieldKey,
+        unit: card.unit || "",
+        value: null,
+        formattedValue: "—",
+        sampleSize,
+        status: "empty",
+        statusLabel: "字段无有效数据",
+      };
+    }
+
+    const finalVal = card.aggregation === "avg" ? totalVal / validCount : totalVal;
+    let groups: Array<{ label: string; value: number | null; count: number }> | undefined;
+    if (card.groupBy) {
+      const gMap = new Map<string, { sum: number; count: number }>();
+      for (const item of datasetItems) {
+        const g = String(item[card.groupBy] || "未分类");
+        const entry = gMap.get(g) || { sum: 0, count: 0 };
+        const v = Number(String(item[fieldKey] ?? "").replace(/[,￥¥%]/g, ""));
+        if (Number.isFinite(v)) entry.sum += v;
+        entry.count += 1;
+        gMap.set(g, entry);
+      }
+      groups = Array.from(gMap.entries()).map(([label, st]) => ({
+        label,
+        value: card.aggregation === "avg" ? (st.count > 0 ? st.sum / st.count : 0) : st.sum,
+        count: st.count,
+      }));
+    }
+
+    return {
+      key: card.metric || fieldKey,
+      name: card.title || fieldKey,
+      unit: card.unit || "",
+      value: finalVal,
+      formattedValue: formatMetricValue(finalVal, card.format || (card.unit === "%" ? "percent" : "number"), card.unit || ""),
+      sampleSize,
+      groups,
+      status: finalVal === 0 ? "zero" : "ok",
+      statusLabel: "计算完成",
+    };
+  }
+
+  return {
+    key: card.metric || "unknown",
+    name: card.title || "未知指标",
+    unit: card.unit || "",
+    value: null,
+    formattedValue: "—",
+    sampleSize,
+    status: "empty",
+    statusLabel: "未配置指标计算规则",
+  };
+}
+
 export async function computeMetric(
   projectId: string,
   metricKey: string,

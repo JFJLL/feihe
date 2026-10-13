@@ -1,6 +1,6 @@
 import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
-import { computeMetric, getProjectMetrics } from '@/lib/metrics/engine';
+import { computeMetric, evaluateCardMetric, getProjectMetrics, type CardMetricConfig } from '@/lib/metrics/engine';
 import { logAction } from '@/lib/ops';
 
 export const dynamic = 'force-dynamic';
@@ -12,11 +12,11 @@ export async function GET(request: Request) {
   if (!access.ok) return jsonError(access.error!, access.status!);
   const project = access.context!.projectId;
 
-  const key = url.searchParams.get('key');
+  const key = url.searchParams.get('key') || url.searchParams.get('metric');
   if (key) {
     const from = url.searchParams.get('from') || undefined;
     const to = url.searchParams.get('to') || undefined;
-    const source = url.searchParams.get('source') || undefined;
+    const source = url.searchParams.get('source') || url.searchParams.get('datasetId') || undefined;
     const status = url.searchParams.get('status') || undefined;
     const scope = url.searchParams.get('scope') || undefined;
     const groupBy = url.searchParams.get('groupBy') || undefined;
@@ -32,6 +32,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   let body: {
     projectId?: string;
+    action?: string;
+    card?: CardMetricConfig;
+    cards?: CardMetricConfig[];
     key?: string;
     name?: string;
     description?: string;
@@ -48,6 +51,24 @@ export async function POST(request: Request) {
     return jsonError('无效的请求体');
   }
 
+  // Handle batch evaluation or single card preview (requires read access)
+  if (body.action === 'evaluate' || body.cards || body.card) {
+    const access = await requireProjectAccess(request, body.projectId, 'read');
+    if (!access.ok) return jsonError(access.error!, access.status!);
+    const project = access.context!.projectId;
+
+    if (body.card) {
+      const metric = await evaluateCardMetric(project, body.card);
+      return Response.json({ ok: true, metric });
+    }
+
+    if (Array.isArray(body.cards)) {
+      const metrics = await Promise.all(body.cards.map((c) => evaluateCardMetric(project, c)));
+      return Response.json({ ok: true, metrics });
+    }
+  }
+
+  // Handle saving metric definition (requires manage access)
   const access = await requireProjectAccess(request, body.projectId, 'manage');
   if (!access.ok) return jsonError(access.error!, access.status!);
   const project = access.context!.projectId;
