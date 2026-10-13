@@ -1,0 +1,374 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245&id=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径趋势\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径渠道\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径明细\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"本项目目标\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"card\":{\"id\":\"card-1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"dashboardId\":\"dash-1791914643245-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":0},{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":1},{\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":2},{\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"metricKeys\":[],\"config\":{\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":3},{\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":4}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245&id=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"\"}]},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics?projectId=1791914643245&datasetId=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&field=%E6%B8%A0%E9%81%93&action=filter_options",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"dashboardId\":\"dash-1791914643245-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":0},{\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":1},{\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":2},{\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"metricKeys\":[],\"config\":{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":3},{\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"metricKeys\":[],\"config\":{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},\"sortOrder\":4}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791914647612\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791914647612\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"咨询人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save\",\"projectId\":\"1791914643245\",\"id\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"name\":\"成交率\",\"config\":{\"id\":\"card-1791914647612\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"咨询人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"},\"expectedVersion\":1}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics?projectId=1791914643245&datasetId=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&field=%E6%B8%A0%E9%81%93&action=filter_options",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245&id=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914643245",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics?projectId=1791914643245&datasetId=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&field=%E6%B8%A0%E9%81%93&action=filter_options",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914643245&id=ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914643245\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]},\"cards\":[{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-a3f6d991-6f2e-490b-aae1-e792ddc67e74\",\"title\":\"同口径单值\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-72f1cd26-8814-4741-ad42-7b90507c6da8\",\"title\":\"同口径趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"card-57685b1b-47b0-4c52-960f-2fba0a60f538\",\"title\":\"同口径渠道\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-38128a7f-ecff-43a9-b0b0-07e42b9ac202\",\"title\":\"同口径明细\",\"type\":\"detail_table\",\"sortOrder\":3,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"},{\"metricId\":\"1791914643245:metric:aa0ce21a-4674-4f37-95ab-0edf9ae8df58\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1,\"id\":\"card-bfba6818-ef9c-48dd-a4d9-206ddc6e945f\",\"title\":\"本项目目标\",\"type\":\"progress_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791914643245-c522815e-b192-4bbc-9863-1cc143ebc2f3\"}]}"
+  }
+]

@@ -1,0 +1,80 @@
+[
+  {
+    "projectId": "focused-1791910638108",
+    "project": {
+      "id": "focused-1791910638108",
+      "name": "三项补修",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#059669",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-admin",
+      "updatedAt": "2026-10-13T16:57:18.111Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "ownerName": "平台管理员",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "e897d96f-1eb2-4b93-927b-a76400a5ccea",
+        "projectId": "focused-1791910638108",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/FocusedRatioDoc",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"分组\",\"targetField\":\"分组\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"成交\",\"targetField\":\"成交\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"咨询\",\"targetField\":\"咨询\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"focused-1791910638108\",\"documentToken\":\"FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"分组\",\"type\":\"text\"},{\"key\":\"成交\",\"type\":\"number\"},{\"key\":\"咨询\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T16:57:19.013Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source"
+      ],
+      "blockedSteps": [
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-focused-1791910638108-default",
+          "projectId": "focused-1791910638108",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T16:57:18.111Z"
+        }
+      ],
+      "targetDashboardId": "dash-focused-1791910638108-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

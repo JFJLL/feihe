@@ -1,0 +1,158 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914640167&id=ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-78e32aed-972d-4962-96f1-bd7696bb62cd\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"独立日期趋势\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"independent\",\"from\":\"2026-10-02\",\"to\":\"\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"independent\",\"from\":\"2026-10-02\",\"to\":\"2026-10-02\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"id\":\"card-78e32aed-972d-4962-96f1-bd7696bb62cd\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"},{\"id\":\"card-22cdaa92-434b-46c6-968c-0e0ac26939ae\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"independent\",\"from\":\"2026-10-02\",\"to\":\"2026-10-02\",\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"dashboardId\":\"dash-1791914640167-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-78e32aed-972d-4962-96f1-bd7696bb62cd\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-78e32aed-972d-4962-96f1-bd7696bb62cd\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"},\"sortOrder\":0},{\"id\":\"card-22cdaa92-434b-46c6-968c-0e0ac26939ae\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"id\":\"card-22cdaa92-434b-46c6-968c-0e0ac26939ae\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"independent\",\"from\":\"2026-10-02\",\"to\":\"2026-10-02\",\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"},\"sortOrder\":1}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-78e32aed-972d-4962-96f1-bd7696bb62cd\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"},{\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"from\":\"2026-10-02\",\"to\":\"2026-10-02\",\"rangePolicy\":\"independent\",\"id\":\"card-22cdaa92-434b-46c6-968c-0e0ac26939ae\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-78e32aed-972d-4962-96f1-bd7696bb62cd\",\"title\":\"跟随团队周期\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"},{\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"from\":\"2026-10-02\",\"to\":\"2026-10-02\",\"rangePolicy\":\"independent\",\"id\":\"card-22cdaa92-434b-46c6-968c-0e0ac26939ae\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"sortOrder\":1,\"datasetId\":\"ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914640167&id=ds-1791914640167-41c42254-74a5-4954-ad99-a07fd7988875&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914640167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914640167\",\"card\":{\"id\":\"card-22cdaa92-434b-46c6-968c-0e0ac26939ae\",\"title\":\"独立日期趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914640167:metric:9e16297a-9941-429f-add7-1c03bffb3a16\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"independent\",\"from\":\"2026-10-02\",\"to\":\"2026-10-02\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"}}"
+  }
+]

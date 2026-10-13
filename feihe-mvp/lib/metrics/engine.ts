@@ -5,6 +5,10 @@ import { parseProjectDate, endDayExclusive, DEFAULT_PROJECT_TIME_ZONE } from '..
 import { resolveCardDefinition, definitionProtocol, DefinitionError } from './definitions';
 import { validateCardConfig } from './config';
 import { getProjectDatasets } from '../datasets';
+import type { DatasetColumn } from '../datasets';
+import { applyMetricQuery, queryErrors, type MetricQuery } from './query';
+import { formatMetricValue } from './display';
+export { formatMetricValue } from './display';
 
 
 export function isStatusCompleted(status: unknown): boolean {
@@ -61,6 +65,9 @@ export interface MetricComputeResult {
   denominatorCoverage?: number;
   calculationSampleSize?: number;
   groups?: Array<MetricComputeResult & { label: string; count: number }>;
+  trend?: Array<MetricComputeResult & { date: string }>;
+  detail?: { columns: DatasetColumn[]; rows: Record<string, unknown>[]; total: number; page: number; totalPages: number; pageSize: number };
+  appliedQuery?: MetricQuery & { timeZone: string; rangePolicy: 'project' | 'independent'; undatedRows: number };
 }
 
 export interface MetricFilterOptions {
@@ -71,24 +78,6 @@ export interface MetricFilterOptions {
   scope?: string;
   category?: string;
   groupBy?: string;
-}
-
-export function formatMetricValue(val: number | null, format = 'number', unit = '', percentScale: PercentScale = 'percentage_points'): string {
-  if (val === null || val === undefined || !Number.isFinite(val)) {
-    return '—';
-  }
-  if (format === 'percent' || unit === '%') {
-    return (val * (percentScale === 'fraction' ? 100 : 1)).toFixed(1) + '%';
-  }
-  if (format === 'currency' || unit === '元') {
-    return '¥' + val.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-  if (format === 'compact') {
-    if (Math.abs(val) >= 10000) return (val / 10000).toFixed(1) + 'w';
-    if (Math.abs(val) >= 1000) return (val / 1000).toFixed(1) + 'k';
-    return String(Math.round(val));
-  }
-  return val.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) + (unit ? ' ' + unit : '');
 }
 
 export async function getProjectMetrics(projectId: string): Promise<MetricDefinition[]> {
@@ -187,25 +176,39 @@ export function evaluateMetricRows(card: EngineMetricConfig, items: Record<strin
   return result;
 }
 
-export async function evaluateCardMetric(projectId: string, card: CardMetricConfig): Promise<MetricComputeResult> {
+export async function evaluateCardMetric(projectId: string, card: CardMetricConfig, query: MetricQuery = {}): Promise<MetricComputeResult> {
   await ensureSchema();
+  const inputErrors = queryErrors(query);
+  if (inputErrors.length) throw new DefinitionError(inputErrors.join('；'));
   const resolved = await resolveCardDefinition(projectId, card);
-  card = resolved.config;
-  if (resolved.definition) {
-    const errors = validateCardConfig(card, await getProjectDatasets(projectId));
+  const context = applyMetricQuery(resolved.config, query);
+  card = context.config;
+  if (resolved.definition || card.from || card.to || card.type === 'time_trend' || card.type === 'detail_table' || context.filters.length) {
+    // Legacy key definitions also support min/max. Validate their numeric field
+    // like a sum, without replacing the aggregation used by the calculation.
+    const validationConfig = !resolved.definition && ['min', 'max'].includes(card.aggregation || '') ? { ...card, aggregation: 'sum' as const } : card;
+    const errors = validateCardConfig(validationConfig, await getProjectDatasets(projectId));
     if (errors.length) throw new DefinitionError(errors.join('；'));
   }
   const d1 = db();
   const dataset = await (card.datasetId
-    ? d1.prepare('SELECT id,name,version FROM datasets WHERE project_id=? AND (id=? OR source_id=?) LIMIT 1').bind(projectId, card.datasetId, card.datasetId)
-    : d1.prepare('SELECT id,name,version FROM datasets WHERE project_id=? ORDER BY row_count DESC, created_at ASC LIMIT 1').bind(projectId)).first<{ id: string; name: string; version: number }>();
+    ? d1.prepare('SELECT id,name,version,schema_json FROM datasets WHERE project_id=? AND (id=? OR source_id=?) LIMIT 1').bind(projectId, card.datasetId, card.datasetId)
+    : d1.prepare('SELECT id,name,version,schema_json FROM datasets WHERE project_id=? ORDER BY row_count DESC, created_at ASC LIMIT 1').bind(projectId)).first<{ id: string; name: string; version: number; schema_json: string }>();
   if (!dataset) return { key: card.metric || 'custom', name: card.title || '指标', unit: card.unit || '', value: null, formattedValue: '—', sampleSize: 0, status: 'missing_source', statusLabel: '数据源不存在或已移除' };
   const stored = await d1.prepare('SELECT data_json FROM dataset_rows WHERE dataset_id=? ORDER BY rowid ASC').bind(dataset.id).all<{ data_json: string }>();
   let items: Record<string, unknown>[] = (stored.results || []).map(r => JSON.parse(r.data_json));
+  const columns: DatasetColumn[] = JSON.parse(dataset.schema_json || '[]');
+  for (const filter of context.filters) {
+    if (!columns.some(column => column.key === filter.key)) throw new DefinitionError('共同筛选字段不存在于指标来源：' + filter.key);
+    if (filter.value === '') continue;
+    items = items.filter(row => row[filter.key] !== undefined && row[filter.key] !== null && String(row[filter.key]) === filter.value);
+  }
+  const zoneSetting = await d1.prepare("SELECT value FROM project_settings WHERE project_id=? AND key='timezone'").bind(projectId).first<{ value: string }>();
+  let timeZone = DEFAULT_PROJECT_TIME_ZONE;
+  try { timeZone = zoneSetting ? JSON.parse(zoneSetting.value) : timeZone; } catch { timeZone = zoneSetting?.value || timeZone; }
+  try { new Intl.DateTimeFormat('en', { timeZone }).format(0); } catch { throw new DefinitionError('项目时区无效，请在设置中确认'); }
+  const undatedRows = card.dateField ? items.filter(row => parseProjectDate(row[card.dateField!], timeZone) === null).length : 0;
   if (card.from || card.to) {
-    const zoneSetting = await d1.prepare("SELECT value FROM project_settings WHERE project_id=? AND key='timezone'").bind(projectId).first<{ value: string }>();
-    let timeZone = DEFAULT_PROJECT_TIME_ZONE;
-    try { timeZone = zoneSetting ? JSON.parse(zoneSetting.value) : timeZone; } catch { timeZone = zoneSetting?.value || timeZone; }
     const startTime = card.from ? parseProjectDate(card.from, timeZone) : null;
     const endTime = card.to ? endDayExclusive(card.to, timeZone) : null;
     if (!card.dateField || (card.from && startTime === null) || (card.to && endTime === null)) return { ...evaluateMetricRows({ aggregation: 'count' }, []), value: null, formattedValue: '—', status: 'error', statusLabel: '日期字段或范围无效' };
@@ -225,7 +228,33 @@ export async function evaluateCardMetric(projectId: string, card: CardMetricConf
       case 'conversion_rate': effective = { ...card, aggregation: 'ratio', numField: card.numField || '成交人数', denField: card.denField || '咨询人数' }; break;
     }
   }
-  return { ...evaluateMetricRows(effective, items), ...(resolved.definition ? { definition: resolved.definition, effectiveConfig: effective, datasetVersion: dataset.version, datasetName: dataset.name } : {}) };
+  // Each bucket uses exactly the scalar aggregation, missing policy and ratio basis.
+  // Daily averages are never averaged again, nor are row-level ratios averaged.
+  const result = evaluateMetricRows(effective, items);
+  if (card.type === 'time_trend') {
+    const buckets = new Map<string, Record<string, unknown>[]>();
+    const formatter = new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' });
+    for (const row of items) {
+      const instant = parseProjectDate(row[card.dateField!], timeZone); if (instant === null) continue;
+      const parts = formatter.formatToParts(instant);
+      const day = ['year', 'month', 'day'].map(type => parts.find(part => part.type === type)?.value).join('-');
+      const bucket = buckets.get(day) || []; bucket.push(row); buckets.set(day, bucket);
+    }
+    result.trend = [];
+    let previous = '';
+    for (const [date, rows] of [...buckets].sort(([a], [b]) => a.localeCompare(b))) {
+      // An explicit missing point prevents the chart connecting across unobserved days.
+      if (previous) { const next = new Date(Date.parse(previous + 'T00:00:00Z') + 86400000).toISOString().slice(0, 10); if (next < date) result.trend.push({ ...evaluateMetricRows({ ...effective, groupBy: undefined }, []), value: null, formattedValue: '—', date: next }); }
+      result.trend.push({ ...evaluateMetricRows({ ...effective, groupBy: undefined }, rows), date }); previous = date;
+    }
+  }
+  if (card.type === 'detail_table') {
+    const pageSize = 15, totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+    const page = Math.min(query.detailPage || 1, totalPages);
+    result.detail = { columns, rows: items.slice((page - 1) * pageSize, page * pageSize), total: items.length, page, totalPages, pageSize };
+  }
+  return { ...result, definition: resolved.definition, effectiveConfig: effective, datasetVersion: dataset.version, datasetName: dataset.name,
+    appliedQuery: { from: card.from, to: card.to, filters: context.filters, timeZone, rangePolicy: context.rangePolicy, undatedRows } };
 }
 
 export async function computeMetric(

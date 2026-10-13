@@ -1,0 +1,143 @@
+[
+  {
+    "projectId": "1791914602013",
+    "project": {
+      "id": "1791914602013",
+      "name": "共同周期与五类呈现1791914602013",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#7c3aed",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T18:03:22.016Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "d984bc39-4dd3-425c-b0cf-562e2dcfa3fb",
+        "projectId": "1791914602013",
+        "type": "feishu_sheet",
+        "name": "仅四列业务表",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/BoardViews-1791914602013",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T18:03:22.938Z",
+        "lastRowCount": 1,
+        "mappingJson": "[]",
+        "lastError": "",
+        "updatedAt": "2026-10-13T18:03:22.938Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791914602013-default",
+          "projectId": "1791914602013",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T18:03:22.135Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791914602013-default",
+      "cards": [
+        {
+          "id": "card-40887eec-f18f-4d59-b7ef-e847b3e65359",
+          "dashboardId": "dash-1791914602013-default",
+          "projectId": "1791914602013",
+          "title": "分页可核对",
+          "type": "detail_table",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791914602013:metric:af061940-55b2-45cc-91e2-12357bebec09\",\"metricVersionPolicy\":\"latest\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T18:03:22.135Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791914602013-d984bc39-4dd3-425c-b0cf-562e2dcfa3fb",
+          "projectId": "1791914602013",
+          "sourceId": "d984bc39-4dd3-425c-b0cf-562e2dcfa3fb",
+          "name": "仅四列业务表",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"name\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"name\":\"成交人数\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 3,
+          "updatedAt": "2026-10-13T18:03:22.946Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "咨询人数",
+              "name": "咨询人数",
+              "type": "number"
+            },
+            {
+              "key": "成交人数",
+              "name": "成交人数",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 2
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      }
+    ]
+  }
+]

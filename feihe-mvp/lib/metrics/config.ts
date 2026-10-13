@@ -2,6 +2,14 @@ import { parseProjectDate } from '../date-values';
 import type { PercentScale } from '../numeric-values';
 
 export type CardAggregation = 'count' | 'nonempty_count' | 'distinct_count' | 'sum' | 'avg' | 'ratio';
+export const CARD_PRESENTATIONS = [
+  { type: 'metric_card', label: '单值指标', advancedLabel: '单值指标卡 (大号数值 / 金额)', wide: false, requiresDate: false },
+  { type: 'time_trend', label: '时间趋势', advancedLabel: '时间趋势', wide: true, requiresDate: true },
+  { type: 'breakdown', label: '分组对比', advancedLabel: '细分对比卡 (按维度分组列表)', wide: false, requiresDate: false },
+  { type: 'detail_table', label: '明细表', advancedLabel: '明细表', wide: true, requiresDate: false },
+  { type: 'progress_card', label: '目标进度', advancedLabel: '达成进度卡 (比率 / 进度条 / 分子分母)', wide: false, requiresDate: false },
+] as const;
+export type CardPresentationType = typeof CARD_PRESENTATIONS[number]['type'];
 export interface CardMetricConfig {
   metricId?: string;
   metricVersionPolicy?: 'latest' | 'pinned';
@@ -20,6 +28,9 @@ export interface CardMetricConfig {
   dateField?: string;
   from?: string;
   to?: string;
+  rangePolicy?: 'project' | 'independent';
+  target?: number;
+  targetMetricVersion?: number;
   missingPolicy?: 'skip' | 'zero';
   percentScale?: PercentScale;
   ratioBasis?: 'paired' | 'independent';
@@ -31,6 +42,13 @@ export interface CardMetricConfig {
 export type MetricColumn = { key: string; name: string; type: string; numericUnit?: string; percentScale?: PercentScale };
 export type MetricDataset = { id: string; sourceId?: string; columns?: MetricColumn[] };
 export function isCountAggregation(aggregation?: string) { return ['count', 'nonempty_count', 'distinct_count'].includes(aggregation || ''); }
+export function resultUnitKey(card: CardMetricConfig) {
+  const ratio = card.aggregation === 'ratio' || isTemplateCard(card) && ['task_completion_rate', 'budget_spent_rate', 'conversion_rate'].includes(card.metric || '');
+  if (ratio) return 'percent:percentage_points';
+  if (isCountAggregation(card.aggregation)) return 'count:' + (card.unit || '');
+  if (card.format === 'percent' || card.unit === '%') return 'percent:' + card.percentScale;
+  return (card.format === 'currency' || card.unit === '元' ? 'currency:' : 'number:') + (card.unit || '');
+}
 function isCurrencyUnit(unit?: string) { return /^(元|人民币|￥|¥|CNY|RMB|USD|美元|\$)$/i.test(unit?.trim() || ''); }
 export function resultDisplayErrors(card: { aggregation?: string; metric?: string; mode?: string; format?: string; unit?: string; percentScale?: string; displayOrigin?: string; displayNeedsConfirmation?: boolean }) {
   const errors: string[] = [];
@@ -45,6 +63,7 @@ type CardDisplayChange = { kind: 'field'; field: string } | { kind: 'aggregation
 // Only display provenance is tracked; values and percentage storage never change here.
 export function transitionCardConfig<T extends CardMetricConfig>(card: T, change: CardDisplayChange, columns: MetricColumn[] = []): T {
   let next = { ...card };
+  const withCompatibleTarget = (value: T): T => card.target !== undefined && resultUnitKey(card) !== resultUnitKey(value) ? { ...value, target: undefined, targetMetricVersion: undefined } : value;
   if (change.kind === 'display') {
     const patch = { ...change.patch };
     if (patch.format) {
@@ -53,7 +72,7 @@ export function transitionCardConfig<T extends CardMetricConfig>(card: T, change
       patch.percentScale = patch.format === 'percent' ? (card.percentScale || column?.percentScale) : undefined;
     }
     if (patch.unit !== undefined && !patch.format && next.format !== 'percent' && patch.unit.trim() !== '%') patch.percentScale = undefined;
-    return { ...next, ...patch, displayOrigin: 'manual', displayNeedsConfirmation: false };
+    return withCompatibleTarget({ ...next, ...patch, displayOrigin: 'manual', displayNeedsConfirmation: false });
   }
   if (change.kind === 'confirm') return { ...next, displayOrigin: 'manual', displayNeedsConfirmation: false };
   const intrinsicRatio = card.aggregation === 'ratio' || (isTemplateCard(card) && ['task_completion_rate', 'budget_spent_rate', 'conversion_rate'].includes(card.metric || ''));
@@ -67,16 +86,16 @@ export function transitionCardConfig<T extends CardMetricConfig>(card: T, change
   const count = isCountAggregation(next.aggregation);
   if (origin === 'manual' && count && ['number', 'compact'].includes(next.format || 'number')) {
     // Older manual preferences can carry an unused scale/unit from their previous field.
-    return { ...next, unit: next.unit?.trim() === '%' || isCurrencyUnit(next.unit) ? '' : next.unit, percentScale: undefined, displayOrigin: 'manual', displayNeedsConfirmation: false };
+    return withCompatibleTarget({ ...next, unit: next.unit?.trim() === '%' || isCurrencyUnit(next.unit) ? '' : next.unit, percentScale: undefined, displayOrigin: 'manual', displayNeedsConfirmation: false });
   }
   if (origin === 'auto' || next.aggregation === 'ratio' || (count && resultDisplayErrors({ ...next, displayNeedsConfirmation: false }).length)) {
     const percent = next.aggregation === 'ratio' || (!count && ['sum', 'avg'].includes(next.aggregation || '') && column?.numericUnit === 'percent');
-    return { ...next, format: percent ? 'percent' : 'number', unit: percent ? '%' : '', percentScale: percent && next.aggregation !== 'ratio' ? column?.percentScale : undefined, displayOrigin: 'auto', displayNeedsConfirmation: false };
+    return withCompatibleTarget({ ...next, format: percent ? 'percent' : 'number', unit: percent ? '%' : '', percentScale: percent && next.aggregation !== 'ratio' ? column?.percentScale : undefined, displayOrigin: 'auto', displayNeedsConfirmation: false });
   }
   const bindingChanged = change.kind === 'field' && card.field !== next.field || change.kind === 'dataset' || change.kind === 'aggregation' && isCountAggregation(card.aggregation) !== count;
   const percent = next.format === 'percent' || next.unit === '%';
   const ambiguous = bindingChanged && !count && (percent && (column?.numericUnit !== 'percent' || column.percentScale !== next.percentScale) || column?.numericUnit === 'percent' && (next.format === 'currency' || Boolean(next.unit && next.unit !== '%')));
-  return { ...next, displayOrigin: 'manual', displayNeedsConfirmation: Boolean(next.displayNeedsConfirmation || ambiguous) };
+  return withCompatibleTarget({ ...next, displayOrigin: 'manual', displayNeedsConfirmation: Boolean(next.displayNeedsConfirmation || ambiguous) });
 }
 export const TEMPLATE_METRICS = ['task_total', 'task_completed', 'task_completion_rate', 'budget_total', 'spent_total', 'budget_spent_rate', 'conversion_rate'];
 export function ratioSampleLabel(metric: { pairedValidCount?: number; numeratorValidCount?: number; denominatorValidCount?: number; totalRows?: number; calculationSampleSize?: number; ratioBasis?: string }, fillZero = false) {
@@ -92,6 +111,11 @@ export function isTemplateCard(card: CardMetricConfig) {
 export function validateCardConfig(card: CardMetricConfig, datasets: MetricDataset[], requireTitle = false): string[] {
   const errors: string[] = [];
   if (requireTitle && !String(card.title || '').trim()) errors.push('请填写卡片标题');
+  if (card.type && !CARD_PRESENTATIONS.some(item => item.type === card.type)) errors.push('不支持的卡片呈现形式');
+  if (card.rangePolicy && !['project', 'independent'].includes(card.rangePolicy)) errors.push('不支持的卡片日期策略');
+  if (card.rangePolicy === 'independent' && !card.from && !card.to) errors.push('独立周期必须指定开始或结束日期');
+  if (card.target !== undefined && (typeof card.target !== 'number' || !Number.isFinite(card.target) || card.target <= 0)) errors.push('目标必须为明确填写的正数');
+  if (card.targetMetricVersion !== undefined && (!Number.isInteger(card.targetMetricVersion) || card.targetMetricVersion < 1)) errors.push('目标确认的指标版本无效');
   if (card.metricId) {
     if (card.metricVersionPolicy && !['latest', 'pinned'].includes(card.metricVersionPolicy)) errors.push('不支持的指标版本策略');
     if (card.metricVersionPolicy === 'pinned' && (!Number.isInteger(card.metricVersion) || (card.metricVersion || 0) < 1)) errors.push('请选择有效的固定指标版本');
@@ -125,7 +149,8 @@ export function validateCardConfig(card: CardMetricConfig, datasets: MetricDatas
       requireField(card.denField || '咨询人数', '分母字段', true);
     }
   }
-  if (card.type && !['metric_card', 'progress_card', 'breakdown'].includes(card.type)) errors.push('不支持的卡片呈现形式');
+  if (card.type === 'time_trend' && !card.dateField) errors.push('时间趋势需要先在指标定义中绑定日期字段');
+  if (card.type === 'progress_card' && card.target === undefined && card.aggregation !== 'ratio' && card.format !== 'percent' && card.unit !== '%') errors.push('目标进度需要填写目标；历史比率进度以100%为基准');
   if (card.type === 'breakdown' && !card.groupBy) errors.push('细分对比卡必须选择分组维度');
   if (card.groupBy) requireField(card.groupBy, '分组字段');
   if (card.dateField) {

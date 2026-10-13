@@ -1,0 +1,32 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791908995662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791908995662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791908995662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791908995662\",\"cards\":[{\"metricId\":\"1791908995662:metric:57b4065d-926b-4e3c-ad94-d6c0a62b0eda\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-e20579be-a2e8-42ec-b95b-f1f9cf8df75c\",\"title\":\"团队成交率\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791908995662-255b0ef1-88e8-4b64-b75f-1851cce8c543\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791908995662&id=ds-1791908995662-255b0ef1-88e8-4b64-b75f-1851cce8c543&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791908934130",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791908934130",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791908934130",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791908934130&id=ds-1791908934130-a5bcd7fc-8f47-40b9-8947-1b9577344af2&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791908934130",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791908934130\",\"card\":{\"id\":\"card-1791908934130:metric:447bdbfc-9b6e-4ac5-8e44-27938b264b4c\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791908934130:metric:447bdbfc-9b6e-4ac5-8e44-27938b264b4c\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\"}}"
+  }
+]

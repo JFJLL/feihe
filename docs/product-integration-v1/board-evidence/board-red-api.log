@@ -1,0 +1,72 @@
+(node:40852) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ board API: project period excludes undated records and the next midnight, includes end-day noon (3.22ms)
+✖ board API: time buckets and table rows share the same definition, full calculation and context (0.3549ms)
+✖ board API: project filter is applied to every presentation and an independent card range is labeled (0.1931ms)
+✖ board API: canonical period, filter, target and shared reference survive atomic publication and GET (1.2396ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 844.3502
+
+✖ failing tests:
+
+test at scripts\test-product-board.mjs:26:1
+✖ board API: project period excludes undated records and the next midnight, includes end-day noon (3.22ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '42.5%' !== '15.0%'
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-board.mjs:28:56)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '42.5%',
+    expected: '15.0%',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-board.mjs:30:1
+✖ board API: time buckets and table rows share the same definition, full calculation and context (0.3549ms)
+  DefinitionError: 不支持的卡片呈现形式
+      at evaluateCardMetric (D:/download/pic-vec/feihe-platform-v3/feihe-mvp/lib/metrics/engine.ts:231:28)
+      at async TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-board.mjs:31:18)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    status: 400,
+    serverVersion: undefined
+  }
+
+test at scripts\test-product-board.mjs:36:1
+✖ board API: project filter is applied to every presentation and an independent card range is labeled (0.1931ms)
+  DefinitionError: 不支持的卡片呈现形式
+      at evaluateCardMetric (D:/download/pic-vec/feihe-platform-v3/feihe-mvp/lib/metrics/engine.ts:231:28)
+      at async TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-board.mjs:37:20)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    status: 400,
+    serverVersion: undefined
+  }
+
+test at scripts\test-product-board.mjs:42:1
+✖ board API: canonical period, filter, target and shared reference survive atomic publication and GET (1.2396ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-board.mjs:45:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

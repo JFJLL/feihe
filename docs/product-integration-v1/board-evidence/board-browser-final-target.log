@@ -1,0 +1,33 @@
+[WebServer] (node:38124) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 23 tests using 1 worker
+
+(node:3232) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:38124) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  ok  1 tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% (5.3s)
+  ok  2 tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 (2.2s)
+  ok  3 tests\browser\focused-red.spec.ts:50:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 (2.9s)
+  ok  4 tests\browser\product-board.spec.ts:33:3 › 明细分页 1280px：实际同步改变总页数后重读同口径指标与明细 (1.5s)
+  ok  5 tests\browser\product-board.spec.ts:54:3 › 小百分比目标 1280px：比例存储的平均与趋势不重复转换，明确目标保存刷新回填 (4.6s)
+  ok  6 tests\browser\product-board.spec.ts:33:3 › 明细分页 390px：实际同步改变总页数后重读同口径指标与明细 (1.4s)
+  ok  7 tests\browser\product-board.spec.ts:54:3 › 小百分比目标 390px：比例存储的平均与趋势不重复转换，明确目标保存刷新回填 (4.2s)
+  ok  8 tests\browser\product-board.spec.ts:96:1 › 共享看板反例：同一指标能通过真实控件选择时间趋势 (1.4s)
+  ok  9 tests\browser\product-board.spec.ts:105:1 › 共享看板反例：项目周期是真实日期控件且包含完整结束日 (1.4s)
+  ok 10 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 1280px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (6.1s)
+  ok 11 tests\browser\product-board.spec.ts:200:3 › 独立周期 1280px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (2.8s)
+  ok 12 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 1440px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (6.3s)
+  ok 13 tests\browser\product-board.spec.ts:200:3 › 独立周期 1440px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (2.7s)
+  ok 14 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 768px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (5.8s)
+  ok 15 tests\browser\product-board.spec.ts:200:3 › 独立周期 768px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (2.5s)
+  ok 16 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 390px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (6.3s)
+  ok 17 tests\browser\product-board.spec.ts:200:3 › 独立周期 390px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (3.3s)
+  ok 18 tests\browser\product-board.spec.ts:227:5 › 周期草稿 1280px 409：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (3.0s)
+  ok 19 tests\browser\product-board.spec.ts:227:5 › 周期草稿 1280px 500：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (2.7s)
+  ok 20 tests\browser\product-board.spec.ts:227:5 › 周期草稿 1280px network：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (2.7s)
+  ok 21 tests\browser\product-board.spec.ts:227:5 › 周期草稿 390px 409：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (4.1s)
+  ok 22 tests\browser\product-board.spec.ts:227:5 › 周期草稿 390px 500：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (4.1s)
+  ok 23 tests\browser\product-board.spec.ts:227:5 › 周期草稿 390px network：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (4.5s)
+
+  23 passed (1.6m)

@@ -30,12 +30,14 @@ test('补修反例：配置保存200后首次同步500，重试复用同一来�
   expect(first.status()).toBe(200);
   const originalId = (await first.json()).id;
   expect((await failed).status()).toBe(500);
-  await page.screenshot({ path: info.outputPath('saved-but-sync-failed.png'), fullPage: true });
   const modal = page.getByRole('dialog');
   const retry = modal.getByRole('button', { name: '重试同步', exact: true });
+  await expect(modal).toContainText('配置已保存');
+  await expect(modal).toContainText('同步失败');
+  await expect(retry).toBeEnabled();
+  await page.screenshot({ path: info.outputPath('saved-but-sync-failed.png'), fullPage: true });
   const success = page.waitForResponse(r => r.url().endsWith('/api/feishu/sync') && r.request().method() === 'POST');
-  if (await retry.count()) await retry.click();
-  else await modal.getByRole('button', { name: '✓ 保存并首次同步' }).click();
+  await retry.click();
   const successful = await success;
   expect(successful.status()).toBe(200);
   expect(successful.request().postDataJSON().sourceId).toBe(originalId);

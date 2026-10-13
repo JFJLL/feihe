@@ -4,6 +4,7 @@ import { logAction } from '@/lib/ops';
 import { getProjectDatasets } from '@/lib/datasets';
 import { validateCardConfig } from '@/lib/metrics/config';
 import { resolveCardDefinition, canonicalCardReference, DefinitionError } from '@/lib/metrics/definitions';
+import { applyMetricQuery, canonicalQuery, queryErrors, readDashboardLayout, type DashboardLayout } from '@/lib/metrics/query';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
     name?: string;
     version?: number;
     force?: boolean;
+    layout?: DashboardLayout;
     cards?: Array<{
       id?: string;
       title: string;
@@ -87,24 +89,40 @@ export async function POST(request: Request) {
     }
   }
 
-  const existingRecord = await d1.prepare('SELECT version FROM dashboards WHERE id=? AND project_id=?').bind(dashboardId, project).first<{ version: number }>();
+  const existingRecord = await d1.prepare('SELECT version,layout_json AS layoutJson FROM dashboards WHERE id=? AND project_id=?').bind(dashboardId, project).first<{ version: number; layoutJson: string }>();
   const newVersion = Math.max(existingRecord?.version || 0, body.version || 0) + 1;
   const cards = Array.isArray(body.cards) ? body.cards : [];
+  if (body.layout !== undefined) {
+    if (body.layout?.kind !== 'project_board' || body.layout.version !== 1) return jsonError('不支持的看板布局配置');
+    const errors = queryErrors(body.layout.query);
+    if (errors.length) return jsonError(errors.join('；'));
+  }
+  const layoutJson = body.layout ? JSON.stringify({ kind: 'project_board', version: 1, query: canonicalQuery(body.layout.query) }) : existingRecord?.layoutJson || JSON.stringify(readDashboardLayout());
+  const query = readDashboardLayout(layoutJson).query;
 
   const datasets = await getProjectDatasets(project);
   const errors: string[] = [];
+  const references: Record<string, unknown>[] = [];
   for (const [i, card] of cards.entries()) {
-    try { const resolved = await resolveCardDefinition(project, { ...card.config, title: card.title, type: card.type }); errors.push(...validateCardConfig(resolved.config, datasets, true).map(error => '卡片 ' + (i + 1) + '：' + error)); }
+    try {
+      const resolved = await resolveCardDefinition(project, { ...card.config, title: card.title, type: card.type });
+      const reference = canonicalCardReference(card.config || {});
+      references[i] = { ...reference, ...(reference.target !== undefined && resolved.definition ? { targetMetricVersion: resolved.definition.version } : {}) };
+      const context = applyMetricQuery(resolved.config, query);
+      errors.push(...validateCardConfig(context.config, datasets, true).map(error => '卡片 ' + (i + 1) + '：' + error));
+      const dataset = datasets.find(item => item.id === context.config.datasetId || item.sourceId === context.config.datasetId);
+      for (const filter of context.filters) if (!dataset?.columns.some(column => column.key === filter.key)) errors.push('卡片 ' + (i + 1) + '：共同筛选字段不属于指标来源：' + filter.key);
+    }
     catch (error) { if (error instanceof DefinitionError) errors.push('卡片 ' + (i + 1) + '：' + error.message); else throw error; }
   }
   if (errors.length) return Response.json({ ok: false, error: errors.join('；'), validationErrors: errors }, { status: 400 });
-  const confirmedCards = cards.map((card, index) => ({ id: card.id || 'card-' + crypto.randomUUID(), title: card.title, type: card.type, configJson: JSON.stringify(canonicalCardReference(card.config || {})), metricKeysJson: JSON.stringify(card.metricKeys || []), sortOrder: card.sortOrder ?? index }));
+  const confirmedCards = cards.map((card, index) => ({ id: card.id || 'card-' + crypto.randomUUID(), title: card.title, type: card.type, configJson: JSON.stringify(references[index]), metricKeysJson: JSON.stringify(card.metricKeys || []), sortOrder: card.sortOrder ?? index }));
   if (new Set(confirmedCards.map(c => c.id)).size !== confirmedCards.length) return jsonError('卡片 ID 重复');
   const saveStamp = crypto.randomUUID();
   try {
     const expectedVersion = existingRecord?.version || 0;
-    const statements = [d1.prepare(      "INSERT INTO dashboards(id, project_id, name, is_default, version, layout_json, status, created_at, updated_at, save_token) VALUES(?, ?, ?, 1, ?, '[]', 'published', ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name=excluded.name, version=excluded.version, updated_at=excluded.updated_at, save_token=excluded.save_token WHERE dashboards.project_id=excluded.project_id AND dashboards.version=?"
-    ).bind(dashboardId, project, String(body.name || '默认看板'), newVersion, now, now, saveStamp, expectedVersion),
+    const statements = [d1.prepare("INSERT INTO dashboards(id, project_id, name, is_default, version, layout_json, status, created_at, updated_at, save_token) VALUES(?, ?, ?, 1, ?, ?, 'published', ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name=excluded.name, version=excluded.version, layout_json=excluded.layout_json, updated_at=excluded.updated_at, save_token=excluded.save_token WHERE dashboards.project_id=excluded.project_id AND dashboards.version=?")
+    .bind(dashboardId, project, String(body.name || '默认看板'), newVersion, layoutJson, now, now, saveStamp, expectedVersion),
     d1.prepare('DELETE FROM dashboard_cards WHERE dashboard_id=? AND project_id=? AND EXISTS (SELECT 1 FROM dashboards WHERE id=? AND project_id=? AND save_token=?)').bind(dashboardId, project, dashboardId, project, saveStamp)];
     for (const card of confirmedCards) statements.push(d1.prepare(
       'INSERT INTO dashboard_cards(id, dashboard_id, project_id, title, type, metric_keys_json, config_json, sort_order, created_at, updated_at) SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE EXISTS (SELECT 1 FROM dashboards WHERE id=? AND project_id=? AND save_token=?)'
@@ -113,7 +131,7 @@ export async function POST(request: Request) {
     const confirmed = await d1.prepare('SELECT version, save_token FROM dashboards WHERE id=? AND project_id=?').bind(dashboardId, project).first<{ version: number; save_token: string }>();
     if (!confirmed || confirmed.save_token !== saveStamp) return Response.json({ ok: false, conflict: true, error: '看板版本发生变化，请保留草稿后重新确认', serverVersion: confirmed?.version }, { status: 409 });
     await logAction('更新看板配置', 'dashboard', dashboardId, '更新 ' + cards.length + ' 张卡片 (v' + newVersion + ')', project, access.context!.user.userId);
-    return Response.json({ ok: true, dashboardId, version: confirmed.version, cardCount: confirmedCards.length, cards: confirmedCards });
+    return Response.json({ ok: true, dashboardId, version: confirmed.version, cardCount: confirmedCards.length, cards: confirmedCards, layout: readDashboardLayout(layoutJson) });
   } catch (err) {
     return jsonError(err instanceof Error ? err.message : '保存看板失败', 500);
   }

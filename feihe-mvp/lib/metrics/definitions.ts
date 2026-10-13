@@ -1,6 +1,6 @@
 import { db, ensureSchema } from '../db';
 import { getProjectDatasets } from '../datasets';
-import { validateCardConfig, type CardMetricConfig } from './config';
+import { validateCardConfig, resultUnitKey, type CardMetricConfig } from './config';
 import type { ProjectAuthContext } from '../api-auth';
 import { logAction } from '../ops';
 
@@ -20,7 +20,7 @@ export function canonicalCardReference(card: CardMetricConfig) {
   if (!card.metricId) return card;
   return { metricId: card.metricId, metricVersionPolicy: card.metricVersionPolicy || 'latest',
     ...(card.metricVersionPolicy === 'pinned' ? { metricVersion: card.metricVersion } : {}),
-    groupBy: card.groupBy, from: card.from, to: card.to };
+    groupBy: card.groupBy, from: card.from, to: card.to, rangePolicy: card.rangePolicy, target: card.target, targetMetricVersion: card.targetMetricVersion };
 }
 export async function getDefinition(projectId: string, id: string) {
   await ensureSchema();
@@ -37,9 +37,14 @@ export async function resolveCardDefinition(projectId: string, card: CardMetricC
   const version = card.metricVersionPolicy === 'pinned' ? card.metricVersion : protocol.version;
   const snapshot = protocol.versions.find(item => item.version === version);
   if (!snapshot) throw new DefinitionError('指标版本不存在', 409, protocol.version);
+  if (card.target !== undefined && card.targetMetricVersion !== undefined) {
+    const confirmed = protocol.versions.find(item => item.version === card.targetMetricVersion);
+    if (!confirmed || resultUnitKey(confirmed.config) !== resultUnitKey(snapshot.config)) throw new DefinitionError('指标结果单位已变化，请重新确认目标后发布');
+  }
   const config = { ...snapshot.config, metricId: undefined, metricVersionPolicy: undefined, metricVersion: undefined,
     id: card.id, title: card.title || snapshot.name, type: card.type || 'metric_card',
     groupBy: card.groupBy !== undefined ? card.groupBy : snapshot.config.groupBy,
+    target: card.target, targetMetricVersion: card.targetMetricVersion, rangePolicy: card.rangePolicy,
     ...(card.from !== undefined || card.to !== undefined ? { from: card.from, to: card.to } : {}),
   };
   return { config, definition: { id: row.id, version: snapshot.version, name: snapshot.name, policy: card.metricVersionPolicy || 'latest' } };

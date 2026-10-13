@@ -1,0 +1,44 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914610485",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914610485",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914610485",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914610485\",\"query\":{},\"cards\":[{\"metricId\":\"1791914610485:metric:a98cdec3-3519-45c9-961c-548d7826054c\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-db876386-cb98-4c5b-829c-e6cafae4e368\",\"title\":\"团队成交率\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914610485-39ea5360-fc2d-4183-8a1f-1e491002b47c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914610485&id=ds-1791914610485-39ea5360-fc2d-4183-8a1f-1e491002b47c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914610485\",\"query\":{\"from\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914610485:metric:a98cdec3-3519-45c9-961c-548d7826054c\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-db876386-cb98-4c5b-829c-e6cafae4e368\",\"title\":\"团队成交率\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914610485-39ea5360-fc2d-4183-8a1f-1e491002b47c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914610485\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914610485:metric:a98cdec3-3519-45c9-961c-548d7826054c\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-db876386-cb98-4c5b-829c-e6cafae4e368\",\"title\":\"团队成交率\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914610485-39ea5360-fc2d-4183-8a1f-1e491002b47c\"}]}"
+  }
+]

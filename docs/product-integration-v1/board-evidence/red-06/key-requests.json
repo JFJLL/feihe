@@ -1,0 +1,56 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=repro-1791912244251",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=repro-1791912244251",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=repro-1791912244251",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=repro-1791912244251",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"repro-1791912244251\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-69ffb243-02f8-4cd2-94ec-289c9f236c57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791912244251-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791912244251\",\"query\":{},\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791912244251-a\",\"id\":\"card-69ffb243-02f8-4cd2-94ec-289c9f236c57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791912244251\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-69ffb243-02f8-4cd2-94ec-289c9f236c57\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791912244251-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=repro-1791912244251&id=ds-repro-1791912244251-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791912244251\",\"query\":{},\"cards\":[{\"id\":\"card-69ffb243-02f8-4cd2-94ec-289c9f236c57\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791912244251-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}]}"
+  }
+]

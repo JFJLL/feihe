@@ -1,0 +1,134 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"初始结果\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914657389-25068422-e2af-47ce-883b-1710281d7f77\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914657389&id=ds-1791914657389-25068422-e2af-47ce-883b-1710281d7f77&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\"},\"cards\":[{\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"初始结果\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914657389-8a71fda5-a4f3-46ec-8ada-755a929ba4c4\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914657389&id=ds-1791914657389-8a71fda5-a4f3-46ec-8ada-755a929ba4c4&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"},\"cards\":[{\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"初始结果\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914657389-8a71fda5-a4f3-46ec-8ada-755a929ba4c4\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"card\":{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"初始结果\",\"type\":\"metric_card\",\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"1791914657389\",\"card\":{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"初始结果\",\"type\":\"metric_card\",\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"card\":{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"},\"cards\":[{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914657389-8a71fda5-a4f3-46ec-8ada-755a929ba4c4\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 500,
+    "body": "{\"projectId\":\"1791914657389\",\"dashboardId\":\"dash-1791914657389-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914657389-8a71fda5-a4f3-46ec-8ada-755a929ba4c4\"},\"sortOrder\":0}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"dashboardId\":\"dash-1791914657389-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914657389-8a71fda5-a4f3-46ec-8ada-755a929ba4c4\"},\"sortOrder\":0}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"},\"cards\":[{\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914657389-25068422-e2af-47ce-883b-1710281d7f77\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914657389&id=ds-1791914657389-25068422-e2af-47ce-883b-1710281d7f77&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914657389",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914657389\",\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-02\"},\"cards\":[{\"metricId\":\"1791914657389:metric:6c628703-9ab4-422c-bac3-f6a6963b878d\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-4e394944-dad3-4a34-8425-bf4cd4b3b4b3\",\"title\":\"卡片和周期都必须保留\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791914657389-25068422-e2af-47ce-883b-1710281d7f77\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914657389&id=ds-1791914657389-25068422-e2af-47ce-883b-1710281d7f77&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "title": "明细分页 1280px：实际同步改变总页数后重读同口径指标与明细",
+    "status": "expected",
+    "evidence": "case-01",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "小百分比目标 1280px：比例存储的平均与趋势不重复转换，明确目标保存刷新回填",
+    "status": "expected",
+    "evidence": "case-02",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "明细分页 390px：实际同步改变总页数后重读同口径指标与明细",
+    "status": "expected",
+    "evidence": "case-03",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "小百分比目标 390px：比例存储的平均与趋势不重复转换，明确目标保存刷新回填",
+    "status": "expected",
+    "evidence": "case-04",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "共享看板反例：同一指标能通过真实控件选择时间趋势",
+    "status": "expected",
+    "evidence": "case-05",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "共享看板反例：项目周期是真实日期控件且包含完整结束日",
+    "status": "expected",
+    "evidence": "case-06",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "共享五类呈现 1280px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致",
+    "status": "expected",
+    "evidence": "case-07",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "独立周期 1280px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注",
+    "status": "expected",
+    "evidence": "case-08",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "共享五类呈现 1440px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致",
+    "status": "expected",
+    "evidence": "case-09",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "独立周期 1440px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注",
+    "status": "expected",
+    "evidence": "case-10",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "共享五类呈现 768px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致",
+    "status": "expected",
+    "evidence": "case-11",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "独立周期 768px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注",
+    "status": "expected",
+    "evidence": "case-12",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "共享五类呈现 390px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致",
+    "status": "expected",
+    "evidence": "case-13",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "独立周期 390px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注",
+    "status": "expected",
+    "evidence": "case-14",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "周期草稿 1280px 409：保存并切换失败保留原数据集、卡片和周期，重试后才切换",
+    "status": "expected",
+    "evidence": "case-15",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "周期草稿 1280px 500：保存并切换失败保留原数据集、卡片和周期，重试后才切换",
+    "status": "expected",
+    "evidence": "case-16",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "周期草稿 1280px network：保存并切换失败保留原数据集、卡片和周期，重试后才切换",
+    "status": "expected",
+    "evidence": "case-17",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "周期草稿 390px 409：保存并切换失败保留原数据集、卡片和周期，重试后才切换",
+    "status": "expected",
+    "evidence": "case-18",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "周期草稿 390px 500：保存并切换失败保留原数据集、卡片和周期，重试后才切换",
+    "status": "expected",
+    "evidence": "case-19",
+    "sourceRun": "board-runtime-verified"
+  },
+  {
+    "title": "周期草稿 390px network：保存并切换失败保留原数据集、卡片和周期，重试后才切换",
+    "status": "expected",
+    "evidence": "case-20",
+    "sourceRun": "board-runtime-verified"
+  }
+]

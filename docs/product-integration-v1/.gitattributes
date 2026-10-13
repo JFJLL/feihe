@@ -7,3 +7,4 @@
 *.log -whitespace
 *.txt -whitespace
 data-evidence/**/error-context.md -text -whitespace
+board-evidence/**/error-context.md -text -whitespace

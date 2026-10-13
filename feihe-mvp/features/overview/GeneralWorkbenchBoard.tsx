@@ -15,6 +15,8 @@ import type { MetricComputeResult } from '../../lib/metrics/engine';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 import { ConflictResolutionDialog } from './ConflictResolutionDialog';
 import { MetricCardPicker } from '../metrics/MetricCardPicker';
+import { BoardQueryBar } from './BoardQueryBar';
+import { readDashboardLayout, queryErrors, type MetricQuery, type DashboardLayout } from '../../lib/metrics/query';
 
 interface DatasetSummary {
   id: string;
@@ -53,6 +55,9 @@ export function GeneralWorkbenchBoard({
   const [dashboardId, setDashboardId] = useState<string>('');
   const [publishedCards, setPublishedCards] = useState<DashboardCardConfig[]>([]);
   const [draftCards, setDraftCards] = useState<DashboardCardConfig[]>([]);
+  const [publishedQuery, setPublishedQuery] = useState<MetricQuery>({});
+  const [draftQuery, setDraftQuery] = useState<MetricQuery>({});
+  const [viewQuery, setViewQuery] = useState<MetricQuery>({});
   const [savingBoard, setSavingBoard] = useState(false);
 
   const saveLock = useRef(false);
@@ -89,20 +94,20 @@ export function GeneralWorkbenchBoard({
     const configure = (event: Event) => {
       const target = (event as CustomEvent<{ projectId: string }>).detail?.projectId;
       if (target !== projectId || !canConfigure || saveLock.current) return;
-      if (!isEditingBoard) { setDraftCards(publishedCards); setIsEditingBoard(true); }
+      if (!isEditingBoard) { setDraftCards(publishedCards); setDraftQuery(viewQuery); setIsEditingBoard(true); }
       setViewMode('board');
     };
     window.addEventListener('workbench:configure', configure);
     return () => window.removeEventListener('workbench:configure', configure);
-  }, [projectId, canConfigure, isEditingBoard, publishedCards]);
+  }, [projectId, canConfigure, isEditingBoard, publishedCards, viewQuery]);
 
   const detailKey = JSON.stringify({ projectId, selectedDatasetId, currentPage, searchTable, datasetRevision });
   const activeDataset = detailSnapshot.key === detailKey ? detailSnapshot.data : null;
   const detailError = detailSnapshot.key === detailKey ? detailSnapshot.error : '';
 
   const hasUnsavedChanges = useMemo(() => {
-    return isEditingBoard && JSON.stringify(draftCards) !== JSON.stringify(publishedCards);
-  }, [isEditingBoard, draftCards, publishedCards]);
+    return isEditingBoard && (JSON.stringify(draftCards) !== JSON.stringify(publishedCards) || JSON.stringify(draftQuery) !== JSON.stringify(publishedQuery));
+  }, [isEditingBoard, draftCards, publishedCards, draftQuery, publishedQuery]);
 
   // Load datasets and dashboard configuration
   const loadWorkspaceData = useCallback(async () => {
@@ -112,7 +117,7 @@ export function GeneralWorkbenchBoard({
         api<{ ok: boolean; datasets: DatasetSummary[] }>(`/api/datasets?projectId=${encodeURIComponent(projectId)}`),
         api<{
           ok: boolean;
-          dashboards: Array<{ id: string; version: number; name: string }>;
+          dashboards: Array<{ id: string; version: number; name: string; layoutJson: string }>;
           targetDashboardId?: string;
           cards: Array<{ id: string; title: string; type: string; configJson: string; sortOrder: number }>;
         }>(`/api/dashboards?projectId=${encodeURIComponent(projectId)}`),
@@ -127,6 +132,8 @@ export function GeneralWorkbenchBoard({
       setSelectedDatasetId(chosenDsId);
 
       const targetDash = dashRes.dashboards?.find((d) => d.id === dashRes.targetDashboardId) || dashRes.dashboards?.[0];
+      const confirmedQuery = readDashboardLayout(targetDash?.layoutJson).query;
+      setPublishedQuery(confirmedQuery); setDraftQuery(confirmedQuery); setViewQuery(confirmedQuery);
       if (targetDash) {
         setDashboardId(targetDash.id);
         setDashboardVersion(targetDash.version || 1);
@@ -227,15 +234,16 @@ export function GeneralWorkbenchBoard({
 
   // Evaluate cards through unified backend metric engine
   const activeCards = isEditingBoard ? draftCards : publishedCards;
+  const activeQuery = isEditingBoard ? draftQuery : viewQuery;
   useEffect(() => {
     if (loading || !canConfigure) return;
     const id = new URLSearchParams(window.location.search).get('addMetric');
     if (!id || handledMetricIntent.current === id) return;
     handledMetricIntent.current = id; setPickerMetricId(id); setModalCard(null); setEditingCardIndex(null);
-    setDraftCards(publishedCards); setIsEditingBoard(true); setShowMetricPicker(true);
+    setDraftCards(publishedCards); setDraftQuery(viewQuery); setIsEditingBoard(true); setShowMetricPicker(true);
     window.history.replaceState(null, '', '/projects/' + encodeURIComponent(projectId));
-  }, [loading, canConfigure, projectId, publishedCards]);
-  const metricKey = JSON.stringify({ projectId, selectedDatasetId, activeCards, datasetRevision });
+  }, [loading, canConfigure, projectId, publishedCards, viewQuery]);
+  const metricKey = JSON.stringify({ projectId, selectedDatasetId, activeCards, activeQuery, datasetRevision });
   const currentMetrics = metricSnapshot.key === metricKey;
   const metricResults = currentMetrics ? metricSnapshot.results : {};
   const metricError = currentMetrics ? metricSnapshot.error : '';
@@ -249,6 +257,7 @@ export function GeneralWorkbenchBoard({
         method: 'POST',
         body: JSON.stringify({
           projectId,
+          query: activeQuery,
           cards: cardsToEval.map((c) => ({
             ...c,
             datasetId: c.datasetId || selectedDatasetId,
@@ -267,7 +276,7 @@ export function GeneralWorkbenchBoard({
     } catch (error) {
       if (requestId === metricRequest.current) setMetricSnapshot({ key: metricKey, results: {}, error: error instanceof Error ? error.message : '指标计算失败' });
     }
-  }, [projectId, selectedDatasetId, metricKey]);
+  }, [projectId, selectedDatasetId, metricKey, activeQuery]);
 
   useEffect(() => {
     void evaluateCardsOnServer(activeCards);
@@ -292,15 +301,18 @@ export function GeneralWorkbenchBoard({
     saveLock.current = true;
     setSavingBoard(true);
     const snapshot = draftCards.map((c, idx) => ({ id: c.id, title: c.title, type: c.type, metricKeys: c.metric ? [c.metric] : [], config: { ...c, datasetId: c.datasetId || selectedDatasetId }, sortOrder: idx }));
+    const layout: DashboardLayout = { kind: 'project_board', version: 1, query: structuredClone(draftQuery) };
     try {
-      const res = await api<{ ok: boolean; dashboardId: string; version: number; cards: Array<{ id: string; title: string; type: string; configJson: string; sortOrder: number }> }>('/api/dashboards', {
-        method: 'POST', body: JSON.stringify({ projectId, dashboardId: dashboardId || 'dash-' + projectId + '-default', name: '默认工作台看板', version: dashboardVersion, force, cards: snapshot }),
+      const res = await api<{ ok: boolean; dashboardId: string; version: number; layout: DashboardLayout; cards: Array<{ id: string; title: string; type: string; configJson: string; sortOrder: number }> }>('/api/dashboards', {
+        method: 'POST', body: JSON.stringify({ projectId, dashboardId: dashboardId || 'dash-' + projectId + '-default', name: '默认工作台看板', version: dashboardVersion, force, cards: snapshot, layout }),
       });
       const confirmed = res.cards.map(c => ({ ...JSON.parse(c.configJson), id: c.id, title: c.title, type: c.type, sortOrder: c.sortOrder } as DashboardCardConfig));
       setDashboardId(res.dashboardId);
       setDashboardVersion(res.version);
       setPublishedCards(confirmed);
       setDraftCards(confirmed);
+      const confirmedQuery = res.layout.query;
+      setPublishedQuery(confirmedQuery); setDraftQuery(confirmedQuery); setViewQuery(confirmedQuery);
       setIsEditingBoard(false);
       setConflictInfo(null);
       showToast('看板已成功保存并发布！', 'success');
@@ -368,6 +380,7 @@ export function GeneralWorkbenchBoard({
   function handleCancelEdit() {
     if (saveLock.current) return;
     setDraftCards(publishedCards);
+    setDraftQuery(publishedQuery); setViewQuery(publishedQuery);
     setIsEditingBoard(false);
   }
 
@@ -523,7 +536,7 @@ export function GeneralWorkbenchBoard({
                     ＋ 添加卡片
                   </button>
                   <button
-                    disabled={savingBoard}
+                    disabled={savingBoard || queryErrors(draftQuery).length > 0}
                     onClick={() => saveDashboard(false)}
                     style={{
                       padding: '6px 14px',
@@ -558,6 +571,7 @@ export function GeneralWorkbenchBoard({
                 <button
                   onClick={() => {
                     setDraftCards(publishedCards);
+                    setDraftQuery(viewQuery);
                     setIsEditingBoard(true);
                   }}
                   style={{
@@ -578,6 +592,8 @@ export function GeneralWorkbenchBoard({
           )}
         </div>
       </div>
+
+      {viewMode === 'board' && datasets.length > 0 && <BoardQueryBar projectId={projectId} dataset={datasets.find(dataset => dataset.id === selectedDatasetId)} query={activeQuery} disabled={savingBoard} editing={isEditingBoard} onChange={query => { if (saveLock.current) return; if (isEditingBoard) setDraftQuery(query); else setViewQuery(query); }} />}
 
       {metricError && <div role="alert">指标计算失败：{metricError}</div>}
       {evaluatingMetrics && <div role="status">正在重新计算指标…</div>}
@@ -620,6 +636,7 @@ export function GeneralWorkbenchBoard({
                       <button
                         onClick={() => {
                           setDraftCards(publishedCards);
+                          setDraftQuery(viewQuery);
                           setIsEditingBoard(true);
                           handleAddCardClick();
                         }}
@@ -631,7 +648,7 @@ export function GeneralWorkbenchBoard({
                   }
                 />
               ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+                <div className="shared-board-grid">
                   {activeCards.map((card, idx) => {
                     const cardKey = card.id || `card-${idx}`;
                     const metric = metricResults[cardKey];
@@ -649,6 +666,8 @@ export function GeneralWorkbenchBoard({
                         onEdit={() => handleEditCardClick(idx)}
                         onRemove={() => handleRemoveCard(idx)}
                         datasetName={cardDataset?.name}
+                        projectId={projectId}
+                        query={activeQuery}
                       />
                     );
                   })}
@@ -737,7 +756,7 @@ export function GeneralWorkbenchBoard({
       )}
 
       {/* Card Creation / Editing Modal */}
-      {showMetricPicker && <MetricCardPicker projectId={projectId} metricId={pickerMetricId} initialCard={modalCard} onClose={() => setShowMetricPicker(false)} onSave={handleSaveCardFromModal}
+      {showMetricPicker && <MetricCardPicker projectId={projectId} metricId={pickerMetricId} initialCard={modalCard} query={activeQuery} onClose={() => setShowMetricPicker(false)} onSave={handleSaveCardFromModal}
         onAdvanced={config => { setShowMetricPicker(false); setModalCard(config || null); setShowCardModal(true); }}
         onNew={() => { setShowMetricPicker(false); navigateTo('/projects/' + encodeURIComponent(projectId) + '/metrics?new=true&datasetId=' + encodeURIComponent(selectedDatasetId)); }} />}
       {showCardModal && (
@@ -756,7 +775,7 @@ export function GeneralWorkbenchBoard({
         open={showUnsavedDialog}
         busy={savingBoard}
         onSave={async () => { if (await saveDashboard(false)) completePendingSwitch(); }}
-        onDiscard={() => { if (saveLock.current) return; setDraftCards(publishedCards); setIsEditingBoard(false); completePendingSwitch(); }}
+        onDiscard={() => { if (saveLock.current) return; setDraftCards(publishedCards); setDraftQuery(publishedQuery); setViewQuery(publishedQuery); setIsEditingBoard(false); completePendingSwitch(); }}
         onCancel={() => { if (saveLock.current) return; setShowUnsavedDialog(false); setPendingDatasetSwitch(null); setPendingNavigation(null); }}
       />
 

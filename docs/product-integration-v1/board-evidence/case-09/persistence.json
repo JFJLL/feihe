@@ -1,0 +1,204 @@
+[
+  {
+    "projectId": "1791914622843",
+    "project": {
+      "id": "1791914622843",
+      "name": "共同周期与五类呈现1791914622843",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#e11d48",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T18:03:42.846Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "a0092548-ec7d-427b-a83b-8783b86c71f4",
+        "projectId": "1791914622843",
+        "type": "feishu_sheet",
+        "name": "仅四列业务表",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/BoardViews-1791914622843",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T18:03:42.904Z",
+        "lastRowCount": 4,
+        "mappingJson": "[]",
+        "lastError": "",
+        "updatedAt": "2026-10-13T18:03:42.904Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "blockedSteps": [],
+      "memberCount": 2,
+      "ready": true
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791914622843-default",
+          "projectId": "1791914622843",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"filters\":[{\"key\":\"渠道\",\"value\":\"门店\"}]}}",
+          "status": "draft",
+          "updatedAt": "2026-10-13T18:03:46.057Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791914622843-default",
+      "cards": [
+        {
+          "id": "card-9efa0934-a7e5-4e9f-ad72-7a27d2a4ebdb",
+          "dashboardId": "dash-1791914622843-default",
+          "projectId": "1791914622843",
+          "title": "同口径单值",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791914622843:metric:56bc3477-168a-4ca7-a912-e22a1e3e7023\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T18:03:46.057Z"
+        },
+        {
+          "id": "card-52124b49-89aa-4275-b899-463ddc7a7680",
+          "dashboardId": "dash-1791914622843-default",
+          "projectId": "1791914622843",
+          "title": "同口径趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791914622843:metric:56bc3477-168a-4ca7-a912-e22a1e3e7023\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T18:03:46.057Z"
+        },
+        {
+          "id": "card-7e263d14-c60f-47c7-9ed0-9d9316cf6be5",
+          "dashboardId": "dash-1791914622843-default",
+          "projectId": "1791914622843",
+          "title": "同口径渠道",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791914622843:metric:56bc3477-168a-4ca7-a912-e22a1e3e7023\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T18:03:46.057Z"
+        },
+        {
+          "id": "card-f37044a0-b48b-4308-aa8e-9c76e6c510fe",
+          "dashboardId": "dash-1791914622843-default",
+          "projectId": "1791914622843",
+          "title": "同口径明细",
+          "type": "detail_table",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791914622843:metric:56bc3477-168a-4ca7-a912-e22a1e3e7023\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T18:03:46.057Z"
+        },
+        {
+          "id": "card-ac9954c9-c925-4e29-b7ce-38ec8b33c480",
+          "dashboardId": "dash-1791914622843-default",
+          "projectId": "1791914622843",
+          "title": "本项目目标",
+          "type": "progress_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791914622843:metric:56bc3477-168a-4ca7-a912-e22a1e3e7023\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":20,\"targetMetricVersion\":1}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T18:03:46.057Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791914622843-a0092548-ec7d-427b-a83b-8783b86c71f4",
+          "projectId": "1791914622843",
+          "sourceId": "a0092548-ec7d-427b-a83b-8783b86c71f4",
+          "name": "仅四列业务表",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"name\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"name\":\"成交人数\",\"type\":\"number\"}]",
+          "rowCount": 4,
+          "version": 1,
+          "updatedAt": "2026-10-13T18:03:42.922Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "咨询人数",
+              "name": "咨询人数",
+              "type": "number"
+            },
+            {
+              "key": "成交人数",
+              "name": "成交人数",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01 12:00:00",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 20
+            },
+            {
+              "日期": "2026-10-01 23:59:59",
+              "渠道": "线上",
+              "咨询人数": 100,
+              "成交人数": 10
+            },
+            {
+              "日期": "2026-10-02 00:00:00",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 50
+            },
+            {
+              "日期": "",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 90
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 4,
+            "totalPages": 1,
+            "currentPageRows": 4
+          }
+        }
+      }
+    ]
+  }
+]

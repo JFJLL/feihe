@@ -1,0 +1,44 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914608749",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914608749",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914608749",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914608749&id=ds-1791914608749-77952378-00b8-4364-ba82-f19ca43a4ca3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914608749",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914608749\",\"card\":{\"id\":\"card-1791914608749:metric:874b1165-245d-4afb-b4b8-fcd531ff0b58\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791914608749:metric:874b1165-245d-4afb-b4b8-fcd531ff0b58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914608749\",\"card\":{\"id\":\"card-1791914608749:metric:874b1165-245d-4afb-b4b8-fcd531ff0b58\",\"title\":\"成交率\",\"type\":\"time_trend\",\"metricId\":\"1791914608749:metric:874b1165-245d-4afb-b4b8-fcd531ff0b58\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  }
+]

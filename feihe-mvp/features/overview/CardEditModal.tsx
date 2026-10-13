@@ -5,7 +5,7 @@ import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api } from '../../lib/hooks/use-project-data';
 import { Dialog } from '../../components/ui/Dialog';
 import type { MetricComputeResult } from '../../lib/metrics/engine';
-import { isTemplateCard, validateCardConfig, ratioSampleLabel, transitionCardConfig, isCountAggregation, type CardAggregation } from '../../lib/metrics/config';
+import { isTemplateCard, validateCardConfig, ratioSampleLabel, transitionCardConfig, isCountAggregation, CARD_PRESENTATIONS, type CardPresentationType, type CardAggregation } from '../../lib/metrics/config';
 
 export interface DashboardCardConfig {
   metricId?: string;
@@ -13,7 +13,7 @@ export interface DashboardCardConfig {
   metricVersion?: number;
   id?: string;
   title: string;
-  type: 'metric_card' | 'progress_card' | 'breakdown';
+  type: CardPresentationType;
   datasetId?: string;
   mode?: 'template' | 'custom';
   missingPolicy?: 'skip' | 'zero';
@@ -30,6 +30,9 @@ export interface DashboardCardConfig {
   dateField?: string;
   from?: string;
   to?: string;
+  rangePolicy?: 'project' | 'independent';
+  target?: number;
+  targetMetricVersion?: number;
   unit?: string;
   format?: 'number' | 'percent' | 'currency' | 'compact';
   desc?: string;
@@ -79,6 +82,8 @@ export function CardEditModal({
     ratioBasis: initialCard?.ratioBasis,
     from: initialCard?.from || '',
     to: initialCard?.to || '',
+    rangePolicy: initialCard?.rangePolicy,
+    target: initialCard?.target,
     desc: initialCard?.desc || '',
     field: initialCard?.field || '',
     numField: initialCard?.numField || '',
@@ -195,13 +200,10 @@ export function CardEditModal({
               ariaLabel="展示呈现形式"
               value={card.type}
               onChange={val => setCard({ ...card, type: val as DashboardCardConfig["type"] })}
-              options={[
-                { value: 'metric_card', label: '单值指标卡 (大号数值 / 金额)' },
-                { value: 'progress_card', label: '达成进度卡 (比率 / 进度条 / 分子分母)' },
-                { value: 'breakdown', label: '细分对比卡 (按维度分组列表)' },
-              ]}
+              options={CARD_PRESENTATIONS.map(item => ({ value: item.type, label: item.advancedLabel }))}
             />
           </label>}
+          {!definitionOnly && card.type === 'progress_card' && <label>目标数值<input aria-label="目标数值" type="number" min="0" step="any" value={card.target ?? ''} onChange={e => setCard({ ...card, target: e.target.value === '' ? undefined : Number(e.target.value) })} /><small>与计算结果采用同一存储单位；比率20表示20%，比例字段0.2表示20%。未设置的历史比率进度继续显示100%基准。</small></label>}
 
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
             指标计算方式

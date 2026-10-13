@@ -5,6 +5,7 @@
 /DELIVERY-STATE.json
 !before/*.log
 !logs/*.log
+!board-evidence/*.log
 /foundation-layout-verified/
 /foundation-evidence/
 
@@ -26,3 +27,13 @@
 /metrics-final/
 /metrics-final-visual/
 /metrics-final-layout/
+
+/board-red/
+/board-red-valid/
+/board-pagination-red/
+/board-iteration-*/
+/board-final/
+/board-final-target/
+/board-final-verified/
+/board-delivery/
+/board-runtime-verified/

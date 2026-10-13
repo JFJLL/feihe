@@ -3,7 +3,11 @@
 import type { DashboardCardConfig } from './CardEditModal';
 import { useState } from 'react';
 import type { MetricComputeResult } from '../../lib/metrics/engine';
-import { ratioSampleLabel } from '../../lib/metrics/config';
+import { ratioSampleLabel, CARD_PRESENTATIONS } from '../../lib/metrics/config';
+import { formatMetricValue } from '../../lib/metrics/display';
+import type { MetricQuery } from '../../lib/metrics/query';
+import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
+import { MetricDetailTable } from './MetricDetailTable';
 
 export function CardRenderView({
   card,
@@ -15,6 +19,8 @@ export function CardRenderView({
   onEdit,
   onRemove,
   datasetName,
+  projectId,
+  query = {},
 }: {
   card: DashboardCardConfig;
   metric?: Omit<MetricComputeResult, 'key' | 'name' | 'unit'>;
@@ -25,6 +31,8 @@ export function CardRenderView({
   onEdit: () => void;
   onRemove: () => void;
   datasetName?: string;
+  projectId?: string;
+  query?: MetricQuery;
 }) {
   const [showAllGroups, setShowAllGroups] = useState(false);
   const effective = metric?.effectiveConfig || card;
@@ -33,12 +41,15 @@ export function CardRenderView({
   const isZeroDiv = metric?.status === 'zero_division';
   const isMissingSource = metric?.status === 'missing_source';
   const isEmpty = metric?.status === 'empty';
-  const progressValue = (metric?.value ?? 0) * (effective.aggregation !== 'ratio' && effective.percentScale === 'fraction' ? 100 : 1);
+  const format = (value: number | null) => formatMetricValue(value, effective.aggregation === 'ratio' ? 'percent' : effective.format || 'number', effective.unit, effective.aggregation === 'ratio' ? 'percentage_points' : effective.percentScale);
+  const target = card.target ?? (effective.aggregation === 'ratio' || effective.format === 'percent' ? effective.aggregation !== 'ratio' && effective.percentScale === 'fraction' ? 1 : 100 : undefined);
+  const progressValue = metric?.value !== null && metric?.value !== undefined && target ? metric.value / target * 100 : null;
 
   return (
     <div
       role="article"
       aria-label={card.title}
+      className={'shared-metric-card' + (CARD_PRESENTATIONS.find(item => item.type === card.type)?.wide ? ' shared-metric-wide' : '')}
       style={{
         background: '#fff',
         borderRadius: 12,
@@ -94,7 +105,7 @@ export function CardRenderView({
 
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 13, color: '#64748b', fontWeight: 600 }}>{card.title}</span>
+          <span className="shared-metric-title" style={{ fontSize: 13, color: '#64748b', fontWeight: 600 }}>{card.title}</span>
           {isMissingSource && (
             <span style={{ fontSize: 10, background: '#fee2e2', color: '#ef4444', padding: '1px 5px', borderRadius: 4 }}>
               来源缺失
@@ -119,22 +130,28 @@ export function CardRenderView({
         {/* Progress Card Display */}
         {card.type === 'progress_card' && (
           <div style={{ marginTop: 10 }}>
+            <p>{metric?.status === 'error' && !metric.effectiveConfig ? '目标待确认或计算失败' : card.target !== undefined ? <>目标：{format(card.target)} · 达成 {progressValue === null ? '—' : progressValue.toFixed(1) + '%'}</> : '历史比率基准100%（尚未设置业务目标）'}</p>
             <div style={{ height: 6, background: '#f1f5f9', borderRadius: 3, overflow: 'hidden' }}>
               <div
                 style={{
-                  width: `${Math.min(100, Math.max(0, progressValue))}%`,
+                  width: `${Math.min(100, Math.max(0, progressValue ?? 0))}%`,
                   height: '100%',
-                  background: progressValue >= 100 ? '#16a34a' : '#2563eb',
+                  background: progressValue !== null && progressValue >= 100 ? '#16a34a' : '#2563eb',
                   borderRadius: 3,
                 }}
               />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#64748b', marginTop: 4 }}>
+            {(metric?.numerator !== undefined || metric?.denominator !== undefined) && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#64748b', marginTop: 4 }}>
               <span>分子: {metric?.numerator !== undefined && metric.numerator !== null ? metric.numerator.toLocaleString() : '—'}</span>
               <span>分母: {metric?.denominator !== undefined && metric.denominator !== null ? metric.denominator.toLocaleString() : '—'}</span>
-            </div>
+            </div>}
           </div>
         )}
+        {card.type === 'time_trend' && metric?.trend && <div className="shared-metric-trend">
+          <TimeSeriesChart rows={metric.trend.map(point => ({ date: point.date, value: point.value }))} series={[{ key: 'value', label: metric.definition?.name || card.title, color: '#2563eb' }]} title={card.title + '时间趋势'} unit="" valueFormatter={value => format(value)} />
+          <details><summary>查看每日数值与样本</summary><div className="data-table-scroll" tabIndex={0}><table aria-label={card.title + '每日结果'}><thead><tr><th>日期</th><th>指标结果</th><th>样本</th></tr></thead><tbody>{metric.trend.map(point => <tr key={point.date}><td>{point.date}</td><td>{point.formattedValue}</td><td>{point.pairedValidCount !== undefined ? ratioSampleLabel(point, effective.missingPolicy === 'zero') : point.sampleSize + ' 行'}{!['ok', 'zero'].includes(point.status) && ' · ' + point.statusLabel}</td></tr>)}</tbody></table></div></details>
+        </div>}
+        {card.type === 'detail_table' && metric?.detail && projectId && <MetricDetailTable key={JSON.stringify({ definition: metric.definition, data: metric.datasetVersion, query, card })} projectId={projectId} card={card} query={query} initial={metric.detail} datasetVersion={metric.datasetVersion} definitionVersion={metric.definition?.version} />}
 
         {/* Group Breakdown Display */}
         {metric?.groups && metric.groups.length > 0 && (
@@ -158,6 +175,7 @@ export function CardRenderView({
         <span>来源: {metric?.datasetName || datasetName || '当前数据集'}</span>
         {metric?.definition && <span>指标 v{metric.definition.version} · {metric.definition.policy === 'pinned' ? '固定口径' : '跟随最新'} · 数据 v{metric.datasetVersion}</span>}
         <span>{metric?.pairedValidCount !== undefined ? ratioSampleLabel(metric, effective.missingPolicy === 'zero') : `有效样本: ${sampleSize} 行`}</span>
+        {metric?.appliedQuery && <span className="shared-metric-period">{metric.appliedQuery.rangePolicy === 'independent' ? '独立周期' : '项目周期'}：{metric.appliedQuery.from || '不限开始'} ～ {metric.appliedQuery.to || '不限结束'} · {metric.appliedQuery.timeZone}{Boolean(metric.appliedQuery.undatedRows) && ` · 无日期 ${metric.appliedQuery.undatedRows} 行${metric.appliedQuery.from || metric.appliedQuery.to || card.type === 'time_trend' ? '不参与日期范围或趋势' : '参与未限期总量'}`}</span>}
       </div>
     </div>
   );

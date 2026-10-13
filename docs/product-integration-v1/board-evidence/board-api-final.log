@@ -1,0 +1,22 @@
+(node:40160) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ board API: project period excludes undated records and the next midnight, includes end-day noon (13.1142ms)
+✔ board API: time buckets and table rows share the same definition, full calculation and context (8.33ms)
+✔ board API: project filter is applied to every presentation and an independent card range is labeled (7.2514ms)
+✔ board API: canonical period, filter, target and shared reference survive atomic publication and GET (6.5587ms)
+✔ board API: invalid date, unknown filter, missing date binding and invalid targets cannot produce normal results or publish (12.8385ms)
+✔ board API: table pagination uses storage keys, clamps overflow and never changes the all-row metric (16.7154ms)
+✔ board API: saved query shares optimistic conflict and viewer protection with cards (1.4263ms)
+✔ board API: paired/independent daily ratios retain genuine zero, missing gaps and observed coverage (17.1299ms)
+✔ board API: missing averages use the same effective sample in scalar/group/day and percent target protocol stays fractional (11.5098ms)
+✔ board API: a UTC instant is grouped and bounded in the configured project time zone (5.5578ms)
+✔ board API: a goal confirmed against fractional percent cannot silently become a count goal after a shared definition update (3.7925ms)
+✔ board API: legacy minimum/maximum keys retain date-range evaluation when the shared board adds query validation (31.989ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 968.9929

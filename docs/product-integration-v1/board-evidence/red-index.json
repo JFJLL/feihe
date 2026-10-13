@@ -1,0 +1,40 @@
+[
+  {
+    "title": "共享看板反例：同一指标能通过真实控件选择时间趋势",
+    "status": "unexpected",
+    "evidence": "red-01",
+    "run": "board-red-valid"
+  },
+  {
+    "title": "共享看板反例：项目周期是真实日期控件且包含完整结束日",
+    "status": "unexpected",
+    "evidence": "red-02",
+    "run": "board-red-valid"
+  },
+  {
+    "title": "明细分页 1280px：实际同步改变总页数后重读同口径指标与明细",
+    "status": "unexpected",
+    "evidence": "red-03",
+    "run": "board-pagination-red"
+  },
+  {
+    "title": "明细分页 390px：实际同步改变总页数后重读同口径指标与明细",
+    "status": "unexpected",
+    "evidence": "red-04",
+    "run": "board-pagination-red"
+  },
+  {
+    "title": "补修反例：配置保存200后首次同步500，重试复用同一来源",
+    "status": "unexpected",
+    "evidence": "red-05",
+    "run": "board-final",
+    "reason": "retry-state race in retained test; full result 99 passed / 1 failed"
+  },
+  {
+    "title": "离开模块、切换项目和浏览器后退均先保护草稿",
+    "status": "unexpected",
+    "evidence": "red-06",
+    "run": "board-delivery",
+    "reason": "cancelled POST reached vinext Request cloning; real HTTP red cases reproduced the same error"
+  }
+]

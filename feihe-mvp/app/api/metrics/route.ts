@@ -5,6 +5,7 @@ import { logAction } from '@/lib/ops';
 import { getProjectDatasets } from '@/lib/datasets';
 import { validateCardConfig } from '@/lib/metrics/config';
 import { DefinitionError, definitionProtocol } from '@/lib/metrics/definitions';
+import { queryErrors, type MetricQuery } from '@/lib/metrics/query';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,6 +15,16 @@ export async function GET(request: Request) {
   const access = await requireProjectAccess(request, rawProject, 'read');
   if (!access.ok) return jsonError(access.error!, access.status!);
   const project = access.context!.projectId;
+
+  if (url.searchParams.get('action') === 'filter_options') {
+    const datasetId = url.searchParams.get('datasetId'), field = url.searchParams.get('field');
+    const dataset = (await getProjectDatasets(project)).find(item => item.id === datasetId);
+    if (!dataset || !dataset.columns.some(column => column.key === field)) return jsonError('筛选字段不属于当前项目数据集');
+    const rows = await db().prepare('SELECT data_json FROM dataset_rows WHERE dataset_id=? ORDER BY rowid ASC').bind(dataset.id).all<{ data_json: string }>();
+    const values = new Set<string>();
+    for (const row of rows.results) { const value = JSON.parse(row.data_json)[field!]; if (value !== null && value !== undefined && String(value).trim()) values.add(String(value)); }
+    return Response.json({ ok: true, values: [...values].sort().slice(0, 100), limited: values.size > 100 }, { headers: { 'Cache-Control': 'no-store' } });
+  }
 
   const key = url.searchParams.get('key') || url.searchParams.get('metric');
   if (key) {
@@ -49,6 +60,7 @@ export async function POST(request: Request) {
     percentScale?: CardMetricConfig['percentScale'];
     ratioBasis?: CardMetricConfig['ratioBasis'];
     missingPolicy?: CardMetricConfig['missingPolicy'];
+    query?: MetricQuery;
   } = {};
 
   try {
@@ -62,11 +74,13 @@ export async function POST(request: Request) {
     const access = await requireProjectAccess(request, body.projectId, 'read');
     if (!access.ok) return jsonError(access.error!, access.status!);
     const project = access.context!.projectId;
+    const contextErrors = queryErrors(body.query || {});
+    if (contextErrors.length) return jsonError(contextErrors.join('；'));
 
     if (body.card) {
       const errors = validateCardConfig(body.card, await getProjectDatasets(project));
       if (errors.length) return Response.json({ ok: false, error: errors.join('；'), validationErrors: errors }, { status: 400 });
-      try { return Response.json({ ok: true, metric: await evaluateCardMetric(project, body.card) }); }
+      try { return Response.json({ ok: true, metric: await evaluateCardMetric(project, body.card, body.query) }); }
       catch (error) { return jsonError(error instanceof Error ? error.message : '指标计算失败', error instanceof DefinitionError ? error.status : 500); }
     }
 
@@ -74,7 +88,7 @@ export async function POST(request: Request) {
       const datasets = await getProjectDatasets(project);
       const metrics = await Promise.all(body.cards.map(async c => {
         const errors = validateCardConfig(c, datasets);
-        try { return errors.length ? { key: c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: errors.join('；'), validationErrors: errors } : await evaluateCardMetric(project, c); }
+        try { return errors.length ? { key: c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: errors.join('；'), validationErrors: errors } : await evaluateCardMetric(project, c, body.query); }
         catch (error) { return { key: c.metricId || c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: error instanceof Error ? error.message : '指标计算失败' }; }
       }));
       return Response.json({ ok: true, metrics });

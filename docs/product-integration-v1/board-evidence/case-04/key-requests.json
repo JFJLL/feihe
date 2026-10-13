@@ -1,0 +1,260 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649&id=ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"title\":\"平均完成率\",\"type\":\"metric_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"title\":\"平均完成趋势\",\"type\":\"metric_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"title\":\"平均完成率\",\"type\":\"metric_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"title\":\"小比例目标\",\"type\":\"metric_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"dashboardId\":\"dash-1791914603649-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},\"sortOrder\":0},{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},\"sortOrder\":1}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1,\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1,\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649&id=ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791914606125\",\"title\":\"平均完成率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\",\"aggregation\":\"avg\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"percentScale\":\"fraction\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"完成率\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791914606125\",\"title\":\"平均完成率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save\",\"projectId\":\"1791914603649\",\"id\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"name\":\"平均完成率\",\"config\":{\"id\":\"card-1791914606125\",\"title\":\"平均完成率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false},\"expectedVersion\":1}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":0.02,\"targetMetricVersion\":1,\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649&id=ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"card\":{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":3,\"targetMetricVersion\":2},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":3,\"targetMetricVersion\":2,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"dashboardId\":\"dash-1791914603649-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},\"sortOrder\":0},{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":3,\"targetMetricVersion\":2,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},\"sortOrder\":1}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"target\":3,\"targetMetricVersion\":2,\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914603649",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914603649\",\"query\":{},\"cards\":[{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-bc968afa-2bf6-4a17-a483-1d0e4d61e0ff\",\"title\":\"平均完成趋势\",\"type\":\"time_trend\",\"sortOrder\":0,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"},{\"metricId\":\"1791914603649:metric:12be3e27-b0c9-4c58-8023-de995e6ddda3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":3,\"targetMetricVersion\":2,\"id\":\"card-17298177-ee8d-408b-a258-eb5d92e036a5\",\"title\":\"小比例目标\",\"type\":\"progress_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914603649&id=ds-1791914603649-851c395a-dcbe-4c08-9e08-f51be1aeb89c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

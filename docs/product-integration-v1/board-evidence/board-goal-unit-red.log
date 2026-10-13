@@ -1,0 +1,40 @@
+(node:37204) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ board API: project period excludes undated records and the next midnight, includes end-day noon (11.2022ms)
+✔ board API: time buckets and table rows share the same definition, full calculation and context (7.9689ms)
+✔ board API: project filter is applied to every presentation and an independent card range is labeled (8.4716ms)
+✔ board API: canonical period, filter, target and shared reference survive atomic publication and GET (7.3393ms)
+✔ board API: invalid date, unknown filter, missing date binding and invalid targets cannot produce normal results or publish (12.0422ms)
+✔ board API: table pagination uses storage keys, clamps overflow and never changes the all-row metric (16.9402ms)
+✔ board API: saved query shares optimistic conflict and viewer protection with cards (1.3944ms)
+✔ board API: paired/independent daily ratios retain genuine zero, missing gaps and observed coverage (15.5721ms)
+✔ board API: missing averages use the same effective sample in scalar/group/day and percent target protocol stays fractional (11.2367ms)
+✔ board API: a UTC instant is grouped and bounded in the configured project time zone (5.6812ms)
+✖ board API: a goal confirmed against fractional percent cannot silently become a count goal after a shared definition update (4.0691ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 829.5466
+
+✖ failing tests:
+
+test at scripts\test-product-board.mjs:112:1
+✖ board API: a goal confirmed against fractional percent cannot silently become a count goal after a shared definition update (4.0691ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-board.mjs:120:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,98 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=focused-1791914490674",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"projectId\":\"focused-1791914490674\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791914490674\\\",\\\"documentToken\\\":\\\"FocusedRatioDoc\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"focused-1791914490674\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=focused-1791914490674&fresh=1&_t=1791914491904",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=focused-1791914490674&fresh=1&_t=1791914491904",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 500,
+    "body": "{\"projectId\":\"focused-1791914490674\",\"sourceId\":\"046b9f08-bf4b-425c-bb8a-31f2b1554e11\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=focused-1791914490674&fresh=1&_t=1791914492101",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=focused-1791914490674&fresh=1&_t=1791914492101",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=focused-1791914490674",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791914490674\",\"sourceId\":\"046b9f08-bf4b-425c-bb8a-31f2b1554e11\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=focused-1791914490674&fresh=1&_t=1791914492517",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=focused-1791914490674&fresh=1&_t=1791914492517",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=focused-1791914490674",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

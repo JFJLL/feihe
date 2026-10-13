@@ -1,0 +1,44 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791910260977",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791910260977",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791910260977",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791910260977&id=ds-1791910260977-cdecabe9-27ae-445e-81fa-9969f5e82e36&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791910260977\",\"query\":{},\"cards\":[{\"metricId\":\"1791910260977:metric:edb2d8ba-25be-45a8-8115-0b18cfd70b7e\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-9390d0fc-4605-441c-89ea-b145d4ded7d2\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0,\"datasetId\":\"ds-1791910260977-cdecabe9-27ae-445e-81fa-9969f5e82e36\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791910260977\",\"card\":{\"metricId\":\"1791910260977:metric:edb2d8ba-25be-45a8-8115-0b18cfd70b7e\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-9390d0fc-4605-441c-89ea-b145d4ded7d2\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0},\"query\":{\"detailPage\":2}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791910260977\",\"card\":{\"metricId\":\"1791910260977:metric:edb2d8ba-25be-45a8-8115-0b18cfd70b7e\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-9390d0fc-4605-441c-89ea-b145d4ded7d2\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0},\"query\":{\"detailPage\":3}}"
+  }
+]

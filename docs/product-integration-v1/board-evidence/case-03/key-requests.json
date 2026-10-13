@@ -1,0 +1,62 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791914602013",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914602013",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791914602013",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914602013\",\"query\":{},\"cards\":[{\"metricId\":\"1791914602013:metric:af061940-55b2-45cc-91e2-12357bebec09\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-40887eec-f18f-4d59-b7ef-e847b3e65359\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0,\"datasetId\":\"ds-1791914602013-d984bc39-4dd3-425c-b0cf-562e2dcfa3fb\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914602013&id=ds-1791914602013-d984bc39-4dd3-425c-b0cf-562e2dcfa3fb&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914602013\",\"card\":{\"metricId\":\"1791914602013:metric:af061940-55b2-45cc-91e2-12357bebec09\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-40887eec-f18f-4d59-b7ef-e847b3e65359\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0},\"query\":{\"detailPage\":2}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914602013\",\"card\":{\"metricId\":\"1791914602013:metric:af061940-55b2-45cc-91e2-12357bebec09\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-40887eec-f18f-4d59-b7ef-e847b3e65359\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0},\"query\":{\"detailPage\":3}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914602013",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791914602013\",\"query\":{},\"cards\":[{\"metricId\":\"1791914602013:metric:af061940-55b2-45cc-91e2-12357bebec09\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-40887eec-f18f-4d59-b7ef-e847b3e65359\",\"title\":\"分页可核对\",\"type\":\"detail_table\",\"sortOrder\":0,\"datasetId\":\"ds-1791914602013-d984bc39-4dd3-425c-b0cf-562e2dcfa3fb\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791914602013&id=ds-1791914602013-d984bc39-4dd3-425c-b0cf-562e2dcfa3fb&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]
