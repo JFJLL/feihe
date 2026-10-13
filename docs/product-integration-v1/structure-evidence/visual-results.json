@@ -1,0 +1,1049 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-structure.spec.ts",
+      "--project",
+      "local"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/structure-final-feedback/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "local",
+        "name": "local",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [
+          "**/*.gateway.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/structure-final-feedback/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "gateway",
+        "name": "gateway",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.gateway.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "local",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": "**/*.gateway.spec.ts",
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "local"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/structure-final-feedback/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/structure-final-feedback/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "product-structure.spec.ts",
+      "file": "product-structure.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6997,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:57:44.220Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "结构来源项目",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiIxNzkxOTMyMjY0ODM1IiwiYWN0b3IiOnsieC11c2VyLWlkIjoidXNlci1lZGl0b3IifX0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\attachments\\关键请求-6eb5517c8d247c043e6d37a5d36265930e63fd8c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\attachments\\实际持久化快照-ae21079d83f43800c30fedb9d6470804c5b5be34.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\attachments\\最终页面-0ebbdfe1daeb786636545e9c8c5f61842cc07ce9.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-a2d6f0dbd09a59b4775e",
+          "file": "product-structure.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7635,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:57:52.113Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\关键请求-92aaaeada1df66b7b3734ce85be75aeb2f6deff4.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\实际持久化快照-fd8969955330c4845acf950f27d3cacb891b03eb.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\最终页面-b270a8e903e4d5da378342392ff3f2973b67cd3d.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-f94efe0e991629d5aad0",
+          "file": "product-structure.spec.ts",
+          "line": 31,
+          "column": 3
+        },
+        {
+          "title": "复用百分口径 1280px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5188,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:00.473Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\attachments\\关键请求-80d9233866d2977f87f4c60ff89491aa7f98ae88.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\attachments\\实际持久化快照-6378a7083363edc3cad7ab13de240f05f12e01cc.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\attachments\\最终页面-075ec93f787ecc0a2fbccf6fc3991dfd815972e8.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-b70f04ab2306b1ef7ce2",
+          "file": "product-structure.spec.ts",
+          "line": 57,
+          "column": 3
+        },
+        {
+          "title": "复用投放结构 1280px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6260,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:06.225Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local\\attachments\\关键请求-43788f9c286df75474320a60f39a7ce64c2eb14a.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local\\attachments\\实际持久化快照-e0b5e6d0eedc551fda4d026c7d3c630191d9c0aa.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local\\attachments\\最终页面-d95cedc2d840f6723d36e5aa77c6fb0faed8ec31.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-52783f24f630363e15e3",
+          "file": "product-structure.spec.ts",
+          "line": 69,
+          "column": 3
+        },
+        {
+          "title": "结构保存恢复 1280px 500：完整字段与目标保留，成功重试复用一个指标集合",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5893,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:13.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\关键请求-557a27f5c3d050384976705ef6d201b421891538.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\实际持久化快照-c853516c85421cd02d53bdf8aee2cb1432362052.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\最终页面-f42b71694bbfab7aebdfce8a96dc5fb1565d3efc.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-dd19a909bf60027d5313",
+          "file": "product-structure.spec.ts",
+          "line": 79,
+          "column": 61
+        },
+        {
+          "title": "结构保存恢复 1280px network：完整字段与目标保留，成功重试复用一个指标集合",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5651,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:19.614Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1-d972e-work：完整字段与目标保留，成功重试复用一个指标集合-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1-d972e-work：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\关键请求-6131dfa6d03d7bf6528e9d662cc5490e04464a7c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1-d972e-work：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\实际持久化快照-3936f8f135890263a2b6a91888f5fa146d75965d.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1-d972e-work：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\最终页面-3cc77e59ceb58883d6b0c5e2e71df17cf5f062b3.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1-d972e-work：完整字段与目标保留，成功重试复用一个指标集合-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-3e87117191bb5844e129",
+          "file": "product-structure.spec.ts",
+          "line": 79,
+          "column": 61
+        },
+        {
+          "title": "结构保存恢复 1280px 409：完整字段与目标保留，成功重试复用一个指标集合",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5502,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:25.817Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\关键请求-dbf997d88532e1629173a99d3e359ac35ef60630.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\实际持久化快照-09c4760546600fbaeb1472107ac64b8cccfb7159.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\最终页面-fc1944c11d1b614a8a27c2263a1623ef10bc5d2f.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-e7e2daf00952736a8c9f",
+          "file": "product-structure.spec.ts",
+          "line": 79,
+          "column": 61
+        },
+        {
+          "title": "结构试算失败 1280px：新请求503清除旧成功预览，保留控件且禁止确认，重新读取恢复",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4606,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:31.944Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-1-c195e-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-1-c195e-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\attachments\\关键请求-0d1c849b557a08bf742995edb4c786ad6bd0022b.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-1-c195e-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\attachments\\实际持久化快照-0de844bba304d59f184430735e12323474636113.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-1-c195e-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\attachments\\最终页面-39ef51bdd00d8bf9f2044f443b9a4bc2a6907ca2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-1-c195e-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-1f6903bb1b858359049c",
+          "file": "product-structure.spec.ts",
+          "line": 99,
+          "column": 3
+        },
+        {
+          "title": "授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6589,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:37.014Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\关键请求-42012badea1fca51f2b9d1ff4455102a18b14d92.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\实际持久化快照-a6506a3dc42031d28533657152dbe3105b6bb663.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\最终页面-db8781c1ca883a4c54db4313b05502707d454242.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-aa4c209ecac611d48a56",
+          "file": "product-structure.spec.ts",
+          "line": 31,
+          "column": 3
+        },
+        {
+          "title": "复用百分口径 390px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5460,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:44.000Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\attachments\\关键请求-364dde17f6b3f9cf4ed7ee230a02e03c7da7e0fa.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\attachments\\实际持久化快照-04cf74465c624efcbae61a345bde308f771994f7.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\attachments\\最终页面-efb83334e4c7ef2851f11daffcced6733540a281.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-5307f571948b610598d5",
+          "file": "product-structure.spec.ts",
+          "line": 57,
+          "column": 3
+        },
+        {
+          "title": "复用投放结构 390px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5319,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:49.804Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local\\attachments\\关键请求-d305412a17fc2ef6d3a52200093d94c8e75687ea.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local\\attachments\\实际持久化快照-61aed5b7c15322ec53fae31422069f8b9e7f362c.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local\\attachments\\最终页面-275d0a6c684d1d93b4dbc990b0b29f8ff4e97f35.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-568d705072651cdc923a",
+          "file": "product-structure.spec.ts",
+          "line": 69,
+          "column": 3
+        },
+        {
+          "title": "结构保存恢复 390px 500：完整字段与目标保留，成功重试复用一个指标集合",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5457,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:58:55.492Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\关键请求-9e65e3dd112ceeb1a8ebfa9dc42616ff1459cbbe.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\实际持久化快照-9a77a4d9ea3bf35e0c5d2d53d5579878540e538a.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\最终页面-e60b58362d1e03b91a5e1c0924433c0dad3398f2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-500：完整字段与目标保留，成功重试复用一个指标集合-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-a877d864f3335e5f964f",
+          "file": "product-structure.spec.ts",
+          "line": 79,
+          "column": 61
+        },
+        {
+          "title": "结构保存恢复 390px network：完整字段与目标保留，成功重试复用一个指标集合",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5486,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:59:01.307Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-3-d3eda-work：完整字段与目标保留，成功重试复用一个指标集合-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-3-d3eda-work：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\关键请求-054c7194b3d4e9e4328e1cfa69f46bfce10b2bee.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-3-d3eda-work：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\实际持久化快照-85055398d2c6eab019696d4ed64214baeb316e33.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-3-d3eda-work：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\最终页面-93d4ab0285f14e7e986061a825705fef253b89c0.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-3-d3eda-work：完整字段与目标保留，成功重试复用一个指标集合-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-e163b4229640bc835e3c",
+          "file": "product-structure.spec.ts",
+          "line": 79,
+          "column": 61
+        },
+        {
+          "title": "结构保存恢复 390px 409：完整字段与目标保留，成功重试复用一个指标集合",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5681,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:59:07.147Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\关键请求-e6b766685daa1432f100ccc433fc397bb72b8156.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\实际持久化快照-a95817d0b8c5e566081c4698284103ac61fc14d7.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\attachments\\最终页面-2cd35f32672cc2d3da404ea18601080bcc800b31.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-409：完整字段与目标保留，成功重试复用一个指标集合-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-e4938619422641dd25d2",
+          "file": "product-structure.spec.ts",
+          "line": 79,
+          "column": 61
+        },
+        {
+          "title": "结构试算失败 390px：新请求503清除旧成功预览，保留控件且禁止确认，重新读取恢复",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4343,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:59:13.224Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-3-2cbcd-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-3-2cbcd-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\attachments\\关键请求-2f0338bf4fea695ec794f895cacd71d1f0a12a7e.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-3-2cbcd-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\attachments\\实际持久化快照-ef7dee7bdd14d7adb7b66828f0be545a31d2b4a2.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-3-2cbcd-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\attachments\\最终页面-c46e639ed9e10237d4419082f578cfa881ab46a9.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-3-2cbcd-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-8a234f10310e354754f3",
+          "file": "product-structure.spec.ts",
+          "line": 99,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T22:57:31.092Z",
+    "duration": 109196.468,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,73 @@
+[WebServer] (node:15440) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15440) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:23748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:23748) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 3 tests using 1 worker
+
+(node:34880) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [local] › tests\browser\product-structure.spec.ts:5:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 (5.1s)
+(node:29036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 (6.3s)
+  ok 3 [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 (5.7s)
+
+
+  1) [local] › tests\browser\product-structure.spec.ts:5:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('option').filter({ hasText: '独立部门报告' })
+    Expected: visible
+    Error: strict mode violation: getByRole('option').filter({ hasText: '独立部门报告' }) resolved to 4 elements:
+        1) <li role="option" aria-selected="false" class="custom-select-option   " id="custom-select-listbox-_r_9_-opt-1">…</li> aka getByRole('option', { name: '独立部门报告1791929968476 · 通用数据工作台' })
+        2) <li role="option" aria-selected="false" class="custom-select-option   " id="custom-select-listbox-_r_9_-opt-3">…</li> aka getByRole('option', { name: '独立部门报告1791929607413 · 通用数据工作台' })
+        3) <li role="option" aria-selected="false" class="custom-select-option   " id="custom-select-listbox-_r_9_-opt-5">…</li> aka getByRole('option', { name: '独立部门报告1791929600454 · 通用数据工作台' })
+        4) <li role="option" aria-selected="false" class="custom-select-option   " id="custom-select-listbox-_r_9_-opt-6">…</li> aka getByRole('option', { name: '独立部门报告1791929594947 · 通用数据工作台' })
+
+    Call log:
+      - Expect "toBeVisible" getByRole('option').filter({ hasText: '独立部门报告' }) with timeout 10000ms
+      - waiting for getByRole('option').filter({ hasText: '独立部门报告' })
+
+
+       7 |   await page.goto('/'); await page.getByRole('button', { name: '＋ 新建项目', exact: true }).click();
+       8 |   await page.getByRole('combobox', { name: '复用项目结构', exact: true }).click();
+    >  9 |   await expect(page.getByRole('option').filter({ hasText: '独立部门报告' })).toBeVisible(); await page.getByRole('option').filter({ hasText: '独立部门报告' }).click();
+         |                                                                        ^
+      10 |   await expect(page.getByText('客户资料、成员、来源链接与授权、私有记录、供应商、历史报告、实际目标和日期范围都不会复制。', { exact: false })).toBeVisible();
+      11 |   await page.getByRole('textbox', { name: '项目名称', exact: true }).fill('复用结构新项目'); await expect(page.getByRole('button', { name: '创建项目并开启向导', exact: true })).toBeDisabled();
+      12 |   await info.attach('结构来源项目', { body: JSON.stringify({ projectId, actor: projectIdentity }), contentType: 'application/json' });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-structure.spec.ts:9:72
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\attachments\关键请求-9eee9361bf97f35f0ca5c17542b00abc9caa0827.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\attachments\实际持久化快照-f7eb1adcb48adfa47afd7508571d1d15a543a152.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\attachments\最终页面-f03a7991e68d51fce8a27ddcaf53ee84fd968623.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\structure-iteration-2\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [local] › tests\browser\product-structure.spec.ts:5:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 
+  2 passed (34.8s)

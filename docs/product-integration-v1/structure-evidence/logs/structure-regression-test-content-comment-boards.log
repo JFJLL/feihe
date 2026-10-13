@@ -1,0 +1,3 @@
+PASS subpage boards: empty/error states, coverage gaps, snapshot deltas, Chinese labels, actual SQL action overlap and consistent denominator, styled filter buttons. Fixtures stay in memory.
+(node:24688) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

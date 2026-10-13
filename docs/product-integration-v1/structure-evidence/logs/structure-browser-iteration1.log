@@ -1,0 +1,100 @@
+[WebServer] (node:15028) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15028) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:21864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21864) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 3 tests using 1 worker
+
+(node:23592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [local] › tests\browser\product-structure.spec.ts:5:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 (5.3s)
+  x  2 [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 (5.3s)
+(node:11388) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 (4.7s)
+
+
+  1) [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 
+
+    TypeError: Cannot read properties of undefined (reading 'target')
+
+      44 |     await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); await expect(page.getByRole('button', { name: '✓ 保存并发布看板', exact: true })).toHaveCount(0); await page.reload(); await dismissProjectNotifications(page);
+      45 |     const current = await (await request.get('/api/dashboards?projectId=' + targetId, { headers: projectIdentity })).json(); expect(current.cards).toHaveLength(sourceCards.length + 1); const configs = current.cards.map((card: { configJson: string }) => JSON.parse(card.configJson));
+    > 46 |     expect(configs.find((card: { title: string }) => card.title === '本项目咨询目标').target).toBe(1200); expect(configs.every((card: { metricId: string }) => card.metricId.startsWith(targetId + ':structure:'))).toBeTruthy(); expect(configs.every((card: { from?: string; to?: string }) => !card.from && !card.to)).toBeTruthy();
+         |                                                                               ^
+      47 |     const amount = page.locator('.configured-board .dashboard-card').filter({ has: page.locator('h4', { hasText: /^咨询人数合计$/ }) }); await expect(amount).toContainText('600');
+      48 |     await page.screenshot({ path: info.outputPath('new-project-published-own-results.png'), fullPage: true });
+      49 |     const generated = await request.post('/api/reports', { headers: projectIdentity, data: { projectId: targetId } }); expect(generated.status()).toBe(200);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-structure.spec.ts:46:79
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\attachments\关键请求-0e4b2630cb22f034a0adb0550169bc1d3f94b797.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\attachments\实际持久化快照-e18c4a15d76b9c2c2d7b00419e8a0f6130060bd4.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\attachments\最终页面-0a6af1a3dfc6e93c60deddcdacdaa6f39cd5778d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 
+
+    TypeError: Cannot read properties of undefined (reading 'target')
+
+      44 |     await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); await expect(page.getByRole('button', { name: '✓ 保存并发布看板', exact: true })).toHaveCount(0); await page.reload(); await dismissProjectNotifications(page);
+      45 |     const current = await (await request.get('/api/dashboards?projectId=' + targetId, { headers: projectIdentity })).json(); expect(current.cards).toHaveLength(sourceCards.length + 1); const configs = current.cards.map((card: { configJson: string }) => JSON.parse(card.configJson));
+    > 46 |     expect(configs.find((card: { title: string }) => card.title === '本项目咨询目标').target).toBe(1200); expect(configs.every((card: { metricId: string }) => card.metricId.startsWith(targetId + ':structure:'))).toBeTruthy(); expect(configs.every((card: { from?: string; to?: string }) => !card.from && !card.to)).toBeTruthy();
+         |                                                                               ^
+      47 |     const amount = page.locator('.configured-board .dashboard-card').filter({ has: page.locator('h4', { hasText: /^咨询人数合计$/ }) }); await expect(amount).toContainText('600');
+      48 |     await page.screenshot({ path: info.outputPath('new-project-published-own-results.png'), fullPage: true });
+      49 |     const generated = await request.post('/api/reports', { headers: projectIdentity, data: { projectId: targetId } }); expect(generated.status()).toBe(200);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-structure.spec.ts:46:79
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\attachments\关键请求-dce512db8f48212a79b74dd592df674cf0c4dbb0.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\attachments\实际持久化快照-dae92828b7308b0f2cef80604b81e727023ac79c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\attachments\最终页面-a41c77a4241009558eb1074897307db1b4d656e8.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\structure-iteration-1\browser-results\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 
+    [local] › tests\browser\product-structure.spec.ts:30:3 › 授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 
+  1 passed (31.7s)

@@ -1,0 +1,17 @@
+(node:8684) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ access API: removed creator has neither project access nor project/source visibility (25.2658ms)
+✔ access API: revoked identity cannot use datasets, metrics, boards, reports, export, business analytics or assistant writes (634.3715ms)
+✔ access API: concurrent removals cannot leave a legacy project without a project administrator (1.4977ms)
+✔ access API: current responsible owner cannot be removed or demoted through member operations (1.2107ms)
+✔ access API: legacy inconsistent responsibility still cannot remove the last project administrator (0.6816ms)
+✔ publication API: publishing an existing initially draft board confirms its actual published status (2.7364ms)
+✔ access API: a registered identity creates projects in its own organization and neither organization sees the other project (1.6064ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4147.2719

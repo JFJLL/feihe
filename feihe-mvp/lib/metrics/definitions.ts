@@ -2,7 +2,6 @@ import { db, ensureSchema } from '../db';
 import { getProjectDatasets } from '../datasets';
 import { validateCardConfig, resultUnitKey, type CardMetricConfig } from './config';
 import type { ProjectAuthContext } from '../api-auth';
-import { logAction } from '../ops';
 
 export type DefinitionVersion = { version: number; config: CardMetricConfig; name: string; at: string; actor: string };
 type Protocol = { kind: 'reusable_metric'; scope: 'project' | 'standard_template'; version: number; saveToken: string; versions: DefinitionVersion[]; standardId?: string; standardVersion?: number };
@@ -75,7 +74,8 @@ export async function listReusableMetrics(projectId: string) {
   }
   return metrics;
 }
-export async function saveReusableMetric(context: ProjectAuthContext, body: { id?: string; name?: string; description?: string; config?: CardMetricConfig; expectedVersion?: number; standardId?: string; standardVersion?: number }, catalog = false) {
+type MetricSaveInput = { id?: string; name?: string; description?: string; config?: CardMetricConfig; expectedVersion?: number; standardId?: string; standardVersion?: number };
+export async function prepareReusableMetric(context: ProjectAuthContext, body: MetricSaveInput, catalog = false, guard = { condition: '1', values: [] as unknown[] }) {
   if (!context.canManage || catalog && !context.isPlatformAdmin) throw new DefinitionError('没有维护此指标的权限', 403);
   const projectId = catalog ? standardNamespace(context.user.orgId) : context.projectId;
   const name = String(body.name || '').trim(); if (!name || name.length > 100) throw new DefinitionError('请填写100字以内的指标名称');
@@ -110,16 +110,23 @@ export async function saveReusableMetric(context: ProjectAuthContext, body: { id
     versions: [...old?.versions || [], { version, config, name, at: now, actor: context.user.userId }], standardId, standardVersion };
   const json = JSON.stringify(protocol), key = oldRow?.key || 'shared_' + crypto.randomUUID().replaceAll('-', '');
   const formula = config.aggregation === 'ratio' ? config.numField + '/' + config.denField : config.field || '';
-  const statements = [db().prepare("INSERT INTO metric_definitions(id,project_id,key,name,description,unit,aggregation,formula,format,filter_json,is_standard,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,description=excluded.description,unit=excluded.unit,aggregation=excluded.aggregation,formula=excluded.formula,format=excluded.format,filter_json=excluded.filter_json,is_standard=excluded.is_standard,updated_at=excluded.updated_at WHERE metric_definitions.project_id=excluded.project_id AND metric_definitions.filter_json=?")
-    .bind(id, projectId, key, name, String(body.description ?? oldRow?.description ?? ''), config.unit || '', config.aggregation || 'count', formula, config.format || 'number', json, catalog || standardId ? 1 : 0, now, now, oldRow?.filterJson || '')];
+  const statements = [db().prepare("INSERT INTO metric_definitions(id,project_id,key,name,description,unit,aggregation,formula,format,filter_json,is_standard,created_at,updated_at) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,? WHERE " + guard.condition + " ON CONFLICT(id) DO UPDATE SET name=excluded.name,description=excluded.description,unit=excluded.unit,aggregation=excluded.aggregation,formula=excluded.formula,format=excluded.format,filter_json=excluded.filter_json,is_standard=excluded.is_standard,updated_at=excluded.updated_at WHERE metric_definitions.project_id=excluded.project_id AND metric_definitions.filter_json=?")
+    .bind(id, projectId, key, name, String(body.description ?? oldRow?.description ?? ''), config.unit || '', config.aggregation || 'count', formula, config.format || 'number', json, catalog || standardId ? 1 : 0, now, now, ...guard.values, oldRow?.filterJson || '')];
   if (!catalog) {
     const dataset = (await getProjectDatasets(projectId)).find(item => item.id === config.datasetId)!;
-    statements.push(db().prepare("INSERT INTO metric_bindings(id,project_id,metric_id,source_id,source_field,dimensions_json,transform_json,created_at,updated_at) SELECT ?,?,?,?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM metric_definitions WHERE id=? AND project_id=? AND filter_json=?) ON CONFLICT(id) DO UPDATE SET source_id=excluded.source_id,source_field=excluded.source_field,dimensions_json=excluded.dimensions_json,transform_json=excluded.transform_json,updated_at=excluded.updated_at")
-      .bind(id + ':binding', projectId, id, dataset.sourceId, config.field || config.numField || '', JSON.stringify([config.dateField, config.groupBy].filter(Boolean)), JSON.stringify({ datasetId: dataset.id, metricId: id, version }), now, now, id, projectId, json));
+    statements.push(db().prepare("INSERT INTO metric_bindings(id,project_id,metric_id,source_id,source_field,dimensions_json,transform_json,created_at,updated_at) SELECT ?,?,?,?,?,?,?,?,? WHERE EXISTS (SELECT 1 FROM metric_definitions WHERE id=? AND project_id=? AND filter_json=?) AND " + guard.condition + " ON CONFLICT(id) DO UPDATE SET source_id=excluded.source_id,source_field=excluded.source_field,dimensions_json=excluded.dimensions_json,transform_json=excluded.transform_json,updated_at=excluded.updated_at")
+      .bind(id + ':binding', projectId, id, dataset.sourceId, config.field || config.numField || '', JSON.stringify([config.dateField, config.groupBy].filter(Boolean)), JSON.stringify({ datasetId: dataset.id, metricId: id, version }), now, now, id, projectId, json, ...guard.values));
   }
-  await db().batch(statements);
-  const confirmed = await getDefinition(projectId, id);
-  if (confirmed.protocol.saveToken !== protocol.saveToken) throw new DefinitionError('指标并发版本发生变化，请保留草稿', 409, confirmed.protocol.version);
-  await logAction(catalog ? '维护标准指标模板' : '保存共享指标定义', 'metric_definition', id, name + ' v' + version, context.projectId, context.user.userId);
-  return { id, version, key, config, standardId, standardVersion };
+  statements.push(db().prepare('INSERT INTO action_logs(project_id,action,target_type,target_id,detail,created_at,actor_user_id) SELECT ?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM metric_definitions WHERE id=? AND project_id=? AND filter_json=?) AND ' + guard.condition)
+    .bind(context.projectId, catalog ? '维护标准指标模板' : '保存共享指标定义', 'metric_definition', id, name + ' v' + version, now, context.user.userId, id, projectId, json, ...guard.values));
+  return { id, json, statements, confirm: async () => {
+    const confirmed = await getDefinition(projectId, id);
+    if (confirmed.protocol.saveToken !== protocol.saveToken) throw new DefinitionError('指标并发版本发生变化，请保留草稿', 409, confirmed.protocol.version);
+    return { id, version, key, config, standardId, standardVersion };
+  } };
+}
+export async function saveReusableMetric(context: ProjectAuthContext, body: MetricSaveInput, catalog = false) {
+  const prepared = await prepareReusableMetric(context, body, catalog);
+  await db().batch(prepared.statements);
+  return prepared.confirm();
 }

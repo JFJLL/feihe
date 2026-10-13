@@ -1,0 +1,17 @@
+(node:6276) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ structure red: a new project explicitly reusing an authorized structure stores a pending blueprint, never the old source or target (28.6224ms)
+✔ structure red: copying a private project without source read permission is refused before creating anything (2.6485ms)
+✔ structure API: source preview exposes only rules and field contracts, without source identifiers, values, targets or credentials (2.8743ms)
+✔ structure API: source revision change or missing acknowledgement prevents creating a target project (2.6386ms)
+✔ structure API: own fields calculate 600, new goal1200 and shared references publish with no original bindings; retry reuses exact IDs (19.0157ms)
+✔ structure API: foreign fields, missing new target, stale datasets and viewer cannot apply or leave partial metrics (6.6357ms)
+✔ structure API: actual audit write failure rolls back the complete import; corrected retry has one metric and the same source (6.0783ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3482.0204

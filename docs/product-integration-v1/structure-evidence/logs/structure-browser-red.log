@@ -1,0 +1,60 @@
+[WebServer] (node:35040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:35040) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:34348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:34348) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 1 test using 1 worker
+
+(node:35972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [local] › tests\browser\product-structure.spec.ts:4:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 (1.0m)
+
+
+  1) [local] › tests\browser\product-structure.spec.ts:4:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox', { name: '复用项目结构', exact: true })
+
+
+       5 |   const { projectId } = await connectProjectTable(page, request, 'general_workbench', consultationRows); await publishRecommendedBoard(page);
+       6 |   await page.goto('/'); await page.getByRole('button', { name: '＋ 新建项目', exact: true }).click();
+    >  7 |   await page.getByRole('combobox', { name: '复用项目结构', exact: true }).click();
+         |                                                                     ^
+       8 |   await expect(page.getByRole('option').filter({ hasText: '独立部门报告' })).toBeVisible();
+       9 |   await info.attach('结构来源项目', { body: JSON.stringify({ projectId, actor: projectIdentity }), contentType: 'application/json' });
+      10 | });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-structure.spec.ts:7:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\attachments\关键请求-953c9f9d227811b17bc1e5d569e8c208ae5f34c2.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\attachments\实际持久化快照-e66eac3a13c807e09febe75fbb16436d0b132ef4.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\attachments\最终页面-d29d29197a1e9ba42248e9d9b00bd22ea6bb58cc.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\structure-red\browser-results\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [local] › tests\browser\product-structure.spec.ts:4:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 

@@ -1,0 +1,320 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932293220&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791932293220\",\"projectId\":\"1791932293220\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791932293220\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"日期\\\",\\\"targetField\\\":\\\"日期\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"渠道\\\",\\\"targetField\\\":\\\"渠道\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询人数\\\",\\\"targetField\\\":\\\"咨询人数\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交人数\\\",\\\"targetField\\\":\\\"成交人数\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791932293220\\\",\\\"documentToken\\\":\\\"Report-1791932293220\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"日期\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"渠道\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"咨询人数\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"成交人数\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791932293220\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932293220\",\"sourceId\":\"9c105696-4d12-4387-8e35-4eacf0f64acd\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932293220&id=ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791932293220&datasetId=ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932293220\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\",\"datasetVersion\":1,\"selected\":[\"records\",\"field:咨询人数\",\"field:成交人数\",\"conversion\"],\"roles\":{\"date\":\"日期\",\"channel\":\"渠道\",\"consultations\":\"咨询人数\",\"deals\":\"成交人数\"},\"bindBusiness\":false}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932293220",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932293220\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"type\":\"metric_card\",\"title\":\"咨询人数合计\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"type\":\"metric_card\",\"title\":\"成交人数合计\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"type\":\"metric_card\",\"title\":\"成交率\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"type\":\"time_trend\",\"title\":\"成交率趋势\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-time_trend\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"type\":\"breakdown\",\"title\":\"成交率按渠道\",\"groupBy\":\"渠道\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-breakdown\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932293220&id=ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932293220\",\"dashboardId\":\"dash-1791932293220-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},\"sortOrder\":0},{\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0-value\",\"title\":\"咨询人数合计\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"咨询人数合计\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},\"sortOrder\":1},{\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0-value\",\"title\":\"成交人数合计\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"成交人数合计\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},\"sortOrder\":2},{\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-value\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"成交率\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-value\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},\"sortOrder\":3},{\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-time_trend\",\"title\":\"成交率趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"type\":\"time_trend\",\"title\":\"成交率趋势\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-time_trend\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},\"sortOrder\":4},{\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-breakdown\",\"title\":\"成交率按渠道\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"type\":\"breakdown\",\"title\":\"成交率按渠道\",\"groupBy\":\"渠道\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-breakdown\",\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},\"sortOrder\":5}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932293220\",\"query\":{},\"cards\":[{\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0-value\",\"title\":\"咨询人数合计\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0-value\",\"title\":\"成交人数合计\",\"type\":\"metric_card\",\"sortOrder\":2,\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-value\",\"title\":\"成交率\",\"type\":\"metric_card\",\"sortOrder\":3,\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-time_trend\",\"title\":\"成交率趋势\",\"type\":\"time_trend\",\"sortOrder\":4,\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"},{\"metricId\":\"1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932293220:recommended:ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd:conversion-breakdown\",\"title\":\"成交率按渠道\",\"type\":\"breakdown\",\"sortOrder\":5,\"datasetId\":\"ds-1791932293220-9c105696-4d12-4387-8e35-4eacf0f64acd\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932293220&mode=source",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"第二客户独立结构1791932295751\",\"description\":\"\",\"departmentId\":\"dept-marketing\",\"ownerId\":\"user-editor\",\"clientId\":\"\",\"templateId\":\"general_workbench\",\"status\":\"筹备中\",\"color\":\"#4f46e5\",\"brand\":\"\",\"spu\":\"\",\"category\":\"\",\"action\":\"create\",\"structureProjectId\":\"1791932293220\",\"structureRevision\":\"2728d3a981c7c2b389b9e6d993417d8bdbf5d1408f34c04118eefb35779e0b53\",\"structureConfirmed\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791932295751\",\"projectId\":\"1791932295751\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791932295751\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"业务日期\\\",\\\"targetField\\\":\\\"业务日期\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"业务渠道\\\",\\\"targetField\\\":\\\"业务渠道\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"问询量\\\",\\\"targetField\\\":\\\"问询量\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"签约量\\\",\\\"targetField\\\":\\\"签约量\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791932295751\\\",\\\"documentToken\\\":\\\"Report-1791932295751\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"业务日期\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"业务渠道\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"问询量\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"签约量\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791932295751\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932295751\",\"sourceId\":\"0363c21e-c08c-40bd-a218-e3118c107637\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932295751&id=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&datasetId=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&datasetId=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&choices=%7B%22bindings%22%3A%7B%22g1%22%3A%7B%22datasetId%22%3A%22ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637%22%2C%22datasetVersion%22%3A1%2C%22fields%22%3A%7B%22%E6%97%A5%E6%9C%9F%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%E6%9C%9F%22%2C%22%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0%22%3A%22%22%2C%22%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0%22%3A%22%22%2C%22%E6%B8%A0%E9%81%93%22%3A%22%22%7D%7D%7D%2C%22selectedCards%22%3A%5B%22c1%22%2C%22c2%22%2C%22c3%22%2C%22c4%22%2C%22c5%22%2C%22c6%22%2C%22c7%22%5D%2C%22targets%22%3A%7B%7D%2C%22percentConfirmations%22%3A%7B%7D%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&datasetId=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&choices=%7B%22bindings%22%3A%7B%22g1%22%3A%7B%22datasetId%22%3A%22ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637%22%2C%22datasetVersion%22%3A1%2C%22fields%22%3A%7B%22%E6%97%A5%E6%9C%9F%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%E6%9C%9F%22%2C%22%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0%22%3A%22%22%2C%22%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0%22%3A%22%22%2C%22%E6%B8%A0%E9%81%93%22%3A%22%E4%B8%9A%E5%8A%A1%E6%B8%A0%E9%81%93%22%7D%7D%7D%2C%22selectedCards%22%3A%5B%22c1%22%2C%22c2%22%2C%22c3%22%2C%22c4%22%2C%22c5%22%2C%22c6%22%2C%22c7%22%5D%2C%22targets%22%3A%7B%7D%2C%22percentConfirmations%22%3A%7B%7D%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&datasetId=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&choices=%7B%22bindings%22%3A%7B%22g1%22%3A%7B%22datasetId%22%3A%22ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637%22%2C%22datasetVersion%22%3A1%2C%22fields%22%3A%7B%22%E6%97%A5%E6%9C%9F%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%E6%9C%9F%22%2C%22%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0%22%3A%22%E9%97%AE%E8%AF%A2%E9%87%8F%22%2C%22%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0%22%3A%22%22%2C%22%E6%B8%A0%E9%81%93%22%3A%22%E4%B8%9A%E5%8A%A1%E6%B8%A0%E9%81%93%22%7D%7D%7D%2C%22selectedCards%22%3A%5B%22c1%22%2C%22c2%22%2C%22c3%22%2C%22c4%22%2C%22c5%22%2C%22c6%22%2C%22c7%22%5D%2C%22targets%22%3A%7B%7D%2C%22percentConfirmations%22%3A%7B%7D%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&datasetId=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&choices=%7B%22bindings%22%3A%7B%22g1%22%3A%7B%22datasetId%22%3A%22ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637%22%2C%22datasetVersion%22%3A1%2C%22fields%22%3A%7B%22%E6%97%A5%E6%9C%9F%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%E6%9C%9F%22%2C%22%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0%22%3A%22%E9%97%AE%E8%AF%A2%E9%87%8F%22%2C%22%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0%22%3A%22%E7%AD%BE%E7%BA%A6%E9%87%8F%22%2C%22%E6%B8%A0%E9%81%93%22%3A%22%E4%B8%9A%E5%8A%A1%E6%B8%A0%E9%81%93%22%7D%7D%7D%2C%22selectedCards%22%3A%5B%22c1%22%2C%22c2%22%2C%22c3%22%2C%22c4%22%2C%22c5%22%2C%22c6%22%2C%22c7%22%5D%2C%22targets%22%3A%7B%7D%2C%22percentConfirmations%22%3A%7B%7D%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932295751&datasetId=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&choices=%7B%22bindings%22%3A%7B%22g1%22%3A%7B%22datasetId%22%3A%22ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637%22%2C%22datasetVersion%22%3A1%2C%22fields%22%3A%7B%22%E6%97%A5%E6%9C%9F%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%E6%9C%9F%22%2C%22%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0%22%3A%22%E9%97%AE%E8%AF%A2%E9%87%8F%22%2C%22%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0%22%3A%22%E7%AD%BE%E7%BA%A6%E9%87%8F%22%2C%22%E6%B8%A0%E9%81%93%22%3A%22%E4%B8%9A%E5%8A%A1%E6%B8%A0%E9%81%93%22%7D%7D%7D%2C%22selectedCards%22%3A%5B%22c1%22%2C%22c2%22%2C%22c3%22%2C%22c4%22%2C%22c5%22%2C%22c6%22%2C%22c7%22%5D%2C%22targets%22%3A%7B%22c7%22%3A1200%7D%2C%22percentConfirmations%22%3A%7B%7D%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure",
+    "method": "POST",
+    "status": 500,
+    "body": "{\"projectId\":\"1791932295751\",\"revision\":\"2728d3a981c7c2b389b9e6d993417d8bdbf5d1408f34c04118eefb35779e0b53\",\"bindings\":{\"g1\":{\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\",\"datasetVersion\":1,\"fields\":{\"日期\":\"业务日期\",\"咨询人数\":\"问询量\",\"成交人数\":\"签约量\",\"渠道\":\"业务渠道\"}}},\"selectedCards\":[\"c1\",\"c2\",\"c3\",\"c4\",\"c5\",\"c6\",\"c7\"],\"targets\":{\"c7\":1200},\"percentConfirmations\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932295751\",\"revision\":\"2728d3a981c7c2b389b9e6d993417d8bdbf5d1408f34c04118eefb35779e0b53\",\"bindings\":{\"g1\":{\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\",\"datasetVersion\":1,\"fields\":{\"日期\":\"业务日期\",\"咨询人数\":\"问询量\",\"成交人数\":\"签约量\",\"渠道\":\"业务渠道\"}}},\"selectedCards\":[\"c1\",\"c2\",\"c3\",\"c4\",\"c5\",\"c6\",\"c7\"],\"targets\":{\"c7\":1200},\"percentConfirmations\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932295751",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932295751\",\"query\":{},\"cards\":[{\"id\":\"structure-1791932295751-c1\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricId\":\"1791932295751:structure:m1\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"},{\"id\":\"structure-1791932295751-c2\",\"title\":\"咨询人数合计\",\"type\":\"metric_card\",\"metricId\":\"1791932295751:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"},{\"id\":\"structure-1791932295751-c3\",\"title\":\"成交人数合计\",\"type\":\"metric_card\",\"metricId\":\"1791932295751:structure:m3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"},{\"id\":\"structure-1791932295751-c4\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791932295751:structure:m4\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"},{\"id\":\"structure-1791932295751-c5\",\"title\":\"成交率趋势\",\"type\":\"time_trend\",\"metricId\":\"1791932295751:structure:m4\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"},{\"id\":\"structure-1791932295751-c6\",\"title\":\"成交率按渠道\",\"type\":\"breakdown\",\"metricId\":\"1791932295751:structure:m4\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"groupBy\":\"业务渠道\",\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"},{\"id\":\"structure-1791932295751-c7\",\"title\":\"本项目咨询目标\",\"type\":\"progress_card\",\"metricId\":\"1791932295751:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"target\":1200,\"targetMetricVersion\":1,\"datasetId\":\"ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932295751&id=ds-1791932295751-0363c21e-c08c-40bd-a218-e3118c107637&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

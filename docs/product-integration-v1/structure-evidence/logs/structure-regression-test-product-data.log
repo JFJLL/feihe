@@ -1,0 +1,16 @@
+(node:41980) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ data workspace API: neutral project lists its own real datasets without a synthetic source (24.1539ms)
+✔ data workspace API: full-dataset quality distinguishes missing, invalid and true zero (5.6247ms)
+✔ data workspace API: card lineage resolves a real dataset id and refuses unrelated guesses (2.0453ms)
+✔ data workspace API: outsider, unverified identity and foreign dataset cannot read data or quality (0.831ms)
+✔ data workspace API: real failed full-batch validation is recorded with actor and no replacement (8.8977ms)
+✔ data workspace API: limited range is recorded per run rather than inferred from an edited source (3.5611ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3543.2466

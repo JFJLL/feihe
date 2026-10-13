@@ -1,0 +1,204 @@
+[
+  {
+    "projectId": "1791932264835",
+    "project": {
+      "id": "1791932264835",
+      "name": "独立部门报告1791932264835",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#2563eb",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T22:57:45.193Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "0b766870-7aaa-4d40-a4be-336b25bcab57",
+        "projectId": "1791932264835",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791932264835",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T22:57:48.173Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"日期\",\"targetField\":\"日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"渠道\",\"targetField\":\"渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"咨询人数\",\"targetField\":\"咨询人数\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"成交人数\",\"targetField\":\"成交人数\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791932264835\",\"documentToken\":\"Report-1791932264835\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T22:57:48.173Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791932264835-default",
+      "cards": [
+        {
+          "id": "recommended-1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:records-value",
+          "dashboardId": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        },
+        {
+          "id": "recommended-1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0-value",
+          "dashboardId": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "title": "咨询人数合计",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        },
+        {
+          "id": "recommended-1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0-value",
+          "dashboardId": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "title": "成交人数合计",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        },
+        {
+          "id": "recommended-1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:conversion-value",
+          "dashboardId": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "title": "成交率",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        },
+        {
+          "id": "recommended-1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:conversion-time_trend",
+          "dashboardId": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "title": "成交率趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        },
+        {
+          "id": "recommended-1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:conversion-breakdown",
+          "dashboardId": "dash-1791932264835-default",
+          "projectId": "1791932264835",
+          "title": "成交率按渠道",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932264835:recommended:ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57:conversion\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-13T22:57:49.066Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791932264835-0b766870-7aaa-4d40-a4be-336b25bcab57",
+          "projectId": "1791932264835",
+          "sourceId": "0b766870-7aaa-4d40-a4be-336b25bcab57",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"name\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"name\":\"成交人数\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T22:57:48.320Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "咨询人数",
+              "name": "咨询人数",
+              "type": "number"
+            },
+            {
+              "key": "成交人数",
+              "name": "成交人数",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 20
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "线上",
+              "咨询人数": 200,
+              "成交人数": 10
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

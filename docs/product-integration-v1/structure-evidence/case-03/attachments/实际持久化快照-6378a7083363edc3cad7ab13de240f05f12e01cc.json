@@ -1,0 +1,316 @@
+[
+  {
+    "projectId": "1791932280596",
+    "project": {
+      "id": "1791932280596",
+      "name": "独立部门报告1791932280596",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#0891b2",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T22:58:00.600Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "3b9af072-c15c-42cf-9770-5bfceca4989a",
+        "projectId": "1791932280596",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791932280596",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T22:58:01.385Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"完成率\",\"targetField\":\"完成率\",\"type\":\"number\",\"nullPolicy\":\"null\",\"numericUnit\":\"percent\",\"sourcePercentScale\":\"fraction\"},{\"sourceField\":\"金额\",\"targetField\":\"金额\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791932280596\",\"documentToken\":\"Report-1791932280596\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"完成率\",\"type\":\"number\"},{\"key\":\"金额\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T22:58:01.385Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791932280596-default",
+          "projectId": "1791932280596",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-13T22:58:01.868Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791932280596-default",
+      "cards": [
+        {
+          "id": "recommended-1791932280596:recommended:ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a:records-value",
+          "dashboardId": "dash-1791932280596-default",
+          "projectId": "1791932280596",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932280596:recommended:ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T22:58:01.868Z"
+        },
+        {
+          "id": "recommended-1791932280596:recommended:ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value",
+          "dashboardId": "dash-1791932280596-default",
+          "projectId": "1791932280596",
+          "title": "完成率平均值",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932280596:recommended:ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T22:58:01.868Z"
+        },
+        {
+          "id": "recommended-1791932280596:recommended:ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a:field%3A%E9%87%91%E9%A2%9D-value",
+          "dashboardId": "dash-1791932280596-default",
+          "projectId": "1791932280596",
+          "title": "金额合计",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932280596:recommended:ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a:field%3A%E9%87%91%E9%A2%9D\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T22:58:01.868Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791932280596-3b9af072-c15c-42cf-9770-5bfceca4989a",
+          "projectId": "1791932280596",
+          "sourceId": "3b9af072-c15c-42cf-9770-5bfceca4989a",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"完成率\",\"name\":\"完成率\",\"type\":\"number\",\"numericUnit\":\"percent\",\"percentScale\":\"fraction\"},{\"key\":\"金额\",\"name\":\"金额\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T22:58:01.402Z",
+          "columns": [
+            {
+              "key": "完成率",
+              "name": "完成率",
+              "type": "number",
+              "numericUnit": "percent",
+              "percentScale": "fraction"
+            },
+            {
+              "key": "金额",
+              "name": "金额",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "完成率": 0.005,
+              "金额": 10
+            },
+            {
+              "完成率": 0.015,
+              "金额": 20
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "projectId": "1791932282512",
+    "project": {
+      "id": "1791932282512",
+      "name": "第二客户独立结构1791932282512",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#475569",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T22:58:02.760Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "054279f0-1d5b-4eef-946a-72a7a7c4456c",
+        "projectId": "1791932282512",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791932282512",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T22:58:03.791Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"达标率\",\"targetField\":\"达标率\",\"type\":\"number\",\"nullPolicy\":\"null\",\"numericUnit\":\"percent\",\"sourcePercentScale\":\"fraction\"},{\"sourceField\":\"金额\",\"targetField\":\"金额\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791932282512\",\"documentToken\":\"Report-1791932282512\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"达标率\",\"type\":\"number\"},{\"key\":\"金额\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T22:58:03.791Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791932282512-default",
+          "projectId": "1791932282512",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-13T22:58:04.398Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791932282512-default",
+      "cards": [
+        {
+          "id": "structure-1791932282512-c1",
+          "dashboardId": "dash-1791932282512-default",
+          "projectId": "1791932282512",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932282512:structure:m1\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T22:58:04.398Z"
+        },
+        {
+          "id": "structure-1791932282512-c2",
+          "dashboardId": "dash-1791932282512-default",
+          "projectId": "1791932282512",
+          "title": "完成率平均值",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932282512:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T22:58:04.398Z"
+        },
+        {
+          "id": "structure-1791932282512-c3",
+          "dashboardId": "dash-1791932282512-default",
+          "projectId": "1791932282512",
+          "title": "金额合计",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932282512:structure:m3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T22:58:04.398Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791932282512-054279f0-1d5b-4eef-946a-72a7a7c4456c",
+          "projectId": "1791932282512",
+          "sourceId": "054279f0-1d5b-4eef-946a-72a7a7c4456c",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"达标率\",\"name\":\"达标率\",\"type\":\"number\",\"numericUnit\":\"percent\",\"percentScale\":\"fraction\"},{\"key\":\"金额\",\"name\":\"金额\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T22:58:03.806Z",
+          "columns": [
+            {
+              "key": "达标率",
+              "name": "达标率",
+              "type": "number",
+              "numericUnit": "percent",
+              "percentScale": "fraction"
+            },
+            {
+              "key": "金额",
+              "name": "金额",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "达标率": 0.015,
+              "金额": 40
+            },
+            {
+              "达标率": 0.025,
+              "金额": 20
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

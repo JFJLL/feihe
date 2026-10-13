@@ -9,6 +9,10 @@ export async function connectProjectTable(page: Page, request: APIRequestContext
   await page.context().setExtraHTTPHeaders(projectIdentity);
   const created = await request.post('/api/projects', { headers: projectIdentity, data: { action: 'create', name: '独立部门报告' + Date.now(), templateId } });
   expect(created.status()).toBe(200); const projectId = (await created.json()).id;
+  return connectExistingProjectTable(page, request, projectId, rows);
+}
+export async function connectExistingProjectTable(page: Page, request: APIRequestContext, projectId: string, rows: unknown[][]) {
+  await page.context().setExtraHTTPHeaders(projectIdentity);
   const token = 'Report-' + projectId, vendor = process.env.FEIHE_TEST_VENDOR_ORIGIN || 'http://127.0.0.1:5217';
   expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows } })).status()).toBe(200);
   await page.goto('/projects/' + projectId + '/data');

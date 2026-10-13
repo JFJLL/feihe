@@ -1,0 +1,74 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791930437167&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791930437167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791930437167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791930437167\",\"projectId\":\"1791930437167\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791930437167\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"完成率\\\",\\\"targetField\\\":\\\"完成率\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"numericUnit\\\":\\\"percent\\\",\\\"sourcePercentScale\\\":\\\"fraction\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791930437167\\\",\\\"documentToken\\\":\\\"Report-1791930437167\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"完成率\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791930437167\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791930437167\",\"sourceId\":\"7f99f9a9-18a7-4d13-822a-a0b7ee03c470\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791930437167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791930437167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791930437167",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791930437167&id=ds-1791930437167-7f99f9a9-18a7-4d13-822a-a0b7ee03c470&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

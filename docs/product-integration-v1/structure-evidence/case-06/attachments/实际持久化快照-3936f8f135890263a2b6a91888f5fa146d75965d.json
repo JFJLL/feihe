@@ -1,0 +1,350 @@
+[
+  {
+    "projectId": "1791932299743",
+    "project": {
+      "id": "1791932299743",
+      "name": "独立部门报告1791932299743",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#4f46e5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T22:58:19.747Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "d3777bb2-a655-443a-afa0-a8b896cada79",
+        "projectId": "1791932299743",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791932299743",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T22:58:21.014Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"日期\",\"targetField\":\"日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"渠道\",\"targetField\":\"渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"咨询人数\",\"targetField\":\"咨询人数\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"成交人数\",\"targetField\":\"成交人数\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791932299743\",\"documentToken\":\"Report-1791932299743\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T22:58:21.014Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791932299743-default",
+      "cards": [
+        {
+          "id": "card-1ef4842c-21ff-446f-a860-88c0ed21d0e4",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        },
+        {
+          "id": "card-063f21e2-1585-4918-9e3b-9332b2e41a8b",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "咨询人数合计",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        },
+        {
+          "id": "card-7327eb4c-a750-4bcc-b146-a997a296eb40",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "成交人数合计",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:field%3A%E6%88%90%E4%BA%A4%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        },
+        {
+          "id": "card-59cbbf69-5cd3-479d-b216-26d57be9f6a2",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "成交率",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        },
+        {
+          "id": "card-0a9e0c4b-6cc5-4198-b3a0-2a734156e58f",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "成交率趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:conversion\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        },
+        {
+          "id": "card-63848821-e8c4-4d09-85d7-796cc93ec8bd",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "成交率按渠道",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:conversion\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        },
+        {
+          "id": "card-12431c2f-008b-400b-b708-ecacbf2088d5",
+          "dashboardId": "dash-1791932299743-default",
+          "projectId": "1791932299743",
+          "title": "本项目咨询目标",
+          "type": "progress_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791932299743:recommended:ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79:field%3A%E5%92%A8%E8%AF%A2%E4%BA%BA%E6%95%B0\",\"metricVersionPolicy\":\"latest\",\"target\":600,\"targetMetricVersion\":1}",
+          "sortOrder": 6,
+          "updatedAt": "2026-10-13T22:58:21.844Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791932299743-d3777bb2-a655-443a-afa0-a8b896cada79",
+          "projectId": "1791932299743",
+          "sourceId": "d3777bb2-a655-443a-afa0-a8b896cada79",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"name\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"name\":\"成交人数\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T22:58:21.030Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "咨询人数",
+              "name": "咨询人数",
+              "type": "number"
+            },
+            {
+              "key": "成交人数",
+              "name": "成交人数",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 20
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "线上",
+              "咨询人数": 200,
+              "成交人数": 10
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "projectId": "1791932302189",
+    "project": {
+      "id": "1791932302189",
+      "name": "第二客户独立结构1791932302189",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#4f46e5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T22:58:22.436Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "a55d75aa-ecfc-46c7-a570-f9fb8f6fb7cd",
+        "projectId": "1791932302189",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791932302189",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T22:58:23.485Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"业务日期\",\"targetField\":\"业务日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"业务渠道\",\"targetField\":\"业务渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"问询量\",\"targetField\":\"问询量\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"签约量\",\"targetField\":\"签约量\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791932302189\",\"documentToken\":\"Report-1791932302189\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"业务日期\",\"type\":\"date\"},{\"key\":\"业务渠道\",\"type\":\"text\"},{\"key\":\"问询量\",\"type\":\"number\"},{\"key\":\"签约量\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T22:58:23.485Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync"
+      ],
+      "blockedSteps": [
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791932302189-default",
+          "projectId": "1791932302189",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T22:58:22.436Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791932302189-default",
+      "cards": []
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791932302189-a55d75aa-ecfc-46c7-a570-f9fb8f6fb7cd",
+          "projectId": "1791932302189",
+          "sourceId": "a55d75aa-ecfc-46c7-a570-f9fb8f6fb7cd",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"业务日期\",\"name\":\"业务日期\",\"type\":\"date\"},{\"key\":\"业务渠道\",\"name\":\"业务渠道\",\"type\":\"text\"},{\"key\":\"问询量\",\"name\":\"问询量\",\"type\":\"number\"},{\"key\":\"签约量\",\"name\":\"签约量\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T22:58:23.500Z",
+          "columns": [
+            {
+              "key": "业务日期",
+              "name": "业务日期",
+              "type": "date"
+            },
+            {
+              "key": "业务渠道",
+              "name": "业务渠道",
+              "type": "text"
+            },
+            {
+              "key": "问询量",
+              "name": "问询量",
+              "type": "number"
+            },
+            {
+              "key": "签约量",
+              "name": "签约量",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "业务日期": "2026-11-01",
+              "业务渠道": "门店",
+              "问询量": 400,
+              "签约量": 80
+            },
+            {
+              "业务日期": "2026-11-02",
+              "业务渠道": "网站",
+              "问询量": 200,
+              "签约量": 10
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

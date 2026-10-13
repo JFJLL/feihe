@@ -6,6 +6,6 @@
 
 人物：普通部门负责人（平台user/项目project_admin）、业务成员editor、只读viewer；平台admin只执行客户/部门等基础管理。界面收敛为项目中心与项目内概览、数据、指标、已启用业务模块、报告、设置。
 
-全部工作包仍在进行，不把最小UI改动或方法测试作为最终完成。已执行本轮当前实现的真实浏览器走查，发现推广阻断见[baseline-audit.md](baseline-audit.md)。入口/表单、数据工作台、共享指标与五类共享看板已开发验证，分别见foundation-report.md、data-report.md、metrics-report.md、board-report.md。字段推荐及专属投放适配已实现并阶段验证，见adapters-report.md；同口径报告/历史/导出已实施并重点验证，见reports-report.md；页面身份/缓存/撤权与发布状态已补修验证，见access-report.md；结构复用、内容/评论适配、启萃组件、日常主页层级及四场景仍待继续。
+全部工作包仍在进行，不把最小UI改动或方法测试作为最终完成。已执行本轮当前实现的真实浏览器走查，发现推广阻断见[baseline-audit.md](baseline-audit.md)。入口/表单、数据工作台、共享指标与五类共享看板已开发验证，分别见foundation-report.md、data-report.md、metrics-report.md、board-report.md。字段推荐及专属投放适配已实现并阶段验证，见adapters-report.md；同口径报告/历史/导出已实施并重点验证，见reports-report.md；页面身份/缓存/撤权与发布状态已补修验证，见access-report.md；授权结构复用已开发验证，见structure-report.md；内容/评论适配、启萃组件、日常主页层级及四场景仍待继续。
 
 环境：127.0.0.1:5216本地应用，5217外部飞书模拟；隔离SQLite .verification/product-integration-browser.db，测试身份已预置，未使用客户数据、生产或真实飞书。无真人访谈/部门试用，不将浏览器脚本称为真人独立使用。

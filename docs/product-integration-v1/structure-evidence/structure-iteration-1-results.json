@@ -1,0 +1,387 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-structure.spec.ts",
+      "--project",
+      "local"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/structure-iteration-1/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "local",
+        "name": "local",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [
+          "**/*.gateway.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/structure-iteration-1/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "gateway",
+        "name": "gateway",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.gateway.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "local",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": "**/*.gateway.spec.ts",
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "local"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/structure-iteration-1/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/structure-iteration-1/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "product-structure.spec.ts",
+      "file": "product-structure.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5284,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:13:14.361Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "结构来源项目",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiIxNzkxOTI5NTk0OTQ3IiwiYWN0b3IiOnsieC11c2VyLWlkIjoidXNlci1lZGl0b3IifX0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\attachments\\关键请求-738d8399475ea077103de9a5aadbb0071ba15323.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\attachments\\实际持久化快照-8625ccd27d1e09bd6adf0554605f58bbefd80190.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\attachments\\最终页面-ea630b6c9154ea6025ab7eeef40a2a773a95a219.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-a2d6f0dbd09a59b4775e",
+          "file": "product-structure.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5286,
+                  "error": {
+                    "message": "TypeError: Cannot read properties of undefined (reading 'target')",
+                    "stack": "TypeError: Cannot read properties of undefined (reading 'target')\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts:46:79",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts",
+                      "column": 79,
+                      "line": 46
+                    },
+                    "snippet": "  44 |     await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); await expect(page.getByRole('button', { name: '✓ 保存并发布看板', exact: true })).toHaveCount(0); await page.reload(); await dismissProjectNotifications(page);\n  45 |     const current = await (await request.get('/api/dashboards?projectId=' + targetId, { headers: projectIdentity })).json(); expect(current.cards).toHaveLength(sourceCards.length + 1); const configs = current.cards.map((card: { configJson: string }) => JSON.parse(card.configJson));\n> 46 |     expect(configs.find((card: { title: string }) => card.title === '本项目咨询目标').target).toBe(1200); expect(configs.every((card: { metricId: string }) => card.metricId.startsWith(targetId + ':structure:'))).toBeTruthy(); expect(configs.every((card: { from?: string; to?: string }) => !card.from && !card.to)).toBeTruthy();\n     |                                                                               ^\n  47 |     const amount = page.locator('.configured-board .dashboard-card').filter({ has: page.locator('h4', { hasText: /^咨询人数合计$/ }) }); await expect(amount).toContainText('600');\n  48 |     await page.screenshot({ path: info.outputPath('new-project-published-own-results.png'), fullPage: true });\n  49 |     const generated = await request.post('/api/reports', { headers: projectIdentity, data: { projectId: targetId } }); expect(generated.status()).toBe(200);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts",
+                        "column": 79,
+                        "line": 46
+                      },
+                      "message": "TypeError: Cannot read properties of undefined (reading 'target')\n\n  44 |     await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); await expect(page.getByRole('button', { name: '✓ 保存并发布看板', exact: true })).toHaveCount(0); await page.reload(); await dismissProjectNotifications(page);\n  45 |     const current = await (await request.get('/api/dashboards?projectId=' + targetId, { headers: projectIdentity })).json(); expect(current.cards).toHaveLength(sourceCards.length + 1); const configs = current.cards.map((card: { configJson: string }) => JSON.parse(card.configJson));\n> 46 |     expect(configs.find((card: { title: string }) => card.title === '本项目咨询目标').target).toBe(1200); expect(configs.every((card: { metricId: string }) => card.metricId.startsWith(targetId + ':structure:'))).toBeTruthy(); expect(configs.every((card: { from?: string; to?: string }) => !card.from && !card.to)).toBeTruthy();\n     |                                                                               ^\n  47 |     const amount = page.locator('.configured-board .dashboard-card').filter({ has: page.locator('h4', { hasText: /^咨询人数合计$/ }) }); await expect(amount).toContainText('600');\n  48 |     await page.screenshot({ path: info.outputPath('new-project-published-own-results.png'), fullPage: true });\n  49 |     const generated = await request.post('/api/reports', { headers: projectIdentity, data: { projectId: targetId } }); expect(generated.status()).toBe(200);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts:46:79"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:13:20.323Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\关键请求-0e4b2630cb22f034a0adb0550169bc1d3f94b797.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\实际持久化快照-e18c4a15d76b9c2c2d7b00419e8a0f6130060bd4.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\最终页面-0a6af1a3dfc6e93c60deddcdacdaa6f39cd5778d.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts",
+                    "column": 79,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-f94efe0e991629d5aad0",
+          "file": "product-structure.spec.ts",
+          "line": 30,
+          "column": 3
+        },
+        {
+          "title": "授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4652,
+                  "error": {
+                    "message": "TypeError: Cannot read properties of undefined (reading 'target')",
+                    "stack": "TypeError: Cannot read properties of undefined (reading 'target')\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts:46:79",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts",
+                      "column": 79,
+                      "line": 46
+                    },
+                    "snippet": "  44 |     await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); await expect(page.getByRole('button', { name: '✓ 保存并发布看板', exact: true })).toHaveCount(0); await page.reload(); await dismissProjectNotifications(page);\n  45 |     const current = await (await request.get('/api/dashboards?projectId=' + targetId, { headers: projectIdentity })).json(); expect(current.cards).toHaveLength(sourceCards.length + 1); const configs = current.cards.map((card: { configJson: string }) => JSON.parse(card.configJson));\n> 46 |     expect(configs.find((card: { title: string }) => card.title === '本项目咨询目标').target).toBe(1200); expect(configs.every((card: { metricId: string }) => card.metricId.startsWith(targetId + ':structure:'))).toBeTruthy(); expect(configs.every((card: { from?: string; to?: string }) => !card.from && !card.to)).toBeTruthy();\n     |                                                                               ^\n  47 |     const amount = page.locator('.configured-board .dashboard-card').filter({ has: page.locator('h4', { hasText: /^咨询人数合计$/ }) }); await expect(amount).toContainText('600');\n  48 |     await page.screenshot({ path: info.outputPath('new-project-published-own-results.png'), fullPage: true });\n  49 |     const generated = await request.post('/api/reports', { headers: projectIdentity, data: { projectId: targetId } }); expect(generated.status()).toBe(200);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts",
+                        "column": 79,
+                        "line": 46
+                      },
+                      "message": "TypeError: Cannot read properties of undefined (reading 'target')\n\n  44 |     await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); await expect(page.getByRole('button', { name: '✓ 保存并发布看板', exact: true })).toHaveCount(0); await page.reload(); await dismissProjectNotifications(page);\n  45 |     const current = await (await request.get('/api/dashboards?projectId=' + targetId, { headers: projectIdentity })).json(); expect(current.cards).toHaveLength(sourceCards.length + 1); const configs = current.cards.map((card: { configJson: string }) => JSON.parse(card.configJson));\n> 46 |     expect(configs.find((card: { title: string }) => card.title === '本项目咨询目标').target).toBe(1200); expect(configs.every((card: { metricId: string }) => card.metricId.startsWith(targetId + ':structure:'))).toBeTruthy(); expect(configs.every((card: { from?: string; to?: string }) => !card.from && !card.to)).toBeTruthy();\n     |                                                                               ^\n  47 |     const amount = page.locator('.configured-board .dashboard-card').filter({ has: page.locator('h4', { hasText: /^咨询人数合计$/ }) }); await expect(amount).toContainText('600');\n  48 |     await page.screenshot({ path: info.outputPath('new-project-published-own-results.png'), fullPage: true });\n  49 |     const generated = await request.post('/api/reports', { headers: projectIdentity, data: { projectId: targetId } }); expect(generated.status()).toBe(200);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts:46:79"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T22:13:26.970Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\关键请求-dce512db8f48212a79b74dd592df674cf0c4dbb0.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\实际持久化快照-dae92828b7308b0f2cef80604b81e727023ac79c.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\attachments\\最终页面-a41c77a4241009558eb1074897307db1b4d656e8.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-structure.spec.ts",
+                    "column": 79,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "118d1a349bec61f97a96-aa4c209ecac611d48a56",
+          "file": "product-structure.spec.ts",
+          "line": 30,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T22:13:01.071Z",
+    "duration": 31736.548,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

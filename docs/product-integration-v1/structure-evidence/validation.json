@@ -1,0 +1,46 @@
+{
+  "batchStartSha": "f01079c4047231fdae695a76ba1b1c281c41d2e9",
+  "fullStartSha": "1027b6b61d819763a5028c6329c34c7c1953b883",
+  "fullBrowser": {
+    "startTime": "2026-10-13T22:44:07.762Z",
+    "duration": 525923.411,
+    "expected": 144,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "nodeTestAssertions": 151,
+  "nodeScripts": 22,
+  "newStructureApi": 11,
+  "legacySqlSsrScripts": 7,
+  "changedLint": {
+    "files": 10,
+    "errors": 0,
+    "warnings": 0
+  },
+  "typecheck": true,
+  "build": true,
+  "finalVisualAndErrorFocusRunPending": false,
+  "baselineFailures": {
+    "api": 2,
+    "browser": 1
+  },
+  "externalSimulation": "Feishu HTTP only; injected local failures are 500/network/503, actual version409 and SQLite trigger failure",
+  "notExecuted": [
+    "human pilot",
+    "real Feishu",
+    "real enterprise gateway",
+    "production"
+  ],
+  "completeProduct": false,
+  "finalVisualRun": {
+    "startTime": "2026-10-13T22:57:31.092Z",
+    "duration": 109196.468,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "finalVisualRunName": "structure-final-feedback",
+  "sourceAndAuthoredDocsWhitespace": "will check before commit"
+}

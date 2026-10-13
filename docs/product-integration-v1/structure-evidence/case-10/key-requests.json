@@ -1,0 +1,332 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932324123&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791932324123\",\"projectId\":\"1791932324123\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791932324123\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"完成率\\\",\\\"targetField\\\":\\\"完成率\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"numericUnit\\\":\\\"percent\\\",\\\"sourcePercentScale\\\":\\\"fraction\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791932324123\\\",\\\"documentToken\\\":\\\"Report-1791932324123\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"完成率\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791932324123\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932324123\",\"sourceId\":\"8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932324123&id=ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791932324123&datasetId=ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932324123\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\",\"datasetVersion\":1,\"selected\":[\"records\",\"field:完成率\",\"field:金额\"],\"roles\":{},\"bindBusiness\":false}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932324123",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932324123\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records-value\",\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},{\"type\":\"metric_card\",\"title\":\"完成率平均值\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},{\"type\":\"metric_card\",\"title\":\"金额合计\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D-value\",\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932324123&id=ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932324123\",\"dashboardId\":\"dash-1791932324123-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records-value\",\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},\"sortOrder\":0},{\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"完成率平均值\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},\"sortOrder\":1},{\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D-value\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"金额合计\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D-value\",\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},\"sortOrder\":2}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932324123\",\"query\":{},\"cards\":[{\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},{\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"},{\"metricId\":\"1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791932324123:recommended:ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d:field%3A%E9%87%91%E9%A2%9D-value\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"sortOrder\":2,\"datasetId\":\"ds-1791932324123-8f414b2f-e0d0-4f97-9da2-a2d7f0baa37d\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932324123&mode=source",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"第二客户独立结构1791932326503\",\"description\":\"\",\"departmentId\":\"dept-marketing\",\"ownerId\":\"user-editor\",\"clientId\":\"\",\"templateId\":\"general_workbench\",\"status\":\"筹备中\",\"color\":\"#0891b2\",\"brand\":\"\",\"spu\":\"\",\"category\":\"\",\"action\":\"create\",\"structureProjectId\":\"1791932324123\",\"structureRevision\":\"a5091fae112ed9e00c5e52a199388446df7e62e60f68f1172ebaf01b637db320\",\"structureConfirmed\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932326503&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791932326503\",\"projectId\":\"1791932326503\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791932326503\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"达标率\\\",\\\"targetField\\\":\\\"达标率\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"numericUnit\\\":\\\"percent\\\",\\\"sourcePercentScale\\\":\\\"fraction\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791932326503\\\",\\\"documentToken\\\":\\\"Report-1791932326503\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"达标率\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791932326503\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932326503\",\"sourceId\":\"bb34a39b-8c36-497b-9fee-c19de4d18ba9\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932326503&id=ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932326503&datasetId=ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791932326503&datasetId=ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9&choices=%7B%22bindings%22%3A%7B%22g1%22%3A%7B%22datasetId%22%3A%22ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9%22%2C%22datasetVersion%22%3A1%2C%22fields%22%3A%7B%22%E5%AE%8C%E6%88%90%E7%8E%87%22%3A%22%E8%BE%BE%E6%A0%87%E7%8E%87%22%2C%22%E9%87%91%E9%A2%9D%22%3A%22%E9%87%91%E9%A2%9D%22%7D%7D%7D%2C%22selectedCards%22%3A%5B%22c1%22%2C%22c2%22%2C%22c3%22%5D%2C%22targets%22%3A%7B%7D%2C%22percentConfirmations%22%3A%7B%7D%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932326503\",\"revision\":\"a5091fae112ed9e00c5e52a199388446df7e62e60f68f1172ebaf01b637db320\",\"bindings\":{\"g1\":{\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\",\"datasetVersion\":1,\"fields\":{\"完成率\":\"达标率\",\"金额\":\"金额\"}}},\"selectedCards\":[\"c1\",\"c2\",\"c3\"],\"targets\":{},\"percentConfirmations\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932326503\",\"query\":{},\"cards\":[{\"id\":\"structure-1791932326503-c1\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricId\":\"1791932326503:structure:m1\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},{\"id\":\"structure-1791932326503-c2\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"metricId\":\"1791932326503:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},{\"id\":\"structure-1791932326503-c3\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"metricId\":\"1791932326503:structure:m3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932326503&id=ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932326503\",\"dashboardId\":\"dash-1791932326503-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"structure-1791932326503-c1\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"structure-1791932326503-c1\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricId\":\"1791932326503:structure:m1\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},\"sortOrder\":0},{\"id\":\"structure-1791932326503-c2\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"structure-1791932326503-c2\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"metricId\":\"1791932326503:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},\"sortOrder\":1},{\"id\":\"structure-1791932326503-c3\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"structure-1791932326503-c3\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"metricId\":\"1791932326503:structure:m3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},\"sortOrder\":2}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932326503\",\"query\":{},\"cards\":[{\"metricId\":\"1791932326503:structure:m1\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"structure-1791932326503-c1\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},{\"metricId\":\"1791932326503:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"structure-1791932326503-c2\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},{\"metricId\":\"1791932326503:structure:m3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"structure-1791932326503-c3\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"sortOrder\":2,\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791932326503",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791932326503\",\"query\":{},\"cards\":[{\"metricId\":\"1791932326503:structure:m1\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"structure-1791932326503-c1\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},{\"metricId\":\"1791932326503:structure:m2\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"structure-1791932326503-c2\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"},{\"metricId\":\"1791932326503:structure:m3\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"structure-1791932326503-c3\",\"title\":\"金额合计\",\"type\":\"metric_card\",\"sortOrder\":2,\"datasetId\":\"ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791932326503&id=ds-1791932326503-bb34a39b-8c36-497b-9fee-c19de4d18ba9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

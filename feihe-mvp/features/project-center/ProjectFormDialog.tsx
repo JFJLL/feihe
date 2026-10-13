@@ -1,15 +1,17 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Project, Workspace } from '../../lib/types/project';
 import { api } from '../../lib/hooks/use-project-data';
 import { Dialog } from '../../components/ui/Dialog';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { PROJECT_COLORS, PROJECT_STATUSES, automaticProjectColor, projectDraftErrors, type ProjectDraft } from '../../lib/project-form';
 import { templateGuide } from '../../lib/project-templates';
+import type { StructureBlueprint } from '../../lib/project-structure';
 
 export type WorkspaceMetadata = NonNullable<Workspace['metadata']>;
-export function ProjectFormDialog({ project, metadata, onClose, onSaved }: {
+export function ProjectFormDialog({ project, metadata, projects = [], onClose, onSaved }: {
   project?: Project | null; metadata: WorkspaceMetadata; onClose: () => void;
+  projects?: Project[];
   onSaved: (id: string) => Promise<void>;
 }) {
   const [form, setForm] = useState<ProjectDraft>(() => ({
@@ -20,31 +22,52 @@ export function ProjectFormDialog({ project, metadata, onClose, onSaved }: {
     color: project?.color || '', brand: project?.brand || '', spu: project?.spu || '', category: project?.category || '',
   }));
   const [busy, setBusy] = useState(false), [error, setError] = useState('');
+  const [structureProjectId, setStructureProjectId] = useState(''), [structureConfirmed, setStructureConfirmed] = useState(false);
+  const [structureRefresh, setStructureRefresh] = useState(0);
+  const structureKey = structureProjectId + ':' + structureRefresh;
+  const [structureSnapshot, setStructureSnapshot] = useState<{ key: string; blueprint?: StructureBlueprint; error?: string }>({ key: '' });
+  const structure = structureSnapshot.key === structureKey ? structureSnapshot.blueprint : undefined;
   const submitting = useRef(false);
   const errors = projectDraftErrors(form);
-  const guide = templateGuide(form.templateId);
+  const effectiveTemplateId = structure?.templateId || form.templateId;
+  const guide = templateGuide(effectiveTemplateId);
   const isEdit = Boolean(project);
+  const structureValid = !structureProjectId || Boolean(structure && structureConfirmed);
+  useEffect(() => {
+    if (!structureProjectId || isEdit) return;
+    const controller = new AbortController();
+    api<{ blueprint: StructureBlueprint }>('/api/project-structure?' + new URLSearchParams({ projectId: structureProjectId, mode: 'source' }), { signal: controller.signal })
+      .then(value => { if (!controller.signal.aborted) setStructureSnapshot({ key: structureKey, blueprint: value.blueprint }); })
+      .catch(error => { if (!controller.signal.aborted) setStructureSnapshot({ key: structureKey, error: error instanceof Error ? error.message : '结构预览失败' }); });
+    return () => controller.abort();
+  }, [structureProjectId, isEdit, structureKey]);
   function field<K extends keyof ProjectDraft>(key: K, value: ProjectDraft[K]) {
     if (!submitting.current) { setForm(prev => ({ ...prev, [key]: value })); setError(''); }
   }
   async function save() {
-    if (submitting.current || errors.length) return;
+    if (submitting.current || errors.length || !structureValid) return;
     submitting.current = true; setBusy(true); setError('');
     try {
-      const saved = await api<{ id: string }>('/api/projects', { method: 'POST', body: JSON.stringify({ ...form, color: form.color || automaticProjectColor(form.name), action: isEdit ? 'update' : 'create', projectId: project?.id }) });
+      const saved = await api<{ id: string }>('/api/projects', { method: 'POST', body: JSON.stringify({ ...form, templateId: effectiveTemplateId, color: form.color || automaticProjectColor(form.name), action: isEdit ? 'update' : 'create', projectId: project?.id,
+        ...(structureProjectId ? { structureProjectId, structureRevision: structure?.revision, structureConfirmed } : {}) }) });
       await onSaved(saved.id);
     } catch (e) { setError(e instanceof Error ? e.message : '保存失败，已保留填写内容'); }
     finally { submitting.current = false; setBusy(false); }
   }
   return <Dialog initialFocus={'input[aria-label="项目名称"]'} title={isEdit ? '编辑项目资料' : '新建项目'} onClose={() => { if (!busy) onClose(); }} width={760}
-    footer={<><button type="button" disabled={busy} onClick={onClose}>取消</button><button type="button" className="primary" disabled={busy || errors.length > 0} onClick={() => void save()}>{busy ? '正在保存…' : isEdit ? '保存项目资料' : '创建项目并开启向导'}</button></>}>
+    footer={<><button type="button" disabled={busy} onClick={onClose}>取消</button><button type="button" className="primary" disabled={busy || errors.length > 0 || !structureValid} onClick={() => void save()}>{busy ? '正在保存…' : isEdit ? '保存项目资料' : '创建项目并开启向导'}</button></>}>
     <form className="integration-project-form" onSubmit={e => { e.preventDefault(); void save(); }}>
       <fieldset disabled={busy} className="integration-form-grid">
         <label className="full-field">项目名称<input aria-label="项目名称" value={form.name} onChange={e => field('name', e.target.value)} maxLength={100} placeholder="如：咨询成交分析" required /></label>
         <label>负责部门<CustomSelect ariaLabel="负责部门" value={form.departmentId} disabled={busy} onChange={value => field('departmentId', value)} options={metadata.departments.map(d => ({ value: d.id, label: d.name }))} /></label>
         <label>项目负责人<CustomSelect ariaLabel="项目负责人" value={form.ownerId} disabled={busy} onChange={value => field('ownerId', value)} options={(metadata.users || []).map(u => ({ value: u.id, label: u.name }))} /></label>
         <label className="full-field">客户或内部项目<CustomSelect ariaLabel="客户或内部项目" value={form.clientId} disabled={busy} onChange={value => field('clientId', value)} options={[{ value: '', label: '内部项目' }, ...metadata.clients.map(c => ({ value: c.id, label: c.name }))]} /></label>
-        {!isEdit && <label className="full-field">业务方向<CustomSelect ariaLabel="业务方向" value={form.templateId} disabled={busy} onChange={value => field('templateId', value)} options={metadata.templates.map(t => ({ value: t.id, label: t.name }))} /></label>}
+        {!isEdit && <>
+          <label className="full-field">复用项目结构（选填）<CustomSelect ariaLabel="复用项目结构" value={structureProjectId} disabled={busy} onChange={value => { setStructureProjectId(value); setStructureConfirmed(false); setError(''); }} options={[{ value: '', label: '从业务方向或空白起步' }, ...projects.map(source => ({ value: source.id, label: source.name + ' · ' + source.templateName }))]} /></label>
+          {structureProjectId && <div className="full-field integration-form-help" aria-live="polite">{structureSnapshot.key === structureKey && structureSnapshot.error ? <p role="alert">{structureSnapshot.error}</p> : !structure ? <p>正在读取已授权项目的结构…</p> : <><strong>复用 {structure.metrics.length} 个指标定义、{structure.cards.length} 个卡片布局</strong><p>只复制指标口径、字段要求与呈现顺序。客户资料、成员、来源链接与授权、私有记录、供应商、历史报告、实际目标和日期范围都不会复制。</p>{structure.omittedCards > 0 && <p>{structure.omittedCards} 个历史业务组件仍保留在原项目；新项目可独立配置业务模块。</p>}<p>创建后接入自己的表，确认字段对应、查看真实试算，再设置本项目目标并发布。</p><label><input type="checkbox" checked={structureConfirmed} onChange={event => setStructureConfirmed(event.target.checked)} />我确认仅复用结构，并重新接入本项目来源及设置目标</label></>}</div>}
+          {structureProjectId && <button type="button" className="secondary" onClick={() => { setStructureConfirmed(false); setStructureRefresh(value => value + 1); }}>重新读取结构</button>}
+          <label className="full-field">业务方向<CustomSelect ariaLabel="业务方向" value={effectiveTemplateId} disabled={busy || Boolean(structureProjectId)} onChange={value => field('templateId', value)} options={metadata.templates.map(t => ({ value: t.id, label: t.name }))} /></label>
+        </>}
         {guide && <div className="full-field integration-form-help"><strong>{guide.name}</strong><p>{guide.description}</p><small>必要字段：{guide.requiredFields.join('、') || '无固定业务字段'}。可选：{guide.optionalFields.join('、') || '按需添加'}。<br />推荐：{guide.recommended}。</small></div>}
         <label className="full-field">项目说明<textarea aria-label="项目说明" value={form.description} onChange={e => field('description', e.target.value)} rows={2} placeholder="这项工作要回答什么问题，团队如何使用结果" /></label>
         <details className="full-field">
@@ -54,7 +77,7 @@ export function ProjectFormDialog({ project, metadata, onClose, onSaved }: {
             <div><span>识别色（自动分配，可调整）</span><div className="integration-color-options" role="group" aria-label="项目识别色">{PROJECT_COLORS.map(c => <button key={c.value} type="button" aria-label={'项目识别色：' + c.label} aria-pressed={(form.color || automaticProjectColor(form.name)) === c.value} title={c.label} style={{ background: c.value }} onClick={() => field('color', c.value)} />)}</div></div>
           </div>
         </details>
-        {(form.templateId === 'content_marketing' || form.templateId === 'comment_qc' || form.brand || form.spu || form.category) && <details className="full-field"><summary>品牌与产品信息（选填）</summary><div className="integration-form-grid secondary-fields">
+        {(effectiveTemplateId === 'content_marketing' || effectiveTemplateId === 'comment_qc' || form.brand || form.spu || form.category) && <details className="full-field"><summary>品牌与产品信息（选填）</summary><div className="integration-form-grid secondary-fields">
           <label>品牌<input value={form.brand} onChange={e => field('brand', e.target.value)} /></label><label>SPU / 产品<input value={form.spu} onChange={e => field('spu', e.target.value)} /></label><label>品类<input value={form.category} onChange={e => field('category', e.target.value)} /></label>
         </div></details>}
       </fieldset>

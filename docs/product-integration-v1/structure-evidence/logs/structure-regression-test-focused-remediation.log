@@ -1,0 +1,22 @@
+(node:24212) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ percent: tagged source text has a canonical fractional value (0.8497ms)
+✔ percent: explicit percentage-point formatting has no threshold amplification (0.1483ms)
+✔ percent: tagged text and native values normalize exactly once (0.7519ms)
+✔ percent: ordinary average is 1.0 percent in whole and groups (0.448ms)
+✔ ratio: complementary missing values have zero paired samples and no default rate (0.2454ms)
+✔ ratio: adding a complete record yields paired20 and explicit independent15 (0.4529ms)
+✔ ratio: explicit zero fill keeps observed pairs separate from imputed calculation rows (0.0994ms)
+✔ ratio: intrinsic ratio points still display small, unit and over100 rates (0.1273ms)
+✔ percent: historical units require confirmation and never mutate the stored row (0.2549ms)
+✔ percent: source numeric fractions, points and tagged scientific text normalize once (0.2104ms)
+✔ ratio: true zero, all-null, absent, invalid and zero-denominator keep paired statistics (0.2778ms)
+✔ ratio: independent groups retain separate coverage and skip is distinct from zero fill (0.126ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3383.404

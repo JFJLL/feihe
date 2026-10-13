@@ -1,0 +1,28 @@
+[WebServer] (node:21792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:21792) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:38536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:38536) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 15 tests using 1 worker
+
+(node:37428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [local] › tests\browser\product-structure.spec.ts:5:1 › 结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认 (5.3s)
+  ok  2 [local] › tests\browser\product-structure.spec.ts:31:3 › 授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 (6.2s)
+  ok  3 [local] › tests\browser\product-structure.spec.ts:57:3 › 复用百分口径 1280px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议 (4.5s)
+  ok  4 [local] › tests\browser\product-structure.spec.ts:69:3 › 复用投放结构 1280px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户 (5.7s)
+  ok  5 [local] › tests\browser\product-structure.spec.ts:79:61 › 结构保存恢复 1280px 500：完整字段与目标保留，成功重试复用一个指标集合 (4.7s)
+  ok  6 [local] › tests\browser\product-structure.spec.ts:79:61 › 结构保存恢复 1280px network：完整字段与目标保留，成功重试复用一个指标集合 (5.1s)
+  ok  7 [local] › tests\browser\product-structure.spec.ts:79:61 › 结构保存恢复 1280px 409：完整字段与目标保留，成功重试复用一个指标集合 (5.3s)
+  ok  8 [local] › tests\browser\product-structure.spec.ts:99:3 › 结构试算失败 1280px：新请求503清除旧成功预览，保留控件且禁止确认，重新读取恢复 (4.3s)
+  ok  9 [local] › tests\browser\product-structure.spec.ts:31:3 › 授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读 (6.0s)
+  ok 10 [local] › tests\browser\product-structure.spec.ts:57:3 › 复用百分口径 390px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议 (5.0s)
+  ok 11 [local] › tests\browser\product-structure.spec.ts:69:3 › 复用投放结构 390px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户 (4.8s)
+  ok 12 [local] › tests\browser\product-structure.spec.ts:79:61 › 结构保存恢复 390px 500：完整字段与目标保留，成功重试复用一个指标集合 (5.1s)
+  ok 13 [local] › tests\browser\product-structure.spec.ts:79:61 › 结构保存恢复 390px network：完整字段与目标保留，成功重试复用一个指标集合 (4.5s)
+  ok 14 [local] › tests\browser\product-structure.spec.ts:79:61 › 结构保存恢复 390px 409：完整字段与目标保留，成功重试复用一个指标集合 (5.3s)
+  ok 15 [local] › tests\browser\product-structure.spec.ts:99:3 › 结构试算失败 390px：新请求503清除旧成功预览，保留控件且禁止确认，重新读取恢复 (4.4s)
+
+  15 passed (1.6m)

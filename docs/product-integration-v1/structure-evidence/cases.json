@@ -1,0 +1,209 @@
+[
+  {
+    "id": "red-01",
+    "run": "structure-red",
+    "title": "结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认",
+    "status": "timedOut",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-red\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local",
+    "path": "red-01",
+    "trace": "red-01/trace.zip"
+  },
+  {
+    "id": "failure-01",
+    "run": "structure-iteration-1",
+    "title": "授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local",
+    "path": "failure-01",
+    "trace": "failure-01/trace.zip"
+  },
+  {
+    "id": "failure-02",
+    "run": "structure-iteration-1",
+    "title": "授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local",
+    "path": "failure-02",
+    "trace": "failure-02/trace.zip"
+  },
+  {
+    "id": "failure-03",
+    "run": "structure-iteration-2",
+    "title": "结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-2\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local",
+    "path": "failure-03",
+    "trace": "failure-03/trace.zip"
+  },
+  {
+    "id": "failure-04",
+    "run": "structure-iteration-3",
+    "title": "复用百分口径 1280px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-3\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local",
+    "path": "failure-04",
+    "trace": "failure-04/trace.zip"
+  },
+  {
+    "id": "failure-05",
+    "run": "structure-iteration-3",
+    "title": "复用投放结构 1280px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-3\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local",
+    "path": "failure-05",
+    "trace": "failure-05/trace.zip"
+  },
+  {
+    "id": "failure-06",
+    "run": "structure-iteration-3",
+    "title": "复用百分口径 390px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-3\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local",
+    "path": "failure-06",
+    "trace": "failure-06/trace.zip"
+  },
+  {
+    "id": "failure-07",
+    "run": "structure-iteration-3",
+    "title": "复用投放结构 390px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-3\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local",
+    "path": "failure-07",
+    "trace": "failure-07/trace.zip"
+  },
+  {
+    "id": "case-01",
+    "run": "structure-final-feedback",
+    "title": "结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构复用反例：普通负责人在新建表单选择已有授权项目，看到不复制来源和真实目标的确认-local",
+    "path": "case-01",
+    "trace": "case-01/trace.zip"
+  },
+  {
+    "id": "case-02",
+    "run": "structure-final-feedback",
+    "title": "授权结构复用 1280px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-1-391cb-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local",
+    "path": "case-02",
+    "trace": "case-02/trace.zip"
+  },
+  {
+    "id": "case-03",
+    "run": "structure-final-feedback",
+    "title": "复用百分口径 1280px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-1-99536-源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local",
+    "path": "case-03",
+    "trace": "case-03/trace.zip"
+  },
+  {
+    "id": "case-04",
+    "run": "structure-final-feedback",
+    "title": "复用投放结构 1280px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-1-ec310-500-10000-100-1-0-，没有原来源或账户-local",
+    "path": "case-04",
+    "trace": "case-04/trace.zip"
+  },
+  {
+    "id": "case-05",
+    "run": "structure-final-feedback",
+    "title": "结构保存恢复 1280px 500：完整字段与目标保留，成功重试复用一个指标集合",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-500：完整字段与目标保留，成功重试复用一个指标集合-local",
+    "path": "case-05",
+    "trace": "case-05/trace.zip"
+  },
+  {
+    "id": "case-06",
+    "run": "structure-final-feedback",
+    "title": "结构保存恢复 1280px network：完整字段与目标保留，成功重试复用一个指标集合",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1-d972e-work：完整字段与目标保留，成功重试复用一个指标集合-local",
+    "path": "case-06",
+    "trace": "case-06/trace.zip"
+  },
+  {
+    "id": "case-07",
+    "run": "structure-final-feedback",
+    "title": "结构保存恢复 1280px 409：完整字段与目标保留，成功重试复用一个指标集合",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-1280px-409：完整字段与目标保留，成功重试复用一个指标集合-local",
+    "path": "case-07",
+    "trace": "case-07/trace.zip"
+  },
+  {
+    "id": "case-08",
+    "run": "structure-final-feedback",
+    "title": "结构试算失败 1280px：新请求503清除旧成功预览，保留控件且禁止确认，重新读取恢复",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-1-c195e-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local",
+    "path": "case-08",
+    "trace": "case-08/trace.zip"
+  },
+  {
+    "id": "case-09",
+    "run": "structure-final-feedback",
+    "title": "授权结构复用 390px：新项目→自己的新表与不同字段→目标确认→试算→草稿→发布刷新→报告及只读",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-授权结构复用-3-892ab-与不同字段→目标确认→试算→草稿→发布刷新→报告及只读-local",
+    "path": "case-09",
+    "trace": "case-09/trace.zip"
+  },
+  {
+    "id": "case-10",
+    "run": "structure-final-feedback",
+    "title": "复用百分口径 390px：新来源1.5%与2.5%平均2.0%，发布刷新保持分数协议",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用百分口径-390px：新来源1-5-与2-5-平均2-0-，发布刷新保持分数协议-local",
+    "path": "case-10",
+    "trace": "case-10/trace.zip"
+  },
+  {
+    "id": "case-11",
+    "run": "structure-final-feedback",
+    "title": "复用投放结构 390px：自己的五列新表驱动专属页500/10000/100/1.0%，没有原来源或账户",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-复用投放结构-3-5ea2b-500-10000-100-1-0-，没有原来源或账户-local",
+    "path": "case-11",
+    "trace": "case-11/trace.zip"
+  },
+  {
+    "id": "case-12",
+    "run": "structure-final-feedback",
+    "title": "结构保存恢复 390px 500：完整字段与目标保留，成功重试复用一个指标集合",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-500：完整字段与目标保留，成功重试复用一个指标集合-local",
+    "path": "case-12",
+    "trace": "case-12/trace.zip"
+  },
+  {
+    "id": "case-13",
+    "run": "structure-final-feedback",
+    "title": "结构保存恢复 390px network：完整字段与目标保留，成功重试复用一个指标集合",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-3-d3eda-work：完整字段与目标保留，成功重试复用一个指标集合-local",
+    "path": "case-13",
+    "trace": "case-13/trace.zip"
+  },
+  {
+    "id": "case-14",
+    "run": "structure-final-feedback",
+    "title": "结构保存恢复 390px 409：完整字段与目标保留，成功重试复用一个指标集合",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构保存恢复-390px-409：完整字段与目标保留，成功重试复用一个指标集合-local",
+    "path": "case-14",
+    "trace": "case-14/trace.zip"
+  },
+  {
+    "id": "case-15",
+    "run": "structure-final-feedback",
+    "title": "结构试算失败 390px：新请求503清除旧成功预览，保留控件且禁止确认，重新读取恢复",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback\\browser-results\\product-structure-结构试算失败-3-2cbcd-503清除旧成功预览，保留控件且禁止确认，重新读取恢复-local",
+    "path": "case-15",
+    "trace": "case-15/trace.zip"
+  }
+]

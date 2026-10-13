@@ -1,0 +1,36 @@
+(node:36432) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ unit: custom + count + empty field counts three records (7.3564ms)
+✔ API: count preview uses the real stored three records (3.9894ms)
+✔ unit: explicit aggregation overrides old task_total binding (0.6809ms)
+✔ unit: global and grouped average share valid samples (0.6885ms)
+✔ unit: absent numerator must not become 0% (0.5024ms)
+✔ unit: null numerator must not become 0% (0.5764ms)
+✔ unit: invalid numerator must not become 0% (0.744ms)
+✔ unit: record, nonempty and distinct counts are different operations (0.4047ms)
+✔ unit: missing, all-null, actual zero, invalid numeric and zero denominator stay distinct (0.2756ms)
+✔ unit: explicit zero fill applies identically to grouped and whole averages (0.2424ms)
+✔ unit: inference considers all observed values and never fills blanks (0.8221ms)
+✔ unit: shared mapping preview matches stored values and preserved column metadata (5.6392ms)
+✔ unit: mapping context changes for project, document, sheet or schema (0.1122ms)
+✔ unit: card validation covers dataset, numeric types, ratio, grouping and date compatibility (0.9967ms)
+✔ unit: date range includes noon on end day and excludes next midnight and undated rows (2.0146ms)
+✔ unit: mapping rejects required (0.9454ms)
+✔ unit: mapping rejects duplicate key (0.1333ms)
+✔ unit: mapping rejects invalid date (0.0788ms)
+✔ unit: mapping rejects unknown boolean (0.0996ms)
+✔ unit: mapping rejects duplicate target (0.0628ms)
+✔ unit: mapping rejects invalid number with zero fill (0.0534ms)
+✔ unit: malformed numeric text is not coerced into legitimate zero (0.2734ms)
+✔ unit: zoneless timestamps preserve milliseconds and invalid epochs fail (0.6249ms)
+✔ unit: unsupported and malformed mapping options are explicitly rejected (0.0928ms)
+✔ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.41ms)
+✔ unit: legacy minimum and maximum definitions retain their aggregation semantics (0.1945ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3414.9224

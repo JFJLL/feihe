@@ -1,0 +1,68 @@
+[
+  {
+    "run": "structure-red",
+    "stats": {
+      "startTime": "2026-10-13T21:47:07.216Z",
+      "duration": 76092.841,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "structure-iteration-1",
+    "stats": {
+      "startTime": "2026-10-13T22:13:01.071Z",
+      "duration": 31736.548,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "structure-iteration-2",
+    "stats": {
+      "startTime": "2026-10-13T22:19:13.341Z",
+      "duration": 34818.944,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "structure-iteration-3",
+    "stats": {
+      "startTime": "2026-10-13T22:26:51.681Z",
+      "duration": 88771.395,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 4,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "structure-iteration-4",
+    "stats": {
+      "startTime": "2026-10-13T22:33:48.505Z",
+      "duration": 53583.072,
+      "expected": 7,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "structure-iteration-5",
+    "stats": {
+      "startTime": "2026-10-13T22:40:44.470Z",
+      "duration": 96971.761,
+      "expected": 15,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

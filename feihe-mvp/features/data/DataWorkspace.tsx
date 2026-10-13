@@ -12,9 +12,11 @@ import { useProject } from '../../components/project-shell/ProjectContext';
 import { SettingsDataSources } from '../settings/data-sources/SettingsDataSources';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
-import type { Dataset } from '../../lib/datasets';
+import type { Dataset, DatasetColumn } from '../../lib/datasets';
 import type { DataWorkspaceState, DatasetQuality, WorkspaceSource } from '../../lib/types/data-workspace';
 import { RecommendationDialog } from '../metrics/RecommendationDialog';
+import { StructureSetup } from '../metrics/StructureSetup';
+import { formatMetricValue } from '../../lib/metrics/display';
 
 type Detail = Dataset & { rows: Record<string, unknown>[]; pagination: { total: number; totalPages: number; page: number } };
 const tabs = [
@@ -23,7 +25,10 @@ const tabs = [
   { id: 'runs', title: '同步记录', desc: '成功、失败和读取范围', icon: '↻' },
 ];
 const types: Record<string, string> = { number: '数值', text: '文本', date: '日期', boolean: '布尔', category: '分类' };
-function display(value: unknown) { return value === null || value === undefined || value === '' ? '—' : typeof value === 'boolean' ? String(value) : typeof value === 'object' ? JSON.stringify(value) : String(value); }
+function display(value: unknown, column?: DatasetColumn) {
+  if (typeof value === 'number' && column?.numericUnit === 'percent' && column.percentScale) return formatMetricValue(value, 'percent', '%', column.percentScale);
+  return value === null || value === undefined || value === '' ? '—' : typeof value === 'boolean' ? String(value) : typeof value === 'object' ? JSON.stringify(value) : String(value);
+}
 function schedule(source?: WorkspaceSource) {
   if (!source) return '手动导入，没有自动同步来源';
   if (source.isPaused) return '来源已暂停；当前不会同步';
@@ -100,6 +105,7 @@ export function DataWorkspace({ projectId }: { projectId: string }) {
     <PageHeader variant="light" title="数据工作台" subtitle="从原表接入，到可核对的项目数据。飞书记录仍在原表编辑。">
       <button className="secondary" onClick={() => setRevision(value => value + 1)}>刷新数据状态</button>
     </PageHeader>
+    <StructureSetup projectId={projectId} datasetId={datasetId} canManage={currentProject?.canManage} onDone={cards => { sessionStorage.setItem('recommended-board:' + projectId, JSON.stringify(cards)); navigateTo('/projects/' + encodeURIComponent(projectId) + '?recommended=true'); }} />
     <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
     <p className="data-scroll-hint">宽表可横向滑动，或聚焦表格后使用左右方向键查看。</p>
     {indexError ? <ErrorState error={indexError} onRetry={() => setRevision(value => value + 1)} /> : !state ? <LoadingState text="正在读取来源、数据集和同步记录…" /> : <>
@@ -124,7 +130,7 @@ export function DataWorkspace({ projectId }: { projectId: string }) {
           <div className="data-actions"><label>搜索数据明细<input aria-label="搜索数据明细" value={search} onChange={event => { setSearch(event.target.value); setPage(1); }} placeholder="在当前数据集中搜索" /></label><button className="secondary" aria-expanded={qualityOpen} onClick={() => setQualityOpen(value => !value)}>字段与质量检查</button><Link className="secondary" href={'/projects/' + encodeURIComponent(projectId)}>查看项目看板</Link></div>
           {qualityOpen && <div className="data-quality">{qualityError ? <ErrorState error={qualityError} onRetry={() => setRevision(value => value + 1)} /> : !quality ? <LoadingState text="正在检查完整数据集…" /> : <><p>已检查完整数据集 {quality.checkedRows} 行</p><p>空值按指标自身规则处理；类型错误不会自动改成0。</p><div className="data-table-scroll" tabIndex={0}><table aria-label="字段质量"><thead><tr><th>字段显示名</th><th>取值键</th><th>类型 / 单位</th><th>空值</th><th>类型错误</th></tr></thead><tbody>{quality.fields.map(field => { const column = dataset.columns.find(item => item.key === field.key); return <tr key={field.key}><td>{field.name}</td><td>{field.key}</td><td>{types[field.type] || field.type}{column?.numericUnit === 'percent' && ' · 百分比（比例存储）'}</td><td>{field.missing}</td><td>{field.invalid}</td></tr>; })}</tbody></table></div></>}</div>}
           {detailError ? <ErrorState error={detailError} onRetry={() => setRevision(value => value + 1)} /> : !detail ? <LoadingState text="正在加载数据明细…" /> : <>
-            <div className="data-table-scroll" tabIndex={0}><table aria-label="业务数据明细"><thead><tr>{detail.columns.map(column => <th key={column.key}>{column.name}</th>)}</tr></thead><tbody>{detail.rows.map((row, index) => <tr key={index}>{detail.columns.map(column => <td key={column.key}>{display(row[column.key])}</td>)}</tr>)}</tbody></table></div>
+            <div className="data-table-scroll" tabIndex={0}><table aria-label="业务数据明细"><thead><tr>{detail.columns.map(column => <th key={column.key}>{column.name}</th>)}</tr></thead><tbody>{detail.rows.map((row, index) => <tr key={index}>{detail.columns.map(column => <td key={column.key}>{display(row[column.key], column)}</td>)}</tr>)}</tbody></table></div>
             {!detail.rows.length && <p role="status">当前搜索没有匹配记录。</p>}
             <div className="data-actions"><span>第 {page} / {detail.pagination.totalPages} 页 · 匹配 {detail.pagination.total} 行</span><div><button className="secondary" disabled={page <= 1} onClick={() => setPage(value => value - 1)}>上一页</button><button className="secondary" disabled={page >= detail.pagination.totalPages} onClick={() => setPage(value => value + 1)}>下一页</button></div></div>
           </>}

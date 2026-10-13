@@ -1,0 +1,26 @@
+{
+  "initialRun": "structure-iteration-5",
+  "rejectedScreenshot": "visual-rejected-390.png",
+  "reason": "Inherited grid compressed title labels into single-character columns",
+  "finalRun": "structure-final-feedback",
+  "accepted": true,
+  "changes": [
+    "stacked preview rows",
+    "error scrolls into viewport and receives keyboard focus"
+  ],
+  "checks": {
+    "browser15Passed": true,
+    "viewportAndFocusAssertions": true,
+    "typecheck": true,
+    "changedLintErrors": 0,
+    "changedLintWarnings": 0,
+    "build": true
+  },
+  "viewed": [
+    "case-09/own-fields-goal-and-real-preview.png",
+    "case-14/structure-409-choices-preserved.png",
+    "case-10/fractional-percentage-reuse-published.png",
+    "case-02/own-fields-goal-and-real-preview.png",
+    "case-11/own-ad-adapter-after-structure-reuse.png"
+  ]
+}

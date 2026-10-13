@@ -5,6 +5,8 @@ import { automaticProjectColor } from '@/lib/project-form';
 import { TEMPLATE_GUIDES, templateGuide } from '@/lib/project-templates';
 import { projectReadiness } from '@/lib/onboarding';
 import { transformMappedRows, type FieldMappingRule, type MappingContext } from '@/lib/field-mapping';
+import { loadStructureBlueprint, type StructureBlueprint } from '@/lib/project-structure';
+import { DefinitionError } from '@/lib/metrics/definitions';
 
 export const dynamic = 'force-dynamic';
 const text = (value: unknown) => String(value || '').trim();
@@ -98,7 +100,18 @@ export async function POST(request: Request) {
     const name = text(body.name);
     if (!name) return jsonError('请填写项目名称');
 
-    const templateId = text(body.templateId) || 'general_workbench';
+    let templateId = text(body.templateId) || 'general_workbench';
+    let structure: StructureBlueprint | undefined;
+    if (body.structureProjectId) {
+      const sourceAccess = await requireProjectAccess(request, body.structureProjectId, 'read');
+      if (!sourceAccess.ok) return jsonError(sourceAccess.error!, sourceAccess.status!);
+      if (body.structureConfirmed !== true) return jsonError('请确认仅复用结构，重新接入本项目来源并设置目标');
+      try {
+        structure = await loadStructureBlueprint(sourceAccess.context!);
+        if (body.structureRevision && body.structureRevision !== structure.revision) return jsonError('来源项目结构已变化，请重新预览后确认', 409);
+        templateId = structure.templateId;
+      } catch (error) { return jsonError(error instanceof Error ? error.message : '结构读取失败', error instanceof DefinitionError ? error.status : 500); }
+    }
     const departmentId = text(body.departmentId) || user.departmentId || 'dept-general';
     const clientId = text(body.clientId) || null;
     const ownerId = text(body.ownerId) || user.userId;
@@ -119,14 +132,15 @@ export async function POST(request: Request) {
     const exists = await d1.prepare('SELECT id FROM projects WHERE id=?').bind(id).first();
     if (exists) id = `${id}-${Date.now().toString(36).slice(-4)}`;
 
-    await d1
+    const projectStatement = d1
       .prepare(
         `INSERT INTO projects(id, name, spu, brand, category, description, status, color, start_at, end_at,
         org_id, department_id, client_id, owner_id, template_id, is_archived, onboarding_status, created_by, created_at, updated_at)
         VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
       )
-      .bind(id, name, spu, brand, category, description, status, color, startAt, endAt, user.orgId, departmentId, clientId, ownerId, templateId, user.userId, now, now)
-      .run();
+      .bind(id, name, spu, brand, category, description, status, color, startAt, endAt, user.orgId, departmentId, clientId, ownerId, templateId, user.userId, now, now);
+    if (structure) await d1.batch([projectStatement, d1.prepare("INSERT INTO project_settings(id,project_id,key,value,updated_at) VALUES(?,?,'structure_blueprint',?,?)").bind(id + ':structure', id, JSON.stringify(structure), now)]);
+    else await projectStatement.run();
 
     // Add creator as project administrator
     await d1
@@ -145,7 +159,7 @@ export async function POST(request: Request) {
     // Create default dashboard from template
     const templateRow = await d1.prepare('SELECT default_dashboard_json FROM project_templates WHERE id=?').bind(templateId).first<{ default_dashboard_json: string }>();
     let cards: Array<Record<string, unknown>> = [];
-    if (!TEMPLATE_GUIDES.some(t => t.id === templateId) && templateRow?.default_dashboard_json) {
+    if (!structure && !TEMPLATE_GUIDES.some(t => t.id === templateId) && templateRow?.default_dashboard_json) {
       try {
         const parsed = JSON.parse(templateRow.default_dashboard_json) as { cards?: Array<Record<string, unknown>> };
         cards = parsed.cards || [];
@@ -201,7 +215,7 @@ export async function POST(request: Request) {
         .run();
     }
 
-    return Response.json({ ok: true, id, templateId });
+    return Response.json({ ok: true, id, templateId, structurePending: Boolean(structure) });
   }
 
   // All other actions require existing project access check

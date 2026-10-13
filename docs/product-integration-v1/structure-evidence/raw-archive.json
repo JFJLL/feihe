@@ -1,0 +1,38 @@
+[
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-red",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-red"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-1",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-iteration-1"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-2",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-iteration-2"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-3",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-iteration-3"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-4",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-iteration-4"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-iteration-5",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-iteration-5"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-complete",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-complete"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-screens",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-final-screens"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\structure-final-feedback",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\structure-raw-evidence\\structure-final-feedback"
+  }
+]

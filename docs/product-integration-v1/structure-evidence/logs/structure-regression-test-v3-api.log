@@ -1,0 +1,20 @@
+(node:35208) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ API: historical sync retains verified editor identity even when upstream sheets fail (15.1638ms)
+✔ API: non-admin editor single/bulk sync retain actor identity; viewer and outsider denied (12.2165ms)
+✔ API: full spreadsheet reads 5050 records beyond row5000, explicit range is marked limited (79.6594ms)
+✔ API: real six-page Bitable sync feeds 501-row weighted ratio16.7% (13.9803ms)
+✔ API: has_more without token rejects publication and preserves previous snapshot (14.0375ms)
+✔ API: invalid conversion fails the full import without replacing valid stored rows (8.8503ms)
+✔ API: changed sheet or document context requires new confirmation (2.8122ms)
+✔ API: invalid card config cannot preview or mutate a published dashboard (5.9064ms)
+✔ API: confirmed dashboard IDs and actual multi-step conflict version roundtrip (3.8535ms)
+✔ API: archive denies other writes; only project admin can restore (2.6398ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3685.5138
