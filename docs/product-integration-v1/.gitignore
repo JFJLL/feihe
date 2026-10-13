@@ -43,3 +43,12 @@
 /adapters-full-verified/
 !adapters-evidence/*.log
 /adapters-delivery/
+
+/reports-red/
+/reports-iteration-*/
+/reports-delivery/
+/reports-final-visual/
+!reports-evidence/*.log
+/reports-date-red/
+/reports-complete/
+/reports-final-screens/

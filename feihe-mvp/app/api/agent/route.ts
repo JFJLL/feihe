@@ -10,6 +10,8 @@ import { getLingxiTrackData, type LingxiTrackResult } from '@/lib/lingxi';
 import { parseDateKey } from '@/lib/comment-review';
 import { reviewByDate } from '@/lib/review-seed';
 import { buildReviewInsight, ensureReviewTables, persistReviewBatch, reviewSections, reviewSummary } from '@/lib/review-report';
+import { createProjectReport } from '@/lib/project-reports';
+import { DefinitionError } from '@/lib/metrics/definitions';
 
 export const dynamic = 'force-dynamic';
 const text = (v: unknown) => String(v ?? '').trim();
@@ -185,6 +187,10 @@ export async function POST(request: Request) {
   const user = access.context!.user;
   try {
     const action = text(body.action) || 'generate';
+    if (!['generate', 'recompile_reports', 'delete_report'].includes(action)) return jsonError('不支持的报告操作');
+    if (action === 'generate' && project !== 'qicui') {
+      return Response.json(await createProjectReport(access.context!, { prompt: text(body.prompt) }));
+    }
     const d1 = db();
     await ensureSchema();
 
@@ -412,6 +418,6 @@ export async function POST(request: Request) {
       return jsonError(message, 500);
     }
   } catch (error) {
-    return jsonError(error instanceof Error ? error.message : 'Agent 任务失败', 500);
+    return jsonError(error instanceof Error ? error.message : 'Agent 任务失败', error instanceof DefinitionError ? error.status : 500);
   }
 }

@@ -1,0 +1,309 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-reports.spec.ts",
+      "--grep",
+      "报告失败恢复"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/reports-date-red/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/reports-date-red/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/reports-date-red/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-reports.spec.ts",
+      "file": "product-reports.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "报告失败恢复 1280px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16332,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('项目开始日期', { exact: true })\nExpected: \u001b[32m\"2026-10-01\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('项目开始日期', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('项目开始日期', { exact: true })\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" type=\"date\" aria-label=\"项目开始日期\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('项目开始日期', { exact: true })\nExpected: \u001b[32m\"2026-10-01\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('项目开始日期', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('项目开始日期', { exact: true })\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" type=\"date\" aria-label=\"项目开始日期\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:81:286",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                      "column": 286,
+                      "line": 81
+                    },
+                    "snippet": "  79 |     await page.route('**/api/reports', async route => { if (route.request().method() === 'POST') { submits++; await held; } await route.continue(); });\n  80 |     await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('button', { name: '正在生成指标快照…', exact: true })).toBeDisabled(); await expect(page.getByLabel('项目开始日期', { exact: true })).toBeDisabled(); release();\n> 81 |     await expect(page.getByRole('heading', { name: '报告历史 · 2 份', exact: true })).toBeVisible(); expect(submits).toBe(1); await page.unroute('**/api/reports'); await page.reload(); await expect(metric).toContainText('成对有效 0 行'); await expect(page.getByLabel('项目开始日期', { exact: true })).toHaveValue('2026-10-01'); await expect(page.getByLabel('项目结束日期', { exact: true })).toHaveValue('2026-10-01');\n     |                                                                                                                                                                                                                                                                                              ^\n  82 |     await page.screenshot({ path: info.outputPath('missing-paired-report-samples.png'), fullPage: true }); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();\n  83 |   });\n  84 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                        "column": 286,
+                        "line": 81
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('项目开始日期', { exact: true })\nExpected: \u001b[32m\"2026-10-01\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('项目开始日期', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('项目开始日期', { exact: true })\u001b[22m\n\u001b[2m    23 × locator resolved to <input value=\"\" type=\"date\" aria-label=\"项目开始日期\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  79 |     await page.route('**/api/reports', async route => { if (route.request().method() === 'POST') { submits++; await held; } await route.continue(); });\n  80 |     await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('button', { name: '正在生成指标快照…', exact: true })).toBeDisabled(); await expect(page.getByLabel('项目开始日期', { exact: true })).toBeDisabled(); release();\n> 81 |     await expect(page.getByRole('heading', { name: '报告历史 · 2 份', exact: true })).toBeVisible(); expect(submits).toBe(1); await page.unroute('**/api/reports'); await page.reload(); await expect(metric).toContainText('成对有效 0 行'); await expect(page.getByLabel('项目开始日期', { exact: true })).toHaveValue('2026-10-01'); await expect(page.getByLabel('项目结束日期', { exact: true })).toHaveValue('2026-10-01');\n     |                                                                                                                                                                                                                                                                                              ^\n  82 |     await page.screenshot({ path: info.outputPath('missing-paired-report-samples.png'), fullPage: true }); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();\n  83 |   });\n  84 | }\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:81:286"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T20:19:45.541Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\关键请求-ac1a4ffa637d2a4deae14fae8bb7afb49eb2c3e5.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\实际持久化快照-fbe34759d8b46292fca256b53fedfaef1a247ba8.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\最终页面-bcdd197fe23c7b43bec0e708d6aa3946db2db585.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                    "column": 286,
+                    "line": 81
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-7031257b60e1d0dd2374",
+          "file": "product-reports.spec.ts",
+          "line": 67,
+          "column": 3
+        },
+        {
+          "title": "报告失败恢复 390px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13451,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('项目开始日期', { exact: true })\nExpected: \u001b[32m\"2026-10-01\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('项目开始日期', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('项目开始日期', { exact: true })\u001b[22m\n\u001b[2m    24 × locator resolved to <input value=\"\" type=\"date\" aria-label=\"项目开始日期\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('项目开始日期', { exact: true })\nExpected: \u001b[32m\"2026-10-01\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('项目开始日期', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('项目开始日期', { exact: true })\u001b[22m\n\u001b[2m    24 × locator resolved to <input value=\"\" type=\"date\" aria-label=\"项目开始日期\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:81:286",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                      "column": 286,
+                      "line": 81
+                    },
+                    "snippet": "  79 |     await page.route('**/api/reports', async route => { if (route.request().method() === 'POST') { submits++; await held; } await route.continue(); });\n  80 |     await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('button', { name: '正在生成指标快照…', exact: true })).toBeDisabled(); await expect(page.getByLabel('项目开始日期', { exact: true })).toBeDisabled(); release();\n> 81 |     await expect(page.getByRole('heading', { name: '报告历史 · 2 份', exact: true })).toBeVisible(); expect(submits).toBe(1); await page.unroute('**/api/reports'); await page.reload(); await expect(metric).toContainText('成对有效 0 行'); await expect(page.getByLabel('项目开始日期', { exact: true })).toHaveValue('2026-10-01'); await expect(page.getByLabel('项目结束日期', { exact: true })).toHaveValue('2026-10-01');\n     |                                                                                                                                                                                                                                                                                              ^\n  82 |     await page.screenshot({ path: info.outputPath('missing-paired-report-samples.png'), fullPage: true }); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();\n  83 |   });\n  84 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                        "column": 286,
+                        "line": 81
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('项目开始日期', { exact: true })\nExpected: \u001b[32m\"2026-10-01\"\u001b[39m\nReceived: \u001b[31m\"\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('项目开始日期', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('项目开始日期', { exact: true })\u001b[22m\n\u001b[2m    24 × locator resolved to <input value=\"\" type=\"date\" aria-label=\"项目开始日期\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  79 |     await page.route('**/api/reports', async route => { if (route.request().method() === 'POST') { submits++; await held; } await route.continue(); });\n  80 |     await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('button', { name: '正在生成指标快照…', exact: true })).toBeDisabled(); await expect(page.getByLabel('项目开始日期', { exact: true })).toBeDisabled(); release();\n> 81 |     await expect(page.getByRole('heading', { name: '报告历史 · 2 份', exact: true })).toBeVisible(); expect(submits).toBe(1); await page.unroute('**/api/reports'); await page.reload(); await expect(metric).toContainText('成对有效 0 行'); await expect(page.getByLabel('项目开始日期', { exact: true })).toHaveValue('2026-10-01'); await expect(page.getByLabel('项目结束日期', { exact: true })).toHaveValue('2026-10-01');\n     |                                                                                                                                                                                                                                                                                              ^\n  82 |     await page.screenshot({ path: info.outputPath('missing-paired-report-samples.png'), fullPage: true }); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();\n  83 |   });\n  84 | }\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:81:286"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T20:20:03.238Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\关键请求-68696423632f4f44d006cd11416d1504b5b2bdae.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\实际持久化快照-52685cf9fe0565fd067028ed5914b474597df91b.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\最终页面-04118ba350ff8312221d5812047d176b9bbd2d3d.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-date-red\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                    "column": 286,
+                    "line": 81
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-66be8200a14f08c8036c",
+          "file": "product-reports.spec.ts",
+          "line": 67,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T20:19:41.776Z",
+    "duration": 35932.020000000004,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,39 @@
+(node:26520) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ report API: a saved report uses the published metric ID/version, exact project period, real daily/group data and prior period (33.4791ms)
+✔ report API: editing one definition changes new reports and cards while the saved original snapshot remains unchanged (33.445ms)
+✔ report API: shared filters and independent card periods keep their actual semantics, not a cosmetic report caption (26.7529ms)
+✔ report API: stale board, invalid period and foreign project/report reads reject without creating a snapshot (1.498ms)
+✔ report API: viewer can read/export but cannot generate; another business member can create a report with their own audit identity (7.4247ms)
+✔ report API: report history really paginates and clamps out-of-range pages without losing old versions (90.4919ms)
+✔ report API: the retained assistant endpoint delegates to project metrics and does not populate a non-social report with legacy facts (5.7701ms)
+✔ report API: a rate change is an absolute percentage-point change, not an unlabeled relative growth percentage (12.1502ms)
+✔ report API: a genuine local audit write failure rolls back the report and does not leave a falsely failed saved snapshot (9.2813ms)
+✖ report API: an unsupported action cannot bypass the project report path into the legacy social generator (3.0254ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1470.1325
+
+✖ failing tests:
+
+test at scripts\test-product-reports.mjs:77:1
+✖ report API: an unsupported action cannot bypass the project report path into the legacy social generator (3.0254ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-reports.mjs:78:112)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

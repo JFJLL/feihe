@@ -1,0 +1,38 @@
+(node:28384) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ report API: a saved report uses the published metric ID/version, exact project period, real daily/group data and prior period (34.0713ms)
+✔ report API: editing one definition changes new reports and cards while the saved original snapshot remains unchanged (34.6055ms)
+✔ report API: shared filters and independent card periods keep their actual semantics, not a cosmetic report caption (27.4124ms)
+✔ report API: stale board, invalid period and foreign project/report reads reject without creating a snapshot (1.6218ms)
+✔ report API: viewer can read/export but cannot generate; another business member can create a report with their own audit identity (7.927ms)
+✔ report API: report history really paginates and clamps out-of-range pages without losing old versions (97.6459ms)
+✔ report API: the retained assistant endpoint delegates to project metrics and does not populate a non-social report with legacy facts (6.1237ms)
+✔ report API: a rate change is an absolute percentage-point change, not an unlabeled relative growth percentage (12.436ms)
+✖ report API: a genuine local audit write failure rolls back the report and does not leave a falsely failed saved snapshot (11.669ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1518.448
+
+✖ failing tests:
+
+test at scripts\test-product-reports.mjs:71:1
+✖ report API: a genuine local audit write failure rolls back the report and does not leave a falsely failed saved snapshot (11.669ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  25 !== 24
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-reports.mjs:74:84)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 25,
+    expected: 24,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

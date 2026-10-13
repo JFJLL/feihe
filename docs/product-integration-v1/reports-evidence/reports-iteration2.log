@@ -1,0 +1,106 @@
+[WebServer] (node:40800) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 10 tests using 1 worker
+
+(node:23168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:40800) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  ok  1 tests\browser\product-reports.spec.ts:5:1 › 报告断链反例：四列原表看板发布后，经页面进入同口径项目报告 (5.0s)
+  ok  2 tests\browser\product-reports.spec.ts:14:3 › 同口径报告 1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接 (5.7s)
+  ok  3 tests\browser\product-reports.spec.ts:14:3 › 同口径报告 1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接 (5.3s)
+  ok  4 tests\browser\product-reports.spec.ts:14:3 › 同口径报告 768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接 (4.7s)
+  ok  5 tests\browser\product-reports.spec.ts:14:3 › 同口径报告 390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接 (5.0s)
+  x   6 tests\browser\product-reports.spec.ts:53:3 › 报告百分与投放 1280px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致 (2.2s)
+(node:25660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 tests\browser\product-reports.spec.ts:67:3 › 报告失败恢复 1280px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照 (3.5s)
+  x   8 tests\browser\product-reports.spec.ts:53:3 › 报告百分与投放 390px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致 (2.2s)
+(node:17148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 tests\browser\product-reports.spec.ts:67:3 › 报告失败恢复 390px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照 (3.3s)
+  ok 10 tests\browser\product-reports.spec.ts:85:1 › 报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录 (2.7s)
+
+
+  1) tests\browser\product-reports.spec.ts:53:3 › 报告百分与投放 1280px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致 ─
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      58 |     await expect(page.getByRole('article', { name: '完成率平均值报告结果', exact: true })).toContainText('1.0%'); const metric = spec.metrics.find((m: { title: string }) => m.title === '完成率平均值'); expect(metric.result.value).toBe(0.01); expect(metric.config.percentScale).toBe('fraction');
+      59 |     await page.getByText('完成率平均值趋势每日趋势', { exact: true }).click(); await expect(page.getByRole('table', { name: '完成率平均值趋势每日趋势', exact: true })).toContainText('0.5%'); await page.screenshot({ path: info.outputPath('fraction-percent-report.png'), fullPage: true });
+    > 60 |     const actual = await (await request.get('/api/datasets?projectId=' + percent.projectId, { headers: projectIdentity })).json(); const rows = await (await request.get('/api/datasets?projectId=' + percent.projectId + '&id=' + actual.datasets[0].id + '&all=true', { headers: projectIdentity })).json(); expect(rows.rows.map((r: { 完成率: number }) => r.完成率)).toEqual([0.005, 0.015]);
+         |                                                                                                                                                                                                                                                                                                                                 ^
+      61 |     const ad = await connectProjectTable(page, request, 'ad_performance', [['日期', '渠道', '花费', '曝光', '点击'], ['2026-10-01', '独立甲', 100, 200, 1], ['2026-10-02', '独立乙', 200, 100, 150]]); await publishRecommendedBoard(page);
+      62 |     await page.getByRole('link', { name: '查看项目报告', exact: true }).click(); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '广告消耗报告结果', exact: true })).toContainText('300');
+      63 |     await page.getByText('点击率趋势每日趋势', { exact: true }).click(); const table = page.getByRole('table', { name: '点击率趋势每日趋势', exact: true }); await expect(table).toContainText('0.5%'); await expect(table).toContainText('150.0%');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-reports.spec.ts:60:321
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\attachments\关键请求-b625d575544321406cebcc55345ae5ce4365fec8.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\attachments\实际持久化快照-34e0cfee9fbfa7ce2e481087435524eece7307a6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\attachments\最终页面-a0b7a50993bf620b412da0f7d6c93e72aad05f33.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\product-reports.spec.ts:53:3 › 报告百分与投放 390px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致 ──
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      58 |     await expect(page.getByRole('article', { name: '完成率平均值报告结果', exact: true })).toContainText('1.0%'); const metric = spec.metrics.find((m: { title: string }) => m.title === '完成率平均值'); expect(metric.result.value).toBe(0.01); expect(metric.config.percentScale).toBe('fraction');
+      59 |     await page.getByText('完成率平均值趋势每日趋势', { exact: true }).click(); await expect(page.getByRole('table', { name: '完成率平均值趋势每日趋势', exact: true })).toContainText('0.5%'); await page.screenshot({ path: info.outputPath('fraction-percent-report.png'), fullPage: true });
+    > 60 |     const actual = await (await request.get('/api/datasets?projectId=' + percent.projectId, { headers: projectIdentity })).json(); const rows = await (await request.get('/api/datasets?projectId=' + percent.projectId + '&id=' + actual.datasets[0].id + '&all=true', { headers: projectIdentity })).json(); expect(rows.rows.map((r: { 完成率: number }) => r.完成率)).toEqual([0.005, 0.015]);
+         |                                                                                                                                                                                                                                                                                                                                 ^
+      61 |     const ad = await connectProjectTable(page, request, 'ad_performance', [['日期', '渠道', '花费', '曝光', '点击'], ['2026-10-01', '独立甲', 100, 200, 1], ['2026-10-02', '独立乙', 200, 100, 150]]); await publishRecommendedBoard(page);
+      62 |     await page.getByRole('link', { name: '查看项目报告', exact: true }).click(); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '广告消耗报告结果', exact: true })).toContainText('300');
+      63 |     await page.getByText('点击率趋势每日趋势', { exact: true }).click(); const table = page.getByRole('table', { name: '点击率趋势每日趋势', exact: true }); await expect(table).toContainText('0.5%'); await expect(table).toContainText('150.0%');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-reports.spec.ts:60:321
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\attachments\关键请求-13d36e2cc249fa9e74c33da8b4a88111066bc149.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\attachments\实际持久化快照-2afe2445c831a1356fad8b60222793250a8aa881.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\attachments\最终页面-07034c52f32d2ad61d7b9c94972086a09015956f.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\reports-iteration-2\browser-results\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests\browser\product-reports.spec.ts:53:3 › 报告百分与投放 1280px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致 ──
+    tests\browser\product-reports.spec.ts:53:3 › 报告百分与投放 390px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致 ───
+  8 passed (49.7s)

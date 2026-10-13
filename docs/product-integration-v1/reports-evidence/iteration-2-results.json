@@ -1,0 +1,792 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-reports.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/reports-iteration-2/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/reports-iteration-2/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/reports-iteration-2/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-reports.spec.ts",
+      "file": "product-reports.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "报告断链反例：四列原表看板发布后，经页面进入同口径项目报告",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4984,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:20.221Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\attachments\\关键请求-d08572a0cef8dc1517b1663fe3cf0d39fd40937f.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\attachments\\实际持久化快照-e3cb5e257fd8ba5ad9d765a8132c80cc64e203f9.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\attachments\\最终页面-bb1995ad98b7a902f444e1a3fe41af84463e4c37.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-f7ed33f66f7bec559ce6",
+          "file": "product-reports.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "同口径报告 1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5663,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:25.768Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\关键请求-c5250e47ec90d6b3eaf75da8ade10c8a741c4f93.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\实际持久化快照-af5f5fb629df99738ee1585ee564b98edd575137.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\最终页面-6feb19fa09ff963ea5aeb7d7fb6da3261223bd17.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-004c90a9fd6537b150df",
+          "file": "product-reports.spec.ts",
+          "line": 14,
+          "column": 3
+        },
+        {
+          "title": "同口径报告 1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5263,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:31.908Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\关键请求-fd952007207ac302a35c387e4fb209e0cf58334f.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\实际持久化快照-9b1b986cc3a990d7f97d5eb21892dff6799ef57a.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\最终页面-dd15fa201f600d96eccb6f04be19802829e54a8c.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-17810afafd93f122c872",
+          "file": "product-reports.spec.ts",
+          "line": 14,
+          "column": 3
+        },
+        {
+          "title": "同口径报告 768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4727,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:37.602Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\关键请求-3c2e784e70f0ae9e35355c47ffc5e1aeda8e5af9.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\实际持久化快照-be2e331b995aad8f9a7b1e9b47fc4ee2a3f796fc.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\最终页面-fd2e22cfa56fa2f8795c060586e799853c1bc753.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-0a8baaff3c8580a80ee1",
+          "file": "product-reports.spec.ts",
+          "line": 14,
+          "column": 3
+        },
+        {
+          "title": "同口径报告 390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4953,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:42.724Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\关键请求-c88cc9a38d19fe7f4aa29056d2de34c4855d64dc.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\实际持久化快照-efa1ce443d0d7f1b6ff679ed54d241c4810c6a43.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\attachments\\最终页面-dbdfeac1135b0baf9e73f83cb5b6693a2ecc30aa.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-同口径报告-390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-723719eb39acd328141a",
+          "file": "product-reports.spec.ts",
+          "line": 14,
+          "column": 3
+        },
+        {
+          "title": "报告百分与投放 1280px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2231,
+                  "error": {
+                    "message": "TypeError: Cannot read properties of undefined (reading 'map')",
+                    "stack": "TypeError: Cannot read properties of undefined (reading 'map')\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:60:321",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                      "column": 321,
+                      "line": 60
+                    },
+                    "snippet": "  58 |     await expect(page.getByRole('article', { name: '完成率平均值报告结果', exact: true })).toContainText('1.0%'); const metric = spec.metrics.find((m: { title: string }) => m.title === '完成率平均值'); expect(metric.result.value).toBe(0.01); expect(metric.config.percentScale).toBe('fraction');\n  59 |     await page.getByText('完成率平均值趋势每日趋势', { exact: true }).click(); await expect(page.getByRole('table', { name: '完成率平均值趋势每日趋势', exact: true })).toContainText('0.5%'); await page.screenshot({ path: info.outputPath('fraction-percent-report.png'), fullPage: true });\n> 60 |     const actual = await (await request.get('/api/datasets?projectId=' + percent.projectId, { headers: projectIdentity })).json(); const rows = await (await request.get('/api/datasets?projectId=' + percent.projectId + '&id=' + actual.datasets[0].id + '&all=true', { headers: projectIdentity })).json(); expect(rows.rows.map((r: { 完成率: number }) => r.完成率)).toEqual([0.005, 0.015]);\n     |                                                                                                                                                                                                                                                                                                                                 ^\n  61 |     const ad = await connectProjectTable(page, request, 'ad_performance', [['日期', '渠道', '花费', '曝光', '点击'], ['2026-10-01', '独立甲', 100, 200, 1], ['2026-10-02', '独立乙', 200, 100, 150]]); await publishRecommendedBoard(page);\n  62 |     await page.getByRole('link', { name: '查看项目报告', exact: true }).click(); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '广告消耗报告结果', exact: true })).toContainText('300');\n  63 |     await page.getByText('点击率趋势每日趋势', { exact: true }).click(); const table = page.getByRole('table', { name: '点击率趋势每日趋势', exact: true }); await expect(table).toContainText('0.5%'); await expect(table).toContainText('150.0%');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                        "column": 321,
+                        "line": 60
+                      },
+                      "message": "TypeError: Cannot read properties of undefined (reading 'map')\n\n  58 |     await expect(page.getByRole('article', { name: '完成率平均值报告结果', exact: true })).toContainText('1.0%'); const metric = spec.metrics.find((m: { title: string }) => m.title === '完成率平均值'); expect(metric.result.value).toBe(0.01); expect(metric.config.percentScale).toBe('fraction');\n  59 |     await page.getByText('完成率平均值趋势每日趋势', { exact: true }).click(); await expect(page.getByRole('table', { name: '完成率平均值趋势每日趋势', exact: true })).toContainText('0.5%'); await page.screenshot({ path: info.outputPath('fraction-percent-report.png'), fullPage: true });\n> 60 |     const actual = await (await request.get('/api/datasets?projectId=' + percent.projectId, { headers: projectIdentity })).json(); const rows = await (await request.get('/api/datasets?projectId=' + percent.projectId + '&id=' + actual.datasets[0].id + '&all=true', { headers: projectIdentity })).json(); expect(rows.rows.map((r: { 完成率: number }) => r.完成率)).toEqual([0.005, 0.015]);\n     |                                                                                                                                                                                                                                                                                                                                 ^\n  61 |     const ad = await connectProjectTable(page, request, 'ad_performance', [['日期', '渠道', '花费', '曝光', '点击'], ['2026-10-01', '独立甲', 100, 200, 1], ['2026-10-02', '独立乙', 200, 100, 150]]); await publishRecommendedBoard(page);\n  62 |     await page.getByRole('link', { name: '查看项目报告', exact: true }).click(); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '广告消耗报告结果', exact: true })).toContainText('300');\n  63 |     await page.getByText('点击率趋势每日趋势', { exact: true }).click(); const table = page.getByRole('table', { name: '点击率趋势每日趋势', exact: true }); await expect(table).toContainText('0.5%'); await expect(table).toContainText('150.0%');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:60:321"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:48.031Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\\attachments\\关键请求-b625d575544321406cebcc55345ae5ce4365fec8.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\\attachments\\实际持久化快照-34e0cfee9fbfa7ce2e481087435524eece7307a6.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\\attachments\\最终页面-a0b7a50993bf620b412da0f7d6c93e72aad05f33.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-12-d08ee-1-0-，真实比率每日0-5-和150-，导出单位一致\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                    "column": 321,
+                    "line": 60
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-08ec2b2ca3f47a54ad0d",
+          "file": "product-reports.spec.ts",
+          "line": 53,
+          "column": 3
+        },
+        {
+          "title": "报告失败恢复 1280px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3454,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:51.715Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\关键请求-a0b2a0c1ef6ad3dcdac3d6806834a4187c3bdfdd.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\实际持久化快照-af0f5d165bf3a92ed70c9f9e683aa36fd09bb362.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\最终页面-f4f139bd0248b4dc425f6e04277d33584ba1a971.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-128-25bc4-示成对0，500和断网保留范围与历史，真实重试冻结快照\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-7031257b60e1d0dd2374",
+          "file": "product-reports.spec.ts",
+          "line": 67,
+          "column": 3
+        },
+        {
+          "title": "报告百分与投放 390px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2159,
+                  "error": {
+                    "message": "TypeError: Cannot read properties of undefined (reading 'map')",
+                    "stack": "TypeError: Cannot read properties of undefined (reading 'map')\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:60:321",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                      "column": 321,
+                      "line": 60
+                    },
+                    "snippet": "  58 |     await expect(page.getByRole('article', { name: '完成率平均值报告结果', exact: true })).toContainText('1.0%'); const metric = spec.metrics.find((m: { title: string }) => m.title === '完成率平均值'); expect(metric.result.value).toBe(0.01); expect(metric.config.percentScale).toBe('fraction');\n  59 |     await page.getByText('完成率平均值趋势每日趋势', { exact: true }).click(); await expect(page.getByRole('table', { name: '完成率平均值趋势每日趋势', exact: true })).toContainText('0.5%'); await page.screenshot({ path: info.outputPath('fraction-percent-report.png'), fullPage: true });\n> 60 |     const actual = await (await request.get('/api/datasets?projectId=' + percent.projectId, { headers: projectIdentity })).json(); const rows = await (await request.get('/api/datasets?projectId=' + percent.projectId + '&id=' + actual.datasets[0].id + '&all=true', { headers: projectIdentity })).json(); expect(rows.rows.map((r: { 完成率: number }) => r.完成率)).toEqual([0.005, 0.015]);\n     |                                                                                                                                                                                                                                                                                                                                 ^\n  61 |     const ad = await connectProjectTable(page, request, 'ad_performance', [['日期', '渠道', '花费', '曝光', '点击'], ['2026-10-01', '独立甲', 100, 200, 1], ['2026-10-02', '独立乙', 200, 100, 150]]); await publishRecommendedBoard(page);\n  62 |     await page.getByRole('link', { name: '查看项目报告', exact: true }).click(); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '广告消耗报告结果', exact: true })).toContainText('300');\n  63 |     await page.getByText('点击率趋势每日趋势', { exact: true }).click(); const table = page.getByRole('table', { name: '点击率趋势每日趋势', exact: true }); await expect(table).toContainText('0.5%'); await expect(table).toContainText('150.0%');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                        "column": 321,
+                        "line": 60
+                      },
+                      "message": "TypeError: Cannot read properties of undefined (reading 'map')\n\n  58 |     await expect(page.getByRole('article', { name: '完成率平均值报告结果', exact: true })).toContainText('1.0%'); const metric = spec.metrics.find((m: { title: string }) => m.title === '完成率平均值'); expect(metric.result.value).toBe(0.01); expect(metric.config.percentScale).toBe('fraction');\n  59 |     await page.getByText('完成率平均值趋势每日趋势', { exact: true }).click(); await expect(page.getByRole('table', { name: '完成率平均值趋势每日趋势', exact: true })).toContainText('0.5%'); await page.screenshot({ path: info.outputPath('fraction-percent-report.png'), fullPage: true });\n> 60 |     const actual = await (await request.get('/api/datasets?projectId=' + percent.projectId, { headers: projectIdentity })).json(); const rows = await (await request.get('/api/datasets?projectId=' + percent.projectId + '&id=' + actual.datasets[0].id + '&all=true', { headers: projectIdentity })).json(); expect(rows.rows.map((r: { 完成率: number }) => r.完成率)).toEqual([0.005, 0.015]);\n     |                                                                                                                                                                                                                                                                                                                                 ^\n  61 |     const ad = await connectProjectTable(page, request, 'ad_performance', [['日期', '渠道', '花费', '曝光', '点击'], ['2026-10-01', '独立甲', 100, 200, 1], ['2026-10-02', '独立乙', 200, 100, 150]]); await publishRecommendedBoard(page);\n  62 |     await page.getByRole('link', { name: '查看项目报告', exact: true }).click(); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '广告消耗报告结果', exact: true })).toContainText('300');\n  63 |     await page.getByText('点击率趋势每日趋势', { exact: true }).click(); const table = page.getByRole('table', { name: '点击率趋势每日趋势', exact: true }); await expect(table).toContainText('0.5%'); await expect(table).toContainText('150.0%');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:60:321"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:55.761Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\\attachments\\关键请求-13d36e2cc249fa9e74c33da8b4a88111066bc149.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\\attachments\\实际持久化快照-2afe2445c831a1356fad8b60222793250a8aa881.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\\attachments\\最终页面-07034c52f32d2ad61d7b9c94972086a09015956f.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告百分与投放-39-6354b-1-0-，真实比率每日0-5-和150-，导出单位一致\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                    "column": 321,
+                    "line": 60
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-3bcf45c68e063fe168ee",
+          "file": "product-reports.spec.ts",
+          "line": 53,
+          "column": 3
+        },
+        {
+          "title": "报告失败恢复 390px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3299,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:58:58.827Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\关键请求-c09156ebe47f5f7d783f069e924cd482b2b271f5.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\实际持久化快照-32498676f1ec2e137894d6c9f14069862884f648.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\attachments\\最终页面-89a7aec5d62bacc325caeb81c3cfd829b7decce2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告失败恢复-390-b13f9-示成对0，500和断网保留范围与历史，真实重试冻结快照\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-66be8200a14f08c8036c",
+          "file": "product-reports.spec.ts",
+          "line": 67,
+          "column": 3
+        },
+        {
+          "title": "报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2720,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:59:02.591Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "报告真实响应",
+                      "contentType": "application/json",
+                      "body": "ewogICJvayI6IHRydWUsCiAgInJlcG9ydElkIjogIjQxYWJhNTFkLWE0MWQtNGY4NC04MTk4LTc1ZGY5M2ViNmZlMSIsCiAgInNwZWMiOiB7CiAgICAidmVyc2lvbiI6ICIxLjAiLAogICAgImtpbmQiOiAicHJvamVjdF9tZXRyaWNzX3JlcG9ydCIsCiAgICAicHJvamVjdElkIjogIjE3OTE5MjE1NDI3MDMiLAogICAgInRpdGxlIjogIueLrOeri+mDqOmXqOaKpeWRijE3OTE5MjE1NDI3MDMgwrcg6aG555uu5oql5ZGKIiwKICAgICJzdWJ0aXRsZSI6ICLlm6LpmJ/nnIvmnb/lkIzlj6PlvoTnu5PmnpzjgIHmr4/ml6Xotovlir/jgIHmnaXmupDkuI7moLfmnKwiLAogICAgImRhc2hib2FyZElkIjogImRhc2gtMTc5MTkyMTU0MjcwMy1kZWZhdWx0IiwKICAgICJkYXNoYm9hcmRWZXJzaW9uIjogMiwKICAgICJxdWVyeUNvbmZpZyI6IHt9LAogICAgInBlcmlvZCI6IHsKICAgICAgInN0YXJ0IjogIuS4jemZkOW8gOWniyIsCiAgICAgICJlbmQiOiAi5LiN6ZmQ57uT5p2fIgogICAgfSwKICAgICJnZW5lcmF0ZWRBdCI6ICIyMDI2LTEwLTEzVDE5OjU5OjA0LjgxM1oiLAogICAgImVuZ2luZSI6ICLpobnnm67mjIfmoIflv6vnhafvvIjmnKrlkK/nlKhBSe+8iSIsCiAgICAicXVlcnkiOiAi5p+l55yL5ZKo6K+i5Lq65pWw5ZKM5oiQ5Lqk546HIiwKICAgICJzdW1tYXJ5IjogWwogICAgICAi5LuF5L2/55So5pys6aG555uu5bey5Y+R5biD55qE55yL5p2/5oyH5qCH77yb5oql5ZGK5L+d55WZ55Sf5oiQ5pe255qE5Y+j5b6E5LiO5pWw5o2u54mI5pys77yM5LiN6ZqP5LmL5ZCO5L+u5pS56YeN566X44CCIiwKICAgICAgIuW9k+WJjeaMh+agh+Wdh+WPr+aguOWvue+8m+i/memHjOS4jeiHquWKqOaOqOaWreS4muWKoeWOn+WboOOAgiIKICAgIF0sCiAgICAibWV0cmljcyI6IFsKICAgICAgewogICAgICAgICJjYXJkSWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpyZWNvcmRzLXZhbHVlIiwKICAgICAgICAidGl0bGUiOiAi6K6w5b2V5pWw6YePIiwKICAgICAgICAidHlwZSI6ICJtZXRyaWNfY2FyZCIsCiAgICAgICAgIm1ldHJpY0lkIjogIjE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6cmVjb3JkcyIsCiAgICAgICAgIm1ldHJpY1ZlcnNpb24iOiAxLAogICAgICAgICJjb25maWciOiB7CiAgICAgICAgICAidGl0bGUiOiAi6K6w5b2V5pWw6YePIiwKICAgICAgICAgICJ0eXBlIjogInRpbWVfdHJlbmQiLAogICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAibW9kZSI6ICJjdXN0b20iLAogICAgICAgICAgIm1ldHJpYyI6ICJjdXN0b20iLAogICAgICAgICAgImFnZ3JlZ2F0aW9uIjogImNvdW50IiwKICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICJmb3JtYXQiOiAibnVtYmVyIiwKICAgICAgICAgICJtaXNzaW5nUG9saWN5IjogInNraXAiLAogICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAiaWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpyZWNvcmRzLXZhbHVlIiwKICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IgogICAgICAgIH0sCiAgICAgICAgInJlc3VsdCI6IHsKICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICJuYW1lIjogIuiusOW9leaVsOmHjyIsCiAgICAgICAgICAidW5pdCI6ICIiLAogICAgICAgICAgInZhbHVlIjogMiwKICAgICAgICAgICJmb3JtYXR0ZWRWYWx1ZSI6ICIyIiwKICAgICAgICAgICJzYW1wbGVTaXplIjogMiwKICAgICAgICAgICJzdGF0dXMiOiAib2siLAogICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAidHJlbmQiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAia2V5IjogImN1c3RvbSIsCiAgICAgICAgICAgICAgIm5hbWUiOiAi6K6w5b2V5pWw6YePIiwKICAgICAgICAgICAgICAidW5pdCI6ICIiLAogICAgICAgICAgICAgICJ2YWx1ZSI6IDEsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjEiLAogICAgICAgICAgICAgICJzYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICAgICAiZGF0ZSI6ICIyMDI2LTEwLTAxIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImtleSI6ICJjdXN0b20iLAogICAgICAgICAgICAgICJuYW1lIjogIuiusOW9leaVsOmHjyIsCiAgICAgICAgICAgICAgInVuaXQiOiAiIiwKICAgICAgICAgICAgICAidmFsdWUiOiAxLAogICAgICAgICAgICAgICJmb3JtYXR0ZWRWYWx1ZSI6ICIxIiwKICAgICAgICAgICAgICAic2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAgICAgImRhdGUiOiAiMjAyNi0xMC0wMiIKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJkZWZpbml0aW9uIjogewogICAgICAgICAgICAiaWQiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpyZWNvcmRzIiwKICAgICAgICAgICAgInZlcnNpb24iOiAxLAogICAgICAgICAgICAibmFtZSI6ICLorrDlvZXmlbDph48iLAogICAgICAgICAgICAicG9saWN5IjogInBpbm5lZCIKICAgICAgICAgIH0sCiAgICAgICAgICAiZWZmZWN0aXZlQ29uZmlnIjogewogICAgICAgICAgICAidGl0bGUiOiAi6K6w5b2V5pWw6YePIiwKICAgICAgICAgICAgInR5cGUiOiAidGltZV90cmVuZCIsCiAgICAgICAgICAgICJkYXRhc2V0SWQiOiAiZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTMiLAogICAgICAgICAgICAibW9kZSI6ICJjdXN0b20iLAogICAgICAgICAgICAibWV0cmljIjogImN1c3RvbSIsCiAgICAgICAgICAgICJhZ2dyZWdhdGlvbiI6ICJjb3VudCIsCiAgICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICAgImZvcm1hdCI6ICJudW1iZXIiLAogICAgICAgICAgICAibWlzc2luZ1BvbGljeSI6ICJza2lwIiwKICAgICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOnJlY29yZHMtdmFsdWUiLAogICAgICAgICAgICAicmFuZ2VQb2xpY3kiOiAicHJvamVjdCIKICAgICAgICAgIH0sCiAgICAgICAgICAiZGF0YXNldElkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAgICJkYXRhc2V0VmVyc2lvbiI6IDEsCiAgICAgICAgICAiZGF0YXNldE5hbWUiOiAi6KGl5L+u5pWw5o2uIiwKICAgICAgICAgICJhcHBsaWVkUXVlcnkiOiB7CiAgICAgICAgICAgICJmaWx0ZXJzIjogW10sCiAgICAgICAgICAgICJ0aW1lWm9uZSI6ICJBc2lhL1NoYW5naGFpIiwKICAgICAgICAgICAgInJhbmdlUG9saWN5IjogInByb2plY3QiLAogICAgICAgICAgICAidW5kYXRlZFJvd3MiOiAwCiAgICAgICAgICB9CiAgICAgICAgfSwKICAgICAgICAiY29tcGFyaXNvbiI6ICLpgInmi6nlrozmlbTotbfmraLml6XmnJ/lkI7lj6/mr5TovoPkuIrmnJ8iCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiY2FyZElkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6ZmllbGQlM0ElRTUlOTIlQTglRTglQUYlQTIlRTQlQkElQkElRTYlOTUlQjAtdmFsdWUiLAogICAgICAgICJ0aXRsZSI6ICLlkqjor6LkurrmlbDlkIjorqEiLAogICAgICAgICJ0eXBlIjogIm1ldHJpY19jYXJkIiwKICAgICAgICAibWV0cmljSWQiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNSU5MiVBOCVFOCVBRiVBMiVFNCVCQSVCQSVFNiU5NSVCMCIsCiAgICAgICAgIm1ldHJpY1ZlcnNpb24iOiAxLAogICAgICAgICJjb25maWciOiB7CiAgICAgICAgICAidGl0bGUiOiAi5ZKo6K+i5Lq65pWw5ZCI6K6hIiwKICAgICAgICAgICJ0eXBlIjogInRpbWVfdHJlbmQiLAogICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAibW9kZSI6ICJjdXN0b20iLAogICAgICAgICAgIm1ldHJpYyI6ICJjdXN0b20iLAogICAgICAgICAgImFnZ3JlZ2F0aW9uIjogInN1bSIsCiAgICAgICAgICAiZmllbGQiOiAi5ZKo6K+i5Lq65pWwIiwKICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICJmb3JtYXQiOiAibnVtYmVyIiwKICAgICAgICAgICJtaXNzaW5nUG9saWN5IjogInNraXAiLAogICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAiaWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNSU5MiVBOCVFOCVBRiVBMiVFNCVCQSVCQSVFNiU5NSVCMC12YWx1ZSIsCiAgICAgICAgICAicmFuZ2VQb2xpY3kiOiAicHJvamVjdCIKICAgICAgICB9LAogICAgICAgICJyZXN1bHQiOiB7CiAgICAgICAgICAia2V5IjogImN1c3RvbSIsCiAgICAgICAgICAibmFtZSI6ICLlkqjor6LkurrmlbDlkIjorqEiLAogICAgICAgICAgInVuaXQiOiAiIiwKICAgICAgICAgICJ2YWx1ZSI6IDMwMCwKICAgICAgICAgICJmb3JtYXR0ZWRWYWx1ZSI6ICIzMDAiLAogICAgICAgICAgInNhbXBsZVNpemUiOiAyLAogICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICJ0cmVuZCI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICAgICAibmFtZSI6ICLlkqjor6LkurrmlbDlkIjorqEiLAogICAgICAgICAgICAgICJ1bml0IjogIiIsCiAgICAgICAgICAgICAgInZhbHVlIjogMTAwLAogICAgICAgICAgICAgICJmb3JtYXR0ZWRWYWx1ZSI6ICIxMDAiLAogICAgICAgICAgICAgICJzYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICAgICAiZGF0ZSI6ICIyMDI2LTEwLTAxIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImtleSI6ICJjdXN0b20iLAogICAgICAgICAgICAgICJuYW1lIjogIuWSqOivouS6uuaVsOWQiOiuoSIsCiAgICAgICAgICAgICAgInVuaXQiOiAiIiwKICAgICAgICAgICAgICAidmFsdWUiOiAyMDAsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjIwMCIsCiAgICAgICAgICAgICAgInNhbXBsZVNpemUiOiAxLAogICAgICAgICAgICAgICJzdGF0dXMiOiAib2siLAogICAgICAgICAgICAgICJzdGF0dXNMYWJlbCI6ICLorqHnrpflrozmiJAiLAogICAgICAgICAgICAgICJkYXRlIjogIjIwMjYtMTAtMDIiCiAgICAgICAgICAgIH0KICAgICAgICAgIF0sCiAgICAgICAgICAiZGVmaW5pdGlvbiI6IHsKICAgICAgICAgICAgImlkIjogIjE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6ZmllbGQlM0ElRTUlOTIlQTglRTglQUYlQTIlRTQlQkElQkElRTYlOTUlQjAiLAogICAgICAgICAgICAidmVyc2lvbiI6IDEsCiAgICAgICAgICAgICJuYW1lIjogIuWSqOivouS6uuaVsOWQiOiuoSIsCiAgICAgICAgICAgICJwb2xpY3kiOiAicGlubmVkIgogICAgICAgICAgfSwKICAgICAgICAgICJlZmZlY3RpdmVDb25maWciOiB7CiAgICAgICAgICAgICJ0aXRsZSI6ICLlkqjor6LkurrmlbDlkIjorqEiLAogICAgICAgICAgICAidHlwZSI6ICJ0aW1lX3RyZW5kIiwKICAgICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAgICJtb2RlIjogImN1c3RvbSIsCiAgICAgICAgICAgICJtZXRyaWMiOiAiY3VzdG9tIiwKICAgICAgICAgICAgImFnZ3JlZ2F0aW9uIjogInN1bSIsCiAgICAgICAgICAgICJmaWVsZCI6ICLlkqjor6LkurrmlbAiLAogICAgICAgICAgICAiZGF0ZUZpZWxkIjogIuaXpeacnyIsCiAgICAgICAgICAgICJmb3JtYXQiOiAibnVtYmVyIiwKICAgICAgICAgICAgIm1pc3NpbmdQb2xpY3kiOiAic2tpcCIsCiAgICAgICAgICAgICJkaXNwbGF5T3JpZ2luIjogImF1dG8iLAogICAgICAgICAgICAiaWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNSU5MiVBOCVFOCVBRiVBMiVFNCVCQSVCQSVFNiU5NSVCMC12YWx1ZSIsCiAgICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IgogICAgICAgICAgfSwKICAgICAgICAgICJkYXRhc2V0SWQiOiAiZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTMiLAogICAgICAgICAgImRhdGFzZXRWZXJzaW9uIjogMSwKICAgICAgICAgICJkYXRhc2V0TmFtZSI6ICLooaXkv67mlbDmja4iLAogICAgICAgICAgImFwcGxpZWRRdWVyeSI6IHsKICAgICAgICAgICAgImZpbHRlcnMiOiBbXSwKICAgICAgICAgICAgInRpbWVab25lIjogIkFzaWEvU2hhbmdoYWkiLAogICAgICAgICAgICAicmFuZ2VQb2xpY3kiOiAicHJvamVjdCIsCiAgICAgICAgICAgICJ1bmRhdGVkUm93cyI6IDAKICAgICAgICAgIH0KICAgICAgICB9LAogICAgICAgICJjb21wYXJpc29uIjogIumAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgfSwKICAgICAgewogICAgICAgICJjYXJkSWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNiU4OCU5MCVFNCVCQSVBNCVFNCVCQSVCQSVFNiU5NSVCMC12YWx1ZSIsCiAgICAgICAgInRpdGxlIjogIuaIkOS6pOS6uuaVsOWQiOiuoSIsCiAgICAgICAgInR5cGUiOiAibWV0cmljX2NhcmQiLAogICAgICAgICJtZXRyaWNJZCI6ICIxNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmZpZWxkJTNBJUU2JTg4JTkwJUU0JUJBJUE0JUU0JUJBJUJBJUU2JTk1JUIwIiwKICAgICAgICAibWV0cmljVmVyc2lvbiI6IDEsCiAgICAgICAgImNvbmZpZyI6IHsKICAgICAgICAgICJ0aXRsZSI6ICLmiJDkuqTkurrmlbDlkIjorqEiLAogICAgICAgICAgInR5cGUiOiAidGltZV90cmVuZCIsCiAgICAgICAgICAiZGF0YXNldElkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAgICJtb2RlIjogImN1c3RvbSIsCiAgICAgICAgICAibWV0cmljIjogImN1c3RvbSIsCiAgICAgICAgICAiYWdncmVnYXRpb24iOiAic3VtIiwKICAgICAgICAgICJmaWVsZCI6ICLmiJDkuqTkurrmlbAiLAogICAgICAgICAgImRhdGVGaWVsZCI6ICLml6XmnJ8iLAogICAgICAgICAgImZvcm1hdCI6ICJudW1iZXIiLAogICAgICAgICAgIm1pc3NpbmdQb2xpY3kiOiAic2tpcCIsCiAgICAgICAgICAiZGlzcGxheU9yaWdpbiI6ICJhdXRvIiwKICAgICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmZpZWxkJTNBJUU2JTg4JTkwJUU0JUJBJUE0JUU0JUJBJUJBJUU2JTk1JUIwLXZhbHVlIiwKICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IgogICAgICAgIH0sCiAgICAgICAgInJlc3VsdCI6IHsKICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICJuYW1lIjogIuaIkOS6pOS6uuaVsOWQiOiuoSIsCiAgICAgICAgICAidW5pdCI6ICIiLAogICAgICAgICAgInZhbHVlIjogMzAsCiAgICAgICAgICAiZm9ybWF0dGVkVmFsdWUiOiAiMzAiLAogICAgICAgICAgInNhbXBsZVNpemUiOiAyLAogICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICJ0cmVuZCI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICAgICAibmFtZSI6ICLmiJDkuqTkurrmlbDlkIjorqEiLAogICAgICAgICAgICAgICJ1bml0IjogIiIsCiAgICAgICAgICAgICAgInZhbHVlIjogMjAsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjIwIiwKICAgICAgICAgICAgICAic2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAgICAgImRhdGUiOiAiMjAyNi0xMC0wMSIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICAgICAibmFtZSI6ICLmiJDkuqTkurrmlbDlkIjorqEiLAogICAgICAgICAgICAgICJ1bml0IjogIiIsCiAgICAgICAgICAgICAgInZhbHVlIjogMTAsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjEwIiwKICAgICAgICAgICAgICAic2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAgICAgImRhdGUiOiAiMjAyNi0xMC0wMiIKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJkZWZpbml0aW9uIjogewogICAgICAgICAgICAiaWQiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNiU4OCU5MCVFNCVCQSVBNCVFNCVCQSVCQSVFNiU5NSVCMCIsCiAgICAgICAgICAgICJ2ZXJzaW9uIjogMSwKICAgICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk5Lq65pWw5ZCI6K6hIiwKICAgICAgICAgICAgInBvbGljeSI6ICJwaW5uZWQiCiAgICAgICAgICB9LAogICAgICAgICAgImVmZmVjdGl2ZUNvbmZpZyI6IHsKICAgICAgICAgICAgInRpdGxlIjogIuaIkOS6pOS6uuaVsOWQiOiuoSIsCiAgICAgICAgICAgICJ0eXBlIjogInRpbWVfdHJlbmQiLAogICAgICAgICAgICAiZGF0YXNldElkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAgICAgIm1vZGUiOiAiY3VzdG9tIiwKICAgICAgICAgICAgIm1ldHJpYyI6ICJjdXN0b20iLAogICAgICAgICAgICAiYWdncmVnYXRpb24iOiAic3VtIiwKICAgICAgICAgICAgImZpZWxkIjogIuaIkOS6pOS6uuaVsCIsCiAgICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICAgImZvcm1hdCI6ICJudW1iZXIiLAogICAgICAgICAgICAibWlzc2luZ1BvbGljeSI6ICJza2lwIiwKICAgICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmZpZWxkJTNBJUU2JTg4JTkwJUU0JUJBJUE0JUU0JUJBJUJBJUU2JTk1JUIwLXZhbHVlIiwKICAgICAgICAgICAgInJhbmdlUG9saWN5IjogInByb2plY3QiCiAgICAgICAgICB9LAogICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAiZGF0YXNldFZlcnNpb24iOiAxLAogICAgICAgICAgImRhdGFzZXROYW1lIjogIuihpeS/ruaVsOaNriIsCiAgICAgICAgICAiYXBwbGllZFF1ZXJ5IjogewogICAgICAgICAgICAiZmlsdGVycyI6IFtdLAogICAgICAgICAgICAidGltZVpvbmUiOiAiQXNpYS9TaGFuZ2hhaSIsCiAgICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IiwKICAgICAgICAgICAgInVuZGF0ZWRSb3dzIjogMAogICAgICAgICAgfQogICAgICAgIH0sCiAgICAgICAgImNvbXBhcmlzb24iOiAi6YCJ5oup5a6M5pW06LW35q2i5pel5pyf5ZCO5Y+v5q+U6L6D5LiK5pyfIgogICAgICB9LAogICAgICB7CiAgICAgICAgImNhcmRJZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tdmFsdWUiLAogICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjociLAogICAgICAgICJ0eXBlIjogIm1ldHJpY19jYXJkIiwKICAgICAgICAibWV0cmljSWQiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5Mzpjb252ZXJzaW9uIiwKICAgICAgICAibWV0cmljVmVyc2lvbiI6IDEsCiAgICAgICAgImNvbmZpZyI6IHsKICAgICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjociLAogICAgICAgICAgInR5cGUiOiAidGltZV90cmVuZCIsCiAgICAgICAgICAiZGF0YXNldElkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAgICJtb2RlIjogImN1c3RvbSIsCiAgICAgICAgICAibWV0cmljIjogImN1c3RvbSIsCiAgICAgICAgICAiYWdncmVnYXRpb24iOiAicmF0aW8iLAogICAgICAgICAgIm51bUZpZWxkIjogIuaIkOS6pOS6uuaVsCIsCiAgICAgICAgICAiZGVuRmllbGQiOiAi5ZKo6K+i5Lq65pWwIiwKICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgImZvcm1hdCI6ICJwZXJjZW50IiwKICAgICAgICAgICJtaXNzaW5nUG9saWN5IjogInNraXAiLAogICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICJkaXNwbGF5T3JpZ2luIjogImF1dG8iLAogICAgICAgICAgImlkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6Y29udmVyc2lvbi12YWx1ZSIsCiAgICAgICAgICAicmFuZ2VQb2xpY3kiOiAicHJvamVjdCIKICAgICAgICB9LAogICAgICAgICJyZXN1bHQiOiB7CiAgICAgICAgICAia2V5IjogImN1c3RvbSIsCiAgICAgICAgICAibmFtZSI6ICLmiJDkuqTnjociLAogICAgICAgICAgInVuaXQiOiAiJSIsCiAgICAgICAgICAidmFsdWUiOiAxMCwKICAgICAgICAgICJmb3JtYXR0ZWRWYWx1ZSI6ICIxMC4wJSIsCiAgICAgICAgICAic2FtcGxlU2l6ZSI6IDIsCiAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICJzdGF0dXNMYWJlbCI6ICLorqHnrpflrozmiJAiLAogICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICJ0b3RhbFJvd3MiOiAyLAogICAgICAgICAgIm51bWVyYXRvclZhbGlkQ291bnQiOiAyLAogICAgICAgICAgImRlbm9taW5hdG9yVmFsaWRDb3VudCI6IDIsCiAgICAgICAgICAicGFpcmVkVmFsaWRDb3VudCI6IDIsCiAgICAgICAgICAibnVtZXJhdG9yQ292ZXJhZ2UiOiAxLAogICAgICAgICAgImRlbm9taW5hdG9yQ292ZXJhZ2UiOiAxLAogICAgICAgICAgImNhbGN1bGF0aW9uU2FtcGxlU2l6ZSI6IDIsCiAgICAgICAgICAibnVtZXJhdG9yIjogMzAsCiAgICAgICAgICAiZGVub21pbmF0b3IiOiAzMDAsCiAgICAgICAgICAidHJlbmQiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAia2V5IjogImN1c3RvbSIsCiAgICAgICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk546HIiwKICAgICAgICAgICAgICAidW5pdCI6ICIlIiwKICAgICAgICAgICAgICAidmFsdWUiOiAyMCwKICAgICAgICAgICAgICAiZm9ybWF0dGVkVmFsdWUiOiAiMjAuMCUiLAogICAgICAgICAgICAgICJzYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgICAgICJ0b3RhbFJvd3MiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAicGFpcmVkVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImNhbGN1bGF0aW9uU2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvciI6IDIwLAogICAgICAgICAgICAgICJkZW5vbWluYXRvciI6IDEwMCwKICAgICAgICAgICAgICAiZGF0ZSI6ICIyMDI2LTEwLTAxIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImtleSI6ICJjdXN0b20iLAogICAgICAgICAgICAgICJuYW1lIjogIuaIkOS6pOeOhyIsCiAgICAgICAgICAgICAgInVuaXQiOiAiJSIsCiAgICAgICAgICAgICAgInZhbHVlIjogNSwKICAgICAgICAgICAgICAiZm9ybWF0dGVkVmFsdWUiOiAiNS4wJSIsCiAgICAgICAgICAgICAgInNhbXBsZVNpemUiOiAxLAogICAgICAgICAgICAgICJzdGF0dXMiOiAib2siLAogICAgICAgICAgICAgICJzdGF0dXNMYWJlbCI6ICLorqHnrpflrozmiJAiLAogICAgICAgICAgICAgICJyYXRpb0Jhc2lzIjogInBhaXJlZCIsCiAgICAgICAgICAgICAgInRvdGFsUm93cyI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvclZhbGlkQ291bnQiOiAxLAogICAgICAgICAgICAgICJkZW5vbWluYXRvclZhbGlkQ291bnQiOiAxLAogICAgICAgICAgICAgICJwYWlyZWRWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAibnVtZXJhdG9yQ292ZXJhZ2UiOiAxLAogICAgICAgICAgICAgICJkZW5vbWluYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICAgICAiY2FsY3VsYXRpb25TYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAibnVtZXJhdG9yIjogMTAsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yIjogMjAwLAogICAgICAgICAgICAgICJkYXRlIjogIjIwMjYtMTAtMDIiCiAgICAgICAgICAgIH0KICAgICAgICAgIF0sCiAgICAgICAgICAiZGVmaW5pdGlvbiI6IHsKICAgICAgICAgICAgImlkIjogIjE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6Y29udmVyc2lvbiIsCiAgICAgICAgICAgICJ2ZXJzaW9uIjogMSwKICAgICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk546HIiwKICAgICAgICAgICAgInBvbGljeSI6ICJwaW5uZWQiCiAgICAgICAgICB9LAogICAgICAgICAgImVmZmVjdGl2ZUNvbmZpZyI6IHsKICAgICAgICAgICAgInRpdGxlIjogIuaIkOS6pOeOhyIsCiAgICAgICAgICAgICJ0eXBlIjogInRpbWVfdHJlbmQiLAogICAgICAgICAgICAiZGF0YXNldElkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAgICAgIm1vZGUiOiAiY3VzdG9tIiwKICAgICAgICAgICAgIm1ldHJpYyI6ICJjdXN0b20iLAogICAgICAgICAgICAiYWdncmVnYXRpb24iOiAicmF0aW8iLAogICAgICAgICAgICAibnVtRmllbGQiOiAi5oiQ5Lqk5Lq65pWwIiwKICAgICAgICAgICAgImRlbkZpZWxkIjogIuWSqOivouS6uuaVsCIsCiAgICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICAgInVuaXQiOiAiJSIsCiAgICAgICAgICAgICJmb3JtYXQiOiAicGVyY2VudCIsCiAgICAgICAgICAgICJtaXNzaW5nUG9saWN5IjogInNraXAiLAogICAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgICAiZGlzcGxheU9yaWdpbiI6ICJhdXRvIiwKICAgICAgICAgICAgImlkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6Y29udmVyc2lvbi12YWx1ZSIsCiAgICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IgogICAgICAgICAgfSwKICAgICAgICAgICJkYXRhc2V0SWQiOiAiZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTMiLAogICAgICAgICAgImRhdGFzZXRWZXJzaW9uIjogMSwKICAgICAgICAgICJkYXRhc2V0TmFtZSI6ICLooaXkv67mlbDmja4iLAogICAgICAgICAgImFwcGxpZWRRdWVyeSI6IHsKICAgICAgICAgICAgImZpbHRlcnMiOiBbXSwKICAgICAgICAgICAgInRpbWVab25lIjogIkFzaWEvU2hhbmdoYWkiLAogICAgICAgICAgICAicmFuZ2VQb2xpY3kiOiAicHJvamVjdCIsCiAgICAgICAgICAgICJ1bmRhdGVkUm93cyI6IDAKICAgICAgICAgIH0KICAgICAgICB9LAogICAgICAgICJjb21wYXJpc29uIjogIumAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgfSwKICAgICAgewogICAgICAgICJjYXJkSWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5Mzpjb252ZXJzaW9uLXRpbWVfdHJlbmQiLAogICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjofotovlir8iLAogICAgICAgICJ0eXBlIjogInRpbWVfdHJlbmQiLAogICAgICAgICJtZXRyaWNJZCI6ICIxNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24iLAogICAgICAgICJtZXRyaWNWZXJzaW9uIjogMSwKICAgICAgICAiY29uZmlnIjogewogICAgICAgICAgInRpdGxlIjogIuaIkOS6pOeOh+i2i+WKvyIsCiAgICAgICAgICAidHlwZSI6ICJ0aW1lX3RyZW5kIiwKICAgICAgICAgICJkYXRhc2V0SWQiOiAiZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTMiLAogICAgICAgICAgIm1vZGUiOiAiY3VzdG9tIiwKICAgICAgICAgICJtZXRyaWMiOiAiY3VzdG9tIiwKICAgICAgICAgICJhZ2dyZWdhdGlvbiI6ICJyYXRpbyIsCiAgICAgICAgICAibnVtRmllbGQiOiAi5oiQ5Lqk5Lq65pWwIiwKICAgICAgICAgICJkZW5GaWVsZCI6ICLlkqjor6LkurrmlbAiLAogICAgICAgICAgImRhdGVGaWVsZCI6ICLml6XmnJ8iLAogICAgICAgICAgInVuaXQiOiAiJSIsCiAgICAgICAgICAiZm9ybWF0IjogInBlcmNlbnQiLAogICAgICAgICAgIm1pc3NpbmdQb2xpY3kiOiAic2tpcCIsCiAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAiaWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5Mzpjb252ZXJzaW9uLXRpbWVfdHJlbmQiLAogICAgICAgICAgInJhbmdlUG9saWN5IjogInByb2plY3QiCiAgICAgICAgfSwKICAgICAgICAicmVzdWx0IjogewogICAgICAgICAgImtleSI6ICJjdXN0b20iLAogICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk546H6LaL5Yq/IiwKICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgInZhbHVlIjogMTAsCiAgICAgICAgICAiZm9ybWF0dGVkVmFsdWUiOiAiMTAuMCUiLAogICAgICAgICAgInNhbXBsZVNpemUiOiAyLAogICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICJyYXRpb0Jhc2lzIjogInBhaXJlZCIsCiAgICAgICAgICAidG90YWxSb3dzIjogMiwKICAgICAgICAgICJudW1lcmF0b3JWYWxpZENvdW50IjogMiwKICAgICAgICAgICJkZW5vbWluYXRvclZhbGlkQ291bnQiOiAyLAogICAgICAgICAgInBhaXJlZFZhbGlkQ291bnQiOiAyLAogICAgICAgICAgIm51bWVyYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICJkZW5vbWluYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICJjYWxjdWxhdGlvblNhbXBsZVNpemUiOiAyLAogICAgICAgICAgIm51bWVyYXRvciI6IDMwLAogICAgICAgICAgImRlbm9taW5hdG9yIjogMzAwLAogICAgICAgICAgInRyZW5kIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImtleSI6ICJjdXN0b20iLAogICAgICAgICAgICAgICJuYW1lIjogIuaIkOS6pOeOh+i2i+WKvyIsCiAgICAgICAgICAgICAgInVuaXQiOiAiJSIsCiAgICAgICAgICAgICAgInZhbHVlIjogMjAsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjIwLjAlIiwKICAgICAgICAgICAgICAic2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICAgICAidG90YWxSb3dzIjogMSwKICAgICAgICAgICAgICAibnVtZXJhdG9yVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgInBhaXJlZFZhbGlkQ291bnQiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yQ292ZXJhZ2UiOiAxLAogICAgICAgICAgICAgICJjYWxjdWxhdGlvblNhbXBsZVNpemUiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3IiOiAyMCwKICAgICAgICAgICAgICAiZGVub21pbmF0b3IiOiAxMDAsCiAgICAgICAgICAgICAgImRhdGUiOiAiMjAyNi0xMC0wMSIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICAgICAibmFtZSI6ICLmiJDkuqTnjofotovlir8iLAogICAgICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgICAgICJ2YWx1ZSI6IDUsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjUuMCUiLAogICAgICAgICAgICAgICJzYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgICAgICJ0b3RhbFJvd3MiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAicGFpcmVkVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImNhbGN1bGF0aW9uU2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvciI6IDEwLAogICAgICAgICAgICAgICJkZW5vbWluYXRvciI6IDIwMCwKICAgICAgICAgICAgICAiZGF0ZSI6ICIyMDI2LTEwLTAyIgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImRlZmluaXRpb24iOiB7CiAgICAgICAgICAgICJpZCI6ICIxNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24iLAogICAgICAgICAgICAidmVyc2lvbiI6IDEsCiAgICAgICAgICAgICJuYW1lIjogIuaIkOS6pOeOhyIsCiAgICAgICAgICAgICJwb2xpY3kiOiAicGlubmVkIgogICAgICAgICAgfSwKICAgICAgICAgICJlZmZlY3RpdmVDb25maWciOiB7CiAgICAgICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjofotovlir8iLAogICAgICAgICAgICAidHlwZSI6ICJ0aW1lX3RyZW5kIiwKICAgICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAgICJtb2RlIjogImN1c3RvbSIsCiAgICAgICAgICAgICJtZXRyaWMiOiAiY3VzdG9tIiwKICAgICAgICAgICAgImFnZ3JlZ2F0aW9uIjogInJhdGlvIiwKICAgICAgICAgICAgIm51bUZpZWxkIjogIuaIkOS6pOS6uuaVsCIsCiAgICAgICAgICAgICJkZW5GaWVsZCI6ICLlkqjor6LkurrmlbAiLAogICAgICAgICAgICAiZGF0ZUZpZWxkIjogIuaXpeacnyIsCiAgICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgICAiZm9ybWF0IjogInBlcmNlbnQiLAogICAgICAgICAgICAibWlzc2luZ1BvbGljeSI6ICJza2lwIiwKICAgICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tdGltZV90cmVuZCIsCiAgICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IgogICAgICAgICAgfSwKICAgICAgICAgICJkYXRhc2V0SWQiOiAiZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTMiLAogICAgICAgICAgImRhdGFzZXRWZXJzaW9uIjogMSwKICAgICAgICAgICJkYXRhc2V0TmFtZSI6ICLooaXkv67mlbDmja4iLAogICAgICAgICAgImFwcGxpZWRRdWVyeSI6IHsKICAgICAgICAgICAgImZpbHRlcnMiOiBbXSwKICAgICAgICAgICAgInRpbWVab25lIjogIkFzaWEvU2hhbmdoYWkiLAogICAgICAgICAgICAicmFuZ2VQb2xpY3kiOiAicHJvamVjdCIsCiAgICAgICAgICAgICJ1bmRhdGVkUm93cyI6IDAKICAgICAgICAgIH0KICAgICAgICB9LAogICAgICAgICJjb21wYXJpc29uIjogIumAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgfSwKICAgICAgewogICAgICAgICJjYXJkSWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5Mzpjb252ZXJzaW9uLWJyZWFrZG93biIsCiAgICAgICAgInRpdGxlIjogIuaIkOS6pOeOh+aMiea4oOmBkyIsCiAgICAgICAgInR5cGUiOiAiYnJlYWtkb3duIiwKICAgICAgICAibWV0cmljSWQiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5Mzpjb252ZXJzaW9uIiwKICAgICAgICAibWV0cmljVmVyc2lvbiI6IDEsCiAgICAgICAgImNvbmZpZyI6IHsKICAgICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjofmjInmuKDpgZMiLAogICAgICAgICAgInR5cGUiOiAidGltZV90cmVuZCIsCiAgICAgICAgICAiZGF0YXNldElkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAgICJtb2RlIjogImN1c3RvbSIsCiAgICAgICAgICAibWV0cmljIjogImN1c3RvbSIsCiAgICAgICAgICAiYWdncmVnYXRpb24iOiAicmF0aW8iLAogICAgICAgICAgIm51bUZpZWxkIjogIuaIkOS6pOS6uuaVsCIsCiAgICAgICAgICAiZGVuRmllbGQiOiAi5ZKo6K+i5Lq65pWwIiwKICAgICAgICAgICJkYXRlRmllbGQiOiAi5pel5pyfIiwKICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgImZvcm1hdCI6ICJwZXJjZW50IiwKICAgICAgICAgICJtaXNzaW5nUG9saWN5IjogInNraXAiLAogICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICJkaXNwbGF5T3JpZ2luIjogImF1dG8iLAogICAgICAgICAgImlkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6Y29udmVyc2lvbi1icmVha2Rvd24iLAogICAgICAgICAgImdyb3VwQnkiOiAi5rig6YGTIiwKICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IgogICAgICAgIH0sCiAgICAgICAgInJlc3VsdCI6IHsKICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICJuYW1lIjogIuaIkOS6pOeOh+aMiea4oOmBkyIsCiAgICAgICAgICAidW5pdCI6ICIlIiwKICAgICAgICAgICJ2YWx1ZSI6IDEwLAogICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjEwLjAlIiwKICAgICAgICAgICJzYW1wbGVTaXplIjogMiwKICAgICAgICAgICJzdGF0dXMiOiAib2siLAogICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgInRvdGFsUm93cyI6IDIsCiAgICAgICAgICAibnVtZXJhdG9yVmFsaWRDb3VudCI6IDIsCiAgICAgICAgICAiZGVub21pbmF0b3JWYWxpZENvdW50IjogMiwKICAgICAgICAgICJwYWlyZWRWYWxpZENvdW50IjogMiwKICAgICAgICAgICJudW1lcmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAiZGVub21pbmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAiY2FsY3VsYXRpb25TYW1wbGVTaXplIjogMiwKICAgICAgICAgICJudW1lcmF0b3IiOiAzMCwKICAgICAgICAgICJkZW5vbWluYXRvciI6IDMwMCwKICAgICAgICAgICJncm91cHMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAia2V5IjogImN1c3RvbSIsCiAgICAgICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk546H5oyJ5rig6YGTIiwKICAgICAgICAgICAgICAidW5pdCI6ICIlIiwKICAgICAgICAgICAgICAidmFsdWUiOiAyMCwKICAgICAgICAgICAgICAiZm9ybWF0dGVkVmFsdWUiOiAiMjAuMCUiLAogICAgICAgICAgICAgICJzYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgICAgICJ0b3RhbFJvd3MiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAicGFpcmVkVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImNhbGN1bGF0aW9uU2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvciI6IDIwLAogICAgICAgICAgICAgICJkZW5vbWluYXRvciI6IDEwMCwKICAgICAgICAgICAgICAibGFiZWwiOiAi6Zeo5bqXIiwKICAgICAgICAgICAgICAiY291bnQiOiAxCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAia2V5IjogImN1c3RvbSIsCiAgICAgICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk546H5oyJ5rig6YGTIiwKICAgICAgICAgICAgICAidW5pdCI6ICIlIiwKICAgICAgICAgICAgICAidmFsdWUiOiA1LAogICAgICAgICAgICAgICJmb3JtYXR0ZWRWYWx1ZSI6ICI1LjAlIiwKICAgICAgICAgICAgICAic2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICAgICAidG90YWxSb3dzIjogMSwKICAgICAgICAgICAgICAibnVtZXJhdG9yVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgInBhaXJlZFZhbGlkQ291bnQiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yQ292ZXJhZ2UiOiAxLAogICAgICAgICAgICAgICJjYWxjdWxhdGlvblNhbXBsZVNpemUiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3IiOiAxMCwKICAgICAgICAgICAgICAiZGVub21pbmF0b3IiOiAyMDAsCiAgICAgICAgICAgICAgImxhYmVsIjogIue6v+S4iiIsCiAgICAgICAgICAgICAgImNvdW50IjogMQogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgInRyZW5kIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgImtleSI6ICJjdXN0b20iLAogICAgICAgICAgICAgICJuYW1lIjogIuaIkOS6pOeOh+aMiea4oOmBkyIsCiAgICAgICAgICAgICAgInVuaXQiOiAiJSIsCiAgICAgICAgICAgICAgInZhbHVlIjogMjAsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjIwLjAlIiwKICAgICAgICAgICAgICAic2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgInN0YXR1cyI6ICJvayIsCiAgICAgICAgICAgICAgInN0YXR1c0xhYmVsIjogIuiuoeeul+WujOaIkCIsCiAgICAgICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICAgICAidG90YWxSb3dzIjogMSwKICAgICAgICAgICAgICAibnVtZXJhdG9yVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgInBhaXJlZFZhbGlkQ291bnQiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImRlbm9taW5hdG9yQ292ZXJhZ2UiOiAxLAogICAgICAgICAgICAgICJjYWxjdWxhdGlvblNhbXBsZVNpemUiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3IiOiAyMCwKICAgICAgICAgICAgICAiZGVub21pbmF0b3IiOiAxMDAsCiAgICAgICAgICAgICAgImRhdGUiOiAiMjAyNi0xMC0wMSIKICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICJrZXkiOiAiY3VzdG9tIiwKICAgICAgICAgICAgICAibmFtZSI6ICLmiJDkuqTnjofmjInmuKDpgZMiLAogICAgICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgICAgICJ2YWx1ZSI6IDUsCiAgICAgICAgICAgICAgImZvcm1hdHRlZFZhbHVlIjogIjUuMCUiLAogICAgICAgICAgICAgICJzYW1wbGVTaXplIjogMSwKICAgICAgICAgICAgICAic3RhdHVzIjogIm9rIiwKICAgICAgICAgICAgICAic3RhdHVzTGFiZWwiOiAi6K6h566X5a6M5oiQIiwKICAgICAgICAgICAgICAicmF0aW9CYXNpcyI6ICJwYWlyZWQiLAogICAgICAgICAgICAgICJ0b3RhbFJvd3MiOiAxLAogICAgICAgICAgICAgICJudW1lcmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JWYWxpZENvdW50IjogMSwKICAgICAgICAgICAgICAicGFpcmVkVmFsaWRDb3VudCI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvckNvdmVyYWdlIjogMSwKICAgICAgICAgICAgICAiZGVub21pbmF0b3JDb3ZlcmFnZSI6IDEsCiAgICAgICAgICAgICAgImNhbGN1bGF0aW9uU2FtcGxlU2l6ZSI6IDEsCiAgICAgICAgICAgICAgIm51bWVyYXRvciI6IDEwLAogICAgICAgICAgICAgICJkZW5vbWluYXRvciI6IDIwMCwKICAgICAgICAgICAgICAiZGF0ZSI6ICIyMDI2LTEwLTAyIgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImRlZmluaXRpb24iOiB7CiAgICAgICAgICAgICJpZCI6ICIxNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24iLAogICAgICAgICAgICAidmVyc2lvbiI6IDEsCiAgICAgICAgICAgICJuYW1lIjogIuaIkOS6pOeOhyIsCiAgICAgICAgICAgICJwb2xpY3kiOiAicGlubmVkIgogICAgICAgICAgfSwKICAgICAgICAgICJlZmZlY3RpdmVDb25maWciOiB7CiAgICAgICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjofmjInmuKDpgZMiLAogICAgICAgICAgICAidHlwZSI6ICJ0aW1lX3RyZW5kIiwKICAgICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAgICJtb2RlIjogImN1c3RvbSIsCiAgICAgICAgICAgICJtZXRyaWMiOiAiY3VzdG9tIiwKICAgICAgICAgICAgImFnZ3JlZ2F0aW9uIjogInJhdGlvIiwKICAgICAgICAgICAgIm51bUZpZWxkIjogIuaIkOS6pOS6uuaVsCIsCiAgICAgICAgICAgICJkZW5GaWVsZCI6ICLlkqjor6LkurrmlbAiLAogICAgICAgICAgICAiZGF0ZUZpZWxkIjogIuaXpeacnyIsCiAgICAgICAgICAgICJ1bml0IjogIiUiLAogICAgICAgICAgICAiZm9ybWF0IjogInBlcmNlbnQiLAogICAgICAgICAgICAibWlzc2luZ1BvbGljeSI6ICJza2lwIiwKICAgICAgICAgICAgInJhdGlvQmFzaXMiOiAicGFpcmVkIiwKICAgICAgICAgICAgImRpc3BsYXlPcmlnaW4iOiAiYXV0byIsCiAgICAgICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tYnJlYWtkb3duIiwKICAgICAgICAgICAgImdyb3VwQnkiOiAi5rig6YGTIiwKICAgICAgICAgICAgInJhbmdlUG9saWN5IjogInByb2plY3QiCiAgICAgICAgICB9LAogICAgICAgICAgImRhdGFzZXRJZCI6ICJkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MyIsCiAgICAgICAgICAiZGF0YXNldFZlcnNpb24iOiAxLAogICAgICAgICAgImRhdGFzZXROYW1lIjogIuihpeS/ruaVsOaNriIsCiAgICAgICAgICAiYXBwbGllZFF1ZXJ5IjogewogICAgICAgICAgICAiZmlsdGVycyI6IFtdLAogICAgICAgICAgICAidGltZVpvbmUiOiAiQXNpYS9TaGFuZ2hhaSIsCiAgICAgICAgICAgICJyYW5nZVBvbGljeSI6ICJwcm9qZWN0IiwKICAgICAgICAgICAgInVuZGF0ZWRSb3dzIjogMAogICAgICAgICAgfQogICAgICAgIH0sCiAgICAgICAgImNvbXBhcmlzb24iOiAi6YCJ5oup5a6M5pW06LW35q2i5pel5pyf5ZCO5Y+v5q+U6L6D5LiK5pyfIgogICAgICB9CiAgICBdLAogICAgImRhdGFzZXRzIjogWwogICAgICB7CiAgICAgICAgImlkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAicHJvamVjdElkIjogIjE3OTE5MjE1NDI3MDMiLAogICAgICAgICJzb3VyY2VJZCI6ICI2NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTMiLAogICAgICAgICJuYW1lIjogIuihpeS/ruaVsOaNriIsCiAgICAgICAgInNjaGVtYUpzb24iOiAiW3tcImtleVwiOlwi5pel5pyfXCIsXCJuYW1lXCI6XCLml6XmnJ9cIixcInR5cGVcIjpcImRhdGVcIn0se1wia2V5XCI6XCLmuKDpgZNcIixcIm5hbWVcIjpcIua4oOmBk1wiLFwidHlwZVwiOlwidGV4dFwifSx7XCJrZXlcIjpcIuWSqOivouS6uuaVsFwiLFwibmFtZVwiOlwi5ZKo6K+i5Lq65pWwXCIsXCJ0eXBlXCI6XCJudW1iZXJcIn0se1wia2V5XCI6XCLmiJDkuqTkurrmlbBcIixcIm5hbWVcIjpcIuaIkOS6pOS6uuaVsFwiLFwidHlwZVwiOlwibnVtYmVyXCJ9XSIsCiAgICAgICAgInJvd0NvdW50IjogMiwKICAgICAgICAidmVyc2lvbiI6IDEsCiAgICAgICAgInVwZGF0ZWRBdCI6ICIyMDI2LTEwLTEzVDE5OjU5OjAzLjQ3MVoiLAogICAgICAgICJjb2x1bW5zIjogWwogICAgICAgICAgewogICAgICAgICAgICAia2V5IjogIuaXpeacnyIsCiAgICAgICAgICAgICJuYW1lIjogIuaXpeacnyIsCiAgICAgICAgICAgICJ0eXBlIjogImRhdGUiCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAia2V5IjogIua4oOmBkyIsCiAgICAgICAgICAgICJuYW1lIjogIua4oOmBkyIsCiAgICAgICAgICAgICJ0eXBlIjogInRleHQiCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAia2V5IjogIuWSqOivouS6uuaVsCIsCiAgICAgICAgICAgICJuYW1lIjogIuWSqOivouS6uuaVsCIsCiAgICAgICAgICAgICJ0eXBlIjogIm51bWJlciIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICJrZXkiOiAi5oiQ5Lqk5Lq65pWwIiwKICAgICAgICAgICAgIm5hbWUiOiAi5oiQ5Lqk5Lq65pWwIiwKICAgICAgICAgICAgInR5cGUiOiAibnVtYmVyIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfQogICAgXSwKICAgICJhaVN0YXR1cyI6ICJub3RfZW5hYmxlZCIsCiAgICAia3BpcyI6IFsKICAgICAgewogICAgICAgICJrZXkiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpyZWNvcmRzLXZhbHVlIiwKICAgICAgICAibGFiZWwiOiAi6K6w5b2V5pWw6YePIiwKICAgICAgICAidmFsdWUiOiAiMiIsCiAgICAgICAgIm5vdGUiOiAi5pyJ5pWI5qC35pysIDIg6KGMIMK3IOmAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgfSwKICAgICAgewogICAgICAgICJrZXkiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNSU5MiVBOCVFOCVBRiVBMiVFNCVCQSVCQSVFNiU5NSVCMC12YWx1ZSIsCiAgICAgICAgImxhYmVsIjogIuWSqOivouS6uuaVsOWQiOiuoSIsCiAgICAgICAgInZhbHVlIjogIjMwMCIsCiAgICAgICAgIm5vdGUiOiAi5pyJ5pWI5qC35pysIDIg6KGMIMK3IOmAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgfSwKICAgICAgewogICAgICAgICJrZXkiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNiU4OCU5MCVFNCVCQSVBNCVFNCVCQSVCQSVFNiU5NSVCMC12YWx1ZSIsCiAgICAgICAgImxhYmVsIjogIuaIkOS6pOS6uuaVsOWQiOiuoSIsCiAgICAgICAgInZhbHVlIjogIjMwIiwKICAgICAgICAibm90ZSI6ICLmnInmlYjmoLfmnKwgMiDooYwgwrcg6YCJ5oup5a6M5pW06LW35q2i5pel5pyf5ZCO5Y+v5q+U6L6D5LiK5pyfIgogICAgICB9LAogICAgICB7CiAgICAgICAgImtleSI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tdmFsdWUiLAogICAgICAgICJsYWJlbCI6ICLmiJDkuqTnjociLAogICAgICAgICJ2YWx1ZSI6ICIxMC4wJSIsCiAgICAgICAgIm5vdGUiOiAi5oiQ5a+55Y+j5b6EIMK3IOaIkOWvueacieaViCAyIOihjCDCtyDliIblrZDmnInmlYggMi8y77yIMTAwLjAl77yJIMK3IOWIhuavjeacieaViCAyLzLvvIgxMDAuMCXvvIkgwrcg6YCJ5oup5a6M5pW06LW35q2i5pel5pyf5ZCO5Y+v5q+U6L6D5LiK5pyfIgogICAgICB9CiAgICBdLAogICAgInNlY3Rpb25zIjogWwogICAgICB7CiAgICAgICAgImlkIjogInN0YXR1cyIsCiAgICAgICAgInRpdGxlIjogIumcgOimgeWFs+azqOeahOeKtuaAgSIsCiAgICAgICAgImV5ZWJyb3ciOiAiIiwKICAgICAgICAia2luZCI6ICJpbnNpZ2h0cyIsCiAgICAgICAgImRhdGEiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIuS7heS9v+eUqOacrOmhueebruW3suWPkeW4g+eahOeci+adv+aMh+agh++8m+aKpeWRiuS/neeVmeeUn+aIkOaXtueahOWPo+W+hOS4juaVsOaNrueJiOacrO+8jOS4jemaj+S5i+WQjuS/ruaUuemHjeeul+OAgiIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIuW9k+WJjeaMh+agh+Wdh+WPr+aguOWvue+8m+i/memHjOS4jeiHquWKqOaOqOaWreS4muWKoeWOn+WboOOAgiIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWQiOiAicmVjb21tZW5kZWQtMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpyZWNvcmRzLXZhbHVlOnRyZW5kIiwKICAgICAgICAidGl0bGUiOiAi6K6w5b2V5pWw6YeP5q+P5pel6LaL5Yq/IiwKICAgICAgICAiZXllYnJvdyI6ICIiLAogICAgICAgICJraW5kIjogInRyZW5kIiwKICAgICAgICAiZGVzY3JpcHRpb24iOiAi5pyJ5pWI5qC35pysIDIg6KGMIiwKICAgICAgICAiZGF0YSI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgIuaXpeacnyI6ICIyMDI2LTEwLTAxIiwKICAgICAgICAgICAgIue7k+aenCI6ICIxIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmnInmlYjmoLfmnKwgMSDooYwiLAogICAgICAgICAgICAi54q25oCBIjogIuiuoeeul+WujOaIkCIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICLml6XmnJ8iOiAiMjAyNi0xMC0wMiIsCiAgICAgICAgICAgICLnu5PmnpwiOiAiMSIsCiAgICAgICAgICAgICLmoLfmnKwiOiAi5pyJ5pWI5qC35pysIDEg6KGMIiwKICAgICAgICAgICAgIueKtuaAgSI6ICLorqHnrpflrozmiJAiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6ZmllbGQlM0ElRTUlOTIlQTglRTglQUYlQTIlRTQlQkElQkElRTYlOTUlQjAtdmFsdWU6dHJlbmQiLAogICAgICAgICJ0aXRsZSI6ICLlkqjor6LkurrmlbDlkIjorqHmr4/ml6Xotovlir8iLAogICAgICAgICJleWVicm93IjogIiIsCiAgICAgICAgImtpbmQiOiAidHJlbmQiLAogICAgICAgICJkZXNjcmlwdGlvbiI6ICLmnInmlYjmoLfmnKwgMiDooYwiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5pel5pyfIjogIjIwMjYtMTAtMDEiLAogICAgICAgICAgICAi57uT5p6cIjogIjEwMCIsCiAgICAgICAgICAgICLmoLfmnKwiOiAi5pyJ5pWI5qC35pysIDEg6KGMIiwKICAgICAgICAgICAgIueKtuaAgSI6ICLorqHnrpflrozmiJAiCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAi5pel5pyfIjogIjIwMjYtMTAtMDIiLAogICAgICAgICAgICAi57uT5p6cIjogIjIwMCIsCiAgICAgICAgICAgICLmoLfmnKwiOiAi5pyJ5pWI5qC35pysIDEg6KGMIiwKICAgICAgICAgICAgIueKtuaAgSI6ICLorqHnrpflrozmiJAiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6ZmllbGQlM0ElRTYlODglOTAlRTQlQkElQTQlRTQlQkElQkElRTYlOTUlQjAtdmFsdWU6dHJlbmQiLAogICAgICAgICJ0aXRsZSI6ICLmiJDkuqTkurrmlbDlkIjorqHmr4/ml6Xotovlir8iLAogICAgICAgICJleWVicm93IjogIiIsCiAgICAgICAgImtpbmQiOiAidHJlbmQiLAogICAgICAgICJkZXNjcmlwdGlvbiI6ICLmnInmlYjmoLfmnKwgMiDooYwiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5pel5pyfIjogIjIwMjYtMTAtMDEiLAogICAgICAgICAgICAi57uT5p6cIjogIjIwIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmnInmlYjmoLfmnKwgMSDooYwiLAogICAgICAgICAgICAi54q25oCBIjogIuiuoeeul+WujOaIkCIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICLml6XmnJ8iOiAiMjAyNi0xMC0wMiIsCiAgICAgICAgICAgICLnu5PmnpwiOiAiMTAiLAogICAgICAgICAgICAi5qC35pysIjogIuacieaViOagt+acrCAxIOihjCIsCiAgICAgICAgICAgICLnirbmgIEiOiAi6K6h566X5a6M5oiQIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfSwKICAgICAgewogICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tdmFsdWU6dHJlbmQiLAogICAgICAgICJ0aXRsZSI6ICLmiJDkuqTnjofmr4/ml6Xotovlir8iLAogICAgICAgICJleWVicm93IjogIiIsCiAgICAgICAgImtpbmQiOiAidHJlbmQiLAogICAgICAgICJkZXNjcmlwdGlvbiI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDIg6KGMIMK3IOWIhuWtkOacieaViCAyLzLvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDIvMu+8iDEwMC4wJe+8iSIsCiAgICAgICAgImRhdGEiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICLml6XmnJ8iOiAiMjAyNi0xMC0wMSIsCiAgICAgICAgICAgICLnu5PmnpwiOiAiMjAuMCUiLAogICAgICAgICAgICAi5qC35pysIjogIuaIkOWvueWPo+W+hCDCtyDmiJDlr7nmnInmlYggMSDooYwgwrcg5YiG5a2Q5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSDCtyDliIbmr43mnInmlYggMS8x77yIMTAwLjAl77yJIiwKICAgICAgICAgICAgIueKtuaAgSI6ICLorqHnrpflrozmiJAiCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAi5pel5pyfIjogIjIwMjYtMTAtMDIiLAogICAgICAgICAgICAi57uT5p6cIjogIjUuMCUiLAogICAgICAgICAgICAi5qC35pysIjogIuaIkOWvueWPo+W+hCDCtyDmiJDlr7nmnInmlYggMSDooYwgwrcg5YiG5a2Q5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSDCtyDliIbmr43mnInmlYggMS8x77yIMTAwLjAl77yJIiwKICAgICAgICAgICAgIueKtuaAgSI6ICLorqHnrpflrozmiJAiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogInJlY29tbWVuZGVkLTE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6Y29udmVyc2lvbi10aW1lX3RyZW5kOnRyZW5kIiwKICAgICAgICAidGl0bGUiOiAi5oiQ5Lqk546H6LaL5Yq/5q+P5pel6LaL5Yq/IiwKICAgICAgICAiZXllYnJvdyI6ICIiLAogICAgICAgICJraW5kIjogInRyZW5kIiwKICAgICAgICAiZGVzY3JpcHRpb24iOiAi5oiQ5a+55Y+j5b6EIMK3IOaIkOWvueacieaViCAyIOihjCDCtyDliIblrZDmnInmlYggMi8y77yIMTAwLjAl77yJIMK3IOWIhuavjeacieaViCAyLzLvvIgxMDAuMCXvvIkiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5pel5pyfIjogIjIwMjYtMTAtMDEiLAogICAgICAgICAgICAi57uT5p6cIjogIjIwLjAlIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDEg6KGMIMK3IOWIhuWtkOacieaViCAxLzHvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSIsCiAgICAgICAgICAgICLnirbmgIEiOiAi6K6h566X5a6M5oiQIgogICAgICAgICAgfSwKICAgICAgICAgIHsKICAgICAgICAgICAgIuaXpeacnyI6ICIyMDI2LTEwLTAyIiwKICAgICAgICAgICAgIue7k+aenCI6ICI1LjAlIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDEg6KGMIMK3IOWIhuWtkOacieaViCAxLzHvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSIsCiAgICAgICAgICAgICLnirbmgIEiOiAi6K6h566X5a6M5oiQIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfSwKICAgICAgewogICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tYnJlYWtkb3duOnRyZW5kIiwKICAgICAgICAidGl0bGUiOiAi5oiQ5Lqk546H5oyJ5rig6YGT5q+P5pel6LaL5Yq/IiwKICAgICAgICAiZXllYnJvdyI6ICIiLAogICAgICAgICJraW5kIjogInRyZW5kIiwKICAgICAgICAiZGVzY3JpcHRpb24iOiAi5oiQ5a+55Y+j5b6EIMK3IOaIkOWvueacieaViCAyIOihjCDCtyDliIblrZDmnInmlYggMi8y77yIMTAwLjAl77yJIMK3IOWIhuavjeacieaViCAyLzLvvIgxMDAuMCXvvIkiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5pel5pyfIjogIjIwMjYtMTAtMDEiLAogICAgICAgICAgICAi57uT5p6cIjogIjIwLjAlIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDEg6KGMIMK3IOWIhuWtkOacieaViCAxLzHvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSIsCiAgICAgICAgICAgICLnirbmgIEiOiAi6K6h566X5a6M5oiQIgogICAgICAgICAgfSwKICAgICAgICAgIHsKICAgICAgICAgICAgIuaXpeacnyI6ICIyMDI2LTEwLTAyIiwKICAgICAgICAgICAgIue7k+aenCI6ICI1LjAlIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDEg6KGMIMK3IOWIhuWtkOacieaViCAxLzHvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSIsCiAgICAgICAgICAgICLnirbmgIEiOiAi6K6h566X5a6M5oiQIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfSwKICAgICAgewogICAgICAgICJpZCI6ICJyZWNvbW1lbmRlZC0xNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24tYnJlYWtkb3duOmdyb3VwcyIsCiAgICAgICAgInRpdGxlIjogIuaIkOS6pOeOh+aMiea4oOmBk+WIhue7hOWvueavlCIsCiAgICAgICAgImV5ZWJyb3ciOiAiIiwKICAgICAgICAia2luZCI6ICJiYXJzIiwKICAgICAgICAiZGF0YSI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgIuWIhue7hCI6ICLpl6jlupciLAogICAgICAgICAgICAi57uT5p6cIjogIjIwLjAlIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDEg6KGMIMK3IOWIhuWtkOacieaViCAxLzHvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSIsCiAgICAgICAgICAgICLnirbmgIEiOiAi6K6h566X5a6M5oiQIgogICAgICAgICAgfSwKICAgICAgICAgIHsKICAgICAgICAgICAgIuWIhue7hCI6ICLnur/kuIoiLAogICAgICAgICAgICAi57uT5p6cIjogIjUuMCUiLAogICAgICAgICAgICAi5qC35pysIjogIuaIkOWvueWPo+W+hCDCtyDmiJDlr7nmnInmlYggMSDooYwgwrcg5YiG5a2Q5pyJ5pWIIDEvMe+8iDEwMC4wJe+8iSDCtyDliIbmr43mnInmlYggMS8x77yIMTAwLjAl77yJIiwKICAgICAgICAgICAgIueKtuaAgSI6ICLorqHnrpflrozmiJAiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogInNvdXJjZXMiLAogICAgICAgICJ0aXRsZSI6ICLmnaXmupDkuI7mlbDmja7mm7TmlrDml7bpl7QiLAogICAgICAgICJleWVicm93IjogIiIsCiAgICAgICAgImtpbmQiOiAidGFibGUiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5p2l5rqQIjogIuihpeS/ruaVsOaNriIsCiAgICAgICAgICAgICLmlbDmja7niYjmnKwiOiAxLAogICAgICAgICAgICAi5Y6f6KGo6K6w5b2VIjogMiwKICAgICAgICAgICAgIuaVsOaNruabtOaWsOaXtumXtCI6ICIyMDI2LTEwLTEzVDE5OjU5OjAzLjQ3MVoiLAogICAgICAgICAgICAi5ZCM5q2l54q25oCBIjogIuacgOi/keaIkOWKn++8mjIwMjYtMTAtMTNUMTk6NTk6MDMuNDU1WiIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWQiOiAiZGVmaW5pdGlvbnMiLAogICAgICAgICJ0aXRsZSI6ICLmjIfmoIflj6PlvoTkuI7niYjmnKwiLAogICAgICAgICJleWVicm93IjogIiIsCiAgICAgICAgImtpbmQiOiAidGFibGUiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5oyH5qCHIjogIuiusOW9leaVsOmHjyIsCiAgICAgICAgICAgICLmoIfor4YiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpyZWNvcmRzIiwKICAgICAgICAgICAgIuWPo+W+hOeJiOacrCI6IDEsCiAgICAgICAgICAgICLogZrlkIgiOiAiY291bnQiLAogICAgICAgICAgICAi5qC35pysIjogIuacieaViOagt+acrCAyIOihjCIsCiAgICAgICAgICAgICLlkajmnJ8iOiAi5LiN6ZmQ5byA5aeLIOiHsyDkuI3pmZDnu5PmnZ8iLAogICAgICAgICAgICAi5q+U6L6DIjogIumAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICLmjIfmoIciOiAi5ZKo6K+i5Lq65pWw5ZCI6K6hIiwKICAgICAgICAgICAgIuagh+ivhiI6ICIxNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmZpZWxkJTNBJUU1JTkyJUE4JUU4JUFGJUEyJUU0JUJBJUJBJUU2JTk1JUIwIiwKICAgICAgICAgICAgIuWPo+W+hOeJiOacrCI6IDEsCiAgICAgICAgICAgICLogZrlkIgiOiAic3VtIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmnInmlYjmoLfmnKwgMiDooYwiLAogICAgICAgICAgICAi5ZGo5pyfIjogIuS4jemZkOW8gOWniyDoh7Mg5LiN6ZmQ57uT5p2fIiwKICAgICAgICAgICAgIuavlOi+gyI6ICLpgInmi6nlrozmlbTotbfmraLml6XmnJ/lkI7lj6/mr5TovoPkuIrmnJ8iCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAi5oyH5qCHIjogIuaIkOS6pOS6uuaVsOWQiOiuoSIsCiAgICAgICAgICAgICLmoIfor4YiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5MzpmaWVsZCUzQSVFNiU4OCU5MCVFNCVCQSVBNCVFNCVCQSVCQSVFNiU5NSVCMCIsCiAgICAgICAgICAgICLlj6PlvoTniYjmnKwiOiAxLAogICAgICAgICAgICAi6IGa5ZCIIjogInN1bSIsCiAgICAgICAgICAgICLmoLfmnKwiOiAi5pyJ5pWI5qC35pysIDIg6KGMIiwKICAgICAgICAgICAgIuWRqOacnyI6ICLkuI3pmZDlvIDlp4sg6IezIOS4jemZkOe7k+adnyIsCiAgICAgICAgICAgICLmr5TovoMiOiAi6YCJ5oup5a6M5pW06LW35q2i5pel5pyf5ZCO5Y+v5q+U6L6D5LiK5pyfIgogICAgICAgICAgfSwKICAgICAgICAgIHsKICAgICAgICAgICAgIuaMh+aghyI6ICLmiJDkuqTnjociLAogICAgICAgICAgICAi5qCH6K+GIjogIjE3OTE5MjE1NDI3MDM6cmVjb21tZW5kZWQ6ZHMtMTc5MTkyMTU0MjcwMy02NTc4NDUyNC1lMGY3LTQzZDQtYjg3NC05MDNjMDU5ZTViOTM6Y29udmVyc2lvbiIsCiAgICAgICAgICAgICLlj6PlvoTniYjmnKwiOiAxLAogICAgICAgICAgICAi6IGa5ZCIIjogInJhdGlvIiwKICAgICAgICAgICAgIuagt+acrCI6ICLmiJDlr7nlj6PlvoQgwrcg5oiQ5a+55pyJ5pWIIDIg6KGMIMK3IOWIhuWtkOacieaViCAyLzLvvIgxMDAuMCXvvIkgwrcg5YiG5q+N5pyJ5pWIIDIvMu+8iDEwMC4wJe+8iSIsCiAgICAgICAgICAgICLlkajmnJ8iOiAi5LiN6ZmQ5byA5aeLIOiHsyDkuI3pmZDnu5PmnZ8iLAogICAgICAgICAgICAi5q+U6L6DIjogIumAieaLqeWujOaVtOi1t+atouaXpeacn+WQjuWPr+avlOi+g+S4iuacnyIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICLmjIfmoIciOiAi5oiQ5Lqk546H6LaL5Yq/IiwKICAgICAgICAgICAgIuagh+ivhiI6ICIxNzkxOTIxNTQyNzAzOnJlY29tbWVuZGVkOmRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzOmNvbnZlcnNpb24iLAogICAgICAgICAgICAi5Y+j5b6E54mI5pysIjogMSwKICAgICAgICAgICAgIuiBmuWQiCI6ICJyYXRpbyIsCiAgICAgICAgICAgICLmoLfmnKwiOiAi5oiQ5a+55Y+j5b6EIMK3IOaIkOWvueacieaViCAyIOihjCDCtyDliIblrZDmnInmlYggMi8y77yIMTAwLjAl77yJIMK3IOWIhuavjeacieaViCAyLzLvvIgxMDAuMCXvvIkiLAogICAgICAgICAgICAi5ZGo5pyfIjogIuS4jemZkOW8gOWniyDoh7Mg5LiN6ZmQ57uT5p2fIiwKICAgICAgICAgICAgIuavlOi+gyI6ICLpgInmi6nlrozmlbTotbfmraLml6XmnJ/lkI7lj6/mr5TovoPkuIrmnJ8iCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAi5oyH5qCHIjogIuaIkOS6pOeOh+aMiea4oOmBkyIsCiAgICAgICAgICAgICLmoIfor4YiOiAiMTc5MTkyMTU0MjcwMzpyZWNvbW1lbmRlZDpkcy0xNzkxOTIxNTQyNzAzLTY1Nzg0NTI0LWUwZjctNDNkNC1iODc0LTkwM2MwNTllNWI5Mzpjb252ZXJzaW9uIiwKICAgICAgICAgICAgIuWPo+W+hOeJiOacrCI6IDEsCiAgICAgICAgICAgICLogZrlkIgiOiAicmF0aW8iLAogICAgICAgICAgICAi5qC35pysIjogIuaIkOWvueWPo+W+hCDCtyDmiJDlr7nmnInmlYggMiDooYwgwrcg5YiG5a2Q5pyJ5pWIIDIvMu+8iDEwMC4wJe+8iSDCtyDliIbmr43mnInmlYggMi8y77yIMTAwLjAl77yJIiwKICAgICAgICAgICAgIuWRqOacnyI6ICLkuI3pmZDlvIDlp4sg6IezIOS4jemZkOe7k+adnyIsCiAgICAgICAgICAgICLmr5TovoMiOiAi6YCJ5oup5a6M5pW06LW35q2i5pel5pyf5ZCO5Y+v5q+U6L6D5LiK5pyfIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfQogICAgXSwKICAgICJzb3VyY2VzIjogWwogICAgICB7CiAgICAgICAgIm5hbWUiOiAi6KGl5L+u5pWw5o2uIiwKICAgICAgICAidHlwZSI6ICJmZWlzaHVfc2hlZXQiLAogICAgICAgICJmcmVzaG5lc3MiOiAiMjAyNi0xMC0xM1QxOTo1OTowMy40NzFaIiwKICAgICAgICAicm93cyI6IDIKICAgICAgfQogICAgXSwKICAgICJxdWFsaXR5IjogW10KICB9LAogICJwbGFuIjogewogICAgImludGVudCI6ICLlt7Llj5HluIPnnIvmnb/mjIfmoIfmiqXlkYoiLAogICAgInBlcmlvZCI6IHsKICAgICAgInN0YXJ0IjogIuS4jemZkOW8gOWniyIsCiAgICAgICJlbmQiOiAi5LiN6ZmQ57uT5p2fIgogICAgfSwKICAgICJyZXF1ZXN0ZWRNZXRyaWNzIjogWwogICAgICAi6K6w5b2V5pWw6YePIiwKICAgICAgIuWSqOivouS6uuaVsOWQiOiuoSIsCiAgICAgICLmiJDkuqTkurrmlbDlkIjorqEiLAogICAgICAi5oiQ5Lqk546HIiwKICAgICAgIuaIkOS6pOeOh+i2i+WKvyIsCiAgICAgICLmiJDkuqTnjofmjInmuKDpgZMiCiAgICBdLAogICAgInJlcXVlc3RlZERpbWVuc2lvbnMiOiBbXSwKICAgICJzb3VyY2VzIjogWwogICAgICB7CiAgICAgICAgImlkIjogImRzLTE3OTE5MjE1NDI3MDMtNjU3ODQ1MjQtZTBmNy00M2Q0LWI4NzQtOTAzYzA1OWU1YjkzIiwKICAgICAgICAibmFtZSI6ICLooaXkv67mlbDmja4iLAogICAgICAgICJ0eXBlIjogImZlaXNodV9zaGVldCIsCiAgICAgICAgInJlYXNvbiI6ICLlvZPliY3pobnnm67lrp7pmYXmjIfmoIfmnaXmupAiCiAgICAgIH0KICAgIF0sCiAgICAiZW5kcG9pbnRzIjogW10sCiAgICAid2FybmluZ3MiOiBbXSwKICAgICJzdGVwcyI6IFsKICAgICAgewogICAgICAgICJuYW1lIjogIuivu+WPluW3suWPkeW4g+aMh+aghyIsCiAgICAgICAgImRldGFpbCI6ICLlm7rlrprlj6PlvoTkuI7mlbDmja7niYjmnKwiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAibmFtZSI6ICLkv53lrZjmiqXlkYrlv6vnhaciLAogICAgICAgICJkZXRhaWwiOiAi5pys5Zyw55yf5a6e57uT5p6c77yM5Y+v5o6I5p2D5a+85Ye6IgogICAgICB9CiAgICBdCiAgfSwKICAiZW5naW5lIjogIumhueebruaMh+agh+W/q+eFp++8iOacquWQr+eUqEFJ77yJIgp9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\attachments\\关键请求-4ff72ba7a476e4c3609b0c13ea58dceb6e98f25e.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\attachments\\实际持久化快照-774fe377fb4ee55ba943088d8b4aad3ffb655684.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\attachments\\最终页面-af2762f768f097f790d67affcf586b134f6224e1.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-iteration-2\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-4e2273188461771de41a",
+          "file": "product-reports.spec.ts",
+          "line": 85,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T19:58:16.434Z",
+    "duration": 49673.296,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

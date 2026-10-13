@@ -1,0 +1,20 @@
+(node:15548) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+node:internal/test_runner/harness:121
+      throw err;
+      ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+409 !== 200
+
+    at file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-reports.mjs:19:180 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 409,
+  expected: 200,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.11.1

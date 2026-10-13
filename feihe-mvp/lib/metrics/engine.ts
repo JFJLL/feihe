@@ -42,6 +42,7 @@ export interface MetricDefinition {
 }
 
 export interface MetricComputeResult {
+  datasetId?: string;
   definition?: { id: string; version: number; name: string; policy: string };
   effectiveConfig?: CardMetricConfig;
   datasetVersion?: number;
@@ -253,7 +254,7 @@ export async function evaluateCardMetric(projectId: string, card: CardMetricConf
     const page = Math.min(query.detailPage || 1, totalPages);
     result.detail = { columns, rows: items.slice((page - 1) * pageSize, page * pageSize), total: items.length, page, totalPages, pageSize };
   }
-  return { ...result, definition: resolved.definition, effectiveConfig: effective, datasetVersion: dataset.version, datasetName: dataset.name,
+  return { ...result, definition: resolved.definition, effectiveConfig: effective, datasetId: dataset.id, datasetVersion: dataset.version, datasetName: dataset.name,
     appliedQuery: { from: card.from, to: card.to, filters: context.filters, timeZone, rangePolicy: context.rangePolicy, undatedRows } };
 }
 

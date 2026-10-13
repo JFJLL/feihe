@@ -1,0 +1,20 @@
+(node:25300) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ report API: a saved report uses the published metric ID/version, exact project period, real daily/group data and prior period (34.7391ms)
+✔ report API: editing one definition changes new reports and cards while the saved original snapshot remains unchanged (35.2115ms)
+✔ report API: shared filters and independent card periods keep their actual semantics, not a cosmetic report caption (27.7759ms)
+✔ report API: stale board, invalid period and foreign project/report reads reject without creating a snapshot (1.7604ms)
+✔ report API: viewer can read/export but cannot generate; another business member can create a report with their own audit identity (8.4531ms)
+✔ report API: report history really paginates and clamps out-of-range pages without losing old versions (95.2646ms)
+✔ report API: the retained assistant endpoint delegates to project metrics and does not populate a non-social report with legacy facts (6.294ms)
+✔ report API: a rate change is an absolute percentage-point change, not an unlabeled relative growth percentage (12.746ms)
+✔ report API: a genuine local audit write failure rolls back the report and does not leave a falsely failed saved snapshot (9.2815ms)
+✔ report API: an unsupported action cannot bypass the project report path into the legacy social generator (0.5569ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1472.5994

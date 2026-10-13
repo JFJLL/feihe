@@ -1,0 +1,40 @@
+(node:18136) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ report API: a saved report uses the published metric ID/version, exact project period, real daily/group data and prior period (37.8654ms)
+✔ report API: editing one definition changes new reports and cards while the saved original snapshot remains unchanged (39.6562ms)
+✔ report API: shared filters and independent card periods keep their actual semantics, not a cosmetic report caption (30.7442ms)
+✔ report API: stale board, invalid period and foreign project/report reads reject without creating a snapshot (1.8794ms)
+✔ report API: viewer can read/export but cannot generate; another business member can create a report with their own audit identity (8.6568ms)
+✔ report API: report history really paginates and clamps out-of-range pages without losing old versions (114.0937ms)
+✔ report API: the retained assistant endpoint delegates to project metrics and does not populate a non-social report with legacy facts (7.8341ms)
+✖ report API: a rate change is an absolute percentage-point change, not an unlabeled relative growth percentage (19.7683ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1977.5591
+
+✖ failing tests:
+
+test at scripts\test-product-reports.mjs:65:1
+✖ report API: a rate change is an absolute percentage-point change, not an unlabeled relative growth percentage (19.7683ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '较上期 −10.0%'
+  - '较上期 −10.0 个百分点'
+              ^
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-reports.mjs:69:192)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '较上期 −10.0%',
+    expected: '较上期 −10.0 个百分点',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

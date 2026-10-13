@@ -1,0 +1,296 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791923397094\",\"projectId\":\"1791923397094\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791923397094\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"日期\\\",\\\"targetField\\\":\\\"日期\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"渠道\\\",\\\"targetField\\\":\\\"渠道\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"完成率\\\",\\\"targetField\\\":\\\"完成率\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"numericUnit\\\":\\\"percent\\\",\\\"sourcePercentScale\\\":\\\"fraction\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791923397094\\\",\\\"documentToken\\\":\\\"Report-1791923397094\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"日期\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"渠道\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"完成率\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791923397094\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923397094\",\"sourceId\":\"8298a751-20c3-40f8-9895-7b47f86de878\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791923397094&id=ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791923397094&datasetId=ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923397094\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\",\"datasetVersion\":1,\"selected\":[\"records\",\"field:完成率\"],\"roles\":{\"date\":\"日期\",\"channel\":\"渠道\"},\"bindBusiness\":false}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791923397094",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791923397094&id=ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923397094\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records-value\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},{\"type\":\"metric_card\",\"title\":\"完成率平均值\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},{\"type\":\"time_trend\",\"title\":\"完成率平均值趋势\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-time_trend\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},{\"type\":\"breakdown\",\"title\":\"完成率平均值按渠道\",\"groupBy\":\"渠道\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-breakdown\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923397094\",\"dashboardId\":\"dash-1791923397094-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records-value\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},\"sortOrder\":0},{\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"完成率平均值\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},\"sortOrder\":1},{\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-time_trend\",\"title\":\"完成率平均值趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"type\":\"time_trend\",\"title\":\"完成率平均值趋势\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-time_trend\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},\"sortOrder\":2},{\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-breakdown\",\"title\":\"完成率平均值按渠道\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"type\":\"breakdown\",\"title\":\"完成率平均值按渠道\",\"groupBy\":\"渠道\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-breakdown\",\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},\"sortOrder\":3}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923397094\",\"query\":{},\"cards\":[{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value\",\"title\":\"完成率平均值\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-time_trend\",\"title\":\"完成率平均值趋势\",\"type\":\"time_trend\",\"sortOrder\":2,\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"},{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-breakdown\",\"title\":\"完成率平均值按渠道\",\"type\":\"breakdown\",\"sortOrder\":3,\"datasetId\":\"ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/reports?projectId=1791923397094&page=1&query=%7B%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/reports",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923397094\",\"query\":{},\"dashboardVersion\":2}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/reports?projectId=1791923397094&page=1&id=bfbed241-f525-4892-9a67-fe8c3caedab2&query=%7B%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791923398953\",\"projectId\":\"1791923398953\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791923398953\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"日期\\\",\\\"targetField\\\":\\\"日期\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"渠道\\\",\\\"targetField\\\":\\\"渠道\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"花费\\\",\\\"targetField\\\":\\\"花费\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"曝光\\\",\\\"targetField\\\":\\\"曝光\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"点击\\\",\\\"targetField\\\":\\\"点击\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791923398953\\\",\\\"documentToken\\\":\\\"Report-1791923398953\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"日期\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"渠道\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"花费\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"曝光\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"点击\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791923398953\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923398953\",\"sourceId\":\"39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791923398953&id=ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791923398953&datasetId=ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923398953\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\",\"datasetVersion\":1,\"selected\":[\"records\",\"spend\",\"impressions\",\"clicks\",\"ctr\"],\"roles\":{\"date\":\"日期\",\"channel\":\"渠道\",\"spend\":\"花费\",\"impressions\":\"曝光\",\"clicks\":\"点击\"},\"bindBusiness\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791923398953",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791923398953&id=ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923398953\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"type\":\"metric_card\",\"title\":\"广告消耗\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"type\":\"metric_card\",\"title\":\"曝光量\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"type\":\"metric_card\",\"title\":\"点击量\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"type\":\"metric_card\",\"title\":\"点击率\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"type\":\"time_trend\",\"title\":\"点击率趋势\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-time_trend\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"type\":\"breakdown\",\"title\":\"点击率按渠道\",\"groupBy\":\"渠道\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-breakdown\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923398953\",\"dashboardId\":\"dash-1791923398953-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"记录数量\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":0},{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend-value\",\"title\":\"广告消耗\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"广告消耗\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":1},{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions-value\",\"title\":\"曝光量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"曝光量\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":2},{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks-value\",\"title\":\"点击量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"点击量\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":3},{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-value\",\"title\":\"点击率\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"点击率\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-value\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":4},{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-time_trend\",\"title\":\"点击率趋势\",\"type\":\"time_trend\",\"metricKeys\":[],\"config\":{\"type\":\"time_trend\",\"title\":\"点击率趋势\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-time_trend\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":5},{\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-breakdown\",\"title\":\"点击率按渠道\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"type\":\"breakdown\",\"title\":\"点击率按渠道\",\"groupBy\":\"渠道\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-breakdown\",\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},\"sortOrder\":6}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923398953\",\"query\":{},\"cards\":[{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records-value\",\"title\":\"记录数量\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend-value\",\"title\":\"广告消耗\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions-value\",\"title\":\"曝光量\",\"type\":\"metric_card\",\"sortOrder\":2,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks-value\",\"title\":\"点击量\",\"type\":\"metric_card\",\"sortOrder\":3,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-value\",\"title\":\"点击率\",\"type\":\"metric_card\",\"sortOrder\":4,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-time_trend\",\"title\":\"点击率趋势\",\"type\":\"time_trend\",\"sortOrder\":5,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"},{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-breakdown\",\"title\":\"点击率按渠道\",\"type\":\"breakdown\",\"sortOrder\":6,\"datasetId\":\"ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/reports?projectId=1791923398953&page=1&query=%7B%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/reports",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791923398953\",\"query\":{},\"dashboardVersion\":2}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/reports?projectId=1791923398953&page=1&id=f1743a20-06fa-4db7-9087-2b1430e925f2&query=%7B%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/report-html?projectId=1791923398953&id=f1743a20-06fa-4db7-9087-2b1430e925f2&download=1",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/report-html?projectId=1791923398953&id=f1743a20-06fa-4db7-9087-2b1430e925f2&download=1",
+    "method": "GET",
+    "body": null,
+    "failure": "net::ERR_ABORTED"
+  }
+]

@@ -528,6 +528,7 @@ export function GeneralWorkbenchBoard({
             </button>
           </div>
 
+          {!isEditingBoard && publishedCards.length > 0 && <Link className="secondary" href={'/projects/' + encodeURIComponent(projectId) + '/reports?query=' + encodeURIComponent(JSON.stringify(viewQuery))}>查看项目报告</Link>}
           {viewMode === 'board' && canConfigure && (
             <>
               {isEditingBoard ? (

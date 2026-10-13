@@ -1,0 +1,304 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-reports.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/reports-red/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/reports-red/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/reports-red/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-reports.spec.ts",
+      "file": "product-reports.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "报告断链反例：四列原表看板发布后，经页面进入同口径项目报告",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 60563,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                        "column": 65,
+                        "line": 9
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: '查看项目报告', exact: true })\u001b[22m\n\n\n   7 |   await expect(page.getByRole('article', { name: '咨询人数合计', exact: true })).toContainText('300');\n   8 |   await page.screenshot({ path: info.outputPath('published-board-without-report-path.png'), fullPage: true });\n>  9 |   await page.getByRole('link', { name: '查看项目报告', exact: true }).click();\n     |                                                                 ^\n  10 |   await expect(page.getByRole('heading', { name: '项目报告', exact: true })).toBeVisible();\n  11 | });\n  12 | test('报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录', async ({ page, request }, info) => {\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:9:65"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:39:27.900Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\attachments\\关键请求-0fc8d027b6f88ffe2ef845b5ae4236c79c416610.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\attachments\\实际持久化快照-cc7cc70ba843c442ca71da2f25f971dbb340869e.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\attachments\\最终页面-7cd86f18c5e857202b0c0966322b46aad39a0567.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告断链反例：四列原表看板发布后，经页面进入同口径项目报告\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-f7ed33f66f7bec559ce6",
+          "file": "product-reports.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2749,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"300\"\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"300\"\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:18:88",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                      "column": 88,
+                      "line": 18
+                    },
+                    "snippet": "  16 |   expect(generated.status()).toBe(200); const report = await generated.json();\n  17 |   await info.attach('报告真实响应', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });\n> 18 |   expect(report.spec.kpis.find((k: { label: string }) => k.label === '咨询人数合计')?.value).toBe('300');\n     |                                                                                        ^\n  19 |   expect(report.spec.metrics.some((m: { metricId: string }) => m.metricId && m.title === '成交率')).toBeTruthy();\n  20 | });\n  21 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                        "column": 88,
+                        "line": 18
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"300\"\u001b[39m\nReceived: \u001b[31mundefined\u001b[39m\n\n  16 |   expect(generated.status()).toBe(200); const report = await generated.json();\n  17 |   await info.attach('报告真实响应', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });\n> 18 |   expect(report.spec.kpis.find((k: { label: string }) => k.label === '咨询人数合计')?.value).toBe('300');\n     |                                                                                        ^\n  19 |   expect(report.spec.metrics.some((m: { metricId: string }) => m.metricId && m.title === '成交率')).toBeTruthy();\n  20 | });\n  21 |\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts:18:88"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T19:40:29.811Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "报告真实响应",
+                      "contentType": "application/json",
+                      "body": "ewogICJvayI6IHRydWUsCiAgInJ1bklkIjogIjVhYjE5NDczLWQ2NDAtNDJhYi05NjFjLThjZDRhNzA2Mzk4ZCIsCiAgInJlcG9ydElkIjogImQ5Yjg1NjNmLWNiM2QtNDNmNy05YWJkLTgwODJhMTE4OTRkZiIsCiAgInBsYW4iOiB7CiAgICAiaW50ZW50IjogIuWQr+iQg+e7j+iQpeS4juekvuWqkuWinumVv+WFqOaZr+eci+advyIsCiAgICAicGVyaW9kIjogewogICAgICAic3RhcnQiOiAiMjAyNi0wOS0xNCIsCiAgICAgICJlbmQiOiAiMjAyNi0xMC0xMyIKICAgIH0sCiAgICAicmVxdWVzdGVkTWV0cmljcyI6IFsKICAgICAgInNoYXJlZF8yN2M2ZGMxZGI2NGE0ZTZjOWYyZWVlNGY0ODEyNGJiYiIKICAgIF0sCiAgICAicmVxdWVzdGVkRGltZW5zaW9ucyI6IFsKICAgICAgIui2i+WKvyIKICAgIF0sCiAgICAic291cmNlcyI6IFsKICAgICAgewogICAgICAgICJpZCI6ICJkNDAxZmFjNS1jNTk1LTQxMWItYjI5ZC00MTY1NDI2NDcxNTgiLAogICAgICAgICJuYW1lIjogIuihpeS/ruaVsOaNriIsCiAgICAgICAgInR5cGUiOiAiZmVpc2h1X3NoZWV0IiwKICAgICAgICAicmVhc29uIjogImdlbmVyYWwiCiAgICAgIH0KICAgIF0sCiAgICAiZW5kcG9pbnRzIjogW10sCiAgICAid2FybmluZ3MiOiBbXSwKICAgICJzdGVwcyI6IFsKICAgICAgewogICAgICAgICJuYW1lIjogIueQhuino+mcgOaxguS4juinhOWIkiIsCiAgICAgICAgImRldGFpbCI6ICLor4bliKvkuLog57uP6JCl5YWo5pmv5Lu75Yqh77yM5YiG5p6Q5ZGo5pyfIDIwMjYtMDktMTQg6IezIDIwMjYtMTAtMTMiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAibmFtZSI6ICLpgInmi6nmlbDmja7lnLDlm77mjqXlj6MiLAogICAgICAgICJkZXRhaWwiOiAi5Yy56YWNIDEg5Liq5pWw5o2u5rqQ44CBMCDkuKrmjqXlj6PvvIzlubboh6rliqjosIPluqbogZrlhYnkuI7ngbXnioDlrp7ml7bmlbDmja4iCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAibmFtZSI6ICLlj6PlvoTmoKHpqozkuI7kuovlrp7nu4Too4UiLAogICAgICAgICJkZXRhaWwiOiAi57uf5LiA6LS555So44CB5pud5YWJ44CB5LqS5Yqo44CB6K+E6K6644CB6IGa5YWJ5oqV5pS+5raI6ICX5LiO54G154qA5q+N5am0IDEzIOe7huWIhuWtkOexu+ebruWPo+W+hO+8jOadnOe7nee8lumAoOaVsOaNriIKICAgICAgfSwKICAgICAgewogICAgICAgICJuYW1lIjogIue8luivkeeUn+aIkOeci+adv+aKpeWRiiIsCiAgICAgICAgImRldGFpbCI6ICLovpPlh7rlhrPnrZbmkZjopoHjgIHmoLjlv4PmjIfmoIfjgIHkvpvpnIDlm5vosaHpmZDjgIFUb3AgMzAg5o6S6KGM5qac5LiO5LiL5LiA5q2l5Yqo5L2c55qE5Y+X5o6nIEhUTUwg5oql5ZGKIgogICAgICB9CiAgICBdCiAgfSwKICAic3BlYyI6IHsKICAgICJ2ZXJzaW9uIjogIjEuMCIsCiAgICAicXVlcnkiOiAi5p+l55yL5ZKo6K+i5Lq65pWw5ZKM5oiQ5Lqk546HIiwKICAgICJ0aXRsZSI6ICLni6znq4vpg6jpl6jmiqXlkYoxNzkxOTIwNDMwMjEyIMK3IOWQr+iQg+e7j+iQpeS4juekvuWqkuWinumVv+WFqOaZr+eci+advyIsCiAgICAic3VidGl0bGUiOiAiIO+9nOiBmuWFieaKleaUviDDlyDngbXnioDmr43lqbTlpKfnm5jmnLrkvJrnnIvmnb8iLAogICAgInBlcmlvZCI6IHsKICAgICAgInN0YXJ0IjogIjIwMjYtMDktMTQiLAogICAgICAiZW5kIjogIjIwMjYtMTAtMTMiCiAgICB9LAogICAgImdlbmVyYXRlZEF0IjogIjIwMjYtMTAtMTNUMTk6NDA6MzIuMzMwWiIsCiAgICAiZW5naW5lIjogIuinhOWImeW8leaTjiIsCiAgICAic3VtbWFyeSI6IFsKICAgICAgIuaKpeWRiuacn+imhuebliAwIOevh+eslOiusOOAgTAg5p2h6K+E6K6677yb5b2T5YmN5bey5ZCM5q2l6IGa5YWJ5oqV5pS+5LiO54G154qA5q+N5am05aSn55uY44CCIiwKICAgICAgIuato+WQkeWPo+eikeWNoOavlCAwLjAl77yM6LSf5ZCR6aOO6Zmp5Y2g5q+UIDAuMCXjgIIiLAogICAgICAi5omn6KGM6L+b5bqmIDAuMCXvvIzogZrlhYnmipXmlL7lt7LlkIzmraXmtojogJcgwqUw44CCIiwKICAgICAgIuWFs+mUruivhOiuuuagt+acrOeos+WumuOAgiIKICAgIF0sCiAgICAia3BpcyI6IFsKICAgICAgewogICAgICAgICJrZXkiOiAibm90ZXMiLAogICAgICAgICJsYWJlbCI6ICLlhoXlrrnmoLfmnKwiLAogICAgICAgICJ2YWx1ZSI6IDAsCiAgICAgICAgInVuaXQiOiAi56+HIiwKICAgICAgICAibm90ZSI6ICLmiqXlkYrmnJ/nurPlhaUiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAia2V5IjogInB1Ymxpc2hlZCIsCiAgICAgICAgImxhYmVsIjogIuWPkeW4g+i/m+W6piIsCiAgICAgICAgInZhbHVlIjogIuKAlCIsCiAgICAgICAgIm5vdGUiOiAiMC8wIOevhyIKICAgICAgfSwKICAgICAgewogICAgICAgICJrZXkiOiAic3BlbmQiLAogICAgICAgICJsYWJlbCI6ICLotLnnlKjmtojogJciLAogICAgICAgICJ2YWx1ZSI6IDAsCiAgICAgICAgInVuaXQiOiAi5YWDIiwKICAgICAgICAibm90ZSI6ICLlt7LlkIzmraXotLnnlKgiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAia2V5IjogInJlYWRzIiwKICAgICAgICAibGFiZWwiOiAi6ZiF6K+76YePIiwKICAgICAgICAidmFsdWUiOiAwLAogICAgICAgICJ1bml0IjogIuasoSIsCiAgICAgICAgIm5vdGUiOiAi6Ieq54S2K+aKleaUvuaVsOaNriIKICAgICAgfSwKICAgICAgewogICAgICAgICJrZXkiOiAiaW50ZXJhY3Rpb25zIiwKICAgICAgICAibGFiZWwiOiAi5LqS5Yqo6YePIiwKICAgICAgICAidmFsdWUiOiAwLAogICAgICAgICJ1bml0IjogIuasoSIsCiAgICAgICAgIm5vdGUiOiAi5b6F6KGl6ZiF6K+7IgogICAgICB9LAogICAgICB7CiAgICAgICAgImtleSI6ICJjb21tZW50cyIsCiAgICAgICAgImxhYmVsIjogIuivhOiuuuWjsOmHjyIsCiAgICAgICAgInZhbHVlIjogMCwKICAgICAgICAidW5pdCI6ICLmnaEiLAogICAgICAgICJub3RlIjogIuS4u+ivhCvmpbzkuK3mpbwiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAia2V5IjogInBvc2l0aXZlIiwKICAgICAgICAibGFiZWwiOiAi5q2j5ZCR5Y+j56KRIiwKICAgICAgICAidmFsdWUiOiAi4oCUIiwKICAgICAgICAidG9uZSI6ICJnb29kIiwKICAgICAgICAibm90ZSI6ICIwIOadoSIKICAgICAgfSwKICAgICAgewogICAgICAgICJrZXkiOiAibmVnYXRpdmUiLAogICAgICAgICJsYWJlbCI6ICLotJ/lkJHpo47pmakiLAogICAgICAgICJ2YWx1ZSI6ICLigJQiLAogICAgICAgICJ0b25lIjogImRhbmdlciIsCiAgICAgICAgIm5vdGUiOiAiMCDmnaEiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAia2V5IjogInN1cHBsaWVyIiwKICAgICAgICAibGFiZWwiOiAi5L6b5bqU5ZWG5aSW5pi+IiwKICAgICAgICAidmFsdWUiOiAi4oCUIiwKICAgICAgICAibm90ZSI6ICIwLzAg5p2hIgogICAgICB9CiAgICBdLAogICAgInNlY3Rpb25zIjogWwogICAgICB7CiAgICAgICAgImlkIjogInRyZW5kIiwKICAgICAgICAiZXllYnJvdyI6ICJEQUlMWSBUUkVORCIsCiAgICAgICAgInRpdGxlIjogIuWIhuaXpeivhOiuuuS4juaDhee7qui1sOWKvyIsCiAgICAgICAgImtpbmQiOiAidHJlbmQiLAogICAgICAgICJkZXNjcmlwdGlvbiI6ICLmjInor4Torrrlv6vnhafogZrlkIgiLAogICAgICAgICJkYXRhIjogW10KICAgICAgfSwKICAgICAgewogICAgICAgICJpZCI6ICJwcm9ncmVzcyIsCiAgICAgICAgImV5ZWJyb3ciOiAiREVMSVZFUlkgJiBCVURHRVQiLAogICAgICAgICJ0aXRsZSI6ICLkuLvnur/lj5HluIPkuI7otLnnlKjov5vluqYiLAogICAgICAgICJraW5kIjogImZ1bm5lbCIsCiAgICAgICAgImRhdGEiOiBbXQogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogInRvcGljcyIsCiAgICAgICAgImV5ZWJyb3ciOiAiVk9JQ0UgVE9QSUNTIiwKICAgICAgICAidGl0bGUiOiAi5raI6LS56ICF6K6o6K665Li76aKYIiwKICAgICAgICAia2luZCI6ICJiYXJzIiwKICAgICAgICAiZGF0YSI6IFtdCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiaWQiOiAibm90ZXMiLAogICAgICAgICJleWVicm93IjogIlRPUCBDT05URU5UIiwKICAgICAgICAidGl0bGUiOiAi6YeN54K556yU6K6w5LiO5LyY56eA5qGI5L6LIiwKICAgICAgICAia2luZCI6ICJjYXJkcyIsCiAgICAgICAgImRlc2NyaXB0aW9uIjogIuaMieS6kuWKqOS4juivhOiuuuihqOeOsOaOkuW6j++8jOWwgemdouadpeiHqueslOiusOivpuaDheaOpeWPo+W5tuW3suS4i+i9veWIsOmhueebrui1hOS6p+W6k+OAgiIsCiAgICAgICAgImRhdGEiOiBbXQogICAgICB9LAogICAgICB7CiAgICAgICAgImlkIjogImFjdGlvbnMiLAogICAgICAgICJleWVicm93IjogIue7k+iuuuS4juihjOWKqCIsCiAgICAgICAgInRpdGxlIjogIuWGs+etlue7k+iuuuS4juS4i+S4gOatpSIsCiAgICAgICAgImtpbmQiOiAiaW5zaWdodHMiLAogICAgICAgICJkYXRhIjogWwogICAgICAgICAgewogICAgICAgICAgICAi5bqP5Y+3IjogMSwKICAgICAgICAgICAgInRleHQiOiAi5oql5ZGK5pyf6KaG55uWIDAg56+H56yU6K6w44CBMCDmnaHor4TorrrvvJvlvZPliY3lt7LlkIzmraXogZrlhYnmipXmlL7kuI7ngbXnioDmr43lqbTlpKfnm5jjgIIiCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAi5bqP5Y+3IjogMiwKICAgICAgICAgICAgInRleHQiOiAi5q2j5ZCR5Y+j56KR5Y2g5q+UIDAuMCXvvIzotJ/lkJHpo47pmanljaDmr5QgMC4wJeOAgiIKICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICLluo/lj7ciOiAzLAogICAgICAgICAgICAidGV4dCI6ICLmiafooYzov5vluqYgMC4wJe+8jOiBmuWFieaKleaUvuW3suWQjOatpea2iOiAlyDCpTDjgIIiCiAgICAgICAgICB9LAogICAgICAgICAgewogICAgICAgICAgICAi5bqP5Y+3IjogNCwKICAgICAgICAgICAgInRleHQiOiAi5YWz6ZSu6K+E6K665qC35pys56iz5a6a44CCIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfQogICAgXSwKICAgICJzb3VyY2VzIjogWwogICAgICB7CiAgICAgICAgIm5hbWUiOiAi6KGl5L+u5pWw5o2uIiwKICAgICAgICAidHlwZSI6ICJmZWlzaHVfc2hlZXQiLAogICAgICAgICJmcmVzaG5lc3MiOiAiMjAyNi0xMC0xM1QxOTo0MDozMS4wODJaIiwKICAgICAgICAicm93cyI6IDIKICAgICAgfQogICAgXSwKICAgICJxdWFsaXR5IjogWwogICAgICB7CiAgICAgICAgImxhYmVsIjogIuaVsOaNrua6kOWPr+eUqOaApyIsCiAgICAgICAgInZhbHVlIjogMSwKICAgICAgICAic3RhdHVzIjogIuW3sui/nuaOpSIKICAgICAgfSwKICAgICAgewogICAgICAgICJsYWJlbCI6ICLmoIflh4bmjIfmoIfopobnm5YiLAogICAgICAgICJ2YWx1ZSI6IDEsCiAgICAgICAgInN0YXR1cyI6ICLlt7LmmKDlsIQiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAibGFiZWwiOiAi5pe26Ze05Y+j5b6EIiwKICAgICAgICAidmFsdWUiOiAxLAogICAgICAgICJzdGF0dXMiOiAiMjAyNi0wOS0xNCDoh7MgMjAyNi0xMC0xMyIKICAgICAgfSwKICAgICAgewogICAgICAgICJsYWJlbCI6ICLnvJbpgKDmlbDmja4iLAogICAgICAgICJ2YWx1ZSI6IDAsCiAgICAgICAgInN0YXR1cyI6ICLnpoHmraIiCiAgICAgIH0KICAgIF0KICB9LAogICJlbmdpbmUiOiAi6KeE5YiZ5byV5pOOIgp9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\attachments\\关键请求-8099455c7fa992a52871c58eeffa4e4a24459daa.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\attachments\\实际持久化快照-de26231a62e9036eb3f4b13d6153bb1a925913c1.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\attachments\\最终页面-59244674beca6426e2791fc7eb9afbdf2d54c326.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\reports-red\\browser-results\\product-reports-报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-reports.spec.ts",
+                    "column": 88,
+                    "line": 18
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c2ecdffb1be91703dde4-4e2273188461771de41a",
+          "file": "product-reports.spec.ts",
+          "line": 12,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T19:39:23.644Z",
+    "duration": 69831.799,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

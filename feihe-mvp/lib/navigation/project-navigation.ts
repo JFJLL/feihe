@@ -55,6 +55,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     description: '口碑分析、评论采集、处置与供应商核验',
     defaultTab: 'voice',
   },
+  { id: 'reports', path: 'reports', number: '05', label: '报告', title: '项目报告', description: '同口径结果、报告历史与导出' },
   {
     id: 'settings',
     path: 'settings',
@@ -96,8 +97,8 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
   sentiment: { module: 'comments', tab: 'voice' },
   voice: { module: 'comments', tab: 'voice' },
   insights: { module: 'comments', tab: 'voice' },
-  reports: { module: 'comments', tab: 'voice' },
-  report: { module: 'comments', tab: 'voice' },
+  reports: { module: 'reports' },
+  report: { module: 'reports' },
   agent: { module: 'comments', tab: 'voice' },
   ai: { module: 'comments', tab: 'voice' },
   settings: { module: 'settings', tab: 'profile' },

@@ -1,0 +1,15 @@
+(node:6860) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ API preview rejects a count result that inherits percent field units (23.4932ms)
+✔ API preview rejects an automatic percent configuration on an ordinary amount field (1.659ms)
+✔ API publish rejects incompatible count units and preserves the existing dashboard (3.127ms)
+✔ API unit transitions persist through dashboard publish/GET and full row reads (10.1499ms)
+✔ API rejects pending display confirmation but keeps an explicit compatible currency choice (1.7129ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 729.4852

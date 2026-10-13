@@ -31,6 +31,7 @@ const QUICK_POOL = [
 ];
 
 const QUICK_PAGE = 4;
+const PROJECT_QUICK_POOL = ['汇报当前项目已发布指标', '查看本项目来源更新时间与有效样本', '查看当前团队看板周期的结果', '保存一份同口径报告供团队查看'];
 
 function storageKey(projectId: string) {
   return 'agent-sessions:' + projectId;
@@ -95,9 +96,10 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
   );
 
   const quickItems = useMemo(() => {
-    const start = (quickPage * QUICK_PAGE) % QUICK_POOL.length;
-    return Array.from({ length: QUICK_PAGE }, (_, i) => QUICK_POOL[(start + i) % QUICK_POOL.length]);
-  }, [quickPage]);
+    const pool = projectId === 'qicui' ? QUICK_POOL : PROJECT_QUICK_POOL;
+    const start = (quickPage * QUICK_PAGE) % pool.length;
+    return Array.from({ length: QUICK_PAGE }, (_, i) => pool[(start + i) % pool.length]);
+  }, [quickPage, projectId]);
 
   const newSession = useCallback(() => {
     const now = new Date().toISOString();
@@ -220,7 +222,7 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
           ) : (
             <>
               <div>
-                <small>AI · 项目上下文已关联</small>
+                <small>{projectId === 'qicui' ? 'AI · 项目上下文已关联' : '项目指标报告 · 未启用AI'}</small>
                 <h3>Hi，我是增长助手</h3>
               </div>
               <div className="floating-agent-head-actions">
@@ -255,7 +257,7 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
                 <div className="floating-agent-welcome">
                   <div className="floating-agent-avatar">✦</div>
                   <h4>Hi，我是增长助手</h4>
-                  <p>这里是项目专属 AI 助手，已关联当前项目数据与接口。和首页输入框同一套生成逻辑，本轮对话内记得住上下文。</p>
+                  <p>{projectId === 'qicui' ? '这里是项目专属 AI 助手，已关联当前项目数据与接口。和首页输入框同一套生成逻辑，本轮对话内记得住上下文。' : '使用本项目已发布的看板指标生成可核对报告。当前未启用AI增强，不自动调用其他项目或行业外部接口。需要调整周期时请进入报告页。'}</p>
                   <div className="floating-agent-quick-head">
                     <span>您可能想问</span>
                     <button type="button" onClick={() => setQuickPage((p) => p + 1)}>⟳ 换一批</button>

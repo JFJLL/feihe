@@ -1,0 +1,11 @@
+(node:2280) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+node:internal/test_runner/harness:121
+      throw err;
+      ^
+
+Error: 目标字段重名
+    at saveDataset (D:/download/pic-vec/feihe-platform-v3/feihe-mvp/lib/datasets.ts:25:42)
+    at async file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-reports.mjs:15:17
+
+Node.js v24.11.1

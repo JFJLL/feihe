@@ -1,0 +1,397 @@
+[
+  {
+    "projectId": "1791923397094",
+    "project": {
+      "id": "1791923397094",
+      "name": "独立部门报告1791923397094",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#4f46e5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T20:29:57.097Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "8298a751-20c3-40f8-9895-7b47f86de878",
+        "projectId": "1791923397094",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791923397094",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T20:29:57.815Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"日期\",\"targetField\":\"日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"渠道\",\"targetField\":\"渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"完成率\",\"targetField\":\"完成率\",\"type\":\"number\",\"nullPolicy\":\"null\",\"numericUnit\":\"percent\",\"sourcePercentScale\":\"fraction\"}],\"context\":{\"projectId\":\"1791923397094\",\"documentToken\":\"Report-1791923397094\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"type\":\"text\"},{\"key\":\"完成率\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T20:29:57.815Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791923397094-default",
+          "projectId": "1791923397094",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "draft",
+          "updatedAt": "2026-10-13T20:29:58.242Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791923397094-default",
+      "cards": [
+        {
+          "id": "recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records-value",
+          "dashboardId": "dash-1791923397094-default",
+          "projectId": "1791923397094",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T20:29:58.242Z"
+        },
+        {
+          "id": "recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-value",
+          "dashboardId": "dash-1791923397094-default",
+          "projectId": "1791923397094",
+          "title": "完成率平均值",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T20:29:58.242Z"
+        },
+        {
+          "id": "recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-time_trend",
+          "dashboardId": "dash-1791923397094-default",
+          "projectId": "1791923397094",
+          "title": "完成率平均值趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T20:29:58.242Z"
+        },
+        {
+          "id": "recommended-1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87-breakdown",
+          "dashboardId": "dash-1791923397094-default",
+          "projectId": "1791923397094",
+          "title": "完成率平均值按渠道",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923397094:recommended:ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878:field%3A%E5%AE%8C%E6%88%90%E7%8E%87\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T20:29:58.242Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791923397094-8298a751-20c3-40f8-9895-7b47f86de878",
+          "projectId": "1791923397094",
+          "sourceId": "8298a751-20c3-40f8-9895-7b47f86de878",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"完成率\",\"name\":\"完成率\",\"type\":\"number\",\"numericUnit\":\"percent\",\"percentScale\":\"fraction\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T20:29:57.825Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "完成率",
+              "name": "完成率",
+              "type": "number",
+              "numericUnit": "percent",
+              "percentScale": "fraction"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "甲组",
+              "完成率": 0.005
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "乙组",
+              "完成率": 0.015
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  },
+  {
+    "projectId": "1791923398953",
+    "project": {
+      "id": "1791923398953",
+      "name": "独立部门报告1791923398953",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#7c3aed",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "ad_performance",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T20:29:58.955Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "投放分析项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "39cbc3d1-a002-4c27-9889-b1fff9ad5d7d",
+        "projectId": "1791923398953",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791923398953",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T20:29:59.499Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"日期\",\"targetField\":\"日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"渠道\",\"targetField\":\"渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"花费\",\"targetField\":\"花费\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"曝光\",\"targetField\":\"曝光\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"点击\",\"targetField\":\"点击\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791923398953\",\"documentToken\":\"Report-1791923398953\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"type\":\"text\"},{\"key\":\"花费\",\"type\":\"number\"},{\"key\":\"曝光\",\"type\":\"number\"},{\"key\":\"点击\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T20:29:59.499Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "draft",
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791923398953-default",
+      "cards": [
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records-value",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        },
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend-value",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "广告消耗",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        },
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions-value",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "曝光量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:impressions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        },
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks-value",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "点击量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:clicks\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        },
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-value",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "点击率",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        },
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-time_trend",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "点击率趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        },
+        {
+          "id": "recommended-1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr-breakdown",
+          "dashboardId": "dash-1791923398953-default",
+          "projectId": "1791923398953",
+          "title": "点击率按渠道",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791923398953:recommended:ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d:ctr\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 6,
+          "updatedAt": "2026-10-13T20:29:59.911Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791923398953-39cbc3d1-a002-4c27-9889-b1fff9ad5d7d",
+          "projectId": "1791923398953",
+          "sourceId": "39cbc3d1-a002-4c27-9889-b1fff9ad5d7d",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"花费\",\"name\":\"花费\",\"type\":\"number\"},{\"key\":\"曝光\",\"name\":\"曝光\",\"type\":\"number\"},{\"key\":\"点击\",\"name\":\"点击\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T20:29:59.508Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "花费",
+              "name": "花费",
+              "type": "number"
+            },
+            {
+              "key": "曝光",
+              "name": "曝光",
+              "type": "number"
+            },
+            {
+              "key": "点击",
+              "name": "点击",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "独立甲",
+              "花费": 100,
+              "曝光": 200,
+              "点击": 1
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "独立乙",
+              "花费": 200,
+              "曝光": 100,
+              "点击": 150
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

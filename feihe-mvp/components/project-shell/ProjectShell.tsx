@@ -19,6 +19,7 @@ import { SettingsWorkspace } from '../../features/settings/SettingsWorkspace';
 import { DataWorkspace } from '../../features/data/DataWorkspace';
 import { MetricWorkspace } from '../../features/metrics/MetricWorkspace';
 import { DatasetAdOverview } from '../../features/overview/DatasetAdOverview';
+import { ReportsWorkspace } from '../../features/reports/ReportsWorkspace';
 
 function ProjectShellContent({
   userName,
@@ -42,7 +43,7 @@ function ProjectShellContent({
     refreshData,
   } = useProject();
 
-  const isSettingsOrData = ['settings', 'data', 'metrics'].includes(activeSection);
+  const isSettingsOrData = ['settings', 'data', 'metrics', 'reports'].includes(activeSection);
 
   // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞）
   if (dataLoading && !dashboard && !isSettingsOrData) {
@@ -125,6 +126,9 @@ function ProjectShellContent({
     case "ads":
       content = <DatasetAdOverview key={projectId} projectId={projectId} />;
       break;
+    case "reports":
+      content = <ReportsWorkspace key={projectId} projectId={projectId} />;
+      break;
     case "data":
       content = <DataWorkspace key={projectId} projectId={projectId} />;
       break;
@@ -161,7 +165,7 @@ function ProjectShellContent({
         {content}
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>
-      {currentProject?.canWrite && activeSection !== 'data' && <FloatingAgent projectId={projectId} />}
+      {currentProject?.canWrite && !['data', 'reports'].includes(activeSection) && <FloatingAgent projectId={projectId} />}
     </div>
   );
 }

@@ -1,0 +1,97 @@
+npm warn Unknown user config "electron_mirror". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> sites-project@0.1.0 build
+> vinext build
+
+
+  vinext build  (Vite 8.0.13)
+
+▲ [WARNING] Proxy environment variables detected. We'll use your proxy for fetch requests.
+
+
+[1/5] analyze client references...
+[2K
+transforming...✓ 315 modules transformed.
+rendering chunks...
+✓ built in 1.09s
+[2/5] analyze server references...
+[2K
+transforming...✓ 222 modules transformed.
+rendering chunks...
+✓ built in 259ms
+[3/5] build rsc environment...
+[2K
+transforming...✓ 313 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 1.15s
+[4/5] build client environment...
+[2K
+transforming...✓ 231 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 594ms
+[5/5] build ssr environment...
+[2K
+transforming...✓ 228 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 437ms
+[0m
+  Route (app)
+  ┌ ƒ /                            
+  ├ λ /api/actions                 
+  ├ λ /api/actions/workbench       
+  ├ λ /api/ads/import              
+  ├ λ /api/ads/summary             
+  ├ λ /api/agent                   
+  ├ λ /api/business-analytics      
+  ├ λ /api/comments/fetch          
+  ├ λ /api/dashboard               
+  ├ λ /api/dashboards              
+  ├ λ /api/data-map                
+  ├ λ /api/data-workspace          
+  ├ λ /api/datasets                
+  ├ λ /api/export                  
+  ├ λ /api/feishu/inspect          
+  ├ λ /api/feishu/sync             
+  ├ λ /api/import                  
+  ├ λ /api/integrations            
+  ├ λ /api/lingxi/track            
+  ├ λ /api/metric-definitions      
+  ├ λ /api/metric-recommendations  
+  ├ λ /api/metrics                 
+  ├ λ /api/note-covers             
+  ├ λ /api/notes/detail            
+  ├ λ /api/notes/list              
+  ├ λ /api/notes/search            
+  ├ λ /api/ops                     
+  ├ λ /api/projects                
+  ├ λ /api/report-html             
+  ├ λ /api/reports                 
+  ├ λ /api/resources               
+  ├ λ /api/review                  
+  ├ λ /api/settings                
+  ├ λ /api/supplier/list           
+  ├ λ /api/supplier/verify         
+  ├ λ /api/uploads                 
+  ├ ƒ /data-sources                
+  ├ ƒ /integrations                
+  ├ ƒ /projects/:projectId         
+  ├ ƒ /projects/:projectId/:section
+  ├ ƒ /projects/:projectId/ads     
+  ├ ƒ /projects/:projectId/agent   
+  ├ ƒ /projects/:projectId/comments
+  ├ ƒ /projects/:projectId/content 
+  ├ ƒ /projects/:projectId/data    
+  ├ ƒ /projects/:projectId/data-map
+  ├ ƒ /projects/:projectId/growth  
+  ├ ƒ /projects/:projectId/insights
+  ├ ƒ /projects/:projectId/metrics 
+  ├ ƒ /projects/:projectId/reports 
+  └ ƒ /projects/:projectId/settings
+
+  λ API  ƒ Dynamic
+
+  Build complete. Run `vinext start` to start the production server.
+

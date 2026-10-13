@@ -1,0 +1,62 @@
+[
+  {
+    "case": "case-01",
+    "title": "报告断链反例：四列原表看板发布后，经页面进入同口径项目报告",
+    "run": "reports-final-screens",
+    "trace": "case-01/trace.zip"
+  },
+  {
+    "case": "case-02",
+    "title": "同口径报告 1280px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+    "run": "reports-final-screens",
+    "trace": "case-02/trace.zip"
+  },
+  {
+    "case": "case-03",
+    "title": "同口径报告 1440px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+    "run": "reports-final-screens",
+    "trace": "case-03/trace.zip"
+  },
+  {
+    "case": "case-04",
+    "title": "同口径报告 768px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+    "run": "reports-final-screens",
+    "trace": "case-04/trace.zip"
+  },
+  {
+    "case": "case-05",
+    "title": "同口径报告 390px：原表→看板周期→键盘生成→导出→定义变更→新旧快照→只读交接",
+    "run": "reports-final-screens",
+    "trace": "case-05/trace.zip"
+  },
+  {
+    "case": "case-06",
+    "title": "报告百分与投放 1280px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致",
+    "run": "reports-final-screens",
+    "trace": "case-06/trace.zip"
+  },
+  {
+    "case": "case-07",
+    "title": "报告失败恢复 1280px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照",
+    "run": "reports-final-screens",
+    "trace": "case-07/trace.zip"
+  },
+  {
+    "case": "case-08",
+    "title": "报告百分与投放 390px：普通字段平均1.0%，真实比率每日0.5%和150%，导出单位一致",
+    "run": "reports-final-screens",
+    "trace": "case-08/trace.zip"
+  },
+  {
+    "case": "case-09",
+    "title": "报告失败恢复 390px：互补缺失显示成对0，500和断网保留范围与历史，真实重试冻结快照",
+    "run": "reports-final-screens",
+    "trace": "case-09/trace.zip"
+  },
+  {
+    "case": "case-10",
+    "title": "报告取数反例：已有生成接口消费真实共享咨询指标，而非空社媒记录",
+    "run": "reports-final-screens",
+    "trace": "case-10/trace.zip"
+  }
+]

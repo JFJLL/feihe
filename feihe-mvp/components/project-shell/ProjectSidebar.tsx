@@ -55,7 +55,7 @@ export function ProjectSidebar({
       <nav className="project-main-nav" aria-label="项目模块">
         {PROJECT_NAV_ITEMS.filter((item) => {
           if (item.id === 'ads') return currentProject?.templateId === 'ad_performance';
-          if (item.id === 'data' || item.id === 'metrics') return true;
+          if (item.id === 'data' || item.id === 'metrics' || item.id === 'reports') return true;
           if (currentProject?.templateId === 'ad_performance') return ['overview', 'ads', 'settings'].includes(item.id);
           if (['general_workbench', 'blank'].includes(currentProject?.templateId || '')) {
             return item.id === 'overview' || item.id === 'data' || item.id === 'settings';
@@ -65,7 +65,7 @@ export function ProjectSidebar({
           }
           // All project directions use the same data workspace.
           return true;
-        }).map((item) => {
+        }).map((item, index) => {
           const href =
             item.path === ''
               ? '/projects/' + encodeURIComponent(projectId)
@@ -87,7 +87,7 @@ export function ProjectSidebar({
                 navigateTo(href);
               }}
             >
-              <span className="nav-num">{item.number}</span>
+              <span className="nav-num">{String(index + 1).padStart(2, '0')}</span>
               <span className="nav-label">{item.label}</span>
             </a>
           );
