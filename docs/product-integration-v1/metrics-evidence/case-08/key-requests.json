@@ -1,0 +1,218 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898421898\",\"title\":\"新增指标\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898421898\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898421898\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save\",\"projectId\":\"1791898421263\",\"id\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"name\":\"成交率\",\"config\":{\"id\":\"card-1791898421898\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false},\"expectedVersion\":0}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898421263&id=ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"card\":{\"id\":\"card-1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"card\":{\"id\":\"card-1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"cards\":[{\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"card\":{\"id\":\"card-1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"title\":\"成交率\",\"type\":\"metric_card\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"card\":{\"id\":\"card-1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"title\":\"成交率\",\"type\":\"breakdown\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"card\":{\"id\":\"card-1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"cards\":[{\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"},{\"id\":\"card-0cfb666e-3c8f-4771-893d-95d85fa1a146\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"dashboardId\":\"dash-1791898421263-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"},\"sortOrder\":0},{\"id\":\"card-0cfb666e-3c8f-4771-893d-95d85fa1a146\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"id\":\"card-0cfb666e-3c8f-4771-893d-95d85fa1a146\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"},\"sortOrder\":1}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"cards\":[{\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"},{\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"id\":\"card-0cfb666e-3c8f-4771-893d-95d85fa1a146\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"sortOrder\":1,\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"cards\":[{\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"},{\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"id\":\"card-0cfb666e-3c8f-4771-893d-95d85fa1a146\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"sortOrder\":1,\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898421263&id=ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898423697\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898423697\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save\",\"projectId\":\"1791898421263\",\"id\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"name\":\"成交率\",\"config\":{\"id\":\"card-1791898423697\",\"title\":\"成交率\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"independent\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"日期\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false},\"expectedVersion\":1}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791898421263",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898421263\",\"cards\":[{\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-3408e3df-ef4f-423c-897b-413a1f59f5e8\",\"title\":\"成交率总盘\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"},{\"metricId\":\"1791898421263:metric:b9c83d2c-e802-4df2-a32a-a132258ae68e\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"id\":\"card-0cfb666e-3c8f-4771-893d-95d85fa1a146\",\"title\":\"成交率渠道\",\"type\":\"breakdown\",\"sortOrder\":1,\"datasetId\":\"ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898421263&id=ds-1791898421263-b681277a-e843-4f86-b51d-b6b791200fb5&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

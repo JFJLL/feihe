@@ -1,0 +1,18 @@
+WebSocket server error: Port 24678 is already in use
+(node:41704) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ shared metric API: a real definition and one real binding replace repeated embedded calculations (36.0503ms)
+✔ shared metric API: publication stores only a reference and both presentations resolve the same current version (5.7946ms)
+✔ shared metric API: pinned history, concurrent update rejection and the key API preserve their declared rule (2.7465ms)
+✔ shared metric API: viewer reads, cannot write, and an unrelated project cannot resolve the id (3.0966ms)
+✔ shared metric API: legacy editors cannot mutate the shared object or binding outside version checks (1.4155ms)
+✔ shared metric API: standard templates require platform administration and contain no project source or period (3.7275ms)
+✔ shared metric API: invalid ratio fields, incompatible count units and unknown fixed versions never publish (2.2454ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1291.7715

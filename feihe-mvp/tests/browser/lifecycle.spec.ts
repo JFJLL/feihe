@@ -113,6 +113,7 @@ test('F 390px键盘完成卡片、选择器、未保存和冲突弹窗', async (
   await page.keyboard.press('Enter');
   const add = page.getByRole('button', { name: '＋ 添加卡片', exact: true });
   await add.focus(); await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).focus(); await page.keyboard.press('Enter');
   const modal = await visibleDialog(page);
   await modal.getByLabel('卡片标题', { exact: true }).fill('移动端计数');
   const aggregation = page.getByRole('combobox', { name: '指标计算方式' });
@@ -125,6 +126,7 @@ test('F 390px键盘完成卡片、选择器、未保存和冲突弹窗', async (
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(add).toBeFocused();
   await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).focus(); await page.keyboard.press('Enter');
   await page.getByLabel('卡片标题', { exact: true }).fill('移动端计数');
   await expect(page.getByRole('button', { name: '保存并加入看板' })).toBeEnabled();
   await page.getByRole('button', { name: '保存并加入看板' }).focus(); await page.keyboard.press('Enter');

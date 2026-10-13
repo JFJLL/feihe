@@ -14,6 +14,7 @@ import { CardRenderView } from './CardRenderView';
 import type { MetricComputeResult } from '../../lib/metrics/engine';
 import { UnsavedChangesDialog } from './UnsavedChangesDialog';
 import { ConflictResolutionDialog } from './ConflictResolutionDialog';
+import { MetricCardPicker } from '../metrics/MetricCardPicker';
 
 interface DatasetSummary {
   id: string;
@@ -66,6 +67,9 @@ export function GeneralWorkbenchBoard({
   // Card modal state
   const [modalCard, setModalCard] = useState<DashboardCardConfig | null>(null);
   const [showCardModal, setShowCardModal] = useState(false);
+  const [showMetricPicker, setShowMetricPicker] = useState(false);
+  const [pickerMetricId, setPickerMetricId] = useState('');
+  const handledMetricIntent = useRef('');
   const [editingCardIndex, setEditingCardIndex] = useState<number | null>(null);
 
   // Unsaved changes & conflict dialogs
@@ -223,6 +227,14 @@ export function GeneralWorkbenchBoard({
 
   // Evaluate cards through unified backend metric engine
   const activeCards = isEditingBoard ? draftCards : publishedCards;
+  useEffect(() => {
+    if (loading || !canConfigure) return;
+    const id = new URLSearchParams(window.location.search).get('addMetric');
+    if (!id || handledMetricIntent.current === id) return;
+    handledMetricIntent.current = id; setPickerMetricId(id); setModalCard(null); setEditingCardIndex(null);
+    setDraftCards(publishedCards); setIsEditingBoard(true); setShowMetricPicker(true);
+    window.history.replaceState(null, '', '/projects/' + encodeURIComponent(projectId));
+  }, [loading, canConfigure, projectId, publishedCards]);
   const metricKey = JSON.stringify({ projectId, selectedDatasetId, activeCards, datasetRevision });
   const currentMetrics = metricSnapshot.key === metricKey;
   const metricResults = currentMetrics ? metricSnapshot.results : {};
@@ -363,14 +375,14 @@ export function GeneralWorkbenchBoard({
     if (saveLock.current) return;
     setModalCard(null);
     setEditingCardIndex(null);
-    setShowCardModal(true);
+    setPickerMetricId(''); setShowMetricPicker(true);
   }
 
   function handleEditCardClick(index: number) {
     if (saveLock.current) return;
     setModalCard(draftCards[index]);
     setEditingCardIndex(index);
-    setShowCardModal(true);
+    if (draftCards[index].metricId) setShowMetricPicker(true); else setShowCardModal(true);
   }
 
   function handleSaveCardFromModal(savedCard: DashboardCardConfig) {
@@ -383,6 +395,7 @@ export function GeneralWorkbenchBoard({
       setDraftCards([...draftCards, savedCard]);
     }
     setShowCardModal(false);
+    setShowMetricPicker(false);
     showToast('卡片已更新至本地草稿，请点击右上角「保存并发布看板」', 'info');
   }
 
@@ -724,6 +737,9 @@ export function GeneralWorkbenchBoard({
       )}
 
       {/* Card Creation / Editing Modal */}
+      {showMetricPicker && <MetricCardPicker projectId={projectId} metricId={pickerMetricId} initialCard={modalCard} onClose={() => setShowMetricPicker(false)} onSave={handleSaveCardFromModal}
+        onAdvanced={config => { setShowMetricPicker(false); setModalCard(config || null); setShowCardModal(true); }}
+        onNew={() => { setShowMetricPicker(false); navigateTo('/projects/' + encodeURIComponent(projectId) + '/metrics?new=true&datasetId=' + encodeURIComponent(selectedDatasetId)); }} />}
       {showCardModal && (
         <CardEditModal
           projectId={projectId}

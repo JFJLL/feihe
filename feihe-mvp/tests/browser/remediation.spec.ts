@@ -7,6 +7,7 @@ test('记录计数：普通三条任务的实时预览必须为3', async ({ page
   await selectDataset(page, '任务数据A');
   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).click();
   await page.getByRole('combobox').filter({ hasText: /比率转化|记录计数/ }).click();
   await page.getByRole('option', { name: /记录计数/ }).click();
   const preview = page.getByText('🔍 全量指标实时试算预览：').locator('..');

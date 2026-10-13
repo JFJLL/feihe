@@ -27,12 +27,13 @@ export function CardRenderView({
   datasetName?: string;
 }) {
   const [showAllGroups, setShowAllGroups] = useState(false);
+  const effective = metric?.effectiveConfig || card;
   const displayVal = metric?.formattedValue ?? '—';
   const sampleSize = metric?.sampleSize ?? 0;
   const isZeroDiv = metric?.status === 'zero_division';
   const isMissingSource = metric?.status === 'missing_source';
   const isEmpty = metric?.status === 'empty';
-  const progressValue = (metric?.value ?? 0) * (card.aggregation !== 'ratio' && card.percentScale === 'fraction' ? 100 : 1);
+  const progressValue = (metric?.value ?? 0) * (effective.aggregation !== 'ratio' && effective.percentScale === 'fraction' ? 100 : 1);
 
   return (
     <div
@@ -103,8 +104,8 @@ export function CardRenderView({
 
         <div style={{ fontSize: 28, fontWeight: 700, color: isMissingSource || isEmpty ? '#94a3b8' : '#0f172a', margin: '8px 0 4px' }}>
           {displayVal}
-          {card.unit && !displayVal.endsWith(card.unit) && !displayVal.endsWith('%') && !displayVal.startsWith('¥') && displayVal !== '—' ? (
-            <small style={{ fontSize: 14, fontWeight: 500, color: '#64748b', marginLeft: 4 }}>{card.unit}</small>
+          {effective.unit && !displayVal.endsWith(effective.unit) && !displayVal.endsWith('%') && !displayVal.startsWith('¥') && displayVal !== '—' ? (
+            <small style={{ fontSize: 14, fontWeight: 500, color: '#64748b', marginLeft: 4 }}>{effective.unit}</small>
           ) : null}
         </div>
 
@@ -145,7 +146,7 @@ export function CardRenderView({
                   {g.formattedValue}
                   {g.count !== undefined && <small style={{ fontWeight: 400, color: '#64748b', marginLeft: 4 }}>({g.count})</small>}
                 </strong>
-                {g.pairedValidCount !== undefined && <small style={{ flexBasis: '100%' }}>{ratioSampleLabel(g, card.missingPolicy === 'zero')}</small>}
+                {g.pairedValidCount !== undefined && <small style={{ flexBasis: '100%' }}>{ratioSampleLabel(g, effective.missingPolicy === 'zero')}</small>}
               </div>
             ))}
             {metric.groups.length > 4 && <button type="button" onClick={() => setShowAllGroups(value => !value)}>{showAllGroups ? '收起分组' : '显示全部分组'}</button>}
@@ -154,8 +155,9 @@ export function CardRenderView({
       </div>
 
       <div style={{ marginTop: 14, paddingTop: 8, borderTop: '1px solid #f1f5f9', fontSize: 11, color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'space-between' }}>
-        <span>来源: {datasetName || '当前数据集'}</span>
-        <span>{metric?.pairedValidCount !== undefined ? ratioSampleLabel(metric, card.missingPolicy === 'zero') : `有效样本: ${sampleSize} 行`}</span>
+        <span>来源: {metric?.datasetName || datasetName || '当前数据集'}</span>
+        {metric?.definition && <span>指标 v{metric.definition.version} · {metric.definition.policy === 'pinned' ? '固定口径' : '跟随最新'} · 数据 v{metric.datasetVersion}</span>}
+        <span>{metric?.pairedValidCount !== undefined ? ratioSampleLabel(metric, effective.missingPolicy === 'zero') : `有效样本: ${sampleSize} 行`}</span>
       </div>
     </div>
   );

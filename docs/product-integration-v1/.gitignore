@@ -19,3 +19,10 @@
 /data-final-visual/
 /data-final-keyboard/
 /data-final-delivery/
+
+/metrics-red/
+/metrics-iteration-*/
+/metrics-regression-*/
+/metrics-final/
+/metrics-final-visual/
+/metrics-final-layout/

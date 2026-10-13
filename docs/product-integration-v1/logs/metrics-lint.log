@@ -1,0 +1,11 @@
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\overview\GeneralWorkbenchBoard.tsx
+  178:37  warning  The ref value 'workspaceRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'workspaceRequest.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  178:62  warning  The ref value 'detailRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'detailRequest.current' to a variable inside the effect, and use that variable in the cleanup function        react-hooks/exhaustive-deps
+  178:87  warning  The ref value 'metricRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'metricRequest.current' to a variable inside the effect, and use that variable in the cleanup function        react-hooks/exhaustive-deps
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\lib\metrics\engine.ts
+  285:32  warning  'commentAgg' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 4 problems (0 errors, 4 warnings)
+

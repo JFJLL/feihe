@@ -21,6 +21,7 @@ async function publish(page: Page, projectId: string, request: APIRequestContext
 }
 async function openAnother(page: Page, title: string) {
   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).click();
   await page.getByLabel('卡片标题', { exact: true }).fill(title);
 }
 async function average(page: Page, field: string, expected: string) {

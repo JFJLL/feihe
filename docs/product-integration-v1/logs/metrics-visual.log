@@ -1,0 +1,19 @@
+[WebServer] (node:38052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 9 tests using 1 worker
+
+(node:35992) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:38052) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  ok 1 tests\browser\product-metrics.spec.ts:20:3 › 共享看板入口：ad_performance 保留业务主体并能加入自己的引用指标 (4.5s)
+  ok 2 tests\browser\product-metrics.spec.ts:20:3 › 共享看板入口：comment_qc 保留业务主体并能加入自己的引用指标 (2.5s)
+  ok 3 tests\browser\product-metrics.spec.ts:20:3 › 共享看板入口：content_marketing 保留业务主体并能加入自己的引用指标 (2.4s)
+  ok 4 tests\browser\product-metrics.spec.ts:41:3 › 指标冲突 1280px：真实409保留字段和草稿，读取真实版本后确认重试 (1.5s)
+  ok 5 tests\browser\product-metrics.spec.ts:69:3 › 标准模板 1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表 (3.4s)
+  ok 6 tests\browser\product-metrics.spec.ts:41:3 › 指标冲突 390px：真实409保留字段和草稿，读取真实版本后确认重试 (1.3s)
+  ok 7 tests\browser\product-metrics.spec.ts:69:3 › 标准模板 390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表 (3.2s)
+  ok 8 tests\browser\product-metrics.spec.ts:115:3 › 共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 (4.0s)
+  ok 9 tests\browser\product-metrics.spec.ts:115:3 › 共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 (3.6s)
+
+  9 passed (34.1s)

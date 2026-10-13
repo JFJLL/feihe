@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898410933",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898410933\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898411575\",\"title\":\"待编辑指标\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898410933-ace95efe-14b6-4b8d-a539-7078f2489431\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898410933\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898411575\",\"title\":\"必须保留的标题\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898410933-ace95efe-14b6-4b8d-a539-7078f2489431\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions",
+    "method": "POST",
+    "status": 409,
+    "body": "{\"action\":\"save\",\"projectId\":\"1791898410933\",\"id\":\"1791898410933:metric:cf03c5d9-8cf8-4c23-8703-06f8745b027d\",\"name\":\"必须保留的标题\",\"config\":{\"id\":\"card-1791898411575\",\"title\":\"必须保留的标题\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898410933-ace95efe-14b6-4b8d-a539-7078f2489431\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"},\"expectedVersion\":1}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898410933",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898410933\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791898411575\",\"title\":\"必须保留的标题\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898410933-ace95efe-14b6-4b8d-a539-7078f2489431\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save\",\"projectId\":\"1791898410933\",\"id\":\"1791898410933:metric:cf03c5d9-8cf8-4c23-8703-06f8745b027d\",\"name\":\"必须保留的标题\",\"config\":{\"id\":\"card-1791898411575\",\"title\":\"必须保留的标题\",\"type\":\"metric_card\",\"datasetId\":\"ds-1791898410933-ace95efe-14b6-4b8d-a539-7078f2489431\",\"aggregation\":\"ratio\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"ratioBasis\":\"paired\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"成交人数\",\"denField\":\"咨询人数\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"%\",\"format\":\"percent\",\"displayOrigin\":\"manual\"},\"expectedVersion\":2}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898410933",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

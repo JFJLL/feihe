@@ -4,6 +4,7 @@ import { computeMetric, evaluateCardMetric, getProjectMetrics, type CardMetricCo
 import { logAction } from '@/lib/ops';
 import { getProjectDatasets } from '@/lib/datasets';
 import { validateCardConfig } from '@/lib/metrics/config';
+import { DefinitionError, definitionProtocol } from '@/lib/metrics/definitions';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,15 +66,16 @@ export async function POST(request: Request) {
     if (body.card) {
       const errors = validateCardConfig(body.card, await getProjectDatasets(project));
       if (errors.length) return Response.json({ ok: false, error: errors.join('；'), validationErrors: errors }, { status: 400 });
-      const metric = await evaluateCardMetric(project, body.card);
-      return Response.json({ ok: true, metric });
+      try { return Response.json({ ok: true, metric: await evaluateCardMetric(project, body.card) }); }
+      catch (error) { return jsonError(error instanceof Error ? error.message : '指标计算失败', error instanceof DefinitionError ? error.status : 500); }
     }
 
     if (Array.isArray(body.cards)) {
       const datasets = await getProjectDatasets(project);
-      const metrics = await Promise.all(body.cards.map(c => {
+      const metrics = await Promise.all(body.cards.map(async c => {
         const errors = validateCardConfig(c, datasets);
-        return errors.length ? Promise.resolve({ key: c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: errors.join('；'), validationErrors: errors }) : evaluateCardMetric(project, c);
+        try { return errors.length ? { key: c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: errors.join('；'), validationErrors: errors } : await evaluateCardMetric(project, c); }
+        catch (error) { return { key: c.metricId || c.metric || 'custom', name: c.title || '指标', value: null, formattedValue: '—', sampleSize: 0, status: 'error', statusLabel: error instanceof Error ? error.message : '指标计算失败' }; }
       }));
       return Response.json({ ok: true, metrics });
     }
@@ -91,6 +93,8 @@ export async function POST(request: Request) {
   await ensureSchema();
   const d1 = db();
   const id = `${project}:${key}`;
+  const current = await d1.prepare('SELECT filter_json AS filterJson FROM metric_definitions WHERE key=? AND project_id=?').bind(key, project).first<{ filterJson: string }>();
+  if (definitionProtocol(current?.filterJson)) return jsonError('请从项目指标页编辑共享定义，不能绕过版本确认', 409);
   const now = new Date().toISOString();
   let protocol: Record<string, unknown>;
   try { protocol = JSON.parse(body.filterJson || '{}'); } catch { return jsonError('指标配置必须是合法 JSON'); }

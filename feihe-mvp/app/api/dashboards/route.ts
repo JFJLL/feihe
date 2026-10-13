@@ -3,6 +3,7 @@ import { db, ensureSchema } from '@/lib/db';
 import { logAction } from '@/lib/ops';
 import { getProjectDatasets } from '@/lib/datasets';
 import { validateCardConfig } from '@/lib/metrics/config';
+import { resolveCardDefinition, canonicalCardReference, DefinitionError } from '@/lib/metrics/definitions';
 
 export const dynamic = 'force-dynamic';
 
@@ -91,9 +92,13 @@ export async function POST(request: Request) {
   const cards = Array.isArray(body.cards) ? body.cards : [];
 
   const datasets = await getProjectDatasets(project);
-  const errors = cards.flatMap((c, i) => validateCardConfig({ ...c.config, title: c.title, type: c.type }, datasets, true).map(error => '卡片 ' + (i + 1) + '：' + error));
+  const errors: string[] = [];
+  for (const [i, card] of cards.entries()) {
+    try { const resolved = await resolveCardDefinition(project, { ...card.config, title: card.title, type: card.type }); errors.push(...validateCardConfig(resolved.config, datasets, true).map(error => '卡片 ' + (i + 1) + '：' + error)); }
+    catch (error) { if (error instanceof DefinitionError) errors.push('卡片 ' + (i + 1) + '：' + error.message); else throw error; }
+  }
   if (errors.length) return Response.json({ ok: false, error: errors.join('；'), validationErrors: errors }, { status: 400 });
-  const confirmedCards = cards.map((card, index) => ({ id: card.id || 'card-' + crypto.randomUUID(), title: card.title, type: card.type, configJson: JSON.stringify(card.config || {}), metricKeysJson: JSON.stringify(card.metricKeys || []), sortOrder: card.sortOrder ?? index }));
+  const confirmedCards = cards.map((card, index) => ({ id: card.id || 'card-' + crypto.randomUUID(), title: card.title, type: card.type, configJson: JSON.stringify(canonicalCardReference(card.config || {})), metricKeysJson: JSON.stringify(card.metricKeys || []), sortOrder: card.sortOrder ?? index }));
   if (new Set(confirmedCards.map(c => c.id)).size !== confirmedCards.length) return jsonError('卡片 ID 重复');
   const saveStamp = crypto.randomUUID();
   try {

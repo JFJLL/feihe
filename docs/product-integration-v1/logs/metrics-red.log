@@ -1,0 +1,115 @@
+[WebServer] (node:36600) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:33296) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:36600) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  x  1 tests\browser\product-metrics.spec.ts:20:3 › 共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 (12.5s)
+(node:39044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\browser\product-metrics.spec.ts:20:3 › 共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 (10.7s)
+
+
+  1) tests\browser\product-metrics.spec.ts:20:3 › 共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 ─────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '项目指标', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '项目指标', exact: true })
+
+
+      22 |     const projectId = await fixture(request);
+      23 |     await page.goto('/projects/' + projectId + '/metrics');
+    > 24 |     await expect(page.getByRole('heading', { name: '项目指标', exact: true })).toBeVisible();
+         |                                                                            ^
+      25 |     await page.getByRole('button', { name: '新建指标', exact: true }).click();
+      26 |     await page.getByRole('textbox', { name: '指标名称', exact: true }).fill('成交率');
+      27 |     await choose(page, '指标计算方式', '比率转化 (分子 / 分母 加权比率)');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-metrics.spec.ts:24:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\attachments\关键请求-e4a0ce432b83223dbf553c5540cb4ecab4a69823.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\attachments\实际持久化快照-0133fe71bcc907c19d865fe026c6858417fa367e.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\attachments\最终页面-edd1d72301c3308f3a65bed79f3a7fd4d37cb5fc.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\product-metrics.spec.ts:20:3 › 共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 ──────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '项目指标', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '项目指标', exact: true })
+
+
+      22 |     const projectId = await fixture(request);
+      23 |     await page.goto('/projects/' + projectId + '/metrics');
+    > 24 |     await expect(page.getByRole('heading', { name: '项目指标', exact: true })).toBeVisible();
+         |                                                                            ^
+      25 |     await page.getByRole('button', { name: '新建指标', exact: true }).click();
+      26 |     await page.getByRole('textbox', { name: '指标名称', exact: true }).fill('成交率');
+      27 |     await choose(page, '指标计算方式', '比率转化 (分子 / 分母 加权比率)');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-metrics.spec.ts:24:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\attachments\关键请求-1d865264243a4c66e0139058af68dde0256c1f34.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\attachments\实际持久化快照-efa950a25f4ece109f2fa8ff34cc43369bc0bcd3.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\attachments\最终页面-5edf61751aa72b37704831955d0da276c11e3860.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\metrics-red\browser-results\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests\browser\product-metrics.spec.ts:20:3 › 共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 ──────────
+    tests\browser\product-metrics.spec.ts:20:3 › 共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 ───────────

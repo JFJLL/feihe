@@ -1,0 +1,669 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-metrics.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/metrics-final-layout/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/metrics-final-layout/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/metrics-final-layout/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-metrics.spec.ts",
+      "file": "product-metrics.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "共享看板入口：ad_performance 保留业务主体并能加入自己的引用指标",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4518,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:20.457Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：ad-performance-保留业务主体并能加入自己的引用指标\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：ad-performance-保留业务主体并能加入自己的引用指标\\attachments\\关键请求-01b65e560116265339a02ca486d8426d669ed46c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：ad-performance-保留业务主体并能加入自己的引用指标\\attachments\\实际持久化快照-5eca1ff57085f5a36c4f67fa3b435f078c2e56fa.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：ad-performance-保留业务主体并能加入自己的引用指标\\attachments\\最终页面-5b097d6737849e259230dd48136682f02fc6a652.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：ad-performance-保留业务主体并能加入自己的引用指标\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-727905d64e206be91190",
+          "file": "product-metrics.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "共享看板入口：comment_qc 保留业务主体并能加入自己的引用指标",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2538,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:25.392Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：comment-qc-保留业务主体并能加入自己的引用指标\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：comment-qc-保留业务主体并能加入自己的引用指标\\attachments\\关键请求-b5d984ab4ac1fb93dbadd588f14c7fdc0b74f39b.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：comment-qc-保留业务主体并能加入自己的引用指标\\attachments\\实际持久化快照-56d004b1df199c558d4309d27ac21abdc02024fb.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：comment-qc-保留业务主体并能加入自己的引用指标\\attachments\\最终页面-c4f7d28a3c789f9631c4444df50e0f2a94f0c59e.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：comment-qc-保留业务主体并能加入自己的引用指标\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-11bdbaed82e179d3897c",
+          "file": "product-metrics.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "共享看板入口：content_marketing 保留业务主体并能加入自己的引用指标",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2407,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:28.126Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：content-marketing-保留业务主体并能加入自己的引用指标\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：content-marketing-保留业务主体并能加入自己的引用指标\\attachments\\关键请求-d40ed9c470e8583c057b0f435b785be497584f77.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：content-marketing-保留业务主体并能加入自己的引用指标\\attachments\\实际持久化快照-3a841859099f08cd96f2c2b08f314e56184eb70e.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：content-marketing-保留业务主体并能加入自己的引用指标\\attachments\\最终页面-d118b7d3533d163dfc6480a5a23d1a3b82f7f0fa.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享看板入口：content-marketing-保留业务主体并能加入自己的引用指标\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-d462c5a86fb6d3ff1e48",
+          "file": "product-metrics.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "指标冲突 1280px：真实409保留字段和草稿，读取真实版本后确认重试",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1485,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:30.805Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-1280px：真实409保留字段和草稿，读取真实版本后确认重试\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-1280px：真实409保留字段和草稿，读取真实版本后确认重试\\attachments\\关键请求-d09353e838ece11ebc0fc4ac97fd795fe51b8c8f.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-1280px：真实409保留字段和草稿，读取真实版本后确认重试\\attachments\\实际持久化快照-32f0e48dfec26b5d6544e039eb4c7e8db31e3cb3.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-1280px：真实409保留字段和草稿，读取真实版本后确认重试\\attachments\\最终页面-0102d38c38995836c61d4a99a8bf7129dac988b0.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-1280px：真实409保留字段和草稿，读取真实版本后确认重试\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-55c33bab1d6aacf00ea7",
+          "file": "product-metrics.spec.ts",
+          "line": 41,
+          "column": 3
+        },
+        {
+          "title": "标准模板 1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3369,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:32.461Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\attachments\\关键请求-7da51c2f5257196fc02fd09a494f1d1fd4c7c7c5.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\attachments\\实际持久化快照-6982ddbfaef7e055f070ab62b5915af893983e57.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\attachments\\最终页面-fa3f84c22b3b83a8360651451ff15d91eb846676.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-a391812dabe2582eec18",
+          "file": "product-metrics.spec.ts",
+          "line": 69,
+          "column": 3
+        },
+        {
+          "title": "指标冲突 390px：真实409保留字段和草稿，读取真实版本后确认重试",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1330,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:36.281Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-390px：真实409保留字段和草稿，读取真实版本后确认重试\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-390px：真实409保留字段和草稿，读取真实版本后确认重试\\attachments\\关键请求-2eafe487b174a67734de13581c52f1098a9b0c11.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-390px：真实409保留字段和草稿，读取真实版本后确认重试\\attachments\\实际持久化快照-9743cbc9375765acc892f406cfc3c6325cd6c2e0.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-390px：真实409保留字段和草稿，读取真实版本后确认重试\\attachments\\最终页面-97a1a5b00625316e4f64fe110731c1a98a3ba57a.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-指标冲突-390px：真实409保留字段和草稿，读取真实版本后确认重试\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-07275f45c291ca7a43d2",
+          "file": "product-metrics.spec.ts",
+          "line": 41,
+          "column": 3
+        },
+        {
+          "title": "标准模板 390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3169,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:37.713Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\attachments\\关键请求-5ab09a22d0029714ebd8d184839f0cc3618ce5ff.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\attachments\\实际持久化快照-ef2561ed969589c2188714647c6ad30c6a777265.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\attachments\\最终页面-c87c12434413098f4dde6cf81bdd9b299321b194.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-标准模板-390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-eddf76f664d1947d4f5a",
+          "file": "product-metrics.spec.ts",
+          "line": 69,
+          "column": 3
+        },
+        {
+          "title": "共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4017,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:41.133Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\关键请求-21c45a3d69ae4bfc1d704cd99fbd527a8ea3f762.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\实际持久化快照-b61cac943f3dafee2f0ed38494e137fb58c28414.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\最终页面-1e6bea723a68eaa8c845544dd515c84aeb184ca9.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-eec003be05e1819f4e7e",
+          "file": "product-metrics.spec.ts",
+          "line": 115,
+          "column": 3
+        },
+        {
+          "title": "共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3593,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T13:33:45.649Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\关键请求-9024015aaadf6ec570282a7842d9475a61795d04.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\实际持久化快照-46e48de5bfdff300557a8bcb764335b41cef153a.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\最终页面-9a2cedb2f547741907210e32d84b5dc3991ca5bf.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-final-layout\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-b4b0d748beae7aea86ae",
+          "file": "product-metrics.spec.ts",
+          "line": 115,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T13:33:16.408Z",
+    "duration": 34138.986,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

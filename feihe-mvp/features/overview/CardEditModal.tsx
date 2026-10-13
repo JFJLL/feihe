@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api } from '../../lib/hooks/use-project-data';
 import { Dialog } from '../../components/ui/Dialog';
@@ -8,6 +8,9 @@ import type { MetricComputeResult } from '../../lib/metrics/engine';
 import { isTemplateCard, validateCardConfig, ratioSampleLabel, transitionCardConfig, isCountAggregation, type CardAggregation } from '../../lib/metrics/config';
 
 export interface DashboardCardConfig {
+  metricId?: string;
+  metricVersionPolicy?: 'latest' | 'pinned';
+  metricVersion?: number;
   id?: string;
   title: string;
   type: 'metric_card' | 'progress_card' | 'breakdown';
@@ -40,14 +43,29 @@ export function CardEditModal({
   defaultDatasetId,
   onSave,
   onClose,
+  dialogTitle,
+  saveLabel = '保存并加入看板',
+  titleLabel = '卡片标题',
+  headerContent,
+  definitionOnly = false,
+  saveRevision = 0,
 }: {
   projectId: string;
   initialCard?: DashboardCardConfig | null;
   datasets: Array<{ id: string; name: string; columns?: Array<{ key: string; name: string; type: string; numericUnit?: string; percentScale?: 'fraction' | 'percentage_points' }> }>;
   defaultDatasetId?: string;
-  onSave: (card: DashboardCardConfig) => void;
+  onSave: (card: DashboardCardConfig) => void | Promise<void>;
   onClose: () => void;
+  dialogTitle?: string;
+  saveLabel?: string;
+  titleLabel?: string;
+  headerContent?: ReactNode;
+  definitionOnly?: boolean;
+  saveRevision?: number;
 }) {
+  const submitLock = useRef(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [saveError, setSaveError] = useState<{ revision: number; message: string } | null>(null);
   const [card, setCard] = useState<DashboardCardConfig>(() => ({
     id: initialCard?.id || `card-${Date.now()}`,
     title: initialCard?.title || '新增指标卡',
@@ -118,19 +136,22 @@ export function CardEditModal({
     };
   }, [projectId, card, activeDataset?.id, datasets, previewKey]);
 
-  function handleSubmit() {
-    if (validationErrors.length || previewError || invalidPreview || loadingPreview || !preview) return;
-    onSave({
+  async function handleSubmit() {
+    if (submitLock.current || validationErrors.length || previewError || invalidPreview || loadingPreview || !preview) return;
+    submitLock.current = true; setSubmitting(true); setSaveError(null);
+    try { await onSave({
       ...card,
       datasetId: card.datasetId || activeDataset?.id,
-    });
+    }); } catch (error) { setSaveError({ revision: saveRevision, message: error instanceof Error ? error.message : '保存失败，修改仍保留' }); }
+    finally { submitLock.current = false; setSubmitting(false); }
   }
 
   return (
-    <Dialog title={initialCard ? '编辑看板指标卡' : '添加看板指标卡'} onClose={onClose} footer={<div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 10 }}>
+    <Dialog title={dialogTitle || (initialCard ? '编辑看板指标卡' : '添加看板指标卡')} onClose={() => { if (!submitLock.current) onClose(); }} footer={<div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 10 }}>
           <button
             type="button"
             onClick={onClose}
+            disabled={submitting}
             style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: 13 }}
           >
             取消
@@ -138,16 +159,18 @@ export function CardEditModal({
           <button
             type="button"
             className="primary"
-            disabled={Boolean(validationErrors.length || previewError || invalidPreview || loadingPreview || !preview)}
+            disabled={Boolean(submitting || validationErrors.length || previewError || invalidPreview || loadingPreview || !preview)}
             onClick={handleSubmit}
             style={{ padding: '8px 18px', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
           >
-            保存并加入看板
+            {submitting ? '保存中…' : saveLabel}
           </button>
         </div>}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div inert={submitting} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {saveError?.revision === saveRevision && <p role="alert">{saveError.message}；当前修改仍保留。</p>}
+          {headerContent}
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
-            卡片标题
+            {titleLabel}
             <input
               value={card.title}
               placeholder="例如：签约达成率 或 门店咨询总人数"
@@ -166,7 +189,7 @@ export function CardEditModal({
             />
           </label>
 
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
+          {!definitionOnly && <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
             展示呈现形式
             <CustomSelect
               ariaLabel="展示呈现形式"
@@ -178,7 +201,7 @@ export function CardEditModal({
                 { value: 'breakdown', label: '细分对比卡 (按维度分组列表)' },
               ]}
             />
-          </label>
+          </label>}
 
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
             指标计算方式

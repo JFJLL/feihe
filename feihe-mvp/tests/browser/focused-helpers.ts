@@ -28,6 +28,7 @@ export async function newFocusedCard(page: Page, projectId: string, title: strin
   await page.goto(`/projects/${projectId}`);
   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).click();
   await page.getByLabel('卡片标题', { exact: true }).fill(title);
 }
 export function focusedPreview(page: Page) {

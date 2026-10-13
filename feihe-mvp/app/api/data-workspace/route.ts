@@ -4,6 +4,7 @@ import { getProjectDatasets } from '@/lib/datasets';
 import { parseNumericValue } from '@/lib/numeric-values';
 import { parseProjectDate } from '@/lib/date-values';
 import type { DatasetQuality, DatasetUse, WorkspaceSource, SourceRun } from '@/lib/types/data-workspace';
+import { resolveCardDefinition } from '@/lib/metrics/definitions';
 
 export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
@@ -24,7 +25,7 @@ export async function GET(request: Request) {
     const uses: DatasetUse[] = [];
     for (const card of cards.results) {
       try {
-        const config = JSON.parse(card.configJson);
+        const config = (await resolveCardDefinition(projectId, JSON.parse(card.configJson))).config;
         const dataset = datasets.find(d => d.id === config.datasetId || d.sourceId === config.datasetId);
         if (dataset) uses.push({ id: card.id, name: card.title, kind: 'card', datasetId: dataset.id });
       } catch { /* A legacy malformed card is not advertised as a valid binding. */ }

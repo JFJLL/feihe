@@ -1,0 +1,143 @@
+[
+  {
+    "projectId": "1791894348118",
+    "project": {
+      "id": "1791894348118",
+      "name": "共享指标1791894348118",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#e11d48",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T12:25:48.127Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "44b272ff-a122-49dc-9188-f429da669166",
+        "projectId": "1791894348118",
+        "type": "feishu_sheet",
+        "name": "咨询成交原表",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/SharedMetric-1791894348118",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T12:25:48.166Z",
+        "lastRowCount": 3,
+        "mappingJson": "[]",
+        "lastError": "",
+        "updatedAt": "2026-10-13T12:25:48.166Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync"
+      ],
+      "blockedSteps": [
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791894348118-default",
+          "projectId": "1791894348118",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T12:25:48.127Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791894348118-default",
+      "cards": []
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791894348118-44b272ff-a122-49dc-9188-f429da669166",
+          "projectId": "1791894348118",
+          "sourceId": "44b272ff-a122-49dc-9188-f429da669166",
+          "name": "咨询成交原表",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"name\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"name\":\"成交人数\",\"type\":\"number\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T12:25:48.182Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "咨询人数",
+              "name": "咨询人数",
+              "type": "number"
+            },
+            {
+              "key": "成交人数",
+              "name": "成交人数",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "门店",
+              "咨询人数": "",
+              "成交人数": 10
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "线上",
+              "咨询人数": 100,
+              "成交人数": ""
+            },
+            {
+              "日期": "2026-10-03",
+              "渠道": "门店",
+              "咨询人数": 100,
+              "成交人数": 20
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]

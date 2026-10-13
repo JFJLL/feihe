@@ -1,0 +1,307 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-metrics.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/metrics-red/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/metrics-red/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/metrics-red/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-metrics.spec.ts",
+      "file": "product-metrics.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12469,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '项目指标', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '项目指标', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '项目指标', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '项目指标', exact: true })\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts:24:76",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts",
+                      "column": 76,
+                      "line": 24
+                    },
+                    "snippet": "  22 |     const projectId = await fixture(request);\n  23 |     await page.goto('/projects/' + projectId + '/metrics');\n> 24 |     await expect(page.getByRole('heading', { name: '项目指标', exact: true })).toBeVisible();\n     |                                                                            ^\n  25 |     await page.getByRole('button', { name: '新建指标', exact: true }).click();\n  26 |     await page.getByRole('textbox', { name: '指标名称', exact: true }).fill('成交率');\n  27 |     await choose(page, '指标计算方式', '比率转化 (分子 / 分母 加权比率)');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts",
+                        "column": 76,
+                        "line": 24
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '项目指标', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '项目指标', exact: true })\u001b[22m\n\n\n  22 |     const projectId = await fixture(request);\n  23 |     await page.goto('/projects/' + projectId + '/metrics');\n> 24 |     await expect(page.getByRole('heading', { name: '项目指标', exact: true })).toBeVisible();\n     |                                                                            ^\n  25 |     await page.getByRole('button', { name: '新建指标', exact: true }).click();\n  26 |     await page.getByRole('textbox', { name: '指标名称', exact: true }).fill('成交率');\n  27 |     await choose(page, '指标计算方式', '比率转化 (分子 / 分母 加权比率)');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts:24:76"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:25:34.258Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\关键请求-e4a0ce432b83223dbf553c5540cb4ecab4a69823.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\实际持久化快照-0133fe71bcc907c19d865fe026c6858417fa367e.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\最终页面-edd1d72301c3308f3a65bed79f3a7fd4d37cb5fc.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts",
+                    "column": 76,
+                    "line": 24
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-eec003be05e1819f4e7e",
+          "file": "product-metrics.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10697,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '项目指标', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '项目指标', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '项目指标', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '项目指标', exact: true })\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts:24:76",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts",
+                      "column": 76,
+                      "line": 24
+                    },
+                    "snippet": "  22 |     const projectId = await fixture(request);\n  23 |     await page.goto('/projects/' + projectId + '/metrics');\n> 24 |     await expect(page.getByRole('heading', { name: '项目指标', exact: true })).toBeVisible();\n     |                                                                            ^\n  25 |     await page.getByRole('button', { name: '新建指标', exact: true }).click();\n  26 |     await page.getByRole('textbox', { name: '指标名称', exact: true }).fill('成交率');\n  27 |     await choose(page, '指标计算方式', '比率转化 (分子 / 分母 加权比率)');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts",
+                        "column": 76,
+                        "line": 24
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '项目指标', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '项目指标', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '项目指标', exact: true })\u001b[22m\n\n\n  22 |     const projectId = await fixture(request);\n  23 |     await page.goto('/projects/' + projectId + '/metrics');\n> 24 |     await expect(page.getByRole('heading', { name: '项目指标', exact: true })).toBeVisible();\n     |                                                                            ^\n  25 |     await page.getByRole('button', { name: '新建指标', exact: true }).click();\n  26 |     await page.getByRole('textbox', { name: '指标名称', exact: true }).fill('成交率');\n  27 |     await choose(page, '指标计算方式', '比率转化 (分子 / 分母 加权比率)');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts:24:76"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T12:25:47.680Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\关键请求-1d865264243a4c66e0139058af68dde0256c1f34.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\实际持久化快照-efa950a25f4ece109f2fa8ff34cc43369bc0bcd3.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\attachments\\最终页面-5edf61751aa72b37704831955d0da276c11e3860.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\metrics-red\\browser-results\\product-metrics-共享指标-390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts",
+                    "column": 76,
+                    "line": 24
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7529728c53b2e82d0827-b4b0d748beae7aea86ae",
+          "file": "product-metrics.spec.ts",
+          "line": 20,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T12:25:30.061Z",
+    "duration": 29017.378,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

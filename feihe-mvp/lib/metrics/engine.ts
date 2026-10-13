@@ -2,6 +2,9 @@ import { parseNumericValue, type PercentScale } from '../numeric-values';
 import { db, ensureSchema } from '../db';
 import { isTemplateCard, resultDisplayErrors, type CardMetricConfig } from './config';
 import { parseProjectDate, endDayExclusive, DEFAULT_PROJECT_TIME_ZONE } from '../date-values';
+import { resolveCardDefinition, definitionProtocol, DefinitionError } from './definitions';
+import { validateCardConfig } from './config';
+import { getProjectDatasets } from '../datasets';
 
 
 export function isStatusCompleted(status: unknown): boolean {
@@ -35,6 +38,10 @@ export interface MetricDefinition {
 }
 
 export interface MetricComputeResult {
+  definition?: { id: string; version: number; name: string; policy: string };
+  effectiveConfig?: CardMetricConfig;
+  datasetVersion?: number;
+  datasetName?: string;
   key: string;
   name: string;
   unit: string;
@@ -182,10 +189,16 @@ export function evaluateMetricRows(card: EngineMetricConfig, items: Record<strin
 
 export async function evaluateCardMetric(projectId: string, card: CardMetricConfig): Promise<MetricComputeResult> {
   await ensureSchema();
+  const resolved = await resolveCardDefinition(projectId, card);
+  card = resolved.config;
+  if (resolved.definition) {
+    const errors = validateCardConfig(card, await getProjectDatasets(projectId));
+    if (errors.length) throw new DefinitionError(errors.join('；'));
+  }
   const d1 = db();
   const dataset = await (card.datasetId
-    ? d1.prepare('SELECT id FROM datasets WHERE project_id=? AND (id=? OR source_id=?) LIMIT 1').bind(projectId, card.datasetId, card.datasetId)
-    : d1.prepare('SELECT id FROM datasets WHERE project_id=? ORDER BY row_count DESC, created_at ASC LIMIT 1').bind(projectId)).first<{ id: string }>();
+    ? d1.prepare('SELECT id,name,version FROM datasets WHERE project_id=? AND (id=? OR source_id=?) LIMIT 1').bind(projectId, card.datasetId, card.datasetId)
+    : d1.prepare('SELECT id,name,version FROM datasets WHERE project_id=? ORDER BY row_count DESC, created_at ASC LIMIT 1').bind(projectId)).first<{ id: string; name: string; version: number }>();
   if (!dataset) return { key: card.metric || 'custom', name: card.title || '指标', unit: card.unit || '', value: null, formattedValue: '—', sampleSize: 0, status: 'missing_source', statusLabel: '数据源不存在或已移除' };
   const stored = await d1.prepare('SELECT data_json FROM dataset_rows WHERE dataset_id=? ORDER BY rowid ASC').bind(dataset.id).all<{ data_json: string }>();
   let items: Record<string, unknown>[] = (stored.results || []).map(r => JSON.parse(r.data_json));
@@ -212,7 +225,7 @@ export async function evaluateCardMetric(projectId: string, card: CardMetricConf
       case 'conversion_rate': effective = { ...card, aggregation: 'ratio', numField: card.numField || '成交人数', denField: card.denField || '咨询人数' }; break;
     }
   }
-  return evaluateMetricRows(effective, items);
+  return { ...evaluateMetricRows(effective, items), ...(resolved.definition ? { definition: resolved.definition, effectiveConfig: effective, datasetVersion: dataset.version, datasetName: dataset.name } : {}) };
 }
 
 export async function computeMetric(
@@ -230,11 +243,12 @@ export async function computeMetric(
   const datasetRow = await datasetQuery.first<{ id: string; name: string }>();
 
   if (datasetRow) {
-    const custom = await d1.prepare('SELECT name, unit, aggregation, formula, format, filter_json AS filterJson FROM metric_definitions WHERE project_id=? AND key=?').bind(projectId, metricKey).first<{ name: string; unit: string; aggregation: string; formula: string; format: string; filterJson: string }>();
+    const custom = await d1.prepare('SELECT id,name, unit, aggregation, formula, format, filter_json AS filterJson FROM metric_definitions WHERE project_id=? AND key=?').bind(projectId, metricKey).first<{ id: string; name: string; unit: string; aggregation: string; formula: string; format: string; filterJson: string }>();
     const columnsRow = await d1.prepare('SELECT schema_json FROM datasets WHERE id=?').bind(datasetRow.id).first<{ schema_json: string }>();
     const columns = JSON.parse(columnsRow?.schema_json || '[]') as Array<{ key: string; type: string }>;
     const dateField = columns.find(c => c.type === 'date')?.key;
     if (custom) {
+      if (definitionProtocol(custom.filterJson)) return evaluateCardMetric(projectId, { metricId: custom.id, from: options.from, to: options.to, groupBy: options.groupBy });
       const parts = custom.formula.split('/').map(s => s.trim());
       return evaluateCardMetric(projectId, { ...metricProtocol(custom.filterJson), title: custom.name, datasetId: datasetRow.id, metric: 'custom', aggregation: custom.aggregation as CardMetricConfig['aggregation'], field: custom.aggregation === 'ratio' ? undefined : custom.formula, numField: custom.aggregation === 'ratio' ? parts[0] : undefined, denField: custom.aggregation === 'ratio' ? parts[1] : undefined, unit: custom.unit, format: custom.format as CardMetricConfig['format'], dateField, from: options.from, to: options.to, groupBy: options.groupBy });
     }

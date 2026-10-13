@@ -1,0 +1,92 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898405507&id=ds-1791898405507-5b02cbe7-a1c8-444c-a3ac-be61ed61a4b9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898405507\",\"card\":{\"id\":\"card-1791898405507:metric:b1ab1f71-3c11-41ee-ba0a-b335d6215047\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricId\":\"1791898405507:metric:b1ab1f71-3c11-41ee-ba0a-b335d6215047\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898405507\",\"cards\":[{\"id\":\"card-c7424cef-d342-403e-8112-c0886dd5bb56\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricId\":\"1791898405507:metric:b1ab1f71-3c11-41ee-ba0a-b335d6215047\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"datasetId\":\"ds-1791898405507-5b02cbe7-a1c8-444c-a3ac-be61ed61a4b9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898405507\",\"dashboardId\":\"dash-1791898405507-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-c7424cef-d342-403e-8112-c0886dd5bb56\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-c7424cef-d342-403e-8112-c0886dd5bb56\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricId\":\"1791898405507:metric:b1ab1f71-3c11-41ee-ba0a-b335d6215047\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"datasetId\":\"ds-1791898405507-5b02cbe7-a1c8-444c-a3ac-be61ed61a4b9\"},\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898405507\",\"cards\":[{\"metricId\":\"1791898405507:metric:b1ab1f71-3c11-41ee-ba0a-b335d6215047\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"id\":\"card-c7424cef-d342-403e-8112-c0886dd5bb56\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791898405507-5b02cbe7-a1c8-444c-a3ac-be61ed61a4b9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791898405507",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791898405507\",\"cards\":[{\"metricId\":\"1791898405507:metric:b1ab1f71-3c11-41ee-ba0a-b335d6215047\",\"metricVersionPolicy\":\"latest\",\"id\":\"card-c7424cef-d342-403e-8112-c0886dd5bb56\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791898405507-5b02cbe7-a1c8-444c-a3ac-be61ed61a4b9\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791898405507&id=ds-1791898405507-5b02cbe7-a1c8-444c-a3ac-be61ed61a4b9&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

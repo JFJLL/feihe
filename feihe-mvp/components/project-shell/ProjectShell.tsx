@@ -17,6 +17,7 @@ import { ContentWorkspace } from '../../features/content/ContentWorkspace';
 import { CommentsWorkspace } from '../../features/comments/CommentsWorkspace';
 import { SettingsWorkspace } from '../../features/settings/SettingsWorkspace';
 import { DataWorkspace } from '../../features/data/DataWorkspace';
+import { MetricWorkspace } from '../../features/metrics/MetricWorkspace';
 
 function ProjectShellContent({
   userName,
@@ -40,7 +41,7 @@ function ProjectShellContent({
     refreshData,
   } = useProject();
 
-  const isSettingsOrData = activeSection === "settings" || activeSection === "data";
+  const isSettingsOrData = ['settings', 'data', 'metrics'].includes(activeSection);
 
   // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞）
   if (dataLoading && !dashboard && !isSettingsOrData) {
@@ -122,6 +123,9 @@ function ProjectShellContent({
       break;
     case "data":
       content = <DataWorkspace key={projectId} projectId={projectId} />;
+      break;
+    case "metrics":
+      content = <MetricWorkspace key={projectId} projectId={projectId} />;
       break;
     case "settings":
       content = (

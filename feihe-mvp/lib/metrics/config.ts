@@ -3,6 +3,9 @@ import type { PercentScale } from '../numeric-values';
 
 export type CardAggregation = 'count' | 'nonempty_count' | 'distinct_count' | 'sum' | 'avg' | 'ratio';
 export interface CardMetricConfig {
+  metricId?: string;
+  metricVersionPolicy?: 'latest' | 'pinned';
+  metricVersion?: number;
   id?: string;
   title?: string;
   type?: string;
@@ -89,6 +92,11 @@ export function isTemplateCard(card: CardMetricConfig) {
 export function validateCardConfig(card: CardMetricConfig, datasets: MetricDataset[], requireTitle = false): string[] {
   const errors: string[] = [];
   if (requireTitle && !String(card.title || '').trim()) errors.push('请填写卡片标题');
+  if (card.metricId) {
+    if (card.metricVersionPolicy && !['latest', 'pinned'].includes(card.metricVersionPolicy)) errors.push('不支持的指标版本策略');
+    if (card.metricVersionPolicy === 'pinned' && (!Number.isInteger(card.metricVersion) || (card.metricVersion || 0) < 1)) errors.push('请选择有效的固定指标版本');
+    return errors; // The authenticated server resolves and validates the complete definition.
+  }
   const dataset = datasets.find(d => d.id === card.datasetId || d.sourceId === card.datasetId);
   if (!dataset) errors.push('请选择当前项目的有效数据集');
   const columns = dataset?.columns || [];

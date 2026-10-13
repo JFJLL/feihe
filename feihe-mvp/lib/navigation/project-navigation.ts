@@ -35,6 +35,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     description: '声量格局、本竞品对比与机会雷达',
     defaultTab: 'competitor',
   },
+  { id: 'metrics', path: 'metrics', number: '03', label: '指标', title: '项目指标', description: '共享计算口径、版本和项目来源' },
   {
     id: 'content',
     path: 'content',

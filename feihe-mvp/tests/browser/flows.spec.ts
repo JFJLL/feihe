@@ -134,6 +134,7 @@ test('B 新建计数、平均、分组、比率卡，预览发布刷新保持正
   for (const [title, aggregation] of [['三条记录', '记录计数 (Count)'], ['有效平均', '数值平均 (Average)'], ['分组平均', '数值平均 (Average)'], ['金额比例', '比率转化 (分子 / 分母 加权比率)']]) {
     await test.step(`新建${title}并读取预览`, async () => {
       await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).first().click();
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).click();
       await page.getByLabel('卡片标题', { exact: true }).fill(title);
       await choose(page, '指标计算方式', aggregation);
       if (title.includes('平均')) await choose(page, '目标计算字段', 'amount');
@@ -215,6 +216,7 @@ test('D 日期范围经编辑试算发布GET刷新重新打开完整保存', asy
   await page.goto(`/projects/${projectId}`);
   await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click();
   await page.getByRole('button', { name: '＋ 添加卡片', exact: true }).click();
+  await page.getByRole('button', { name: '高级：独立卡片', exact: true }).click();
   await page.getByLabel('卡片标题', { exact: true }).fill('10月1日记录');
   await choose(page, '绑定数据集', '日期数据');
   await choose(page, '日期字段', 'date');

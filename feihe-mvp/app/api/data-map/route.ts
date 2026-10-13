@@ -93,6 +93,11 @@ export async function POST(request: Request) {
   const id = text(body.id) || crypto.randomUUID();
   const now = new Date().toISOString();
   const d1 = db();
+  if (entity === 'metric' || entity === 'binding') {
+    const metric = entity === 'metric' ? await d1.prepare('SELECT filter_json AS filterJson FROM metric_definitions WHERE id=? AND project_id=?').bind(id, project).first<{ filterJson: string }>()
+      : await d1.prepare('SELECT m.filter_json AS filterJson FROM metric_definitions m WHERE m.project_id=? AND (m.id=? OR m.id=(SELECT metric_id FROM metric_bindings WHERE id=? AND project_id=?))').bind(project, text(body.metricId), id, project).first<{ filterJson: string }>();
+    if (metric?.filterJson?.includes('"reusable_metric"')) return jsonError('共享指标请从项目指标页编辑，不能绕过版本确认', 409);
+  }
 
   try {
     if (action === 'delete') {
