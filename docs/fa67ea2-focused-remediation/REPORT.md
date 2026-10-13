@@ -69,9 +69,11 @@ node node_modules/@playwright/test/cli.js test
 
 来源接口与同步接口的已有按ID更新、来源隔离和暂存发布机制继续使用，本轮未修改这两处认证或存储实现。
 
-## 验收结束时的 Git 快照与未验证项
+## Git 交付与未验证项
 
-实际修改工作区 `D:\download\pic-vec\feihe-platform-v3`；会话原工作区 `D:\download\pic-vec\feihe` 的main与用户已有未跟踪文件未动。起始与验收结束时HEAD均为 `fa67ea2c0380e470fe32fb5b57fb8ce02402f5f1`。从 `codex/v3-targeted-remediation` 创建独立分支 `codex/v3-percent-source-ratio-fix`。开始时目标工作区无受跟踪的未提交修改，只有旧证据目录；验收结束时本轮代码与新证据未提交。未推送、未合并main、未部署。详情见 [GIT-STATE.json](GIT-STATE.json)。
+实际修改工作区 `D:\download\pic-vec\feihe-platform-v3`；会话原工作区 `D:\download\pic-vec\feihe` 的main与用户已有未跟踪文件未动。起始/验收基线为 `fa67ea2c0380e470fe32fb5b57fb8ce02402f5f1`。独立分支为 [`codex/v3-percent-source-ratio-fix`](https://github.com/JFJLL/feihe/tree/codex/v3-percent-source-ratio-fix)。用户验收后授权提交、推送并明确要求暂不合并。
+
+源码与本轮可复核证据已提交并推送：[`0e3a430`](https://github.com/JFJLL/feihe/commit/0e3a43031101c4a073eaa00773d12fb90269b240)，远端SHA已核对。本次交付状态更新使用随后独立的文档提交；最新分支SHA以远端Git ref为准。未合并main、未部署。原有未跟踪验收产物保留，本轮受跟踪代码已提交。详情见 [GIT-STATE.json](GIT-STATE.json)。`TRACKED-CHANGES.txt` 与 `WORKTREE-STATUS.txt` 为验收结束、提交前的快照。
 
 来源快照补充归档重跑了新增15条，报告与附件在 `final-focused-evidence/`，不重复累计为新用例。
 

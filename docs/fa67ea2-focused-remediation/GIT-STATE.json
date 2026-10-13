@@ -4,9 +4,8 @@
   "baselineSHA": "fa67ea2c0380e470fe32fb5b57fb8ce02402f5f1",
   "baselineBranch": "codex/v3-targeted-remediation",
   "workingBranch": "codex/v3-percent-source-ratio-fix",
-  "headSHA": "fa67ea2c0380e470fe32fb5b57fb8ce02402f5f1",
-  "committed": false,
-  "pushed": false,
+  "committed": true,
+  "pushed": true,
   "merged": false,
   "deployed": false,
   "testDatabase": ".verification/focused-browser.db",
@@ -61,5 +60,15 @@
     "production": "not executed"
   },
   "testServerStopped": true,
-  "snapshotPhase": "browser acceptance completed, before authorized git commit and push"
+  "snapshotPhase": "code/evidence push verified; delivery metadata recorded in following commit",
+  "acceptanceSnapshot": {
+    "headSHA": "fa67ea2c0380e470fe32fb5b57fb8ce02402f5f1",
+    "committed": false,
+    "pushed": false
+  },
+  "codeCommitSHA": "0e3a43031101c4a073eaa00773d12fb90269b240",
+  "verifiedRemoteCodeCommitSHA": "0e3a43031101c4a073eaa00773d12fb90269b240",
+  "remoteVerifiedAtUTC": "2026-10-13 07:24:05 UTC",
+  "branchURL": "https://github.com/JFJLL/feihe/tree/codex/v3-percent-source-ratio-fix",
+  "finalBranchHead": "Resolve origin/codex/v3-percent-source-ratio-fix; metadata commit follows code commit"
 }
