@@ -1,0 +1,86 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save_user\",\"id\":\"pilot-person-1791889762430\",\"name\":\"咨询试点负责人1791889762430\",\"industry\":\"\",\"email\":\"pilot1791889762430@example.test\",\"departmentId\":\"dept-0c9a0f12-a5ce-4876-a68a-956441a35974\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"新部门内部项目1791889762430\",\"description\":\"\",\"departmentId\":\"dept-0c9a0f12-a5ce-4876-a68a-956441a35974\",\"ownerId\":\"pilot-person-1791889762430\",\"clientId\":\"\",\"templateId\":\"blank\",\"status\":\"筹备中\",\"color\":\"#059669\",\"brand\":\"\",\"spu\":\"\",\"category\":\"\",\"action\":\"create\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"update_onboarding\",\"projectId\":\"1791889762430\",\"onboardingStatus\":\"source\",\"completedSteps\":[\"template\",\"skip:members\"]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791889762430",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

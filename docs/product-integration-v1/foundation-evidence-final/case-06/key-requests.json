@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"id\":\"1791889746226\",\"name\":\"资料一致性1791889746226\",\"description\":\"\",\"departmentId\":\"dept-marketing\",\"ownerId\":\"user-project-manager\",\"clientId\":\"\",\"templateId\":\"general_workbench\",\"status\":\"筹备中\",\"color\":\"#4f46e5\",\"brand\":\"\",\"spu\":\"\",\"category\":\"\",\"action\":\"update\",\"projectId\":\"1791889746226\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"id\":\"1791889746226\",\"name\":\"资料一致性1791889746226\",\"description\":\"两入口保持相同资料\",\"departmentId\":\"dept-marketing\",\"ownerId\":\"user-project-manager\",\"clientId\":\"\",\"templateId\":\"general_workbench\",\"status\":\"筹备中\",\"color\":\"#4f46e5\",\"brand\":\"\",\"spu\":\"\",\"category\":\"\",\"action\":\"update\",\"projectId\":\"1791889746226\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=1791889746226&fresh=1&_t=1791889747288",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=1791889746226&fresh=1&_t=1791889747288",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

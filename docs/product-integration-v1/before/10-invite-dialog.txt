@@ -1,0 +1,71 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 通用项目中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 非社媒部门首次接入（审查）
+    - img
+  - paragraph: 品牌未设置 · 非社媒部门首次接入（审查） · 筹备中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/project-f501f105
+    - link "02 数据管理":
+      - /url: /projects/project-f501f105/settings?tab=data-sources
+    - link "05 项目设置":
+      - /url: /projects/project-f501f105/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:10:32
+- main:
+  - heading "项目设置" [level=1]
+  - text: 11 个识别词 · 0 条主线
+  - paragraph: 集中管理当前项目的低频配置、目标规则、数据源与数据地图。
+  - tablist "模块切换":
+    - tab "项目资料"
+    - tab "成员与权限" [selected]
+    - tab "数据源"
+    - tab "工具集成"
+    - tab "数据地图"
+  - tabpanel "成员与权限":
+    - region "项目成员概况":
+      - article: 成员总数 1 人 已加入当前项目的协同成员
+      - article: 项目管理员 1 人 具备数据接入、指标发布与授权权限
+      - article: 业务编辑者 0 人 具备业务数据编辑与同步权限
+      - article: 只读观察员 0 人 仅具备看板查看与报告导出权限
+    - text: 当前操作身份：
+    - strong: 用户
+    - text: 具备成员管理权限
+    - article:
+      - text: MEMBER ACCESS MATRIX
+      - heading "项目成员与权限列表" [level=3]
+      - paragraph: 不同成员按角色隔离飞书应用凭证、写操作与删除权限。
+      - button "＋ 添加已有成员"
+      - table:
+        - rowgroup:
+          - row "成员姓名 系统账号 / 邮箱 项目角色 权限范围 操作":
+            - columnheader "成员姓名"
+            - columnheader "系统账号 / 邮箱"
+            - columnheader "项目角色"
+            - columnheader "权限范围"
+            - columnheader "操作"
+        - rowgroup:
+          - row "业务编辑者(张晓)(您) editor@company.local 项目管理员 完整数据接入、指标配置、看板发布与成员管理":
+            - cell "业务编辑者(张晓)(您)"
+            - cell "editor@company.local":
+              - code: editor@company.local
+            - cell "项目管理员"
+            - cell "完整数据接入、指标配置、看板发布与成员管理"
+            - cell
+    - heading "添加项目成员" [level=3]
+    - button "×"
+    - paragraph: 从公司组织中选择已有成员加入当前项目，并为其分配权限角色。
+    - text: 选择成员
+    - combobox "请选择":
+      - text: 平台管理员 (admin@company.local)
+      - img
+    - text: 分配项目角色
+    - combobox "请选择":
+      - text: 业务编辑者
+      - img
+    - button "取消"
+    - button "确认添加"
+- button "打开智能助手": 智

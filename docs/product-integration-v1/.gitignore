@@ -1,0 +1,9 @@
+/baseline-foundation/
+/foundation-iteration-*/
+/foundation-final/
+/foundation-verified/
+/DELIVERY-STATE.json
+!before/*.log
+!logs/*.log
+/foundation-layout-verified/
+/foundation-evidence/

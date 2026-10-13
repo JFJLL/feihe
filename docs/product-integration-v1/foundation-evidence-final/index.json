@@ -1,0 +1,313 @@
+{
+  "scope": "第一批入口及首用，不代表完整产品目标完成",
+  "status": "foundation-verified-goal-active",
+  "stats": {
+    "startTime": "2026-10-13T11:08:48.053Z",
+    "duration": 38733.885,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "items": [
+    {
+      "id": "case-01",
+      "title": "产品入口 1280px：新客户/部门经页面维护，负责人自行创建项目",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:12",
+      "screenshots": [
+        "final-page.png",
+        "new-organization.png",
+        "shared-project-form.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-01/final-page.png",
+        "foundation-evidence-final/case-01/new-organization.png",
+        "foundation-evidence-final/case-01/shared-project-form.png",
+        "foundation-evidence-final/case-01/key-requests.json",
+        "foundation-evidence-final/case-01/persistence.json",
+        "foundation-evidence-final/case-01/trace.zip"
+      ]
+    },
+    {
+      "id": "case-02",
+      "title": "统一项目表单 1280px：中心与资料使用同一Dialog并保留负责人选择",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:51",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-02/final-page.png",
+        "foundation-evidence-final/case-02/key-requests.json",
+        "foundation-evidence-final/case-02/persistence.json",
+        "foundation-evidence-final/case-02/trace.zip"
+      ]
+    },
+    {
+      "id": "case-03",
+      "title": "只读入口 1280px：不引导编辑归档删除，负责人和参与筛选列表可用",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:71",
+      "screenshots": [
+        "final-page.png",
+        "readonly-project-list.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-03/final-page.png",
+        "foundation-evidence-final/case-03/readonly-project-list.png",
+        "foundation-evidence-final/case-03/key-requests.json",
+        "foundation-evidence-final/case-03/persistence.json",
+        "foundation-evidence-final/case-03/trace.zip"
+      ]
+    },
+    {
+      "id": "case-04",
+      "title": "键盘项目表单 1280px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:88",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-04/final-page.png",
+        "foundation-evidence-final/case-04/key-requests.json",
+        "foundation-evidence-final/case-04/persistence.json",
+        "foundation-evidence-final/case-04/trace.zip"
+      ]
+    },
+    {
+      "id": "case-05",
+      "title": "产品入口 1440px：新客户/部门经页面维护，负责人自行创建项目",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:12",
+      "screenshots": [
+        "final-page.png",
+        "new-organization.png",
+        "shared-project-form.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-05/final-page.png",
+        "foundation-evidence-final/case-05/new-organization.png",
+        "foundation-evidence-final/case-05/shared-project-form.png",
+        "foundation-evidence-final/case-05/key-requests.json",
+        "foundation-evidence-final/case-05/persistence.json",
+        "foundation-evidence-final/case-05/trace.zip"
+      ]
+    },
+    {
+      "id": "case-06",
+      "title": "统一项目表单 1440px：中心与资料使用同一Dialog并保留负责人选择",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:51",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-06/final-page.png",
+        "foundation-evidence-final/case-06/key-requests.json",
+        "foundation-evidence-final/case-06/persistence.json",
+        "foundation-evidence-final/case-06/trace.zip"
+      ]
+    },
+    {
+      "id": "case-07",
+      "title": "只读入口 1440px：不引导编辑归档删除，负责人和参与筛选列表可用",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:71",
+      "screenshots": [
+        "final-page.png",
+        "readonly-project-list.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-07/final-page.png",
+        "foundation-evidence-final/case-07/readonly-project-list.png",
+        "foundation-evidence-final/case-07/key-requests.json",
+        "foundation-evidence-final/case-07/persistence.json",
+        "foundation-evidence-final/case-07/trace.zip"
+      ]
+    },
+    {
+      "id": "case-08",
+      "title": "键盘项目表单 1440px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:88",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-08/final-page.png",
+        "foundation-evidence-final/case-08/key-requests.json",
+        "foundation-evidence-final/case-08/persistence.json",
+        "foundation-evidence-final/case-08/trace.zip"
+      ]
+    },
+    {
+      "id": "case-09",
+      "title": "产品入口 768px：新客户/部门经页面维护，负责人自行创建项目",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:12",
+      "screenshots": [
+        "final-page.png",
+        "new-organization.png",
+        "shared-project-form.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-09/final-page.png",
+        "foundation-evidence-final/case-09/new-organization.png",
+        "foundation-evidence-final/case-09/shared-project-form.png",
+        "foundation-evidence-final/case-09/key-requests.json",
+        "foundation-evidence-final/case-09/persistence.json",
+        "foundation-evidence-final/case-09/trace.zip"
+      ]
+    },
+    {
+      "id": "case-10",
+      "title": "统一项目表单 768px：中心与资料使用同一Dialog并保留负责人选择",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:51",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-10/final-page.png",
+        "foundation-evidence-final/case-10/key-requests.json",
+        "foundation-evidence-final/case-10/persistence.json",
+        "foundation-evidence-final/case-10/trace.zip"
+      ]
+    },
+    {
+      "id": "case-11",
+      "title": "只读入口 768px：不引导编辑归档删除，负责人和参与筛选列表可用",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:71",
+      "screenshots": [
+        "final-page.png",
+        "readonly-project-list.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-11/final-page.png",
+        "foundation-evidence-final/case-11/readonly-project-list.png",
+        "foundation-evidence-final/case-11/key-requests.json",
+        "foundation-evidence-final/case-11/persistence.json",
+        "foundation-evidence-final/case-11/trace.zip"
+      ]
+    },
+    {
+      "id": "case-12",
+      "title": "键盘项目表单 768px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:88",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-12/final-page.png",
+        "foundation-evidence-final/case-12/key-requests.json",
+        "foundation-evidence-final/case-12/persistence.json",
+        "foundation-evidence-final/case-12/trace.zip"
+      ]
+    },
+    {
+      "id": "case-13",
+      "title": "产品入口 390px：新客户/部门经页面维护，负责人自行创建项目",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:12",
+      "screenshots": [
+        "final-page.png",
+        "new-organization.png",
+        "shared-project-form.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-13/final-page.png",
+        "foundation-evidence-final/case-13/new-organization.png",
+        "foundation-evidence-final/case-13/shared-project-form.png",
+        "foundation-evidence-final/case-13/key-requests.json",
+        "foundation-evidence-final/case-13/persistence.json",
+        "foundation-evidence-final/case-13/trace.zip"
+      ]
+    },
+    {
+      "id": "case-14",
+      "title": "统一项目表单 390px：中心与资料使用同一Dialog并保留负责人选择",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:51",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-14/final-page.png",
+        "foundation-evidence-final/case-14/key-requests.json",
+        "foundation-evidence-final/case-14/persistence.json",
+        "foundation-evidence-final/case-14/trace.zip"
+      ]
+    },
+    {
+      "id": "case-15",
+      "title": "只读入口 390px：不引导编辑归档删除，负责人和参与筛选列表可用",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:71",
+      "screenshots": [
+        "final-page.png",
+        "readonly-project-list.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-15/final-page.png",
+        "foundation-evidence-final/case-15/readonly-project-list.png",
+        "foundation-evidence-final/case-15/key-requests.json",
+        "foundation-evidence-final/case-15/persistence.json",
+        "foundation-evidence-final/case-15/trace.zip"
+      ]
+    },
+    {
+      "id": "case-16",
+      "title": "键盘项目表单 390px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:88",
+      "screenshots": [
+        "final-page.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-16/final-page.png",
+        "foundation-evidence-final/case-16/key-requests.json",
+        "foundation-evidence-final/case-16/persistence.json",
+        "foundation-evidence-final/case-16/trace.zip"
+      ]
+    },
+    {
+      "id": "case-17",
+      "title": "新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:103",
+      "screenshots": [
+        "final-page.png",
+        "new-department-owner-next-step.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-17/final-page.png",
+        "foundation-evidence-final/case-17/new-department-owner-next-step.png",
+        "foundation-evidence-final/case-17/key-requests.json",
+        "foundation-evidence-final/case-17/persistence.json",
+        "foundation-evidence-final/case-17/trace.zip"
+      ]
+    },
+    {
+      "id": "case-18",
+      "title": "只读日常首屏：只展示准备状态，不提供同步或看板配置",
+      "status": "passed",
+      "source": "product-foundation.spec.ts:135",
+      "screenshots": [
+        "final-page.png",
+        "readonly-daily-entry.png"
+      ],
+      "files": [
+        "foundation-evidence-final/case-18/final-page.png",
+        "foundation-evidence-final/case-18/readonly-daily-entry.png",
+        "foundation-evidence-final/case-18/key-requests.json",
+        "foundation-evidence-final/case-18/persistence.json",
+        "foundation-evidence-final/case-18/trace.zip"
+      ]
+    }
+  ],
+  "previousRejectedScreenshots": "foundation-evidence/case-17/18关键图包含加载，原证据仍保留本地，最终用例增加了真实空状态等候断言"
+}

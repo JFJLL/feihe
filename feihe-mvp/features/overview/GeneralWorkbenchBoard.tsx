@@ -37,6 +37,7 @@ export function GeneralWorkbenchBoard({
   project?: Project;
 }) {
   const { showToast, navigateTo } = useProject();
+  const canConfigure = Boolean(project?.canManage);
   const [datasets, setDatasets] = useState<DatasetSummary[]>([]);
   const [selectedDatasetId, setSelectedDatasetId] = useState<string>('');
   const [detailSnapshot, setDetailSnapshot] = useState<{ key: string; data: DatasetDetail | null; error: string }>({ key: '', data: null, error: '' });
@@ -79,6 +80,18 @@ export function GeneralWorkbenchBoard({
   const [searchTable, setSearchTable] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 15;
+
+  useEffect(() => {
+    const configure = (event: Event) => {
+      const target = (event as CustomEvent<{ projectId: string }>).detail?.projectId;
+      if (target !== projectId || !canConfigure || saveLock.current) return;
+      if (!isEditingBoard) { setDraftCards(publishedCards); setIsEditingBoard(true); }
+      setViewMode('board');
+    };
+    window.addEventListener('workbench:configure', configure);
+    return () => window.removeEventListener('workbench:configure', configure);
+  }, [projectId, canConfigure, isEditingBoard, publishedCards]);
+
   const detailKey = JSON.stringify({ projectId, selectedDatasetId, currentPage, searchTable, datasetRevision });
   const activeDataset = detailSnapshot.key === detailKey ? detailSnapshot.data : null;
   const detailError = detailSnapshot.key === detailKey ? detailSnapshot.error : '';
@@ -476,7 +489,7 @@ export function GeneralWorkbenchBoard({
             </button>
           </div>
 
-          {viewMode === 'board' && (
+          {viewMode === 'board' && canConfigure && (
             <>
               {isEditingBoard ? (
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -561,15 +574,13 @@ export function GeneralWorkbenchBoard({
           {datasets.length === 0 ? (
             <EmptyState
               title="当前项目尚未接入通用数据集"
-              text="请进入项目设置中的「数据源」配置并同步飞书表格，即可生成动态业务度量看板。"
-              action={
-                <Link
+              text={canConfigure ? '接入业务表后，选择适用的指标与图表。飞书原表保持不变。' : '工作台由项目负责人接入数据。已有结果发布后会显示在这里。'}
+              action={canConfigure ? (<Link
                   href={`/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`}
                   style={{ padding: '8px 16px', background: '#2563eb', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 13 }}
                 >
                   前往接入数据源 →
-                </Link>
-              }
+                </Link>) : undefined}
             />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -583,9 +594,9 @@ export function GeneralWorkbenchBoard({
               {activeCards.length === 0 ? (
                 <EmptyState
                   title="当前看板未添加任何指标卡片"
-                  text={isEditingBoard ? '点击上方「＋ 添加卡片」添加自定义业务度量卡片。' : '点击右上角「⚙ 自定义看板卡片」开始配置个性化指标。'}
+                  text={!canConfigure ? '负责人尚未添加团队指标；您可以查看已接入的数据明细。' : isEditingBoard ? '点击上方「＋ 添加卡片」添加自定义业务度量卡片。' : '点击右上角「⚙ 自定义看板卡片」开始配置个性化指标。'}
                   action={
-                    isEditingBoard ? (
+                    !canConfigure ? undefined : isEditingBoard ? (
                       <button
                         onClick={handleAddCardClick}
                         style={{ padding: '8px 16px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}

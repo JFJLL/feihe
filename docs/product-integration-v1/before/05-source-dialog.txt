@@ -1,0 +1,72 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 通用项目中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 非社媒部门首次接入（审查）
+    - img
+  - paragraph: 品牌未设置 · 非社媒部门首次接入（审查） · 筹备中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/project-f501f105
+    - link "02 数据管理":
+      - /url: /projects/project-f501f105/settings?tab=data-sources
+    - link "05 项目设置":
+      - /url: /projects/project-f501f105/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:10:32
+- main:
+  - heading "项目设置" [level=1]
+  - text: 11 个识别词 · 0 条主线
+  - paragraph: 集中管理当前项目的低频配置、目标规则、数据源与数据地图。
+  - tablist "模块切换":
+    - tab "项目资料"
+    - tab "成员与权限"
+    - tab "数据源" [selected]
+    - tab "工具集成"
+    - tab "数据地图"
+  - tabpanel "数据源":
+    - region "项目数据源同步概况":
+      - article: 已配置数据源 0 个 当前项目手动登记的数据源，不含内置工作表
+      - article: 有同步记录 0 个 尚无同步记录
+      - article: 需处理的数据源 0 个 按最近错误记录统计；详情见下方数据源列表
+      - article: 最近读取行数合计 — 行 各源最近一次读取量相加，未经跨表去重；无记录显示 —
+    - article:
+      - text: CONNECTED SOURCES
+      - heading "非社媒部门首次接入（审查）的数据源" [level=2]
+      - paragraph: 支持飞书电子表格、多维表格与通用任务表接入；支持可视化字段映射与落库校验。
+      - text: 共 0 个配置
+      - dialog "接入飞书表格与可视化字段映射":
+        - heading "接入飞书表格与可视化字段映射" [level=3]
+        - button "关闭弹窗": ✕
+        - group:
+          - text: 数据源名称
+          - textbox "数据源名称":
+            - /placeholder: 如：华北区门店咨询与签约表
+            - text: 业务数据表
+          - text: 数据用途
+          - combobox "请选择":
+            - text: 通用表格数据集（任务、活动、预算、转化）
+            - img
+          - text: 同步策略
+          - combobox "请选择":
+            - text: 手动同步 (已就绪)
+            - img
+          - text: 飞书表格链接（支持电子表格、多维表格与 Wiki 节点）
+          - textbox "飞书表格链接":
+            - /placeholder: https://yimeichuanbo.feishu.cn/wiki/... 或 sheets/... 或 base/...
+          - button "智能检测工作表 ↗" [disabled]
+          - text: 目标工作表 (Sheet / Table ID)
+          - textbox "目标工作表 (Sheet / Table ID)":
+            - /placeholder: 点击上方智能检测自动选择
+          - text: 读取范围 (普通电子表格适用)
+          - textbox "读取范围 (普通电子表格适用)":
+            - /placeholder: 留空为全表；填入范围将明确限制读取
+          - paragraph: 读取范围留空表示完整工作表；指定范围时只同步该范围。
+        - button "取消"
+        - button "仅保存配置" [disabled]
+        - button "✓ 保存并首次同步" [disabled]
+      - text: ∅
+      - heading "当前项目尚未配置数据源" [level=3]
+      - paragraph: 点击上方「接入飞书数据源」开始绑定飞书表格或多维表格。
+- button "打开智能助手": 智

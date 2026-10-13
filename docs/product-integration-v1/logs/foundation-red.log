@@ -1,0 +1,239 @@
+(node:1388) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ production: unverified administrator header is rejected (22.6757ms)
+✖ production: arbitrary bearer and missing identity never fall back to administrator (0.4417ms)
+✖ production: signed gateway identity is verified and raw user header cannot override it (7.8779ms)
+✖ organization: authorized admin creates and updates a new department with a stable id (1.7103ms)
+✖ organization: admin manages clients; ordinary users are denied organization writes (0.7882ms)
+✖ project: invalid department/client/owner references are rejected before insert (0.7638ms)
+✖ project: general and blank starts do not install task/budget assumptions (1.8391ms)
+✖ project: new content projects do not inherit confirmed Qicui targets (6.6544ms)
+✖ project: visible list includes actual viewer role and owner identity; metadata exposes selection users (2.1739ms)
+✖ project: selecting another owner adds that confirmed owner as project administrator (2.0308ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 0
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 569.7875
+
+✖ failing tests:
+
+test at scripts\test-product-foundation.mjs:20:1
+✖ production: unverified administrator header is rejected (22.6757ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   departmentId: 'dept-general',
+  +   displayName: '平台管理员',
+  +   email: 'admin@company.local',
+  +   orgId: 'org-default',
+  +   role: 'platform_admin',
+  +   userId: 'user-admin'
+  + }
+  - null
+  
+      at file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:21:44
+      at async productionCheck (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:18:9)
+      at async TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:21:3)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Object],
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:23:1
+✖ production: arbitrary bearer and missing identity never fall back to administrator (0.4417ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + {
+  +   departmentId: 'dept-general',
+  +   displayName: '平台管理员 (开发环境)',
+  +   email: 'admin@company.local',
+  +   orgId: 'org-default',
+  +   role: 'platform_admin',
+  +   userId: 'user-admin'
+  + }
+  - null
+  
+      at file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:25:12
+      at async productionCheck (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:18:9)
+      at async TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:24:3)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Object],
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:29:1
+✖ production: signed gateway identity is verified and raw user header cannot override it (7.8779ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'user-admin'
+  - 'user-project-manager'
+          ^
+  
+      at file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:36:12
+      at async productionCheck (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:18:9)
+      at async TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:31:3)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'user-admin',
+    expected: 'user-project-manager',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:39:1
+✖ organization: authorized admin creates and updates a new department with a stable id (1.7103ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:41:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:47:1
+✖ organization: admin manages clients; ordinary users are denied organization writes (0.7882ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:49:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:54:1
+✖ project: invalid department/client/owner references are rejected before insert (0.7638ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:57:12)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:61:1
+✖ project: general and blank starts do not install task/budget assumptions (1.8391ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   [Object: null prototype] {
+  +     config_json: '{"id":"c1","title":"任务总数","type":"metric_card","metric":"task_total"}'
+  +   },
+  +   [Object: null prototype] {
+  +     config_json: '{"id":"c2","title":"已完成数","type":"metric_card","metric":"task_completed"}'
+  +   },
+  +   [Object: null prototype] {
+  +     config_json: '{"id":"c3","title":"任务完成率","type":"metric_card","metric":"task_completion_rate"}'
+  +   },
+  +   [Object: null prototype] {
+  +     config_json: '{"id":"c4","title":"预算执行率","type":"metric_card","metric":"budget_spent_rate"}'
+  +   },
+  +   [Object: null prototype] {
+  +     config_json: '{"id":"c5","title":"按负责人状态分布","type":"bar_chart","dimension":"owner","metric":"task_completed"}'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:67:12)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Array],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:70:1
+✖ project: new content projects do not inherit confirmed Qicui targets (6.6544ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(rows.results.every(r => r.target_count === 0))
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:74:46)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:76:1
+✖ project: visible list includes actual viewer role and owner identity; metadata exposes selection users (2.1739ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'viewer'
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:81:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'viewer',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:84:1
+✖ project: selecting another owner adds that confirmed owner as project administrator (2.0308ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(detail.members.some(m => m.userId === 'user-project-manager' && m.role === 'project_admin'))
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:89:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

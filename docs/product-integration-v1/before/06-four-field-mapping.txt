@@ -1,0 +1,199 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 通用项目中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 非社媒部门首次接入（审查）
+    - img
+  - paragraph: 品牌未设置 · 非社媒部门首次接入（审查） · 筹备中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/project-f501f105
+    - link "02 数据管理":
+      - /url: /projects/project-f501f105/settings?tab=data-sources
+    - link "05 项目设置":
+      - /url: /projects/project-f501f105/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:10:32
+- main:
+  - heading "项目设置" [level=1]
+  - text: 11 个识别词 · 0 条主线
+  - paragraph: 集中管理当前项目的低频配置、目标规则、数据源与数据地图。
+  - tablist "模块切换":
+    - tab "项目资料"
+    - tab "成员与权限"
+    - tab "数据源" [selected]
+    - tab "工具集成"
+    - tab "数据地图"
+  - tabpanel "数据源":
+    - region "项目数据源同步概况":
+      - article: 已配置数据源 0 个 当前项目手动登记的数据源，不含内置工作表
+      - article: 有同步记录 0 个 尚无同步记录
+      - article: 需处理的数据源 0 个 按最近错误记录统计；详情见下方数据源列表
+      - article: 最近读取行数合计 — 行 各源最近一次读取量相加，未经跨表去重；无记录显示 —
+    - article:
+      - text: CONNECTED SOURCES
+      - heading "非社媒部门首次接入（审查）的数据源" [level=2]
+      - paragraph: 支持飞书电子表格、多维表格与通用任务表接入；支持可视化字段映射与落库校验。
+      - text: 共 0 个配置
+      - dialog "接入飞书表格与可视化字段映射":
+        - heading "接入飞书表格与可视化字段映射" [level=3]
+        - button "关闭弹窗": ✕
+        - group:
+          - text: 数据源名称
+          - textbox "数据源名称":
+            - /placeholder: 如：华北区门店咨询与签约表
+            - text: 部门咨询成交原表
+          - text: 数据用途
+          - combobox "请选择":
+            - text: 通用表格数据集（任务、活动、预算、转化）
+            - img
+          - text: 同步策略
+          - combobox "请选择":
+            - text: 手动同步 (已就绪)
+            - img
+          - text: 飞书表格链接（支持电子表格、多维表格与 Wiki 节点）
+          - textbox "飞书表格链接":
+            - /placeholder: https://yimeichuanbo.feishu.cn/wiki/... 或 sheets/... 或 base/...
+            - text: https://fixture.feishu.cn/sheets/ProductConsultingBaseline
+          - button "智能检测工作表 ↗"
+          - text: 目标工作表 (Sheet / Table ID)
+          - combobox "目标工作表":
+            - text: 补修数据 (sheetA)
+            - img
+          - text: 读取范围 (普通电子表格适用)
+          - textbox "读取范围 (普通电子表格适用)":
+            - /placeholder: 留空为全表；填入范围将明确限制读取
+          - paragraph: 读取范围留空表示完整工作表；指定范围时只同步该范围。
+          - heading "⚙ 可视化字段映射配置" [level=4]
+          - paragraph: 定义来源字段对应项目数据集的目标字段名、数据类型、主键及空值处理。已自动解析 4 个字段。
+          - button "映射后预览"
+          - button "原始快照"
+          - paragraph: 多个主键字段组成联合主键；空主键、重复主键和非法值会拒绝整次导入。必填检查先于补值，未映射字段保留。
+          - table:
+            - rowgroup:
+              - row "来源原字段 目标项目字段名 目标数据类型 业务主键 日期字段 必填 空值处理":
+                - columnheader "来源原字段"
+                - columnheader "目标项目字段名"
+                - columnheader "目标数据类型"
+                - columnheader "业务主键"
+                - columnheader "日期字段"
+                - columnheader "必填"
+                - columnheader "空值处理"
+            - rowgroup:
+              - row "日期 日期 日期主键 日期日期字段 日期必填":
+                - cell "日期"
+                - cell "日期":
+                  - textbox "日期目标字段": 日期
+                - cell:
+                  - combobox "日期数据类型":
+                    - text: 日期 (date)
+                    - img
+                  - combobox "日期日期格式":
+                    - text: auto
+                    - img
+                - cell "日期主键":
+                  - checkbox "日期主键"
+                - cell "日期日期字段":
+                  - checkbox "日期日期字段" [checked]
+                - cell "日期必填":
+                  - checkbox "日期必填"
+                - cell:
+                  - combobox "日期空值处理":
+                    - text: 保留为空 (null)
+                    - img
+              - row "渠道 渠道 渠道主键 渠道日期字段 渠道必填":
+                - cell "渠道"
+                - cell "渠道":
+                  - textbox "渠道目标字段": 渠道
+                - cell:
+                  - combobox "渠道数据类型":
+                    - text: 文本 (text)
+                    - img
+                - cell "渠道主键":
+                  - checkbox "渠道主键"
+                - cell "渠道日期字段":
+                  - checkbox "渠道日期字段"
+                - cell "渠道必填":
+                  - checkbox "渠道必填"
+                - cell:
+                  - combobox "渠道空值处理":
+                    - text: 保留为空 (null)
+                    - img
+              - row "咨询人数 咨询人数 咨询人数主键 咨询人数日期字段 咨询人数必填":
+                - cell "咨询人数"
+                - cell "咨询人数":
+                  - textbox "咨询人数目标字段": 咨询人数
+                - cell:
+                  - combobox "咨询人数数据类型":
+                    - text: 数值 (number)
+                    - img
+                  - combobox "咨询人数数值单位":
+                    - text: 普通数值
+                    - img
+                - cell "咨询人数主键":
+                  - checkbox "咨询人数主键"
+                - cell "咨询人数日期字段":
+                  - checkbox "咨询人数日期字段"
+                - cell "咨询人数必填":
+                  - checkbox "咨询人数必填"
+                - cell:
+                  - combobox "咨询人数空值处理":
+                    - text: 保留为空 (null)
+                    - img
+              - row "成交人数 成交人数 成交人数主键 成交人数日期字段 成交人数必填":
+                - cell "成交人数"
+                - cell "成交人数":
+                  - textbox "成交人数目标字段": 成交人数
+                - cell:
+                  - combobox "成交人数数据类型":
+                    - text: 数值 (number)
+                    - img
+                  - combobox "成交人数数值单位":
+                    - text: 普通数值
+                    - img
+                - cell "成交人数主键":
+                  - checkbox "成交人数主键"
+                - cell "成交人数日期字段":
+                  - checkbox "成交人数日期字段"
+                - cell "成交人数必填":
+                  - checkbox "成交人数必填"
+                - cell:
+                  - combobox "成交人数空值处理":
+                    - text: 保留为空 (null)
+                    - img
+          - text: 🔍 映射转换后数据预览（前 5 行）：
+          - table:
+            - rowgroup:
+              - row "日期 渠道 咨询人数 成交人数":
+                - columnheader "日期"
+                - columnheader "渠道"
+                - columnheader "咨询人数"
+                - columnheader "成交人数"
+            - rowgroup:
+              - row "2026-10-01 自然 100 20":
+                - cell "2026-10-01"
+                - cell "自然"
+                - cell "100"
+                - cell "20"
+              - row "2026-10-02 广告 200 30":
+                - cell "2026-10-02"
+                - cell "广告"
+                - cell "200"
+                - cell "30"
+              - row "2026-10-03 自然 50 10":
+                - cell "2026-10-03"
+                - cell "自然"
+                - cell "50"
+                - cell "10"
+        - button "取消"
+        - button "仅保存配置"
+        - button "✓ 保存并首次同步"
+      - text: ∅
+      - heading "当前项目尚未配置数据源" [level=3]
+      - paragraph: 点击上方「接入飞书数据源」开始绑定飞书表格或多维表格。
+  - region "操作通知":
+    - status:
+      - text: ✓ 链接解析成功
+      - button "关闭通知": ×
+- button "打开智能助手": 智

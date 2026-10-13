@@ -1,0 +1,98 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 项目协同中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 第二客户投放（审查）
+    - img
+  - paragraph: 品牌未设置 · 第二客户投放（审查） · 筹备中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/project-8aff73d0
+    - link "02 竞品分析":
+      - /url: /projects/project-8aff73d0/growth
+    - link "03 内容管理":
+      - /url: /projects/project-8aff73d0/content
+    - link "04 评论运营":
+      - /url: /projects/project-8aff73d0/comments
+    - link "05 项目设置":
+      - /url: /projects/project-8aff73d0/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:21:02
+- main:
+  - text: AD PERFORMANCE · 投放效果分析看板
+  - heading "第二客户投放（审查）" [level=1]
+  - paragraph: 广告投放消耗、点击效率与转化监控
+  - text: 投放截至 待同步
+  - button "同步最新数据"
+  - text: PROJECT ONBOARDING · 新项目初始化向导
+  - heading "欢迎开启项目协作：完成以下步骤即可就绪" [level=2]
+  - paragraph: 您是当前项目的管理员，具备完整的数据接入、指标配置与成员邀请权限。
+  - button "稍后配置"
+  - button "完成初始化（发布项目）" [disabled]
+  - strong: 1. 业务模板确认
+  - text: ✓ 已就绪
+  - paragraph: 已选定「投放分析项目」，确立项目数据边界与指标框架。
+  - strong: 获得能力：
+  - text: 确立项目数据边界、推荐指标集与默认看板布局。
+  - link "查看项目设定 →":
+    - /url: /projects/project-8aff73d0/settings?tab=profile
+  - strong: 2. 接入业务数据源
+  - text: ✓ 已就绪
+  - paragraph: 绑定飞书表格、多维表格或业务数据集，建立专属数据管道。
+  - strong: 获得能力：
+  - text: 建立项目专属数据管道，隔离不同来源与客户数据。
+  - link "接入飞书数据源 →":
+    - /url: /projects/project-8aff73d0/settings?tab=data-sources
+  - strong: 3. 字段映射与首次同步
+  - text: ✓ 已就绪
+  - paragraph: 确认数据类型、主键与空值策略，执行安全来源级落库。
+  - strong: 获得能力：
+  - text: 生成结构化数据集，留存版本快照与血缘记录。
+  - link "配置字段与同步 →":
+    - /url: /projects/project-8aff73d0/settings?tab=data-sources
+  - strong: 4. 确认指标与发布看板
+  - text: ✓ 已就绪
+  - paragraph: 根据业务字段计算求和、比率与分组，自定义卡片并发布。
+  - strong: 获得能力：
+  - text: 获得动态更新的业务看板，支持卡片增删与指标切换。
+  - link "查看看板与配置 →":
+    - /url: /projects/project-8aff73d0
+  - strong: 5. 邀请团队成员协作
+  - text: 选填
+  - paragraph: 按项目管理员、编辑者、只读成员划分权限，隔离敏感凭证。
+  - strong: 获得能力：
+  - text: 多人协同查看数据、处置异常与导出经营报告。
+  - link "管理团队成员 →":
+    - /url: /projects/project-8aff73d0/settings?tab=members
+  - button "单人跳过"
+  - region "投放分析指标":
+    - article: 广告消耗 — 元
+    - article: 信息流消耗 — 元
+    - article: 搜索消耗 — 元
+    - article: 计划达成率 — %
+  - text: 投放
+  - heading "广告消耗趋势" [level=3]
+  - text: ∅
+  - heading "暂无可绘制的数据" [level=3]
+  - paragraph: 同步或抓取真实数据后显示；缺失记录不会补成零。
+  - text: 效率
+  - heading "投放点击效率" [level=3]
+  - text: ∅
+  - heading "暂无可绘制的数据" [level=3]
+  - paragraph: 同步或抓取真实数据后显示；缺失记录不会补成零。
+  - text: AI 复盘
+  - heading "基于项目数据生成运营报告" [level=3]
+  - textbox "报告需求": 根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。
+  - button "生成复盘报告"
+  - region "操作通知":
+    - status:
+      - text: ✓ 链接解析成功
+      - button "关闭通知": ×
+    - status:
+      - text: ✓ 数据源配置已保存
+      - button "关闭通知": ×
+    - status:
+      - text: ✓ 同步成功，已入库 2 行数据
+      - button "关闭通知": ×
+- button "打开智能助手": 智

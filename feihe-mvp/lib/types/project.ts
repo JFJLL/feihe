@@ -18,6 +18,16 @@ export type Project = {
   departmentId?: string;
   clientId?: string | null;
   ownerId?: string;
+  ownerName?: string;
+  createdBy?: string;
+  projectRole?: 'project_admin' | 'editor' | 'viewer';
+  canManage?: boolean;
+  canWrite?: boolean;
+  canDelete?: boolean;
+  isParticipant?: boolean | number;
+  sourceCount?: number;
+  dataRowCount?: number;
+  dataUpdatedAt?: string | null;
   templateId?: string;
   isArchived?: number;
   onboardingStatus?: string;
@@ -405,7 +415,10 @@ export type Workspace = {
     departments: Array<{ id: string; name: string }>;
     clients: Array<{ id: string; name: string; industry?: string }>;
     templates: Array<{ id: string; name: string; description: string; icon: string; modulesJson: string }>;
-    currentUser?: { userId: string; email: string; displayName: string; role: string };
+    users?: Array<{ id: string; name: string; email: string; role: string; departmentId?: string }>;
+    canManageOrganization?: boolean;
+    platformContacts?: Array<{ id: string; name: string; email: string }>;
+    currentUser?: { userId: string; email: string; displayName: string; role: string; departmentId?: string; orgId?: string };
   };
 };
 

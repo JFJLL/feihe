@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from '../ui/AppLink';
 import { api } from '../../lib/hooks/use-project-data';
 import type { Plan, Spec } from '../../lib/types/project';
 
@@ -205,7 +204,7 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
       </button>
 
       <div className={'floating-agent-mask' + (open ? ' show' : '')} onClick={() => setOpen(false)} />
-      <aside className={'floating-agent-panel' + (open ? ' show' : '')} aria-hidden={!open}>
+      {open && <aside className="floating-agent-panel show" aria-label="项目智能助手">
         <header className="floating-agent-head">
           {showHistory ? (
             <>
@@ -330,7 +329,7 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
             </footer>
           </>
         )}
-      </aside>
+      </aside>}
     </>
   );
 }

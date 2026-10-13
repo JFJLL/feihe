@@ -1,0 +1,478 @@
+[
+  {
+    "projectId": "project-f501f105",
+    "project": {
+      "ok": true,
+      "project": {
+        "id": "project-f501f105",
+        "name": "非社媒部门首次接入（审查）",
+        "spu": "",
+        "brand": "",
+        "category": "",
+        "description": "",
+        "status": "筹备中",
+        "color": "#2563eb",
+        "startAt": null,
+        "endAt": null,
+        "orgId": "org-default",
+        "departmentId": "dept-general",
+        "clientId": null,
+        "ownerId": "user-editor",
+        "templateId": "general_workbench",
+        "isArchived": 0,
+        "onboardingStatus": "source",
+        "updatedAt": "2026-10-13T09:10:32.442Z",
+        "departmentName": "综合管理部",
+        "clientName": null,
+        "templateName": "通用数据工作台"
+      },
+      "members": [
+        {
+          "id": "project-f501f105:user-editor",
+          "projectId": "project-f501f105",
+          "userId": "user-editor",
+          "role": "project_admin",
+          "name": "业务编辑者(张晓)",
+          "email": "editor@company.local",
+          "departmentId": "dept-marketing"
+        },
+        {
+          "id": "project-f501f105:user-project-manager",
+          "projectId": "project-f501f105",
+          "userId": "user-project-manager",
+          "role": "editor",
+          "name": "项目主管(李强)",
+          "email": "pm@company.local",
+          "departmentId": "dept-marketing"
+        },
+        {
+          "id": "project-f501f105:user-viewer",
+          "projectId": "project-f501f105",
+          "userId": "user-viewer",
+          "role": "viewer",
+          "name": "项目观察员(王悦)",
+          "email": "viewer@company.local",
+          "departmentId": "dept-operations"
+        }
+      ],
+      "availableUsers": [
+        {
+          "id": "user-editor",
+          "name": "业务编辑者(张晓)",
+          "email": "editor@company.local",
+          "role": "user",
+          "departmentId": "dept-marketing"
+        },
+        {
+          "id": "user-admin",
+          "name": "平台管理员",
+          "email": "admin@company.local",
+          "role": "platform_admin",
+          "departmentId": "dept-general"
+        },
+        {
+          "id": "user-project-manager",
+          "name": "项目主管(李强)",
+          "email": "pm@company.local",
+          "role": "user",
+          "departmentId": "dept-marketing"
+        },
+        {
+          "id": "user-viewer",
+          "name": "项目观察员(王悦)",
+          "email": "viewer@company.local",
+          "role": "user",
+          "departmentId": "dept-operations"
+        }
+      ],
+      "onboarding": {
+        "currentStep": "source",
+        "completedStepsJson": "[\"template\"]",
+        "selectedTemplateId": "general_workbench"
+      },
+      "currentUser": {
+        "userId": "user-editor",
+        "email": "editor@company.local",
+        "displayName": "业务编辑者(张晓)",
+        "role": "user",
+        "orgId": "org-default",
+        "departmentId": "dept-marketing"
+      },
+      "projectRole": "project_admin",
+      "readiness": {
+        "completedSteps": [
+          "template",
+          "source",
+          "first_sync",
+          "members"
+        ],
+        "blockedSteps": [
+          "metrics"
+        ],
+        "memberCount": 3,
+        "ready": false
+      }
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-project-f501f105-default",
+          "projectId": "project-f501f105",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T09:10:32.442Z"
+        }
+      ],
+      "targetDashboardId": "dash-project-f501f105-default",
+      "cards": [
+        {
+          "id": "card-project-f501f105-c1",
+          "dashboardId": "dash-project-f501f105-default",
+          "projectId": "project-f501f105",
+          "title": "任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T09:10:32.442Z"
+        },
+        {
+          "id": "card-project-f501f105-c2",
+          "dashboardId": "dash-project-f501f105-default",
+          "projectId": "project-f501f105",
+          "title": "已完成数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T09:10:32.442Z"
+        },
+        {
+          "id": "card-project-f501f105-c3",
+          "dashboardId": "dash-project-f501f105-default",
+          "projectId": "project-f501f105",
+          "title": "任务完成率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completion_rate\"]",
+          "configJson": "{\"id\":\"c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T09:10:32.442Z"
+        },
+        {
+          "id": "card-project-f501f105-c4",
+          "dashboardId": "dash-project-f501f105-default",
+          "projectId": "project-f501f105",
+          "title": "预算执行率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"budget_spent_rate\"]",
+          "configJson": "{\"id\":\"c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T09:10:32.442Z"
+        },
+        {
+          "id": "card-project-f501f105-c5",
+          "dashboardId": "dash-project-f501f105-default",
+          "projectId": "project-f501f105",
+          "title": "按负责人状态分布",
+          "type": "bar_chart",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c5\",\"title\":\"按负责人状态分布\",\"type\":\"bar_chart\",\"dimension\":\"owner\",\"metric\":\"task_completed\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T09:10:32.442Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-project-f501f105-1bae1cb1-fb2e-4334-94c2-0d5fbce4e07b",
+          "projectId": "project-f501f105",
+          "sourceId": "1bae1cb1-fb2e-4334-94c2-0d5fbce4e07b",
+          "name": "部门咨询成交原表",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"咨询人数\",\"name\":\"咨询人数\",\"type\":\"number\"},{\"key\":\"成交人数\",\"name\":\"成交人数\",\"type\":\"number\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T09:12:24.378Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "咨询人数",
+              "name": "咨询人数",
+              "type": "number"
+            },
+            {
+              "key": "成交人数",
+              "name": "成交人数",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "自然",
+              "咨询人数": 100,
+              "成交人数": 20
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "广告",
+              "咨询人数": 200,
+              "成交人数": 30
+            },
+            {
+              "日期": "2026-10-03",
+              "渠道": "自然",
+              "咨询人数": 50,
+              "成交人数": 10
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  },
+  {
+    "projectId": "project-8aff73d0",
+    "project": {
+      "ok": true,
+      "project": {
+        "id": "project-8aff73d0",
+        "name": "第二客户投放（审查）",
+        "spu": "",
+        "brand": "",
+        "category": "",
+        "description": "",
+        "status": "筹备中",
+        "color": "#2563eb",
+        "startAt": null,
+        "endAt": null,
+        "orgId": "org-default",
+        "departmentId": "dept-general",
+        "clientId": null,
+        "ownerId": "user-editor",
+        "templateId": "ad_performance",
+        "isArchived": 0,
+        "onboardingStatus": "source",
+        "updatedAt": "2026-10-13T09:21:02.689Z",
+        "departmentName": "综合管理部",
+        "clientName": null,
+        "templateName": "投放分析项目"
+      },
+      "members": [
+        {
+          "id": "project-8aff73d0:user-editor",
+          "projectId": "project-8aff73d0",
+          "userId": "user-editor",
+          "role": "project_admin",
+          "name": "业务编辑者(张晓)",
+          "email": "editor@company.local",
+          "departmentId": "dept-marketing"
+        }
+      ],
+      "availableUsers": [
+        {
+          "id": "user-editor",
+          "name": "业务编辑者(张晓)",
+          "email": "editor@company.local",
+          "role": "user",
+          "departmentId": "dept-marketing"
+        },
+        {
+          "id": "user-admin",
+          "name": "平台管理员",
+          "email": "admin@company.local",
+          "role": "platform_admin",
+          "departmentId": "dept-general"
+        },
+        {
+          "id": "user-project-manager",
+          "name": "项目主管(李强)",
+          "email": "pm@company.local",
+          "role": "user",
+          "departmentId": "dept-marketing"
+        },
+        {
+          "id": "user-viewer",
+          "name": "项目观察员(王悦)",
+          "email": "viewer@company.local",
+          "role": "user",
+          "departmentId": "dept-operations"
+        }
+      ],
+      "onboarding": {
+        "currentStep": "source",
+        "completedStepsJson": "[\"template\"]",
+        "selectedTemplateId": "ad_performance"
+      },
+      "currentUser": {
+        "userId": "user-editor",
+        "email": "editor@company.local",
+        "displayName": "业务编辑者(张晓)",
+        "role": "user",
+        "orgId": "org-default",
+        "departmentId": "dept-marketing"
+      },
+      "projectRole": "project_admin",
+      "readiness": {
+        "completedSteps": [
+          "template",
+          "source",
+          "first_sync",
+          "metrics"
+        ],
+        "blockedSteps": [
+          "members"
+        ],
+        "memberCount": 1,
+        "ready": false
+      }
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-project-8aff73d0-default",
+          "projectId": "project-8aff73d0",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T09:21:02.689Z"
+        }
+      ],
+      "targetDashboardId": "dash-project-8aff73d0-default",
+      "cards": [
+        {
+          "id": "card-project-8aff73d0-ad1",
+          "dashboardId": "dash-project-8aff73d0-default",
+          "projectId": "project-8aff73d0",
+          "title": "广告消耗",
+          "type": "metric_card",
+          "metricKeysJson": "[\"spend\"]",
+          "configJson": "{\"id\":\"ad1\",\"title\":\"广告消耗\",\"type\":\"metric_card\",\"metric\":\"spend\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T09:21:02.689Z"
+        },
+        {
+          "id": "card-project-8aff73d0-ad2",
+          "dashboardId": "dash-project-8aff73d0-default",
+          "projectId": "project-8aff73d0",
+          "title": "总曝光量",
+          "type": "metric_card",
+          "metricKeysJson": "[\"impressions\"]",
+          "configJson": "{\"id\":\"ad2\",\"title\":\"总曝光量\",\"type\":\"metric_card\",\"metric\":\"impressions\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T09:21:02.689Z"
+        },
+        {
+          "id": "card-project-8aff73d0-ad3",
+          "dashboardId": "dash-project-8aff73d0-default",
+          "projectId": "project-8aff73d0",
+          "title": "总点击量",
+          "type": "metric_card",
+          "metricKeysJson": "[\"clicks\"]",
+          "configJson": "{\"id\":\"ad3\",\"title\":\"总点击量\",\"type\":\"metric_card\",\"metric\":\"clicks\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T09:21:02.689Z"
+        },
+        {
+          "id": "card-project-8aff73d0-ad4",
+          "dashboardId": "dash-project-8aff73d0-default",
+          "projectId": "project-8aff73d0",
+          "title": "平均点击率 CTR",
+          "type": "metric_card",
+          "metricKeysJson": "[\"ctr\"]",
+          "configJson": "{\"id\":\"ad4\",\"title\":\"平均点击率 CTR\",\"type\":\"metric_card\",\"metric\":\"ctr\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T09:21:02.689Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-project-8aff73d0-d7e6115c-8c92-42df-9fb7-5651fb1eace4",
+          "projectId": "project-8aff73d0",
+          "sourceId": "d7e6115c-8c92-42df-9fb7-5651fb1eace4",
+          "name": "客户投放日报",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"花费\",\"name\":\"花费\",\"type\":\"number\"},{\"key\":\"曝光\",\"name\":\"曝光\",\"type\":\"number\"},{\"key\":\"点击\",\"name\":\"点击\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T09:22:34.733Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "花费",
+              "name": "花费",
+              "type": "number"
+            },
+            {
+              "key": "曝光",
+              "name": "曝光",
+              "type": "number"
+            },
+            {
+              "key": "点击",
+              "name": "点击",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "搜索",
+              "花费": 100,
+              "曝光": 1000,
+              "点击": 50
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "信息流",
+              "花费": 200,
+              "曝光": 2000,
+              "点击": 80
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

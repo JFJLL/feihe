@@ -1,0 +1,37 @@
+WebSocket server error: Port 24678 is already in use
+(node:16204) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ unit: custom + count + empty field counts three records (5.2129ms)
+✔ API: count preview uses the real stored three records (4.0965ms)
+✔ unit: explicit aggregation overrides old task_total binding (0.6295ms)
+✔ unit: global and grouped average share valid samples (0.6059ms)
+✔ unit: absent numerator must not become 0% (0.3836ms)
+✔ unit: null numerator must not become 0% (0.2712ms)
+✔ unit: invalid numerator must not become 0% (0.2816ms)
+✔ unit: record, nonempty and distinct counts are different operations (0.3054ms)
+✔ unit: missing, all-null, actual zero, invalid numeric and zero denominator stay distinct (0.2553ms)
+✔ unit: explicit zero fill applies identically to grouped and whole averages (0.2662ms)
+✔ unit: inference considers all observed values and never fills blanks (1.1959ms)
+✔ unit: shared mapping preview matches stored values and preserved column metadata (9.6732ms)
+✔ unit: mapping context changes for project, document, sheet or schema (0.1768ms)
+✔ unit: card validation covers dataset, numeric types, ratio, grouping and date compatibility (6.8609ms)
+✔ unit: date range includes noon on end day and excludes next midnight and undated rows (1.7728ms)
+✔ unit: mapping rejects required (0.6726ms)
+✔ unit: mapping rejects duplicate key (0.1399ms)
+✔ unit: mapping rejects invalid date (0.0773ms)
+✔ unit: mapping rejects unknown boolean (0.0953ms)
+✔ unit: mapping rejects duplicate target (0.0593ms)
+✔ unit: mapping rejects invalid number with zero fill (0.0578ms)
+✔ unit: malformed numeric text is not coerced into legitimate zero (0.3243ms)
+✔ unit: zoneless timestamps preserve milliseconds and invalid epochs fail (1.6627ms)
+✔ unit: unsupported and malformed mapping options are explicitly rejected (0.1581ms)
+✔ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.5702ms)
+✔ unit: legacy minimum and maximum definitions retain their aggregation semantics (0.3354ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 830.8591

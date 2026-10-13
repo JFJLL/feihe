@@ -1,0 +1,177 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 项目协同中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 启萃评论与声量项目
+    - img
+  - paragraph: 飞鹤 · 启萃 · 进行中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/qicui
+    - link "02 竞品分析":
+      - /url: /projects/qicui/growth
+    - link "03 内容管理":
+      - /url: /projects/qicui/content
+    - link "04 评论运营":
+      - /url: /projects/qicui/comments
+    - link "05 项目设置":
+      - /url: /projects/qicui/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:09:44
+- main:
+  - text: FEIHE · Q3 DASHBOARD
+  - heading "启萃评论与声量项目" [level=1]
+  - paragraph: 2026年 Q3 · 小红书种草与电商引流 · 项目数据看板
+  - text: 投放截至 待同步
+  - button "同步最新数据"
+  - navigation "模块切换":
+    - button "总览 · Q3累计全盘 决策摘要、月度进度、投流效率与内容复盘" [pressed]:
+      - strong: 总览 · Q3累计全盘
+      - text: 决策摘要、月度进度、投流效率与内容复盘
+    - button "分日 · 日报监控看板 日期切换、8大核心指标与近30天趋势":
+      - strong: 分日 · 日报监控看板
+      - text: 日期切换、8大核心指标与近30天趋势
+  - group: 数据来源与多工作表溯源明细 尚未在线核对 · 点击同步最新数据
+  - text: 决策层 · 今日指标与待办 投放 待同步 · 笔记 待同步 —% 当日计划达成率 实际消耗 / 已填计划
+  - strong: 消耗节奏
+  - text: ¥— 当日计划 ¥—
+  - strong: 信息流 CTR
+  - text: —% 点击合计 / 展现合计
+  - strong: 搜索 CTR
+  - text: —% 搜索广告实际点击效率
+  - strong: 待处置风险
+  - text: 0 条 待回复 0 · 待删除 0
+  - strong: Executive Summary · 关键数据摘要
+  - list:
+    - listitem: 消耗 待同步 实际投放 ¥—，当日计划 ¥—，达成率 —%。
+    - listitem: 效率 信息流 CTR —%，搜索 CTR —%；按聚光展现、点击加权计算。
+    - listitem: 内容 项目已收录 0 篇笔记，累计阅读 0 次，互动 0 次。
+    - listitem: 行动 有 0 条风险评论待处理，其中待回复 0 条、待删除 0 条。
+  - text: 预算节奏
+  - heading "预算消耗节奏对比" [level=3]
+  - text: 当月进度与季度全盘 ∅
+  - heading "等待投放数据" [level=3]
+  - paragraph: 点击同步最新数据后展示月度与季度进度。
+  - text: 计划为已填日期的预算合计，并非完整月度或季度预算。时间进度按自然日计算。 一、投流效率
+  - heading "KFS 投流与采买结构" [level=3]
+  - text: 投流与达人采买分开展示
+  - strong: 信息流 / 搜索投流结构
+  - text: Q3 已同步日期 ∅
+  - heading "暂无投流结构" [level=3]
+  - paragraph: 同步已填写的信息流与搜索消耗后显示。
+  - strong: 达人 K · 内容采买
+  - text: 项目笔记报价合计 ¥0 商业合作笔记
+  - strong: 0 篇
+  - text: 内容平均 CPE
+  - strong: ¥0
+  - paragraph: 使用笔记库已有报价与互动表现；采买费用与投流消耗为不同口径。
+  - strong: KFS 分渠道消耗趋势（堆叠面积）
+  - text: 近 0 个数据日 · 信息流 F + 搜索 S ∅
+  - heading "暂无分渠道日度消耗" [level=3]
+  - paragraph: 同步周投放表的信息流与搜索分渠道消耗后显示堆叠趋势。
+  - text: 二、内容产出
+  - heading "种草发布与切角渗透" [level=3]
+  - text: 当前项目累计笔记库 种草笔记总数 0 篇 已发布 0 篇 累计内容阅读 0 次 累计曝光 0 次 累计内容互动 0 次 项目发布目标 未设置
+  - strong: 达人量级结构分布
+  - text: 0 篇已收录笔记 ∅
+  - heading "达人层级待补充" [level=3]
+  - paragraph: 同步笔记库后显示层级分布。
+  - strong: 内容形式分布
+  - text: 已收录笔记 ∅
+  - heading "暂无采买分布" [level=3]
+  - paragraph: 记录报价后显示达人层级采买分布。
+  - strong: 内容切角 / 场景渗透
+  - text: TOP 8 方向笔记与互动
+  - table:
+    - rowgroup:
+      - row "切角 / 场景 篇数 阅读 互动 分布":
+        - columnheader "切角 / 场景"
+        - columnheader "篇数"
+        - columnheader "阅读"
+        - columnheader "互动"
+        - columnheader "分布"
+    - rowgroup
+  - text: 三、内容效果
+  - heading "内容效果深度分析" [level=3]
+  - text: 散点矩阵 · 分布直方图 · 箱线图
+  - strong: 笔记阅读与互动效果（散点图）
+  - text: X=阅读量 Y=互动量 · 0篇完整记录（含零值）· 点大小=采集评论数 内容方向
+  - combobox "散点图内容方向":
+    - text: 全部方向
+    - img
+  - text: ∅
+  - heading "暂无散点数据" [level=3]
+  - paragraph: 同步笔记阅读与互动指标后生成效果矩阵。
+  - strong: 笔记阅读量分布直方图
+  - text: 0 篇有阅读数据的笔记 主流分布集中于
+  - strong: 1千~5千
+  - text: 区间（占比最高） ∅
+  - heading "暂无分布数据" [level=3]
+  - paragraph: 同步笔记阅读量后生成分布直方图。
+  - text: TARGET VS ACTUAL
+  - heading "KPI目标与实际" [level=3]
+  - text: 选择同一周期、代理、项目和渠道进行比较；总计与明细分别查看。 ∅
+  - heading "等待 KPI 数据" [level=3]
+  - paragraph: 同步飞书数据后查看目标、实际和差额。
+  - text: 五、爆文排行
+  - heading "高热内容 TOP20 排行榜" [level=3]
+  - text: 项目全量笔记按互动量排序 ∅
+  - heading "暂无爆文数据" [level=3]
+  - paragraph: 同步笔记互动指标后生成TOP20排行榜。
+  - text: 数据覆盖
+  - heading "内容数据与待办" [level=3]
+  - text: 真实记录覆盖情况 当前项目笔记
+  - strong: "0"
+  - text: 篇 已记录阅读量
+  - strong: "0"
+  - text: 篇（含零值） 阅读和互动均有记录
+  - strong: "0"
+  - text: 篇 风险待处理
+  - strong: "0"
+  - text: 条
+  - paragraph: 分布图覆盖当前项目全部已收录笔记；评论来自采集快照，不串联为用户转化漏斗。内容最新有效日期：待同步。
+  - link "查看风险待办 →":
+    - /url: /projects/qicui/comments?tab=actions
+  - text: 字段覆盖
+  - heading "内容分析还缺哪些数据" [level=3]
+  - text: 按全量笔记核对 内容方向 0 篇有记录 · 0 篇待补充
+  - strong: 0.0%
+  - text: 达人层级 0 篇有记录 · 0 篇待补充
+  - strong: 0.0%
+  - text: 阅读量 0 篇有记录 · 0 篇待补充
+  - strong: 0.0%
+  - text: 互动量 0 篇有记录 · 0 篇待补充
+  - strong: 0.0%
+  - paragraph: 方向缺失的笔记仍计入阅读和互动总量；不参与已标注方向的效果判断。
+  - text: 达人效率
+  - heading "达人层级效率排行榜" [level=3]
+  - text: 按篇均CPE升序，缺失排末尾 ∅
+  - heading "暂无达人效率数据" [level=3]
+  - paragraph: 同步达人层级表现指标后生成效率排行榜。
+  - text: 互动质量
+  - heading "已记录点赞、收藏与分享构成" [level=3]
+  - text: 比例仅在三项已记录指标中计算 互动质量洞察 点赞占比 0% 浅层互动，反映内容吸引力 收藏占比 0% 深度互动，反映内容价值密度 分享占比 0% 采集评论单独查看，不计入此构成 行动层
+  - heading "复盘洞察与下一步行动" [level=3]
+  - text: 从数据直接进入运营
+  - strong: 当前观察
+  - paragraph: 内容库共 0 篇，累计互动 0 次。已标注的内容方向中，暂无方向收录最多。
+  - paragraph: 当前真实评论快照合计 0 条，正向 0 条，负向 0 条。继续优先处理待回复和待删除事项。
+  - link "处理 0 条风险待办 达人回复与删除处置 去处理 →":
+    - /url: /projects/qicui/comments?tab=actions
+    - strong: 处理 0 条风险待办
+    - text: 达人回复与删除处置 去处理 →
+  - link "复盘高热内容与切角 阅读、互动与达人效率 看内容 →":
+    - /url: /projects/qicui/content?tab=analysis
+    - strong: 复盘高热内容与切角
+    - text: 阅读、互动与达人效率 看内容 →
+  - link "对照竞品月报与搜索趋势 使用已接入的品牌工作表 看竞品 →":
+    - /url: /projects/qicui/growth?tab=competitor
+    - strong: 对照竞品月报与搜索趋势
+    - text: 使用已接入的品牌工作表 看竞品 →
+  - group: 查看指标定义与口径说明
+  - text: AI 复盘
+  - heading "基于项目数据生成运营报告" [level=3]
+  - textbox "报告需求": 根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。
+  - button "生成复盘报告"
+- button "打开智能助手": 智

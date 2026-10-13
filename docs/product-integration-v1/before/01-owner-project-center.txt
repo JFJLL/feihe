@@ -1,0 +1,34 @@
+- banner:
+  - link "协同 项目协同中台 V1 MULTI-PROJECT COLLABORATION OS":
+    - /url: /
+  - text: 公 公开访问 项目成员
+- main:
+  - text: PROJECT PORTFOLIO
+  - heading "多部门项目协同中心" [level=1]
+  - paragraph: 支持各业务部门创建专属项目、接入飞书数据、配置自定义指标与看板，实现成员权限隔离。
+  - text: 共 1 个项目（1 进行中 · 0 筹备中）
+  - button "＋ 新建项目"
+  - textbox "搜索项目名称、品牌或说明…"
+  - text: "状态:"
+  - combobox "请选择":
+    - text: 全部状态 (1)
+    - img
+  - text: "部门:"
+  - combobox "请选择":
+    - text: 全部部门
+    - img
+  - text: "模板:"
+  - combobox "请选择":
+    - text: 全部业务模板
+    - img
+  - article:
+    - text: 进行中 内容营销项目
+    - button "编辑"
+    - button "归档"
+    - text: 启
+    - heading "启萃评论与声量项目" [level=3]
+    - text: 市场与营销部 · 内部项目
+    - paragraph: 评论执行、口碑舆情与本竞品监测
+    - text: "笔记资产 0 可汇报 0 数据源 4 ID: qicui"
+    - link "进入工作区 →":
+      - /url: /projects/qicui

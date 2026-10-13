@@ -52,10 +52,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   projectId: string; project?: Project; dashboard: Dashboard; ops: Ops; loading?: boolean;
   onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const { showToast, workspace, refreshWorkspace } = useProject();
-  const currentMemberRole =
-    workspace?.metadata?.currentUser?.role ||
-    "project_admin";
+  const { refreshWorkspace } = useProject();
+  const currentMemberRole = project?.projectRole || '';
+  const canWrite = Boolean(project?.canWrite);
 
   const handleNoteInspect = (noteId: string) => {
     const targetNote = (dashboard.notes || []).find(n => String(n.id) === String(noteId));
@@ -265,7 +264,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     if (next) setSelected(String(next.date));
   }
 
-  const isGeneral = project?.templateId === 'general_workbench';
+  const isGeneral = ['general_workbench', 'blank'].includes(project?.templateId || '');
   const isCommentQc = project?.templateId === 'comment_qc';
   const isAd = project?.templateId === 'ad_performance';
 
@@ -289,7 +288,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     <PageHeader eyebrow={headerEyebrow} title={project?.name || '项目总览'} subtitle={headerSubtitle}>
       <div className="workspace-header-actions">
         {!isGeneral && <span className="overview-quarter-pill">投放截至 {date || '待同步'}</span>}
-        <SyncButton projectId={projectId} onRefresh={onRefresh} />
+        {canWrite && <SyncButton projectId={projectId} onRefresh={onRefresh} />}
       </div>
     </PageHeader>
     {!isGeneral && project?.templateId !== 'comment_qc' && project?.templateId !== 'ad_performance' && (
@@ -312,7 +311,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       />
     )}
 
-    {project?.templateId === 'general_workbench' ? (
+    {isGeneral ? (
       <div className="overview-block-content" style={{ marginTop: 20 }}>
         <GeneralWorkbenchBoard key={projectId} projectId={projectId} project={project} />
       </div>
@@ -634,7 +633,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     </>
     )}
 
-    <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple"><div className="report-prompt"><textarea aria-label="报告需求" value={prompt} onChange={e => setPrompt(e.target.value)} /><button className="primary-btn" onClick={generate} disabled={busy || !prompt.trim()}>{busy ? '正在生成…' : '生成复盘报告'}</button></div>{error && <p role="alert">{error}</p>}{report && <Link href={`/api/report-html?id=${encodeURIComponent(report)}&projectId=${encodeURIComponent(projectId)}`} target="_blank">查看生成报告 →</Link>}</Section>
+    {canWrite && <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple"><div className="report-prompt"><textarea aria-label="报告需求" value={prompt} onChange={e => setPrompt(e.target.value)} /><button className="primary-btn" onClick={generate} disabled={busy || !prompt.trim()}>{busy ? '正在生成…' : '生成复盘报告'}</button></div>{error && <p role="alert">{error}</p>}{report && <Link href={`/api/report-html?id=${encodeURIComponent(report)}&projectId=${encodeURIComponent(projectId)}`} target="_blank">查看生成报告 →</Link>}</Section>}
     {renderCategoryNotesModal()}
   </div>;
 }

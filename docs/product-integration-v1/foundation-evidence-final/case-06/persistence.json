@@ -1,0 +1,62 @@
+[
+  {
+    "projectId": "1791889746226",
+    "project": {
+      "id": "1791889746226",
+      "name": "资料一致性1791889746226",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "两入口保持相同资料",
+      "status": "筹备中",
+      "color": "#4f46e5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-project-manager",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T11:09:07.257Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "项目主管(李强)",
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "members"
+      ],
+      "blockedSteps": [
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "memberCount": 2,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791889746226-default",
+          "projectId": "1791889746226",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T11:09:06.229Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791889746226-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

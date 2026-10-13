@@ -17,6 +17,7 @@ export function ProjectSidebar({
     projectId,
     projects,
     currentProject,
+    workspace,
     loading,
     error,
     activeSection,
@@ -39,8 +40,8 @@ export function ProjectSidebar({
       <div className="brand">
         <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a5f3fc" strokeWidth="4" strokeLinecap="round"/></svg></span>
         <div>
-          {currentProject?.templateId === 'general_workbench' ? '通用项目中台' : '项目协同中台'}
-          <small>PROJECT WORKSPACE</small>
+          项目工作台
+
         </div>
       </div>
 
@@ -53,7 +54,7 @@ export function ProjectSidebar({
 
       <nav className="project-main-nav" aria-label="项目模块">
         {PROJECT_NAV_ITEMS.filter((item) => {
-          if (currentProject?.templateId === 'general_workbench') {
+          if (['general_workbench', 'blank'].includes(currentProject?.templateId || '')) {
             return item.id === 'overview' || item.id === 'data' || item.id === 'settings';
           }
           if (currentProject?.templateId === 'comment_qc') {
@@ -94,7 +95,7 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {signedIn ? userName : '协作用户'} ·{' '}
+          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')} ·{' '}
           {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '就绪'}
         </small>
       </div>

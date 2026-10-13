@@ -1,6 +1,8 @@
 import { getAuthenticatedUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
-import { projectId } from '@/lib/projects';
+import { saveOrganizationEntry, validateProjectReferences, ensureOwnerMembership } from '@/lib/organization';
+import { automaticProjectColor } from '@/lib/project-form';
+import { TEMPLATE_GUIDES, templateGuide } from '@/lib/project-templates';
 import { projectReadiness } from '@/lib/onboarding';
 import { transformMappedRows, type FieldMappingRule, type MappingContext } from '@/lib/field-mapping';
 
@@ -13,109 +15,64 @@ const slug = (value: string) =>
     .replace(/^-|-$/g, '')
     .slice(0, 32) || `project-${crypto.randomUUID().slice(0, 8)}`;
 
+const PROJECT_SELECT = 'p.id,p.name,p.spu,p.brand,p.category,p.description,p.status,p.color,p.start_at AS startAt,p.end_at AS endAt,p.org_id AS orgId,p.department_id AS departmentId,p.client_id AS clientId,p.owner_id AS ownerId,p.template_id AS templateId,p.is_archived AS isArchived,p.onboarding_status AS onboardingStatus,p.created_by AS createdBy,p.updated_at AS updatedAt,d.name AS departmentName,c.name AS clientName,u.name AS ownerName,COALESCE(t.name,CASE WHEN p.template_id=\'blank\' THEN \'空白项目\' ELSE \'未配置方向\' END) AS templateName';
+const PROJECT_JOINS = ' FROM projects p LEFT JOIN departments d ON d.id=p.department_id LEFT JOIN clients c ON c.id=p.client_id LEFT JOIN users u ON u.id=p.owner_id LEFT JOIN project_templates t ON t.id=p.template_id ';
+const DIRECTORY_SQL = 'SELECT u.id,u.name,u.email,u.role,u.department_id AS departmentId FROM users u LEFT JOIN departments d ON d.id=u.department_id WHERE d.org_id=? OR u.department_id IS NULL ORDER BY u.name';
+
 export async function GET(request?: Request) {
   const user = await getAuthenticatedUser(request);
-  if (!user) return jsonError('请先登录', 401);
-
+  if (!user) return jsonError('请通过已验证的公司身份入口登录', 401);
   await ensureSchema();
   const d1 = db();
-
-  const url = request ? new URL(request.url) : null;
-  const targetProjectId = url?.searchParams.get('projectId');
+  const targetProjectId = request ? new URL(request.url).searchParams.get('projectId') : null;
   if (targetProjectId) {
     const access = await requireProjectAccess(request!, targetProjectId, 'read');
     if (!access.ok) return jsonError(access.error!, access.status!);
-    const pId = access.context!.projectId;
-
+    const context = access.context!;
     const [project, members, availableUsers, onboarding] = await Promise.all([
-      d1.prepare(`SELECT p.id, p.name, p.spu, p.brand, p.category, p.description, p.status, p.color,
-        p.start_at AS startAt, p.end_at AS endAt, p.org_id AS orgId, p.department_id AS departmentId,
-        p.client_id AS clientId, p.owner_id AS ownerId, p.template_id AS templateId,
-        p.is_archived AS isArchived, p.onboarding_status AS onboardingStatus,
-        p.updated_at AS updatedAt,
-        d.name AS departmentName, c.name AS clientName, t.name AS templateName
-        FROM projects p
-        LEFT JOIN departments d ON d.id=p.department_id
-        LEFT JOIN clients c ON c.id=p.client_id
-        LEFT JOIN project_templates t ON t.id=p.template_id
-        WHERE p.id=?`).bind(pId).first(),
-      d1.prepare(`SELECT pm.id, pm.project_id AS projectId, pm.user_id AS userId, pm.role,
-        COALESCE(u.name, pm.user_id) AS name, COALESCE(u.email, '') AS email, u.department_id AS departmentId
-        FROM project_members pm
-        LEFT JOIN users u ON u.id=pm.user_id
-        WHERE pm.project_id=? ORDER BY pm.created_at ASC`).bind(pId).all(),
-      d1.prepare('SELECT id, name, email, role, department_id AS departmentId FROM users ORDER BY name').all(),
-      d1.prepare('SELECT current_step AS currentStep, completed_steps_json AS completedStepsJson, selected_template_id AS selectedTemplateId FROM project_onboarding WHERE project_id=?').bind(pId).first(),
+      d1.prepare('SELECT ' + PROJECT_SELECT + PROJECT_JOINS + ' WHERE p.id=?').bind(context.projectId).first(),
+      d1.prepare('SELECT pm.id,pm.project_id AS projectId,pm.user_id AS userId,pm.role,COALESCE(u.name,pm.user_id) AS name,COALESCE(u.email,\'\') AS email,u.department_id AS departmentId FROM project_members pm LEFT JOIN users u ON u.id=pm.user_id WHERE pm.project_id=? ORDER BY pm.created_at').bind(context.projectId).all(),
+      d1.prepare(DIRECTORY_SQL).bind(user.orgId).all(),
+      d1.prepare('SELECT current_step AS currentStep,completed_steps_json AS completedStepsJson,selected_template_id AS selectedTemplateId FROM project_onboarding WHERE project_id=?').bind(context.projectId).first<{ completedStepsJson?: string }>(),
     ]);
-
-    return Response.json({
-      ok: true,
-      project,
-      members: members.results || [],
-      availableUsers: availableUsers.results || [],
-      onboarding,
-      currentUser: access.context!.user,
-      projectRole: access.context!.projectRole,
-      readiness: await projectReadiness(pId, (() => { try { return JSON.parse((onboarding as { completedStepsJson?: string })?.completedStepsJson || '[]'); } catch { return []; } })()),
-    });
+    let steps: string[] = [];
+    try { steps = JSON.parse(onboarding?.completedStepsJson || '[]'); } catch {}
+    return Response.json({ ok: true, project, members: members.results, availableUsers: availableUsers.results, onboarding,
+      currentUser: user, projectRole: context.projectRole, canManage: context.canManage,
+      canWrite: context.canWrite && !Number(context.project.is_archived), readiness: await projectReadiness(context.projectId, steps) });
   }
 
-  const isPlatformAdmin = user.role === 'platform_admin';
-  const filterClause = isPlatformAdmin
-    ? '1=1'
-    : `(p.id IN (SELECT project_id FROM project_members WHERE user_id='${user.userId}') OR p.created_by='${user.userId}' OR p.owner_id='${user.userId}')`;
-
-  const [projects, sources, departments, clients, templates] = await Promise.all([
-    d1
-      .prepare(
-        `SELECT p.id, p.name, p.spu, p.brand, p.category, p.description, p.status, p.color,
-        p.start_at AS startAt, p.end_at AS endAt, p.org_id AS orgId, p.department_id AS departmentId,
-        p.client_id AS clientId, p.owner_id AS ownerId, p.template_id AS templateId,
-        p.is_archived AS isArchived, p.onboarding_status AS onboardingStatus,
-        p.updated_at AS updatedAt,
-        COUNT(DISTINCT pn.note_id) AS noteCount,
-        SUM(CASE WHEN pn.status='符合且能汇报' THEN 1 ELSE 0 END) AS reportableCount,
-        d.name AS departmentName,
-        c.name AS clientName,
-        t.name AS templateName
-        FROM projects p
-        LEFT JOIN project_notes pn ON pn.project_id=p.id
-        LEFT JOIN departments d ON d.id=p.department_id
-        LEFT JOIN clients c ON c.id=p.client_id
-        LEFT JOIN project_templates t ON t.id=p.template_id
-        WHERE ${filterClause}
-        GROUP BY p.id
-        ORDER BY CASE p.status WHEN '进行中' THEN 0 WHEN '筹备中' THEN 1 WHEN '已结束' THEN 2 ELSE 3 END, p.updated_at DESC`
-      )
-      .all(),
-    d1
-      .prepare(
-        `SELECT s.id, s.project_id AS projectId, s.type, s.name, s.spreadsheet, s.sheet_id AS sheetId,
-        s.range, s.kind, s.sync_frequency AS syncFrequency, s.status, s.last_synced_at AS lastSyncedAt,
-        s.last_row_count AS lastRowCount, s.mapping_json AS mappingJson, s.last_error AS lastError,
-        s.updated_at AS updatedAt
-        FROM data_sources s
-        JOIN projects p ON p.id=s.project_id
-        WHERE ${filterClause}
-        ORDER BY s.updated_at DESC`
-      )
-      .all(),
-    d1.prepare('SELECT id, name FROM departments ORDER BY name').all(),
-    d1.prepare('SELECT id, name, industry FROM clients ORDER BY name').all(),
-    d1.prepare('SELECT id, name, description, icon, modules_json AS modulesJson FROM project_templates ORDER BY name').all(),
+  const admin = user.role === 'platform_admin';
+  const filter = 'p.org_id=?' + (admin ? '' : ' AND (p.id IN (SELECT project_id FROM project_members WHERE user_id=?) OR p.created_by=? OR p.owner_id=?)');
+  const filterValues = admin ? [user.orgId] : [user.orgId, user.userId, user.userId, user.userId];
+  const role = admin ? "'project_admin'" : "COALESCE((SELECT role FROM project_members pm WHERE pm.project_id=p.id AND pm.user_id=?),CASE WHEN p.created_by=? OR p.owner_id=? THEN 'project_admin' ELSE 'viewer' END)";
+  const roleValues = admin ? [] : [user.userId, user.userId, user.userId];
+  const projectSQL = 'SELECT ' + PROJECT_SELECT + ',' + role + ' AS projectRole,'
+    + 'EXISTS(SELECT 1 FROM project_members pm WHERE pm.project_id=p.id AND pm.user_id=?) AS isParticipant,'
+    + '(SELECT COUNT(*) FROM project_notes pn WHERE pn.project_id=p.id) AS noteCount,'
+    + "(SELECT COUNT(*) FROM project_notes pn WHERE pn.project_id=p.id AND pn.status='符合且能汇报') AS reportableCount,"
+    + '(SELECT COUNT(*) FROM data_sources s WHERE s.project_id=p.id) AS sourceCount,'
+    + '(SELECT COALESCE(SUM(ds.row_count),0) FROM datasets ds WHERE ds.project_id=p.id) AS dataRowCount,'
+    + 'COALESCE((SELECT MAX(ds.updated_at) FROM datasets ds WHERE ds.project_id=p.id),(SELECT MAX(s.last_synced_at) FROM data_sources s WHERE s.project_id=p.id)) AS dataUpdatedAt'
+    + PROJECT_JOINS + ' WHERE ' + filter + ' ORDER BY p.is_archived,p.updated_at DESC';
+  const [projects, sources, departments, clients, templates, users] = await Promise.all([
+    d1.prepare(projectSQL).bind(...roleValues, user.userId, ...filterValues).all<Record<string, unknown>>(),
+    d1.prepare('SELECT s.id,s.project_id AS projectId,s.type,s.name,s.spreadsheet,s.sheet_id AS sheetId,s.range,s.kind,s.sync_frequency AS syncFrequency,s.status,s.last_synced_at AS lastSyncedAt,s.last_row_count AS lastRowCount,s.mapping_json AS mappingJson,s.last_error AS lastError,s.updated_at AS updatedAt FROM data_sources s JOIN projects p ON p.id=s.project_id WHERE ' + filter + ' ORDER BY s.updated_at DESC').bind(...filterValues).all(),
+    d1.prepare('SELECT id,name FROM departments WHERE org_id=? ORDER BY name').bind(user.orgId).all(),
+    d1.prepare('SELECT id,name,industry FROM clients WHERE org_id=? ORDER BY name').bind(user.orgId).all(),
+    d1.prepare('SELECT id,name,description,icon,modules_json AS modulesJson FROM project_templates ORDER BY name').all<{ id: string; name: string; description: string; icon: string; modulesJson: string }>(),
+    d1.prepare(DIRECTORY_SQL).bind(user.orgId).all<{ id: string; name: string; email: string; role: string }>(),
   ]);
-
-  return Response.json({
-    ok: true,
-    projects: projects.results,
-    sources: sources.results,
-    metadata: {
-      departments: departments.results,
-      clients: clients.results,
-      templates: templates.results,
-      currentUser: user,
-    },
-  });
+  const catalog = templates.results.map(t => ({ ...t, ...templateGuide(t.id) }));
+  if (!catalog.some(t => t.id === 'blank')) catalog.push({ ...templateGuide('blank')!, icon: '' });
+  const visible = projects.results.map(p => ({ ...p,
+    canManage: admin || p.projectRole === 'project_admin',
+    canWrite: !Number(p.isArchived) && (admin || ['project_admin', 'editor'].includes(String(p.projectRole))),
+    canDelete: admin && p.id !== 'qicui' }));
+  return Response.json({ ok: true, projects: visible, sources: sources.results, metadata: {
+    departments: departments.results, clients: clients.results, templates: catalog, users: users.results,
+    canManageOrganization: admin, platformContacts: users.results.filter(u => u.role === 'platform_admin'), currentUser: user,
+  } });
 }
 
 export async function POST(request: Request) {
@@ -128,28 +85,35 @@ export async function POST(request: Request) {
 
   const action = text(body.action);
   const now = new Date().toISOString();
+  const caller = await getAuthenticatedUser(request);
+  if (!caller) return jsonError('请通过已验证的公司身份入口登录', 401);
   await ensureSchema();
   const d1 = db();
+  if (action === 'save_client' || action === 'save_department' || action === 'save_user') return saveOrganizationEntry(caller, action, body);
 
   if (action === 'create') {
-    const user = await getAuthenticatedUser(request);
+    const user = caller;
     if (!user) return jsonError('请先登录', 401);
 
     const name = text(body.name);
     if (!name) return jsonError('请填写项目名称');
 
     const templateId = text(body.templateId) || 'general_workbench';
-    const departmentId = text(body.departmentId) || 'dept-general';
+    const departmentId = text(body.departmentId) || user.departmentId || 'dept-general';
     const clientId = text(body.clientId) || null;
     const ownerId = text(body.ownerId) || user.userId;
     const status = text(body.status) || '筹备中';
-    const color = text(body.color) || '#1769d5';
+    const color = text(body.color) || automaticProjectColor(name);
     const description = text(body.description);
     const spu = text(body.spu);
     const brand = text(body.brand);
     const category = text(body.category);
     const startAt = text(body.startAt) || null;
     const endAt = text(body.endAt) || null;
+
+    if (name.length > 100) return jsonError('项目名称不能超过100字');
+    const referenceError = await validateProjectReferences(user, { departmentId, ownerId, clientId, templateId, status, color });
+    if (referenceError) return jsonError(referenceError);
 
     let id = text(body.id) ? slug(text(body.id)) : slug(name);
     const exists = await d1.prepare('SELECT id FROM projects WHERE id=?').bind(id).first();
@@ -170,6 +134,8 @@ export async function POST(request: Request) {
       .bind(`${id}:${user.userId}`, id, user.userId, now, now)
       .run();
 
+    await ensureOwnerMembership(id, ownerId);
+
     // Initialize onboarding state
     await d1
       .prepare(`INSERT OR IGNORE INTO project_onboarding(project_id, current_step, completed_steps_json, selected_template_id, updated_at) VALUES(?, 'source', '["template"]', ?, ?)`)
@@ -179,7 +145,7 @@ export async function POST(request: Request) {
     // Create default dashboard from template
     const templateRow = await d1.prepare('SELECT default_dashboard_json FROM project_templates WHERE id=?').bind(templateId).first<{ default_dashboard_json: string }>();
     let cards: Array<Record<string, unknown>> = [];
-    if (templateRow?.default_dashboard_json) {
+    if (!TEMPLATE_GUIDES.some(t => t.id === templateId) && templateRow?.default_dashboard_json) {
       try {
         const parsed = JSON.parse(templateRow.default_dashboard_json) as { cards?: Array<Record<string, unknown>> };
         cards = parsed.cards || [];
@@ -188,7 +154,7 @@ export async function POST(request: Request) {
 
     const dashboardId = `dash-${id}-default`;
     await d1
-      .prepare(`INSERT OR IGNORE INTO dashboards(id, project_id, name, is_default, version, layout_json, status, created_at, updated_at) VALUES(?, ?, '默认看板', 1, 1, '[]', 'published', ?, ?)`)
+      .prepare(`INSERT OR IGNORE INTO dashboards(id, project_id, name, is_default, version, layout_json, status, created_at, updated_at) VALUES(?, ?, '团队工作台', 1, 1, '[]', 'draft', ?, ?)`)
       .bind(dashboardId, id, now, now)
       .run();
 
@@ -203,9 +169,9 @@ export async function POST(request: Request) {
     // Only configure marketing/comment pipelines if this project explicitly selected those templates!
     if (templateId === 'content_marketing') {
       const pipelines = [
-        ['viral', '口碑爆文维护', 200],
-        ['value_scan', '价值内容扫描', 60],
-        ['commercial', '商业内容执行', 300],
+        ['viral', '口碑爆文维护', 0],
+        ['value_scan', '价值内容扫描', 0],
+        ['commercial', '商业内容执行', 0],
       ] as const;
       await d1.batch(
         pipelines.map(([key, label, target]) =>
@@ -288,6 +254,8 @@ export async function POST(request: Request) {
     const startAt = body.startAt !== undefined ? text(body.startAt) || null : (existing.start_at as string | null);
     const endAt = body.endAt !== undefined ? text(body.endAt) || null : (existing.end_at as string | null);
     const onboardingStatus = body.onboardingStatus !== undefined ? text(body.onboardingStatus) : (existing.onboarding_status as string);
+    const referenceError = await validateProjectReferences(access.context!.user, { departmentId: departmentId || 'dept-general', ownerId: ownerId || access.context!.user.userId, clientId, templateId: String(existing.template_id || 'general_workbench'), status, color });
+    if (referenceError) return jsonError(referenceError);
 
     await d1
       .prepare(
@@ -312,6 +280,8 @@ export async function POST(request: Request) {
         id
       )
       .run();
+
+    await ensureOwnerMembership(id, ownerId || access.context!.user.userId);
 
     if (body.onboardingStatus === 'ready') {
       await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json=?, updated_at=? WHERE project_id=?`).bind(JSON.stringify(readiness?.completedSteps || []), now, id).run();
@@ -405,6 +375,11 @@ export async function POST(request: Request) {
     const targetUserId = text(body.userId);
     const role = text(body.role) || 'viewer';
     const subAction = action === 'remove_member' ? 'remove' : (text(body.subAction) || 'upsert');
+    if (subAction !== 'remove') {
+      if (!['project_admin', 'editor', 'viewer'].includes(role)) return jsonError('请选择有效的项目角色');
+      const directoryUser = await d1.prepare('SELECT u.id FROM users u LEFT JOIN departments d ON d.id=u.department_id WHERE u.id=? AND (d.org_id=? OR u.department_id IS NULL)').bind(targetUserId, access.context!.user.orgId).first();
+      if (!directoryUser) return jsonError('请选择已登记的公司成员');
+    }
     if (!targetUserId) return jsonError('缺少成员用户 ID');
 
     if (subAction === 'remove') {

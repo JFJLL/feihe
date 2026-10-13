@@ -1,0 +1,62 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 通用项目中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 非社媒部门首次接入（审查）
+    - img
+  - paragraph: 品牌未设置 · 非社媒部门首次接入（审查） · 筹备中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/project-f501f105
+    - link "02 数据管理":
+      - /url: /projects/project-f501f105/settings?tab=data-sources
+    - link "05 项目设置":
+      - /url: /projects/project-f501f105/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:10:32
+- main:
+  - heading "项目设置" [level=1]
+  - text: 11 个识别词 · 0 条主线
+  - paragraph: 集中管理当前项目的低频配置、目标规则、数据源与数据地图。
+  - tablist "模块切换":
+    - tab "项目资料" [selected]
+    - tab "成员与权限"
+    - tab "数据源"
+    - tab "工具集成"
+    - tab "数据地图"
+  - tabpanel "项目资料":
+    - region "已保存的项目资料":
+      - article: 项目状态 已保存 筹备中 项目标识：project-f501f105
+      - article: 负责部门 / 负责人 综合管理部 模板：通用数据工作台
+    - article:
+      - text: 项目资料
+      - heading "编辑项目基本资料" [level=2]
+      - text: 项目名称 *
+      - textbox "项目名称 *": 非社媒部门首次接入（审查）
+      - text: 负责部门
+      - combobox "请选择":
+        - text: 综合管理部
+        - img
+      - text: 所属客户
+      - combobox "请选择":
+        - text: 内部部门项目 (无特定客户)
+        - img
+      - text: 业务状态
+      - combobox "请选择":
+        - text: 筹备中
+        - img
+      - text: 项目识别色
+      - button "项目识别色 翡翠绿 靛青蓝 琥珀黄 玫瑰红 优雅紫 青色 石板灰"
+      - button "翡翠绿"
+      - button "靛青蓝"
+      - button "琥珀黄"
+      - button "玫瑰红"
+      - button "优雅紫"
+      - button "青色"
+      - button "石板灰"
+      - text: 项目说明
+      - textbox "项目说明":
+        - /placeholder: 项目背景、分工与核心目标简述…
+      - button "保存项目资料"
+- button "打开智能助手": 智

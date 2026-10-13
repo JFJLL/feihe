@@ -1,0 +1,78 @@
+- complementary "项目主要导航":
+  - link "返回项目中心":
+    - /url: /
+    - text: ← 项目中心
+  - text: 通用项目中台 PROJECT WORKSPACE 当前项目
+  - combobox "切换项目":
+    - text: 非社媒部门首次接入（审查）
+    - img
+  - paragraph: 品牌未设置 · 非社媒部门首次接入（审查） · 筹备中
+  - navigation "项目模块":
+    - link "01 项目总览":
+      - /url: /projects/project-f501f105
+    - link "02 数据管理":
+      - /url: /projects/project-f501f105/settings?tab=data-sources
+    - link "05 项目设置":
+      - /url: /projects/project-f501f105/settings
+  - text: 项目资料已连接 协作用户 · 2026/10/13 17:10:32
+- main:
+  - text: PROJECT DASHBOARD · 通用数据工作台
+  - heading "非社媒部门首次接入（审查）" [level=1]
+  - paragraph: 综合管理部 · 结构化数据集与度量监控看板
+  - button "同步最新数据"
+  - text: PROJECT ONBOARDING · 新项目初始化向导
+  - heading "欢迎开启项目协作：完成以下步骤即可就绪" [level=2]
+  - paragraph: 您当前为业务协作成员，可查看数据并执行允许的业务操作。如需接入新数据源请联系项目管理员。
+  - button "稍后配置"
+  - strong: 1. 业务模板确认
+  - text: ✓ 已就绪
+  - paragraph: 已选定「通用数据工作台」，确立项目数据边界与指标框架。
+  - strong: 获得能力：
+  - text: 确立项目数据边界、推荐指标集与默认看板布局。
+  - link "查看项目设定 →":
+    - /url: /projects/project-f501f105/settings?tab=profile
+  - strong: 2. 接入业务数据源
+  - text: ✓ 已就绪
+  - paragraph: 绑定飞书表格、多维表格或业务数据集，建立专属数据管道。
+  - strong: 获得能力：
+  - text: 建立项目专属数据管道，隔离不同来源与客户数据。
+  - link "接入飞书数据源 →":
+    - /url: /projects/project-f501f105/settings?tab=data-sources
+  - strong: 3. 字段映射与首次同步
+  - text: ✓ 已就绪
+  - paragraph: 确认数据类型、主键与空值策略，执行安全来源级落库。
+  - strong: 获得能力：
+  - text: 生成结构化数据集，留存版本快照与血缘记录。
+  - link "配置字段与同步 →":
+    - /url: /projects/project-f501f105/settings?tab=data-sources
+  - strong: 4. 确认指标与发布看板
+  - text: 第4步
+  - paragraph: 根据业务字段计算求和、比率与分组，自定义卡片并发布。
+  - strong: 获得能力：
+  - text: 获得动态更新的业务看板，支持卡片增删与指标切换。
+  - link "查看看板与配置 →":
+    - /url: /projects/project-f501f105
+  - strong: 5. 邀请团队成员协作
+  - text: ✓ 已就绪
+  - paragraph: 按项目管理员、编辑者、只读成员划分权限，隔离敏感凭证。
+  - strong: 获得能力：
+  - text: 多人协同查看数据、处置异常与导出经营报告。
+  - link "管理团队成员 →":
+    - /url: /projects/project-f501f105/settings?tab=members
+  - text: "当前业务数据集:"
+  - combobox "当前业务数据集":
+    - text: 部门咨询成交原表 (3 行)
+    - img
+  - button "📊 看板视图"
+  - button "📋 数据明细 (3 行)"
+  - button "⚙ 自定义看板卡片"
+  - article "任务总数": "任务总数 3 来源: 部门咨询成交原表 有效样本: 3 行"
+  - article "已完成数": "已完成数 — 任务状态字段不存在，请重新选择 来源: 部门咨询成交原表 有效样本: 0 行"
+  - article "任务完成率": "任务完成率 — 任务状态字段不存在，请重新选择 来源: 部门咨询成交原表 有效样本: 0 行"
+  - article "预算执行率": "预算执行率 — 预算字段不存在，请重新选择；支出字段不存在，请重新选择 来源: 部门咨询成交原表 有效样本: 0 行"
+  - article "按负责人状态分布": "按负责人状态分布 — 任务状态字段不存在，请重新选择；分组字段不存在，请重新选择 来源: 部门咨询成交原表 有效样本: 0 行"
+  - text: AI 复盘
+  - heading "基于项目数据生成运营报告" [level=3]
+  - textbox "报告需求": 根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。
+  - button "生成复盘报告"
+- button "打开智能助手": 智

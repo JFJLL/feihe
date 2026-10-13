@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save_client\",\"id\":\"\",\"name\":\"晨风试点客户1791889733355\",\"industry\":\"\",\"email\":\"\",\"departmentId\":\"dept-0c9a0f12-a5ce-4876-a68a-956441a35974\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"action\":\"save_department\",\"id\":\"\",\"name\":\"咨询服务试点部1791889733355\",\"industry\":\"\",\"email\":\"\",\"departmentId\":\"dept-0c9a0f12-a5ce-4876-a68a-956441a35974\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"咨询成交项目1791889733355\",\"description\":\"\",\"departmentId\":\"dept-3ba260eb-228d-4fba-82ef-e5d150e4699b\",\"ownerId\":\"user-editor\",\"clientId\":\"client-c7111554-4d16-43e1-8164-a456884f8863\",\"templateId\":\"general_workbench\",\"status\":\"筹备中\",\"color\":\"#e11d48\",\"brand\":\"\",\"spu\":\"\",\"category\":\"\",\"action\":\"create\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

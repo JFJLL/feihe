@@ -1,0 +1,1209 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-foundation.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/foundation-layout-verified/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/foundation-layout-verified/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/foundation-layout-verified/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-foundation.spec.ts",
+      "file": "product-foundation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "产品入口 1280px：新客户/部门经页面维护，负责人自行创建项目",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5865,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:08:52.640Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\关键请求-cdc58681effd267d40d065b35da298d926340f5c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\实际持久化快照-1beefc171cd86660f71ceb324a4e812337e8bb68.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\最终页面-b878eccc723fa86a2d35b2ce79f47d1d77c5a70c.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-b01c7d5b5193308c5f08",
+          "file": "product-foundation.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "统一项目表单 1280px：中心与资料使用同一Dialog并保留负责人选择",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1516,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:08:59.277Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\关键请求-a78538a31a440187494ffe10d325985d09d52bc2.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\实际持久化快照-bee3dab9e5d243aa1eedad3e8f0286d2008ade68.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\最终页面-40b94855662bdadafcea743012d70ecd7405e7f6.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-68f39496ded7fc434617",
+          "file": "product-foundation.spec.ts",
+          "line": 51,
+          "column": 3
+        },
+        {
+          "title": "只读入口 1280px：不引导编辑归档删除，负责人和参与筛选列表可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1083,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:00.936Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\关键请求-30f475331faae37d0bb8633bb17aafd43e269779.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\实际持久化快照-4392adb7253ef76acb70620f78a64d3f290cde5f.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\最终页面-a6ef839d6f6b44da134731c6188485529dceaac2.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-e908b9e1d4bd76a444f8",
+          "file": "product-foundation.spec.ts",
+          "line": 71,
+          "column": 3
+        },
+        {
+          "title": "键盘项目表单 1280px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1196,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:02.137Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\关键请求-e42231349bd5453c29bf206f884e1f53cc512029.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\实际持久化快照-2d8e7703537e5971a79b8c98a679719acf0a5d8c.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\最终页面-dee45ec9e2dcb0210776ebd2a9d05855ea40a80f.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-2a618e2895c272de802e",
+          "file": "product-foundation.spec.ts",
+          "line": 88,
+          "column": 3
+        },
+        {
+          "title": "产品入口 1440px：新客户/部门经页面维护，负责人自行创建项目",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2368,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:03.470Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1440px：新客户-部门经页面维护，负责人自行创建项目\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1440px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\关键请求-1d431fc14457e8c398ee7ea96845f5a7fd42334e.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1440px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\实际持久化快照-9c8fd9c4f52f5813e2a4ec9e17180d1ba19564f9.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1440px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\最终页面-963f47b128329ed43ed3c2ad0552557a127afdcf.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-1440px：新客户-部门经页面维护，负责人自行创建项目\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-1c853ef5e1a292567dcd",
+          "file": "product-foundation.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "统一项目表单 1440px：中心与资料使用同一Dialog并保留负责人选择",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1448,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:06.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1440px：中心与资料使用同一Dialog并保留负责人选择\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1440px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\关键请求-30b4099c4eba4066afc8909c0dc6ca2165869f87.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1440px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\实际持久化快照-8dea0874be3e35c4dc737b4033da11a518dcaece.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1440px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\最终页面-8fa7a3c6c3316f9ef3dcd59b9080221808d21153.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-1440px：中心与资料使用同一Dialog并保留负责人选择\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-5bdbcb27ea688c5d9813",
+          "file": "product-foundation.spec.ts",
+          "line": 51,
+          "column": 3
+        },
+        {
+          "title": "只读入口 1440px：不引导编辑归档删除，负责人和参与筛选列表可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1060,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:07.676Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1440px：不引导编辑归档删除，负责人和参与筛选列表可用\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1440px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\关键请求-320328596d26ccb641aa90c19b3e01a261992d81.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1440px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\实际持久化快照-94d901b4cf49ccf7f92240f1036eaf8493c0a658.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1440px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\最终页面-b82187f969a3aa4abf3aa483bc619b68667bcabe.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-1440px：不引导编辑归档删除，负责人和参与筛选列表可用\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-e1332f2a9460d3c9ce7e",
+          "file": "product-foundation.spec.ts",
+          "line": 71,
+          "column": 3
+        },
+        {
+          "title": "键盘项目表单 1440px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1144,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:08.843Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1440px：次要设置折叠、选择器和保存区无溢出并返回焦点\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1440px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\关键请求-fb019b0535e297dcb4690c93d34ceaec38f3f28d.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1440px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\实际持久化快照-44311919d19f9246937b65952e6ed4ec0b4a92c5.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1440px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\最终页面-3b219b3260aa5ff6deba31533532047f578c0e4e.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-1440px：次要设置折叠、选择器和保存区无溢出并返回焦点\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-15a71e7957eef0c45f06",
+          "file": "product-foundation.spec.ts",
+          "line": 88,
+          "column": 3
+        },
+        {
+          "title": "产品入口 768px：新客户/部门经页面维护，负责人自行创建项目",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2144,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:10.123Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-768px：新客户-部门经页面维护，负责人自行创建项目\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-768px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\关键请求-8fb1d45f704f1147862b12c01ef9b532fe3436a9.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-768px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\实际持久化快照-aefc6076446c192e3a3b941625227b10fee9eaba.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-768px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\最终页面-0977c33d3d25f416b72d572edaace5b562e17dde.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-768px：新客户-部门经页面维护，负责人自行创建项目\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-4bb208f45ed697348e35",
+          "file": "product-foundation.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "统一项目表单 768px：中心与资料使用同一Dialog并保留负责人选择",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1429,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:12.460Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-768px：中心与资料使用同一Dialog并保留负责人选择\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-768px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\关键请求-2bb852f4d14daa028e47d77adf045c88f26a21ae.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-768px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\实际持久化快照-b20e6cc10303a7f97ae06360260ff62ca661be38.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-768px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\最终页面-c7372897346739986349dc1fc850e41535626e14.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-768px：中心与资料使用同一Dialog并保留负责人选择\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-5a755621f504d5d5592c",
+          "file": "product-foundation.spec.ts",
+          "line": 51,
+          "column": 3
+        },
+        {
+          "title": "只读入口 768px：不引导编辑归档删除，负责人和参与筛选列表可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1039,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:14.001Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-768px：不引导编辑归档删除，负责人和参与筛选列表可用\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-768px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\关键请求-0da5ac58d315b653ffc68cc4360a99cda610bd6e.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-768px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\实际持久化快照-e7f39d3e3014ef54267434cbbdb27bad410b988a.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-768px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\最终页面-0c4477f24bffd698c3abb2085210a51f23124ba6.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-768px：不引导编辑归档删除，负责人和参与筛选列表可用\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-52bf7aec9ee7b86b1e14",
+          "file": "product-foundation.spec.ts",
+          "line": 71,
+          "column": 3
+        },
+        {
+          "title": "键盘项目表单 768px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1103,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:15.131Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-768px：次要设置折叠、选择器和保存区无溢出并返回焦点\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-768px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\关键请求-ba830c03e14e53bee0c7eebd750411a523fd3662.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-768px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\实际持久化快照-83a7b82597a0984803ea83f77b2f1d0637f8ba0e.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-768px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\最终页面-337b69823bd7032013144a0c0d41744e9d418f82.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-768px：次要设置折叠、选择器和保存区无溢出并返回焦点\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-d47a9f98d6806dea728c",
+          "file": "product-foundation.spec.ts",
+          "line": 88,
+          "column": 3
+        },
+        {
+          "title": "产品入口 390px：新客户/部门经页面维护，负责人自行创建项目",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2107,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:16.340Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\关键请求-1957357dbd6c2ff07a96db2fe1a2838aeaf3a801.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\实际持久化快照-ba8429946020d729afd82c9d83ad4834d123b838.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\\attachments\\最终页面-57ca77d47ce6cffe5ba43305b5227aaac2a510b4.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-e5f43b6e48c5387b4119",
+          "file": "product-foundation.spec.ts",
+          "line": 12,
+          "column": 3
+        },
+        {
+          "title": "统一项目表单 390px：中心与资料使用同一Dialog并保留负责人选择",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1378,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:18.608Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\关键请求-fde3dc8ed4b988b42364b01a6cd8c0a119dfca5b.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\实际持久化快照-8d5d86ea9f5a13a83ac4b94761bc4cbf03da188e.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\\attachments\\最终页面-2d1994cb4e5b0e7d5e5cad9f71f0303aecb23083.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-b18f9e0a9586d91104ba",
+          "file": "product-foundation.spec.ts",
+          "line": 51,
+          "column": 3
+        },
+        {
+          "title": "只读入口 390px：不引导编辑归档删除，负责人和参与筛选列表可用",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 926,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:20.078Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\关键请求-0e2faf3c53541220a13d5765202768d44cbf18e8.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\实际持久化快照-41f80d93e1d193c9db8632aec02d45d1280efdf5.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\\attachments\\最终页面-527ab1aab12f109ac81c2afc3e2e9fe3aed63617.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-07627f4c865c35a8112f",
+          "file": "product-foundation.spec.ts",
+          "line": 71,
+          "column": 3
+        },
+        {
+          "title": "键盘项目表单 390px：次要设置折叠、选择器和保存区无溢出并返回焦点",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1134,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:21.068Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\关键请求-dc26d40973109a5933580dab75ef90956ef0fac6.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\实际持久化快照-3d537ef79fa109b59ef1b62a8845285d5c30231b.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\\attachments\\最终页面-b7d60aff6400cffe6442d5971355fc68253a760d.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-167a02fcd15afb766194",
+          "file": "product-foundation.spec.ts",
+          "line": 88,
+          "column": 3
+        },
+        {
+          "title": "新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2285,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:22.325Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择\\attachments\\关键请求-dcbcca3fa7368f641351758324d1fda119f05824.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择\\attachments\\实际持久化快照-41487c78c7ec69a49c2837a4c3e16a3f2b85c989.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择\\attachments\\最终页面-e17725e3531ce62f59e83f8de009ccdff42b3c35.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-d93b920e82e8e4a0056c",
+          "file": "product-foundation.spec.ts",
+          "line": 103,
+          "column": 1
+        },
+        {
+          "title": "只读日常首屏：只展示准备状态，不提供同步或看板配置",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 948,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T11:09:24.852Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读日常首屏：只展示准备状态，不提供同步或看板配置\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读日常首屏：只展示准备状态，不提供同步或看板配置\\attachments\\关键请求-15d27eb1d7bdd90f0dccacc2d480dd01258dd537.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读日常首屏：只展示准备状态，不提供同步或看板配置\\attachments\\实际持久化快照-904fe6dea92ef1eed0b3abe986a6c0fae918804b.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读日常首屏：只展示准备状态，不提供同步或看板配置\\attachments\\最终页面-4b205fbeb3e7b0d816e50e3d9b595bbfbb20acea.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\foundation-layout-verified\\browser-results\\product-foundation-只读日常首屏：只展示准备状态，不提供同步或看板配置\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "005554ffc91fb93c2b48-cbb8293c1fbf3012a98c",
+          "file": "product-foundation.spec.ts",
+          "line": 135,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T11:08:48.053Z",
+    "duration": 38733.885,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

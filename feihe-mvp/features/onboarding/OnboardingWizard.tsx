@@ -1,292 +1,60 @@
 'use client';
-
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from '../../components/ui/AppLink';
 import type { Project } from '../../lib/types/project';
 import { api } from '../../lib/hooks/use-project-data';
 import { useProject } from '../../components/project-shell/ProjectContext';
-
-interface Step {
-  id: string;
-  title: string;
-  desc: string;
-  unlockedAbility: string;
-  link: string;
-  linkLabel: string;
-}
-
-export function OnboardingWizard({
-  projectId,
-  project,
-  role = 'project_admin',
-  onFinish = async () => {},
-}: {
-  projectId: string;
-  project?: Project;
-  role?: string;
-  onFinish?: () => Promise<void>;
-}) {
+type Readiness = { completedSteps: string[]; blockedSteps: string[]; memberCount: number; ready: boolean };
+export function OnboardingWizard({ projectId, project, role = '', onFinish = async () => {} }: { projectId: string; project?: Project; role?: string; onFinish?: () => Promise<void> }) {
   const { showToast } = useProject();
-  const [busy, setBusy] = useState(false);
-  const [completedSteps, setCompletedSteps] = useState<string[]>(['template']);
-  const [skippedSteps, setSkippedSteps] = useState<string[]>([]);
-  const [memberCount, setMemberCount] = useState<number>(1);
-  const [dismissed, setDismissed] = useState(false);
-  const [feedback, setFeedback] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
-
-  const readinessKey = projectId + ':' + (project?.updatedAt || '');
-  const [readinessState, setReadinessState] = useState({ key: '', failed: false });
-  const readinessLoading = readinessState.key !== readinessKey;
-  const [actualRole, setActualRole] = useState(role);
+  const [snapshot, setSnapshot] = useState<{ key: string; role: string; readiness: Readiness } | null>(null);
+  const [error, setError] = useState(''), [busy, setBusy] = useState(false), [dismissed, setDismissed] = useState(false);
+  const submitting = useRef(false);
+  const key = projectId + ':' + (project?.updatedAt || '');
   useEffect(() => {
-    let cancelled = false;
-    api<{ projectRole: string; readiness: { completedSteps: string[]; memberCount: number } }>(      '/api/projects?projectId=' + encodeURIComponent(projectId)    ).then(detail => {
-      if (cancelled) return;
-      setReadinessState({ key: readinessKey, failed: false });
-      setActualRole(detail.projectRole); setMemberCount(detail.readiness.memberCount);
-      setCompletedSteps(detail.readiness.completedSteps.filter(s => !s.startsWith('skip:')));
-      setSkippedSteps(detail.readiness.completedSteps.filter(s => s.startsWith('skip:')).map(s => s.slice(5)));
-    }).catch(err => { if (!cancelled) { setReadinessState({ key: readinessKey, failed: true }); setFeedback({ type: 'error', message: err instanceof Error ? err.message : '初始化状态读取失败' }); } });
-    return () => { cancelled = true; };
-  }, [projectId, project?.updatedAt, readinessKey]);
-
-  const templateTitle =
-    project?.templateName ||
-    (project?.templateId === 'general_workbench'
-      ? '通用数据工作台'
-      : project?.templateId === 'comment_qc'
-      ? '评论质检项目'
-      : project?.templateId === 'ad_performance'
-      ? '投放分析项目'
-      : '内容营销项目');
-
-  const steps: Step[] = [
-    {
-      id: 'template',
-      title: '1. 业务模板确认',
-      desc: `已选定「${templateTitle}」，确立项目数据边界与指标框架。`,
-      unlockedAbility: '确立项目数据边界、推荐指标集与默认看板布局。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=profile`,
-      linkLabel: '查看项目设定',
-    },
-    {
-      id: 'source',
-      title: '2. 接入业务数据源',
-      desc: '绑定飞书表格、多维表格或业务数据集，建立专属数据管道。',
-      unlockedAbility: '建立项目专属数据管道，隔离不同来源与客户数据。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`,
-      linkLabel: '接入飞书数据源',
-    },
-    {
-      id: 'first_sync',
-      title: '3. 字段映射与首次同步',
-      desc: '确认数据类型、主键与空值策略，执行安全来源级落库。',
-      unlockedAbility: '生成结构化数据集，留存版本快照与血缘记录。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`,
-      linkLabel: '配置字段与同步',
-    },
-    {
-      id: 'metrics',
-      title: '4. 确认指标与发布看板',
-      desc: '根据业务字段计算求和、比率与分组，自定义卡片并发布。',
-      unlockedAbility: '获得动态更新的业务看板，支持卡片增删与指标切换。',
-      link: `/projects/${encodeURIComponent(projectId)}`,
-      linkLabel: '查看看板与配置',
-    },
-    {
-      id: 'members',
-      title: '5. 邀请团队成员协作',
-      desc: '按项目管理员、编辑者、只读成员划分权限，隔离敏感凭证。',
-      unlockedAbility: '多人协同查看数据、处置异常与导出经营报告。',
-      link: `/projects/${encodeURIComponent(projectId)}/settings?tab=members`,
-      linkLabel: '管理团队成员',
-    },
-  ];
-
-  const canManage = actualRole === 'project_admin' || actualRole === 'platform_admin';
-  const readyToFinish = !readinessLoading && !readinessState.failed && ['template', 'source', 'first_sync', 'metrics'].every(step => completedSteps.includes(step)) && (completedSteps.includes('members') || skippedSteps.includes('members'));
-
-  function handleSkipMembers() {
-    if (readinessLoading || busy) return;
-    setSkippedSteps((prev) => Array.from(new Set([...prev, 'members'])));
-    showToast('已跳过团队邀请步骤（单人独立管理）', 'info');
-  }
-
-  async function markFinished() {
-    if (!readyToFinish || busy) return;
-    setBusy(true);
-    setFeedback(null);
+    const controller = new AbortController();
+    api<{ projectRole: string; readiness: Readiness }>('/api/projects?projectId=' + encodeURIComponent(projectId), { signal: controller.signal })
+      .then(detail => { if (!controller.signal.aborted) { setSnapshot({ key, role: detail.projectRole, readiness: detail.readiness }); setError(''); } })
+      .catch(e => { if (!controller.signal.aborted) setError(e instanceof Error ? e.message : '首次设置读取失败'); });
+    return () => controller.abort();
+  }, [key, projectId]);
+  const current = snapshot?.key === key ? snapshot : null;
+  const canManage = (current?.role || role) === 'project_admin' || (current?.role || role) === 'platform_admin';
+  if (project?.onboardingStatus === 'ready' || dismissed) return null;
+  if (!canManage) return <section className="integration-onboarding-note" aria-label="工作台准备状态"><strong>工作台待负责人发布</strong><p>您可以查看已有结果。接入数据和发布工作台由{project?.ownerName || '项目负责人'}完成。</p></section>;
+  const steps = current?.readiness.completedSteps || [];
+  const dataReady = steps.includes('first_sync'), metricsReady = steps.includes('metrics');
+  const teamReady = steps.includes('members') || steps.includes('skip:members');
+  const next = !dataReady ? '接入自己的业务表' : !metricsReady ? '确认指标与第一份看板' : !teamReady ? '选择团队协作或先单人试用' : '发布团队工作台';
+  async function update(skipOnly = false) {
+    if (submitting.current || !current || (!skipOnly && !current.readiness.ready)) return;
+    submitting.current = true; setBusy(true); setError('');
     try {
-      const allSteps = [
-        ...completedSteps,
-        ...skippedSteps.map((s) => `skip:${s}`),
-      ];
-
-      await api('/api/projects', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'update_onboarding',
-          projectId,
-          onboardingStatus: 'ready',
-          completedSteps: allSteps,
-        }),
-      });
-
-      showToast('项目初始化已完成，已正式就绪！', 'success');
-      setFeedback({ message: '初始化完成！项目已进入就绪状态。', type: 'success' });
-      await onFinish();
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : '初始化失败';
-      setFeedback({ message: msg, type: 'error' });
-      showToast(msg, 'error');
-    } finally {
-      setBusy(false);
-    }
+      const completedSteps = skipOnly ? [...steps, 'skip:members'] : steps;
+      await api('/api/projects', { method: 'POST', body: JSON.stringify({ action: 'update_onboarding', projectId, onboardingStatus: skipOnly ? (project?.onboardingStatus || 'source') : 'ready', completedSteps }) });
+      if (skipOnly) {
+        const detail = await api<{ projectRole: string; readiness: Readiness }>('/api/projects?projectId=' + encodeURIComponent(projectId));
+        setSnapshot({ key, role: detail.projectRole, readiness: detail.readiness });
+        showToast('已选择单人试用，之后可随时添加团队成员', 'info');
+      } else { showToast('工作台已发布，团队可以开始使用', 'success'); await onFinish(); }
+    } catch (e) { setError(e instanceof Error ? e.message : '保存失败，请重试'); }
+    finally { submitting.current = false; setBusy(false); }
   }
-
-  if (dismissed) return null;
-
-  return (
-    <div
-      style={{
-        background: '#ffffff',
-        borderRadius: 12,
-        border: '1px solid #bfdbfe',
-        padding: '24px',
-        marginBottom: 24,
-        boxShadow: '0 4px 12px rgba(37,99,235,0.06)',
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
-        <div>
-          <span style={{ fontSize: 11, fontWeight: 700, color: '#2563eb', background: '#eff6ff', padding: '3px 8px', borderRadius: 4, letterSpacing: '0.06em' }}>
-            PROJECT ONBOARDING · 新项目初始化向导
-          </span>
-          <h2 style={{ fontSize: 20, fontWeight: 700, margin: '8px 0 4px 0', color: '#0f172a' }}>
-            欢迎开启项目协作：完成以下步骤即可就绪
-          </h2>
-          <p style={{ fontSize: 13, color: '#475569', margin: 0 }}>
-            {canManage
-              ? '您是当前项目的管理员，具备完整的数据接入、指标配置与成员邀请权限。'
-              : '您当前为业务协作成员，可查看数据并执行允许的业务操作。如需接入新数据源请联系项目管理员。'}
-          </p>
-          {feedback && (
-            <div style={{ marginTop: 8, fontSize: 12, color: feedback.type === 'error' ? '#ef4444' : '#16a34a' }}>
-              {feedback.message}
-            </div>
-          )}
-        </div>
-
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button
-            onClick={() => setDismissed(true)}
-            style={{
-              background: '#fff',
-              color: '#64748b',
-              border: '1px solid #cbd5e1',
-              borderRadius: 6,
-              padding: '8px 14px',
-              fontSize: 13,
-              cursor: 'pointer',
-            }}
-          >
-            稍后配置
-          </button>
-          {canManage && (
-            <button
-              onClick={markFinished}
-              disabled={busy || !readyToFinish}
-              style={{
-                background: '#2563eb',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 6,
-                padding: '8px 16px',
-                fontWeight: 600,
-                fontSize: 13,
-                cursor: busy || !readyToFinish ? 'default' : 'pointer',
-                opacity: busy || !readyToFinish ? 0.7 : 1,
-              }}
-            >
-              {busy ? '正在就绪…' : '完成初始化（发布项目）'}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Stepper Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
-        {steps.map((s, idx) => {
-          const isDone = completedSteps.includes(s.id);
-          const isSkipped = skippedSteps.includes(s.id);
-          const isOptional = s.id === 'members' && memberCount === 1 && !isDone && !isSkipped;
-
-          const stepStatus = isDone ? 'completed' : isSkipped ? 'skipped' : isOptional ? 'optional' : 'blocked';
-          const statusBg = stepStatus === 'completed' ? '#f0fdf4' : stepStatus === 'optional' ? '#f0f9ff' : stepStatus === 'skipped' ? '#f8fafc' : '#fefce8';
-          const statusBorder = stepStatus === 'completed' ? '#86efac' : stepStatus === 'optional' ? '#bae6fd' : stepStatus === 'skipped' ? '#cbd5e1' : '#fef08a';
-          const statusColor = stepStatus === 'completed' ? '#166534' : stepStatus === 'optional' ? '#0369a1' : stepStatus === 'skipped' ? '#64748b' : '#854d0e';
-
-          return (
-            <div
-              key={s.id}
-              style={{
-                padding: 14,
-                borderRadius: 8,
-                border: `1px solid ${statusBorder}`,
-                background: statusBg,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                  <strong style={{ fontSize: 13, color: statusColor }}>{s.title}</strong>
-                  <span style={{ fontSize: 12, color: statusColor, fontWeight: 600 }}>
-                    {isDone ? '✓ 已就绪' : isSkipped ? '已跳过' : isOptional ? '选填' : `第${idx + 1}步`}
-                  </span>
-                </div>
-                <p style={{ fontSize: 12, color: '#475569', margin: '0 0 8px 0', lineHeight: 1.4 }}>{s.desc}</p>
-                <div style={{ fontSize: 11, color: '#64748b', background: 'rgba(0,0,0,0.03)', padding: '6px 8px', borderRadius: 4, marginBottom: 10 }}>
-                  <strong>获得能力：</strong>{s.unlockedAbility}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link
-                  href={s.link}
-                  style={{
-                    display: 'inline-block',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: isDone ? '#16a34a' : '#2563eb',
-                    textDecoration: 'none',
-                  }}
-                >
-                  {s.linkLabel} →
-                </Link>
-
-                {isOptional && canManage && (
-                  <button
-                    disabled={readinessLoading || busy}
-                    onClick={handleSkipMembers}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      fontSize: 11,
-                      color: '#64748b',
-                      cursor: 'pointer',
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    单人跳过
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+  return <section className="integration-onboarding" aria-label="首次设置">
+    <div className="integration-page-heading"><div><small>首次设置 · {project?.templateName || '通用数据工作台'}</small><h2>下一步：{next}</h2><p>{!dataReady ? '保留飞书原表，不必添加任务、预算或负责人列。接入后按实际字段选择适用的分析。' : !metricsReady ? '先得到可核对的指标，再选择趋势、分组或明细。已有设置会保留。' : '发布后进入日常工作界面，成员可以查看同一份结果。'}</p></div>
+      {!dataReady ? <Link className="primary" href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=data-sources'}>接入飞书数据源 →</Link> : !metricsReady ? <button className="primary" onClick={() => window.dispatchEvent(new CustomEvent('workbench:configure', { detail: { projectId } }))}>查看看板与配置 →</button> : null}
     </div>
-  );
+    {error && <p role="alert" className="integration-error">{error}</p>}
+    <div className="integration-actions">
+      {current?.readiness.memberCount === 1 && !teamReady && <button type="button" disabled={busy} onClick={() => void update(true)}>单人跳过</button>}
+      {canManage && <button type="button" className={current?.readiness.ready ? 'primary' : ''} disabled={busy || !current?.readiness.ready} onClick={() => void update()}>{busy ? '正在发布…' : '完成初始化（发布项目）'}</button>}
+      <button type="button" disabled={busy} onClick={() => setDismissed(true)}>稍后配置</button>
+    </div>
+    <details><summary>查看设置进度与团队选项</summary><ol className="integration-setup-checklist">
+      <li>基本资料与业务方向：{steps.includes('template') ? '已完成' : '待确认'}</li>
+      <li>业务数据：{steps.includes('source') ? dataReady ? '已同步' : '待首次同步' : '待接入'} <Link href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=data-sources'}>检查数据</Link></li>
+      <li>指标与看板：{metricsReady ? '已完成' : '待确认'}</li>
+      <li>团队：{steps.includes('members') ? '已添加成员' : steps.includes('skip:members') ? '已选择单人试用' : '选填，允许单人试用'} <Link href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=members'}>管理团队成员 →</Link></li>
+    </ol></details>
+  </section>;
 }

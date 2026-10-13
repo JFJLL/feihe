@@ -2,8 +2,8 @@
 
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 
-export function Dialog({ open = true, title, children, footer, onClose, width = 560 }: {
-  open?: boolean; title: string; children: ReactNode; footer?: ReactNode; onClose: () => void; width?: number;
+export function Dialog({ open = true, title, children, footer, onClose, width = 560, initialFocus }: {
+  open?: boolean; title: string; children: ReactNode; footer?: ReactNode; onClose: () => void; width?: number; initialFocus?: string;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -12,10 +12,10 @@ export function Dialog({ open = true, title, children, footer, onClose, width = 
     const element = ref.current;
     const previousFocus = document.activeElement as HTMLElement | null;
     element?.showModal();
-    const first = element?.querySelector<HTMLElement>('input:not([disabled]), button:not([disabled]), [tabindex="0"]');
+    const first = (initialFocus ? element?.querySelector<HTMLElement>(initialFocus) : null) || element?.querySelector<HTMLElement>('input:not([disabled]), button:not([disabled]), [tabindex="0"]');
     first?.focus();
     return () => { element?.close(); if (previousFocus?.isConnected) previousFocus.focus(); };
-  }, [open]);
+  }, [open, initialFocus]);
   if (!open) return null;
   return <dialog ref={ref} className="shared-dialog" aria-labelledby={titleId}
     onKeyDown={event => {

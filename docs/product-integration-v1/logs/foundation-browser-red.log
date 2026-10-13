@@ -1,0 +1,410 @@
+
+Running 8 tests using 1 worker
+
+(node:22472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\browser\product-foundation.spec.ts:12:3 › 产品入口 1280px：新客户/部门经页面维护，负责人自行创建项目 (1.0m)
+(node:24436) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 1280px：中心与资料使用同一Dialog并保留负责人选择 (1.0m)
+(node:37360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\browser\product-foundation.spec.ts:71:3 › 只读入口 1280px：不引导编辑归档删除，负责人和参与筛选列表可用 (10.5s)
+(node:8288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 1280px：次要设置折叠、选择器和保存区无溢出并返回焦点 (10.7s)
+(node:16040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  5 tests\browser\product-foundation.spec.ts:12:3 › 产品入口 390px：新客户/部门经页面维护，负责人自行创建项目 (1.0m)
+(node:17872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  6 tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 390px：中心与资料使用同一Dialog并保留负责人选择 (1.0m)
+(node:12488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  7 tests\browser\product-foundation.spec.ts:71:3 › 只读入口 390px：不引导编辑归档删除，负责人和参与筛选列表可用 (10.5s)
+(node:35032) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  8 tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 390px：次要设置折叠、选择器和保存区无溢出并返回焦点 (10.7s)
+
+
+  1) tests\browser\product-foundation.spec.ts:12:3 › 产品入口 1280px：新客户/部门经页面维护，负责人自行创建项目 ─────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '客户与部门', exact: true })
+
+
+      15 |     const unique = String(Date.now()), client = '晨风试点客户' + unique, department = '咨询服务试点部' + unique;
+      16 |     await page.goto('/');
+    > 17 |     await page.getByRole('button', { name: '客户与部门', exact: true }).click();
+         |                                                                    ^
+      18 |     await expect(page.getByRole('dialog', { name: '平台基础管理', exact: true })).toBeVisible();
+      19 |     await page.getByRole('button', { name: '新增客户', exact: true }).click();
+      20 |     await page.getByLabel('客户名称', { exact: true }).fill(client);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:17:68
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\attachments\关键请求-05a4c9bdf946e98772b9f1955b39e131c9671c90.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\attachments\实际持久化快照-41ec85304777beb2d1e3032c039f828c1a974dd9.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\attachments\最终页面-3dfdfaf7668398543ad318fa86af34cbe4152a21.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-1280px：新客户-部门经页面维护，负责人自行创建项目\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 1280px：中心与资料使用同一Dialog并保留负责人选择 ─────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('article', { name: '资料一致性1791885324406', exact: true }).getByRole('button', { name: '编辑', exact: true })
+
+
+      53 |     const title = '资料一致性' + Date.now(), id = await fixture(request, title);
+      54 |     await page.goto('/');
+    > 55 |     await page.getByRole('article', { name: title, exact: true }).getByRole('button', { name: '编辑', exact: true }).click();
+         |                                                                                                                    ^
+      56 |     await expect(page.getByRole('dialog', { name: '编辑项目资料', exact: true })).toBeVisible();
+      57 |     await choose(page, '项目负责人', '项目主管(李强)');
+      58 |     await page.getByRole('button', { name: '保存项目资料', exact: true }).click();
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:55:116
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\attachments\关键请求-403dd52b85e2064b4fd425c99949989e1fb5e401.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\attachments\实际持久化快照-7443fba3c9716751ebd9e779ebd9d9df30b7de06.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\attachments\最终页面-3544dd8b08d822170fe1dd4291e6f7a096db45b4.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-1280px：中心与资料使用同一Dialog并保留负责人选择\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests\browser\product-foundation.spec.ts:71:3 › 只读入口 1280px：不引导编辑归档删除，负责人和参与筛选列表可用 ────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('article', { name: '只读交接1791885385492', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('article', { name: '只读交接1791885385492', exact: true }) with timeout 10000ms
+      - waiting for getByRole('article', { name: '只读交接1791885385492', exact: true })
+
+
+      75 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/');
+      76 |     const card = page.getByRole('article', { name: title, exact: true });
+    > 77 |     await expect(card).toBeVisible();
+         |                        ^
+      78 |     for (const name of ['编辑', '归档', '删除']) await expect(card.getByRole('button', { name, exact: true })).toHaveCount(0);
+      79 |     await page.getByRole('button', { name: '紧凑列表', exact: true }).click();
+      80 |     await expect(page.getByRole('row').filter({ hasText: title })).toBeVisible();
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:77:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\attachments\关键请求-40ce8170aeaf90d8558d18b8cd4c1887bafa90d6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\attachments\实际持久化快照-30493d4d3c3ec6e7cc01b1912e58fbc10642a5e9.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\attachments\最终页面-dd17d2ca81009f188f307cf60f880074a23a2c0f.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-1280px：不引导编辑归档删除，负责人和参与筛选列表可用\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 1280px：次要设置折叠、选择器和保存区无溢出并返回焦点 ──────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '新建项目', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '新建项目', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: '新建项目', exact: true })
+
+
+      89 |     await page.setViewportSize({ width, height: 844 }); await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-editor' }); await page.goto('/');
+      90 |     const trigger = page.getByRole('button', { name: '＋ 新建项目', exact: true }); await trigger.click();
+    > 91 |     const dialog = page.getByRole('dialog', { name: '新建项目', exact: true }); await expect(dialog).toBeVisible();
+         |                                                                                                  ^
+      92 |     await expect(page.getByLabel('项目名称', { exact: true })).toBeFocused();
+      93 |     await expect(page.getByRole('combobox', { name: '业务状态', exact: true })).toBeHidden();
+      94 |     const owner = page.getByRole('combobox', { name: '项目负责人', exact: true }); await owner.focus(); await owner.press('ArrowDown'); await owner.press('Enter');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:91:98
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\attachments\关键请求-4fc5a6f6305980b4b95e451750b05029782587fc.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\attachments\实际持久化快照-d9df5934deeecf1b7e4f0a5cc7c7a79a558f96f8.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\attachments\最终页面-5a6a562b6a9f22910b1da0ba79107845d2156ea3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-1280px：次要设置折叠、选择器和保存区无溢出并返回焦点\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests\browser\product-foundation.spec.ts:12:3 › 产品入口 390px：新客户/部门经页面维护，负责人自行创建项目 ──────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '客户与部门', exact: true })
+
+
+      15 |     const unique = String(Date.now()), client = '晨风试点客户' + unique, department = '咨询服务试点部' + unique;
+      16 |     await page.goto('/');
+    > 17 |     await page.getByRole('button', { name: '客户与部门', exact: true }).click();
+         |                                                                    ^
+      18 |     await expect(page.getByRole('dialog', { name: '平台基础管理', exact: true })).toBeVisible();
+      19 |     await page.getByRole('button', { name: '新增客户', exact: true }).click();
+      20 |     await page.getByLabel('客户名称', { exact: true }).fill(client);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:17:68
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\attachments\关键请求-fa146d3dc09d4ab407c27e1571bcd5c47bb08cbf.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\attachments\实际持久化快照-86ba052a46e50c87ba476ab2ca4a2050ed7c2210.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\attachments\最终页面-657548754d209341d6185312f4b9477fdc5ba715.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-产品入口-390px：新客户-部门经页面维护，负责人自行创建项目\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 390px：中心与资料使用同一Dialog并保留负责人选择 ──────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('article', { name: '资料一致性1791885469707', exact: true }).getByRole('button', { name: '编辑', exact: true })
+
+
+      53 |     const title = '资料一致性' + Date.now(), id = await fixture(request, title);
+      54 |     await page.goto('/');
+    > 55 |     await page.getByRole('article', { name: title, exact: true }).getByRole('button', { name: '编辑', exact: true }).click();
+         |                                                                                                                    ^
+      56 |     await expect(page.getByRole('dialog', { name: '编辑项目资料', exact: true })).toBeVisible();
+      57 |     await choose(page, '项目负责人', '项目主管(李强)');
+      58 |     await page.getByRole('button', { name: '保存项目资料', exact: true }).click();
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:55:116
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\attachments\关键请求-dfd282e8afd10b7b2811484b4fd6c35214d63fcf.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\attachments\实际持久化快照-b434423c12039e88650dbf62e70288688586d489.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\attachments\最终页面-dc091568e842d059807c1067ccd02f9deadb673d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-统一项目表单-390px：中心与资料使用同一Dialog并保留负责人选择\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests\browser\product-foundation.spec.ts:71:3 › 只读入口 390px：不引导编辑归档删除，负责人和参与筛选列表可用 ─────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('article', { name: '只读交接1791885530802', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('article', { name: '只读交接1791885530802', exact: true }) with timeout 10000ms
+      - waiting for getByRole('article', { name: '只读交接1791885530802', exact: true })
+
+
+      75 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/');
+      76 |     const card = page.getByRole('article', { name: title, exact: true });
+    > 77 |     await expect(card).toBeVisible();
+         |                        ^
+      78 |     for (const name of ['编辑', '归档', '删除']) await expect(card.getByRole('button', { name, exact: true })).toHaveCount(0);
+      79 |     await page.getByRole('button', { name: '紧凑列表', exact: true }).click();
+      80 |     await expect(page.getByRole('row').filter({ hasText: title })).toBeVisible();
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:77:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\attachments\关键请求-6721017f201c5f4570a289cff5482b28ca8c1926.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\attachments\实际持久化快照-72f4bdf952e84ccd480e876501ff329a55b95f1a.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\attachments\最终页面-d9ca8a76277dee57ef8c01b1592c10a7e88b6008.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-只读入口-390px：不引导编辑归档删除，负责人和参与筛选列表可用\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 390px：次要设置折叠、选择器和保存区无溢出并返回焦点 ───────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '新建项目', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '新建项目', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: '新建项目', exact: true })
+
+
+      89 |     await page.setViewportSize({ width, height: 844 }); await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-editor' }); await page.goto('/');
+      90 |     const trigger = page.getByRole('button', { name: '＋ 新建项目', exact: true }); await trigger.click();
+    > 91 |     const dialog = page.getByRole('dialog', { name: '新建项目', exact: true }); await expect(dialog).toBeVisible();
+         |                                                                                                  ^
+      92 |     await expect(page.getByLabel('项目名称', { exact: true })).toBeFocused();
+      93 |     await expect(page.getByRole('combobox', { name: '业务状态', exact: true })).toBeHidden();
+      94 |     const owner = page.getByRole('combobox', { name: '项目负责人', exact: true }); await owner.focus(); await owner.press('ArrowDown'); await owner.press('Enter');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-foundation.spec.ts:91:98
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\attachments\关键请求-461eb7a7a8e4a8addab827a5963d1560a93cfb5d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\attachments\实际持久化快照-3a41e6a5d4d740fd25ca1f06a5b76d7bba18e00d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\attachments\最终页面-2ad29a90a52315304e5c334699ab7edaedee8987.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\baseline-foundation\browser-results\product-foundation-键盘项目表单-390px：次要设置折叠、选择器和保存区无溢出并返回焦点\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8 failed
+    tests\browser\product-foundation.spec.ts:12:3 › 产品入口 1280px：新客户/部门经页面维护，负责人自行创建项目 ──────────────
+    tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 1280px：中心与资料使用同一Dialog并保留负责人选择 ──────────
+    tests\browser\product-foundation.spec.ts:71:3 › 只读入口 1280px：不引导编辑归档删除，负责人和参与筛选列表可用 ─────────────
+    tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 1280px：次要设置折叠、选择器和保存区无溢出并返回焦点 ───────────
+    tests\browser\product-foundation.spec.ts:12:3 › 产品入口 390px：新客户/部门经页面维护，负责人自行创建项目 ───────────────
+    tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 390px：中心与资料使用同一Dialog并保留负责人选择 ───────────
+    tests\browser\product-foundation.spec.ts:71:3 › 只读入口 390px：不引导编辑归档删除，负责人和参与筛选列表可用 ──────────────
+    tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 390px：次要设置折叠、选择器和保存区无溢出并返回焦点 ────────────

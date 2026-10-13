@@ -1,0 +1,8 @@
+* -text
+*.md text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Preserve raw Windows test evidence without rewriting its bytes.
+*.log -whitespace
+*.txt -whitespace

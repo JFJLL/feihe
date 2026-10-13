@@ -8,6 +8,7 @@ import { FeedbackToastContainer } from '../ui/FeedbackToast';
 import { FloatingAgent } from './FloatingAgent';
 import { LoadingState } from '../ui/LoadingState';
 import { ErrorState } from '../ui/ErrorState';
+import { emptyDashboard, emptyOps } from '../../lib/hooks/use-project-data';
 
 // 各板块工作区（全盘预载入内存，0ms 极速切换）
 import { OverviewWorkspace } from '../../features/overview/OverviewWorkspace';
@@ -63,16 +64,8 @@ function ProjectShellContent({
     );
   }
 
-  const effectiveDashboard: any = dashboard || {
-    pipelines: [],
-    notes: [],
-    summary: { totalNotes: 0, totalReads: 0, totalInteractions: 0, totalSpend: 0 },
-    analytics: { brands: [] },
-    feishu: null,
-  };
-  const effectiveOps: any = ops || {
-    settings: { rules: { brands: [], competitors: [] } },
-  };
+  const effectiveDashboard = dashboard || emptyDashboard;
+  const effectiveOps = ops || emptyOps;
 
   // 客户端单页即时切换（0ms 响应，彻底消除白屏刷新与等待）
   let content = children;
@@ -157,7 +150,7 @@ function ProjectShellContent({
         {content}
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>
-      <FloatingAgent projectId={projectId} />
+      {currentProject?.canWrite && <FloatingAgent projectId={projectId} />}
     </div>
   );
 }

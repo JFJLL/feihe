@@ -1,0 +1,62 @@
+[
+  {
+    "projectId": "1791889762430",
+    "project": {
+      "id": "1791889762430",
+      "name": "新部门内部项目1791889762430",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#059669",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-0c9a0f12-a5ce-4876-a68a-956441a35974",
+      "clientId": null,
+      "ownerId": "pilot-person-1791889762430",
+      "templateId": "blank",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "pilot-person-1791889762430",
+      "updatedAt": "2026-10-13T11:09:23.920Z",
+      "departmentName": "咨询服务试点部1791887197224",
+      "clientName": null,
+      "ownerName": "咨询试点负责人1791889762430",
+      "templateName": "空白项目"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "skip:members"
+      ],
+      "blockedSteps": [
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791889762430-default",
+          "projectId": "1791889762430",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T11:09:23.504Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791889762430-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

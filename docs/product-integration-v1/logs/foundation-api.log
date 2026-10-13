@@ -1,0 +1,22 @@
+(node:27016) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ production: unverified administrator header is rejected (2.8048ms)
+✔ production: arbitrary bearer and missing identity never fall back to administrator (0.4913ms)
+✔ production: signed gateway identity is verified and raw user header cannot override it (26.8535ms)
+✔ organization: authorized admin creates and updates a new department with a stable id (3.3572ms)
+✔ organization: admin manages clients; ordinary users are denied organization writes (1.5607ms)
+✔ project: invalid department/client/owner references are rejected before insert (0.9985ms)
+✔ project: general and blank starts do not install task/budget assumptions (1.3903ms)
+✔ project: new content projects do not inherit confirmed Qicui targets (0.5304ms)
+✔ project: visible list includes actual viewer role and owner identity; metadata exposes selection users (1.5044ms)
+✔ project: selecting another owner adds that confirmed owner as project administrator (1.1983ms)
+✔ organization: an admin can register a verified company account for owner and member selection without database edits (1.3509ms)
+✔ project: member assignments reject unknown directory accounts and unsupported roles (1.0061ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 606.5481

@@ -1,0 +1,58 @@
+(node:33264) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ production: unverified administrator header is rejected (2.9878ms)
+✔ production: arbitrary bearer and missing identity never fall back to administrator (0.4701ms)
+✔ production: signed gateway identity is verified and raw user header cannot override it (33.6163ms)
+✔ organization: authorized admin creates and updates a new department with a stable id (3.866ms)
+✔ organization: admin manages clients; ordinary users are denied organization writes (1.729ms)
+✔ project: invalid department/client/owner references are rejected before insert (1.0044ms)
+✔ project: general and blank starts do not install task/budget assumptions (1.919ms)
+✔ project: new content projects do not inherit confirmed Qicui targets (0.5366ms)
+✔ project: visible list includes actual viewer role and owner identity; metadata exposes selection users (1.4457ms)
+✔ project: selecting another owner adds that confirmed owner as project administrator (1.2358ms)
+✖ organization: an admin can register a verified company account for owner and member selection without database edits (0.9401ms)
+✖ project: member assignments reject unknown directory accounts and unsupported roles (0.967ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 10
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 580.3027
+
+✖ failing tests:
+
+test at scripts\test-product-foundation.mjs:93:1
+✖ organization: an admin can register a verified company account for owner and member selection without database edits (0.9401ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:95:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-foundation.mjs:100:1
+✖ project: member assignments reject unknown directory accounts and unsupported roles (0.967ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-foundation.mjs:102:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
