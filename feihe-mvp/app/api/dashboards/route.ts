@@ -121,7 +121,7 @@ export async function POST(request: Request) {
   const saveStamp = crypto.randomUUID();
   try {
     const expectedVersion = existingRecord?.version || 0;
-    const statements = [d1.prepare("INSERT INTO dashboards(id, project_id, name, is_default, version, layout_json, status, created_at, updated_at, save_token) VALUES(?, ?, ?, 1, ?, ?, 'published', ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name=excluded.name, version=excluded.version, layout_json=excluded.layout_json, updated_at=excluded.updated_at, save_token=excluded.save_token WHERE dashboards.project_id=excluded.project_id AND dashboards.version=?")
+    const statements = [d1.prepare("INSERT INTO dashboards(id, project_id, name, is_default, version, layout_json, status, created_at, updated_at, save_token) VALUES(?, ?, ?, 1, ?, ?, 'published', ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name=excluded.name, version=excluded.version, layout_json=excluded.layout_json, status=excluded.status, updated_at=excluded.updated_at, save_token=excluded.save_token WHERE dashboards.project_id=excluded.project_id AND dashboards.version=?")
     .bind(dashboardId, project, String(body.name || '默认看板'), newVersion, layoutJson, now, now, saveStamp, expectedVersion),
     d1.prepare('DELETE FROM dashboard_cards WHERE dashboard_id=? AND project_id=? AND EXISTS (SELECT 1 FROM dashboards WHERE id=? AND project_id=? AND save_token=?)').bind(dashboardId, project, dashboardId, project, saveStamp)];
     for (const card of confirmedCards) statements.push(d1.prepare(

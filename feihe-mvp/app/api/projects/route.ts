@@ -43,10 +43,10 @@ export async function GET(request?: Request) {
   }
 
   const admin = user.role === 'platform_admin';
-  const filter = 'p.org_id=?' + (admin ? '' : ' AND (p.id IN (SELECT project_id FROM project_members WHERE user_id=?) OR p.created_by=? OR p.owner_id=?)');
-  const filterValues = admin ? [user.orgId] : [user.orgId, user.userId, user.userId, user.userId];
-  const role = admin ? "'project_admin'" : "COALESCE((SELECT role FROM project_members pm WHERE pm.project_id=p.id AND pm.user_id=?),CASE WHEN p.created_by=? OR p.owner_id=? THEN 'project_admin' ELSE 'viewer' END)";
-  const roleValues = admin ? [] : [user.userId, user.userId, user.userId];
+  const filter = 'p.org_id=?' + (admin ? '' : " AND p.id IN (SELECT project_id FROM project_members WHERE user_id=? AND role IN ('project_admin','editor','viewer'))");
+  const filterValues = admin ? [user.orgId] : [user.orgId, user.userId];
+  const role = admin ? "'project_admin'" : '(SELECT role FROM project_members pm WHERE pm.project_id=p.id AND pm.user_id=?)';
+  const roleValues = admin ? [] : [user.userId];
   const projectSQL = 'SELECT ' + PROJECT_SELECT + ',' + role + ' AS projectRole,'
     + 'EXISTS(SELECT 1 FROM project_members pm WHERE pm.project_id=p.id AND pm.user_id=?) AS isParticipant,'
     + '(SELECT COUNT(*) FROM project_notes pn WHERE pn.project_id=p.id) AS noteCount,'
@@ -123,9 +123,9 @@ export async function POST(request: Request) {
       .prepare(
         `INSERT INTO projects(id, name, spu, brand, category, description, status, color, start_at, end_at,
         org_id, department_id, client_id, owner_id, template_id, is_archived, onboarding_status, created_by, created_at, updated_at)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'org-default', ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
       )
-      .bind(id, name, spu, brand, category, description, status, color, startAt, endAt, departmentId, clientId, ownerId, templateId, user.userId, now, now)
+      .bind(id, name, spu, brand, category, description, status, color, startAt, endAt, user.orgId, departmentId, clientId, ownerId, templateId, user.userId, now, now)
       .run();
 
     // Add creator as project administrator
@@ -381,15 +381,25 @@ export async function POST(request: Request) {
       if (!directoryUser) return jsonError('请选择已登记的公司成员');
     }
     if (!targetUserId) return jsonError('缺少成员用户 ID');
+    const existingRole = await d1.prepare('SELECT role FROM project_members WHERE project_id=? AND user_id=?').bind(id, targetUserId).first<{ role: string }>();
+    const reducing = subAction === 'remove' || role !== 'project_admin';
+    if (reducing && targetUserId === String(access.context!.project.owner_id)) return jsonError('请先在项目资料中交接负责人，再移除或调整该成员');
+    if (reducing && existingRole?.role === 'project_admin') {
+      const others = await d1.prepare("SELECT COUNT(*) AS n FROM project_members WHERE project_id=? AND user_id<>? AND role='project_admin'").bind(id, targetUserId).first<{ n: number }>();
+      if (!others?.n) return jsonError('项目至少需要保留一位项目管理员');
+    }
 
     if (subAction === 'remove') {
-      await d1.prepare('DELETE FROM project_members WHERE project_id=? AND user_id=?').bind(id, targetUserId).run();
+      await d1.prepare("DELETE FROM project_members WHERE project_id=? AND user_id=? AND (role<>'project_admin' OR EXISTS(SELECT 1 FROM project_members other WHERE other.project_id=? AND other.user_id<>? AND other.role='project_admin')) AND NOT EXISTS(SELECT 1 FROM projects WHERE id=? AND owner_id=?)").bind(id, targetUserId, id, targetUserId, id, targetUserId).run();
+      if (await d1.prepare('SELECT id FROM project_members WHERE project_id=? AND user_id=?').bind(id, targetUserId).first()) return jsonError('成员或负责人在操作期间已变化，请刷新后重试', 409);
       return Response.json({ ok: true, removed: true });
     }
 
     const existingMem = await d1.prepare('SELECT id FROM project_members WHERE project_id=? AND user_id=?').bind(id, targetUserId).first<{ id: string }>();
     if (existingMem) {
-      await d1.prepare('UPDATE project_members SET role=?, updated_at=? WHERE id=?').bind(role, now, existingMem.id).run();
+      await d1.prepare("UPDATE project_members SET role=?, updated_at=? WHERE id=? AND (role<>'project_admin' OR ?='project_admin' OR EXISTS(SELECT 1 FROM project_members other WHERE other.project_id=? AND other.user_id<>? AND other.role='project_admin')) AND (?='project_admin' OR NOT EXISTS(SELECT 1 FROM projects WHERE id=? AND owner_id=?))").bind(role, now, existingMem.id, role, id, targetUserId, role, id, targetUserId).run();
+      const confirmedRole = await d1.prepare('SELECT role FROM project_members WHERE id=?').bind(existingMem.id).first<{ role: string }>();
+      if (confirmedRole?.role !== role) return jsonError('成员或负责人在操作期间已变化，请刷新后重试', 409);
       return Response.json({ ok: true, memberId: existingMem.id, role });
     } else {
       const newId = `${id}:${targetUserId}`;

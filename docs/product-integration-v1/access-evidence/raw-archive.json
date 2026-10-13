@@ -1,0 +1,30 @@
+[
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-red",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-red"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-1",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-iteration-1"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-2",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-iteration-2"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-3",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-iteration-3"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-iteration-4"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-gateway-iteration-1",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-gateway-iteration-1"
+  },
+  {
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete",
+    "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\access-raw-evidence\\access-complete"
+  }
+]

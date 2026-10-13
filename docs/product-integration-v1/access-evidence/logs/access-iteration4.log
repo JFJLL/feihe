@@ -1,0 +1,24 @@
+[WebServer] (node:40656) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:40656) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:41296) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:41296) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 9 tests using 1 worker
+
+(node:37836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [local] › tests\browser\product-access.spec.ts:4:1 › 页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面 (5.0s)
+  ok 2 [local] › tests\browser\product-access.spec.ts:20:3 › 返回使用权限 1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权 (3.5s)
+  ok 3 [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 (2.8s)
+  ok 4 [local] › tests\browser\product-access.spec.ts:20:3 › 返回使用权限 390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权 (3.0s)
+  ok 5 [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 (2.5s)
+  ok 6 [local] › tests\browser\product-access.spec.ts:51:1 › 撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者 (3.3s)
+(node:41712) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 7 [gateway] › tests\browser\product-access.gateway.spec.ts:9:1 › 公司身份边界：无身份、伪造管理员头和任意Bearer不能进入已有缓存的页面或API (4.2s)
+  ok 8 [gateway] › tests\browser\product-access.gateway.spec.ts:19:1 › 公司身份边界：真实签名取登记身份，普通成员/查看者/管理员分别执行授权页面和写权限 (2.0s)
+  ok 9 [gateway] › tests\browser\product-access.gateway.spec.ts:28:1 › 公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效 (681ms)
+
+  9 passed (39.0s)

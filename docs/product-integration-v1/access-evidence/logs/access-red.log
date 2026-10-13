@@ -1,0 +1,108 @@
+[WebServer] (node:19596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:4076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19596) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  x  1 tests\browser\product-access.spec.ts:4:1 › 页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面 (15.7s)
+(node:37372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\browser\product-access.spec.ts:19:1 › 撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者 (2.5s)
+
+
+  1) tests\browser\product-access.spec.ts:4:1 › 页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面 ──────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '无权访问此项目', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '无权访问此项目', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '无权访问此项目', exact: true })
+
+
+      13 |   await page.goto('/projects/' + projectId + '/data');
+      14 |   await page.screenshot({ path: info.outputPath('cached-project-unauthorized-entry.png'), fullPage: true });
+    > 15 |   await expect(page.getByRole('heading', { name: '无权访问此项目', exact: true })).toBeVisible();
+         |                                                                             ^
+      16 |   await expect(page.getByText(privateName, { exact: true })).toHaveCount(0);
+      17 |   await expect(page.getByRole('navigation', { name: '项目模块', exact: true })).toHaveCount(0);
+      18 | });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-access.spec.ts:15:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\attachments\关键请求-70537fa63f432bd88a1c4a249a2c3f6e2c8d9aee.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\attachments\实际持久化快照-3f44eb5e7a4c846307c477d7e7b4e1c0ebe821dc.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\attachments\最终页面-45c30fa50bc129573059e26f26b043150532781a.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\access-red\browser-results\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\product-access.spec.ts:19:1 › 撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者 ───────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 200
+
+      26 |   const denied = await request.get('/api/reports?projectId=' + projectId, { headers: projectIdentity });
+      27 |   await info.attach('创建者撤权后的真实报告响应', { body: JSON.stringify({ status: denied.status(), body: await denied.json() }), contentType: 'application/json' });
+    > 28 |   expect(denied.status()).toBe(403);
+         |                           ^
+      29 |   expect((await request.get('/api/report-html?projectId=' + projectId + '&id=' + reportId, { headers: projectIdentity })).status()).toBe(403);
+      30 |   await page.goto('/projects/' + projectId + '/reports'); await expect(page.getByRole('heading', { name: '无权访问此项目', exact: true })).toBeVisible();
+      31 |   await page.screenshot({ path: info.outputPath('revoked-creator-denied.png') });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-access.spec.ts:28:27
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\attachments\关键请求-9e9ffd23c3c9a96a68c964332fddb5b7979d88e4.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\attachments\实际持久化快照-717c4460fdf5e6e8532a1487b3f3bbbb95fc3386.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #5: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\attachments\最终页面-67ea0f6ba86e811d1eaf56a1a81ed6897a16f29e.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\error-context.md
+
+    attachment #7: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\access-red\browser-results\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests\browser\product-access.spec.ts:4:1 › 页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面 ───────────────────
+    tests\browser\product-access.spec.ts:19:1 › 撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者 ────────────────

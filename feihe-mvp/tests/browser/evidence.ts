@@ -1,5 +1,6 @@
 import { test as base, expect } from '@playwright/test';
 import { writeFile } from 'node:fs/promises';
+import { gatewayIdentity } from './gateway-identity';
 
 export const test = base.extend<{ evidence: void }>({
   evidence: [async ({ page, request }, use, info) => {
@@ -22,14 +23,16 @@ export const test = base.extend<{ evidence: void }>({
     await writeFile(requestsPath, JSON.stringify(requests, null, 2));
     await info.attach('关键请求', { path: requestsPath, contentType: 'application/json' });
     const persistence: unknown[] = [];
-    const workspace = projectIds.size ? await (await request.get('/api/projects')).json() : { sources: [] };
+    // Privileged diagnostic reads are separate from the tested browser identities.
+    const diagnosticOptions = info.project.name === 'gateway' ? { headers: await gatewayIdentity('user-admin') } : {};
+    const workspace = projectIds.size ? await (await request.get('/api/projects', diagnosticOptions)).json() : { sources: [] };
     for (const projectId of projectIds) {
       const query = '?projectId=' + encodeURIComponent(projectId);
-      const project = await (await request.get('/api/projects' + query)).json();
-      const dashboard = await (await request.get('/api/dashboards' + query)).json();
-      const datasets = await (await request.get('/api/datasets' + query)).json();
+      const project = await (await request.get('/api/projects' + query, diagnosticOptions)).json();
+      const dashboard = await (await request.get('/api/dashboards' + query, diagnosticOptions)).json();
+      const datasets = await (await request.get('/api/datasets' + query, diagnosticOptions)).json();
       const details = [];
-      for (const dataset of datasets.datasets || []) details.push(await (await request.get('/api/datasets' + query + '&id=' + encodeURIComponent(dataset.id) + '&all=true')).json());
+      for (const dataset of datasets.datasets || []) details.push(await (await request.get('/api/datasets' + query + '&id=' + encodeURIComponent(dataset.id) + '&all=true', diagnosticOptions)).json());
       persistence.push({ projectId, project: project.project, sourceConfigurations: workspace.sources?.filter((source: { projectId: string }) => source.projectId === projectId), readiness: project.readiness, dashboard, datasets: details });
     }
     const persistencePath = info.outputPath('persistence.json');

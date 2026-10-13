@@ -1,0 +1,68 @@
+[
+  {
+    "run": "access-red",
+    "stats": {
+      "startTime": "2026-10-13T20:55:36.719Z",
+      "duration": 24655.11,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "access-iteration-1",
+    "stats": {
+      "startTime": "2026-10-13T21:09:05.200Z",
+      "duration": 13043.924,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "access-iteration-2",
+    "stats": {
+      "startTime": "2026-10-13T21:16:30.616Z",
+      "duration": 51004.767,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "access-iteration-3",
+    "stats": {
+      "startTime": "2026-10-13T21:20:18.696Z",
+      "duration": 156386.006,
+      "expected": 7,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "access-iteration-4",
+    "stats": {
+      "startTime": "2026-10-13T21:27:02.184Z",
+      "duration": 39044.342,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "access-gateway-iteration-1",
+    "stats": {
+      "startTime": "2026-10-13T21:15:06.833Z",
+      "duration": 17324.634000000002,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

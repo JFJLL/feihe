@@ -1,0 +1,12 @@
+[WebServer] (node:17256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:17256) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 2 tests using 1 worker
+
+(node:27024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\browser\product-access.spec.ts:4:1 › 页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面 (4.5s)
+  ok 2 tests\browser\product-access.spec.ts:19:1 › 撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者 (2.9s)
+
+  2 passed (13.0s)

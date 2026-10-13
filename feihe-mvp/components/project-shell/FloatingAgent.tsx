@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { api } from '../../lib/hooks/use-project-data';
 import type { Plan, Spec } from '../../lib/types/project';
+import { useCacheIdentity } from './IdentityBoundary';
+import { identityStorageKey } from '../../lib/browser-cache';
 
 type ChatMsg = {
   role: 'user' | 'assistant';
@@ -33,13 +35,14 @@ const QUICK_POOL = [
 const QUICK_PAGE = 4;
 const PROJECT_QUICK_POOL = ['汇报当前项目已发布指标', '查看本项目来源更新时间与有效样本', '查看当前团队看板周期的结果', '保存一份同口径报告供团队查看'];
 
-function storageKey(projectId: string) {
-  return 'agent-sessions:' + projectId;
+function storageKey(projectId: string, identity: string) {
+  return 'agent-sessions:' + identityStorageKey(identity, projectId);
 }
 
-function loadSessions(projectId: string): ChatSession[] {
+function loadSessions(projectId: string, identity: string): ChatSession[] {
+  if (!identity) return [];
   try {
-    const raw = localStorage.getItem(storageKey(projectId));
+    const raw = localStorage.getItem(storageKey(projectId, identity));
     if (!raw) return [];
     const parsed = JSON.parse(raw) as ChatSession[];
     return Array.isArray(parsed) ? parsed : [];
@@ -58,6 +61,7 @@ function timeLabel(iso: string) {
 }
 
 export function FloatingAgent({ projectId }: { projectId: string }) {
+  const identity = useCacheIdentity();
   const [open, setOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [input, setInput] = useState('');
@@ -71,19 +75,19 @@ export function FloatingAgent({ projectId }: { projectId: string }) {
   useEffect(() => {
     try {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSessions(loadSessions(projectId));
+      setSessions(loadSessions(projectId, identity));
     } catch {
       setSessions([]);
     }
-  }, [projectId]);
+  }, [projectId, identity]);
 
   useEffect(() => {
     try {
-      localStorage.setItem(storageKey(projectId), JSON.stringify(sessions.slice(0, 30)));
+      if (identity) localStorage.setItem(storageKey(projectId, identity), JSON.stringify(sessions.slice(0, 30)));
     } catch {
       /* storage optional */
     }
-  }, [sessions, projectId]);
+  }, [sessions, projectId, identity]);
 
   useEffect(() => {
     const el = bodyRef.current;

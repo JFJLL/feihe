@@ -1,0 +1,23 @@
+[WebServer] (node:30700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:30700) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:31540) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Failed to run dependency scan. Skipping dependency pre-bundling. Error: The following dependencies are imported but could not be resolved:
+[WebServer] 
+[WebServer]   cloudflare:workers (imported by D:/download/pic-vec/feihe-platform-v3/feihe-mvp/lib/runtime-env.ts)
+[WebServer] 
+[WebServer] Are they installed?
+[WebServer]     at file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/node_modules/vite/dist/node/chunks/node.js:31510:33
+[WebServer]     at async file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/node_modules/vite/dist/node/chunks/node.js:23242:15
+[WebServer] (node:31540) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 3 tests using 1 worker
+
+(node:40876) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [gateway] › tests\browser\product-access.gateway.spec.ts:14:1 › 公司身份边界：无身份、伪造管理员头和任意Bearer不能进入已有缓存的页面或API (4.1s)
+  ok 2 [gateway] › tests\browser\product-access.gateway.spec.ts:24:1 › 公司身份边界：真实签名取登记身份，普通成员/查看者/管理员分别执行授权页面和写权限 (2.0s)
+  ok 3 [gateway] › tests\browser\product-access.gateway.spec.ts:33:1 › 公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效 (689ms)
+
+  3 passed (17.3s)

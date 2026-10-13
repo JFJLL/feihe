@@ -162,7 +162,7 @@ function ProjectShellContent({
     <div className="app-shell">
       <ProjectSidebar userName={userName} signedIn={signedIn} />
       <main className="main">
-        {content}
+        <React.Fragment key={currentProject?.projectRole || 'pending'}>{content}</React.Fragment>
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>
       {currentProject?.canWrite && !['data', 'reports'].includes(activeSection) && <FloatingAgent projectId={projectId} />}
@@ -175,16 +175,20 @@ export function ProjectShell({
   initialData,
   userName = '内部用户',
   signedIn = true,
+  userId,
+  initialRole,
   children,
 }: {
   projectId: string;
   initialData?: ProjectBootstrap | null;
   userName?: string;
   signedIn?: boolean;
+  userId?: string;
+  initialRole?: 'project_admin' | 'editor' | 'viewer';
   children: React.ReactNode;
 }) {
   return (
-    <ProjectProvider key={projectId} projectId={projectId} initialData={initialData} initialWorkspace={initialData?.workspace}>
+    <ProjectProvider key={projectId} projectId={projectId} initialData={initialData} initialWorkspace={initialData?.workspace} userId={userId} initialRole={initialRole}>
       <ProjectShellContent userName={userName} signedIn={signedIn}>
         {children}
       </ProjectShellContent>

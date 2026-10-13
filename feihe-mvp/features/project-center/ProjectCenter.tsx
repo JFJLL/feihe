@@ -9,11 +9,15 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { FeedbackToastContainer } from '../../components/ui/FeedbackToast';
 import type { ToastMessage } from '../../components/project-shell/ProjectContext';
-import { api, cnTime } from '../../lib/hooks/use-project-data';
+import { api, cnTime, ApiError } from '../../lib/hooks/use-project-data';
+import { useCacheIdentity } from '../../components/project-shell/IdentityBoundary';
+import { AccessState } from '../../components/ui/AccessState';
 import { ProjectFormDialog } from './ProjectFormDialog';
 import { OrganizationManager } from './OrganizationManager';
 
 export function ProjectCenter({ userName }: { userName: string }) {
+  const identity = useCacheIdentity();
+  const [accessFailure, setAccessFailure] = useState<{ status: number; message: string } | null>(null);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true), [error, setError] = useState('');
   const [editing, setEditing] = useState<Project | null | undefined>(undefined);
@@ -33,12 +37,17 @@ export function ProjectCenter({ userName }: { userName: string }) {
     const request = ++generation.current; setLoading(true);
     try {
       const next = await api<Workspace>('/api/projects');
-      if (request === generation.current) { setWorkspace(next); setError(''); }
-    } catch (e) { if (request === generation.current) setError(e instanceof Error ? e.message : '项目读取失败'); }
+      if (request === generation.current) {
+        const confirmedUser = next.metadata?.currentUser;
+        if (!confirmedUser || identity !== confirmedUser.orgId + ':' + confirmedUser.userId) { setWorkspace(null); setAccessFailure({ status: 401, message: '登录身份已变化，请重新打开项目中心' }); return; }
+        setWorkspace(next); setError('');
+      }
+    } catch (e) { if (request === generation.current) { if (e instanceof ApiError && [401, 403].includes(e.status)) { setWorkspace(null); setAccessFailure({ status: e.status, message: e.message }); } setError(e instanceof Error ? e.message : '项目读取失败'); } }
     finally { if (request === generation.current) setLoading(false); }
-  }, []);
+  }, [identity]);
   const invalidateRequests = useCallback(() => { generation.current++; }, []);
   useEffect(() => { const timer = setTimeout(() => void refresh(), 0); return () => { clearTimeout(timer); invalidateRequests(); }; }, [refresh, invalidateRequests]);
+  useEffect(() => { const returned = () => { void refresh(); }; window.addEventListener('focus', returned); return () => window.removeEventListener('focus', returned); }, [refresh]);
   const metadata = workspace?.metadata;
   const projects = useMemo(() => workspace?.projects || [], [workspace]);
   const filtered = useMemo(() => projects.filter(p => {
@@ -77,6 +86,7 @@ export function ProjectCenter({ userName }: { userName: string }) {
       <Link className="primary" href={'/projects/' + encodeURIComponent(p.id)}>{p.canManage && p.onboardingStatus !== 'ready' ? '继续设置 →' : '进入工作区 →'}</Link>
     </div>;
   }
+  if (accessFailure) return <AccessState status={accessFailure.status} message={accessFailure.message} />;
   return <div className="platform-shell">
     <header className="platform-top"><Link className="platform-brand" href="/"><b>协同</b><span>项目数据与报告协作</span></Link>
       <div className="platform-user"><span>{metadata?.currentUser?.displayName || (workspace ? userName : '验证身份中')}<small>{metadata?.currentUser?.role === 'platform_admin' ? '平台管理员' : '公司成员'}</small></span></div>

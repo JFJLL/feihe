@@ -1,0 +1,28 @@
+{
+  "batchStartSha": "ac8559551cdfd76c57ec525b88cc6b8dbe599fd8",
+  "fullStartSha": "1027b6b61d819763a5028c6329c34c7c1953b883",
+  "branch": "codex/product-integration-v1",
+  "worktree": "D:/download/pic-vec/feihe-platform-v3",
+  "identityTrust": "isolated real HMAC gateway branch; no deployed SSO or production",
+  "externalSimulation": "Feishu origin only in local test builds",
+  "localExecution": [
+    "auth",
+    "member authorization",
+    "row conversion",
+    "SQL",
+    "datasets",
+    "metrics",
+    "boards",
+    "reports",
+    "HTML export"
+  ],
+  "unexecuted": [
+    "human pilot",
+    "real Feishu",
+    "production gateway",
+    "production data",
+    "deployment",
+    "merge"
+  ],
+  "completeProduct": false
+}

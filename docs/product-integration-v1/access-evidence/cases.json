@@ -1,0 +1,166 @@
+[
+  {
+    "id": "red-01",
+    "run": "access-red",
+    "title": "页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-red\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面",
+    "path": "red-01",
+    "trace": "red-01/trace.zip"
+  },
+  {
+    "id": "red-02",
+    "run": "access-red",
+    "title": "撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-red\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者",
+    "path": "red-02",
+    "trace": "red-02/trace.zip"
+  },
+  {
+    "id": "harness-failure-01",
+    "run": "access-iteration-2",
+    "title": "成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-2\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local",
+    "path": "harness-failure-01",
+    "trace": "harness-failure-01/trace.zip"
+  },
+  {
+    "id": "harness-failure-02",
+    "run": "access-iteration-2",
+    "title": "成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+    "status": "failed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-2\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local",
+    "path": "harness-failure-02",
+    "trace": "harness-failure-02/trace.zip"
+  },
+  {
+    "id": "harness-failure-03",
+    "run": "access-iteration-3",
+    "title": "成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+    "status": "timedOut",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-3\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local",
+    "path": "harness-failure-03",
+    "trace": "harness-failure-03/trace.zip"
+  },
+  {
+    "id": "harness-failure-04",
+    "run": "access-iteration-3",
+    "title": "成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+    "status": "timedOut",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-3\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local",
+    "path": "harness-failure-04",
+    "trace": "harness-failure-04/trace.zip"
+  },
+  {
+    "id": "case-01",
+    "run": "access-complete",
+    "title": "页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面-local",
+    "path": "case-01",
+    "trace": "case-01/trace.zip"
+  },
+  {
+    "id": "case-02",
+    "run": "access-complete",
+    "title": "身份缓存隔离 1280px：页面仍打开时切换已授权身份，旧会话失效后重新读取只读结果",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-身份缓存隔离-1280px：页面仍打开时切换已授权身份，旧会话失效后重新读取只读结果-local",
+    "path": "case-02",
+    "trace": "case-02/trace.zip"
+  },
+  {
+    "id": "case-03",
+    "run": "access-complete",
+    "title": "返回使用权限 1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-返回使用权限-1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local",
+    "path": "case-03",
+    "trace": "case-03/trace.zip"
+  },
+  {
+    "id": "case-04",
+    "run": "access-complete",
+    "title": "成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local",
+    "path": "case-04",
+    "trace": "case-04/trace.zip"
+  },
+  {
+    "id": "case-05",
+    "run": "access-complete",
+    "title": "身份缓存隔离 390px：页面仍打开时切换已授权身份，旧会话失效后重新读取只读结果",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-身份缓存隔离-390px：页面仍打开时切换已授权身份，旧会话失效后重新读取只读结果-local",
+    "path": "case-05",
+    "trace": "case-05/trace.zip"
+  },
+  {
+    "id": "case-06",
+    "run": "access-complete",
+    "title": "返回使用权限 390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-返回使用权限-390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local",
+    "path": "case-06",
+    "trace": "case-06/trace.zip"
+  },
+  {
+    "id": "case-07",
+    "run": "access-complete",
+    "title": "成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local",
+    "path": "case-07",
+    "trace": "case-07/trace.zip"
+  },
+  {
+    "id": "case-08",
+    "run": "access-complete",
+    "title": "撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者",
+    "project": "local",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者-local",
+    "path": "case-08",
+    "trace": "case-08/trace.zip"
+  },
+  {
+    "id": "case-09",
+    "run": "access-complete",
+    "title": "公司身份边界：无身份、伪造管理员头和任意Bearer不能进入已有缓存的页面或API",
+    "project": "gateway",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access.gateway-公司身-0564b-理员头和任意Bearer不能进入已有缓存的页面或API-gateway",
+    "path": "case-09",
+    "trace": "case-09/trace.zip"
+  },
+  {
+    "id": "case-10",
+    "run": "access-complete",
+    "title": "公司身份边界：真实签名取登记身份，普通成员/查看者/管理员分别执行授权页面和写权限",
+    "project": "gateway",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access.gateway-公司身-bd1c6-身份，普通成员-查看者-管理员分别执行授权页面和写权限-gateway",
+    "path": "case-10",
+    "trace": "case-10/trace.zip"
+  },
+  {
+    "id": "case-11",
+    "run": "access-complete",
+    "title": "公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效",
+    "project": "gateway",
+    "status": "passed",
+    "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-complete\\browser-results\\product-access.gateway-公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效-gateway",
+    "path": "case-11",
+    "trace": "case-11/trace.zip"
+  }
+]

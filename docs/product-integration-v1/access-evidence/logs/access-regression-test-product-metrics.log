@@ -1,0 +1,17 @@
+(node:40036) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ shared metric API: a real definition and one real binding replace repeated embedded calculations (31.7161ms)
+✔ shared metric API: publication stores only a reference and both presentations resolve the same current version (4.5098ms)
+✔ shared metric API: pinned history, concurrent update rejection and the key API preserve their declared rule (2.4379ms)
+✔ shared metric API: viewer reads, cannot write, and an unrelated project cannot resolve the id (2.1481ms)
+✔ shared metric API: legacy editors cannot mutate the shared object or binding outside version checks (1.159ms)
+✔ shared metric API: standard templates require platform administration and contain no project source or period (2.2148ms)
+✔ shared metric API: invalid ratio fields, incompatible count units and unknown fixed versions never publish (0.9906ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 974.564

@@ -1,0 +1,40 @@
+{
+  "stats": {
+    "startTime": "2026-10-13T21:29:17.853Z",
+    "duration": 431026.027,
+    "expected": 129,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "baselineFailed": {
+    "api": 4,
+    "browser": 2
+  },
+  "newBrowser": 11,
+  "nodeTestAssertions": 140,
+  "nodeScripts": 21,
+  "legacySqlSsrScripts": 7,
+  "static": {
+    "typecheck": true,
+    "build": true,
+    "changedLint": {
+      "files": 19,
+      "errors": 0,
+      "warnings": 0
+    },
+    "sourceAndAuthoredDocsWhitespace": true,
+    "rawArtifactWhitespace": "Original Windows command output/Playwright error context is retained; generated artifacts are not source whitespace assertions"
+  },
+  "external": {
+    "feishu": "simulated vendor origin",
+    "gateway": "isolated real HMAC branch"
+  },
+  "notExecuted": [
+    "human pilot",
+    "real Feishu",
+    "real enterprise gateway",
+    "production"
+  ],
+  "wholeProductComplete": false
+}

@@ -1,0 +1,11 @@
+✔ request abort: partial POST cancelled during cold setup never clones a closed body (26.708ms)
+✔ request abort: complete POST cancelled during cold setup never clones a closed body (3.4208ms)
+✔ request transport: an active POST retains its actual body and headers through URL/header cloning (17.8124ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53.0371

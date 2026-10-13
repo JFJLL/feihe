@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '../../../lib/hooks/use-project-data';
 import { CustomSelect } from '../../../components/ui/CustomSelect';
 import { MetricCard } from '../../../components/ui/operations/MetricCard';
@@ -45,7 +45,10 @@ export function MemberManagement({
   const [error, setError] = useState<string | null>(null);
   const [members, setMembers] = useState<ProjectMember[]>([]);
   const [availableUsers, setAvailableUsers] = useState<AvailableUser[]>([]);
-  const [currentUser, setCurrentUser] = useState<{ userId: string; role: string; name: string } | null>(null);
+  const [currentUser, setCurrentUser] = useState<{ userId: string; role: string; displayName: string } | null>(null);
+  const [ownerId, setOwnerId] = useState('');
+  const requestGeneration = useRef(0);
+  const invalidateRequests = useCallback(() => { requestGeneration.current++; }, []);
   const [busy, setBusy] = useState<string>('');
 
   // Add member dialog
@@ -60,6 +63,7 @@ export function MemberManagement({
   }>({ open: false, member: null });
 
   const loadData = useCallback(async () => {
+    const generation = ++requestGeneration.current;
     setLoading(true);
     setError(null);
     try {
@@ -67,22 +71,26 @@ export function MemberManagement({
         ok: boolean;
         members: ProjectMember[];
         availableUsers: AvailableUser[];
-        currentUser: { userId: string; role: string; name: string };
+        currentUser: { userId: string; role: string; displayName: string };
+        project: { ownerId?: string };
       }>(`/api/projects?projectId=${encodeURIComponent(projectId)}`);
 
-      setMembers(res.members || []);
+      if (generation !== requestGeneration.current) return;
+      setMembers(res.members || []); setOwnerId(res.project?.ownerId || '');
       setAvailableUsers(res.availableUsers || []);
       if (res.currentUser) setCurrentUser(res.currentUser);
     } catch (err) {
+      if (generation !== requestGeneration.current) return;
       setError(err instanceof Error ? err.message : '加载成员列表失败');
     } finally {
-      setLoading(false);
+      if (generation === requestGeneration.current) setLoading(false);
     }
   }, [projectId]);
 
   useEffect(() => {
-    void loadData();
-  }, [loadData]);
+    const timer = setTimeout(() => { void loadData(); }, 0);
+    return () => { clearTimeout(timer); invalidateRequests(); };
+  }, [loadData, invalidateRequests]);
 
   const canManageMembers =
     currentUser?.role === 'platform_admin' ||
@@ -195,7 +203,7 @@ export function MemberManagement({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 13, color: '#1e293b' }}>
-            当前操作身份：<strong>{currentUser?.name || '用户'}</strong>
+            当前操作身份：<strong>{currentUser?.displayName || '用户'}</strong>
           </span>
           <span
             style={{
@@ -262,6 +270,7 @@ export function MemberManagement({
                   {members.map((m) => {
                     const roleInfo = ROLE_OPTIONS.find((r) => r.value === m.role) || ROLE_OPTIONS[2];
                     const isSelf = m.userId === currentUser?.userId;
+                    const protectedMember = m.userId === ownerId || m.role === 'project_admin' && adminCount <= 1;
 
                     return (
                       <tr key={m.userId} style={{ borderBottom: '1px solid #f1f5f9' }}>
@@ -280,6 +289,8 @@ export function MemberManagement({
                           {canManageMembers && !isSelf ? (
                             <CustomSelect
                               value={m.role}
+                              ariaLabel={m.name + '项目角色'}
+                              disabled={Boolean(busy) || protectedMember}
                               onChange={(val) => handleRoleChange(m.userId, val)}
                               options={ROLE_OPTIONS}
                               style={{ width: 140 }}
@@ -290,6 +301,7 @@ export function MemberManagement({
                               {roleInfo.label}
                             </span>
                           )}
+                          {m.userId === ownerId && <p>当前负责人；角色调整需先交接项目资料。</p>}
                         </td>
                         <td style={{ padding: '12px 14px', color: '#475569' }}>
                           {m.role === 'project_admin'
@@ -303,7 +315,7 @@ export function MemberManagement({
                             {!isSelf && (
                               <button
                                 type="button"
-                                disabled={busy === m.userId}
+                                disabled={Boolean(busy) || protectedMember}
                                 onClick={() => setConfirmRemove({ open: true, member: m })}
                                 style={{
                                   background: 'transparent',

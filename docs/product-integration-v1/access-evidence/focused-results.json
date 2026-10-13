@@ -1,0 +1,725 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-access.spec.ts",
+      "tests/browser/product-access.gateway.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/access-iteration-4/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "local",
+        "name": "local",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [
+          "**/*.gateway.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/access-iteration-4/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "gateway",
+        "name": "gateway",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.gateway.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "local",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": "**/*.gateway.spec.ts",
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "local"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "gateway",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.gateway.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5226",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "gateway"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/access-iteration-4/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/access-iteration-4/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "product-access.spec.ts",
+      "file": "product-access.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5000,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:10.054Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面-local\\attachments\\关键请求-2706d65a1ad6a2db217eef6ea15587e8073d5bbd.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面-local\\attachments\\实际持久化快照-60cce901ee3512f542c782987f928fc4ef3bf046.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面-local\\attachments\\最终页面-1334c1cba45dcb1e467d405fd7b92ec35d21ef44.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6dee00d9b8ebfd3493f3-b24057e7297d3b93bc45",
+          "file": "product-access.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "返回使用权限 1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3455,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:15.580Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\attachments\\关键请求-c3ce427f384926c3bb6d8bc0b8e0df24908d8fb7.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\attachments\\实际持久化快照-5e07ed0d55b3af66126ea364c6f783aaa2ec12c1.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\attachments\\最终页面-20be250de4a335a9f279bf51cb4f165f9b03d536.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6dee00d9b8ebfd3493f3-d9890d7fa18615e6ff3a",
+          "file": "product-access.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2778,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:19.419Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\attachments\\关键请求-6caf37404cdadb31416f714b9dedd83e039cec4e.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\attachments\\实际持久化快照-ca0c60fbacda0e023ae62fca317999c400db3eb0.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\attachments\\最终页面-fd132033ed3221e3299c8521ccff27c6f967af69.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6dee00d9b8ebfd3493f3-9d3c28745e17960321b8",
+          "file": "product-access.spec.ts",
+          "line": 35,
+          "column": 3
+        },
+        {
+          "title": "返回使用权限 390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2977,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:22.458Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\attachments\\关键请求-508a5136999a333aa43eeb2a191a39a1bf53eb12.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\attachments\\实际持久化快照-68d0c0e00979a131eb5b66cce76b20e335943acf.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\attachments\\最终页面-6b67c94f16cba22ee672effb1acb19bb1be52ad4.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-返回使用权限-390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6dee00d9b8ebfd3493f3-d04246faf456bf1242c9",
+          "file": "product-access.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2533,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:25.630Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\attachments\\关键请求-c2272729824babd6c4ba38bbf4fc7887b2367650.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\attachments\\实际持久化快照-25b95125dc754f0892a4e57c0874406b4f35eccf.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\attachments\\最终页面-6a580dbc69332bb9e17121e44168cc03fe343e18.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6dee00d9b8ebfd3493f3-dbc8614c6ce59a1599df",
+          "file": "product-access.spec.ts",
+          "line": 35,
+          "column": 3
+        },
+        {
+          "title": "撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3287,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:28.319Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "创建者撤权后的真实报告响应",
+                      "contentType": "application/json",
+                      "body": "eyJzdGF0dXMiOjQwMywiYm9keSI6eyJvayI6ZmFsc2UsImVycm9yIjoi5oKo5rKh5pyJ6K+l6aG555uu55qE6K6/6Zeu5p2D6ZmQIn19"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者-local\\attachments\\关键请求-0647716cbb0a3f6d95df43ebde8dda8864e6d807.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者-local\\attachments\\实际持久化快照-c0005c11928f4db5295afcf8ec8164dd2bab48db.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者-local\\attachments\\最终页面-b895b78610f71c061b3c1220e0bac583e2ac1a46.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access-撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6dee00d9b8ebfd3493f3-4c4d1d751406777b52dd",
+          "file": "product-access.spec.ts",
+          "line": 51,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "product-access.gateway.spec.ts",
+      "file": "product-access.gateway.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "公司身份边界：无身份、伪造管理员头和任意Bearer不能进入已有缓存的页面或API",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gateway",
+              "projectName": "gateway",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4206,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:32.982Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-0564b-理员头和任意Bearer不能进入已有缓存的页面或API-gateway\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-0564b-理员头和任意Bearer不能进入已有缓存的页面或API-gateway\\attachments\\关键请求-6c20f80bfb0b1af2ee059a7aa86be6a9277d4623.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-0564b-理员头和任意Bearer不能进入已有缓存的页面或API-gateway\\attachments\\实际持久化快照-0d92ff3adb4d07cd7de4ab3d5086e053c96b5087.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-0564b-理员头和任意Bearer不能进入已有缓存的页面或API-gateway\\attachments\\最终页面-ad93a6b09d8e3785ada928b6c0e3f02749a046d5.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-0564b-理员头和任意Bearer不能进入已有缓存的页面或API-gateway\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1b4eea7d62729e53352b-3da141a713a0db4a3924",
+          "file": "product-access.gateway.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "公司身份边界：真实签名取登记身份，普通成员/查看者/管理员分别执行授权页面和写权限",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gateway",
+              "projectName": "gateway",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2011,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:37.709Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-bd1c6-身份，普通成员-查看者-管理员分别执行授权页面和写权限-gateway\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-bd1c6-身份，普通成员-查看者-管理员分别执行授权页面和写权限-gateway\\attachments\\关键请求-9d1339f27443da187f82e621ce1b81fd8d688d73.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-bd1c6-身份，普通成员-查看者-管理员分别执行授权页面和写权限-gateway\\attachments\\实际持久化快照-6651a3efc786fe06a74ed1f2c2afd93feebd836d.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-bd1c6-身份，普通成员-查看者-管理员分别执行授权页面和写权限-gateway\\attachments\\最终页面-a76106bd5a5f7750966cba49d7f8e30b41459dba.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身-bd1c6-身份，普通成员-查看者-管理员分别执行授权页面和写权限-gateway\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1b4eea7d62729e53352b-3386de8fa542a1c143ef",
+          "file": "product-access.gateway.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "gateway",
+              "projectName": "gateway",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 681,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T21:27:39.769Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效-gateway\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效-gateway\\attachments\\关键请求-c9e4209c426821f901be5384bcafcdf260b2fd40.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效-gateway\\attachments\\实际持久化快照-13116a84df858e1cbaf8c42d87ea9ad26723e96c.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效-gateway\\attachments\\最终页面-9e705c71e90178ae0e79f7ce7b4420c98f4d7401.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\access-iteration-4\\browser-results\\product-access.gateway-公司身份边界：过期、篡改签名及未登记账号均拒绝，测试身份不会在此服务生效-gateway\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1b4eea7d62729e53352b-900ce517795c7cae040a",
+          "file": "product-access.gateway.spec.ts",
+          "line": 28,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T21:27:02.184Z",
+    "duration": 39044.342,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

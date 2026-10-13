@@ -1,0 +1,13 @@
+npm warn Unknown user config "electron_mirror". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> sites-project@0.1.0 typecheck
+> tsc --noEmit
+
+tests/browser/product-access.gateway.spec.ts(18,50): error TS2322: Type '{ 'x-user-id'?: undefined; authorization?: undefined; } | { 'x-user-id': string; authorization?: undefined; } | { authorization: string; 'x-user-id': string; }' is not assignable to type '{ [key: string]: string; } | undefined'.
+  Type '{ 'x-user-id'?: undefined; authorization?: undefined; }' is not assignable to type '{ [key: string]: string; }'.
+    Property ''x-user-id'' is incompatible with index signature.
+      Type 'undefined' is not assignable to type 'string'.
+tests/browser/product-access.gateway.spec.ts(19,46): error TS2345: Argument of type '{ 'x-user-id'?: undefined; authorization?: undefined; } | { 'x-user-id': string; authorization?: undefined; } | { authorization: string; 'x-user-id': string; }' is not assignable to parameter of type '{ [key: string]: string; }'.
+  Type '{ 'x-user-id'?: undefined; authorization?: undefined; }' is not assignable to type '{ [key: string]: string; }'.
+    Property ''x-user-id'' is incompatible with index signature.
+      Type 'undefined' is not assignable to type 'string'.

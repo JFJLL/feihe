@@ -128,10 +128,8 @@ export async function requireProjectAccess(
     projectRole = 'project_admin';
   } else {
     const member = await d1.prepare('SELECT role FROM project_members WHERE project_id=? AND user_id=?').bind(slug, user.userId).first<{ role: ProjectRole }>();
-    if (member) {
+    if (member && ['project_admin', 'editor', 'viewer'].includes(member.role)) {
       projectRole = member.role;
-    } else if (project.created_by === user.userId || project.owner_id === user.userId) {
-      projectRole = 'project_admin';
     } else {
       return { ok: false, status: 403, error: '您没有该项目的访问权限' };
     }

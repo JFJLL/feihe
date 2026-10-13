@@ -1,0 +1,129 @@
+[WebServer] (node:13856) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:13856) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:16508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:16508) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 6 tests using 1 worker
+
+(node:31212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [local] › tests\browser\product-access.spec.ts:4:1 › 页面权限反例：原身份真实缓存后，无成员的新身份不能挂载项目私有页面 (5.2s)
+  ok 2 [local] › tests\browser\product-access.spec.ts:20:3 › 返回使用权限 1280px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权 (3.9s)
+  x  3 [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 (11.9s)
+(node:24352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 [local] › tests\browser\product-access.spec.ts:20:3 › 返回使用权限 390px：普通成员看报告→只读降权→已发布结果→撤权→恢复授权 (3.5s)
+  x  5 [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 (11.6s)
+(node:23852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 6 [local] › tests\browser\product-access.spec.ts:48:1 › 撤权反例：负责人交接并移除创建者后，报告、导出和页面都必须拒绝原创建者 (2.7s)
+
+
+  1) [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByText('当前操作身份：')
+    Expected substring: "项目负责人(李四)"
+    Received string:    "当前操作身份：项目主管(李强)"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByText('当前操作身份：') with timeout 10000ms
+      - waiting for getByText('当前操作身份：')
+        23 × locator resolved to <span>…</span>
+           - unexpected value "当前操作身份：项目主管(李强)"
+
+
+      39 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-project-manager' }); await page.goto('/projects/' + projectId + '/settings?tab=members');
+      40 |     const owner = page.getByRole('row').filter({ hasText: '业务编辑者(张晓)' }); await expect(owner.getByRole('combobox')).toBeDisabled(); await expect(owner.getByRole('button', { name: '移除', exact: true })).toBeDisabled(); await expect(owner).toContainText('当前负责人');
+    > 41 |     await expect(page.getByText('当前操作身份：')).toContainText('项目负责人(李四)'); await page.screenshot({ path: info.outputPath('owner-protected-member-controls.png'), fullPage: true });
+         |                                             ^
+      42 |     await page.context().setExtraHTTPHeaders(projectIdentity); await page.reload();
+      43 |     const managerRole = page.getByRole('combobox', { name: '项目负责人(李四)项目角色', exact: true }); await managerRole.focus(); await managerRole.press('ArrowDown'); await page.getByRole('option', { name: '只读观察员', exact: true }).click();
+      44 |     await expect(managerRole).toContainText('只读观察员'); const detail = await (await request.get('/api/projects?projectId=' + projectId, { headers: projectIdentity })).json(); expect(detail.members.find((m: { userId: string }) => m.userId === 'user-project-manager').role).toBe('viewer');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-access.spec.ts:41:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\attachments\关键请求-9c37df77be23438eb9d5c0372d2302b3d04dd1fa.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\attachments\实际持久化快照-c193e0d6d58ce9aeb193e17af2ca472c49834d1b.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\attachments\最终页面-3b0c1e3d80c956937f82b50132d03c4235ce6f9e.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByText('当前操作身份：')
+    Expected substring: "项目负责人(李四)"
+    Received string:    "当前操作身份：项目主管(李强)"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByText('当前操作身份：') with timeout 10000ms
+      - waiting for getByText('当前操作身份：')
+        23 × locator resolved to <span>…</span>
+           - unexpected value "当前操作身份：项目主管(李强)"
+
+
+      39 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-project-manager' }); await page.goto('/projects/' + projectId + '/settings?tab=members');
+      40 |     const owner = page.getByRole('row').filter({ hasText: '业务编辑者(张晓)' }); await expect(owner.getByRole('combobox')).toBeDisabled(); await expect(owner.getByRole('button', { name: '移除', exact: true })).toBeDisabled(); await expect(owner).toContainText('当前负责人');
+    > 41 |     await expect(page.getByText('当前操作身份：')).toContainText('项目负责人(李四)'); await page.screenshot({ path: info.outputPath('owner-protected-member-controls.png'), fullPage: true });
+         |                                             ^
+      42 |     await page.context().setExtraHTTPHeaders(projectIdentity); await page.reload();
+      43 |     const managerRole = page.getByRole('combobox', { name: '项目负责人(李四)项目角色', exact: true }); await managerRole.focus(); await managerRole.press('ArrowDown'); await page.getByRole('option', { name: '只读观察员', exact: true }).click();
+      44 |     await expect(managerRole).toContainText('只读观察员'); const detail = await (await request.get('/api/projects?projectId=' + projectId, { headers: projectIdentity })).json(); expect(detail.members.find((m: { userId: string }) => m.userId === 'user-project-manager').role).toBe('viewer');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-access.spec.ts:41:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\attachments\关键请求-0bc56781dcce7254b99f69b98764c7ed9b9cb787.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\attachments\实际持久化快照-f88880d5413e78c7baa69b569a08362f12cd93df.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\attachments\最终页面-76f778ef89abc4e3168b4c33141321f4e0533e53.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\access-iteration-2\browser-results\product-access-成员管理-390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 1280px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 
+    [local] › tests\browser\product-access.spec.ts:35:3 › 成员管理 390px：负责人保护、真实角色选择器与撤销访问，当前身份来自公司记录 ─
+  4 passed (51.0s)

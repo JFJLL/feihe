@@ -1,0 +1,20 @@
+[
+  {
+    "url": "http://127.0.0.1:5226/api/projects?projectId=1791927381391",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5226/api/datasets?projectId=1791927381391",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5226/api/dashboards?projectId=1791927381391",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

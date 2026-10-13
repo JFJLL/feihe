@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { Dashboard, Ops } from '../types/project';
-import { readSessionCache, writeSessionCache } from '../browser-cache';
+import { readSessionCache, writeSessionCache, clearIdentityCache, isActiveCacheIdentity } from '../browser-cache';
+import { useCacheIdentity } from '../../components/project-shell/IdentityBoundary';
 import type { ProjectBootstrap } from '../project-bootstrap';
 
 export const emptyAnalytics = {
@@ -153,6 +154,11 @@ export async function api<T>(url: string, options?: RequestInit): Promise<T> {
     window.dispatchEvent(new CustomEvent('app:datasets-changed', { detail: { projectId: affectedProject } }));
   }
   if (!response.ok || (data && data.ok === false)) {
+    if (typeof window !== 'undefined' && [401, 403].includes(response.status) && !(url.startsWith('/api/projects') && options?.method !== 'POST')) {
+      let affectedProject = new URL(url, window.location.origin).searchParams.get('projectId') || '';
+      try { affectedProject ||= JSON.parse(String(options?.body || '{}')).projectId || ''; } catch {}
+      window.dispatchEvent(new CustomEvent('app:permission-response', { detail: { projectId: affectedProject, status: response.status } }));
+    }
     throw new ApiError(data?.error || `操作失败 (HTTP ${response.status})`, response.status, data as Record<string, unknown>);
   }
   return data as T;
@@ -169,10 +175,15 @@ const projectCacheStorageKey = (cacheKey: string) => 'project-data:' + cacheKey;
 const subscribeCache = () => () => undefined;
 const REVALIDATE_AFTER = 2 * 60 * 1000;
 
-function restoredProjectData(cacheKey: string) {
+export function clearProjectDataCache(identity: string) {
+  for (const key of projectDataCache.keys()) if (key.startsWith(identity + '|')) projectDataCache.delete(key);
+  clearIdentityCache(identity);
+}
+function restoredProjectData(cacheKey: string, identity: string) {
+  if (!isActiveCacheIdentity(identity) || typeof window === 'undefined') return null;
   const memory = projectDataCache.get(cacheKey);
   if (memory) return memory;
-  const stored = readSessionCache<{ dashboard: Dashboard; ops: Ops }>(projectCacheStorageKey(cacheKey));
+  const stored = readSessionCache<{ dashboard: Dashboard; ops: Ops }>(projectCacheStorageKey(cacheKey), undefined, identity);
   if (!stored?.value?.dashboard || !stored.value.ops) return null;
   const restored = { ...stored.value, timestamp: stored.timestamp };
   projectDataCache.set(cacheKey, restored);
@@ -184,14 +195,16 @@ export function useProjectData(
   filters?: ProjectDataFilters,
   initialData?: ProjectBootstrap | null
 ) {
+  const identity = useCacheIdentity();
+  const requestGeneration = useRef(0);
   const from = filters?.from;
   const to = filters?.to;
   const source = filters?.source;
-  const cacheKey = projectId + '_' + (from || '') + '_' + (to || '') + '_' + (source || '');
-  const cached = initialData || projectDataCache.get(cacheKey);
+  const cacheKey = identity + '|' + projectId + '_' + (from || '') + '_' + (to || '') + '_' + (source || '');
+  const cached = initialData || (identity ? projectDataCache.get(cacheKey) : null);
   const restored = useSyncExternalStore(
     subscribeCache,
-    () => restoredProjectData(cacheKey),
+    () => restoredProjectData(cacheKey, identity),
     () => null
   );
 
@@ -201,6 +214,7 @@ export function useProjectData(
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async (opts?: { fresh?: boolean; throwOnError?: boolean }) => {
+    const generation = ++requestGeneration.current;
     const isFresh = opts?.fresh ?? false;
     setLoading(true);
     setError(null);
@@ -227,12 +241,15 @@ export function useProjectData(
         api<Dashboard>('/api/dashboard?' + query.toString(), fetchOpts),
         api<Ops>(opsUrl, fetchOpts),
       ]);
-      projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp: now });
-      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard: dashRes, ops: opsRes }, now);
+      if (generation !== requestGeneration.current || identity && !isActiveCacheIdentity(identity)) return null;
+      if (isActiveCacheIdentity(identity)) projectDataCache.set(cacheKey, { dashboard: dashRes, ops: opsRes, timestamp: now });
+      writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard: dashRes, ops: opsRes }, now, identity);
       setDashboard(dashRes);
       setOps(opsRes);
       return { dashboard: dashRes, ops: opsRes };
     } catch (err) {
+      if (generation !== requestGeneration.current) return null;
+      if (err instanceof ApiError && [401, 403].includes(err.status)) { clearProjectDataCache(identity); setDashboard(null); setOps(null); }
       const msg = err instanceof Error ? err.message : '数据加载失败';
       setError(msg);
       if (opts?.throwOnError) {
@@ -240,28 +257,30 @@ export function useProjectData(
       }
       return null;
     } finally {
-      setLoading(false);
+      if (generation === requestGeneration.current) setLoading(false);
     }
-  }, [projectId, from, to, source, cacheKey]);
+  }, [projectId, from, to, source, cacheKey, identity]);
 
   useEffect(() => {
     if (initialData) {
       const { dashboard, ops, timestamp } = initialData;
-      projectDataCache.set(cacheKey, { dashboard, ops, timestamp });
+      if (isActiveCacheIdentity(identity)) projectDataCache.set(cacheKey, { dashboard, ops, timestamp });
       setTimeout(() => {
-        writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard, ops }, timestamp);
+        writeSessionCache(projectCacheStorageKey(cacheKey), { dashboard, ops }, timestamp, identity);
       }, 60);
     }
-    const current = restoredProjectData(cacheKey);
+    const current = restoredProjectData(cacheKey, identity);
     if (current && Date.now() - current.timestamp < REVALIDATE_AFTER) return;
     const timer = setTimeout(() => {
       void refresh({ fresh: false });
     }, 0);
     return () => clearTimeout(timer);
-  }, [refresh, cacheKey, initialData]);
+  }, [refresh, cacheKey, initialData, identity]);
+  useEffect(() => () => { requestGeneration.current++; }, [cacheKey]);
 
-  const visibleDashboard = dashboard || restored?.dashboard || null;
-  const visibleOps = ops || restored?.ops || null;
+  const denied = Boolean(error && !dashboard && !ops);
+  const visibleDashboard = dashboard || (!denied ? restored?.dashboard : null) || null;
+  const visibleOps = ops || (!denied ? restored?.ops : null) || null;
 
   return {
     dashboard: visibleDashboard,
