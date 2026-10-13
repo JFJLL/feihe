@@ -1,0 +1,252 @@
+[WebServer] (node:14252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 108 tests using 1 worker
+
+(node:1740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14252) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  ok   1 tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 (5.8s)
+  ok   2 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 (2.9s)
+  ok   3 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 (2.3s)
+  ok   4 tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 1280px：重复百分值非空3、去重2，平均与计数来回切换发布 (2.7s)
+  ok   5 tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 1280px：金额与简写偏好保留，来源名字不触发货币单位 (2.6s)
+  ok   6 tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 1280px：变更未知单位字段时阻止静默继承与错误发布 (2.3s)
+  ok   7 tests\browser\card-display-linkage.spec.ts:47:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 (2.4s)
+  ok   8 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率字段非空数显示计数2 (1.9s)
+  ok   9 tests\browser\card-display-linkage.spec.ts:83:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 (1.9s)
+  ok  10 tests\browser\card-display-linkage.spec.ts:105:3 › 聚合循环 390px：重复百分值非空3、去重2，平均与计数来回切换发布 (2.4s)
+  ok  11 tests\browser\card-display-linkage.spec.ts:127:3 › 手动偏好 390px：金额与简写偏好保留，来源名字不触发货币单位 (2.4s)
+  ok  12 tests\browser\card-display-linkage.spec.ts:144:3 › 手动百分确认 390px：变更未知单位字段时阻止静默继承与错误发布 (1.7s)
+  ok  13 tests\browser\flows.spec.ts:33:1 › 映射规则在页面阻止空必填、重复主键、非法日期和未知布尔，修正后真实落库 (2.7s)
+  ok  14 tests\browser\flows.spec.ts:70:1 › A 空项目接入、换表、映射校验、真实同步和重编辑 (2.0s)
+  ok  15 tests\browser\flows.spec.ts:105:1 › 来源慢请求：换链接、关闭与重编辑使旧结果失效 (5.6s)
+  ok  16 tests\browser\flows.spec.ts:129:1 › B 新建计数、平均、分组、比率卡，预览发布刷新保持正确 (3.0s)
+  ok  17 tests\browser\flows.spec.ts:164:3 › C 保存并切换500保留草稿，重试成功后才切换 (1.8s)
+  ok  18 tests\browser\flows.spec.ts:164:3 › C 保存并切换断网保留草稿，重试成功后才切换 (1.9s)
+  ok  19 tests\browser\flows.spec.ts:195:1 › 取消编辑恢复原稿，删光保存刷新仍为空 (2.2s)
+  ok  20 tests\browser\flows.spec.ts:210:1 › D 日期范围经编辑试算发布GET刷新重新打开完整保存 (2.4s)
+  ok  21 tests\browser\focused-red.spec.ts:4:1 › 补修反例：百分字段普通平均0.5%与1.5%显示1.0% (2.2s)
+  ok  22 tests\browser\focused-red.spec.ts:15:1 › 补修反例：配置保存200后首次同步500，重试复用同一来源 (1.8s)
+  ok  23 tests\browser\focused-red.spec.ts:50:1 › 补修反例：互补缺失数据默认无可计算比率和成对样本 (2.3s)
+  ok  24 tests\browser\focused.spec.ts:56:3 › 历史百分口径确认 1280px：普通来源数值不被猜单位，明确百分点后保存刷新 (3.1s)
+  ok  25 tests\browser\focused.spec.ts:84:3 › 百分协议 1280px：六档文本和两种原生数值，预览发布刷新重编辑 (5.0s)
+  ok  26 tests\browser\focused.spec.ts:145:5 › 首次同步 500 1280px：配置真实保存后失败，关闭重开复用原ID (4.4s)
+  ok  27 tests\browser\focused.spec.ts:145:5 › 首次同步 断网 1280px：配置真实保存后失败，关闭重开复用原ID (4.6s)
+  ok  28 tests\browser\focused.spec.ts:145:5 › 首次同步 样本外必填 1280px：配置真实保存后失败，关闭重开复用原ID (3.6s)
+  ok  29 tests\browser\focused.spec.ts:213:3 › 比率样本 1280px：互补缺失、完整行、独立汇总及补零经真实同步发布 (6.5s)
+  ok  30 tests\browser\focused.spec.ts:56:3 › 历史百分口径确认 390px：普通来源数值不被猜单位，明确百分点后保存刷新 (2.8s)
+  ok  31 tests\browser\focused.spec.ts:84:3 › 百分协议 390px：六档文本和两种原生数值，预览发布刷新重编辑 (4.6s)
+  ok  32 tests\browser\focused.spec.ts:145:5 › 首次同步 500 390px：配置真实保存后失败，关闭重开复用原ID (4.0s)
+  ok  33 tests\browser\focused.spec.ts:145:5 › 首次同步 断网 390px：配置真实保存后失败，关闭重开复用原ID (4.0s)
+  ok  34 tests\browser\focused.spec.ts:145:5 › 首次同步 样本外必填 390px：配置真实保存后失败，关闭重开复用原ID (3.2s)
+  ok  35 tests\browser\focused.spec.ts:213:3 › 比率样本 390px：互补缺失、完整行、独立汇总及补零经真实同步发布 (5.5s)
+  ok  36 tests\browser\lifecycle.spec.ts:12:1 › E 必要资源受阻、单人跳过、就绪，归档刷新授权恢复再编辑 (3.2s)
+  ok  37 tests\browser\lifecycle.spec.ts:65:1 › 离开模块、切换项目和浏览器后退均先保护草稿 (2.1s)
+  ok  38 tests\browser\lifecycle.spec.ts:107:1 › F 390px键盘完成卡片、选择器、未保存和冲突弹窗 (2.6s)
+  ok  39 tests\browser\lifecycle.spec.ts:150:1 › F 390px键盘映射、真实写入与确认弹窗 (2.4s)
+  ok  40 tests\browser\product-adapters.spec.ts:23:1 › 字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板 (1.5s)
+  ok  41 tests\browser\product-adapters.spec.ts:32:1 › 投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300 (2.4s)
+  ok  42 tests\browser\product-adapters.spec.ts:54:3 › 字段对应 1280px：不同名称的原表经选择器确认后驱动专属页，重复确认不增加对象 (2.4s)
+  ok  43 tests\browser\product-adapters.spec.ts:84:3 › 陌生部门推荐 1280px：四列原表→确认→六卡发布→刷新→同口径趋势与渠道 (2.5s)
+  ok  44 tests\browser\product-adapters.spec.ts:101:3 › 投放真实链路 1280px：确认自己的五列来源→专属页→同步更新→共享定义改版→只读与刷新 (4.4s)
+  ok  45 tests\browser\product-adapters.spec.ts:54:3 › 字段对应 390px：不同名称的原表经选择器确认后驱动专属页，重复确认不增加对象 (2.2s)
+  ok  46 tests\browser\product-adapters.spec.ts:84:3 › 陌生部门推荐 390px：四列原表→确认→六卡发布→刷新→同口径趋势与渠道 (2.1s)
+  ok  47 tests\browser\product-adapters.spec.ts:101:3 › 投放真实链路 390px：确认自己的五列来源→专属页→同步更新→共享定义改版→只读与刷新 (4.2s)
+  ok  48 tests\browser\product-board.spec.ts:33:3 › 明细分页 1280px：实际同步改变总页数后重读同口径指标与明细 (1.3s)
+  ok  49 tests\browser\product-board.spec.ts:54:3 › 小百分比目标 1280px：比例存储的平均与趋势不重复转换，明确目标保存刷新回填 (4.5s)
+  ok  50 tests\browser\product-board.spec.ts:33:3 › 明细分页 390px：实际同步改变总页数后重读同口径指标与明细 (1.3s)
+  ok  51 tests\browser\product-board.spec.ts:54:3 › 小百分比目标 390px：比例存储的平均与趋势不重复转换，明确目标保存刷新回填 (3.7s)
+  ok  52 tests\browser\product-board.spec.ts:96:1 › 共享看板反例：同一指标能通过真实控件选择时间趋势 (1.2s)
+  ok  53 tests\browser\product-board.spec.ts:105:1 › 共享看板反例：项目周期是真实日期控件且包含完整结束日 (1.2s)
+  ok  54 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 1280px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (5.2s)
+  ok  55 tests\browser\product-board.spec.ts:200:3 › 独立周期 1280px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (2.6s)
+  ok  56 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 1440px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (5.5s)
+  ok  57 tests\browser\product-board.spec.ts:200:3 › 独立周期 1440px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (2.8s)
+  ok  58 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 768px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (5.8s)
+  ok  59 tests\browser\product-board.spec.ts:200:3 › 独立周期 768px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (2.3s)
+  ok  60 tests\browser\product-board.spec.ts:131:3 › 共享五类呈现 390px：页面选用同ID、完整周期、明确目标，发布刷新及定义更新一致 (5.6s)
+  ok  61 tests\browser\product-board.spec.ts:200:3 › 独立周期 390px：真实控件选择后保存刷新重新编辑，覆盖范围明确标注 (3.0s)
+  ok  62 tests\browser\product-board.spec.ts:227:5 › 周期草稿 1280px 409：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (2.5s)
+  ok  63 tests\browser\product-board.spec.ts:227:5 › 周期草稿 1280px 500：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (2.3s)
+  ok  64 tests\browser\product-board.spec.ts:227:5 › 周期草稿 1280px network：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (2.4s)
+  ok  65 tests\browser\product-board.spec.ts:227:5 › 周期草稿 390px 409：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (3.3s)
+  ok  66 tests\browser\product-board.spec.ts:227:5 › 周期草稿 390px 500：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (3.8s)
+  ok  67 tests\browser\product-board.spec.ts:227:5 › 周期草稿 390px network：保存并切换失败保留原数据集、卡片和周期，重试后才切换 (3.8s)
+  ok  68 tests\browser\product-data.spec.ts:19:3 › 数据工作台 1280px：四列原表经真实接入、明细、字段和同步记录贯通 (1.8s)
+  ok  69 tests\browser\product-data.spec.ts:70:3 › 数据工作台 1280px：只读明细、分页搜索、项目隔离和来源权限 (1.5s)
+  ok  70 tests\browser\product-data.spec.ts:124:3 › 数据同步失败 1280px：真实校验失败保留旧快照，记录失败与复用来源恢复 (6.6s)
+  ok  71 tests\browser\product-data.spec.ts:19:3 › 数据工作台 390px：四列原表经真实接入、明细、字段和同步记录贯通 (2.4s)
+  ok  72 tests\browser\product-data.spec.ts:70:3 › 数据工作台 390px：只读明细、分页搜索、项目隔离和来源权限 (1.7s)
+  ok  73 tests\browser\product-data.spec.ts:124:3 › 数据同步失败 390px：真实校验失败保留旧快照，记录失败与复用来源恢复 (2.3s)
+  ok  74 tests\browser\product-foundation.spec.ts:12:3 › 产品入口 1280px：新客户/部门经页面维护，负责人自行创建项目 (2.5s)
+  ok  75 tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 1280px：中心与资料使用同一Dialog并保留负责人选择 (1.5s)
+  ok  76 tests\browser\product-foundation.spec.ts:71:3 › 只读入口 1280px：不引导编辑归档删除，负责人和参与筛选列表可用 (1.1s)
+  ok  77 tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 1280px：次要设置折叠、选择器和保存区无溢出并返回焦点 (1.2s)
+  ok  78 tests\browser\product-foundation.spec.ts:12:3 › 产品入口 1440px：新客户/部门经页面维护，负责人自行创建项目 (2.6s)
+  ok  79 tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 1440px：中心与资料使用同一Dialog并保留负责人选择 (1.5s)
+  ok  80 tests\browser\product-foundation.spec.ts:71:3 › 只读入口 1440px：不引导编辑归档删除，负责人和参与筛选列表可用 (1.0s)
+  ok  81 tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 1440px：次要设置折叠、选择器和保存区无溢出并返回焦点 (1.1s)
+[WebServer] 03:24:18 [vite] (client) [console.error] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[WebServer] 
+[WebServer] - A server/client branch `if (typeof window !== 'undefined')`.
+[WebServer] - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+[WebServer] - Date formatting in a user's locale which doesn't match the server.
+[WebServer] - External changing data without sending a snapshot of it along with the HTML.
+[WebServer] - Invalid HTML tag nesting.
+[WebServer] 
+[WebServer] It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+[WebServer] 
+[WebServer] https://react.dev/link/hydration-mismatch
+[WebServer] 
+[WebServer]   ...
+[WebServer]     <AwaitAppRenderDependencies>
+[WebServer]       <ProjectLayout>
+[WebServer]         <ProjectShell projectId="1791919456092" initialData={{...}} userName="公开访问" signedIn={false}>
+[WebServer]           <ProjectProvider projectId="1791919456092" initialData={{...}} initialWorkspace={{ok:true, ...}}>
+[WebServer]             <ProjectShellContent userName="公开访问" signedIn={false}>
+[WebServer]               <div className="app-shell">
+[WebServer]                 <ProjectSidebar>
+[WebServer]                 <main className="main">
+[WebServer]                   <OverviewWorkspace projectId="1791919456092" project={{id:"179191...", ...}} dashboard={{ok:true, ...}} ...>
+[WebServer]                     <div className="ops-worksp...">
+[WebServer]                       <PageHeader>
+[WebServer]                       <OnboardingWizard>
+[WebServer]                       <div>
+[WebServer]                       <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple">
+[WebServer]                         <section className="pastel-car...">
+[WebServer]                           <div>
+[WebServer]                           <div className="report-prompt">
+[WebServer]                             <textarea
+[WebServer]                               aria-label="报告需求"
+[WebServer]                               value="根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。"
+[WebServer]                               onChange={function onChange}
+[WebServer] -                             style={{caret-color:"transparent"}}
+[WebServer]                             >
+[WebServer]                             ...
+[WebServer]                       ...
+[WebServer]                   ...
+[WebServer]                 ...
+[WebServer] 
+  ok  82 tests\browser\product-foundation.spec.ts:12:3 › 产品入口 768px：新客户/部门经页面维护，负责人自行创建项目 (2.5s)
+  ok  83 tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 768px：中心与资料使用同一Dialog并保留负责人选择 (1.5s)
+  ok  84 tests\browser\product-foundation.spec.ts:71:3 › 只读入口 768px：不引导编辑归档删除，负责人和参与筛选列表可用 (1.0s)
+  ok  85 tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 768px：次要设置折叠、选择器和保存区无溢出并返回焦点 (1.1s)
+[WebServer] 03:24:24 [vite] (client) [console.error] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[WebServer] 
+[WebServer] - A server/client branch `if (typeof window !== 'undefined')`.
+[WebServer] - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+[WebServer] - Date formatting in a user's locale which doesn't match the server.
+[WebServer] - External changing data without sending a snapshot of it along with the HTML.
+[WebServer] - Invalid HTML tag nesting.
+[WebServer] 
+[WebServer] It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+[WebServer] 
+[WebServer] https://react.dev/link/hydration-mismatch
+[WebServer] 
+[WebServer]   ...
+[WebServer]     <AwaitAppRenderDependencies>
+[WebServer]       <ProjectLayout>
+[WebServer]         <ProjectShell projectId="1791919462820" initialData={{...}} userName="公开访问" signedIn={false}>
+[WebServer]           <ProjectProvider projectId="1791919462820" initialData={{...}} initialWorkspace={{ok:true, ...}}>
+[WebServer]             <ProjectShellContent userName="公开访问" signedIn={false}>
+[WebServer]               <div className="app-shell">
+[WebServer]                 <ProjectSidebar>
+[WebServer]                 <main className="main">
+[WebServer]                   <OverviewWorkspace projectId="1791919462820" project={{id:"179191...", ...}} dashboard={{ok:true, ...}} ...>
+[WebServer]                     <div className="ops-worksp...">
+[WebServer]                       <PageHeader>
+[WebServer]                       <OnboardingWizard>
+[WebServer]                       <div>
+[WebServer]                       <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple">
+[WebServer]                         <section className="pastel-car...">
+[WebServer]                           <div>
+[WebServer]                           <div className="report-prompt">
+[WebServer]                             <textarea
+[WebServer]                               aria-label="报告需求"
+[WebServer]                               value="根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。"
+[WebServer]                               onChange={function onChange}
+[WebServer] -                             style={{caret-color:"transparent"}}
+[WebServer]                             >
+[WebServer]                             ...
+[WebServer]                       ...
+[WebServer]                   ...
+[WebServer]                 ...
+[WebServer] 
+  ok  86 tests\browser\product-foundation.spec.ts:12:3 › 产品入口 390px：新客户/部门经页面维护，负责人自行创建项目 (2.4s)
+  ok  87 tests\browser\product-foundation.spec.ts:51:3 › 统一项目表单 390px：中心与资料使用同一Dialog并保留负责人选择 (1.5s)
+  ok  88 tests\browser\product-foundation.spec.ts:71:3 › 只读入口 390px：不引导编辑归档删除，负责人和参与筛选列表可用 (913ms)
+  ok  89 tests\browser\product-foundation.spec.ts:88:3 › 键盘项目表单 390px：次要设置折叠、选择器和保存区无溢出并返回焦点 (1.1s)
+  ok  90 tests\browser\product-foundation.spec.ts:103:1 › 新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择 (2.5s)
+  ok  91 tests\browser\product-foundation.spec.ts:135:1 › 只读日常首屏：只展示准备状态，不提供同步或看板配置 (966ms)
+  ok  92 tests\browser\product-metrics.spec.ts:20:3 › 共享看板入口：ad_performance 保留业务主体并能加入自己的引用指标 (1.7s)
+  ok  93 tests\browser\product-metrics.spec.ts:20:3 › 共享看板入口：comment_qc 保留业务主体并能加入自己的引用指标 (2.4s)
+  ok  94 tests\browser\product-metrics.spec.ts:20:3 › 共享看板入口：content_marketing 保留业务主体并能加入自己的引用指标 (2.2s)
+  ok  95 tests\browser\product-metrics.spec.ts:41:3 › 指标冲突 1280px：真实409保留字段和草稿，读取真实版本后确认重试 (1.8s)
+  ok  96 tests\browser\product-metrics.spec.ts:69:3 › 标准模板 1280px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表 (2.8s)
+  ok  97 tests\browser\product-metrics.spec.ts:41:3 › 指标冲突 390px：真实409保留字段和草稿，读取真实版本后确认重试 (1.2s)
+  ok  98 tests\browser\product-metrics.spec.ts:69:3 › 标准模板 390px：管理员发布无来源模板，普通负责人绑定另一项目自己的原表 (2.7s)
+  ok  99 tests\browser\product-metrics.spec.ts:115:3 › 共享指标 1280px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 (3.7s)
+  ok 100 tests\browser\product-metrics.spec.ts:115:3 › 共享指标 390px：定义一次，两张卡引用，版本修改影响全部卡且历史口径可计算 (3.7s)
+  ok 101 tests\browser\remediation.spec.ts:4:1 › 记录计数：普通三条任务的实时预览必须为3 (1.4s)
+  ok 102 tests\browser\remediation.spec.ts:19:1 › 409：保存并切换失败后仍保留数据集A、草稿和编辑状态 (1.5s)
+  ok 103 tests\browser\state.spec.ts:16:1 › 旧模板改为自定义求和后显示30，保存刷新仍按新配置计算 (2.2s)
+  ok 104 tests\browser\state.spec.ts:34:1 › 预览乱序忽略旧值，500错误清除成功预览并禁止加入 (2.9s)
+  ok 105 tests\browser\state.spec.ts:61:1 › 数据集迟到响应、搜索和金额显示名均使用当前内容和存储key (2.7s)
+  ok 106 tests\browser\state.spec.ts:87:1 › 数据更新使当前页越界时自动校正重读，同时保留编辑草稿 (1.7s)
+  ok 107 tests\browser\state.spec.ts:117:1 › 保存中冻结快照且重复操作只提交一次真实请求 (1.3s)
+  x  108 tests\browser\state.spec.ts:144:1 › 评论质检与投放分析进入各自业务主体，数据导航URL和标签一致 (12.8s)
+
+
+  1) tests\browser\state.spec.ts:144:1 › 评论质检与投放分析进入各自业务主体，数据导航URL和标签一致 ────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: '投放点击效率' })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: '投放点击效率' }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: '投放点击效率' })
+
+
+      151 |       await expect(page.getByTestId('ad-performance-overview')).toBeVisible();
+      152 |       await expect(page.getByRole('heading', { name: '广告消耗趋势' })).toBeVisible();
+    > 153 |       await expect(page.getByRole('heading', { name: '投放点击效率' })).toBeVisible();
+          |                                                                   ^
+      154 |     } else {
+      155 |       await expect(page.getByRole('heading', { name: '评论运营', exact: true })).toBeVisible();
+      156 |       await expect(page.getByRole('heading', { name: '消费者反馈情感结构' })).toBeVisible();
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\state.spec.ts:153:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\attachments\关键请求-ddd0269bfc081bbc6298d45d152a02d2acb6170a.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\attachments\实际持久化快照-9c6124a392daeb0ae3e875101068e84ca361afe6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\attachments\最终页面-cbec00b371708d2c08f8b58c05dcf5581f931587.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\adapters-full-verified\browser-results\state-评论质检与投放分析进入各自业务主体，数据导航URL和标签一致\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    tests\browser\state.spec.ts:144:1 › 评论质检与投放分析进入各自业务主体，数据导航URL和标签一致 ─────────────────────────────
+  107 passed (5.7m)

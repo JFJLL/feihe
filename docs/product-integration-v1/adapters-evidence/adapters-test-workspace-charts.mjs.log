@@ -1,0 +1,2 @@
+PASS workspace charts (static): gaps, zero, empty, single date, invalid numbers, unique gradients
+PASS workspace UI keyboard interaction: TimeSeriesChart focusable points, WorkspaceModuleTabs roving tabindex & activation, CustomSelect combobox & keyboard state transitions

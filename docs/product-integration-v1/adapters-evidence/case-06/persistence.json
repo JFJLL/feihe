@@ -1,0 +1,215 @@
+[
+  {
+    "projectId": "1791919782070",
+    "project": {
+      "id": "1791919782070",
+      "name": "字段驱动接入1791919782070",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#0891b2",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "ad_performance",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T19:29:42.073Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "投放分析项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "95d5fff7-f5e2-42cb-9889-b5ea513001a6",
+        "projectId": "1791919782070",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Adapter-1791919782070",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T19:29:42.804Z",
+        "lastRowCount": 1,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"业务发生日\",\"targetField\":\"业务发生日\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"投放位置\",\"targetField\":\"投放位置\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"消耗金额\",\"targetField\":\"消耗金额\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"展示次数\",\"targetField\":\"展示次数\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"访问点击\",\"targetField\":\"访问点击\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791919782070\",\"documentToken\":\"Adapter-1791919782070\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"业务发生日\",\"type\":\"date\"},{\"key\":\"投放位置\",\"type\":\"text\"},{\"key\":\"消耗金额\",\"type\":\"number\"},{\"key\":\"展示次数\",\"type\":\"number\"},{\"key\":\"访问点击\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T19:29:42.804Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "draft",
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791919782070-default",
+      "cards": [
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:records-value",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        },
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:spend-value",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "广告消耗",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        },
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:impressions-value",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "曝光量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:impressions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        },
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:clicks-value",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "点击量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:clicks\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        },
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:ctr-value",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "点击率",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        },
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:ctr-time_trend",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "点击率趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        },
+        {
+          "id": "recommended-1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:ctr-breakdown",
+          "dashboardId": "dash-1791919782070-default",
+          "projectId": "1791919782070",
+          "title": "点击率按投放位置",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919782070:recommended:ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6:ctr\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"投放位置\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 6,
+          "updatedAt": "2026-10-13T19:29:43.655Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791919782070-95d5fff7-f5e2-42cb-9889-b5ea513001a6",
+          "projectId": "1791919782070",
+          "sourceId": "95d5fff7-f5e2-42cb-9889-b5ea513001a6",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"业务发生日\",\"name\":\"业务发生日\",\"type\":\"date\"},{\"key\":\"投放位置\",\"name\":\"投放位置\",\"type\":\"text\"},{\"key\":\"消耗金额\",\"name\":\"消耗金额\",\"type\":\"number\"},{\"key\":\"展示次数\",\"name\":\"展示次数\",\"type\":\"number\"},{\"key\":\"访问点击\",\"name\":\"访问点击\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-13T19:29:42.820Z",
+          "columns": [
+            {
+              "key": "业务发生日",
+              "name": "业务发生日",
+              "type": "date"
+            },
+            {
+              "key": "投放位置",
+              "name": "投放位置",
+              "type": "text"
+            },
+            {
+              "key": "消耗金额",
+              "name": "消耗金额",
+              "type": "number"
+            },
+            {
+              "key": "展示次数",
+              "name": "展示次数",
+              "type": "number"
+            },
+            {
+              "key": "访问点击",
+              "name": "访问点击",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "业务发生日": "2026-10-01",
+              "投放位置": "独立位置",
+              "消耗金额": 125,
+              "展示次数": 1000,
+              "访问点击": 15
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      }
+    ]
+  }
+]

@@ -14,6 +14,7 @@ import { api, cnTime } from '../../lib/hooks/use-project-data';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import type { Dataset } from '../../lib/datasets';
 import type { DataWorkspaceState, DatasetQuality, WorkspaceSource } from '../../lib/types/data-workspace';
+import { RecommendationDialog } from '../metrics/RecommendationDialog';
 
 type Detail = Dataset & { rows: Record<string, unknown>[]; pagination: { total: number; totalPages: number; page: number } };
 const tabs = [
@@ -54,6 +55,7 @@ export function DataWorkspace({ projectId }: { projectId: string }) {
   const qualityError = qualitySnapshot.key === qualityKey ? qualitySnapshot.error : '';
   const [syncing, setSyncing] = useState('');
   const syncLock = useRef(false);
+  const [recommendOpen, setRecommendOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController(); let current = true;
@@ -127,10 +129,11 @@ export function DataWorkspace({ projectId }: { projectId: string }) {
             <div className="data-actions"><span>第 {page} / {detail.pagination.totalPages} 页 · 匹配 {detail.pagination.total} 行</span><div><button className="secondary" disabled={page <= 1} onClick={() => setPage(value => value - 1)}>上一页</button><button className="secondary" disabled={page >= detail.pagination.totalPages} onClick={() => setPage(value => value + 1)}>下一页</button></div></div>
           </>}
           <h3>正在使用此数据集</h3>{state.uses.filter(use => use.datasetId === datasetId).length ? <ul>{state.uses.filter(use => use.datasetId === datasetId).map(use => <li key={use.kind + use.id}>{use.kind === 'metric' ? '指标' : '看板卡片'}：{use.name}</li>)}</ul> : <p>尚无绑定的指标或卡片。</p>}
-          {currentProject?.canManage && !currentProject.isArchived && <button className="secondary" onClick={() => navigateTo('/projects/' + encodeURIComponent(projectId) + '/metrics?new=true&datasetId=' + encodeURIComponent(datasetId))}>创建指标</button>}
+          {currentProject?.canManage && !currentProject.isArchived && <div className="data-actions"><button className="primary" onClick={() => setRecommendOpen(true)}>推荐指标与看板</button><button className="secondary" onClick={() => navigateTo('/projects/' + encodeURIComponent(projectId) + '/metrics?new=true&datasetId=' + encodeURIComponent(datasetId))}>创建指标</button></div>}
         </>}
       </section>}
       {tab === 'runs' && <section className="platform-panel data-panel"><h2>同步记录</h2><p>显示最近100条同步记录。每次同步独立记录结果。失败保留上一次成功数据；只接入配置不代表已经同步。</p>{!state.runs.length ? <EmptyState title="尚无同步记录" text="接入配置后，执行首次同步。" /> : <div className="data-table-scroll" tabIndex={0}><table aria-label="来源同步记录"><thead><tr><th>来源 / 时间</th><th>结果</th><th>读取 / 入库</th><th>读取范围</th><th>说明</th></tr></thead><tbody>{state.runs.map(run => <tr key={run.id}><td>{run.sourceName}<p>{cnTime(run.startedAt)}</p></td><td>{run.status === 'success' ? '成功' : run.status === 'failed' ? '失败' : '进行中'}</td><td>{run.status === 'failed' && !run.rowsRead ? '读取未完成' : run.rowsRead} / {run.rowsImported}</td><td>{run.scope === 'full_table' ? '完整工作表' : run.scope === 'limited_range' ? '有限范围：' + run.range : '历史范围未记录'}</td><td>{run.errorSummary || (run.rowsFailed ? '有 ' + run.rowsFailed + ' 行未导入' : '已完整发布读取到的批次')}{!run.sourceId && <p>旧记录未保存来源ID</p>}</td></tr>)}</tbody></table></div>}</section>}
     </>}
+    {recommendOpen && <RecommendationDialog projectId={projectId} datasetId={datasetId} templateId={currentProject?.templateId} onClose={() => setRecommendOpen(false)} onDone={cards => { sessionStorage.setItem('recommended-board:' + projectId, JSON.stringify(cards)); setRecommendOpen(false); navigateTo('/projects/' + encodeURIComponent(projectId) + '?recommended=true'); }} />}
   </div>;
 }

@@ -37,3 +37,9 @@
 /board-final-verified/
 /board-delivery/
 /board-runtime-verified/
+
+/adapters-red/
+/adapters-iteration-*/
+/adapters-full-verified/
+!adapters-evidence/*.log
+/adapters-delivery/

@@ -1,0 +1,221 @@
+[
+  {
+    "projectId": "1791919787397",
+    "project": {
+      "id": "1791919787397",
+      "name": "字段驱动接入1791919787397",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#059669",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "ad_performance",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T19:29:47.400Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "投放分析项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "bcdddb74-27c7-4e3a-8847-2c60152d6e81",
+        "projectId": "1791919787397",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Adapter-1791919787397",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T19:29:49.404Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"日期\",\"targetField\":\"日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"渠道\",\"targetField\":\"渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"花费\",\"targetField\":\"花费\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"曝光\",\"targetField\":\"曝光\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"点击\",\"targetField\":\"点击\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791919787397\",\"documentToken\":\"Adapter-1791919787397\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"type\":\"text\"},{\"key\":\"花费\",\"type\":\"number\"},{\"key\":\"曝光\",\"type\":\"number\"},{\"key\":\"点击\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T19:29:49.404Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "blockedSteps": [],
+      "memberCount": 2,
+      "ready": true
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "draft",
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791919787397-default",
+      "cards": [
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:records-value",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "记录数量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        },
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:spend-value",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "广告消耗",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        },
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:impressions-value",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "曝光量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:impressions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        },
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:clicks-value",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "点击量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:clicks\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        },
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:ctr-value",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "点击率",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        },
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:ctr-time_trend",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "点击率趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:ctr\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        },
+        {
+          "id": "recommended-1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:ctr-breakdown",
+          "dashboardId": "dash-1791919787397-default",
+          "projectId": "1791919787397",
+          "title": "点击率按渠道",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791919787397:recommended:ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81:ctr\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"渠道\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 6,
+          "updatedAt": "2026-10-13T19:29:48.718Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791919787397-bcdddb74-27c7-4e3a-8847-2c60152d6e81",
+          "projectId": "1791919787397",
+          "sourceId": "bcdddb74-27c7-4e3a-8847-2c60152d6e81",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"日期\",\"name\":\"日期\",\"type\":\"date\"},{\"key\":\"渠道\",\"name\":\"渠道\",\"type\":\"text\"},{\"key\":\"花费\",\"name\":\"花费\",\"type\":\"number\"},{\"key\":\"曝光\",\"name\":\"曝光\",\"type\":\"number\"},{\"key\":\"点击\",\"name\":\"点击\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 2,
+          "updatedAt": "2026-10-13T19:29:49.487Z",
+          "columns": [
+            {
+              "key": "日期",
+              "name": "日期",
+              "type": "date"
+            },
+            {
+              "key": "渠道",
+              "name": "渠道",
+              "type": "text"
+            },
+            {
+              "key": "花费",
+              "name": "花费",
+              "type": "number"
+            },
+            {
+              "key": "曝光",
+              "name": "曝光",
+              "type": "number"
+            },
+            {
+              "key": "点击",
+              "name": "点击",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "日期": "2026-10-01",
+              "渠道": "新客户门店",
+              "花费": 500,
+              "曝光": 5000,
+              "点击": 100
+            },
+            {
+              "日期": "2026-10-02",
+              "渠道": "新客户线上",
+              "花费": 100,
+              "曝光": 1000,
+              "点击": 20
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

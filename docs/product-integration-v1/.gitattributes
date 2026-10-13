@@ -8,3 +8,4 @@
 *.txt -whitespace
 data-evidence/**/error-context.md -text -whitespace
 board-evidence/**/error-context.md -text -whitespace
+adapters-evidence/**/error-context.md -text -whitespace

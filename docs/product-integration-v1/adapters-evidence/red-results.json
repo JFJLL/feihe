@@ -1,0 +1,299 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-adapters.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/adapters-red/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/adapters-red/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/adapters-red/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5216",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "product-adapters.spec.ts",
+      "file": "product-adapters.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 60658,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts",
+                        "column": 68,
+                        "line": 26
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: '推荐指标与看板', exact: true })\u001b[22m\n\n\n  24 |   const { projectId } = await connect(page, request, 'general_workbench', [['日期', '渠道', '咨询人数', '成交人数'], ['2026-10-01', '门店', 100, 20], ['2026-10-02', '线上', 200, 10]]);\n  25 |   await page.screenshot({ path: info.outputPath('no-field-recommendation.png'), fullPage: true });\n> 26 |   await page.getByRole('button', { name: '推荐指标与看板', exact: true }).click();\n     |                                                                    ^\n  27 |   await expect(page.getByRole('dialog')).toContainText('成交率');\n  28 |   await expect(page.getByRole('dialog')).not.toContainText('预算执行率');\n  29 |   await expect(page.getByRole('dialog')).not.toContainText('任务完成率');\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts:26:68"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T18:39:37.254Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\\attachments\\关键请求-62448e03f9319c2b668314b2eee92a9eb4794c1c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\\attachments\\实际持久化快照-5d82fd3e7257c9ab6eac53686bf4cc0ab8282bd6.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\\attachments\\最终页面-bc83fe61af6c0125abb2565f7ab6b6ec683ea0aa.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bdaaecd4407fe46ef646-1effbbdc0908a854076f",
+          "file": "product-adapters.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13074,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })\nExpected substring: \u001b[32m\"300\"\u001b[39m\nReceived string:    \u001b[31m\"广告消耗— 元\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })\u001b[22m\n\u001b[2m    23 × locator resolved to <article class=\"pastel-card pastel-blue reference-kpi ops-metric-card ops-metric-card-blue\">…</article>\u001b[22m\n\u001b[2m       - unexpected value \"广告消耗— 元\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })\nExpected substring: \u001b[32m\"300\"\u001b[39m\nReceived string:    \u001b[31m\"广告消耗— 元\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })\u001b[22m\n\u001b[2m    23 × locator resolved to <article class=\"pastel-card pastel-blue reference-kpi ops-metric-card ops-metric-card-blue\">…</article>\u001b[22m\n\u001b[2m       - unexpected value \"广告消耗— 元\"\u001b[22m\n\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts:37:82",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts",
+                      "column": 82,
+                      "line": 37
+                    },
+                    "snippet": "  35 |   const overview = page.getByTestId('ad-performance-overview');\n  36 |   await expect(overview).toBeVisible(); await page.screenshot({ path: info.outputPath('imported-ad-dataset-disconnected.png'), fullPage: true });\n> 37 |   await expect(overview.locator('.ops-metric-card').filter({ hasText: '广告消耗' })).toContainText('300');\n     |                                                                                  ^\n  38 | });\n  39 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts",
+                        "column": 82,
+                        "line": 37
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })\nExpected substring: \u001b[32m\"300\"\u001b[39m\nReceived string:    \u001b[31m\"广告消耗— 元\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })\u001b[22m\n\u001b[2m    23 × locator resolved to <article class=\"pastel-card pastel-blue reference-kpi ops-metric-card ops-metric-card-blue\">…</article>\u001b[22m\n\u001b[2m       - unexpected value \"广告消耗— 元\"\u001b[22m\n\n\n  35 |   const overview = page.getByTestId('ad-performance-overview');\n  36 |   await expect(overview).toBeVisible(); await page.screenshot({ path: info.outputPath('imported-ad-dataset-disconnected.png'), fullPage: true });\n> 37 |   await expect(overview.locator('.ops-metric-card').filter({ hasText: '广告消耗' })).toContainText('300');\n     |                                                                                  ^\n  38 | });\n  39 |\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts:37:82"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T18:40:39.387Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\\attachments\\关键请求-e7bb50a21a4823633472323f987b6f2c99a24248.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\\attachments\\实际持久化快照-c05561cfc9ab58f2a38a3a987e41d8dd0d72d2e2.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\\attachments\\最终页面-e86b0ed1ca3e8340bfa9a1f83a43c281fdb86eb3.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\adapters-red\\browser-results\\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts",
+                    "column": 82,
+                    "line": 37
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "bdaaecd4407fe46ef646-40c25b4cbefcc9883e48",
+          "file": "product-adapters.spec.ts",
+          "line": 32,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T18:39:33.098Z",
+    "duration": 80448.349,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

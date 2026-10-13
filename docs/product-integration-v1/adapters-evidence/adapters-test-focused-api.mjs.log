@@ -1,0 +1,16 @@
+(node:9816) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ API percent: real inspect/map/sync stores tagged, native fraction and native points once (17.0391ms)
+✔ API percent: metric definitions and dashboard round-trip explicit unit, legacy ambiguity rejected (4.3187ms)
+✔ API source: real save succeeds then beyond-preview validation fails; correct same ID, one dataset (6.5783ms)
+✔ API ratio: paired and independent definitions persist their basis and expose actual coverage (3.7496ms)
+✔ API historical percent: existing configuration returns explicit needs-confirmation with rows unchanged (1.5422ms)
+✔ API dataset: direct percent writes use the same fractional contract; mixed untyped numbers rejected (2.914ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 742.9435

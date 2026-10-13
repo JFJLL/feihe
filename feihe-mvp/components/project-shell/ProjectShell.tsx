@@ -18,6 +18,7 @@ import { CommentsWorkspace } from '../../features/comments/CommentsWorkspace';
 import { SettingsWorkspace } from '../../features/settings/SettingsWorkspace';
 import { DataWorkspace } from '../../features/data/DataWorkspace';
 import { MetricWorkspace } from '../../features/metrics/MetricWorkspace';
+import { DatasetAdOverview } from '../../features/overview/DatasetAdOverview';
 
 function ProjectShellContent({
   userName,
@@ -120,6 +121,9 @@ function ProjectShellContent({
           onRefresh={refreshData}
         />
       );
+      break;
+    case "ads":
+      content = <DatasetAdOverview key={projectId} projectId={projectId} />;
       break;
     case "data":
       content = <DataWorkspace key={projectId} projectId={projectId} />;

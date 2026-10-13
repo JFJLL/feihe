@@ -1,0 +1,12 @@
+[WebServer] (node:26580) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:24896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:26580) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  ok 1 tests\browser\product-adapters.spec.ts:23:1 › 字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板 (5.1s)
+  ok 2 tests\browser\product-adapters.spec.ts:32:1 › 投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300 (4.2s)
+
+  2 passed (15.0s)

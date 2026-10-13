@@ -1,0 +1,3 @@
+(node:34760) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS growth: real SQLite normalization, totals, scope, >12 brands, paired metrics, missing/zero and component rendering

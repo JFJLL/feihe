@@ -1,0 +1,154 @@
+[WebServer] (node:15440) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:34672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15440) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+  x  1 tests\browser\product-adapters.spec.ts:23:1 › 字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板 (1.0m)
+(node:4952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 02:40:41 [vite] (client) [console.error] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[WebServer] 
+[WebServer] - A server/client branch `if (typeof window !== 'undefined')`.
+[WebServer] - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+[WebServer] - Date formatting in a user's locale which doesn't match the server.
+[WebServer] - External changing data without sending a snapshot of it along with the HTML.
+[WebServer] - Invalid HTML tag nesting.
+[WebServer] 
+[WebServer] It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+[WebServer] 
+[WebServer] https://react.dev/link/hydration-mismatch
+[WebServer] 
+[WebServer]   ...
+[WebServer]     <AwaitAppRenderDependencies>
+[WebServer]       <ProjectLayout>
+[WebServer]         <ProjectShell projectId="1791916839872" initialData={{...}} userName="公开访问" signedIn={false}>
+[WebServer]           <ProjectProvider projectId="1791916839872" initialData={{...}} initialWorkspace={{ok:true, ...}}>
+[WebServer]             <ProjectShellContent userName="公开访问" signedIn={false}>
+[WebServer]               <div className="app-shell">
+[WebServer]                 <ProjectSidebar>
+[WebServer]                 <main className="main">
+[WebServer]                   <OverviewWorkspace projectId="1791916839872" project={{id:"179191...", ...}} dashboard={{ok:true, ...}} ...>
+[WebServer]                     <div className="ops-worksp...">
+[WebServer]                       <PageHeader>
+[WebServer]                       <FeishuSources>
+[WebServer]                       <OnboardingWizard>
+[WebServer]                       <div>
+[WebServer]                       <Section>
+[WebServer]                       <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple">
+[WebServer]                         <section className="pastel-car...">
+[WebServer]                           <div>
+[WebServer]                           <div className="report-prompt">
+[WebServer]                             <textarea
+[WebServer]                               aria-label="报告需求"
+[WebServer]                               value="根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。"
+[WebServer]                               onChange={function onChange}
+[WebServer] -                             style={{caret-color:"transparent"}}
+[WebServer]                             >
+[WebServer]                             ...
+[WebServer]                       ...
+[WebServer]                   ...
+[WebServer]                 ...
+[WebServer] 
+  x  2 tests\browser\product-adapters.spec.ts:32:1 › 投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300 (13.1s)
+
+
+  1) tests\browser\product-adapters.spec.ts:23:1 › 字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板 ────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '推荐指标与看板', exact: true })
+
+
+      24 |   const { projectId } = await connect(page, request, 'general_workbench', [['日期', '渠道', '咨询人数', '成交人数'], ['2026-10-01', '门店', 100, 20], ['2026-10-02', '线上', 200, 10]]);
+      25 |   await page.screenshot({ path: info.outputPath('no-field-recommendation.png'), fullPage: true });
+    > 26 |   await page.getByRole('button', { name: '推荐指标与看板', exact: true }).click();
+         |                                                                    ^
+      27 |   await expect(page.getByRole('dialog')).toContainText('成交率');
+      28 |   await expect(page.getByRole('dialog')).not.toContainText('预算执行率');
+      29 |   await expect(page.getByRole('dialog')).not.toContainText('任务完成率');
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-adapters.spec.ts:26:68
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\attachments\关键请求-62448e03f9319c2b668314b2eee92a9eb4794c1c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\attachments\实际持久化快照-5d82fd3e7257c9ab6eac53686bf4cc0ab8282bd6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\attachments\最终页面-bc83fe61af6c0125abb2565f7ab6b6ec683ea0aa.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\product-adapters.spec.ts:32:1 › 投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300 ─────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })
+    Expected substring: "300"
+    Received string:    "广告消耗— 元"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' }) with timeout 10000ms
+      - waiting for getByTestId('ad-performance-overview').locator('.ops-metric-card').filter({ hasText: '广告消耗' })
+        23 × locator resolved to <article class="pastel-card pastel-blue reference-kpi ops-metric-card ops-metric-card-blue">…</article>
+           - unexpected value "广告消耗— 元"
+
+
+      35 |   const overview = page.getByTestId('ad-performance-overview');
+      36 |   await expect(overview).toBeVisible(); await page.screenshot({ path: info.outputPath('imported-ad-dataset-disconnected.png'), fullPage: true });
+    > 37 |   await expect(overview.locator('.ops-metric-card').filter({ hasText: '广告消耗' })).toContainText('300');
+         |                                                                                  ^
+      38 | });
+      39 |
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-adapters.spec.ts:37:82
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\attachments\关键请求-e7bb50a21a4823633472323f987b6f2c99a24248.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\attachments\实际持久化快照-c05561cfc9ab58f2a38a3a987e41d8dd0d72d2e2.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\attachments\最终页面-e86b0ed1ca3e8340bfa9a1f83a43c281fdb86eb3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\adapters-red\browser-results\product-adapters-投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests\browser\product-adapters.spec.ts:23:1 › 字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板 ─────────────────
+    tests\browser\product-adapters.spec.ts:32:1 › 投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300 ──────────────────

@@ -1,0 +1,66 @@
+[
+  {
+    "case": "case-01",
+    "title": "字段推荐反例：陌生四列表接入后可以经真实控件确认适用的指标和看板",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-01/trace.zip",
+    "keyRequests": "case-01/key-requests.json",
+    "persistence": "case-01/persistence.json"
+  },
+  {
+    "case": "case-02",
+    "title": "投放断链反例：五列新来源真实入库后专属投放消耗显示本项目300",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-02/trace.zip",
+    "keyRequests": "case-02/key-requests.json",
+    "persistence": "case-02/persistence.json"
+  },
+  {
+    "case": "case-03",
+    "title": "字段对应 1280px：不同名称的原表经选择器确认后驱动专属页，重复确认不增加对象",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-03/trace.zip",
+    "keyRequests": "case-03/key-requests.json",
+    "persistence": "case-03/persistence.json"
+  },
+  {
+    "case": "case-04",
+    "title": "陌生部门推荐 1280px：四列原表→确认→六卡发布→刷新→同口径趋势与渠道",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-04/trace.zip",
+    "keyRequests": "case-04/key-requests.json",
+    "persistence": "case-04/persistence.json"
+  },
+  {
+    "case": "case-05",
+    "title": "投放真实链路 1280px：确认自己的五列来源→专属页→同步更新→共享定义改版→只读与刷新",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-05/trace.zip",
+    "keyRequests": "case-05/key-requests.json",
+    "persistence": "case-05/persistence.json"
+  },
+  {
+    "case": "case-06",
+    "title": "字段对应 390px：不同名称的原表经选择器确认后驱动专属页，重复确认不增加对象",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-06/trace.zip",
+    "keyRequests": "case-06/key-requests.json",
+    "persistence": "case-06/persistence.json"
+  },
+  {
+    "case": "case-07",
+    "title": "陌生部门推荐 390px：四列原表→确认→六卡发布→刷新→同口径趋势与渠道",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-07/trace.zip",
+    "keyRequests": "case-07/key-requests.json",
+    "persistence": "case-07/persistence.json"
+  },
+  {
+    "case": "case-08",
+    "title": "投放真实链路 390px：确认自己的五列来源→专属页→同步更新→共享定义改版→只读与刷新",
+    "sourceRun": "adapters-delivery",
+    "trace": "case-08/trace.zip",
+    "keyRequests": "case-08/key-requests.json",
+    "persistence": "case-08/persistence.json"
+  }
+]

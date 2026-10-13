@@ -75,6 +75,7 @@ export function GeneralWorkbenchBoard({
   const [showMetricPicker, setShowMetricPicker] = useState(false);
   const [pickerMetricId, setPickerMetricId] = useState('');
   const handledMetricIntent = useRef('');
+  const handledRecommendation = useRef(false);
   const [editingCardIndex, setEditingCardIndex] = useState<number | null>(null);
 
   // Unsaved changes & conflict dialogs
@@ -235,6 +236,18 @@ export function GeneralWorkbenchBoard({
   // Evaluate cards through unified backend metric engine
   const activeCards = isEditingBoard ? draftCards : publishedCards;
   const activeQuery = isEditingBoard ? draftQuery : viewQuery;
+  useEffect(() => {
+    if (loading || !canConfigure || handledRecommendation.current || !new URLSearchParams(window.location.search).has('recommended')) return;
+    handledRecommendation.current = true;
+    try {
+      const cards: DashboardCardConfig[] = JSON.parse(sessionStorage.getItem('recommended-board:' + projectId) || '[]');
+      if (!Array.isArray(cards)) return;
+      setDraftCards([...publishedCards, ...cards.filter(card => card.metricId && !publishedCards.some(existing => existing.id === card.id))]);
+      setDraftQuery(viewQuery); setIsEditingBoard(true);
+      sessionStorage.removeItem('recommended-board:' + projectId);
+      window.history.replaceState(null, '', '/projects/' + encodeURIComponent(projectId));
+    } catch { showToast('推荐草稿读取失败，请返回数据页重新确认', 'error'); }
+  }, [loading, canConfigure, projectId, publishedCards, viewQuery, showToast]);
   useEffect(() => {
     if (loading || !canConfigure) return;
     const id = new URLSearchParams(window.location.search).get('addMetric');

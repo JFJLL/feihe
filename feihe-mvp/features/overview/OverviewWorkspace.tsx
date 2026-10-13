@@ -22,6 +22,7 @@ import { OnboardingWizard } from '../onboarding/OnboardingWizard';
 import { GeneralWorkbenchBoard } from './GeneralWorkbenchBoard';
 import { CommentsWorkspace } from '../comments/CommentsWorkspace';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
+import { DatasetAdOverview } from './DatasetAdOverview';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
 const formatDateZh = (val: string | null | undefined) => {
@@ -281,13 +282,13 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     : isCommentQc
     ? '评论口碑采集、处置待办与供应商核验分析'
     : isAd
-    ? '广告投放消耗、点击效率与转化监控'
+    ? '本项目投放消耗、点击效率与渠道对比'
     : `2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`;
 
   return <div className="ops-workspace overview-colorful-page reference-workspace">
     <PageHeader eyebrow={headerEyebrow} title={project?.name || '项目总览'} subtitle={headerSubtitle}>
       <div className="workspace-header-actions">
-        {!isGeneral && <span className="overview-quarter-pill">投放截至 {date || '待同步'}</span>}
+        {!isGeneral && !isAd && <span className="overview-quarter-pill">投放截至 {date || '待同步'}</span>}
         {canWrite && <SyncButton projectId={projectId} onRefresh={onRefresh} />}
       </div>
     </PageHeader>
@@ -297,7 +298,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
       ]} activeTab={tab} onChange={setTab} />
     )}
-    {!isGeneral && <FeishuSources data={dashboard.feishu} projectId={projectId} />}
+    {!isGeneral && !isAd && <FeishuSources data={dashboard.feishu} projectId={projectId} />}
 
     {project?.onboardingStatus !== 'ready' && (
       <OnboardingWizard
@@ -317,8 +318,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       </div>
     ) : project?.templateId === 'comment_qc' ? (
       <CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />
-    ) : project?.templateId === 'ad_performance' ? (
+    ) : project?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} legacy={(dashboard.feishu?.daily || []).length ? (
       <div className="stack" data-testid="ad-performance-overview">
+        <FeishuSources data={dashboard.feishu} projectId={projectId} />
         <section className="ops-metric-grid" aria-label="投放分析指标">
           <MetricCard label="广告消耗" value={amount(feedSpend === null && searchSpend === null ? null : channelTotal)} unit="元" />
           <MetricCard label="信息流消耗" value={amount(feedSpend)} unit="元" />
@@ -328,7 +330,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#2563eb' }, { key: 'feed_spend', label: '信息流消耗', color: '#16a34a' }, { key: 'search_spend', label: '搜索消耗', color: '#7c3aed' }]} /></Section>
         <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#16a34a' }, { key: 'search_ctr', label: '搜索CTR', color: '#7c3aed' }]} /></Section>
       </div>
-    ) : (
+    ) : undefined} /> : (
       <>
     {tab === 'overview' && <div className="overview-block-content">
       <section className="pastel-card health-overview-card">

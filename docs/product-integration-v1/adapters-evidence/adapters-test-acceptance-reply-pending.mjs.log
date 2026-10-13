@@ -1,0 +1,3 @@
+(node:13496) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS actual route SQL/HTTP: no-pending exclusion, exact reply/status condition, project isolation, orphan exclusion, note deduplication, 3-page traversal, empty page, injection safety, all three status cards, comment KPI vs note totals, authorization gate. In-memory fixtures only.

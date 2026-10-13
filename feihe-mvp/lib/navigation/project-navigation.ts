@@ -36,6 +36,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     defaultTab: 'competitor',
   },
   { id: 'metrics', path: 'metrics', number: '03', label: '指标', title: '项目指标', description: '共享计算口径、版本和项目来源' },
+  { id: 'ads', path: 'ads', number: '04', label: '投放分析', title: '投放分析', description: '本项目来源、广告消耗、点击与渠道' },
   {
     id: 'content',
     path: 'content',
