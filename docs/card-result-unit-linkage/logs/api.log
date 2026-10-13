@@ -1,0 +1,13 @@
+✔ API preview rejects a count result that inherits percent field units (26.8688ms)
+✔ API preview rejects an automatic percent configuration on an ordinary amount field (1.9361ms)
+✔ API publish rejects incompatible count units and preserves the existing dashboard (3.4902ms)
+✔ API unit transitions persist through dashboard publish/GET and full row reads (8.0824ms)
+✔ API rejects pending display confirmation but keeps an explicit compatible currency choice (1.802ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 765.8387

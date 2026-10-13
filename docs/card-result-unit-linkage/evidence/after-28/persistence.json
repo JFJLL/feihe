@@ -1,0 +1,217 @@
+[
+  {
+    "projectId": "focused-1791879991019",
+    "project": {
+      "id": "focused-1791879991019",
+      "name": "来源重试验收",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T08:26:31.024Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "25fb6cd9-8a2e-4d72-83df-88742ad2d6a9",
+        "projectId": "focused-1791879991019",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/FocusedLateRequiredDoc",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T08:26:33.208Z",
+        "lastRowCount": 12,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"任务\",\"targetField\":\"任务\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"金额\",\"targetField\":\"金额\",\"type\":\"number\",\"nullPolicy\":\"null\",\"required\":false}],\"context\":{\"projectId\":\"focused-1791879991019\",\"documentToken\":\"FocusedLateRequiredDoc\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"任务\",\"type\":\"text\"},{\"key\":\"金额\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T08:26:33.208Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync"
+      ],
+      "blockedSteps": [
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-focused-1791879991019-default",
+          "projectId": "focused-1791879991019",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:26:31.024Z"
+        }
+      ],
+      "targetDashboardId": "dash-focused-1791879991019-default",
+      "cards": [
+        {
+          "id": "card-focused-1791879991019-c1",
+          "dashboardId": "dash-focused-1791879991019-default",
+          "projectId": "focused-1791879991019",
+          "title": "任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:26:31.024Z"
+        },
+        {
+          "id": "card-focused-1791879991019-c2",
+          "dashboardId": "dash-focused-1791879991019-default",
+          "projectId": "focused-1791879991019",
+          "title": "已完成数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T08:26:31.024Z"
+        },
+        {
+          "id": "card-focused-1791879991019-c3",
+          "dashboardId": "dash-focused-1791879991019-default",
+          "projectId": "focused-1791879991019",
+          "title": "任务完成率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_completion_rate\"]",
+          "configJson": "{\"id\":\"c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T08:26:31.024Z"
+        },
+        {
+          "id": "card-focused-1791879991019-c4",
+          "dashboardId": "dash-focused-1791879991019-default",
+          "projectId": "focused-1791879991019",
+          "title": "预算执行率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"budget_spent_rate\"]",
+          "configJson": "{\"id\":\"c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T08:26:31.024Z"
+        },
+        {
+          "id": "card-focused-1791879991019-c5",
+          "dashboardId": "dash-focused-1791879991019-default",
+          "projectId": "focused-1791879991019",
+          "title": "按负责人状态分布",
+          "type": "bar_chart",
+          "metricKeysJson": "[\"task_completed\"]",
+          "configJson": "{\"id\":\"c5\",\"title\":\"按负责人状态分布\",\"type\":\"bar_chart\",\"dimension\":\"owner\",\"metric\":\"task_completed\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-13T08:26:31.024Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-focused-1791879991019-25fb6cd9-8a2e-4d72-83df-88742ad2d6a9",
+          "projectId": "focused-1791879991019",
+          "sourceId": "25fb6cd9-8a2e-4d72-83df-88742ad2d6a9",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"任务\",\"name\":\"任务\",\"type\":\"text\"},{\"key\":\"金额\",\"name\":\"金额\",\"type\":\"number\"}]",
+          "rowCount": 12,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:26:33.216Z",
+          "columns": [
+            {
+              "key": "任务",
+              "name": "任务",
+              "type": "text"
+            },
+            {
+              "key": "金额",
+              "name": "金额",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "任务": "任务1",
+              "金额": 1
+            },
+            {
+              "任务": "任务2",
+              "金额": 2
+            },
+            {
+              "任务": "任务3",
+              "金额": 3
+            },
+            {
+              "任务": "任务4",
+              "金额": 4
+            },
+            {
+              "任务": "任务5",
+              "金额": 5
+            },
+            {
+              "任务": "任务6",
+              "金额": 6
+            },
+            {
+              "任务": "任务7",
+              "金额": 7
+            },
+            {
+              "任务": "任务8",
+              "金额": 8
+            },
+            {
+              "任务": "任务9",
+              "金额": 9
+            },
+            {
+              "任务": "任务10",
+              "金额": 10
+            },
+            {
+              "任务": "任务11",
+              "金额": 11
+            },
+            {
+              "任务": "任务12",
+              "金额": null
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 12,
+            "totalPages": 1,
+            "currentPageRows": 12
+          }
+        }
+      }
+    ]
+  }
+]

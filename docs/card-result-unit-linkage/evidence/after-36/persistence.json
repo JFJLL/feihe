@@ -1,0 +1,107 @@
+[
+  {
+    "projectId": "ready-1791880040758",
+    "project": {
+      "id": "ready-1791880040758",
+      "name": "初始化恢复验收",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "进行中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "ready",
+      "updatedAt": "2026-10-13T08:27:22.714Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "blockedSteps": [],
+      "memberCount": 2,
+      "ready": true
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-ready-1791880040758-default",
+          "projectId": "ready-1791880040758",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:27:23.354Z"
+        }
+      ],
+      "targetDashboardId": "dash-ready-1791880040758-default",
+      "cards": [
+        {
+          "id": "card-3941c5ce-ea2b-48cb-bd88-ef0c202ea3d3",
+          "dashboardId": "dash-ready-1791880040758-default",
+          "projectId": "ready-1791880040758",
+          "title": "恢复后的记录",
+          "type": "metric_card",
+          "metricKeysJson": "[\"custom\"]",
+          "configJson": "{\"id\":\"card-3941c5ce-ea2b-48cb-bd88-ef0c202ea3d3\",\"title\":\"恢复后的记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-ready-1791880040758-ready\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:27:23.354Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-ready-1791880040758-ready",
+          "projectId": "ready-1791880040758",
+          "sourceId": "ready",
+          "name": "真实任务",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:21.187Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "task": "1"
+            },
+            {
+              "task": "2"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

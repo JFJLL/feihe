@@ -1,0 +1,268 @@
+[
+  {
+    "projectId": "template-comment_qc-179188007444",
+    "project": {
+      "id": "template-comment_qc-179188007444",
+      "name": "comment_qc",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "comment_qc",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T08:27:54.447Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "评论质检项目"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template"
+      ],
+      "blockedSteps": [
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-template-comment_qc-179188007444-default",
+          "projectId": "template-comment_qc-179188007444",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:27:54.447Z"
+        }
+      ],
+      "targetDashboardId": "dash-template-comment_qc-179188007444-default",
+      "cards": [
+        {
+          "id": "card-template-comment_qc-179188007444-cq1",
+          "dashboardId": "dash-template-comment_qc-179188007444-default",
+          "projectId": "template-comment_qc-179188007444",
+          "title": "评论总数",
+          "type": "metric_card",
+          "metricKeysJson": "[\"comments_total\"]",
+          "configJson": "{\"id\":\"cq1\",\"title\":\"评论总数\",\"type\":\"metric_card\",\"metric\":\"comments_total\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:27:54.447Z"
+        },
+        {
+          "id": "card-template-comment_qc-179188007444-cq2",
+          "dashboardId": "dash-template-comment_qc-179188007444-default",
+          "projectId": "template-comment_qc-179188007444",
+          "title": "正向舆情",
+          "type": "metric_card",
+          "metricKeysJson": "[\"positive_comments\"]",
+          "configJson": "{\"id\":\"cq2\",\"title\":\"正向舆情\",\"type\":\"metric_card\",\"metric\":\"positive_comments\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-13T08:27:54.447Z"
+        },
+        {
+          "id": "card-template-comment_qc-179188007444-cq3",
+          "dashboardId": "dash-template-comment_qc-179188007444-default",
+          "projectId": "template-comment_qc-179188007444",
+          "title": "负向预警",
+          "type": "metric_card",
+          "metricKeysJson": "[\"negative_comments\"]",
+          "configJson": "{\"id\":\"cq3\",\"title\":\"负向预警\",\"type\":\"metric_card\",\"metric\":\"negative_comments\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-13T08:27:54.447Z"
+        },
+        {
+          "id": "card-template-comment_qc-179188007444-cq4",
+          "dashboardId": "dash-template-comment_qc-179188007444-default",
+          "projectId": "template-comment_qc-179188007444",
+          "title": "外显达标率",
+          "type": "metric_card",
+          "metricKeysJson": "[\"supplier_visible_rate\"]",
+          "configJson": "{\"id\":\"cq4\",\"title\":\"外显达标率\",\"type\":\"metric_card\",\"metric\":\"supplier_visible_rate\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-13T08:27:54.447Z"
+        }
+      ]
+    },
+    "datasets": []
+  },
+  {
+    "projectId": "repro-1791880075708",
+    "project": {
+      "id": "repro-1791880075708",
+      "name": "定向返修测试",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T08:27:55.711Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-repro-1791880075708-default",
+          "projectId": "repro-1791880075708",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:27:55.806Z"
+        }
+      ],
+      "targetDashboardId": "dash-repro-1791880075708-default",
+      "cards": [
+        {
+          "id": "card-12433c7d-e679-48ed-b391-90b7dc904200",
+          "dashboardId": "dash-repro-1791880075708-default",
+          "projectId": "repro-1791880075708",
+          "title": "原始任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880075708-a\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:27:55.806Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880075708-b",
+          "projectId": "repro-1791880075708",
+          "sourceId": "b",
+          "name": "任务数据B",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:55.763Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "task": "其他",
+              "amount": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880075708-a",
+          "projectId": "repro-1791880075708",
+          "sourceId": "a",
+          "name": "任务数据A",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"},{\"key\":\"group\",\"name\":\"group\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:55.744Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            },
+            {
+              "key": "group",
+              "name": "group",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "task": "任务1",
+              "amount": 10,
+              "group": "同组"
+            },
+            {
+              "task": "任务2",
+              "amount": null,
+              "group": "同组"
+            },
+            {
+              "task": "任务3",
+              "amount": 20,
+              "group": "另一组"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]

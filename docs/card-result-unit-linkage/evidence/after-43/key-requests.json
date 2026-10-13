@@ -1,0 +1,68 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=repro-1791880061711",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880061711",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=repro-1791880061711",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880061711\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880061711-a\",\"id\":\"card-4d6c2687-9089-4bb6-abfd-ef5ceca5fad5\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880061711&id=ds-repro-1791880061711-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880061711\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880061711-a\",\"id\":\"card-4d6c2687-9089-4bb6-abfd-ef5ceca5fad5\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880061711&id=ds-repro-1791880061711-a&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880061711\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791880063104\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880061711-a\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "body": "{\"projectId\":\"repro-1791880061711\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791880063104\",\"title\":\"慢试算\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880061711-a\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880061711\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791880063104\",\"title\":\"慢试算\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880061711-b\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 500,
+    "body": "{\"projectId\":\"repro-1791880061711\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791880063104\",\"title\":\"失败的新配置\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880061711-b\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  }
+]

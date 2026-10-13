@@ -1,0 +1,34 @@
+✔ unit: custom + count + empty field counts three records (4.9829ms)
+✔ API: count preview uses the real stored three records (3.989ms)
+✔ unit: explicit aggregation overrides old task_total binding (0.6914ms)
+✔ unit: global and grouped average share valid samples (0.9363ms)
+✔ unit: absent numerator must not become 0% (0.814ms)
+✔ unit: null numerator must not become 0% (0.5304ms)
+✔ unit: invalid numerator must not become 0% (0.6039ms)
+✔ unit: record, nonempty and distinct counts are different operations (0.9183ms)
+✔ unit: missing, all-null, actual zero, invalid numeric and zero denominator stay distinct (0.5844ms)
+✔ unit: explicit zero fill applies identically to grouped and whole averages (0.4227ms)
+✔ unit: inference considers all observed values and never fills blanks (0.9266ms)
+✔ unit: shared mapping preview matches stored values and preserved column metadata (6.7093ms)
+✔ unit: mapping context changes for project, document, sheet or schema (0.1472ms)
+✔ unit: card validation covers dataset, numeric types, ratio, grouping and date compatibility (3.8029ms)
+✔ unit: date range includes noon on end day and excludes next midnight and undated rows (2.1059ms)
+✔ unit: mapping rejects required (0.4911ms)
+✔ unit: mapping rejects duplicate key (0.1475ms)
+✔ unit: mapping rejects invalid date (0.0865ms)
+✔ unit: mapping rejects unknown boolean (0.1069ms)
+✔ unit: mapping rejects duplicate target (0.073ms)
+✔ unit: mapping rejects invalid number with zero fill (0.0665ms)
+✔ unit: malformed numeric text is not coerced into legitimate zero (0.351ms)
+✔ unit: zoneless timestamps preserve milliseconds and invalid epochs fail (1.5402ms)
+✔ unit: unsupported and malformed mapping options are explicitly rejected (0.1683ms)
+✔ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.59ms)
+✔ unit: legacy minimum and maximum definitions retain their aggregation semantics (0.5087ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 957.3921

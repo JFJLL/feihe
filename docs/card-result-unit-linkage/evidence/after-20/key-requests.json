@@ -1,0 +1,116 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=repro-1791879953175",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791879953175",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=repro-1791879953175",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791879953175-a\",\"id\":\"card-2072c290-8003-49aa-937a-e89ee810ae57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791879953175&id=ds-repro-1791879953175-date&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879954367\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791879953175-a\",\"id\":\"card-2072c290-8003-49aa-937a-e89ee810ae57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0},{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"dashboardId\":\"dash-repro-1791879953175-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-2072c290-8003-49aa-937a-e89ee810ae57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_total\"],\"config\":{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791879953175-a\",\"id\":\"card-2072c290-8003-49aa-937a-e89ee810ae57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0},\"sortOrder\":0},{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"},\"sortOrder\":1}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791879953175-a\",\"id\":\"card-2072c290-8003-49aa-937a-e89ee810ae57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0},{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"sortOrder\":1}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=repro-1791879953175",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791879953175",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=repro-1791879953175",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791879953175-a\",\"id\":\"card-2072c290-8003-49aa-937a-e89ee810ae57\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0},{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"sortOrder\":1}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791879953175&id=ds-repro-1791879953175-date&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791879953175\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879954367\",\"title\":\"10月1日记录\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791879953175-date\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"2026-10-01\",\"to\":\"2026-10-01\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"date\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  }
+]

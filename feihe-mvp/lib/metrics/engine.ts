@@ -1,6 +1,6 @@
 import { parseNumericValue, type PercentScale } from '../numeric-values';
 import { db, ensureSchema } from '../db';
-import { isTemplateCard, type CardMetricConfig } from './config';
+import { isTemplateCard, resultDisplayErrors, type CardMetricConfig } from './config';
 import { parseProjectDate, endDayExclusive, DEFAULT_PROJECT_TIME_ZONE } from '../date-values';
 
 
@@ -126,6 +126,8 @@ export function evaluateMetricRows(card: EngineMetricConfig, items: Record<strin
   const field = card.field || (card.metric !== 'custom' ? card.metric : '') || '';
   const calculate = (): MetricComputeResult => {
     const fail = (status: MetricStatus, label: string) => ({ ...base, status, statusLabel: label });
+    const displayErrors = resultDisplayErrors(card);
+    if (displayErrors.length) return fail('needs_configuration', displayErrors.join('；'));
     if (aggregation !== 'ratio' && (card.format === 'percent' || card.unit === '%') && !card.percentScale) return fail('needs_configuration', '历史百分比单位待确认，请编辑选择数值口径');
     if (aggregation === 'count') return { ...base, value: items.length, sampleSize: items.length, status: items.length ? 'ok' : 'empty', statusLabel: items.length ? '计算完成' : '无数据记录' };
     if (aggregation === 'nonempty_count' || aggregation === 'distinct_count') {

@@ -1,0 +1,269 @@
+[
+  {
+    "projectId": "repro-1791880051202",
+    "project": {
+      "id": "repro-1791880051202",
+      "name": "定向返修测试",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T08:27:31.206Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "616b2b3f-8225-49ae-9e43-d9e151139723",
+        "projectId": "repro-1791880051202",
+        "type": "feishu_sheet",
+        "name": "结构A",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/FixtureDoc",
+        "sheetId": "sheetB",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T08:27:32.899Z",
+        "lastRowCount": 3,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"编号\",\"targetField\":\"编号\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"金额\",\"targetField\":\"amount\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"分组\",\"targetField\":\"分组\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"已确认\",\"targetField\":\"已确认\",\"type\":\"boolean\",\"nullPolicy\":\"null\"},{\"sourceField\":\"业务日\",\"targetField\":\"业务日\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"订单\",\"targetField\":\"订单\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"访问\",\"targetField\":\"访问\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"repro-1791880051202\",\"documentToken\":\"FixtureDoc\",\"sheetId\":\"sheetB\",\"fields\":[{\"key\":\"编号\",\"type\":\"number\"},{\"key\":\"金额\",\"type\":\"number\"},{\"key\":\"分组\",\"type\":\"text\"},{\"key\":\"已确认\",\"type\":\"boolean\"},{\"key\":\"业务日\",\"type\":\"date\"},{\"key\":\"订单\",\"type\":\"number\"},{\"key\":\"访问\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T08:27:32.899Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-repro-1791880051202-default",
+          "projectId": "repro-1791880051202",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:27:31.252Z"
+        }
+      ],
+      "targetDashboardId": "dash-repro-1791880051202-default",
+      "cards": [
+        {
+          "id": "card-da9f718b-ff02-49a0-bcac-5efaa72fbcf7",
+          "dashboardId": "dash-repro-1791880051202-default",
+          "projectId": "repro-1791880051202",
+          "title": "原始任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880051202-a\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:27:31.252Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880051202-616b2b3f-8225-49ae-9e43-d9e151139723",
+          "projectId": "repro-1791880051202",
+          "sourceId": "616b2b3f-8225-49ae-9e43-d9e151139723",
+          "name": "结构A",
+          "schemaJson": "[{\"key\":\"编号\",\"name\":\"编号\",\"type\":\"number\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"},{\"key\":\"分组\",\"name\":\"分组\",\"type\":\"text\"},{\"key\":\"已确认\",\"name\":\"已确认\",\"type\":\"boolean\"},{\"key\":\"业务日\",\"name\":\"业务日\",\"type\":\"date\"},{\"key\":\"订单\",\"name\":\"订单\",\"type\":\"number\"},{\"key\":\"访问\",\"name\":\"访问\",\"type\":\"number\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:32.908Z",
+          "columns": [
+            {
+              "key": "编号",
+              "name": "编号",
+              "type": "number"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            },
+            {
+              "key": "分组",
+              "name": "分组",
+              "type": "text"
+            },
+            {
+              "key": "已确认",
+              "name": "已确认",
+              "type": "boolean"
+            },
+            {
+              "key": "业务日",
+              "name": "业务日",
+              "type": "date"
+            },
+            {
+              "key": "订单",
+              "name": "订单",
+              "type": "number"
+            },
+            {
+              "key": "访问",
+              "name": "访问",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "编号": 1,
+              "amount": 10,
+              "分组": "同组",
+              "已确认": true,
+              "业务日": "2026-10-01T12:00:00+08:00",
+              "订单": 0,
+              "访问": 100
+            },
+            {
+              "编号": 2,
+              "amount": null,
+              "分组": "同组",
+              "已确认": false,
+              "业务日": "2026-10-02T00:00:00+08:00",
+              "订单": 10,
+              "访问": 100
+            },
+            {
+              "编号": 3,
+              "amount": 20,
+              "分组": "另组",
+              "已确认": true,
+              "业务日": "2026-10-01",
+              "订单": 20,
+              "访问": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880051202-b",
+          "projectId": "repro-1791880051202",
+          "sourceId": "b",
+          "name": "任务数据B",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:31.241Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "task": "其他",
+              "amount": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880051202-a",
+          "projectId": "repro-1791880051202",
+          "sourceId": "a",
+          "name": "任务数据A",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"},{\"key\":\"group\",\"name\":\"group\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:31.230Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            },
+            {
+              "key": "group",
+              "name": "group",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "task": "任务1",
+              "amount": 10,
+              "group": "同组"
+            },
+            {
+              "task": "任务2",
+              "amount": null,
+              "group": "同组"
+            },
+            {
+              "task": "任务3",
+              "amount": 20,
+              "group": "另一组"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]

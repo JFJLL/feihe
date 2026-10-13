@@ -1,0 +1,20 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=flow-1791879933839",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/inspect",
+    "method": "POST",
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/SlowDoc\",\"projectId\":\"flow-1791879933839\"}",
+    "failure": "net::ERR_ABORTED"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/NewDoc\",\"projectId\":\"flow-1791879933839\"}"
+  }
+]

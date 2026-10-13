@@ -1,0 +1,104 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=focused-1791879891662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=focused-1791879891662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=focused-1791879891662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"cards\":[{\"id\":\"card-focused-1791879891662-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791879891662-card-display\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=focused-1791879891662&id=ds-focused-1791879891662-card-display&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879892877\",\"title\":\"新增指标卡\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"distinct_count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"completion\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"cards\":[{\"id\":\"card-focused-1791879891662-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"distinct_count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"completion\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"dashboardId\":\"dash-focused-1791879891662-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-focused-1791879891662-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_total\"],\"config\":{\"id\":\"card-focused-1791879891662-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791879891662-card-display\"},\"sortOrder\":0},{\"id\":\"card-focused-1791879891662-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metricKeys\":[\"task_completed\"],\"config\":{\"id\":\"card-focused-1791879891662-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791879891662-card-display\"},\"sortOrder\":1},{\"id\":\"card-focused-1791879891662-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metricKeys\":[\"task_completion_rate\"],\"config\":{\"id\":\"card-focused-1791879891662-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791879891662-card-display\"},\"sortOrder\":2},{\"id\":\"card-focused-1791879891662-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metricKeys\":[\"budget_spent_rate\"],\"config\":{\"id\":\"card-focused-1791879891662-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791879891662-card-display\"},\"sortOrder\":3},{\"id\":\"card-focused-1791879891662-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"metricKeys\":[\"task_completed\"],\"config\":{\"id\":\"card-focused-1791879891662-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791879891662-card-display\"},\"sortOrder\":4},{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"metricKeys\":[\"custom\"],\"config\":{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"distinct_count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"completion\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false},\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"cards\":[{\"id\":\"card-focused-1791879891662-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"distinct_count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"completion\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false,\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=focused-1791879891662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=focused-1791879891662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=focused-1791879891662",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"cards\":[{\"id\":\"card-focused-1791879891662-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-focused-1791879891662-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791879891662-card-display\"},{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"distinct_count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"completion\",\"numField\":\"\",\"denField\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false,\"sortOrder\":5}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=focused-1791879891662&id=ds-focused-1791879891662-card-display&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879891662\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-1791879892877\",\"title\":\"唯一值计数 (去重计数)\",\"type\":\"metric_card\",\"datasetId\":\"ds-focused-1791879891662-card-display\",\"aggregation\":\"distinct_count\",\"metric\":\"custom\",\"mode\":\"custom\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"completion\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"auto\",\"displayNeedsConfirmation\":false}}"
+  }
+]

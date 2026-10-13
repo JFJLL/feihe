@@ -1,0 +1,330 @@
+
+Running 6 tests using 1 worker
+
+  x  1 tests\browser\card-display-linkage.spec.ts:20:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 (14.7s)
+  x  2 tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 (12.3s)
+  x  3 tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 (11.7s)
+  x  4 tests\browser\card-display-linkage.spec.ts:20:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 (11.8s)
+  x  5 tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 390px：完成率字段非空数显示计数2 (11.5s)
+  x  6 tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 (11.6s)
+
+
+  1) tests\browser\card-display-linkage.spec.ts:20:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 ──────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "15"
+    Received: "1500.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>1500.0%</span>
+           - unexpected value "1500.0%"
+
+
+      14 | }
+      15 | async function value(page: Page, expected: string) {
+    > 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);
+         |                                                              ^
+      17 | }
+      18 |
+      19 | for (const width of [1280, 390]) {
+        at value (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:16:62)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:31:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\attachments\关键请求-c57f31d669429f459f5cb7da523554176d39f58d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\attachments\实际持久化快照-55ab20e23c76ed0490967186dc4ef9ee3a0c284c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\attachments\最终页面-a771f9df9dccdc24edb544080dd825bb7390942c.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 ─────────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "2"
+    Received: "200.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>200.0%</span>
+           - unexpected value "200.0%"
+
+
+      14 | }
+      15 | async function value(page: Page, expected: string) {
+    > 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);
+         |                                                              ^
+      17 | }
+      18 |
+      19 | for (const width of [1280, 390]) {
+        at value (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:16:62)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:47:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\attachments\关键请求-2666e49d84257a6f7242315dec7c03254bd78093.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\attachments\实际持久化快照-dc1767635249d3086959a2a7888498cf35a33778.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\attachments\最终页面-8ee3ef6c8a4bdc83d3d570bc6bef216eae432b91.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 ──────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "2"
+    Received: "200.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>200.0%</span>
+           - unexpected value "200.0%"
+
+
+      14 | }
+      15 | async function value(page: Page, expected: string) {
+    > 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);
+         |                                                              ^
+      17 | }
+      18 |
+      19 | for (const width of [1280, 390]) {
+        at value (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:16:62)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:47:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\attachments\关键请求-329796935b13e21e47d487a90284fa69f97b992d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\attachments\实际持久化快照-7ac9a9b11f44b6188480098e38f19e32be355874.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\attachments\最终页面-9a37ec3cc4c2f93c9f54b5da95ff062dd7be9ff5.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests\browser\card-display-linkage.spec.ts:20:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 ───────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "15"
+    Received: "1500.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>1500.0%</span>
+           - unexpected value "1500.0%"
+
+
+      14 | }
+      15 | async function value(page: Page, expected: string) {
+    > 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);
+         |                                                              ^
+      17 | }
+      18 |
+      19 | for (const width of [1280, 390]) {
+        at value (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:16:62)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:31:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\attachments\关键请求-3f586e04ce16aebe4ba8842af6825d1dc386c8fd.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\attachments\实际持久化快照-8596e6b0f544884f77fa72dcfe692fdba573b714.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\attachments\最终页面-9c6023112814cf4c16b09d25f2b9eb56fee565e1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 390px：完成率字段非空数显示计数2 ──────────────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "2"
+    Received: "200.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>200.0%</span>
+           - unexpected value "200.0%"
+
+
+      14 | }
+      15 | async function value(page: Page, expected: string) {
+    > 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);
+         |                                                              ^
+      17 | }
+      18 |
+      19 | for (const width of [1280, 390]) {
+        at value (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:16:62)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:47:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\attachments\关键请求-f05acaeab65892ba148bf0a81fc2ac13f4877a77.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\attachments\实际持久化快照-5bdc166798ebd9b12343b71e2797fba7fbc5716d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\attachments\最终页面-8cc939a43915b2b14283baa34574f831da42e50c.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 ───────────
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+    Expected: "2"
+    Received: "200.0%"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveText" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms
+      - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()
+        23 × locator resolved to <span>200.0%</span>
+           - unexpected value "200.0%"
+
+
+      14 | }
+      15 | async function value(page: Page, expected: string) {
+    > 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);
+         |                                                              ^
+      17 | }
+      18 |
+      19 | for (const width of [1280, 390]) {
+        at value (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:16:62)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\card-display-linkage.spec.ts:47:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\attachments\关键请求-0b749a62ca4d63ae10924e82d3aef96f92ff02cc.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\attachments\实际持久化快照-77211a0f98314f7ad0ea722d86a7d9794942d6e8.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\attachments\最终页面-4744955ca0ac9bf6a7427fa02967c95c28382ab4.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\card-result-unit-linkage\baseline\browser-results\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    tests\browser\card-display-linkage.spec.ts:20:3 › 字段联动 A 1280px：平均完成率切金额自动清理百分语义 ───────────────
+    tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 1280px：完成率字段非空数显示计数2 ──────────────────
+    tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2 ───────────
+    tests\browser\card-display-linkage.spec.ts:20:3 › 字段联动 A 390px：平均完成率切金额自动清理百分语义 ────────────────
+    tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 390px：完成率字段非空数显示计数2 ───────────────────
+    tests\browser\card-display-linkage.spec.ts:38:5 › 字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2 ────────────

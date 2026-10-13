@@ -1,0 +1,44 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=template-comment_qc-179188007444",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=repro-1791880075708",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880075708",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=repro-1791880075708",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880075708\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880075708-a\",\"id\":\"card-12433c7d-e679-48ed-b391-90b7dc904200\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880075708&id=ds-repro-1791880075708-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=repro-1791880075708",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

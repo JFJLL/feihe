@@ -1,0 +1,68 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=repro-1791880056331",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880056331",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=repro-1791880056331",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880056331\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880056331-a\",\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880056331&id=ds-repro-1791880056331-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880056331\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880056331-a\",\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880056331&id=ds-repro-1791880056331-a&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880056331\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880056331-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880056331\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"409必须保留的草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880056331-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880056331\",\"cards\":[{\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"409必须保留的草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880056331-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards",
+    "method": "POST",
+    "status": 409,
+    "body": "{\"projectId\":\"repro-1791880056331\",\"dashboardId\":\"dash-repro-1791880056331-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"409必须保留的草稿\",\"type\":\"metric_card\",\"metricKeys\":[\"task_total\"],\"config\":{\"id\":\"card-851e8c1c-694d-4d0c-84ec-54b81f2b84b7\",\"title\":\"409必须保留的草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880056331-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"},\"sortOrder\":0}]}"
+  }
+]

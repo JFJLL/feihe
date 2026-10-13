@@ -1,0 +1,663 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/card-display-linkage.spec.ts"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/card-result-unit-linkage/baseline/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5206",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/card-result-unit-linkage/baseline/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/card-result-unit-linkage/baseline/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/browser/server.mjs",
+      "url": "http://127.0.0.1:5206",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "card-display-linkage.spec.ts",
+      "file": "card-display-linkage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "字段联动 A 1280px：平均完成率切金额自动清理百分语义",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14662,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"15\"\u001b[39m\nReceived: \u001b[31m\"15\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>1500.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"1500.0%\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"15\"\u001b[39m\nReceived: \u001b[31m\"15\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>1500.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"1500.0%\"\u001b[22m\n\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:31:11",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                      "column": 62,
+                      "line": 16
+                    },
+                    "snippet": "  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                        "column": 62,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"15\"\u001b[39m\nReceived: \u001b[31m\"15\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>1500.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"1500.0%\"\u001b[22m\n\n\n  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:31:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:44:31.382Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\\attachments\\关键请求-c57f31d669429f459f5cb7da523554176d39f58d.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\\attachments\\实际持久化快照-55ab20e23c76ed0490967186dc4ef9ee3a0c284c.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\\attachments\\最终页面-a771f9df9dccdc24edb544080dd825bb7390942c.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-1280px：平均完成率切金额自动清理百分语义\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                    "column": 62,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4762442da7d130050480-2c0a7a8144872d577bcf",
+          "file": "card-display-linkage.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "字段联动 B 1280px：完成率字段非空数显示计数2",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12291,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                      "column": 62,
+                      "line": 16
+                    },
+                    "snippet": "  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                        "column": 62,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n\n  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:44:47.509Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\\attachments\\关键请求-2666e49d84257a6f7242315dec7c03254bd78093.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\\attachments\\实际持久化快照-dc1767635249d3086959a2a7888498cf35a33778.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\\attachments\\最终页面-8ee3ef6c8a4bdc83d3d570bc6bef216eae432b91.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率字段非空数显示计数2\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                    "column": 62,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4762442da7d130050480-ec22d7e80fa231ce5c31",
+          "file": "card-display-linkage.spec.ts",
+          "line": 38,
+          "column": 5
+        },
+        {
+          "title": "字段联动 B 1280px：完成率唯一值计数 (去重计数)显示计数2",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11721,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                      "column": 62,
+                      "line": 16
+                    },
+                    "snippet": "  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                        "column": 62,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n\n  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:45:00.894Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\\attachments\\关键请求-329796935b13e21e47d487a90284fa69f97b992d.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\\attachments\\实际持久化快照-7ac9a9b11f44b6188480098e38f19e32be355874.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\\attachments\\最终页面-9a37ec3cc4c2f93c9f54b5da95ff062dd7be9ff5.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-1280px：完成率唯一值计数-去重计数-显示计数2\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                    "column": 62,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4762442da7d130050480-8f615d03792bafd174e1",
+          "file": "card-display-linkage.spec.ts",
+          "line": 38,
+          "column": 5
+        },
+        {
+          "title": "字段联动 A 390px：平均完成率切金额自动清理百分语义",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11760,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"15\"\u001b[39m\nReceived: \u001b[31m\"15\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>1500.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"1500.0%\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"15\"\u001b[39m\nReceived: \u001b[31m\"15\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>1500.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"1500.0%\"\u001b[22m\n\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:31:11",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                      "column": 62,
+                      "line": 16
+                    },
+                    "snippet": "  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                        "column": 62,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"15\"\u001b[39m\nReceived: \u001b[31m\"15\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>1500.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"1500.0%\"\u001b[22m\n\n\n  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:31:11"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:45:13.851Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\\attachments\\关键请求-3f586e04ce16aebe4ba8842af6825d1dc386c8fd.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\\attachments\\实际持久化快照-8596e6b0f544884f77fa72dcfe692fdba573b714.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\\attachments\\最终页面-9c6023112814cf4c16b09d25f2b9eb56fee565e1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-A-390px：平均完成率切金额自动清理百分语义\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                    "column": 62,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4762442da7d130050480-9114ae26201b53ab9f83",
+          "file": "card-display-linkage.spec.ts",
+          "line": 20,
+          "column": 3
+        },
+        {
+          "title": "字段联动 B 390px：完成率字段非空数显示计数2",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11537,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                      "column": 62,
+                      "line": 16
+                    },
+                    "snippet": "  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                        "column": 62,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n\n  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:45:26.664Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\\attachments\\关键请求-f05acaeab65892ba148bf0a81fc2ac13f4877a77.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\\attachments\\实际持久化快照-5bdc166798ebd9b12343b71e2797fba7fbc5716d.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\\attachments\\最终页面-8cc939a43915b2b14283baa34574f831da42e50c.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率字段非空数显示计数2\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                    "column": 62,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4762442da7d130050480-38d252c7933ce6b54ff7",
+          "file": "card-display-linkage.spec.ts",
+          "line": 38,
+          "column": 5
+        },
+        {
+          "title": "字段联动 B 390px：完成率唯一值计数 (去重计数)显示计数2",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11551,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13",
+                    "location": {
+                      "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                      "column": 62,
+                      "line": 16
+                    },
+                    "snippet": "  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                        "column": 62,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"2\u001b[7m00.0%\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first() with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔍 全量指标实时试算预览：').locator('..').locator('span').first()\u001b[22m\n\u001b[2m    23 × locator resolved to <span>200.0%</span>\u001b[22m\n\u001b[2m       - unexpected value \"200.0%\"\u001b[22m\n\n\n  14 | }\n  15 | async function value(page: Page, expected: string) {\n> 16 |   await expect(focusedPreview(page).locator('span').first()).toHaveText(expected);\n     |                                                              ^\n  17 | }\n  18 |\n  19 | for (const width of [1280, 390]) {\n    at value (D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:16:62)\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts:47:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-13T07:45:39.198Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\\attachments\\关键请求-0b749a62ca4d63ae10924e82d3aef96f92ff02cc.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\\attachments\\实际持久化快照-77211a0f98314f7ad0ea722d86a7d9794942d6e8.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\\attachments\\最终页面-4744955ca0ac9bf6a7427fa02967c95c28382ab4.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\card-result-unit-linkage\\baseline\\browser-results\\card-display-linkage-字段联动-B-390px：完成率唯一值计数-去重计数-显示计数2\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\card-display-linkage.spec.ts",
+                    "column": 62,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "4762442da7d130050480-abfda73ae1de6cf2c1e1",
+          "file": "card-display-linkage.spec.ts",
+          "line": 38,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-13T07:44:26.716Z",
+    "duration": 84947.616,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}

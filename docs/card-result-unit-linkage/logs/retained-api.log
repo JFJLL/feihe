@@ -1,0 +1,18 @@
+✔ API: historical sync retains verified editor identity even when upstream sheets fail (20.4468ms)
+✔ API: non-admin editor single/bulk sync retain actor identity; viewer and outsider denied (21.6529ms)
+✔ API: full spreadsheet reads 5050 records beyond row5000, explicit range is marked limited (140.404ms)
+✔ API: real six-page Bitable sync feeds 501-row weighted ratio16.7% (29.786ms)
+✔ API: has_more without token rejects publication and preserves previous snapshot (20.1067ms)
+✔ API: invalid conversion fails the full import without replacing valid stored rows (14.7653ms)
+✔ API: changed sheet or document context requires new confirmation (4.0642ms)
+✔ API: invalid card config cannot preview or mutate a published dashboard (8.0437ms)
+✔ API: confirmed dashboard IDs and actual multi-step conflict version roundtrip (5.9181ms)
+✔ API: archive denies other writes; only project admin can restore (2.9695ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1240.0025

@@ -1,0 +1,164 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"projectId\":\"focused-1791879978994\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791879978994\\\",\\\"documentToken\\\":\\\"FocusedRatioDoc\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"focused-1791879978994\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboard?projectId=focused-1791879978994&fresh=1&_t=1791879980207",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/ops?projectId=focused-1791879978994&fresh=1&_t=1791879980207",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync",
+    "method": "POST",
+    "status": 500,
+    "body": "{\"projectId\":\"focused-1791879978994\",\"sourceId\":\"76b7a9f4-2727-414a-adbf-36b11803f4f2\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/ops?projectId=focused-1791879978994&fresh=1&_t=1791879980305",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboard?projectId=focused-1791879978994&fresh=1&_t=1791879980305",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"projectId\":\"focused-1791879978994\",\"sheetId\":\"sheetA\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"id\":\"76b7a9f4-2727-414a-adbf-36b11803f4f2\",\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FocusedRatioDoc\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"成交\\\",\\\"targetField\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"咨询\\\",\\\"targetField\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"focused-1791879978994\\\",\\\"documentToken\\\":\\\"FocusedRatioDoc\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"成交\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"咨询\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"focused-1791879978994\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboard?projectId=focused-1791879978994&fresh=1&_t=1791879981849",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/ops?projectId=focused-1791879978994&fresh=1&_t=1791879981849",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879978994\",\"sourceId\":\"76b7a9f4-2727-414a-adbf-36b11803f4f2\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboard?projectId=focused-1791879978994&fresh=1&_t=1791879981943",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/ops?projectId=focused-1791879978994&fresh=1&_t=1791879981943",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=focused-1791879978994",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"focused-1791879978994\",\"cards\":[{\"id\":\"card-focused-1791879978994-c1\",\"title\":\"任务总数\",\"type\":\"metric_card\",\"metric\":\"task_total\",\"sortOrder\":0,\"datasetId\":\"ds-focused-1791879978994-76b7a9f4-2727-414a-adbf-36b11803f4f2\"},{\"id\":\"card-focused-1791879978994-c2\",\"title\":\"已完成数\",\"type\":\"metric_card\",\"metric\":\"task_completed\",\"sortOrder\":1,\"datasetId\":\"ds-focused-1791879978994-76b7a9f4-2727-414a-adbf-36b11803f4f2\"},{\"id\":\"card-focused-1791879978994-c3\",\"title\":\"任务完成率\",\"type\":\"metric_card\",\"metric\":\"task_completion_rate\",\"sortOrder\":2,\"datasetId\":\"ds-focused-1791879978994-76b7a9f4-2727-414a-adbf-36b11803f4f2\"},{\"id\":\"card-focused-1791879978994-c4\",\"title\":\"预算执行率\",\"type\":\"metric_card\",\"metric\":\"budget_spent_rate\",\"sortOrder\":3,\"datasetId\":\"ds-focused-1791879978994-76b7a9f4-2727-414a-adbf-36b11803f4f2\"},{\"id\":\"card-focused-1791879978994-c5\",\"title\":\"按负责人状态分布\",\"type\":\"breakdown\",\"dimension\":\"owner\",\"metric\":\"task_completed\",\"groupBy\":\"owner\",\"sortOrder\":4,\"datasetId\":\"ds-focused-1791879978994-76b7a9f4-2727-414a-adbf-36b11803f4f2\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=focused-1791879978994&id=ds-focused-1791879978994-76b7a9f4-2727-414a-adbf-36b11803f4f2&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

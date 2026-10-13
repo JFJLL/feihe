@@ -1,0 +1,5 @@
+/baseline/
+/final*/
+/iteration-*/
+/DELIVERY-STATE.json
+!logs/*.log

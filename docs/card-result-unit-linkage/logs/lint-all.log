@@ -1,0 +1,214 @@
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\actions\workbench\route.ts
+  3:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\agent\route.ts
+  5:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\lingxi\track\route.ts
+  10:9  warning  'project' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\note-covers\route.ts
+   3:10  warning  'projectId' is defined but never used         @typescript-eslint/no-unused-vars
+  40:9   warning  'project' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\notes\list\route.ts
+  3:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\ops\route.ts
+  5:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\projects\route.ts
+  3:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\resources\route.ts
+  4:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\supplier\list\route.ts
+  3:10  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\app\api\supplier\verify\route.ts
+  6:29  warning  'projectId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\note-detail\NoteDetailDrawer.tsx
+  121:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\notes-modal\CategoryNotesModal.tsx
+  51:7   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\notes-modal\CategoryNotesModal.tsx:51:7
+  49 |   useEffect(() => {
+  50 |     if (isOpen) {
+> 51 |       setKeyword('');
+     |       ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  52 |       setSelectedNote(notes.length === 1 ? notes[0] : null);
+  53 |       setExtraComments([]);
+  54 |       setExtraContent('');  react-hooks/set-state-in-effect
+  80:7   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\notes-modal\CategoryNotesModal.tsx:80:7
+  78 |   useEffect(() => {
+  79 |     if (!selectedNote || !projectId) {
+> 80 |       setExtraComments([]);
+     |       ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  81 |       setExtraContent('');
+  82 |       return;
+  83 |     }                                      react-hooks/set-state-in-effect
+  87:68  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-explicit-any
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\project-shell\FloatingAgent.tsx
+  4:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\project-shell\ProjectShell.tsx
+  66:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  73:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\project-shell\ProjectSwitcher.tsx
+  19:9  warning  'pathname' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  20:9  warning  'searchParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\components\ui\NoteThumbnail.tsx
+  109:5  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\AcceptanceDelivery.tsx
+   29:87  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  367:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  506:31  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\CommentActionWorkbench.tsx
+  263:6  warning  React Hook useCallback has missing dependencies: 'availableDates' and 'summary'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\CommentCollection.tsx
+  369:27  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\CommentsWorkspace.tsx
+  120:9  warning  'totalFailedNotes' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\ReviewActionQueue.tsx
+  46:6  warning  React Hook useEffect has a missing dependency: 'load'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\content\ContentRegistry.tsx
+  13:10  warning  'NoteSummaryBoard' is defined but never used     @typescript-eslint/no-unused-vars
+  49:10  warning  'boardError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\growth\CompetitorIntelligenceSection.tsx
+    7:42  warning  'GrowthReadout' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+   11:52  warning  'ratio' is defined but never used                                                                                         @typescript-eslint/no-unused-vars
+  103:6   warning  React Hook useMemo has missing dependencies: 'brandColor' and 'name'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  199:23  warning  'pct' is assigned a value but never used                                                                                  @typescript-eslint/no-unused-vars
+  238:23  warning  'pct' is assigned a value but never used                                                                                  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\overview\GeneralWorkbenchBoard.tsx
+   34:3   warning  'project' is defined but never used                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  161:37  warning  The ref value 'workspaceRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'workspaceRequest.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  161:62  warning  The ref value 'detailRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'detailRequest.current' to a variable inside the effect, and use that variable in the cleanup function        react-hooks/exhaustive-deps
+  161:87  warning  The ref value 'metricRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'metricRequest.current' to a variable inside the effect, and use that variable in the cleanup function        react-hooks/exhaustive-deps
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\overview\OverviewCharts.tsx
+  654:9  warning  'baseline' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\overview\OverviewWorkspace.tsx
+  55:11  warning  'showToast' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\project-center\ProjectCenter.tsx
+  196:9  warning  The 'allProjects' logical expression could make the dependencies of useMemo Hook (at line 221) change on every render. To fix this, wrap the initialization of 'allProjects' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\settings\data-sources\SettingsDataSources.tsx
+  107:52  warning  The ref value 'statusRequest.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'statusRequest.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\settings\integrations\SettingsIntegrations.tsx
+  99:18  warning  'removeIntegration' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\settings\members\MemberManagement.tsx
+  84:10  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\settings\members\MemberManagement.tsx:84:10
+  82 |
+  83 |   useEffect(() => {
+> 84 |     void loadData();
+     |          ^^^^^^^^ Avoid calling setState() directly within an effect
+  85 |   }, [loadData]);
+  86 |
+  87 |   const canManageMembers =  react-hooks/set-state-in-effect
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\lib\api-auth.ts
+  181:31  warning  'requireWrite' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\lib\feishu-model.ts
+  138:9  warning  'header1_15' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\lib\feishu-sync.ts
+  65:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\lib\metrics\engine.ts
+  271:32  warning  'commentAgg' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\reconcile-qicui.mjs
+  2:8  warning  'fs' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\test-computed-styles.mjs
+  91:11  warning  'd' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\test-ui-unification-v1-regression.mjs
+  178:7  warning  'dialogHandler' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\test-xlsx-loader.mjs
+  36:19  warning  'sel' is defined but never used                   @typescript-eslint/no-unused-vars
+  56:8   warning  'buf' is defined but never used                   @typescript-eslint/no-unused-vars
+  58:19  warning  'sheet' is defined but never used                 @typescript-eslint/no-unused-vars
+  58:26  warning  'opts' is defined but never used                  @typescript-eslint/no-unused-vars
+  69:21  warning  'isValidXLSX' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\verify-frontend-closure.mjs
+  27:22  warning  'getProjectDatasets' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  29:34  warning  'projectsGet' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  30:36  warning  'dashboardsGet' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  31:15  warning  'feishuInspect' is assigned a value but never used       @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\verify-operations.mjs
+  126:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\verify-platform-v1.mjs
+    3:10  warning  'DatabaseSync' is defined but never used                   @typescript-eslint/no-unused-vars
+   32:11  warning  'requireProjectAccess' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   32:33  warning  'getAuthenticatedUser' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   33:11  warning  'projectId' is assigned a value but never used             @typescript-eslint/no-unused-vars
+   33:22  warning  'validateProjectId' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   36:26  warning  'formatMetricValue' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   37:24  warning  'getProjectDatasets' is assigned a value but never used    @typescript-eslint/no-unused-vars
+   39:16  warning  'getProjects' is assigned a value but never used           @typescript-eslint/no-unused-vars
+   43:16  warning  'getDatasets' is assigned a value but never used           @typescript-eslint/no-unused-vars
+   43:35  warning  'postDatasets' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  203:11  warning  'brokenRows' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  204:11  warning  'fakeDb' is assigned a value but never used                @typescript-eslint/no-unused-vars
+  214:5   warning  'caught14' is assigned a value but never used              @typescript-eslint/no-unused-vars
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\scripts\verify-v2-unit-api.mjs
+   29:22  warning  'getProjectDatasets' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   31:9   warning  'computeMetric' is assigned a value but never used       @typescript-eslint/no-unused-vars
+   31:63  warning  'formatMetricValue' is assigned a value but never used   @typescript-eslint/no-unused-vars
+   34:15  warning  'datasetsPost' is assigned a value but never used        @typescript-eslint/no-unused-vars
+   36:15  warning  'metricsPost' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   36:33  warning  'metricsGet' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  372:7   warning  'saveBoundRes' is assigned a value but never used        @typescript-eslint/no-unused-vars
+
+✖ 82 problems (8 errors, 74 warnings)
+

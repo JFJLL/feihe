@@ -1,0 +1,74 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=flow-1791879925991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FixtureDoc\",\"projectId\":\"flow-1791879925991\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/FixtureDoc\",\"projectId\":\"flow-1791879925991\",\"sheetId\":\"sheetB\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"结构A\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/FixtureDoc\",\"sheetId\":\"sheetB\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"编号\\\",\\\"targetField\\\":\\\"编号\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"金额\\\",\\\"targetField\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"required\\\":false},{\\\"sourceField\\\":\\\"分组\\\",\\\"targetField\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\",\\\"isKey\\\":false,\\\"isDate\\\":false},{\\\"sourceField\\\":\\\"已确认\\\",\\\"targetField\\\":\\\"已确认\\\",\\\"type\\\":\\\"boolean\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"业务日\\\",\\\"targetField\\\":\\\"业务日\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"订单\\\",\\\"targetField\\\":\\\"订单\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"访问\\\",\\\"targetField\\\":\\\"访问\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"flow-1791879925991\\\",\\\"documentToken\\\":\\\"FixtureDoc\\\",\\\"sheetId\\\":\\\"sheetB\\\",\\\"fields\\\":[{\\\"key\\\":\\\"编号\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"金额\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"分组\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"已确认\\\",\\\"type\\\":\\\"boolean\\\"},{\\\"key\\\":\\\"业务日\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"订单\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"访问\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"flow-1791879925991\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboard?projectId=flow-1791879925991&fresh=1&_t=1791879928740",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/ops?projectId=flow-1791879925991&fresh=1&_t=1791879928740",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"flow-1791879925991\",\"sourceId\":\"9a3eb577-3f5f-4dd3-a100-236cecc51646\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/ops?projectId=flow-1791879925991&fresh=1&_t=1791879928868",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboard?projectId=flow-1791879925991&fresh=1&_t=1791879928868",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=flow-1791879925991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

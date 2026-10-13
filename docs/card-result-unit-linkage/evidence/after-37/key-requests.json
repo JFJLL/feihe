@@ -1,0 +1,62 @@
+[
+  {
+    "url": "http://127.0.0.1:5206/api/feishu/sync?projectId=repro-1791880044869",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/projects?projectId=repro-1791880044869",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880044869",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards?projectId=repro-1791880044869",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880044869\",\"cards\":[{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880044869-a\",\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"sortOrder\":0}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/datasets?projectId=repro-1791880044869&id=ds-repro-1791880044869-b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880044869\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"原始任务总数\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880044869-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880044869\",\"action\":\"evaluate\",\"card\":{\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880044869-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880044869\",\"cards\":[{\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880044869-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5206/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"repro-1791880044869\",\"dashboardId\":\"dash-repro-1791880044869-default\",\"name\":\"默认工作台看板\",\"version\":2,\"force\":false,\"cards\":[{\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"metricKeys\":[\"task_total\"],\"config\":{\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880044869-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"},\"sortOrder\":0}]}"
+  }
+]

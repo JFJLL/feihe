@@ -1,0 +1,328 @@
+[
+  {
+    "projectId": "repro-1791880044869",
+    "project": {
+      "id": "repro-1791880044869",
+      "name": "定向返修测试",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T08:27:24.874Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-repro-1791880044869-default",
+          "projectId": "repro-1791880044869",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:27:26.292Z"
+        }
+      ],
+      "targetDashboardId": "dash-repro-1791880044869-default",
+      "cards": [
+        {
+          "id": "card-6012ca20-d425-4262-88b3-86c45758ba8a",
+          "dashboardId": "dash-repro-1791880044869-default",
+          "projectId": "repro-1791880044869",
+          "title": "导航保护草稿",
+          "type": "metric_card",
+          "metricKeysJson": "[\"task_total\"]",
+          "configJson": "{\"id\":\"card-6012ca20-d425-4262-88b3-86c45758ba8a\",\"title\":\"导航保护草稿\",\"type\":\"metric_card\",\"datasetId\":\"ds-repro-1791880044869-a\",\"metric\":\"task_total\",\"mode\":\"template\",\"missingPolicy\":\"skip\",\"from\":\"\",\"to\":\"\",\"desc\":\"\",\"field\":\"\",\"numField\":\"\",\"denField\":\"\",\"groupBy\":\"\",\"dateField\":\"\",\"unit\":\"\",\"format\":\"number\",\"displayOrigin\":\"manual\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:27:26.292Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880044869-b",
+          "projectId": "repro-1791880044869",
+          "sourceId": "b",
+          "name": "任务数据B",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:24.908Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "task": "其他",
+              "amount": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880044869-a",
+          "projectId": "repro-1791880044869",
+          "sourceId": "a",
+          "name": "任务数据A",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"},{\"key\":\"group\",\"name\":\"group\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:24.898Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            },
+            {
+              "key": "group",
+              "name": "group",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "task": "任务1",
+              "amount": 10,
+              "group": "同组"
+            },
+            {
+              "task": "任务2",
+              "amount": null,
+              "group": "同组"
+            },
+            {
+              "task": "任务3",
+              "amount": 20,
+              "group": "另一组"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  },
+  {
+    "projectId": "repro-1791880044927",
+    "project": {
+      "id": "repro-1791880044927",
+      "name": "导航目的项目repro-1791880044927",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "general_workbench",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "updatedAt": "2026-10-13T08:27:24.987Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "templateName": "通用数据工作台"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-repro-1791880044927-default",
+          "projectId": "repro-1791880044927",
+          "name": "默认看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-13T08:27:24.978Z"
+        }
+      ],
+      "targetDashboardId": "dash-repro-1791880044927-default",
+      "cards": [
+        {
+          "id": "card-7225fe02-1ce1-4346-8eec-f96066bbdd6f",
+          "dashboardId": "dash-repro-1791880044927-default",
+          "projectId": "repro-1791880044927",
+          "title": "原始任务总数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metric\":\"task_total\",\"datasetId\":\"ds-repro-1791880044927-a\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-13T08:27:24.978Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880044927-b",
+          "projectId": "repro-1791880044927",
+          "sourceId": "b",
+          "name": "任务数据B",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:24.966Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "task": "其他",
+              "amount": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-repro-1791880044927-a",
+          "projectId": "repro-1791880044927",
+          "sourceId": "a",
+          "name": "任务数据A",
+          "schemaJson": "[{\"key\":\"task\",\"name\":\"task\",\"type\":\"text\"},{\"key\":\"amount\",\"name\":\"amount\",\"type\":\"number\"},{\"key\":\"group\",\"name\":\"group\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-13T08:27:24.957Z",
+          "columns": [
+            {
+              "key": "task",
+              "name": "task",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "name": "amount",
+              "type": "number"
+            },
+            {
+              "key": "group",
+              "name": "group",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "task": "任务1",
+              "amount": 10,
+              "group": "同组"
+            },
+            {
+              "task": "任务2",
+              "amount": null,
+              "group": "同组"
+            },
+            {
+              "task": "任务3",
+              "amount": 20,
+              "group": "另一组"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      }
+    ]
+  }
+]
