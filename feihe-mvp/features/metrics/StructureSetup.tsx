@@ -102,7 +102,7 @@ function StructureDialog({ projectId, datasetId, onClose, onDone }: { projectId:
         return <div className="recommendation-option" key={card.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 8 }}><label style={{ display: 'flex', alignItems: 'center', gap: 8 }}><input type="checkbox" aria-label={'复用' + card.title} checked={picked} onChange={event => update({ ...currentChoices(), selectedCards: event.target.checked ? [...view.selectedCards, card.key] : view.selectedCards.filter(key => key !== card.key) })} />{card.title}</label>{picked && <><p>{preview?.preview ? '本项目试算：' + preview.preview.formattedValue : preview?.error || (plan ? '等待完整字段对应' : '正在试算新配置…')}</p>{preview?.preview && metric?.config.aggregation === 'ratio' && <small>{ratioSampleLabel(preview.preview, metric.config.missingPolicy === 'zero')}</small>}{card.requiresTarget && <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>本项目目标<input aria-label={card.title + '本项目目标'} type="number" min="0" step="any" value={choices?.targets?.[card.key] ?? ''} onChange={event => { const targets = { ...currentChoices().targets }; if (event.target.value === '') delete targets[card.key]; else targets[card.key] = Number(event.target.value); update({ ...currentChoices(), targets }); }} /></label>}</>}</div>;
       })}
       {view.errors.length > 0 && <p role="status">{view.errors.join('；')}</p>}
-      {view.blueprint.business && <p>专属投放页也将绑定本项目来源和这组共享指标；不会携带原账户或授权。</p>}
+      {view.blueprint.business && <p>专属{view.blueprint.business.kind === 'dataset_ad' ? '投放' : view.blueprint.business.kind === 'dataset_content' ? '内容' : '评论'}页也将绑定本项目来源和这组共享指标；不会携带原账户或授权。</p>}
       <p>确认后指标持久保存，看板进入草稿；仍须由您发布团队看板。</p>
     </div>}
   </Dialog>;

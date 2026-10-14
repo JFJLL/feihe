@@ -1,0 +1,232 @@
+{
+  "gitBaseline": "1027b6b61d819763a5028c6329c34c7c1953b883",
+  "stageStart": "e32e5cbf7186f8068fcd9aefad2f9b1c46bc152a",
+  "workspace": "D:/download/pic-vec/feihe-platform-v3",
+  "branch": "codex/product-integration-v1",
+  "checks": [
+    {
+      "command": "node scripts/test-acceptance-reply-pending.mjs",
+      "startedAt": "2026-10-14T00:15:22.495Z",
+      "finishedAt": "2026-10-14T00:15:22.955Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/test-card-display-api.mjs",
+      "startedAt": "2026-10-14T00:15:22.957Z",
+      "finishedAt": "2026-10-14T00:15:32.480Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 5
+    },
+    {
+      "command": "node scripts/test-card-display-linkage.mjs",
+      "startedAt": "2026-10-14T00:15:32.481Z",
+      "finishedAt": "2026-10-14T00:15:42.913Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 17
+    },
+    {
+      "command": "node scripts/test-category-notes-modal.mjs",
+      "startedAt": "2026-10-14T00:15:42.914Z",
+      "finishedAt": "2026-10-14T00:15:43.514Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/test-content-comment-boards.mjs",
+      "startedAt": "2026-10-14T00:15:43.515Z",
+      "finishedAt": "2026-10-14T00:15:44.341Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/test-dashboard-feedback.mjs",
+      "startedAt": "2026-10-14T00:15:44.342Z",
+      "finishedAt": "2026-10-14T00:15:47.435Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/test-focused-api.mjs",
+      "startedAt": "2026-10-14T00:15:47.437Z",
+      "finishedAt": "2026-10-14T00:15:58.462Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 6
+    },
+    {
+      "command": "node scripts/test-focused-remediation.mjs",
+      "startedAt": "2026-10-14T00:15:58.463Z",
+      "finishedAt": "2026-10-14T00:16:12.207Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 12
+    },
+    {
+      "command": "node scripts/test-product-access.mjs",
+      "startedAt": "2026-10-14T00:16:12.208Z",
+      "finishedAt": "2026-10-14T00:16:25.414Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 7
+    },
+    {
+      "command": "node scripts/test-product-adapters.mjs",
+      "startedAt": "2026-10-14T00:16:25.415Z",
+      "finishedAt": "2026-10-14T00:16:34.870Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 7
+    },
+    {
+      "command": "node scripts/test-product-board.mjs",
+      "startedAt": "2026-10-14T00:16:34.871Z",
+      "finishedAt": "2026-10-14T00:16:47.158Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 12
+    },
+    {
+      "command": "node scripts/test-product-data.mjs",
+      "startedAt": "2026-10-14T00:16:47.159Z",
+      "finishedAt": "2026-10-14T00:17:02.128Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 6
+    },
+    {
+      "command": "node scripts/test-product-foundation.mjs",
+      "startedAt": "2026-10-14T00:17:02.129Z",
+      "finishedAt": "2026-10-14T00:17:16.732Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 12
+    },
+    {
+      "command": "node scripts/test-product-metrics.mjs",
+      "startedAt": "2026-10-14T00:17:16.732Z",
+      "finishedAt": "2026-10-14T00:17:28.123Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 7
+    },
+    {
+      "command": "node scripts/test-product-reports.mjs",
+      "startedAt": "2026-10-14T00:17:28.125Z",
+      "finishedAt": "2026-10-14T00:17:40.792Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 10
+    },
+    {
+      "command": "node scripts/test-product-structure.mjs",
+      "startedAt": "2026-10-14T00:17:40.793Z",
+      "finishedAt": "2026-10-14T00:17:56.546Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 11
+    },
+    {
+      "command": "node scripts/test-request-abort.mjs",
+      "startedAt": "2026-10-14T00:17:56.548Z",
+      "finishedAt": "2026-10-14T00:17:56.864Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 3
+    },
+    {
+      "command": "node scripts/test-ui-unification-v1-regression.mjs",
+      "startedAt": "2026-10-14T00:17:56.865Z",
+      "finishedAt": "2026-10-14T00:17:57.836Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/test-v3-api.mjs",
+      "startedAt": "2026-10-14T00:17:57.837Z",
+      "finishedAt": "2026-10-14T00:18:10.768Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 10
+    },
+    {
+      "command": "node scripts/test-v3-remediation.mjs",
+      "startedAt": "2026-10-14T00:18:10.768Z",
+      "finishedAt": "2026-10-14T00:18:22.938Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 26
+    },
+    {
+      "command": "node scripts/test-workspace-charts.mjs",
+      "startedAt": "2026-10-14T00:18:22.939Z",
+      "finishedAt": "2026-10-14T00:18:23.504Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/verify-growth.mjs",
+      "startedAt": "2026-10-14T00:18:23.505Z",
+      "finishedAt": "2026-10-14T00:18:39.288Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 0
+    },
+    {
+      "command": "node scripts/test-product-domains.mjs",
+      "startedAt": "2026-10-14T00:18:39.289Z",
+      "finishedAt": "2026-10-14T00:18:51.587Z",
+      "exitCode": 0,
+      "signal": null,
+      "tests": 14
+    }
+  ],
+  "assertions": {
+    "unitStorage": 55,
+    "api": 107,
+    "http": 3
+  },
+  "legacyScripts": 7,
+  "static": {
+    "typecheck": {
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0
+    },
+    "build": {
+      "command": "npm.cmd run build",
+      "exitCode": 0
+    },
+    "lint": {
+      "files": 24,
+      "errors": 0,
+      "existingWarnings": 3
+    }
+  },
+  "externalBoundary": "Isolated Feishu vendor HTTP; failure/latency injection on specified requests, local routes/storage/metrics/publication real",
+  "notExecuted": [
+    "human department pilot",
+    "real Feishu",
+    "real enterprise gateway",
+    "production validation",
+    "merge",
+    "deployment"
+  ],
+  "fullObjective": "active",
+  "browser": {
+    "startTime": "2026-10-14T00:15:12.369Z",
+    "duration": 704437.905,
+    "expected": 164,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "browserCore": 20
+}

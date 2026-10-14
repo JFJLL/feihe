@@ -211,7 +211,7 @@ export async function POST(request: Request) {
     } else if (templateId === 'comment_qc') {
       await d1
         .prepare(`INSERT INTO project_settings(id,project_id,key,value,updated_at) VALUES(?,?,?,?,?)`)
-        .bind(`${id}:acceptance`, id, 'acceptance', JSON.stringify({ reportCount: 200, baseCount: 30, brandTopRate: 0.4, freshnessHours: 24, supplierSimilarity: 0.58 }), now)
+        .bind(`${id}:acceptance`, id, 'acceptance', JSON.stringify({ reportCount: 0, baseCount: 0, brandTopRate: 0, freshnessHours: 24, supplierSimilarity: 0.58, targetsConfirmed: false }), now)
         .run();
     }
 

@@ -1,0 +1,104 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791935853526&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791935853526&id=ds-1791935853526-ed8136a3-2f42-4f3c-a164-c34da7099581&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-definitions?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791935853526\",\"card\":{\"id\":\"card-1791935853526:metric:9625505a-fca3-4f70-ab4c-fa442296eb1f\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricId\":\"1791935853526:metric:9625505a-fca3-4f70-ab4c-fa442296eb1f\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"},\"query\":{}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791935853526\",\"query\":{},\"cards\":[{\"id\":\"card-c76d9623-1975-4947-a47d-d6487f20d0d3\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricId\":\"1791935853526:metric:9625505a-fca3-4f70-ab4c-fa442296eb1f\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791935853526-ed8136a3-2f42-4f3c-a164-c34da7099581\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791935853526\",\"dashboardId\":\"dash-1791935853526-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"card-c76d9623-1975-4947-a47d-d6487f20d0d3\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"id\":\"card-c76d9623-1975-4947-a47d-d6487f20d0d3\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"metricId\":\"1791935853526:metric:9625505a-fca3-4f70-ab4c-fa442296eb1f\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791935853526-ed8136a3-2f42-4f3c-a164-c34da7099581\"},\"sortOrder\":0}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791935853526\",\"query\":{},\"cards\":[{\"metricId\":\"1791935853526:metric:9625505a-fca3-4f70-ab4c-fa442296eb1f\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\",\"id\":\"card-c76d9623-1975-4947-a47d-d6487f20d0d3\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791935853526-ed8136a3-2f42-4f3c-a164-c34da7099581\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791935853526&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791935853526",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791935853526\",\"query\":{},\"cards\":[{\"metricId\":\"1791935853526:metric:9625505a-fca3-4f70-ab4c-fa442296eb1f\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-c76d9623-1975-4947-a47d-d6487f20d0d3\",\"title\":\"本项目记录\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791935853526-ed8136a3-2f42-4f3c-a164-c34da7099581\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791935853526&id=ds-1791935853526-ed8136a3-2f42-4f3c-a164-c34da7099581&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

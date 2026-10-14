@@ -1,0 +1,117 @@
+[WebServer] (node:33624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:33624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:19716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19716) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 2 tests using 1 worker
+
+(node:21724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [local] › tests\browser\product-domains.spec.ts:4:1 › 内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录 (15.5s)
+(node:15988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [local] › tests\browser\product-domains.spec.ts:9:1 › 评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态 (13.1s)
+
+
+  1) [local] › tests\browser\product-domains.spec.ts:4:1 › 内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录 ─
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })
+    Expected substring: "3,000"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' }) with timeout 10000ms
+      - waiting for getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })
+
+
+       5 |   const { projectId } = await connectProjectTable(page, request, 'content_marketing', [['发布日期', '内容编号', '标题', '阅读量', '互动量', '内容费用'], ['2026-11-01', 'article-a', '业务教程', 1000, 10, 50], ['2026-11-02', 'article-b', '案例分享', 2000, 20, 100]]);
+       6 |   await publishRecommendedBoard(page); await page.goto('/projects/' + projectId + '/content');
+    >  7 |   const business = page.getByTestId('content-domain-overview'); await expect(business.locator('.ops-metric-card').filter({ hasText: '阅读总量' })).toContainText('3,000'); await expect(business.getByRole('table', { name: '项目内容记录', exact: true })).toContainText('业务教程');
+         |                                                                                                                                                ^
+       8 | });
+       9 | test('评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态', async ({ page, request }) => {
+      10 |   const { projectId } = await connectProjectTable(page, request, 'comment_qc', [['记录日期', '评论编号', '评论内容', '情感', '处置状态'], ['2026-11-01', 'c1', '需要回复咨询', '问题', '待处理'], ['2026-11-01', 'c2', '体验很好', '正面', '已处理'], ['2026-11-02', 'c3', '未标注的记录', '', '待处理']]);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:7:144
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\attachments\关键请求-16dad9c1c9ccc9f70219f962e9fa8a18f37b7a47.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\attachments\实际持久化快照-eebb18beb013e9b2e4752c99a7857d4d815ff83d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\attachments\最终页面-338d7b285b8abb7d74188773e034622fb2727abb.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-red\browser-results\product-domains-内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [local] › tests\browser\product-domains.spec.ts:9:1 › 评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态 ──────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('comment-domain-overview').locator('.ops-metric-card').filter({ hasText: '评论记录数' })
+    Expected substring: "3"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByTestId('comment-domain-overview').locator('.ops-metric-card').filter({ hasText: '评论记录数' }) with timeout 10000ms
+      - waiting for getByTestId('comment-domain-overview').locator('.ops-metric-card').filter({ hasText: '评论记录数' })
+
+
+      10 |   const { projectId } = await connectProjectTable(page, request, 'comment_qc', [['记录日期', '评论编号', '评论内容', '情感', '处置状态'], ['2026-11-01', 'c1', '需要回复咨询', '问题', '待处理'], ['2026-11-01', 'c2', '体验很好', '正面', '已处理'], ['2026-11-02', 'c3', '未标注的记录', '', '待处理']]);
+      11 |   await publishRecommendedBoard(page); await page.goto('/projects/' + projectId + '/comments');
+    > 12 |   const business = page.getByTestId('comment-domain-overview'); await expect(business.locator('.ops-metric-card').filter({ hasText: '评论记录数' })).toContainText('3'); await expect(business.getByRole('table', { name: '项目评论记录', exact: true })).toContainText('需要回复咨询');
+         |                                                                                                                                                 ^
+      13 | });
+      14 |
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:12:145
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\attachments\关键请求-61c125c230875c23dfb319acc3dca4d86c70e385.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\attachments\实际持久化快照-7864977f126558c055b76d41b93f82784e9a1fd5.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\attachments\最终页面-1da79ef962971ca6c54477c9f0b294558d912c4d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-red\browser-results\product-domains-评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [local] › tests\browser\product-domains.spec.ts:4:1 › 内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录 ──
+    [local] › tests\browser\product-domains.spec.ts:9:1 › 评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态 ───────

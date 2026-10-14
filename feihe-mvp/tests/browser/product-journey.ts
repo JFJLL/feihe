@@ -11,9 +11,9 @@ export async function connectProjectTable(page: Page, request: APIRequestContext
   expect(created.status()).toBe(200); const projectId = (await created.json()).id;
   return connectExistingProjectTable(page, request, projectId, rows);
 }
-export async function connectExistingProjectTable(page: Page, request: APIRequestContext, projectId: string, rows: unknown[][]) {
+export async function connectExistingProjectTable(page: Page, request: APIRequestContext, projectId: string, rows: unknown[][], documentToken?: string) {
   await page.context().setExtraHTTPHeaders(projectIdentity);
-  const token = 'Report-' + projectId, vendor = process.env.FEIHE_TEST_VENDOR_ORIGIN || 'http://127.0.0.1:5217';
+  const token = documentToken || 'Report-' + projectId, vendor = process.env.FEIHE_TEST_VENDOR_ORIGIN || 'http://127.0.0.1:5217';
   expect((await request.post(vendor + '/__fixture/focused-rows', { data: { documentToken: token, rows } })).status()).toBe(200);
   await page.goto('/projects/' + projectId + '/data');
   await page.getByRole('button', { name: /接入飞书数据源/ }).click();

@@ -1,0 +1,36 @@
+✔ unit: custom + count + empty field counts three records (8.9572ms)
+✔ API: count preview uses the real stored three records (5.5101ms)
+✔ unit: explicit aggregation overrides old task_total binding (0.9337ms)
+✔ unit: global and grouped average share valid samples (0.995ms)
+✔ unit: absent numerator must not become 0% (0.7005ms)
+✔ unit: null numerator must not become 0% (0.5087ms)
+✔ unit: invalid numerator must not become 0% (0.6395ms)
+✔ unit: record, nonempty and distinct counts are different operations (0.5568ms)
+✔ unit: missing, all-null, actual zero, invalid numeric and zero denominator stay distinct (0.4055ms)
+✔ unit: explicit zero fill applies identically to grouped and whole averages (0.3875ms)
+✔ unit: inference considers all observed values and never fills blanks (1.2349ms)
+✔ unit: shared mapping preview matches stored values and preserved column metadata (6.8918ms)
+✔ unit: mapping context changes for project, document, sheet or schema (0.137ms)
+✔ unit: card validation covers dataset, numeric types, ratio, grouping and date compatibility (1.2717ms)
+✔ unit: date range includes noon on end day and excludes next midnight and undated rows (2.588ms)
+✔ unit: mapping rejects required (1.3043ms)
+✔ unit: mapping rejects duplicate key (0.1565ms)
+✔ unit: mapping rejects invalid date (0.0837ms)
+✔ unit: mapping rejects unknown boolean (0.1016ms)
+✔ unit: mapping rejects duplicate target (0.0772ms)
+✔ unit: mapping rejects invalid number with zero fill (0.0568ms)
+✔ unit: malformed numeric text is not coerced into legitimate zero (0.2992ms)
+✔ unit: zoneless timestamps preserve milliseconds and invalid epochs fail (0.8026ms)
+✔ unit: unsupported and malformed mapping options are explicitly rejected (0.112ms)
+✔ unit: date mapping preserves ISO fractional seconds and normalizes only calendar separators (0.4055ms)
+✔ unit: legacy minimum and maximum definitions retain their aggregation semantics (0.2498ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11867.8889
+(node:39600) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

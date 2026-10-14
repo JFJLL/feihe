@@ -61,9 +61,10 @@ export const emptyOps: Ops = {
       deleteCompetitorMentions: true,
     },
     acceptance: {
-      reportCount: 200,
-      baseCount: 30,
-      brandTopRate: 0.4,
+      reportCount: 0,
+      baseCount: 0,
+      brandTopRate: 0,
+      targetsConfirmed: false,
       freshnessHours: 24,
       supplierSimilarity: 0.58,
     },

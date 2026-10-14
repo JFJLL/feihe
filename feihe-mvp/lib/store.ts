@@ -2,6 +2,7 @@ import { classifyComment, DEFAULT_RULES, normalizeText, type ClassificationRules
 import { DEFAULT_PROJECT_ID, db, ensureSchema } from './db';
 import { getSetting } from './ops';
 import { projectId } from './projects';
+import { defaultAcceptance, acceptanceTargetsConfirmed } from './business-targets';
 
 export function noteIdFrom(value: string) {
   const matches = value.match(/[0-9a-f]{24}/ig);
@@ -14,7 +15,7 @@ export async function saveFetchedComments(noteId: string, comments: CommentInput
   const currentProject = projectId(project);
   const now = new Date().toISOString();
   const rules = await getSetting<ClassificationRules>('rules', DEFAULT_RULES, currentProject);
-  const acceptance = await getSetting('acceptance', { reportCount: 200, baseCount: 30, brandTopRate: .4 }, currentProject);
+  const acceptance = await getSetting('acceptance', defaultAcceptance(currentProject), currentProject);
   const customRules = await d1.prepare(`SELECT keywords,sentiment,category,action FROM review_rules
     WHERE project_id=? AND enabled=1 ORDER BY priority ASC,created_at ASC`).bind(currentProject).all<{keywords:string;sentiment:string;category:string;action:string}>();
   const classified = comments.map((comment) => {
@@ -36,7 +37,7 @@ export async function saveFetchedComments(noteId: string, comments: CommentInput
   const top5 = l1.slice(0, 5);
   const brandMentionTop5 = top5.length ? top5.filter((x) => x.result.hasBrand).length / top5.length : 0;
   const total = comments.length;
-  const status = positive >= acceptance.reportCount && brandMentionTop5 >= acceptance.brandTopRate ? '符合且能汇报' : positive >= acceptance.baseCount ? '符合基础要求' : `不够${acceptance.baseCount}条需补充`;
+  const status = !acceptanceTargetsConfirmed(acceptance) ? '验收目标未设置' : positive >= acceptance.reportCount && brandMentionTop5 >= acceptance.brandTopRate ? '符合且能汇报' : positive >= acceptance.baseCount ? '符合基础要求' : `不够${acceptance.baseCount}条需补充`;
 
   const existing = await d1.prepare('SELECT id FROM key_comments WHERE project_id=? AND note_id = ? AND disappeared_at IS NULL').bind(currentProject,noteId).all<{ id: string }>();
   const liveIds = new Set(comments.map((comment) => `${currentProject}:${comment.id}`));

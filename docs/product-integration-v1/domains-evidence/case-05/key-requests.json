@@ -1,0 +1,152 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791937257817&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791937257817\",\"projectId\":\"1791937257817\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791937257817\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"内容编号\\\",\\\"targetField\\\":\\\"内容编号\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"唯一编号\\\",\\\"targetField\\\":\\\"唯一编号\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"阅读量\\\",\\\"targetField\\\":\\\"阅读量\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791937257817\\\",\\\"documentToken\\\":\\\"Report-1791937257817\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"内容编号\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"唯一编号\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"阅读量\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791937257817\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937257817\",\"sourceId\":\"1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937257817&id=ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791937257817&datasetId=ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3&domain=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 400,
+    "body": "{\"projectId\":\"1791937257817\",\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\",\"datasetVersion\":1,\"selected\":[\"content_records\",\"reads\"],\"roles\":{\"contentId\":\"内容编号\",\"reads\":\"阅读量\"},\"domain\":\"content\",\"bindBusiness\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791937257817&datasetId=ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3&roles=%7B%22contentId%22%3A%22%E5%94%AF%E4%B8%80%E7%BC%96%E5%8F%B7%22%2C%22reads%22%3A%22%E9%98%85%E8%AF%BB%E9%87%8F%22%7D&domain=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937257817\",\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\",\"datasetVersion\":1,\"selected\":[\"content_records\",\"reads\"],\"roles\":{\"contentId\":\"唯一编号\",\"reads\":\"阅读量\"},\"domain\":\"content\",\"bindBusiness\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937257817&kind=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791937257817",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937257817&id=ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937257817\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"内容记录数\",\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records-value\",\"metricId\":\"1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"},{\"type\":\"metric_card\",\"title\":\"阅读总量\",\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads-value\",\"metricId\":\"1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937257817\",\"dashboardId\":\"dash-1791937257817-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records-value\",\"title\":\"内容记录数\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"内容记录数\",\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records-value\",\"metricId\":\"1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"},\"sortOrder\":0},{\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads-value\",\"title\":\"阅读总量\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"阅读总量\",\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads-value\",\"metricId\":\"1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"},\"sortOrder\":1}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937257817\",\"query\":{},\"cards\":[{\"metricId\":\"1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:content_records-value\",\"title\":\"内容记录数\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"},{\"metricId\":\"1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791937257817:recommended:ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3:reads-value\",\"title\":\"阅读总量\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791937257817-1688bd62-9e54-4dcd-b7a1-f7ab0e2319a3\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937257817&kind=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

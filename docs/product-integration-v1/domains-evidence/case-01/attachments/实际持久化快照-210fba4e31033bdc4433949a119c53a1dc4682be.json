@@ -1,0 +1,207 @@
+[
+  {
+    "projectId": "1791937239920",
+    "project": {
+      "id": "1791937239920",
+      "name": "独立部门报告1791937239920",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#4f46e5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-14T00:20:39.924Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "9a666a32-ed41-45f9-825e-d678bf8b98f9",
+        "projectId": "1791937239920",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791937239920",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T00:20:40.715Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"发布日期\",\"targetField\":\"发布日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"内容编号\",\"targetField\":\"内容编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"标题\",\"targetField\":\"标题\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"阅读量\",\"targetField\":\"阅读量\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"互动量\",\"targetField\":\"互动量\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"内容费用\",\"targetField\":\"内容费用\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791937239920\",\"documentToken\":\"Report-1791937239920\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"发布日期\",\"type\":\"date\"},{\"key\":\"内容编号\",\"type\":\"text\"},{\"key\":\"标题\",\"type\":\"text\"},{\"key\":\"阅读量\",\"type\":\"number\"},{\"key\":\"互动量\",\"type\":\"number\"},{\"key\":\"内容费用\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T00:20:40.715Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791937239920-default",
+          "projectId": "1791937239920",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-14T00:20:41.234Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791937239920-default",
+      "cards": [
+        {
+          "id": "recommended-1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:content_records-value",
+          "dashboardId": "dash-1791937239920-default",
+          "projectId": "1791937239920",
+          "title": "内容记录数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-14T00:20:41.234Z"
+        },
+        {
+          "id": "recommended-1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:reads-value",
+          "dashboardId": "dash-1791937239920-default",
+          "projectId": "1791937239920",
+          "title": "阅读总量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-14T00:20:41.234Z"
+        },
+        {
+          "id": "recommended-1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:interactions-value",
+          "dashboardId": "dash-1791937239920-default",
+          "projectId": "1791937239920",
+          "title": "互动总量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:interactions\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-14T00:20:41.234Z"
+        },
+        {
+          "id": "recommended-1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:spend-value",
+          "dashboardId": "dash-1791937239920-default",
+          "projectId": "1791937239920",
+          "title": "内容费用",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:spend\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-14T00:20:41.234Z"
+        },
+        {
+          "id": "recommended-1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:reads-time_trend-date",
+          "dashboardId": "dash-1791937239920-default",
+          "projectId": "1791937239920",
+          "title": "阅读总量趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937239920:recommended:ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-14T00:20:41.234Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791937239920-9a666a32-ed41-45f9-825e-d678bf8b98f9",
+          "projectId": "1791937239920",
+          "sourceId": "9a666a32-ed41-45f9-825e-d678bf8b98f9",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"发布日期\",\"name\":\"发布日期\",\"type\":\"date\"},{\"key\":\"内容编号\",\"name\":\"内容编号\",\"type\":\"text\"},{\"key\":\"标题\",\"name\":\"标题\",\"type\":\"text\"},{\"key\":\"阅读量\",\"name\":\"阅读量\",\"type\":\"number\"},{\"key\":\"互动量\",\"name\":\"互动量\",\"type\":\"number\"},{\"key\":\"内容费用\",\"name\":\"内容费用\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-14T00:20:40.734Z",
+          "columns": [
+            {
+              "key": "发布日期",
+              "name": "发布日期",
+              "type": "date"
+            },
+            {
+              "key": "内容编号",
+              "name": "内容编号",
+              "type": "text"
+            },
+            {
+              "key": "标题",
+              "name": "标题",
+              "type": "text"
+            },
+            {
+              "key": "阅读量",
+              "name": "阅读量",
+              "type": "number"
+            },
+            {
+              "key": "互动量",
+              "name": "互动量",
+              "type": "number"
+            },
+            {
+              "key": "内容费用",
+              "name": "内容费用",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "发布日期": "2026-11-01",
+              "内容编号": "article-a",
+              "标题": "业务教程",
+              "阅读量": 1000,
+              "互动量": 10,
+              "内容费用": 50
+            },
+            {
+              "发布日期": "2026-11-02",
+              "内容编号": "article-b",
+              "标题": "案例分享",
+              "阅读量": 2000,
+              "互动量": 20,
+              "内容费用": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

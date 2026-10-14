@@ -1,0 +1,10 @@
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\AcceptanceDelivery.tsx
+  370:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  509:31  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\download\pic-vec\feihe-platform-v3\feihe-mvp\features\comments\CommentsWorkspace.tsx
+  120:9  warning  'totalFailedNotes' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 3 problems (0 errors, 3 warnings)
+

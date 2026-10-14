@@ -1,0 +1,293 @@
+[WebServer] (node:38264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:38264) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:37112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:37112) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 14 tests using 1 worker
+
+(node:35776) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [local] › tests\browser\product-domains.spec.ts:5:1 › 内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录 (5.2s)
+  x   2 [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 1280px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 (1.0m)
+(node:40112) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   3 [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 (4.2s)
+(node:5644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  4 [local] › tests\browser\product-domains.spec.ts:60:3 › 评论最小表 1280px：缺字段显示未配置，初始目标不继承，明确保存40/10后刷新仍正确 (3.7s)
+  ok  5 [local] › tests\browser\product-domains.spec.ts:72:3 › 业务校验 1280px：样本之外重复编号阻止确认，错误获焦，改对应字段后使用同一个来源与数据集 (3.3s)
+  ok  6 [local] › tests\browser\product-domains.spec.ts:82:3 › 更新与分页 1280px：31条评论第3页，同来源真实同步1条后刷新校正到第1页 (3.9s)
+  x   7 [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 1280px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 (5.0s)
+(node:2316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   8 [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 (1.0m)
+(node:41596) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   9 [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 (3.6s)
+(node:28068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 10 [local] › tests\browser\product-domains.spec.ts:60:3 › 评论最小表 390px：缺字段显示未配置，初始目标不继承，明确保存40/10后刷新仍正确 (4.9s)
+  ok 11 [local] › tests\browser\product-domains.spec.ts:72:3 › 业务校验 390px：样本之外重复编号阻止确认，错误获焦，改对应字段后使用同一个来源与数据集 (3.1s)
+  ok 12 [local] › tests\browser\product-domains.spec.ts:82:3 › 更新与分页 390px：31条评论第3页，同来源真实同步1条后刷新校正到第1页 (4.0s)
+  x  13 [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 390px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 (5.2s)
+(node:32360) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 14 [local] › tests\browser\product-domains.spec.ts:99:1 › 评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态 (3.7s)
+
+
+  1) [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 1280px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox', { name: '渠道对应字段', exact: true })
+
+
+      12 | const commentsRows = [['记录日期', '评论编号', '评论内容', '情感', '处置状态'], ['2026-11-01', 'c1', '需要回复咨询', '问题', '待处理'], ['2026-11-01', 'c2', '体验很好', '正面', '已处理'], ['2026-11-02', 'c3', '未标注的记录', '', '待处理']];
+      13 | async function choose(page: Page, name: string, value: string) {
+    > 14 |   await page.getByRole('combobox', { name, exact: true }).click(); await page.getByRole('option', { name: value, exact: true }).click();
+         |                                                           ^
+      15 | }
+      16 | async function publishDraft(page: Page) {
+      17 |   const response = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST');
+        at choose (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:14:59)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:28:145
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\attachments\关键请求-695c888868b2f62a4c50068ab3b05b22a715d659.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\attachments\实际持久化快照-aaebf767b98631aa04a340d045e0307c40935c4c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\attachments\最终页面-3f88d697212d2327fef5aab6e2c222ca716cd711.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-1280p-d520a-实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 ──
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      51 |     await page.screenshot({ path: info.outputPath('comments-source-labeled-and-filtered.png'), fullPage: true }); await domain.getByRole('button', { name: '清除周期与筛选', exact: true }).click();
+      52 |     await page.goto('/projects/' + projectId + '/reports'); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '评论记录数报告结果', exact: true })).toContainText('3');
+    > 53 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); expect(new Set(board.dashboards[0].cards.map((card: { id: string }) => card.id)).size).toBe(board.dashboards[0].cards.length);
+         |                                                                                                                                                                      ^
+      54 |     expect(board.dashboards[0].cards.filter((card: { type: string }) => card.type === 'breakdown').length).toBe(2);
+      55 |     expect((await request.post('/api/projects', { headers: projectIdentity, data: { action: 'add_member', projectId, userId: 'user-viewer', role: 'viewer' } })).status()).toBe(200);
+      56 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/projects/' + projectId + '/comments'); await expect(domain.locator('.ops-metric-card').filter({ hasText: '评论记录数' })).toContainText('3'); await fit(page);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:53:166
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\attachments\关键请求-7b8389f317d9e7803e79abb0bca8358616468d74.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\attachments\实际持久化快照-75b92ab6abd0488ac66daeb93cbdbeedd8b736f8.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\attachments\最终页面-0f14dba2302304f7918a07415e16cb2efdd6e809.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 1280px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      94 |     await page.goto('/projects/' + projectId + '/content'); await expect(page.getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })).toContainText('3,000'); await page.goto('/projects/' + projectId + '/comments'); await expect(page.getByTestId('comment-domain-overview').getByRole('table', { name: '项目评论记录', exact: true })).toContainText('需要回复咨询');
+      95 |     const content = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=content', { headers: projectIdentity })).json(), comment = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=comment', { headers: projectIdentity })).json(); expect(content.dataset.id).not.toBe(comment.dataset.id); expect(content.dataset.sourceId).not.toBe(comment.dataset.sourceId); expect(content.metrics.records.definition.id).not.toBe(comment.metrics.records.definition.id);
+    > 96 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); const references = board.dashboards[0].cards.map((card: { configJson: string }) => JSON.parse(card.configJson).metricId); expect(references).toContain(content.metrics.reads.definition.id); expect(references).toContain(comment.metrics.records.definition.id); await fit(page);
+         |                                                                                                                                                                          ^
+      97 |   });
+      98 | }
+      99 | test('评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态', async ({ page, request }) => {
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:96:170
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\attachments\关键请求-162c306d44cd3c0ab705ee3bec94b0a26e951c02.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\attachments\实际持久化快照-7a12473447e5773ff3320141e723cb0bd9156e2c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\attachments\最终页面-9dbadb19a63d195644a06c9acec5b90b7beed98d.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-12-36d18-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox', { name: '渠道对应字段', exact: true })
+
+
+      12 | const commentsRows = [['记录日期', '评论编号', '评论内容', '情感', '处置状态'], ['2026-11-01', 'c1', '需要回复咨询', '问题', '待处理'], ['2026-11-01', 'c2', '体验很好', '正面', '已处理'], ['2026-11-02', 'c3', '未标注的记录', '', '待处理']];
+      13 | async function choose(page: Page, name: string, value: string) {
+    > 14 |   await page.getByRole('combobox', { name, exact: true }).click(); await page.getByRole('option', { name: value, exact: true }).click();
+         |                                                           ^
+      15 | }
+      16 | async function publishDraft(page: Page) {
+      17 |   const response = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST');
+        at choose (D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:14:59)
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:28:145
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\attachments\关键请求-bf1a18bb0534a856120b7004f10ddbbe4168ef46.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\attachments\实际持久化快照-526b2168017bc7b82a5e0615e3ab8d934e7bca7d.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\attachments\最终页面-a6de54b4b455f69af365af2b9d8d3805e180b465.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 ───
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      51 |     await page.screenshot({ path: info.outputPath('comments-source-labeled-and-filtered.png'), fullPage: true }); await domain.getByRole('button', { name: '清除周期与筛选', exact: true }).click();
+      52 |     await page.goto('/projects/' + projectId + '/reports'); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '评论记录数报告结果', exact: true })).toContainText('3');
+    > 53 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); expect(new Set(board.dashboards[0].cards.map((card: { id: string }) => card.id)).size).toBe(board.dashboards[0].cards.length);
+         |                                                                                                                                                                      ^
+      54 |     expect(board.dashboards[0].cards.filter((card: { type: string }) => card.type === 'breakdown').length).toBe(2);
+      55 |     expect((await request.post('/api/projects', { headers: projectIdentity, data: { action: 'add_member', projectId, userId: 'user-viewer', role: 'viewer' } })).status()).toBe(200);
+      56 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/projects/' + projectId + '/comments'); await expect(domain.locator('.ops-metric-card').filter({ hasText: '评论记录数' })).toContainText('3'); await fit(page);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:53:166
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\attachments\关键请求-e1d07fa4fa7241b40fc9a16464a7e832f70cbe50.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\attachments\实际持久化快照-0b89760701daca1420ee868d9964b6b913b46664.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\attachments\最终页面-0fd54178db8af797cad04ceccda0c44d00419002.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-评论领域-390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 390px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 
+
+    TypeError: Cannot read properties of undefined (reading 'map')
+
+      94 |     await page.goto('/projects/' + projectId + '/content'); await expect(page.getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })).toContainText('3,000'); await page.goto('/projects/' + projectId + '/comments'); await expect(page.getByTestId('comment-domain-overview').getByRole('table', { name: '项目评论记录', exact: true })).toContainText('需要回复咨询');
+      95 |     const content = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=content', { headers: projectIdentity })).json(), comment = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=comment', { headers: projectIdentity })).json(); expect(content.dataset.id).not.toBe(comment.dataset.id); expect(content.dataset.sourceId).not.toBe(comment.dataset.sourceId); expect(content.metrics.records.definition.id).not.toBe(comment.metrics.records.definition.id);
+    > 96 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); const references = board.dashboards[0].cards.map((card: { configJson: string }) => JSON.parse(card.configJson).metricId); expect(references).toContain(content.metrics.reads.definition.id); expect(references).toContain(comment.metrics.records.definition.id); await fit(page);
+         |                                                                                                                                                                          ^
+      97 |   });
+      98 | }
+      99 | test('评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态', async ({ page, request }) => {
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-domains.spec.ts:96:170
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\attachments\关键请求-3112d5bad14b136a27cf5406031dc0bdbbd07865.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\attachments\实际持久化快照-2c0642de800911319465b53184f9a704d83e20cc.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\attachments\最终页面-64e53eaf8205863cec7f8831fb4eb6801b20acf2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\domains-extended-1\browser-results\product-domains-内容与评论分表-39-92ab3-实文档，用途选择、两专属页和团队卡片分别引用自己的来源-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 1280px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 
+    [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 ───
+    [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 1280px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 
+    [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 
+    [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 ────
+    [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 390px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 
+  8 passed (3.4m)

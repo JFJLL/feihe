@@ -1,0 +1,22 @@
+(node:39784) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ domain red: imported content can bind its own source to the content business page and shared readings metric (44.4339ms)
+✔ domain red: imported comments become project comment records and sentiment/status analysis rather than an empty note pool (14.2619ms)
+✔ domain red: a new comment project has no inherited200/30 acceptance targets or automatic ready confirmation (2.335ms)
+✔ domain API: complete-batch duplicate/blank IDs and empty comment text reject before any shared metric or binding is written (7.8175ms)
+✔ domain API: business records, scalar/trend/group values share project-day and common-filter rules; undated records stay out of the requested day (14.1729ms)
+✔ domain API: missing optional fields are absent, source labels are not fabricated, and row position is explicitly not a stable comment key (3.8019ms)
+✔ domain API: pagination is real, latest source updates retain the binding and clamp the actual current page (6.1463ms)
+✔ domain API: invalid latest source data and removed/retyped fields fail explicitly rather than returning the previous normal values (5.5004ms)
+✔ domain API: untrusted URL, foreign source/module, viewer writes and stale dataset versions reject without successful local mutations (3.969ms)
+✔ domain API: actual SQL/audit failure rolls back shared definitions and business binding; retry reuses one collection and correct audit actor (4.3631ms)
+✔ domain API: published content scalar, trend, group and real saved report reference the exact same metric ID/version and local rows (31.523ms)
+✔ domain API: zero remains unconfirmed, positive acceptance targets require an explicit settings save, and historical Qicui targets are preserved (4.097ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7171.7373

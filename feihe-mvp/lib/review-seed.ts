@@ -1,6 +1,7 @@
 import seedDates from '../data/qicui/supplier-seed.json';
 import { classifyNotes, type AcceptanceCriteria, type ReviewResult, type SeedNote } from './comment-review';
 import { db, type MiniDb } from './db';
+import { defaultAcceptance, acceptanceTargetsConfirmed } from './business-targets';
 type SeedEntry = { sheets: Array<{ name: string; kind: string; rows: number; notes: number }>; notes: SeedNote[] };
 const cache = seedDates as unknown as { dates: Record<string, SeedEntry> };
 const qicuiSeedMemo = new Map<string, ReviewResult>();
@@ -22,15 +23,15 @@ function mergeNotes(lists: SeedNote[][]): SeedNote[] {
   return [...merged.values()];
 }
 async function getProjectAcceptance(d1: MiniDb, project: string): Promise<AcceptanceCriteria> {
-  const defaultVal: AcceptanceCriteria = { reportCount: 200, baseCount: 30, brandTopRate: 0.4, freshnessHours: 24 };
+  const defaultVal = defaultAcceptance(project);
   try {
     const row = await d1.prepare('SELECT value FROM project_settings WHERE project_id=? AND key=?').bind(project, 'acceptance').first<{ value: string }>();
     if (row?.value) {
       const parsed = JSON.parse(row.value);
       return {
-        reportCount: Math.max(1, Number(parsed.reportCount || 200)),
-        baseCount: Math.max(1, Number(parsed.baseCount || 30)),
-        brandTopRate: Math.min(1, Math.max(0, Number(parsed.brandTopRate ?? 0.4))),
+        reportCount: Math.max(0, Number(parsed.reportCount ?? defaultVal.reportCount)),
+        baseCount: Math.max(0, Number(parsed.baseCount ?? defaultVal.baseCount)),
+        brandTopRate: Math.min(1, Math.max(0, Number(parsed.brandTopRate ?? defaultVal.brandTopRate))),
         freshnessHours: Math.max(1, Number(parsed.freshnessHours || 24)),
       };
     }
@@ -42,6 +43,7 @@ export async function reviewByDate(project: string, dateKey: string): Promise<Re
   if (!project) throw new Error('project is required for reviewByDate');
   const d1 = db();
   const acceptance = await getProjectAcceptance(d1, project);
+  if (!acceptanceTargetsConfirmed(acceptance)) return null;
 
   if (project === 'qicui' && cache.dates && cache.dates[dateKey]) {
     const memoKey = dateKey + ':' + JSON.stringify(acceptance);

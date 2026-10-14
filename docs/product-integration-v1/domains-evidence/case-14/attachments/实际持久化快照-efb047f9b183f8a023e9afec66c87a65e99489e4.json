@@ -1,0 +1,298 @@
+[
+  {
+    "projectId": "1791937300862",
+    "project": {
+      "id": "1791937300862",
+      "name": "独立部门报告1791937300862",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#e11d48",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-14T00:21:40.866Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "0b16f8c0-009e-4f49-8b8f-1bbbb97d3934",
+        "projectId": "1791937300862",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791937300862",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T00:21:42.063Z",
+        "lastRowCount": 31,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"内容编号\",\"targetField\":\"内容编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"唯一编号\",\"targetField\":\"唯一编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"阅读量\",\"targetField\":\"阅读量\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791937300862\",\"documentToken\":\"Report-1791937300862\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"内容编号\",\"type\":\"text\"},{\"key\":\"唯一编号\",\"type\":\"text\"},{\"key\":\"阅读量\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T00:21:42.063Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791937300862-default",
+          "projectId": "1791937300862",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-14T00:21:42.758Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791937300862-default",
+      "cards": [
+        {
+          "id": "recommended-1791937300862:recommended:ds-1791937300862-0b16f8c0-009e-4f49-8b8f-1bbbb97d3934:content_records-value",
+          "dashboardId": "dash-1791937300862-default",
+          "projectId": "1791937300862",
+          "title": "内容记录数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937300862:recommended:ds-1791937300862-0b16f8c0-009e-4f49-8b8f-1bbbb97d3934:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-14T00:21:42.758Z"
+        },
+        {
+          "id": "recommended-1791937300862:recommended:ds-1791937300862-0b16f8c0-009e-4f49-8b8f-1bbbb97d3934:reads-value",
+          "dashboardId": "dash-1791937300862-default",
+          "projectId": "1791937300862",
+          "title": "阅读总量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937300862:recommended:ds-1791937300862-0b16f8c0-009e-4f49-8b8f-1bbbb97d3934:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-14T00:21:42.758Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791937300862-0b16f8c0-009e-4f49-8b8f-1bbbb97d3934",
+          "projectId": "1791937300862",
+          "sourceId": "0b16f8c0-009e-4f49-8b8f-1bbbb97d3934",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"内容编号\",\"name\":\"内容编号\",\"type\":\"text\"},{\"key\":\"唯一编号\",\"name\":\"唯一编号\",\"type\":\"text\"},{\"key\":\"阅读量\",\"name\":\"阅读量\",\"type\":\"number\"}]",
+          "rowCount": 31,
+          "version": 1,
+          "updatedAt": "2026-10-14T00:21:42.081Z",
+          "columns": [
+            {
+              "key": "内容编号",
+              "name": "内容编号",
+              "type": "text"
+            },
+            {
+              "key": "唯一编号",
+              "name": "唯一编号",
+              "type": "text"
+            },
+            {
+              "key": "阅读量",
+              "name": "阅读量",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "内容编号": "duplicate0",
+              "唯一编号": "unique0",
+              "阅读量": 0
+            },
+            {
+              "内容编号": "duplicate1",
+              "唯一编号": "unique1",
+              "阅读量": 1
+            },
+            {
+              "内容编号": "duplicate2",
+              "唯一编号": "unique2",
+              "阅读量": 2
+            },
+            {
+              "内容编号": "duplicate3",
+              "唯一编号": "unique3",
+              "阅读量": 3
+            },
+            {
+              "内容编号": "duplicate4",
+              "唯一编号": "unique4",
+              "阅读量": 4
+            },
+            {
+              "内容编号": "duplicate5",
+              "唯一编号": "unique5",
+              "阅读量": 5
+            },
+            {
+              "内容编号": "duplicate6",
+              "唯一编号": "unique6",
+              "阅读量": 6
+            },
+            {
+              "内容编号": "duplicate7",
+              "唯一编号": "unique7",
+              "阅读量": 7
+            },
+            {
+              "内容编号": "duplicate8",
+              "唯一编号": "unique8",
+              "阅读量": 8
+            },
+            {
+              "内容编号": "duplicate9",
+              "唯一编号": "unique9",
+              "阅读量": 9
+            },
+            {
+              "内容编号": "duplicate10",
+              "唯一编号": "unique10",
+              "阅读量": 10
+            },
+            {
+              "内容编号": "duplicate11",
+              "唯一编号": "unique11",
+              "阅读量": 11
+            },
+            {
+              "内容编号": "duplicate12",
+              "唯一编号": "unique12",
+              "阅读量": 12
+            },
+            {
+              "内容编号": "duplicate13",
+              "唯一编号": "unique13",
+              "阅读量": 13
+            },
+            {
+              "内容编号": "duplicate14",
+              "唯一编号": "unique14",
+              "阅读量": 14
+            },
+            {
+              "内容编号": "duplicate15",
+              "唯一编号": "unique15",
+              "阅读量": 15
+            },
+            {
+              "内容编号": "duplicate16",
+              "唯一编号": "unique16",
+              "阅读量": 16
+            },
+            {
+              "内容编号": "duplicate17",
+              "唯一编号": "unique17",
+              "阅读量": 17
+            },
+            {
+              "内容编号": "duplicate18",
+              "唯一编号": "unique18",
+              "阅读量": 18
+            },
+            {
+              "内容编号": "duplicate19",
+              "唯一编号": "unique19",
+              "阅读量": 19
+            },
+            {
+              "内容编号": "duplicate20",
+              "唯一编号": "unique20",
+              "阅读量": 20
+            },
+            {
+              "内容编号": "duplicate21",
+              "唯一编号": "unique21",
+              "阅读量": 21
+            },
+            {
+              "内容编号": "duplicate22",
+              "唯一编号": "unique22",
+              "阅读量": 22
+            },
+            {
+              "内容编号": "duplicate23",
+              "唯一编号": "unique23",
+              "阅读量": 23
+            },
+            {
+              "内容编号": "duplicate24",
+              "唯一编号": "unique24",
+              "阅读量": 24
+            },
+            {
+              "内容编号": "duplicate25",
+              "唯一编号": "unique25",
+              "阅读量": 25
+            },
+            {
+              "内容编号": "duplicate26",
+              "唯一编号": "unique26",
+              "阅读量": 26
+            },
+            {
+              "内容编号": "duplicate27",
+              "唯一编号": "unique27",
+              "阅读量": 27
+            },
+            {
+              "内容编号": "duplicate28",
+              "唯一编号": "unique28",
+              "阅读量": 28
+            },
+            {
+              "内容编号": "duplicate29",
+              "唯一编号": "unique29",
+              "阅读量": 29
+            },
+            {
+              "内容编号": "duplicate0",
+              "唯一编号": "unique30",
+              "阅读量": 30
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 31,
+            "totalPages": 3,
+            "currentPageRows": 31
+          }
+        }
+      }
+    ]
+  }
+]

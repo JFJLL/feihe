@@ -1,0 +1,80 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791935614170&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791935614170",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791935614170",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Adapter-1791935614170\",\"projectId\":\"1791935614170\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Adapter-1791935614170\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"业务发生日\\\",\\\"targetField\\\":\\\"业务发生日\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"投放位置\\\",\\\"targetField\\\":\\\"投放位置\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"消耗金额\\\",\\\"targetField\\\":\\\"消耗金额\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"展示次数\\\",\\\"targetField\\\":\\\"展示次数\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"访问点击\\\",\\\"targetField\\\":\\\"访问点击\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791935614170\\\",\\\"documentToken\\\":\\\"Adapter-1791935614170\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"业务发生日\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"投放位置\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"消耗金额\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"展示次数\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"访问点击\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791935614170\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791935614170\",\"sourceId\":\"81b010d0-9e68-48fe-ac26-3472f746b0dd\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791935614170",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791935614170",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791935614170",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791935614170&id=ds-1791935614170-81b010d0-9e68-48fe-ac26-3472f746b0dd&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791935614170&datasetId=ds-1791935614170-81b010d0-9e68-48fe-ac26-3472f746b0dd&domain=ad",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

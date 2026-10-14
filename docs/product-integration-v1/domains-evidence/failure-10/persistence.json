@@ -1,0 +1,62 @@
+[
+  {
+    "projectId": "template-comment_qc-179193604839",
+    "project": {
+      "id": "template-comment_qc-179193604839",
+      "name": "comment_qc",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#4f46e5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-general",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "comment_qc",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-admin",
+      "updatedAt": "2026-10-14T00:00:48.395Z",
+      "departmentName": "综合管理部",
+      "clientName": null,
+      "ownerName": "平台管理员",
+      "templateName": "评论质检项目"
+    },
+    "sourceConfigurations": [],
+    "readiness": {
+      "completedSteps": [
+        "template"
+      ],
+      "blockedSteps": [
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-template-comment_qc-179193604839-default",
+          "projectId": "template-comment_qc-179193604839",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-14T00:00:48.395Z"
+        }
+      ],
+      "targetDashboardId": "dash-template-comment_qc-179193604839-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

@@ -274,6 +274,7 @@ export type Rules = {
 };
 
 export type Acceptance = {
+  targetsConfirmed?: boolean;
   reportCount: number;
   baseCount: number;
   brandTopRate: number;

@@ -1,0 +1,27 @@
+[WebServer] (node:10420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10420) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:12392) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:12392) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 14 tests using 1 worker
+
+(node:28536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [local] › tests\browser\product-domains.spec.ts:5:1 › 内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录 (5.3s)
+  ok  2 [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 1280px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 (4.7s)
+  ok  3 [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 (5.0s)
+  ok  4 [local] › tests\browser\product-domains.spec.ts:60:3 › 评论最小表 1280px：缺字段显示未配置，初始目标不继承，明确保存40/10后刷新仍正确 (4.3s)
+  ok  5 [local] › tests\browser\product-domains.spec.ts:72:3 › 业务校验 1280px：样本之外重复编号阻止确认，错误获焦，改对应字段后使用同一个来源与数据集 (3.4s)
+  ok  6 [local] › tests\browser\product-domains.spec.ts:82:3 › 更新与分页 1280px：31条评论第3页，同来源真实同步1条后刷新校正到第1页 (4.0s)
+  ok  7 [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 1280px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 (4.8s)
+  ok  8 [local] › tests\browser\product-domains.spec.ts:22:3 › 内容领域 390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读 (4.1s)
+  ok  9 [local] › tests\browser\product-domains.spec.ts:44:3 › 评论领域 390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见 (4.2s)
+  ok 10 [local] › tests\browser\product-domains.spec.ts:60:3 › 评论最小表 390px：缺字段显示未配置，初始目标不继承，明确保存40/10后刷新仍正确 (4.7s)
+  ok 11 [local] › tests\browser\product-domains.spec.ts:72:3 › 业务校验 390px：样本之外重复编号阻止确认，错误获焦，改对应字段后使用同一个来源与数据集 (3.2s)
+  ok 12 [local] › tests\browser\product-domains.spec.ts:82:3 › 更新与分页 390px：31条评论第3页，同来源真实同步1条后刷新校正到第1页 (3.7s)
+  ok 13 [local] › tests\browser\product-domains.spec.ts:91:3 › 内容与评论分表 390px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源 (4.8s)
+  ok 14 [local] › tests\browser\product-domains.spec.ts:99:1 › 评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态 (3.0s)
+
+  14 passed (1.4m)

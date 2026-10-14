@@ -1,0 +1,13 @@
+(node:27440) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ domain red: imported content can bind its own source to the content business page and shared readings metric (43.8035ms)
+✔ domain red: imported comments become project comment records and sentiment/status analysis rather than an empty note pool (13.3486ms)
+✔ domain red: a new comment project has no inherited200/30 acceptance targets or automatic ready confirmation (2.9135ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7077.4525

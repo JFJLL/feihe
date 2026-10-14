@@ -1,6 +1,7 @@
 import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
-import { logAction, saveSetting } from '@/lib/ops';
+import { logAction, saveSetting, getSetting } from '@/lib/ops';
+import { defaultAcceptance } from '@/lib/business-targets';
 import { invalidateOpsCache } from '@/app/api/ops/route';
 
 export const dynamic = 'force-dynamic';
@@ -26,17 +27,22 @@ export async function POST(request: Request) {
   const project = access.context!.projectId;
 
   try {
-    if (body.rules) await saveSetting('rules', body.rules, project);
     if (body.acceptance) {
+      const current = await getSetting('acceptance', defaultAcceptance(project), project);
       const value = {
-        reportCount: Math.max(1, Number(body.acceptance.reportCount || 200)),
-        baseCount: Math.max(1, Number(body.acceptance.baseCount || 30)),
-        brandTopRate: Math.min(1, Math.max(0, Number(body.acceptance.brandTopRate ?? 0.4))),
-        freshnessHours: Math.max(1, Number(body.acceptance.freshnessHours || 24)),
-        supplierSimilarity: Math.min(1, Math.max(0.3, Number(body.acceptance.supplierSimilarity ?? 0.58))),
+        reportCount: Number(body.acceptance.reportCount ?? current.reportCount),
+        baseCount: Number(body.acceptance.baseCount ?? current.baseCount),
+        brandTopRate: Number(body.acceptance.brandTopRate ?? current.brandTopRate),
+        freshnessHours: Number(body.acceptance.freshnessHours ?? current.freshnessHours ?? 24),
+        supplierSimilarity: Number(body.acceptance.supplierSimilarity ?? current.supplierSimilarity ?? 0.58),
+        targetsConfirmed: false,
       };
+      if (![value.reportCount, value.baseCount].every(number => Number.isInteger(number) && number >= 0) || value.baseCount > value.reportCount) return jsonError('评论目标须为非负整数，基础达标数不能超过可汇报数；0表示未设置');
+      if (!Number.isFinite(value.brandTopRate) || value.brandTopRate < 0 || value.brandTopRate > 1 || !Number.isFinite(value.freshnessHours) || value.freshnessHours <= 0 || !Number.isFinite(value.supplierSimilarity) || value.supplierSimilarity < 0.3 || value.supplierSimilarity > 1) return jsonError('验收比例、数据新鲜度或相似度阈值无效');
+      value.targetsConfirmed = value.reportCount > 0 && value.baseCount > 0 && (body.acceptance.reportCount !== undefined || body.acceptance.baseCount !== undefined || current.targetsConfirmed !== false);
       await saveSetting('acceptance', value, project);
     }
+    if (body.rules) await saveSetting('rules', body.rules, project);
     if (body.goals) {
       await saveSetting(
         'goals',
@@ -109,7 +115,7 @@ export async function POST(request: Request) {
           .run();
       }
     }
-    await logAction('更新设置', 'project_settings', '', '更新规则/目标配置', project);
+    await logAction('更新设置', 'project_settings', '', '更新规则/目标配置', project, access.context!.user.userId);
     invalidateOpsCache(project);
     return Response.json({ ok: true });
   } catch (error) {

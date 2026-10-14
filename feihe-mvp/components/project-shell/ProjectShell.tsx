@@ -15,6 +15,7 @@ import { OverviewWorkspace } from '../../features/overview/OverviewWorkspace';
 import { GrowthWorkspace } from '../../features/growth/GrowthWorkspace';
 import { ContentWorkspace } from '../../features/content/ContentWorkspace';
 import { CommentsWorkspace } from '../../features/comments/CommentsWorkspace';
+import { DatasetDomainOverview } from '../../features/overview/DatasetDomainOverview';
 import { SettingsWorkspace } from '../../features/settings/SettingsWorkspace';
 import { DataWorkspace } from '../../features/data/DataWorkspace';
 import { MetricWorkspace } from '../../features/metrics/MetricWorkspace';
@@ -104,23 +105,23 @@ function ProjectShellContent({
       break;
     case "content":
       content = (
-        <ContentWorkspace
+        <DatasetDomainOverview key={projectId} projectId={projectId} kind="content" legacy={projectId === 'qicui' || (effectiveDashboard.notes || []).length ? <ContentWorkspace
           projectId={projectId}
           dashboard={effectiveDashboard}
           ops={effectiveOps}
           onRefresh={refreshData}
-        />
+        /> : undefined} />
       );
       break;
     case "comments":
     case "insights":
       content = (
-        <CommentsWorkspace
+        <DatasetDomainOverview key={projectId} projectId={projectId} kind="comment" hasLegacyData={Boolean(projectId === 'qicui' || (effectiveDashboard.notes || []).length || (effectiveOps.supplier || []).length)} legacy={<CommentsWorkspace
           projectId={projectId}
           dashboard={effectiveDashboard}
           ops={effectiveOps}
           onRefresh={refreshData}
-        />
+        />} />
       );
       break;
     case "ads":

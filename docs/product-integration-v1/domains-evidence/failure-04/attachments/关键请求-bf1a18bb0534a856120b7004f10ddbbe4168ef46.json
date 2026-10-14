@@ -1,0 +1,92 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791934577991&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791934577991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791934577991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791934577991\",\"projectId\":\"1791934577991\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791934577991\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"业务日\\\",\\\"targetField\\\":\\\"业务日\\\",\\\"type\\\":\\\"date\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"条目编号\\\",\\\"targetField\\\":\\\"条目编号\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"事项标题\\\",\\\"targetField\\\":\\\"事项标题\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"发布渠道\\\",\\\"targetField\\\":\\\"发布渠道\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"阅读人次\\\",\\\"targetField\\\":\\\"阅读人次\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"互动人次\\\",\\\"targetField\\\":\\\"互动人次\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"稿件支出\\\",\\\"targetField\\\":\\\"稿件支出\\\",\\\"type\\\":\\\"number\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791934577991\\\",\\\"documentToken\\\":\\\"Report-1791934577991\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"业务日\\\",\\\"type\\\":\\\"date\\\"},{\\\"key\\\":\\\"条目编号\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"事项标题\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"发布渠道\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"阅读人次\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"互动人次\\\",\\\"type\\\":\\\"number\\\"},{\\\"key\\\":\\\"稿件支出\\\",\\\"type\\\":\\\"number\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791934577991\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791934577991\",\"sourceId\":\"11e48a27-f4d9-4396-b010-92a930915ed2\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791934577991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791934577991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791934577991",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791934577991&id=ds-1791934577991-11e48a27-f4d9-4396-b010-92a930915ed2&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791934577991&datasetId=ds-1791934577991-11e48a27-f4d9-4396-b010-92a930915ed2&domain=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791934577991&datasetId=ds-1791934577991-11e48a27-f4d9-4396-b010-92a930915ed2&roles=%7B%22date%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%22%2C%22contentId%22%3A%22%E6%9D%A1%E7%9B%AE%E7%BC%96%E5%8F%B7%22%7D&domain=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791934577991&datasetId=ds-1791934577991-11e48a27-f4d9-4396-b010-92a930915ed2&roles=%7B%22date%22%3A%22%E4%B8%9A%E5%8A%A1%E6%97%A5%22%2C%22contentId%22%3A%22%E6%9D%A1%E7%9B%AE%E7%BC%96%E5%8F%B7%22%2C%22title%22%3A%22%E4%BA%8B%E9%A1%B9%E6%A0%87%E9%A2%98%22%7D&domain=content",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

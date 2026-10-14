@@ -1,0 +1,222 @@
+[
+  {
+    "id": "case-01",
+    "title": "内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-01/trace.zip",
+    "evidenceDirectory": "case-01",
+    "requestAttachment": "case-01/attachments/关键请求-ff32d236940e604f55315d399e21dcc5ece91189.json",
+    "persistenceAttachment": "case-01/attachments/实际持久化快照-210fba4e31033bdc4433949a119c53a1dc4682be.json"
+  },
+  {
+    "id": "case-02",
+    "title": "内容领域 1280px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-02/trace.zip",
+    "evidenceDirectory": "case-02",
+    "requestAttachment": "case-02/attachments/关键请求-551136da8a53d3e70d4ec4569cf74adb21131a36.json",
+    "persistenceAttachment": "case-02/attachments/实际持久化快照-02e9d44746507fe6cda947c5584920768ca87a2c.json"
+  },
+  {
+    "id": "case-03",
+    "title": "评论领域 1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-03/trace.zip",
+    "evidenceDirectory": "case-03",
+    "requestAttachment": "case-03/attachments/关键请求-6cd66dcb06f99172300147ee15d3cc42087797b8.json",
+    "persistenceAttachment": "case-03/attachments/实际持久化快照-90022b29642077a1dffe7b12c9e56e2e26e75aae.json"
+  },
+  {
+    "id": "case-04",
+    "title": "评论最小表 1280px：缺字段显示未配置，初始目标不继承，明确保存40/10后刷新仍正确",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-04/trace.zip",
+    "evidenceDirectory": "case-04",
+    "requestAttachment": "case-04/attachments/关键请求-b8cadd5fb3a09971eea25aef8bba3f48a5ec4d59.json",
+    "persistenceAttachment": "case-04/attachments/实际持久化快照-e0605972a812293a7ea93fc4bf03a9a12331e2d1.json"
+  },
+  {
+    "id": "case-05",
+    "title": "业务校验 1280px：样本之外重复编号阻止确认，错误获焦，改对应字段后使用同一个来源与数据集",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-05/trace.zip",
+    "evidenceDirectory": "case-05",
+    "requestAttachment": "case-05/attachments/关键请求-ba0893d18ad89672043684ff571f1bb22f189b59.json",
+    "persistenceAttachment": "case-05/attachments/实际持久化快照-ad91bb8bf364d4411850a5c2b8be1c88b769bdc9.json"
+  },
+  {
+    "id": "case-06",
+    "title": "更新与分页 1280px：31条评论第3页，同来源真实同步1条后刷新校正到第1页",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-06/trace.zip",
+    "evidenceDirectory": "case-06",
+    "requestAttachment": "case-06/attachments/关键请求-47e3bded232e33833a21d11b778f4142d9ff7ad1.json",
+    "persistenceAttachment": "case-06/attachments/实际持久化快照-8fffd7c246141e1dd0061a4a9622c4448fe100f7.json"
+  },
+  {
+    "id": "case-07",
+    "title": "内容与评论分表 1280px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-07/trace.zip",
+    "evidenceDirectory": "case-07",
+    "requestAttachment": "case-07/attachments/关键请求-5a64625d9160aca47d16106b3903f13b426a3b41.json",
+    "persistenceAttachment": "case-07/attachments/实际持久化快照-98530b2e3b0914001203ca503f712901097925e0.json"
+  },
+  {
+    "id": "case-08",
+    "title": "字段异步 1280px：迟到真实试算不覆盖新选择，失败清旧预览并保留字段，重试后发布40",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-08/trace.zip",
+    "evidenceDirectory": "case-08",
+    "requestAttachment": "case-08/attachments/关键请求-b0e725703b8948841f657a0f5694d92ca0fe435d.json",
+    "persistenceAttachment": "case-08/attachments/实际持久化快照-15f623d4ec24f064809550dfaf04daae6b0bacc9.json"
+  },
+  {
+    "id": "case-09",
+    "title": "推荐版本冲突 1280px：弹窗打开期间同来源同步，真实409清旧预览，字段保留并重新试算发布90",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-09/trace.zip",
+    "evidenceDirectory": "case-09",
+    "requestAttachment": "case-09/attachments/关键请求-d0e1129a258d31977a9031cf2e154361b6108efd.json",
+    "persistenceAttachment": "case-09/attachments/实际持久化快照-7797651a63bdac056d4fe1b54de62dd6c8c4766c.json"
+  },
+  {
+    "id": "case-10",
+    "title": "推荐选择 1280px：业务页所需指标未选全时不能确认，可明确只发布所选记录指标再补齐业务页",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-10/trace.zip",
+    "evidenceDirectory": "case-10",
+    "requestAttachment": "case-10/attachments/关键请求-825d003ffab4bb85c1a883fc37aabd832358cb8a.json",
+    "persistenceAttachment": "case-10/attachments/实际持久化快照-0529a55a19bef48ae3ceb205c830c7d0cfb74745.json"
+  },
+  {
+    "id": "case-11",
+    "title": "内容领域 390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-11/trace.zip",
+    "evidenceDirectory": "case-11",
+    "requestAttachment": "case-11/attachments/关键请求-7dfedf28a94b5850a4eefa084e62d8242d795531.json",
+    "persistenceAttachment": "case-11/attachments/实际持久化快照-69a92df55e0e334a5f22452272c37b7852624bea.json"
+  },
+  {
+    "id": "case-12",
+    "title": "评论领域 390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-12/trace.zip",
+    "evidenceDirectory": "case-12",
+    "requestAttachment": "case-12/attachments/关键请求-2620f75f898fd6937ccf1cda624645351aed8f84.json",
+    "persistenceAttachment": "case-12/attachments/实际持久化快照-a212089c75976878515a9579b043142994740cf2.json"
+  },
+  {
+    "id": "case-13",
+    "title": "评论最小表 390px：缺字段显示未配置，初始目标不继承，明确保存40/10后刷新仍正确",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-13/trace.zip",
+    "evidenceDirectory": "case-13",
+    "requestAttachment": "case-13/attachments/关键请求-55d691fa6cd5291f6822579845e921751c2565d7.json",
+    "persistenceAttachment": "case-13/attachments/实际持久化快照-a611384730d0ec7c4ad9ac65047656669486037e.json"
+  },
+  {
+    "id": "case-14",
+    "title": "业务校验 390px：样本之外重复编号阻止确认，错误获焦，改对应字段后使用同一个来源与数据集",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-14/trace.zip",
+    "evidenceDirectory": "case-14",
+    "requestAttachment": "case-14/attachments/关键请求-f8a901674d604f3c4cec919fa47c2d9d29072642.json",
+    "persistenceAttachment": "case-14/attachments/实际持久化快照-efb047f9b183f8a023e9afec66c87a65e99489e4.json"
+  },
+  {
+    "id": "case-15",
+    "title": "更新与分页 390px：31条评论第3页，同来源真实同步1条后刷新校正到第1页",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-15/trace.zip",
+    "evidenceDirectory": "case-15",
+    "requestAttachment": "case-15/attachments/关键请求-fc3883f0c8a367de60a26438e9b1543df6eddbd6.json",
+    "persistenceAttachment": "case-15/attachments/实际持久化快照-50090235914dd768d6e164d5a3d887e2d918ef6b.json"
+  },
+  {
+    "id": "case-16",
+    "title": "内容与评论分表 390px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-16/trace.zip",
+    "evidenceDirectory": "case-16",
+    "requestAttachment": "case-16/attachments/关键请求-2e473afff52d7180c5f9df6f6f3e34229aaae825.json",
+    "persistenceAttachment": "case-16/attachments/实际持久化快照-78e5a4364b0fa6c2f2acd7e64ca2fc868aba78b4.json"
+  },
+  {
+    "id": "case-17",
+    "title": "字段异步 390px：迟到真实试算不覆盖新选择，失败清旧预览并保留字段，重试后发布40",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-17/trace.zip",
+    "evidenceDirectory": "case-17",
+    "requestAttachment": "case-17/attachments/关键请求-135a75791dd4c4c92add9aa5d66959ff13f78f7d.json",
+    "persistenceAttachment": "case-17/attachments/实际持久化快照-1c3a47ba2b3572ee554873874bbf14599b50dada.json"
+  },
+  {
+    "id": "case-18",
+    "title": "推荐版本冲突 390px：弹窗打开期间同来源同步，真实409清旧预览，字段保留并重新试算发布90",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-18/trace.zip",
+    "evidenceDirectory": "case-18",
+    "requestAttachment": "case-18/attachments/关键请求-764e462f8d40c1208ae2b1432ad9026729fb3d8b.json",
+    "persistenceAttachment": "case-18/attachments/实际持久化快照-94080ff534bc94f33fe37b0946bd76699b0a8d55.json"
+  },
+  {
+    "id": "case-19",
+    "title": "推荐选择 390px：业务页所需指标未选全时不能确认，可明确只发布所选记录指标再补齐业务页",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-19/trace.zip",
+    "evidenceDirectory": "case-19",
+    "requestAttachment": "case-19/attachments/关键请求-e607cfc84ba6eb23b9cc0ed07f6c04f31c6faead.json",
+    "persistenceAttachment": "case-19/attachments/实际持久化快照-389dc31fe5ef30c83f73663aeeef18c87b2c4fc4.json"
+  },
+  {
+    "id": "case-20",
+    "title": "评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态",
+    "status": "passed",
+    "role": "user-editor (platform member/project creator); user-viewer where specified",
+    "sourceBoundary": "Feishu fixture only; real local routes/SQLite/calculation/boards/reports",
+    "trace": "case-20/trace.zip",
+    "evidenceDirectory": "case-20",
+    "requestAttachment": "case-20/attachments/关键请求-4c906b2bf0dc220bc681f4f484ab411db955689d.json",
+    "persistenceAttachment": "case-20/attachments/实际持久化快照-6e44dda854fb03d6bc41d9fd385de92c54eecd9f.json"
+  }
+]

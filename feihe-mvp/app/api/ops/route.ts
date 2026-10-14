@@ -2,7 +2,7 @@ import { apiUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { DEFAULT_RULES } from '@/lib/classify';
 import { getSetting } from '@/lib/ops';
-import { projectId } from '@/lib/projects';
+import { defaultAcceptance } from '@/lib/business-targets';
 
 export const dynamic = 'force-dynamic';
 
@@ -83,7 +83,7 @@ export async function GET(request: Request) {
       FROM supplier_comments WHERE project_id=? AND visibility!='待核验' GROUP BY visibility`).bind(project).all(),
     d1.prepare(`SELECT category,sentiment,COUNT(*) AS count FROM key_comments WHERE project_id=? AND disappeared_at IS NULL GROUP BY category,sentiment ORDER BY count DESC LIMIT 12`).bind(project).all(),
     getSetting('rules', DEFAULT_RULES, project),
-    getSetting('acceptance', { reportCount: 200, baseCount: 30, brandTopRate: 0.4, freshnessHours: 24, supplierSimilarity: 0.58 }, project),
+    getSetting('acceptance', defaultAcceptance(project), project),
     getSetting('goals', { workTarget: 0, workCompleted: 0, monthlyTarget: 0, quarterlyTarget: 0, publishTarget: 0, budgetTarget: 0, commentTarget: 0 }, project),
     getSetting('growth', { watchKeywords: [], inspirations: [], seedNoteIds: [], thresholds: { breakoutInteractions: 1000, seedScore: 65, ctr: 0.15, cpuv: 0.7 } }, project),
     d1.prepare(`SELECT id,name,keywords,sentiment,category,action,priority,enabled,updated_at AS updatedAt FROM review_rules WHERE project_id=? ORDER BY priority,updated_at DESC`).bind(project).all(),

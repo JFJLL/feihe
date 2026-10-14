@@ -1,0 +1,40 @@
+{
+  "deleted": false,
+  "retainedRuns": [
+    {
+      "run": "domains-red",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-red",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-red"
+    },
+    {
+      "run": "domains-green-1",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-green-1",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-green-1"
+    },
+    {
+      "run": "domains-extended-1",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-extended-1",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-extended-1"
+    },
+    {
+      "run": "domains-extended-2",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-extended-2",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-extended-2"
+    },
+    {
+      "run": "domains-complete",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-complete",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-complete"
+    },
+    {
+      "run": "domains-regression-repair",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-regression-repair",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-regression-repair"
+    },
+    {
+      "run": "domains-complete-final",
+      "source": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\domains-complete-final",
+      "destination": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\.verification\\domains-raw-evidence\\domains-complete-final"
+    }
+  ]
+}

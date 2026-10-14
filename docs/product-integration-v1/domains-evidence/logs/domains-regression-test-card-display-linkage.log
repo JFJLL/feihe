@@ -1,0 +1,27 @@
+✔ auto percent configuration cannot stay bound to an ordinary amount field (1.1554ms)
+✔ count: percentage results are rejected by configuration validation (0.1574ms)
+✔ count: engine must not format quantity2 as200percent (0.5448ms)
+✔ nonempty_count: percentage results are rejected by configuration validation (0.1131ms)
+✔ nonempty_count: engine must not format quantity2 as200percent (0.0869ms)
+✔ distinct_count: percentage results are rejected by configuration validation (0.0669ms)
+✔ distinct_count: engine must not format quantity2 as200percent (0.0545ms)
+✔ automatic average field cycle inherits only applicable units without touching data (3.9703ms)
+✔ average and count aggregation cycles preserve the selected field and clear percentage semantics (0.9799ms)
+✔ manual compatible currency and compact preferences survive scalar field and aggregation changes (1.0591ms)
+✔ manual percentage on a different unknown-unit field requires confirmation (0.3548ms)
+✔ legacy percent preferences remain explicit and known source scale mismatches are blocked (0.2336ms)
+✔ dataset switch and incompatible currency count conversions clear source-bound units (0.1596ms)
+✔ ratio transitions retain intrinsic percentage points, paired/independent coverage, and no field-derived scale (0.2516ms)
+✔ leaving a ratio clears intrinsic percentage units even on a legacy card without provenance (0.6644ms)
+✔ legacy compatible compact preferences survive cleanup of an unused percentage scale (0.1798ms)
+✔ removing an explicitly entered percent unit also removes its inactive scale (0.3146ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10160.7885
+(node:35632) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

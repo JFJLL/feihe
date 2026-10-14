@@ -1,0 +1,306 @@
+[
+  {
+    "projectId": "1791937265853",
+    "project": {
+      "id": "1791937265853",
+      "name": "独立部门报告1791937265853",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#2563eb",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-14T00:21:05.857Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0",
+        "projectId": "1791937265853",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Domain-comments-1791937265853",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T00:21:08.525Z",
+        "lastRowCount": 3,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"记录日期\",\"targetField\":\"记录日期\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"评论编号\",\"targetField\":\"评论编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"评论内容\",\"targetField\":\"评论内容\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"情感\",\"targetField\":\"情感\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"处置状态\",\"targetField\":\"处置状态\",\"type\":\"text\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791937265853\",\"documentToken\":\"Domain-comments-1791937265853\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"记录日期\",\"type\":\"date\"},{\"key\":\"评论编号\",\"type\":\"text\"},{\"key\":\"评论内容\",\"type\":\"text\"},{\"key\":\"情感\",\"type\":\"text\"},{\"key\":\"处置状态\",\"type\":\"text\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T00:21:08.525Z"
+      },
+      {
+        "id": "d7379d63-e8cb-4117-bfa5-317b449e009a",
+        "projectId": "1791937265853",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791937265853",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T00:21:07.132Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"内容编号\",\"targetField\":\"内容编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"标题\",\"targetField\":\"标题\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"阅读量\",\"targetField\":\"阅读量\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791937265853\",\"documentToken\":\"Report-1791937265853\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"内容编号\",\"type\":\"text\"},{\"key\":\"标题\",\"type\":\"text\"},{\"key\":\"阅读量\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T00:21:07.132Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791937265853-default",
+      "cards": [
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-d7379d63-e8cb-4117-bfa5-317b449e009a:content_records-value",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "内容记录数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-d7379d63-e8cb-4117-bfa5-317b449e009a:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-d7379d63-e8cb-4117-bfa5-317b449e009a:reads-value",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "阅读总量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-d7379d63-e8cb-4117-bfa5-317b449e009a:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records-value",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "评论记录数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 2,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:sentiment-value",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "有情感标注的评论",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:sentiment\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 3,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:treatmentStatus-value",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "有处置状态的评论",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:treatmentStatus\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 4,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records-time_trend-date",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "评论记录数趋势",
+          "type": "time_trend",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 5,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records-breakdown-%E6%83%85%E6%84%9F",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "来源情感分布",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"情感\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 6,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        },
+        {
+          "id": "recommended-1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records-breakdown-%E5%A4%84%E7%BD%AE%E7%8A%B6%E6%80%81",
+          "dashboardId": "dash-1791937265853-default",
+          "projectId": "1791937265853",
+          "title": "来源处置状态",
+          "type": "breakdown",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937265853:recommended:ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0:comment_records\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"处置状态\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 7,
+          "updatedAt": "2026-10-14T00:21:09.416Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791937265853-e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0",
+          "projectId": "1791937265853",
+          "sourceId": "e4a9e64b-b12f-4d78-8cc4-6d2fbe565bb0",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"记录日期\",\"name\":\"记录日期\",\"type\":\"date\"},{\"key\":\"评论编号\",\"name\":\"评论编号\",\"type\":\"text\"},{\"key\":\"评论内容\",\"name\":\"评论内容\",\"type\":\"text\"},{\"key\":\"情感\",\"name\":\"情感\",\"type\":\"text\"},{\"key\":\"处置状态\",\"name\":\"处置状态\",\"type\":\"text\"}]",
+          "rowCount": 3,
+          "version": 1,
+          "updatedAt": "2026-10-14T00:21:08.545Z",
+          "columns": [
+            {
+              "key": "记录日期",
+              "name": "记录日期",
+              "type": "date"
+            },
+            {
+              "key": "评论编号",
+              "name": "评论编号",
+              "type": "text"
+            },
+            {
+              "key": "评论内容",
+              "name": "评论内容",
+              "type": "text"
+            },
+            {
+              "key": "情感",
+              "name": "情感",
+              "type": "text"
+            },
+            {
+              "key": "处置状态",
+              "name": "处置状态",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "记录日期": "2026-11-01",
+              "评论编号": "c1",
+              "评论内容": "需要回复咨询",
+              "情感": "问题",
+              "处置状态": "待处理"
+            },
+            {
+              "记录日期": "2026-11-01",
+              "评论编号": "c2",
+              "评论内容": "体验很好",
+              "情感": "正面",
+              "处置状态": "已处理"
+            },
+            {
+              "记录日期": "2026-11-02",
+              "评论编号": "c3",
+              "评论内容": "未标注的记录",
+              "情感": null,
+              "处置状态": "待处理"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 3,
+            "totalPages": 1,
+            "currentPageRows": 3
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791937265853-d7379d63-e8cb-4117-bfa5-317b449e009a",
+          "projectId": "1791937265853",
+          "sourceId": "d7379d63-e8cb-4117-bfa5-317b449e009a",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"内容编号\",\"name\":\"内容编号\",\"type\":\"text\"},{\"key\":\"标题\",\"name\":\"标题\",\"type\":\"text\"},{\"key\":\"阅读量\",\"name\":\"阅读量\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-14T00:21:07.152Z",
+          "columns": [
+            {
+              "key": "内容编号",
+              "name": "内容编号",
+              "type": "text"
+            },
+            {
+              "key": "标题",
+              "name": "标题",
+              "type": "text"
+            },
+            {
+              "key": "阅读量",
+              "name": "阅读量",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "内容编号": "a1",
+              "标题": "自己的内容甲",
+              "阅读量": 1000
+            },
+            {
+              "内容编号": "a2",
+              "标题": "自己的内容乙",
+              "阅读量": 2000
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

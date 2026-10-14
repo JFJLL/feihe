@@ -1,0 +1,26 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=template-comment_qc-179193604839",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=template-comment_qc-179193604839&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=template-comment_qc-179193604839",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=template-comment_qc-179193604839",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

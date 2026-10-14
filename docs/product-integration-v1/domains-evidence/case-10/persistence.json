@@ -1,0 +1,146 @@
+[
+  {
+    "projectId": "1791937281657",
+    "project": {
+      "id": "1791937281657",
+      "name": "独立部门报告1791937281657",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#2563eb",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-14T00:21:21.661Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "182680e7-8449-4a81-8075-e81ce5a2df64",
+        "projectId": "1791937281657",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791937281657",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T00:21:22.896Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"内容编号\",\"targetField\":\"内容编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"阅读量\",\"targetField\":\"阅读量\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791937281657\",\"documentToken\":\"Report-1791937281657\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"内容编号\",\"type\":\"text\"},{\"key\":\"阅读量\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T00:21:22.896Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791937281657-default",
+          "projectId": "1791937281657",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 3,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-14T00:21:24.346Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791937281657-default",
+      "cards": [
+        {
+          "id": "recommended-1791937281657:recommended:ds-1791937281657-182680e7-8449-4a81-8075-e81ce5a2df64:content_records-value",
+          "dashboardId": "dash-1791937281657-default",
+          "projectId": "1791937281657",
+          "title": "内容记录数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937281657:recommended:ds-1791937281657-182680e7-8449-4a81-8075-e81ce5a2df64:content_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-14T00:21:24.346Z"
+        },
+        {
+          "id": "recommended-1791937281657:recommended:ds-1791937281657-182680e7-8449-4a81-8075-e81ce5a2df64:reads-value",
+          "dashboardId": "dash-1791937281657-default",
+          "projectId": "1791937281657",
+          "title": "阅读总量",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937281657:recommended:ds-1791937281657-182680e7-8449-4a81-8075-e81ce5a2df64:reads\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-14T00:21:24.346Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791937281657-182680e7-8449-4a81-8075-e81ce5a2df64",
+          "projectId": "1791937281657",
+          "sourceId": "182680e7-8449-4a81-8075-e81ce5a2df64",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"内容编号\",\"name\":\"内容编号\",\"type\":\"text\"},{\"key\":\"阅读量\",\"name\":\"阅读量\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-14T00:21:22.914Z",
+          "columns": [
+            {
+              "key": "内容编号",
+              "name": "内容编号",
+              "type": "text"
+            },
+            {
+              "key": "阅读量",
+              "name": "阅读量",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "内容编号": "a",
+              "阅读量": 1000
+            },
+            {
+              "内容编号": "b",
+              "阅读量": 2000
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,125 @@
+[
+  {
+    "projectId": "1791937252835",
+    "project": {
+      "id": "1791937252835",
+      "name": "独立部门报告1791937252835",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#0891b2",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "comment_qc",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-14T00:20:52.839Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "评论质检项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "b68929b9-b8e6-4de6-b49c-5941cd666ae3",
+        "projectId": "1791937252835",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791937252835",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T00:20:54.069Z",
+        "lastRowCount": 1,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"评论内容\",\"targetField\":\"评论内容\",\"type\":\"text\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791937252835\",\"documentToken\":\"Report-1791937252835\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"评论内容\",\"type\":\"text\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T00:20:54.069Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics"
+      ],
+      "blockedSteps": [
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791937252835-default",
+          "projectId": "1791937252835",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 2,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{}}",
+          "status": "published",
+          "updatedAt": "2026-10-14T00:20:54.564Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791937252835-default",
+      "cards": [
+        {
+          "id": "recommended-1791937252835:recommended:ds-1791937252835-b68929b9-b8e6-4de6-b49c-5941cd666ae3:comment_records-value",
+          "dashboardId": "dash-1791937252835-default",
+          "projectId": "1791937252835",
+          "title": "评论记录数",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"1791937252835:recommended:ds-1791937252835-b68929b9-b8e6-4de6-b49c-5941cd666ae3:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-14T00:20:54.564Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791937252835-b68929b9-b8e6-4de6-b49c-5941cd666ae3",
+          "projectId": "1791937252835",
+          "sourceId": "b68929b9-b8e6-4de6-b49c-5941cd666ae3",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"评论内容\",\"name\":\"评论内容\",\"type\":\"text\"}]",
+          "rowCount": 1,
+          "version": 1,
+          "updatedAt": "2026-10-14T00:20:54.089Z",
+          "columns": [
+            {
+              "key": "评论内容",
+              "name": "评论内容",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "评论内容": "只有评论正文"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 1,
+            "totalPages": 1,
+            "currentPageRows": 1
+          }
+        }
+      }
+    ]
+  }
+]

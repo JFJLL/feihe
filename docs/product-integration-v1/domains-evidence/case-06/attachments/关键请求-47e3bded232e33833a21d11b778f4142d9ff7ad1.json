@@ -1,0 +1,158 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791937261176&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791937261176\",\"projectId\":\"1791937261176\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791937261176\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"评论编号\\\",\\\"targetField\\\":\\\"评论编号\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"评论内容\\\",\\\"targetField\\\":\\\"评论内容\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"},{\\\"sourceField\\\":\\\"处置状态\\\",\\\"targetField\\\":\\\"处置状态\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791937261176\\\",\\\"documentToken\\\":\\\"Report-1791937261176\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"评论编号\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"评论内容\\\",\\\"type\\\":\\\"text\\\"},{\\\"key\\\":\\\"处置状态\\\",\\\"type\\\":\\\"text\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791937261176\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937261176\",\"sourceId\":\"ce55106a-b326-410c-bf86-94ac95ab1690\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937261176&id=ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791937261176&datasetId=ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690&domain=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937261176\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\",\"datasetVersion\":1,\"selected\":[\"comment_records\",\"treatmentStatus\"],\"roles\":{\"commentId\":\"评论编号\",\"commentText\":\"评论内容\",\"treatmentStatus\":\"处置状态\"},\"domain\":\"comment\",\"bindBusiness\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937261176&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791937261176",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937261176&id=ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937261176\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"评论记录数\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-value\",\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},{\"type\":\"metric_card\",\"title\":\"有处置状态的评论\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus-value\",\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},{\"type\":\"breakdown\",\"title\":\"来源处置状态\",\"groupBy\":\"处置状态\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-breakdown-%E5%A4%84%E7%BD%AE%E7%8A%B6%E6%80%81\",\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937261176\",\"dashboardId\":\"dash-1791937261176-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-value\",\"title\":\"评论记录数\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"评论记录数\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-value\",\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},\"sortOrder\":0},{\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus-value\",\"title\":\"有处置状态的评论\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"有处置状态的评论\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus-value\",\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},\"sortOrder\":1},{\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-breakdown-%E5%A4%84%E7%BD%AE%E7%8A%B6%E6%80%81\",\"title\":\"来源处置状态\",\"type\":\"breakdown\",\"metricKeys\":[],\"config\":{\"type\":\"breakdown\",\"title\":\"来源处置状态\",\"groupBy\":\"处置状态\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-breakdown-%E5%A4%84%E7%BD%AE%E7%8A%B6%E6%80%81\",\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},\"sortOrder\":2}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937261176\",\"query\":{},\"cards\":[{\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-value\",\"title\":\"评论记录数\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},{\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:treatmentStatus-value\",\"title\":\"有处置状态的评论\",\"type\":\"metric_card\",\"sortOrder\":1,\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"},{\"metricId\":\"1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"处置状态\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791937261176:recommended:ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690:comment_records-breakdown-%E5%A4%84%E7%BD%AE%E7%8A%B6%E6%80%81\",\"title\":\"来源处置状态\",\"type\":\"breakdown\",\"sortOrder\":2,\"datasetId\":\"ds-1791937261176-ce55106a-b326-410c-bf86-94ac95ab1690\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937261176&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937261176&kind=comment&query=%7B%22detailPage%22%3A2%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937261176&kind=comment&query=%7B%22detailPage%22%3A3%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937261176&kind=comment&query=%7B%22detailPage%22%3A3%7D",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

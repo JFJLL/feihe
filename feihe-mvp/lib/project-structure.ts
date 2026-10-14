@@ -4,7 +4,8 @@ import { resolveCardDefinition, getDefinition, prepareReusableMetric, Definition
 import { CARD_PRESENTATIONS, validateCardConfig, transitionCardConfig, type CardMetricConfig, type MetricColumn } from './metrics/config';
 import { evaluateCardMetric } from './metrics/engine';
 import type { ProjectAuthContext } from './api-auth';
-import type { FieldRoles } from './metrics/recommendations';
+import { defaultBusinessDomain, fieldRoleErrors, type FieldRoles } from './metrics/recommendations';
+import { validateBusinessRecords } from './business-records';
 
 export type StructureBlueprint = {
   kind: 'project_structure_v1'; sourceProjectId: string; templateId: string; revision: string;
@@ -12,7 +13,7 @@ export type StructureBlueprint = {
   metrics: Array<{ key: string; groupKey: string; name: string; config: CardMetricConfig }>;
   cards: Array<{ key: string; metricKey: string; title: string; type: string; groupBy?: string; requiresTarget: boolean }>;
   omittedCards: number;
-  business?: { kind: 'dataset_ad'; groupKey: string; roles: FieldRoles; metricKeys: Record<string, string> };
+  business?: { kind: 'dataset_ad' | 'dataset_content' | 'dataset_comment'; groupKey: string; roles: FieldRoles; metricKeys: Record<string, string> };
 };
 export type StructureBindings = Record<string, { datasetId: string; datasetVersion: number; fields: Record<string, string> }>;
 export type StructureChoices = { bindings?: StructureBindings; selectedCards?: string[]; targets?: Record<string, number>; percentConfirmations?: Record<string, 'fraction' | 'percentage_points'> };
@@ -68,19 +69,20 @@ export async function loadStructureBlueprint(context: ProjectAuthContext): Promi
   }
   if (!cards.length) throw new DefinitionError('已发布看板没有可复用的指标卡；历史业务组件仍留在原项目');
   let business: StructureBlueprint['business'];
-  const setting = await db().prepare("SELECT value FROM project_settings WHERE project_id=? AND key='analytics:ad'").bind(projectId).first<{ value: string }>();
+  const domain = defaultBusinessDomain(String(context.project.template_id));
+  const setting = domain ? await db().prepare('SELECT value FROM project_settings WHERE project_id=? AND key=?').bind(projectId, 'analytics:' + domain).first<{ value: string }>() : null;
   if (setting) {
     const binding = JSON.parse(setting.value) as { kind: string; roles: FieldRoles; metricIds: Record<string, string> };
-    if (binding.kind === 'dataset_ad') {
+    if (binding.kind === 'dataset_' + domain) {
       const metricKeys: Record<string, string> = {}; let groupKey = '';
-      for (const role of ['spend', 'impressions', 'clicks', 'ctr']) {
+      for (const role of Object.keys(binding.metricIds)) {
         const mapped = await metricFor({ metricId: binding.metricIds[role] }, binding.metricIds[role], role);
-        if (groupKey && groupKey !== mapped.groupKey) throw new DefinitionError('专属投放配置跨来源，需在新项目重新配置');
+        if (groupKey && groupKey !== mapped.groupKey) throw new DefinitionError('专属业务配置跨来源，需在新项目重新配置');
         groupKey = mapped.groupKey; metricKeys[role] = mapped.metricKey;
       }
       const dataset = datasets.find(item => groupIds.get(item.id) === groupKey)!;
-      const roles = Object.fromEntries(['date', 'channel', 'spend', 'impressions', 'clicks'].filter(role => typeof binding.roles[role as keyof FieldRoles] === 'string').map(role => [role, binding.roles[role as keyof FieldRoles]])) as FieldRoles;
-      addFields(groupKey, Object.values(roles), dataset); business = { kind: 'dataset_ad', groupKey, roles, metricKeys };
+      const roles = Object.fromEntries(Object.entries(binding.roles).filter(([, field]) => Boolean(field))) as FieldRoles;
+      addFields(groupKey, Object.values(roles), dataset); business = { kind: binding.kind as NonNullable<StructureBlueprint['business']>['kind'], groupKey, roles, metricKeys };
     }
   }
   const clean = { kind: 'project_structure_v1' as const, sourceProjectId: projectId, templateId: String(context.project.template_id || 'general_workbench'), groups, metrics, cards, omittedCards, business };
@@ -145,6 +147,12 @@ export async function applyStructure(context: ProjectAuthContext, revision: stri
   const datasets = await getProjectDatasets(context.projectId), plan = planStructure(stored.blueprint, datasets, choices);
   if (Object.values(plan.bindings).some(binding => datasets.some(dataset => dataset.id === binding.datasetId && dataset.version !== binding.datasetVersion))) throw new DefinitionError('来源数据已更新，请重新读取实际字段后确认，当前选择仍可保留', 409);
   if (plan.errors.length) throw new DefinitionError(plan.errors.join('；'));
+  if (stored.blueprint.business) {
+    const business = stored.blueprint.business, binding = plan.bindings[business.groupKey], dataset = datasets.find(item => item.id === binding.datasetId)!;
+    const roles = Object.fromEntries(Object.entries(business.roles).map(([role, field]) => [role, binding.fields[field]])) as FieldRoles;
+    const errors = fieldRoleErrors(dataset, roles); if (errors.length) throw new DefinitionError(errors.join('；'));
+    await validateBusinessRecords(dataset, business.kind.slice(8) as 'ad' | 'content' | 'comment', roles);
+  }
   const usedDatasets = [...new Set(plan.configured.map(metric => metric.config.datasetId!))].map(id => datasets.find(dataset => dataset.id === id)!);
   const guard = { condition: "EXISTS(SELECT 1 FROM project_settings WHERE project_id=? AND key='structure_blueprint' AND value=?)" + usedDatasets.map(() => ' AND EXISTS(SELECT 1 FROM datasets WHERE id=? AND project_id=? AND version=?)').join(''), values: [context.projectId, stored.raw, ...usedDatasets.flatMap(dataset => [dataset.id, context.projectId, dataset.version])] as unknown[] };
   const prepared = [];
@@ -154,8 +162,9 @@ export async function applyStructure(context: ProjectAuthContext, revision: stri
   const now = new Date().toISOString(), statements = prepared.flatMap(metric => metric.statements);
   if (stored.blueprint.business) {
     const business = stored.blueprint.business, binding = plan.bindings[business.groupKey];
-    const value = { kind: 'dataset_ad', datasetId: binding.datasetId, roles: Object.fromEntries(Object.entries(business.roles).map(([role, field]) => [role, binding.fields[field]])), metricIds: Object.fromEntries(Object.entries(business.metricKeys).map(([role, key]) => [role, context.projectId + ':structure:' + key])), confirmedDatasetVersion: binding.datasetVersion };
-    statements.push(db().prepare("INSERT INTO project_settings(id,project_id,key,value,updated_at) SELECT ?,?,'analytics:ad',?,? WHERE " + guard.condition + ' ON CONFLICT(id) DO NOTHING').bind(context.projectId + ':analytics:ad', context.projectId, JSON.stringify(value), now, ...guard.values));
+    const value = { kind: business.kind, datasetId: binding.datasetId, roles: Object.fromEntries(Object.entries(business.roles).map(([role, field]) => [role, binding.fields[field]])), metricIds: Object.fromEntries(Object.entries(business.metricKeys).map(([role, key]) => [role, context.projectId + ':structure:' + key])), confirmedDatasetVersion: binding.datasetVersion };
+    const settingKey = 'analytics:' + business.kind.slice(8);
+    statements.push(db().prepare('INSERT INTO project_settings(id,project_id,key,value,updated_at) SELECT ?,?,?,?,? WHERE ' + guard.condition + ' ON CONFLICT(id) DO NOTHING').bind(context.projectId + ':' + settingKey, context.projectId, settingKey, JSON.stringify(value), now, ...guard.values));
   }
   const applied: AppliedStructure = { ...choices, choiceHash, cards, at: now };
   const guards = prepared.map(() => 'EXISTS(SELECT 1 FROM metric_definitions WHERE id=? AND project_id=? AND filter_json=?)').join(' AND ');

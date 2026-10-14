@@ -1,0 +1,146 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/project-structure?projectId=1791937295728&mode=summary",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/inspect",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"url\":\"https://fixture.feishu.cn/sheets/Report-1791937295728\",\"projectId\":\"1791937295728\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"name\":\"补修数据\",\"type\":\"feishu_sheet\",\"spreadsheet\":\"https://fixture.feishu.cn/sheets/Report-1791937295728\",\"sheetId\":\"sheetA\",\"range\":\"\",\"kind\":\"general\",\"syncFrequency\":\"manual\",\"mappingJson\":\"{\\\"rules\\\":[{\\\"sourceField\\\":\\\"评论内容\\\",\\\"targetField\\\":\\\"评论内容\\\",\\\"type\\\":\\\"text\\\",\\\"nullPolicy\\\":\\\"null\\\"}],\\\"context\\\":{\\\"projectId\\\":\\\"1791937295728\\\",\\\"documentToken\\\":\\\"Report-1791937295728\\\",\\\"sheetId\\\":\\\"sheetA\\\",\\\"fields\\\":[{\\\"key\\\":\\\"评论内容\\\",\\\"type\\\":\\\"text\\\"}]}}\",\"action\":\"save_source\",\"projectId\":\"1791937295728\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937295728\",\"sourceId\":\"070f0256-4475-4068-b8b1-ceff54571eca\"}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/data-workspace?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937295728&id=ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations?projectId=1791937295728&datasetId=ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca&domain=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metric-recommendations",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937295728\",\"datasetId\":\"ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca\",\"datasetVersion\":1,\"selected\":[\"comment_records\"],\"roles\":{\"commentText\":\"评论内容\"},\"domain\":\"comment\",\"bindBusiness\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/projects?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937295728&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=1791937295728",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=1791937295728&id=ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937295728\",\"query\":{},\"cards\":[{\"type\":\"metric_card\",\"title\":\"评论记录数\",\"id\":\"recommended-1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records-value\",\"metricId\":\"1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937295728\",\"dashboardId\":\"dash-1791937295728-default\",\"name\":\"默认工作台看板\",\"version\":1,\"force\":false,\"cards\":[{\"id\":\"recommended-1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records-value\",\"title\":\"评论记录数\",\"type\":\"metric_card\",\"metricKeys\":[],\"config\":{\"type\":\"metric_card\",\"title\":\"评论记录数\",\"id\":\"recommended-1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records-value\",\"metricId\":\"1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"datasetId\":\"ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca\"},\"sortOrder\":0}],\"layout\":{\"kind\":\"project_board\",\"version\":1,\"query\":{}}}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937295728\",\"query\":{},\"cards\":[{\"metricId\":\"1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"recommended-1791937295728:recommended:ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca:comment_records-value\",\"title\":\"评论记录数\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-1791937295728-070f0256-4475-4068-b8b1-ceff54571eca\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/business-analytics?projectId=1791937295728&kind=comment",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/settings",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"1791937295728\",\"rules\":{\"brands\":[\"飞鹤\",\"启萃\",\"卓睿\"],\"competitors\":[\"爱他美\",\"合生元\",\"派星\",\"A2\",\"a2\",\"至初\",\"美素\",\"金领冠\"],\"positiveWords\":[\"好吸收\",\"长肉\",\"长个\",\"适应\",\"好转奶\",\"抵抗力\",\"体质\",\"便便正常\",\"爱喝\",\"放心\",\"稳当\",\"细腻\",\"溶解\"],\"negativeWords\":[\"不好\",\"踩雷\",\"过敏\",\"便秘\",\"拉肚子\",\"胀气\",\"吐奶\",\"不长肉\",\"腥\",\"难喝\",\"结块\",\"发货慢\",\"不发货\",\"客服\",\"核销\",\"假货\",\"贵\",\"后悔\"]},\"acceptance\":{\"reportCount\":40,\"baseCount\":10,\"brandTopRate\":0,\"freshnessHours\":24,\"supplierSimilarity\":0.58,\"targetsConfirmed\":false},\"pipelines\":[],\"goals\":{\"workTarget\":0,\"workCompleted\":1,\"monthlyTarget\":0,\"quarterlyTarget\":0,\"publishTarget\":0,\"budgetTarget\":0,\"commentTarget\":0}}"
+  }
+]

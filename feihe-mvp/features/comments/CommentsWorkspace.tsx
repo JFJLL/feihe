@@ -151,9 +151,9 @@ export function CommentsWorkspace({
     <div className="ops-workspace overview-colorful-page reference-workspace" data-workspace-ui="v2">
       <PageHeader
         variant="light"
-        eyebrow="FEIHE · Q3 COMMENTS"
+        eyebrow={projectId === 'qicui' ? '启萃评论业务' : undefined}
         title="评论运营"
-        subtitle="2026年 Q3 · 小红书口碑分析、评论采集、风险处置与供应商核验"
+        subtitle="笔记评论采集、风险处置与供应商核验；需要对应来源与外部服务。"
         badge={
           <span>
             {verifiedCount} 已确认外显 · {pendingRisk} 风险待办

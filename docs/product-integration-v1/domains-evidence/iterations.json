@@ -1,0 +1,126 @@
+[
+  {
+    "run": "domains-red",
+    "stats": {
+      "startTime": "2026-10-13T23:13:39.217Z",
+      "duration": 54546.846999999994,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "内容断链反例：页面接入自己的内容表后，内容页显示真实3000阅读和两条业务记录",
+        "status": "failed",
+        "evidence": "red-01",
+        "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })\nExpected substring: \u001b[32m\"3,000\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })\u001b[22m\n\n\n   5 |   const { projectId } = await connectProjectTable(page, request, 'content_marketing', [['发布日期', '内容编号', '标题', '阅读量', '互动量', '内容费用'], ['2026-11-01', 'article-a', '业务教程', 1000, 10, 50], ['2026-11-02', 'article-b', '案例分享', 2000, 20, 100]]);\n   6 |   await publishRecommendedBoard(page); await page.goto('/projects/' + projectId + '/content');\n>  7 |   const business = page.getByTestId('content-domain-overview'); await expect(business.locator('.ops-metric-card').filter({ hasText: '阅读总量' })).toContainText('3,000'); await expect(business.getByRole('table', { name: '项目内容记录', exact: true })).toContainText('业务教程');\n     |                                                                                                                                                ^\n   8 | });\n   9 | test('评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态', async ({ page, request }) => {\n  10 |   const { projectId } = await connectProjectTable(page, request, 'comment_qc', [['记录日期', '评论编号', '评论内容', '情感', '处置状态'], ['2026-11-01', 'c1', '需要回复咨询', '问题', '待处理'], ['2026-11-01', 'c2', '体验很好', '正面', '已处理'], ['2026-11-02', 'c3', '未标注的记录', '', '待处理']]);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-domains.spec.ts:7:144"
+      },
+      {
+        "title": "评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态",
+        "status": "failed",
+        "evidence": "red-02",
+        "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('comment-domain-overview').locator('.ops-metric-card').filter({ hasText: '评论记录数' })\nExpected substring: \u001b[32m\"3\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('comment-domain-overview').locator('.ops-metric-card').filter({ hasText: '评论记录数' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('comment-domain-overview').locator('.ops-metric-card').filter({ hasText: '评论记录数' })\u001b[22m\n\n\n  10 |   const { projectId } = await connectProjectTable(page, request, 'comment_qc', [['记录日期', '评论编号', '评论内容', '情感', '处置状态'], ['2026-11-01', 'c1', '需要回复咨询', '问题', '待处理'], ['2026-11-01', 'c2', '体验很好', '正面', '已处理'], ['2026-11-02', 'c3', '未标注的记录', '', '待处理']]);\n  11 |   await publishRecommendedBoard(page); await page.goto('/projects/' + projectId + '/comments');\n> 12 |   const business = page.getByTestId('comment-domain-overview'); await expect(business.locator('.ops-metric-card').filter({ hasText: '评论记录数' })).toContainText('3'); await expect(business.getByRole('table', { name: '项目评论记录', exact: true })).toContainText('需要回复咨询');\n     |                                                                                                                                                 ^\n  13 | });\n  14 |\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-domains.spec.ts:12:145"
+      }
+    ]
+  },
+  {
+    "run": "domains-green-1",
+    "stats": {
+      "startTime": "2026-10-13T23:26:58.370Z",
+      "duration": 31596.32,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "domains-extended-1",
+    "stats": {
+      "startTime": "2026-10-13T23:34:25.166Z",
+      "duration": 203139.144,
+      "expected": 8,
+      "skipped": 0,
+      "unexpected": 6,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "内容领域 1280px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读",
+        "status": "timedOut",
+        "evidence": "failure-01",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "title": "评论领域 1280px：来源标注与状态分组、空标注覆盖和同指标报告真实可见",
+        "status": "failed",
+        "evidence": "failure-02",
+        "error": "TypeError: Cannot read properties of undefined (reading 'map')\n\n  51 |     await page.screenshot({ path: info.outputPath('comments-source-labeled-and-filtered.png'), fullPage: true }); await domain.getByRole('button', { name: '清除周期与筛选', exact: true }).click();\n  52 |     await page.goto('/projects/' + projectId + '/reports'); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '评论记录数报告结果', exact: true })).toContainText('3');\n> 53 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); expect(new Set(board.dashboards[0].cards.map((card: { id: string }) => card.id)).size).toBe(board.dashboards[0].cards.length);\n     |                                                                                                                                                                      ^\n  54 |     expect(board.dashboards[0].cards.filter((card: { type: string }) => card.type === 'breakdown').length).toBe(2);\n  55 |     expect((await request.post('/api/projects', { headers: projectIdentity, data: { action: 'add_member', projectId, userId: 'user-viewer', role: 'viewer' } })).status()).toBe(200);\n  56 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/projects/' + projectId + '/comments'); await expect(domain.locator('.ops-metric-card').filter({ hasText: '评论记录数' })).toContainText('3'); await fit(page);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-domains.spec.ts:53:166"
+      },
+      {
+        "title": "内容与评论分表 1280px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源",
+        "status": "failed",
+        "evidence": "failure-03",
+        "error": "TypeError: Cannot read properties of undefined (reading 'map')\n\n  94 |     await page.goto('/projects/' + projectId + '/content'); await expect(page.getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })).toContainText('3,000'); await page.goto('/projects/' + projectId + '/comments'); await expect(page.getByTestId('comment-domain-overview').getByRole('table', { name: '项目评论记录', exact: true })).toContainText('需要回复咨询');\n  95 |     const content = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=content', { headers: projectIdentity })).json(), comment = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=comment', { headers: projectIdentity })).json(); expect(content.dataset.id).not.toBe(comment.dataset.id); expect(content.dataset.sourceId).not.toBe(comment.dataset.sourceId); expect(content.metrics.records.definition.id).not.toBe(comment.metrics.records.definition.id);\n> 96 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); const references = board.dashboards[0].cards.map((card: { configJson: string }) => JSON.parse(card.configJson).metricId); expect(references).toContain(content.metrics.reads.definition.id); expect(references).toContain(comment.metrics.records.definition.id); await fit(page);\n     |                                                                                                                                                                          ^\n  97 |   });\n  98 | }\n  99 | test('评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态', async ({ page, request }) => {\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-domains.spec.ts:96:170"
+      },
+      {
+        "title": "内容领域 390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读",
+        "status": "timedOut",
+        "evidence": "failure-04",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "title": "评论领域 390px：来源标注与状态分组、空标注覆盖和同指标报告真实可见",
+        "status": "failed",
+        "evidence": "failure-05",
+        "error": "TypeError: Cannot read properties of undefined (reading 'map')\n\n  51 |     await page.screenshot({ path: info.outputPath('comments-source-labeled-and-filtered.png'), fullPage: true }); await domain.getByRole('button', { name: '清除周期与筛选', exact: true }).click();\n  52 |     await page.goto('/projects/' + projectId + '/reports'); await page.getByRole('button', { name: '生成并保存报告', exact: true }).click(); await expect(page.getByRole('article', { name: '评论记录数报告结果', exact: true })).toContainText('3');\n> 53 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); expect(new Set(board.dashboards[0].cards.map((card: { id: string }) => card.id)).size).toBe(board.dashboards[0].cards.length);\n     |                                                                                                                                                                      ^\n  54 |     expect(board.dashboards[0].cards.filter((card: { type: string }) => card.type === 'breakdown').length).toBe(2);\n  55 |     expect((await request.post('/api/projects', { headers: projectIdentity, data: { action: 'add_member', projectId, userId: 'user-viewer', role: 'viewer' } })).status()).toBe(200);\n  56 |     await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/projects/' + projectId + '/comments'); await expect(domain.locator('.ops-metric-card').filter({ hasText: '评论记录数' })).toContainText('3'); await fit(page);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-domains.spec.ts:53:166"
+      },
+      {
+        "title": "内容与评论分表 390px：一个项目两个真实文档，用途选择、两专属页和团队卡片分别引用自己的来源",
+        "status": "failed",
+        "evidence": "failure-06",
+        "error": "TypeError: Cannot read properties of undefined (reading 'map')\n\n  94 |     await page.goto('/projects/' + projectId + '/content'); await expect(page.getByTestId('content-domain-overview').locator('.ops-metric-card').filter({ hasText: '阅读总量' })).toContainText('3,000'); await page.goto('/projects/' + projectId + '/comments'); await expect(page.getByTestId('comment-domain-overview').getByRole('table', { name: '项目评论记录', exact: true })).toContainText('需要回复咨询');\n  95 |     const content = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=content', { headers: projectIdentity })).json(), comment = await (await request.get('/api/business-analytics?projectId=' + projectId + '&kind=comment', { headers: projectIdentity })).json(); expect(content.dataset.id).not.toBe(comment.dataset.id); expect(content.dataset.sourceId).not.toBe(comment.dataset.sourceId); expect(content.metrics.records.definition.id).not.toBe(comment.metrics.records.definition.id);\n> 96 |     const board = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: projectIdentity })).json(); const references = board.dashboards[0].cards.map((card: { configJson: string }) => JSON.parse(card.configJson).metricId); expect(references).toContain(content.metrics.reads.definition.id); expect(references).toContain(comment.metrics.records.definition.id); await fit(page);\n     |                                                                                                                                                                          ^\n  97 |   });\n  98 | }\n  99 | test('评论断链反例：页面接入评论表后，评论页显示真实三条评论与来源处置状态', async ({ page, request }) => {\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-domains.spec.ts:96:170"
+      }
+    ]
+  },
+  {
+    "run": "domains-extended-2",
+    "stats": {
+      "startTime": "2026-10-13T23:39:41.669Z",
+      "duration": 86698.956,
+      "expected": 14,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "run": "domains-complete",
+    "case": "字段对应 1280px：不同名称的原表经选择器确认后驱动专属页，重复确认不增加对象",
+    "status": "failed",
+    "evidence": "failure-07",
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected substring: \u001b[32m\"专属投放分析仍缺少\"\u001b[39m\nReceived string:    \u001b[31m\"确认适用的指标与看板✕原表：补修数据 · 1 条记录。以下推荐仅使用已有字段；不会安装任务、预算或固定目标。专属业务分析仍缺少：花费、曝光、点击。可先使用下面能够计算的内容，补齐字段后再确认业务页。确认字段对应日期对应字段业务发生日渠道对应字段未指定花费对应字段未指定曝光对应字段未指定点击对应字段未指定记录数量：1统计本项目原表记录行数，不要求任务、预算或负责人列。生成核心指标，并为主要指标添加日期趋势和渠道对比（有对应字段时）。指标只定义一次，各图表引用同一口径；团队看板仍需确认发布。取消创建指标并进入看板草稿\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    23 × locator resolved to <dialog open=\"\" class=\"shared-dialog\" aria-labelledby=\"_r_m_\">…</dialog>\u001b[22m\n\u001b[2m       - unexpected value \"确认适用的指标与看板✕原表：补修数据 · 1 条记录。以下推荐仅使用已有字段；不会安装任务、预算或固定目标。专属业务分析仍缺少：花费、曝光、点击。可先使用下面能够计算的内容，补齐字段后再确认业务页。确认字段对应日期对应字段业务发生日渠道对应字段未指定花费对应字段未指定曝光对应字段未指定点击对应字段未指定记录数量：1统计本项目原表记录行数，不要求任务、预算或负责人列。生成核心指标，并为主要指标添加日期趋势和渠道对比（有对应字段时）。指标只定义一次，各图表引用同一口径；团队看板仍需确认发布。取消创建指标并进入看板草稿\"\u001b[22m\n\n\n  61 |     const { projectId } = await connect(page, request, 'ad_performance', [['业务发生日', '投放位置', '消耗金额', '展示次数', '访问点击'], ['2026-10-01', '独立位置', 125, 1000, 15]]);\n  62 |     await page.getByRole('button', { name: '推荐指标与看板', exact: true }).click();\n> 63 |     await expect(page.getByRole('dialog')).toContainText('专属投放分析仍缺少');\n     |                                            ^\n  64 |     for (const [label, column] of [['渠道', '投放位置'], ['花费', '消耗金额'], ['曝光', '展示次数'], ['点击', '访问点击']]) {\n  65 |       await page.getByRole('combobox', { name: label + '对应字段', exact: true }).click();\n  66 |       await page.getByRole('option', { name: column, exact: true }).click();\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts:63:44"
+  },
+  {
+    "run": "domains-complete",
+    "case": "字段对应 390px：不同名称的原表经选择器确认后驱动专属页，重复确认不增加对象",
+    "status": "failed",
+    "evidence": "failure-08",
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected substring: \u001b[32m\"专属投放分析仍缺少\"\u001b[39m\nReceived string:    \u001b[31m\"确认适用的指标与看板✕原表：补修数据 · 1 条记录。以下推荐仅使用已有字段；不会安装任务、预算或固定目标。专属业务分析仍缺少：花费、曝光、点击。可先使用下面能够计算的内容，补齐字段后再确认业务页。确认字段对应日期对应字段业务发生日渠道对应字段未指定花费对应字段未指定曝光对应字段未指定点击对应字段未指定记录数量：1统计本项目原表记录行数，不要求任务、预算或负责人列。生成核心指标，并为主要指标添加日期趋势和渠道对比（有对应字段时）。指标只定义一次，各图表引用同一口径；团队看板仍需确认发布。取消创建指标并进入看板草稿\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    23 × locator resolved to <dialog open=\"\" class=\"shared-dialog\" aria-labelledby=\"_r_m_\">…</dialog>\u001b[22m\n\u001b[2m       - unexpected value \"确认适用的指标与看板✕原表：补修数据 · 1 条记录。以下推荐仅使用已有字段；不会安装任务、预算或固定目标。专属业务分析仍缺少：花费、曝光、点击。可先使用下面能够计算的内容，补齐字段后再确认业务页。确认字段对应日期对应字段业务发生日渠道对应字段未指定花费对应字段未指定曝光对应字段未指定点击对应字段未指定记录数量：1统计本项目原表记录行数，不要求任务、预算或负责人列。生成核心指标，并为主要指标添加日期趋势和渠道对比（有对应字段时）。指标只定义一次，各图表引用同一口径；团队看板仍需确认发布。取消创建指标并进入看板草稿\"\u001b[22m\n\n\n  61 |     const { projectId } = await connect(page, request, 'ad_performance', [['业务发生日', '投放位置', '消耗金额', '展示次数', '访问点击'], ['2026-10-01', '独立位置', 125, 1000, 15]]);\n  62 |     await page.getByRole('button', { name: '推荐指标与看板', exact: true }).click();\n> 63 |     await expect(page.getByRole('dialog')).toContainText('专属投放分析仍缺少');\n     |                                            ^\n  64 |     for (const [label, column] of [['渠道', '投放位置'], ['花费', '消耗金额'], ['曝光', '展示次数'], ['点击', '访问点击']]) {\n  65 |       await page.getByRole('combobox', { name: label + '对应字段', exact: true }).click();\n  66 |       await page.getByRole('option', { name: column, exact: true }).click();\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-adapters.spec.ts:63:44"
+  },
+  {
+    "run": "domains-complete",
+    "case": "共享看板入口：comment_qc 保留业务主体并能加入自己的引用指标",
+    "status": "failed",
+    "evidence": "failure-09",
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '消费者反馈情感结构', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '消费者反馈情感结构', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '消费者反馈情感结构', exact: true })\u001b[22m\n\n\n  33 |     await expect(page.getByRole('article', { name: '本项目记录', exact: true })).toContainText('指标 v1');\n  34 |     if (templateId === 'ad_performance') await expect(page.getByTestId('ad-performance-overview')).toBeVisible();\n> 35 |     if (templateId === 'comment_qc') await expect(page.getByRole('heading', { name: '消费者反馈情感结构', exact: true })).toBeVisible();\n     |                                                                                                                  ^\n  36 |     const stored = await (await request.get('/api/dashboards?projectId=' + projectId, { headers: identity })).json();\n  37 |     expect(JSON.parse(stored.cards[0].configJson).metricId).toBe(metricId);\n  38 |   });\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-metrics.spec.ts:35:114"
+  },
+  {
+    "run": "domains-complete",
+    "case": "评论质检与投放分析进入各自业务主体，数据导航URL和标签一致",
+    "status": "failed",
+    "evidence": "failure-10",
+    "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: '评论运营', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: '评论运营', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: '评论运营', exact: true })\u001b[22m\n\n\n  153 |       await expect(page.getByRole('heading', { name: '投放点击效率' })).toBeVisible();\n  154 |     } else {\n> 155 |       await expect(page.getByRole('heading', { name: '评论运营', exact: true })).toBeVisible();\n      |                                                                              ^\n  156 |       await expect(page.getByRole('heading', { name: '消费者反馈情感结构' })).toBeVisible();\n  157 |       await page.getByRole('button', { name: '前往处置工作台查看与闭环评论 →' }).click();\n  158 |       await expect(page.getByRole('heading', { name: /处置/ }).first()).toBeVisible();\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\state.spec.ts:155:78"
+  }
+]

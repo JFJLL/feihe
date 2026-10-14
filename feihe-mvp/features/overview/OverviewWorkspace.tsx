@@ -23,6 +23,7 @@ import { GeneralWorkbenchBoard } from './GeneralWorkbenchBoard';
 import { CommentsWorkspace } from '../comments/CommentsWorkspace';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DatasetAdOverview } from './DatasetAdOverview';
+import { DatasetDomainOverview } from './DatasetDomainOverview';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
 const formatDateZh = (val: string | null | undefined) => {
@@ -268,6 +269,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const isGeneral = ['general_workbench', 'blank'].includes(project?.templateId || '');
   const isCommentQc = project?.templateId === 'comment_qc';
   const isAd = project?.templateId === 'ad_performance';
+  const isDatasetContent = project?.templateId === 'content_marketing' && projectId !== 'qicui' && !(dashboard.notes || []).length;
 
   const headerEyebrow = isGeneral
     ? 'PROJECT DASHBOARD · 通用数据工作台'
@@ -275,30 +277,30 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     ? 'COMMENT QC · 评论口碑质检看板'
     : isAd
     ? 'AD PERFORMANCE · 投放效果分析看板'
-    : `FEIHE · ${quarterName} DASHBOARD`;
+    : isDatasetContent ? '内容分析' : `FEIHE · ${quarterName} DASHBOARD`;
 
   const headerSubtitle = isGeneral
     ? `${project?.departmentName || '业务部门'} · 结构化数据集与度量监控看板`
     : isCommentQc
-    ? '评论口碑采集、处置待办与供应商核验分析'
+    ? '本项目评论记录、来源标注与处置状态'
     : isAd
     ? '本项目投放消耗、点击效率与渠道对比'
-    : `2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`;
+    : isDatasetContent ? '本项目内容表现、趋势与记录' : `2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`;
 
   return <div className="ops-workspace overview-colorful-page reference-workspace">
     <PageHeader eyebrow={headerEyebrow} title={project?.name || '项目总览'} subtitle={headerSubtitle}>
       <div className="workspace-header-actions">
-        {!isGeneral && !isAd && <span className="overview-quarter-pill">投放截至 {date || '待同步'}</span>}
+        {!isGeneral && !isAd && !isCommentQc && !isDatasetContent && <span className="overview-quarter-pill">投放截至 {date || '待同步'}</span>}
         {canWrite && <SyncButton projectId={projectId} onRefresh={onRefresh} />}
       </div>
     </PageHeader>
-    {!isGeneral && project?.templateId !== 'comment_qc' && project?.templateId !== 'ad_performance' && (
+    {!isGeneral && !isDatasetContent && project?.templateId !== 'comment_qc' && project?.templateId !== 'ad_performance' && (
       <WorkspaceModuleTabs tabs={[
         { id: 'overview', title: `总览 · ${quarterName}累计全盘`, desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
         { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
       ]} activeTab={tab} onChange={setTab} />
     )}
-    {!isGeneral && !isAd && <FeishuSources data={dashboard.feishu} projectId={projectId} />}
+    {!isGeneral && !isAd && !isCommentQc && !isDatasetContent && <FeishuSources data={dashboard.feishu} projectId={projectId} />}
 
     {project?.onboardingStatus !== 'ready' && (
       <OnboardingWizard
@@ -317,8 +319,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <GeneralWorkbenchBoard key={projectId} projectId={projectId} project={project} />
       </div>
     ) : project?.templateId === 'comment_qc' ? (
-      <CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />
-    ) : project?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} legacy={(dashboard.feishu?.daily || []).length ? (
+      <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="comment" hasLegacyData={Boolean(projectId === 'qicui' || (dashboard.notes || []).length || (ops.supplier || []).length)} legacy={<CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />} />
+    ) : isDatasetContent ? <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="content" /> : project?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} legacy={(dashboard.feishu?.daily || []).length ? (
       <div className="stack" data-testid="ad-performance-overview">
         <FeishuSources data={dashboard.feishu} projectId={projectId} />
         <section className="ops-metric-grid" aria-label="投放分析指标">

@@ -1,0 +1,158 @@
+[
+  {
+    "projectId": "1791934492327",
+    "project": {
+      "id": "1791934492327",
+      "name": "独立部门报告1791934492327",
+      "spu": "",
+      "brand": "",
+      "category": "",
+      "description": "",
+      "status": "筹备中",
+      "color": "#d97706",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-editor",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "source",
+      "createdBy": "user-editor",
+      "updatedAt": "2026-10-13T23:34:52.332Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "业务编辑者(张晓)",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "37b8c6b9-513e-4738-b8f5-10ed3b182d4d",
+        "projectId": "1791934492327",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/Report-1791934492327",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-13T23:34:53.590Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"业务日\",\"targetField\":\"业务日\",\"type\":\"date\",\"nullPolicy\":\"null\"},{\"sourceField\":\"条目编号\",\"targetField\":\"条目编号\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"事项标题\",\"targetField\":\"事项标题\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"发布渠道\",\"targetField\":\"发布渠道\",\"type\":\"text\",\"nullPolicy\":\"null\"},{\"sourceField\":\"阅读人次\",\"targetField\":\"阅读人次\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"互动人次\",\"targetField\":\"互动人次\",\"type\":\"number\",\"nullPolicy\":\"null\"},{\"sourceField\":\"稿件支出\",\"targetField\":\"稿件支出\",\"type\":\"number\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"1791934492327\",\"documentToken\":\"Report-1791934492327\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"业务日\",\"type\":\"date\"},{\"key\":\"条目编号\",\"type\":\"text\"},{\"key\":\"事项标题\",\"type\":\"text\"},{\"key\":\"发布渠道\",\"type\":\"text\"},{\"key\":\"阅读人次\",\"type\":\"number\"},{\"key\":\"互动人次\",\"type\":\"number\"},{\"key\":\"稿件支出\",\"type\":\"number\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-13T23:34:53.590Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync"
+      ],
+      "blockedSteps": [
+        "metrics",
+        "members"
+      ],
+      "memberCount": 1,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-1791934492327-default",
+          "projectId": "1791934492327",
+          "name": "团队工作台",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "draft",
+          "updatedAt": "2026-10-13T23:34:52.332Z"
+        }
+      ],
+      "targetDashboardId": "dash-1791934492327-default",
+      "cards": []
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-1791934492327-37b8c6b9-513e-4738-b8f5-10ed3b182d4d",
+          "projectId": "1791934492327",
+          "sourceId": "37b8c6b9-513e-4738-b8f5-10ed3b182d4d",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"业务日\",\"name\":\"业务日\",\"type\":\"date\"},{\"key\":\"条目编号\",\"name\":\"条目编号\",\"type\":\"text\"},{\"key\":\"事项标题\",\"name\":\"事项标题\",\"type\":\"text\"},{\"key\":\"发布渠道\",\"name\":\"发布渠道\",\"type\":\"text\"},{\"key\":\"阅读人次\",\"name\":\"阅读人次\",\"type\":\"number\"},{\"key\":\"互动人次\",\"name\":\"互动人次\",\"type\":\"number\"},{\"key\":\"稿件支出\",\"name\":\"稿件支出\",\"type\":\"number\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-13T23:34:53.608Z",
+          "columns": [
+            {
+              "key": "业务日",
+              "name": "业务日",
+              "type": "date"
+            },
+            {
+              "key": "条目编号",
+              "name": "条目编号",
+              "type": "text"
+            },
+            {
+              "key": "事项标题",
+              "name": "事项标题",
+              "type": "text"
+            },
+            {
+              "key": "发布渠道",
+              "name": "发布渠道",
+              "type": "text"
+            },
+            {
+              "key": "阅读人次",
+              "name": "阅读人次",
+              "type": "number"
+            },
+            {
+              "key": "互动人次",
+              "name": "互动人次",
+              "type": "number"
+            },
+            {
+              "key": "稿件支出",
+              "name": "稿件支出",
+              "type": "number"
+            }
+          ],
+          "rows": [
+            {
+              "业务日": "2026-11-01",
+              "条目编号": "own-a",
+              "事项标题": "独立部门教程",
+              "发布渠道": "站内",
+              "阅读人次": 1000,
+              "互动人次": 10,
+              "稿件支出": 50
+            },
+            {
+              "业务日": "2026-11-02",
+              "条目编号": "own-b",
+              "事项标题": "独立部门案例",
+              "发布渠道": "站外",
+              "阅读人次": 2000,
+              "互动人次": 20,
+              "稿件支出": 100
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

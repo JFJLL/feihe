@@ -1,0 +1,20 @@
+{
+  "reviewed": true,
+  "viewportScreenshots": [
+    "content-field-selector-open.png",
+    "complete-batch-identity-validation-error.png"
+  ],
+  "checks": [
+    "390px actual viewport: selector options and confirmation footer visible",
+    "390px error: actual focus and viewport assertions; all error lines visible",
+    "desktop/new source business pages: real counts and typed rows",
+    "full-page screenshots retained but not substituted for modal viewport proof"
+  ],
+  "paths": [
+    "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/.verification/domains-raw-evidence/domains-complete-final/browser-results/product-domains-业务校验-390px-47b17-阻止确认，错误获焦，改对应字段后使用同一个来源与数据集-local/complete-batch-identity-validation-error.png",
+    "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/.verification/domains-raw-evidence/domains-complete-final/browser-results/product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local/content-field-selector-open.png",
+    "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/.verification/domains-raw-evidence/domains-complete-final/browser-results/product-domains-内容领域-390px：不同字段经真实选择器确认、发布、刷新和报告均使用本项目3000阅读-local/content-published-own-records.png",
+    "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/.verification/domains-raw-evidence/domains-complete-final/browser-results/product-domains-评论最小表-390px：缺字段显示未配置，初始目标不继承，明确保存40-10后刷新仍正确-local/comment-optional-capabilities-unconfigured.png",
+    "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/.verification/domains-raw-evidence/domains-complete-final/browser-results/product-domains-评论最小表-390px：缺字段显示未配置，初始目标不继承，明确保存40-10后刷新仍正确-local/own-comment-targets-confirmed.png"
+  ]
+}

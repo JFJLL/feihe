@@ -1,0 +1,33 @@
+(node:24868) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ domain red: imported content can bind its own source to the content business page and shared readings metric (45.0215ms)
+✔ domain red: imported comments become project comment records and sentiment/status analysis rather than an empty note pool (15.223ms)
+✔ domain red: a new comment project has no inherited200/30 acceptance targets or automatic ready confirmation (2.5457ms)
+✔ domain API: complete-batch duplicate/blank IDs and empty comment text reject before any shared metric or binding is written (7.9654ms)
+✔ domain API: business records, scalar/trend/group values share project-day and common-filter rules; undated records stay out of the requested day (15.849ms)
+✔ domain API: missing optional fields are absent, source labels are not fabricated, and row position is explicitly not a stable comment key (3.1891ms)
+✔ domain API: pagination is real, latest source updates retain the binding and clamp the actual current page (5.6712ms)
+✔ domain API: invalid latest source data and removed/retyped fields fail explicitly rather than returning the previous normal values (5.4154ms)
+✔ domain API: untrusted URL, foreign source/module, viewer writes and stale dataset versions reject without successful local mutations (4.6866ms)
+✔ domain API: actual SQL/audit failure rolls back shared definitions and business binding; retry reuses one collection and correct audit actor (4.1137ms)
+✔ domain API: published content scalar, trend, group and real saved report reference the exact same metric ID/version and local rows (31.6688ms)
+✔ domain API: zero remains unconfirmed, positive acceptance targets require an explicit settings save, and historical Qicui targets are preserved (3.9647ms)
+✔ domain API: a valid shared metric edit updates the dedicated scalar/trend/group at v2 rather than silently continuing the old calculation (9.6307ms)
+✖ domain API: authorized content structure reuse binds its typed business page to new private records and new metric IDs (7.9728ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 13
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8650.5527
+
+✖ failing tests:
+
+test at scripts\test-product-domains.mjs:116:1
+✖ domain API: authorized content structure reuse binds its typed business page to new private records and new metric IDs (7.9728ms)
+  TypeError: Cannot read properties of null (reading 'revision')
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-domains.mjs:120:192)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7)
