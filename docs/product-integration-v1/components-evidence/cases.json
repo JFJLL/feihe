@@ -1,0 +1,119 @@
+[
+  {
+    "id": "case-01",
+    "title": "启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口",
+    "status": "passed",
+    "role": "platform admin (initial read-only baseline)",
+    "trace": "case-01/trace.zip",
+    "requests": "case-01/attachments/关键请求-16c6e5bf7e5fcce346361f0324496df69d0ce5ff.json",
+    "persistence": "case-01/attachments/实际持久化快照-25e5cb68026ca01ba5f602111109cf24974f9146.json"
+  },
+  {
+    "id": "case-02",
+    "title": "历史业务组件 1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-02/trace.zip",
+    "requests": "case-02/attachments/关键请求-89dbe81306efabaf3d7481bfa4c7939b1001aa9c.json",
+    "persistence": "case-02/attachments/实际持久化快照-9664ebcc69f474574dcb7ca3ac1547436d5e9592.json"
+  },
+  {
+    "id": "case-03",
+    "title": "组件发布恢复 1280px 500：选择与顺序不丢，成功后才应用新布局",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-03/trace.zip",
+    "requests": "case-03/attachments/关键请求-1662c1545914915f0f0a830c5d5b4e1074103c96.json",
+    "persistence": "case-03/attachments/实际持久化快照-396ebadb34893e71ed12e0f9711f9046cda91272.json"
+  },
+  {
+    "id": "case-04",
+    "title": "组件发布恢复 1280px network：选择与顺序不丢，成功后才应用新布局",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-04/trace.zip",
+    "requests": "case-04/attachments/关键请求-9d416cdfbed81cc3efe7b6364d35a7fdf65a1cd1.json",
+    "persistence": "case-04/attachments/实际持久化快照-5ae4b390f6a166424678cc263b20ece39b7d09ec.json"
+  },
+  {
+    "id": "case-05",
+    "title": "组件发布恢复 1280px 409：选择与顺序不丢，成功后才应用新布局",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-05/trace.zip",
+    "requests": "case-05/attachments/关键请求-9c4133625bed2531176c76187e642be86772a0b8.json",
+    "persistence": "case-05/attachments/实际持久化快照-a97bb9ad2edb013260957fa9dc51436c017b4ee4.json"
+  },
+  {
+    "id": "case-06",
+    "title": "日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-06/trace.zip",
+    "requests": "case-06/attachments/关键请求-ea3cc9d7b7ca1ef87c58ce86c06390173853c823.json",
+    "persistence": "case-06/attachments/实际持久化快照-142d6302821369eb1b295e3d366f27218c045424.json"
+  },
+  {
+    "id": "case-07",
+    "title": "共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-07/trace.zip",
+    "requests": "case-07/attachments/关键请求-f6952ee281a802dd17ad861d3c2636d23effddf7.json",
+    "persistence": "case-07/attachments/实际持久化快照-b9200fe4d486a16542f2511d2d884346227fb006.json"
+  },
+  {
+    "id": "case-08",
+    "title": "历史业务组件 390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-08/trace.zip",
+    "requests": "case-08/attachments/关键请求-788495b00aedeb98d627fe7007812f23a8a2238f.json",
+    "persistence": "case-08/attachments/实际持久化快照-6a85dc2d5b30d04132e5b8210091b42fb934e8d9.json"
+  },
+  {
+    "id": "case-09",
+    "title": "组件发布恢复 390px 500：选择与顺序不丢，成功后才应用新布局",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-09/trace.zip",
+    "requests": "case-09/attachments/关键请求-a625644903ea9c21dcfb75590675042d221e6cf2.json",
+    "persistence": "case-09/attachments/实际持久化快照-c4a2adfd81240a21e36887a2600d000aba313daf.json"
+  },
+  {
+    "id": "case-10",
+    "title": "组件发布恢复 390px network：选择与顺序不丢，成功后才应用新布局",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-10/trace.zip",
+    "requests": "case-10/attachments/关键请求-27337db2439a9993b995f80b4f44e0a3c5fb285d.json",
+    "persistence": "case-10/attachments/实际持久化快照-1ec8daa669cd289bc1cdedbab3b3c561b0682ca7.json"
+  },
+  {
+    "id": "case-11",
+    "title": "组件发布恢复 390px 409：选择与顺序不丢，成功后才应用新布局",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-11/trace.zip",
+    "requests": "case-11/attachments/关键请求-3ea6fa1bada1575825e7aa2b0d2f8c7ea13f731b.json",
+    "persistence": "case-11/attachments/实际持久化快照-5fe68cd3e534871e4e864ee053bae43261e84d7a.json"
+  },
+  {
+    "id": "case-12",
+    "title": "日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-12/trace.zip",
+    "requests": "case-12/attachments/关键请求-1dd5a35fbb791d8f338841c1d7bd204ec1cabd1c.json",
+    "persistence": "case-12/attachments/实际持久化快照-dbaff60a6e54956841aa08e8b2cb47a8eba4f443.json"
+  },
+  {
+    "id": "case-13",
+    "title": "共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+    "status": "passed",
+    "role": "user-editor (platform member/project admin); viewer where specified",
+    "trace": "case-13/trace.zip",
+    "requests": "case-13/attachments/关键请求-b8d9ee4f67891d03d4e045704edcff59c1eeccc5.json",
+    "persistence": "case-13/attachments/实际持久化快照-7f6444c162cc6009c2d0e9179fb881985ef91cba.json"
+  }
+]

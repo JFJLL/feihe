@@ -1,0 +1,194 @@
+[
+  {
+    "command": "node scripts/test-acceptance-reply-pending.mjs",
+    "startedAt": "2026-10-14T01:28:46.693Z",
+    "finishedAt": "2026-10-14T01:28:47.154Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/test-card-display-api.mjs",
+    "startedAt": "2026-10-14T01:28:47.156Z",
+    "finishedAt": "2026-10-14T01:29:02.986Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 5
+  },
+  {
+    "command": "node scripts/test-card-display-linkage.mjs",
+    "startedAt": "2026-10-14T01:29:02.987Z",
+    "finishedAt": "2026-10-14T01:29:18.993Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 17
+  },
+  {
+    "command": "node scripts/test-category-notes-modal.mjs",
+    "startedAt": "2026-10-14T01:29:18.993Z",
+    "finishedAt": "2026-10-14T01:29:19.548Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/test-content-comment-boards.mjs",
+    "startedAt": "2026-10-14T01:29:19.548Z",
+    "finishedAt": "2026-10-14T01:29:20.212Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/test-dashboard-feedback.mjs",
+    "startedAt": "2026-10-14T01:29:20.213Z",
+    "finishedAt": "2026-10-14T01:29:22.453Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/test-focused-api.mjs",
+    "startedAt": "2026-10-14T01:29:22.454Z",
+    "finishedAt": "2026-10-14T01:29:38.635Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 6
+  },
+  {
+    "command": "node scripts/test-focused-remediation.mjs",
+    "startedAt": "2026-10-14T01:29:38.635Z",
+    "finishedAt": "2026-10-14T01:29:54.728Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 12
+  },
+  {
+    "command": "node scripts/test-product-access.mjs",
+    "startedAt": "2026-10-14T01:29:54.729Z",
+    "finishedAt": "2026-10-14T01:30:11.628Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 7
+  },
+  {
+    "command": "node scripts/test-product-adapters.mjs",
+    "startedAt": "2026-10-14T01:30:11.628Z",
+    "finishedAt": "2026-10-14T01:30:27.673Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 7
+  },
+  {
+    "command": "node scripts/test-product-board.mjs",
+    "startedAt": "2026-10-14T01:30:27.674Z",
+    "finishedAt": "2026-10-14T01:30:43.900Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 12
+  },
+  {
+    "command": "node scripts/test-product-data.mjs",
+    "startedAt": "2026-10-14T01:30:43.900Z",
+    "finishedAt": "2026-10-14T01:31:00.056Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 6
+  },
+  {
+    "command": "node scripts/test-product-foundation.mjs",
+    "startedAt": "2026-10-14T01:31:00.056Z",
+    "finishedAt": "2026-10-14T01:31:16.109Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 12
+  },
+  {
+    "command": "node scripts/test-product-metrics.mjs",
+    "startedAt": "2026-10-14T01:31:16.109Z",
+    "finishedAt": "2026-10-14T01:31:32.433Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 7
+  },
+  {
+    "command": "node scripts/test-product-reports.mjs",
+    "startedAt": "2026-10-14T01:31:32.433Z",
+    "finishedAt": "2026-10-14T01:31:50.288Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 10
+  },
+  {
+    "command": "node scripts/test-product-structure.mjs",
+    "startedAt": "2026-10-14T01:31:50.288Z",
+    "finishedAt": "2026-10-14T01:32:08.599Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 11
+  },
+  {
+    "command": "node scripts/test-request-abort.mjs",
+    "startedAt": "2026-10-14T01:32:08.599Z",
+    "finishedAt": "2026-10-14T01:32:08.832Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 3
+  },
+  {
+    "command": "node scripts/test-ui-unification-v1-regression.mjs",
+    "startedAt": "2026-10-14T01:32:08.833Z",
+    "finishedAt": "2026-10-14T01:32:09.648Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/test-v3-api.mjs",
+    "startedAt": "2026-10-14T01:32:09.648Z",
+    "finishedAt": "2026-10-14T01:32:26.187Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 10
+  },
+  {
+    "command": "node scripts/test-v3-remediation.mjs",
+    "startedAt": "2026-10-14T01:32:26.187Z",
+    "finishedAt": "2026-10-14T01:32:42.619Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 26
+  },
+  {
+    "command": "node scripts/test-workspace-charts.mjs",
+    "startedAt": "2026-10-14T01:32:42.619Z",
+    "finishedAt": "2026-10-14T01:32:43.065Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/verify-growth.mjs",
+    "startedAt": "2026-10-14T01:32:43.065Z",
+    "finishedAt": "2026-10-14T01:32:59.925Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 0
+  },
+  {
+    "command": "node scripts/test-product-domains.mjs",
+    "startedAt": "2026-10-14T01:32:59.925Z",
+    "finishedAt": "2026-10-14T01:33:19.552Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 14
+  },
+  {
+    "command": "node scripts/test-product-components.mjs",
+    "startedAt": "2026-10-14T01:33:19.553Z",
+    "finishedAt": "2026-10-14T01:33:44.165Z",
+    "exitCode": 0,
+    "signal": null,
+    "tests": 5
+  }
+]

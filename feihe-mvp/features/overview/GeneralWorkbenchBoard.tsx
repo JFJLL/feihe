@@ -51,6 +51,8 @@ export function GeneralWorkbenchBoard({
 
   // Draft vs Published Cards separation
   const [isEditingBoard, setIsEditingBoard] = useState(false);
+  const editingBoardRef = useRef(false);
+  editingBoardRef.current = isEditingBoard;
   const [dashboardVersion, setDashboardVersion] = useState<number>(1);
   const [dashboardId, setDashboardId] = useState<string>('');
   const [publishedCards, setPublishedCards] = useState<DashboardCardConfig[]>([]);
@@ -111,7 +113,7 @@ export function GeneralWorkbenchBoard({
   }, [isEditingBoard, draftCards, publishedCards, draftQuery, publishedQuery]);
 
   // Load datasets and dashboard configuration
-  const loadWorkspaceData = useCallback(async () => {
+  const loadWorkspaceData = useCallback(async (configOnly = false) => {
     const requestId = ++workspaceRequest.current;
     try {
       const [dsRes, dashRes] = await Promise.all([
@@ -124,17 +126,17 @@ export function GeneralWorkbenchBoard({
         }>(`/api/dashboards?projectId=${encodeURIComponent(projectId)}`),
       ]);
 
-      if (requestId !== workspaceRequest.current) return;
+      if (requestId !== workspaceRequest.current || configOnly && editingBoardRef.current) return;
       setDataError('');
       const dsList = dsRes.datasets || [];
       setDatasets(dsList);
 
       const chosenDsId = dsList[0]?.id || '';
-      setSelectedDatasetId(chosenDsId);
+      if (!configOnly) setSelectedDatasetId(chosenDsId);
 
       const targetDash = dashRes.dashboards?.find((d) => d.id === dashRes.targetDashboardId) || dashRes.dashboards?.[0];
       const confirmedQuery = readDashboardLayout(targetDash?.layoutJson).query;
-      setPublishedQuery(confirmedQuery); setDraftQuery(confirmedQuery); setViewQuery(confirmedQuery);
+      setPublishedQuery(confirmedQuery); setDraftQuery(confirmedQuery); if (!configOnly) setViewQuery(confirmedQuery);
       if (targetDash) {
         setDashboardId(targetDash.id);
         setDashboardVersion(targetDash.version || 1);
@@ -185,6 +187,14 @@ export function GeneralWorkbenchBoard({
     void loadWorkspaceData();
     return () => { workspaceRequest.current++; detailRequest.current++; metricRequest.current++; };
   }, [loadWorkspaceData]);
+  useEffect(() => {
+    const changed = (event: Event) => {
+      const scope = (event as CustomEvent<{ projectId: string }>).detail;
+      if (scope?.projectId === projectId && !editingBoardRef.current && !saveLock.current) void loadWorkspaceData(true);
+    };
+    window.addEventListener('app:dashboard-changed', changed);
+    return () => window.removeEventListener('app:dashboard-changed', changed);
+  }, [projectId, loadWorkspaceData]);
 
   // Load active dataset rows with server-side pagination & search
   const loadDatasetDetail = useCallback(async (dsId: string, page = 1, search = '', requestKey = detailKey) => {
@@ -329,6 +339,7 @@ export function GeneralWorkbenchBoard({
       setIsEditingBoard(false);
       setConflictInfo(null);
       showToast('看板已成功保存并发布！', 'success');
+      window.dispatchEvent(new CustomEvent('app:dashboard-changed', { detail: { projectId, dashboardId: res.dashboardId, version: res.version } }));
       return true;
     } catch (err) {
       if (err instanceof ApiError && err.status === 409) {

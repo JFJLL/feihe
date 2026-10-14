@@ -1,0 +1,144 @@
+[
+  {
+    "run": "components-red",
+    "stats": {
+      "startTime": "2026-10-14T00:36:42.421Z",
+      "duration": 104890.935,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口",
+        "evidence": "red-01",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      }
+    ]
+  },
+  {
+    "run": "components-green-1",
+    "stats": {
+      "startTime": "2026-10-14T00:44:53.285Z",
+      "duration": 46023.202,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": []
+  },
+  {
+    "run": "components-extended-1",
+    "stats": {
+      "startTime": "2026-10-14T00:59:23.276Z",
+      "duration": 75261.5,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": []
+  },
+  {
+    "run": "components-extended-2",
+    "stats": {
+      "startTime": "2026-10-14T01:08:39.906Z",
+      "duration": 321576.974,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 4,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表",
+        "evidence": "failure-01",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "title": "共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+        "evidence": "failure-02",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "title": "日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表",
+        "evidence": "failure-03",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "title": "共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+        "evidence": "failure-04",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      }
+    ]
+  },
+  {
+    "run": "components-extended-3",
+    "stats": {
+      "startTime": "2026-10-14T01:17:09.655Z",
+      "duration": 179469.303,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+        "evidence": "failure-05",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      },
+      {
+        "title": "共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+        "evidence": "failure-06",
+        "status": "timedOut",
+        "error": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+      }
+    ]
+  },
+  {
+    "run": "components-extended-4",
+    "stats": {
+      "startTime": "2026-10-14T01:22:10.023Z",
+      "duration": 78420.73199999999,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+        "evidence": "failure-07",
+        "status": "failed",
+        "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '团队业务组件布局', exact: true })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog', { name: '团队业务组件布局', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '团队业务组件布局', exact: true })\u001b[22m\n\u001b[2m    23 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);\n  74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByTitle('编辑卡片', { exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill(draftTitle); await cardDialog.getByRole('button', { name: '加入草稿', exact: true }).click();\n> 75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: draftTitle, exact: true })).toContainText('2');\n     |                                                                                                                                                                                                                                                                                                                                                   ^\n  76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: draftTitle, exact: true })).toBeVisible();\n  77 |     await page.getByRole('button', { name: '强制覆盖发布', exact: true }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: draftTitle, exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);\n  78 |   });\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts:75:339"
+      },
+      {
+        "title": "共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+        "evidence": "failure-08",
+        "status": "failed",
+        "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: '团队业务组件布局', exact: true })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog', { name: '团队业务组件布局', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: '团队业务组件布局', exact: true })\u001b[22m\n\u001b[2m    23 × locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);\n  74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByTitle('编辑卡片', { exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill(draftTitle); await cardDialog.getByRole('button', { name: '加入草稿', exact: true }).click();\n> 75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: draftTitle, exact: true })).toContainText('2');\n     |                                                                                                                                                                                                                                                                                                                                                   ^\n  76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: draftTitle, exact: true })).toBeVisible();\n  77 |     await page.getByRole('button', { name: '强制覆盖发布', exact: true }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: draftTitle, exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);\n  78 |   });\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts:75:339"
+      }
+    ]
+  },
+  {
+    "run": "components-extended-5",
+    "stats": {
+      "startTime": "2026-10-14T01:27:23.560Z",
+      "duration": 60644.147000000004,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": []
+  }
+]

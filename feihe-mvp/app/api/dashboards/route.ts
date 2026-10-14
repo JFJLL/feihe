@@ -5,6 +5,7 @@ import { getProjectDatasets } from '@/lib/datasets';
 import { validateCardConfig } from '@/lib/metrics/config';
 import { resolveCardDefinition, canonicalCardReference, DefinitionError } from '@/lib/metrics/definitions';
 import { applyMetricQuery, canonicalQuery, queryErrors, readDashboardLayout, type DashboardLayout } from '@/lib/metrics/query';
+import { businessComponentErrors } from '@/lib/business-components';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,8 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   let body: {
+    action?: string;
+    components?: string[];
     projectId?: string;
     dashboardId?: string;
     name?: string;
@@ -72,6 +75,26 @@ export async function POST(request: Request) {
   const now = new Date().toISOString();
   const dashboardId = String(body.dashboardId || `dash-${project}-default`);
   if (body.version !== undefined && (!Number.isInteger(body.version) || body.version < 0)) return jsonError('看板版本必须是非负整数');
+  if (body.action === 'set_components') {
+    if (project !== 'qicui' && access.context!.project.template_id !== 'content_marketing') return jsonError('当前项目未启用笔记与投放业务组件');
+    if (body.version === undefined) return jsonError('请提交已读取的团队看板版本');
+    const errors = businessComponentErrors(body.components); if (errors.length) return jsonError(errors.join('；'));
+    const existing = await d1.prepare('SELECT project_id AS projectId,version,layout_json AS layoutJson FROM dashboards WHERE id=?').bind(dashboardId).first<{ projectId: string; version: number; layoutJson: string }>();
+    if (!existing) return jsonError('团队看板不存在', 404);
+    if (existing.projectId !== project) return jsonError('看板不属于当前项目', 403);
+    if (existing.version !== body.version) return Response.json({ ok: false, conflict: true, error: '团队看板已更新，请保留选择并读取最新版本后确认', serverVersion: existing.version }, { status: 409 });
+    const layout = { ...readDashboardLayout(existing.layoutJson), businessComponents: body.components! }, token = crypto.randomUUID();
+    try {
+      await d1.batch([
+        d1.prepare("UPDATE dashboards SET layout_json=?,version=?,save_token=?,updated_at=?,status='published' WHERE id=? AND project_id=? AND version=?").bind(JSON.stringify(layout), existing.version + 1, token, now, dashboardId, project, existing.version),
+        d1.prepare('INSERT INTO action_logs(project_id,action,target_type,target_id,detail,created_at,actor_user_id) SELECT ?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM dashboards WHERE id=? AND project_id=? AND save_token=?)').bind(project, '发布业务组件布局', 'dashboard', dashboardId, JSON.stringify(body.components), now, access.context!.user.userId, dashboardId, project, token),
+      ]);
+      const confirmed = await d1.prepare('SELECT version,save_token AS token FROM dashboards WHERE id=? AND project_id=?').bind(dashboardId, project).first<{ version: number; token: string }>();
+      if (!confirmed || confirmed.token !== token) return Response.json({ ok: false, conflict: true, error: '看板在发布期间更新，请保留选择并重新确认', serverVersion: confirmed?.version }, { status: 409 });
+      return Response.json({ ok: true, dashboardId, version: confirmed.version, layout });
+    } catch (error) { return jsonError(error instanceof Error ? error.message : '组件布局发布失败', 500); }
+  }
+  if (body.action !== undefined) return jsonError('不支持的看板操作');
   if (!Array.isArray(body.cards)) return jsonError('请提交明确的卡片数组，空看板请提交 []');
   const owner = await d1.prepare('SELECT project_id FROM dashboards WHERE id=?').bind(dashboardId).first<{ project_id: string }>();
   if (owner && owner.project_id !== project) return jsonError('看板不属于当前项目', 403);
@@ -96,8 +119,13 @@ export async function POST(request: Request) {
     if (body.layout?.kind !== 'project_board' || body.layout.version !== 1) return jsonError('不支持的看板布局配置');
     const errors = queryErrors(body.layout.query);
     if (errors.length) return jsonError(errors.join('；'));
+    if (body.layout.businessComponents !== undefined) {
+      if (project !== 'qicui' && access.context!.project.template_id !== 'content_marketing') return jsonError('当前项目未启用笔记与投放业务组件');
+      const errors = businessComponentErrors(body.layout.businessComponents); if (errors.length) return jsonError(errors.join('；'));
+    }
   }
-  const layoutJson = body.layout ? JSON.stringify({ kind: 'project_board', version: 1, query: canonicalQuery(body.layout.query) }) : existingRecord?.layoutJson || JSON.stringify(readDashboardLayout());
+  const previousLayout = readDashboardLayout(existingRecord?.layoutJson);
+  const layoutJson = body.layout ? JSON.stringify({ kind: 'project_board', version: 1, query: canonicalQuery(body.layout.query), ...((body.layout.businessComponents ?? previousLayout.businessComponents) !== undefined ? { businessComponents: body.layout.businessComponents ?? previousLayout.businessComponents } : {}) }) : existingRecord?.layoutJson || JSON.stringify(previousLayout);
   const query = readDashboardLayout(layoutJson).query;
 
   const datasets = await getProjectDatasets(project);

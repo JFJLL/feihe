@@ -1,0 +1,47 @@
+{
+  "rawRuns": [
+    {
+      "original": "docs/product-integration-v1/components-red",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-red",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-green-1",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-green-1",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-extended-1",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-extended-1",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-extended-2",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-extended-2",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-extended-3",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-extended-3",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-extended-4",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-extended-4",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-extended-5",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-extended-5",
+      "method": "rename intact, no deletion"
+    },
+    {
+      "original": "docs/product-integration-v1/components-complete",
+      "retainedAt": "feihe-mvp/.verification/components-raw-evidence/components-complete",
+      "method": "rename intact, no deletion"
+    }
+  ],
+  "canonicalEvidence": "docs/product-integration-v1/components-evidence",
+  "failuresRetained": true,
+  "generatedRawWhitespaceUntouched": true
+}

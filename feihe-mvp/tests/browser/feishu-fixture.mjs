@@ -7,6 +7,8 @@ export const sheetB = [['编号', '金额', '分组', '已确认', '业务日', 
 
 const pageFixtures = new Map();
 const focusedFixtures = new Map();
+const legacySheets = new Map();
+const legacyWikiTokens = new Set(['CEsvwg65MikAGOkqKItcR7wkn3b', 'SVwkw52kZiSlLEkQuaNcHvrynGg', 'H0iDwGhffiL2UHk9G96cpnR4nBe', 'J8bnw5Mx4inxbukp2HYcgjMznJg', 'Ag0QwaIbain4ZFkOAMLcKI9tnyd']);
 function focusedRows(documentToken) {
   if (focusedFixtures.has(documentToken)) return focusedFixtures.get(documentToken);
   if (documentToken === 'FocusedPercentDoc') return [
@@ -25,10 +27,11 @@ export async function handleFeishuFixture(input) {
 
     const ok = data => Response.json({ code: 0, data });
     if (url.pathname.includes('/auth/')) return Response.json({ code: 0, tenant_access_token: 'fixture-tenant' });
-    if (url.pathname.includes('/wiki/')) return ok({ node: { obj_type: 'sheet', obj_token: 'FixtureDoc' } });
+    if (url.pathname.includes('/wiki/')) return ok({ node: { obj_type: 'sheet', obj_token: legacySheets.size && legacyWikiTokens.has(url.searchParams.get('token')) ? 'LegacyFixtureDoc' : 'FixtureDoc' } });
     if (url.pathname.endsWith('/sheets/query')) {
       if (url.pathname.includes('SlowDoc')) await new Promise(resolve => setTimeout(resolve, 1200));
       const documentToken = url.pathname.split('/spreadsheets/')[1]?.split('/')[0];
+      if (documentToken === 'LegacyFixtureDoc') return ok({ sheets: [...legacySheets].map(([id, rows]) => ({ sheet_id: id, title: '受控历史表' + id, grid_properties: { row_count: rows.length, column_count: Math.max(...rows.map(row => row.length)) } })) });
       const pageCount = pageFixtures.get(documentToken);
       const focused = focusedRows(documentToken);
       if (focused) return ok({ sheets: [{ sheet_id: 'sheetA', title: '补修数据', grid_properties: { row_count: focused.length, column_count: focused[0].length } }] });
@@ -43,6 +46,11 @@ export async function handleFeishuFixture(input) {
       const sheetId = range.split('!')[0];
       const bounds = range.match(/![A-Z]+(\d+):[A-Z]+(\d+)/);
       const documentToken = url.pathname.split('/spreadsheets/')[1]?.split('/')[0];
+      if (documentToken === 'LegacyFixtureDoc') {
+        const raw = legacySheets.get(sheetId) || [], match = range.match(/!([A-Z]+)(\d+):([A-Z]+)(\d+)/);
+        const column = letters => [...letters].reduce((n, letter) => n * 26 + letter.charCodeAt(0) - 64, 0);
+        return ok({ valueRange: { values: match ? raw.slice(Number(match[2]) - 1, Number(match[4])).map(row => row.slice(column(match[1]) - 1, column(match[3]))) : raw } });
+      }
       const pageCount = pageFixtures.get(documentToken);
       const all = focusedRows(documentToken) || (pageCount !== undefined && sheetId === 'sheetA' ? [['任务', '金额'], ...Array.from({ length: pageCount }, (_, i) => [pageCount === 1 ? '更新后唯一任务' : '分页任务' + (i + 1), pageCount === 1 ? '100' : String(i + 1)])] : sheetId === 'sheetB' ? sheetB : sheetId === 'sheetBig' ? [['编号', '金额'], ...Array.from({ length: 5050 }, (_, i) => [String(i + 1), '1'])] : sheetA);
       return ok({ valueRange: { values: bounds ? all.slice(Number(bounds[1]) - 1, Number(bounds[2])) : all } });
@@ -66,6 +74,11 @@ export async function startFeishuFixture() {
   const { createServer } = await import('node:http');
   const fixtureServer = createServer(async (req, res) => {
     try {
+      if (req.method === 'POST' && req.url === '/__fixture/legacy-sheets') {
+        let body = ''; for await (const chunk of req) body += chunk;
+        const data = JSON.parse(body); legacySheets.clear(); for (const [id, rows] of Object.entries(data.sheets)) legacySheets.set(id, rows);
+        res.writeHead(200, { 'Content-Type': 'application/json' }); res.end('{"ok":true}'); return;
+      }
       if (req.method === 'POST' && req.url === '/__fixture/focused-rows') {
         let body = ''; for await (const chunk of req) body += chunk;
         const data = JSON.parse(body); focusedFixtures.set(String(data.documentToken), data.rows);

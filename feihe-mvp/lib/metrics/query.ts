@@ -2,7 +2,7 @@ import { parseProjectDate } from '../date-values';
 import type { CardMetricConfig } from './config';
 
 export type MetricQuery = { from?: string; to?: string; filters?: Array<{ key: string; value: string }>; detailPage?: number };
-export type DashboardLayout = { kind: 'project_board'; version: 1; query: MetricQuery };
+export type DashboardLayout = { kind: 'project_board'; version: 1; query: MetricQuery; businessComponents?: string[] };
 export function queryErrors(query: MetricQuery): string[] {
   const errors: string[] = [];
   if (!query || typeof query !== 'object' || Array.isArray(query)) return ['项目筛选必须是对象'];
@@ -20,7 +20,7 @@ export function canonicalQuery(query: MetricQuery = {}): MetricQuery {
     ...(query.filters?.some(filter => filter.value !== '') ? { filters: query.filters.filter(filter => filter.value !== '').map(filter => ({ key: filter.key, value: filter.value })) } : {}) };
 }
 export function readDashboardLayout(json?: string): DashboardLayout {
-  try { const value = JSON.parse(json || '{}'); if (value.kind === 'project_board' && !queryErrors(value.query).length) return { kind: 'project_board', version: 1, query: canonicalQuery(value.query) }; } catch {}
+  try { const value = JSON.parse(json || '{}'); if (value.kind === 'project_board' && !queryErrors(value.query).length) return { kind: 'project_board', version: 1, query: canonicalQuery(value.query), ...(Array.isArray(value.businessComponents) ? { businessComponents: value.businessComponents } : {}) }; } catch {}
   return { kind: 'project_board', version: 1, query: {} };
 }
 // An explicit card period (including legacy from/to) remains an independent override.

@@ -1,0 +1,1008 @@
+{
+  "config": {
+    "argv": [
+      "C:\\nvm4w\\nodejs\\node.exe",
+      "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "tests/browser/product-components.spec.ts",
+      "--project",
+      "local"
+    ],
+    "configFile": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\playwright.config.ts",
+    "rootDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/components-extended-2/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "local",
+        "name": "local",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [
+          "**/*.gateway.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "D:/download/pic-vec/feihe-platform-v3/docs/product-integration-v1/components-extended-2/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "gateway",
+        "name": "gateway",
+        "testDir": "D:/download/pic-vec/feihe-platform-v3/feihe-mvp/tests/browser",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.gateway.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "local",
+        "testDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "snapshotDir": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser",
+        "testIgnore": "**/*.gateway.spec.ts",
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "channel": "chromium",
+          "baseURL": "http://127.0.0.1:5216",
+          "viewport": {
+            "width": 1280,
+            "height": 900
+          },
+          "trace": "on",
+          "screenshot": "on"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "local"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "../docs/product-integration-v1/components-extended-2/browser-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/product-integration-v1/components-extended-2/browser-report/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "product-components.spec.ts",
+      "file": "product-components.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4297,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:09:20.917Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\\attachments\\关键请求-d407889043d47101df834d05a7f764c1481fdef2.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\\attachments\\实际持久化快照-bf93f5475019457f47701533f64b94d95ebd38bf.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\\attachments\\最终页面-7103d111b5df61ed8355feab8c0e9ada84d1ff91.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-a200c768b8eb2599150e",
+          "file": "product-components.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "历史业务组件 1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4305,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:09:25.567Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\attachments\\关键请求-80275495bc06ba8fdd24d73856e5154fdf0263db.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\attachments\\实际持久化快照-c76ccfa2ab6e749ca382c92169a6abbac38ee165.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\attachments\\最终页面-247b531689b6609a9e6f70501d8f320884dee12d.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-ae7b819b4ef39b7fa7fe",
+          "file": "product-components.spec.ts",
+          "line": 37,
+          "column": 3
+        },
+        {
+          "title": "组件发布恢复 1280px 500：选择与顺序不丢，成功后才应用新布局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2643,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:09:30.273Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-500：选择与顺序不丢，成功后才应用新布局-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-500：选择与顺序不丢，成功后才应用新布局-local\\attachments\\关键请求-aec8f8c7df773cac54783428b5c71c7960364185.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-500：选择与顺序不丢，成功后才应用新布局-local\\attachments\\实际持久化快照-f27a1e499c696b867ce643cdc23b7a7c1ce64e5c.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-500：选择与顺序不丢，成功后才应用新布局-local\\attachments\\最终页面-a6073382817dff2bc11540b2b10e7a2a2489f85b.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-500：选择与顺序不丢，成功后才应用新布局-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-4c63f4b99579092c36e3",
+          "file": "product-components.spec.ts",
+          "line": 50,
+          "column": 52
+        },
+        {
+          "title": "组件发布恢复 1280px network：选择与顺序不丢，成功后才应用新布局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2923,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:09:33.202Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-network：选择与顺序不丢，成功后才应用新布局-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-network：选择与顺序不丢，成功后才应用新布局-local\\attachments\\关键请求-20cb49e69a46cf21e27d5558ebd8a2d6d618e3c7.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-network：选择与顺序不丢，成功后才应用新布局-local\\attachments\\实际持久化快照-c4a91c17881c857f75de061417226f836ff1eeb2.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-network：选择与顺序不丢，成功后才应用新布局-local\\attachments\\最终页面-0db9101158369643d9219f267d14185dc0692069.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-network：选择与顺序不丢，成功后才应用新布局-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-a919ca02a585d5de0303",
+          "file": "product-components.spec.ts",
+          "line": 50,
+          "column": 52
+        },
+        {
+          "title": "组件发布恢复 1280px 409：选择与顺序不丢，成功后才应用新布局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2950,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:09:36.397Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-409：选择与顺序不丢，成功后才应用新布局-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-409：选择与顺序不丢，成功后才应用新布局-local\\attachments\\关键请求-0dba3e4fc312243f1b8c6ea60da635f91607d887.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-409：选择与顺序不丢，成功后才应用新布局-local\\attachments\\实际持久化快照-447bf3fae5502cc698ba24ca312d02f46fe41e4b.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-409：选择与顺序不丢，成功后才应用新布局-local\\attachments\\最终页面-738a6e4d75a70e9dc1a4fcde7e98d96dfd698d24.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-1280px-409：选择与顺序不丢，成功后才应用新布局-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-6a45a5ecf5c26859931c",
+          "file": "product-components.spec.ts",
+          "line": 50,
+          "column": 52
+        },
+        {
+          "title": "日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 60783,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts",
+                        "column": 153,
+                        "line": 60
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: '分日 · 日报监控看板', exact: true })\u001b[22m\n\n\n  58 |   });\n  59 |   test(`日报组件 ${width}px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表`, async ({ page, request }, info) => {\n> 60 |     await page.setViewportSize({ width, height: 900 }); await prepare(page, request); await page.getByRole('tab', { name: '分日 · 日报监控看板', exact: true }).click(); const daily = page.getByTestId('business-component-board-daily');\n     |                                                                                                                                                         ^\n  61 |     await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400'); await expect(daily.locator('.reference-kpi').filter({ hasText: '信息流 CTR' })).toContainText('2'); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toBeVisible();\n  62 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const dialog = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await dialog.getByRole('checkbox', { name: '显示计划消耗与点击效率趋势', exact: true }).uncheck(); await dialog.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(dialog).toHaveCount(0); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toHaveCount(0); await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400');\n  63 |     await page.screenshot({ path: info.outputPath('daily-component-filtered-with-real-values.png'), fullPage: true });\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts:60:153"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:09:39.658Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\attachments\\关键请求-d5cf9c7a60a60d20ec11f480e1b3fc6e36a4dc98.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\attachments\\实际持久化快照-b3a6abb8f045aa086b817cd996009a57a29cdfe3.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\attachments\\最终页面-5fcc544a7ecac56c7e8a4d7fe30bc1881f236ab4.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-4e440ba4187b8ae3ec5c",
+          "file": "product-components.spec.ts",
+          "line": 59,
+          "column": 3
+        },
+        {
+          "title": "共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 61325,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts",
+                        "column": 229,
+                        "line": 74
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('article', { name: '组件场景独立记录1791940244635', exact: true }).getByRole('button', { name: '编辑', exact: true })\u001b[22m\n\n\n  72 |     await page.goto('/projects/qicui/metrics'); await page.getByRole('row').filter({ has: page.getByRole('cell', { name: definition.config.title, exact: true }) }).getByRole('button', { name: '加入看板', exact: true }).click(); await page.getByRole('button', { name: '加入草稿', exact: true }).click();\n  73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);\n> 74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByRole('button', { name: '编辑', exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill('组件发布期间保留的草稿'); await cardDialog.getByRole('button', { name: '保存并加入看板', exact: true }).click();\n     |                                                                                                                                                                                                                                     ^\n  75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2');\n  76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toBeVisible();\n  77 |     await page.getByRole('button', { name: /覆盖保存/ }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts:74:229"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:10:41.647Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\attachments\\关键请求-fd5aaac2382e3ff47b89bbdf424efd5f1e58219c.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\attachments\\实际持久化快照-6d46840974e6279c046027a1b6fa84efe6b3c7c4.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\attachments\\最终页面-31157eb699a563da488f7fc415c9f776286eca58.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-66b869c52a0916fd8d06",
+          "file": "product-components.spec.ts",
+          "line": 67,
+          "column": 3
+        },
+        {
+          "title": "历史业务组件 390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4060,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:11:44.640Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\attachments\\关键请求-cbcf26a47b71f7d75296c9923456377ea77d9553.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\attachments\\实际持久化快照-4b466735cab5b6bd0a4f57c2852a764ba47cd5cd.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\attachments\\最终页面-804a0f04417a7305e0cfe302adb978d7df381131.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-历史业务组件-390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-be5b6c1b329d1723cf42",
+          "file": "product-components.spec.ts",
+          "line": 37,
+          "column": 3
+        },
+        {
+          "title": "组件发布恢复 390px 500：选择与顺序不丢，成功后才应用新布局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2346,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:11:49.177Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-500：选择与顺序不丢，成功后才应用新布局-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-500：选择与顺序不丢，成功后才应用新布局-local\\attachments\\关键请求-320df9f0a93c3c4fc36a7f30172badef3f5f86c3.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-500：选择与顺序不丢，成功后才应用新布局-local\\attachments\\实际持久化快照-11d79e58c5243b849ffe50116e89e31f158ce034.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-500：选择与顺序不丢，成功后才应用新布局-local\\attachments\\最终页面-d767714e65471f3861dcf41c39250907260aa228.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-500：选择与顺序不丢，成功后才应用新布局-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-104fdc6e984b5708a105",
+          "file": "product-components.spec.ts",
+          "line": 50,
+          "column": 52
+        },
+        {
+          "title": "组件发布恢复 390px network：选择与顺序不丢，成功后才应用新布局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2683,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:11:51.677Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-network：选择与顺序不丢，成功后才应用新布局-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-network：选择与顺序不丢，成功后才应用新布局-local\\attachments\\关键请求-d367cd7c22e769aaea5de57bda4fa61de4b74fc1.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-network：选择与顺序不丢，成功后才应用新布局-local\\attachments\\实际持久化快照-48eca7d219c179ba94299c2baed84f1e7e6ea381.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-network：选择与顺序不丢，成功后才应用新布局-local\\attachments\\最终页面-c3fc288fd95876f7437951c836aa957caff95e4e.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-network：选择与顺序不丢，成功后才应用新布局-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-a128b216eaa71237f59c",
+          "file": "product-components.spec.ts",
+          "line": 50,
+          "column": 52
+        },
+        {
+          "title": "组件发布恢复 390px 409：选择与顺序不丢，成功后才应用新布局",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2534,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:11:54.544Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-409：选择与顺序不丢，成功后才应用新布局-local\\test-finished-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-409：选择与顺序不丢，成功后才应用新布局-local\\attachments\\关键请求-b7cd19e4bec608ee238b4ef16de5fb064037b7c9.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-409：选择与顺序不丢，成功后才应用新布局-local\\attachments\\实际持久化快照-6d9a42d7b58c4368340639cea060b52175c4e600.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-409：选择与顺序不丢，成功后才应用新布局-local\\attachments\\最终页面-ce38b38c09afeee1f67c5018e2425f8a221f00d5.png"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-组件发布恢复-390px-409：选择与顺序不丢，成功后才应用新布局-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-b0a850b6649b0520b379",
+          "file": "product-components.spec.ts",
+          "line": 50,
+          "column": 52
+        },
+        {
+          "title": "日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 60601,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts",
+                        "column": 153,
+                        "line": 60
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: '分日 · 日报监控看板', exact: true })\u001b[22m\n\n\n  58 |   });\n  59 |   test(`日报组件 ${width}px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表`, async ({ page, request }, info) => {\n> 60 |     await page.setViewportSize({ width, height: 900 }); await prepare(page, request); await page.getByRole('tab', { name: '分日 · 日报监控看板', exact: true }).click(); const daily = page.getByTestId('business-component-board-daily');\n     |                                                                                                                                                         ^\n  61 |     await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400'); await expect(daily.locator('.reference-kpi').filter({ hasText: '信息流 CTR' })).toContainText('2'); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toBeVisible();\n  62 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const dialog = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await dialog.getByRole('checkbox', { name: '显示计划消耗与点击效率趋势', exact: true }).uncheck(); await dialog.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(dialog).toHaveCount(0); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toHaveCount(0); await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400');\n  63 |     await page.screenshot({ path: info.outputPath('daily-component-filtered-with-real-values.png'), fullPage: true });\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts:60:153"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:11:57.264Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\attachments\\关键请求-6c68417f395a79d27aa763b7d31c41b0cfef9cc3.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\attachments\\实际持久化快照-dc9fdfd328c61f23de780d426895be63a7b72840.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\attachments\\最终页面-609900a61abb19f860aa99040cf11c56d746d687.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-bfc30448efbe7ed979db",
+          "file": "product-components.spec.ts",
+          "line": 59,
+          "column": 3
+        },
+        {
+          "title": "共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "local",
+              "projectName": "local",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 61078,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 60000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts",
+                        "column": 229,
+                        "line": 74
+                      },
+                      "message": "Error: locator.click: Test timeout of 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('article', { name: '组件场景独立记录1791940381725', exact: true }).getByRole('button', { name: '编辑', exact: true })\u001b[22m\n\n\n  72 |     await page.goto('/projects/qicui/metrics'); await page.getByRole('row').filter({ has: page.getByRole('cell', { name: definition.config.title, exact: true }) }).getByRole('button', { name: '加入看板', exact: true }).click(); await page.getByRole('button', { name: '加入草稿', exact: true }).click();\n  73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);\n> 74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByRole('button', { name: '编辑', exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill('组件发布期间保留的草稿'); await cardDialog.getByRole('button', { name: '保存并加入看板', exact: true }).click();\n     |                                                                                                                                                                                                                                     ^\n  75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2');\n  76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toBeVisible();\n  77 |     await page.getByRole('button', { name: /覆盖保存/ }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);\n    at D:\\download\\pic-vec\\feihe-platform-v3\\feihe-mvp\\tests\\browser\\product-components.spec.ts:74:229"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-14T01:12:58.979Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\test-failed-1.png"
+                    },
+                    {
+                      "name": "关键请求",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\attachments\\关键请求-939c2acc7794070e37f0b968b2a3db67b360bbd6.json"
+                    },
+                    {
+                      "name": "实际持久化快照",
+                      "contentType": "application/json",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\attachments\\实际持久化快照-524caad56fab6f2611fa0d5e2e8ac6435e4d1efb.json"
+                    },
+                    {
+                      "name": "最终页面",
+                      "contentType": "image/png",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\attachments\\最终页面-8401b07a5c640fa0b64737d13d3ea53e1412cd0e.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "D:\\download\\pic-vec\\feihe-platform-v3\\docs\\product-integration-v1\\components-extended-2\\browser-results\\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f2b7cdd349cf604b8bab-a6b9f5dc9fedff90b26f",
+          "file": "product-components.spec.ts",
+          "line": 67,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-14T01:08:39.906Z",
+    "duration": 321576.974,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

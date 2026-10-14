@@ -1,0 +1,452 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: product-components.spec.ts >> 启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口
+- Location: tests\browser\product-components.spec.ts:2:1
+
+# Error details
+
+```
+Test timeout of 60000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 60000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: '配置业务组件布局', exact: true })
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - complementary "项目主要导航" [ref=e3]:
+    - link "返回项目中心" [ref=e4] [cursor=pointer]:
+      - /url: /
+      - text: ← 项目中心
+    - generic [ref=e5]: 项目工作台
+    - generic [ref=e11]:
+      - generic [ref=e12]: 当前项目
+      - combobox "切换项目" [ref=e15] [cursor=pointer]:
+        - generic [ref=e16]: 启萃评论与声量项目
+      - paragraph [ref=e20]: 飞鹤 · 启萃 · 进行中
+    - navigation "项目模块" [ref=e21]:
+      - link "项目总览" [ref=e22] [cursor=pointer]:
+        - /url: /projects/qicui
+        - generic [ref=e23]: "01"
+      - link "数据管理" [ref=e25] [cursor=pointer]:
+        - /url: /projects/qicui/data
+        - generic [ref=e26]: "02"
+      - link "竞品分析" [ref=e28] [cursor=pointer]:
+        - /url: /projects/qicui/growth
+        - generic [ref=e29]: "03"
+      - link "指标" [ref=e31] [cursor=pointer]:
+        - /url: /projects/qicui/metrics
+        - generic [ref=e32]: "04"
+      - link "内容管理" [ref=e34] [cursor=pointer]:
+        - /url: /projects/qicui/content
+        - generic [ref=e35]: "05"
+      - link "评论运营" [ref=e37] [cursor=pointer]:
+        - /url: /projects/qicui/comments
+        - generic [ref=e38]: "06"
+      - link "报告" [ref=e40] [cursor=pointer]:
+        - /url: /projects/qicui/reports
+        - generic [ref=e41]: "07"
+      - link "项目设置" [ref=e43] [cursor=pointer]:
+        - /url: /projects/qicui/settings
+        - generic [ref=e44]: "08"
+    - generic [ref=e46]:
+      - text: 项目资料已连接
+      - generic [ref=e48]: 平台管理员 · 2026/10/14 08:37:03
+  - main [ref=e49]:
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - text: FEIHE · Q3 DASHBOARD
+          - heading "启萃评论与声量项目" [level=1] [ref=e54]
+          - paragraph [ref=e55]: 2026年 Q3 · 小红书种草与电商引流 · 项目数据看板
+        - generic [ref=e57]:
+          - generic [ref=e58]: 投放截至 待同步
+          - button "同步最新数据" [ref=e60] [cursor=pointer]
+      - navigation "模块切换" [ref=e64]:
+        - button "总览 · Q3累计全盘 决策摘要、月度进度、投流效率与内容复盘" [pressed] [ref=e65] [cursor=pointer]:
+          - generic [aria-hidden] [ref=e66]: 📊
+          - generic [ref=e67]:
+            - strong [ref=e69]: 总览 · Q3累计全盘
+            - generic [ref=e70]: 决策摘要、月度进度、投流效率与内容复盘
+        - button "分日 · 日报监控看板 日期切换、8大核心指标与近30天趋势" [ref=e71] [cursor=pointer]:
+          - generic [aria-hidden] [ref=e72]: 📅
+          - generic [ref=e73]:
+            - strong [ref=e75]: 分日 · 日报监控看板
+            - generic [ref=e76]: 日期切换、8大核心指标与近30天趋势
+      - group [ref=e77]:
+        - generic "数据来源与多工作表溯源明细 尚未在线核对 · 点击同步最新数据" [ref=e78] [cursor=pointer]
+      - generic [ref=e79]:
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e82]: 决策层 · 今日指标与待办
+            - generic [ref=e83]: 投放 待同步 · 笔记 待同步
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - generic [ref=e86]: —%
+              - generic [ref=e87]: 当日计划达成率
+              - generic [ref=e88]: 实际消耗 / 已填计划
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - strong [ref=e92]: 消耗节奏
+                - generic [ref=e93]: ¥—
+                - generic [ref=e94]: 当日计划 ¥—
+              - generic [ref=e95]:
+                - strong [ref=e97]: 信息流 CTR
+                - generic [ref=e98]: —%
+                - generic [ref=e99]: 点击合计 / 展现合计
+              - generic [ref=e100]:
+                - strong [ref=e102]: 搜索 CTR
+                - generic [ref=e103]: —%
+                - generic [ref=e104]: 搜索广告实际点击效率
+              - generic [ref=e105]:
+                - strong [ref=e107]: 待处置风险
+                - generic [ref=e108]: 0 条
+                - generic [ref=e109]: 待回复 0 · 待删除 0
+          - generic [ref=e110]:
+            - strong [ref=e112]: Executive Summary · 关键数据摘要
+            - list [ref=e113]:
+              - listitem [ref=e114]:
+                - generic [ref=e115]: 消耗
+                - generic [ref=e116]: 待同步 实际投放 ¥—，当日计划 ¥—，达成率 —%。
+              - listitem [ref=e117]:
+                - generic [ref=e118]: 效率
+                - generic [ref=e119]: 信息流 CTR —%，搜索 CTR —%；按聚光展现、点击加权计算。
+              - listitem [ref=e120]:
+                - generic [ref=e121]: 内容
+                - generic [ref=e122]: 项目已收录 0 篇笔记，累计阅读 0 次，互动 0 次。
+              - listitem [ref=e123]:
+                - generic [ref=e124]: 行动
+                - generic [ref=e125]: 有 0 条风险评论待处理，其中待回复 0 条、待删除 0 条。
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: 预算节奏
+              - heading "预算消耗节奏对比" [level=3] [ref=e130]
+            - generic [ref=e131]: 当月进度与季度全盘
+          - generic [ref=e132]:
+            - generic [ref=e133]: ∅
+            - heading "等待投放数据" [level=3] [ref=e134]
+            - paragraph [ref=e135]: 点击同步最新数据后展示月度与季度进度。
+          - generic [ref=e136]: 计划为已填日期的预算合计，并非完整月度或季度预算。时间进度按自然日计算。
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - generic [ref=e139]:
+              - generic [ref=e140]: 一、投流效率
+              - heading "KFS 投流与采买结构" [level=3] [ref=e141]
+            - generic [ref=e142]: 投流与达人采买分开展示
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - generic [ref=e145]:
+                - generic [ref=e146]:
+                  - strong [ref=e147]: 信息流 / 搜索投流结构
+                  - generic [ref=e148]: Q3 已同步日期
+                - generic [ref=e149]:
+                  - generic [ref=e150]: ∅
+                  - heading "暂无投流结构" [level=3] [ref=e151]
+                  - paragraph [ref=e152]: 同步已填写的信息流与搜索消耗后显示。
+              - generic [ref=e153]:
+                - generic [ref=e154]:
+                  - strong [ref=e155]: 达人 K · 内容采买
+                  - generic [ref=e156]: 项目笔记报价合计
+                - generic [ref=e157]: ¥0
+                - generic [ref=e158]:
+                  - generic [ref=e159]:
+                    - text: 商业合作笔记
+                    - strong [ref=e160]: 0 篇
+                  - generic [ref=e161]:
+                    - text: 内容平均 CPE
+                    - strong [ref=e162]: ¥0
+                - paragraph [ref=e163]: 使用笔记库已有报价与互动表现；采买费用与投流消耗为不同口径。
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - strong [ref=e166]: KFS 分渠道消耗趋势（堆叠面积）
+                - generic [ref=e167]: 近 0 个数据日 · 信息流 F + 搜索 S
+              - generic [ref=e169]:
+                - generic [ref=e170]: ∅
+                - heading "暂无分渠道日度消耗" [level=3] [ref=e171]
+                - paragraph [ref=e172]: 同步周投放表的信息流与搜索分渠道消耗后显示堆叠趋势。
+        - generic [ref=e173]:
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - generic [ref=e176]: 二、内容产出
+              - heading "种草发布与切角渗透" [level=3] [ref=e177]
+            - generic [ref=e178]: 当前项目累计笔记库
+          - generic [ref=e179]:
+            - generic [ref=e180]:
+              - generic [ref=e181]: 种草笔记总数
+              - generic [ref=e182]:
+                - text: "0"
+                - generic [ref=e183]: 篇
+              - generic [ref=e184]: 已发布 0 篇
+            - generic [ref=e185]:
+              - generic [ref=e186]: 累计内容阅读
+              - generic [ref=e187]:
+                - text: "0"
+                - generic [ref=e188]: 次
+              - generic [ref=e189]: 累计曝光 0 次
+            - generic [ref=e190]:
+              - generic [ref=e191]: 累计内容互动
+              - generic [ref=e192]:
+                - text: "0"
+                - generic [ref=e193]: 次
+              - generic [ref=e194]: 项目发布目标 未设置
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - strong [ref=e198]: 达人量级结构分布
+                - generic [ref=e199]: 0 篇已收录笔记
+              - generic [ref=e200]:
+                - generic [ref=e201]: ∅
+                - heading "达人层级待补充" [level=3] [ref=e202]
+                - paragraph [ref=e203]: 同步笔记库后显示层级分布。
+            - generic [ref=e205]:
+              - strong [ref=e206]: 内容形式分布
+              - generic [ref=e207]: 已收录笔记
+          - generic [ref=e208]:
+            - generic [ref=e210]:
+              - generic [ref=e211]: ∅
+              - heading "暂无采买分布" [level=3] [ref=e212]
+              - paragraph [ref=e213]: 记录报价后显示达人层级采买分布。
+            - generic [ref=e214]:
+              - generic [ref=e215]:
+                - strong [ref=e216]: 内容切角 / 场景渗透
+                - generic [ref=e217]: TOP 8 方向笔记与互动
+              - table [ref=e219]:
+                - rowgroup [ref=e220]:
+                  - row [ref=e221]:
+                    - columnheader "切角 / 场景" [ref=e222]
+                    - columnheader "篇数" [ref=e223]
+                    - columnheader "阅读" [ref=e224]
+                    - columnheader "互动" [ref=e225]
+                    - columnheader "分布" [ref=e226]
+                - rowgroup
+        - generic [ref=e227]:
+          - generic [ref=e228]:
+            - generic [ref=e229]:
+              - generic [ref=e230]: 三、内容效果
+              - heading "内容效果深度分析" [level=3] [ref=e231]
+            - generic [ref=e232]: 散点矩阵 · 分布直方图 · 箱线图
+          - generic [ref=e233]:
+            - generic [ref=e234]:
+              - generic [ref=e235]:
+                - strong [ref=e236]: 笔记阅读与互动效果（散点图）
+                - generic [ref=e237]: X=阅读量 Y=互动量 · 0篇完整记录（含零值）· 点大小=采集评论数
+              - generic [ref=e238]:
+                - text: 内容方向
+                - combobox "散点图内容方向" [ref=e240] [cursor=pointer]:
+                  - generic [ref=e241]: 全部方向
+              - generic [ref=e244]:
+                - generic [ref=e245]: ∅
+                - heading "暂无散点数据" [level=3] [ref=e246]
+                - paragraph [ref=e247]: 同步笔记阅读与互动指标后生成效果矩阵。
+            - generic [ref=e248]:
+              - generic [ref=e249]:
+                - strong [ref=e250]: 笔记阅读量分布直方图
+                - generic [ref=e251]: 0 篇有阅读数据的笔记
+              - generic [ref=e253]:
+                - text: 主流分布集中于
+                - strong [ref=e254]: 1千~5千
+                - text: 区间（占比最高）
+              - generic [ref=e256]:
+                - generic [ref=e257]: ∅
+                - heading "暂无分布数据" [level=3] [ref=e258]
+                - paragraph [ref=e259]: 同步笔记阅读量后生成分布直方图。
+        - generic [ref=e260]:
+          - generic [ref=e262]:
+            - generic [ref=e263]: TARGET VS ACTUAL
+            - heading "KPI目标与实际" [level=3] [ref=e264]
+            - generic [ref=e265]: 选择同一周期、代理、项目和渠道进行比较；总计与明细分别查看。
+          - generic [ref=e266]:
+            - generic [ref=e267]: ∅
+            - heading "等待 KPI 数据" [level=3] [ref=e268]
+            - paragraph [ref=e269]: 同步飞书数据后查看目标、实际和差额。
+        - generic [ref=e270]:
+          - generic [ref=e271]:
+            - generic [ref=e272]:
+              - generic [ref=e273]: 五、爆文排行
+              - heading "高热内容 TOP20 排行榜" [level=3] [ref=e274]
+            - generic [ref=e275]: 项目全量笔记按互动量排序
+          - generic [ref=e276]:
+            - generic [ref=e277]: ∅
+            - heading "暂无爆文数据" [level=3] [ref=e278]
+            - paragraph [ref=e279]: 同步笔记互动指标后生成TOP20排行榜。
+        - generic [ref=e280]:
+          - generic [ref=e281]:
+            - generic [ref=e282]:
+              - generic [ref=e283]:
+                - generic [ref=e284]:
+                  - generic [ref=e285]: 数据覆盖
+                  - heading "内容数据与待办" [level=3] [ref=e286]
+                - generic [ref=e287]: 真实记录覆盖情况
+              - generic [ref=e288]:
+                - generic [ref=e289]:
+                  - text: 当前项目笔记
+                  - generic [ref=e290]:
+                    - strong [ref=e291]: "0"
+                    - text: 篇
+                - generic [ref=e292]:
+                  - text: 已记录阅读量
+                  - generic [ref=e293]:
+                    - strong [ref=e294]: "0"
+                    - text: 篇（含零值）
+                - generic [ref=e295]:
+                  - text: 阅读和互动均有记录
+                  - generic [ref=e296]:
+                    - strong [ref=e297]: "0"
+                    - text: 篇
+                - generic [ref=e298]:
+                  - text: 风险待处理
+                  - generic [ref=e299]:
+                    - strong [ref=e300]: "0"
+                    - text: 条
+              - paragraph [ref=e301]: 分布图覆盖当前项目全部已收录笔记；评论来自采集快照，不串联为用户转化漏斗。内容最新有效日期：待同步。
+              - link "查看风险待办 →" [ref=e302] [cursor=pointer]:
+                - /url: /projects/qicui/comments?tab=actions
+            - generic [ref=e303]:
+              - generic [ref=e304]:
+                - generic [ref=e305]:
+                  - generic [ref=e306]: 字段覆盖
+                  - heading "内容分析还缺哪些数据" [level=3] [ref=e307]
+                - generic [ref=e308]: 按全量笔记核对
+              - generic [ref=e309]:
+                - generic [ref=e311]:
+                  - generic [ref=e312]: 内容方向
+                  - generic [ref=e313]:
+                    - generic [ref=e314]: 0 篇有记录 · 0 篇待补充
+                    - strong [ref=e315]: 0.0%
+                - generic [ref=e319]:
+                  - generic [ref=e320]: 达人层级
+                  - generic [ref=e321]:
+                    - generic [ref=e322]: 0 篇有记录 · 0 篇待补充
+                    - strong [ref=e323]: 0.0%
+                - generic [ref=e327]:
+                  - generic [ref=e328]: 阅读量
+                  - generic [ref=e329]:
+                    - generic [ref=e330]: 0 篇有记录 · 0 篇待补充
+                    - strong [ref=e331]: 0.0%
+                - generic [ref=e335]:
+                  - generic [ref=e336]: 互动量
+                  - generic [ref=e337]:
+                    - generic [ref=e338]: 0 篇有记录 · 0 篇待补充
+                    - strong [ref=e339]: 0.0%
+              - paragraph [ref=e342]: 方向缺失的笔记仍计入阅读和互动总量；不参与已标注方向的效果判断。
+          - generic [ref=e343]:
+            - generic [ref=e344]:
+              - generic [ref=e345]:
+                - generic [ref=e346]: 达人效率
+                - heading "达人层级效率排行榜" [level=3] [ref=e347]
+              - generic [ref=e348]: 按篇均CPE升序，缺失排末尾
+            - generic [ref=e349]:
+              - generic [ref=e350]: ∅
+              - heading "暂无达人效率数据" [level=3] [ref=e351]
+              - paragraph [ref=e352]: 同步达人层级表现指标后生成效率排行榜。
+        - generic [ref=e353]:
+          - generic [ref=e354]:
+            - generic [ref=e355]:
+              - generic [ref=e356]: 互动质量
+              - heading "已记录点赞、收藏与分享构成" [level=3] [ref=e357]
+            - generic [ref=e358]: 比例仅在三项已记录指标中计算
+          - generic [ref=e362]:
+            - generic [ref=e363]: 互动质量洞察
+            - generic [ref=e364]:
+              - generic [ref=e365]:
+                - generic [ref=e366]: 点赞占比
+                - generic [ref=e367]: 0%
+                - generic [ref=e368]: 浅层互动，反映内容吸引力
+              - generic [ref=e369]:
+                - generic [ref=e370]: 收藏占比
+                - generic [ref=e371]: 0%
+                - generic [ref=e372]: 深度互动，反映内容价值密度
+              - generic [ref=e373]:
+                - generic [ref=e374]: 分享占比
+                - generic [ref=e375]: 0%
+                - generic [ref=e376]: 采集评论单独查看，不计入此构成
+        - generic [ref=e377]:
+          - generic [ref=e378]:
+            - generic [ref=e379]:
+              - generic [ref=e380]: 行动层
+              - heading "复盘洞察与下一步行动" [level=3] [ref=e381]
+            - generic [ref=e382]: 从数据直接进入运营
+          - generic [ref=e383]:
+            - generic [ref=e384]:
+              - strong [ref=e385]: 当前观察
+              - paragraph [ref=e386]: 内容库共 0 篇，累计互动 0 次。已标注的内容方向中，暂无方向收录最多。
+              - paragraph [ref=e387]: 当前真实评论快照合计 0 条，正向 0 条，负向 0 条。继续优先处理待回复和待删除事项。
+            - generic [ref=e388]:
+              - link "处理 0 条风险待办 达人回复与删除处置 去处理 →" [ref=e389] [cursor=pointer]:
+                - /url: /projects/qicui/comments?tab=actions
+                - generic [ref=e390]:
+                  - strong [ref=e391]: 处理 0 条风险待办
+                  - generic [ref=e392]: 达人回复与删除处置
+                - generic [ref=e393]: 去处理 →
+              - link "复盘高热内容与切角 阅读、互动与达人效率 看内容 →" [ref=e394] [cursor=pointer]:
+                - /url: /projects/qicui/content?tab=analysis
+                - generic [ref=e395]:
+                  - strong [ref=e396]: 复盘高热内容与切角
+                  - generic [ref=e397]: 阅读、互动与达人效率
+                - generic [ref=e398]: 看内容 →
+              - link "对照竞品月报与搜索趋势 使用已接入的品牌工作表 看竞品 →" [ref=e399] [cursor=pointer]:
+                - /url: /projects/qicui/growth?tab=competitor
+                - generic [ref=e400]:
+                  - strong [ref=e401]: 对照竞品月报与搜索趋势
+                  - generic [ref=e402]: 使用已接入的品牌工作表
+                - generic [ref=e403]: 看竞品 →
+        - group [ref=e404]:
+          - generic "查看指标定义与口径说明" [ref=e405]
+      - generic [ref=e406]:
+        - generic [ref=e408]:
+          - generic [ref=e409]: 团队看板
+          - heading "项目指标与图表" [level=3] [ref=e410]
+        - generic [ref=e411]:
+          - generic [ref=e412]:
+            - generic [ref=e413]:
+              - generic [ref=e414]: "当前业务数据集:"
+              - generic [ref=e415]: 暂无导入数据集
+            - generic [ref=e416]:
+              - generic [ref=e417]:
+                - button "📊 看板视图" [ref=e418] [cursor=pointer]
+                - button "📋 数据明细 (0 行)" [ref=e419] [cursor=pointer]
+              - button "⚙ 自定义看板卡片" [ref=e420] [cursor=pointer]
+          - generic [ref=e421]:
+            - generic [ref=e422]: ∅
+            - heading "当前项目尚未接入通用数据集" [level=3] [ref=e423]
+            - paragraph [ref=e424]: 接入业务表后，选择适用的指标与图表。飞书原表保持不变。
+            - link "前往接入数据源 →" [ref=e426] [cursor=pointer]:
+              - /url: /projects/qicui/settings?tab=data-sources
+      - generic [ref=e427]:
+        - generic [ref=e429]:
+          - generic [ref=e430]: AI 复盘
+          - heading "基于项目数据生成运营报告" [level=3] [ref=e431]
+        - generic [ref=e432]:
+          - textbox "报告需求" [ref=e433]: 根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。
+          - button "生成复盘报告" [ref=e434] [cursor=pointer]
+  - button "打开智能助手" [ref=e435] [cursor=pointer]:
+    - generic [ref=e437]: 智
+```
+
+# Test source
+
+```ts
+  1 | import { test, expect } from './evidence';
+  2 | test('启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口', async ({ page }, info) => {
+  3 |   await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-admin' }); await page.goto('/projects/qicui');
+  4 |   await expect(page.getByRole('heading', { name: '内容效果深度分析', exact: true })).toBeVisible();
+  5 |   await page.screenshot({ path: info.outputPath('qicui-components-before.png'), fullPage: true });
+> 6 |   await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click();
+    |                                                                     ^ Error: locator.click: Test timeout of 60000ms exceeded.
+  7 |   await expect(page.getByRole('dialog', { name: '团队业务组件布局', exact: true })).toBeVisible();
+  8 | });
+  9 | 
+```

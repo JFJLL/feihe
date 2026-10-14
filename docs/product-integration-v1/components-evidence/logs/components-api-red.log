@@ -1,0 +1,48 @@
+(node:4352) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ component red: publishing registered business components changes the real team layout/version without replacing any existing cards (36.2722ms)
+✖ component red: a stale component publication reports the actual server version and preserves the confirmed layout (1.6468ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17131.2666
+
+✖ failing tests:
+
+test at scripts\test-product-components.mjs:10:1
+✖ component red: publishing registered business components changes the real team layout/version without replacing any existing cards (36.2722ms)
+  AssertionError [ERR_ASSERTION]: {"ok":false,"error":"请提交明确的卡片数组，空看板请提交 []"}
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-components.mjs:13:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-components.mjs:17:1
+✖ component red: a stale component publication reports the actual server version and preserves the confirmed layout (1.6468ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-components.mjs:19:150)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

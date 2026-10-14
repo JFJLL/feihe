@@ -1,0 +1,44 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"all\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=qicui&fresh=1&_t=1791940181159",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=qicui&fresh=1&_t=1791940181159",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

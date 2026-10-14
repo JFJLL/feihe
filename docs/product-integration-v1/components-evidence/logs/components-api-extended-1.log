@@ -1,0 +1,51 @@
+(node:6956) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ component red: publishing registered business components changes the real team layout/version without replacing any existing cards (44.3292ms)
+✔ component API: malformed/duplicate identifiers, foreign dashboard, unrelated template and viewer writes do not modify the team layout (8.2981ms)
+✔ component API: a shared-card publication preserves component layout and common period; stale/force component requests cannot overwrite it (5.9591ms)
+✖ component API: audit SQL failure rolls the version/layout back and retry records the actual non-platform-admin publisher (1.1371ms)
+✖ component red: a stale component publication reports the actual server version and preserves the confirmed layout (2.5772ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15568.2529
+
+✖ failing tests:
+
+test at scripts\test-product-components.mjs:34:1
+✖ component API: audit SQL failure rolls the version/layout back and retry records the actual non-platform-admin publisher (1.1371ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-components.mjs:35:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-product-components.mjs:43:1
+✖ component red: a stale component publication reports the actual server version and preserves the confirmed layout (2.5772ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  3 !== 2
+  
+      at TestContext.<anonymous> (file:///D:/download/pic-vec/feihe-platform-v3/feihe-mvp/scripts/test-product-components.mjs:48:10)
+      at async Test.run (node:internal/test_runner/test:1113:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

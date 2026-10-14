@@ -1,0 +1,214 @@
+[WebServer] (node:41220) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:41220) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:40536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:40536) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 13 tests using 1 worker
+
+(node:24128) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [local] › tests\browser\product-components.spec.ts:5:1 › 启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口 (4.3s)
+  ok  2 [local] › tests\browser\product-components.spec.ts:37:3 › 历史业务组件 1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致 (4.3s)
+  ok  3 [local] › tests\browser\product-components.spec.ts:50:52 › 组件发布恢复 1280px 500：选择与顺序不丢，成功后才应用新布局 (2.6s)
+  ok  4 [local] › tests\browser\product-components.spec.ts:50:52 › 组件发布恢复 1280px network：选择与顺序不丢，成功后才应用新布局 (2.9s)
+  ok  5 [local] › tests\browser\product-components.spec.ts:50:52 › 组件发布恢复 1280px 409：选择与顺序不丢，成功后才应用新布局 (3.0s)
+  x   6 [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 (1.0m)
+(node:37612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   7 [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 (1.0m)
+(node:36428) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  8 [local] › tests\browser\product-components.spec.ts:37:3 › 历史业务组件 390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致 (4.1s)
+  ok  9 [local] › tests\browser\product-components.spec.ts:50:52 › 组件发布恢复 390px 500：选择与顺序不丢，成功后才应用新布局 (2.3s)
+  ok 10 [local] › tests\browser\product-components.spec.ts:50:52 › 组件发布恢复 390px network：选择与顺序不丢，成功后才应用新布局 (2.7s)
+  ok 11 [local] › tests\browser\product-components.spec.ts:50:52 › 组件发布恢复 390px 409：选择与顺序不丢，成功后才应用新布局 (2.5s)
+  x  12 [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 (1.0m)
+(node:34592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  13 [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 (1.0m)
+
+
+  1) [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('tab', { name: '分日 · 日报监控看板', exact: true })
+
+
+      58 |   });
+      59 |   test(`日报组件 ${width}px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表`, async ({ page, request }, info) => {
+    > 60 |     await page.setViewportSize({ width, height: 900 }); await prepare(page, request); await page.getByRole('tab', { name: '分日 · 日报监控看板', exact: true }).click(); const daily = page.getByTestId('business-component-board-daily');
+         |                                                                                                                                                         ^
+      61 |     await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400'); await expect(daily.locator('.reference-kpi').filter({ hasText: '信息流 CTR' })).toContainText('2'); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toBeVisible();
+      62 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const dialog = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await dialog.getByRole('checkbox', { name: '显示计划消耗与点击效率趋势', exact: true }).uncheck(); await dialog.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(dialog).toHaveCount(0); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toHaveCount(0); await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400');
+      63 |     await page.screenshot({ path: info.outputPath('daily-component-filtered-with-real-values.png'), fullPage: true });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:60:153
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\attachments\关键请求-d5cf9c7a60a60d20ec11f480e1b3fc6e36a4dc98.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\attachments\实际持久化快照-b3a6abb8f045aa086b817cd996009a57a29cdfe3.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\attachments\最终页面-5fcc544a7ecac56c7e8a4d7fe30bc1881f236ab4.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-12-4eed7-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('article', { name: '组件场景独立记录1791940244635', exact: true }).getByRole('button', { name: '编辑', exact: true })
+
+
+      72 |     await page.goto('/projects/qicui/metrics'); await page.getByRole('row').filter({ has: page.getByRole('cell', { name: definition.config.title, exact: true }) }).getByRole('button', { name: '加入看板', exact: true }).click(); await page.getByRole('button', { name: '加入草稿', exact: true }).click();
+      73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);
+    > 74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByRole('button', { name: '编辑', exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill('组件发布期间保留的草稿'); await cardDialog.getByRole('button', { name: '保存并加入看板', exact: true }).click();
+         |                                                                                                                                                                                                                                     ^
+      75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2');
+      76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toBeVisible();
+      77 |     await page.getByRole('button', { name: /覆盖保存/ }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:74:229
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\关键请求-fd5aaac2382e3ff47b89bbdf424efd5f1e58219c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\实际持久化快照-6d46840974e6279c046027a1b6fa84efe6b3c7c4.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\最终页面-31157eb699a563da488f7fc415c9f776286eca58.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('tab', { name: '分日 · 日报监控看板', exact: true })
+
+
+      58 |   });
+      59 |   test(`日报组件 ${width}px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表`, async ({ page, request }, info) => {
+    > 60 |     await page.setViewportSize({ width, height: 900 }); await prepare(page, request); await page.getByRole('tab', { name: '分日 · 日报监控看板', exact: true }).click(); const daily = page.getByTestId('business-component-board-daily');
+         |                                                                                                                                                         ^
+      61 |     await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400'); await expect(daily.locator('.reference-kpi').filter({ hasText: '信息流 CTR' })).toContainText('2'); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toBeVisible();
+      62 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const dialog = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await dialog.getByRole('checkbox', { name: '显示计划消耗与点击效率趋势', exact: true }).uncheck(); await dialog.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(dialog).toHaveCount(0); await expect(daily.getByRole('heading', { name: '近30个数据日 · 计划与实际', exact: true })).toHaveCount(0); await expect(daily.locator('.reference-kpi').filter({ hasText: '当日实际消耗' })).toContainText('400');
+      63 |     await page.screenshot({ path: info.outputPath('daily-component-filtered-with-real-values.png'), fullPage: true });
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:60:153
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\attachments\关键请求-6c68417f395a79d27aa763b7d31c41b0cfef9cc3.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\attachments\实际持久化快照-dc9fdfd328c61f23de780d426895be63a7b72840.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\attachments\最终页面-609900a61abb19f860aa99040cf11c56d746d687.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-日报组件-39-b2a51-加权CTR，单独选择日报区块，空布局刷新与恢复完整图表-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('article', { name: '组件场景独立记录1791940381725', exact: true }).getByRole('button', { name: '编辑', exact: true })
+
+
+      72 |     await page.goto('/projects/qicui/metrics'); await page.getByRole('row').filter({ has: page.getByRole('cell', { name: definition.config.title, exact: true }) }).getByRole('button', { name: '加入看板', exact: true }).click(); await page.getByRole('button', { name: '加入草稿', exact: true }).click();
+      73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);
+    > 74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByRole('button', { name: '编辑', exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill('组件发布期间保留的草稿'); await cardDialog.getByRole('button', { name: '保存并加入看板', exact: true }).click();
+         |                                                                                                                                                                                                                                     ^
+      75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2');
+      76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toBeVisible();
+      77 |     await page.getByRole('button', { name: /覆盖保存/ }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:74:229
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\关键请求-939c2acc7794070e37f0b968b2a3db67b360bbd6.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\实际持久化快照-524caad56fab6f2611fa0d5e2e8ac6435e4d1efb.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\最终页面-8401b07a5c640fa0b64737d13d3ea53e1412cd0e.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-extended-2\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 
+    [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+    [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 
+    [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+  9 passed (5.4m)

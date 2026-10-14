@@ -1,0 +1,12 @@
+(node:27264) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ component red: publishing registered business components changes the real team layout/version without replacing any existing cards (36.8549ms)
+✔ component red: a stale component publication reports the actual server version and preserves the confirmed layout (2.4142ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15861.846

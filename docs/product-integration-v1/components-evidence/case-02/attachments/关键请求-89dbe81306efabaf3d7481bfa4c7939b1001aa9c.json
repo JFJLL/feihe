@@ -1,0 +1,98 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"all\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=qicui&fresh=1&_t=1791941970277",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=qicui&fresh=1&_t=1791941970277",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"dashboardId\":\"dash-qicui-default\",\"version\":2,\"action\":\"set_components\",\"components\":[\"decision\",\"content-effects\",\"budget\",\"content-output\",\"kpi-comparison\",\"top-content\",\"coverage-efficiency\",\"interaction-quality\",\"actions\",\"dictionary\",\"daily-summary\",\"daily-trends\",\"daily-efficiency\"]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

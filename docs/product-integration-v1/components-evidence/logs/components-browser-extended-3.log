@@ -1,0 +1,111 @@
+[WebServer] (node:29432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:29432) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:27024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:27024) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 4 tests using 1 worker
+
+(node:40536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 1280px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 (7.2s)
+  x  2 [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 (1.0m)
+(node:21972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 3 [local] › tests\browser\product-components.spec.ts:59:3 › 日报组件 390px：真实400消耗与加权CTR，单独选择日报区块，空布局刷新与恢复完整图表 (4.0s)
+  x  4 [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 (1.0m)
+
+
+  1) [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByRole('button', { name: '保存并加入看板', exact: true })
+
+
+      72 |     await page.goto('/projects/qicui/metrics'); await page.getByRole('row').filter({ has: page.getByRole('cell', { name: definition.config.title, exact: true }) }).getByRole('button', { name: '加入看板', exact: true }).click(); await page.getByRole('button', { name: '加入草稿', exact: true }).click();
+      73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);
+    > 74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByTitle('编辑卡片', { exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill('组件发布期间保留的草稿'); await cardDialog.getByRole('button', { name: '保存并加入看板', exact: true }).click();
+         |                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+      75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2');
+      76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toBeVisible();
+      77 |     await page.getByRole('button', { name: '强制覆盖发布', exact: true }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:74:415
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\关键请求-6ea52b348f1a0034922eb962e5ae32d5bcdc4b9c.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\实际持久化快照-284c3d306cd41cb7ce9009f0d7dab2ea9659e0b2.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\最终页面-2892feaa966705d90f5e9a0fca2569cee4c51c82.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--19c6d-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByRole('button', { name: '保存并加入看板', exact: true })
+
+
+      72 |     await page.goto('/projects/qicui/metrics'); await page.getByRole('row').filter({ has: page.getByRole('cell', { name: definition.config.title, exact: true }) }).getByRole('button', { name: '加入看板', exact: true }).click(); await page.getByRole('button', { name: '加入草稿', exact: true }).click();
+      73 |     const first = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await first).status()).toBe(200); await dismissProjectNotifications(page);
+    > 74 |     await page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true }).click(); const card = page.getByRole('article', { name: definition.config.title, exact: true }); await card.getByTitle('编辑卡片', { exact: true }).click(); const cardDialog = page.getByRole('dialog'); await cardDialog.getByLabel('卡片标题', { exact: true }).fill('组件发布期间保留的草稿'); await cardDialog.getByRole('button', { name: '保存并加入看板', exact: true }).click();
+         |                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+      75 |     await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click(); const layout = page.getByRole('dialog', { name: '团队业务组件布局', exact: true }); await layout.getByRole('checkbox', { name: '显示KFS投流与采买结构', exact: true }).uncheck(); await layout.getByRole('button', { name: '发布业务组件布局', exact: true }).click(); await expect(layout).toHaveCount(0); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2');
+      76 |     const conflict = page.waitForResponse(r => r.url().endsWith('/api/dashboards') && r.request().method() === 'POST'); await page.getByRole('button', { name: '✓ 保存并发布看板', exact: true }).click(); expect((await conflict).status()).toBe(409); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toBeVisible();
+      77 |     await page.getByRole('button', { name: '强制覆盖发布', exact: true }).click(); await expect(page.getByRole('dialog')).toHaveCount(0); await page.reload(); await expect(page.getByRole('article', { name: '组件发布期间保留的草稿', exact: true })).toContainText('2'); await expect(page.getByRole('heading', { name: 'KFS 投流与采买结构', exact: true })).toHaveCount(0);
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:74:415
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\关键请求-f7d0dd6f7bc6f505b3be50880682d4651e7a3924.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\实际持久化快照-583029f067d4e34c296c6ca0ef7c865778cbdfea.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\attachments\最终页面-713878ff44f75bee04c382167eff32d5804c1507.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-extended-3\browser-results\product-components-共享卡片保护--a1136-编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 1280px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+    [local] › tests\browser\product-components.spec.ts:67:3 › 共享卡片保护 390px：组件发布不覆盖正在编辑的标题草稿，按真实冲突版本重试仍保留已发布组件选择 
+  2 passed (3.0m)

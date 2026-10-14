@@ -1,0 +1,60 @@
+[WebServer] (node:29460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:29460) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:34532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:34532) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 1 test using 1 worker
+
+(node:34340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [local] › tests\browser\product-components.spec.ts:2:1 › 启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口 (1.0m)
+
+
+  1) [local] › tests\browser\product-components.spec.ts:2:1 › 启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口 ────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: locator.click: Test timeout of 60000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '配置业务组件布局', exact: true })
+
+
+      4 |   await expect(page.getByRole('heading', { name: '内容效果深度分析', exact: true })).toBeVisible();
+      5 |   await page.screenshot({ path: info.outputPath('qicui-components-before.png'), fullPage: true });
+    > 6 |   await page.getByRole('button', { name: '配置业务组件布局', exact: true }).click();
+        |                                                                     ^
+      7 |   await expect(page.getByRole('dialog', { name: '团队业务组件布局', exact: true })).toBeVisible();
+      8 | });
+      9 |
+        at D:\download\pic-vec\feihe-platform-v3\feihe-mvp\tests\browser\product-components.spec.ts:6:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: 关键请求 (application/json) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\attachments\关键请求-3dc94dbb13ac2744f024e15190697e5c51510c57.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: 实际持久化快照 (application/json) ──────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\attachments\实际持久化快照-e2f19fd930d8a27f30812a1f1f8b432aebff7ff2.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: 最终页面 (image/png) ────────────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\attachments\最终页面-62d666a6461f91fc41fc273a7ebc9769a309c85a.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\error-context.md
+
+    attachment #6: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\docs\product-integration-v1\components-red\browser-results\product-components-启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口-local\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [local] › tests\browser\product-components.spec.ts:2:1 › 启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口 ─────

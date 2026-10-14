@@ -1,0 +1,17 @@
+✔ recommendation API: real field labels and types produce only valid four-column metrics with actual previews (17.1344ms)
+✔ recommendation API: repeated confirmation reuses definitions and real bindings without merging arbitrary names or resetting versions (5.5161ms)
+✔ recommendation API: confirmed field changes reject stale data and do not silently replace edited metric rules (4.6235ms)
+✔ ad adapter API: five actual columns bind the page to the same shared IDs, totals, daily values and channels (20.153ms)
+✔ ad adapter API: a metric edit changes both the dedicated page and ordinary cards at the actual confirmed version (11.2426ms)
+✔ ad adapter API: project range and field filter are computed locally, not applied to an unrelated historical feed (19.6124ms)
+✔ recommendation/binding API: viewer reads but cannot configure; foreign dataset, invalid field roles and missing ad fields refuse binding (8.8641ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15767.5769
+(node:19688) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

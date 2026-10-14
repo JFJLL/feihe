@@ -1,0 +1,68 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"query\":{},\"cards\":[{\"metricId\":\"qicui:metric:1264b890-5e8f-4554-9d8b-2bba846637ef\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-c2069c64-e5e3-4951-81d8-196f5a0eb123\",\"title\":\"组件场景独立记录1791940244635\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-qicui-b3cedb7e-845c-4487-af1a-74ab4163b77b\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui&id=ds-qicui-b3cedb7e-845c-4487-af1a-74ab4163b77b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"all\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=qicui&fresh=1&_t=1791940318764",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=qicui&fresh=1&_t=1791940318764",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"query\":{},\"cards\":[{\"metricId\":\"qicui:metric:1264b890-5e8f-4554-9d8b-2bba846637ef\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-c2069c64-e5e3-4951-81d8-196f5a0eb123\",\"title\":\"组件场景独立记录1791940244635\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-qicui-b3cedb7e-845c-4487-af1a-74ab4163b77b\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui&id=ds-qicui-b3cedb7e-845c-4487-af1a-74ab4163b77b&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  }
+]

@@ -1,0 +1,104 @@
+[
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"query\":{},\"cards\":[{\"metricId\":\"qicui:metric:6fd7871e-1045-4bd3-8f73-45e0632ee00c\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-e100bc6f-0ccc-4d6f-b6da-cb48fd7fac02\",\"title\":\"组件发布期间保留的草稿1280\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-qicui-52ab5339-49eb-4bb9-848b-b7ed5561760c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui&id=ds-qicui-52ab5339-49eb-4bb9-848b-b7ed5561760c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/feishu/sync",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"all\":true}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboard?projectId=qicui&fresh=1&_t=1791942011159",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/ops?projectId=qicui&fresh=1&_t=1791942011159",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"query\":{},\"cards\":[{\"metricId\":\"qicui:metric:6fd7871e-1045-4bd3-8f73-45e0632ee00c\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-e100bc6f-0ccc-4d6f-b6da-cb48fd7fac02\",\"title\":\"组件发布期间保留的草稿1280\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-qicui-52ab5339-49eb-4bb9-848b-b7ed5561760c\"}]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui&id=ds-qicui-52ab5339-49eb-4bb9-848b-b7ed5561760c&page=1&pageSize=15&search=",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 409,
+    "body": "{\"projectId\":\"qicui\",\"dashboardId\":\"dash-qicui-default\",\"version\":25,\"action\":\"set_components\",\"components\":[\"budget\",\"decision\",\"content-output\",\"content-effects\",\"kpi-comparison\",\"top-content\",\"coverage-efficiency\",\"interaction-quality\",\"actions\",\"dictionary\",\"daily-summary\",\"daily-trends\",\"daily-efficiency\"]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui&dashboardId=dash-qicui-default",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"dashboardId\":\"dash-qicui-default\",\"version\":26,\"action\":\"set_components\",\"components\":[\"budget\",\"decision\",\"content-output\",\"content-effects\",\"kpi-comparison\",\"top-content\",\"coverage-efficiency\",\"interaction-quality\",\"actions\",\"dictionary\",\"daily-summary\",\"daily-trends\",\"daily-efficiency\"]}"
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/datasets?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/dashboards?projectId=qicui",
+    "method": "GET",
+    "status": 200,
+    "body": null
+  },
+  {
+    "url": "http://127.0.0.1:5216/api/metrics",
+    "method": "POST",
+    "status": 200,
+    "body": "{\"projectId\":\"qicui\",\"query\":{},\"cards\":[{\"metricId\":\"qicui:metric:6fd7871e-1045-4bd3-8f73-45e0632ee00c\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\",\"id\":\"card-e100bc6f-0ccc-4d6f-b6da-cb48fd7fac02\",\"title\":\"组件发布期间保留的草稿1280\",\"type\":\"metric_card\",\"sortOrder\":0,\"datasetId\":\"ds-qicui-52ab5339-49eb-4bb9-848b-b7ed5561760c\"}]}"
+  }
+]

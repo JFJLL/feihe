@@ -1,0 +1,131 @@
+[
+  {
+    "projectId": "qicui",
+    "project": {
+      "id": "qicui",
+      "name": "启萃评论与声量项目",
+      "spu": "启萃",
+      "brand": "飞鹤",
+      "category": "婴幼儿奶粉",
+      "description": "评论执行、口碑舆情与本竞品监测",
+      "status": "进行中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "ready",
+      "createdBy": "",
+      "updatedAt": "2026-10-14T01:33:51.952Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "平台管理员",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "feishu-competitor-monthly",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤竞品月报数据收集表",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=ldZDsR",
+        "sheetId": "ldZDsR",
+        "range": "A1:AZ5000",
+        "kind": "competitor",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "【标准参考】金领冠-yx: 未找到工作表，可能已删除或替换；美素佳儿-yx: 未找到工作表，可能已删除或替换；爱他美-ym: 未找到工作表，可能已删除或替换；a2-bw: 未找到工作表，可能已删除或替换；飞鹤-ym: 未找到工作表，可能已删除或替换；合生元-bw: 未找到工作表，可能已删除或替换；君乐宝-zy: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:39:39.014Z"
+      },
+      {
+        "id": "feishu-daily-kpi-dashboard",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "启萃分日数据看板",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/CEsvwg65MikAGOkqKItcR7wkn3b",
+        "sheetId": "4bTvDu",
+        "range": "A1:AZ5000",
+        "kind": "owned",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 13,
+        "mappingJson": "{}",
+        "lastError": "KPI内部管理@PM: 未找到工作表，可能已删除或替换；爆文笔记库: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:39:39.014Z"
+      },
+      {
+        "id": "feishu-weekly-trend",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤启萃周趋势变化底表",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/SVwkw52kZiSlLEkQuaNcHvrynGg",
+        "sheetId": "kMYs9o",
+        "range": "A1:AZ5000",
+        "kind": "weekly_trend",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 3,
+        "mappingJson": "{}",
+        "lastError": "【日更】A-kfsop周投资数据（Q4）: 未找到工作表，可能已删除或替换；【日更】站内搜索指数@翠娴: 未找到工作表，可能已删除或替换；【周五更】启萃日常周KPI监测表@翠娴: 未找到工作表，可能已删除或替换；【月更】I+TI留存@翠娴: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:39:39.014Z"
+      },
+      {
+        "id": "feishu-content-planning",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤启萃内容规划all in one",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/H0iDwGhffiL2UHk9G96cpnR4nBe",
+        "sheetId": "7XkqoO",
+        "range": "A1:AZ5000",
+        "kind": "content_planning",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "内容切角们: 未找到工作表，可能已删除或替换；启萃场景库: 未找到工作表，可能已删除或替换；卡审话术总结: 未找到工作表，可能已删除或替换；竞品问题收集: 未找到工作表，可能已删除或替换；本品消费者反馈: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:39:39.014Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "members"
+      ],
+      "blockedSteps": [
+        "first_sync",
+        "metrics"
+      ],
+      "memberCount": 4,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-qicui-default",
+          "projectId": "qicui",
+          "name": "启萃默认营销看板",
+          "isDefault": 1,
+          "version": 7,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{},\"businessComponents\":[\"budget\",\"decision\",\"content-output\",\"content-effects\",\"kpi-comparison\",\"top-content\",\"coverage-efficiency\",\"interaction-quality\",\"actions\",\"dictionary\",\"daily-summary\",\"daily-trends\",\"daily-efficiency\"]}",
+          "status": "published",
+          "updatedAt": "2026-10-14T01:39:39.996Z"
+        }
+      ],
+      "targetDashboardId": "dash-qicui-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

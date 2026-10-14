@@ -1,0 +1,22 @@
+[WebServer] (node:40624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:40624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (node:19444) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:19444) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+
+Running 9 tests using 1 worker
+
+(node:18400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [local] › tests\browser\product-components.spec.ts:4:1 › 启萃组件反例：真实页面有权用户能打开既有复杂图表的团队布局编辑入口 (4.4s)
+  ok 2 [local] › tests\browser\product-components.spec.ts:36:3 › 历史业务组件 1280px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致 (4.8s)
+  ok 3 [local] › tests\browser\product-components.spec.ts:49:52 › 组件发布恢复 1280px 500：选择与顺序不丢，成功后才应用新布局 (2.6s)
+  ok 4 [local] › tests\browser\product-components.spec.ts:49:52 › 组件发布恢复 1280px network：选择与顺序不丢，成功后才应用新布局 (2.8s)
+  ok 5 [local] › tests\browser\product-components.spec.ts:49:52 › 组件发布恢复 1280px 409：选择与顺序不丢，成功后才应用新布局 (3.7s)
+  ok 6 [local] › tests\browser\product-components.spec.ts:36:3 › 历史业务组件 390px：真实四表同步、复杂图表、选择移动、发布刷新与只读一致 (4.0s)
+  ok 7 [local] › tests\browser\product-components.spec.ts:49:52 › 组件发布恢复 390px 500：选择与顺序不丢，成功后才应用新布局 (2.7s)
+  ok 8 [local] › tests\browser\product-components.spec.ts:49:52 › 组件发布恢复 390px network：选择与顺序不丢，成功后才应用新布局 (2.4s)
+  ok 9 [local] › tests\browser\product-components.spec.ts:49:52 › 组件发布恢复 390px 409：选择与顺序不丢，成功后才应用新布局 (2.8s)
+
+  9 passed (1.3m)

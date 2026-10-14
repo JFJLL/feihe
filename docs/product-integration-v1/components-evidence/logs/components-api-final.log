@@ -1,0 +1,16 @@
+WebSocket server error: Port 24678 is already in use
+(node:6136) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ component red: publishing registered business components changes the real team layout/version without replacing any existing cards (43.0837ms)
+✔ component API: malformed/duplicate identifiers, foreign dashboard, unrelated template and viewer writes do not modify the team layout (7.6647ms)
+✔ component API: a shared-card publication preserves component layout and common period; stale/force component requests cannot overwrite it (13.5637ms)
+✔ component API: audit SQL failure rolls the version/layout back and retry records the actual non-platform-admin publisher (5.1579ms)
+✔ component red: a stale component publication reports the actual server version and preserves the confirmed layout (3.2488ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22257.099

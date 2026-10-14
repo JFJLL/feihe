@@ -1,0 +1,21 @@
+✔ structure red: a new project explicitly reusing an authorized structure stores a pending blueprint, never the old source or target (34.2381ms)
+✔ structure red: copying a private project without source read permission is refused before creating anything (3.5443ms)
+✔ structure API: source preview exposes only rules and field contracts, without source identifiers, values, targets or credentials (3.6893ms)
+✔ structure API: source revision change or missing acknowledgement prevents creating a target project (2.9237ms)
+✔ structure API: own fields calculate 600, new goal1200 and shared references publish with no original bindings; retry reuses exact IDs (23.149ms)
+✔ structure API: foreign fields, missing new target, stale datasets and viewer cannot apply or leave partial metrics (8.0482ms)
+✔ structure API: actual audit write failure rolls back the complete import; corrected retry has one metric and the same source (6.771ms)
+✔ structure API: small percentages retain fractions once; automatic units follow the actual mapped field rather than the old field (6.7208ms)
+✔ structure API: a manually declared historical percentage on a new untyped field requires explicit scale confirmation (6.6825ms)
+✔ structure API: two different original sources require two own bindings and preserve each metric and card order (9.6499ms)
+✔ structure API: concurrent identical confirmations cannot duplicate metrics, bindings or saved goals (5.4629ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18007.7769
+(node:29040) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

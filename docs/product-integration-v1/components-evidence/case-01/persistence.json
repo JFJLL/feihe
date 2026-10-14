@@ -1,0 +1,131 @@
+[
+  {
+    "projectId": "qicui",
+    "project": {
+      "id": "qicui",
+      "name": "启萃评论与声量项目",
+      "spu": "启萃",
+      "brand": "飞鹤",
+      "category": "婴幼儿奶粉",
+      "description": "评论执行、口碑舆情与本竞品监测",
+      "status": "进行中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "ready",
+      "createdBy": "",
+      "updatedAt": "2026-10-14T01:33:51.952Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "平台管理员",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "feishu-content-planning",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤启萃内容规划all in one",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/H0iDwGhffiL2UHk9G96cpnR4nBe",
+        "sheetId": "7XkqoO",
+        "range": "A1:AZ5000",
+        "kind": "content_planning",
+        "syncFrequency": "realtime",
+        "status": "已连接",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T01:33:51.966Z"
+      },
+      {
+        "id": "feishu-weekly-trend",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤启萃周趋势变化底表",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/SVwkw52kZiSlLEkQuaNcHvrynGg",
+        "sheetId": "kMYs9o",
+        "range": "A1:AZ5000",
+        "kind": "weekly_trend",
+        "syncFrequency": "realtime",
+        "status": "已连接",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T01:33:51.964Z"
+      },
+      {
+        "id": "feishu-daily-kpi-dashboard",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "启萃分日数据看板",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/CEsvwg65MikAGOkqKItcR7wkn3b",
+        "sheetId": "4bTvDu",
+        "range": "A1:AZ5000",
+        "kind": "owned",
+        "syncFrequency": "realtime",
+        "status": "已连接",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T01:33:51.963Z"
+      },
+      {
+        "id": "feishu-competitor-monthly",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤竞品月报数据收集表",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=ldZDsR",
+        "sheetId": "ldZDsR",
+        "range": "A1:AZ5000",
+        "kind": "competitor",
+        "syncFrequency": "realtime",
+        "status": "已连接",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T01:33:51.961Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "members"
+      ],
+      "blockedSteps": [
+        "first_sync",
+        "metrics"
+      ],
+      "memberCount": 4,
+      "ready": false
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-qicui-default",
+          "projectId": "qicui",
+          "name": "启萃默认营销看板",
+          "isDefault": 1,
+          "version": 1,
+          "layoutJson": "[]",
+          "status": "published",
+          "updatedAt": "2026-10-14 01:33:51"
+        }
+      ],
+      "targetDashboardId": "dash-qicui-default",
+      "cards": []
+    },
+    "datasets": []
+  }
+]

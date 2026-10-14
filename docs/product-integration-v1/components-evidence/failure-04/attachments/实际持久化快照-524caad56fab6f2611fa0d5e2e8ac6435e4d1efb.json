@@ -1,0 +1,258 @@
+[
+  {
+    "projectId": "qicui",
+    "project": {
+      "id": "qicui",
+      "name": "启萃评论与声量项目",
+      "spu": "启萃",
+      "brand": "飞鹤",
+      "category": "婴幼儿奶粉",
+      "description": "评论执行、口碑舆情与本竞品监测",
+      "status": "进行中",
+      "color": "#1769d5",
+      "startAt": null,
+      "endAt": null,
+      "orgId": "org-default",
+      "departmentId": "dept-marketing",
+      "clientId": null,
+      "ownerId": "user-admin",
+      "templateId": "content_marketing",
+      "isArchived": 0,
+      "onboardingStatus": "ready",
+      "createdBy": "",
+      "updatedAt": "2026-10-14T01:08:59.511Z",
+      "departmentName": "市场与营销部",
+      "clientName": null,
+      "ownerName": "平台管理员",
+      "templateName": "内容营销项目"
+    },
+    "sourceConfigurations": [
+      {
+        "id": "28219fcd-821b-4085-ac85-541a6455b839",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/ComponentOwn-1791940380776",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T01:13:01.507Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"任务\",\"targetField\":\"任务\",\"type\":\"text\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"qicui\",\"documentToken\":\"ComponentOwn-1791940380776\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"任务\",\"type\":\"text\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T01:13:01.507Z"
+      },
+      {
+        "id": "feishu-competitor-monthly",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤竞品月报数据收集表",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/J8bnw5Mx4inxbukp2HYcgjMznJg?sheet=ldZDsR",
+        "sheetId": "ldZDsR",
+        "range": "A1:AZ5000",
+        "kind": "competitor",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "【标准参考】金领冠-yx: 未找到工作表，可能已删除或替换；美素佳儿-yx: 未找到工作表，可能已删除或替换；爱他美-ym: 未找到工作表，可能已删除或替换；a2-bw: 未找到工作表，可能已删除或替换；飞鹤-ym: 未找到工作表，可能已删除或替换；合生元-bw: 未找到工作表，可能已删除或替换；君乐宝-zy: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:13:00.368Z"
+      },
+      {
+        "id": "feishu-daily-kpi-dashboard",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "启萃分日数据看板",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/CEsvwg65MikAGOkqKItcR7wkn3b",
+        "sheetId": "4bTvDu",
+        "range": "A1:AZ5000",
+        "kind": "owned",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 13,
+        "mappingJson": "{}",
+        "lastError": "KPI内部管理@PM: 未找到工作表，可能已删除或替换；爆文笔记库: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:13:00.368Z"
+      },
+      {
+        "id": "feishu-weekly-trend",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤启萃周趋势变化底表",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/SVwkw52kZiSlLEkQuaNcHvrynGg",
+        "sheetId": "kMYs9o",
+        "range": "A1:AZ5000",
+        "kind": "weekly_trend",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 3,
+        "mappingJson": "{}",
+        "lastError": "【日更】A-kfsop周投资数据（Q4）: 未找到工作表，可能已删除或替换；【日更】站内搜索指数@翠娴: 未找到工作表，可能已删除或替换；【周五更】启萃日常周KPI监测表@翠娴: 未找到工作表，可能已删除或替换；【月更】I+TI留存@翠娴: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:13:00.368Z"
+      },
+      {
+        "id": "feishu-content-planning",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "飞鹤启萃内容规划all in one",
+        "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/H0iDwGhffiL2UHk9G96cpnR4nBe",
+        "sheetId": "7XkqoO",
+        "range": "A1:AZ5000",
+        "kind": "content_planning",
+        "syncFrequency": "realtime",
+        "status": "同步失败",
+        "lastSyncedAt": null,
+        "lastRowCount": 0,
+        "mappingJson": "{}",
+        "lastError": "内容切角们: 未找到工作表，可能已删除或替换；启萃场景库: 未找到工作表，可能已删除或替换；卡审话术总结: 未找到工作表，可能已删除或替换；竞品问题收集: 未找到工作表，可能已删除或替换；本品消费者反馈: 未找到工作表，可能已删除或替换",
+        "updatedAt": "2026-10-14T01:13:00.368Z"
+      },
+      {
+        "id": "b3cedb7e-845c-4487-af1a-74ab4163b77b",
+        "projectId": "qicui",
+        "type": "feishu_sheet",
+        "name": "补修数据",
+        "spreadsheet": "https://fixture.feishu.cn/sheets/ComponentOwn-1791940243620",
+        "sheetId": "sheetA",
+        "range": "",
+        "kind": "general",
+        "syncFrequency": "manual",
+        "status": "已连接",
+        "lastSyncedAt": "2026-10-14T01:10:44.397Z",
+        "lastRowCount": 2,
+        "mappingJson": "{\"rules\":[{\"sourceField\":\"任务\",\"targetField\":\"任务\",\"type\":\"text\",\"nullPolicy\":\"null\"}],\"context\":{\"projectId\":\"qicui\",\"documentToken\":\"ComponentOwn-1791940243620\",\"sheetId\":\"sheetA\",\"fields\":[{\"key\":\"任务\",\"type\":\"text\"}]}}",
+        "lastError": "",
+        "updatedAt": "2026-10-14T01:10:44.397Z"
+      }
+    ],
+    "readiness": {
+      "completedSteps": [
+        "template",
+        "source",
+        "first_sync",
+        "metrics",
+        "members"
+      ],
+      "blockedSteps": [],
+      "memberCount": 4,
+      "ready": true
+    },
+    "dashboard": {
+      "ok": true,
+      "dashboards": [
+        {
+          "id": "dash-qicui-default",
+          "projectId": "qicui",
+          "name": "默认工作台看板",
+          "isDefault": 1,
+          "version": 25,
+          "layoutJson": "{\"kind\":\"project_board\",\"version\":1,\"query\":{},\"businessComponents\":[\"decision\",\"budget\",\"kfs\",\"content-output\",\"content-effects\",\"kpi-comparison\",\"top-content\",\"coverage-efficiency\",\"interaction-quality\",\"actions\",\"dictionary\",\"daily-summary\",\"daily-trends\",\"daily-efficiency\"]}",
+          "status": "published",
+          "updatedAt": "2026-10-14T01:13:02.564Z"
+        }
+      ],
+      "targetDashboardId": "dash-qicui-default",
+      "cards": [
+        {
+          "id": "card-c2069c64-e5e3-4951-81d8-196f5a0eb123",
+          "dashboardId": "dash-qicui-default",
+          "projectId": "qicui",
+          "title": "组件场景独立记录1791940244635",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"qicui:metric:1264b890-5e8f-4554-9d8b-2bba846637ef\",\"metricVersionPolicy\":\"latest\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 0,
+          "updatedAt": "2026-10-14T01:13:02.564Z"
+        },
+        {
+          "id": "card-b3e36afb-4076-4e98-8952-58eebd917845",
+          "dashboardId": "dash-qicui-default",
+          "projectId": "qicui",
+          "title": "组件场景独立记录1791940381725",
+          "type": "metric_card",
+          "metricKeysJson": "[]",
+          "configJson": "{\"metricId\":\"qicui:metric:da7a56c4-a21a-4109-9355-8195fa0f851a\",\"metricVersionPolicy\":\"latest\",\"groupBy\":\"\",\"rangePolicy\":\"project\"}",
+          "sortOrder": 1,
+          "updatedAt": "2026-10-14T01:13:02.564Z"
+        }
+      ]
+    },
+    "datasets": [
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-qicui-28219fcd-821b-4085-ac85-541a6455b839",
+          "projectId": "qicui",
+          "sourceId": "28219fcd-821b-4085-ac85-541a6455b839",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"任务\",\"name\":\"任务\",\"type\":\"text\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-14T01:13:01.528Z",
+          "columns": [
+            {
+              "key": "任务",
+              "name": "任务",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "任务": "本项目记录甲"
+            },
+            {
+              "任务": "本项目记录乙"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      },
+      {
+        "ok": true,
+        "dataset": {
+          "id": "ds-qicui-b3cedb7e-845c-4487-af1a-74ab4163b77b",
+          "projectId": "qicui",
+          "sourceId": "b3cedb7e-845c-4487-af1a-74ab4163b77b",
+          "name": "补修数据",
+          "schemaJson": "[{\"key\":\"任务\",\"name\":\"任务\",\"type\":\"text\"}]",
+          "rowCount": 2,
+          "version": 1,
+          "updatedAt": "2026-10-14T01:10:44.417Z",
+          "columns": [
+            {
+              "key": "任务",
+              "name": "任务",
+              "type": "text"
+            }
+          ],
+          "rows": [
+            {
+              "任务": "本项目记录甲"
+            },
+            {
+              "任务": "本项目记录乙"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "pageSize": 15,
+            "total": 2,
+            "totalPages": 1,
+            "currentPageRows": 2
+          }
+        }
+      }
+    ]
+  }
+]

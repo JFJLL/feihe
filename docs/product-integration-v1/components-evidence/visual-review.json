@@ -1,0 +1,14 @@
+{
+  "reviewed": true,
+  "reviewedArtifacts": [
+    "case-08/business-layout-editor-open.png",
+    "case-11/component-error-draft-preserved.png",
+    "published-historic-detail-desktop.png"
+  ],
+  "checks": [
+    "390px actual viewport editor and footer visible",
+    "390px actual409 error and checkbox states visible",
+    "desktop chart points/histogram/boxplots retained; 90000/600 and actual same-date budget700/900 visible"
+  ],
+  "originalImagesRetained": true
+}
