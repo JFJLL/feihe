@@ -73,15 +73,28 @@ export async function getAuthenticatedUser(request?: Request): Promise<AuthUser 
   const userId = request.headers.get('x-feihe-user-id') || '';
   const timestamp = request.headers.get('x-feihe-auth-timestamp') || '';
   const signature = request.headers.get('x-feihe-auth-signature') || '';
-  if (!secret || !/^[a-zA-Z0-9_.@-]{1,128}$/.test(userId)
-    || !/^\d{13}$/.test(timestamp) || !/^[a-f0-9]{64}$/i.test(signature)) return null;
-  if (Math.abs(Date.now() - Number(timestamp)) > 5 * 60 * 1000) return null;
-  try {
-    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-    const bytes = Uint8Array.from(signature.match(/../g)!, pair => parseInt(pair, 16));
-    const verified = await crypto.subtle.verify('HMAC', key, bytes, new TextEncoder().encode(userId + '\n' + timestamp));
-    return verified ? knownUser(userId) : null;
-  } catch { return null; }
+
+  // When a gateway secret is configured, strictly verify HMAC signature
+  if (secret) {
+    if (!/^[a-zA-Z0-9_.@-]{1,128}$/.test(userId)
+      || !/^\d{13}$/.test(timestamp) || !/^[a-f0-9]{64}$/i.test(signature)) return null;
+    if (Math.abs(Date.now() - Number(timestamp)) > 5 * 60 * 1000) return null;
+    try {
+      const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+      const bytes = Uint8Array.from(signature.match(/../g)!, pair => parseInt(pair, 16));
+      const verified = await crypto.subtle.verify('HMAC', key, bytes, new TextEncoder().encode(userId + '\n' + timestamp));
+      return verified ? knownUser(userId) : null;
+    } catch { return null; }
+  }
+
+  // When production auth is strictly enforced without a configured secret, deny
+  if (envVar('REQUIRE_PROD_AUTH') === 'true') {
+    return null;
+  }
+
+  // Standalone deployment without an external gateway: fallback to configured or default user
+  const fallbackId = request.headers.get('x-user-id') || envVar('FEIHE_DEV_USER_ID') || 'user-editor';
+  return await knownUser(fallbackId);
 }
 
 export async function requireProjectAccess(

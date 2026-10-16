@@ -62,7 +62,9 @@ export function devAuthGatewayPlugin() {
         }
 
         const secFetchSite = req.headers['sec-fetch-site'];
-        if (secFetchSite === 'cross-site') {
+        const secFetchMode = req.headers['sec-fetch-mode'];
+        // Reject cross-site subresource/API requests (CSRF), but allow top-level user navigations (e.g. clicking link in desktop app)
+        if (secFetchSite === 'cross-site' && secFetchMode !== 'navigate') {
           return next();
         }
 
