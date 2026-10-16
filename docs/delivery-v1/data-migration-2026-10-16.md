@@ -240,7 +240,7 @@ node scripts/reconcile-qicui.mjs
 
 ### 8.2 追加结果统计
 
-执行脚本：`node scripts/append-d1-qicui-delta.mjs`
+执行脚本：`node scripts/append-d1-qicui-delta.mjs --apply`
 
 ```
 === D1 APPEND SUMMARY ===
@@ -266,7 +266,7 @@ node scripts/reconcile-qicui.mjs
 
 ### 8.3 二次运行 100% 幂等证据
 
-对追加后的主库再次运行 `node scripts/append-d1-qicui-delta.mjs --no-backup`：
+对追加后的主库再次运行 `node scripts/append-d1-qicui-delta.mjs --apply --no-backup`：
 - **新增写入（Inserted）**：**0**
 - **覆盖更新（Replaced）**：**0**
 - **业务数据指纹与哈希**：100% 匹配无漂移。
@@ -284,11 +284,11 @@ node scripts/reconcile-qicui.mjs
 
 ### 9.2 按列更新行数统计
 
-执行脚本：`node scripts/merge-d1-observations.mjs`
+执行脚本：`node scripts/merge-d1-observations.mjs --apply`
 
 > **注意（执行与复验区分说明）**：
 > - **首次执行（First Apply）**：在 1,293 篇 D1 较新时序候选笔记中，**实际真实写入更新了 1,278 篇画像的爬虫观测指标与 218 张 CDN 封面**，有效修复了 22 篇阅读量为 0 的历史缺数。
-> - **二次运行（Second Run）**：随后立即执行的 `node scripts/merge-d1-observations.mjs --no-backup` 输出 `Updated Note Profiles: 0`，此结果为**严谨的二次幂等性复验（Idempotence Verification）**，证明所有观测值已精确同步，二次运行零重复写入，并非首次未执行。
+> - **二次运行（Second Run）**：随后立即执行的 `node scripts/merge-d1-observations.mjs --apply --no-backup` 输出 `Updated Note Profiles: 0`，此结果为**严谨的二次幂等性复验（Idempotence Verification）**，证明所有观测值已精确同步，二次运行零重复写入，并非首次未执行。
 
 ```
 === D1 OBSERVATION MERGE AUDIT SUMMARY ===
@@ -315,7 +315,7 @@ node scripts/reconcile-qicui.mjs
 
 ### 9.3 二次运行 100% 幂等验证
 
-对已合并主库再次执行 `node scripts/merge-d1-observations.mjs --no-backup`（幂等复验）：
+对已合并主库再次执行 `node scripts/merge-d1-observations.mjs --apply --no-backup`（幂等复验）：
 - **更新画像数（Updated Profiles）**：**0**
 - **各列更新数**：全量为 **0**。
 - **保护列哈希与确认日报指纹**：100% 一致。
@@ -333,7 +333,7 @@ node scripts/reconcile-qicui.mjs
 
 ### 10.2 激活执行结果与回退审计日志
 
-执行脚本：`node scripts/activate-qicui-sync-tasks.mjs`
+执行脚本：`node scripts/activate-qicui-sync-tasks.mjs --apply`
 
 ```
 === ROLLBACK & SCHEDULING AUDIT LOG ===
