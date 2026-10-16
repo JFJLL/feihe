@@ -112,14 +112,15 @@ const server = await createServer({
   resolve: { alias: { '@': appRoot } }
 });
 async function platformRead(spec, task, account, window) {
-  const bridge = path.resolve('scripts/automation-read-bridge.py');
+  const bridge = path.resolve(appRoot, 'scripts/automation-read-bridge.py');
+  const automationRoot = path.resolve(options['automation-root'] || process.env.AUTOMATION_ROOT || path.resolve(appRoot, '../../automation'));
   return new Promise((resolve,reject)=>{
     const child=spawn(process.env.FEIHE_PYTHON || 'python',[bridge],{windowsHide:true,stdio:['pipe','pipe','pipe']});let output='';
     const timer=setTimeout(()=>{child.kill();reject(new Error('平台只读取数超时'));},12*60000);
     child.stdout.on('data',chunk=>{output+=chunk.toString('utf8');if(output.length>24000000){child.kill();reject(new Error('平台响应超出本批限制'));}});
     child.on('error',error=>{clearTimeout(timer);reject(error);});
     child.on('close',()=>{clearTimeout(timer);try{const result=JSON.parse(output);if(!result.ok)reject(new Error(result.message));else resolve(result);}catch{reject(new Error('平台桥接响应无效'));}});
-    child.stdin.end(JSON.stringify({automationRoot:args['automation-root'],platform:spec.platform,account:{externalId:account.external_id},entityIds:spec.entityIds,dimension:spec.dimension,refreshDays:spec.refreshDays || 7,attributionDelayDays:spec.attributionDelayDays || 0,from:window?.window_from,to:window?.window_to}));
+    child.stdin.end(JSON.stringify({automationRoot,platform:spec.platform,account:{externalId:account.external_id},entityIds:spec.entityIds,dimension:spec.dimension,refreshDays:spec.refreshDays || 7,attributionDelayDays:spec.attributionDelayDays || 0,from:window?.window_from,to:window?.window_to}));
   });
 }
 try {

@@ -514,9 +514,11 @@ function cumulativeRows(points: DailyPoint[]) {
 
 /** 动态计算渠道费用结构与分布 */
 function ChannelStructureOverview({ series }: { series: DailyPoint[] }) {
-  const observed = series.filter(p => p.adSpend.value !== null);
+  // Only include days with complete cost components (where both adSpend and projectInvestment are observed)
+  // to ensure numerators and denominator use the exact same common date range.
+  const completeDays = series.filter(p => p.adSpend.value !== null && p.projectInvestment.value !== null);
   const sumVal = (key: keyof DailyPoint) =>
-    observed.reduce((acc, p) => {
+    completeDays.reduce((acc, p) => {
       const v = (p[key] as Cell)?.value;
       return typeof v === 'number' ? acc + v : acc;
     }, 0);
@@ -529,6 +531,12 @@ function ChannelStructureOverview({ series }: { series: DailyPoint[] }) {
   const commentsCost = sumVal('comments');
   const otherCost = sumVal('other');
   const totalInvestment = sumVal('projectInvestment') || (adSpend + creatorCost + seoCost + commentsCost + otherCost);
+  const commonThrough = completeDays.at(-1)?.date || '';
+  const commonFrom = completeDays[0]?.date || '';
+  const partialDates = series
+    .filter(p => p.date > commonThrough && (p.creatorCost.value !== null || p.seo.value !== null))
+    .map(p => p.date.slice(5));
+  const partialDatesText = partialDates.length > 0 ? partialDates.join('、') : '';
 
   const channels = [
     { label: '信息流 (F)', value: feedSpend, color: DASHBOARD_PALETTE.feed, desc: '聚光信息流推广' },
@@ -545,8 +553,13 @@ function ChannelStructureOverview({ series }: { series: DailyPoint[] }) {
         <div>
           <h4>KFS 全渠道费用构成与占比（区间累计）</h4>
           <span className="bd-caption">
-            {'基于已观测的 ' + observed.length + ' 个数据日累计计算 · 项目总投入 ¥' + format(totalInvestment)}
+            {`基于共同完整费用口径（${commonFrom} 至 ${commonThrough}，共 ${completeDays.length} 个完整投流日）累计计算 · 共同区间项目总投入 ¥${format(totalInvestment)}`}
           </span>
+          {partialDates.length > 0 && (
+            <div style={{ marginTop: 4, fontSize: 11, color: '#64748b' }}>
+              {`注：${partialDatesText} 等日期达人/SEO等费用已登记，因投流广告尚未回填，不混入全渠道占比分母以保持同范围口径。`}
+            </div>
+          )}
         </div>
       </div>
 
@@ -609,15 +622,19 @@ function AspectSummaryCard({
           owner: getOwner('投流'),
           deadline: '本日报确认前',
           conclusion: isPending
-            ? `${view.day} 当日投放费用待录入；截至 ${view.businessThrough || '10-14'} 月累计广告消耗 ¥${format(view.progress.actualThroughData)}，月累计结算 ¥${format(view.core.monthlySettlement?.value)}（进度 ${format((view.progress.settlementFraction ?? 0) * 100)}%）。`
+            ? (view.core.creatorCost?.value !== null
+                ? `${view.day} 费用尚未齐备 · 达人已填报（¥${format(view.core.creatorCost.value)}），投流广告待回填；未齐备指标参考截至 ${view.businessThrough || '10-14'} 完整实绩，月累计广告消耗 ¥${format(view.progress.actualThroughData)}。`
+                : `${view.day} 当日投放费用待录入；截至 ${view.businessThrough || '10-14'} 月累计广告消耗 ¥${format(view.progress.actualThroughData)}，月累计结算 ¥${format(view.core.monthlySettlement?.value)}（进度 ${format((view.progress.settlementFraction ?? 0) * 100)}%）。`)
             : `当日平台广告消耗 ¥${format(view.core.adSpend.value)}，项目总投入 ¥${format(view.core.projectInvestment.value)}，政策后结算 ¥${format(view.core.settlement.value)}。`,
           reason: isPending
-            ? '底层周报数据按周更新，当日投放明细尚未同步底表。'
+            ? (view.core.creatorCost?.value !== null
+                ? '达人采买已填报，投流广告周底表数据尚未回填。'
+                : '底层周报数据按周更新，当日投放明细尚未同步底表。')
             : (view.progress.lagPoints !== null && view.progress.lagPoints >= view.progress.alertThresholdPoints
               ? `FS业务排期落后 ${format(view.progress.lagPoints)} 个百分点。`
               : '投放消耗按排期执行，差额在预警阈值范围内。'),
           action: isPending
-            ? `接入 ${view.businessThrough || '10-14'} 最近有效日实绩参考，待作者更新后核实。`
+            ? `接入 ${view.businessThrough || '10-14'} 最近完整有效日实绩参考未齐备指标，待投流广告更新后核实。`
             : '维持当前渠道投放节奏，持续跟踪京准通与聚光当日返点及消耗对账。',
         };
       }
@@ -1064,11 +1081,18 @@ export function BusinessDailyBoard({
   };
 
   // Dynamic period calculations for Overview mode
-  const observedPoints = (view?.series || []).filter(p => p.adSpend?.value !== null);
-  const periodAdSpend = observedPoints.reduce((acc, p) => acc + (p.adSpend?.value || 0), 0);
-  const periodCreatorCost = observedPoints.reduce((acc, p) => acc + (p.creatorCost?.value || 0), 0);
-  const periodProjectInvestment = observedPoints.reduce((acc, p) => acc + (p.projectInvestment?.value || 0), 0);
-  const periodSettlement = observedPoints.reduce((acc, p) => acc + (p.settlement?.value || 0), 0);
+  const adPoints = (view?.series || []).filter(p => p.adSpend?.value !== null);
+  const creatorPoints = (view?.series || []).filter(p => p.creatorCost?.value !== null);
+  const completeInvestmentPoints = (view?.series || []).filter(p => p.projectInvestment?.value !== null);
+  const completeSettlementPoints = (view?.series || []).filter(p => p.settlement?.value !== null);
+
+  const periodAdSpend = adPoints.reduce((acc, p) => acc + (p.adSpend?.value || 0), 0);
+  const periodCreatorCost = creatorPoints.reduce((acc, p) => acc + (p.creatorCost?.value || 0), 0);
+  const periodProjectInvestment = completeInvestmentPoints.reduce((acc, p) => acc + (p.projectInvestment?.value || 0), 0);
+  const periodSettlement = completeSettlementPoints.reduce((acc, p) => acc + (p.settlement?.value || 0), 0);
+
+  const latestCreatorPoint = creatorPoints.at(-1);
+  const latestCompletePoint = completeInvestmentPoints.at(-1);
 
   return (
     <DailyDetailsContext.Provider value={detailQuery}>
@@ -1097,6 +1121,11 @@ export function BusinessDailyBoard({
             </span>
             <span className="bd-meta-cutoff">
               实际数据截至：<strong>{view?.businessThrough || '待采集'}</strong>
+              {view?.latestRegisteredDay && view.latestRegisteredDay > (view?.businessThrough || '') && (
+                <span className="bd-meta-sub-cutoff" style={{ marginLeft: 6, opacity: 0.85, fontSize: 12 }}>
+                  （达人等部分费用已登记至 {view.latestRegisteredDay}）
+                </span>
+              )}
             </span>
             {!overview && isTodayCostsPending && (
               <span className="bd-meta-status-chip">
@@ -1314,7 +1343,7 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodAdSpend)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + observedPoints.length + ' 个有效观测日（' + (view?.from?.slice(5) || '10-01') + ' 至 ' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）· 日均 ¥' + format(periodAdSpend / (observedPoints.length || 1))}
+                          {'覆盖 ' + adPoints.length + ' 个有效观测日（' + (view?.from?.slice(5) || '10-01') + ' 至 ' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）· 日均 ¥' + format(periodAdSpend / (adPoints.length || 1))}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
@@ -1333,14 +1362,14 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodCreatorCost)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + observedPoints.length + ' 个有效观测日 · 日均 ¥' + format(periodCreatorCost / (observedPoints.length || 1))}
+                          {'覆盖 ' + creatorPoints.length + ' 个有效观测日 · 日均 ¥' + format(periodCreatorCost / (creatorPoints.length || 1))}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
                           <strong>
                             {selected?.creatorCost?.value !== null
                               ? '¥' + format(selected?.creatorCost?.value)
-                              : '最新有效（' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestObservedPoint?.creatorCost?.value)}
+                              : '最新有效（' + (latestCreatorPoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestCreatorPoint?.creatorCost?.value)}
                           </strong>
                         </div>
                       </article>
@@ -1352,14 +1381,14 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodProjectInvestment)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + observedPoints.length + ' 个有效观测日 · 日均 ¥' + format(periodProjectInvestment / (observedPoints.length || 1))}
+                          {'覆盖 ' + completeInvestmentPoints.length + ' 个完整投流日 · 日均 ¥' + format(periodProjectInvestment / (completeInvestmentPoints.length || 1))}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
                           <strong>
                             {selected?.projectInvestment?.value !== null
                               ? '¥' + format(selected?.projectInvestment?.value)
-                              : '最新有效（' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestObservedPoint?.projectInvestment?.value)}
+                              : '最新有效（' + (latestCompletePoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestCompletePoint?.projectInvestment?.value)}
                           </strong>
                         </div>
                       </article>
@@ -1371,14 +1400,14 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodSettlement)}</div>
                         <div className="bd-kpi-sub">
-                          {'月累计结算 ¥' + format(view.core.monthlySettlement?.value) + '（进度 ' + format((view.progress.settlementFraction ?? 0) * 100) + '%）'}
+                          {'覆盖 ' + completeSettlementPoints.length + ' 个完整投流日 · 月累计结算 ¥' + format(view.core.monthlySettlement?.value) + '（进度 ' + format((view.progress.settlementFraction ?? 0) * 100) + '%）'}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
                           <strong>
                             {selected?.settlement?.value !== null
                               ? '¥' + format(selected?.settlement?.value)
-                              : '最新有效（' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestObservedPoint?.settlement?.value)}
+                              : '最新有效（' + (latestCompletePoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestCompletePoint?.settlement?.value)}
                           </strong>
                         </div>
                       </article>
@@ -1405,7 +1434,9 @@ export function BusinessDailyBoard({
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                               <strong style={{ fontSize: 13, color: '#1e293b' }}>
-                                最近费用实绩 · {latestObservedPoint.date.slice(5).replace('-', '月')}日
+                                {view.core.creatorCost?.value !== null
+                                  ? `最近完整费用实绩 · ${latestObservedPoint.date.slice(5).replace('-', '月')}日（未齐备指标接入）`
+                                  : `最近费用实绩 · ${latestObservedPoint.date.slice(5).replace('-', '月')}日`}
                               </strong>
                               <span
                                 style={{
@@ -1417,60 +1448,74 @@ export function BusinessDailyBoard({
                                   color: '#2c7168',
                                 }}
                               >
-                                最新有效实绩
+                                {view.core.creatorCost?.value !== null ? '未齐备指标接入 14 实绩' : '最新有效实绩'}
                               </span>
                             </div>
                             <span style={{ fontSize: 11, color: '#64748b' }}>
-                              {day} 分日费用尚未录入（月累计结算已达 ¥{format(view.core.monthlySettlement?.value)}），业务基准日保持 {day}
+                              {view.core.creatorCost?.value !== null
+                                ? `${day.slice(5)} 费用尚未齐备 · 达人等已填报，投流广告待回填，业务基准日保持 ${day}`
+                                : `${day.slice(5)} 分日费用待录入（月累计结算已达 ¥${format(view.core.monthlySettlement?.value)}），业务基准日保持 ${day}`}
                             </span>
                           </div>
                           <div className="bd-kpis" style={{ marginTop: 0 }}>
                             <article className="bd-kpi-card-rich">
                               <div className="bd-kpi-head">
                                 <span>平台广告消耗</span>
-                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 实绩</span>
+                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 完整实绩</span>
                               </div>
                               <div className="bd-kpi-val">¥{format(latestObservedPoint.adSpend?.value)}</div>
                               <div className="bd-kpi-sub">
                                 信息流 ¥{format(latestObservedPoint.feed?.value)} + 搜索 ¥{format(latestObservedPoint.search?.value)}
                               </div>
-                              <span className="bd-state">周报Q4 · {latestObservedPoint.date} 实绩</span>
+                              <span className="bd-state">未齐备指标 · 参考 {latestObservedPoint.date} 完整实绩</span>
                             </article>
 
                             <article className="bd-kpi-card-rich">
                               <div className="bd-kpi-head">
                                 <span>达人合作费用</span>
-                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 实绩</span>
+                                <span className="bd-kpi-badge">
+                                  {view.core.creatorCost?.value !== null ? `${day.slice(5)} 已登记` : `${latestObservedPoint.date.slice(5)} 实绩`}
+                                </span>
                               </div>
-                              <div className="bd-kpi-val">¥{format(latestObservedPoint.creatorCost?.value)}</div>
+                              <div className="bd-kpi-val">
+                                ¥{format(view.core.creatorCost?.value !== null ? view.core.creatorCost.value : latestObservedPoint.creatorCost?.value)}
+                              </div>
                               <div className="bd-kpi-sub">
-                                星 ¥{format(latestObservedPoint.star?.investment?.value ?? 0)} + 盟 ¥{format(latestObservedPoint.alliance?.investment?.value ?? 0)}
+                                {view.core.creatorCost?.value !== null
+                                  ? `星 ¥${format(selected?.starCreator?.value ?? selected?.star?.investment?.value ?? 0)} + 盟 ¥${format(selected?.allianceCreator?.value ?? selected?.alliance?.investment?.value ?? 0)}`
+                                  : `星 ¥${format(latestObservedPoint.starCreator?.value ?? latestObservedPoint.star?.investment?.value ?? 0)} + 盟 ¥${format(latestObservedPoint.allianceCreator?.value ?? latestObservedPoint.alliance?.investment?.value ?? 0)}`}
                               </div>
-                              <span className="bd-state">周报Q4 · {latestObservedPoint.date} 实绩</span>
+                              <span className="bd-state">
+                                {view.core.creatorCost?.value !== null ? `周报Q4 · ${day} 达人已填报` : `周报Q4 · ${latestObservedPoint.date} 实绩`}
+                              </span>
                             </article>
 
                             <article className="bd-kpi-card-rich">
                               <div className="bd-kpi-head">
                                 <span>项目总投入</span>
-                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 实绩</span>
+                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 完整实绩</span>
                               </div>
                               <div className="bd-kpi-val">¥{format(latestObservedPoint.projectInvestment?.value)}</div>
                               <div className="bd-kpi-sub">
-                                含KFSOP及杂费总投资
+                                {view.core.projectInvestment?.partialValue !== undefined && view.core.projectInvestment?.partialValue !== null
+                                  ? `${day.slice(5)} 部分已登记：¥${format(view.core.projectInvestment.partialValue)}（缺投流广告）`
+                                  : '含KFSOP及杂费总投资'}
                               </div>
-                              <span className="bd-state">周报Q4 · {latestObservedPoint.date} 实绩</span>
+                              <span className="bd-state">未齐备指标 · 参考 {latestObservedPoint.date} 完整实绩</span>
                             </article>
 
                             <article className="bd-kpi-card-rich">
                               <div className="bd-kpi-head">
                                 <span>政策后结算金额</span>
-                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 实绩</span>
+                                <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 完整实绩</span>
                               </div>
                               <div className="bd-kpi-val">¥{format(latestObservedPoint.settlement?.value)}</div>
                               <div className="bd-kpi-sub">
-                                政策后核算（星盟总结算）
+                                {view.core.settlement?.partialValue !== undefined && view.core.settlement?.partialValue !== null
+                                  ? `${day.slice(5)} 部分已登记：¥${format(view.core.settlement.partialValue)}（缺投流广告）`
+                                  : '政策后核算（星盟总结算）'}
                               </div>
-                              <span className="bd-state">周报Q4 · {latestObservedPoint.date} 实绩</span>
+                              <span className="bd-state">未齐备指标 · 参考 {latestObservedPoint.date} 完整实绩</span>
                             </article>
                           </div>
                         </div>
@@ -1504,7 +1549,7 @@ export function BusinessDailyBoard({
                   {/* Alerts & Consolidated Status Banner */}
                   {isTodayCostsPending ? (
                     <div className="bd-alerts-compact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', background: '#fafaf9', border: '1px solid #e7e5e4', borderRadius: 6, margin: '8px 0 10px', fontSize: 11.5, color: '#78716c' }}>
-                      <span>💡 <strong>{day} 分日费用待底表填报</strong> · 上方卡片已展示 {latestObservedPoint?.date} 最近实绩；所选基准日保持 {day}，各板块填报正常展示。</span>
+                      <span>💡 <strong>{day} 费用尚未齐备 · 投流广告待回填</strong> · 达人等单项已登记，未齐备指标参考 {latestObservedPoint?.date} 完整实绩；所选基准日保持 {day}。</span>
                       <details style={{ display: 'inline', marginLeft: 8 }}>
                         <summary style={{ cursor: 'pointer', color: '#0284c7', fontSize: 11 }}>来源核对</summary>
                         <span className="bd-caption" style={{ display: 'block', marginTop: 4 }}>数据源：周趋势底表 Q4 (loIsK8)</span>
@@ -1729,6 +1774,18 @@ export function BusinessDailyBoard({
                         <p className="bd-caption">
                           截至 {view.businessThrough || '待采集'}，同范围FS计划 {format(view.progress.planThroughData)} 元，实际 {format(view.progress.actualThroughData)} 元，差额（实际−计划）{format(view.progress.gapThroughData)} 元。
                         </p>
+                        {view?.platformNative && (
+                          <div className="bd-platform-reconcile-chip" style={{ margin: '8px 0', padding: '8px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#334155' }}>
+                            <strong style={{ color: DASHBOARD_PALETTE.actual }}>平台原生观测对账：</strong>
+                            {view.platformNative.status === 'missing_weekly' ? (
+                              <span>{view.platformNative.day} 聚光原生投放 ¥{format(view.platformNative.totalFee)}（信息流 ¥{format(view.platformNative.feedFee)} + 搜索 ¥{format(view.platformNative.searchFee)}）。周底表广告投放尚未回填，保持独立来源对账，不计入周表成本总口径。</span>
+                            ) : view.platformNative.status === 'difference' ? (
+                              <span>{view.platformNative.day} 聚光原生投放 ¥{format(view.platformNative.totalFee)} vs 周底表广告消耗 ¥{format(view.platformNative.weeklyAdSpend)}，<strong>差额 ¥{format(view.platformNative.delta)}</strong>（口径待核对）。两套来源独立，不擅自合并或自动抵扣。</span>
+                            ) : (
+                              <span>{view.platformNative.day} 聚光原生投放与周底表广告消耗金额一致（¥{format(view.platformNative.totalFee)}）。</span>
+                            )}
+                          </div>
+                        )}
                         <div className="bd-costs">
                           {selected &&
                             ([
@@ -1766,6 +1823,16 @@ export function BusinessDailyBoard({
                             <DataTable table={table('日 / 周 / 月费用对账')!} />
                           </details>
                         )}
+                    {table('平台原生投放分日核对 · 聚光') && (
+                      <details className="bd-table-details" style={{ marginTop: 8 }} open>
+                        <summary>
+                          {view?.platformNative?.totalFee
+                            ? `展开平台原生投放分日核对（聚光独立来源 · ${view.platformNative.day.slice(5)} ¥${format(view.platformNative.totalFee)} · ${view.platformNative.statusLabel || (view.platformNative.status === 'missing_weekly' ? '待回填' : view.platformNative.status === 'difference' ? '金额有差异' : '金额一致')}）`
+                            : '展开平台原生投放分日核对（聚光独立来源）'}
+                        </summary>
+                        <DataTable table={table('平台原生投放分日核对 · 聚光')!} />
+                      </details>
+                    )}
                         {table('预算版本 · 每日FS排期') && (
                           <details>
                             <summary>展开日 / 周排期及预算版本</summary>

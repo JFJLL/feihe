@@ -19,6 +19,7 @@ export async function ensureBusinessSchema() {
     db().prepare(`CREATE TABLE IF NOT EXISTS business_daily_reports(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,business_day TEXT NOT NULL,status TEXT NOT NULL,confirmed_by TEXT,created_at TEXT NOT NULL,fingerprint TEXT NOT NULL,payload_json TEXT NOT NULL,UNIQUE(project_id,business_day,status,fingerprint))`),
     db().prepare(`CREATE INDEX IF NOT EXISTS idx_business_report_day ON business_daily_reports(project_id,business_day,status,created_at)`),
     db().prepare(`CREATE TABLE IF NOT EXISTS business_sync_receipts(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,source_key TEXT NOT NULL,capture_id TEXT NOT NULL,state TEXT NOT NULL,captured_at TEXT NOT NULL)`),
+    db().prepare(`CREATE TABLE IF NOT EXISTS business_platform_observations(id TEXT PRIMARY KEY,project_id TEXT NOT NULL,source_key TEXT NOT NULL,account_id TEXT NOT NULL,business_day TEXT NOT NULL,natural_key_json TEXT NOT NULL,data_json TEXT NOT NULL,captured_at TEXT NOT NULL,run_id TEXT NOT NULL,UNIQUE(project_id,source_key,account_id,business_day,natural_key_json))`),
   ]).then(() => undefined).catch(error => { ready = null; throw error; });
   await ready;
 }
@@ -136,13 +137,28 @@ export async function latestDaily(projectId: string, day: string, from?: string,
   const key=JSON.stringify({projectId,day,from,to,configVersion:configVersion?.version,heads:heads.results});
   const cached=dailyViews.get(key);if(cached)return cached;
   const bundle = await currentBundle(projectId,true);
-  const view = buildDailyView(projectId, bundle, day, { from, to, threshold: config?.alertThresholdPoints });
+  let platformObservations: { sourceKey: string; accountId: string; businessDay: string; capturedAt: string; data: Record<string, unknown> }[] = [];
+  try {
+    const adKeys = config?.bindings.filter(b => b.role === 'platform_ads').map(b => b.key) || ['juguang-f', 'juguang-s'];
+    if (adKeys.length) {
+      const platRes = await db().prepare(`SELECT source_key,account_id,business_day,data_json,captured_at FROM business_platform_observations WHERE project_id=? AND source_key IN (${adKeys.map(()=>'?').join(',')}) ORDER BY business_day DESC, captured_at DESC`).bind(projectId, ...adKeys).all<{ source_key: string; account_id: string; business_day: string; data_json: string; captured_at: string }>();
+      const rows = (platRes as any)?.results || platRes || [];
+      platformObservations = rows.map((r: any) => ({
+        sourceKey: r.source_key,
+        accountId: r.account_id,
+        businessDay: r.business_day,
+        capturedAt: r.captured_at,
+        data: JSON.parse(r.data_json || '{}')
+      }));
+    }
+  } catch {}
+  const view = buildDailyView(projectId, bundle, day, { from, to, threshold: config?.alertThresholdPoints, platformObservations });
   view.fingerprint = await fingerprint(view);
   dailyViews.set(key,view);if(dailyViews.size>24)dailyViews.delete(dailyViews.keys().next().value!);
   return view;
 }
 export function dailySummary(view: DailyView): DailyView {
-  const shortTables = new Set(['板块负责人','日 / 周 / 月费用对账','达人储备及发布进度','当前执行底表 · 当月产出','核心占位词关键词表现','星盟月累计 · 电商与聚光分别核对']);
+  const shortTables = new Set(['板块负责人','日 / 周 / 月费用对账','达人储备及发布进度','当前执行底表 · 当月产出','核心占位词关键词表现','星盟月累计 · 电商与聚光分别核对','平台原生投放分日核对 · 聚光']);
   const highlights = buildBusinessHighlights(view);
   const sectionMetadata: Record<string, SectionMetadata> = {
     search: {

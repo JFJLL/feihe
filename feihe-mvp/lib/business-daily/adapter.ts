@@ -1,6 +1,6 @@
 import { parseNumericValue } from '../numeric-values';
 import { parseProjectDate } from '../date-values';
-import type { Cell, CommercePoint, DailyPoint, DailyView, Difference, Narrative, NoteSpend, ReportDocument, SourceBundle, SourceRef, SourceTable, TableView } from './types';
+import type { Cell, CommercePoint, DailyPoint, DailyView, Difference, Narrative, NoteSpend, PlatformNativeObservation, ReportDocument, SourceBundle, SourceRef, SourceTable, TableView } from './types';
 
 export const DAILY_SCHEMA_VERSION = 'business-daily/1.0.1';
 const txt = (v: unknown) => v === null || v === undefined ? '' : String(v).trim();
@@ -13,9 +13,9 @@ export function calendarDay(value: unknown): string | null {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(epoch);
 }
 const ref = (s: SourceTable | ReportDocument, row?: number, column?: number): SourceRef => ({ sourceKey: s.key, url: s.url, version: s.version, capturedAt: s.capturedAt, captureId: s.captureId, ...('range' in s ? { range: s.range } : {}), row, column });
-export function cell(value: unknown, source?: SourceRef, unavailable = false): Cell {
+export function cell(value: unknown, source?: SourceRef, unavailable = false, customReason?: string, partialValue?: number | null): Cell {
   if (/^#(?:REF!|DIV\/0!|VALUE!|N\/A|NUM!|NAME\?|ERROR!)/i.test(txt(value))) return { value: null, state: 'formula_error', reason: txt(value), source };
-  if (unavailable) return { value: null, state: 'not_collected', reason: '费用原始输入尚未登记；公式默认零不视为观测', source };
+  if (unavailable) return { value: null, state: 'not_collected', reason: customReason || '费用原始输入尚未登记；公式默认零不视为观测', source, ...(partialValue !== undefined && partialValue !== null ? { partialValue } : {}) };
   const number = parseNumericValue(value);
   return number === null ? { value: null, state: 'missing', reason: txt(value) ? '无法解释的值：' + txt(value) : '源字段为空', source } : { value: number, state: 'observed', source };
 }
@@ -41,17 +41,92 @@ export function weeklyPoints(s: SourceTable): DailyPoint[] {
     if (i < 2 || summary(r[0]) || summary(r[ix.day])) continue;
     const day = calendarDay(r[ix.day]); if (!day) continue;
     if (txt(r[2])) week = txt(r[2]);
-    // Formula totals can be zero although their primitive K/F/S inputs are blank.
-    const inputIndexes = [ix.star, ix.star + 1, ix.star + 2, ix.star + 4, ix.alliance, ix.alliance + 1, ix.alliance + 2, ix.alliance + 4];
-    const pending = inputIndexes.every(j => parseNumericValue(r[j]) === null);
-    const at = (j: number, actual = true) => cell(r[j], ref(s, i + 1, j + 1), actual && pending);
-    const commerce = (start: number): CommercePoint => {
-      const denominatorPending = pending || (/^#/.test(txt(r[start + 6])) && Number(r[start + 7]) === 0);
-      const c = (j: number): Cell => denominatorPending && !pending ? { value: null, state: 'missing', reason: '底表引用的电商内表尚未回传当日数据（公式XLOOKUP返回模板零值且进店率为#DIV/0!，属未回传）', source: ref(s, i + 1, start + j + 1) } : cell(r[start + j], ref(s, i + 1, start + j + 1), pending);
-      // These are source-local period UVs. We do not claim cross-day unique users.
-      return { investment: at(start + 5), shopUv: c(7), readUv: c(8), purchaseUv: c(9), newCustomerUv: c(10), monitoredShopUv: at(start + 11) };
+    // Primitive leaf inputs for each indicator independently:
+    const kLeaves = [ix.star, ix.alliance];
+    const fLeaves = [ix.star + 1, ix.star + 2, ix.alliance + 1, ix.alliance + 2];
+    const sLeaves = [ix.star + 4, ix.alliance + 4];
+    const adLeaves = [...fLeaves, ...sLeaves];
+
+    // Indicator-level leaf availability (distinguishing explicit 0 from null/blank):
+    const creatorAvailable = kLeaves.some(j => parseNumericValue(r[j]) !== null);
+    const feedAvailable = fLeaves.some(j => parseNumericValue(r[j]) !== null);
+    const searchAvailable = sLeaves.some(j => parseNumericValue(r[j]) !== null);
+    const adAvailable = feedAvailable && searchAvailable;
+    const anyAdLeafInput = adLeaves.some(j => parseNumericValue(r[j]) !== null);
+
+    const seoValue = parseNumericValue(r[ix.seo]);
+    const commentsValue = parseNumericValue(r[ix.comments]);
+
+    const rowEntirelyEmpty = !creatorAvailable && !anyAdLeafInput && seoValue === null && commentsValue === null;
+
+    const at = (j: number, unavailable = false, customReason?: string) => {
+      return cell(r[j], ref(s, i + 1, j + 1), unavailable, customReason);
     };
-    points.push({ date: day, week, plan: at(ix.plan, false), adSpend: at(ix.ad), creatorCost: at(ix.k), projectInvestment: at(ix.all), settlement: at(ix.settlement), feed: at(ix.f), search: at(ix.search), seo: at(ix.seo), comments: at(ix.comments), other: at(ix.other), star: commerce(ix.star), alliance: commerce(ix.alliance), source: ref(s, i + 1) });
+
+    const creatorCell = at(ix.k, !creatorAvailable, '达人费用原始输入尚未登记；公式默认零不视为观测');
+    const feedCell = at(ix.f, !feedAvailable, '投流信息流费用原始输入尚未登记；公式默认零不视为观测');
+    const searchCell = at(ix.search, !searchAvailable, '投流搜索费用原始输入尚未登记；公式默认零不视为观测');
+    const adCell = at(ix.ad, !adAvailable, '投流广告费用尚未回填；公式默认零不视为观测');
+
+    const seoCell = cell(r[ix.seo], ref(s, i + 1, ix.seo + 1), seoValue === null && rowEntirelyEmpty);
+    const commentsCell = cell(r[ix.comments], ref(s, i + 1, ix.comments + 1), commentsValue === null && rowEntirelyEmpty);
+    const otherCell = cell(r[ix.other], ref(s, i + 1, ix.other + 1), rowEntirelyEmpty);
+
+    // Total Project Investment & Settlement:
+    // If ad spend or creator is not available, the formula total lacks components and cannot be treated as complete actual total.
+    const projectInvestmentCell: Cell = (() => {
+      const rawNum = parseNumericValue(r[ix.all]);
+      if (rowEntirelyEmpty || rawNum === null) {
+        return at(ix.all, true, '费用原始输入尚未登记');
+      }
+      if (!adAvailable) {
+        return cell(r[ix.all], ref(s, i + 1, ix.all + 1), true, '投流广告费用尚未回填，总投入缺少广告组件，不作为完整实际总额（已登记部分小计：¥' + rawNum.toFixed(2) + '）', rawNum);
+      }
+      if (!creatorAvailable) {
+        return cell(r[ix.all], ref(s, i + 1, ix.all + 1), true, '达人合作费用尚未登记，总投入缺少达人组件，不作为完整实际总额（已登记部分小计：¥' + rawNum.toFixed(2) + '）', rawNum);
+      }
+      return at(ix.all, false);
+    })();
+
+    const settlementCell: Cell = (() => {
+      const rawNum = parseNumericValue(r[ix.settlement]);
+      if (rowEntirelyEmpty || rawNum === null) {
+        return at(ix.settlement, true, '费用原始输入尚未登记');
+      }
+      if (!adAvailable) {
+        return cell(r[ix.settlement], ref(s, i + 1, ix.settlement + 1), true, '投流广告费用尚未回填，缺少广告结算组件，不作为完整实际总额（已登记部分结算：¥' + rawNum.toFixed(2) + '）', rawNum);
+      }
+      if (!creatorAvailable) {
+        return cell(r[ix.settlement], ref(s, i + 1, ix.settlement + 1), true, '达人合作费用尚未登记，缺少达人结算组件，不作为完整实际总额（已登记部分结算：¥' + rawNum.toFixed(2) + '）', rawNum);
+      }
+      return at(ix.settlement, false);
+    })();
+
+    const commerce = (start: number): CommercePoint => {
+      const denominatorPending = rowEntirelyEmpty || (/^#/.test(txt(r[start + 6])) && Number(r[start + 7]) === 0);
+      const c = (j: number): Cell => denominatorPending && !rowEntirelyEmpty ? { value: null, state: 'missing', reason: '底表引用的电商内表尚未回传当日数据（公式XLOOKUP返回模板零值且进店率为#DIV/0!，属未回传）', source: ref(s, i + 1, start + j + 1) } : cell(r[start + j], ref(s, i + 1, start + j + 1), rowEntirelyEmpty);
+      // These are source-local period UVs. We do not claim cross-day unique users.
+      return { investment: at(start + 5, !adAvailable), shopUv: c(7), readUv: c(8), purchaseUv: c(9), newCustomerUv: c(10), monitoredShopUv: at(start + 11, !adAvailable) };
+    };
+    points.push({
+      date: day,
+      week,
+      plan: at(ix.plan, false),
+      adSpend: adCell,
+      creatorCost: creatorCell,
+      projectInvestment: projectInvestmentCell,
+      settlement: settlementCell,
+      feed: feedCell,
+      search: searchCell,
+      seo: seoCell,
+      comments: commentsCell,
+      other: otherCell,
+      star: commerce(ix.star),
+      alliance: commerce(ix.alliance),
+      source: ref(s, i + 1),
+      starCreator: at(ix.star, !creatorAvailable),
+      allianceCreator: at(ix.alliance, !creatorAvailable)
+    });
   }
   return points;
 }
@@ -123,7 +198,17 @@ function commerceSum(points: DailyPoint[], key: 'star' | 'alliance', totalDaysCo
 
   return result;
 }
-export function buildDailyView(projectId: string, bundle: SourceBundle, day: string, options: { from?: string; to?: string; threshold?: number } = {}): DailyView {
+export function buildDailyView(
+  projectId: string,
+  bundle: SourceBundle,
+  day: string,
+  options: {
+    from?: string;
+    to?: string;
+    threshold?: number;
+    platformObservations?: { sourceKey: string; accountId: string; businessDay: string; capturedAt: string; data: Record<string, unknown> }[];
+  } = {}
+): DailyView {
   if (!calendarDay(day) || calendarDay(day) !== day) throw new Error('日报日期无效');
   if (bundle.tables.some(s => !s.complete)) throw new Error('不完整来源不能进入业务看板');
   const sourceVersions = bundle.tables.map(s => ref(s)); if (bundle.document) sourceVersions.push(ref(bundle.document));
@@ -280,6 +365,8 @@ export function buildDailyView(projectId: string, bundle: SourceBundle, day: str
   const gapThroughData = actualThroughData !== null && planThroughData !== null ? actualThroughData - planThroughData : null;
   const latestReportDay = [...narrativeDays.keys()].sort().at(-1) || null;
   const latestCompleteDay = [...unique.values()].filter(p => p.adSpend.value !== null).at(-1)?.date || null;
+  const latestRegisteredDay = [...unique.values()].filter(p => p.adSpend.value !== null || p.creatorCost.value !== null || p.seo.value !== null).at(-1)?.date || null;
+  const financeThrough = businessThrough;
   const defaultDay = latestReportDay || latestCompleteDay || day;
   const hasCurrentNarrative = narrative.length > 0 && !isNarrativeHistorical;
   const hasSpend = selected?.adSpend?.value !== null && selected?.adSpend?.state === 'observed';
@@ -294,6 +381,116 @@ export function buildDailyView(projectId: string, bundle: SourceBundle, day: str
     dayStatus = 'empty';
   }
 
+  // Platform Native Reconciliation (Independent source)
+  let platformNative: PlatformNativeObservation | undefined = undefined;
+  const platObs = options.platformObservations || [];
+  const dayPlatObs = platObs.filter(o => o.businessDay === day && (o.sourceKey === 'juguang-f' || o.sourceKey === 'juguang-s' || o.sourceKey.startsWith('juguang')));
+  if (dayPlatObs.length > 0) {
+    let feedTotal = 0, searchTotal = 0, grandTotal = 0;
+    const tableRows: (string | number | null)[][] = [];
+    const seenPlacements = new Set<string>();
+    for (const o of dayPlatObs) {
+      const d = o.data;
+      const fee = Number(d.fee || d['消费'] || 0);
+      const imps = Number(d.impression || d['展现量'] || 0);
+      const clicks = Number(d.click || d['点击量'] || 0);
+      const placement = String(d.placementName || d['投放位置'] || (o.sourceKey.includes('f') ? '信息流' : '搜索'));
+      const placementKey = `${o.sourceKey}:${o.accountId}:${placement}`;
+      if (seenPlacements.has(placementKey)) continue;
+      seenPlacements.add(placementKey);
+
+      const accountLabel = o.sourceKey === 'juguang-f' ? `聚光信息流 (${o.accountId})` : o.sourceKey === 'juguang-s' ? `聚光搜索 (${o.accountId})` : `${o.sourceKey} (${o.accountId})`;
+      if (o.sourceKey === 'juguang-f') feedTotal += fee;
+      else if (o.sourceKey === 'juguang-s') searchTotal += fee;
+      grandTotal += fee;
+      tableRows.push([day, accountLabel, placement, Math.round(fee * 100) / 100, imps, clicks, selected?.adSpend?.value === null ? '周底表未回填' : '周底表已有值']);
+    }
+    if (grandTotal > 0) {
+      grandTotal = Math.round(grandTotal * 100) / 100;
+      feedTotal = Math.round(feedTotal * 100) / 100;
+      searchTotal = Math.round(searchTotal * 100) / 100;
+
+      const weeklyAdSpend = selected?.adSpend?.value ?? null;
+      let status: 'missing_weekly' | 'difference' | 'matched' = 'missing_weekly';
+      let statusLabel = '待回填';
+      let delta: number | null = null;
+      let totalRowStatus = '独立平台观测 · 周底表待回填';
+      let note = `周底表当日投流广告尚未回填；平台原生投放 ¥${grandTotal.toFixed(2)} 保持独立对账，不计入周表成本口径。`;
+
+      if (weeklyAdSpend === null) {
+        status = 'missing_weekly';
+        statusLabel = '待回填';
+        totalRowStatus = '独立平台观测 · 周底表待回填';
+        note = `周底表当日投流广告尚未回填；平台原生投放 ¥${grandTotal.toFixed(2)} 保持独立对账，不计入周表成本口径。`;
+        if (selected) {
+          differences.push({
+            key: `platform-unreconciled-${day}`,
+            title: `平台原生投放与周底表比对（${day} · 周底表待回填）`,
+            details: `聚光平台 ${day} 原始投放：信息流 ¥${feedTotal.toFixed(2)} + 搜索 ¥${searchTotal.toFixed(2)}，合计 ¥${grandTotal.toFixed(2)} 已存入平台观测；周底表当日广告投流列尚未回填（公式为0），保持独立来源对账，不擅自拼入周表成本总口径。`,
+            sources: [selected.source]
+          });
+        }
+      } else {
+        delta = Math.round((grandTotal - weeklyAdSpend) * 100) / 100;
+        if (Math.abs(delta) > 0.01) {
+          status = 'difference';
+          statusLabel = `金额有差异（差额 ¥${delta.toFixed(2)}）`;
+          totalRowStatus = `差异 ¥${delta.toFixed(2)} · 口径待核对`;
+          note = `平台原生投放 ¥${grandTotal.toFixed(2)} vs 周底表广告消耗 ¥${weeklyAdSpend.toFixed(2)}，差额 ¥${delta.toFixed(2)}（口径或返点政策待核对），保持独立来源不自动抵扣。`;
+          if (selected) {
+            differences.push({
+              key: `platform-diff-${day}`,
+              title: `平台原生投放与周底表金额差异（${day}）`,
+              details: `聚光平台 ${day} 原始投放合计 ¥${grandTotal.toFixed(2)}（信息流 ¥${feedTotal.toFixed(2)} + 搜索 ¥${searchTotal.toFixed(2)}），周底表当日广告消耗登记为 ¥${weeklyAdSpend.toFixed(2)}，差额 ¥${delta.toFixed(2)}。两者来源口径保持独立展示与核对，不擅自拼接或自动抵扣。`,
+              sources: [selected.source]
+            });
+          }
+        } else {
+          status = 'matched';
+          statusLabel = '金额一致';
+          totalRowStatus = '金额一致 · 独立来源';
+          note = `平台原生投放与周底表广告消耗金额一致（¥${grandTotal.toFixed(2)}）。`;
+        }
+      }
+
+      tableRows.push([
+        `${day} 聚光小计`,
+        '聚光合计',
+        '信息流 + 搜索',
+        grandTotal,
+        tableRows.reduce((a, b) => a + (Number(b[4]) || 0), 0),
+        tableRows.reduce((a, b) => a + (Number(b[5]) || 0), 0),
+        totalRowStatus
+      ]);
+
+      platformNative = {
+        day,
+        totalFee: grandTotal,
+        feedFee: feedTotal,
+        searchFee: searchTotal,
+        weeklyAdSpend,
+        delta,
+        status,
+        statusLabel,
+        note
+      };
+
+      tables.push({
+        key: 'platform-native-reconciliation',
+        title: '平台原生投放分日核对 · 聚光',
+        columns: ['业务日期', '平台/账号', '投放位置', '消耗/元', '展现量', '点击量', '对账状态'],
+        rows: tableRows,
+        source: {
+          sourceKey: 'juguang-f/juguang-s',
+          url: 'https://ad.xiaohongshu.com',
+          version: 'platform_obs',
+          capturedAt: dayPlatObs[0]?.capturedAt || ''
+        },
+        scope: `聚光原生投放数据独立采集对账；${day} 原生投放合计 ¥${grandTotal.toFixed(2)}，周底表广告消耗 ¥${weeklyAdSpend !== null ? weeklyAdSpend.toFixed(2) : '未回填'}，状态：${statusLabel}。保持独立来源展示，不擅自拼入周表成本总口径。`
+      });
+    }
+  }
+
   return {
     projectId,
     day,
@@ -302,6 +499,9 @@ export function buildDailyView(projectId: string, bundle: SourceBundle, day: str
     dayStatus,
     latestReportDay,
     latestCompleteDay,
+    latestRegisteredDay,
+    financeThrough,
+    platformNative,
     narrativeBusinessDay,
     isNarrativeHistorical,
     dates: [...new Set([...narrativeDays.keys(), ...unique.keys()])].sort(),

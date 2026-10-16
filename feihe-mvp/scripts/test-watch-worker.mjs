@@ -49,18 +49,29 @@ try {
     -- Task with invalid upstream format so it safely fails inside worker without external network call
     INSERT OR REPLACE INTO business_sync_tasks (id, project_id, source_key, name, state, spec_json, interval_minutes, next_run_at, updated_at)
     VALUES ('qicui:task-mock-fail', 'qicui', 'mock-source', '模拟容错任务', 'active', '{"type":"feishu_table","sourceKey":"mock-source","sourceUrl":"https://mock.test/weekly","forbiddenSecret":"fail-fast"}', 60, datetime('now', '-1 minute'), '2026-10-16');
+
+    -- Account and task to reach automation_platform branch and verify platformRead without ReferenceError
+    INSERT OR REPLACE INTO source_accounts (id, project_id, integration_id, external_id, name, account_type, status, metadata_json, created_at, updated_at)
+    VALUES ('acc_mock_plat', 'qicui', 'int_mock', 'mock_seller_001', '模拟平台账号', 'subaccount', 'active', '{"platform":"juguang","name":"模拟聚光"}', '2026-10-16', '2026-10-16');
+
+    INSERT OR REPLACE INTO business_sync_tasks (id, project_id, source_key, name, state, spec_json, interval_minutes, next_run_at, updated_at)
+    VALUES ('qicui:task-plat-reach', 'qicui', 'mock-plat-key', '平台分支回归任务', 'active', '{"type":"automation_platform","sourceKey":"mock-plat-key","sourceUrl":"https://ad.xiaohongshu.com/mock","platform":"juguang","accountId":"acc_mock_plat","entityIds":["mock_seller_001"],"dimension":"account","refreshDays":1}', 60, datetime('now', '-1 minute'), '2026-10-16');
   `);
   db.close();
   console.log('[BOOTSTRAP] Fresh temporary DB bootstrapped successfully without depending on user DB.\n');
 
-  // 2. Launch run-business-sync.mjs with --watch --interval 1
+  // 2. Launch run-business-sync.mjs with --watch --interval 1 and isolated stub automation-root (ZERO external/OSS/token)
   console.log('[TEST 1] Testing watch mode multi-tick scheduling & anti-reentrancy...');
   const scriptPath = path.resolve(appRoot, 'scripts/run-business-sync.mjs');
+  const isolatedStubAutomation = path.join(tempDir, 'isolated-stub-automation');
+  fs.mkdirSync(isolatedStubAutomation, { recursive: true });
+
   const child = spawn(process.execPath, [
     scriptPath,
     '--db', tempDb,
     '--watch',
     '--interval', '1',
+    '--automation-root', isolatedStubAutomation,
   ], {
     cwd: appRoot,
     stdio: ['pipe', 'pipe', 'pipe'],
@@ -93,6 +104,8 @@ try {
 
   assert.ok(stdoutData.includes('[BusinessWorker] 常驻轮询调度器已就绪'), 'Worker must log startup readiness in watch mode');
   assert.ok(stdoutData.includes('task-mock-fail'), 'Worker must process task-mock-fail');
+  assert.ok(stdoutData.includes('task-plat-reach'), 'Worker must reach and process automation_platform branch');
+  assert.ok(!stdoutData.includes('args is not defined') && !stderrData.includes('args is not defined'), 'platformRead must not throw args ReferenceError');
   assert.ok(stdoutData.includes('收到退出信号，正在安全停机'), 'Worker must intercept SIGINT and perform safe shutdown');
   console.log('  Passed: Watch mode multi-tick executed and cleanly stopped on signal.\n');
 
@@ -103,6 +116,10 @@ try {
   assert.equal(updatedTask.lease_token, null, 'Lease token must be freed on error without lock leak');
   assert.ok(updatedTask.retry_count >= 1, 'Retry count must advance on error');
   assert.ok(updatedTask.last_error, 'Last error must be recorded');
+  const platTask = dbVerify.prepare(`SELECT state, retry_count, lease_token, last_error FROM business_sync_tasks WHERE id = 'qicui:task-plat-reach'`).get();
+  assert.equal(platTask.lease_token, null, 'Platform task lease must be freed');
+  assert.ok(platTask.retry_count >= 1, 'Platform task retry count must advance');
+  assert.ok(platTask.last_error, 'Platform task error must be recorded without leaking credentials');
   dbVerify.close();
   console.log('  Passed: Lease released immediately on failure, retry count updated, no lock leak.\n');
 

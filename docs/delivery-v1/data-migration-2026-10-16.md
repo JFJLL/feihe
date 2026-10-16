@@ -350,3 +350,50 @@ node scripts/reconcile-qicui.mjs
 ### 10.3 最终状态冻结
 - 真实主库 `feihe-mvp/data/local.db` 状态健康自包含，`node scripts/run-business-sync.mjs --list-due` 扫描返回 `0 项到期任务`。
 - 代码与文档已全面冻结，QA 可立即启动 `5173` 与 `npm run business:worker`。
+
+
+
+---
+
+## 11. 真实业务数据源首轮实时同步审计报告 (用户明确授权执行)
+
+### 11.1 执行背景与一致性备份
+- **授权背景**：用户明确授权本轮立即对外部平台执行一次真实数据同步，解除静态复制与不外抓限制，落库唯一生产主库 `feihe-mvp/data/local.db`。
+- **一致性备份**：同步前生成主库完整物理快照 `feihe-mvp/data/local.db.backup.1792127001202`。
+- **防竞态与Worker控制**：同步前平稳停止旧常驻 worker（原 PID 39252），保持前端服务（PID 5084 监听 5173）不中断，按任务逐项单次准确调度。
+- **关键修复**：
+  1. 修复 `scripts/run-business-sync.mjs` 中 `platformRead` 的 `args['automation-root']` 变量未定义缺陷，改为 `options['automation-root'] || process.env.AUTOMATION_ROOT || 'D:/download/pic-vec/automation'`，并将桥接脚本路径使用 `appRoot` 绝对锚定。
+  2. 补齐 `source_accounts` 中启萃项目依赖的 4 个平台子账号（`acc_jzt_qicui`、`acc_jg_f`、`acc_jg_s`、`acc_tb_adstar`），使平台账号校验通过。原主库 5 个既有账号 100% 保持未修改，非 7 项活跃任务依赖账号已清除。
+
+### 11.2 7 个真实数据源同步明细与回执
+
+| 任务 ID | 来源类型 / 平台 | 接口端点 / 协议 | 作业 ID (Sync Job) | 来源数据日 (Through) | 返回有效行数 | 执行状态 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `qicui:weekly-q4` | 飞书表格 (周底表) | `lark-cli sheets +table-get` (loIsK8) | `2e83b059-8786-4309-8f13-869f8118fbb5` | 2026-10-15 | 45 行 | **成功 (success)** |
+| `qicui:business-report` | 飞书文档 (日报正文) | `lark-cli docs +fetch` + 嵌套日表 | `2eb2e7aa-9682-4b50-9a06-f381e919e54c` | 2026-10-15 | 110 行 | **成功 (success)** |
+| `qicui:jzt-qicui` | 京准通 (204611) | JZT API (`platforms.jzt.fetch_jzt_data`) | `d52b87b1-cac9-47cf-babb-dce7cf2bd7d7` | 2026-10-15 | 7 行 | **成功 (success)** |
+| `qicui:juguang-f` | 小红书聚光日常-F | Juguang API (`fetch_juguang_data`, account) | `8193bf3c-8d68-481d-abd7-2f7576bcea28` | 2026-10-15 | 14 行 | **成功 (success)** |
+| `qicui:juguang-s` | 小红书聚光日常-S | Juguang API (`fetch_juguang_data`, account) | `c0600be4-092f-42e3-a111-5d5be055e9e3` | 2026-10-15 | 7 行 | **成功 (success)** |
+| `qicui:adstar-qicui` | 淘宝星河 (117498869) | Taobao API (`fetch_taobao_data`, order) | `2b6f8ed8-bc71-4941-ac56-3c34472ccf18` | 2026-10-14 | 7 行 | **成功 (success)** |
+| `qicui:competitor-ipscg-*` | IPSCG 竞品监控 | HTTP API (`http://xhs.yq.ipscg.com/grab`) | `8ce01d31-c523-4f87-af80-ed592f0eeda3` | 2026-10-14 | 10 行 | **成功 (success)** |
+| `qicui:comments-register-*` | 评论执行副本 | - | - | 2026-10-13 | - | **严格保持 paused** |
+
+- **总抓取原始有效记录**：200 行真实业务数据。
+- **业务捕获记录 (Captures)**：从 51 增至 68 条（+17 条原始快照）。
+- **同步回执记录 (Receipts)**：从 86 增至 119 条（+33 条状态回执）。
+- **平台分日观测 (Observations)**：从 40 增至 45 条。
+- **日报版本与最新快照**：新增 10/16 原始日报快照，`business_daily_reports` 总数从 28 增至 36。
+
+### 11.3 核心基线与确认日报指纹审计
+- **2026-10-13 确认日报指纹**：`f5874e5bca5f59c2fa28997866e49d4e5aea1f2237b3809274ec3ddb91fa2e0e`，100% 保持未变。
+- **10/14 日报核心指标基线核验**：
+  - `adSpend`: 184,018.36
+  - `creatorCost`: 30,560.20
+  - `projectInvestment`: 219,978.56
+  - `settlement`: 213,388.4022
+  - `actualThroughData`: 3,915,166.16
+  - 核心口径与数值与 QA 同步前基线 100% 精确吻合。
+
+### 11.4 正常 Worker 调度恢复
+- **调度时间错峰**：7 项活跃任务以 6 小时周期为基准，每项错峰 20 分钟（范围 `2026-10-16T11:11:40Z` ~ `2026-10-16T13:11:40Z`），防止集中触发。
+- **项目内后台常驻 Worker**：已重新拉起单一项目常驻调度器（PID 36444，命令 `node scripts/run-business-sync.mjs --watch --project qicui`），状态正常运行。
