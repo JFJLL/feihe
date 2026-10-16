@@ -27,10 +27,12 @@ import { getProjectThemeTag } from '../../features/overview/dashboard-template';
 function ProjectShellContent({
   userName,
   signedIn,
+  isDevLocal = false,
   children,
 }: {
   userName: string;
   signedIn: boolean;
+  isDevLocal?: boolean;
   children: React.ReactNode;
 }) {
   const {
@@ -53,7 +55,7 @@ function ProjectShellContent({
   if (dataLoading && !dashboard && !isSettingsOrData) {
     return (
       <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
-        <ProjectSidebar userName={userName} signedIn={signedIn} />
+        <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} />
         <main className="main">
           <LoadingState text="正在准备项目全盘数据…" />
         </main>
@@ -181,6 +183,7 @@ export function ProjectShell({
   signedIn = true,
   userId,
   initialRole,
+  isDevLocal = false,
   children,
 }: {
   projectId: string;
@@ -188,12 +191,13 @@ export function ProjectShell({
   userName?: string;
   signedIn?: boolean;
   userId?: string;
+  isDevLocal?: boolean;
   initialRole?: 'project_admin' | 'editor' | 'viewer';
   children: React.ReactNode;
 }) {
   return (
     <ProjectProvider key={projectId} projectId={projectId} initialData={initialData} initialWorkspace={initialData?.workspace} userId={userId} initialRole={initialRole}>
-      <ProjectShellContent userName={userName} signedIn={signedIn}>
+      <ProjectShellContent userName={userName} signedIn={signedIn} isDevLocal={isDevLocal}>
         {children}
       </ProjectShellContent>
     </ProjectProvider>

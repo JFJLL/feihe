@@ -9,9 +9,11 @@ import { cnTime } from '../../lib/hooks/use-project-data';
 export function ProjectSidebar({
   userName,
   signedIn = true,
+  isDevLocal = false,
 }: {
   userName: string;
   signedIn?: boolean;
+  isDevLocal?: boolean;
 }) {
   const {
     projectId,
@@ -95,7 +97,7 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')} ·{' '}
+          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')}{(isDevLocal || workspace?.metadata?.isDevLocal) && <span style={{ marginLeft: 6, fontSize: '0.72rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 6px', borderRadius: 4 }}>本地开发</span>} ·{' '}
           {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '就绪'}
         </small>
       </div>

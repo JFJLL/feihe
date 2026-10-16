@@ -12,5 +12,6 @@ export default async function ProjectLayout({ children, params }: { children: Re
   if (!access.ok) return <IdentityBoundary identity={null}><AccessState status={access.status || 403} message={access.error} /></IdentityBoundary>;
   const context = access.context!;
   const initialData = await loadProjectBootstrap(projectId, forwarded);
-  return <IdentityBoundary identity={context.user.orgId + ':' + context.user.userId}><ProjectShell projectId={projectId} initialData={initialData} userName={context.user.displayName} signedIn={true} userId={context.user.userId} initialRole={context.projectRole}>{children}</ProjectShell></IdentityBoundary>;
+  const isDevLocal = forwarded.get('x-feihe-dev-mode') === '1';
+  return <IdentityBoundary identity={context.user.orgId + ':' + context.user.userId}><ProjectShell projectId={projectId} initialData={initialData} userName={context.user.displayName} signedIn={true} userId={context.user.userId} initialRole={context.projectRole} isDevLocal={isDevLocal}>{children}</ProjectShell></IdentityBoundary>;
 }

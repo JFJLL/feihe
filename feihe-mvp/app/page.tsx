@@ -5,7 +5,9 @@ import { AccessState } from '../components/ui/AccessState';
 import { IdentityBoundary } from '../components/project-shell/IdentityBoundary';
 export const dynamic = 'force-dynamic';
 export default async function Home() {
-  const user = await getAuthenticatedUser(new Request('http://localhost/', { headers: new Headers(await headers()) }));
+  const reqHeaders = new Headers(await headers());
+  const user = await getAuthenticatedUser(new Request('http://localhost/', { headers: reqHeaders }));
   if (!user) return <IdentityBoundary identity={null}><AccessState status={401} message="请通过已验证的公司身份入口登录后查看项目。" /></IdentityBoundary>;
-  return <IdentityBoundary identity={user.orgId + ':' + user.userId}><ProjectCenter userName={user.displayName} /></IdentityBoundary>;
+  const isDevLocal = reqHeaders.get('x-feihe-dev-mode') === '1';
+  return <IdentityBoundary identity={user.orgId + ':' + user.userId}><ProjectCenter userName={user.displayName} isDevLocal={isDevLocal} /></IdentityBoundary>;
 }

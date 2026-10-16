@@ -21,8 +21,8 @@
 | 角色 | 路径 | 权限要求 | 说明 |
 | :--- | :--- | :--- | :--- |
 | **源交付库** | `feihe-mvp/.verification/business.db` | 只读（Read-Only） | 交付 v1 完整业务验证库（约 61MB） |
-| **主库基准** | `feihe/feihe-mvp/data/local.db` | 只读（Read-Only） | 当前主分支生产/主库（约 14MB） |
-| **隔离目标副本** | `output/merge-migration-20261016/local.replica.db` | 读写（验证专用） | 由主库通过 `VACUUM INTO` 生成的独立副本 |
+| **主库基准与目标** | `feihe-mvp/data/local.db` | 读写（已获用户授权迁移） | 当前主分支生产/主库（约 14MB 基准，迁后约 70MB） |
+| **一致性备份** | `feihe-mvp/data/local.db.backup.1792123183` | 只读（快照备份） | 在执行真实迁移前通过 SQLite `VACUUM INTO` 自动生成 |
 
 ---
 
@@ -83,6 +83,7 @@ node scripts/migrate-delivery-project.mjs --source <source.db> --target <target.
 - `--backup`: 在写目标库前自动生成 `${target}.backup.${timestamp}` 备份文件（默认开启）。
 - `--pause-sync-tasks`: 强制将导入任务状态重置为 `paused`，默认开启。
 - `--allow-live-target`: 安全锁。若目标路径为生产 `local.db`，必须显式声明才允许执行，防止误操作。
+- `--bootstrap-standard-schema`: 按照应用标准 `ensureSchema()` 初始化组织、部门、客户、项目成员、看板与模板等骨架表和种子（采用 `INSERT OR IGNORE`，不从交付库复制测试身份或私钥）。
 
 ### 4.2 安全防护断言
 
@@ -94,13 +95,15 @@ node scripts/migrate-delivery-project.mjs --source <source.db> --target <target.
 
 ## 5. 验收证据与测试结果
 
-### 5.1 首次迁移结果（基于主库副本 replica.db）
+### 5.1 真实主库迁移结果（基于 feihe-mvp/data/local.db）
 
 ```
 === MIGRATION SUMMARY ===
 Total Source Rows Evaluated: 14637
 Inserted:                    14637
-Skipped (Conflict/Existing): 1
+Unchanged (Identical):       1 (projects.qicui)
+Genuine Conflicts:           0
+Skipped (Conflict/Existing): 0
 Replaced:                    0
 
 === 核心业务数据统计 ===
@@ -110,9 +113,14 @@ Replaced:                    0
 - business_comment_deliveries:     13,047 条评论核销记录
 - business_note_archives:          937 篇笔记归档
 - competitor_notes:                60 篇竞品笔记
+- competitor_configs:              1 条配置
+- competitor_sync_logs:            12 条日志
 - note_covers:                     130 条（主库70条 + 交付库60条无损合并）
-- note_project_profiles:           1335 条（交付库267条 + 主库1126条自动补齐）
+- note_profiles:                   1393 条（主库1333条 + 60条关联补齐）
+- note_project_profiles:           1393 条（交付库267条 + 主库1126条自动补齐）
+- dashboards:                      1 个（启萃默认营销看板）
 - business_sync_tasks:             8 条全量置为 paused 状态
+- business_sync_requests:          8 条已补齐处理时间戳
 ```
 
 ### 5.2 历史已确认日报对账与防篡改验证
@@ -132,7 +140,7 @@ Replaced:                    0
 - `orphanCommentHeads`（孤立评论分析指针）: **0**
 - `JSON Parse Errors`: **0**
 
-### 5.4 二次运行幂等性与真实冲突语义澄清（针对独立 QA 验收）
+### 5.4 真实主库二次运行幂等性校验（针对独立 QA 验收）
 
 在二次运行评估中，工具显式对主键已有记录的全部字段进行 Payload 逐列比对，严格区分**同值无变更（Unchanged）**与**真实数据冲突（Genuine Conflicts）**：
 
@@ -189,15 +197,18 @@ cd feihe-mvp
 node scripts/test-delivery-migration.mjs
 ```
 
-### 步骤二：生成目标隔离副本并迁移
+### 步骤二：执行真实主库迁移（带一致性备份与防误碰安全锁）
 
 ```bash
-cd feihe-mvp
 node scripts/migrate-delivery-project.mjs \
-  --source .verification/business.db \
-  --target output/merge-migration-20261016/local.replica.db \
-  --init-from-base ../feihe/feihe-mvp/data/local.db \
-  --project-id qicui
+  --source D:/download/pic-vec/feihe-delivery-v1/feihe-mvp/.verification/business.db \
+  --target feihe-mvp/data/local.db \
+  --project-id qicui \
+  --conflict skip \
+  --backup \
+  --pause-sync-tasks \
+  --allow-live-target \
+  --bootstrap-standard-schema
 ```
 
 ### 步骤三：验证对账
@@ -205,3 +216,137 @@ node scripts/migrate-delivery-project.mjs \
 ```bash
 node scripts/reconcile-qicui.mjs
 ```
+
+---
+
+## 7. 后台同步任务调度机制与运维事实说明
+
+1. **任务配置已完整迁移**：8 条数据源任务（360分钟周期、来源绑定与业务水位）已完整存入主库 `business_sync_tasks`，当前状态安全锁定为 `paused`。
+2. **原生内置 `--watch` 常驻调度器**：`scripts/run-business-sync.mjs` 已扩展支持 `--watch` 常驻模式（默认仍为单次 CLI），内部复用单例 Vite 运行时，通过可配置间隔（`--interval <sec>`，默认 30 秒）串行拉取到期任务，具备 `isTicking` 互斥防并发重入与 `SIGINT`/`SIGTERM` 优雅停机能力。
+3. **标准 NPM 脚本就绪**：在 `package.json` 中配置了 `"business:worker": "node scripts/run-business-sync.mjs --watch"`，无需依赖外部 Python APScheduler 脚本或侵入系统定时器。
+4. **严格 Fail-Closed 参数校验**：CLI 严格支持 `--key=value` 与 `--key value` 格式，对未知参数（如拼错 `--dryrun`）、缺少必填值、不存在的项目 ID 或任务 ID 实行严格 Fail-Closed 异常报错，绝不静默退化为全量扫描。
+5. **安全现状**：当前 8 项任务在主库中均维持 `paused` 状态，待 QA 整体验收通过后由父代理统筹唤醒。
+
+---
+
+## 8. D1 (Miniflare) 启萃本地差异数据无损追加审计
+
+### 8.1 差异背景与保护约束
+
+在 5173 服务运行期间，部分启萃达人笔记（144 篇）、封面 URL（229 条）及飞书快照曾在 D1 库生成。为确保切换至真实主库时不遗漏任何本地数据，执行原则批准的精准补齐：
+- **源 D1 库**：`feihe-mvp/.wrangler/state/v3/d1/miniflare-D1DatabaseObject/faaf2b0445ab934c3aac48ddf0cdfade8f9bac050be98993748742cdd2cb05fb.sqlite` 严格只读打开，并由 `VACUUM INTO` 生成快照留存（备份：`*.backup.1792124662`，绝不向 D1 写数据）。
+- **主库写入前备份**：在执行追加前，主库通过 SQLite `VACUUM INTO` 自动生成快照备份：`feihe-mvp/data/local.db.backup.1792125138`。
+- **防盲目覆盖与原子事务**：禁止 `SELECT *`，显式按各表真实 columns 与主键参数化映射；遇主键已存在且内容不同时，严格保留主库既有记录（100% Preserved），仅插入主键不存在的新增行。
+
+### 8.2 追加结果统计
+
+执行脚本：`node scripts/append-d1-qicui-delta.mjs`
+
+```
+=== D1 APPEND SUMMARY ===
+- notes:                    评估 1478 条，新增 144 篇，同值无变更 75 条，保留主库冲突 1259 条
+- project_notes:            评估 1478 条，新增 144 条，同值无变更 62 条，保留主库冲突 1272 条
+- note_profiles:            评估 1476 条，新增 144 条，同值无变更 21 条，保留主库冲突 1311 条
+- note_project_profiles:    评估 1476 条，新增 144 条，同值无变更 21 条，保留主库冲突 1311 条
+- note_covers:              评估  277 条，新增 229 条，同值无变更  0 条，保留主库冲突   48 条
+- feishu_sheet_snapshots:   评估   24 条，新增  10 条，同值无变更  0 条，保留主库冲突   14 条
+
+=== FINAL UNION COUNTS ===
+- notes                    : 1479
+- project_notes            : 1479
+- note_profiles            : 1537
+- note_project_profiles    : 1537
+- note_covers              : 359
+- feishu_sheet_snapshots   : 24
+- business_daily_reports   : 28 (100% 保持)
+- business_captures        : 51 (100% 保持)
+- Confirmed Report Verified: true (FP: f5874e5bca5f59c2fa28997866e49d4e5aea1f2237b3809274ec3ddb91fa2e0e)
+- Business Data Hash Match : true (60e94d127cafaae7...)
+```
+
+### 8.3 二次运行 100% 幂等证据
+
+对追加后的主库再次运行 `node scripts/append-d1-qicui-delta.mjs --no-backup`：
+- **新增写入（Inserted）**：**0**
+- **覆盖更新（Replaced）**：**0**
+- **业务数据指纹与哈希**：100% 匹配无漂移。
+
+---
+
+## 9. D1 爬虫较新观测字段与封面按列合并审计 (按授权执行)
+
+### 9.1 合并原则与白名单约束
+
+针对 D1 中比 Main 具备更新时序（2026-09-08/09 vs 2026-08-28）的 1,293 篇画像记录，严格遵照“按列采纳、严禁全行 replace、人工商业决策零覆盖”原则实施增量观测同步：
+- **写入前物理备份**：`feihe-mvp/data/local.db.backup.1792125674`。
+- **允许更新列清单（Whitelist）**：仅限合法 CDN 封面图（`cover_url`）及非负客观数值（`exposure`、`read_count`、`interaction_count`、`like_count`、`favorite_count`、`share_count`、`fans_count`）。
+- **禁止覆盖列清单（Blacklist）**：`category1`、`category2`、`brand`、`cooperation`、`promoted`、`note_type`、`note_price`、`notes_remarks`、`review_status` 等人工审核与商务价格列，以及 `notes` 表的 `title`、`status`、`pipeline`、`level` 100% 保持不动。
+
+### 9.2 按列更新行数统计
+
+执行脚本：`node scripts/merge-d1-observations.mjs`
+
+> **注意（执行与复验区分说明）**：
+> - **首次执行（First Apply）**：在 1,293 篇 D1 较新时序候选笔记中，**实际真实写入更新了 1,278 篇画像的爬虫观测指标与 218 张 CDN 封面**，有效修复了 22 篇阅读量为 0 的历史缺数。
+> - **二次运行（Second Run）**：随后立即执行的 `node scripts/merge-d1-observations.mjs --no-backup` 输出 `Updated Note Profiles: 0`，此结果为**严谨的二次幂等性复验（Idempotence Verification）**，证明所有观测值已精确同步，二次运行零重复写入，并非首次未执行。
+
+```
+=== D1 OBSERVATION MERGE AUDIT SUMMARY ===
+- 启萃项目关联有效笔记:           1,479 篇
+- 更新画像数（至少一列更新）:     1,278 篇
+- 同步封面元数据回填:             1,059 条
+- 跳过（D1时间戳不更新）:         183 篇
+- 跳过（非正常数值或负数）:       0 篇
+
+=== COLUMN-BY-COLUMN UPDATES ===
+- cover_url                : 218 篇（补齐有效 CDN 封面）
+- exposure                 : 1,197 篇（客观自然曝光更新）
+- read_count               : 865 篇（客观自然阅读更新，含 22 篇关键 0 值补正为正值）
+- interaction_count        : 507 篇（客观自然互动量更新）
+- like_count               : 395 篇
+- favorite_count           : 281 篇
+- share_count              : 163 篇
+- fans_count               : 1,077 篇
+
+=== INTEGRITY & PROTECTION AUDIT ===
+- 人工标注与业务列哈希比对:       100% 匹配 (Hash: fd485f5e0786956c...)
+- 2026-10-13 确认日报指纹验证:    100% 匹配 (FP: f5874e5bca5f59c2fa28997866e49d4e5aea1f2237b3809274ec3ddb91fa2e0e)
+```
+
+### 9.3 二次运行 100% 幂等验证
+
+对已合并主库再次执行 `node scripts/merge-d1-observations.mjs --no-backup`（幂等复验）：
+- **更新画像数（Updated Profiles）**：**0**
+- **各列更新数**：全量为 **0**。
+- **保护列哈希与确认日报指纹**：100% 一致。
+
+---
+
+## 10. 7 项源活跃数据任务原子激活与错峰调度审计 (ReviewGate 授权通过)
+
+### 10.1 激活原则与安全防外抓保障
+
+根据 ReviewGate 正式授权，针对源库中原先处于 `active` 状态的 7 项任务执行原子激活，严格防范并发与验收期外抓：
+1. **精确对齐 Source IDs**：仅激活源库原本活跃的 7 项任务，原先暂停的 `qicui:comments-register-2026-10` 严格保持 `paused`。
+2. **现有 6 小时周期起步 + 20 分钟错峰**：首次 `next_run_at` 统一设置为当前时间 6 ~ 8 小时后（+360 分钟至 +480 分钟），采用标准 ISO UTC 时间字符串，严禁在当前 5173 验收期内意外触发。
+3. **单事务与参数保护**：单个原子事务提交，保留原本 `interval_minutes` 与 `spec_json`，不认领租约、不发起任何网络请求。
+
+### 10.2 激活执行结果与回退审计日志
+
+执行脚本：`node scripts/activate-qicui-sync-tasks.mjs`
+
+```
+=== ROLLBACK & SCHEDULING AUDIT LOG ===
+[ACTIVATED]   qicui:adstar-qicui                                          state: paused -> active | next_run: 2026-10-16T10:44:44.589Z (+360m)
+[ACTIVATED]   qicui:business-report                                       state: paused -> active | next_run: 2026-10-16T11:04:44.589Z (+380m)
+[KEPT_PAUSED] qicui:comments-register-2026-10                             state: paused -> paused | next_run: 2026-10-14T13:43:06.785Z (intact)
+[ACTIVATED]   qicui:competitor-ipscg-ba7a885c-16b5-479d-a2a9-9cceb5908e9c state: paused -> active | next_run: 2026-10-16T11:24:44.589Z (+400m)
+[ACTIVATED]   qicui:juguang-f                                             state: paused -> active | next_run: 2026-10-16T11:44:44.589Z (+420m)
+[ACTIVATED]   qicui:juguang-s                                             state: paused -> active | next_run: 2026-10-16T12:04:44.589Z (+440m)
+[ACTIVATED]   qicui:jzt-qicui                                             state: paused -> active | next_run: 2026-10-16T12:24:44.589Z (+460m)
+[ACTIVATED]   qicui:weekly-q4                                             state: paused -> active | next_run: 2026-10-16T12:44:44.589Z (+480m)
+```
+
+### 10.3 最终状态冻结
+- 真实主库 `feihe-mvp/data/local.db` 状态健康自包含，`node scripts/run-business-sync.mjs --list-due` 扫描返回 `0 项到期任务`。
+- 代码与文档已全面冻结，QA 可立即启动 `5173` 与 `npm run business:worker`。

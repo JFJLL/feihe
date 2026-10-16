@@ -40,7 +40,8 @@ export async function GET(request?: Request) {
     let steps: string[] = [];
     try { steps = JSON.parse(onboarding?.completedStepsJson || '[]'); } catch {}
     return Response.json({ ok: true, project, members: members.results, availableUsers: availableUsers.results, onboarding,
-      currentUser: user, projectRole: context.projectRole, canManage: context.canManage,
+      currentUser: user,
+    isDevLocal: Boolean(request?.headers.get('x-feihe-dev-mode') === '1'), projectRole: context.projectRole, canManage: context.canManage,
       canWrite: context.canWrite && !Number(context.project.is_archived), readiness: await projectReadiness(context.projectId, steps) });
   }
 
@@ -74,6 +75,7 @@ export async function GET(request?: Request) {
   return Response.json({ ok: true, projects: visible, sources: sources.results, metadata: {
     departments: departments.results, clients: clients.results, templates: catalog, users: users.results,
     canManageOrganization: admin, platformContacts: users.results.filter(u => u.role === 'platform_admin'), currentUser: user,
+    isDevLocal: Boolean(request?.headers.get('x-feihe-dev-mode') === '1'),
   } });
 }
 

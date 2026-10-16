@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 
@@ -10,7 +11,7 @@ export function parseArgs(argv = process.argv.slice(2)) {
     const item = argv[i];
     if (item.startsWith('--')) {
       const key = item.slice(2);
-      if (key === 'dry-run' || key === 'plan' || key === 'backup' || key === 'no-backup' || key === 'pause-sync-tasks' || key === 'preserve-sync-state' || key === 'allow-live-target') {
+      if (key === 'dry-run' || key === 'plan' || key === 'backup' || key === 'no-backup' || key === 'pause-sync-tasks' || key === 'preserve-sync-state' || key === 'allow-live-target' || key === 'bootstrap-standard-schema') {
         flags[key] = true;
       } else if (i + 1 < argv.length && !argv[i + 1].startsWith('--')) {
         flags[key] = argv[++i];
@@ -30,6 +31,7 @@ export function parseArgs(argv = process.argv.slice(2)) {
     conflict: flags.conflict || 'skip', // 'skip' or 'replace'
     pauseSyncTasks: flags['preserve-sync-state'] ? false : (flags['pause-sync-tasks'] !== false),
     allowLiveTarget: Boolean(flags['allow-live-target']),
+    bootstrapStandardSchema: Boolean(flags['bootstrap-standard-schema']),
   };
 }
 
@@ -353,6 +355,56 @@ export function ensureTargetSchema(targetDb) {
   `);
 }
 
+export function bootstrapStandardSeeds(targetDb) {
+  // 6. Standard application schema bootstrap seeds (INSERT OR IGNORE preserves all existing data)
+  targetDb.exec(`
+    INSERT OR IGNORE INTO organizations(id, name, slug, created_at, updated_at)
+    VALUES('org-default', '通用项目协同中台', 'default', datetime('now'), datetime('now'));
+
+    INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+    VALUES
+      ('dept-marketing', 'org-default', '市场与营销部', datetime('now'), datetime('now')),
+      ('dept-operations', 'org-default', '渠道与运营部', datetime('now'), datetime('now')),
+      ('dept-brand', 'org-default', '品牌战略部', datetime('now'), datetime('now')),
+      ('dept-general', 'org-default', '综合管理部', datetime('now'), datetime('now'));
+
+    INSERT OR IGNORE INTO clients(id, org_id, name, industry, created_at, updated_at)
+    VALUES
+      ('client-feihe', 'org-default', '飞鹤乳业', '快消母婴', datetime('now'), datetime('now')),
+      ('client-internal', 'org-default', '公司内部部门', '内部管理', datetime('now'), datetime('now'));
+
+    INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
+    VALUES
+      ('user-admin', 'admin@company.local', '平台管理员', 'platform_admin', 'dept-general', datetime('now'), datetime('now')),
+      ('user-project-manager', 'pm@company.local', '项目主管(李强)', 'user', 'dept-marketing', datetime('now'), datetime('now')),
+      ('user-editor', 'editor@company.local', '业务编辑者(张晓)', 'user', 'dept-marketing', datetime('now'), datetime('now')),
+      ('user-viewer', 'viewer@company.local', '项目观察员(王悦)', 'user', 'dept-operations', datetime('now'), datetime('now'));
+
+    INSERT OR IGNORE INTO project_members(id, project_id, user_id, role, created_at, updated_at)
+    VALUES
+      ('qicui:user-admin', 'qicui', 'user-admin', 'project_admin', datetime('now'), datetime('now')),
+      ('qicui:user-project-manager', 'qicui', 'user-project-manager', 'project_admin', datetime('now'), datetime('now')),
+      ('qicui:user-editor', 'qicui', 'user-editor', 'editor', datetime('now'), datetime('now')),
+      ('qicui:user-viewer', 'qicui', 'user-viewer', 'viewer', datetime('now'), datetime('now'));
+
+    INSERT OR IGNORE INTO project_onboarding(project_id, current_step, completed_steps_json, selected_template_id, updated_at)
+    VALUES('qicui', 'ready', '["template","source","first_sync","metrics","ready"]', 'content_marketing', datetime('now'));
+
+    INSERT OR IGNORE INTO project_templates(id, name, description, icon, modules_json, default_metrics_json, default_dashboard_json, version)
+    VALUES
+      ('general_workbench', '通用数据工作台', '适用于任意非社媒表格数据集，如活动排期、任务分工、预算支出等，支持通用指标统计与看板呈现。', 'table',
+       '["overview","data","reports","settings"]',
+       '["task_total","task_completed","task_completion_rate","budget_total","spent_total","budget_spent_rate"]',
+       '{"cards":[{"id":"c1","title":"任务总数","type":"metric_card","metric":"task_total"},{"id":"c2","title":"已完成数","type":"metric_card","metric":"task_completed"},{"id":"c3","title":"任务完成率","type":"metric_card","metric":"task_completion_rate"},{"id":"c4","title":"预算执行率","type":"metric_card","metric":"budget_spent_rate"},{"id":"c5","title":"按负责人状态分布","type":"bar_chart","dimension":"owner","metric":"task_completed"}]}',
+       '1.0.0'),
+      ('content_marketing', '内容营销项目', '适用于品牌内容种草、笔记资产沉淀、博主合作与曝光互动效果跟踪。', 'sparkles',
+       '["overview","content","growth","data","reports","settings"]',
+       '["published_notes","interactions","reads","ctr","spend","cpe"]',
+       '{"cards":[{"id":"cm1","title":"发布笔记数","type":"metric_card","metric":"published_notes"},{"id":"cm2","title":"总互动量","type":"metric_card","metric":"interactions"},{"id":"cm3","title":"互动成本 CPE","type":"metric_card","metric":"cpe"},{"id":"cm4","title":"内容趋势","type":"trend_chart","metric":"interactions"}]}',
+       '1.0.0');
+  `);
+}
+
 export function runMigration(options) {
   const {
     source,
@@ -365,6 +417,7 @@ export function runMigration(options) {
     conflict,
     pauseSyncTasks,
     allowLiveTarget,
+    bootstrapStandardSchema,
   } = options;
 
   if (!source || !fs.existsSync(source)) {
@@ -443,6 +496,10 @@ export function runMigration(options) {
 
   try {
     ensureTargetSchema(targetDb);
+    if (bootstrapStandardSchema) {
+      log('Bootstrapping standard application schema seeds (organizations, departments, clients, users, project_members, templates)...');
+      bootstrapStandardSeeds(targetDb);
+    }
 
     const stats = {
       projectId,
@@ -948,7 +1005,11 @@ export function auditIntegrity(db, projectId) {
 }
 
 // CLI entry point
-if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname.replace(/^\/([a-zA-Z]:)/, '$1'))) {
+const isMain = process.argv[1] && (
+  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url)) ||
+  path.resolve(process.argv[1]).endsWith('migrate-delivery-project.mjs')
+);
+if (isMain) {
   try {
     const args = parseArgs();
     if (!args.source || !args.target) {

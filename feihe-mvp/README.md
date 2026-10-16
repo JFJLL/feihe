@@ -18,12 +18,22 @@
 
 项目会复用上一级目录的 `config.json`，不会把凭证复制到源码中。
 
+### 1. 普通开发启动（默认 Node Runtime + 主库）
 ```bash
-cd /Users/user/Documents/feihe/feihe-mvp
-PATH='/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin':$PATH node scripts/dev.mjs
+cd feihe-mvp
+node scripts/dev.mjs
+```
+- 本地启动默认在 Node Runtime 下运行，直连主库 `data/local.db`。
+- 本机环回访问（`http://127.0.0.1:5173/`）自动注入受限本地开发身份（`user-editor` 业务编辑者），无需配置测试头或环境变量。
+
+### 2. 显式 Cloudflare Runtime 模式（保留选项）
+```bash
+ENABLE_CLOUDFLARE_RUNTIME=true node scripts/dev.mjs
 ```
 
-打开 `http://127.0.0.1:5173/`。
+### 3. 生产部署与鉴权
+- 生产环境（`REQUIRE_PROD_AUTH=true` 或 `NODE_ENV=production`）严格强制公司网关签名鉴权，禁用本地开发身份注入。
+- 使用 `npm run build` 打包 Cloudflare Workers 生产部署产物。
 
 ## 推荐使用顺序
 

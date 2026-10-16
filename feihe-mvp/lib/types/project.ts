@@ -429,6 +429,7 @@ export type Workspace = {
     canManageOrganization?: boolean;
     platformContacts?: Array<{ id: string; name: string; email: string }>;
     currentUser?: { userId: string; email: string; displayName: string; role: string; departmentId?: string; orgId?: string };
+    isDevLocal?: boolean;
   };
 };
 
