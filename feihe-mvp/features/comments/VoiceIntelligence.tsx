@@ -99,19 +99,23 @@ function SentimentDonut({
   total,
   positiveRate,
 }: {
-  positive: number;
-  neutral: number;
-  question: number;
-  negative: number;
+  positive: number | null;
+  neutral: number | null;
+  question: number | null;
+  negative: number | null;
   total: number;
-  positiveRate: number;
+  positiveRate: number | null;
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const pos = positive ?? 0;
+  const neu = neutral ?? 0;
+  const q = question ?? 0;
+  const neg = negative ?? 0;
   const items = [
-    { label: '正向好评', count: positive, color: '#16a34a', pct: total ? (positive / total) * 100 : 0 },
-    { label: '中立讨论', count: neutral, color: '#94a3b8', pct: total ? (neutral / total) * 100 : 0 },
-    { label: '购买问询', count: question, color: '#ea580c', pct: total ? (question / total) * 100 : 0 },
-    { label: '负向风险', count: negative, color: '#dc2626', pct: total ? (negative / total) * 100 : 0 },
+    { label: '正向好评', count: pos, color: '#16a34a', pct: total ? (pos / total) * 100 : 0 },
+    { label: '中立讨论', count: neu, color: '#94a3b8', pct: total ? (neu / total) * 100 : 0 },
+    { label: '购买问询', count: q, color: '#ea580c', pct: total ? (q / total) * 100 : 0 },
+    { label: '负向风险', count: neg, color: '#dc2626', pct: total ? (neg / total) * 100 : 0 },
   ];
   const size = 150;
   const baseStroke = 24;
@@ -266,10 +270,10 @@ export function VoiceIntelligence({
           <div className="reference-kpi-meta">已识别为正向的评论</div>
           <div className="reference-kpi-delta">{topPositive ? `主要主题：${String(topPositive.name)}` : '暂无正向主题分类'}</div>
         </article>
-        <article className={`pastel-card pastel-${m.negativeCount > 0 ? 'amber' : 'teal'} reference-kpi`}>
+        <article className={`pastel-card pastel-${num(m.negativeCount) > 0 ? 'amber' : 'teal'} reference-kpi`}>
           <div className="stat-head">
             <span>负向风险评论</span>
-            <span className={`section-mini-tag tag-${m.negativeCount > 0 ? 'orange' : 'teal'}`}>风险监控</span>
+            <span className={`section-mini-tag tag-${num(m.negativeCount) > 0 ? 'orange' : 'teal'}`}>风险监控</span>
           </div>
           <div className="stat-value">{compact(m.negativeCount)}<small> 条</small></div>
           <div className="reference-kpi-meta">需闭环处置的负面舆情</div>
@@ -308,8 +312,8 @@ export function VoiceIntelligence({
           title="口碑趋势动态走势"
           desc="仅显示真实抓取快照；不同日期的监测笔记范围可能不同，数值不是每日新增评论。"
         >
-          {(data.analytics?.trend || []).length < 3 ? <div className="empty">真实历史快照不足，暂不展示趋势。积累至少 3 个观测日期后显示。</div> : <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="口碑趋势动态走势" series={[
-            {key:'total',label:'总评论',color:'#0284c7'}, {key:'positive',label:'正向',color:'#16a34a'},
+          {(data.analytics?.trend || []).length < 3 ? <div className="empty">真实历史快照不足，暂不展示趋势。积累至少 3 个观测日期后显示。</div> : <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="供应商交付登记日度趋势" series={[
+            {key:'total',label:'交付量',color:'#0284c7'}, {key:'positive',label:'正向',color:'#16a34a'},
             {key:'negative',label:'负向',color:'#dc2626'}, {key:'question',label:'问询',color:'#ea580c'},
           ]} />}
         </DashboardSection>

@@ -30,7 +30,7 @@ function loadComponent(filename) {
     assert(resolved, `Local import resolves: ${name}`);
     return loadComponent(resolved);
   };
-  vm.runInNewContext(`(function(require, module, exports) { ${compiled}\n})`, {})(require, result, result.exports);
+  vm.runInNewContext(`(function(require, module, exports) { ${compiled}\n})`, { URLSearchParams })(require, result, result.exports);
   moduleCache.set(filename, result.exports);
   return result.exports;
 }

@@ -6,6 +6,7 @@ export type NavItem = {
   title: string;
   description: string;
   defaultTab?: string;
+  inSidebar?: boolean;
 };
 
 export const PROJECT_NAV_ITEMS: NavItem[] = [
@@ -16,6 +17,16 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     label: '项目总览',
     title: '项目总览',
     description: '项目经营与全盘进展',
+    inSidebar: true,
+  },
+  {
+    id: 'ads',
+    path: 'ads',
+    number: '02',
+    label: '投流分析',
+    title: '投流分析',
+    description: '信息流分析与搜索分析',
+    inSidebar: true,
   },
   {
     id: 'growth',
@@ -25,6 +36,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     title: '竞品分析',
     description: '声量格局、本竞品对比与机会雷达',
     defaultTab: 'competitor',
+    inSidebar: true,
   },
   {
     id: 'content',
@@ -34,6 +46,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     title: '内容管理',
     description: '内容效率、内容台账与发布监测',
     defaultTab: 'analysis',
+    inSidebar: true,
   },
   {
     id: 'comments',
@@ -43,6 +56,7 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     title: '评论运营',
     description: '口碑分析、评论采集、处置与供应商核验',
     defaultTab: 'voice',
+    inSidebar: true,
   },
   {
     id: 'settings',
@@ -50,10 +64,45 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     number: '05',
     label: '项目设置',
     title: '项目设置',
-    description: '项目资料、目标规则、数据源与数据地图',
+    description: '项目资料、目标规则、数据管理、指标、报告与数据地图',
     defaultTab: 'profile',
+    inSidebar: true,
+  },
+  // 以下模块已归入项目设置二级导航，不再平铺在主侧栏，但保留条目以兼容旧路由/深链与校验
+  {
+    id: 'data',
+    path: 'data',
+    number: '06',
+    label: '数据管理',
+    title: '数据管理',
+    description: '数据源、数据集与同步配置',
+    defaultTab: 'sources',
+    inSidebar: false,
+  },
+  {
+    id: 'metrics',
+    path: 'metrics',
+    number: '07',
+    label: '指标',
+    title: '项目指标',
+    description: '共享计算口径、版本和项目来源',
+    inSidebar: false,
+  },
+  {
+    id: 'reports',
+    path: 'reports',
+    number: '08',
+    label: '报告',
+    title: '项目报告',
+    description: '同口径结果、报告历史与导出',
+    inSidebar: false,
   },
 ];
+
+export const SETTINGS_SECTION_IDS = new Set(['settings', 'data', 'metrics', 'reports']);
+export function isSettingsSection(section: string): boolean {
+  return SETTINGS_SECTION_IDS.has(section);
+}
 
 export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: string }> = {
   cockpit: { module: '' },
@@ -85,19 +134,23 @@ export const LEGACY_SECTION_REDIRECTS: Record<string, { module: string; tab?: st
   sentiment: { module: 'comments', tab: 'voice' },
   voice: { module: 'comments', tab: 'voice' },
   insights: { module: 'comments', tab: 'voice' },
-  reports: { module: 'comments', tab: 'voice' },
-  report: { module: 'comments', tab: 'voice' },
+  reports: { module: 'reports' },
+  report: { module: 'reports' },
+  metrics: { module: 'metrics' },
+  metric: { module: 'metrics' },
   agent: { module: 'comments', tab: 'voice' },
   ai: { module: 'comments', tab: 'voice' },
   settings: { module: 'settings', tab: 'profile' },
   profile: { module: 'settings', tab: 'profile' },
   rules: { module: 'settings', tab: 'rules' },
-  'data-sources': { module: 'settings', tab: 'data-sources' },
-  sources: { module: 'settings', tab: 'data-sources' },
+  board: { module: 'settings', tab: 'board' },
+  'data-sources': { module: 'data', tab: 'sources' },
+  sources: { module: 'data', tab: 'sources' },
   integrations: { module: 'settings', tab: 'integrations' },
   tools: { module: 'settings', tab: 'integrations' },
   'data-map': { module: 'settings', tab: 'data-map' },
   map: { module: 'settings', tab: 'data-map' },
+  data: { module: 'data' },
 };
 
 export function resolveProjectRoute(projectId: string, section?: string, searchParams?: URLSearchParams): string {

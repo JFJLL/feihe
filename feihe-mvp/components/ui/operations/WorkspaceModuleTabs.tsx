@@ -86,18 +86,25 @@ export function WorkspaceModuleTabs({
 
   const gridClass = `ops-module-tabs-${tabs.length}`;
   return (
-    <nav className={`ops-module-tabs ${gridClass}`} aria-label="模块切换">
-      {tabs.map((t) => {
+    <nav className={`ops-module-tabs ${gridClass}`} aria-label="模块切换" role="tablist">
+      {tabs.map((t, idx) => {
         const isActive = activeTab === t.id;
         return (
           <button
+            ref={(el) => { tabsRef.current[idx] = el; }}
             key={t.id}
+            id={`workspace-tab-${t.id}`}
             type="button"
-            aria-pressed={isActive}
+            role="tab"
+            tabIndex={isActive ? 0 : -1}
+            aria-selected={isActive}
+            aria-controls={`workspace-tabpanel-${t.id}`}
+            data-tab-id={t.id}
             className={`ops-module-tab ${isActive ? 'active' : ''}`}
             onClick={() => {
               if (!isActive) onChange(t.id);
             }}
+            onKeyDown={(e) => handleKeyDown(e, idx)}
           >
             <span className="ops-module-tab-icon" aria-hidden="true">{t.icon}</span>
             <div className="ops-module-tab-body">

@@ -14,6 +14,7 @@ export function SyncButton({ projectId, onRefresh }: { projectId: string; onRefr
       const response=await fetch('/api/feishu/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({projectId,all:true})});
       const result=await response.json() as FeishuSyncResult & {error?:string};
       if(!response.ok)throw new Error(result.error||result.message||'同步失败');
+      window.dispatchEvent(new CustomEvent('app:datasets-changed',{detail:{projectId}}));
       await onRefresh({fresh:true});
       setStatus(result.ok?'success':'error');setMessage(result.message);
     } catch(e){setStatus('error');setMessage(e instanceof Error?e.message:'同步失败，请重试');}

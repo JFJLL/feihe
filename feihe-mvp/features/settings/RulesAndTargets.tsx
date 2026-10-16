@@ -370,11 +370,14 @@ export function RulesAndTargets({
       <section className="settings-grid">
         <article className="panel pastel-card reference-section section-blue">
           <PanelHead eyebrow="ACCEPTANCE" title="验收与更新阈值" />
+          <p>{acceptance.targetsConfirmed === false || !acceptance.reportCount || !acceptance.baseCount ? '评论验收目标未设置。0表示未设置；填写本项目的正整数目标并保存后才用于验收，不继承其他客户目标。' : '当前为本项目已确认的验收目标，修改后请保存。'}</p>
           <div className="form-grid">
             <label>
               可汇报最低评论数
               <input
                 type="number"
+                min="0"
+                step="1"
                 value={acceptance.reportCount}
                 onChange={(e) =>
                   setAcceptance({ ...acceptance, reportCount: num(e.target.value) })
@@ -385,6 +388,8 @@ export function RulesAndTargets({
               基础达标评论数
               <input
                 type="number"
+                min="0"
+                step="1"
                 value={acceptance.baseCount}
                 onChange={(e) =>
                   setAcceptance({ ...acceptance, baseCount: num(e.target.value) })

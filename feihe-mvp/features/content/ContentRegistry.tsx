@@ -11,6 +11,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact, cnTime, pct } from '../../lib/hooks/use-project-data';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
 import { NoteSummaryBoard } from './NoteSummaryBoard';
+const todayInBusinessTime=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date());
 
 export function ContentRegistry({
   projectId,
@@ -40,8 +41,8 @@ export function ContentRegistry({
   const [scope, setScope] = useState(searchParams.get('scope') || '');
   const [status, setStatus] = useState(searchParams.get('status') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
-  const [from, setFrom] = useState(searchParams.get('from') || '');
-  const [to, setTo] = useState(searchParams.get('to') || '');
+  const [from, setFrom] = useState(searchParams.get('from') || (searchParams.get('period')==='history' ? '':todayInBusinessTime().slice(0,7)+'-01'));
+  const [to, setTo] = useState(searchParams.get('to') || (searchParams.get('period')==='history' ? '':todayInBusinessTime()));
   const [sort, setSort] = useState(searchParams.get('sort') || '');
   const [order, setOrder] = useState(searchParams.get('order') || 'desc');
   const [page, setPage] = useState(Math.max(1, parseInt(searchParams.get('page') || '1', 10)));
@@ -61,8 +62,8 @@ export function ContentRegistry({
     setScope('');
     setStatus('');
     setCategory('');
-    setFrom('');
-    setTo('');
+    setFrom(todayInBusinessTime().slice(0,7)+'-01');
+    setTo(todayInBusinessTime());
     setSort('');
     setOrder('desc');
     setPage(1);
@@ -77,6 +78,7 @@ export function ContentRegistry({
   const syncToUrl = useCallback((nextState: { query: string; source: string; scope: string; status: string; category: string; from: string; to: string; sort: string; order: string; page: number }) => {
     try {
       const p = new URLSearchParams(window.location.search);
+      if(!nextState.from && !nextState.to)p.set('period','history');else p.delete('period');
       if (nextState.query) p.set('query', nextState.query); else p.delete('query');
       if (nextState.source) p.set('source', nextState.source); else p.delete('source');
       if (nextState.scope) p.set('scope', nextState.scope); else p.delete('scope');
@@ -104,8 +106,8 @@ export function ContentRegistry({
       setScope(p.get('scope') || '');
       setStatus(p.get('status') || '');
       setCategory(p.get('category') || '');
-      setFrom(p.get('from') || '');
-      setTo(p.get('to') || '');
+      setFrom(p.get('from') || (p.get('period')==='history' ? '':todayInBusinessTime().slice(0,7)+'-01'));
+      setTo(p.get('to') || (p.get('period')==='history' ? '':todayInBusinessTime()));
       setSort(p.get('sort') || '');
       setOrder(p.get('order') || 'desc');
       setPage(Math.max(1, parseInt(p.get('page') || '1', 10)));
@@ -356,6 +358,8 @@ export function ContentRegistry({
         }
       >
         <WorkspaceToolbar>
+          <button type="button" className="btn btn-sm" onClick={()=>{setFrom(todayInBusinessTime().slice(0,7)+'-01');setTo(todayInBusinessTime());setPage(1);}}>当月新发</button>
+          <button type="button" className="btn btn-sm" onClick={()=>{setFrom('');setTo('');setPage(1);}}>查看历史</button>
           <input
             type="text"
             placeholder="搜索标题 / 博主 / 笔记ID"

@@ -1,9 +1,14 @@
-# Local credentials
+﻿# Local credentials
 config.json
 token.txt
 
 # Large data files and raw sheets
 data/
+# Project data workspaces are source code, not raw data archives.
+!/feihe-mvp/features/data/
+!/feihe-mvp/features/data/**
+!/feihe-mvp/app/projects/*/data/
+!/feihe-mvp/app/projects/*/data/page.tsx
 outputs/
 *.xlsx
 !docs/*.xlsx
@@ -30,3 +35,18 @@ __pycache__/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Test evidence & run-time artifacts (scoped, never global *.png/*.zip)
+docs/*/browser-results/
+docs/*/browser-report/
+docs/*/evidence/
+docs/*/final-focused-evidence/
+docs/*/final-validation-*/
+docs/*/structure-evidence/
+docs/*/board-evidence/
+docs/*/screenshots/
+docs/delivery-v1/screenshots/
+output/
+feihe-mvp/output/
+feihe-mvp/.verification/
+feihe-mvp/.playwright-cli/

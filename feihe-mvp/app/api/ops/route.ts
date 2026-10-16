@@ -1,8 +1,8 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { apiUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { DEFAULT_RULES } from '@/lib/classify';
 import { getSetting } from '@/lib/ops';
-import { projectId } from '@/lib/projects';
+import { defaultAcceptance } from '@/lib/business-targets';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,11 +23,15 @@ export function invalidateOpsCache(project?: string) {
 }
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const url = new URL(request.url);
+  const rawProject = url.searchParams.get('projectId');
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, rawProject, 'read')
+    : (await apiUser() ? { ok: true, status: 200, error: '', context: { projectId: String(rawProject || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
   await ensureSchema();
   const d1 = db();
-  const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
   const visibility = url.searchParams.get('visibility') || '';
   const fresh = url.searchParams.get('fresh') === '1' || Boolean(url.searchParams.get('_t'));
   const cacheKey = `ops:${project}:${visibility}`;
@@ -71,7 +75,7 @@ export async function GET(request: Request) {
     completedJobsRow,
   ] = await Promise.all([
     d1.prepare('SELECT id,type,title,status,progress,total,succeeded,failed,message,created_at AS createdAt,finished_at AS finishedAt FROM jobs WHERE project_id=? ORDER BY created_at DESC LIMIT 40').bind(project).all(),
-    d1.prepare('SELECT id,action,target_type AS targetType,target_id AS targetId,detail,created_at AS createdAt FROM action_logs WHERE project_id=? ORDER BY created_at DESC LIMIT 60').bind(project).all(),
+    d1.prepare('SELECT id,action,target_type AS targetType,target_id AS targetId,detail,actor_user_id AS actorUserId,created_at AS createdAt FROM action_logs WHERE project_id=? ORDER BY created_at DESC LIMIT 60').bind(project).all(),
     visibility ? d1.prepare(supplierSql).bind(project, visibility).all() : d1.prepare(supplierSql).bind(project).all(),
     d1.prepare(`SELECT visibility,COUNT(*) AS count,ROUND(AVG(LENGTH(planned_content)),1) AS avgLength,
       ROUND(AVG(CASE WHEN planned_content LIKE '%，%' OR planned_content LIKE '%,%' THEN 1.0 ELSE 0 END)*100,1) AS commaRate,
@@ -79,7 +83,7 @@ export async function GET(request: Request) {
       FROM supplier_comments WHERE project_id=? AND visibility!='待核验' GROUP BY visibility`).bind(project).all(),
     d1.prepare(`SELECT category,sentiment,COUNT(*) AS count FROM key_comments WHERE project_id=? AND disappeared_at IS NULL GROUP BY category,sentiment ORDER BY count DESC LIMIT 12`).bind(project).all(),
     getSetting('rules', DEFAULT_RULES, project),
-    getSetting('acceptance', { reportCount: 200, baseCount: 30, brandTopRate: 0.4, freshnessHours: 24, supplierSimilarity: 0.58 }, project),
+    getSetting('acceptance', defaultAcceptance(project), project),
     getSetting('goals', { workTarget: 0, workCompleted: 0, monthlyTarget: 0, quarterlyTarget: 0, publishTarget: 0, budgetTarget: 0, commentTarget: 0 }, project),
     getSetting('growth', { watchKeywords: [], inspirations: [], seedNoteIds: [], thresholds: { breakoutInteractions: 1000, seedScore: 65, ctr: 0.15, cpuv: 0.7 } }, project),
     d1.prepare(`SELECT id,name,keywords,sentiment,category,action,priority,enabled,updated_at AS updatedAt FROM review_rules WHERE project_id=? ORDER BY priority,updated_at DESC`).bind(project).all(),

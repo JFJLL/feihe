@@ -1,6 +1,6 @@
 'use client';
 
-import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { NoteCover } from '../../components/ui/NoteCover';
 import { GrowthSampleBoard } from './GrowthSampleBoard';
 import { display, completeSum, ratio, percent } from './metrics';
 import { useState } from 'react';
@@ -270,7 +270,7 @@ export function KeywordRadar({
                   </div>
                 ))
               ) : (
-                <EmptyState title="尚未设置观察关键词" text="添加关键词后将自动计算匹配笔记与机会明细。" />
+                <EmptyState compact title="尚未设置观察关键词" text="添加关键词后将自动计算匹配笔记与机会明细。" />
               )}
             </div>
           </section>
@@ -284,12 +284,16 @@ export function KeywordRadar({
               {hotNotes.slice(0, 12).map((note) => (
                 <article key={note.id}>
                   <div>
-                    <NoteThumbnail
+                    <NoteCover
                       src={note.coverUrl}
+                      noteId={note.id}
+                      projectId={data.projectId || 'qicui'}
                       title={note.title}
                       author={note.author}
                       category={noteDirection(note)}
+                      url={note.url}
                       className="note-radar-cover"
+                      aspectRatio="3:4"
                     />
                     <i>{note.sourceType === 'commercial' ? '商业笔记' : note.sourceType || '来源未标注'}</i>
                   </div>
@@ -317,8 +321,7 @@ export function KeywordRadar({
                 </article>
               ))}
               {!hotNotes.length && (
-                <EmptyState
-                  title="暂无高热笔记"
+                <EmptyState compact title="暂无高热笔记"
                   text="当前筛选周期内暂未发现达到爆文阈值的笔记，可调整阈值或同步更多数据。"
                 />
               )}

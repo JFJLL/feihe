@@ -10,8 +10,9 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { api, cnTime, pct } from '../../lib/hooks/use-project-data';
-import type { Dashboard, Acceptance } from '../../lib/types/project';
+import type { Dashboard, Acceptance, Note } from '../../lib/types/project';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from '../content/content-view-model';
+import { acceptanceTargetsConfirmed } from '../../lib/business-targets';
 
 export function AcceptanceDelivery({
   projectId,
@@ -26,7 +27,7 @@ export function AcceptanceDelivery({
   acceptance: Acceptance;
   openNote: (id: string) => void;
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
-  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: any[]; maxCount?: number }) => void;
+  openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
 }) {
   const handlePipelineClick = (pipeName: string) => {
     if (!openCategoryNotes) return;
@@ -151,42 +152,44 @@ export function AcceptanceDelivery({
     return () => controller.abort();
   }, [projectId, modalFilter, modalPage, toast]);
 
-  const reportReq = acceptance.reportCount || 200;
-  const baseReq = acceptance.baseCount || 30;
-  const brandReqRate = acceptance.brandTopRate || 0.4;
+  const targetsConfirmed = acceptanceTargetsConfirmed(acceptance);
+  const reportReq = acceptance.reportCount;
+  const baseReq = acceptance.baseCount;
+  const brandReqRate = acceptance.brandTopRate;
 
   return (
     <div className="stack animate-fade-in">
+      {!targetsConfirmed && <p role="status">本项目验收目标未设置。请在项目规则中确认目标；当前不判定可汇报、基础达标或补量缺口。</p>}
       {/* 顶部真实经营 KPI */}
       <section className="ops-metric-grid">
         <MetricCard
           theme="green"
           label="符合且能汇报"
-          value={summary.reportableCount.toLocaleString()}
+          value={targetsConfirmed ? summary.reportableCount.toLocaleString() : '未设置'}
           unit="篇"
-          desc={`≥${reportReq}条评论 且 前5提及率≥${pct(brandReqRate)}`}
+          desc={targetsConfirmed ? `≥${reportReq}条评论 且 前5提及率≥${pct(brandReqRate)}` : '需要确认本项目验收目标'}
           tag="最高档交付"
-          clickable
+          clickable={targetsConfirmed}
           onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '符合且能汇报的笔记', tag: '最高档交付', theme: 'green', status: '符合且能汇报' }); }}
         />
         <MetricCard
           theme="blue"
           label="符合基础要求"
-          value={summary.baseCount.toLocaleString()}
+          value={targetsConfirmed ? summary.baseCount.toLocaleString() : '未设置'}
           unit="篇"
-          desc={`有效评论达到 ${baseReq} 条考核基线`}
+          desc={targetsConfirmed ? `有效评论达到 ${baseReq} 条考核基线` : '需要确认本项目验收目标'}
           tag="基础达标"
-          clickable
+          clickable={targetsConfirmed}
           onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '符合基础要求的笔记', tag: '基础达标', theme: 'blue', status: '符合基础要求' }); }}
         />
         <MetricCard
           theme="yellow"
           label="需补充笔记"
-          value={summary.supplementCount.toLocaleString()}
+          value={targetsConfirmed ? summary.supplementCount.toLocaleString() : '未设置'}
           unit="篇"
-          desc={`不足 ${baseReq} 条，进入供应商/达人补量`}
+          desc={targetsConfirmed ? `不足 ${baseReq} 条，进入供应商/达人补量` : '目标未设置，不计算补量缺口'}
           tag="补量缺口"
-          clickable
+          clickable={targetsConfirmed}
           onClick={() => { setModalLoading(true); setModalPage(1); setModalFilter({ title: '需补充评论的笔记', tag: '补量缺口', theme: 'yellow', status: '需补充' }); }}
         />
         <MetricCard
@@ -209,7 +212,7 @@ export function AcceptanceDelivery({
           <div>
             <strong style={{ fontSize: '13.5px', color: '#166534' }}>当前项目验收判定规则配置</strong>
             <div style={{ fontSize: '12px', color: '#15803d', marginTop: '2px' }}>
-              可汇报线：≥ <strong>{reportReq}</strong> 条 · 基础达标线：≥ <strong>{baseReq}</strong> 条 · 前5主评品牌提及率阈值：≥ <strong>{pct(brandReqRate)}</strong> · 新鲜度：{acceptance.freshnessHours || 24}小时
+              {targetsConfirmed ? <>可汇报线：≥ <strong>{reportReq}</strong> 条 · 基础达标线：≥ <strong>{baseReq}</strong> 条 · 前5主评品牌提及率阈值：≥ <strong>{pct(brandReqRate)}</strong></> : '验收目标未设置'} · 新鲜度：{acceptance.freshnessHours || 24}小时
             </div>
           </div>
         </div>
@@ -383,7 +386,7 @@ export function AcceptanceDelivery({
                         />
                         ) : (
                           <div className="ops-table-note-cover">
-                            {(note.author || '笔').slice(0, 1)}
+                            {Array.from(note.author || '笔')[0] || '笔'}
                           </div>
                         )}
                         <div className="ops-table-note-info">
@@ -505,7 +508,7 @@ export function AcceptanceDelivery({
                             {note.coverUrl ? (
                               <img src={note.coverUrl} alt="" className="ops-table-note-cover" loading="lazy" />
                             ) : (
-                              <div className="ops-table-note-cover">{(note.author || '笔').slice(0, 1)}</div>
+                              <div className="ops-table-note-cover">{Array.from(note.author || '笔')[0] || '笔'}</div>
                             )}
                             <div className="ops-table-note-info">
                               <span

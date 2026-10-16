@@ -1,5 +1,9 @@
-﻿@import '../styles/tokens.css';
+@import '../styles/tokens.css';
 @import '../styles/project-shell.css';
+@import '../styles/business-daily.css';
+@import '../styles/business-visuals.css';
+@import '../styles/note-operations.css';
+@import '../styles/competitors.css';
 @import '../styles/platform.css';
 @import '../styles/workspace.css';
 @import '../styles/operations-workspaces.css';
@@ -9,6 +13,8 @@
 @import '../styles/workspace-polish.css';
 @import '../styles/workspace-ui-v2.css';
 @import '../styles/category-notes-modal.css';
+@import '../styles/dashboard-template.css';
+@import '../styles/note-modal.css';
 
 /* Core Base & Shared UI Utilities */
 .stack { display: flex; flex-direction: column; gap: 20px; }
@@ -285,4 +291,13 @@
   .app-shell { display: block; }
   .main { padding: 0; background: white; }
   .panel { box-shadow: none; border-color: #cbd5e1; }
+}
+dialog.shared-dialog::backdrop { background: rgba(15, 23, 42, .5); }
+dialog.shared-dialog { margin: auto; overflow: hidden; box-sizing: border-box; box-shadow: 0 20px 40px rgba(0,0,0,.2); }
+body:has(dialog.shared-dialog[open]) { overflow: hidden; }
+dialog.shared-dialog *, .workbench-toolbar * { box-sizing: border-box; }
+@media (max-width: 600px) {
+  .workbench-toolbar > div { flex-wrap: wrap; max-width: 100%; }
+  .workbench-toolbar .custom-select-container { max-width: 100%; }
+  .card-edit-fields { grid-template-columns: 1fr !important; }
 }

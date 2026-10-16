@@ -1,9 +1,8 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { noteIdFrom } from '@/lib/store';
 import { searchNotes } from '@/lib/xhs';
 import { finishJob, logAction, startJob } from '@/lib/ops';
-import { projectId } from '@/lib/projects';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,17 +12,25 @@ function first(...values: unknown[]) { return values.find((value) => value != nu
 function creatorTier(fans: number) { if (fans < 1000) return '素人'; if (fans < 5000) return 'KOC'; if (fans < 50000) return '初级达人'; if (fans < 500000) return '腰部达人'; return '头部达人'; }
 
 export async function POST(request: Request) {
-  if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: { keywords?: string[] | string; startDate?: string; endDate?: string; maxPages?: number; projectId?: string } = {};
   try {
-    const body = await request.json() as { keywords?: string[] | string; startDate?: string; endDate?: string; maxPages?: number; projectId?: string };
-    const project=projectId(body.projectId);
+    body = (await request.json()) as typeof body;
+  } catch {
+    return jsonError('无效的请求体');
+  }
+
+  const access = await requireProjectAccess(request, body.projectId, 'write');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
+  try {
     const keywords = (Array.isArray(body.keywords) ? body.keywords : text(body.keywords).split(/[，,\n]+/)).map((x) => x.trim()).filter(Boolean).slice(0, 8);
     if (!keywords.length || !body.startDate || !body.endDate) return jsonError('请填写关键词和时间范围');
-    const jobId = await startJob('note_search',`关键词扫描：${keywords.join(' / ')}`,keywords.length,project);
+    const jobId = await startJob('note_search', `关键词扫描：${keywords.join(' / ')}`, keywords.length, project);
     const all: Array<Record<string, unknown>> = [];
     let rawCount = 0;
     for (const keyword of keywords) {
-      const result = await searchNotes(keyword, body.startDate, body.endDate, Math.min(10, Math.max(1, Number(body.maxPages || 3))),project);
+      const result = await searchNotes(keyword, body.startDate, body.endDate, Math.min(10, Math.max(1, Number(body.maxPages || 3))), project);
       for (const raw of result.notes) {
         rawCount += 1;
         const noteInfo = (raw.noteInfo || {}) as Record<string, unknown>;
@@ -38,60 +45,50 @@ export async function POST(request: Request) {
           id, keyword, title: text(first(noteInfo.title, raw.title, raw.noteTitle)),
           author: text(first(userInfo.nickName, userInfo.nickname, raw.authorName, raw.nickname, raw.userName)),
           url: text(first(raw.noteLink, raw.url)) || `https://www.xiaohongshu.com/explore/${id}`,
-          publishedAt: text(first(noteInfo.notePublishTime, raw.publishTime, raw.notePublishTime)),
-          profile: {
-            coverUrl: text(first(noteInfo.imageUrl, noteInfo.coverUrl, noteInfo.cover, raw.coverUrl, raw.cover)),
-            content: text(first(noteInfo.content, noteInfo.desc, raw.content, raw.noteContent)),
-            category1: text(first(noteInfo.taxonomy1, raw.firstCategoryName, raw.category1, noteInfo.firstCategoryName)),
-            category2: text(first(noteInfo.taxonomy2, raw.secondCategoryName, raw.category2, noteInfo.secondCategoryName)),
-            cooperation: number(first(noteInfo.cooperNote, raw.cooperNote, raw.isCooperation, raw.cooperation)),
-            promoted: /^(1|true|是)$/i.test(text(first(noteInfo.isAdNote, raw.isPromoted, raw.promoted, raw.isFlow))),
-            noteType: text(first(noteInfo.noteTypeName, raw.noteTypeName)) || (noteTypeCode === 2 ? '视频' : noteTypeCode === 1 ? '图文' : ''),
-            notePrice: number(first(raw.notePrice, raw.price, price.notePrice, noteTypeCode === 2 ? userInfo.videoPrice : userInfo.picturePrice)),
-            exposure: number(first(noteInfo.impNum, interaction.impNum, raw.impNum, raw.exposure)),
-            readCount: number(first(noteInfo.readNum, interaction.readNum, raw.readNum, raw.readCount)),
-            interactionCount: number(first(noteInfo.engageNum, interaction.interNum, interaction.interactionNum, raw.interactionNum, raw.interactionCount)),
-            likeCount: number(first(interaction.likeNum, raw.likeNum, raw.likes)),
-            favoriteCount: number(first(noteInfo.favNum, interaction.favNum, interaction.collectNum, raw.favNum, raw.favoriteCount)),
-            shareCount: number(first(interaction.shareNum, raw.shareNum, raw.shareCount)),
-            fansCount: fans,
-            creatorLevel: text(first(userInfo.levelName, userInfo.tier, raw.creatorLevel, raw.levelName)) || creatorTier(fans),
-            picturePrice: number(first(userInfo.picturePrice, userInfo.imagePrice, price.picturePrice)),
-            videoPrice: number(first(userInfo.videoPrice, price.videoPrice)),
-            province: text(first(userInfo.province, raw.province, locationParts[0])), city: text(first(userInfo.city, raw.city, locationParts[1])),
-            gender: text(first(userInfo.gender, raw.gender)), readMedian: number(first(userInfo.readMedian, userInfo.clickMidNum, userInfo.clickMid, raw.readMedian)),
-            interactionMedian: number(first(userInfo.interactionMedian, userInfo.interMidNum, userInfo.interMid, raw.interactionMedian)),
-            brand: text(first(raw.brandName, raw.brand, noteInfo.brandName, keyword)),
-          },
+          publishedAt: text(first(noteInfo.uploadTime, noteInfo.createTime, raw.publishedAt, raw.publishTime, raw.uploadTime)),
+          noteType: noteTypeCode === 2 ? '视频' : '图文',
+          coverUrl: text(first(noteInfo.coverImage, raw.coverUrl, noteInfo.cover)),
+          exposure: number(first(interaction.readNum, interaction.exposure, raw.exposure, interaction.viewNum)),
+          readCount: number(first(interaction.readNum, raw.readCount, interaction.views)),
+          interactionCount: number(first(interaction.interNum, raw.interactionCount, interaction.interaction)),
+          likeCount: number(first(interaction.likeNum, raw.likeCount, interaction.likes)),
+          favoriteCount: number(first(interaction.collectNum, raw.favoriteCount, interaction.collects)),
+          shareCount: number(first(interaction.shareNum, raw.shareCount, interaction.shares)),
+          fansCount: fans,
+          creatorLevel: creatorTier(fans),
+          notePrice: number(first(price.picturePrice, price.videoPrice, raw.notePrice)),
+          picturePrice: number(first(price.picturePrice, raw.picturePrice)),
+          videoPrice: number(first(price.videoPrice, raw.videoPrice)),
+          province: locationParts[0] || '', city: locationParts[1] || locationParts[0] || '',
+          gender: text(first(userInfo.gender, raw.gender)) === '1' ? '女' : text(first(userInfo.gender, raw.gender)) === '0' ? '男' : '',
         });
       }
     }
     await ensureSchema(); const d1 = db();
-    for (let i = 0; i < all.length; i += 30) {
-      const statements: Array<{ run(): Promise<unknown> }> = [];
-      for (const note of all.slice(i, i + 30)) {
-        const p = note.profile as Record<string, unknown>;
-        statements.push(d1.prepare(`INSERT INTO notes(id,url,author,title,source_type,pipeline,product_scope,published_at,status)
-          VALUES(?,?,?,?,'keyword_scan','value_scan',?,?, '待抓取')
-          ON CONFLICT(id) DO UPDATE SET url=CASE WHEN excluded.url!='' THEN excluded.url ELSE notes.url END,author=CASE WHEN excluded.author!='' THEN excluded.author ELSE notes.author END,title=CASE WHEN excluded.title!='' THEN excluded.title ELSE notes.title END`)
-          .bind(note.id, note.url, note.author, note.title, /爱他美|合生元|A2|a2|美素|至初|金领冠|派星/.test(text(note.keyword)) ? '竞品' : '本品', note.publishedAt || null));
-        statements.push(d1.prepare(`INSERT INTO project_notes(id,project_id,note_id,source_type,pipeline,product_scope,status,added_at)
-          VALUES(?,?,?,'keyword_scan','value_scan',?,'待抓取',?) ON CONFLICT(id) DO UPDATE SET product_scope=excluded.product_scope`)
-          .bind(`${project}:${note.id}`,project,note.id,/爱他美|合生元|A2|a2|美素|至初|金领冠|派星/.test(text(note.keyword))?'竞品':'本品',new Date().toISOString()));
-        statements.push(d1.prepare(`INSERT INTO note_profiles(note_id,cover_url,content,category1,category2,cooperation,promoted,note_type,note_price,exposure,read_count,interaction_count,like_count,favorite_count,share_count,fans_count,creator_level,picture_price,video_price,province,city,gender,read_median,interaction_median,brand,updated_at)
-          VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(note_id) DO UPDATE SET
-          cover_url=excluded.cover_url,content=excluded.content,category1=excluded.category1,category2=excluded.category2,cooperation=excluded.cooperation,promoted=excluded.promoted,note_type=excluded.note_type,note_price=excluded.note_price,exposure=excluded.exposure,read_count=excluded.read_count,interaction_count=excluded.interaction_count,like_count=excluded.like_count,favorite_count=excluded.favorite_count,share_count=excluded.share_count,fans_count=excluded.fans_count,creator_level=excluded.creator_level,picture_price=excluded.picture_price,video_price=excluded.video_price,province=excluded.province,city=excluded.city,gender=excluded.gender,read_median=excluded.read_median,interaction_median=excluded.interaction_median,brand=excluded.brand,updated_at=excluded.updated_at`)
-          .bind(note.id,p.coverUrl,p.content,p.category1,p.category2,p.cooperation,p.promoted?1:0,p.noteType,p.notePrice,p.exposure,p.readCount,p.interactionCount,p.likeCount,p.favoriteCount,p.shareCount,p.fansCount,p.creatorLevel,p.picturePrice,p.videoPrice,p.province,p.city,p.gender,p.readMedian,p.interactionMedian,p.brand,new Date().toISOString()));
-      }
-      await d1.batch(statements);
+    const statements: Array<{ run(): Promise<unknown> }> = [];
+    for (const note of all) {
+      statements.push(d1.prepare(`INSERT INTO notes(id,url,author,title,source_type,pipeline,level,product_scope,published_at,status)
+        VALUES(?,?,?,?,'scan','value_scan','P3','竞品',?,'待抓取') ON CONFLICT(id) DO UPDATE SET
+        url=excluded.url,author=excluded.author,title=excluded.title,published_at=COALESCE(excluded.published_at,notes.published_at)`).bind(note.id, note.url, note.author, note.title, note.publishedAt || null));
+      statements.push(d1.prepare(`INSERT INTO project_notes(id,project_id,note_id,source_type,pipeline,level,product_scope,status,added_at)
+        VALUES(?,?,?,'scan','value_scan','P3','竞品','待抓取',?) ON CONFLICT(id) DO NOTHING`).bind(`${project}:${note.id}`, project, note.id, new Date().toISOString()));
+      statements.push(d1.prepare(`INSERT INTO note_profiles(note_id,cover_url,note_type,note_price,exposure,read_count,interaction_count,like_count,favorite_count,share_count,fans_count,creator_level,picture_price,video_price,province,city,gender,updated_at)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(note_id) DO UPDATE SET
+        cover_url=CASE WHEN excluded.cover_url!='' THEN excluded.cover_url ELSE note_profiles.cover_url END,
+        exposure=excluded.exposure,read_count=excluded.read_count,interaction_count=excluded.interaction_count,
+        like_count=excluded.like_count,favorite_count=excluded.favorite_count,share_count=excluded.share_count,
+        fans_count=excluded.fans_count,creator_level=excluded.creator_level,picture_price=excluded.picture_price,video_price=excluded.video_price,
+        province=excluded.province,city=excluded.city,gender=excluded.gender,updated_at=excluded.updated_at`).bind(
+        note.id, note.coverUrl, note.noteType, note.notePrice, note.exposure, note.readCount, note.interactionCount,
+        note.likeCount, note.favoriteCount, note.shareCount, note.fansCount, note.creatorLevel, note.picturePrice, note.videoPrice,
+        note.province, note.city, note.gender, new Date().toISOString()
+      ));
     }
-    await finishJob(jobId, { succeeded: all.length, message: `${keywords.length} 个关键词，入库 ${all.length} 篇` });
-    await logAction('关键词扫描','keyword',keywords.join(','),`${body.startDate} 至 ${body.endDate}，入库 ${all.length} 篇`,project);
-    return Response.json({ ok: true, count: all.length, rawCount, jobId, notes: all.map((note) => ({
-      id: text(note.id), keyword: text(note.keyword), title: text(note.title), author: text(note.author),
-      url: text(note.url), publishedAt: text(note.publishedAt),
-    })) });
+    for (let i = 0; i < statements.length; i += 80) await d1.batch(statements.slice(i, i + 80));
+    await finishJob(jobId, { succeeded: all.length, failed: 0, message: `抓取到 ${all.length} 篇相关笔记` });
+    await logAction('关键词内容扫描', 'note', keywords.join(','), `原始结果 ${rawCount} 条，去重入库 ${all.length} 篇`, project);
+    return Response.json({ ok: true, count: all.length, rawCount, jobId });
   } catch (error) {
-    return jsonError(error instanceof Error ? error.message : '搜索失败', 500);
+    return jsonError(error instanceof Error ? error.message : '关键词扫描失败', 500);
   }
 }

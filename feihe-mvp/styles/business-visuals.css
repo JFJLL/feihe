@@ -1,0 +1,394 @@
+.bv-today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.bv-today article{padding:12px 14px;border:1px solid #e8d9bf;background:#fffaf1;border-radius:9px;font-size:12px}.bv-today strong{font-size:13px;color:#845a2e}.bv-today p{margin:6px 0;line-height:1.7;color:#5c6f80}.bv-today span{font-size:11px;color:#8c7454}.bv-word-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bv-word-cards article{padding:14px;background:#f2f7fd;border:1px solid #dbe7f3;border-radius:9px}.bv-word-head h4{margin:0 0 7px;font-size:14px}.bv-word-head>span{font-size:11px;color:#407da0}.bv-word-spend{display:block;font-size:23px;margin:12px 0 4px}.bv-word-cards dl{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 0}.bv-word-cards dt{font-size:10px;color:#6d8194}.bv-word-cards dd{font-size:12px;font-weight:600;margin:4px 0 0}.bv-small-warning{font-size:11px!important;color:#a86739!important;line-height:1.65;margin:10px 0 0}.bv-cost-chart{margin:18px 0}.bv-chart-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.bv-chart-title h4{font-size:13px;margin:6px 0 8px}.bv-chart-title>span{font-size:10px;color:#728399}.bv-cost-row svg{width:100%;display:block;height:86px}.bv-svg-label{fill:#425e77;font-size:13px;font-weight:500}.bv-svg-muted{fill:#788b9b;font-size:11px}.bv-inline-metric{padding:10px 12px;background:#f8fbff;border-radius:7px;display:flex;align-items:center;gap:12px;font-size:12px}.bv-inline-metric small{color:#748499;font-size:10px}.bv-ranks{margin:20px 0}.bv-ranks h4{font-size:13px;margin:0 0 12px}.bv-rank-row{display:grid;grid-template-columns:minmax(100px,1.2fr) minmax(65px,1fr) 88px;align-items:center;gap:8px;min-height:29px;font-size:11px}.bv-rank-label{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:#536d84}.bv-rank-track{height:10px;border-radius:3px;background:#edf2f7;overflow:hidden}.bv-rank-track>span{display:block;height:100%;border-radius:3px;background:#599cd4}.bv-rank-row>b{text-align:right;font-size:11px;font-weight:500;white-space:nowrap}.bv-rank-row small{font-size:9px;margin-left:3px;color:#8092a5}.bv-teal .bv-rank-track>span{background:#5daea6}.bv-evidence{margin:9px 0!important;font-size:10px!important}.bv-evidence a{color:#407b9f;white-space:nowrap}.bv-feed-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.bv-feed-kpis article{background:#f1f8f6;border:1px solid #dcece7;padding:12px;border-radius:8px}.bv-feed-kpis span{font-size:11px;color:#6c827b}.bv-feed-kpis strong{font-size:23px;display:block;margin-top:9px;color:#286e73}.bv-people-ranks .bv-ranks{margin:18px 0}.bv-audience{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bv-audience article{padding:12px;background:#f6f9fc;border-radius:8px}.bv-audience article>div:first-child{display:flex;align-items:center;justify-content:space-between;font-size:12px;margin-bottom:10px}.bv-audience strong{font-size:19px;color:#2c7e9a}.bv-audience p{font-size:10px;color:#708494;line-height:1.7}.bv-audience summary{font-size:10px!important}.bv-progress{margin:14px 0}.bv-progress>div:first-child{display:flex;gap:10px;align-items:center;font-size:12px;margin-bottom:9px}.bv-progress strong{margin-left:auto;font-size:13px;white-space:nowrap}.bv-progress b{font-size:12px;color:#377ea9;white-space:nowrap}.bv-progress-track{height:8px;background:#e9eff5;overflow:hidden;border-radius:4px}.bv-progress-track>span{height:100%;display:block;background:#5899cb;border-radius:4px}.bv-inline-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.bv-inline-totals>div{background:#f5f8fc;padding:14px;border-radius:8px}.bv-inline-totals span{display:block;font-size:11px;color:#7a8b9d}.bv-inline-totals b{display:block;font-size:22px;margin-top:8px}.bv-creator-legend{display:flex;gap:20px;font-size:11px;margin-bottom:16px;color:#698094}.bv-creator-legend span:before{content:'';display:inline-block;width:9px;height:9px;background:#d4dde6;margin-right:6px}.bv-creator-legend span:nth-child(2):before{background:#adcedf}.bv-creator-legend span:nth-child(3):before{background:#468bbe}.bv-level{margin:17px 0}.bv-level>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-size:12px}.bv-level span{font-size:11px;color:#728698}.bv-level-track{height:16px;position:relative;background:#edf2f6;border-radius:4px;overflow:hidden}.bv-level-track i{position:absolute;left:0;top:0;bottom:0;display:block}.bv-level-plan{width:100%;background:#d4dde6}.bv-level-selected{background:#adcedf}.bv-level-published{background:#468bbe}.bv-source-difference{border-left:3px solid #d8ab70;background:#fffaf1;padding:12px 14px;font-size:12px;margin-top:20px}.bv-source-difference p{font-size:11px;line-height:1.7;margin:8px 0}.bv-form-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 12px}.bv-form-split>div{background:#f4f8fb;padding:12px;border-radius:8px}.bv-form-split span{font-size:11px;color:#7b8ea0}.bv-form-split strong{font-size:20px;display:block;margin-top:8px}.bv-stacked-form{height:10px;background:#e9eef4;display:flex;border-radius:4px;overflow:hidden}.bv-stacked-form span:first-child{background:#599bd1}.bv-stacked-form span:nth-child(2){background:#67aaa4}.bv-rectification{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;margin:12px 0 22px}.bv-rectification h4{font-size:13px}.bv-status-strip{display:flex;height:16px;border-radius:4px;overflow:hidden;margin:15px 0}.bv-status-0{background:#69aa99}.bv-status-1{background:#d4a165}.bv-status-2{background:#c57669}.bv-status-3{background:#ced7e2}.bv-status-labels{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;margin:14px 0}.bv-status-labels i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}.bv-seo-summary{display:grid;grid-template-columns:1.1fr 1fr .65fr;gap:20px}.bv-unknown{background:#f5f7fa;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:7px;font-size:11px;color:#738797}.bv-unknown strong{font-size:20px;color:#80909e}.bv-seo-buckets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.bv-seo-buckets .bv-progress>div:first-child{flex-wrap:wrap;font-size:10px}.bv-seo-keywords{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0}.bv-seo-keywords article{border:1px solid #deE7ef;background:#f7fafc;border-radius:7px;padding:12px;display:flex;flex-direction:column;gap:8px}.bv-seo-keywords strong{font-size:12px;min-height:32px;line-height:1.5}.bv-seo-keywords span,.bv-seo-keywords small{font-size:10px;color:#778b9d}.bv-actions{margin-top:16px;padding:12px 14px;border-left:3px solid #94b8d4;background:#f6f9fc}.bv-actions h4{font-size:12px;margin:0 0 8px}.bv-actions p{font-size:11px;line-height:1.75;margin:7px 0}.business-daily .bv-notes-table td{max-width:290px;font-size:11px}.business-daily .bv-notes-table small{font-size:10px}.bv-detail-pagination{display:flex;align-items:center;gap:10px;margin-top:12px}.bv-detail-pagination span{font-size:11px;color:#758da2}.bd-priority .bd-panel h3{font-size:20px}.bd-panel .bv-narrative-summary{font-size:12px;line-height:1.8;color:#60768b}.bv-seo-buckets .bv-progress strong{margin-left:0}@media(min-width:1200px) and (max-width:1400px){.bv-word-spend{font-size:19px}.bv-rank-row{grid-template-columns:minmax(110px,1.4fr) minmax(50px,.8fr) 77px}.bv-feed-kpis strong{font-size:20px}.bv-seo-keywords{grid-template-columns:repeat(4,minmax(0,1fr))}.bv-progress>div:first-child{font-size:11px}.bv-rectification{gap:16px}}
+
+.bv-unconfirmed-tag{display:inline-block;padding:1px 5px;background:#e2e8f0;color:#64748b;border-radius:4px;font-size:10px;font-weight:normal;margin-right:4px;}
+/* --- Remediation Layout Fixes for Business Visuals --- */
+
+/* 1. Single Action / Alert Full-Width Banner */
+.bv-today.bv-today-single {
+  display: block;
+  width: 100%;
+}
+
+.bv-today.bv-today-single .bv-action-single-article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 10px 16px;
+  background: #fffdf5;
+  border: 1px solid #f2dfba;
+  border-left: 4px solid #d97706;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.bv-action-lead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.bv-action-tag-pill {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.bv-action-body {
+  flex: 1;
+  margin: 0 !important;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.bv-action-assignee {
+  font-size: 11px;
+  color: #78716c;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+/* 2. Full-Width Single Rectification Status Strip */
+.bv-rectification.bv-rectification-single {
+  display: block;
+  width: 100%;
+}
+
+.bv-rectification.bv-rectification-single .bv-rectification-base {
+  width: 100%;
+}
+
+.bv-rectification.bv-rectification-single .bv-status-strip {
+  width: 100%;
+  height: 18px;
+}
+
+.bv-rectification-report {
+  background: #fbfcfe;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+/* 3. Reference and Snapshot Badges */
+.bv-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.bv-ref-chip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #1d4ed8;
+  background: #dbeafe;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.bv-ref-note {
+  font-size: 10px;
+  color: #2563eb !important;
+  margin-left: 4px;
+}
+
+.bv-ref-hint {
+  color: #2563eb !important;
+  font-size: 11px !important;
+  margin-top: 6px !important;
+}
+
+.bv-creator-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.bv-creator-legend-row .bv-creator-legend {
+  margin-bottom: 0;
+}
+
+.bv-cost-empty {
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  text-align: center;
+  margin: 14px 0;
+}
+
+.bv-empty-cost-hint {
+  color: #64748b !important;
+  font-size: 12px !important;
+  margin: 4px 0 0 !important;
+}
+
+/* 4. Unified Status Banner for Pending Day Costs */
+.bd-alerts-unified {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: #fffdf5;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid #ea580c;
+  border-radius: 8px;
+  margin: 6px 0 10px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.bd-alert-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.bd-alert-body {
+  flex: 1;
+}
+
+.bd-alert-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bd-alert-title-row strong {
+  font-size: 13px;
+  color: #9a3412;
+}
+
+.bd-alert-tag {
+  font-size: 11px;
+  color: #c2410c;
+  background: #ffedd5;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.bd-alert-desc {
+  margin: 4px 0 0 !important;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #78350f;
+}
+
+.bd-alert-action {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.bd-alert-owner {
+  font-size: 11px;
+  color: #9a3412;
+  font-weight: 500;
+  background: #fef3c7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #fde68a;
+  white-space: nowrap;
+}
+
+/* 5. Symmetrical Core Overview Layout */
+.bd-two-col.bd-core-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.bd-two-col.bd-core-overview > .bd-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+/* Full-width and multi-column Top 10 Keywords */
+.bd-keywords-top-container .bv-ranks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+  margin: 10px 0;
+}
+
+.bd-keywords-top-container .bv-ranks h4 {
+  grid-column: 1 / -1;
+  margin-bottom: 6px;
+}
+
+.bv-today {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+/* Feed Audience Grid (3-column on wide screens, stacks naturally on narrow screens) */
+.bv-feed-audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+  margin-top: 10px;
+}
+
+.bv-audience-col {
+  min-width: 0;
+}
+
+.bv-audience-col .bv-ranks {
+  margin: 0;
+}
+
+.bv-audience-penetration-col {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.bv-audience-penetration-col .bv-audience {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 1100px) {
+  .bv-feed-audience-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* Targeted UI Polish 2026-10-15 */
+
+/* 1. SEO Summary 2-column balanced layout & note */
+.bv-seo-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.bv-seo-note {
+  font-size: 11px;
+  color: #728198;
+  margin: 6px 0 14px 0;
+  line-height: 1.6;
+}
+
+/* 2. Unified Rectification Summary Cards */
+.bv-rectification {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin: 12px 0 18px !important;
+  align-items: stretch !important;
+}
+
+.bv-rectification-card,
+.bv-rectification-base,
+.bv-rectification-report {
+  background: #fbfcfe !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  height: 100% !important;
+}
+
+.bv-rectification-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 24px;
+  margin-bottom: 6px;
+}
+
+.bv-rectification-card h4,
+.bv-rectification-base h4,
+.bv-rectification-report h4 {
+  font-size: 13px !important;
+  font-weight: 600;
+  margin: 0 !important;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+.bv-rectification-bottom-note {
+  margin-top: auto !important;
+  padding-top: 8px;
+}
+
+.bv-rectification.bv-rectification-single {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  width: 100% !important;
+}
+
+.bv-rectification.bv-rectification-single .bv-rectification-base {
+  width: 100% !important;
+}
+
+/* 3. Targeted Paired Equal Height: Creators & Maintenance */
+.bd-two-col.bd-creators-maintenance {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.bd-two-col.bd-creators-maintenance > .bd-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.bd-two-col.bd-creators-maintenance > .bd-panel > :last-child {
+  margin-top: auto;
+}
+
+@media (max-width: 1000px) {
+  .bd-two-col.bd-creators-maintenance {
+    grid-template-columns: 1fr;
+    align-items: initial;
+  }
+  .bd-two-col.bd-creators-maintenance > .bd-panel {
+    height: auto;
+  }
+  .bd-two-col.bd-creators-maintenance > .bd-panel > :last-child {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .bv-rectification {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .bv-seo-summary {
+    grid-template-columns: 1fr !important;
+  }
+}

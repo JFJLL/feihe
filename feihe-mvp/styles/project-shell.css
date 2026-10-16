@@ -291,17 +291,58 @@
   position: fixed;
   right: 24px;
   bottom: 24px;
-  width: 54px;
-  height: 54px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0 16px 0 12px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 22px;
   cursor: pointer;
   background: linear-gradient(135deg, #0284c7, #0369a1);
   box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   z-index: 70;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+}
+.floating-agent-btn.active {
+  background: linear-gradient(135deg, #334155, #1e293b);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
+}
+.floating-agent-label {
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.floating-agent-engine-tag {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #0284c7;
+  font-weight: 600;
+}
+.floating-agent-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed #e2e8f0;
+}
+.floating-agent-source-pill {
+  font-size: 11px;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 2px 6px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .floating-agent-btn:hover {
   transform: translateY(-2px);
@@ -510,3 +551,94 @@
 .queue-main small{color:#94a3b8;font-size:11px}
 @media(max-width:1100px){.queue-grid{grid-template-columns:1fr}}
 
+
+/* Safe Markdown & Clean Agent Styles */
+.agent-markdown-body {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #1e293b;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.agent-markdown-p {
+  margin: 0 0 6px 0;
+}
+.agent-markdown-p:last-child {
+  margin-bottom: 0;
+}
+.agent-markdown-link {
+  color: #0284c7 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+  font-weight: 600;
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+.agent-markdown-link:hover {
+  color: #0369a1 !important;
+}
+.agent-markdown-code {
+  background: rgba(15, 23, 42, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: #0369a1;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.floating-agent-head-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.floating-agent-head-main-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.floating-agent-head-main-row h3 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+.floating-agent-status-badge.online {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0284c7;
+  background: #e0f2fe;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #bae6fd;
+  white-space: nowrap;
+}
+.floating-agent-head-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
+.floating-agent-sub-divider {
+  color: #cbd5e1;
+}
+.floating-agent-day-tag {
+  color: #0369a1;
+  font-weight: 600;
+}
+.floating-agent-source-pill.is-link {
+  color: #0284c7;
+  border-color: #bae6fd;
+  background: #f0f9ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.floating-agent-source-pill.is-link:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #0369a1;
+}

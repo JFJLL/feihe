@@ -9,7 +9,7 @@ import { keywordMatches, noteDirection } from './KeywordRadar';
 import { GrowthSampleBoard } from './GrowthSampleBoard';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { display, percent, ratio } from './metrics';
-import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { NoteCover } from '../../components/ui/NoteCover';
 import { sampleDirection } from './directions';
 import { contentDirectionLabel } from '../../lib/dashboard-display';
 
@@ -121,11 +121,13 @@ export function InspirationLibrary({
             {auto.slice(0, 10).map((note) => (
               <div key={note.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
-                <NoteThumbnail
+                <NoteCover
                   src={note.coverUrl}
                   title={note.title}
                   author={note.author}
                   category={noteDirection(note)}
+                  url={note.url}
+                  aspectRatio="1:1"
                 />
                 </div>
                 <span style={{ flex: 1, minWidth: 0 }}>
@@ -210,11 +212,13 @@ export function InspirationLibrary({
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       {srcNote && (
                         <div style={{ width: '36px', height: '36px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
-                        <NoteThumbnail
+                        <NoteCover
                           src={srcNote.coverUrl}
                           title={srcNote.title}
                           author={srcNote.author}
                           category={noteDirection(srcNote)}
+                          url={srcNote.url}
+                          aspectRatio="1:1"
                         />
                         </div>
                       )}

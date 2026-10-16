@@ -5,15 +5,18 @@ import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { LoadingState } from '../../components/ui/LoadingState';
-import { WorkspaceModuleTabs, type ModuleTab } from '../../components/ui/operations/WorkspaceModuleTabs';
+import { SettingsSubNav } from './SettingsSubNav';
 import { ProjectProfile } from './ProjectProfile';
+import { MemberManagement } from './members/MemberManagement';
 import { RulesAndTargets } from './RulesAndTargets';
-import { SettingsDataSources } from './data-sources/SettingsDataSources';
 import { SettingsIntegrations } from './integrations/SettingsIntegrations';
 import { DataMap } from './data-map/DataMap';
+import { GeneralWorkbenchBoard } from '../overview/GeneralWorkbenchBoard';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
+import { useCachedQuery } from '../../lib/hooks/use-cached-query';
+import { invalidateQueryCache } from '../../lib/cache/query-cache';
 
 const emptyMap: MapData = {
   accounts: [],
@@ -49,70 +52,98 @@ export function SettingsWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean; throwOnError?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('profile', ['profile', 'rules', 'data-sources', 'integrations', 'data-map']);
-  const { currentProject, workspace, refreshWorkspace, showToast } = useProject();
+  const [tab, setTab] = useProjectTab('profile', [
+    'profile',
+    'members',
+    'rules',
+    'board',
+    'data-sources',
+    'integrations',
+    'data-map',
+    'data',
+    'metrics',
+    'reports',
+  ]);
+  const { currentProject, refreshWorkspace, showToast, navigateTo } = useProject();
+
+  // If someone visits /projects/[id]/settings?tab=data, metrics, reports, or data-sources, route seamlessly
+  useEffect(() => {
+    let subpath = '';
+    if (tab === 'data' || tab === 'data-sources') {
+      subpath = 'data';
+    } else if (tab === 'metrics') {
+      subpath = 'metrics';
+    } else if (tab === 'reports') {
+      subpath = 'reports';
+    }
+    if (!subpath) return;
+
+    let search = '';
+    let hash = '';
+    if (typeof window !== 'undefined') {
+      if (window.location.search) {
+        const params = new URLSearchParams(window.location.search);
+        params.delete('tab');
+        const qs = params.toString();
+        if (qs) {
+          search = `?${qs}`;
+        }
+      }
+      hash = window.location.hash || '';
+    }
+    const target = `/projects/${encodeURIComponent(projectId)}/${subpath}${search}${hash}`;
+    navigateTo(target, { replace: true });
+  }, [tab, projectId, navigateTo]);
 
   // Per-project visited tabs set: lazy-mounts on first visit, preserves drafts thereafter.
   const [visitedByProject, setVisitedByProject] = useState<Record<string, Set<string>>>(() => ({
     [projectId]: new Set([tab]),
   }));
-  const visited = visitedByProject[projectId] ?? new Set([tab]);
+  const visited = new Set([...(visitedByProject[projectId] ?? []), tab]);
 
-  const handleTabChange = (nextTab: string) => {
+  if (!visitedByProject[projectId]?.has(tab)) {
     setVisitedByProject((prev) => {
       const current = prev[projectId];
-      if (current && current.has(nextTab)) return prev;
+      if (current && current.has(tab)) return prev;
       const next = new Set(current || ['profile']);
-      next.add(nextTab);
+      next.add(tab);
       return { ...prev, [projectId]: next };
     });
-    setTab(nextTab);
-  };
+  }
 
-  const [map, setMap] = useState<MapData>(emptyMap);
-  const [mapError, setMapError] = useState('');
-  const [mapLoadedFor, setMapLoadedFor] = useState('');
-
-  useEffect(() => {
-    let cancelled = false;
-    if (tab === 'data-map') {
-      api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId))
-        .then((m) => { if (!cancelled) { setMap(m); setMapError(''); setMapLoadedFor(projectId); } })
-        .catch((e) => { if (!cancelled) setMapError(e instanceof Error ? e.message : '数据地图加载失败'); });
-    }
-    return () => { cancelled = true; };
-  }, [tab, projectId, showToast]);
+  const {
+    data: mapData,
+    loading: mapLoading,
+    error: mapError,
+    refresh: refreshMap,
+  } = useCachedQuery<MapData>({
+    url: '/api/data-map',
+    projectId,
+    params: { projectId },
+    enabled: tab === 'data-map' || visited.has('data-map'),
+    staleTime: 60 * 1000,
+    ttl: 15 * 60 * 1000,
+  });
+  const map = mapData || emptyMap;
 
   const reloadMap = async () => {
-    try {
-      const m = await api<MapData>('/api/data-map?projectId=' + encodeURIComponent(projectId));
-      setMap(m);
-      setMapError('');
-      setMapLoadedFor(projectId);
-    } catch (e) {
-      setMapError(e instanceof Error ? e.message : '数据地图加载失败');
-    }
+    invalidateQueryCache({ projectId, endpoint: '/api/data-map' });
+    await refreshMap({ fresh: true });
   };
 
   const handleProfileOrSourceUpdate = async () => {
+    invalidateQueryCache({ projectId, endpoint: '/api/projects' });
+    invalidateQueryCache({ projectId, endpoint: '/api/data-workspace' });
     await refreshWorkspace();
     await onRefresh({ fresh: true });
   };
-
-  const tabs: ModuleTab[] = [
-    { id: 'profile', title: '项目资料', desc: '品牌、SPU 与基本信息维护', icon: '📋' },
-    { id: 'rules', title: '目标与规则', desc: '总盘目标、月季任务与审查词库', icon: '🎯' },
-    { id: 'data-sources', title: '数据源', desc: '飞书多表溯源与交付源配置', icon: '📊' },
-    { id: 'integrations', title: '工具集成', desc: 'RedTrend、飞书与外部接口', icon: '🔌' },
-    { id: 'data-map', title: '数据地图', desc: '账户、接口与语义指标映射', icon: '🗺️' },
-  ];
 
   return (
     <div className="stack ops-workspace reference-workspace settings-workspace" data-workspace-ui="v2">
       <PageHeader
         variant="light"
         title="项目设置"
-        subtitle="集中管理当前项目的低频配置、目标规则、数据源与数据地图。"
+        subtitle="集中管理当前项目的资料、目标规则、成员权限、工具与数据地图。"
         badge={
           <span>
             {ops.settings.rules.brands.length + ops.settings.rules.competitors.length} 个识别词 ·{' '}
@@ -121,101 +152,116 @@ export function SettingsWorkspace({
         }
       />
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={handleTabChange} variant="compact" />
+      <SettingsSubNav activeTab={tab} />
 
       {visited.has('profile') && (
-      <div
-        id="workspace-tabpanel-profile"
-        role="tabpanel"
-        aria-labelledby="workspace-tab-profile"
-        tabIndex={0}
-        style={{ display: tab === 'profile' ? 'block' : 'none' }}
-      >
-        <ProjectProfile
-          key={projectId}
-          project={currentProject}
-          projectId={projectId}
-          onDone={handleProfileOrSourceUpdate}
-          toast={showToast}
-        />
-      </div>
+        <div
+          id="workspace-tabpanel-profile"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-profile"
+          tabIndex={0}
+          style={{ display: tab === 'profile' ? 'block' : 'none' }}
+        >
+          <ProjectProfile
+            key={projectId}
+            project={currentProject}
+            projectId={projectId}
+            onDone={handleProfileOrSourceUpdate}
+            toast={showToast}
+          />
+        </div>
+      )}
+
+      {visited.has('members') && (
+        <div
+          id="workspace-tabpanel-members"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-members"
+          tabIndex={0}
+          style={{ display: tab === 'members' ? 'block' : 'none' }}
+        >
+          <MemberManagement
+            key={projectId}
+            projectId={projectId}
+            onDone={handleProfileOrSourceUpdate}
+            toast={showToast}
+          />
+        </div>
       )}
 
       {visited.has('rules') && (
-      <div
-        id="workspace-tabpanel-rules"
-        role="tabpanel"
-        aria-labelledby="workspace-tab-rules"
-        tabIndex={0}
-        style={{ display: tab === 'rules' ? 'block' : 'none' }}
-      >
-        <RulesAndTargets
-          key={projectId}
-          data={dashboard}
-          ops={ops}
-          projectId={projectId}
-          onDone={onRefresh}
-          toast={showToast}
-        />
-      </div>
+        <div
+          id="workspace-tabpanel-rules"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-rules"
+          tabIndex={0}
+          style={{ display: tab === 'rules' ? 'block' : 'none' }}
+        >
+          <RulesAndTargets
+            key={projectId}
+            data={dashboard}
+            ops={ops}
+            projectId={projectId}
+            onDone={onRefresh}
+            toast={showToast}
+          />
+        </div>
       )}
 
-      {visited.has('data-sources') && (
-      <div
-        id="workspace-tabpanel-data-sources"
-        role="tabpanel"
-        aria-labelledby="workspace-tab-data-sources"
-        tabIndex={0}
-        style={{ display: tab === 'data-sources' ? 'block' : 'none' }}
-      >
-        <SettingsDataSources
-          key={projectId}
-          projectId={projectId}
-          workspace={workspace}
-          onDone={handleProfileOrSourceUpdate}
-          toast={showToast}
-        />
-      </div>
+            {visited.has('board') && (
+        <div
+          id="workspace-tabpanel-board"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-board"
+          tabIndex={0}
+          style={{ display: tab === 'board' ? 'block' : 'none' }}
+        >
+          <GeneralWorkbenchBoard
+            key={projectId}
+            projectId={projectId}
+            project={currentProject || undefined}
+          />
+        </div>
       )}
 
       {visited.has('integrations') && (
-      <div
-        id="workspace-tabpanel-integrations"
-        role="tabpanel"
-        aria-labelledby="workspace-tab-integrations"
-        tabIndex={0}
-        style={{ display: tab === 'integrations' ? 'block' : 'none' }}
-      >
-        <SettingsIntegrations
-          key={projectId}
-          projectId={projectId}
-          toast={showToast}
-        />
-      </div>
+        <div
+          id="workspace-tabpanel-integrations"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-integrations"
+          tabIndex={0}
+          style={{ display: tab === 'integrations' ? 'block' : 'none' }}
+        >
+          <SettingsIntegrations
+            key={projectId}
+            projectId={projectId}
+            toast={showToast}
+          />
+        </div>
       )}
 
       {visited.has('data-map') && (
-      <div
-        id="workspace-tabpanel-data-map"
-        role="tabpanel"
-        aria-labelledby="workspace-tab-data-map"
-        tabIndex={0}
-        style={{ display: tab === 'data-map' ? 'block' : 'none' }}
-      >
-        {mapError ? (
-          <ErrorState error={mapError} onRetry={reloadMap} />
-        ) : mapLoadedFor !== projectId ? (
-          <LoadingState text="正在加载当前项目的数据地图…" />
-        ) : (
-          <DataMap
-            key={projectId}
-            projectId={projectId}
-            data={map}
-            reload={reloadMap}
-            toast={showToast}
-          />
-        )}
-      </div>
+        <div
+          id="workspace-tabpanel-data-map"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-data-map"
+          tabIndex={0}
+          style={{ display: tab === 'data-map' ? 'block' : 'none' }}
+        >
+          {mapError && !mapData ? (
+            <ErrorState error={mapError} onRetry={reloadMap} />
+          ) : mapLoading && !mapData ? (
+            <LoadingState text="正在加载当前项目的数据地图…" />
+          ) : (
+            <DataMap
+              key={projectId}
+              projectId={projectId}
+              data={map}
+              reload={reloadMap}
+              toast={showToast}
+            />
+          )}
+        </div>
       )}
     </div>
   );

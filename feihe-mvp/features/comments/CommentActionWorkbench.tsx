@@ -11,6 +11,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { api } from '../../lib/hooks/use-project-data';
 import type { ActionWorkbenchItem } from './comment-view-model';
 import { CommentEfficiencyBoard } from './CommentEfficiencyBoard';
+import { useProject } from '../../components/project-shell/ProjectContext';
 
 // ======================== Client Cache for Workbench ========================
 type WorkbenchCacheData = {
@@ -66,6 +67,8 @@ export function CommentActionWorkbench({
   toast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }) {
   const searchParams = useSearchParams();
+  const { currentProject } = useProject();
+  const canWrite = Boolean(currentProject?.canWrite && !currentProject?.isArchived);
 
   // Initialize from URL search params
   const [sourceFilter, setSourceFilter] = useState<'all' | 'key-comment' | 'review-batch'>(
@@ -522,7 +525,7 @@ export function CommentActionWorkbench({
         {needsRecalculation && (
           <div style={{ marginBottom: '14px', padding: '12px 16px', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ color: '#92400e', fontSize: '13px', fontWeight: 600 }}>该日期尚未生成规则判定</span>
-            <button
+            {canWrite && <button
               type="button"
               className="primary"
               disabled={recalculating}
@@ -530,7 +533,7 @@ export function CommentActionWorkbench({
               style={{ fontSize: '12.5px', padding: '4px 12px' }}
             >
               {recalculating ? '正在生成判定…' : '生成本批次判定'}
-            </button>
+            </button>}
           </div>
         )}
 
@@ -664,7 +667,7 @@ export function CommentActionWorkbench({
                   </td>
                   <td>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                      {item.status !== 'handled' ? (
+                      {item.status !== 'handled' && canWrite ? (
                         <>
                           {item.action === 'reply' && (
                             <button
@@ -708,10 +711,10 @@ export function CommentActionWorkbench({
                           )}
                         </>
                       ) : (
-                        <span style={{ fontSize: '12px', color: '#166534', fontWeight: 600 }}>✓ 已闭环</span>
+                        <span style={{ fontSize: '12px', color: '#166534', fontWeight: 600 }}>{item.status === 'handled' ? '✓ 已闭环' : '待处理 · 只读'}</span>
                       )}
 
-                      {item.source === 'key-comment' && (
+                      {canWrite && item.source === 'key-comment' && (
                         <button
                           type="button"
                           className="danger-link"

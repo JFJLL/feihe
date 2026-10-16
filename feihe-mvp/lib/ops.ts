@@ -29,8 +29,8 @@ export async function failJob(id: string, message: string) {
     .bind('失败', message, new Date().toISOString(), id).run();
 }
 
-export async function logAction(action: string, targetType = '', targetId = '', detail = '', project = DEFAULT_PROJECT_ID) {
+export async function logAction(action: string, targetType = '', targetId = '', detail = '', project = DEFAULT_PROJECT_ID, actorUserId = '') {
   await ensureSchema();
-  await db().prepare('INSERT INTO action_logs(project_id,action,target_type,target_id,detail,created_at) VALUES(?,?,?,?,?,?)')
-    .bind(projectId(project), action, targetType, targetId, detail, new Date().toISOString()).run();
+  await db().prepare('INSERT INTO action_logs(project_id,action,target_type,target_id,detail,created_at,actor_user_id) VALUES(?,?,?,?,?,?,?)')
+    .bind(projectId(project), action, targetType, targetId, detail, new Date().toISOString(), actorUserId).run();
 }

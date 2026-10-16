@@ -1,4 +1,4 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema, DEFAULT_PROJECT_ID } from '@/lib/db';
 import { logAction } from '@/lib/ops';
 import { projectId } from '@/lib/projects';
@@ -8,9 +8,14 @@ const value=(input:unknown)=>String(input??'').trim();
 const number=(input:unknown,fallback=0)=>{const n=Number(input);return Number.isFinite(n)?n:fallback};
 
 export async function POST(request:Request){
-  const user=await apiUser(true);if(!user)return jsonError('请先登录',401);
-  try{
-    const body=await request.json() as Record<string,unknown>;const action=value(body.action);const project=projectId(body.projectId);const d1=db();await ensureSchema();const now=new Date().toISOString();
+  let body: Record<string, unknown> = {};
+  try { body = await request.json() as Record<string, unknown>; } catch { return jsonError('无效的请求体'); }
+  const action = value(body.action);
+  const access = await requireProjectAccess(request, body.projectId, action === 'project_delete' ? 'admin' : 'write');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+  const user = access.context!.user;
+  try {const d1=db();await ensureSchema();const now=new Date().toISOString();
     if(action==='project_delete'){
       if(project===DEFAULT_PROJECT_ID)return jsonError('默认项目不能删除，可将状态设为“已结束”');
       await d1.batch([
@@ -29,6 +34,10 @@ export async function POST(request:Request){
     }
    if(action==='note_update'){
      const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');
+     const pnRow = await d1.prepare('SELECT note_id FROM project_notes WHERE project_id=? AND note_id=?').bind(project, id).first();
+     if (!pnRow) {
+       return jsonError('当前笔记为数据源只读快照/业务投影，不支持直接修改基础字段', 400);
+     }
      const updates: string[] = [];
      const updateVals: unknown[] = [];
      if ('title' in body) { updates.push('title=?'); updateVals.push(value(body.title)); }
@@ -55,7 +64,7 @@ export async function POST(request:Request){
      const reason=value(body.reason)||'人工校正验收状态';
      if(!id||!newStatus)return jsonError('缺少笔记 ID 或新状态', 400);
      const oldRow=await d1.prepare('SELECT status FROM project_notes WHERE project_id=? AND note_id=?').bind(project,id).first<{status:string}>();
-     if(!oldRow)return jsonError('未找到目标项目笔记记录', 404);
+     if(!oldRow)return jsonError('当前笔记为只读业务快照/采集投影，不支持人工校正验收状态', 400);
      const oldStatus=oldRow?.status||'待抓取';
      await d1.prepare('UPDATE project_notes SET status=? WHERE project_id=? AND note_id=?').bind(newStatus,project,id).run();
      await logAction('人工验收校正','acceptance',id,`原状态: ${oldStatus} -> 新状态: ${newStatus}，原因: ${reason}，操作人: ${user.displayName||user.userId}`,project);
@@ -63,6 +72,10 @@ export async function POST(request:Request){
    }
     if(action==='note_delete'){
       const id=value(body.id);if(!id)return jsonError('缺少笔记 ID');
+      const pnRow = await d1.prepare('SELECT note_id FROM project_notes WHERE project_id=? AND note_id=?').bind(project, id).first();
+      if (!pnRow) {
+        return jsonError('当前笔记为数据源只读快照/业务投影，不能从项目中移除', 400);
+      }
       await d1.batch([d1.prepare('DELETE FROM project_notes WHERE project_id=? AND note_id=?').bind(project,id),d1.prepare('DELETE FROM key_comments WHERE project_id=? AND note_id=?').bind(project,id),d1.prepare('DELETE FROM comment_snapshots WHERE project_id=? AND note_id=?').bind(project,id)]);
       const remaining=await d1.prepare('SELECT COUNT(*) AS count FROM project_notes WHERE note_id=?').bind(id).first<{count:number}>();
       if(!Number(remaining?.count||0))await d1.batch([d1.prepare('DELETE FROM note_profiles WHERE note_id=?').bind(id),d1.prepare('DELETE FROM notes WHERE id=?').bind(id)]);

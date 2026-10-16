@@ -1,4 +1,4 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, apiUser, jsonError, type ProjectAuthContext } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { projectId } from '@/lib/projects';
 import { ensureReviewTables, persistReviewBatch } from '@/lib/review-report';
@@ -8,13 +8,17 @@ import { logAction } from '@/lib/ops';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const url = new URL(request.url);
+  const rawProject = url.searchParams.get('projectId');
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, rawProject, 'read')
+    : (await apiUser() ? { ok: true, status: 200, error: '', context: { projectId: String(rawProject || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
   await ensureSchema();
   const d1 = db();
   await ensureReviewTables(d1);
-
-  const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
   const pageSize = Math.min(100, Math.max(1, parseInt(url.searchParams.get('pageSize') || '20', 10)));
   const offset = (page - 1) * pageSize;
@@ -279,21 +283,26 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: {
+    id?: string;
+    rawId?: string;
+    source?: 'key-comment' | 'review-batch';
+    action?: 'resolve' | 'delete' | 'recalculate';
+    method?: string;
+    projectId?: string;
+    date?: string;
+  } = {};
+  try { body = await request.json() as typeof body; } catch { return jsonError('无效的请求体'); }
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, body.projectId, 'write')
+    : (await apiUser(true) ? { ok: true, status: 200, error: '', context: { projectId: String(body.projectId || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
   await ensureSchema();
   const d1 = db();
   await ensureReviewTables(d1);
   try {
-    const body = await request.json() as {
-      id?: string;
-      rawId?: string;
-      source?: 'key-comment' | 'review-batch';
-      action?: 'resolve' | 'delete' | 'recalculate';
-      method?: string;
-      projectId?: string;
-      date?: string;
-    };
-    const project = projectId(body.projectId);
 
     if (body.action === 'recalculate') {
       const dateKey = (body.date || '').trim();
@@ -306,8 +315,13 @@ export async function POST(request: Request) {
     }
 
     const source = body.source || (body.id?.startsWith('rb-') ? 'review-batch' : 'key-comment');
+    if (!['key-comment', 'review-batch'].includes(source)) return jsonError('未知待办来源');
     const rawId = body.rawId || body.id?.replace(/^(kc-|rb-)/, '');
     if (!rawId) return jsonError('缺少项目 ID', 400);
+    const table = source === 'key-comment' ? 'key_comments' : 'review_action_items';
+    const owned = await d1.prepare(`SELECT id FROM ${table} WHERE id=? AND project_id=?`).bind(rawId, project).first();
+    if (!owned) return jsonError('待办不存在或不属于当前项目', 404);
+    const actor = (access.context as ProjectAuthContext)?.user?.userId || '';
 
     if (body.action === 'resolve') {
       const method = body.method || '已人工核实处置';
@@ -319,7 +333,7 @@ export async function POST(request: Request) {
         await d1.prepare("UPDATE review_action_items SET status = '已处理', handled_at = ?, treatment_method = ? WHERE id = ? AND project_id = ?")
           .bind(now, method, Number(rawId), project).run();
       }
-      await logAction('处置待办', source, rawId, `标记已处理：${method}`, project);
+      await logAction('处置待办', source, rawId, `标记已处理：${method}`, project, actor);
       return Response.json({ ok: true });
     }
 
@@ -329,7 +343,7 @@ export async function POST(request: Request) {
       } else {
         await d1.prepare('DELETE FROM review_action_items WHERE id = ? AND project_id = ?').bind(Number(rawId), project).run();
       }
-      await logAction('删除待办', source, rawId, '移除待办项', project);
+      await logAction('删除待办', source, rawId, '移除待办项', project, actor);
       return Response.json({ ok: true });
     }
 

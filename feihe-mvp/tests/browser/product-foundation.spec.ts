@@ -1,0 +1,148 @@
+import { test, expect } from './evidence';
+import type { Page, APIRequestContext } from '@playwright/test';
+async function choose(page: Page, label: string, option: string) {
+  await page.getByRole('combobox', { name: label, exact: true }).click();
+  await page.getByRole('option', { name: option, exact: true }).click();
+}
+async function fixture(request: APIRequestContext, name: string) {
+  const res = await request.post('/api/projects', { headers: { 'x-user-id': 'user-editor' }, data: { action: 'create', name, templateId: 'general_workbench' } });
+  expect(res.status()).toBe(200); return (await res.json()).id as string;
+}
+for (const width of [1280, 1440, 768, 390]) {
+  test('产品入口 ' + width + 'px：新客户/部门经页面维护，负责人自行创建项目', async ({ page, request }, info) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-admin' });
+    const unique = String(Date.now()), client = '晨风试点客户' + unique, department = '咨询服务试点部' + unique;
+    await page.goto('/');
+    await page.getByRole('button', { name: '客户与部门', exact: true }).click();
+    await expect(page.getByRole('dialog', { name: '平台基础管理', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: '新增客户', exact: true }).click();
+    await page.getByLabel('客户名称', { exact: true }).fill(client);
+    await page.getByRole('button', { name: '保存客户', exact: true }).click();
+    await expect(page.getByRole('cell', { name: client, exact: true })).toBeVisible();
+    await choose(page, '基础管理类别', '部门');
+    await page.getByRole('button', { name: '新增部门', exact: true }).click();
+    await page.getByLabel('部门名称', { exact: true }).fill(department);
+    await page.getByRole('button', { name: '保存部门', exact: true }).click();
+    await expect(page.getByRole('cell', { name: department, exact: true })).toBeVisible();
+    await page.screenshot({ path: info.outputPath('new-organization.png') });
+    await page.getByRole('dialog').getByRole('button', { name: '关闭弹窗' }).click();
+    await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-editor' });
+    await page.goto('/');
+    await page.getByRole('button', { name: '＋ 新建项目', exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: '新建项目', exact: true });
+    await expect(dialog).toBeVisible();
+    await page.getByLabel('项目名称', { exact: true }).fill('咨询成交项目' + unique);
+    await choose(page, '负责部门', department);
+    await choose(page, '客户或内部项目', client);
+    await expect(page.getByRole('combobox', { name: '项目负责人', exact: true })).toContainText('业务编辑者(张晓)');
+    await page.screenshot({ path: info.outputPath('shared-project-form.png') });
+    const response = page.waitForResponse(r => r.url().endsWith('/api/projects') && r.request().method() === 'POST');
+    await page.getByRole('button', { name: '创建项目并开启向导', exact: true }).click();
+    const saved = await (await response).json();
+    await expect(page.getByRole('heading', { name: '咨询成交项目' + unique, exact: true })).toBeVisible();
+    const detail = await (await request.get('/api/projects?projectId=' + saved.id, { headers: { 'x-user-id': 'user-editor' } })).json();
+    expect(detail.currentUser.role).toBe('user'); expect(detail.projectRole).toBe('project_admin');
+    expect(detail.project).toMatchObject({ clientName: client, departmentName: department, ownerId: 'user-editor' });
+    const board = await (await request.get('/api/dashboards?projectId=' + saved.id, { headers: { 'x-user-id': 'user-editor' } })).json();
+    expect(board.cards).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+  test('统一项目表单 ' + width + 'px：中心与资料使用同一Dialog并保留负责人选择', async ({ page, request }) => {
+    await page.setViewportSize({ width, height: 900 }); await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-editor' });
+    const title = '资料一致性' + Date.now(), id = await fixture(request, title);
+    await page.goto('/');
+    await page.getByRole('article', { name: title, exact: true }).getByRole('button', { name: '编辑', exact: true }).click();
+    await expect(page.getByRole('dialog', { name: '编辑项目资料', exact: true })).toBeVisible();
+    await choose(page, '项目负责人', '项目主管(李强)');
+    await page.getByRole('button', { name: '保存项目资料', exact: true }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await page.goto('/projects/' + id + '/settings?tab=profile');
+    await page.getByRole('button', { name: '编辑项目资料', exact: true }).click();
+    await expect(page.getByRole('dialog', { name: '编辑项目资料', exact: true })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: '项目负责人', exact: true })).toContainText('项目主管(李强)');
+    await page.getByLabel('项目说明', { exact: true }).fill('两入口保持相同资料');
+    await page.getByRole('button', { name: '保存项目资料', exact: true }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    const detail = await (await request.get('/api/projects?projectId=' + id, { headers: { 'x-user-id': 'user-editor' } })).json();
+    expect(detail.project).toMatchObject({ ownerId: 'user-project-manager', description: '两入口保持相同资料' });
+    expect(detail.members.some((m: { userId: string; role: string }) => m.userId === 'user-project-manager' && m.role === 'project_admin')).toBe(true);
+  });
+  test('只读入口 ' + width + 'px：不引导编辑归档删除，负责人和参与筛选列表可用', async ({ page, request }, info) => {
+    await page.setViewportSize({ width, height: 900 });
+    const title = '只读交接' + Date.now(), id = await fixture(request, title);
+    const membership = await request.post('/api/projects', { headers: { 'x-user-id': 'user-editor' }, data: { action: 'add_member', projectId: id, userId: 'user-viewer', role: 'viewer' } }); expect(membership.status()).toBe(200);
+    await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' }); await page.goto('/');
+    const card = page.getByRole('article', { name: title, exact: true });
+    await expect(card).toBeVisible();
+    for (const name of ['编辑', '归档', '删除']) await expect(card.getByRole('button', { name, exact: true })).toHaveCount(0);
+    await page.getByRole('button', { name: '紧凑列表', exact: true }).click();
+    await expect(page.getByRole('row').filter({ hasText: title })).toBeVisible();
+    await choose(page, '项目范围', '我负责的');
+    await expect(page.getByRole('row').filter({ hasText: title })).toHaveCount(0);
+    await choose(page, '项目范围', '我参与的');
+    await expect(page.getByRole('row').filter({ hasText: title })).toBeVisible();
+    await expect(page.getByRole('button', { name: '联系平台管理员', exact: true })).toBeVisible();
+    await page.screenshot({ path: info.outputPath('readonly-project-list.png') });
+  });
+  test('键盘项目表单 ' + width + 'px：次要设置折叠、选择器和保存区无溢出并返回焦点', async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 }); await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-editor' }); await page.goto('/');
+    const trigger = page.getByRole('button', { name: '＋ 新建项目', exact: true }); await trigger.click();
+    const dialog = page.getByRole('dialog', { name: '新建项目', exact: true }); await expect(dialog).toBeVisible();
+    await expect(page.getByLabel('项目名称', { exact: true })).toBeFocused();
+    await expect(page.getByRole('combobox', { name: '业务状态', exact: true })).toBeHidden();
+    const owner = page.getByRole('combobox', { name: '项目负责人', exact: true }); await owner.focus(); await owner.press('ArrowDown'); await owner.press('Enter');
+    await expect(owner).toBeFocused(); await page.getByLabel('项目名称', { exact: true }).fill('键盘新项目');
+    const save = page.getByRole('button', { name: '创建项目并开启向导', exact: true }); await expect(save).toBeInViewport(); await expect(save).toBeEnabled();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await save.focus(); await page.keyboard.press('Tab'); expect(await dialog.evaluate(el => el.contains(document.activeElement))).toBe(true);
+    await page.keyboard.press('Escape'); await expect(dialog).toHaveCount(0); await expect(trigger).toBeFocused();
+  });
+}
+
+test('新部门人员入口：平台通过页面登记新企业账号，普通负责人自行创建并持久化单人选择', async ({ page, request }, info) => {
+  const unique = String(Date.now()), id = 'pilot-person-' + unique, name = '咨询试点负责人' + unique;
+  await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-admin' }); await page.goto('/');
+  await page.getByRole('button', { name: '客户与部门', exact: true }).click();
+  await choose(page, '基础管理类别', '成员目录');
+  await page.getByRole('button', { name: '登记公司成员', exact: true }).click();
+  await page.getByLabel('企业账号ID', { exact: true }).fill(id);
+  await page.getByLabel('成员姓名', { exact: true }).fill(name);
+  await page.getByLabel('成员邮箱', { exact: true }).fill('pilot' + unique + '@example.test');
+  await page.getByRole('button', { name: '保存公司成员', exact: true }).click();
+  await expect(page.getByRole('cell', { name, exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '编辑公司成员：' + name, exact: true }).click();
+  await expect(page.getByLabel('企业账号ID', { exact: true })).toBeDisabled();
+  await page.getByRole('dialog').getByRole('button', { name: '关闭弹窗' }).click();
+  await page.context().setExtraHTTPHeaders({ 'x-user-id': id }); await page.goto('/');
+  await page.getByRole('button', { name: '＋ 新建项目', exact: true }).click();
+  await page.getByLabel('项目名称', { exact: true }).fill('新部门内部项目' + unique);
+  await choose(page, '业务方向', '空白项目');
+  await expect(page.getByRole('combobox', { name: '项目负责人', exact: true })).toContainText(name);
+  const created = page.waitForResponse(r => r.url().endsWith('/api/projects') && r.request().method() === 'POST');
+  await page.getByRole('button', { name: '创建项目并开启向导', exact: true }).click();
+  const projectId = (await (await created).json()).id;
+  await expect(page.getByRole('heading', { name: '下一步：接入自己的业务表', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '完成初始化（发布项目）', exact: true })).toBeDisabled();
+  await page.getByRole('button', { name: '单人跳过', exact: true }).click();
+  await page.reload();
+  const detail = await (await request.get('/api/projects?projectId=' + projectId, { headers: { 'x-user-id': id } })).json();
+  expect(detail.currentUser.role).toBe('user'); expect(detail.project.ownerId).toBe(id);
+  expect(detail.readiness.completedSteps).toContain('skip:members'); expect(detail.readiness.ready).toBe(false);
+  await expect(page.getByRole('heading', { name: '当前项目尚未接入通用数据集', exact: true })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('new-department-owner-next-step.png') });
+});
+test('只读日常首屏：只展示准备状态，不提供同步或看板配置', async ({ page, request }, info) => {
+  const id = await fixture(request, '只读首用' + Date.now());
+  await request.post('/api/projects', { headers: { 'x-user-id': 'user-editor' }, data: { action: 'add_member', projectId: id, userId: 'user-viewer', role: 'viewer' } });
+  await page.context().setExtraHTTPHeaders({ 'x-user-id': 'user-viewer' });
+  await page.goto('/projects/' + id);
+  await expect(page.getByRole('region', { name: '工作台准备状态', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '当前项目尚未接入通用数据集', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '同步最新数据', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '⚙ 自定义看板卡片', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '完成初始化（发布项目）', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '生成复盘报告', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '打开智能助手', exact: true })).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('readonly-daily-entry.png'), fullPage: true });
+});

@@ -31,8 +31,8 @@ async function settings(project = DEFAULT_PROJECT_ID) {
     baseUrl: integration?.baseUrl || envVar('XHS_BASE_URL') || process.env.XHS_BASE_URL || local.xiaohongshu?.base_url || '',
     searchPath: String(integrationConfig.searchPath||'/api/solar/content_square/searchNote'),
     detailPath: String(integrationConfig.detailPath||'/api/solar/note/{noteId}/detail?bizCode='),
-    l1Path: String(integrationConfig.l1Path||'/api/solar/note/{noteId}/l1_comments'),
-    l2Path: String(integrationConfig.l2Path||'/api/solar/note/{noteId}/l2_comments'),
+    l1Path: String(integrationConfig.l1Path||'/api/solar/note/{noteId}/l1Comments'),
+    l2Path: String(integrationConfig.l2Path||'/api/solar/note/{noteId}/l2Comments'),
     l1PageSize: Number(envVar('XHS_COMMENT_L1_PAGE_SIZE') || process.env.XHS_COMMENT_L1_PAGE_SIZE || local.xiaohongshu?.comment_l1_page_size || 20),
     l2PageSize: Number(envVar('XHS_COMMENT_L2_PAGE_SIZE') || process.env.XHS_COMMENT_L2_PAGE_SIZE || local.xiaohongshu?.comment_l2_page_size || 20),
     searchPageSize: Number(envVar('XHS_SEARCH_PAGE_SIZE') || process.env.XHS_SEARCH_PAGE_SIZE || local.xiaohongshu?.search_page_size || 60),
@@ -53,9 +53,10 @@ function bytesToBase64(bytes: ArrayBuffer) {
   return btoa(binary);
 }
 
-async function cookiePool(project = DEFAULT_PROJECT_ID) {
+async function cookiePool(project = DEFAULT_PROJECT_ID, explicitObjectKey?: string) {
   const config = await settings(project);
-  const { accessKeyId, accessKeySecret, endpoint, bucket, objectKey } = config.oss;
+  const { accessKeyId, accessKeySecret, endpoint, bucket } = config.oss;
+  const objectKey = explicitObjectKey || config.oss.objectKey;
   if (!accessKeyId || !accessKeySecret || !endpoint || !bucket || !objectKey) {
     throw new Error('OSS Cookie 配置不完整');
   }
@@ -71,6 +72,52 @@ async function cookiePool(project = DEFAULT_PROJECT_ID) {
   const pool = text.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line) as Record<string, string>);
   if (!pool.length) throw new Error('Cookie 池为空');
   return pool;
+}
+
+// The note operations worker requires a named project account and its own OSS object.
+// Existing legacy callers retain their established behavior; this path has no global-cookie fallback.
+export async function createProjectCommentRequester(project: string) {
+  await ensureSchema();
+  const integration = await db().prepare("SELECT id,base_url,config_json FROM integrations WHERE project_id=? AND provider IN ('redtrend','xiaohongshu','pgy') AND enabled=1 ORDER BY CASE provider WHEN 'pgy' THEN 0 WHEN 'xiaohongshu' THEN 1 ELSE 2 END LIMIT 1").bind(projectId(project)).first<{id:string;base_url:string;config_json:string}>();
+  const config = JSON.parse(integration?.config_json || '{}');
+  const account = integration ? await db().prepare('SELECT id,external_id,metadata_json FROM source_accounts WHERE id=? AND project_id=? AND integration_id=?').bind(String(config.accountId || ''),projectId(project),integration.id).first<{id:string;external_id:string;metadata_json:string}>() : null;
+  const meta = JSON.parse(account?.metadata_json || '{}'), object = String(config.cookieObject || 'KOL/token.txt');
+  if (!integration?.base_url || !account || !['xiaohongshu','xhs','pgy'].includes(meta.platform) || !account.external_id) {
+    throw new Error('本项目指定评论账号、接口或独立Cookie对象未配置');
+  }
+  const pool = await cookiePool(project, object);
+  // Explicit matching: locate the entry where customerClientId or userId matches the bound external_id
+  const matched = pool.filter(c => String(c.customerClientId || c.userId || '') === String(account.external_id));
+  if (matched.length === 0) {
+    throw new Error(`在凭据池中未匹配到指定账号 (customerClientId: ${account.external_id})，未尝试任意Cookie`);
+  }
+  if (matched.length > 1) {
+    throw new Error(`在凭据池中匹配到多个相同账号凭据 (customerClientId: ${account.external_id})，未尝试任意Cookie`);
+  }
+  const cookies = matched[0];
+  const cookie = Object.entries(cookies).map(([key,value])=>`${key}=${value}`).join('; ');
+  const paths = {
+    detail: String(config.detailPath || '/api/solar/note/{noteId}/detail?bizCode='),
+    roots: String(config.l1Path || '/api/solar/note/{noteId}/l1Comments'),
+    replies: String(config.l2Path || '/api/solar/note/{noteId}/l2Comments'),
+  };
+  const base = new URL(integration.base_url);
+  if (!['https:','http:'].includes(base.protocol) || base.username || base.password) throw new Error('评论接口地址无效');
+  return {
+    async read(kind: keyof typeof paths, noteId: string, query: Record<string, string> = {}) {
+      const url = new URL(integration.base_url.replace(/\/$/,'') + paths[kind].replace('{noteId}', encodeURIComponent(noteId)));
+      Object.entries(query).forEach(([key, value]) => url.searchParams.set(key, value));
+      return requestJson(url.toString(), {
+        headers: {
+          Cookie: cookie,
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+          Accept: 'application/json, text/plain, */*',
+          Referer: 'https://pgy.xiaohongshu.com/',
+        }
+      }, 30);
+    },
+    pageSize: 100,
+  };
 }
 
 export async function createNoteDetailFetcher(project = DEFAULT_PROJECT_ID) {
@@ -110,18 +157,24 @@ function idOf(value: Record<string, unknown> | undefined) {
   return String(value?.idStr || value?.id || '');
 }
 
-function mapComment(noteId: string, value: Record<string, unknown>, depth: 1 | 2, parentId?: string): FetchedComment {
-  const user = (value.user || value.author || {}) as Record<string, unknown>;
+export function mapSolarComment(noteId: string, value: Record<string, unknown>, depth: 1 | 2, userMap: Record<string, Record<string, unknown>> = {}, parentId?: string): FetchedComment {
+  const rawUserId = String(value.userIdStr || value.userId || '');
+  const userInfo = userMap[rawUserId] || (value.user || value.author || {}) as Record<string, unknown>;
+  const nickname = String(userInfo.userNickName || userInfo.nickname || userInfo.nickName || userInfo.name || '');
   return {
     id: idOf(value) || `${noteId}-${depth}-${String(value.createTime || '')}-${String(value.content || '').slice(0, 12)}`,
     noteId,
     parentId,
     content: String(value.content || ''),
-    author: String(user.nickname || user.nickName || user.name || ''),
+    author: nickname,
     createdAt: String(value.createTime || ''),
     replyCount: Number(value.subCommentCount || 0),
     depth,
   };
+}
+
+function mapComment(noteId: string, value: Record<string, unknown>, depth: 1 | 2, parentId?: string): FetchedComment {
+  return mapSolarComment(noteId, value, depth, {}, parentId);
 }
 
 export async function fetchAllComments(noteId: string, project = DEFAULT_PROJECT_ID) {
@@ -158,8 +211,9 @@ export async function fetchAllComments(noteId: string, project = DEFAULT_PROJECT
   const comments: FetchedComment[] = [];
   for (const item of l1Items) {
     const l1 = item.comment as Record<string, unknown>;
+    const userMap = (item.userMap || {}) as Record<string, Record<string, unknown>>;
     const parentId = idOf(l1);
-    comments.push(mapComment(noteId, l1, 1));
+    comments.push(mapSolarComment(noteId, l1, 1, userMap));
     const l2: Array<Record<string, unknown>> = [];
     const l2Seen = new Set<string>();
     for (const child of (item.l1L2Comments || []) as Array<Record<string, unknown>>) {
@@ -167,6 +221,7 @@ export async function fetchAllComments(noteId: string, project = DEFAULT_PROJECT
     }
     const expected = Number(l1.subCommentCount || 0);
     let l2Offset = l2.length ? idOf(l2.at(-1)) : '';
+    let l2UserMap = userMap;
     while (parentId && l2.length < expected) {
       const url = new URL(`${config.baseUrl.replace(/\/$/, '')}${config.l2Path.replace('{noteId}',noteId)}`);
       url.searchParams.set('offset', l2Offset);
@@ -174,6 +229,7 @@ export async function fetchAllComments(noteId: string, project = DEFAULT_PROJECT
       url.searchParams.set('pageSize', String(config.l2PageSize));
       const data = await requestJson(url.toString(), { headers }, config.timeout);
       const batch = (data.l2Comments || []) as Array<Record<string, unknown>>;
+      if (data.userMap) l2UserMap = { ...l2UserMap, ...(data.userMap as Record<string, Record<string, unknown>>) };
       if (!batch.length) break;
       let added = 0;
       for (const child of batch) {
@@ -183,7 +239,7 @@ export async function fetchAllComments(noteId: string, project = DEFAULT_PROJECT
       if (!added || !next || next === l2Offset) break;
       l2Offset = next;
     }
-    for (const child of l2) comments.push(mapComment(noteId, child, 2, parentId));
+    for (const child of l2) comments.push(mapSolarComment(noteId, child, 2, l2UserMap, parentId));
   }
   return { noteId, reportedL1, fetchedL1: l1Items.length, fetchedL2: comments.filter((c) => c.depth === 2).length, comments };
 }

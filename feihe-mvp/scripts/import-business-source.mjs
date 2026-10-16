@@ -1,0 +1,8 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createServer} from 'vite';
+const args=Object.fromEntries(process.argv.slice(2).reduce((out,value,i,all)=>value.startsWith('--') ? [...out,[value.slice(2),all[i+1]]]:out,[]));
+const location=path.resolve(args.db || '.verification/business.db');if(!location.replaceAll('\\','/').includes('/.verification/') || !args.file || !args.project)throw new Error('必须明确指定项目、来源文件及隔离开发库');
+Object.assign(process.env,{LOCAL_DB_PATH:location,LOCAL_DB_NO_SEED:'true',ENABLE_TEST_AUTH:'1',REQUIRE_PROD_AUTH:'false'});
+const vite=await createServer({configFile:false,cacheDir:'node_modules/.vite/business-source-import',server:{middlewareMode:true,hmr:false},appType:'custom',resolve:{alias:{'@':path.resolve('.')}}});
+try{const daily=await vite.ssrLoadModule('/lib/business-daily/store.ts'),{db}=await vite.ssrLoadModule('/lib/db.ts');const table=JSON.parse(await fs.readFile(args.file,'utf8'));await daily.ensureBusinessSchema();const row=await db().prepare('SELECT version FROM business_project_config WHERE project_id=?').bind(args.project).first(),config=await daily.businessConfig(args.project) || {bindings:[]};const old=config.bindings.find(b=>b.key===table.key);if(old && (old.role!==table.role || old.url!==table.url))throw new Error('来源绑定冲突');if(!old){config.bindings.push({key:table.key,role:table.role,url:table.url});await daily.configureBusiness(args.project,config,row?.version || 0);}const result=await daily.ingestBusinessBundle(args.project,{tables:[table]});process.stdout.write(JSON.stringify({projectId:args.project,rows:table.rows.length,receipts:result.receipts})+'\n');}finally{await vite.close();}

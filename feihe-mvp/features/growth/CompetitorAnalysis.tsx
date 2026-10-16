@@ -9,6 +9,9 @@ import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { BrandLandscape } from './BrandLandscape';
 import { CompetitorIntelligenceSection } from './CompetitorIntelligenceSection';
+import { RealCompetitorMonitor } from '../competitors/RealCompetitorMonitor';
+import { useProject } from '../../components/project-shell/ProjectContext';
+import '../../styles/competitors.css';
 import { numeric, percent, ratio, completeSum, change, previousMonth, compactMetric } from './metrics';
 import { paletteColor } from '../../lib/workspace-palette';
 
@@ -16,11 +19,14 @@ export function CompetitorAnalysis({
   data,
   onSwitchTab,
   openCategoryNotes,
+  openNote,
 }: {
   data: Dashboard;
   onSwitchTab?: (tab: string) => void;
   openCategoryNotes?: (opts: { title: string; subtitle?: string; tag?: string; notes: Note[]; maxCount?: number }) => void;
+  openNote?: (id: string) => void;
 }) {
+  const { projectId } = useProject();
   const handleBrandClick = (brandName: string) => {
     if (!openCategoryNotes) return;
     const clean = brandName.trim();
@@ -65,6 +71,20 @@ export function CompetitorAnalysis({
   }));
 
   return <div className="stack animate-fade-in growth-analysis">
+    {/* 第四批核心：真实竞品监测主视图 (本地归一化库与有界调度，项目专属看板) */}
+    <RealCompetitorMonitor projectId={projectId || 'qicui'} openNote={openNote} openCategoryNotes={openCategoryNotes} />
+
+    {/* 历史月报与静态快照归档（2026-08 旧样本参考，非实时监控，默认折叠收纳） */}
+    <details className="comp-legacy-archive">
+      <summary>
+        <span>📦 历史月报归档与静态快照 (2026-08 旧样本参考，非实时监控)</span>
+        <span style={{ fontSize: '0.75rem', color: '#64748b' }}>点击展开/收起历史飞书月报</span>
+      </summary>
+      <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div style={{ padding: '0.625rem 0.875rem', background: '#fef3c7', borderRadius: '6px', fontSize: '0.8125rem', color: '#92400e', border: '1px solid #fde68a' }}>
+          ⚠️ <strong>历史来源声明</strong>：下方图表与数据均来源于 2026 年 8 月飞书月报静态快照存档，不代表当前最新舆情监测实况。最新竞品监测请以上方真实采集看板为准。
+        </div>
+
     <div className="reference-daily-grid" style={{ alignItems: 'stretch' }}>
       <MetricCard
         label="启萃灵犀搜索指数"
@@ -93,7 +113,7 @@ export function CompetitorAnalysis({
           <td><GrowthReadout value={row.reads} /></td><td><GrowthReadout value={row.interactions} /></td><td><GrowthReadout value={ratio(row.interactions, row.interactionSamples)} /></td>
           <td>{percent(ratio(row.pairedInteractions, row.pairedReads))}</td><td><GrowthReadout value={ratio(row.pairedCost, row.costInteractions)} /></td>
         </tr>)}</tbody>
-      </table></div> : <EmptyState title="暂无品牌样本" text="同步项目笔记后显示品牌份额和效率。" />}
+      </table></div> : <EmptyState compact title="暂无品牌样本" text="同步项目笔记后显示品牌份额和效率。" />}
       <p className="metric-note">阅读、互动为已记录值之和；互动/阅读仅使用两项均有记录的笔记，CPE 仅使用费用与互动均有记录的笔记。零分母不计算比率。费用口径为笔记报价，非实际投放结算。</p>
     </DashboardSection>
     <div className="workspace-two-col competitor-source-grid">
@@ -144,7 +164,7 @@ export function CompetitorAnalysis({
               </tbody>
             </table>
           </div>
-        ) : <EmptyState title="暂无月报数据" text="同步已填写的竞品月份后显示。" />}
+        ) : <EmptyState compact title="暂无月报数据" text="同步已填写的竞品月份后显示。" />}
       </DashboardSection>
 
       {/* 右侧：将灵犀和聚光合并为一个双曲线对比折线图，消除卡片紧贴与重复 */}
@@ -184,7 +204,7 @@ export function CompetitorAnalysis({
     <DashboardSection title="品牌问题反馈分布" eyebrow="SOURCE FEEDBACK" desc="来自内容规划表的品牌问题收集记录；为收集到的讨论，不代表已证实的产品问题。源表未提供 P0/P1/P2 等级。">
       {(() => {
         const issues = data.feishu?.competitorIssues || [];
-        if (!issues.length) return <EmptyState title="暂无来源记录" text="同步内容规划表中的品牌问题收集工作表后展示。" />;
+        if (!issues.length) return <EmptyState compact title="暂无来源记录" text="同步内容规划表中的品牌问题收集工作表后展示。" />;
         const counts = new Map<string, number>();
         const categories = new Map<string, number>();
         for (const issue of issues) {
@@ -309,6 +329,9 @@ export function CompetitorAnalysis({
     </DashboardSection>
 
     <CompetitorIntelligenceSection intelligence={data.feishu?.intelligence} />
+      </div>
+    </details>
+
     {onSwitchTab && <div className="workspace-header-actions"><button onClick={() => onSwitchTab('radar')}>查看关键词机会</button><button onClick={() => onSwitchTab('inspiration')}>进入灵感选题</button></div>}
   </div>;
 }

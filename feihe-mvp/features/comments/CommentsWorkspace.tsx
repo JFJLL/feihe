@@ -17,8 +17,13 @@ import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { api, num, pct } from '../../lib/hooks/use-project-data';
+import { NoteOperationsWorkspace } from './NoteOperationsWorkspace';
 
-export function CommentsWorkspace({
+export function CommentsWorkspace(props:Parameters<typeof LegacyCommentsWorkspace>[0]) {
+  const [legacyOpen,setLegacyOpen]=useState(false);
+  return <><NoteOperationsWorkspace key={props.projectId} projectId={props.projectId}/><details className="bd-panel" onToggle={e=>setLegacyOpen(e.currentTarget.open)}><summary>其他已配置的评论交付与处置工具</summary>{legacyOpen && <LegacyCommentsWorkspace {...props}/>}</details></>;
+}
+function LegacyCommentsWorkspace({
   projectId,
   dashboard,
   ops,
@@ -151,9 +156,9 @@ export function CommentsWorkspace({
     <div className="ops-workspace overview-colorful-page reference-workspace" data-workspace-ui="v2">
       <PageHeader
         variant="light"
-        eyebrow="FEIHE · Q3 COMMENTS"
+        eyebrow={projectId === 'qicui' ? '启萃评论业务' : undefined}
         title="评论运营"
-        subtitle="2026年 Q3 · 小红书口碑分析、评论采集、风险处置与供应商核验"
+        subtitle="笔记评论采集、风险处置与供应商核验；需要对应来源与外部服务。"
         badge={
           <span>
             {verifiedCount} 已确认外显 · {pendingRisk} 风险待办

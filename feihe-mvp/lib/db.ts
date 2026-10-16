@@ -275,6 +275,92 @@ export async function ensureSchema() {
         target_type TEXT NOT NULL DEFAULT '', target_id TEXT NOT NULL DEFAULT '',
         detail TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL
       )`),
+            d1.prepare(`CREATE TABLE IF NOT EXISTS organizations (
+        id TEXT PRIMARY KEY, name TEXT NOT NULL, slug TEXT NOT NULL,
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS departments (
+        id TEXT PRIMARY KEY, org_id TEXT NOT NULL, name TEXT NOT NULL,
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS clients (
+        id TEXT PRIMARY KEY, org_id TEXT NOT NULL, name TEXT NOT NULL,
+        industry TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY, email TEXT NOT NULL, name TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'viewer', department_id TEXT,
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS project_members (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, user_id TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'viewer', created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS connections (
+        id TEXT PRIMARY KEY, org_id TEXT NOT NULL, provider TEXT NOT NULL,
+        name TEXT NOT NULL, config_json TEXT NOT NULL DEFAULT '{}', status TEXT NOT NULL DEFAULT '未检测',
+        last_tested_at TEXT, last_error TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS project_connections (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, connection_id TEXT NOT NULL,
+        created_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS project_templates (
+        id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL, icon TEXT NOT NULL DEFAULT '',
+        modules_json TEXT NOT NULL DEFAULT '[]', default_metrics_json TEXT NOT NULL DEFAULT '[]',
+        default_dashboard_json TEXT NOT NULL DEFAULT '{}', version TEXT NOT NULL DEFAULT '1.0.0'
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS project_onboarding (
+        project_id TEXT PRIMARY KEY, current_step TEXT NOT NULL DEFAULT 'template',
+        completed_steps_json TEXT NOT NULL DEFAULT '[]', selected_template_id TEXT, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS dashboards (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, name TEXT NOT NULL DEFAULT '默认看板',
+        is_default INTEGER NOT NULL DEFAULT 1, version INTEGER NOT NULL DEFAULT 1,
+        layout_json TEXT NOT NULL DEFAULT '[]', status TEXT NOT NULL DEFAULT 'published',
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS dashboard_cards (
+        id TEXT PRIMARY KEY, dashboard_id TEXT NOT NULL, project_id TEXT NOT NULL,
+        title TEXT NOT NULL, type TEXT NOT NULL, metric_keys_json TEXT NOT NULL DEFAULT '[]',
+        config_json TEXT NOT NULL DEFAULT '{}', sort_order INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS datasets (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, source_id TEXT NOT NULL,
+        name TEXT NOT NULL, schema_json TEXT NOT NULL DEFAULT '[]', row_count INTEGER NOT NULL DEFAULT 0,
+        version INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS dataset_rows (
+        id TEXT PRIMARY KEY, dataset_id TEXT NOT NULL, project_id TEXT NOT NULL,
+        source_id TEXT NOT NULL, row_key TEXT NOT NULL, data_json TEXT NOT NULL,
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS sync_jobs (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, source_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending', rows_read INTEGER NOT NULL DEFAULT 0,
+        rows_imported INTEGER NOT NULL DEFAULT 0, rows_failed INTEGER NOT NULL DEFAULT 0,
+        error_summary TEXT NOT NULL DEFAULT '', started_at TEXT NOT NULL, finished_at TEXT
+      )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS note_project_profiles (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, note_id TEXT NOT NULL,
+        cooperation INTEGER NOT NULL DEFAULT 0, promoted INTEGER NOT NULL DEFAULT 0,
+        note_type TEXT NOT NULL DEFAULT '', note_price REAL NOT NULL DEFAULT 0,
+        picture_price REAL NOT NULL DEFAULT 0, video_price REAL NOT NULL DEFAULT 0,
+        category1 TEXT NOT NULL DEFAULT '', category2 TEXT NOT NULL DEFAULT '',
+        product_scope TEXT NOT NULL DEFAULT '本品', brand TEXT NOT NULL DEFAULT '',
+        notes_remarks TEXT NOT NULL DEFAULT '', review_status TEXT NOT NULL DEFAULT '',
+        created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+      )`),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_project_members_project ON project_members(project_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_project_members_user ON project_members(user_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_dashboards_project ON dashboards(project_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_dashboard_cards_dashboard ON dashboard_cards(dashboard_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_datasets_project ON datasets(project_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_dataset_rows_dataset ON dataset_rows(dataset_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_dataset_rows_project ON dataset_rows(project_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_sync_jobs_project_source ON sync_jobs(project_id, source_id)'),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_note_project_profiles_project_note ON note_project_profiles(project_id, note_id)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_notes_pipeline ON notes(pipeline)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_project_notes_project ON project_notes(project_id)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_project_notes_note ON project_notes(note_id)'),
@@ -352,6 +438,7 @@ export async function ensureSchema() {
     await ensureColumn('note_profiles', 'source_metrics_json', 'TEXT');
     await ensureColumn('comment_snapshots', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('data_sources', 'mapping_json', `TEXT NOT NULL DEFAULT '{}'`);
+    await ensureColumn('dashboards', 'save_token', "TEXT NOT NULL DEFAULT ''");
     await ensureColumn('data_sources', 'last_error', `TEXT NOT NULL DEFAULT ''`);
     await ensureColumn('project_notes', 'last_fetched_at', 'TEXT');
     await ensureColumn('project_notes', 'comment_total', 'INTEGER NOT NULL DEFAULT 0');
@@ -363,9 +450,87 @@ export async function ensureSchema() {
     await ensureColumn('supplier_comments', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('jobs', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('action_logs', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
+    await ensureColumn('action_logs', 'actor_user_id', "TEXT NOT NULL DEFAULT ''");
+    await ensureColumn('projects', 'org_id', "TEXT NOT NULL DEFAULT 'org-default'");
+    await ensureColumn('projects', 'department_id', "TEXT NOT NULL DEFAULT 'dept-marketing'");
+    await ensureColumn('projects', 'client_id', "TEXT");
+    await ensureColumn('projects', 'owner_id', "TEXT NOT NULL DEFAULT 'user-admin'");
+    await ensureColumn('projects', 'template_id', "TEXT NOT NULL DEFAULT 'content_marketing'");
+    await ensureColumn('projects', 'is_archived', "INTEGER NOT NULL DEFAULT 0");
+    await ensureColumn('projects', 'archived_at', "TEXT");
+    await ensureColumn('projects', 'onboarding_status', "TEXT NOT NULL DEFAULT 'ready'");
+    await ensureColumn('data_sources', 'connection_id', "TEXT NOT NULL DEFAULT 'conn-default-feishu'");
+    await ensureColumn('data_sources', 'is_paused', "INTEGER NOT NULL DEFAULT 0");
+    await ensureColumn('data_sources', 'schedule_enabled', "INTEGER NOT NULL DEFAULT 0");
+    await ensureColumn('data_sources', 'last_probe_at', "TEXT");
+    await ensureColumn('data_sources', 'probe_status', "TEXT NOT NULL DEFAULT '未检测'");
+    await ensureColumn('sync_jobs', 'request_scope', "TEXT NOT NULL DEFAULT 'unknown'");
+    await ensureColumn('sync_jobs', 'requested_range', "TEXT NOT NULL DEFAULT ''");
+    await ensureColumn('supplier_comments', 'source_id', "TEXT NOT NULL DEFAULT 'default_supplier'");
+    await ensureColumn('metric_definitions', 'is_standard', "INTEGER NOT NULL DEFAULT 1");
+    await ensureColumn('metric_definitions', 'numerator_key', "TEXT");
+    await ensureColumn('metric_definitions', 'denominator_key', "TEXT");
+    await ensureColumn('metric_definitions', 'missing_policy', "TEXT NOT NULL DEFAULT 'null'");
+    await ensureColumn('metric_definitions', 'filter_json', "TEXT NOT NULL DEFAULT '{}'");
     await d1.batch([
       d1.prepare(`INSERT OR IGNORE INTO projects(id,name,spu,brand,category,description,status,color,created_at,updated_at)
         VALUES('${DEFAULT_PROJECT_ID}','启萃评论与声量项目','启萃','飞鹤','婴幼儿奶粉','评论执行、口碑舆情与本竞品监测','进行中','#1769d5',?,?)`).bind(new Date().toISOString(),new Date().toISOString()),
+            d1.prepare(`INSERT OR IGNORE INTO organizations(id, name, slug, created_at, updated_at)
+        VALUES('org-default', '通用项目协同中台', 'default', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-marketing', 'org-default', '市场与营销部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-operations', 'org-default', '渠道与运营部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-brand', 'org-default', '品牌战略部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-general', 'org-default', '综合管理部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO clients(id, org_id, name, industry, created_at, updated_at)
+        VALUES('client-feihe', 'org-default', '飞鹤乳业', '快消母婴', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO clients(id, org_id, name, industry, created_at, updated_at)
+        VALUES('client-internal', 'org-default', '公司内部部门', '内部管理', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
+        VALUES('user-admin', 'admin@company.local', '平台管理员', 'platform_admin', 'dept-general', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
+        VALUES('user-project-manager', 'pm@company.local', '项目主管(李强)', 'user', 'dept-marketing', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
+        VALUES('user-editor', 'editor@company.local', '业务编辑者(张晓)', 'user', 'dept-marketing', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
+        VALUES('user-viewer', 'viewer@company.local', '项目观察员(王悦)', 'user', 'dept-operations', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO project_members(id, project_id, user_id, role, created_at, updated_at)
+        VALUES('qicui:user-admin', 'qicui', 'user-admin', 'project_admin', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO project_members(id, project_id, user_id, role, created_at, updated_at)
+        VALUES('qicui:user-project-manager', 'qicui', 'user-project-manager', 'project_admin', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO project_members(id, project_id, user_id, role, created_at, updated_at)
+        VALUES('qicui:user-editor', 'qicui', 'user-editor', 'editor', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO project_members(id, project_id, user_id, role, created_at, updated_at)
+        VALUES('qicui:user-viewer', 'qicui', 'user-viewer', 'viewer', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO project_onboarding(project_id, current_step, completed_steps_json, selected_template_id, updated_at)
+        VALUES('qicui', 'ready', '["template","source","first_sync","metrics","ready"]', 'content_marketing', ?)`).bind(new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO project_templates(id, name, description, icon, modules_json, default_metrics_json, default_dashboard_json, version)
+        VALUES('general_workbench', '通用数据工作台', '适用于任意非社媒表格数据集，如活动排期、任务分工、预算支出等，支持通用指标统计与看板呈现。', 'table',
+        '["overview","data","reports","settings"]',
+        '["task_total","task_completed","task_completion_rate","budget_total","spent_total","budget_spent_rate"]',
+        '{"cards":[{"id":"c1","title":"任务总数","type":"metric_card","metric":"task_total"},{"id":"c2","title":"已完成数","type":"metric_card","metric":"task_completed"},{"id":"c3","title":"任务完成率","type":"metric_card","metric":"task_completion_rate"},{"id":"c4","title":"预算执行率","type":"metric_card","metric":"budget_spent_rate"},{"id":"c5","title":"按负责人状态分布","type":"bar_chart","dimension":"owner","metric":"task_completed"}]}',
+        '1.0.0')`),
+      d1.prepare(`INSERT OR IGNORE INTO project_templates(id, name, description, icon, modules_json, default_metrics_json, default_dashboard_json, version)
+        VALUES('content_marketing', '内容营销项目', '适用于品牌内容种草、笔记资产沉淀、博主合作与曝光互动效果跟踪。', 'sparkles',
+        '["overview","content","growth","data","reports","settings"]',
+        '["published_notes","interactions","reads","ctr","spend","cpe"]',
+        '{"cards":[{"id":"cm1","title":"发布笔记数","type":"metric_card","metric":"published_notes"},{"id":"cm2","title":"总互动量","type":"metric_card","metric":"interactions"},{"id":"cm3","title":"互动成本 CPE","type":"metric_card","metric":"cpe"},{"id":"cm4","title":"内容趋势","type":"trend_chart","metric":"interactions"}]}',
+        '1.0.0')`),
+      d1.prepare(`INSERT OR IGNORE INTO project_templates(id, name, description, icon, modules_json, default_metrics_json, default_dashboard_json, version)
+        VALUES('comment_qc', '评论质检项目', '适用于社媒口碑监测、正负向舆情判定、关键评论处置与供应商交付核验。', 'message-square',
+        '["overview","comments","data","reports","settings"]',
+        '["comments_total","positive_comments","negative_comments","supplier_visible_rate"]',
+        '{"cards":[{"id":"cq1","title":"评论总数","type":"metric_card","metric":"comments_total"},{"id":"cq2","title":"正向舆情","type":"metric_card","metric":"positive_comments"},{"id":"cq3","title":"负向预警","type":"metric_card","metric":"negative_comments"},{"id":"cq4","title":"外显达标率","type":"metric_card","metric":"supplier_visible_rate"}]}',
+        '1.0.0')`),
+      d1.prepare(`INSERT OR IGNORE INTO project_templates(id, name, description, icon, modules_json, default_metrics_json, default_dashboard_json, version)
+        VALUES('ad_performance', '投放分析项目', '适用于聚光等广告投放账户监控、消耗趋势、点击曝光与获客转化分析。', 'trending-up',
+        '["overview","insights","data","reports","settings"]',
+        '["spend","impressions","clicks","ctr","cpc","cpm"]',
+        '{"cards":[{"id":"ad1","title":"广告消耗","type":"metric_card","metric":"spend"},{"id":"ad2","title":"总曝光量","type":"metric_card","metric":"impressions"},{"id":"ad3","title":"总点击量","type":"metric_card","metric":"clicks"},{"id":"ad4","title":"平均点击率 CTR","type":"metric_card","metric":"ctr"}]}',
+        '1.0.0')`),
       d1.prepare(`INSERT OR IGNORE INTO pipelines(id,name,target_count,delivered_count,budget,spent) VALUES('viral','素人评论大爆文',200,128,24000,15360)`),
       d1.prepare(`INSERT OR IGNORE INTO pipelines(id,name,target_count,delivered_count,budget,spent) VALUES('value_scan','价值笔记扫描',68,43,12000,7200)`),
       d1.prepare(`INSERT OR IGNORE INTO pipelines(id,name,target_count,delivered_count,budget,spent) VALUES('commercial','新发商业笔记',360,276,42000,30660)`),
@@ -430,6 +595,11 @@ export async function ensureSchema() {
     } catch {}
     // Quarantine only exact records inserted by the withdrawn historical seed.
     // Keep them for audit; real captures and future snapshots remain untouched.
+        await d1.prepare(`INSERT OR IGNORE INTO note_project_profiles(id, project_id, note_id, cooperation, promoted, note_type, note_price, picture_price, video_price, category1, category2, product_scope, brand, created_at, updated_at)
+      SELECT 'qicui:' || note_id, 'qicui', note_id, cooperation, promoted, note_type, note_price, picture_price, video_price, category1, category2, '本品', brand, updated_at, updated_at
+      FROM note_profiles`).run();
+    await d1.prepare(`INSERT OR IGNORE INTO dashboards(id, project_id, name, is_default, version, status, created_at, updated_at)
+      VALUES('dash-qicui-default', 'qicui', '启萃默认营销看板', 1, 1, 'published', datetime('now'), datetime('now'))`).run();
     await ensureColumn('comment_snapshots', 'quarantine_reason', "TEXT NOT NULL DEFAULT ''");
     const rejected = (await import('./migrations/rejected-snapshot-signatures.json')).default;
     await d1.prepare(`UPDATE comment_snapshots SET quarantine_reason='withdrawn-preset-history'

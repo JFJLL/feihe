@@ -5,6 +5,8 @@ import type { Note, NoteDetail } from '../types/project';
 import { DetailDrawer } from '../../features/content/DetailDrawer';
 import { NoteDetailDrawer, type NoteDetailContext } from '../../components/note-detail/NoteDetailDrawer';
 import { api } from './use-project-data';
+import { fetchWithCache, getCachedQuery, buildCacheKey, invalidateQueryCache } from '../cache/query-cache';
+import { useCacheIdentity } from '../../components/project-shell/IdentityBoundary';
 
 export function useNoteDetail({
   projectId,
@@ -21,20 +23,33 @@ export function useNoteDetail({
   context?: NoteDetailContext;
   defaultTab?: 'basic' | 'performance' | 'comments' | 'acceptance';
 }) {
+  const identity = useCacheIdentity();
   const [detail, setDetail] = useState<NoteDetail | null>(null);
 
   const openNote = useCallback(
     async (id: string) => {
+      const detailUrl = '/api/notes/detail?id=' + encodeURIComponent(id) + '&projectId=' + encodeURIComponent(projectId);
+      // Synchronous instant render if previously opened/cached
+      const cacheKey = buildCacheKey(identity, projectId, detailUrl);
+      const cached = getCachedQuery<NoteDetail>(cacheKey, identity);
+      if (cached?.data) {
+        setDetail(cached.data);
+      }
       try {
-        const data = await api<NoteDetail>(
-          '/api/notes/detail?id=' + encodeURIComponent(id) + '&projectId=' + encodeURIComponent(projectId)
-        );
+        const data = await fetchWithCache<NoteDetail>(detailUrl, {
+          identity,
+          projectId,
+          staleTime: 60 * 1000,
+          ttl: 15 * 60 * 1000,
+        });
         setDetail(data);
       } catch (err) {
-        toast(err instanceof Error ? err.message : '明细加载失败', 'error');
+        if (!cached?.data) {
+          toast(err instanceof Error ? err.message : '明细加载失败', 'error');
+        }
       }
     },
-    [projectId, toast]
+    [projectId, identity, toast]
   );
 
   const saveNote = useCallback(
@@ -48,6 +63,7 @@ export function useNoteDetail({
             ...(note as unknown as Record<string, unknown>),
           }),
         });
+        invalidateQueryCache({ projectId, endpoint: '/api/notes/detail' });
         toast('笔记资料已更新', 'success');
         setDetail(null);
         await onRefresh({ fresh: true });
@@ -66,6 +82,7 @@ export function useNoteDetail({
           method: 'POST',
           body: JSON.stringify({ action: 'note_delete', projectId, id: note.id }),
         });
+        invalidateQueryCache({ projectId, endpoint: '/api/notes/detail' });
         toast('笔记已移出当前项目', 'success');
         setDetail(null);
         await onRefresh({ fresh: true });
@@ -77,7 +94,7 @@ export function useNoteDetail({
   );
 
   const isOperations =
-    variant === 'operations' || context === 'content' || context === 'comments' || context === 'acceptance';
+    variant === 'operations' || context === 'content' || context === 'comments' || context === 'acceptance' || context === 'growth' || context === 'insights';
 
   const renderDrawer = useCallback(() => {
     if (!detail) return null;

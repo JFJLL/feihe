@@ -1,7 +1,8 @@
 ﻿'use client';
 
 import { contentDirectionLabel } from '../../lib/dashboard-display';
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import type { Dashboard, Ops, Project } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
@@ -18,6 +19,16 @@ import { KpiComparison } from './KpiComparison';
 import { useCategoryNotesModal } from '../../components/notes-modal/CategoryNotesModal';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import { overviewPeriod, sumMetric, finiteMetric, matchedBudget } from './overview-view-model';
+import { OnboardingWizard } from '../onboarding/OnboardingWizard';
+import { GeneralWorkbenchBoard } from './GeneralWorkbenchBoard';
+import { CommentsWorkspace } from '../comments/CommentsWorkspace';
+import { MetricCard } from '../../components/ui/operations/MetricCard';
+import { DatasetAdOverview } from './DatasetAdOverview';
+import { DatasetDomainOverview } from './DatasetDomainOverview';
+import { BusinessComponentBoard } from './BusinessComponentBoard';
+import { BusinessDailyBoard } from './BusinessDailyBoard';
+import { resolveDashboardPreset } from './dashboard-template';
+import { DashboardFrame } from './DashboardFrame';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
 const formatDateZh = (val: string | null | undefined) => {
@@ -27,10 +38,10 @@ const formatDateZh = (val: string | null | undefined) => {
 };
 const colors = ['#1e6091', '#16a34a', '#7c3aed', '#f59e0b', '#0d9488', '#64748b'];
 
-function Section({ tag, title, tone = 'blue', hint, children }: {
-  tag: string; title: string; tone?: string; hint?: string; children: ReactNode;
+function Section({ tag, title, tone = 'blue', hint, children, componentId }: {
+  tag: string; title: string; tone?: string; hint?: string; children: ReactNode; componentId?: string;
 }) {
-  return <section className={`pastel-card reference-section section-${tone}`}>
+  return <section data-business-component={componentId} className={`pastel-card reference-section section-${tone}`}>
     <div className="card-header-row"><div className="header-left"><span className={`section-mini-tag tag-${tone}`}>{tag}</span><h3>{title}</h3></div>{hint && <span className="header-tag">{hint}</span>}</div>{children}
   </section>;
 }
@@ -48,7 +59,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   projectId: string; project?: Project; dashboard: Dashboard; ops: Ops; loading?: boolean;
   onRefresh?: (opts?: { fresh?: boolean }) => Promise<void>;
 }) {
-  const { showToast } = useProject();
+  const { refreshWorkspace } = useProject();
+  const currentMemberRole = project?.projectRole || '';
+  const canWrite = Boolean(project?.canWrite);
 
   const handleNoteInspect = (noteId: string) => {
     const targetNote = (dashboard.notes || []).find(n => String(n.id) === String(noteId));
@@ -133,7 +146,15 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   };
 
   const [tab, setTab] = useProjectTab('overview', ['overview', 'daily']);
-  const [selected, setSelected] = useState('');
+  const searchParams = useSearchParams();
+  const urlDay = searchParams.get('day') || '';
+  const [selected, setSelected] = useState(urlDay);
+
+  useEffect(() => {
+    if (urlDay && urlDay !== selected) {
+      setSelected(urlDay);
+    }
+  }, [urlDay]);
   const [scatterCategory, setScatterCategory] = useState('');
   const [prompt, setPrompt] = useState('根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。');
   const [busy, setBusy] = useState(false);
@@ -186,6 +207,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     label: readBandLabels[i],
     count: readValues.filter(v => v >= lo && v < (readBands[i + 1] ?? Infinity)).length,
   }));
+  const dominantReadBands = histBins.filter(bin => bin.count > 0 && bin.count === Math.max(...histBins.map(item => item.count))).map(bin => bin.label);
   // 达人层级效果箱线图数据
   const boxPlotGroups = (dashboard.analytics.creatorLevels || [])
     .map(level => {
@@ -245,7 +267,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     if (!prompt.trim()) return;
     setBusy(true); setError(''); setReport('');
     try {
-      const result = await api<{ reportId: string }>('/api/agent', { method: 'POST', body: JSON.stringify({ projectId, prompt }) });
+      const quarterStart = date ? `${date.slice(0, 4)}-${String(Math.floor((Number(date.slice(5, 7)) - 1) / 3) * 3 + 1).padStart(2, '0')}-01` : '';
+      const query = date ? { from: tab === 'daily' ? date : quarterStart, to: date } : undefined;
+      const result = await api<{ reportId: string }>('/api/agent', { method: 'POST', body: JSON.stringify({ projectId, prompt, query }) });
       setReport(result.reportId);
       await onRefresh({ fresh: true });
     } catch (e) { setError(e instanceof Error ? e.message : '生成失败'); }
@@ -258,18 +282,78 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     if (next) setSelected(String(next.date));
   }
 
-  return <div className="ops-workspace overview-colorful-page reference-workspace">
-    <PageHeader eyebrow={`FEIHE · ${quarterName} DASHBOARD`} title={project?.name || '项目总览'} subtitle={`2026年 ${quarterName} · 小红书种草与电商引流 · 项目数据看板`}>
-      <div className="workspace-header-actions"><span className="overview-quarter-pill">投放截至 {date || '待同步'}</span><SyncButton projectId={projectId} onRefresh={onRefresh} /></div>
-    </PageHeader>
-    <WorkspaceModuleTabs tabs={[
-      { id: 'overview', title: `总览 · ${quarterName}累计全盘`, desc: '决策摘要、月度进度、投流效率与内容复盘', icon: '📊' },
-      { id: 'daily', title: '分日 · 日报监控看板', desc: '日期切换、8大核心指标与近30天趋势', icon: '📅' },
-    ]} activeTab={tab} onChange={setTab} />
-    <FeishuSources data={dashboard.feishu} projectId={projectId} />
+  const preset = resolveDashboardPreset(project?.templateId);
+  const isGeneral = preset.kind === 'general';
+  const isCommentQc = preset.kind === 'comment_qc';
+  const isAd = preset.kind === 'ad_performance';
+  const isDatasetContent = project?.templateId === 'content_marketing' && projectId !== 'qicui' && !(dashboard.notes || []).length;
 
-    {tab === 'overview' && <div className="overview-block-content">
-      <section className="pastel-card health-overview-card">
+  const headerSubtitle = isGeneral
+    ? `${project?.departmentName || '业务部门'} · 结构化数据集与度量监控看板`
+    : isCommentQc
+    ? '本项目评论记录、来源标注与处置状态'
+    : isAd
+    ? '本项目投放消耗、点击效率与渠道对比'
+    : isDatasetContent ? '本项目内容表现、趋势与记录' : '业务日报、投流效果与执行进度';
+
+  const tabsSlot = preset.showModuleTabs ? (
+    <WorkspaceModuleTabs
+      tabs={[
+        { id: 'overview', title: '数据总览', desc: '整体效果与星盟电商漏斗', icon: '📊' },
+        { id: 'daily', title: '分日看板', desc: '预算排期、投流摘要与业务日报', icon: '📅' },
+      ]}
+      activeTab={tab}
+      onChange={setTab}
+      variant="cards"
+    />
+  ) : null;
+
+  return (
+    <DashboardFrame
+      preset={preset}
+      project={project}
+      subtitle={headerSubtitle}
+      actions={canWrite && (isGeneral || isAd || isCommentQc) ? <SyncButton projectId={projectId} onRefresh={onRefresh} /> : undefined}
+      tabsSlot={tabsSlot}
+    >
+
+    {project?.onboardingStatus !== 'ready' && (
+      <OnboardingWizard
+        projectId={projectId}
+        project={project}
+        role={currentMemberRole}
+        onFinish={async () => {
+          if (refreshWorkspace) await refreshWorkspace();
+          if (onRefresh) await onRefresh({ fresh: true });
+        }}
+      />
+    )}
+
+    {isGeneral ? (
+      <div className="overview-block-content" style={{ marginTop: 20 }}>
+        <GeneralWorkbenchBoard key={projectId} projectId={projectId} project={project} />
+      </div>
+    ) : project?.templateId === 'comment_qc' ? (
+      <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="comment" hasLegacyData={Boolean(projectId === 'qicui' || (dashboard.notes || []).length || (ops.supplier || []).length)} legacy={<CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />} />
+    ) : isDatasetContent ? <><BusinessDailyBoard key={`${projectId}:${tab}`} projectId={projectId} overview={tab === 'overview'} canWrite={canWrite} />{tab === 'overview' && <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="content" />}</> : project?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} legacy={(dashboard.feishu?.daily || []).length ? (
+      <div className="stack" data-testid="ad-performance-overview">
+        <FeishuSources data={dashboard.feishu} projectId={projectId} />
+        <section className="ops-metric-grid" aria-label="投放分析指标">
+          <MetricCard label="广告消耗" value={amount(feedSpend === null && searchSpend === null ? null : channelTotal)} unit="元" />
+          <MetricCard label="信息流消耗" value={amount(feedSpend)} unit="元" />
+          <MetricCard label="搜索消耗" value={amount(searchSpend)} unit="元" />
+          <MetricCard label="计划达成率" value={amount(daily?.achieve_pct)} unit="%" />
+        </section>
+        <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#2563eb' }, { key: 'feed_spend', label: '信息流消耗', color: '#16a34a' }, { key: 'search_spend', label: '搜索消耗', color: '#7c3aed' }]} /></Section>
+        <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#16a34a' }, { key: 'search_ctr', label: '搜索CTR', color: '#7c3aed' }]} /></Section>
+      </div>
+    ) : undefined} /> : (
+      <>
+    <BusinessDailyBoard key={`${projectId}:${tab}`} projectId={projectId} overview={tab === 'overview'} canWrite={canWrite} />
+    {Boolean((dashboard.notes || []).length) && (<details className="bd-panel"><summary>其他已配置的项目组件</summary>
+    <FeishuSources data={dashboard.feishu} projectId={projectId} />
+    {tab === 'overview' && <BusinessComponentBoard projectId={projectId} view="overview" canManage={Boolean(project?.canManage && !project.isArchived)} period={date}>
+      <section data-business-component="decision" className="pastel-card health-overview-card">
         <div className="health-card-head"><span className="section-mini-tag tag-blue">决策层 · 今日指标与待办</span><span className="health-date-hint">投放 {date || '待同步'} · 笔记 {latestNoteDate || '待同步'}</span></div>
         <div className="health-main-row">
           <div className="health-score-dial"><div className="score-number">{amount(daily?.achieve_pct)}<small>%</small></div><div className="score-label">当日计划达成率</div><div className="score-badge">实际消耗 / 已填计划</div></div>
@@ -283,7 +367,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <div className="health-exec-summary"><div className="exec-title"><strong>Executive Summary · 关键数据摘要</strong></div><ul className="exec-summary-list">{summary.map(item => <li className="exec-item" key={item.tag}><span className={`exec-tag ${item.tag === '行动' ? 'tag-warn' : 'tag-blue'}`}>{item.tag}</span><span>{item.text}</span></li>)}</ul></div>
       </section>
 
-      <Section tag="预算节奏" title="预算消耗节奏对比" tone="amber" hint="当月进度与季度全盘">
+      <Section componentId="budget" tag="预算节奏" title="预算消耗节奏对比" tone="amber" hint="当月进度与季度全盘">
         {date ? <div className="budget-dual-grid">{[
           { title: `${Number(date.slice(5, 7))}月当月 · 截至${formatDateZh(date)}`, spend: monthSpend, budget: monthBudget, time: monthDay / monthDays * 100, days: `${monthDay}/${monthDays}`, tone: 'blue', count: monthRows.length },
           { title: `${quarterName} 累计 · ${quarterStartZh}—${formatDateZh(date)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / quarterTotalDays * 100, days: `${quarterDay}/${quarterTotalDays}`, tone: 'purple', count: quarterRows.length },
@@ -296,7 +380,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <div className="budget-footer-notes">计划为已填日期的预算合计，并非完整月度或季度预算。时间进度按自然日计算。</div>
       </Section>
 
-      <Section tag="一、投流效率" title="KFS 投流与采买结构" tone="teal" hint="投流与达人采买分开展示">
+      <Section componentId="kfs" tag="一、投流效率" title="KFS 投流与采买结构" tone="teal" hint="投流与达人采买分开展示">
         <div className="two-col-chart-grid" style={{ alignItems: 'stretch' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div className="chart-inner-panel"><div className="inner-head"><strong>信息流 / 搜索投流结构</strong><small>{quarterName} 已同步日期</small></div>
@@ -320,7 +404,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </div>
       </Section>
 
-      <Section tag="二、内容产出" title="种草发布与切角渗透" tone="purple" hint="当前项目累计笔记库">
+      <Section componentId="content-output" tag="二、内容产出" title="种草发布与切角渗透" tone="purple" hint="当前项目累计笔记库">
         <div className="content-kpi-grid">{[
           { label: '种草笔记总数', value: m.noteCount, unit: '篇', tone: 'blue', desc: `已发布 ${num(m.publishedCount)} 篇` },
           { label: '累计内容阅读', value: compact(m.readCount), unit: '次', tone: 'green', desc: `累计曝光 ${compact(m.exposure)} 次` },
@@ -362,7 +446,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </div>
       </Section>
 
-      <Section tag="三、内容效果" title="内容效果深度分析" tone="blue" hint="散点矩阵 · 分布直方图 · 箱线图">
+      <Section componentId="content-effects" tag="三、内容效果" title="内容效果深度分析" tone="blue" hint="散点矩阵 · 分布直方图 · 箱线图">
         <div className="two-col-chart-grid">
           <div className="chart-inner-panel"><div className="inner-head"><strong>笔记阅读与互动效果（散点图）</strong><small>X=阅读量 Y=互动量 · {scatterPoints.length}篇完整记录（含零值）· 点大小=采集评论数</small></div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>内容方向<CustomSelect ariaLabel="散点图内容方向" value={scatterCategory} onChange={setScatterCategory} options={[{ value: '', label: '全部方向' }, ...[...new Set(dashboard.notes.map(n => contentDirectionLabel(n.category1)))].sort().map(value => ({ value, label: value }))]} /></label>
@@ -371,7 +455,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
             <div className="inner-head"><strong>笔记阅读量分布直方图</strong><small>{readValues.length} 篇有阅读数据的笔记</small></div>
             <div style={{ display: 'flex', alignItems: 'center', height: 38, marginBottom: 10, fontSize: 12, color: '#64748b' }}>
-              <span>主流分布集中于 <strong style={{ color: '#0f172a' }}>1千~5千</strong> 区间（占比最高）</span>
+              <span>{dominantReadBands.length ? <>已记录阅读量最多的区间：<strong style={{ color: '#0f172a' }}>{dominantReadBands.join('、')}</strong>{dominantReadBands.length > 1 ? '（并列）' : ''}</> : '尚无可统计的阅读量'}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
               {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" height={280} onBinClick={handleHistogramBinClick} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
@@ -384,14 +468,14 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </div>}
       </Section>
 
-      <KpiComparison data={dashboard.feishu} />
+      <div data-business-component="kpi-comparison"><KpiComparison data={dashboard.feishu} /></div>
 
-      <Section tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="项目全量笔记按互动量排序">
+      <Section componentId="top-content" tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="项目全量笔记按互动量排序">
         {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)} onClick={() => handleNoteInspect(String(n.id || i))} style={{ cursor: 'pointer' }} title="点击查看该笔记画像"><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
       </Section>
 
       {/* ===== 新增：内容健康度仪表盘 + 达人效率排行 ===== */}
-      <div className="workspace-two-col" style={{ alignItems: 'start' }}>
+      <div data-business-component="coverage-efficiency" className="workspace-two-col" style={{ alignItems: 'start' }}>
         <div className="stack"><Section tag="数据覆盖" title="内容数据与待办" tone="green" hint="真实记录覆盖情况">
           <div className="reference-daily-grid">
             {[
@@ -441,7 +525,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       </div>
 
       {/* ===== 新增：互动质量分析 ===== */}
-      <Section tag="互动质量" title="已记录点赞、收藏与分享构成" tone="purple" hint="比例仅在三项已记录指标中计算">
+      <Section componentId="interaction-quality" tag="互动质量" title="已记录点赞、收藏与分享构成" tone="purple" hint="比例仅在三项已记录指标中计算">
         <div className="workspace-two-col" style={{ alignItems: 'start' }}>
           <div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '10px 0' }}>
@@ -487,15 +571,15 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </div>
       </Section>
 
-      <Section tag="行动层" title="复盘洞察与下一步行动" tone="purple" hint="从数据直接进入运营">
-        <div className="two-col-chart-grid"><div className="reference-learning"><strong>当前观察</strong><p>内容库共 {m.noteCount} 篇，累计互动 {compact(m.interactionCount)} 次。已标注的内容方向中，{String(dashboard.analytics.categories[0]?.name || '暂无方向')}收录最多。</p><p>当前真实评论快照合计 {m.commentTotal} 条，正向 {m.positiveCount} 条，负向 {m.negativeCount} 条。继续优先处理待回复和待删除事项。</p></div><div className="reference-actions">
+      <Section componentId="actions" tag="行动层" title="复盘洞察与下一步行动" tone="purple" hint="从数据直接进入运营">
+        <div className="two-col-chart-grid"><div className="reference-learning"><strong>当前观察</strong><p>内容库共 {m.noteCount} 篇，累计互动 {compact(m.interactionCount)} 次。已标注的内容方向中，{String(dashboard.analytics.categories[0]?.name || '暂无方向')}收录最多。</p><p>当前记录评论量 {compact(m.commentTotal)} 条{m.sentimentAvailable && m.positiveCount !== null ? `，正向 ${m.positiveCount} 条，负向 ${m.negativeCount} 条` : '（情感语义分类未标注）'}。继续优先处理待回复和待删除事项。</p></div><div className="reference-actions">
           <Link href={`/projects/${encodeURIComponent(projectId)}/comments?tab=actions`}><span><strong>处理 {pending} 条风险待办</strong><small>达人回复与删除处置</small></span><b>去处理 →</b></Link>
           <Link href={`/projects/${encodeURIComponent(projectId)}/content?tab=analysis`}><span><strong>复盘高热内容与切角</strong><small>阅读、互动与达人效率</small></span><b>看内容 →</b></Link>
           <Link href={`/projects/${encodeURIComponent(projectId)}/growth?tab=competitor`}><span><strong>对照竞品月报与搜索趋势</strong><small>使用已接入的品牌工作表</small></span><b>看竞品 →</b></Link>
         </div></div>
       </Section>
       {/* ===== 跨表整合：统一指标字典 ===== */}
-      <details><summary>查看指标定义与口径说明</summary><Section tag="指标字典" title="统一指标定义与口径说明" tone="blue" hint="跨模块一致性保障">
+      <details data-business-component="dictionary"><summary>查看指标定义与口径说明</summary><Section tag="指标字典" title="统一指标定义与口径说明" tone="blue" hint="跨模块一致性保障">
         <div className="ops-table-wrap">
           <table className="ops-table">
             <thead><tr><th>指标名称</th><th>定义公式</th><th>数据来源</th><th>适用模块</th><th>注意事项</th></tr></thead>
@@ -525,20 +609,20 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </div>
         <p className="metric-note" style={{ marginTop: 10 }}>以上指标口径在 Overview、Content、Comments、Growth 四大模块中保持一致。新增看板时必须遵循本字典定义，确保跨模块数据可比。</p>
       </Section></details>
-    </div>}
+    </BusinessComponentBoard>}
 
-    {tab === 'daily' && <div className="overview-block-content">
+    {tab === 'daily' && <BusinessComponentBoard projectId={projectId} view="daily" canManage={Boolean(project?.canManage && !project.isArchived)} period={date}>
       <div className="reference-date-toolbar"><div><span className="section-mini-tag tag-blue">分析层 · 日报数据</span><small>选择日期后，指标与趋势一起更新</small></div><div className="reference-date-controls"><button onClick={() => stepDate(-1)} disabled={!date || date === rows[0]?.date} aria-label="前一个数据日期">←</button><label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>日报日期 <CustomSelect value={date} onChange={setSelected} options={[...rows].reverse().map(r => ({ value: String(r.date), label: `${String(r.date)}${String(r.date) === String(rows.at(-1)?.date) ? ' (最新)' : ''}` }))} /></label><button onClick={() => stepDate(1)} disabled={!date || date === rows.at(-1)?.date} aria-label="后一个数据日期">→</button><button onClick={() => setSelected('')}>最新日期</button></div></div>
       {!daily ? <EmptyState title="尚无日度投放数据" text="同步现有飞书数据源后查看日报。" /> : <>
-        <div className="reference-daily-grid">{dailyCards.map(item => {
+        <div data-business-component="daily-summary" className="reference-daily-grid">{dailyCards.map(item => {
           const currentValue = finiteMetric(daily[item.key]);
           const previousValue = finiteMetric(previous?.[item.key]);
           const delta = currentValue !== null && previousValue !== null && previousValue !== 0 ? (currentValue - previousValue) / Math.abs(previousValue) * 100 : null;
           const spark = quarterRows.slice(-14).map(r => finiteMetric(r[item.key]));
           return <article className={`pastel-card pastel-${item.tone} reference-kpi`} key={item.key}><div className="stat-head"><span>{item.title}</span><span className={`section-mini-tag tag-${item.tone}`}>日报</span></div><div className="stat-value">{amount(currentValue)}<small> {item.unit}</small></div><div className="reference-kpi-meta">{item.desc}</div><div className="reference-kpi-delta">{delta === null ? '暂无可比前期' : `较前一数据日 ${delta >= 0 ? '+' : ''}${amount(delta)}%`}</div>{spark.every(v => v !== null) && <Sparkline data={spark as number[]} color={item.tone === 'purple' ? colors[2] : colors[0]} />}</article>;
         })}</div>
-        <div className="workspace-two-col"><Section tag="消耗趋势" title="近30个数据日 · 计划与实际"><TimeSeriesChart rows={recent} title="计划与实际消耗" unit="元" series={[{ key: 'plan_spend', label: '计划', color: '#94a3b8' }, { key: 'actual_spend', label: '实际', color: colors[0] }]} /></Section><Section tag="CTR趋势" title="信息流与搜索 · 点击效率" tone="teal"><TimeSeriesChart rows={recent} title="信息流与搜索CTR" unit="%" series={[{ key: 'feed_ctr', label: '信息流', color: '#0d9488' }, { key: 'search_ctr', label: '搜索', color: colors[2] }]} /></Section></div>
-        <div className="workspace-two-col" style={{ marginTop: 14 }}><Section tag="CPUV趋势" title="小红盟 / 小红星 · UV成本趋势" tone="amber"><TimeSeriesChart rows={recent} title="CPUV 周趋势" unit="元" series={[{ key: 'xhm_cpuv', label: '小红盟 CPUV', color: '#f59e0b' }, { key: 'xhx_cpuv', label: '小红星 CPUV', color: '#ea580c' }]} /></Section><Section tag="效率对比" title="核心效率指标 · 当日 vs 前一日" tone="purple">
+        <div data-business-component="daily-trends" className="workspace-two-col"><Section tag="消耗趋势" title="近30个数据日 · 计划与实际"><TimeSeriesChart rows={recent} title="计划与实际消耗" unit="元" series={[{ key: 'plan_spend', label: '计划', color: '#94a3b8' }, { key: 'actual_spend', label: '实际', color: colors[0] }]} /></Section><Section tag="CTR趋势" title="信息流与搜索 · 点击效率" tone="teal"><TimeSeriesChart rows={recent} title="信息流与搜索CTR" unit="%" series={[{ key: 'feed_ctr', label: '信息流', color: '#0d9488' }, { key: 'search_ctr', label: '搜索', color: colors[2] }]} /></Section></div>
+        <div data-business-component="daily-efficiency" className="workspace-two-col" style={{ marginTop: 14 }}><Section tag="CPUV趋势" title="小红盟 / 小红星 · UV成本趋势" tone="amber"><TimeSeriesChart rows={recent} title="CPUV 周趋势" unit="元" series={[{ key: 'xhm_cpuv', label: '小红盟 CPUV', color: '#f59e0b' }, { key: 'xhx_cpuv', label: '小红星 CPUV', color: '#ea580c' }]} /></Section><Section tag="效率对比" title="核心效率指标 · 当日 vs 前一日" tone="purple">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
             {([
               { label: '信息流 CTR', current: finiteMetric(daily?.feed_ctr), prev: finiteMetric(previous?.feed_ctr), unit: '%', tone: 'teal' as const, benchmark: null as number | null, lowerIsBetter: false },
@@ -567,9 +651,12 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </Section></div>
         <p className="reference-note">投流消耗优先使用周投放表 F+S；聚光全量当日消耗 ¥{amount(daily.ads_spend)}，CTR、互动来自聚光全量样本，两者范围不同。缺失值显示 —。</p>
       </>}
-    </div>}
+    </BusinessComponentBoard>}
+    </details>)}</>
+    )}
 
-    <Section tag="AI 复盘" title="基于项目数据生成运营报告" tone="purple"><div className="report-prompt"><textarea aria-label="报告需求" value={prompt} onChange={e => setPrompt(e.target.value)} /><button className="primary-btn" onClick={generate} disabled={busy || !prompt.trim()}>{busy ? '正在生成…' : '生成复盘报告'}</button></div>{error && <p role="alert">{error}</p>}{report && <Link href={`/api/report-html?id=${encodeURIComponent(report)}&projectId=${encodeURIComponent(projectId)}`} target="_blank">查看生成报告 →</Link>}</Section>
+
     {renderCategoryNotesModal()}
-  </div>;
+    </DashboardFrame>
+  );
 }

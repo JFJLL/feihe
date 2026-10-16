@@ -3,10 +3,10 @@ export type Row = Record<string, unknown>;
 export type Project = {
   id: string;
   name: string;
-  spu: string;
-  brand: string;
-  category: string;
-  description: string;
+  spu?: string;
+  brand?: string;
+  category?: string;
+  description?: string;
   status: string;
   color: string;
   startAt?: string;
@@ -14,6 +14,26 @@ export type Project = {
   updatedAt: string;
   noteCount: number;
   reportableCount: number;
+  orgId?: string;
+  departmentId?: string;
+  clientId?: string | null;
+  ownerId?: string;
+  ownerName?: string;
+  createdBy?: string;
+  projectRole?: 'project_admin' | 'editor' | 'viewer';
+  canManage?: boolean;
+  canWrite?: boolean;
+  canDelete?: boolean;
+  isParticipant?: boolean | number;
+  sourceCount?: number;
+  dataRowCount?: number;
+  dataUpdatedAt?: string | null;
+  templateId?: string;
+  isArchived?: number;
+  onboardingStatus?: string;
+  departmentName?: string;
+  clientName?: string;
+  templateName?: string;
 };
 
 export type Pipeline = {
@@ -58,6 +78,7 @@ export type Note = {
   brandMentionTop5: number;
   status: string;
   coverUrl?: string;
+  imageList?: string[];
   content?: string;
   category1?: string;
   category2?: string;
@@ -129,13 +150,14 @@ export type Ads = {
 export type DashboardMetrics = {
   noteCount: number;
   commentTotal: number;
-  positiveCount: number;
-  positiveRate: number;
-  negativeCount: number;
-  negativeRate: number;
-  questionCount: number;
-  questionRate: number;
-  neutralCount?: number;
+  positiveCount: number | null;
+  positiveRate: number | null;
+  negativeCount: number | null;
+  negativeRate: number | null;
+  questionCount: number | null;
+  questionRate: number | null;
+  neutralCount?: number | null;
+  sentimentAvailable?: boolean;
   exposure?: number;
   readCount?: number;
   interactionCount?: number;
@@ -254,6 +276,7 @@ export type Rules = {
 };
 
 export type Acceptance = {
+  targetsConfirmed?: boolean;
   reportCount: number;
   baseCount: number;
   brandTopRate: number;
@@ -338,6 +361,13 @@ export type NoteDetail = {
     questionCount: number;
   }>;
   comments: KeyComment[];
+  source?: 'legacy' | 'projection' | 'competitor';
+  capabilities?: {
+    canEdit: boolean;
+    canDelete: boolean;
+    canCalibrate: boolean;
+    readonlyReason?: string;
+  };
 };
 
 export type DataSource = {
@@ -391,6 +421,15 @@ export type Integration = {
 export type Workspace = {
   projects: Project[];
   sources: Source[];
+  metadata?: {
+    departments: Array<{ id: string; name: string }>;
+    clients: Array<{ id: string; name: string; industry?: string }>;
+    templates: Array<{ id: string; name: string; description: string; icon: string; modulesJson: string }>;
+    users?: Array<{ id: string; name: string; email: string; role: string; departmentId?: string }>;
+    canManageOrganization?: boolean;
+    platformContacts?: Array<{ id: string; name: string; email: string }>;
+    currentUser?: { userId: string; email: string; displayName: string; role: string; departmentId?: string; orgId?: string };
+  };
 };
 
 export type IntegrationData = {

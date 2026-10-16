@@ -375,6 +375,10 @@ label:has(select),
   .ops-module-tab-icon { flex-basis: 30px; width: 30px; height: 30px; font-size: 16px; }
 }
 @media (max-width: 760px) {
+  .settings-sources-section .management-list > .source-list-item { grid-template-columns: auto minmax(0, 1fr) !important; }
+  .settings-sources-section .source-list-details { grid-column: 1 / -1; }
+  .settings-sources-section .source-list-status { grid-column: 2; grid-row: 1; white-space: normal !important; }
+  .settings-sources-section .source-list-actions { grid-column: 1 / -1; flex-wrap: wrap; white-space: normal !important; }
   .app-shell:has(.ops-workspace) > .sidebar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 10px 12px; height: auto; }
   .app-shell:has(.ops-workspace) .sidebar .brand { grid-column: 1; grid-row: 1; padding: 0; gap: 8px; font-size: 13px; }
   .app-shell:has(.ops-workspace) .sidebar .brand > span { width: 28px; height: 28px; font-size: 15px; }

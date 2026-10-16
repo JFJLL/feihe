@@ -30,7 +30,7 @@ try {
   assert.match(markup,/height:260px/);
 
   // Execute the production note query against >500 records, preserving project scope.
-  const source = fs.readFileSync(new URL('../app/api/dashboard/route.ts',import.meta.url),'utf8');
+  const source = fs.readFileSync(new URL('../lib/project-dashboard.ts',import.meta.url),'utf8');
   const query = source.match(/bind\(`(SELECT n\.id,n\.url,n\.author,n\.title,[\s\S]*?)`\)\.all\(\)/)[1];
   const db = new DatabaseSync(':memory:');
   const aliases = { n:'notes',pn:'project_notes',p:'note_profiles' };
@@ -61,13 +61,18 @@ try {
     await sql.prepare('INSERT INTO note_profiles(note_id,source_metrics_json,updated_at) VALUES(?,?,?)').bind('full-'+id,json,'2026-09-09').run();
   }
   const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+  const dataMod={exports:{}};
   const mod={exports:{}};
   const require=name=>({
     '@/lib/api-auth':{apiUser:async()=>true,jsonError:(error,status)=>Response.json({error},{status})},
     '@/lib/db':dbmod,'@/lib/projects':{projectId:v=>v||'qicui'},
-    '@/lib/feishu-sync':{readFeishuData:async()=>({})},
+    './db':dbmod,'./feishu-sync':{readFeishuData:async()=>({})},
+    '@/lib/project-dashboard':dataMod.exports,
   })[name];
-  vm.runInNewContext(`(function(require,module,exports){${compiled}\n})`,{Response,URL,URLSearchParams})(require,mod,mod.exports);
+  vm.runInNewContext(`(function(require,module,exports){${compiled}\n})`,{Response,URL,URLSearchParams})(require,dataMod,dataMod.exports);
+  const routeSource=fs.readFileSync(new URL('../app/api/dashboard/route.ts',import.meta.url),'utf8');
+  const routeCompiled=ts.transpileModule(routeSource,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+  vm.runInNewContext(`(function(require,module,exports){${routeCompiled}\n})`,{Response,URL,URLSearchParams})(require,mod,mod.exports);
   const response=await mod.exports.GET(new Request('http://localhost/api/dashboard?projectId=full-test&fresh=1'));
   const payload=await response.json();
   assert.equal(response.status,200,JSON.stringify(payload));

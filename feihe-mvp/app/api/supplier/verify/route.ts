@@ -1,4 +1,4 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, apiUser, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { similarity } from '@/lib/store';
 import { fetchAllComments } from '@/lib/xhs';
@@ -8,9 +8,14 @@ import { getProjectSetting, projectId } from '@/lib/projects';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
-  if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: { noteIds?: string[]; projectId?: string } = {};
+  try { body = await request.json() as typeof body; } catch { return jsonError('无效的请求体'); }
+  const access = typeof requireProjectAccess === 'function'
+    ? await requireProjectAccess(request, body.projectId, 'write')
+    : (await apiUser(true) ? { ok: true, status: 200, error: '', context: { projectId: String(body.projectId || 'qicui') } } : { ok: false, status: 401, error: '请先登录' });
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
   try {
-    const body = await request.json() as { noteIds?: string[]; projectId?: string }; const project=projectId(body.projectId);
     await ensureSchema(); const d1 = db();
     const acceptance=await getProjectSetting(project,'acceptance',{supplierSimilarity:.58}); const threshold=Math.min(1,Math.max(.3,Number(acceptance.supplierSimilarity||.58)));
     const selected = (body.noteIds || []).filter(Boolean).slice(0, 40);

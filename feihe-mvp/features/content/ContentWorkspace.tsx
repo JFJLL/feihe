@@ -98,7 +98,7 @@ export function ContentWorkspace({
       <PageHeader
         variant="light"
         title="内容管理"
-        subtitle="2026年 Q3 · 全盘内容效率拆解、切角渗透与达人表现"
+        subtitle="全盘内容资产 · 效率拆解、切角渗透与达人表现（涵盖在投及历史归档）"
         badge={<span>{dashboard.metrics.noteCount.toLocaleString()} 篇笔记资产</span>}
       >
         <div className="workspace-header-actions">

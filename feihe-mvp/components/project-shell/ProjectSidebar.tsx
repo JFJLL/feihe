@@ -17,6 +17,7 @@ export function ProjectSidebar({
     projectId,
     projects,
     currentProject,
+    workspace,
     loading,
     error,
     activeSection,
@@ -38,8 +39,7 @@ export function ProjectSidebar({
       <div className="brand">
         <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a5f3fc" strokeWidth="4" strokeLinecap="round"/></svg></span>
         <div>
-          社媒增长中台
-          <small>PROJECT WORKSPACE</small>
+          项目工作台
         </div>
       </div>
 
@@ -51,17 +51,32 @@ export function ProjectSidebar({
       />
 
       <nav className="project-main-nav" aria-label="项目模块">
-        {PROJECT_NAV_ITEMS.map((item) => {
+        {PROJECT_NAV_ITEMS.filter((item) => {
+          if (item.inSidebar === false) return false;
+          if (['data', 'metrics', 'reports'].includes(item.id)) return false;
+          if (item.id === 'ads') return ['content_marketing', 'ad_performance'].includes(currentProject?.templateId || '');
+          if (currentProject?.templateId === 'ad_performance') return ['overview', 'ads', 'settings'].includes(item.id);
+          if (['general_workbench', 'blank'].includes(currentProject?.templateId || '')) {
+            return item.id === 'overview' || item.id === 'settings';
+          }
+          if (currentProject?.templateId === 'comment_qc') {
+            return item.id === 'overview' || item.id === 'comments' || item.id === 'settings';
+          }
+          return true;
+        }).map((item, index) => {
           const href =
             item.path === ''
               ? '/projects/' + encodeURIComponent(projectId)
               : '/projects/' + encodeURIComponent(projectId) + '/' + item.path;
-          const isActive = activeSection === item.path;
+
+          const isSettingsActive = ['settings', 'data', 'metrics', 'reports'].includes(activeSection);
+          const isActive = item.id === 'settings' ? isSettingsActive : activeSection === item.path;
 
           return (
             <a
               key={item.id}
               href={href}
+              aria-label={item.label}
               className={isActive ? 'active' : ''}
               aria-current={isActive ? 'page' : undefined}
               onClick={(e) => {
@@ -69,7 +84,7 @@ export function ProjectSidebar({
                 navigateTo(href);
               }}
             >
-              <span className="nav-num">{item.number}</span>
+              <span className="nav-num">{String(index + 1).padStart(2, '0')}</span>
               <span className="nav-label">{item.label}</span>
             </a>
           );
@@ -80,8 +95,8 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {signedIn ? userName : '公开访问'} · 无需登录 ·{' '}
-          {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '实时连接'}
+          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')} ·{' '}
+          {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '就绪'}
         </small>
       </div>
     </aside>

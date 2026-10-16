@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
 
 // Execute the actual route SQL, not a second implementation of normalization.
-const route = fs.readFileSync(new URL('../app/api/dashboard/route.ts', import.meta.url), 'utf8');
+const route = fs.readFileSync(new URL('../lib/project-dashboard.ts', import.meta.url), 'utf8');
 const sql = route.match(/bind\(`(SELECT CASE WHEN p\.brand[\s\S]*?)`\)\.all\(\)/)?.[1];
 assert.ok(sql, 'actual dashboard brand SQL must be found');
 const db = new DatabaseSync(':memory:');

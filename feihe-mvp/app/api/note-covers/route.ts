@@ -1,15 +1,19 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
-import { cacheNoteCovers, getNoteCover, resolveNoteCoverUrl } from '@/lib/note-covers';
-import { projectId } from '@/lib/projects';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
+import { cacheNoteCovers, getNoteCover, resolveNoteCoverUrl, isValidNoteId, isNoteInProject } from '@/lib/note-covers';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return new Response('请先登录', { status: 401 });
   const params = new URL(request.url).searchParams;
-  const project = projectId(params.get('projectId'));
+  const access = await requireProjectAccess(request, params.get('projectId'), 'read');
+  if (!access.ok) return new Response(access.error || '无权访问', { status: access.status || 403 });
+  const project = access.context!.projectId;
   const noteId = String(params.get('noteId') || '');
-  if (!/^[0-9a-f]{24}$/i.test(noteId)) return new Response('笔记 ID 无效', { status: 400 });
+  if (!isValidNoteId(noteId)) return new Response('笔记 ID 无效', { status: 400 });
+
+  const inProject = await isNoteInProject(project, noteId);
+  if (!inProject) return new Response('笔记不属于当前项目', { status: 404, headers: { 'cache-control': 'no-store' } });
+
   if (params.get('resolve') === '1') {
     try {
       const coverUrl = await resolveNoteCoverUrl(project, noteId);
@@ -32,10 +36,13 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: { projectId?: string; noteIds?: string[]; limit?: number } = {};
+  try { body = await request.json() as typeof body; } catch { return jsonError('无效的请求体'); }
+  const access = await requireProjectAccess(request, body.projectId, 'write');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
   try {
-    const body = await request.json() as { projectId?: string; noteIds?: string[]; limit?: number };
-    const results = await cacheNoteCovers(body.noteIds || [], body.projectId, Math.min(20, Math.max(1, Number(body.limit || 12))));
+    const results = await cacheNoteCovers(body.noteIds || [], project, Math.min(20, Math.max(1, Number(body.limit || 12))));
     return Response.json({ ok: true, count: results.length, results });
   } catch (error) {
     return jsonError(error instanceof Error ? error.message : '封面抓取失败', 500);

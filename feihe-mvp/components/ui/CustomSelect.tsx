@@ -226,7 +226,7 @@ export function CustomSelect({
                 role="option"
                 aria-selected={isSelected}
                 aria-disabled={opt.disabled}
-                onClick={() => selectOption(opt)}
+                onClick={(event) => { event.preventDefault(); event.stopPropagation(); selectOption(opt); }}
                 onMouseEnter={() => setInternalActiveIndex(idx)}
                 className={`custom-select-option ${isSelected ? 'is-selected' : ''} ${isActive ? 'is-active' : ''} ${opt.disabled ? 'is-disabled' : ''}`}
               >

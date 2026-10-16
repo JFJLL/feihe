@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import type { Note } from '../../lib/types/project';
 import { NoteThumbnail } from '../ui/NoteThumbnail';
+import { NoteCover } from '../ui/NoteCover';
 import { contentDirectionLabel } from '../../lib/dashboard-display';
 import { compact, num } from '../../lib/hooks/use-project-data';
 
@@ -182,12 +183,17 @@ export function CategoryNotesModal({
               {/* Hero Section */}
               <div className="note-detail-hero">
                 <div className="note-detail-cover-box">
-                  <NoteThumbnail
+                  <NoteCover
                     src={selectedNote.coverUrl}
+                    noteId={selectedNote.id}
+                    projectId={projectId || 'qicui'}
                     title={selectedNote.title}
                     author={selectedNote.author}
                     category={selectedNote.category1}
+                    url={selectedNote.url}
                     className="note-detail-cover-img"
+                    aspectRatio="3:4"
+                    eager
                   />
                 </div>
                 <div className="note-detail-hero-info">
@@ -488,11 +494,16 @@ export function CategoryNotesModal({
                             </td>
                             <td>
                               <div className="note-cover-thumb-wrap">
-                                <NoteThumbnail
+                                <NoteCover
                                   src={note.coverUrl}
+                                  noteId={note.id}
+                                  projectId={projectId || 'qicui'}
                                   title={note.title}
                                   author={note.author}
                                   category={note.category1}
+                                  url={note.url}
+                                  className="ops-table-note-cover"
+                                  aspectRatio="3:4"
                                 />
                               </div>
                             </td>

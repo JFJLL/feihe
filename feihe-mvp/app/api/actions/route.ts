@@ -1,16 +1,18 @@
-import { apiUser, jsonError } from '@/lib/api-auth';
+import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { db, ensureSchema } from '@/lib/db';
 import { logAction } from '@/lib/ops';
-import { projectId } from '@/lib/projects';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
-  if (!(await apiUser())) return jsonError('请先登录', 401);
+  const url = new URL(request.url);
+  const access = await requireProjectAccess(request, url.searchParams.get('projectId'), 'read');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
   await ensureSchema();
   const d1 = db();
-  const url = new URL(request.url);
-  const project = projectId(url.searchParams.get('projectId'));
+
   const query = (url.searchParams.get('query') || '').trim();
   const action = (url.searchParams.get('action') || '').trim();
   const status = (url.searchParams.get('status') || '').trim();
@@ -47,57 +49,99 @@ export async function GET(request: Request) {
 
   const whereClause = ' WHERE ' + conditions.join(' AND ');
 
-  const [totalRow, summaryRows, itemsRows] = await Promise.all([
-    d1.prepare('SELECT COUNT(*) AS total FROM key_comments kc LEFT JOIN notes n ON n.id = kc.note_id' + whereClause).bind(...params).first<{ total: number }>(),
-    d1.prepare('SELECT COUNT(*) AS total, ' +
-      "SUM(CASE WHEN treatment_status = '待处理' AND action = '需达人回复' THEN 1 ELSE 0 END) AS replyPending, " +
-      "SUM(CASE WHEN treatment_status = '待处理' AND action = '需删除' THEN 1 ELSE 0 END) AS deletePending, " +
-      "SUM(CASE WHEN treatment_status = '待处理' AND action = '需补充' THEN 1 ELSE 0 END) AS supplementPending, " +
-      "SUM(CASE WHEN treatment_status = '已处理' THEN 1 ELSE 0 END) AS handledCount " +
-      'FROM key_comments kc WHERE kc.project_id = ?').bind(project).first<{
-      total: number;
-      replyPending: number;
-      deletePending: number;
-      supplementPending: number;
-      handledCount: number;
-    }>(),
-    d1.prepare('SELECT kc.id, kc.note_id AS noteId, kc.content, kc.author, kc.sentiment, ' +
-      'kc.category, kc.action, kc.treatment_status AS treatmentStatus, ' +
-      'kc.treatment_method AS treatmentMethod, kc.last_seen_at AS lastSeenAt, ' +
-      'kc.disappeared_at AS disappearedAt, kc.reply_count AS replyCount, ' +
-      'n.title AS noteTitle, n.author AS noteAuthor, n.url AS noteUrl ' +
-      'FROM key_comments kc LEFT JOIN notes n ON n.id = kc.note_id' + whereClause + ' ' +
-      "ORDER BY CASE WHEN kc.treatment_status = '待处理' THEN 0 ELSE 1 END, kc.last_seen_at DESC " +
-      'LIMIT ? OFFSET ?').bind(...params, pageSize, offset).all(),
-  ]);
+  const countSql = `
+    SELECT COUNT(*) AS total
+    FROM key_comments kc
+    JOIN notes n ON n.id = kc.note_id
+    JOIN project_notes pn ON pn.note_id = n.id AND pn.project_id = kc.project_id
+    ${whereClause}
+  `;
 
-  const total = Number(totalRow?.total || 0);
-  const summary = {
-    total: Number(summaryRows?.total || 0),
-    replyPending: Number(summaryRows?.replyPending || 0),
-    deletePending: Number(summaryRows?.deletePending || 0),
-    supplementPending: Number(summaryRows?.supplementPending || 0),
-    handledCount: Number(summaryRows?.handledCount || 0),
-  };
+  const summarySql = `
+    SELECT
+      COUNT(*) AS total,
+      SUM(CASE WHEN treatment_status = '待处理' THEN 1 ELSE 0 END) AS pendingTotal,
+      SUM(CASE WHEN treatment_status = '已处置' THEN 1 ELSE 0 END) AS processedTotal,
+      SUM(CASE WHEN action = '保留观察' THEN 1 ELSE 0 END) AS observeCount,
+      SUM(CASE WHEN action = '申请删除' THEN 1 ELSE 0 END) AS deleteCount,
+      SUM(CASE WHEN action = '需达人回复' THEN 1 ELSE 0 END) AS replyCount,
+      SUM(CASE WHEN action = '私信沟通' THEN 1 ELSE 0 END) AS directMessageCount
+    FROM key_comments kc
+    WHERE kc.project_id = ?
+  `;
 
-  return Response.json({
-    ok: true,
-    items: itemsRows.results || [],
-    total,
-    page,
-    pageSize,
-    summary,
-  });
+  const listSql = `
+    SELECT
+      kc.id, kc.note_id AS noteId, kc.content, kc.author, kc.created_at AS createdAt,
+      kc.sentiment, kc.category, kc.action, kc.treatment_status AS treatmentStatus,
+      kc.treatment_method AS treatmentMethod, kc.first_seen_at AS firstSeenAt,
+      kc.last_seen_at AS lastSeenAt, kc.disappeared_at AS disappearedAt,
+      kc.reply_count AS replyCount,
+      n.title AS noteTitle, n.author AS noteAuthor, n.url AS noteUrl
+    FROM key_comments kc
+    JOIN notes n ON n.id = kc.note_id
+    JOIN project_notes pn ON pn.note_id = n.id AND pn.project_id = kc.project_id
+    ${whereClause}
+    ORDER BY kc.last_seen_at DESC
+    LIMIT ? OFFSET ?
+  `;
+
+  try {
+    const [countResult, summaryResult, listResult] = await Promise.all([
+      d1.prepare(countSql).bind(...params).first<{ total: number }>(),
+      d1.prepare(summarySql).bind(project).first<Record<string, number>>(),
+      d1.prepare(listSql).bind(...params, pageSize, offset).all<Record<string, unknown>>(),
+    ]);
+
+    const total = countResult?.total || 0;
+    return Response.json({
+      ok: true,
+      actions: listResult.results || [],
+      pagination: { total, page, pageSize, totalPages: Math.ceil(total / pageSize) },
+      summary: summaryResult || {},
+    });
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : '查询舆情处置列表失败', 500);
+  }
 }
 
 export async function POST(request: Request) {
-  if (!(await apiUser(true))) return jsonError('请先登录', 401);
+  let body: { id?: string; action?: string; method?: string; projectId?: string } = {};
   try {
-    const body = await request.json() as { id?: string; status?: string; method?: string; projectId?: string }; const project=projectId(body.projectId);
+    body = (await request.json()) as typeof body;
+  } catch {
+    return jsonError('无效的请求体');
+  }
+
+  const access = await requireProjectAccess(request, body.projectId, 'write');
+  if (!access.ok) return jsonError(access.error!, access.status!);
+  const project = access.context!.projectId;
+
+  try {
     if (!body.id) return jsonError('缺少评论 ID');
     await ensureSchema();
-    await db().prepare('UPDATE key_comments SET treatment_status=?, treatment_method=? WHERE id=? AND project_id=?').bind(body.status||'已处理',body.method||'人工确认',body.id,project).run();
-    await logAction('评论处置','comment',body.id,`${body.status||'已处理'} · ${body.method||'人工确认'}`,project);
-    return Response.json({ ok: true });
-  } catch (error) { return jsonError(error instanceof Error ? error.message : '更新失败', 500); }
+    const d1 = db();
+
+    if (body.action === 'resolve') {
+      await d1
+        .prepare("UPDATE key_comments SET treatment_status='已处置', treatment_method=? WHERE id=? AND project_id=?")
+        .bind(body.method || '人工处理', body.id, project)
+        .run();
+      await logAction('处置评论', 'key_comment', body.id, `处置方式：${body.method || '人工处理'}`, project);
+      return Response.json({ ok: true });
+    }
+
+    if (body.action === 'reopen') {
+      await d1
+        .prepare("UPDATE key_comments SET treatment_status='待处理', treatment_method=NULL WHERE id=? AND project_id=?")
+        .bind(body.id, project)
+        .run();
+      await logAction('重置处置状态', 'key_comment', body.id, '重新打开待处理', project);
+      return Response.json({ ok: true });
+    }
+
+    return jsonError('不支持的操作');
+  } catch (error) {
+    return jsonError(error instanceof Error ? error.message : '更新舆情处置状态失败', 500);
+  }
 }

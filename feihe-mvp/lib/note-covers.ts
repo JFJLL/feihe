@@ -21,21 +21,65 @@ const internalUrl = (project: string, noteId: string) =>
 const pendingUrls = new Map<string, Promise<string>>();
 let urlQueue = Promise.resolve();
 
+export function isValidNoteId(id: string): boolean {
+  return typeof id === 'string' && /^(?:[0-9a-f]{24}|[0-9a-f]{32})$/i.test(id);
+}
+
+export async function isNoteInProject(project: string, noteId: string): Promise<boolean> {
+  await ensureSchema();
+  if (!isValidNoteId(noteId)) return false;
+  const d1 = db();
+  const lower = noteId.toLowerCase();
+  const member = await d1.prepare('SELECT note_id FROM project_notes WHERE project_id=? AND (note_id=? OR lower(note_id)=?) LIMIT 1').bind(project, noteId, lower).first();
+  if (member) return true;
+  const arch = await d1.prepare('SELECT note_id FROM business_note_archives WHERE project_id=? AND (note_id=? OR lower(note_id)=?) LIMIT 1').bind(project, noteId, lower).first();
+  if (arch) return true;
+  const comp = await d1.prepare('SELECT raw_note_id FROM competitor_notes WHERE project_id=? AND (raw_note_id=? OR lower(raw_note_id)=?) LIMIT 1').bind(project, noteId, lower).first();
+  return Boolean(comp);
+}
+
+export async function assertNoteInProject(project: string, noteId: string): Promise<void> {
+  const ok = await isNoteInProject(project, noteId);
+  if (!ok) {
+    throw new Error('笔记不属于当前项目');
+  }
+}
+
 /** Resolve the live note's URL. No bundled metadata or image files are needed. */
 export async function resolveNoteCoverUrl(project: string, noteId: string): Promise<string> {
   await ensureSchema();
-  const member = await db().prepare('SELECT note_id FROM project_notes WHERE project_id=? AND note_id=?').bind(project, noteId).first();
-  if (!member) throw new Error('笔记不属于当前项目');
-  const key = `${project}:${noteId}`;
+  const proj = projectId(project);
+  if (!isValidNoteId(noteId)) throw new Error('笔记 ID 无效');
+  await assertNoteInProject(proj, noteId);
+
+  // Check if already present in note_profiles
+  const profile = await db().prepare('SELECT cover_url AS coverUrl FROM note_profiles WHERE note_id=? OR lower(note_id)=?').bind(noteId, noteId.toLowerCase()).first<{ coverUrl?: string }>();
+  if (profile?.coverUrl && profile.coverUrl.startsWith('http')) {
+    return profile.coverUrl;
+  }
+
+  // Check if competitor note has imageList
+  const compRow = await db().prepare('SELECT raw_payload_json FROM competitor_notes WHERE project_id=? AND (raw_note_id=? OR lower(raw_note_id)=?)').bind(proj, noteId, noteId.toLowerCase()).first<{ raw_payload_json?: string }>();
+  if (compRow?.raw_payload_json) {
+    try {
+      const p = JSON.parse(compRow.raw_payload_json);
+      let list = p.imageList;
+      if (typeof list === 'string') list = JSON.parse(list);
+      if (Array.isArray(list) && list[0] && String(list[0]).startsWith('http')) {
+        return String(list[0]);
+      }
+    } catch {}
+  }
+  const key = `${proj}:${noteId}`;
   const pending = pendingUrls.get(key);
   if (pending) return pending;
   const task = urlQueue.then(async () => {
-    const row = await existing(project, noteId);
+    const row = await existing(proj, noteId);
     if (row?.sourceUrl && /^https:\/\//.test(row.sourceUrl) && row.fetchedAt && Date.now() - Date.parse(row.fetchedAt) < 6 * 60 * 60 * 1000) return row.sourceUrl;
-    const failure = await db().prepare("SELECT updated_at FROM note_covers WHERE project_id=? AND note_id=? AND status='失败'").bind(project, noteId).first<{updated_at: string}>();
+    const failure = await db().prepare("SELECT updated_at FROM note_covers WHERE project_id=? AND note_id=? AND status='失败'").bind(proj, noteId).first<{updated_at: string}>();
     if (failure && Date.now() - Date.parse(failure.updated_at) < 60000) throw new Error('封面暂不可用，请稍后重试');
     try {
-      const fetchDetail = await createNoteDetailFetcher(project);
+      const fetchDetail = await createNoteDetailFetcher(proj);
       const sourceUrl = firstImage(await fetchDetail(noteId));
       if (!/^https:\/\//.test(sourceUrl)) throw new Error('笔记接口未返回有效封面 URL');
       const now = new Date().toISOString();
@@ -43,13 +87,13 @@ export async function resolveNoteCoverUrl(project: string, noteId: string): Prom
         db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,status,fetched_at,last_error,updated_at)
           VALUES(?,?,?,?,'URL已获取',?,'',?) ON CONFLICT(id) DO UPDATE SET source_url=excluded.source_url,
           status=excluded.status,fetched_at=excluded.fetched_at,last_error='',updated_at=excluded.updated_at`)
-          .bind(key, noteId, project, sourceUrl, now, now),
+          .bind(key, noteId, proj, sourceUrl, now, now),
         db().prepare(`INSERT INTO note_profiles(note_id,cover_url,updated_at) VALUES(?,?,?)
           ON CONFLICT(note_id) DO UPDATE SET cover_url=excluded.cover_url,updated_at=excluded.updated_at`).bind(noteId, sourceUrl, now),
       ]);
       return sourceUrl;
     } catch (error) {
-      await persistFailure(project, noteId, error instanceof Error ? error.message : '封面获取失败');
+      await persistFailure(proj, noteId, error instanceof Error ? error.message : '封面获取失败');
       throw error;
     }
   });
@@ -97,6 +141,7 @@ async function persistFailure(project: string, noteId: string, message: string) 
 }
 
 async function cacheWithFetcher(noteId: string, project: string, fetchDetail: (noteId: string) => Promise<Record<string, unknown>>, force = false): Promise<NoteCoverResult> {
+  await assertNoteInProject(project, noteId);
   const cached = await existing(project, noteId);
   if (!force && cached?.status === '已缓存' && cached.r2Key) {
     return { ...cached, coverUrl: internalUrl(project, noteId), cached: true };
@@ -129,7 +174,14 @@ async function cacheWithFetcher(noteId: string, project: string, fetchDetail: (n
 export async function cacheNoteCovers(noteIds: string[], rawProject?: string, limit = 12) {
   await ensureSchema();
   const project = projectId(rawProject);
-  const ids = [...new Set(noteIds.filter((id) => /^[0-9a-f]{24}$/i.test(id)))].slice(0, limit);
+  const candidates = [...new Set(noteIds.filter(isValidNoteId))].slice(0, limit);
+  if (!candidates.length) return [] as NoteCoverResult[];
+  const ids: string[] = [];
+  for (const id of candidates) {
+    if (await isNoteInProject(project, id)) {
+      ids.push(id);
+    }
+  }
   if (!ids.length) return [] as NoteCoverResult[];
   const fetchDetail = await createNoteDetailFetcher(project);
   const results: NoteCoverResult[] = [];
@@ -143,63 +195,81 @@ export async function cacheNoteCovers(noteIds: string[], rawProject?: string, li
 export async function getNoteCover(project: string, noteId: string) {
   await ensureSchema();
   const proj = projectId(project);
+  if (!isValidNoteId(noteId)) return null;
+  const inProject = await isNoteInProject(proj, noteId);
+  if (!inProject) return null;
+
   const row = await existing(proj, noteId);
-  if (!row?.r2Key || row.status !== '已缓存') {
-    const profile = await db().prepare('SELECT cover_url AS coverUrl FROM note_profiles WHERE note_id=?').bind(noteId).first<{ coverUrl?: string }>();
-    const rawSource = profile?.coverUrl;
-    if (rawSource && rawSource.startsWith('http')) {
-      const sourceUrl = rawSource.startsWith('http://') ? 'https://' + rawSource.slice(7) : rawSource;
+  if (row?.r2Key && row.status === '已缓存') {
+    const object = await blobGet(row.r2Key);
+    if (object) return { object, row };
+    if (!row.sourceUrl) return null;
+    try {
+      const { data, contentType } = await downloadCover(row.sourceUrl);
       try {
-        const { data, contentType } = await downloadCover(sourceUrl);
-        const r2Key = 'projects/' + proj + '/note-covers/' + noteId + '.' + extension(contentType);
-        try { await blobPut(r2Key, data, contentType); } catch {}
-        const now = new Date().toISOString();
-        try {
-          await db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,r2_key,content_type,status,fetched_at,last_error,updated_at)
-            VALUES(?,?,?,?,?,?,'已缓存',?,'',?) ON CONFLICT(id) DO UPDATE SET source_url=excluded.source_url,
-            r2_key=excluded.r2_key,content_type=excluded.content_type,status='已缓存',fetched_at=excluded.fetched_at,last_error='',updated_at=excluded.updated_at`)
-            .bind(proj + ':' + noteId, noteId, proj, sourceUrl, r2Key, contentType, now, now).run();
-        } catch {}
-        return {
-          object: {
-            body: data,
-            contentType,
-            etag: data.byteLength + '-' + Math.round(Date.now() / 1000),
-          },
-          row: {
-            noteId,
-            sourceUrl,
-            r2Key,
-            contentType,
-            status: '已缓存',
-            fetchedAt: now,
-            lastError: '',
-          },
-        };
+        await blobPut(row.r2Key, data, contentType);
+      } catch {
+        // Still serve the repaired image when the local cache directory is read-only.
+      }
+      return {
+        object: {
+          body: data,
+          contentType,
+          etag: data.byteLength + '-' + Math.round(Date.now() / 1000),
+        },
+        row,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  // Not cached yet: check note_profiles or competitor_notes of this project
+  const profile = await db().prepare('SELECT cover_url AS coverUrl FROM note_profiles WHERE note_id=? OR lower(note_id)=?').bind(noteId, noteId.toLowerCase()).first<{ coverUrl?: string }>();
+  let rawSource = profile?.coverUrl;
+  if (!rawSource || !rawSource.startsWith('http')) {
+    const compRow = await db().prepare('SELECT raw_payload_json FROM competitor_notes WHERE project_id=? AND (raw_note_id=? OR lower(raw_note_id)=?)').bind(proj, noteId, noteId.toLowerCase()).first<{ raw_payload_json?: string }>();
+    if (compRow?.raw_payload_json) {
+      try {
+        const p = JSON.parse(compRow.raw_payload_json);
+        let list = p.imageList;
+        if (typeof list === 'string') list = JSON.parse(list);
+        if (Array.isArray(list) && list[0] && String(list[0]).startsWith('http')) {
+          rawSource = String(list[0]);
+        }
       } catch {}
     }
-    return null;
   }
-  if (!row?.r2Key || row.status !== '已缓存') return null;
-  const object = await blobGet(row.r2Key);
-  if (object) return { object, row };
-  if (!row.sourceUrl) return null;
-  try {
-    const { data, contentType } = await downloadCover(row.sourceUrl);
+  if (rawSource && rawSource.startsWith('http')) {
+    const sourceUrl = rawSource.startsWith('http://') ? 'https://' + rawSource.slice(7) : rawSource;
     try {
-      await blobPut(row.r2Key, data, contentType);
-    } catch {
-      // Still serve the repaired image when the local cache directory is read-only.
-    }
-    return {
-      object: {
-        body: data,
-        contentType,
-        etag: data.byteLength + '-' + Math.round(Date.now() / 1000),
-      },
-      row,
-    };
-  } catch {
-    return null;
+      const { data, contentType } = await downloadCover(sourceUrl);
+      const r2Key = 'projects/' + proj + '/note-covers/' + noteId + '.' + extension(contentType);
+      try { await blobPut(r2Key, data, contentType); } catch {}
+      const now = new Date().toISOString();
+      try {
+        await db().prepare(`INSERT INTO note_covers(id,note_id,project_id,source_url,r2_key,content_type,status,fetched_at,last_error,updated_at)
+          VALUES(?,?,?,?,?,?,'已缓存',?,'',?) ON CONFLICT(id) DO UPDATE SET source_url=excluded.source_url,
+          r2_key=excluded.r2_key,content_type=excluded.content_type,status='已缓存',fetched_at=excluded.fetched_at,last_error='',updated_at=excluded.updated_at`)
+          .bind(proj + ':' + noteId, noteId, proj, sourceUrl, r2Key, contentType, now, now).run();
+      } catch {}
+      return {
+        object: {
+          body: data,
+          contentType,
+          etag: data.byteLength + '-' + Math.round(Date.now() / 1000),
+        },
+        row: {
+          noteId,
+          sourceUrl,
+          r2Key,
+          contentType,
+          status: '已缓存',
+          fetchedAt: now,
+          lastError: '',
+        },
+      };
+    } catch {}
   }
+  return null;
 }

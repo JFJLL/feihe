@@ -385,7 +385,7 @@ export function CommentCollection({
                           />
                         ) : (
                           <div className="ops-table-note-cover">
-                            {(note.author || '笔').slice(0, 1)}
+                            {Array.from(note.author || '笔')[0] || '笔'}
                           </div>
                         )}
                         <div className="ops-table-note-info">

@@ -32,6 +32,8 @@ export function GrowthWorkspace({
     projectId,
     onRefresh,
     toast: showToast,
+    variant: 'operations',
+    context: 'growth',
   });
 
   const { openCategoryNotes, renderCategoryNotesModal } = useCategoryNotesModal({
@@ -83,7 +85,7 @@ export function GrowthWorkspace({
         className="overview-block-content"
       >
         {tab === 'competitor' && (
-          <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} openCategoryNotes={openCategoryNotes} />
+          <CompetitorAnalysis data={dashboard} onSwitchTab={setTab} openCategoryNotes={openCategoryNotes} openNote={openNote} />
         )}
 
         {tab === 'radar' && (
