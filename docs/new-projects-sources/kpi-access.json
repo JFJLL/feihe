@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-10-19T15:23:00+08:00",
+  "node_token": "RQffw002Aik9aNkW9PScJ05knre",
+  "identities": {
+    "app_id": "cli_aab8ccb080fa1cd3",
+    "brand": "feishu",
+    "bot": {
+      "appName": "用户725268的飞书 CLI",
+      "openId": "ou_15f9a17b3745deb13adbcc2124a27a5a",
+      "status": "ready"
+    },
+    "user": {
+      "userName": "用户725268",
+      "openId": "ou_405453f6d61993fbfac100453430d58f",
+      "status": "ready",
+      "tokenStatus": "valid"
+    }
+  },
+  "results": {
+    "user": {
+      "ok": false,
+      "code": 131006,
+      "type": "authorization",
+      "subtype": "permission_denied",
+      "message": "user lacks permission for the requested resource"
+    },
+    "bot": {
+      "ok": false,
+      "code": 131006,
+      "type": "authorization",
+      "subtype": "permission_denied",
+      "message": "bot lacks permission for the requested resource"
+    }
+  },
+  "summary": "Both user and bot identities lack resource-level read access (code 131006) to node RQffw002Aik9aNkW9PScJ05knre."
+}

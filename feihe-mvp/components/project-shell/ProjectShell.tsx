@@ -12,6 +12,7 @@ import { emptyDashboard, emptyOps } from '../../lib/hooks/use-project-data';
 
 // 各板块工作区（全盘预载入内存，0ms 极速切换）
 import { OverviewWorkspace } from '../../features/overview/OverviewWorkspace';
+import { CampaignWorkspace } from '../../features/campaign/CampaignWorkspace';
 import { GrowthWorkspace } from '../../features/growth/GrowthWorkspace';
 import { ContentWorkspace } from '../../features/content/ContentWorkspace';
 import { CommentsWorkspace } from '../../features/comments/CommentsWorkspace';
@@ -48,11 +49,12 @@ function ProjectShellContent({
     refreshData,
   } = useProject();
   const themeTag = getProjectThemeTag(currentProject?.templateId);
+  const isCampaignReview = currentProject?.templateId === 'campaign_review';
 
   const isSettingsOrData = ['settings', 'data', 'metrics', 'reports'].includes(activeSection);
 
   // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞）
-  if (dataLoading && !dashboard && !isSettingsOrData) {
+  if (dataLoading && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
       <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
         <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} />
@@ -63,7 +65,7 @@ function ProjectShellContent({
     );
   }
 
-  if (dataError && !dashboard && !isSettingsOrData) {
+  if (dataError && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
       <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
         <ProjectSidebar userName={userName} signedIn={signedIn} />
@@ -82,7 +84,15 @@ function ProjectShellContent({
   switch (activeSection) {
     case "":
     case "overview":
-      if (dataError && !dashboard) {
+      if (isCampaignReview) {
+        content = (
+          <CampaignWorkspace
+            key={projectId}
+            projectId={projectId}
+            initialTab="overview"
+          />
+        );
+      } else if (dataError && !dashboard) {
         content = <ErrorState error={dataError} onRetry={refreshData} />;
       } else {
         content = (
@@ -109,14 +119,24 @@ function ProjectShellContent({
       );
       break;
     case "content":
-      content = (
-        <DatasetDomainOverview key={projectId} projectId={projectId} kind="content" legacy={projectId === 'qicui' || (effectiveDashboard.notes || []).length ? <ContentWorkspace
-          projectId={projectId}
-          dashboard={effectiveDashboard}
-          ops={effectiveOps}
-          onRefresh={refreshData}
-        /> : undefined} />
-      );
+      if (isCampaignReview) {
+        content = (
+          <CampaignWorkspace
+            key={projectId}
+            projectId={projectId}
+            initialTab="content"
+          />
+        );
+      } else {
+        content = (
+          <DatasetDomainOverview key={projectId} projectId={projectId} kind="content" legacy={projectId === 'qicui' || (effectiveDashboard.notes || []).length ? <ContentWorkspace
+            projectId={projectId}
+            dashboard={effectiveDashboard}
+            ops={effectiveOps}
+            onRefresh={refreshData}
+          /> : undefined} />
+        );
+      }
       break;
     case "comments":
     case "insights":
@@ -130,7 +150,17 @@ function ProjectShellContent({
       );
       break;
     case "ads":
-      content = currentProject?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} /> : <AdsPlaceholder />;
+      if (isCampaignReview) {
+        content = (
+          <CampaignWorkspace
+            key={projectId}
+            projectId={projectId}
+            initialTab="ads"
+          />
+        );
+      } else {
+        content = currentProject?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} /> : <AdsPlaceholder />;
+      }
       break;
     case "reports":
       content = <ReportsWorkspace key={projectId} projectId={projectId} />;

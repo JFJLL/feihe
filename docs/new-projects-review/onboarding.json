@@ -1,0 +1,197 @@
+{
+  "timestamp": "2026-10-19T08:35:13.670Z",
+  "db_path": "D:\\download\\pic-vec\\feihe\\feihe-mvp\\data\\local.db",
+  "backup_file": "D:\\download\\pic-vec\\feihe\\.verification\\campaign\\local.db.pre-campaign-backup.db",
+  "qicui_hash_before": "16bc37586f2f6b4a7ce6c99e0120a8d8e5389dc198b7eec0206e2114cd9c7b0b",
+  "qicui_hash_after": "16bc37586f2f6b4a7ce6c99e0120a8d8e5389dc198b7eec0206e2114cd9c7b0b",
+  "qicui_intact": true,
+  "projects_total": 4,
+  "projects": [
+    {
+      "id": "qicui",
+      "name": "启萃评论与声量项目",
+      "owner_id": "",
+      "template_id": "content_marketing"
+    },
+    {
+      "id": "kailas",
+      "name": "凯乐石",
+      "owner_id": "user-editor",
+      "template_id": "campaign_review"
+    },
+    {
+      "id": "meiling",
+      "name": "美菱",
+      "owner_id": "user-editor",
+      "template_id": "campaign_review"
+    },
+    {
+      "id": "winner-wipes",
+      "name": "酒精湿巾",
+      "owner_id": "user-editor",
+      "template_id": "campaign_review"
+    }
+  ],
+  "sources_total": 19,
+  "sources": [
+    {
+      "id": "feishu-competitor-monthly",
+      "project_id": "qicui",
+      "name": "飞鹤竞品月报数据收集表",
+      "status": "同步正常",
+      "sheet_id": "ldZDsR"
+    },
+    {
+      "id": "feishu-daily-kpi-dashboard",
+      "project_id": "qicui",
+      "name": "启萃分日数据看板",
+      "status": "同步正常",
+      "sheet_id": "4bTvDu"
+    },
+    {
+      "id": "feishu-weekly-trend",
+      "project_id": "qicui",
+      "name": "飞鹤启萃周趋势变化底表",
+      "status": "同步正常",
+      "sheet_id": "kMYs9o"
+    },
+    {
+      "id": "feishu-content-planning",
+      "project_id": "qicui",
+      "name": "飞鹤启萃内容规划all in one",
+      "status": "同步正常",
+      "sheet_id": "7XkqoO"
+    },
+    {
+      "id": "src-kailas-node-MetCwmTK2iof7Sk2SqacURIWnPe",
+      "project_id": "kailas",
+      "name": "FUGA达人审核常见问题汇总表",
+      "status": "元数据已核验",
+      "sheet_id": "0aRpyJ"
+    },
+    {
+      "id": "src-kailas-node-S2FRw04w6i21DikL6DVcmfG8nSh",
+      "project_id": "kailas",
+      "name": "26年6月&Q3【FUGA 大坡王黑山】日常执行表",
+      "status": "元数据已核验",
+      "sheet_id": "0vvsaG"
+    },
+    {
+      "id": "src-kailas-node-H9y3wPrjQi817YkAyrvcaxzAncg",
+      "project_id": "kailas",
+      "name": "黑山Q3-种草投放数据 副本",
+      "status": "公式异常待核对",
+      "sheet_id": "pwNPq2"
+    },
+    {
+      "id": "src-kailas-node-LT1MwikWci8LTDk0UL7coXfrnVb",
+      "project_id": "kailas",
+      "name": "凯乐石资料（未能读取标题）",
+      "status": "权限受限",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-kailas-file-XI8XbmwQKo4gGKxipdycvmM8n2g",
+      "project_id": "kailas",
+      "name": "【1010最新】FUGA大坡王黑山Q3阶段复盘V4.pptx",
+      "status": "元数据已核验",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-kailas-manual-report",
+      "project_id": "kailas",
+      "name": "凯乐石营销10.16–10.18日报截图",
+      "status": "已录入",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-meiling-base-XH2obMhtwaPCWUsmsWacRCpLnvg",
+      "project_id": "meiling",
+      "name": "美菱冰箱小红书种草多维表",
+      "status": "元数据已核验",
+      "sheet_id": "tbluz50zuZOeGQWf"
+    },
+    {
+      "id": "src-meiling-node-UKPKwNHFdi9jk0kBaQKcuO3Anqf",
+      "project_id": "meiling",
+      "name": "美菱冰箱618小红书项目复盘",
+      "status": "元数据已核验",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-meiling-node-RQffw002Aik9aNkW9PScJ05knre",
+      "project_id": "meiling",
+      "name": "美菱KPI",
+      "status": "权限受限",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "project_id": "meiling",
+      "name": "美菱资料（未能读取标题）",
+      "status": "权限受限",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "project_id": "meiling",
+      "name": "美菱投放日报",
+      "status": "权限受限",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-meiling-manual-report",
+      "project_id": "meiling",
+      "name": "美菱营销10.19日报",
+      "status": "已录入",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-winner-wipes-node-Jo2cwK3c9ishJdkq40ycfNSMnTh",
+      "project_id": "winner-wipes",
+      "name": "【易美】Y26 9-10月 稳健玉米消毒湿巾",
+      "status": "元数据已核验",
+      "sheet_id": "OgJUzb"
+    },
+    {
+      "id": "src-winner-wipes-node-VDyYwLnG9ivYpOko7eocjEvrnag",
+      "project_id": "winner-wipes",
+      "name": "【周报】稳健玉米酒精湿巾Y26 9-11月",
+      "status": "元数据已核验",
+      "sheet_id": ""
+    },
+    {
+      "id": "src-winner-wipes-manual-report",
+      "project_id": "winner-wipes",
+      "name": "稳健酒精湿巾10.19日报",
+      "status": "已录入",
+      "sheet_id": ""
+    }
+  ],
+  "snapshots": {
+    "kailas": {
+      "reportPeriod": "10.16–10.18 日报（截图未注明年份）",
+      "updatedAt": "2026-10-19T08:35:13.655Z",
+      "sourcesCount": 8,
+      "kpisCount": 6,
+      "tablesCount": 4,
+      "actionsCount": 4
+    },
+    "meiling": {
+      "reportPeriod": "10.19 日报（原文未注明年份）",
+      "updatedAt": "2026-10-19T08:35:13.661Z",
+      "sourcesCount": 6,
+      "kpisCount": 11,
+      "tablesCount": 7,
+      "actionsCount": 5
+    },
+    "winner-wipes": {
+      "reportPeriod": "10.19 日报（原文未注明年份）",
+      "updatedAt": "2026-10-19T08:35:13.666Z",
+      "sourcesCount": 5,
+      "kpisCount": 24,
+      "tablesCount": 6,
+      "actionsCount": 4
+    }
+  }
+}

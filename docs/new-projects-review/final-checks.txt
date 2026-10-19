@@ -1,0 +1,33 @@
+=== Final Check 1: npm run typecheck ===
+Status: PASS
+Command: npm run typecheck
+Output:
+> tsc --noEmit
+Exit Code: 0
+
+=== Final Check 2: npx eslint ===
+Status: PASS (已解决：原 CampaignWorkspace.tsx:98 react-hooks/set-state-in-effect 错误已修复)
+Command: npx eslint lib/campaign-*.ts features/campaign/*.tsx app/api/campaign-dashboard/route.ts components/project-shell/ProjectShell.tsx components/project-shell/ProjectSidebar.tsx
+Exit Code: 0
+Output:
+0 errors, 0 warnings
+
+=== Final Check 3: npx tsx scripts/test-campaign-adapters.mjs ===
+Status: PASS
+Command: npx tsx scripts/test-campaign-adapters.mjs
+Exit Code: 0
+Output:
+=== Running Campaign Adapter Mutation Tests ===
+[PASS] Wipes: 变异 actual/target 驱动 KPI 与表格变化
+[PASS] Wipes: 删 actual 不回退 8.23
+[PASS] Wipes: 删 weekly 不造 116 发布与周报表
+[PASS] Wipes: explicit null 实际保持 null (无回退/无NaN)
+[PASS] Wipes: 改变 weekly 周期文本动态反映新周期 -> period=2026/11/01-11/20（截至11/21已发布完毕）
+[PASS] Meiling: 删候选池 stats 不回退 1096 -> val=null
+[PASS] Meiling: 改 records 驱动 confirmed/published 动态计算
+[PASS] Meiling: 无忧嵌502 不归小确杏502
+[PASS] Idempotency: 重复 apply 不追加 sources/kpis/tables
+[PASS] Referential: 所有 kpi/table.sourceId 均在 sources 中存在
+[PASS] Kailas: 副本 0 不覆盖 manual 906818.64 -> value=906818.64
+=== Summary ===
+Total: 11 | Passed: 11 | Failed: 0

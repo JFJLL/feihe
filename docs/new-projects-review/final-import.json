@@ -1,0 +1,150 @@
+{
+  "timestamp": "2026-10-19T08:35:35.101Z",
+  "api_checks": {
+    "projects": {
+      "status": 200,
+      "ok": true,
+      "count": 4,
+      "ids": [
+        "kailas",
+        "meiling",
+        "qicui",
+        "winner-wipes"
+      ]
+    },
+    "campaign_dashboards": {
+      "kailas": {
+        "status": 200,
+        "sources_count": 8,
+        "kpis_count": 6,
+        "tables_count": 4,
+        "actions_count": 4,
+        "actions_title": "凯乐石日报规划动作",
+        "missing_kpi_sources": [],
+        "missing_table_sources": [],
+        "subtitle": "预算与版位效率",
+        "manual_val_906818_64_preserved": true
+      },
+      "meiling": {
+        "status": 200,
+        "sources_count": 6,
+        "kpis_count": 11,
+        "tables_count": 7,
+        "actions_count": 5,
+        "actions_title": "美菱日报规划动作",
+        "missing_kpi_sources": [],
+        "missing_table_sources": [],
+        "subtitle": "双十一投放与内容执行",
+        "current_period_table": {
+          "title": "10.16–10.18 当期投放",
+          "rows_count": 7,
+          "valid": true
+        },
+        "observation_kpis": [
+          {
+            "id": "meiling-confirmed-total",
+            "label": "确认合作",
+            "value": 108,
+            "unit": "位",
+            "target": null,
+            "direction": "neutral",
+            "note": "日报确认合作108位（观测值，非考核目标）"
+          },
+          {
+            "id": "meiling-published-count",
+            "label": "已发布",
+            "value": 44,
+            "unit": "篇",
+            "target": null,
+            "direction": "neutral",
+            "note": "日报已发布44篇；巡查44篇为同一已发布集合的复核"
+          },
+          {
+            "id": "meiling-breakdown-sum",
+            "label": "状态明细合计",
+            "value": 106,
+            "unit": "篇",
+            "target": null,
+            "direction": "neutral",
+            "note": "内容状态合计106篇，与确认合作108位需核对口径，不推定缺失两位达人"
+          }
+        ]
+      },
+      "winner-wipes": {
+        "status": 200,
+        "sources_count": 5,
+        "kpis_count": 24,
+        "tables_count": 6,
+        "actions_count": 4,
+        "actions_title": "酒精湿巾日报规划动作",
+        "missing_kpi_sources": [],
+        "missing_table_sources": [],
+        "subtitle": "种草效果与KPI进度"
+      }
+    },
+    "qicui_rejection": {
+      "status": 400,
+      "error": "该项目非轻量营销看板(campaign_review)模板",
+      "rejected_properly": true
+    },
+    "does_not_exist": {
+      "status": 404,
+      "error": "项目不存在",
+      "returned_404": true
+    }
+  },
+  "db_checks": {
+    "projects_total": 4,
+    "projects": [
+      {
+        "id": "kailas",
+        "name": "凯乐石",
+        "template_id": "campaign_review"
+      },
+      {
+        "id": "meiling",
+        "name": "美菱",
+        "template_id": "campaign_review"
+      },
+      {
+        "id": "qicui",
+        "name": "启萃评论与声量项目",
+        "template_id": "content_marketing"
+      },
+      {
+        "id": "winner-wipes",
+        "name": "酒精湿巾",
+        "template_id": "campaign_review"
+      }
+    ],
+    "total_data_sources": 19,
+    "new_campaign_sources_count": 15,
+    "new_campaign_sources_unique_count": 15,
+    "no_duplicate_sources": true,
+    "sources_per_project": {
+      "kailas": 6,
+      "meiling": 6,
+      "winner-wipes": 3
+    }
+  },
+  "qicui_intact": true,
+  "backup_receipt": {
+    "backup_file": "D:\\download\\pic-vec\\feihe\\.verification\\campaign\\local.db.pre-campaign-backup.db",
+    "qicui_hash_before": "16bc37586f2f6b4a7ce6c99e0120a8d8e5389dc198b7eec0206e2114cd9c7b0b",
+    "qicui_hash_after": "16bc37586f2f6b4a7ce6c99e0120a8d8e5389dc198b7eec0206e2114cd9c7b0b",
+    "qicui_intact": true
+  },
+  "verifications": {
+    "four_projects_visible": true,
+    "all_kpi_table_source_ids_in_sources": true,
+    "meiling_current_period_7_rows": true,
+    "kailas_906818_64_preserved": true,
+    "no_target_108": true,
+    "actions_items_counts_valid": true,
+    "qicui_rejected_as_non_campaign": true,
+    "does_not_exist_404": true,
+    "db_projects_count_4": true,
+    "db_new_sources_count_15_no_duplicates": true
+  },
+  "all_verifications_passed": true
+}

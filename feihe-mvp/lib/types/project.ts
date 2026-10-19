@@ -34,6 +34,7 @@ export type Project = {
   departmentName?: string;
   clientName?: string;
   templateName?: string;
+  campaignSnapshotAt?: string | null;
 };
 
 export type Pipeline = {

@@ -1,0 +1,86 @@
+{
+  "audit_time": "2026-10-19T15:23:23+08:00",
+  "identity": "user",
+  "total_tokens": 6,
+  "success_count": 5,
+  "failed_count": 1,
+  "nodes": [
+    {
+      "token": "MetCwmTK2iof7Sk2SqacURIWnPe",
+      "access_status": "accessible",
+      "ok": true,
+      "title": "FUGA达人审核常见问题汇总表",
+      "node_type": "origin",
+      "obj_type": "sheet",
+      "node_token": "MetCwmTK2iof7Sk2SqacURIWnPe",
+      "obj_token": "ZuBzsoC0fhuQ8Fte13pcdHcxnQg",
+      "space_id": "7622888078261767122",
+      "has_child": false,
+      "updated_at": "2026-10-19T04:01:12Z"
+    },
+    {
+      "token": "S2FRw04w6i21DikL6DVcmfG8nSh",
+      "access_status": "accessible",
+      "ok": true,
+      "title": "26年6月&Q3【FUGA 大坡王黑山】日常执行表",
+      "node_type": "origin",
+      "obj_type": "sheet",
+      "node_token": "S2FRw04w6i21DikL6DVcmfG8nSh",
+      "obj_token": "DsGFs2SxehA0setiGvdcHZuhn7d",
+      "space_id": "7622888078261767122",
+      "has_child": false,
+      "updated_at": "2026-10-19T03:57:01Z"
+    },
+    {
+      "token": "H9y3wPrjQi817YkAyrvcaxzAncg",
+      "access_status": "accessible",
+      "ok": true,
+      "title": "黑山Q3-种草投放数据 副本",
+      "node_type": "origin",
+      "obj_type": "sheet",
+      "node_token": "H9y3wPrjQi817YkAyrvcaxzAncg",
+      "obj_token": "X7CasjHnThuFA2tPYuscN6NBnMf",
+      "space_id": "7622888078261767122",
+      "has_child": false,
+      "updated_at": "2026-10-19T06:43:50Z"
+    },
+    {
+      "token": "LT1MwikWci8LTDk0UL7coXfrnVb",
+      "access_status": "permission_denied",
+      "ok": false,
+      "exit_code": 3,
+      "error": {
+        "code": 131006,
+        "type": "authorization",
+        "subtype": "permission_denied",
+        "message": "user lacks permission for the requested resource"
+      }
+    },
+    {
+      "token": "Jo2cwK3c9ishJdkq40ycfNSMnTh",
+      "access_status": "accessible",
+      "ok": true,
+      "title": "【易美】Y26 9-10月 稳健玉米消毒湿巾",
+      "node_type": "origin",
+      "obj_type": "sheet",
+      "node_token": "Jo2cwK3c9ishJdkq40ycfNSMnTh",
+      "obj_token": "Ero1shDTFhVzwttqDMLceZQ4nMb",
+      "space_id": "7646605786822692051",
+      "has_child": false,
+      "updated_at": "2026-10-19T05:52:24Z"
+    },
+    {
+      "token": "VDyYwLnG9ivYpOko7eocjEvrnag",
+      "access_status": "accessible",
+      "ok": true,
+      "title": "【周报】稳健玉米酒精湿巾Y26 9-11月",
+      "node_type": "origin",
+      "obj_type": "docx",
+      "node_token": "VDyYwLnG9ivYpOko7eocjEvrnag",
+      "obj_token": "LtZ5dlPvnoiA8OxsvAUcV2lAnWb",
+      "space_id": "7644753641844346059",
+      "has_child": false,
+      "updated_at": "2026-10-14T08:15:33Z"
+    }
+  ]
+}

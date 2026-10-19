@@ -72,6 +72,10 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
     finally { setBusy(false); }
   }
   function freshness(p: Project) {
+    if (p.templateId === 'campaign_review') {
+      if (p.campaignSnapshotAt) return '快照更新 ' + cnTime(p.campaignSnapshotAt);
+      return '待接入项目资料';
+    }
     if (!p.sourceCount && !p.dataRowCount) return '未接入数据';
     if (!p.dataUpdatedAt) return '待首次同步';
     if (!p.dataRowCount) return '最近同步没有记录';
