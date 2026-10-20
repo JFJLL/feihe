@@ -8,6 +8,7 @@ export type SettingsTabId =
   | 'members'
   | 'rules'
   | 'board'
+  | 'data-sources'
   | 'data'
   | 'metrics'
   | 'reports'
@@ -17,6 +18,7 @@ export type SettingsTabId =
 export function SettingsSubNav({ activeTab }: { activeTab?: string }) {
   const { projectId, currentProject, navigateTo, activeSection } = useProject();
   const isGeneral = currentProject?.templateId === 'general_workbench';
+  const isCampaign = currentProject?.templateId === 'campaign_review';
 
   const tabs: { id: SettingsTabId; title: string; href: string; icon: string }[] = [
     {
@@ -41,18 +43,29 @@ export function SettingsSubNav({ activeTab }: { activeTab?: string }) {
             icon: '🎯',
           },
         ]),
-        {
+    {
       id: 'board',
       title: '团队看板',
       href: `/projects/${encodeURIComponent(projectId)}/settings?tab=board`,
       icon: '📌',
     },
-    {
-      id: 'data',
-      title: '数据管理',
-      href: `/projects/${encodeURIComponent(projectId)}/data`,
-      icon: '📊',
-    },
+    ...(isCampaign
+      ? [
+          {
+            id: 'data-sources' as SettingsTabId,
+            title: '数据来源',
+            href: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`,
+            icon: '🗄️',
+          },
+        ]
+      : [
+          {
+            id: 'data' as SettingsTabId,
+            title: '数据管理',
+            href: `/projects/${encodeURIComponent(projectId)}/data`,
+            icon: '📊',
+          },
+        ]),
     {
       id: 'metrics',
       title: '项目指标',
@@ -79,11 +92,12 @@ export function SettingsSubNav({ activeTab }: { activeTab?: string }) {
     },
   ];
 
-  // Derive active tab from prop or activeSection
   const currentActive =
     activeTab ||
     (activeSection === 'data'
-      ? 'data'
+      ? isCampaign
+        ? 'data-sources'
+        : 'data'
       : activeSection === 'metrics'
       ? 'metrics'
       : activeSection === 'reports'

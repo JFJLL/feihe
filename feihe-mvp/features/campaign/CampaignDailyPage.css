@@ -1,0 +1,146 @@
+/**
+ * CampaignDailyPage Scoped Styles
+ * 暖白底色 #f6f5f2, 主深青 #2c7168, 辅助紫 #8273a3, 边框 #e6e3dc
+ */
+
+.ca-daily-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 10px;
+}
+
+.ca-filter-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ca-filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ca-palette-muted, #64748b);
+  white-space: nowrap;
+}
+
+.ca-metric-pills {
+  display: inline-flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ca-metric-pill-btn {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ca-metric-pill-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ca-metric-pill-btn.active {
+  background: #ffffff;
+  color: var(--ca-palette-primary, #2c7168);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.ca-date-range-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  padding: 3px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.ca-date-input {
+  border: none;
+  background: transparent;
+  font-size: 11.5px;
+  color: #1e293b;
+  font-family: inherit;
+  outline: none;
+  padding: 2px 0;
+}
+
+.ca-date-sep {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.ca-btn-reset {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ca-btn-reset:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.ca-dataset-select {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e293b;
+  outline: none;
+  cursor: pointer;
+}
+
+.ca-daily-empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: #ffffff;
+  border: 1px dashed var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 12px;
+  text-align: center;
+  gap: 10px;
+}
+
+.ca-daily-empty-icon {
+  font-size: 32px;
+}
+
+.ca-daily-empty-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.ca-daily-empty-desc {
+  font-size: 12.5px;
+  color: #64748b;
+  max-width: 480px;
+  line-height: 1.6;
+}

@@ -53,7 +53,7 @@ function ProjectShellContent({
 
   const isSettingsOrData = ['settings', 'data', 'metrics', 'reports'].includes(activeSection);
 
-  // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞）
+  // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞，战役项目由专属工作区独立加载）
   if (dataLoading && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
       <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
@@ -89,7 +89,7 @@ function ProjectShellContent({
           <CampaignWorkspace
             key={projectId}
             projectId={projectId}
-            initialTab="overview"
+            section="overview"
           />
         );
       } else if (dataError && !dashboard) {
@@ -124,7 +124,7 @@ function ProjectShellContent({
           <CampaignWorkspace
             key={projectId}
             projectId={projectId}
-            initialTab="content"
+            section="content"
           />
         );
       } else {
@@ -155,7 +155,7 @@ function ProjectShellContent({
           <CampaignWorkspace
             key={projectId}
             projectId={projectId}
-            initialTab="ads"
+            section="ads"
           />
         );
       } else {
@@ -166,7 +166,19 @@ function ProjectShellContent({
       content = <ReportsWorkspace key={projectId} projectId={projectId} />;
       break;
     case "data":
-      content = <DataWorkspace key={projectId} projectId={projectId} />;
+      if (isCampaignReview) {
+        content = (
+          <SettingsWorkspace
+            projectId={projectId}
+            project={currentProject}
+            dashboard={effectiveDashboard}
+            ops={effectiveOps}
+            onRefresh={refreshData}
+          />
+        );
+      } else {
+        content = <DataWorkspace key={projectId} projectId={projectId} />;
+      }
       break;
     case "metrics":
       content = <MetricWorkspace key={projectId} projectId={projectId} />;
@@ -174,7 +186,7 @@ function ProjectShellContent({
     case "settings":
       content = (
         <>
-          {dataError && (
+          {dataError && !isCampaignReview && (
             <div style={{ padding: "10px 16px", background: "#fef3c7", border: "1px solid #fde68a", color: "#92400e", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
               ⚠️ 分析数据接口暂不可用，但您可以正常维护项目设置、数据源与成员权限。
             </div>

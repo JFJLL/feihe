@@ -107,6 +107,28 @@ export interface CampaignActions {
   items: (CampaignActionItem | string)[];
 }
 
+export interface CampaignDailyMetric {
+  key: string;
+  label: string;
+  unit?: string;
+}
+
+export interface CampaignDailyRow {
+  date: string; // ISO date string: YYYY-MM-DD
+  [key: string]: string | number | null;
+}
+
+export interface CampaignDailyDataset {
+  id: string;
+  label: string;
+  period: string;
+  sourceId?: string;
+  sourceUrl?: string;
+  note?: string;
+  metrics: CampaignDailyMetric[];
+  rows: CampaignDailyRow[];
+}
+
 export interface CampaignDashboard {
   projectId: string;
   name: string;
@@ -120,6 +142,7 @@ export interface CampaignDashboard {
   tables: CampaignTable[];
   actions: CampaignActions;
   warnings: string[];
+  dailyDatasets?: CampaignDailyDataset[];
 }
 
 export interface CampaignProjectMeta {

@@ -12,9 +12,9 @@ import { RulesAndTargets } from './RulesAndTargets';
 import { SettingsIntegrations } from './integrations/SettingsIntegrations';
 import { DataMap } from './data-map/DataMap';
 import { GeneralWorkbenchBoard } from '../overview/GeneralWorkbenchBoard';
+import { CampaignSourcesPanel } from '../campaign/CampaignSourcesPanel';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { useProject } from '../../components/project-shell/ProjectContext';
-import { api } from '../../lib/hooks/use-project-data';
 import { useCachedQuery } from '../../lib/hooks/use-cached-query';
 import { invalidateQueryCache } from '../../lib/cache/query-cache';
 
@@ -52,7 +52,10 @@ export function SettingsWorkspace({
   ops: Ops;
   onRefresh: (opts?: { fresh?: boolean; throwOnError?: boolean }) => Promise<void>;
 }) {
-  const [tab, setTab] = useProjectTab('profile', [
+  const { currentProject, refreshWorkspace, showToast, navigateTo } = useProject();
+  const isCampaignReview = currentProject?.templateId === 'campaign_review';
+
+  const [tab] = useProjectTab('profile', [
     'profile',
     'members',
     'rules',
@@ -64,12 +67,16 @@ export function SettingsWorkspace({
     'metrics',
     'reports',
   ]);
-  const { currentProject, refreshWorkspace, showToast, navigateTo } = useProject();
 
   // If someone visits /projects/[id]/settings?tab=data, metrics, reports, or data-sources, route seamlessly
   useEffect(() => {
     let subpath = '';
-    if (tab === 'data' || tab === 'data-sources') {
+    if (tab === 'data-sources') {
+      if (isCampaignReview) {
+        return; // Campaign review projects stay on settings?tab=data-sources
+      }
+      subpath = 'data';
+    } else if (tab === 'data') {
       subpath = 'data';
     } else if (tab === 'metrics') {
       subpath = 'metrics';
@@ -93,7 +100,7 @@ export function SettingsWorkspace({
     }
     const target = `/projects/${encodeURIComponent(projectId)}/${subpath}${search}${hash}`;
     navigateTo(target, { replace: true });
-  }, [tab, projectId, navigateTo]);
+  }, [tab, projectId, navigateTo, isCampaignReview]);
 
   // Per-project visited tabs set: lazy-mounts on first visit, preserves drafts thereafter.
   const [visitedByProject, setVisitedByProject] = useState<Record<string, Set<string>>>(() => ({
@@ -134,21 +141,32 @@ export function SettingsWorkspace({
   const handleProfileOrSourceUpdate = async () => {
     invalidateQueryCache({ projectId, endpoint: '/api/projects' });
     invalidateQueryCache({ projectId, endpoint: '/api/data-workspace' });
+    invalidateQueryCache({ projectId, endpoint: '/api/campaign-dashboard' });
     await refreshWorkspace();
     await onRefresh({ fresh: true });
   };
+
+  const ruleWordCount = (ops?.settings?.rules?.brands?.length || 0) + (ops?.settings?.rules?.competitors?.length || 0);
 
   return (
     <div className="stack ops-workspace reference-workspace settings-workspace" data-workspace-ui="v2">
       <PageHeader
         variant="light"
         title="项目设置"
-        subtitle="集中管理当前项目的资料、目标规则、成员权限、工具与数据地图。"
+        subtitle={
+          isCampaignReview
+            ? "集中管理当前项目的资料、目标规则、成员权限、数据来源与工具集成。"
+            : "集中管理当前项目的资料、目标规则、成员权限、工具与数据地图。"
+        }
         badge={
-          <span>
-            {ops.settings.rules.brands.length + ops.settings.rules.competitors.length} 个识别词 ·{' '}
-            {dashboard.pipelines.length} 条主线
-          </span>
+          isCampaignReview ? (
+            <span>战役复盘资料与数据管理</span>
+          ) : (
+            <span>
+              {ruleWordCount} 个识别词 ·{' '}
+              {dashboard.pipelines?.length || 0} 条主线
+            </span>
+          )
         }
       />
 
@@ -189,6 +207,22 @@ export function SettingsWorkspace({
         </div>
       )}
 
+      {visited.has('data-sources') && isCampaignReview && (
+        <div
+          id="workspace-tabpanel-data-sources"
+          role="tabpanel"
+          aria-labelledby="workspace-tab-data-sources"
+          tabIndex={0}
+          style={{ display: tab === 'data-sources' ? 'block' : 'none' }}
+        >
+          <CampaignSourcesPanel
+            key={projectId}
+            projectId={projectId}
+            onDone={handleProfileOrSourceUpdate}
+          />
+        </div>
+      )}
+
       {visited.has('rules') && (
         <div
           id="workspace-tabpanel-rules"
@@ -208,7 +242,7 @@ export function SettingsWorkspace({
         </div>
       )}
 
-            {visited.has('board') && (
+      {visited.has('board') && (
         <div
           id="workspace-tabpanel-board"
           role="tabpanel"

@@ -1,0 +1,685 @@
+/**
+ * Campaign Analytics Visual System (ca- scope)
+ * 调色基准: 暖白底色 #f6f5f2, 主深青 #2c7168, 辅助紫 #8273a3, 赭金 #b88a45, 陶土 #bd7964, 计划灰 #8c9ba5
+ * 约束: 1280 首屏可见 4 指标 + 2 核心图表; 移动端 390 单列响应; 纯原生 SVG; 缺值不虚假补零; 预算超支不截断
+ */
+
+:root {
+  --ca-palette-primary: #2c7168;
+  --ca-palette-purple: #8273a3;
+  --ca-palette-gold: #b88a45;
+  --ca-palette-terracotta: #bd7964;
+  --ca-palette-slate: #8c9ba5;
+  --ca-palette-bg: #f6f5f2;
+  --ca-palette-panel: #ffffff;
+  --ca-palette-text: #1f2937;
+  --ca-palette-muted: #64748b;
+  --ca-palette-subtle: #94a3b8;
+  --ca-palette-border: #e2e8f0;
+  --ca-palette-border-warm: #e6e3dc;
+  --ca-palette-grid: #edf2f7;
+  --ca-palette-good: #2c7168;
+  --ca-palette-warn: #b88a45;
+  --ca-palette-danger: #bd7964;
+}
+
+/* ==========================================================================
+   1. Page & Layout Containers
+   ========================================================================== */
+
+.ca-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 16px 20px 32px;
+  box-sizing: border-box;
+  background-color: var(--ca-palette-bg);
+  color: var(--ca-palette-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height: 1.5;
+}
+
+.ca-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  background: var(--ca-palette-panel);
+  border: 1px solid var(--ca-palette-border-warm);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.ca-header-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ca-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ca-header-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ca-palette-text);
+  letter-spacing: -0.01em;
+}
+
+.ca-header-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(44, 113, 104, 0.1);
+  color: var(--ca-palette-primary);
+  border: 1px solid rgba(44, 113, 104, 0.2);
+}
+
+.ca-header-subtitle {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ca-palette-muted);
+}
+
+.ca-header-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--ca-palette-muted);
+  flex-shrink: 0;
+}
+
+.ca-header-meta strong {
+  color: var(--ca-palette-text);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   2. Toolbar & Controls
+   ========================================================================== */
+
+.ca-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: var(--ca-palette-panel);
+  border: 1px solid var(--ca-palette-border-warm);
+  border-radius: 8px;
+}
+
+.ca-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ca-toolbar-select {
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--ca-palette-text);
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.ca-toolbar-select:focus {
+  border-color: var(--ca-palette-primary);
+  box-shadow: 0 0 0 2px rgba(44, 113, 104, 0.15);
+}
+
+.ca-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ca-palette-text);
+  background: #f8fafc;
+  border: 1px solid var(--ca-palette-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ca-toolbar-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.ca-toolbar-btn-primary {
+  background: var(--ca-palette-primary);
+  color: #ffffff;
+  border-color: var(--ca-palette-primary);
+}
+
+.ca-toolbar-btn-primary:hover {
+  background: #235b54;
+}
+
+/* ==========================================================================
+   3. Grids (Responsive 2-Col and Wide)
+   ========================================================================== */
+
+.ca-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.ca-grid-wide {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   4. Panels (Card Containers)
+   ========================================================================== */
+
+.ca-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--ca-palette-panel);
+  border: 1px solid var(--ca-palette-border-warm);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  min-width: 0;
+}
+
+.ca-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ca-palette-border-warm);
+  background: #ffffff;
+}
+
+.ca-panel-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ca-panel-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ca-palette-text);
+  letter-spacing: -0.01em;
+}
+
+.ca-panel-subtitle {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--ca-palette-muted);
+  line-height: 1.4;
+}
+
+.ca-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ca-panel-body {
+  padding: 14px 16px;
+  min-width: 0;
+  position: relative;
+}
+
+/* ==========================================================================
+   5. Tabs Navigation
+   ========================================================================== */
+
+.ca-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--ca-palette-border-warm);
+  padding: 0 4px;
+  margin-bottom: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ca-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ca-palette-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.ca-tab-btn:hover {
+  color: var(--ca-palette-text);
+}
+
+.ca-tab-btn.active {
+  color: var(--ca-palette-primary);
+  font-weight: 600;
+  border-bottom-color: var(--ca-palette-primary);
+}
+
+.ca-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: var(--ca-palette-muted);
+}
+
+.ca-tab-btn.active .ca-tab-badge {
+  background: rgba(44, 113, 104, 0.12);
+  color: var(--ca-palette-primary);
+}
+
+/* ==========================================================================
+   6. MetricStrip (4 items on 1280 Desktop, 1 on Mobile 390)
+   ========================================================================== */
+
+.ca-metric-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.ca-metric-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--ca-palette-panel);
+  border: 1px solid var(--ca-palette-border-warm);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  min-width: 0;
+}
+
+.ca-metric-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ca-palette-muted);
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ca-metric-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.ca-metric-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ca-palette-text);
+  letter-spacing: -0.02em;
+  font-feature-settings: "tnum" 1;
+}
+
+.ca-metric-missing {
+  color: var(--ca-palette-subtle);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ca-metric-unit {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ca-palette-muted);
+}
+
+.ca-metric-note {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--ca-palette-subtle);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   7. Tables & Responsive Horizontal Scroll
+   ========================================================================== */
+
+.ca-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--ca-palette-border-warm);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.ca-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  text-align: left;
+}
+
+.ca-table th {
+  padding: 8px 12px;
+  background: #f8fafc;
+  color: var(--ca-palette-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--ca-palette-border);
+  white-space: nowrap;
+}
+
+.ca-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--ca-palette-text);
+  white-space: nowrap;
+}
+
+.ca-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ca-table tr:hover td {
+  background: #fcfdfe;
+}
+
+/* ==========================================================================
+   8. Insights, Notes & Empty States
+   ========================================================================== */
+
+.ca-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(44, 113, 104, 0.06);
+  border-left: 3px solid var(--ca-palette-primary);
+  border-radius: 4px;
+  font-size: 12.5px;
+  color: var(--ca-palette-text);
+  line-height: 1.5;
+}
+
+.ca-insight-warn {
+  background: rgba(189, 121, 100, 0.08);
+  border-left-color: var(--ca-palette-terracotta);
+}
+
+.ca-note {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  color: var(--ca-palette-muted);
+  line-height: 1.45;
+}
+
+.ca-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--ca-palette-muted);
+  font-size: 12.5px;
+  gap: 6px;
+}
+
+.ca-empty-icon {
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+.ca-empty-title {
+  font-weight: 600;
+  color: var(--ca-palette-text);
+}
+
+.ca-empty-hint {
+  font-size: 11px;
+  color: var(--ca-palette-subtle);
+  max-width: 280px;
+}
+
+/* ==========================================================================
+   9. Chart SVG Styles, Readouts & Legends
+   ========================================================================== */
+
+.ca-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  user-select: none;
+}
+
+.ca-chart-readout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 34px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--ca-palette-border);
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.ca-chart-readout strong {
+  color: var(--ca-palette-text);
+}
+
+.ca-chart-readout-empty {
+  color: var(--ca-palette-subtle);
+  font-size: 11.5px;
+}
+
+.ca-chart-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--ca-palette-muted);
+  margin-top: 8px;
+}
+
+.ca-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.ca-chart-legend-item:hover {
+  opacity: 0.8;
+}
+
+.ca-chart-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.ca-chart-swatch-circle {
+  border-radius: 50%;
+}
+
+.ca-chart-swatch-line {
+  height: 2px;
+  width: 12px;
+  border-radius: 1px;
+}
+
+.ca-chart-tooltip {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  background: rgba(15, 23, 42, 0.94);
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  white-space: nowrap;
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+  transition: opacity 0.1s ease;
+}
+
+.ca-chart-tooltip strong {
+  color: #ffffff;
+}
+
+.ca-badge-achieved {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(44, 113, 104, 0.12);
+  color: var(--ca-palette-primary);
+}
+
+.ca-badge-overrun {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(189, 121, 100, 0.14);
+  color: var(--ca-palette-terracotta);
+}
+
+.ca-badge-neutral {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: var(--ca-palette-muted);
+}
+
+/* ==========================================================================
+   10. Responsive Breakpoints
+   - 1280 Desktop: 4 metrics + 2 charts clearly on first screen
+   - 640/390 Mobile: single column, horizontal tables scroll within container
+   ========================================================================== */
+
+@media (max-width: 980px) {
+  .ca-metric-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ca-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .ca-page {
+    padding: 12px 10px 24px;
+    gap: 12px;
+  }
+  .ca-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 14px;
+  }
+  .ca-header-meta {
+    align-items: flex-start;
+  }
+  .ca-metric-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .ca-metric-item {
+    padding: 8px 10px;
+  }
+  .ca-metric-label {
+    font-size: 11px;
+  }
+  .ca-metric-value {
+    font-size: 16px;
+  }
+  .ca-metric-unit {
+    font-size: 11px;
+  }
+  .ca-metric-note {
+    font-size: 10px;
+  }
+  .ca-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ca-toolbar-group {
+    justify-content: space-between;
+  }
+  .ca-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 12px;
+  }
+  .ca-panel-body {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 340px) {
+  .ca-metric-strip {
+    grid-template-columns: 1fr;
+  }
+}

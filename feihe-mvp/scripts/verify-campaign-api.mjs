@@ -57,7 +57,10 @@ try {
     assert.ok(Array.isArray(data.dashboard.sources));
     assert.ok(Array.isArray(data.dashboard.kpis));
     assert.ok(Array.isArray(data.dashboard.tables));
-    console.log(`[PASS] ${pid} 看板快照读回成功: sources=${data.dashboard.sources.length}, kpis=${data.dashboard.kpis.length}, tables=${data.dashboard.tables.length}`);
+    assert.ok(Array.isArray(data.dashboard.dailyDatasets), `${pid} must contain dailyDatasets array`);
+    const expectedCounts = { kailas: 1, meiling: 3, "winner-wipes": 2 };
+    assert.equal(data.dashboard.dailyDatasets.length, expectedCounts[pid], `${pid} dailyDatasets count mismatch`);
+    console.log(`[PASS] ${pid} 看板快照读回成功: sources=${data.dashboard.sources.length}, kpis=${data.dashboard.kpis.length}, tables=${data.dashboard.tables.length}, dailyDatasets=${data.dashboard.dailyDatasets.length}`);
   }
 
   // 3. Test GET /api/campaign-dashboard for qicui -> must return 400 (template rejection)

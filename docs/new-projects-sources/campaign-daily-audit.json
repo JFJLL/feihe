@@ -1,0 +1,441 @@
+{
+  "audit_version": "2.1.0-strict-coverage",
+  "generated_at": "2026-10-19T18:25:26.199753+08:00",
+  "datasets_audit": {
+    "wipes-daily-delivery": {
+      "source_table": "Ero1shDTFhVzwttqDMLceZQ4nMb / 0QTVhE (By day)",
+      "range_queried": "A1:H36",
+      "total_logical_rows": 36,
+      "header_rows": 1,
+      "summary_rows": 1,
+      "empty_rows": 1,
+      "valid_daily_records": 33,
+      "rows_sum_check": true,
+      "daily_points": 33,
+      "date_range": "2026-09-16 ~ 2026-10-18",
+      "sum_spend": 165346.38,
+      "source_summary_spend": 165346.38,
+      "spend_reconciliation_diff": 0.0,
+      "duplicate_date_keys": 0,
+      "raw_key_duplicates": 0,
+      "missing_coverage": {
+        "spend": {
+          "null_points": 0,
+          "valid_points": 33,
+          "coverage_pct": "100.0%"
+        },
+        "impressions": {
+          "null_points": 0,
+          "valid_points": 33,
+          "coverage_pct": "100.0%"
+        },
+        "engagements": {
+          "null_points": 0,
+          "valid_points": 33,
+          "coverage_pct": "100.0%"
+        },
+        "uv": {
+          "null_points": 0,
+          "valid_points": 33,
+          "coverage_pct": "100.0%"
+        },
+        "cpm": {
+          "null_points": 0,
+          "valid_points": 33,
+          "coverage_pct": "100.0%"
+        },
+        "cpe": {
+          "null_points": 0,
+          "valid_points": 33,
+          "coverage_pct": "100.0%"
+        },
+        "cpuv": {
+          "null_points": 1,
+          "valid_points": 32,
+          "coverage_pct": "97.0%"
+        }
+      }
+    },
+    "wipes-daily-taosou": {
+      "source_table": "Ero1shDTFhVzwttqDMLceZQ4nMb / wY1HZO (淘搜)",
+      "range_queried": "A1:M40",
+      "total_logical_rows": 40,
+      "header_rows": 1,
+      "summary_rows": 1,
+      "empty_rows": 3,
+      "valid_daily_records": 35,
+      "rows_sum_check": true,
+      "daily_points": 35,
+      "date_range": "2026-09-14 ~ 2026-10-18",
+      "sum_spend": 347214.69,
+      "source_summary_spend": 347214.69,
+      "spend_reconciliation_diff": 0.0,
+      "duplicate_date_keys": 0,
+      "raw_key_duplicates": 0,
+      "missing_coverage": {
+        "kw_total_index": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "kw_wipes": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "kw_corn_wipes": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "spend_total": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "spend_k": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "spend_f": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "spend_s": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        },
+        "spend_cid": {
+          "null_points": 0,
+          "valid_points": 35,
+          "coverage_pct": "100.0%"
+        }
+      }
+    },
+    "meiling-daily-cid-jd": {
+      "source_table": "RoAtsw3KTh56ZBtT7cmcTYaznJb / Trvrou (日-投放数据（京东对投cid）)",
+      "range_queried": "A1:N7",
+      "total_logical_rows": 7,
+      "header_rows": 2,
+      "summary_rows": 1,
+      "empty_rows": 1,
+      "valid_daily_records": 3,
+      "rows_sum_check": true,
+      "daily_points": 3,
+      "date_range": "2026-10-16 ~ 2026-10-18",
+      "sum_spend": 3382.52,
+      "source_summary_spend": 3382.52,
+      "spend_reconciliation_diff": 0.0,
+      "duplicate_date_keys": 0,
+      "raw_key_duplicates": 0,
+      "missing_coverage": {
+        "spend": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "impressions": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "clicks": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "ctr": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "cpc": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "cpm": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "engagements": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "cpe": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "orders": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "gmv": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "roi": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        },
+        "uv": {
+          "null_points": 0,
+          "valid_points": 3,
+          "coverage_pct": "100.0%"
+        }
+      }
+    },
+    "meiling-daily-tm-seed": {
+      "source_table": "RoAtsw3KTh56ZBtT7cmcTYaznJb / D9ddm3 (（自采天猫种草）数据源)",
+      "range_queried": "A1:W776",
+      "total_logical_rows": 776,
+      "header_rows": 1,
+      "summary_rows": 0,
+      "empty_rows": 0,
+      "valid_daily_records": 775,
+      "rows_sum_check": true,
+      "daily_points": 19,
+      "date_range": "2026-09-30 ~ 2026-10-18",
+      "sum_spend": 78951.87,
+      "source_summary_spend": null,
+      "spend_reconciliation_diff": null,
+      "reconciliation_note": "源底表无预设独立总计行，仅对各有效行进行真实累计，不伪造独立对账来源。",
+      "duplicate_date_keys": 0,
+      "raw_key_duplicates_exact_dimension": 0,
+      "raw_key_multi_dimension_occurrences_date_creative": 184,
+      "missing_coverage": {
+        "spend": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "impressions": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "clicks": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "ctr": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "cpc": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "cpm": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "engagements": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "cpe": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "uv": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        },
+        "cpuv": {
+          "null_points": 1,
+          "valid_points": 18,
+          "coverage_pct": "94.7%"
+        },
+        "creatives_count": {
+          "null_points": 0,
+          "valid_points": 19,
+          "coverage_pct": "100.0%"
+        }
+      }
+    },
+    "meiling-daily-jd-seed": {
+      "source_table": "RoAtsw3KTh56ZBtT7cmcTYaznJb / BI2xBs (（自采京东种草）数据源)",
+      "range_queried": "A1:W1210",
+      "total_logical_rows": 1210,
+      "header_rows": 1,
+      "summary_rows": 0,
+      "empty_rows": 0,
+      "valid_daily_records": 1209,
+      "rows_sum_check": true,
+      "daily_points": 20,
+      "date_range": "2026-09-29 ~ 2026-10-18",
+      "sum_spend": 78526.29,
+      "source_summary_spend": null,
+      "spend_reconciliation_diff": null,
+      "reconciliation_note": "源底表无预设独立总计行，仅对各有效行进行真实累计，不伪造独立对账来源。",
+      "duplicate_date_keys": 0,
+      "raw_key_duplicates_exact_dimension": 0,
+      "raw_key_multi_dimension_occurrences_date_creative": 612,
+      "missing_coverage": {
+        "spend": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "impressions": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "clicks": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "ctr": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "cpc": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "cpm": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "engagements": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "cpe": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "uv": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        },
+        "cpuv": {
+          "null_points": 2,
+          "valid_points": 18,
+          "coverage_pct": "90.0%"
+        },
+        "creatives_count": {
+          "null_points": 0,
+          "valid_points": 20,
+          "coverage_pct": "100.0%"
+        }
+      }
+    },
+    "kailas-daily-fuga-creatives": {
+      "source_table": "X7CasjHnThuFA2tPYuscN6NBnMf / OzIjd5 (底表-创意-10月)",
+      "range_queried": "A1:Z7751 (8 chunks of 1000 rows)",
+      "total_logical_rows": 7751,
+      "header_rows": 1,
+      "summary_rows": 0,
+      "empty_rows": 0,
+      "valid_daily_records": 7750,
+      "rows_sum_check": true,
+      "daily_points": 12,
+      "date_range": "2026-10-01 ~ 2026-10-12",
+      "sum_spend": 74256.4,
+      "source_summary_spend": null,
+      "spend_reconciliation_diff": null,
+      "reconciliation_note": "源底表无预设独立总计行，仅对各有效行进行真实累计，不伪造独立对账来源。",
+      "duplicate_date_keys": 0,
+      "raw_key_duplicates_exact_dimension": 0,
+      "raw_key_multi_dimension_occurrences_date_creative": 0,
+      "missing_coverage": {
+        "spend": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "impressions": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "clicks": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "ctr": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "cpc": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "cpm": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "engagements": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "cpe": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "seed_crowd": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "deep_seed_crowd": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "search_clicks": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "uv": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "cpuv": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        },
+        "creatives_count": {
+          "null_points": 0,
+          "valid_points": 12,
+          "coverage_pct": "100.0%"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { requireProjectAccess, jsonError } from '@/lib/api-auth';
 import { getCampaignDashboardSnapshot } from '@/lib/campaign-store';
+import { getCampaignDailyDatasetsByProject } from '@/lib/campaign-daily-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,9 +31,16 @@ export async function GET(request: Request) {
       return jsonError('尚未接入资料', 404);
     }
 
+    // 4. Attach only this project's daily datasets (strict project isolation, server-only)
+    const dailyDatasets = getCampaignDailyDatasetsByProject(projectId);
+    const enrichedDashboard = {
+      ...snapshot,
+      dailyDatasets,
+    };
+
     return Response.json({
       ok: true,
-      dashboard: snapshot,
+      dashboard: enrichedDashboard,
       projectId,
       projectRole: access.context!.projectRole,
       canWrite: access.context!.canWrite,

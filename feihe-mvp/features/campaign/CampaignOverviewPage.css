@@ -1,0 +1,135 @@
+/**
+ * CampaignOverviewPage Scoped Styles
+ * 暖白底色 #f6f5f2, 主深青 #2c7168, 边框 #e6e3dc
+ */
+
+.ca-overview-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ca-overview-selector-label {
+  font-size: 12px;
+  color: var(--ca-palette-muted, #64748b);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ca-snapshot-pills {
+  display: inline-flex;
+  background: #edebe6;
+  padding: 2px;
+  border-radius: 8px;
+  gap: 2px;
+}
+
+.ca-snapshot-btn {
+  border: none;
+  background: transparent;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ca-snapshot-btn:hover {
+  color: #1e293b;
+}
+
+.ca-snapshot-btn.active {
+  background: #ffffff;
+  color: var(--ca-palette-primary, #2c7168);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.ca-quick-links-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 8px;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.ca-quick-links-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ca-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ca-palette-primary, #2c7168);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(44, 113, 104, 0.08);
+  transition: background 0.15s ease;
+}
+
+.ca-nav-link:hover {
+  background: rgba(44, 113, 104, 0.16);
+}
+
+.ca-details-collapse {
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.ca-details-summary {
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  background: #faf9f6;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ca-details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ca-details-summary::after {
+  content: "▼";
+  font-size: 10px;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.ca-details-collapse[open] .ca-details-summary::after {
+  transform: rotate(180deg);
+}
+
+.ca-details-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+}
+
+.ca-footer-date {
+  font-size: 11px;
+  color: var(--ca-palette-subtle, #94a3b8);
+  text-align: right;
+  margin-top: 4px;
+}

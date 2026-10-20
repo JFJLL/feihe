@@ -1,0 +1,49 @@
+================================================================================
+Campaign Dashboard Redesign Integration Verification (Final & Security-Hardened)
+Date: 2026-10-19
+Target: feihe-mvp (meiling, kailas, winner-wipes, qicui)
+================================================================================
+
+1. TypeScript Check (npm run typecheck -> tsc --noEmit)
+--------------------------------------------------------------------------------
+Command: npm run typecheck
+Result: PASSED (exit code: 0)
+Details: All TypeScript types, server/client boundary contracts, and enriched CampaignDashboard types resolved with zero errors.
+
+2. Scoped ESLint Check (14 targeted campaign, server & shell files)
+--------------------------------------------------------------------------------
+Command: npx eslint (14 targeted files)
+Result: PASSED (0 errors, 0 warnings across all 14 files)
+
+Verified Files:
+- features/campaign/CampaignOverviewPage.tsx  [PASS]
+- features/campaign/CampaignDailyPage.tsx     [PASS]
+- features/campaign/CampaignAdsPage.tsx       [PASS]
+- features/campaign/CampaignContentPage.tsx   [PASS]
+- features/campaign/CampaignCharts.tsx        [PASS]
+- features/campaign/CampaignWorkspace.tsx     [PASS]
+- features/campaign/CampaignSourcesPanel.tsx  [PASS]
+- features/settings/SettingsWorkspace.tsx     [PASS]
+- features/settings/SettingsSubNav.tsx        [PASS]
+- components/project-shell/ProjectShell.tsx   [PASS]
+- lib/campaign-types.ts                       [PASS]
+- lib/campaign-daily.ts                       [PASS - Client-safe, zero JSON imports]
+- lib/campaign-daily-server.ts                [PASS - Server-only dataset extractor]
+- app/api/campaign-dashboard/route.ts         [PASS - Authorized project-isolated attachment]
+
+3. Data Security & Client Bundle Isolation Verification
+--------------------------------------------------------------------------------
+- Client Safe: lib/campaign-daily.ts does NOT import campaign-daily-data.json.
+- Client Selector: getCampaignDailyDatasets(dashboard) strictly reads dashboard?.dailyDatasets ?? [].
+- Server Protection: lib/campaign-daily-server.ts extracts datasets by project strictly on server.
+- API Boundary: /api/campaign-dashboard attaches only the authorized project's daily datasets after requireProjectAccess.
+- scripts/test-campaign-daily.mjs: ALL 4 SECURITY & CONTRACT TESTS PASSED.
+
+4. Project APIs & Data Integrity Verification
+--------------------------------------------------------------------------------
+- Kailas: Snapshot readback OK (sources=8, kpis=12, tables=7, dailyDatasets=1)
+- Meiling: Snapshot readback OK (sources=6, kpis=41, tables=14, dailyDatasets=3)
+- Winner Wipes: Snapshot readback OK (sources=5, kpis=24, tables=6, dailyDatasets=2)
+- Qicui Boundary Guard: /api/campaign-dashboard safely blocks qicui with 400 (non-campaign template)
+- Qicui Business Reconcile (reconcile-qicui.mjs): 6/6 PASS, 100% data intact, 0 regressions
+- Zero DB write operations performed during verification.
