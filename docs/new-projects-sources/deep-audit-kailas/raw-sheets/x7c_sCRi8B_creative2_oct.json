@@ -1,0 +1,9 @@
+{
+  "token": "X7CasjHnThuFA2tPYuscN6NBnMf",
+  "sheet_id": "sCRi8B",
+  "actual_range": "A1:Z5",
+  "row_count": 5,
+  "col_count": 26,
+  "csv": "[row=1] 时间,创意名称,创意ID,笔记ID,笔记跳转链接,单元名称,单元ID,计划名称,计划ID,消费,展现量,点击量,点击率,平均点击成本,平均千次展示费用,互动量,平均互动成本,新增种草人群,新增种草人群成本,新增深度种草人群,新增深度种草人群成本,搜索组件点击量,搜索组件点击转化率,小红盟任务期消费,小红盟站外活跃行为UV(30日归因),小红盟站外活跃行为成本(30日归因)\n[row=2] 2026/10/1,丰海,6377733925,6a956908000000002501aec3,https://www.xiaohongshu.com/explore/6a956908000000002501aec3?xsec_token=WBbBrLvPwLK2Q5hAhTT8WE8ixTr4QMtLStPvxs06PWCOs=&xsec_source=pc_wind_export,0915-黑山-视频流-cpe-产品开箱-竞品近30天搜1,817550879,0915-黑山-视频流-cpe-产品开箱-竞品近30天搜1,224101066,0.09,2,0,0.00%,0,45,0,0,0,0,0,0,0,0.00%,0.09,0,0\n[row=3] 2026/10/1,我已经在努力了,6377733926,6a99502c00000000260149a2,https://www.xiaohongshu.com/explore/6a99502c00000000260149a2?xsec_token=WBg-0ELte8XdMph4Ft2VMFw6uH52Lu9GOh0bYyoViQuVc=&xsec_source=pc_wind_export,0915-黑山-视频流-cpe-产品开箱-竞品近30天搜1,817550879,0915-黑山-视频流-cpe-产品开箱-竞品近30天搜1,224101066,5.22,26,4,15.38%,1.31,200.77,4,1.31,5,1.04,1,5.22,0,0.00%,5.22,0,0\n[row=4] 2026/10/1,FFFHOPE,6377733927,6a92b134000000001f001e0c,https://www.xiaohongshu.com/explore/6a92b134000000001f001e0c?xsec_token=WBDKkQivJOZljqr-5fV-h4j6ejuGBiemW4fwG-pOZAXV0=&xsec_source=pc_wind_export,0915-黑山-视频流-cpe-产品开箱-竞品近30天搜1,817550879,0915-黑山-视频流-cpe-产品开箱-竞品近30天搜1,224101066,0.09,1,0,0.00%,0,90,0,0,0,0,0,0,0,0.00%,0.09,0,0\n[row=5] 2026/10/1,丰海,6377790190,6a956908000000002501aec3,https://www.xiaohongshu.com/explore/6a956908000000002501aec3?xsec_token=WBbBrLvPwLK2Q5hAhTT8WE8ixTr4QMtLStPvxs06PWCOs=&xsec_source=pc_wind_export,0915-黑山-视频流-cpe-产品开箱-竞品人群,817515898,0915-黑山-视频流-cpe-产品开箱-竞品人群,224102736,0.03,1,0,0.00%,0,30,0,0,0,0,0,0,0,0.00%,0.03,0,0",
+  "sample_note": "Sampled top 5 rows for raw transaction log schema audit"
+}

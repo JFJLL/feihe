@@ -22,6 +22,7 @@ import type {
 import kailasPayload from "./campaign-enrichment/kailas.json" with { type: "json" };
 import meilingPayload from "./campaign-enrichment/meiling.json" with { type: "json" };
 import winnerWipesPayload from "./campaign-enrichment/winner-wipes.json" with { type: "json" };
+import huangTianePayload from "./campaign-enrichment/huang-tiane.json" with { type: "json" };
 
 export interface CampaignEnrichmentPayload {
   projectId: string;
@@ -35,6 +36,7 @@ const ENRICHMENT_STORE: Record<string, CampaignEnrichmentPayload> = {
   kailas: kailasPayload as unknown as CampaignEnrichmentPayload,
   meiling: meilingPayload as unknown as CampaignEnrichmentPayload,
   "winner-wipes": winnerWipesPayload as unknown as CampaignEnrichmentPayload,
+  "huang-tiane": huangTianePayload as unknown as CampaignEnrichmentPayload,
 };
 
 /**

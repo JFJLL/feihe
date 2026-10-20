@@ -10,6 +10,7 @@ export const CAMPAIGN_PROJECT_IDS: readonly CampaignProjectId[] = [
   'kailas',
   'meiling',
   'winner-wipes',
+  'huang-tiane',
 ] as const;
 
 export const CAMPAIGN_PROJECT_CATALOG: Record<CampaignProjectId, CampaignProjectMeta> = {
@@ -46,12 +47,24 @@ export const CAMPAIGN_PROJECT_CATALOG: Record<CampaignProjectId, CampaignProject
     category: '快消',
     defaultReportPeriod: '营销复盘周期',
   },
+  'huang-tiane': {
+    id: 'huang-tiane',
+    name: '黄天鹅',
+    brand: '黄天鹅',
+    subtitle: '可生食鸡蛋种草与电商引流',
+    description: '可生食鸡蛋小红书种草、投流与商销引流复盘',
+    templateId: CAMPAIGN_TEMPLATE_ID,
+    color: '#d97706',
+    category: '生鲜食品',
+    defaultReportPeriod: '营销复盘周期',
+  },
 };
 
 export const CAMPAIGN_PROJECT_LIST: readonly CampaignProjectMeta[] = [
   CAMPAIGN_PROJECT_CATALOG.kailas,
   CAMPAIGN_PROJECT_CATALOG.meiling,
   CAMPAIGN_PROJECT_CATALOG['winner-wipes'],
+  CAMPAIGN_PROJECT_CATALOG['huang-tiane'],
 ];
 
 export const CAMPAIGN_REVIEW_TEMPLATE = {

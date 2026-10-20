@@ -1,0 +1,8 @@
+{
+  "token": "Pm3DsKubghgFDAtbbS5cyHY5n4g",
+  "sheet_id": "Ag2khD",
+  "actual_range": "A1:K4",
+  "row_count": 4,
+  "col_count": 11,
+  "csv": "[row=1] 博主昵称,笔记链接,笔记ID,曝光量,阅读量,互动量,点赞数,收藏量,评论量,分享量,CTR\n[row=2] HannahBananaMe,https://www.xiaohongshu.com/explore/6a7591230000000025006614?xsec_token=MBEGP3SjG8gTBMgjmXK0plmGTEc_ohOho-6iu2o47T9iE=&xsec_source=pc_pgy,6a7591230000000025006614,1679,183.00 ,49,28,4,12,2.00 ,11%\n[row=3] Seth,https://www.xiaohongshu.com/explore/6a5f357700000000040283b3?xsec_token=MB9L3FtMFEkNEgISw2MoOfv5txU320DYmOQdkiaognMjs=&xsec_source=pc_pgy,6a5f357700000000040283b3,9138,1024.00 ,65,48,5,17,11.00 ,11%\n[row=4] 合计,,,10817,1207.00 ,114,76.00 ,9,29,13,11%"
+}

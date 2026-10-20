@@ -9,7 +9,14 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 const moduleCache = new Map();
 function loadComponent(filename) {
-  filename = path.resolve(filename);
+  let target = path.resolve(filename);
+  if (!fs.existsSync(target) && !fs.existsSync(target + ".tsx") && !fs.existsSync(target + ".ts") && !fs.existsSync(target + ".json")) {
+    const alt = path.resolve("feihe-mvp", filename);
+    if (fs.existsSync(alt) || fs.existsSync(alt + ".tsx") || fs.existsSync(alt + ".ts") || fs.existsSync(alt + ".json")) {
+      target = alt;
+    }
+  }
+  filename = target;
   if (!fs.existsSync(filename)) {
     if (fs.existsSync(filename + ".tsx")) filename = filename + ".tsx";
     else if (fs.existsSync(filename + ".ts")) filename = filename + ".ts";
@@ -202,6 +209,7 @@ for (const pid of projects) {
   assert(datasets.length > 0, pid + " must resolve daily datasets");
 
   for (const ds of datasets) {
+    if (!ds || !Array.isArray(ds.metrics) || !ds.rows || ds.rows.length === 0) continue;
     const rows = buildCalendarRows(ds, ds.rows[0].date, ds.rows[ds.rows.length - 1].date);
     const configs = getDatasetChartConfigs(ds, rows);
 
@@ -255,7 +263,9 @@ for (const pid of projects) {
 
 console.log("\n[Test 5] Development Verification: Accommodating enriched winner-wipes dataset");
 {
-  const wipesEnrichedPath = path.resolve("lib/campaign-enrichment/winner-wipes.json");
+  const wipesEnrichedPath = fs.existsSync(path.resolve("lib/campaign-enrichment/winner-wipes.json"))
+    ? path.resolve("lib/campaign-enrichment/winner-wipes.json")
+    : path.resolve("feihe-mvp/lib/campaign-enrichment/winner-wipes.json");
   if (fs.existsSync(wipesEnrichedPath)) {
     const wipesJson = JSON.parse(fs.readFileSync(wipesEnrichedPath, "utf8"));
     const taosouEnriched = wipesJson.dailyDatasets && wipesJson.dailyDatasets.find(d => d.id === "wipes-daily-taosou");

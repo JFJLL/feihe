@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-10-20T09:28:10.835Z",
+  "db_path": "D:\\download\\pic-vec\\feihe\\feihe-mvp\\data\\local.db",
+  "backup_file": "D:\\download\\pic-vec\\feihe\\.verification\\campaign\\local.db.pre-huang-tiane-2026-10-20T09-28-03-772Z.db",
+  "project": {
+    "id": "huang-tiane",
+    "name": "黄天鹅",
+    "brand": "黄天鹅",
+    "category": "生鲜食品",
+    "description": "可生食鸡蛋种草与电商引流",
+    "color": "#d97706",
+    "org_id": "org-default",
+    "department_id": "dept-marketing",
+    "client_id": "",
+    "owner_id": "user-editor",
+    "template_id": "campaign_review"
+  },
+  "sources": [
+    {
+      "id": "src-huang-tiane-manual",
+      "name": "黄天鹅10/20日报计划与手工数据",
+      "kind": "huang_tiane_manual_chat",
+      "status": "manual",
+      "probe_status": "manual"
+    },
+    {
+      "id": "src-huang-tiane-kol-execution",
+      "name": "【黄天鹅】红书种草执行表",
+      "kind": "huang_tiane_creator_execution",
+      "status": "ready",
+      "probe_status": "accessible"
+    },
+    {
+      "id": "src-huang-tiane-cid-fs",
+      "name": "黄天鹅红猫CID 26年10月项目报表-fs 副本",
+      "kind": "huang_tiane_cid_fs",
+      "status": "ready",
+      "probe_status": "accessible"
+    },
+    {
+      "id": "src-huang-tiane-brand-fs",
+      "name": "黄天鹅品牌线26年10月项目报表-fs",
+      "kind": "huang_tiane_brand_fs",
+      "status": "ready",
+      "probe_status": "accessible"
+    },
+    {
+      "id": "src-huang-tiane-commerce-canonical",
+      "name": "黄天鹅商销日报主表",
+      "kind": "huang_tiane_commerce_canonical",
+      "status": "ready",
+      "probe_status": "accessible"
+    },
+    {
+      "id": "src-huang-tiane-commerce-alt",
+      "name": "黄天鹅商销日报副本",
+      "kind": "huang_tiane_commerce_alt",
+      "status": "ready",
+      "probe_status": "accessible"
+    }
+  ],
+  "snapshot_summary": {
+    "sourcesCount": 6,
+    "kpisCount": 18,
+    "tablesCount": 22,
+    "dailyDatasetsCount": 5,
+    "actionsCount": 7,
+    "warningsCount": 2
+  },
+  "baseline_hashes": {
+    "qicui": "a3098236e09ce98c20d174c200ebd4ca35ca0d9511809fac04283d5a407209f8",
+    "kailas": "8fac705660bda61fa4a3e65967861a971006bfaf8ce9649bf3c03dd3534e1a00",
+    "meiling": "3b414939ffc0bb394bce91f3f05b4c52bc2617d36b83eeac4a6d8fc0c3abaf2c",
+    "winner-wipes": "b518f39679875d8447c3848c1b3c0559940211d6e897a8cfcd4f31e5e1d305a5"
+  },
+  "all_intact": true
+}

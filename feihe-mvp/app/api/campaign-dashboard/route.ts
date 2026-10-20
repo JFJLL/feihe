@@ -1,7 +1,11 @@
 import { requireProjectAccess, jsonError } from "@/lib/api-auth";
 import { getCampaignDashboardSnapshot } from "@/lib/campaign-store";
 import { getCampaignDailyDatasetsByProject } from "@/lib/campaign-daily-server";
-import { getCampaignEnrichment, mergeCampaignEnrichment } from "@/lib/campaign-enrichment-server";
+import {
+  getCampaignEnrichment,
+  mergeCampaignEnrichment,
+  mergeById,
+} from "@/lib/campaign-enrichment-server";
 
 export const dynamic = "force-dynamic";
 
@@ -33,10 +37,12 @@ export async function GET(request: Request) {
     }
 
     // 4. Attach only this project's daily datasets (strict project isolation, server-only)
-    const dailyDatasets = getCampaignDailyDatasetsByProject(projectId);
+    // Retain snapshot.dailyDatasets and merge with server daily datasets using mergeById
+    const serverDailyDatasets = getCampaignDailyDatasetsByProject(projectId) || [];
+    const mergedDailyDatasets = mergeById(snapshot.dailyDatasets || [], serverDailyDatasets);
     const baseDashboard = {
       ...snapshot,
-      dailyDatasets,
+      dailyDatasets: mergedDailyDatasets,
     };
 
     // 5. Merge project enrichment (tables, sources, dailyDatasets)

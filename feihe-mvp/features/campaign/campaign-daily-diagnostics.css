@@ -1,0 +1,195 @@
+/* ==========================================================================
+   CampaignDailyDiagnostics Styles
+   Warm, editorial, non-boilerplate visual language consistent with QiCui
+   ========================================================================== */
+
+.ca-diagnostics-root {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ca-diagnostics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ca-palette-border, #e2e8f0);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ca-diagnostics-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ca-diagnostics-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ca-diagnostics-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ca-palette-text, #1e293b);
+  margin: 0;
+}
+
+.ca-diagnostics-desc {
+  font-size: 12px;
+  color: var(--ca-palette-muted, #64748b);
+}
+
+/* 2x2 Diagnostics Grid */
+.ca-diagnostics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 1080px) {
+  .ca-diagnostics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Panel wrapper */
+.ca-diag-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   Heatmap Styling
+   ========================================================================== */
+
+.ca-heatmap-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.ca-heatmap-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: fit-content;
+}
+
+.ca-heatmap-label-col {
+  width: 130px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ca-heatmap-metric-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ca-palette-text, #1e293b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ca-heatmap-metric-meta {
+  font-size: 10.5px;
+  color: var(--ca-palette-muted, #64748b);
+}
+
+.ca-heatmap-cells {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex: 1;
+}
+
+.ca-heatmap-cell {
+  width: 22px;
+  height: 28px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  user-select: none;
+}
+
+.ca-heatmap-cell:hover {
+  transform: scale(1.15);
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.ca-heatmap-cell-missing {
+  background: #f1f5f9;
+  border: 1px dashed #cbd5e1;
+  color: #94a3b8;
+}
+
+.ca-heatmap-dates-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: fit-content;
+  margin-top: 4px;
+}
+
+.ca-heatmap-date-label {
+  width: 22px;
+  text-align: center;
+  font-size: 9.5px;
+  color: #94a3b8;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  height: 38px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Weekly Summary Breakdown Table
+   ========================================================================== */
+
+.ca-weekly-table-wrap {
+  margin-top: 12px;
+  border-top: 1px dashed var(--ca-palette-border, #e2e8f0);
+  padding-top: 10px;
+}
+
+.ca-weekly-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.ca-weekly-badge-full {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.ca-weekly-badge-partial {
+  background: #fef3c7;
+  color: #b45309;
+}

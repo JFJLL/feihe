@@ -1,0 +1,218 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+  "table_id": "tbltCR6P2mQIidsd",
+  "rev": 590,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 52,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_78_yangji.ndjson",
+  "record_file_size_bytes": 35888,
+  "manifest_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_78_yangji.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 14
+      },
+      "example": "recvpCHZol5dQp"
+    },
+    "下单时间": {
+      "field_id": "fldtRTbnci",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 2,
+        "min": "2026-07-21T00:00:00.000+08:00",
+        "max": "2026-08-20T00:00:00.000+08:00"
+      },
+      "example": "2026-07-21T00:00:00.000+08:00"
+    },
+    "内部不同区域": {
+      "field_id": "fld61r1Pz3",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 52,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "内饰确认进度": {
+      "field_id": "fldwCg47eV",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "内饰已确认"
+    },
+    "子订单编号": {
+      "field_id": "fldCIXtd7S",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 2,
+        "max_length": 19
+      },
+      "example": "HC2607210866000157"
+    },
+    "推荐产品": {
+      "field_id": "fld8KkDdls",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.9807692307692307
+      },
+      "example": [
+        "小确杏420"
+      ]
+    },
+    "收货地址": {
+      "field_id": "fldvcvxqSj",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 37
+      },
+      "example": "达人淘宝自购"
+    },
+    "样机图片-侧面": {
+      "field_id": "fldla9l79L",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 52,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机图片-右面": {
+      "field_id": "fldkFp9CK0",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 52,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机图片-左面": {
+      "field_id": "fldFn3pxMM",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 52,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机图片-正面": {
+      "field_id": "flddDl1qTr",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 52,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机进度": {
+      "field_id": "fldacy8I4i",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 6
+      },
+      "example": "已下单"
+    },
+    "联系电话": {
+      "field_id": "fldEuZEXyS",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 2,
+        "max_length": 26
+      },
+      "example": "18223069947"
+    },
+    "订单截图": {
+      "field_id": "fld8nt3KNa",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 3,
+        "max_length": 1,
+        "avg_length": 0.9423076923076923
+      },
+      "example": [
+        {
+          "file_token": "KpSPbc4RZoLmgLxByo6c9k6LnOe",
+          "name": "image.png",
+          "size": 256464
+        }
+      ]
+    },
+    "达人昵称": {
+      "field_id": "fldSnCBrhR",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 10
+      },
+      "example": "杨kk"
+    },
+    "退货时间": {
+      "field_id": "fldThQVqkO",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 19,
+        "min": "2026-08-07T00:00:00.000+08:00",
+        "max": "2026-09-28T00:00:00.000+08:00"
+      },
+      "example": "2026-08-11T00:00:00.000+08:00"
+    },
+    "退货流程": {
+      "field_id": "fldfkYOGER",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 2,
+        "max_length": 2
+      },
+      "example": "可退"
+    },
+    "退货进度": {
+      "field_id": "fldLHjL2Gq",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 8,
+        "max_length": 1,
+        "avg_length": 0.8461538461538461
+      },
+      "example": [
+        "完成退货"
+      ]
+    }
+  }
+}

@@ -76,10 +76,68 @@ function fmtPct(val: number | null | undefined, maxDigits = 1): string {
 // 1. MetricStrip 紧凑指标条 (首屏 4 简洁指标，移动端 390 紧凑 2 列，防止大数溢出)
 // ============================================================================
 
+export interface MetricStripItem {
+  label: string;
+  value?: string | number | null;
+  unit?: string;
+  note?: string;
+  sparkline?: (number | null)[];
+}
+
+function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 20, strokeColor = '#2c7168') {
+  const valid = points.filter((p): p is number => p !== null && Number.isFinite(p));
+  if (valid.length < 2) return null;
+  const min = Math.min(...valid);
+  const max = Math.max(...valid);
+  const range = max === min ? 1 : max - min;
+  const step = width / (points.length - 1);
+  const pad = 2;
+  const innerH = height - pad * 2;
+
+  let d = '';
+  let inLine = false;
+
+  points.forEach((val, i) => {
+    if (val === null || !Number.isFinite(val)) {
+      inLine = false;
+      return;
+    }
+    const x = i * step;
+    const y = pad + innerH - ((val - min) / range) * innerH;
+    if (!inLine) {
+      d += `M ${x.toFixed(1)} ${y.toFixed(1)}`;
+      inLine = true;
+    } else {
+      d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+  });
+
+  if (!d) return null;
+
+  return (
+    <div style={{ width: '100%', height: `${height}px`, marginTop: '4px', opacity: 0.85 }} aria-hidden="true">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        style={{ width: '100%', height: '100%', overflow: 'visible' }}
+        preserveAspectRatio="none"
+      >
+        <path
+          d={d}
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function MetricStrip({
   items,
 }: {
-  items: Array<{ label: string; value?: string | number | null; unit?: string; note?: string }>;
+  items: Array<MetricStripItem>;
 }) {
   if (!items || items.length === 0) return null;
 
@@ -105,6 +163,7 @@ export function MetricStrip({
               </span>
               {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
             </div>
+            {it.sparkline && renderMiniSparklineSvg(it.sparkline, 96, 20, CAMPAIGN_PALETTE.primary)}
             {it.note && <p className="ca-metric-note bd-kpi-sub" title={it.note}>{it.note}</p>}
           </article>
         );
@@ -1337,7 +1396,7 @@ export function ScatterChart({
   xLabel,
   yLabel,
 }: {
-  data: Array<{ label: string; x: number | null; y: number | null; size: number | null }>;
+  data: Array<{ label: string; x: number | null; y: number | null; size: number | null; detail?: string }>;
   xLabel: string;
   yLabel: string;
 }) {
@@ -1353,7 +1412,7 @@ export function ScatterChart({
   }
 
   const validPoints = data.filter(
-    (d): d is { label: string; x: number; y: number; size: number | null } =>
+    (d): d is { label: string; x: number; y: number; size: number | null; detail?: string } =>
       typeof d.x === 'number' && Number.isFinite(d.x) && typeof d.y === 'number' && Number.isFinite(d.y)
   );
 
@@ -1412,7 +1471,7 @@ export function ScatterChart({
       <div className="ca-chart-readout" aria-live="polite">
         {current ? (
           <>
-            <strong>{current.label}</strong>
+            <strong>{current.detail || current.label}</strong>
             <span>{xLabel}: {fmtNum(current.x)}</span>
             <span>{yLabel}: {fmtNum(current.y)}</span>
             {current.size !== null && <span>规模: {fmtNum(current.size)}</span>}
@@ -1568,9 +1627,9 @@ export function ScatterChart({
                 stroke="#ffffff"
                 strokeWidth="1.5"
               >
-                <title>{`${pt.label}\n${xLabel}: ${fmtNum(pt.x)}\n${yLabel}: ${fmtNum(pt.y)}`}</title>
+                <title>{`${pt.detail || pt.label}\n${xLabel}: ${fmtNum(pt.x)}\n${yLabel}: ${fmtNum(pt.y)}`}</title>
               </circle>
-              {(validPoints.length <= 10 || isSelected) && (
+              {(validPoints.length <= 15 || isSelected) && (
                 <text
                   x={px}
                   y={py - r - 3}
@@ -1580,7 +1639,7 @@ export function ScatterChart({
                   fontWeight={isSelected ? '600' : '400'}
                   pointerEvents="none"
                 >
-                  {pt.label.length > 6 ? `${pt.label.slice(0, 6)}…` : pt.label}
+                  {pt.label}
                 </text>
               )}
             </g>

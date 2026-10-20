@@ -1073,7 +1073,7 @@ export const WIPES_MANUAL_DASHBOARD: CampaignDashboard = {
 // Export Map
 // ============================================================================
 
-export const CAMPAIGN_MANUAL_DASHBOARDS: Record<CampaignProjectId, CampaignDashboard> = {
+export const CAMPAIGN_MANUAL_DASHBOARDS: Partial<Record<CampaignProjectId, CampaignDashboard>> = {
   kailas: KAILAS_MANUAL_DASHBOARD,
   meiling: MEILING_MANUAL_DASHBOARD,
   'winner-wipes': WIPES_MANUAL_DASHBOARD,

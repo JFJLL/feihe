@@ -1,0 +1,94 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+  "table_id": "tblnAwGAiAAMNu2z",
+  "rev": 73,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 8,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_618_matching.ndjson",
+  "record_file_size_bytes": 1496,
+  "manifest_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_618_matching.manifest.json",
+  "columns": {
+    "ID": {
+      "field_id": "fldq3xeElj",
+      "field_type": "auto_number",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 6
+      },
+      "example": "NO.001"
+    },
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 14
+      },
+      "example": "recvjpdV1utfyp"
+    },
+    "产品名称": {
+      "field_id": "fldC3DB4J5",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 9
+      },
+      "example": "黑珍珠516"
+    },
+    "外溢平台": {
+      "field_id": "fld3J2hGSn",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "京东"
+    },
+    "是否可嵌入": {
+      "field_id": "fldMlKS2k1",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "可嵌入"
+      ]
+    },
+    "筛选人": {
+      "field_id": "fldqK7WGkk",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 2
+      },
+      "example": "雨珂"
+    },
+    "采买形式": {
+      "field_id": "fldBed6KA9",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "自采"
+      ]
+    }
+  }
+}

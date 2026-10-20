@@ -8,6 +8,7 @@ import { CampaignOverviewPage } from './CampaignOverviewPage';
 import { CampaignDailyPage } from './CampaignDailyPage';
 import { CampaignAdsPage } from './CampaignAdsPage';
 import { CampaignContentPage } from './CampaignContentPage';
+import { HuangTianeBoard } from './HuangTianeBoard';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
@@ -242,18 +243,36 @@ export function CampaignWorkspace({
         </div>
       )}
 
-      {/* 投流分析独立页面 */}
-      {currentSection === 'ads' && (
+      {/* 黄天鹅专属看板：分发 overview / ads / content 到 HuangTianeBoard，daily 保持共享分日看板 */}
+      {projectId === 'huang-tiane' && (
+        currentSection === 'overview' && overviewTab === 'daily' ? (
+          <div
+            id="workspace-tabpanel-daily"
+            role="tabpanel"
+            aria-labelledby="workspace-tab-daily"
+            tabIndex={0}
+          >
+            <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
+          </div>
+        ) : (
+          <HuangTianeBoard
+            key={projectId}
+            dashboard={activeDashboard}
+            section={currentSection}
+          />
+        )
+      )}
+
+      {/* 其它项目标准分发 */}
+      {projectId !== 'huang-tiane' && currentSection === 'ads' && (
         <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
       )}
 
-      {/* 内容管理独立页面 */}
-      {currentSection === 'content' && (
+      {projectId !== 'huang-tiane' && currentSection === 'content' && (
         <CampaignContentPage key={projectId} dashboard={activeDashboard} />
       )}
 
-      {/* 首页总览 / 分日看板：仅在 overview 状态下提供紧凑切换条与刷新 */}
-      {currentSection === 'overview' && (
+      {projectId !== 'huang-tiane' && currentSection === 'overview' && (
         overviewTab === 'daily' ? (
           <div
             id="workspace-tabpanel-daily"

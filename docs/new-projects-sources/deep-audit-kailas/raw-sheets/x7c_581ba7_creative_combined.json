@@ -1,0 +1,9 @@
+{
+  "token": "X7CasjHnThuFA2tPYuscN6NBnMf",
+  "sheet_id": "581ba7",
+  "actual_range": "A1:Z5",
+  "row_count": 5,
+  "col_count": 26,
+  "csv": "[row=1] 时间,创意名称,创意ID,笔记ID,笔记跳转链接,单元名称,单元ID,计划名称,计划ID,消费,展现量,点击量,点击率,平均点击成本,平均千次展示费用,互动量,平均互动成本,新增种草人群,新增种草人群成本,新增深度种草人群,新增深度种草人群成本,搜索组件点击量,搜索组件点击转化率,小红盟任务期消费,小红盟站外活跃行为UV(30日归因),小红盟站外活跃行为成本(30日归因)\n[row=2] 2026/07/16,Jiaolinyang,4994419147,699b0fbb000000000e03f0f9,https://www.xiaohongshu.com/explore/699b0fbb000000000e03f0f9?xsec_token=WBLRcJaMwqvar4Sm9j7dgXZ44cFws8uZjTE7LDfQvun98=&xsec_source=pc_wind_export,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,660782059,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,200442166,11.05,279,19,6.81%,0.58,39.61,5,2.21,4,2.76,1,11.05,0,0.00%,0,0.00,0\n[row=3] 2026/07/16,廖大佰,4994419148,699054b700000000150215f4,https://www.xiaohongshu.com/explore/699054b700000000150215f4?xsec_token=WBHqZMH1VwRRoU8HZBreBAhwGagNA65pWB52my55abOmQ=&xsec_source=pc_wind_export,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,660782059,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,200442166,6.73,135,7,5.19%,0.96,49.85,3,2.24,3,2.24,1,6.73,2,28.57%,0,0.00,0\n[row=4] 2026/07/16,Jasper佳朋,4994419149,69902e42000000000d008543,https://www.xiaohongshu.com/explore/69902e42000000000d008543?xsec_token=WBHqZMH1VwRRoU8HZBreBAhxJHgoV524mJFY6HGp-v234=&xsec_source=pc_wind_export,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,660782059,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,200442166,4.5,96,7,7.29%,0.64,46.88,1,4.5,1,4.5,0,0,0,0.00%,0,0.00,0\n[row=5] 2026/07/16,LAWLE4,4994419150,699000fe000000000d009c21,https://www.xiaohongshu.com/explore/699000fe000000000d009c21?xsec_token=WBHqZMH1VwRRoU8HZBreBAh8TOW8FMcK0rkOkKLOsmESI=&xsec_source=pc_wind_export,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,660782059,6.1-黑山-信息流-种草/cpe-5篇-品牌人群,200442166,17.68,437,28,6.41%,0.63,40.46,4,4.42,1,17.68,0,0,0,0.00%,0,0.00,0",
+  "sample_note": "Sampled top 5 rows for raw transaction log schema audit"
+}

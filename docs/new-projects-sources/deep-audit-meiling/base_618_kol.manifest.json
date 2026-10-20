@@ -1,0 +1,689 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+  "table_id": "tbluFs8VE8cmajTm",
+  "rev": 7971,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 515,
+  "page_count": 2,
+  "has_more": false,
+  "record_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_618_kol.ndjson",
+  "record_file_size_bytes": 1157334,
+  "manifest_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_618_kol.manifest.json",
+  "columns": {
+    "5月下单价": {
+      "field_id": "fldEsb1gXv",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 7
+      },
+      "example": "0"
+    },
+    "5月报价": {
+      "field_id": "fldzUlyF7E",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 86,
+        "min": 800,
+        "max": 70000,
+        "avg": 9420.041958041958
+      },
+      "example": 800
+    },
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 14
+      },
+      "example": "recvjpfWPfEXAC"
+    },
+    "timeline": {
+      "field_id": "fldkmEgqfl",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 461,
+        "max_length": 31
+      },
+      "example": "初稿6.7 大纲 6.3"
+    },
+    "下单时间": {
+      "field_id": "fldxMtvasI",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 10
+      },
+      "example": "2026-05-20"
+    },
+    "不挑选理由": {
+      "field_id": "fldZWpUvU1",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 501,
+        "max_length": 41
+      },
+      "example": "场景不太行"
+    },
+    "主页链接": {
+      "field_id": "fldaADVRQ3",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 86,
+        "max_length": 516
+      },
+      "example": "[https://xhslink.com/m/3U9p9gyTPoi](https://xhslink.com/m/3U9p9gyTPoi)"
+    },
+    "二核场景": {
+      "field_id": "fldgFzqMtE",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 444,
+        "max_length": 4,
+        "avg_length": 0.1786407766990291
+      },
+      "example": [
+        {
+          "file_token": "N2rBb2vACofDqgxQED9cZsnMnzd",
+          "name": "image.png",
+          "size": 1024
+        }
+      ]
+    },
+    "二核确认合作": {
+      "field_id": "fldZr8vDGk",
+      "field_type": "checkbox",
+      "physical_type": "boolean",
+      "stats": {
+        "true_count": 79
+      },
+      "example": true
+    },
+    "互动量": {
+      "field_id": "fldPVYWkyx",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 500,
+        "min": 62,
+        "max": 14924,
+        "avg": 2998.4666666666667
+      },
+      "example": 62
+    },
+    "京准通上传终稿/授权": {
+      "field_id": "fld6tfXkWq",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 502,
+        "max_length": 2,
+        "avg_length": 0.05048543689320388
+      },
+      "example": [
+        "已上传平台",
+        "已上传授权"
+      ]
+    },
+    "内容方向": {
+      "field_id": "fldGv1p1gS",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 447,
+        "max_length": 75
+      },
+      "example": "优先 天天爸爸的日记"
+    },
+    "内容方向确认": {
+      "field_id": "fldPcOhsjD",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 457,
+        "max_length": 1,
+        "avg_length": 0.11262135922330097
+      },
+      "example": [
+        "确认"
+      ]
+    },
+    "内容类型": {
+      "field_id": "fldlhIcTzm",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 86,
+        "max_length": 1,
+        "avg_length": 0.8330097087378641
+      },
+      "example": [
+        "美食类"
+      ]
+    },
+    "内饰确认进度": {
+      "field_id": "fldN8n2Hef",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 461,
+        "max_length": 1,
+        "avg_length": 0.10485436893203884
+      },
+      "example": [
+        "暂未给到"
+      ]
+    },
+    "发布时间": {
+      "field_id": "fldtyMFRvM",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 465,
+        "min": "2026-05-26T00:00:00.000+08:00",
+        "max": "2026-06-16T00:00:00.000+08:00"
+      },
+      "example": "2026-05-29T00:00:00.000+08:00"
+    },
+    "发布档期": {
+      "field_id": "fldnq8NUJ0",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 461,
+        "min": "2026-05-25T00:00:00.000+08:00",
+        "max": "2026-06-16T00:00:00.000+08:00"
+      },
+      "example": "2026-05-29T00:00:00.000+08:00"
+    },
+    "发布短链": {
+      "field_id": "fldqKg0HVA",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 465,
+        "max_length": 724
+      },
+      "example": "[http://xhslink.com/o/Xpv8FRxeME](http://xhslink.com/o/Xpv8FRxeME)"
+    },
+    "发布长链": {
+      "field_id": "fldJULaQHe",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 515,
+        "max_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "合作形式（图文/视频）": {
+      "field_id": "fldLw5AOeY",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 86,
+        "max_length": 1,
+        "avg_length": 0.8330097087378641
+      },
+      "example": [
+        "视频"
+      ]
+    },
+    "合作笔记近30天互动单价（视频）": {
+      "field_id": "fldIJyeLdk",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 87,
+        "max_length": 11
+      },
+      "example": "4"
+    },
+    "合作笔记近30天阅读单价（图文）": {
+      "field_id": "fldMnqaLtI",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 87,
+        "max_length": 11
+      },
+      "example": "0.5710207"
+    },
+    "品牌反馈": {
+      "field_id": "fldbHlgrCt",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 201,
+        "max_length": 1,
+        "avg_length": 0.6097087378640776
+      },
+      "example": [
+        "合作"
+      ]
+    },
+    "品牌授权书收集": {
+      "field_id": "fldAHc30YD",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 465,
+        "max_length": 1,
+        "avg_length": 0.0970873786407767
+      },
+      "example": [
+        "已收集"
+      ]
+    },
+    "商单近30天互动中位数": {
+      "field_id": "fldGUodxAJ",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 86,
+        "min": 0,
+        "max": 14105,
+        "avg": 1455.4731934731935
+      },
+      "example": 0
+    },
+    "商单近30天阅读中位数": {
+      "field_id": "fldTSPxmKA",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 86,
+        "min": 0,
+        "max": 647006,
+        "avg": 18625.09557109557
+      },
+      "example": 0
+    },
+    "地域": {
+      "field_id": "fldZb3yJJq",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 86,
+        "max_length": 17
+      },
+      "example": "北京"
+    },
+    "场景图": {
+      "field_id": "fldJ2v0MOF",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 100,
+        "max_length": 1,
+        "avg_length": 0.8058252427184466
+      },
+      "example": [
+        {
+          "file_token": "Ldr9bMzSooSSLux19rZcY5Tbnrf",
+          "name": "image.png",
+          "size": 1024
+        }
+      ]
+    },
+    "外溢平台": {
+      "field_id": "fld5Qe9UhX",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 456,
+        "max_length": 1,
+        "avg_length": 0.1145631067961165
+      },
+      "example": [
+        "京东"
+      ]
+    },
+    "外溢平台（自动）": {
+      "field_id": "fldauanSEu",
+      "field_type": "lookup",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 85,
+        "max_length": 5
+      },
+      "example": "京东"
+    },
+    "审核进度": {
+      "field_id": "fldqcbJbd4",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 464,
+        "max_length": 1,
+        "avg_length": 0.09902912621359224
+      },
+      "example": [
+        "已发布"
+      ]
+    },
+    "小红盟(自采/代采)结算价格": {
+      "field_id": "fldxUKCzGK",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 515
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "尺寸": {
+      "field_id": "fldBsW4AlQ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 422,
+        "max_length": 97
+      },
+      "example": "没档期"
+    },
+    "推荐产品": {
+      "field_id": "fldog4zGfZ",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 79,
+        "max_length": 1,
+        "avg_length": 0.8466019417475729
+      },
+      "example": [
+        ""
+      ]
+    },
+    "提报日期": {
+      "field_id": "fldtuvfGfF",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 86,
+        "min": "2026-05-11T00:00:00.000+08:00",
+        "max": "2026-06-05T00:00:00.000+08:00"
+      },
+      "example": "2026-05-12T00:00:00.000+08:00"
+    },
+    "方向备注": {
+      "field_id": "fldS2VBI4k",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 507,
+        "max_length": 46
+      },
+      "example": "跟小户型不太契合"
+    },
+    "星伴计划结算价格": {
+      "field_id": "fldOR3LlcE",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 515
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "是否上传星伴及终稿": {
+      "field_id": "fldTpjX2US",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 505,
+        "max_length": 2,
+        "avg_length": 0.02524271844660194
+      },
+      "example": [
+        "已上传星伴"
+      ]
+    },
+    "是否可嵌入": {
+      "field_id": "fldWnwnydI",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 86,
+        "max_length": 1,
+        "avg_length": 0.8330097087378641
+      },
+      "example": [
+        "/"
+      ]
+    },
+    "是否达成爆文（点赞≥1000）": {
+      "field_id": "fldWSalKLp",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 507,
+        "max_length": 1,
+        "avg_length": 0.015533980582524271
+      },
+      "example": [
+        "✅"
+      ]
+    },
+    "曝光量": {
+      "field_id": "fldw6q0i2N",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 500,
+        "min": 3195,
+        "max": 442805,
+        "avg": 146265.33333333334
+      },
+      "example": 3195
+    },
+    "样机进度": {
+      "field_id": "flddBzl8JQ",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 462,
+        "max_length": 1,
+        "avg_length": 0.1029126213592233
+      },
+      "example": [
+        "已下单"
+      ]
+    },
+    "核价备注": {
+      "field_id": "fldQ5YFQ17",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 441,
+        "max_length": 729
+      },
+      "example": "女生搬不动，不接"
+    },
+    "点赞量": {
+      "field_id": "flduBzR2wb",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 500,
+        "min": 27,
+        "max": 10254,
+        "avg": 2034.1333333333334
+      },
+      "example": 27
+    },
+    "父记录": {
+      "field_id": "fldi9zstlK",
+      "field_type": "link",
+      "physical_type": "array<struct<id string>>",
+      "stats": {
+        "empty_count": 515,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "稿件链接": {
+      "field_id": "fldVX72RIK",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 465,
+        "max_length": 189
+      },
+      "example": "[脚本-Vikii的家-头部-测评方向-报备视频](https://yimeichuanbo.feishu.cn/wiki/Pw3sw1ipwiVk49kTy4tcIXuHnse?from=from_copylink)"
+    },
+    "笔记id": {
+      "field_id": "fldsgwVCYv",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 515
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "筛选人备注": {
+      "field_id": "fldkHpmVus",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 284,
+        "max_length": 39
+      },
+      "example": "0进店"
+    },
+    "筛选人（自动）": {
+      "field_id": "fldVSGimrQ",
+      "field_type": "lookup",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 85,
+        "max_length": 2
+      },
+      "example": "柳潇"
+    },
+    "粉丝（万）": {
+      "field_id": "fldpobsf1u",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 86,
+        "min": 0.17,
+        "max": 87.87,
+        "avg": 6.5942191142191025
+      },
+      "example": 1
+    },
+    "素材链接": {
+      "field_id": "fldwOD4INz",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 465,
+        "max_length": 155
+      },
+      "example": "（已）通过网盘分享的文件：尘er\n链接: [https://pan.baidu.com/s/17gYlNGZE14UJvvBi9L4dow?pwd=pyqe](https://pan.baidu.com/s/17gYlNGZE14UJvvBi9L4dow?",
+      "example_truncated": true
+    },
+    "蒲公英链接": {
+      "field_id": "fldW2HIVLP",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 86,
+        "max_length": 382
+      },
+      "example": "[https://pgy.xiaohongshu.com/solar/pre-trade/blogger-detail/58b83f076a6a6902eb61cb65](https://pgy.xiaohongshu.com/solar/pre-trad",
+      "example_truncated": true
+    },
+    "达人ID": {
+      "field_id": "fldiVb9mZ9",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 86,
+        "max_length": 15
+      },
+      "example": "ch666_"
+    },
+    "达人是否可接": {
+      "field_id": "fldPakfP1A",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 407,
+        "max_length": 1,
+        "avg_length": 0.20970873786407768
+      },
+      "example": [
+        "可接"
+      ]
+    },
+    "达人昵称": {
+      "field_id": "fldQdCovPV",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 86,
+        "max_length": 15
+      },
+      "example": "yoyo"
+    },
+    "达人量级": {
+      "field_id": "fldpjWZH1l",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 86,
+        "max_length": 1,
+        "avg_length": 0.8330097087378641
+      },
+      "example": [
+        "koc"
+      ]
+    },
+    "退货进度": {
+      "field_id": "fldFmSaG8Q",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "完成退货"
+    },
+    "采买形式（自动）": {
+      "field_id": "fldSmVUz8o",
+      "field_type": "lookup",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 85,
+        "max_length": 9
+      },
+      "example": "自采"
+    },
+    "阅读量": {
+      "field_id": "fldbOPgPdU",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 500,
+        "min": 990,
+        "max": 72147,
+        "avg": 22262.066666666666
+      },
+      "example": 990
+    }
+  }
+}

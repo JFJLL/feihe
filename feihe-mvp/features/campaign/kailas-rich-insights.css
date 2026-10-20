@@ -1,0 +1,126 @@
+/**
+ * KailasRichInsights Scoped Styling
+ * Aligns with CAMPAIGN_PALETTE (#2c7168 teal, #8273a3 purple, #b88a45 gold, #bd7964 terracotta)
+ */
+
+.kri-root {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 16px 0;
+}
+
+.kri-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.kri-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+}
+
+.kri-group-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kri-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.kri-badge-primary {
+  background: rgba(44, 113, 104, 0.1);
+  color: #2c7168;
+}
+
+.kri-badge-purple {
+  background: rgba(130, 115, 163, 0.1);
+  color: #8273a3;
+}
+
+.kri-group-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.kri-group-sub {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.kri-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .kri-grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.kri-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.kri-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.kri-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.kri-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+}
+
+.kri-table tr:last-child td {
+  border-bottom: none;
+}
+
+.kri-empty {
+  padding: 32px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+}

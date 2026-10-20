@@ -1,0 +1,1923 @@
+{
+  "manifest_version": "v2_strictly_verified",
+  "project": "meiling",
+  "brand": "美菱冰箱 (Meiling Refrigerator)",
+  "generated_at": "2026-10-20T14:59:21.722734",
+  "audit_status": "audit_complete_facts_verified",
+  "access_summary": {
+    "domain": "https://yimeichuanbo.feishu.cn",
+    "accessible_nodes": [
+      {
+        "type": "base",
+        "token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+        "title": "美菱冰箱小红书种草多维表",
+        "status": "accessible"
+      },
+      {
+        "type": "wiki_sheet",
+        "node_token": "DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+        "obj_token": "RoAtsw3KTh56ZBtT7cmcTYaznJb",
+        "title": "美菱冰箱双11日报表 副本",
+        "status": "accessible"
+      },
+      {
+        "type": "wiki_sheet",
+        "node_token": "HNDCwmdpkiw4DgkFSNycB3cbnSc",
+        "obj_token": "N2bssx2dBh8xyItaFEfccqaznHY",
+        "title": "美菱冰箱kpi管理表 副本",
+        "status": "accessible",
+        "note": "接替无权限之RQff"
+      },
+      {
+        "type": "wiki_sheet",
+        "node_token": "MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+        "obj_token": "XSKrspszhhgvPvtxMNicmYlUnEc",
+        "title": "美菱冰箱618复盘数据 副本",
+        "status": "accessible"
+      },
+      {
+        "type": "wiki_docx",
+        "node_token": "UKPKwNHFdi9jk0kBaQKcuO3Anqf",
+        "obj_token": "Ugwgd6lKzoURMWxXeJ3c4VzNnFc",
+        "title": "美菱冰箱618小红书项目复盘",
+        "status": "accessible"
+      }
+    ],
+    "inaccessible_nodes": [
+      {
+        "type": "wiki",
+        "node_token": "RQffw002Aik9aNkW9PScJ05knre",
+        "status": "permission_denied",
+        "code": 131006,
+        "message": "user lacks permission for the requested resource",
+        "resolution": "已由后补副本 wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc (美菱冰箱kpi管理表 副本) 100% 替代"
+      }
+    ]
+  },
+  "base_inventory": {
+    "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+    "title": "美菱冰箱小红书种草多维表",
+    "tables_count": 12,
+    "tables": [
+      {
+        "table_id": "tbluz50zuZOeGQWf",
+        "name": "双11 KOL进度表",
+        "records_count": 1096,
+        "campaign": "双11",
+        "role": "双11达人全生命周期主表（117确认达人/已发布/各阶段执行）",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblOYMiuP5hTjxbN",
+        "name": "双11供图进度表",
+        "records_count": 6,
+        "campaign": "双11",
+        "role": "双11供图/素材协作进度",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblotoaoy40ShO5k",
+        "name": "双11 样机信息表",
+        "records_count": 84,
+        "campaign": "双11",
+        "role": "样机寄送/型号/产品流转",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblQvZjfvg0TfgSy",
+        "name": "双11 产品匹配规则",
+        "records_count": 13,
+        "campaign": "双11",
+        "role": "核心SPU与卖点/价格/标签匹配机制",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblzT0CPHCNgzhtS",
+        "name": "7-8月KOL进度表",
+        "records_count": 538,
+        "campaign": "7-8月",
+        "role": "历史7-8月达人排期",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblohi0dmMCuJ4wm",
+        "name": "7-8月KOC(供图)进度表",
+        "records_count": 113,
+        "campaign": "7-8月",
+        "role": "历史7-8月KOC供图进度",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tbltCR6P2mQIidsd",
+        "name": "7-8月样机信息表",
+        "records_count": 52,
+        "campaign": "7-8月",
+        "role": "历史7-8月样机记录",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblEE8G56GSpngf1",
+        "name": "7-8月产品匹配规则",
+        "records_count": 9,
+        "campaign": "7-8月",
+        "role": "历史7-8月产品匹配规则",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tbluFs8VE8cmajTm",
+        "name": "618KOL进度表",
+        "records_count": 515,
+        "campaign": "618",
+        "role": "历史618达人排期进度",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblxEoETSU6uBBSN",
+        "name": "618KOC(供图)进度表",
+        "records_count": 221,
+        "campaign": "618",
+        "role": "历史618 KOC供图进度",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblObq4NnsHMFT2t",
+        "name": "618样机信息表",
+        "records_count": 59,
+        "campaign": "618",
+        "role": "历史618样机记录",
+        "read_status": "pending_deep_read"
+      },
+      {
+        "table_id": "tblnAwGAiAAMNu2z",
+        "name": "618产品匹配规则",
+        "records_count": 8,
+        "campaign": "618",
+        "role": "历史618产品匹配规则",
+        "read_status": "pending_deep_read"
+      }
+    ]
+  },
+  "workbooks_inventory": [
+    {
+      "name": "DkdO_double11_daily",
+      "spreadsheet_token": "RoAtsw3KTh56ZBtT7cmcTYaznJb",
+      "wiki_token": "DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "title": "美菱冰箱双11日报表 副本",
+      "campaign": "2026年双11（执行中）",
+      "sheets_count": 35,
+      "sheets": [
+        {
+          "sheet_id": "smsJa2",
+          "sheet_name": "byday汇总数据",
+          "row_count": 143,
+          "column_count": 22,
+          "is_hidden": false,
+          "role": "历史多周期汇总（618/7-8月/双11分区切片）",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "hKnPdA",
+          "sheet_name": "笔记数据",
+          "row_count": 602,
+          "column_count": 296,
+          "is_hidden": true,
+          "role": "【新矿】双11笔记级全维度明细（互动/阅读/曝光/留资/投放）",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "7pkBrd",
+          "sheet_name": "城市数据",
+          "row_count": 733,
+          "column_count": 103,
+          "is_hidden": true,
+          "role": "【新矿】人群城市线级与地域渗透分布",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "NFsNpI",
+          "sheet_name": "年龄分布",
+          "row_count": 352,
+          "column_count": 20,
+          "is_hidden": true,
+          "role": "【新矿】人群年龄画像分布",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "T7XdCM",
+          "sheet_name": "地域数据源",
+          "row_count": 2,
+          "column_count": 24,
+          "is_hidden": true,
+          "role": "地域透视源配置",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "y8B3mE",
+          "sheet_name": "年龄数据源",
+          "row_count": 2,
+          "column_count": 24,
+          "is_hidden": true,
+          "role": "年龄透视源配置",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "hk9XgJ",
+          "sheet_name": "日报",
+          "row_count": 200,
+          "column_count": 20,
+          "is_hidden": true,
+          "role": "日报摘要视图",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "m9zUdJ",
+          "sheet_name": "数据分析草稿页",
+          "row_count": 458,
+          "column_count": 109,
+          "is_hidden": true,
+          "role": "分析草稿与临时计算",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "BZjmuN",
+          "sheet_name": "自采&代采数据汇总",
+          "row_count": 208,
+          "column_count": 30,
+          "is_hidden": false,
+          "role": "自采 vs 代采渠道汇总比对",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "iautvs",
+          "sheet_name": "日-投放数据（自采天猫种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false,
+          "role": "天猫自采分日透视表（消耗/曝光/点击/CTR/CPC）",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "0Ng4EP",
+          "sheet_name": "定向人群（自采天猫种草）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true,
+          "role": "【新矿】天猫种草定向人群包效果明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "xKvzRm",
+          "sheet_name": "日-投放数据（自采红猫cid）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false,
+          "role": "红猫CID自采分日透视表（外溢GMV/订单/ROI）",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "HGgP2Z",
+          "sheet_name": "定向人群（自采红猫cid）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true,
+          "role": "【新矿】红猫CID定向人群包效果明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "B5TBE7",
+          "sheet_name": "日-投放数据（自采京东种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false,
+          "role": "京东自采分日透视表（消耗/曝光/点击/CTR/CPC）",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "TBQTUR",
+          "sheet_name": "定向人群（自采京东种草）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true,
+          "role": "【新矿】京东种草定向人群包效果明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "nOJsYT",
+          "sheet_name": "日-投放数据（自采红京cid）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false,
+          "role": "红京CID自采分日透视表（外溢GMV/订单/ROI）",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "YnkjWX",
+          "sheet_name": "定向人群（自采红京cid）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true,
+          "role": "【新矿】红京CID定向人群包效果明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "7gf6nq",
+          "sheet_name": "日-投放数据（代采星伴种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false,
+          "role": "代采星伴种草分日透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "7vfv8y",
+          "sheet_name": "日-投放数据（uds）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false,
+          "role": "阿里UDS回传分日透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "O5TsXZ",
+          "sheet_name": "日-投放数据（代付京东种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false,
+          "role": "代付京东种草分日透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "TLLRoo",
+          "sheet_name": "日-投放数据（对投京东种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false,
+          "role": "京东对投种草分日透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "w0oPX1",
+          "sheet_name": "日-投放数据（jds）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false,
+          "role": "京东JDS回传分日透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "Trvrou",
+          "sheet_name": "日-投放数据（京东对投cid）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false,
+          "role": "京东对投CID真实消耗与ROI汇总",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "D9ddm3",
+          "sheet_name": "（自采天猫种草）数据源",
+          "row_count": 7632,
+          "column_count": 28,
+          "is_hidden": false,
+          "role": "天猫自采底层颗粒明细数据",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "FpcDvG",
+          "sheet_name": "（自采红猫cid）数据源",
+          "row_count": 17933,
+          "column_count": 29,
+          "is_hidden": false,
+          "role": "红猫CID底层颗粒明细数据",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "BI2xBs",
+          "sheet_name": "（自采京东种草）数据源",
+          "row_count": 14992,
+          "column_count": 23,
+          "is_hidden": false,
+          "role": "京东自采底层颗粒明细数据",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "qTB7Td",
+          "sheet_name": "（自采红京cid）数据源",
+          "row_count": 23486,
+          "column_count": 29,
+          "is_hidden": false,
+          "role": "红京CID底层颗粒明细数据",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "ACntPW",
+          "sheet_name": "(代采星伴种草）数据源",
+          "row_count": 2979,
+          "column_count": 22,
+          "is_hidden": false,
+          "role": "代采星伴底层颗粒明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "Q6XGXp",
+          "sheet_name": "uds数据源",
+          "row_count": 3030,
+          "column_count": 29,
+          "is_hidden": false,
+          "role": "UDS底层颗粒明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "DHweyP",
+          "sheet_name": "（代付京东种草）数据源",
+          "row_count": 13954,
+          "column_count": 23,
+          "is_hidden": false,
+          "role": "代付京东底层颗粒明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "TxNNS6",
+          "sheet_name": "JDS数据源",
+          "row_count": 1415,
+          "column_count": 25,
+          "is_hidden": false,
+          "role": "JDS底层颗粒明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "zF2qee",
+          "sheet_name": "京东对投种草数据源",
+          "row_count": 13954,
+          "column_count": 22,
+          "is_hidden": false,
+          "role": "京东对投种草底层颗粒明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "E2KFmU",
+          "sheet_name": "（京东对投cid）数据源",
+          "row_count": 23485,
+          "column_count": 29,
+          "is_hidden": false,
+          "role": "京东对投CID底层颗粒明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "mG2COI",
+          "sheet_name": "笔记&词类",
+          "row_count": 535,
+          "column_count": 20,
+          "is_hidden": false,
+          "role": "【新矿】搜索词/关键词类型/笔记标签与分类匹配表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "Y7qNOu",
+          "sheet_name": "打款",
+          "row_count": 201,
+          "column_count": 21,
+          "is_hidden": false,
+          "role": "【新矿】双11各渠道账户实际打款 vs 应消耗预算对照",
+          "read_status": "pending_deep_read"
+        }
+      ]
+    },
+    {
+      "name": "HNDC_kpi_mgmt",
+      "spreadsheet_token": "N2bssx2dBh8xyItaFEfccqaznHY",
+      "wiki_token": "HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "title": "美菱冰箱kpi管理表 副本",
+      "campaign": "跨周期KPI管理（双11/7-8月/618）",
+      "sheets_count": 11,
+      "sheets": [
+        {
+          "sheet_id": "1Km6lH",
+          "sheet_name": "618达人数据明细",
+          "row_count": 106,
+          "column_count": 25,
+          "is_hidden": true,
+          "role": "618历史达人明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "ajEynU",
+          "sheet_name": "618数据透视表",
+          "row_count": 185,
+          "column_count": 164,
+          "is_hidden": true,
+          "role": "618历史透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "fqh8ue",
+          "sheet_name": "618数据更新用（勿动）",
+          "row_count": 200,
+          "column_count": 22,
+          "is_hidden": true,
+          "role": "618历史更新中间表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "4SGaOf",
+          "sheet_name": "双11进度更新",
+          "row_count": 200,
+          "column_count": 20,
+          "is_hidden": false,
+          "role": "【新矿】双11大促目标KPI vs 实际完成进度表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "L986LN",
+          "sheet_name": "7-8月kpi进度总览",
+          "row_count": 198,
+          "column_count": 29,
+          "is_hidden": false,
+          "role": "7-8月历史KPI进度总览",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "YDZeE4",
+          "sheet_name": "数据透视表",
+          "row_count": 200,
+          "column_count": 20,
+          "is_hidden": false,
+          "role": "KPI透视表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "duEfmf",
+          "sheet_name": "7-8月达人数据明细",
+          "row_count": 200,
+          "column_count": 27,
+          "is_hidden": false,
+          "role": "7-8月达人明细",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "oejbmv",
+          "sheet_name": "7-8月数据更新用（勿动）",
+          "row_count": 185,
+          "column_count": 21,
+          "is_hidden": false,
+          "role": "7-8月更新中间表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "FkLCad",
+          "sheet_name": "618kpi进度总览",
+          "row_count": 197,
+          "column_count": 28,
+          "is_hidden": false,
+          "role": "618复盘目标KPI vs 实际对照表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "5FDWQS",
+          "sheet_name": "Sheet10",
+          "row_count": 200,
+          "column_count": 49,
+          "is_hidden": false,
+          "role": "辅助透视计算表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "SI0mQy",
+          "sheet_name": "双11筛号进度透视表",
+          "row_count": 201,
+          "column_count": 98,
+          "is_hidden": false,
+          "role": "【新矿】双11达人筛号全生命周期漏斗与审核透视",
+          "read_status": "pending_deep_read"
+        }
+      ]
+    },
+    {
+      "name": "MMPZ_618_review",
+      "spreadsheet_token": "XSKrspszhhgvPvtxMNicmYlUnEc",
+      "wiki_token": "MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "title": "美菱冰箱618复盘数据 副本",
+      "campaign": "2026年618大促（已结案）",
+      "sheets_count": 5,
+      "sheets": [
+        {
+          "sheet_id": "4a19cf",
+          "sheet_name": "数据汇总",
+          "row_count": 199,
+          "column_count": 34,
+          "is_hidden": false,
+          "role": "618结案全量105篇达人明细与财务ROI",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "sj1rpy",
+          "sheet_name": "by笔记fs",
+          "row_count": 140,
+          "column_count": 10,
+          "is_hidden": false,
+          "role": "618按笔记粉丝与互动切片",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "hmtx2k",
+          "sheet_name": "Sheet4",
+          "row_count": 201,
+          "column_count": 22,
+          "is_hidden": false,
+          "role": "618渠道投流拆解",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "xJhK8A",
+          "sheet_name": "数据透视表",
+          "row_count": 200,
+          "column_count": 584,
+          "is_hidden": false,
+          "role": "618全渠道透视大宽表",
+          "read_status": "pending_deep_read"
+        },
+        {
+          "sheet_id": "ML6sDi",
+          "sheet_name": "蒲公英数据",
+          "row_count": 200,
+          "column_count": 213,
+          "is_hidden": false,
+          "role": "618蒲公英平台官方导出数据",
+          "read_status": "pending_deep_read"
+        }
+      ]
+    }
+  ],
+  "forensic_audit_evidence": {
+    "Y7qNOu_打款": {
+      "source": "DkdO (RoAtsw3KTh56ZBtT7cmcTYaznJb) -> Sheet: Y7qNOu",
+      "header": [
+        "账户 (A)",
+        "打款 (B)",
+        "实际打款 (C)",
+        "实际应消耗 (D)",
+        "还差&应挪 (E)"
+      ],
+      "total_accounts": 7,
+      "evidence_note": "严格按5列固定位置映射，空单元格保留为null。Row 2 C列为空，D列为1094327.99（自采红猫应消耗）；Row 4 D列为511713.93（红盟应消耗）；Row 6 D列为386111.11（京东对投应消耗）；Row 8 D列为477497.26（星伴应消耗）。规划打款总计120万元，4个种草账户实际应消耗总计246.97万元。"
+    },
+    "4SGaOf_双11进度更新": {
+      "source": "HNDC (N2bssx2dBh8xyItaFEfccqaznHY) -> Sheet: 4SGaOf",
+      "update_time": "2026.9.28 (原规划表，截止时间未注明)",
+      "scenario": "双11大促9/28初始规划口径（总预算380万/117篇），与后续执行调整后288万口径并存，严禁覆盖。",
+      "evidence_note": "Row 1 表头无GMV/UV；Row 15 京东表头与 Row 26 天猫表头含GMV/进店量。Row 16 京东进店量11,508与GMV 1,368,061.20为京东平台整体合并值；Row 27 天猫进店量6,151与GMV 626,127.49为天猫平台整体合并值。型号级无独立GMV/进店归因，坚决不计算假产品ROI，完整保留源数据。"
+    },
+    "tblotoaoy40ShO5k_双11样机信息表": {
+      "source": "Base (XH2obMhtwaPCWUsmsWacRCpLnvg) -> Table: tblotoaoy40ShO5k",
+      "records_count": 84,
+      "evidence_note": "彻底脱敏所有达人姓名、电话与收件地址。按Base真实字段【推荐产品】、【样机进度】、【退货进度】、【内饰确认进度】分类聚合。小确杏502Pro 35台/421 18台/520 8台/511 7台；已下单61台/已收加急制图15台；未退货55台/已提退货15台/已通知退货14台；内饰已确认62台/未确认16台。"
+    },
+    "mG2COI_笔记词类": {
+      "source": "DkdO (RoAtsw3KTh56ZBtT7cmcTYaznJb) -> Sheet: mG2COI",
+      "grid_row_count": 535,
+      "actual_valid_keywords_count": 339,
+      "evidence_note": "原表535为Feishu分配网格数，扣除空行后有效关键词实际为339条。竞品截流词203条(59.9%)、品类词82条(24.2%)、品牌词28条(8.3%)、618大促词25条(7.4%)、智能词包1条(0.3%)。"
+    },
+    "618_vs_Double11_隔离": {
+      "evidence_note": "618结案复盘（总花费197.6万/GMV 1696万/全案ROI 8.58）与双11进行中（9/28规划版380万/现执行预算288万）分为两个独立表与scenario，禁止混画。"
+    },
+    "可比日期区间": {
+      "evidence_note": "天猫自采（09/30~10/18）与京东自采（09/29~10/18）仅在交集09/30~10/18（19天）进行同日期并排对照，不盲目跨期加总。"
+    }
+  },
+  "enriched_tables_summary": [
+    {
+      "id": "meiling-enrich-matrix-product-stage",
+      "title": "双11二核确认KOL主推产品与审核执行阶段交叉矩阵（N=117）",
+      "period": "2026年双11（截至10月19日缓存快照）",
+      "rows_count": 42
+    },
+    {
+      "id": "meiling-enrich-matrix-platform-stage",
+      "title": "双11二核确认KOL外溢平台与审核执行阶段交叉矩阵（N=117）",
+      "period": "2026年双11（截至10月19日缓存快照）",
+      "rows_count": 27
+    },
+    {
+      "id": "meiling-enrich-content-theme-format",
+      "title": "双11二核确认KOL内容类型与合作形式分布（N=117）",
+      "period": "2026年双11（截至10月19日缓存快照）",
+      "rows_count": 10
+    },
+    {
+      "id": "meiling-enrich-channel-creative-efficiency",
+      "title": "双11天猫自采与京东自采创意投放贡献效率对比（基于1984条细表流水聚合）",
+      "period": "天猫 2026-09-30 ~ 2026-10-18 / 京东 2026-09-29 ~ 2026-10-18",
+      "rows_count": 2
+    },
+    {
+      "id": "meiling-enrich-note-creative-efficiency",
+      "title": "双11全量商业投放笔记素材转化贡献效率明细（全量14篇）",
+      "period": "2026/09/29 ~ 2026/10/18",
+      "rows_count": 14
+    },
+    {
+      "id": "meiling-enrich-account-budget-pacing",
+      "title": "双11各渠道投放账户规划打款与实际应消耗（7大账户）",
+      "period": "双11大促周期（打款与应消耗对照）",
+      "rows_count": 7
+    },
+    {
+      "id": "meiling-enrich-double11-model-planning",
+      "title": "双11各产品系列与型号原规划预算、篇数及投流消耗（9/28规划版·380万）",
+      "period": "2026.9.28更新（原规划表，截止未注明）",
+      "rows_count": 10
+    },
+    {
+      "id": "meiling-enrich-double11-platform-kpi-summary",
+      "title": "双11分平台目标规划与渠道级回传GMV总览（京东 vs 天猫）",
+      "period": "2026.9.28更新（原规划表，截止未注明）",
+      "rows_count": 3
+    },
+    {
+      "id": "meiling-enrich-sample-machine-progress",
+      "title": "双11样机产品型号分布与流转进度统计（84台·隐私脱敏）",
+      "period": "双11大促全周期（84台样机）",
+      "rows_count": 9
+    },
+    {
+      "id": "meiling-enrich-search-keywords-classification",
+      "title": "小红书投放搜索词类与产品渗透聚类（有效339条非空词）",
+      "period": "投放搜索词绑定（339条有效关键词）",
+      "rows_count": 12
+    },
+    {
+      "id": "meiling-enrich-channel-daily-comparable",
+      "title": "双平台同周期可比分日消耗与效率对照（天猫自采 vs 京东自采 09/30~10/18）",
+      "period": "2026-09-30 ~ 2026-10-18 (可比19天)",
+      "rows_count": 19
+    },
+    {
+      "id": "meiling-enrich-material-pareto-efficiency",
+      "title": "双11全量14篇商业笔记素材消耗Pareto与能效层级诊断",
+      "period": "2026-09-29 ~ 2026-10-18 (天猫09/30起，京东09/29起)",
+      "rows_count": 14
+    },
+    {
+      "id": "meiling-enrich-618-procurement-roi-review",
+      "title": "2026年618复盘采买形式KOL+FS vs 纯FS结构与ROI口径拆解（独立已结案）",
+      "period": "2026-05-20 ~ 2026-06-20 (618已结案复盘)",
+      "rows_count": 5
+    }
+  ],
+  "facts_snapshot": {
+    "account_budget_pacing": {
+      "sourceId": "sheet:RoAtsw3KTh56ZBtT7cmcTYaznJb:Y7qNOu",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Y7qNOu",
+      "period": "双11大促周期（打款与应消耗对照）",
+      "total_accounts": 7,
+      "total_planned_budget": 1200000.0,
+      "total_required_spend": 2469650.29,
+      "rows": [
+        {
+          "row_number": 2,
+          "account": "美菱-26年双11-自采-红猫种草（易美）",
+          "budget_planned": 250000.0,
+          "actual_paid": null,
+          "actual_required_spend": 1094327.99,
+          "variance": null
+        },
+        {
+          "row_number": 3,
+          "account": "美菱-26年双11-自采-CID红猫（易美）",
+          "budget_planned": 50000.0,
+          "actual_paid": null,
+          "actual_required_spend": null,
+          "variance": null
+        },
+        {
+          "row_number": 4,
+          "account": "美菱-26年双11-自采-红盟种草（易美）",
+          "budget_planned": 250000.0,
+          "actual_paid": null,
+          "actual_required_spend": 511713.93,
+          "variance": null
+        },
+        {
+          "row_number": 5,
+          "account": "美菱-26年双11-自采-CID红京（易美）",
+          "budget_planned": 250000.0,
+          "actual_paid": null,
+          "actual_required_spend": null,
+          "variance": null
+        },
+        {
+          "row_number": 6,
+          "account": "美菱-26年双11-代采-京东对投（易美）",
+          "budget_planned": 100000.0,
+          "actual_paid": null,
+          "actual_required_spend": 386111.11,
+          "variance": null
+        },
+        {
+          "row_number": 7,
+          "account": "美菱-26年双11-代采-CID京东对投（易美）",
+          "budget_planned": 200000.0,
+          "actual_paid": null,
+          "actual_required_spend": null,
+          "variance": null
+        },
+        {
+          "row_number": 8,
+          "account": "美菱-26年双11-代采-红猫种草（易美星伴）",
+          "budget_planned": 100000.0,
+          "actual_paid": null,
+          "actual_required_spend": 477497.26,
+          "variance": null
+        }
+      ]
+    },
+    "double11_model_planning": {
+      "sourceId": "sheet:N2bssx2dBh8xyItaFEfccqaznHY:4SGaOf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/N2bssx2dBh8xyItaFEfccqaznHY?sheet=4SGaOf",
+      "period": "2026.9.28更新（原规划表，截止未注明）",
+      "scenario": "double11_original_planning_380w",
+      "rows": [
+        {
+          "row_number": 2,
+          "series": "小确杏系列",
+          "model": "BCD-520WFPU9CIZXG1",
+          "budget_wan": 65.0,
+          "posts_plan": 17,
+          "screen_prog": 9,
+          "pub_prog": 0,
+          "spend": 94321.54
+        },
+        {
+          "row_number": 3,
+          "series": "小确杏系列",
+          "model": "BCD-511WSPU9CIZXG1",
+          "budget_wan": 30.0,
+          "posts_plan": 9,
+          "screen_prog": 5,
+          "pub_prog": 0,
+          "spend": 12628.0
+        },
+        {
+          "row_number": 4,
+          "series": "小确杏系列",
+          "model": "BCD-502WFPU9CZXG1",
+          "budget_wan": 150.0,
+          "posts_plan": 45,
+          "screen_prog": 36,
+          "pub_prog": 13,
+          "spend": 274453.16
+        },
+        {
+          "row_number": 5,
+          "series": "小确杏系列",
+          "model": "BCD-421WFPU9CZXG1",
+          "budget_wan": 75.0,
+          "posts_plan": 24,
+          "screen_prog": 18,
+          "pub_prog": 0,
+          "spend": 15744.59
+        },
+        {
+          "row_number": 6,
+          "series": "大白鲸系列",
+          "model": "BCD-570WSPU9CDIZXG1",
+          "budget_wan": 15.0,
+          "posts_plan": 4,
+          "screen_prog": 4,
+          "pub_prog": 0,
+          "spend": 9581.56
+        },
+        {
+          "row_number": 7,
+          "series": "黑珍珠系列",
+          "model": "BCD-516WFPU9BIZX",
+          "budget_wan": 20.0,
+          "posts_plan": 6,
+          "screen_prog": 3,
+          "pub_prog": 0,
+          "spend": 8509.33
+        },
+        {
+          "row_number": 8,
+          "series": "无忧嵌系列",
+          "model": "BCD-513WFPU9CIZXG1",
+          "budget_wan": 25.0,
+          "posts_plan": 12,
+          "screen_prog": 6,
+          "pub_prog": 0,
+          "spend": null
+        },
+        {
+          "row_number": 9,
+          "series": "无忧嵌系列",
+          "model": "BCD-512WFPU9CZXG1白",
+          "budget_wan": null,
+          "posts_plan": null,
+          "screen_prog": null,
+          "pub_prog": null,
+          "spend": null
+        },
+        {
+          "row_number": 10,
+          "series": "无忧嵌系列",
+          "model": "BCD-502WSPU9CZXG1",
+          "budget_wan": null,
+          "posts_plan": null,
+          "screen_prog": null,
+          "pub_prog": null,
+          "spend": null
+        }
+      ],
+      "total": {
+        "row_number": 11,
+        "series": "双11全渠道合计",
+        "model": "全量产品型号",
+        "budget_wan": 380.0,
+        "posts_plan": 117,
+        "screen_prog": 81,
+        "pub_prog": 13,
+        "spend": 415238.18
+      }
+    },
+    "double11_platform_kpi_summary": {
+      "sourceId": "sheet:N2bssx2dBh8xyItaFEfccqaznHY:4SGaOf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/N2bssx2dBh8xyItaFEfccqaznHY?sheet=4SGaOf",
+      "period": "2026.9.28更新（原规划表，截止未注明）",
+      "scenario": "double11_platform_level_kpi",
+      "rows": [
+        {
+          "platform": "京东渠道整体",
+          "budget_wan": 215.0,
+          "posts_plan": 66,
+          "screen_prog": 42,
+          "pub_prog": 13,
+          "spend": 264853.93,
+          "store_uv": 11508,
+          "gmv": 1368061.2,
+          "channel_roi": null,
+          "evidence": "4SGaOf row 16 (UV 11,508 / GMV 1,368,061.20) 与 row 22 消耗合计 264,853.93"
+        },
+        {
+          "platform": "天猫渠道整体",
+          "budget_wan": 165.0,
+          "posts_plan": 51,
+          "screen_prog": 39,
+          "pub_prog": 0,
+          "spend": 150384.25,
+          "store_uv": 6151,
+          "gmv": 626127.49,
+          "channel_roi": null,
+          "evidence": "4SGaOf row 27 (UV 6,151 / GMV 626,127.49) 与 row 32 消耗合计 150,384.25"
+        },
+        {
+          "platform": "双平台总计",
+          "budget_wan": 380.0,
+          "posts_plan": 117,
+          "screen_prog": 81,
+          "pub_prog": 13,
+          "spend": 415238.18,
+          "store_uv": 17659,
+          "gmv": 1994188.69,
+          "channel_roi": null,
+          "evidence": "双平台加总：GMV 1,994,188.69 / 消耗 415,238.18 = 4.80"
+        }
+      ]
+    },
+    "sample_machine_distribution": {
+      "sourceId": "base:XH2obMhtwaPCWUsmsWacRCpLnvg:tblotoaoy40ShO5k",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tblotoaoy40ShO5k",
+      "period": "双11样机全量流转（84台）",
+      "total_machines": 84,
+      "by_model": [
+        {
+          "model": "小确杏502Pro",
+          "count": 35,
+          "ratio": 41.7
+        },
+        {
+          "model": "小确杏421",
+          "count": 18,
+          "ratio": 21.4
+        },
+        {
+          "model": "小确杏520机皇",
+          "count": 8,
+          "ratio": 9.5
+        },
+        {
+          "model": "小确杏511",
+          "count": 7,
+          "ratio": 8.3
+        },
+        {
+          "model": "黑珍珠516",
+          "count": 6,
+          "ratio": 7.1
+        },
+        {
+          "model": "大白鲸570",
+          "count": 4,
+          "ratio": 4.8
+        },
+        {
+          "model": "无忧嵌512",
+          "count": 2,
+          "ratio": 2.4
+        },
+        {
+          "model": "无忧嵌502",
+          "count": 2,
+          "ratio": 2.4
+        },
+        {
+          "model": "无忧嵌513",
+          "count": 2,
+          "ratio": 2.4
+        }
+      ],
+      "by_logistics": [
+        {
+          "stage": "已下单",
+          "count": 61,
+          "ratio": 72.6
+        },
+        {
+          "stage": "已收集样机图",
+          "count": 15,
+          "ratio": 17.9
+        },
+        {
+          "stage": "没库存",
+          "count": 4,
+          "ratio": 4.8
+        },
+        {
+          "stage": "图片缺失",
+          "count": 2,
+          "ratio": 2.4
+        },
+        {
+          "stage": "不用购买",
+          "count": 1,
+          "ratio": 1.2
+        },
+        {
+          "stage": "未更新",
+          "count": 1,
+          "ratio": 1.2
+        }
+      ],
+      "by_return": [
+        {
+          "return_stage": "未退货",
+          "count": 55,
+          "ratio": 65.5
+        },
+        {
+          "return_stage": "完成退货",
+          "count": 15,
+          "ratio": 17.9
+        },
+        {
+          "return_stage": "已通知退货",
+          "count": 14,
+          "ratio": 16.7
+        }
+      ],
+      "by_interior": [
+        {
+          "interior_stage": "内饰已确认",
+          "count": 62,
+          "ratio": 73.8
+        },
+        {
+          "interior_stage": "未确认",
+          "count": 16,
+          "ratio": 19.0
+        },
+        {
+          "interior_stage": "达人调整中",
+          "count": 3,
+          "ratio": 3.6
+        },
+        {
+          "interior_stage": "暂未给到",
+          "count": 3,
+          "ratio": 3.6
+        }
+      ]
+    },
+    "search_keywords_clusters": {
+      "sourceId": "sheet:RoAtsw3KTh56ZBtT7cmcTYaznJb:mG2COI",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=mG2COI",
+      "period": "搜索投放词绑定",
+      "total_valid_keywords": 339,
+      "clusters": [
+        {
+          "category": "竞品词",
+          "product": "-",
+          "count": 176,
+          "ratio": 51.9,
+          "sample_keywords": "懒人冰立得冰箱、海尔冰箱推荐性价比高、松下冰箱"
+        },
+        {
+          "category": "品类词",
+          "product": "-",
+          "count": 82,
+          "ratio": 24.2,
+          "sample_keywords": "冰箱品牌、小户型冰箱、冰箱设计"
+        },
+        {
+          "category": "品牌词",
+          "product": "-",
+          "count": 28,
+          "ratio": 8.3,
+          "sample_keywords": "美菱冰箱是什么档次、美菱黑珍珠镜面冰箱测评、美菱冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "小确杏机皇520",
+          "count": 10,
+          "ratio": 2.9,
+          "sample_keywords": "李佳琦618冰箱、618冰箱怎么买最划算、冰箱618买会更便宜吗"
+        },
+        {
+          "category": "竞品词",
+          "product": "小确杏机皇520",
+          "count": 10,
+          "ratio": 2.9,
+          "sample_keywords": "美的508Pro冰箱、华凌冰箱、海尔冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "黑珍珠",
+          "count": 6,
+          "ratio": 1.8,
+          "sample_keywords": "618冰箱选购、618冰箱、618冰箱攻略"
+        },
+        {
+          "category": "竞品词",
+          "product": "黑珍珠",
+          "count": 6,
+          "ratio": 1.8,
+          "sample_keywords": "美的冰箱、美的可爱多冰箱、卡萨帝冰箱"
+        },
+        {
+          "category": "竞品词",
+          "product": "小确杏409",
+          "count": 6,
+          "ratio": 1.8,
+          "sample_keywords": "东芝冰箱、海尔冰箱推荐、colmo冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "棉花糖515",
+          "count": 5,
+          "ratio": 1.5,
+          "sample_keywords": "618买冰箱什么时候最便宜、海尔冰箱618价格、618冰箱价格"
+        },
+        {
+          "category": "竞品词",
+          "product": "棉花糖515",
+          "count": 5,
+          "ratio": 1.5,
+          "sample_keywords": "美的小冰狗冰箱、海尔云溪冰箱、东芝大白梨冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "小确杏409",
+          "count": 4,
+          "ratio": 1.2,
+          "sample_keywords": "618冰箱推荐性价比、618冰箱便宜吗、海尔618升对开门冰箱"
+        },
+        {
+          "category": "智能词包",
+          "product": "-",
+          "count": 1,
+          "ratio": 0.3,
+          "sample_keywords": "智能搭建词包"
+        }
+      ]
+    },
+    "review_618_procurement_roi": {
+      "sourceId": "sheet:XSKrspszhhgvPvtxMNicmYlUnEc:4a19cf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "period": "2026-05-20 ~ 2026-06-20 (618已结案复盘)",
+      "scenario": "618_settled_review",
+      "rows": [
+        {
+          "procurement_mode": "自采",
+          "channel": "京东自采",
+          "k_spend": 220218.9,
+          "fs_spend": 371992.0,
+          "total_spend": 592210.9,
+          "k_share": 37.19,
+          "fs_share": 62.81,
+          "gmv": 3306734.71,
+          "fs_roi": 8.89,
+          "overall_roi": 5.58
+        },
+        {
+          "procurement_mode": "自采",
+          "channel": "天猫自采",
+          "k_spend": 192390.0,
+          "fs_spend": 411120.0,
+          "total_spend": 603510.0,
+          "k_share": 31.88,
+          "fs_share": 68.12,
+          "gmv": 6559520.62,
+          "fs_roi": 15.96,
+          "overall_roi": 10.87
+        },
+        {
+          "procurement_mode": "代采（对投）",
+          "channel": "京东对投",
+          "k_spend": 167596.0,
+          "fs_spend": 409330.0,
+          "total_spend": 576926.0,
+          "k_share": 29.05,
+          "fs_share": 70.95,
+          "gmv": 4292855.01,
+          "fs_roi": 10.49,
+          "overall_roi": 7.44
+        },
+        {
+          "procurement_mode": "代采（星伴）",
+          "channel": "天猫星伴",
+          "k_spend": 89980.0,
+          "fs_spend": 113182.0,
+          "total_spend": 203162.0,
+          "k_share": 44.29,
+          "fs_share": 55.71,
+          "gmv": 2800449.08,
+          "fs_roi": 24.74,
+          "overall_roi": 13.78
+        },
+        {
+          "procurement_mode": "618全案合计",
+          "channel": "全渠道已结案",
+          "k_spend": 670184.9,
+          "fs_spend": 1305624.0,
+          "total_spend": 1975808.9,
+          "k_share": 33.92,
+          "fs_share": 66.08,
+          "gmv": 16959559.42,
+          "fs_roi": 12.99,
+          "overall_roi": 8.58
+        }
+      ]
+    },
+    "channel_comparable_daily": {
+      "sourceId": "sheet:RoAtsw3KTh56ZBtT7cmcTYaznJb:D9ddm3,BI2xBs",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb",
+      "period": "2026-09-30 ~ 2026-10-18 (可比19天)",
+      "rows": [
+        {
+          "date": "2026-09-30",
+          "tm_spend": 643.11,
+          "jd_spend": 342.55,
+          "spend_ratio_jd_vs_tm": 0.53,
+          "tm_ctr": 17.3,
+          "jd_ctr": 12.88,
+          "tm_cpc": 0.37,
+          "jd_cpc": 0.44,
+          "tm_cpe": 49.47,
+          "jd_cpe": 5.71
+        },
+        {
+          "date": "2026-10-01",
+          "tm_spend": 1208.32,
+          "jd_spend": 1361.74,
+          "spend_ratio_jd_vs_tm": 1.13,
+          "tm_ctr": 15.25,
+          "jd_ctr": 10.69,
+          "tm_cpc": 0.26,
+          "jd_cpc": 0.44,
+          "tm_cpe": 24.66,
+          "jd_cpe": 45.39
+        },
+        {
+          "date": "2026-10-02",
+          "tm_spend": 1408.23,
+          "jd_spend": 1344.94,
+          "spend_ratio_jd_vs_tm": 0.96,
+          "tm_ctr": 14.62,
+          "jd_ctr": 11.61,
+          "tm_cpc": 0.23,
+          "jd_cpc": 0.43,
+          "tm_cpe": 26.08,
+          "jd_cpe": 67.25
+        },
+        {
+          "date": "2026-10-03",
+          "tm_spend": 1815.08,
+          "jd_spend": 1490.29,
+          "spend_ratio_jd_vs_tm": 0.82,
+          "tm_ctr": 13.87,
+          "jd_ctr": 10.61,
+          "tm_cpc": 0.23,
+          "jd_cpc": 0.44,
+          "tm_cpe": 30.25,
+          "jd_cpe": 62.1
+        },
+        {
+          "date": "2026-10-04",
+          "tm_spend": 2021.95,
+          "jd_spend": 1790.77,
+          "spend_ratio_jd_vs_tm": 0.89,
+          "tm_ctr": 12.46,
+          "jd_ctr": 9.07,
+          "tm_cpc": 0.3,
+          "jd_cpc": 0.45,
+          "tm_cpe": 29.73,
+          "jd_cpe": 74.62
+        },
+        {
+          "date": "2026-10-05",
+          "tm_spend": 3074.9,
+          "jd_spend": 2032.79,
+          "spend_ratio_jd_vs_tm": 0.66,
+          "tm_ctr": 11.51,
+          "jd_ctr": 9.43,
+          "tm_cpc": 0.33,
+          "jd_cpc": 0.47,
+          "tm_cpe": 29.57,
+          "jd_cpe": 81.31
+        },
+        {
+          "date": "2026-10-06",
+          "tm_spend": 3013.62,
+          "jd_spend": 2018.66,
+          "spend_ratio_jd_vs_tm": 0.67,
+          "tm_ctr": 11.56,
+          "jd_ctr": 9.26,
+          "tm_cpc": 0.36,
+          "jd_cpc": 0.52,
+          "tm_cpe": 28.7,
+          "jd_cpe": 144.19
+        },
+        {
+          "date": "2026-10-07",
+          "tm_spend": 3022.31,
+          "jd_spend": 2010.22,
+          "spend_ratio_jd_vs_tm": 0.67,
+          "tm_ctr": 11.39,
+          "jd_ctr": 9.24,
+          "tm_cpc": 0.36,
+          "jd_cpc": 0.52,
+          "tm_cpe": 22.06,
+          "jd_cpe": 95.72
+        },
+        {
+          "date": "2026-10-08",
+          "tm_spend": 3265.02,
+          "jd_spend": 2024.46,
+          "spend_ratio_jd_vs_tm": 0.62,
+          "tm_ctr": 10.95,
+          "jd_ctr": 9.05,
+          "tm_cpc": 0.35,
+          "jd_cpc": 0.53,
+          "tm_cpe": 33.32,
+          "jd_cpe": 96.4
+        },
+        {
+          "date": "2026-10-09",
+          "tm_spend": 3426.06,
+          "jd_spend": 5024.01,
+          "spend_ratio_jd_vs_tm": 1.47,
+          "tm_ctr": 10.87,
+          "jd_ctr": 10.09,
+          "tm_cpc": 0.4,
+          "jd_cpc": 0.52,
+          "tm_cpe": 28.79,
+          "jd_cpe": 86.62
+        },
+        {
+          "date": "2026-10-10",
+          "tm_spend": 3352.06,
+          "jd_spend": 4123.3,
+          "spend_ratio_jd_vs_tm": 1.23,
+          "tm_ctr": 11.49,
+          "jd_ctr": 9.62,
+          "tm_cpc": 0.41,
+          "jd_cpc": 0.5,
+          "tm_cpe": 31.62,
+          "jd_cpe": 91.63
+        },
+        {
+          "date": "2026-10-11",
+          "tm_spend": 3804.86,
+          "jd_spend": 5006.41,
+          "spend_ratio_jd_vs_tm": 1.32,
+          "tm_ctr": 11.69,
+          "jd_ctr": 10.08,
+          "tm_cpc": 0.41,
+          "jd_cpc": 0.5,
+          "tm_cpe": 29.27,
+          "jd_cpe": 86.32
+        },
+        {
+          "date": "2026-10-12",
+          "tm_spend": 3639.1,
+          "jd_spend": 5269.52,
+          "spend_ratio_jd_vs_tm": 1.45,
+          "tm_ctr": 11.15,
+          "jd_ctr": 9.91,
+          "tm_cpc": 0.46,
+          "jd_cpc": 0.49,
+          "tm_cpe": 41.83,
+          "jd_cpe": 86.39
+        },
+        {
+          "date": "2026-10-13",
+          "tm_spend": 6098.36,
+          "jd_spend": 4210.6,
+          "spend_ratio_jd_vs_tm": 0.69,
+          "tm_ctr": 11.0,
+          "jd_ctr": 10.17,
+          "tm_cpc": 0.47,
+          "jd_cpc": 0.53,
+          "tm_cpe": 14.98,
+          "jd_cpe": 79.45
+        },
+        {
+          "date": "2026-10-14",
+          "tm_spend": 6486.23,
+          "jd_spend": 3871.3,
+          "spend_ratio_jd_vs_tm": 0.6,
+          "tm_ctr": 11.57,
+          "jd_ctr": 10.03,
+          "tm_cpc": 0.51,
+          "jd_cpc": 0.59,
+          "tm_cpe": 12.97,
+          "jd_cpe": 70.39
+        },
+        {
+          "date": "2026-10-15",
+          "tm_spend": 12697.47,
+          "jd_spend": 8057.81,
+          "spend_ratio_jd_vs_tm": 0.63,
+          "tm_ctr": 10.47,
+          "jd_ctr": 10.19,
+          "tm_cpc": 0.79,
+          "jd_cpc": 0.68,
+          "tm_cpe": 15.68,
+          "jd_cpe": 76.02
+        },
+        {
+          "date": "2026-10-16",
+          "tm_spend": 10152.5,
+          "jd_spend": 10254.27,
+          "spend_ratio_jd_vs_tm": 1.01,
+          "tm_ctr": 10.39,
+          "jd_ctr": 9.36,
+          "tm_cpc": 0.87,
+          "jd_cpc": 0.7,
+          "tm_cpe": 17.78,
+          "jd_cpe": 173.8
+        },
+        {
+          "date": "2026-10-17",
+          "tm_spend": 3788.58,
+          "jd_spend": 8643.26,
+          "spend_ratio_jd_vs_tm": 2.28,
+          "tm_ctr": 10.97,
+          "jd_ctr": 10.2,
+          "tm_cpc": 0.91,
+          "jd_cpc": 0.58,
+          "tm_cpe": 86.1,
+          "jd_cpe": 101.69
+        },
+        {
+          "date": "2026-10-18",
+          "tm_spend": 6034.11,
+          "jd_spend": 9641.64,
+          "spend_ratio_jd_vs_tm": 1.6,
+          "tm_ctr": 10.79,
+          "jd_ctr": 10.56,
+          "tm_cpc": 0.76,
+          "jd_cpc": 0.57,
+          "tm_cpe": 8.5,
+          "jd_cpe": 102.57
+        }
+      ]
+    },
+    "material_pareto_efficiency": {
+      "sourceId": "sheet:RoAtsw3KTh56ZBtT7cmcTYaznJb:D9ddm3,BI2xBs",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb",
+      "period": "2026-09-29 ~ 2026-10-18",
+      "rows": [
+        {
+          "rank": 1,
+          "material_name": "村西头的灰太狼（在装修）",
+          "note_id": "6abb9bec000000000a02720f",
+          "channel": "自采天猫种草",
+          "period": "2026-09-30 ~ 2026-10-18",
+          "spend": 52610.2,
+          "spend_cum_ratio": 33.4,
+          "impressions": 1111950,
+          "clicks": 129614,
+          "ctr": 11.66,
+          "cpc": 0.41,
+          "cpe": 15.45,
+          "uv": 1966,
+          "cpuv": 26.76,
+          "efficiency_tier": "核心放量Top"
+        },
+        {
+          "rank": 2,
+          "material_name": "豆芽不是菜",
+          "note_id": "6aba3fcb000000001b030ece",
+          "channel": "自采京东种草",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "spend": 52470.19,
+          "spend_cum_ratio": 66.7,
+          "impressions": 997307,
+          "clicks": 96102,
+          "ctr": 9.64,
+          "cpc": 0.55,
+          "cpe": 102.08,
+          "uv": 1285,
+          "cpuv": 40.83,
+          "efficiency_tier": "核心放量Top"
+        },
+        {
+          "rank": 3,
+          "material_name": "犹犹玉玉",
+          "note_id": "6abb86b4000000001b01c9c7",
+          "channel": "自采京东种草",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "spend": 14216.92,
+          "spend_cum_ratio": 75.8,
+          "impressions": 243774,
+          "clicks": 22856,
+          "ctr": 9.38,
+          "cpc": 0.62,
+          "cpe": 77.69,
+          "uv": 299,
+          "cpuv": 47.55,
+          "efficiency_tier": "核心放量Top"
+        },
+        {
+          "rank": 4,
+          "material_name": "李拜六不熬夜",
+          "note_id": "6ac72cc4000000001c02e832",
+          "channel": "自采天猫种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 13994.21,
+          "spend_cum_ratio": 84.6,
+          "impressions": 209580,
+          "clicks": 26684,
+          "ctr": 12.73,
+          "cpc": 0.52,
+          "cpe": 58.55,
+          "uv": 991,
+          "cpuv": 14.12,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 5,
+          "material_name": "yoohoow",
+          "note_id": "6ac77966000000001303d538",
+          "channel": "自采京东种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 5972.22,
+          "spend_cum_ratio": 88.4,
+          "impressions": 89613,
+          "clicks": 12008,
+          "ctr": 13.4,
+          "cpc": 0.5,
+          "cpe": 33.18,
+          "uv": 56,
+          "cpuv": 106.65,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 6,
+          "material_name": "Jenny爱极简",
+          "note_id": "6acca9f2000000001203d946",
+          "channel": "自采京东种草",
+          "period": "2026-10-15 ~ 2026-10-18",
+          "spend": 5862.55,
+          "spend_cum_ratio": 92.2,
+          "impressions": 92492,
+          "clicks": 11002,
+          "ctr": 11.9,
+          "cpc": 0.53,
+          "cpe": 124.74,
+          "uv": 22,
+          "cpuv": 266.48,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 7,
+          "material_name": "刘威同学",
+          "note_id": "6abcedf50000000018013cff",
+          "channel": "自采天猫种草",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "spend": 3480.27,
+          "spend_cum_ratio": 94.4,
+          "impressions": 38362,
+          "clicks": 3974,
+          "ctr": 10.36,
+          "cpc": 0.88,
+          "cpe": 68.24,
+          "uv": 417,
+          "cpuv": 8.35,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 8,
+          "material_name": "知仪",
+          "note_id": "6acca8a600000000150045ad",
+          "channel": "自采天猫种草",
+          "period": "2026-10-13 ~ 2026-10-18",
+          "spend": 2721.64,
+          "spend_cum_ratio": 96.1,
+          "impressions": 18188,
+          "clicks": 1050,
+          "ctr": 5.77,
+          "cpc": 2.59,
+          "cpe": 8.92,
+          "uv": 467,
+          "cpuv": 5.83,
+          "efficiency_tier": "稳健放量"
+        },
+        {
+          "rank": 9,
+          "material_name": "网友小金",
+          "note_id": "6ac77af8000000001c02e305",
+          "channel": "自采天猫种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 2231.04,
+          "spend_cum_ratio": 97.5,
+          "impressions": 10999,
+          "clicks": 49,
+          "ctr": 0.45,
+          "cpc": 45.53,
+          "cpe": 446.21,
+          "uv": 358,
+          "cpuv": 6.23,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 10,
+          "material_name": "苏苏sue",
+          "note_id": "6acd91be000000001803bc53",
+          "channel": "自采天猫种草",
+          "period": "2026-10-13 ~ 2026-10-18",
+          "spend": 1453.37,
+          "spend_cum_ratio": 98.4,
+          "impressions": 6066,
+          "clicks": 83,
+          "ctr": 1.37,
+          "cpc": 17.51,
+          "cpe": 45.42,
+          "uv": 374,
+          "cpuv": 3.89,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 11,
+          "material_name": "理工男朱先生的家",
+          "note_id": "6ac75f26000000001a02bf0a",
+          "channel": "自采天猫种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 1277.39,
+          "spend_cum_ratio": 99.2,
+          "impressions": 5477,
+          "clicks": 33,
+          "ctr": 0.6,
+          "cpc": 38.71,
+          "cpe": 212.9,
+          "uv": 286,
+          "cpuv": 4.47,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 12,
+          "material_name": "娜娜智能家居",
+          "note_id": "6ac341dc000000001301b1d9",
+          "channel": "自采天猫种草",
+          "period": "2026-10-05 ~ 2026-10-18",
+          "spend": 1168.53,
+          "spend_cum_ratio": 100.0,
+          "impressions": 7461,
+          "clicks": 241,
+          "ctr": 3.23,
+          "cpc": 4.85,
+          "cpe": 9.2,
+          "uv": 211,
+          "cpuv": 5.54,
+          "efficiency_tier": "试探期素材"
+        },
+        {
+          "rank": 13,
+          "material_name": "造家物语",
+          "note_id": "6abce7fe000000001b0226b2",
+          "channel": "自采天猫种草",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "spend": 15.22,
+          "spend_cum_ratio": 100.0,
+          "impressions": 863,
+          "clicks": 29,
+          "ctr": 3.36,
+          "cpc": 0.52,
+          "cpe": 7.61,
+          "uv": 6,
+          "cpuv": 2.54,
+          "efficiency_tier": "试探期素材"
+        },
+        {
+          "rank": 14,
+          "material_name": "设计师Brian",
+          "note_id": "6ad036d1000000001a030de4",
+          "channel": "自采京东种草",
+          "period": "2026-10-15 ~ 2026-10-17",
+          "spend": 4.41,
+          "spend_cum_ratio": 100.0,
+          "impressions": 406,
+          "clicks": 9,
+          "ctr": 2.22,
+          "cpc": 0.49,
+          "cpe": null,
+          "uv": 0,
+          "cpuv": null,
+          "efficiency_tier": "试探期素材"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "meiling-base",
+      "name": "美菱双11多维表格 (双11 KOL进度表)",
+      "url": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tbluz50zuZOeGQWf&view=vewOPEh08l",
+      "status": "ready",
+      "detail": "双11多维表格，1096条提报记录，117条二核确认合作全量明细",
+      "fetchedAt": "2026-10-19T15:27:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书多维表格Base",
+        "syncedAt": "2026-10-19T15:27:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-base-yangji",
+      "name": "美菱双11多维表格 - 样机信息表",
+      "url": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tblotoaoy40ShO5k",
+      "status": "ready",
+      "detail": "双11试用样机信息表，全量84台样机型号与流转进度（已脱敏）",
+      "fetchedAt": "2026-10-19T15:27:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书多维表格Base",
+        "syncedAt": "2026-10-19T15:27:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "name": "美菱冰箱双11日报表 副本",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "status": "ready",
+      "detail": "双11大促日报表工作簿（RoAtsw3KTh56ZBtT7cmcTYaznJb），包含天猫/京东种草数据源细表与打款表",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-D9ddm3",
+      "name": "美菱双11日报表 - 自采天猫种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=D9ddm3",
+      "status": "ready",
+      "detail": "自采天猫种草全量底表（7632行，实际可比19天，9篇笔记素材）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-BI2xBs",
+      "name": "美菱双11日报表 - 自采京东种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=BI2xBs",
+      "status": "ready",
+      "detail": "自采京东种草全量底表（14992行，实际可比20天，5篇笔记素材）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-Trvrou",
+      "name": "美菱双11日报表 - 京东对投CID日流水",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Trvrou",
+      "status": "ready",
+      "detail": "京东对投CID真实消耗与成交转化（10/16-10/18，3天分日流水）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-Y7qNOu",
+      "name": "美菱双11日报表 - 打款与应消耗对照表",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Y7qNOu",
+      "status": "ready",
+      "detail": "双11各渠道投放账户规划打款与实际应消耗（7大账户固定列映射）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-mG2COI",
+      "name": "美菱双11日报表 - 笔记&词类配置表",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=mG2COI",
+      "status": "ready",
+      "detail": "小红书投放搜索词类与产品渗透聚类（有效339条非空词，竞品/品类/品牌/大促词）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-ACntPW",
+      "name": "美菱双11日报表 - 代采星伴种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=ACntPW",
+      "status": "ready",
+      "detail": "代采星伴种草底表（2979行明细聚合，10/15-10/18共4天流水）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-zF2qee",
+      "name": "美菱双11日报表 - 京东对投种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=zF2qee",
+      "status": "ready",
+      "detail": "京东对投种草底表（13954行明细聚合，10/15-10/18共4天流水）",
+      "fetchedAt": "2026-10-19T18:25:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T18:25:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-node-HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "name": "美菱冰箱kpi管理表 副本",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "status": "ready",
+      "detail": "美菱KPI管理表，接替无权限之RQff，包含双11进度更新（4SGaOf）、筛号透视（SI0mQy）及618/7-8月KPI总览",
+      "fetchedAt": "2026-10-19T08:38:11+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T08:38:11+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-4SGaOf",
+      "name": "美菱冰箱kpi管理表 - 双11进度更新表",
+      "url": "https://yimeichuanbo.feishu.cn/sheets/N2bssx2dBh8xyItaFEfccqaznHY?sheet=4SGaOf",
+      "status": "ready",
+      "detail": "双11各产品系列与型号原规划预算（380万/117篇）及京东/天猫渠道级回传GMV（9/28更新）",
+      "fetchedAt": "2026-10-19T08:38:11+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T08:38:11+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "name": "美菱冰箱618复盘数据 副本",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "status": "ready",
+      "detail": "2026年618大促结案复盘工作簿（XSKrspszhhgvPvtxMNicmYlUnEc），包含全量105篇达人明细与财务级ROI",
+      "fetchedAt": "2026-10-19T16:47:29+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-19T16:47:29+08:00"
+      }
+    }
+  ]
+}

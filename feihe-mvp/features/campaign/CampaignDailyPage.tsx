@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
 import { CampaignComboChart } from "./CampaignComboChart";
+import { CampaignDailyDiagnostics } from "./CampaignDailyDiagnostics";
 import {
   resolveDailyDatasets,
   buildCalendarRows,
@@ -325,6 +326,16 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             );
           })}
         </div>
+      )}
+
+      {/* 6.1 分日深度诊断 (累计走势 / 指标热力图 / 规模成本成对散点 / 周度规模加权分析) */}
+      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
+        <CampaignDailyDiagnostics
+          dataset={activeDataset}
+          calendarRows={chartAndTableRows}
+          startDate={startDate}
+          endDate={endDate}
+        />
       )}
 
       {/* 7. 真实数据全量明细表格 (默认收起在 details 内部，使图表视觉主导，展开可查验完整过滤行) */}

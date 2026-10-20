@@ -1,0 +1,8 @@
+{
+  "token": "Pm3DsKubghgFDAtbbS5cyHY5n4g",
+  "sheet_id": "opVblS",
+  "actual_range": "A1:J6",
+  "row_count": 6,
+  "col_count": 10,
+  "csv": "[row=1] \"总消耗\n*含kfs返点\",曝光,阅读,互动,ctr,cpc,cpe,cpm,cpti,cpuv\n[row=2] 103597.34,703612,93054,5383,13%,1.11,19.25,147.24,,\n[row=3] 内容端消耗,自然曝光,自然阅读,自然互动,ctr,cpc,cpe,cpm,cpti,cpuv\n[row=4] \"¥94,363.50\",561788,62353,3283,11%,1.51,28.74,167.97,/,/\n[row=5] \"投流端消耗\n*含返点\",投流曝光,投流阅读,投流互动,ctr,cpc,cpe,cpm,cpti,cpuv\n[row=6] \"¥9,233.84\",126114,15584,\"2,100\",12.36%,0.59 ,4.40 ,73.22 ,3.92 ,73.00 "
+}

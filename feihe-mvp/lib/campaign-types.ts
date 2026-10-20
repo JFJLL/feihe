@@ -3,7 +3,7 @@
  * Template: campaign_review
  */
 
-export type CampaignProjectId = 'kailas' | 'meiling' | 'winner-wipes';
+export type CampaignProjectId = 'kailas' | 'meiling' | 'winner-wipes' | 'huang-tiane';
 
 export type CampaignTemplateId = 'campaign_review';
 

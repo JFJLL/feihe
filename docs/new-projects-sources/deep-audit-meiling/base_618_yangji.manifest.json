@@ -1,0 +1,218 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+  "table_id": "tblObq4NnsHMFT2t",
+  "rev": 933,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 59,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_618_yangji.ndjson",
+  "record_file_size_bytes": 40758,
+  "manifest_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_618_yangji.manifest.json",
+  "columns": {
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 14
+      },
+      "example": "recvjpMwBkJnGT"
+    },
+    "下单时间": {
+      "field_id": "fldtRTbnci",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "min": "2026-05-14T00:00:00.000+08:00",
+        "max": "2026-06-05T00:00:00.000+08:00"
+      },
+      "example": "2026-06-04T00:00:00.000+08:00"
+    },
+    "内部不同区域": {
+      "field_id": "fld61r1Pz3",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 59,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "内饰确认进度": {
+      "field_id": "fldwCg47eV",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 5
+      },
+      "example": "暂未给到"
+    },
+    "子订单编号": {
+      "field_id": "fldCIXtd7S",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 54
+      },
+      "example": "HC2606046947000233"
+    },
+    "推荐产品": {
+      "field_id": "fld8KkDdls",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "小确杏553L"
+      ]
+    },
+    "收货地址": {
+      "field_id": "fldvcvxqSj",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 46
+      },
+      "example": "易美传播"
+    },
+    "样机图片-侧面": {
+      "field_id": "fldla9l79L",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 59,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机图片-右面": {
+      "field_id": "fldkFp9CK0",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 59,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机图片-左面": {
+      "field_id": "fldFn3pxMM",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 59,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机图片-正面": {
+      "field_id": "flddDl1qTr",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 59,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "样机进度": {
+      "field_id": "fldacy8I4i",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 6
+      },
+      "example": "已下单"
+    },
+    "联系电话": {
+      "field_id": "fldEuZEXyS",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 13
+      },
+      "example": "17745227437"
+    },
+    "订单截图": {
+      "field_id": "fld8nt3KNa",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 2,
+        "max_length": 2,
+        "avg_length": 0.9830508474576272
+      },
+      "example": [
+        {
+          "file_token": "Jd38b5j0lozyH6xr9pycMQG2nqd",
+          "name": "1.jpg",
+          "size": 653860
+        }
+      ]
+    },
+    "达人昵称": {
+      "field_id": "fldSnCBrhR",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 12
+      },
+      "example": "尘er"
+    },
+    "退货时间": {
+      "field_id": "fldThQVqkO",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 9,
+        "min": "2026-05-30T00:00:00.000+08:00",
+        "max": "2026-06-26T00:00:00.000+08:00"
+      },
+      "example": "2026-06-21T00:00:00.000+08:00"
+    },
+    "退货流程": {
+      "field_id": "fldfkYOGER",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 3
+      },
+      "example": "可退"
+    },
+    "退货进度": {
+      "field_id": "fldLHjL2Gq",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 8,
+        "max_length": 1,
+        "avg_length": 0.864406779661017
+      },
+      "example": [
+        "完成退货"
+      ]
+    }
+  }
+}

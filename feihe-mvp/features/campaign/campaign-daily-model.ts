@@ -32,6 +32,7 @@ export interface SummaryMetricItem {
   value: string;
   unit?: string;
   note?: string;
+  sparkline?: (number | null)[];
 }
 
 export const CAMPAIGN_PALETTE = {
@@ -358,7 +359,13 @@ export function getDatasetChartConfigs(
     return configs;
   }
 
-  if (isCid) {
+  const isCommerce = dataset.metrics.some((m) => m.key === "orders") && dataset.metrics.some((m) => m.key === "gmv");
+  const cleanDsLabel = dataset.label.replace(/\s*\([\s\S]*?\)\s*$/, "").trim();
+  const channelPrefix = cleanDsLabel || (isCommerce ? "商销" : isCid ? "CID" : "");
+  const has30dNote = dataset.note?.includes("30日") || dataset.label.includes("30日");
+  const attributionSuffix = has30dNote ? " (30日归因)" : "";
+
+  if (isCid || isCommerce) {
     // 1. Primary: spend & GMV bars 同元 + ROI line 倍 (right)
     const primarySeries: ComboSeries[] = [
       { key: "spend", label: "广告花费", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
@@ -369,8 +376,8 @@ export function getDatasetChartConfigs(
     if (activePrimary.length >= 2) {
       configs.push({
         id: "cid-primary",
-        title: "京东对投CID - 花费、成交GMV与ROI",
-        caption: "对比每日广告花费、30日归因成交GMV与归因成交ROI。",
+        title: `${channelPrefix || "投流转化"} - 花费、成交GMV与ROI`,
+        caption: `对比每日广告花费、成交GMV与成交ROI${attributionSuffix}。`,
         series: activePrimary,
         isPrimary: true,
         height: 300,
@@ -387,8 +394,8 @@ export function getDatasetChartConfigs(
     if (activeClicks.length >= 2) {
       configs.push({
         id: "cid-clicks",
-        title: "CID 点击量与点击率 (CTR)",
-        caption: "对比每日CID点击量与点击率 (CTR) 的数值。",
+        title: `${channelPrefix || "转化"} 点击量与点击率 (CTR)`,
+        caption: `对比每日点击量与点击率 (CTR) 的数值。`,
         series: activeClicks,
         height: 280,
         xLabel: "日期",
@@ -396,16 +403,19 @@ export function getDatasetChartConfigs(
     }
 
     // 3. Orders & UV: orders 单 (bar) + UV 人 (line right, 显式归因)
+    const uvMetric = metricMap.get("uv");
+    const uvLabel = uvMetric?.label || (has30dNote ? "进店UV (30日归因)" : "进店UV");
+    const uvUnit = uvMetric?.unit || "人";
     const orderSeries: ComboSeries[] = [
       { key: "orders", label: "订单量", unit: "单", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.gold },
-      { key: "uv", label: "进店UV (30日归因)", unit: "人", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.primary },
+      { key: "uv", label: uvLabel, unit: uvUnit, axis: "right", kind: "line", color: CAMPAIGN_PALETTE.primary },
     ];
     const activeOrders = filterActiveSeries(orderSeries, filteredRows);
     if (activeOrders.length >= 2) {
       configs.push({
         id: "cid-orders",
-        title: "CID 订单量与进店UV (30日归因)",
-        caption: "对比每日CID订单量与进店访客 (UV) 的数值。",
+        title: `${channelPrefix || "转化"} 订单量与${uvLabel}`,
+        caption: `对比每日订单量与进店访客 (UV) 的数值。`,
         series: activeOrders,
         height: 280,
         xLabel: "日期",
@@ -422,8 +432,8 @@ export function getDatasetChartConfigs(
       if (activeEng.length >= 2) {
         configs.push({
           id: "cid-engagements",
-          title: "CID 互动量与单次互动成本 (CPE)",
-          caption: "对比每日CID渠道的互动量与单次互动成本 (CPE)。",
+          title: `${channelPrefix || "转化"} 互动量与单次互动成本 (CPE)`,
+          caption: `对比每日互动量与单次互动成本 (CPE)。`,
           series: activeEng,
           height: 280,
           xLabel: "日期",
@@ -497,8 +507,11 @@ export function getDatasetChartConfigs(
 
   // 4. Reach & UV: UV 人 (bars) + CPUV 元 (line right)
   if (metricMap.has("uv") && metricMap.has("cpuv")) {
+    const uvMetric = metricMap.get("uv");
+    const uvLabel = uvMetric?.label || (dataset.note?.includes("30日") ? "进店UV (30日归因)" : "进店UV");
+    const uvUnit = uvMetric?.unit || "人";
     const uvSeries: ComboSeries[] = [
-      { key: "uv", label: "进店UV (30日归因)", unit: "人", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
+      { key: "uv", label: uvLabel, unit: uvUnit, axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
       { key: "cpuv", label: "访客获取成本 (CPUV)", unit: "元", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
     ];
     const activeUv = filterActiveSeries(uvSeries, filteredRows);
@@ -605,24 +618,109 @@ export function computeSummaryMetrics(
         value: spendStrict.isComplete && spendStrict.sum !== null ? fmtNum(spendStrict.sum) : "—",
         unit: "元",
         note: spendStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${spendStrict.validCount}/${totalDays} 天 (含缺日)`,
+        sparkline: calendarRows.map((r) => safeNum(r.spend_total)),
       },
       {
         label: "淘搜总指数峰值",
         value: maxKwIndex !== null ? fmtNum(maxKwIndex, 0) : "—",
         unit: "指数",
         note: latestRow ? `最新: ${fmtNum(latestIndex, 0)} (${String(latestRow.date).slice(5)})` : "无有效指数记录",
+        sparkline: calendarRows.map((r) => safeNum(r.kw_total_index)),
       },
       {
         label: "信息流(F端)累计消耗",
         value: fSpendStrict.isComplete && fSpendStrict.sum !== null ? fmtNum(fSpendStrict.sum) : "—",
         unit: "元",
         note: fSpendStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${fSpendStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r.spend_f)),
       },
       {
         label: "达人(K端)累计消耗",
         value: kSpendStrict.isComplete && kSpendStrict.sum !== null ? fmtNum(kSpendStrict.sum) : "—",
         unit: "元",
         note: kSpendStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${kSpendStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r.spend_k)),
+      },
+    ];
+  }
+
+  // 1. CID / Commerce summary: 消耗 / GMV / 订单(或展现/点击) / ROI
+  const isCommerceOrCid = dataset.id.includes("cid") || dataset.id.includes("shangxiao") || dataset.metrics.some((m) => m.key === "gmv");
+  if (isCommerceOrCid && dataset.metrics.some((m) => m.key === "gmv")) {
+    const spendKey = dataset.metrics.some((m) => m.key === "spend_total") ? "spend_total" : "spend";
+    const spendStrict = computeStrictSum(calendarRows, spendKey);
+    const gmvStrict = computeStrictSum(calendarRows, "gmv");
+
+    // 3rd metric: orders > impressions > clicks
+    let thirdMetric: SummaryMetricItem;
+    if (dataset.metrics.some((m) => m.key === "orders")) {
+      const ordersStrict = computeStrictSum(calendarRows, "orders");
+      thirdMetric = {
+        label: "周期累计订单量",
+        value: ordersStrict.isComplete && ordersStrict.sum !== null ? fmtNum(ordersStrict.sum, 0) : "—",
+        unit: "单",
+        note: ordersStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${ordersStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r.orders)),
+      };
+    } else if (dataset.metrics.some((m) => m.key === "impressions")) {
+      const impStrict = computeStrictSum(calendarRows, "impressions");
+      thirdMetric = {
+        label: "周期展现总量",
+        value: impStrict.isComplete && impStrict.sum !== null ? fmtNum(impStrict.sum, 0) : "—",
+        unit: "次",
+        note: impStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${impStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r.impressions)),
+      };
+    } else {
+      const clicksStrict = computeStrictSum(calendarRows, "clicks");
+      thirdMetric = {
+        label: "周期点击总量",
+        value: clicksStrict.isComplete && clicksStrict.sum !== null ? fmtNum(clicksStrict.sum, 0) : "—",
+        unit: "次",
+        note: clicksStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${clicksStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r.clicks)),
+      };
+    }
+
+    // 4th metric: ROI
+    let roiVal = "—";
+    let roiNote = `已覆盖 ${Math.min(spendStrict.validCount, gmvStrict.validCount)}/${totalDays} 天 (含缺日)`;
+    if (spendStrict.isComplete && gmvStrict.isComplete && spendStrict.sum !== null && gmvStrict.sum !== null) {
+      if (spendStrict.sum === 0) {
+        roiVal = "—";
+        roiNote = "消耗为0，无有效分母";
+      } else {
+        roiVal = fmtNum(gmvStrict.sum / spendStrict.sum, 2);
+        roiNote = `区间成交GMV ¥${fmtNum(gmvStrict.sum)} / 总消耗`;
+      }
+    }
+
+    return [
+      {
+        label: "周期累计总消耗",
+        value: spendStrict.isComplete && spendStrict.sum !== null ? fmtNum(spendStrict.sum) : "—",
+        unit: "元",
+        note: spendStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${spendStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r[spendKey])),
+      },
+      {
+        label: "周期成交 GMV",
+        value: gmvStrict.isComplete && gmvStrict.sum !== null ? fmtNum(gmvStrict.sum) : "—",
+        unit: "元",
+        note: gmvStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${gmvStrict.validCount}/${totalDays} 天`,
+        sparkline: calendarRows.map((r) => safeNum(r.gmv)),
+      },
+      thirdMetric,
+      {
+        label: "周期综合 ROI",
+        value: roiVal,
+        unit: "倍",
+        note: roiNote,
+        sparkline: calendarRows.map((r) => {
+          const s = safeNum(r[spendKey]);
+          const g = safeNum(r.gmv);
+          return s && g && s > 0 ? Number((g / s).toFixed(2)) : null;
+        }),
       },
     ];
   }
@@ -684,6 +782,7 @@ export function computeSummaryMetrics(
           value: "—",
           unit: "元/次",
           note: "点击量为0，无有效分母",
+          sparkline: calendarRows.map((r) => safeNum(r.cpc)),
         };
       } else {
         // 0消耗 / 正点击 => CPC = 0.00
@@ -693,6 +792,7 @@ export function computeSummaryMetrics(
           value: fmtNum(cpc, 2),
           unit: "元/次",
           note: "区间总消耗 / 区间总点击 (完整统计)",
+          sparkline: calendarRows.map((r) => safeNum(r.cpc)),
         };
       }
     } else {
@@ -701,6 +801,7 @@ export function computeSummaryMetrics(
         value: "—",
         unit: "元/次",
         note: `已覆盖 ${Math.min(spendStrict.validCount, clicksStrict.validCount)}/${totalDays} 天 (含缺日未全计入)`,
+        sparkline: calendarRows.map((r) => safeNum(r.cpc)),
       };
     }
   } else if (dataset.metrics.some((m) => m.key === "cpuv")) {
@@ -712,6 +813,7 @@ export function computeSummaryMetrics(
           value: "—",
           unit: "元/人",
           note: "访客量为0，无有效分母",
+          sparkline: calendarRows.map((r) => safeNum(r.cpuv)),
         };
       } else {
         const cpuv = spendStrict.sum / uvStrict.sum;
@@ -720,6 +822,7 @@ export function computeSummaryMetrics(
           value: fmtNum(cpuv, 2),
           unit: "元/人",
           note: "总消耗 / 归因UV求和 (非跨日去重)",
+          sparkline: calendarRows.map((r) => safeNum(r.cpuv)),
         };
       }
     } else {
@@ -728,6 +831,7 @@ export function computeSummaryMetrics(
         value: "—",
         unit: "元/人",
         note: `已覆盖 ${Math.min(spendStrict.validCount, uvStrict.validCount)}/${totalDays} 天 (含缺日未全计入)`,
+        sparkline: calendarRows.map((r) => safeNum(r.cpuv)),
       };
     }
   } else {
@@ -745,18 +849,21 @@ export function computeSummaryMetrics(
       value: spendStrict.isComplete && spendStrict.sum !== null ? fmtNum(spendStrict.sum) : "—",
       unit: "元",
       note: spendStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${spendStrict.validCount}/${totalDays} 天 (含缺日未全计入)`,
+      sparkline: calendarRows.map((r) => safeNum(r.spend)),
     },
     {
       label: "周期展现总量",
       value: impStrict && impStrict.isComplete && impStrict.sum !== null ? fmtNum(impStrict.sum, 0) : "—",
       unit: "次",
       note: impStrict ? (impStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${impStrict.validCount}/${totalDays} 天`) : "无展现指标",
+      sparkline: calendarRows.map((r) => safeNum(r.impressions)),
     },
     {
       label: interactionLabel,
       value: engStrict && engStrict.isComplete && engStrict.sum !== null ? fmtNum(engStrict.sum, 0) : "—",
       unit: "次",
       note: engStrict ? (engStrict.isComplete ? `${totalDays}天完整统计` : `已覆盖 ${engStrict.validCount}/${totalDays} 天`) : "无互动指标",
+      sparkline: calendarRows.map((r) => safeNum(r.engagements ?? r.clicks)),
     },
     fourthMetric,
   ];

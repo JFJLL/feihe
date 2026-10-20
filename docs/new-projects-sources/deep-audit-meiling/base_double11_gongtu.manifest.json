@@ -1,0 +1,520 @@
+{
+  "manifest_version": "v1",
+  "format": "ndjson",
+  "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+  "table_id": "tblOYMiuP5hTjxbN",
+  "rev": 276,
+  "timezone": "Asia/Shanghai",
+  "query_context": {
+    "field_scope": "all_fields",
+    "record_scope": "all_records"
+  },
+  "requested_limit": 2000,
+  "records_count": 6,
+  "page_count": 1,
+  "has_more": false,
+  "record_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_double11_gongtu.ndjson",
+  "record_file_size_bytes": 14857,
+  "manifest_file": "D:\\download\\pic-vec\\feihe\\docs\\new-projects-sources\\deep-audit-meiling\\base_double11_gongtu.manifest.json",
+  "columns": {
+    "7月下单价": {
+      "field_id": "fldEsb1gXv",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 0,
+        "max_length": 4
+      },
+      "example": "0"
+    },
+    "record_id": {
+      "physical_type": "string",
+      "stats": {
+        "max_length": 14
+      },
+      "example": "recvvhFGpotISp"
+    },
+    "timeline": {
+      "field_id": "fld37b5IjF",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 22
+      },
+      "example": "达人自己出文案"
+    },
+    "不挑选理由": {
+      "field_id": "fldZWpUvU1",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 6,
+        "max_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "主页链接": {
+      "field_id": "fldaADVRQ3",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 134
+      },
+      "example": "[https://www.xiaohongshu.com/user/profile/5ac2e0cbe8ac2b241fe9aa44](https://www.xiaohongshu.com/user/profile/5ac2e0cbe8ac2b241fe",
+      "example_truncated": true
+    },
+    "二核场景": {
+      "field_id": "fldgFzqMtE",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "二核确认合作": {
+      "field_id": "fldZr8vDGk",
+      "field_type": "checkbox",
+      "physical_type": "boolean",
+      "stats": {
+        "true_count": 5
+      },
+      "example": true
+    },
+    "内容方向": {
+      "field_id": "fldGv1p1gS",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 63
+      },
+      "example": "住进原木风小家，植入502pro卖点，体现小户型适配，选对家电，才不破坏家里温柔的麦芒色调"
+    },
+    "内容方向确认": {
+      "field_id": "fldAKNI6Bc",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "确认"
+      ]
+    },
+    "内容类型": {
+      "field_id": "fldlhIcTzm",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "场景种草"
+      ]
+    },
+    "发布档期": {
+      "field_id": "fldnq8NUJ0",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "min": "2026-09-22T00:00:00.000+08:00",
+        "max": "2026-10-06T00:00:00.000+08:00"
+      },
+      "example": "2026-09-22T00:00:00.000+08:00"
+    },
+    "发布短链": {
+      "field_id": "fldqKg0HVA",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 830
+      },
+      "example": "[https://www.xiaohongshu.com/discovery/item/6ab74477000000001802cfd5?source=webshare&xhsshare=pc_web&xsec_token=MBQl4Ulymq4y7Ffw",
+      "example_truncated": true
+    },
+    "发布长链": {
+      "field_id": "fldJULaQHe",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 6,
+        "max_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "合作形式（图文/视频）": {
+      "field_id": "fldLw5AOeY",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "图文"
+      ]
+    },
+    "合作笔记近30天互动单价（视频）": {
+      "field_id": "fldIJyeLdk",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 11
+      },
+      "example": "7.62195122"
+    },
+    "合作笔记近30天阅读单价（图文）": {
+      "field_id": "fldMnqaLtI",
+      "field_type": "formula",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 11
+      },
+      "example": "0.68810662"
+    },
+    "品牌反馈": {
+      "field_id": "fldbHlgrCt",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "商单近30天互动中位数": {
+      "field_id": "fldGUodxAJ",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 1,
+        "min": 620,
+        "max": 1766,
+        "avg": 1007.2
+      },
+      "example": 620
+    },
+    "商单近30天阅读中位数": {
+      "field_id": "fldTSPxmKA",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 1,
+        "min": 11227,
+        "max": 35150,
+        "avg": 18318.8
+      },
+      "example": 11227
+    },
+    "地域": {
+      "field_id": "fldZb3yJJq",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 9
+      },
+      "example": "重庆"
+    },
+    "场景图": {
+      "field_id": "fldJ2v0MOF",
+      "field_type": "attachment",
+      "physical_type": "array<struct<file_token string, size number, name string>>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "外溢平台": {
+      "field_id": "fld5Qe9UhX",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "京东代采"
+      ]
+    },
+    "外溢平台（自动）": {
+      "field_id": "fldauanSEu",
+      "field_type": "lookup",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 2
+      },
+      "example": "京东"
+    },
+    "审核进度": {
+      "field_id": "fldqcbJbd4",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "已发布"
+      ]
+    },
+    "小红盟(自采/代采)结算价格": {
+      "field_id": "fldxUKCzGK",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 6
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "尺寸": {
+      "field_id": "fldBsW4AlQ",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 6,
+        "max_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "推荐产品": {
+      "field_id": "fldog4zGfZ",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "小确杏502pro-雨珂"
+      ]
+    },
+    "提报日期": {
+      "field_id": "fldtuvfGfF",
+      "field_type": "datetime",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "min": "2026-09-15T00:00:00.000+08:00",
+        "max": "2026-09-15T00:00:00.000+08:00"
+      },
+      "example": "2026-09-15T00:00:00.000+08:00"
+    },
+    "星伴计划结算价格": {
+      "field_id": "fldOR3LlcE",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 6
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "是否上传星伴/终稿/京东授权": {
+      "field_id": "fldYmjyqo9",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "是否可嵌入": {
+      "field_id": "fldWnwnydI",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "是否收素材/授权": {
+      "field_id": "fldwOD4INz",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "核价备注": {
+      "field_id": "fldQ5YFQ17",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 2,
+        "max_length": 18
+      },
+      "example": "分发平台：抖音"
+    },
+    "父记录": {
+      "field_id": "fldi9zstlK",
+      "field_type": "link",
+      "physical_type": "array<struct<id string>>",
+      "stats": {
+        "empty_count": 6,
+        "max_length": 0,
+        "avg_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "稿件链接": {
+      "field_id": "fldVX72RIK",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 174
+      },
+      "example": "[图文大纲-妩妹儿-2.5w-502pro-住进原木风小家，植入502pro卖点，体现小户型适配，选对家电，才不破坏家里温柔的麦芒色调-报备图文](https://yimeichuanbo.feishu.cn/docx/F1JsdojteobMFbx7LL",
+      "example_truncated": true
+    },
+    "笔记id": {
+      "field_id": "fldsgwVCYv",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 6,
+        "max_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "筛选人备注": {
+      "field_id": "fldkHpmVus",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 6,
+        "max_length": 0
+      },
+      "hint": "All values are empty; type inference may be ambiguous. Avoid analyzing this column unless required."
+    },
+    "筛选人（自动）": {
+      "field_id": "fldVSGimrQ",
+      "field_type": "lookup",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 2
+      },
+      "example": "雨珂"
+    },
+    "粉丝（万）": {
+      "field_id": "fldpobsf1u",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 1,
+        "min": 2.4952,
+        "max": 4.9368,
+        "avg": 3.5717399999999997
+      },
+      "example": 2.5072
+    },
+    "蒲公英链接": {
+      "field_id": "fldW2HIVLP",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 170
+      },
+      "example": "[https://pgy.xiaohongshu.com/solar/pre-trade/blogger-detail/5ac2e0cbe8ac2b241fe9aa44](https://pgy.xiaohongshu.com/solar/pre-trad",
+      "example_truncated": true
+    },
+    "达人ID": {
+      "field_id": "fldiVb9mZ9",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 10
+      },
+      "example": "958638362"
+    },
+    "达人是否可接": {
+      "field_id": "fldPakfP1A",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 0,
+        "max_length": 1,
+        "avg_length": 1
+      },
+      "example": [
+        "可接"
+      ]
+    },
+    "达人昵称": {
+      "field_id": "fldQdCovPV",
+      "field_type": "text",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 10
+      },
+      "example": "妩妹儿"
+    },
+    "达人裸价": {
+      "field_id": "fldzUlyF7E",
+      "field_type": "number",
+      "physical_type": "number|null",
+      "stats": {
+        "null_count": 1,
+        "min": 4900,
+        "max": 9500,
+        "avg": 7480
+      },
+      "example": 7500
+    },
+    "达人量级": {
+      "field_id": "fldpjWZH1l",
+      "field_type": "select",
+      "physical_type": "array<string>",
+      "stats": {
+        "empty_count": 1,
+        "max_length": 1,
+        "avg_length": 0.8333333333333334
+      },
+      "example": [
+        "尾部"
+      ]
+    },
+    "采买形式": {
+      "field_id": "fldlUFRNxr",
+      "field_type": "lookup",
+      "physical_type": "string|null",
+      "stats": {
+        "null_count": 1,
+        "max_length": 4
+      },
+      "example": "京东代采"
+    }
+  }
+}

@@ -3,10 +3,20 @@
   "extractedAt": "2026-10-20",
   "sources": [
     {
+      "id": "wipes-sheets-ogjuzb",
+      "name": "飞书在线KPI底表 (OgJUzb)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=OgJUzb",
+      "status": "ready",
+      "provenance": "feishu",
+      "detail": "飞书表格KPI子表真实数据映射，覆盖日常种草、医生专家及CID监控",
+      "fetchedAt": "2026-10-20"
+    },
+    {
       "id": "wipes-kpi-sheet",
       "name": "飞书在线KPI底表 (OgJUzb)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=OgJUzb",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "飞书表格KPI子表真实数据映射，覆盖日常种草、医生专家及CID监控",
       "fetchedAt": "2026-10-20"
     },
@@ -15,6 +25,7 @@
       "name": "飞书在线周报 (稳健玉米酒精湿巾Y26 9-11月)",
       "url": "https://feishu.cn/docx/LtZ5dlPvnoiA8OxsvAUcV2lAnWb",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "飞书云文档周期复盘，从正文提取全量笔记已发布数量与节奏",
       "fetchedAt": "2026-10-20"
     },
@@ -23,6 +34,7 @@
       "name": "淘搜指数与分渠道日消耗 (wY1HZO)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=wY1HZO",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "36天完整淘搜6大关键词指数、K/F/S/CID渠道日消耗及搜索进店UV",
       "fetchedAt": "2026-10-20"
     },
@@ -31,7 +43,26 @@
       "name": "全渠道投放日跟踪与版位透视 (0QTVhE)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=0QTVhE",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "34天By day日趋势数据及视频内流/搜索推广/信息流推广三大版位效果结构",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-k279uc",
+      "name": "淘宝星河数据表 (k279uc)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=k279uc",
+      "status": "ready",
+      "provenance": "feishu",
+      "detail": "手淘搜索曝光进店UV、笔记进店UV、全店成交GMV与新客占比日跟踪",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-ipt5gi",
+      "name": "发布&消耗进度表 (iPT5gI)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=iPT5gI",
+      "status": "ready",
+      "provenance": "feishu",
+      "detail": "客户打款预算 vs 实际可消耗预算双轨对比，含116篇达人发布进度跟踪",
       "fetchedAt": "2026-10-20"
     },
     {
@@ -39,6 +70,7 @@
       "name": "关键词词类与词级访客成本 (WBP7aU)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=WBP7aU",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "4大词类大盘聚合与52个核心关键词真实消费、展现、点击、UV及CPUV",
       "fetchedAt": "2026-10-20"
     },
@@ -47,6 +79,7 @@
       "name": "聚光定向人群包透视 (PFSl9q)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=PFSl9q",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "31个精准定向人群包消耗、展现、互动、站外活跃UV及CPUV量化透视",
       "fetchedAt": "2026-10-20"
     },
@@ -55,6 +88,7 @@
       "name": "发布数据汇总明细与专家号专项 (9weg9y / 0lnwuD)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=9weg9y",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "全量116篇已发布笔记（含3篇医学专家号），覆盖K端达人费与FS聚光投流",
       "fetchedAt": "2026-10-20"
     },
@@ -63,7 +97,26 @@
       "name": "CID组件引流数据 (tiermz)",
       "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=tiermz",
       "status": "ready",
+      "provenance": "feishu",
       "detail": "10位达人素材跨端CID组件点击与访客成本监控",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-ywbwx9-tiermz",
+      "name": "CID明细底表与组件引流数据 (yWBwx9 / tiermz)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=yWBwx9",
+      "status": "ready",
+      "provenance": "feishu",
+      "detail": "10位达人CID跨端组件引流、组件点击成本及30日成交订单与GMV追踪",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-tfgagj",
+      "name": "BY DAY淘搜vs 消耗数据透视表 (TFGAgj)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=TFGAgj",
+      "status": "ready",
+      "provenance": "feishu",
+      "detail": "34天分版位(视频内流/搜索推广/信息流推广)每日FS投流与CID消耗透视",
       "fetchedAt": "2026-10-20"
     }
   ],
@@ -1972,6 +2025,1272 @@
           "spend": 2781.81,
           "componentClicks": 100,
           "costPerClick": 27.82
+        }
+      ]
+    },
+    {
+      "id": "wipes-kpi-achievement-table",
+      "title": "稳健玉米消毒湿巾项目KPI目标与实绩达成总览表",
+      "category": "performance",
+      "period": "源表未注明统计区间（累计执行快照）",
+      "sourceId": "wipes-sheets-ogjuzb",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=OgJUzb",
+      "note": "依据在线表OgJUzb最新Revision 24470核算。CPUV(≤10实绩8.00)、CPM(≤60实绩93.95)、CPE(≤6实绩9.47)为成本指标，越低越优。医生专家CPE实绩5.26对应目标10元实际达成率为190.11%（源表公式单元格静态显示180.56%）。源表未标注统计区间，为当前执行快照。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "dimension",
+          "title": "指标维度",
+          "type": "badge"
+        },
+        {
+          "key": "metric",
+          "title": "衡量指标",
+          "type": "string"
+        },
+        {
+          "key": "subChannel",
+          "title": "细分渠道",
+          "type": "string"
+        },
+        {
+          "key": "rawTarget",
+          "title": "原始目标值",
+          "type": "string"
+        },
+        {
+          "key": "rawActual",
+          "title": "原始实绩值",
+          "type": "string"
+        },
+        {
+          "key": "comparator",
+          "title": "判定方向",
+          "type": "badge"
+        },
+        {
+          "key": "numericTarget",
+          "title": "数值目标",
+          "type": "number"
+        },
+        {
+          "key": "numericActual",
+          "title": "数值实绩",
+          "type": "number"
+        },
+        {
+          "key": "sourceProgress",
+          "title": "源表进度",
+          "type": "string"
+        },
+        {
+          "key": "calculatedAchievementPct",
+          "title": "真实达成率",
+          "type": "string"
+        },
+        {
+          "key": "isSurpassed",
+          "title": "是否达标",
+          "type": "badge"
+        },
+        {
+          "key": "auditNote",
+          "title": "审计备注",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "dimension": "日常种草",
+          "metric": "CPUV",
+          "subChannel": "FS",
+          "rawTarget": "≤10",
+          "rawActual": "8.00",
+          "comparator": "lte",
+          "numericTarget": 10.0,
+          "numericActual": 8.0,
+          "sourceProgress": "125.05%",
+          "calculatedAchievementPct": "125.00%",
+          "isCostMetric": true,
+          "isSurpassed": true,
+          "auditNote": null
+        },
+        {
+          "dimension": "日常种草",
+          "metric": "淘搜",
+          "subChannel": "9-11月加总",
+          "rawTarget": "6,000",
+          "rawActual": "9,375",
+          "comparator": "gte",
+          "numericTarget": 6000.0,
+          "numericActual": 9375.0,
+          "sourceProgress": "156.25%",
+          "calculatedAchievementPct": "156.25%",
+          "isCostMetric": false,
+          "isSurpassed": true,
+          "auditNote": null
+        },
+        {
+          "dimension": "日常种草",
+          "metric": "曝光量",
+          "subChannel": "KFS",
+          "rawTarget": "4,000,000",
+          "rawActual": "6,203,964",
+          "comparator": "gte",
+          "numericTarget": 4000000.0,
+          "numericActual": 6203964.0,
+          "sourceProgress": "155.10%",
+          "calculatedAchievementPct": "155.10%",
+          "isCostMetric": false,
+          "isSurpassed": true,
+          "auditNote": null
+        },
+        {
+          "dimension": "日常种草",
+          "metric": "CPM",
+          "subChannel": "FS",
+          "rawTarget": "≤60",
+          "rawActual": "93.95",
+          "comparator": "lte",
+          "numericTarget": 60.0,
+          "numericActual": 93.95,
+          "sourceProgress": "63.87%",
+          "calculatedAchievementPct": "63.86%",
+          "isCostMetric": true,
+          "isSurpassed": false,
+          "auditNote": null
+        },
+        {
+          "dimension": "日常种草",
+          "metric": "互动量",
+          "subChannel": "KFS",
+          "rawTarget": "31,579",
+          "rawActual": "62,149",
+          "comparator": "gte",
+          "numericTarget": 31579.0,
+          "numericActual": 62149.0,
+          "sourceProgress": "196.81%",
+          "calculatedAchievementPct": "196.80%",
+          "isCostMetric": false,
+          "isSurpassed": true,
+          "auditNote": null
+        },
+        {
+          "dimension": "日常种草",
+          "metric": "CPE",
+          "subChannel": "FS",
+          "rawTarget": "≤6",
+          "rawActual": "9.47",
+          "comparator": "lte",
+          "numericTarget": 6.0,
+          "numericActual": 9.47,
+          "sourceProgress": "63.33%",
+          "calculatedAchievementPct": "63.36%",
+          "isCostMetric": true,
+          "isSurpassed": false,
+          "auditNote": null
+        },
+        {
+          "dimension": "日常种草",
+          "metric": "爆文率\n（互动量≥1000）",
+          "subChannel": "KFS",
+          "rawTarget": "30%",
+          "rawActual": "33.33%",
+          "comparator": "gte",
+          "numericTarget": 30.0,
+          "numericActual": 33.33,
+          "sourceProgress": "111.11%",
+          "calculatedAchievementPct": "111.10%",
+          "isCostMetric": false,
+          "isSurpassed": true,
+          "auditNote": null
+        },
+        {
+          "dimension": "医生专家",
+          "metric": "曝光量",
+          "subChannel": "KFS",
+          "rawTarget": "788,235",
+          "rawActual": "446,245",
+          "comparator": "gte",
+          "numericTarget": 788235.0,
+          "numericActual": 446245.0,
+          "sourceProgress": "56.61%",
+          "calculatedAchievementPct": "56.61%",
+          "isCostMetric": false,
+          "isSurpassed": false,
+          "auditNote": null
+        },
+        {
+          "dimension": "医生专家",
+          "metric": "CPM",
+          "subChannel": "FS",
+          "rawTarget": "85",
+          "rawActual": "171.80",
+          "comparator": "lte",
+          "numericTarget": 85.0,
+          "numericActual": 171.8,
+          "sourceProgress": "49.48%",
+          "calculatedAchievementPct": "49.48%",
+          "isCostMetric": true,
+          "isSurpassed": false,
+          "auditNote": null
+        },
+        {
+          "dimension": "医生专家",
+          "metric": "互动量",
+          "subChannel": "KFS",
+          "rawTarget": "7,063",
+          "rawActual": "11,353",
+          "comparator": "gte",
+          "numericTarget": 7063.0,
+          "numericActual": 11353.0,
+          "sourceProgress": "160.74%",
+          "calculatedAchievementPct": "160.74%",
+          "isCostMetric": false,
+          "isSurpassed": true,
+          "auditNote": null
+        },
+        {
+          "dimension": "医生专家",
+          "metric": "CPE",
+          "subChannel": "FS",
+          "rawTarget": "10",
+          "rawActual": "5.26",
+          "comparator": "lte",
+          "numericTarget": 10.0,
+          "numericActual": 5.26,
+          "sourceProgress": "180.56%",
+          "calculatedAchievementPct": "190.11%",
+          "isCostMetric": true,
+          "isSurpassed": true,
+          "auditNote": "源表公式单元格静态显示180.56%；按当前实绩5.26元与目标10元重算真实达成率为190.11%（成本指标越低越优），两处差异予以并列注明。"
+        }
+      ]
+    },
+    {
+      "id": "wipes-taobao-xinghe-table",
+      "title": "淘宝星河手淘搜索曝光进店UV与全店GMV转化日趋势 (35天)",
+      "category": "performance",
+      "period": "2026/09/14~2026/10/18",
+      "sourceId": "wipes-sheets-k279uc",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=k279uc",
+      "note": "手淘外溢承接与进店转化跟踪表（k279uc）。全店成交GMV(¥74,489.30)为淘宝全店总成交额，受全域品牌效应影响，非纯投流直接转化，不可直接计算ROI；任务商品GMV(¥8,741.81)为玉米湿巾单品直接成交GMV。进店UV与全店GMV呈现显著同频脉冲。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "date",
+          "title": "活动时间",
+          "type": "string"
+        },
+        {
+          "key": "fs_spend",
+          "title": "FS总消耗(元)",
+          "type": "currency"
+        },
+        {
+          "key": "search_exp_uv",
+          "title": "手淘搜索曝光UV",
+          "type": "number"
+        },
+        {
+          "key": "search_in_uv",
+          "title": "手淘搜索进店UV",
+          "type": "number"
+        },
+        {
+          "key": "note_in_uv",
+          "title": "笔记进店UV",
+          "type": "number"
+        },
+        {
+          "key": "new_visitor_uv",
+          "title": "店铺新访客",
+          "type": "number"
+        },
+        {
+          "key": "shop_buy_uv",
+          "title": "全店成交UV",
+          "type": "number"
+        },
+        {
+          "key": "shop_total_gmv",
+          "title": "全店成交GMV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "task_item_gmv",
+          "title": "任务商品GMV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "in_cpuv",
+          "title": "进店CPUV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "new_cust_rate",
+          "title": "新客占比",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "date": "9月14日",
+          "fs_spend": 0.0,
+          "search_exp_uv": null,
+          "search_in_uv": null,
+          "note_in_uv": null,
+          "new_visitor_uv": null,
+          "shop_buy_uv": null,
+          "shop_total_gmv": null,
+          "task_item_gmv": null,
+          "in_cpuv": 0.0,
+          "new_cust_rate": ""
+        },
+        {
+          "date": "9月15日",
+          "fs_spend": 0.0,
+          "search_exp_uv": 39,
+          "search_in_uv": 45,
+          "note_in_uv": 56,
+          "new_visitor_uv": 48,
+          "shop_buy_uv": 0,
+          "shop_total_gmv": 0.0,
+          "task_item_gmv": 0.0,
+          "in_cpuv": 0.0,
+          "new_cust_rate": "86%"
+        },
+        {
+          "date": "9月16日",
+          "fs_spend": 614.38,
+          "search_exp_uv": 6,
+          "search_in_uv": 4,
+          "note_in_uv": 9,
+          "new_visitor_uv": 1,
+          "shop_buy_uv": 1,
+          "shop_total_gmv": 32.54,
+          "task_item_gmv": 0.0,
+          "in_cpuv": 68.26,
+          "new_cust_rate": "11%"
+        },
+        {
+          "date": "9月17日",
+          "fs_spend": 803.24,
+          "search_exp_uv": 50,
+          "search_in_uv": 48,
+          "note_in_uv": 57,
+          "new_visitor_uv": 47,
+          "shop_buy_uv": 1,
+          "shop_total_gmv": 32.9,
+          "task_item_gmv": 0.0,
+          "in_cpuv": 14.09,
+          "new_cust_rate": "82%"
+        },
+        {
+          "date": "9月18日",
+          "fs_spend": 2039.03,
+          "search_exp_uv": 49,
+          "search_in_uv": 44,
+          "note_in_uv": 61,
+          "new_visitor_uv": 39,
+          "shop_buy_uv": 2,
+          "shop_total_gmv": 112.6,
+          "task_item_gmv": 46.8,
+          "in_cpuv": 33.43,
+          "new_cust_rate": "64%"
+        },
+        {
+          "date": "9月19日",
+          "fs_spend": 3486.29,
+          "search_exp_uv": 52,
+          "search_in_uv": 36,
+          "note_in_uv": 60,
+          "new_visitor_uv": 44,
+          "shop_buy_uv": 4,
+          "shop_total_gmv": 208.71,
+          "task_item_gmv": 147.06,
+          "in_cpuv": 58.1,
+          "new_cust_rate": "73%"
+        },
+        {
+          "date": "9月20日",
+          "fs_spend": 4210.9,
+          "search_exp_uv": 99,
+          "search_in_uv": 86,
+          "note_in_uv": 121,
+          "new_visitor_uv": 84,
+          "shop_buy_uv": 8,
+          "shop_total_gmv": 307.19,
+          "task_item_gmv": 96.18,
+          "in_cpuv": 34.8,
+          "new_cust_rate": "69%"
+        },
+        {
+          "date": "9月21日",
+          "fs_spend": 4114.87,
+          "search_exp_uv": 63,
+          "search_in_uv": 46,
+          "note_in_uv": 62,
+          "new_visitor_uv": 26,
+          "shop_buy_uv": 3,
+          "shop_total_gmv": 138.83,
+          "task_item_gmv": 9.4,
+          "in_cpuv": 66.37,
+          "new_cust_rate": "42%"
+        },
+        {
+          "date": "9月22日",
+          "fs_spend": 4955.18,
+          "search_exp_uv": 101,
+          "search_in_uv": 58,
+          "note_in_uv": 99,
+          "new_visitor_uv": 46,
+          "shop_buy_uv": 13,
+          "shop_total_gmv": 1239.3,
+          "task_item_gmv": 241.86,
+          "in_cpuv": 50.05,
+          "new_cust_rate": "46%"
+        },
+        {
+          "date": "9月23日",
+          "fs_spend": 4811.72,
+          "search_exp_uv": 178,
+          "search_in_uv": 137,
+          "note_in_uv": 181,
+          "new_visitor_uv": 113,
+          "shop_buy_uv": 10,
+          "shop_total_gmv": 311.16,
+          "task_item_gmv": 25.72,
+          "in_cpuv": 26.58,
+          "new_cust_rate": "62%"
+        },
+        {
+          "date": "9月24日",
+          "fs_spend": 4949.41,
+          "search_exp_uv": 135,
+          "search_in_uv": 65,
+          "note_in_uv": 112,
+          "new_visitor_uv": 51,
+          "shop_buy_uv": 14,
+          "shop_total_gmv": 476.83,
+          "task_item_gmv": 82.86,
+          "in_cpuv": 44.19,
+          "new_cust_rate": "46%"
+        },
+        {
+          "date": "9月25日",
+          "fs_spend": 3500.6,
+          "search_exp_uv": 145,
+          "search_in_uv": 77,
+          "note_in_uv": 144,
+          "new_visitor_uv": 97,
+          "shop_buy_uv": 8,
+          "shop_total_gmv": 215.83,
+          "task_item_gmv": 0.0,
+          "in_cpuv": 24.31,
+          "new_cust_rate": "67%"
+        },
+        {
+          "date": "9月26日",
+          "fs_spend": 3367.38,
+          "search_exp_uv": 184,
+          "search_in_uv": 47,
+          "note_in_uv": 123,
+          "new_visitor_uv": 72,
+          "shop_buy_uv": 22,
+          "shop_total_gmv": 1256.17,
+          "task_item_gmv": 215.5,
+          "in_cpuv": 27.38,
+          "new_cust_rate": "59%"
+        },
+        {
+          "date": "9月27日",
+          "fs_spend": 3341.39,
+          "search_exp_uv": 241,
+          "search_in_uv": 79,
+          "note_in_uv": 171,
+          "new_visitor_uv": 115,
+          "shop_buy_uv": 22,
+          "shop_total_gmv": 2722.77,
+          "task_item_gmv": 241.48,
+          "in_cpuv": 19.54,
+          "new_cust_rate": "67%"
+        },
+        {
+          "date": "9月28日",
+          "fs_spend": 3821.06,
+          "search_exp_uv": 319,
+          "search_in_uv": 164,
+          "note_in_uv": 285,
+          "new_visitor_uv": 199,
+          "shop_buy_uv": 12,
+          "shop_total_gmv": 475.87,
+          "task_item_gmv": 98.34,
+          "in_cpuv": 13.41,
+          "new_cust_rate": "70%"
+        },
+        {
+          "date": "9月29日",
+          "fs_spend": 3088.53,
+          "search_exp_uv": 311,
+          "search_in_uv": 151,
+          "note_in_uv": 305,
+          "new_visitor_uv": 194,
+          "shop_buy_uv": 21,
+          "shop_total_gmv": 430.72,
+          "task_item_gmv": 37.2,
+          "in_cpuv": 10.13,
+          "new_cust_rate": "64%"
+        },
+        {
+          "date": "9月30日",
+          "fs_spend": 3149.31,
+          "search_exp_uv": 270,
+          "search_in_uv": 103,
+          "note_in_uv": 268,
+          "new_visitor_uv": 147,
+          "shop_buy_uv": 17,
+          "shop_total_gmv": 874.52,
+          "task_item_gmv": 178.88,
+          "in_cpuv": 11.75,
+          "new_cust_rate": "55%"
+        },
+        {
+          "date": "10月1日",
+          "fs_spend": 3358.96,
+          "search_exp_uv": 293,
+          "search_in_uv": 117,
+          "note_in_uv": 276,
+          "new_visitor_uv": 155,
+          "shop_buy_uv": 19,
+          "shop_total_gmv": 1553.74,
+          "task_item_gmv": 18.4,
+          "in_cpuv": 12.17,
+          "new_cust_rate": "56%"
+        },
+        {
+          "date": "10月2日",
+          "fs_spend": 3510.72,
+          "search_exp_uv": 295,
+          "search_in_uv": 121,
+          "note_in_uv": 310,
+          "new_visitor_uv": 180,
+          "shop_buy_uv": 34,
+          "shop_total_gmv": 1012.07,
+          "task_item_gmv": 310.9,
+          "in_cpuv": 11.32,
+          "new_cust_rate": "58%"
+        },
+        {
+          "date": "10月3日",
+          "fs_spend": 3507.04,
+          "search_exp_uv": 322,
+          "search_in_uv": 155,
+          "note_in_uv": 347,
+          "new_visitor_uv": 235,
+          "shop_buy_uv": 22,
+          "shop_total_gmv": 739.11,
+          "task_item_gmv": 67.3,
+          "in_cpuv": 10.11,
+          "new_cust_rate": "68%"
+        },
+        {
+          "date": "10月4日",
+          "fs_spend": 3510.39,
+          "search_exp_uv": 279,
+          "search_in_uv": 85,
+          "note_in_uv": 271,
+          "new_visitor_uv": 169,
+          "shop_buy_uv": 22,
+          "shop_total_gmv": 739.11,
+          "task_item_gmv": 67.3,
+          "in_cpuv": 12.95,
+          "new_cust_rate": "62%"
+        },
+        {
+          "date": "10月5日",
+          "fs_spend": 3285.65,
+          "search_exp_uv": 305,
+          "search_in_uv": 79,
+          "note_in_uv": 244,
+          "new_visitor_uv": 154,
+          "shop_buy_uv": 24,
+          "shop_total_gmv": 981.12,
+          "task_item_gmv": 28.7,
+          "in_cpuv": 13.47,
+          "new_cust_rate": "63%"
+        },
+        {
+          "date": "10月6日",
+          "fs_spend": 3285.65,
+          "search_exp_uv": 418,
+          "search_in_uv": 157,
+          "note_in_uv": 375,
+          "new_visitor_uv": 240,
+          "shop_buy_uv": 45,
+          "shop_total_gmv": 1492.95,
+          "task_item_gmv": 513.61,
+          "in_cpuv": 8.76,
+          "new_cust_rate": "64%"
+        },
+        {
+          "date": "10月7日",
+          "fs_spend": 3506.0,
+          "search_exp_uv": 530,
+          "search_in_uv": 188,
+          "note_in_uv": 453,
+          "new_visitor_uv": 286,
+          "shop_buy_uv": 73,
+          "shop_total_gmv": 4386.92,
+          "task_item_gmv": 810.47,
+          "in_cpuv": 7.74,
+          "new_cust_rate": "63%"
+        },
+        {
+          "date": "10月8日",
+          "fs_spend": 4957.0,
+          "search_exp_uv": 653,
+          "search_in_uv": 219,
+          "note_in_uv": 510,
+          "new_visitor_uv": 317,
+          "shop_buy_uv": 110,
+          "shop_total_gmv": 7610.96,
+          "task_item_gmv": 613.53,
+          "in_cpuv": 9.72,
+          "new_cust_rate": "62%"
+        },
+        {
+          "date": "10月9日",
+          "fs_spend": 5012.0,
+          "search_exp_uv": 792,
+          "search_in_uv": 285,
+          "note_in_uv": 620,
+          "new_visitor_uv": 397,
+          "shop_buy_uv": 115,
+          "shop_total_gmv": 8320.34,
+          "task_item_gmv": 1066.02,
+          "in_cpuv": 8.08,
+          "new_cust_rate": "64%"
+        },
+        {
+          "date": "10月10日",
+          "fs_spend": 4850.8,
+          "search_exp_uv": 617,
+          "search_in_uv": 208,
+          "note_in_uv": 540,
+          "new_visitor_uv": 330,
+          "shop_buy_uv": 70,
+          "shop_total_gmv": 4775.53,
+          "task_item_gmv": 694.86,
+          "in_cpuv": 8.98,
+          "new_cust_rate": "61%"
+        },
+        {
+          "date": "10月11日",
+          "fs_spend": 5732.0,
+          "search_exp_uv": 692,
+          "search_in_uv": 252,
+          "note_in_uv": 580,
+          "new_visitor_uv": 345,
+          "shop_buy_uv": 80,
+          "shop_total_gmv": 4123.46,
+          "task_item_gmv": 669.26,
+          "in_cpuv": 9.88,
+          "new_cust_rate": "59%"
+        },
+        {
+          "date": "10月12日",
+          "fs_spend": 6905.0,
+          "search_exp_uv": 816,
+          "search_in_uv": 294,
+          "note_in_uv": 724,
+          "new_visitor_uv": 456,
+          "shop_buy_uv": 76,
+          "shop_total_gmv": 6785.04,
+          "task_item_gmv": 416.36,
+          "in_cpuv": 9.54,
+          "new_cust_rate": "63%"
+        },
+        {
+          "date": "10月13日",
+          "fs_spend": 9451.0,
+          "search_exp_uv": 835,
+          "search_in_uv": 247,
+          "note_in_uv": 663,
+          "new_visitor_uv": 364,
+          "shop_buy_uv": 72,
+          "shop_total_gmv": 2934.47,
+          "task_item_gmv": 314.23,
+          "in_cpuv": 14.25,
+          "new_cust_rate": "55%"
+        },
+        {
+          "date": "10月14日",
+          "fs_spend": 7424.0,
+          "search_exp_uv": 836,
+          "search_in_uv": 239,
+          "note_in_uv": 699,
+          "new_visitor_uv": 364,
+          "shop_buy_uv": 54,
+          "shop_total_gmv": 2104.86,
+          "task_item_gmv": 269.86,
+          "in_cpuv": 10.62,
+          "new_cust_rate": "52%"
+        },
+        {
+          "date": "10月15日",
+          "fs_spend": 10010.0,
+          "search_exp_uv": 884,
+          "search_in_uv": 224,
+          "note_in_uv": 839,
+          "new_visitor_uv": 438,
+          "shop_buy_uv": 82,
+          "shop_total_gmv": 5250.94,
+          "task_item_gmv": 165.95,
+          "in_cpuv": 11.93,
+          "new_cust_rate": "52%"
+        },
+        {
+          "date": "10月16日",
+          "fs_spend": 11744.0,
+          "search_exp_uv": 924,
+          "search_in_uv": 275,
+          "note_in_uv": 803,
+          "new_visitor_uv": 474,
+          "shop_buy_uv": 69,
+          "shop_total_gmv": 4969.9,
+          "task_item_gmv": 626.17,
+          "in_cpuv": 14.63,
+          "new_cust_rate": "59%"
+        },
+        {
+          "date": "10月17日",
+          "fs_spend": 11692.0,
+          "search_exp_uv": 972,
+          "search_in_uv": 264,
+          "note_in_uv": 889,
+          "new_visitor_uv": 497,
+          "shop_buy_uv": 74,
+          "shop_total_gmv": 3607.63,
+          "task_item_gmv": 261.03,
+          "in_cpuv": 13.15,
+          "new_cust_rate": "56%"
+        },
+        {
+          "date": "10月18日",
+          "fs_spend": 13123.0,
+          "search_exp_uv": 1013,
+          "search_in_uv": 245,
+          "note_in_uv": 940,
+          "new_visitor_uv": 525,
+          "shop_buy_uv": 69,
+          "shop_total_gmv": 4265.21,
+          "task_item_gmv": 406.58,
+          "in_cpuv": 13.96,
+          "new_cust_rate": "56%"
+        }
+      ]
+    },
+    {
+      "id": "wipes-budget-dual-track-table",
+      "title": "项目预算双轨结构对照表（客户打款口径 vs 实际可消耗口径）",
+      "category": "budget",
+      "period": "源表未注明完整预算执行起止期（发布期至10/12，投流T-1更新）",
+      "sourceId": "wipes-sheets-ipt5gi",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=iPT5gI",
+      "note": "严格区分客户打款预算(¥500,000.00，已消耗¥358,645.67，进度71.73%)与实际可消耗预算(¥548,587.63，已消耗¥397,851.98，进度72.52%)。14,200元为此前投放规划中的单日预算上限基准，非累计预算；源表发布追踪截止10/12，投流截止未标。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "track",
+          "title": "预算核算口径",
+          "type": "badge"
+        },
+        {
+          "key": "category",
+          "title": "费用类目",
+          "type": "string"
+        },
+        {
+          "key": "budget",
+          "title": "规划预算(元)",
+          "type": "currency"
+        },
+        {
+          "key": "spent",
+          "title": "已消耗预算(元)",
+          "type": "currency"
+        },
+        {
+          "key": "spentRate",
+          "title": "消耗进度",
+          "type": "percent"
+        },
+        {
+          "key": "remaining",
+          "title": "剩余预算(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "track": "客户打款口径",
+          "category": "K端达人采买",
+          "budget": 195200.0,
+          "spent": 188049.64,
+          "spentRate": "96.34%",
+          "remaining": 7150.36
+        },
+        {
+          "track": "客户打款口径",
+          "category": "产品购买(样品)",
+          "budget": 4800.0,
+          "spent": 3623.03,
+          "spentRate": "75.48%",
+          "remaining": 1176.97
+        },
+        {
+          "track": "客户打款口径",
+          "category": "聚光投流(FS现金)",
+          "budget": 296773.72,
+          "spent": 165146.58,
+          "spentRate": "55.65%",
+          "remaining": 131627.14
+        },
+        {
+          "track": "客户打款口径",
+          "category": "投流服务费1%(小红星+CID)",
+          "budget": 3226.28,
+          "spent": 1826.42,
+          "spentRate": "56.61%",
+          "remaining": 1399.86
+        },
+        {
+          "track": "客户打款口径",
+          "category": "打款总计",
+          "budget": 500000.0,
+          "spent": 358645.67,
+          "spentRate": "71.73%",
+          "remaining": 141354.33
+        },
+        {
+          "track": "实际可消耗口径",
+          "category": "K端达人采买",
+          "budget": 220045.74,
+          "spent": 212895.38,
+          "spentRate": "96.75%",
+          "remaining": 7150.36
+        },
+        {
+          "track": "实际可消耗口径",
+          "category": "产品购买(样品)",
+          "budget": 4800.0,
+          "spent": 3623.03,
+          "spentRate": "75.48%",
+          "remaining": 1176.97
+        },
+        {
+          "track": "实际可消耗口径",
+          "category": "聚光投流(FS现金)",
+          "budget": 320515.62,
+          "spent": 179507.15,
+          "spentRate": "56.01%",
+          "remaining": 141008.47
+        },
+        {
+          "track": "实际可消耗口径",
+          "category": "投流服务费1%(小红星+CID)",
+          "budget": 3226.28,
+          "spent": 1826.42,
+          "spentRate": "56.61%",
+          "remaining": 1399.86
+        },
+        {
+          "track": "实际可消耗口径",
+          "category": "实际可消耗总计",
+          "budget": 548587.63,
+          "spent": 397851.98,
+          "spentRate": "72.52%",
+          "remaining": 150735.66
+        }
+      ]
+    },
+    {
+      "id": "wipes-cid-full-attribution-table",
+      "title": "CID跨端引流与10位创作者组件成交明细表",
+      "category": "performance",
+      "period": "2026/10/16~2026/10/19",
+      "sourceId": "wipes-sheets-ywbwx9-tiermz",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=yWBwx9",
+      "note": "CID明细底表与汇总（yWBwx9/tiermz）。涵盖10位达人10/16~10/19试跑明细。当前仅宸妈妈录得1笔成交订单(成交GMV ¥25.55，ROI 0.0404)，其余达人订单量为0且GMV为0.00，处于前端引流测试阶段。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "creator",
+          "title": "创作者",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "title": "CID总消耗(元)",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "component_clicks",
+          "title": "组件点击量",
+          "type": "number"
+        },
+        {
+          "key": "cost_per_component_click",
+          "title": "组件点击成本(元)",
+          "type": "currency"
+        },
+        {
+          "key": "orders_30d",
+          "title": "30日成交订单量",
+          "type": "number"
+        },
+        {
+          "key": "gmv_30d",
+          "title": "30日成交GMV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "roi_30d",
+          "title": "30日ROI",
+          "type": "number"
+        }
+      ],
+      "rows": [
+        {
+          "creator": "柚柚&果果(龙凤胎)",
+          "spend": 639.38,
+          "impressions": 2662,
+          "clicks": 32,
+          "component_clicks": 23,
+          "cost_per_component_click": 27.8,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "宸妈妈",
+          "spend": 632.15,
+          "impressions": 5923,
+          "clicks": 188,
+          "component_clicks": 34,
+          "cost_per_component_click": 18.59,
+          "orders_30d": 1,
+          "gmv_30d": 25.55,
+          "roi_30d": 0.0404
+        },
+        {
+          "creator": "我是小雪呀（哺乳期）",
+          "spend": 627.19,
+          "impressions": 3592,
+          "clicks": 51,
+          "component_clicks": 22,
+          "cost_per_component_click": 28.51,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "马可菠萝派",
+          "spend": 363.31,
+          "impressions": 1555,
+          "clicks": 78,
+          "component_clicks": 9,
+          "cost_per_component_click": 40.37,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "刘慧教授说健康",
+          "spend": 240.75,
+          "impressions": 2108,
+          "clicks": 51,
+          "component_clicks": 5,
+          "cost_per_component_click": 48.15,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "浠浠敲可爱",
+          "spend": 183.87,
+          "impressions": 807,
+          "clicks": 15,
+          "component_clicks": 8,
+          "cost_per_component_click": 22.98,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "养个小土豆",
+          "spend": 93.66,
+          "impressions": 979,
+          "clicks": 8,
+          "component_clicks": 3,
+          "cost_per_component_click": 31.22,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "硕士妈妈黄慧(测评版)",
+          "spend": 52.92,
+          "impressions": 261,
+          "clicks": 6,
+          "component_clicks": 1,
+          "cost_per_component_click": 52.92,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "灿宝日记-",
+          "spend": 26.17,
+          "impressions": 170,
+          "clicks": 7,
+          "component_clicks": 0,
+          "cost_per_component_click": null,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        },
+        {
+          "creator": "小糖果",
+          "spend": 21.77,
+          "impressions": 402,
+          "clicks": 4,
+          "component_clicks": 0,
+          "cost_per_component_click": null,
+          "orders_30d": 0,
+          "gmv_30d": 0.0,
+          "roi_30d": 0.0
+        }
+      ]
+    },
+    {
+      "id": "wipes-weekly-sprint-table",
+      "title": "投放阶段周度Sprint转化效率对比表 (5期周汇总)",
+      "category": "performance",
+      "period": "2026/09/16~2026/10/19 (第5期源表标题为10/13-10/29规划，实际数据核验截止10/19共7天)",
+      "sourceId": "wipes-sheets-0qtvhe",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=0QTVhE",
+      "note": "来自By day子表右侧BY周数据情况汇总。第5期行标为10/13-10/29规划窗口，但数值76,963.75经核对逐日数据实际为10/13~10/19共7天累计消耗，严禁以17天算日均！小红星站外活跃UV为各阶段周期归因活跃人数，各周人群存在重叠，不可跨周直接相加去重。第3周(9/29~10/5)国庆前期CPUV达阶段最优¥4.29。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "sourcePeriod",
+          "title": "源表期标",
+          "type": "badge"
+        },
+        {
+          "key": "actualObservedPeriod",
+          "title": "实际核算期",
+          "type": "string"
+        },
+        {
+          "key": "observedDays",
+          "title": "实际天数",
+          "type": "number"
+        },
+        {
+          "key": "spend",
+          "title": "实际消耗(元)",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "interactions",
+          "title": "互动量",
+          "type": "number"
+        },
+        {
+          "key": "uv_30d",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "dailySpendAvg",
+          "title": "日均消耗(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "sourcePeriod": "9/16-9/21",
+          "actualObservedPeriod": "9/16-9/21",
+          "observedDays": 6,
+          "spend": 15268.71,
+          "impressions": 224045,
+          "interactions": 515,
+          "uv_30d": 542,
+          "cpm": 68.15,
+          "cpe": 29.88,
+          "cpuv": 28.17,
+          "dailySpendAvg": 2544.79
+        },
+        {
+          "sourcePeriod": "9/22-9/28",
+          "actualObservedPeriod": "9/22-9/28",
+          "observedDays": 7,
+          "spend": 28746.74,
+          "impressions": 449453,
+          "interactions": 1111,
+          "uv_30d": 3468,
+          "cpm": 63.96,
+          "cpe": 25.87,
+          "cpuv": 8.29,
+          "dailySpendAvg": 4106.68
+        },
+        {
+          "sourcePeriod": "9/29-10/5",
+          "actualObservedPeriod": "9/29-10/5",
+          "observedDays": 7,
+          "spend": 23410.6,
+          "impressions": 350555,
+          "interactions": 3325,
+          "uv_30d": 5452,
+          "cpm": 66.78,
+          "cpe": 7.04,
+          "cpuv": 4.29,
+          "dailySpendAvg": 3344.37
+        },
+        {
+          "sourcePeriod": "10/6-10/12",
+          "actualObservedPeriod": "10/6-10/12",
+          "observedDays": 7,
+          "spend": 34477.75,
+          "impressions": 353977,
+          "interactions": 5996,
+          "uv_30d": 764,
+          "cpm": 97.4,
+          "cpe": 5.75,
+          "cpuv": 45.13,
+          "dailySpendAvg": 4925.39
+        },
+        {
+          "sourcePeriod": "10/13-10/29",
+          "actualObservedPeriod": "10/13-10/19",
+          "observedDays": 7,
+          "plannedSprintDays": 17,
+          "spend": 76963.75,
+          "impressions": 478072,
+          "interactions": 8769,
+          "uv_30d": 5345,
+          "cpm": 160.99,
+          "cpe": 8.78,
+          "cpuv": 14.4,
+          "dailySpendAvg": 10994.82,
+          "note": "源表行标为10/13-10/29规划窗口，但数值76,963.75经核验为10/13~10/19共7天实际消费加总，严禁以17天算日均！"
+        }
+      ]
+    },
+    {
+      "id": "wipes-channel-structure-table",
+      "title": "项目全渠道实际花费结构汇总表 (K/F/S/CID与淘搜总和)",
+      "category": "budget",
+      "period": "2026/09/14~2026/10/19",
+      "sourceId": "wipes-sheets-wy1hzo",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=wY1HZO",
+      "note": "淘搜子表第1行总计真实数据映射。覆盖K端达人费¥188,049.64、F端信息流¥132,134.39、S端搜索推广¥46,733.16、CID端¥2,881.17，总消耗¥369,798.36，淘搜总指数9,375。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "channel",
+          "title": "投放渠道",
+          "type": "badge"
+        },
+        {
+          "key": "channelName",
+          "title": "渠道名称",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "title": "消耗金额(元)",
+          "type": "currency"
+        },
+        {
+          "key": "share",
+          "title": "花费占比",
+          "type": "percent"
+        },
+        {
+          "key": "role",
+          "title": "渠道战略角色",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "channel": "K",
+          "channelName": "达人采买 (KOL/KOC)",
+          "spend": 188049.64,
+          "share": "50.85%",
+          "role": "内容种草与心智建设基石"
+        },
+        {
+          "channel": "F",
+          "channelName": "信息流与视频内流 (Feeds)",
+          "spend": 132134.39,
+          "share": "35.73%",
+          "role": "规模化放大曝光与低成本引流"
+        },
+        {
+          "channel": "S",
+          "channelName": "搜索推广 (Search)",
+          "spend": 46733.16,
+          "share": "12.64%",
+          "role": "精准心智拦截与需求收口"
+        },
+        {
+          "channel": "CID",
+          "channelName": "跨端直连 (CID直跳电商)",
+          "spend": 2881.17,
+          "share": "0.78%",
+          "role": "高潜爆款直联淘宝成交探索"
+        },
+        {
+          "channel": "Total",
+          "channelName": "全渠道总消耗",
+          "spend": 369798.36,
+          "share": "100.00%",
+          "role": "全盘总计"
         }
       ]
     }

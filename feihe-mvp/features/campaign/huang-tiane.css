@@ -1,0 +1,279 @@
+/* Shared Qicui Palette Aligned Theme for Huang Tiane Campaign */
+:root {
+  --ht-primary: #2c7168;
+  --ht-purple: #8273a3;
+  --ht-gold: #b88a45;
+  --ht-terracotta: #bd7964;
+  --ht-slate: #8c9ba5;
+  --ht-warm-bg: #f6f5f2;
+  --ht-border: #e6e3dc;
+  --ht-text-dark: #1f2937;
+  --ht-text-muted: #64748b;
+}
+
+.ht-board {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: var(--ht-text-dark);
+}
+
+/* Header */
+.ht-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fbfaf8;
+  border: 1px solid var(--ht-border);
+  border-radius: 8px;
+}
+
+.ht-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ht-header-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ht-text-dark);
+  letter-spacing: -0.01em;
+}
+
+.ht-header-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #edebe6;
+  color: var(--ht-text-dark);
+}
+
+.ht-header-meta {
+  font-size: 12px;
+  color: var(--ht-text-muted);
+  font-family: inherit;
+}
+
+/* Layout Grid */
+.ht-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .ht-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Notice Banner */
+.ht-notice {
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #f8f7f5;
+  border: 1px solid var(--ht-border);
+  color: var(--ht-text-muted);
+}
+
+/* Tri-Stage Progress Card */
+.ht-tri-stage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: #fafaf9;
+  border-radius: 6px;
+  border: 1px solid var(--ht-border);
+}
+
+.ht-stage-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ht-stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.ht-stage-name {
+  font-weight: 600;
+  color: var(--ht-text-dark);
+}
+
+.ht-stage-counts {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--ht-primary);
+  font-weight: 500;
+}
+
+.ht-stage-track {
+  height: 8px;
+  border-radius: 4px;
+  background: #e7e5e4;
+  overflow: hidden;
+}
+
+.ht-stage-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.ht-stage-fill-1 {
+  background: var(--ht-primary);
+}
+
+.ht-stage-fill-2 {
+  background: var(--ht-gold);
+}
+
+.ht-stage-fill-3 {
+  background: var(--ht-purple);
+}
+
+/* Scope Tabs */
+.ht-scope-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid var(--ht-border);
+  padding-bottom: 4px;
+}
+
+.ht-scope-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ht-text-muted);
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.2s ease;
+}
+
+.ht-scope-tab-btn:hover {
+  color: var(--ht-text-dark);
+  background: #f1efeb;
+}
+
+.ht-scope-tab-btn.active {
+  color: var(--ht-primary);
+  background: #edebe6;
+  border-bottom: 2px solid var(--ht-primary);
+}
+
+/* Collapsible Section */
+.ht-collapse-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #fafaf9;
+  border: 1px solid var(--ht-border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ht-text-dark);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ht-collapse-toggle:hover {
+  background: #f5f5f4;
+}
+
+.ht-collapse-icon {
+  font-size: 12px;
+  color: var(--ht-text-muted);
+}
+
+.ht-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 8px;
+  border: 1px solid var(--ht-border);
+  border-radius: 6px;
+}
+
+.ht-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.ht-table th {
+  background: #f5f3ef;
+  color: var(--ht-text-dark);
+  font-weight: 500;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--ht-border);
+  white-space: nowrap;
+}
+
+.ht-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f5f5f4;
+  color: var(--ht-text-dark);
+  white-space: nowrap;
+}
+
+.ht-table tr:hover td {
+  background: #fcfbf9;
+}
+
+.ht-badge-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ht-badge-published {
+  background: #e8f3ee;
+  color: #2c7168;
+}
+
+.ht-badge-shooting {
+  background: #f7ede3;
+  color: #b88a45;
+}
+
+.ht-badge-script {
+  background: #f0edf6;
+  color: #8273a3;
+}
+
+.ht-badge-review {
+  background: #f7ebe7;
+  color: #bd7964;
+}
+
+.ht-badge-collected {
+  background: #e8f3ee;
+  color: #2c7168;
+}
+
+.ht-badge-uncollected {
+  background: #f3f4f6;
+  color: #6b7280;
+}

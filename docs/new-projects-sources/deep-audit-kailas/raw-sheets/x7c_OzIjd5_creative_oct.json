@@ -1,0 +1,9 @@
+{
+  "token": "X7CasjHnThuFA2tPYuscN6NBnMf",
+  "sheet_id": "OzIjd5",
+  "actual_range": "A1:Z5",
+  "row_count": 5,
+  "col_count": 26,
+  "csv": "[row=1] 时间,创意名称,创意ID,笔记ID,笔记跳转链接,单元名称,单元ID,计划名称,计划ID,消费,展现量,点击量,点击率,平均点击成本,平均千次展示费用,互动量,平均互动成本,新增种草人群,新增种草人群成本,新增深度种草人群,新增深度种草人群成本,搜索组件点击量,搜索组件点击转化率,小红盟任务期消费,小红盟站外活跃行为UV(30日归因),小红盟站外活跃行为成本(30日归因)\n[row=2] 2026/10/1,Q4-信息流-互-垂/潮-多人群-图文-晒鞋ugc-tree,2664360687,68da3591000000000b03d875,https://www.xiaohongshu.com/explore/68da3591000000000b03d875?xsec_token=WBNoSyKf2lN7QSr9VcaIPl_9ijjM8DabIEcF5tXrbcOgw=&xsec_source=pc_wind_export,Q4-信息流-互-垂/潮-多人群-图文-晒鞋ugc-tree,403598475,Q4-信息流-互-垂/潮-多人群-图文-晒鞋ugc-tree,150299885,0,1,0,0.00%,0,0,0,0,0,0,0,0,0,0.00%,0,0,0\n[row=3] 2026/10/1,Chang,5006424331,6a197edf0000000038035fa7,https://www.xiaohongshu.com/explore/6a197edf0000000038035fa7?xsec_token=WB6RfJdJTZaiGBQiK-6FLXwBWMAQrZIzj_se0cDaV7h4Y=&xsec_source=pc_wind_export,6.3-黑山源色-信息流-种草/cpc-潮流人群-Chang-时髦人群∩徒步鞋i/ti,662118094,6.3-黑山源色-信息流-种草/cpc-潮流人群-Chang-时髦人群∩徒步鞋i/ti,200698382,0,1,0,0.00%,0,0,0,0,0,0,0,0,0,0.00%,0,0,0\n[row=4] 2026/10/1,Antiseptic_sam,5022620934,6a21205b000000003601ae45,https://www.xiaohongshu.com/explore/6a21205b000000003601ae45?xsec_token=WBYt6yUFAa6127K7dNuum9kz0iELTu4_AcW4F1_lKZpA4=&xsec_source=pc_wind_export,6.4-黑山-信息流-种草/cpc-潮流人群-Antiseptic_sam-文艺时髦精∩徒步鞋ti,664007861,6.4-黑山-信息流-种草/cpc-潮流人群-Antiseptic_sam-文艺时髦精∩徒步鞋ti,201113845,0,1,0,0.00%,0,0,0,0,0,0,0,0,0,0.00%,0,0,0\n[row=5] 2026/10/1,郭锅丸,5271211128,6a26af0e000000000702e6e9,https://www.xiaohongshu.com/explore/6a26af0e000000000702e6e9?xsec_token=WBk3DY8kUzrSE413rRZiDUE8atZHHcj5RWvehkVtAtgnA=&xsec_source=pc_wind_export,6.23-黑山-信息流-种草/ti-15篇-运动焕活-自我超越者∩时尚态度,688029190,6.23-黑山-信息流-种草/ti-15篇-运动焕活-自我超越者∩时尚态度,205216530,0.32,12,1,8.33%,0.32,26.67,0,0,1,0.32,1,0.32,0,0.00%,0,0,0",
+  "sample_note": "Sampled top 5 rows for raw transaction log schema audit"
+}

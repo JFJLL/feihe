@@ -1,0 +1,264 @@
+/* ==========================================================================
+   WipesRichInsights Styling - Design System Compliant
+   Colors: #2c7168 (Teal), #8273a3 (Purple), #b88a45 (Gold), #bd7964 (Terracotta)
+   ========================================================================== */
+
+.wipes-rich-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+/* Header & Notice */
+.wipes-rich-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: #fdfbf7;
+  border: 1px solid #ebd9c8;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #5c432d;
+}
+
+.wipes-rich-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.wipes-rich-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  background: #2c7168;
+  color: #ffffff;
+}
+
+.wipes-rich-notice {
+  font-size: 12px;
+  color: #7c624b;
+}
+
+/* Grid layouts */
+.wipes-rich-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.wipes-rich-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.wipes-rich-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 1024px) {
+  .wipes-rich-grid-2,
+  .wipes-rich-grid-3,
+  .wipes-rich-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* KPI Matrix Card */
+.wipes-kpi-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.wipes-kpi-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.wipes-kpi-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.wipes-kpi-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.wipes-kpi-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.wipes-kpi-badge.surpassed {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.wipes-kpi-badge.lagging {
+  background: #fce8e6;
+  color: #c5221f;
+}
+
+.wipes-kpi-badge.pending {
+  background: #f1f3f4;
+  color: #5f6368;
+}
+
+.wipes-kpi-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.wipes-kpi-actual {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.wipes-kpi-target {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.wipes-kpi-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.wipes-kpi-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.wipes-kpi-progress-fill.surpassed {
+  background: #2c7168;
+}
+
+.wipes-kpi-progress-fill.lagging {
+  background: #bd7964;
+}
+
+.wipes-kpi-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.wipes-kpi-note {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Highlight Info Card */
+.wipes-info-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wipes-info-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wipes-info-stat {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.wipes-info-desc {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Table Mini Visualizer */
+.wipes-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.wipes-summary-table th {
+  text-align: left;
+  padding: 8px 10px;
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.wipes-summary-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.wipes-summary-table tr:hover td {
+  background: #fafbfc;
+}
+
+/* SVG Pareto & Concentric Charts */
+.wipes-svg-chart {
+  width: 100%;
+  height: 240px;
+}
+
+/* Attribution Note Pill */
+.wipes-attribution-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #854d0e;
+  line-height: 1.5;
+}
+
+.wipes-attribution-callout strong {
+  color: #713f12;
+}

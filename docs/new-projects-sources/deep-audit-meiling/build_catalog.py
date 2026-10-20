@@ -1,0 +1,186 @@
+import json
+import os
+from datetime import datetime
+
+def main():
+    now = datetime.now().isoformat()
+    
+    catalog = {
+        "generated_at": now,
+        "project": "meiling",
+        "brand": "美菱冰箱 (Meiling Refrigerator)",
+        "status": "catalog_generated_deep_read_in_progress",
+        "access_audit": {
+            "domain": "https://yimeichuanbo.feishu.cn",
+            "accessible_nodes": [
+                {"type": "base", "token": "XH2obMhtwaPCWUsmsWacRCpLnvg", "title": "美菱冰箱小红书种草多维表", "status": "accessible"},
+                {"type": "wiki_sheet", "node_token": "DkdOwDEk0i9FTUkXlh1cTE0fnOd", "obj_token": "RoAtsw3KTh56ZBtT7cmcTYaznJb", "title": "美菱冰箱双11日报表 副本", "status": "accessible"},
+                {"type": "wiki_sheet", "node_token": "HNDCwmdpkiw4DgkFSNycB3cbnSc", "obj_token": "N2bssx2dBh8xyItaFEfccqaznHY", "title": "美菱冰箱kpi管理表 副本", "status": "accessible", "note": "接替无权限之RQff"},
+                {"type": "wiki_sheet", "node_token": "MMPZwhQbMiVmIKkcyb9c7mDQnHp", "obj_token": "XSKrspszhhgvPvtxMNicmYlUnEc", "title": "美菱冰箱618复盘数据 副本", "status": "accessible"},
+                {"type": "wiki_docx", "node_token": "UKPKwNHFdi9jk0kBaQKcuO3Anqf", "obj_token": "Ugwgd6lKzoURMWxXeJ3c4VzNnFc", "title": "美菱冰箱618小红书项目复盘", "status": "accessible"}
+            ],
+            "inaccessible_nodes": [
+                {
+                    "type": "wiki",
+                    "node_token": "RQffw002Aik9aNkW9PScJ05knre",
+                    "status": "permission_denied",
+                    "code": 131006,
+                    "message": "user lacks permission for the requested resource",
+                    "resolution": "已由后补副本 wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc (美菱冰箱kpi管理表 副本) 100% 替代"
+                }
+            ]
+        },
+        "base_inventory": {
+            "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+            "title": "美菱冰箱小红书种草多维表",
+            "tables_count": 12,
+            "tables": [
+                {"table_id": "tbluz50zuZOeGQWf", "name": "双11 KOL进度表", "records_count": 1096, "campaign": "双11", "role": "双11达人全生命周期主表（117确认达人/已发布/各阶段执行）", "read_status": "pending_deep_read"},
+                {"table_id": "tblOYMiuP5hTjxbN", "name": "双11供图进度表", "records_count": 6, "campaign": "双11", "role": "双11供图/素材协作进度", "read_status": "pending_deep_read"},
+                {"table_id": "tblotoaoy40ShO5k", "name": "双11 样机信息表", "records_count": 84, "campaign": "双11", "role": "样机寄送/型号/产品流转", "read_status": "pending_deep_read"},
+                {"table_id": "tblQvZjfvg0TfgSy", "name": "双11 产品匹配规则", "records_count": 13, "campaign": "双11", "role": "核心SPU与卖点/价格/标签匹配机制", "read_status": "pending_deep_read"},
+                {"table_id": "tblzT0CPHCNgzhtS", "name": "7-8月KOL进度表", "records_count": 538, "campaign": "7-8月", "role": "历史7-8月达人排期", "read_status": "pending_deep_read"},
+                {"table_id": "tblohi0dmMCuJ4wm", "name": "7-8月KOC(供图)进度表", "records_count": 113, "campaign": "7-8月", "role": "历史7-8月KOC供图进度", "read_status": "pending_deep_read"},
+                {"table_id": "tbltCR6P2mQIidsd", "name": "7-8月样机信息表", "records_count": 52, "campaign": "7-8月", "role": "历史7-8月样机记录", "read_status": "pending_deep_read"},
+                {"table_id": "tblEE8G56GSpngf1", "name": "7-8月产品匹配规则", "records_count": 9, "campaign": "7-8月", "role": "历史7-8月产品匹配规则", "read_status": "pending_deep_read"},
+                {"table_id": "tbluFs8VE8cmajTm", "name": "618KOL进度表", "records_count": 515, "campaign": "618", "role": "历史618达人排期进度", "read_status": "pending_deep_read"},
+                {"table_id": "tblxEoETSU6uBBSN", "name": "618KOC(供图)进度表", "records_count": 221, "campaign": "618", "role": "历史618 KOC供图进度", "read_status": "pending_deep_read"},
+                {"table_id": "tblObq4NnsHMFT2t", "name": "618样机信息表", "records_count": 59, "campaign": "618", "role": "历史618样机记录", "read_status": "pending_deep_read"},
+                {"table_id": "tblnAwGAiAAMNu2z", "name": "618产品匹配规则", "records_count": 8, "campaign": "618", "role": "历史618产品匹配规则", "read_status": "pending_deep_read"}
+            ]
+        },
+        "workbooks_inventory": [
+            {
+                "name": "DkdO_double11_daily",
+                "spreadsheet_token": "RoAtsw3KTh56ZBtT7cmcTYaznJb",
+                "wiki_token": "DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+                "title": "美菱冰箱双11日报表 副本",
+                "campaign": "2026年双11（执行中）",
+                "sheets_count": 35,
+                "sheets": [
+                    {"sheet_id": "smsJa2", "sheet_name": "byday汇总数据", "row_count": 143, "column_count": 22, "is_hidden": False, "role": "历史多周期汇总（618/7-8月/双11分区切片）", "read_status": "pending_deep_read"},
+                    {"sheet_id": "hKnPdA", "sheet_name": "笔记数据", "row_count": 602, "column_count": 296, "is_hidden": True, "role": "【新矿】双11笔记级全维度明细（互动/阅读/曝光/留资/投放）", "read_status": "pending_deep_read"},
+                    {"sheet_id": "7pkBrd", "sheet_name": "城市数据", "row_count": 733, "column_count": 103, "is_hidden": True, "role": "【新矿】人群城市线级与地域渗透分布", "read_status": "pending_deep_read"},
+                    {"sheet_id": "NFsNpI", "sheet_name": "年龄分布", "row_count": 352, "column_count": 20, "is_hidden": True, "role": "【新矿】人群年龄画像分布", "read_status": "pending_deep_read"},
+                    {"sheet_id": "T7XdCM", "sheet_name": "地域数据源", "row_count": 2, "column_count": 24, "is_hidden": True, "role": "地域透视源配置", "read_status": "pending_deep_read"},
+                    {"sheet_id": "y8B3mE", "sheet_name": "年龄数据源", "row_count": 2, "column_count": 24, "is_hidden": True, "role": "年龄透视源配置", "read_status": "pending_deep_read"},
+                    {"sheet_id": "hk9XgJ", "sheet_name": "日报", "row_count": 200, "column_count": 20, "is_hidden": True, "role": "日报摘要视图", "read_status": "pending_deep_read"},
+                    {"sheet_id": "m9zUdJ", "sheet_name": "数据分析草稿页", "row_count": 458, "column_count": 109, "is_hidden": True, "role": "分析草稿与临时计算", "read_status": "pending_deep_read"},
+                    {"sheet_id": "BZjmuN", "sheet_name": "自采&代采数据汇总", "row_count": 208, "column_count": 30, "is_hidden": False, "role": "自采 vs 代采渠道汇总比对", "read_status": "pending_deep_read"},
+                    {"sheet_id": "iautvs", "sheet_name": "日-投放数据（自采天猫种草)", "row_count": 592, "column_count": 286, "is_hidden": False, "role": "天猫自采分日透视表（消耗/曝光/点击/CTR/CPC）", "read_status": "pending_deep_read"},
+                    {"sheet_id": "0Ng4EP", "sheet_name": "定向人群（自采天猫种草）", "row_count": 578, "column_count": 287, "is_hidden": True, "role": "【新矿】天猫种草定向人群包效果明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "xKvzRm", "sheet_name": "日-投放数据（自采红猫cid）", "row_count": 601, "column_count": 287, "is_hidden": False, "role": "红猫CID自采分日透视表（外溢GMV/订单/ROI）", "read_status": "pending_deep_read"},
+                    {"sheet_id": "HGgP2Z", "sheet_name": "定向人群（自采红猫cid）", "row_count": 578, "column_count": 287, "is_hidden": True, "role": "【新矿】红猫CID定向人群包效果明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "B5TBE7", "sheet_name": "日-投放数据（自采京东种草)", "row_count": 592, "column_count": 286, "is_hidden": False, "role": "京东自采分日透视表（消耗/曝光/点击/CTR/CPC）", "read_status": "pending_deep_read"},
+                    {"sheet_id": "TBQTUR", "sheet_name": "定向人群（自采京东种草）", "row_count": 578, "column_count": 287, "is_hidden": True, "role": "【新矿】京东种草定向人群包效果明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "nOJsYT", "sheet_name": "日-投放数据（自采红京cid）", "row_count": 601, "column_count": 287, "is_hidden": False, "role": "红京CID自采分日透视表（外溢GMV/订单/ROI）", "read_status": "pending_deep_read"},
+                    {"sheet_id": "YnkjWX", "sheet_name": "定向人群（自采红京cid）", "row_count": 578, "column_count": 287, "is_hidden": True, "role": "【新矿】红京CID定向人群包效果明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "7gf6nq", "sheet_name": "日-投放数据（代采星伴种草)", "row_count": 592, "column_count": 286, "is_hidden": False, "role": "代采星伴种草分日透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "7vfv8y", "sheet_name": "日-投放数据（uds）", "row_count": 601, "column_count": 287, "is_hidden": False, "role": "阿里UDS回传分日透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "O5TsXZ", "sheet_name": "日-投放数据（代付京东种草)", "row_count": 592, "column_count": 286, "is_hidden": False, "role": "代付京东种草分日透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "TLLRoo", "sheet_name": "日-投放数据（对投京东种草)", "row_count": 592, "column_count": 286, "is_hidden": False, "role": "京东对投种草分日透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "w0oPX1", "sheet_name": "日-投放数据（jds）", "row_count": 601, "column_count": 287, "is_hidden": False, "role": "京东JDS回传分日透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "Trvrou", "sheet_name": "日-投放数据（京东对投cid）", "row_count": 601, "column_count": 287, "is_hidden": False, "role": "京东对投CID真实消耗与ROI汇总", "read_status": "pending_deep_read"},
+                    {"sheet_id": "D9ddm3", "sheet_name": "（自采天猫种草）数据源", "row_count": 7632, "column_count": 28, "is_hidden": False, "role": "天猫自采底层颗粒明细数据", "read_status": "pending_deep_read"},
+                    {"sheet_id": "FpcDvG", "sheet_name": "（自采红猫cid）数据源", "row_count": 17933, "column_count": 29, "is_hidden": False, "role": "红猫CID底层颗粒明细数据", "read_status": "pending_deep_read"},
+                    {"sheet_id": "BI2xBs", "sheet_name": "（自采京东种草）数据源", "row_count": 14992, "column_count": 23, "is_hidden": False, "role": "京东自采底层颗粒明细数据", "read_status": "pending_deep_read"},
+                    {"sheet_id": "qTB7Td", "sheet_name": "（自采红京cid）数据源", "row_count": 23486, "column_count": 29, "is_hidden": False, "role": "红京CID底层颗粒明细数据", "read_status": "pending_deep_read"},
+                    {"sheet_id": "ACntPW", "sheet_name": "(代采星伴种草）数据源", "row_count": 2979, "column_count": 22, "is_hidden": False, "role": "代采星伴底层颗粒明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "Q6XGXp", "sheet_name": "uds数据源", "row_count": 3030, "column_count": 29, "is_hidden": False, "role": "UDS底层颗粒明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "DHweyP", "sheet_name": "（代付京东种草）数据源", "row_count": 13954, "column_count": 23, "is_hidden": False, "role": "代付京东底层颗粒明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "TxNNS6", "sheet_name": "JDS数据源", "row_count": 1415, "column_count": 25, "is_hidden": False, "role": "JDS底层颗粒明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "zF2qee", "sheet_name": "京东对投种草数据源", "row_count": 13954, "column_count": 22, "is_hidden": False, "role": "京东对投种草底层颗粒明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "E2KFmU", "sheet_name": "（京东对投cid）数据源", "row_count": 23485, "column_count": 29, "is_hidden": False, "role": "京东对投CID底层颗粒明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "mG2COI", "sheet_name": "笔记&词类", "row_count": 535, "column_count": 20, "is_hidden": False, "role": "【新矿】搜索词/关键词类型/笔记标签与分类匹配表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "Y7qNOu", "sheet_name": "打款", "row_count": 201, "column_count": 21, "is_hidden": False, "role": "【新矿】双11各渠道账户实际打款 vs 应消耗预算对照", "read_status": "pending_deep_read"}
+                ]
+            },
+            {
+                "name": "HNDC_kpi_mgmt",
+                "spreadsheet_token": "N2bssx2dBh8xyItaFEfccqaznHY",
+                "wiki_token": "HNDCwmdpkiw4DgkFSNycB3cbnSc",
+                "title": "美菱冰箱kpi管理表 副本",
+                "campaign": "跨周期KPI管理（双11/7-8月/618）",
+                "sheets_count": 11,
+                "sheets": [
+                    {"sheet_id": "1Km6lH", "sheet_name": "618达人数据明细", "row_count": 106, "column_count": 25, "is_hidden": True, "role": "618历史达人明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "ajEynU", "sheet_name": "618数据透视表", "row_count": 185, "column_count": 164, "is_hidden": True, "role": "618历史透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "fqh8ue", "sheet_name": "618数据更新用（勿动）", "row_count": 200, "column_count": 22, "is_hidden": True, "role": "618历史更新中间表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "4SGaOf", "sheet_name": "双11进度更新", "row_count": 200, "column_count": 20, "is_hidden": False, "role": "【新矿】双11大促目标KPI vs 实际完成进度表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "L986LN", "sheet_name": "7-8月kpi进度总览", "row_count": 198, "column_count": 29, "is_hidden": False, "role": "7-8月历史KPI进度总览", "read_status": "pending_deep_read"},
+                    {"sheet_id": "YDZeE4", "sheet_name": "数据透视表", "row_count": 200, "column_count": 20, "is_hidden": False, "role": "KPI透视表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "duEfmf", "sheet_name": "7-8月达人数据明细", "row_count": 200, "column_count": 27, "is_hidden": False, "role": "7-8月达人明细", "read_status": "pending_deep_read"},
+                    {"sheet_id": "oejbmv", "sheet_name": "7-8月数据更新用（勿动）", "row_count": 185, "column_count": 21, "is_hidden": False, "role": "7-8月更新中间表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "FkLCad", "sheet_name": "618kpi进度总览", "row_count": 197, "column_count": 28, "is_hidden": False, "role": "618复盘目标KPI vs 实际对照表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "5FDWQS", "sheet_name": "Sheet10", "row_count": 200, "column_count": 49, "is_hidden": False, "role": "辅助透视计算表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "SI0mQy", "sheet_name": "双11筛号进度透视表", "row_count": 201, "column_count": 98, "is_hidden": False, "role": "【新矿】双11达人筛号全生命周期漏斗与审核透视", "read_status": "pending_deep_read"}
+                ]
+            },
+            {
+                "name": "MMPZ_618_review",
+                "spreadsheet_token": "XSKrspszhhgvPvtxMNicmYlUnEc",
+                "wiki_token": "MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+                "title": "美菱冰箱618复盘数据 副本",
+                "campaign": "2026年618大促（已结案）",
+                "sheets_count": 5,
+                "sheets": [
+                    {"sheet_id": "4a19cf", "sheet_name": "数据汇总", "row_count": 199, "column_count": 34, "is_hidden": False, "role": "618结案全量105篇达人明细与财务ROI", "read_status": "pending_deep_read"},
+                    {"sheet_id": "sj1rpy", "sheet_name": "by笔记fs", "row_count": 140, "column_count": 10, "is_hidden": False, "role": "618按笔记粉丝与互动切片", "read_status": "pending_deep_read"},
+                    {"sheet_id": "hmtx2k", "sheet_name": "Sheet4", "row_count": 201, "column_count": 22, "is_hidden": False, "role": "618渠道投流拆解", "read_status": "pending_deep_read"},
+                    {"sheet_id": "xJhK8A", "sheet_name": "数据透视表", "row_count": 200, "column_count": 584, "is_hidden": False, "role": "618全渠道透视大宽表", "read_status": "pending_deep_read"},
+                    {"sheet_id": "ML6sDi", "sheet_name": "蒲公英数据", "row_count": 200, "column_count": 213, "is_hidden": False, "role": "618蒲公英平台官方导出数据", "read_status": "pending_deep_read"}
+                ]
+            }
+        ],
+        "new_mineable_dimensions": [
+            {
+                "dimension_name": "双11目标KPI vs 实际达成进度",
+                "source": "HNDC (N2bssx2dBh8xyItaFEfccqaznHY) -> sheet: 4SGaOf (双11进度更新)",
+                "value_add": "填补双11大促考核目标空白，提供CTR、CPC、互动量、回传GMV的target vs actual对照"
+            },
+            {
+                "dimension_name": "双11达人筛号全生命周期漏斗透视",
+                "source": "HNDC (N2bssx2dBh8xyItaFEfccqaznHY) -> sheet: SI0mQy (双11筛号进度透视表)",
+                "value_add": "达人候选池、初筛、二核、寄样、发布等完整选人漏斗与流转状态"
+            },
+            {
+                "dimension_name": "双11笔记级全维度明细 (602篇)",
+                "source": "DkdO (RoAtsw3KTh56ZBtT7cmcTYaznJb) -> sheet: hKnPdA (笔记数据)",
+                "value_add": "突破上轮14篇自采笔记限制，挖掘全量双11投放笔记的互动、阅读与回传指标"
+            },
+            {
+                "dimension_name": "关键词与搜索词类分类匹配 (535行)",
+                "source": "DkdO (RoAtsw3KTh56ZBtT7cmcTYaznJb) -> sheet: mG2COI (笔记&词类)",
+                "value_add": "品类词、品牌词、场景词、竞品截流词的搜索渗透与匹配分布"
+            },
+            {
+                "dimension_name": "定向人群包与受众画像 (城市733行 + 年龄352行 + 4个人群Sheet)",
+                "source": "DkdO (RoAtsw3KTh56ZBtT7cmcTYaznJb) -> sheet: 7pkBrd (城市数据), NFsNpI (年龄分布), 0Ng4EP, HGgP2Z, TBQTUR, YnkjWX",
+                "value_add": "天猫/京东双平台种草与CID定向人群包效果与受众地域、年龄结构分布"
+            },
+            {
+                "dimension_name": "双11各渠道投放账户预算与打款兑现 (8个大账户)",
+                "source": "DkdO (RoAtsw3KTh56ZBtT7cmcTYaznJb) -> sheet: Y7qNOu (打款)",
+                "value_add": "账户打款额 vs 实际应消耗 vs 差异挪款分析，财务预算进度图"
+            },
+            {
+                "dimension_name": "Base多维表双11产品匹配规则与样机流转 (13条规则 + 84条样机)",
+                "source": "Base (XH2obMhtwaPCWUsmsWacRCpLnvg) -> tblQvZjfvg0TfgSy (产品匹配规则) + tblotoaoy40ShO5k (样机信息表)",
+                "value_add": "核心SPU卖点与达人类型匹配机制、样机寄送状态与型号分布"
+            }
+        ]
+    }
+    
+    out_path = "docs/new-projects-sources/deep-audit-meiling/catalog.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(catalog, f, ensure_ascii=False, indent=2)
+    print(f"Written: {out_path}")
+
+    # Also write a manifest.json
+    manifest_path = "docs/new-projects-sources/deep-audit-meiling/manifest.json"
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(catalog, f, ensure_ascii=False, indent=2)
+    print(f"Written: {manifest_path}")
+
+if __name__ == "__main__":
+    main()

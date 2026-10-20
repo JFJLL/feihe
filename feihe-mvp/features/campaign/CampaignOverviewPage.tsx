@@ -20,6 +20,7 @@ import {
 import "./campaign-analytics.css";
 import "./CampaignOverviewPage.css";
 import { CampaignComboChart } from "./CampaignComboChart";
+import { CampaignEnrichmentPanels } from "./CampaignEnrichmentPanels";
 import { buildCalendarRows } from "./campaign-daily-model";
 import {
   safeNum,
@@ -172,7 +173,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       { label: "双11调整后总预算", value: budgetVal, unit: "元", note: "10.18快照调整预算口径" },
       { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendKpi?.period },
       { label: progressKpi?.label || "大促消耗进度", value: progressKpi?.value !== null && progressKpi?.value !== undefined ? String(progressKpi.value) + "%" : null, note: "截至10.18累计" },
-      { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value ? "线上已发布 " + String(publishedKpi.value) + " 篇 (母集 " + String(confirmedKpi?.value || "—") + " 位)" : undefined },
+      { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value !== null && publishedKpi?.value !== undefined ? `${publishedKpi.label}: ${publishedKpi.value}${publishedKpi.unit || "篇"}` : undefined },
     ];
   }, [meilingExecutionTable, meilingFourLinesTable, findKpi]);
 
@@ -401,10 +402,23 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         const bestPlacement = validCpuv.length > 0 ? [...validCpuv].sort((a, b) => (a.cpuv || 0) - (b.cpuv || 0))[0] : null;
         return `稳健酒精湿巾10.19日报口径：${bestPlacement ? `${bestPlacement.name}成本最低(${bestPlacement.cpuv}元/UV)` : "各版位分化核算"}。视频真实消耗入账。`;
       }
-      const notMet = wipesDailyTargetBullets.filter(
-        (d) => d.actual !== null && d.target !== null && (d.direction === "lower" ? d.actual > d.target : d.actual < d.target)
+      const validTargets = wipesDailyTargetBullets.filter((d) => d.actual !== null && d.target !== null);
+      const unknownCount = wipesDailyTargetBullets.length - validTargets.length;
+      const notMet = validTargets.filter(
+        (d) => (d.direction === "lower" ? d.actual! > d.target! : d.actual! < d.target!)
       );
-      return `飞书底表快照考核（未注明确切截止日期）：日常种草中包含${notMet.map((m) => `${m.label}(实际${m.actual}${m.unit || ""} 目标${m.target})`).join("、") || "全部达标"}等偏差项，详见标靶图。`;
+
+      let statusDesc = "";
+      if (validTargets.length === 0) {
+        statusDesc = `暂无有效目标基准可比对${unknownCount > 0 ? `（${unknownCount}项待补目标值）` : ""}`;
+      } else if (notMet.length > 0) {
+        const notMetStr = notMet.map((m) => `${m.label}(实际${m.actual}${m.unit || ""} 目标${m.target})`).join("、");
+        statusDesc = `日常种草中存在偏差项：${notMetStr}${unknownCount > 0 ? `；另有${unknownCount}项待补目标` : ""}`;
+      } else {
+        statusDesc = `已比对的${validTargets.length}项已设目标指标均达成${unknownCount > 0 ? `；另有${unknownCount}项待补目标` : ""}`;
+      }
+
+      return `飞书底表快照考核（未注明确切截止日期）：${statusDesc}，详见标靶图。`;
     }
 
     return `当前项目业务周期: ${activeHeaderPeriod}。核心数据基于最新入账记录动态呈现，缺值保持留白。`;
@@ -789,6 +803,9 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
           </>
         )}
       </div>
+
+      {/* 3.1 战役增强面板 (各项目总览 Rich 扩展分析卡) */}
+      <CampaignEnrichmentPanels dashboard={dashboard} section="overview" activeSnapshot={activeSnapshot} />
 
       {/* 4. 底部业务洞察 (从真实数据动态派生，无硬编码虚假结论) */}
       <section className="ca-insight" aria-label="战役业务解读">

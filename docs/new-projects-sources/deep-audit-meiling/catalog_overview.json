@@ -1,0 +1,451 @@
+{
+  "base": {
+    "base_token": "XH2obMhtwaPCWUsmsWacRCpLnvg",
+    "tables": [
+      {
+        "table_id": "tbluz50zuZOeGQWf",
+        "name": "双11 KOL进度表",
+        "records_count": 1096
+      },
+      {
+        "table_id": "tblOYMiuP5hTjxbN",
+        "name": "双11供图进度表",
+        "records_count": 6
+      },
+      {
+        "table_id": "tblotoaoy40ShO5k",
+        "name": "双11 样机信息表",
+        "records_count": 84
+      },
+      {
+        "table_id": "tblQvZjfvg0TfgSy",
+        "name": "双11 产品匹配规则",
+        "records_count": 13
+      },
+      {
+        "table_id": "tblzT0CPHCNgzhtS",
+        "name": "7-8月KOL进度表",
+        "records_count": 538
+      },
+      {
+        "table_id": "tblohi0dmMCuJ4wm",
+        "name": "7-8月KOC(供图)进度表",
+        "records_count": 113
+      },
+      {
+        "table_id": "tbltCR6P2mQIidsd",
+        "name": "7-8月样机信息表",
+        "records_count": 52
+      },
+      {
+        "table_id": "tblEE8G56GSpngf1",
+        "name": "7-8月产品匹配规则",
+        "records_count": 9
+      },
+      {
+        "table_id": "tbluFs8VE8cmajTm",
+        "name": "618KOL进度表",
+        "records_count": 515
+      },
+      {
+        "table_id": "tblxEoETSU6uBBSN",
+        "name": "618KOC(供图)进度表",
+        "records_count": 221
+      },
+      {
+        "table_id": "tblObq4NnsHMFT2t",
+        "name": "618样机信息表",
+        "records_count": 59
+      },
+      {
+        "table_id": "tblnAwGAiAAMNu2z",
+        "name": "618产品匹配规则",
+        "records_count": 8
+      }
+    ]
+  },
+  "workbooks": {
+    "MMPZ_618_review": {
+      "token": "XSKrspszhhgvPvtxMNicmYlUnEc",
+      "wiki_token": "MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "title": "美菱冰箱618复盘数据 副本",
+      "sheets": [
+        {
+          "sheet_id": "4a19cf",
+          "sheet_name": "数据汇总",
+          "row_count": 199,
+          "column_count": 34,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "sj1rpy",
+          "sheet_name": "by笔记fs",
+          "row_count": 140,
+          "column_count": 10,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "hmtx2k",
+          "sheet_name": "Sheet4",
+          "row_count": 201,
+          "column_count": 22,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "xJhK8A",
+          "sheet_name": "数据透视表",
+          "row_count": 200,
+          "column_count": 584,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "ML6sDi",
+          "sheet_name": "蒲公英数据",
+          "row_count": 200,
+          "column_count": 213,
+          "is_hidden": false
+        }
+      ]
+    },
+    "DkdO_double11_daily": {
+      "token": "RoAtsw3KTh56ZBtT7cmcTYaznJb",
+      "wiki_token": "DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "title": "美菱冰箱双11日报表  副本",
+      "sheets": [
+        {
+          "sheet_id": "smsJa2",
+          "sheet_name": "byday汇总数据",
+          "row_count": 143,
+          "column_count": 22,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "hKnPdA",
+          "sheet_name": "笔记数据",
+          "row_count": 602,
+          "column_count": 296,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "7pkBrd",
+          "sheet_name": "城市数据",
+          "row_count": 733,
+          "column_count": 103,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "NFsNpI",
+          "sheet_name": "年龄分布",
+          "row_count": 352,
+          "column_count": 20,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "T7XdCM",
+          "sheet_name": "地域数据源",
+          "row_count": 2,
+          "column_count": 24,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "y8B3mE",
+          "sheet_name": "年龄数据源",
+          "row_count": 2,
+          "column_count": 24,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "hk9XgJ",
+          "sheet_name": "日报",
+          "row_count": 200,
+          "column_count": 20,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "m9zUdJ",
+          "sheet_name": "数据分析草稿页",
+          "row_count": 458,
+          "column_count": 109,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "BZjmuN",
+          "sheet_name": "自采&代采数据汇总",
+          "row_count": 208,
+          "column_count": 30,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "iautvs",
+          "sheet_name": "日-投放数据（自采天猫种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "0Ng4EP",
+          "sheet_name": "定向人群（自采天猫种草）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "xKvzRm",
+          "sheet_name": "日-投放数据（自采红猫cid）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "HGgP2Z",
+          "sheet_name": "定向人群（自采红猫cid）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "B5TBE7",
+          "sheet_name": "日-投放数据（自采京东种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "TBQTUR",
+          "sheet_name": "定向人群（自采京东种草）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "nOJsYT",
+          "sheet_name": "日-投放数据（自采红京cid）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "YnkjWX",
+          "sheet_name": "定向人群（自采红京cid）",
+          "row_count": 578,
+          "column_count": 287,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "7gf6nq",
+          "sheet_name": "日-投放数据（代采星伴种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "7vfv8y",
+          "sheet_name": "日-投放数据（uds）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "O5TsXZ",
+          "sheet_name": "日-投放数据（代付京东种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "TLLRoo",
+          "sheet_name": "日-投放数据（对投京东种草)",
+          "row_count": 592,
+          "column_count": 286,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "w0oPX1",
+          "sheet_name": "日-投放数据（jds）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "Trvrou",
+          "sheet_name": "日-投放数据（京东对投cid）",
+          "row_count": 601,
+          "column_count": 287,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "D9ddm3",
+          "sheet_name": "（自采天猫种草）数据源",
+          "row_count": 7632,
+          "column_count": 28,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "FpcDvG",
+          "sheet_name": "（自采红猫cid）数据源",
+          "row_count": 17933,
+          "column_count": 29,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "BI2xBs",
+          "sheet_name": "（自采京东种草）数据源",
+          "row_count": 14992,
+          "column_count": 23,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "qTB7Td",
+          "sheet_name": "（自采红京cid）数据源",
+          "row_count": 23486,
+          "column_count": 29,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "ACntPW",
+          "sheet_name": "(代采星伴种草）数据源",
+          "row_count": 2979,
+          "column_count": 22,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "Q6XGXp",
+          "sheet_name": "uds数据源",
+          "row_count": 3030,
+          "column_count": 29,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "DHweyP",
+          "sheet_name": "（代付京东种草）数据源",
+          "row_count": 13954,
+          "column_count": 23,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "TxNNS6",
+          "sheet_name": "JDS数据源",
+          "row_count": 1415,
+          "column_count": 25,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "zF2qee",
+          "sheet_name": "京东对投种草数据源",
+          "row_count": 13954,
+          "column_count": 22,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "E2KFmU",
+          "sheet_name": "（京东对投cid）数据源",
+          "row_count": 23485,
+          "column_count": 29,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "mG2COI",
+          "sheet_name": "笔记&词类",
+          "row_count": 535,
+          "column_count": 20,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "Y7qNOu",
+          "sheet_name": "打款",
+          "row_count": 201,
+          "column_count": 21,
+          "is_hidden": false
+        }
+      ]
+    },
+    "HNDC_kpi_mgmt": {
+      "token": "N2bssx2dBh8xyItaFEfccqaznHY",
+      "wiki_token": "HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "title": "美菱冰箱kpi管理表 副本",
+      "sheets": [
+        {
+          "sheet_id": "1Km6lH",
+          "sheet_name": "618达人数据明细",
+          "row_count": 106,
+          "column_count": 25,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "ajEynU",
+          "sheet_name": "618数据透视表",
+          "row_count": 185,
+          "column_count": 164,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "fqh8ue",
+          "sheet_name": "618数据更新用（勿动）",
+          "row_count": 200,
+          "column_count": 22,
+          "is_hidden": true
+        },
+        {
+          "sheet_id": "4SGaOf",
+          "sheet_name": "双11进度更新",
+          "row_count": 200,
+          "column_count": 20,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "L986LN",
+          "sheet_name": "7-8月kpi进度总览",
+          "row_count": 198,
+          "column_count": 29,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "YDZeE4",
+          "sheet_name": "数据透视表",
+          "row_count": 200,
+          "column_count": 20,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "duEfmf",
+          "sheet_name": "7-8月达人数据明细",
+          "row_count": 200,
+          "column_count": 27,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "oejbmv",
+          "sheet_name": "7-8月数据更新用（勿动）",
+          "row_count": 185,
+          "column_count": 21,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "FkLCad",
+          "sheet_name": "618kpi进度总览",
+          "row_count": 197,
+          "column_count": 28,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "5FDWQS",
+          "sheet_name": "Sheet10",
+          "row_count": 200,
+          "column_count": 49,
+          "is_hidden": false
+        },
+        {
+          "sheet_id": "SI0mQy",
+          "sheet_name": "双11筛号进度透视表",
+          "row_count": 201,
+          "column_count": 98,
+          "is_hidden": false
+        }
+      ]
+    }
+  },
+  "docx": {
+    "wiki_token": "UKPKwNHFdi9jk0kBaQKcuO3Anqf",
+    "docx_token": "Ugwgd6lKzoURMWxXeJ3c4VzNnFc"
+  }
+}
