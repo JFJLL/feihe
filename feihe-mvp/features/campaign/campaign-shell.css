@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Campaign Shell - Shared DashboardFrame & Unified Compact Header
+   ========================================================================== */
+
+.campaign-workspace-root {
+  width: 100%;
+}
+
+.ca-subnav-reload-btn {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.campaign-workspace-root .ca-page {
+  padding: 0;
+  max-width: none;
+  background: transparent;
+  gap: 12px;
+}
+
+/* Compact header toolbar (bd-toolbar-compact) */
+.campaign-workspace-root .ca-header,
+.ca-header.bd-toolbar-compact {
+  padding: 8px 14px;
+  gap: 12px;
+  align-items: center;
+  box-shadow: none;
+  border-radius: 8px;
+}
+
+.campaign-workspace-root .ca-header .ca-header-title,
+.ca-header.bd-toolbar-compact .ca-header-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.campaign-workspace-root .ca-header .ca-header-subtitle,
+.ca-header.bd-toolbar-compact .ca-header-subtitle {
+  font-size: 12px;
+  margin: 0;
+}
+
+.campaign-workspace-root .ca-header .ca-header-meta,
+.ca-header.bd-toolbar-compact .ca-header-meta {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
+
+/* Mobile responsive constraints (preserving 390px viewport integrity) */
+@media (max-width: 640px) {
+  .campaign-workspace-root .ca-header,
+  .ca-header.bd-toolbar-compact {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .campaign-workspace-root .ca-header .ca-header-meta,
+  .ca-header.bd-toolbar-compact .ca-header-meta {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .campaign-workspace-root .ca-dataset-picker-wrap,
+  .campaign-workspace-root .ca-overview-selector-wrap,
+  .campaign-workspace-root .ca-snapshot-pills,
+  .campaign-workspace-root .ca-date-range-box,
+  .campaign-workspace-root .ca-filter-section {
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .campaign-workspace-root .ca-dataset-select,
+  .campaign-workspace-root .ca-toolbar-select,
+  .campaign-workspace-root .ca-date-input {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}

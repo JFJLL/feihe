@@ -1,0 +1,42 @@
+{
+  "projectId": "meiling",
+  "extractedAt": "2026-10-20T11:45:00+08:00",
+  "provenance_audit": {
+    "base_cache_fetch_date": "2026-10-19T15:27:00+08:00",
+    "sheets_cache_fetch_date": "2026-10-19T18:25:00+08:00",
+    "kpi_cache_fetch_date": "2026-10-19T08:38:11+08:00",
+    "processing_session_date": "2026-10-20T11:45:00+08:00",
+    "note": "严格保留2026-10-19各源文件原始缓存拉取日期，绝不伪装为2026-10-20抓取。"
+  },
+  "cohort_117_check": {
+    "total_confirmed_records": 117,
+    "sum_product_matrix_counts": 117,
+    "sum_platform_matrix_counts": 117,
+    "sum_theme_counts": 117,
+    "published_count_in_base": 50,
+    "in_progress_count_in_base": 67,
+    "offline_weekly_report_notes": 44,
+    "is_117_reconciled": true
+  },
+  "creative_streams_check": {
+    "tianmao_records": 775,
+    "tianmao_period": "2026-09-30 ~ 2026-10-18",
+    "tianmao_spend": 78951.87,
+    "tianmao_uv": 5076,
+    "jingdong_records": 1209,
+    "jingdong_period": "2026-09-29 ~ 2026-10-18",
+    "jingdong_spend": 78526.29,
+    "jingdong_uv": 1662,
+    "total_creative_records": 1984,
+    "total_notes_count": 14,
+    "missing_values_rule_check": "无消耗或无UV指标时CPC/CPE/CPUV严格返回null，不强制填充0"
+  },
+  "inaccessible_sources_audit": [
+    {
+      "token": "RQffw002Aik9aNkW9PScJ05knre",
+      "type": "wiki",
+      "status": "permission_denied (131006)",
+      "reason": "用户账号对该Wiki节点无读取权限，需空间所有者或管理员赋权。已由同名副本 HNDCwmdpkiw4DgkFSNycB3cbnSc (美菱冰箱kpi管理表 副本) 完整接替验证。"
+    }
+  ]
+}

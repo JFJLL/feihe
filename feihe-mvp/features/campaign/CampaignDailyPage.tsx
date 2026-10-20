@@ -2,171 +2,47 @@
 
 import React, { useState, useMemo } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
+import { MetricStrip, ChartPanel } from "./CampaignCharts";
+import { CampaignComboChart } from "./CampaignComboChart";
 import {
-  getCampaignDailyDatasets,
-  type CampaignDailyDataset,
-  type CampaignDailyMetric,
-} from "../../lib/campaign-daily";
-import { TimeSeriesChart } from "../../components/ui/TimeSeriesChart";
-import {
-  CAMPAIGN_PALETTE,
-  MetricStrip,
-  ChartPanel,
-} from "./CampaignCharts";
+  resolveDailyDatasets,
+  buildCalendarRows,
+  subtractCalendarDays,
+  getDatasetChartConfigs,
+  computeSummaryMetrics,
+  fmtNum,
+  safeNum,
+} from "./campaign-daily-model";
 import "./campaign-analytics.css";
-import "./CampaignDailyPage.css";
+import "./campaign-combo.css";
+import "./campaign-daily.css";
 
 export interface CampaignDailyPageProps {
   dashboard: CampaignDashboard;
 }
 
-type ChartRow = { date: string; [key: string]: string | number | null };
-
-function safeNum(val: unknown): number | null {
-  if (val === null || val === undefined) return null;
-  const s = String(val).trim();
-  if (s === "" || s === "-" || s === "—" || s === "null" || s === "undefined") return null;
-  const cleaned = s.replace(/[,¥%]/g, "").trim();
-  if (cleaned === "") return null;
-  const n = Number(cleaned);
-  return Number.isFinite(n) ? n : null;
-}
-
-function fmtNum(val: unknown, maxDigits = 2): string {
-  const n = safeNum(val);
-  if (n === null) return "—";
-  return n.toLocaleString("zh-CN", { maximumFractionDigits: maxDigits });
-}
-
-// 判定指标是否为可累加的绝对量指标 (只有消耗、点击、曝光、订单等才可求和；CPC/CTR/ROI/CPUV/UV绝不可求和)
-function isAdditiveMetric(key: string): boolean {
-  const k = key.toLowerCase();
-  return /^(spend|spend_total|spend_k|spend_f|spend_s|spend_cid|impressions|clicks|engagements|orders|search_clicks|creatives_count)$/.test(k);
-}
-
-// 计算日历天偏移 (支持跨月份准确计算日历日期)
-function subtractCalendarDays(isoDate: string, days: number): string {
-  const [y, m, d] = isoDate.split("-").map(Number);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  dt.setUTCDate(dt.getUTCDate() - days);
-  return dt.toISOString().slice(0, 10);
-}
-
-// 生成两日期之间完整的连续日历日期序列
-function generateCalendarDates(start: string, end: string): string[] {
-  const dates: string[] = [];
-  const [sy, sm, sd] = start.split("-").map(Number);
-  const [ey, em, ed] = end.split("-").map(Number);
-  const cur = new Date(Date.UTC(sy, sm - 1, sd));
-  const last = new Date(Date.UTC(ey, em - 1, ed));
-  while (cur <= last) {
-    dates.push(cur.toISOString().slice(0, 10));
-    cur.setUTCDate(cur.getUTCDate() + 1);
-  }
-  return dates;
-}
-
-/**
- * 解析分日数据集：
- * 1. 优先读取 Boole 落盘的真实分日数据集 (Kailas/Wipes/Meiling 创意与投放流水)；
- * 2. 美菱默认优先选用样本期更长的主流种草流水 (天猫19天/京东20天)，CID 明确标注 30日归因单子渠道；
- * 3. 若处于补齐过渡期，自底表动态提取，确保不中断。
- */
-function resolveDatasets(dashboard: CampaignDashboard): CampaignDailyDataset[] {
-  const fromContract = getCampaignDailyDatasets(dashboard);
-  if (fromContract && fromContract.length > 0) {
-    // 美菱优先推荐长业务期的自采天猫/京东种草流水，CID 3天明确标注
-    if (dashboard.projectId === "meiling") {
-      const tmSeed = fromContract.find((d) => d.id === "meiling-daily-tm-seed");
-      const jdSeed = fromContract.find((d) => d.id === "meiling-daily-jd-seed");
-      const cid = fromContract.find((d) => d.id === "meiling-daily-cid-jd");
-      const rest = fromContract.filter((d) => d.id !== "meiling-daily-tm-seed" && d.id !== "meiling-daily-jd-seed" && d.id !== "meiling-daily-cid-jd");
-
-      const reordered: CampaignDailyDataset[] = [];
-      if (tmSeed) reordered.push({ ...tmSeed, label: "自采天猫种草日流水 (19天 · 推荐)" });
-      if (jdSeed) reordered.push({ ...jdSeed, label: "自采京东种草日流水 (20天)" });
-      if (cid) reordered.push({ ...cid, label: "京东对投CID日表现 (3天 · 30日归因 · 单子渠道)" });
-      return [...reordered, ...rest];
-    }
-    return fromContract;
-  }
-
-  const fallback: CampaignDailyDataset[] = [];
-  if (dashboard.projectId === "meiling") {
-    const cidTable = dashboard.tables?.find((t) => t.id === "meiling-unlocked-double11-cid-daily");
-    if (cidTable?.rows) {
-      const validRows = cidTable.rows
-        .filter((r) => {
-          const d = String(r.date || "");
-          return d && !/(合计|总计|汇总)/.test(d);
-        })
-        .map((r) => ({
-          date: String(r.date || "").replace(/\//g, "-"),
-          spend: safeNum(r.spend),
-          impressions: safeNum(r.impressions),
-          clicks: safeNum(r.clicks),
-          interactions: safeNum(r.interactions),
-          activeUv: safeNum(r.activeUv),
-          cpc: safeNum(r.cpc),
-          gmv: safeNum(r.gmv),
-        }));
-
-      if (validRows.length > 0) {
-        const sorted = [...validRows].sort((a, b) => a.date.localeCompare(b.date));
-        fallback.push({
-          id: "meiling-cid-daily-fallback",
-          label: "京东对投CID日表现 (3天 · 30日归因 · 单子渠道)",
-          period: `${sorted[0].date} ~ ${sorted[sorted.length - 1].date}`,
-          note: "京东对投CID分日流水 (30日归因 · 单子渠道)",
-          metrics: [
-            { key: "spend", label: "广告花费", unit: "元" },
-            { key: "clicks", label: "点击量", unit: "次" },
-            { key: "impressions", label: "曝光量", unit: "次" },
-            { key: "activeUv", label: "进店UV", unit: "人" },
-            { key: "cpc", label: "点击成本 (CPC)", unit: "元" },
-          ],
-          rows: sorted,
-        });
-      }
-    }
-  }
+function formatDatasetDisplay(id: string, fallback: string): string {
+  if (id === "meiling-daily-tm-seed") return "自采天猫种草";
+  if (id === "meiling-daily-cid-jd" || id === "meiling-cid-daily-fallback") return "京东对投 CID";
+  if (id === "meiling-daily-jd-seed") return "自采京东种草";
+  if (id === "wipes-daily-delivery") return "日常种草";
+  if (id === "wipes-daily-taosou" || id === "wipes-daily-taosearch") return "淘搜表现";
+  if (id === "kailas-daily-fuga-creatives") return "凯乐石日常投放";
   return fallback;
 }
 
 export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
-  const { name } = dashboard;
-  const datasets = useMemo(() => resolveDatasets(dashboard), [dashboard]);
+  const name = dashboard?.name || "项目";
+  const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
 
-  // 派生选择状态，避免 useEffect 中同步 setState 产生 lint 警告
+  // Selected dataset
   const [selectedDatasetId, setSelectedDatasetId] = useState<string>("");
-  const activeDataset = useMemo((): CampaignDailyDataset | null => {
+  const activeDataset = useMemo(() => {
     if (!datasets.length) return null;
     return datasets.find((d) => d.id === selectedDatasetId) || datasets[0];
   }, [datasets, selectedDatasetId]);
 
-  const [selectedMetricKey, setSelectedMetricKey] = useState<string>("");
-  const activeMetric = useMemo((): CampaignDailyMetric | null => {
-    if (!activeDataset?.metrics.length) return null;
-    return activeDataset.metrics.find((m) => m.key === selectedMetricKey) || activeDataset.metrics[0];
-  }, [activeDataset, selectedMetricKey]);
-
-  // 小额/比率类指标识别 (CPC/CPUV/CPE/ROI/CTR/CPM) 精确到 2 位小数，防止默认 Math.round 出现重复 0/1 刻度
-  const isSmallScaleMetric = useMemo(() => {
-    if (!activeMetric) return false;
-    const k = activeMetric.key.toLowerCase();
-    const u = activeMetric.unit || "";
-    return /cpc|cpuv|cpe|roi|ctr/i.test(k) || u === "%" || (u === "元" && /cost|cpc|cpuv|cpe/i.test(k));
-  }, [activeMetric]);
-
-  const dailyValueFormatter = useMemo(() => {
-    if (!isSmallScaleMetric) return undefined;
-    return (v: number) => {
-      if (v === 0) return "0";
-      return v < 10 ? v.toFixed(2) : v.toFixed(1);
-    };
-  }, [isSmallScaleMetric]);
-
-  // 日期范围处理：优先近可用业务日期范围
+  // Available dates for range clamping
   const allAvailableDates = useMemo(() => {
     if (!activeDataset?.rows) return [];
     return activeDataset.rows
@@ -184,37 +60,36 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const startDate = customStartDate || minAvailableDate;
   const endDate = customEndDate || maxAvailableDate;
 
-  // 日期区间筛选与日历补齐（缺失日插入 null 让 TimeSeriesChart 真实断开，绝不补零或连跨缺日）
-  const chartAndTableRows = useMemo((): ChartRow[] => {
-    if (!activeDataset?.rows || !startDate || !endDate) return [];
-    const rowMap = new Map<string, ChartRow>();
-    for (const r of activeDataset.rows) {
-      if (r.date) rowMap.set(r.date, r);
-    }
+  // 严格检查日期逆序：start > end 禁止出图，展示明确提示
+  const isDateOrderInvalid = Boolean(startDate && endDate && startDate > endDate);
 
-    const calendarDates = generateCalendarDates(startDate, endDate);
-    return calendarDates.map((dateStr) => {
-      const existing = rowMap.get(dateStr);
-      if (existing) {
-        return existing;
-      }
-      // 缺日插入包含 date 与 null 指标的空记录，驱动 TimeSeriesChart 路径断开
-      const emptyRow: ChartRow = { date: dateStr };
-      for (const m of activeDataset.metrics) {
-        emptyRow[m.key] = null;
-      }
-      return emptyRow;
-    });
-  }, [activeDataset, startDate, endDate]);
+  // Calendar dates with missing gaps filled as null (lines break, zero distinct from null)
+  const chartAndTableRows = useMemo(() => {
+    if (isDateOrderInvalid) return [];
+    return buildCalendarRows(activeDataset, startDate, endDate);
+  }, [activeDataset, startDate, endDate, isDateOrderInvalid]);
 
-  // 仅包含有效源数据的行 (供表格降序展示)
+  // Valid present rows for table (inspectable in details)
   const presentTableRows = useMemo(() => {
+    if (!activeDataset || isDateOrderInvalid) return [];
     return chartAndTableRows.filter((r) => {
-      return activeDataset?.metrics.some((m) => safeNum(r[m.key]) !== null);
+      return activeDataset.metrics.some((m) => safeNum(r[m.key]) !== null);
     });
-  }, [chartAndTableRows, activeDataset]);
+  }, [chartAndTableRows, activeDataset, isDateOrderInvalid]);
 
-  // 快捷区间处理：按日历天回溯 6 天 / 13 天
+  // 4 Fixed compact business summary metrics (传入完整 calendarRows，缺日不隐瞒)
+  const summaryMetrics = useMemo(() => {
+    if (!activeDataset || isDateOrderInvalid) return [];
+    return computeSummaryMetrics(activeDataset, chartAndTableRows);
+  }, [activeDataset, chartAndTableRows, isDateOrderInvalid]);
+
+  // 3-5 multi-metric business combination chart configs (each axis same unit, >=2 series)
+  const chartConfigs = useMemo(() => {
+    if (!activeDataset || isDateOrderInvalid) return [];
+    return getDatasetChartConfigs(activeDataset, chartAndTableRows);
+  }, [activeDataset, chartAndTableRows, isDateOrderInvalid]);
+
+  // Preset date shortcuts
   const handleQuickPreset = (preset: "all" | "7d" | "14d") => {
     if (!maxAvailableDate) return;
     if (preset === "all") {
@@ -229,75 +104,31 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
     }
   };
 
-  // 当前指标业务统计 Strip：严格区分可加与非可加指标
-  const metricStats = useMemo(() => {
-    if (!presentTableRows.length || !activeMetric) return null;
-    const isAdditive = isAdditiveMetric(activeMetric.key);
+  // Secondary switch for Winner Wipes delivery vs taosou
+  const isWipes = activeDataset?.id.startsWith("wipes-daily-");
+  const alternateWipesId =
+    activeDataset?.id === "wipes-daily-delivery"
+      ? "wipes-daily-taosou"
+      : activeDataset?.id === "wipes-daily-taosou"
+      ? "wipes-daily-delivery"
+      : null;
+  const alternateWipesLabel =
+    activeDataset?.id === "wipes-daily-delivery"
+      ? "切换到淘搜表现 →"
+      : "← 返回日常种草";
 
-    const validEntries = presentTableRows
-      .map((r) => ({ date: String(r.date), val: safeNum(r[activeMetric.key]) }))
-      .filter((e): e is { date: string; val: number } => e.val !== null);
-
-    if (!validEntries.length) return null;
-
-    const values = validEntries.map((e) => e.val);
-    const maxVal = Math.max(...values);
-    const minVal = Math.min(...values);
-    const maxEntry = validEntries.find((e) => e.val === maxVal);
-    const minEntry = validEntries.find((e) => e.val === minVal);
-
-    // 最新日值 (按日期排序最近一天)
-    const latestEntry = [...validEntries].sort((a, b) => b.date.localeCompare(a.date))[0];
-
-    if (isAdditive) {
-      const sumVal = values.reduce((a, b) => a + b, 0);
-      return {
-        isAdditive: true,
-        item1Label: "区间累计总额",
-        item1Value: fmtNum(sumVal),
-        item1Note: `${validEntries.length}个有效记录日累计`,
-        item2Label: "单日最高峰值",
-        item2Value: fmtNum(maxVal),
-        item2Note: maxEntry ? `于 ${maxEntry.date}` : undefined,
-        item3Label: "单日最低谷值",
-        item3Value: fmtNum(minVal),
-        item3Note: minEntry ? `于 ${minEntry.date}` : undefined,
-        item4Label: "记录天数",
-        item4Value: `${validEntries.length}`,
-        item4Note: `区间跨度: ${startDate} ~ ${endDate}`,
-      };
-    }
-
-    // 非可加指标 (CPC / CTR / ROI / CPUV / UV / 指数等) 绝不显示累计总和或普通平均
-    return {
-      isAdditive: false,
-      item1Label: `最新日值 (${latestEntry?.date || "最新"})`,
-      item1Value: fmtNum(latestEntry?.val),
-      item1Note: "单日指标不按区间累加",
-      item2Label: "单日最低值",
-      item2Value: fmtNum(minVal),
-      item2Note: minEntry ? `于 ${minEntry.date}` : undefined,
-      item3Label: "单日最高值",
-      item3Value: fmtNum(maxVal),
-      item3Note: maxEntry ? `于 ${maxEntry.date}` : undefined,
-      item4Label: "有效记录天数",
-      item4Value: `${validEntries.length}`,
-      item4Note: "比率与独立访客按单日核对",
-    };
-  }, [presentTableRows, activeMetric, startDate, endDate]);
-
-  // 诚实空态处理：无真实分日源时绝不绘制全零走势
+  // Honest empty state when no daily datasets exist (e.g. qicui or unconfigured projects)
   if (!datasets.length || !activeDataset || !activeDataset.rows.length) {
     return (
       <div className="ca-page" role="main" aria-label={`${name} 分日趋势`}>
-        <header className="ca-header">
+        <header className="ca-header bd-toolbar-compact">
           <div className="ca-header-heading">
             <div className="ca-header-title-row">
-              <h1 className="ca-header-title">{name} · 分日看板</h1>
+              <h2 className="ca-header-title">分日看板</h2>
               <span className="ca-header-badge">逐日趋势</span>
             </div>
             <p className="ca-header-subtitle">
-              严格基于真实日期采集，缺失断流不作虚假补零拟合
+              项目暂无逐日分日流水记录
             </p>
           </div>
         </header>
@@ -306,8 +137,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
           <div className="ca-daily-empty-icon">📅</div>
           <h3 className="ca-daily-empty-title">当前项目暂无逐日分日流水记录</h3>
           <p className="ca-daily-empty-desc">
-            根据业务源表审核结果，本项目当前为阶段性小结/日报聚合切片，未收录连续日级别流水；
-            系统秉持诚实数据原则，不以全零连线绘制虚假趋势图。项目总览与考核指标看板正常服务。
+            所选项目暂无连续日级别流水数据。
           </p>
         </div>
       </div>
@@ -316,61 +146,60 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
   return (
     <div className="ca-page" role="main" aria-label={`${name} 分日趋势看板`}>
-      {/* 1. Header (单行 h1 + 周期说明 + 数据集切换) */}
-      <header className="ca-header">
+      {/* 1. Header (紧凑元信息 toolbar + 周期说明 + 数据集切换) */}
+      <header className="ca-header bd-toolbar-compact">
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
-            <h1 className="ca-header-title">{name} · 分日趋势看板</h1>
-            <span className="ca-header-badge">逐日流水</span>
+            <h2 className="ca-header-title">分日看板</h2>
+            <span className="ca-header-badge">多维业务比对</span>
             <span className="ca-header-subtitle">
-              {activeDataset.label} ({activeDataset.period})
+              {formatDatasetDisplay(activeDataset.id, activeDataset.label)} ({activeDataset.period})
             </span>
           </div>
         </div>
 
-        {datasets.length > 1 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span className="ca-filter-label">数据流水:</span>
-            <select
-              className="ca-dataset-select"
-              value={activeDataset.id}
-              onChange={(e) => {
-                setSelectedDatasetId(e.target.value);
+        <div className="ca-dataset-picker-wrap">
+          {datasets.length > 1 && (
+            <div className="ca-dataset-picker-item">
+              <span className="ca-filter-label">分析范围:</span>
+              <select
+                className="ca-dataset-select"
+                value={activeDataset.id}
+                onChange={(e) => {
+                  setSelectedDatasetId(e.target.value);
+                  setCustomStartDate("");
+                  setCustomEndDate("");
+                }}
+                aria-label="选择分日数据集"
+              >
+                {datasets.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {formatDatasetDisplay(d.id, d.label)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {isWipes && alternateWipesId && (
+            <button
+              type="button"
+              className="ca-btn-switch-dataset"
+              onClick={() => {
+                setSelectedDatasetId(alternateWipesId);
                 setCustomStartDate("");
                 setCustomEndDate("");
               }}
-              aria-label="选择分日数据集"
+              title="切换关联分日分析视角"
             >
-              {datasets.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+              {alternateWipesLabel}
+            </button>
+          )}
+        </div>
       </header>
 
-      {/* 2. 交互式筛选工具栏 (单指标切换 + 真实日历日期区间筛选) */}
-      <div className="ca-daily-toolbar" role="toolbar" aria-label="图表筛选工具栏">
-        <div className="ca-filter-section">
-          <span className="ca-filter-label">分析指标:</span>
-          <div className="ca-metric-pills" role="radiogroup" aria-label="选择图表分析指标">
-            {activeDataset.metrics.map((m) => (
-              <button
-                key={m.key}
-                type="button"
-                className={`ca-metric-pill-btn ${activeMetric?.key === m.key ? "active" : ""}`}
-                onClick={() => setSelectedMetricKey(m.key)}
-                role="radio"
-                aria-checked={activeMetric?.key === m.key}
-              >
-                {m.label} {m.unit ? `(${m.unit})` : ""}
-              </button>
-            ))}
-          </div>
-        </div>
-
+      {/* 2. 日期区间控制工具栏 (保留真实日历快捷与日期控制，已完全移除单指标选择胶囊) */}
+      <div className="ca-daily-toolbar" role="toolbar" aria-label="分日分析工具栏">
         <div className="ca-filter-section">
           <span className="ca-filter-label">业务日期区间:</span>
           <div className="ca-date-range-box">
@@ -424,139 +253,139 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             </button>
           )}
         </div>
+
+        {!isDateOrderInvalid && (
+          <div style={{ fontSize: 11.5, color: "#64748b" }}>
+            有效采集 <strong>{presentTableRows.length}</strong> 天 · 日历跨度{" "}
+            <strong>{chartAndTableRows.length}</strong> 天
+          </div>
+        )}
       </div>
 
-      {/* 3. 当前指标区间统计 Strip (4 核心指标，非可加指标不求和) */}
-      {metricStats && activeMetric && (
-        <MetricStrip
-          items={[
-            {
-              label: metricStats.item1Label,
-              value: metricStats.item1Value,
-              unit: activeMetric.unit,
-              note: metricStats.item1Note,
-            },
-            {
-              label: metricStats.item2Label,
-              value: metricStats.item2Value,
-              unit: activeMetric.unit,
-              note: metricStats.item2Note,
-            },
-            {
-              label: metricStats.item3Label,
-              value: metricStats.item3Value,
-              unit: activeMetric.unit,
-              note: metricStats.item3Note,
-            },
-            {
-              label: metricStats.item4Label,
-              value: metricStats.item4Value,
-              unit: "天",
-              note: metricStats.item4Note,
-            },
-          ]}
-        />
-      )}
-
-      {/* 4. 核心时间序列折线图 (TimeSeriesChart，缺日断开不连线或补0) */}
-      {activeMetric && (
-        <ChartPanel
-          title={`${activeDataset.label} - ${activeMetric.label} 趋势`}
-          subtitle={`统计区间: ${startDate} ~ ${endDate} · 单位: ${activeMetric.unit || "—"}`}
-          actions={
-            <span style={{ fontSize: 11.5, color: "#64748b" }}>
-              共 {presentTableRows.length} 个采集样本
-            </span>
-          }
-        >
-          <TimeSeriesChart
-            rows={chartAndTableRows}
-            series={[
-              {
-                key: activeMetric.key,
-                label: activeMetric.label,
-                color: CAMPAIGN_PALETTE.primary,
-              },
-            ]}
-            title={`${activeDataset.label} - ${activeMetric.label} 趋势`}
-            unit={activeMetric.unit || ""}
-            height={260}
-            valueFormatter={dailyValueFormatter}
-          />
-        </ChartPanel>
-      )}
-
-      {/* 5. 分日数据真实明细表格 (按日期降序排列) */}
-      <ChartPanel
-        title={`${activeDataset.label} 分日明细记录`}
-        subtitle="按日期降序排列 · 缺值保持留白 (—)"
-        actions={
-          <span style={{ fontSize: 11.5, color: "#64748b" }}>
-            当前筛选区间内包含 {presentTableRows.length} 条有效流水
-          </span>
-        }
-      >
-        <div className="ca-table-wrap">
-          <table className="ca-table">
-            <thead>
-              <tr>
-                <th>日期</th>
-                {activeDataset.metrics.map((m) => (
-                  <th
-                    key={m.key}
-                    style={{
-                      textAlign: "right",
-                      color: m.key === activeMetric?.key ? CAMPAIGN_PALETTE.primary : undefined,
-                      fontWeight: m.key === activeMetric?.key ? "700" : undefined,
-                    }}
-                  >
-                    {m.label} {m.unit ? `(${m.unit})` : ""}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {presentTableRows.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={activeDataset.metrics.length + 1}
-                    style={{ textAlign: "center", padding: "24px 0", color: "#64748b" }}
-                  >
-                    所选日期区间无记录
-                  </td>
-                </tr>
-              ) : (
-                [...presentTableRows].reverse().map((row) => (
-                  <tr key={String(row.date)}>
-                    <td style={{ fontWeight: "600", color: "#1e293b" }}>{row.date}</td>
-                    {activeDataset.metrics.map((m) => {
-                      const raw = row[m.key];
-                      const valStr = fmtNum(raw);
-                      const isHighlight = m.key === activeMetric?.key;
-                      return (
-                        <td
-                          key={m.key}
-                          style={{
-                            textAlign: "right",
-                            fontWeight: isHighlight ? "600" : "400",
-                            color: isHighlight ? CAMPAIGN_PALETTE.primary : undefined,
-                          }}
-                        >
-                          {valStr}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      {/* 3. 日期逆序异常提示 */}
+      {isDateOrderInvalid && (
+        <div className="ca-daily-empty-box" role="alert">
+          <div className="ca-daily-empty-icon">⚠️</div>
+          <h3 className="ca-daily-empty-title">起始日期不能晚于结束日期</h3>
+          <p className="ca-daily-empty-desc">
+            当前选择的起始日期 ({startDate}) 晚于结束日期 ({endDate})，请调整有效日期范围。
+          </p>
         </div>
-      </ChartPanel>
+      )}
 
-      {/* 6. 页脚精简说明 (绝不展示来源管理或 source URL) */}
+      {/* 4. 空日期段明确空态 */}
+      {!isDateOrderInvalid && (chartAndTableRows.length === 0 || presentTableRows.length === 0) && (
+        <div className="ca-daily-empty-box">
+          <div className="ca-daily-empty-icon">📅</div>
+          <h3 className="ca-daily-empty-title">所选日期暂无记录</h3>
+          <p className="ca-daily-empty-desc">
+            所选日期区间内未包含任何采集记录，请调整日期区间。
+          </p>
+        </div>
+      )}
+
+      {/* 5. 4核心精炼业务指标 Strip (严格遵循业务加权与覆盖率，缺日留—) */}
+      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
+        <MetricStrip items={summaryMetrics} />
+      )}
+
+      {/* 6. 多图联动业务面板 (默认2列等高约260px，奇数张最后一图跨两列) */}
+      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
+        <div className="ca-daily-grid">
+          {chartConfigs.map((cfg, idx) => {
+            const isLastOdd = chartConfigs.length % 2 === 1 && idx === chartConfigs.length - 1;
+            return (
+              <div
+                key={cfg.id}
+                className={isLastOdd ? "ca-daily-panel ca-daily-panel-span-2" : "ca-daily-panel"}
+              >
+                <ChartPanel
+                  title={cfg.title}
+                  subtitle={
+                    cfg.caption
+                      ? `统计区间: ${startDate} ~ ${endDate} · ${cfg.caption}`
+                      : `统计区间: ${startDate} ~ ${endDate}`
+                  }
+                  actions={
+                    <span style={{ fontSize: 11.5, color: "#64748b" }}>
+                      {cfg.series.length} 项联动指标
+                    </span>
+                  }
+                >
+                  <CampaignComboChart
+                    rows={chartAndTableRows}
+                    series={cfg.series}
+                    xKey="date"
+                    title={cfg.title}
+                    height={260}
+                    xLabel={cfg.xLabel}
+                  />
+                </ChartPanel>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* 7. 真实数据全量明细表格 (默认收起在 details 内部，使图表视觉主导，展开可查验完整过滤行) */}
+      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
+        <details className="ca-daily-details-panel">
+          <summary className="ca-daily-details-summary">
+            <div className="ca-daily-details-summary-title">
+              <span className="ca-daily-details-icon">📊</span>
+              <span>查看完整分日明细数据表</span>
+              <span className="ca-daily-details-badge">共 {presentTableRows.length} 条有效记录</span>
+            </div>
+            <span className="ca-daily-details-hint">点击展开 / 收起明细</span>
+          </summary>
+
+          <div className="ca-table-wrap">
+            <table className="ca-table">
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  {activeDataset.metrics.map((m) => (
+                    <th key={m.key} style={{ textAlign: "right" }}>
+                      {m.label} {m.unit ? `(${m.unit})` : ""}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {presentTableRows.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={activeDataset.metrics.length + 1}
+                      style={{ textAlign: "center", padding: "24px 0", color: "#64748b" }}
+                    >
+                      所选日期暂无记录
+                    </td>
+                  </tr>
+                ) : (
+                  [...presentTableRows].reverse().map((row) => (
+                    <tr key={String(row.date)}>
+                      <td style={{ fontWeight: "600", color: "#1e293b" }}>{String(row.date)}</td>
+                      {activeDataset.metrics.map((m) => {
+                        const raw = row[m.key];
+                        const valStr = fmtNum(raw);
+                        return (
+                          <td key={m.key} style={{ textAlign: "right" }}>
+                            {valStr}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      )}
+
+      {/* 8. 页脚精简说明 */}
       <footer className="ca-footer-date">
-        业务统计区间: {activeDataset.period} · 提取时间: 2026-10-19
+        业务统计区间: {activeDataset.period}
       </footer>
     </div>
   );

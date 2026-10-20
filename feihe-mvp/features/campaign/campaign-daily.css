@@ -1,0 +1,343 @@
+/**
+ * Campaign Daily Dashboard Scoped Styles
+ * Unified with CampaignCharts:
+ *   Warm bg: #f6f5f2, Primary: #2c7168, Purple: #8273a3, Gold: #b88a45, Border: #e6e3dc
+ */
+
+.ca-daily-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 10px;
+}
+
+.ca-filter-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ca-filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ca-palette-muted, #64748b);
+  white-space: nowrap;
+}
+
+.ca-date-range-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  padding: 4px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.ca-date-input {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: #1e293b;
+  font-family: inherit;
+  outline: none;
+  padding: 2px 0;
+}
+
+.ca-date-sep {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.ca-btn-reset {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.ca-btn-reset:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+
+.ca-dataset-picker-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.ca-dataset-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.ca-dataset-select {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e293b;
+  outline: none;
+  cursor: pointer;
+}
+
+.ca-btn-switch-dataset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ca-palette-primary, #2c7168);
+  background: rgba(44, 113, 104, 0.08);
+  border: 1px solid rgba(44, 113, 104, 0.25);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ca-btn-switch-dataset:hover {
+  background: rgba(44, 113, 104, 0.16);
+  color: #1a4943;
+}
+
+/* ==========================================================================
+   2. Charts Layout Grid (1 wide primary + 2 cols supporting)
+   ========================================================================== */
+
+.ca-daily-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.ca-daily-panel {
+  width: 100%;
+}
+
+.ca-daily-panel-span-2 {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.ca-daily-panel-primary {
+  width: 100%;
+}
+
+.ca-daily-panel-supporting {
+  width: 100%;
+}
+
+.ca-chart-caption {
+  margin: 0 0 10px 0;
+  padding: 6px 10px;
+  background: #f8fafc;
+  border-left: 3px solid var(--ca-palette-primary, #2c7168);
+  border-radius: 0 4px 4px 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #475569;
+}
+
+/* 消除 ComboChart 在 ChartPanel 内部的重复标题与多余嵌套边框 */
+.ca-panel .ca-combo-card {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  background: transparent;
+}
+
+.ca-panel .ca-combo-header {
+  display: none;
+}
+
+/* ==========================================================================
+   3. Collapsible Details Table
+   ========================================================================== */
+
+.ca-daily-details-panel {
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+}
+
+.ca-daily-details-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #ffffff;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  transition: background-color 0.15s ease;
+}
+
+.ca-daily-details-summary:hover {
+  background: #f8fafc;
+}
+
+.ca-daily-details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ca-daily-details-summary-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ca-daily-details-icon {
+  font-size: 15px;
+}
+
+.ca-daily-details-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.ca-daily-details-hint {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.ca-daily-details-panel[open] .ca-daily-details-summary {
+  border-bottom: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  background: #f8fafc;
+}
+
+.ca-daily-details-panel .ca-table-wrap {
+  padding: 8px 12px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+/* ==========================================================================
+   4. Empty States
+   ========================================================================== */
+
+.ca-daily-empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: #ffffff;
+  border: 1px dashed var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 12px;
+  text-align: center;
+  gap: 10px;
+}
+
+.ca-daily-empty-icon {
+  font-size: 32px;
+}
+
+.ca-daily-empty-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.ca-daily-empty-desc {
+  font-size: 12.5px;
+  color: #64748b;
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   5. Responsive Adaptations (Mobile 390px+ / Desktop)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .ca-daily-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ca-daily-panel-span-2 {
+    grid-column: 1;
+  }
+
+  .ca-dataset-picker-wrap {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ca-dataset-picker-item {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .ca-dataset-select {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+  }
+
+  .ca-btn-switch-dataset {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .ca-daily-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .ca-filter-section {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 390px) {
+  .ca-date-range-box {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "kailas-q3-organic-vs-paid": {
+    "source_rows": 6,
+    "last_row_index": 6,
+    "valid_channels_count": 3,
+    "content_spend": 518378.11,
+    "paid_spend": 769666.0,
+    "total_spend": 1288044.11,
+    "spend_sum_valid": true
+  },
+  "kailas-notes-performance-scatter": {
+    "raw_logical_blocks": 123,
+    "last_row_index": 145,
+    "valid_snapshot_notes": 119,
+    "excluded_rows": [
+      [
+        143,
+        "#N/A"
+      ],
+      [
+        144,
+        "（空白）"
+      ],
+      [
+        145,
+        "总计"
+      ]
+    ],
+    "sum_spend": 906818.64,
+    "sum_task_spend": 558453.8,
+    "sum_impressions": 19659767.0,
+    "sum_engagements": 82521.0,
+    "sum_uv_attributed": 11260.0
+  },
+  "kailas-kol-material-kfs-dual": {
+    "subsheets": {
+      "HBAV7o": {
+        "queried_blocks": 29,
+        "valid_notes": 28
+      },
+      "pBBc7Y": {
+        "queried_blocks": 14,
+        "valid_notes": 13
+      },
+      "krnHxa": {
+        "queried_blocks": 11,
+        "valid_notes": 10
+      }
+    },
+    "total_notes_samples": 51,
+    "total_k_cost": 516537.0,
+    "total_fs_spend": 62125.65
+  },
+  "kailas-search-keywords-category": {
+    "raw_logical_blocks": 9,
+    "excluded_rows": [
+      [
+        5,
+        "归属"
+      ],
+      [
+        12,
+        "（空白）"
+      ],
+      [
+        13,
+        "总计"
+      ]
+    ],
+    "valid_categories": 6,
+    "sum_spend": 150567.68,
+    "sum_clicks": 307987.0
+  },
+  "kailas-notes-leverage-fs-k": {
+    "raw_logical_blocks": 70,
+    "excluded_rows": [
+      [
+        67,
+        ""
+      ],
+      [
+        68,
+        ""
+      ],
+      [
+        69,
+        ""
+      ],
+      [
+        70,
+        ""
+      ]
+    ],
+    "valid_notes_count": 65,
+    "max_leverage": 8.83,
+    "avg_spend": 8306.82
+  }
+}

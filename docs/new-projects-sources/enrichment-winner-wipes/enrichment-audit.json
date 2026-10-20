@@ -1,0 +1,179 @@
+{
+  "generatedAt": "2026-10-20",
+  "projectId": "winner-wipes",
+  "outputPath": "feihe-mvp/lib/campaign-enrichment/winner-wipes.json",
+  "dailyDatasets": [
+    {
+      "id": "wipes-daily-taosou",
+      "label": "稳健玉米湿巾淘搜指数全系列与分渠道投放 (36天)",
+      "period": "2026-09-14 ~ 2026-10-19",
+      "rowCount": 36,
+      "reconciliation": {
+        "spendTotalSum": 361363.47,
+        "sourceSummarySpend": 361363.47,
+        "spendDiff": 0.0,
+        "indexTotalSum": 9375,
+        "sourceSummaryIndex": 9375,
+        "indexDiff": 0
+      }
+    },
+    {
+      "id": "wipes-daily-delivery",
+      "label": "稳健玉米湿巾投放日趋势 (By day)",
+      "period": "2026-09-16 ~ 2026-10-19",
+      "rowCount": 34,
+      "reconciliation": {
+        "spendSum": 178867.55,
+        "impressionsSum": 1856102,
+        "engagementsSum": 19712,
+        "uvSum": 23593
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "wipes-keyword-category-table",
+      "title": "关键词词类效果与转化汇总表",
+      "category": "performance",
+      "rowCount": 5,
+      "colCount": 11,
+      "keys": [
+        "category",
+        "spend",
+        "impressions",
+        "clicks",
+        "interactions",
+        "uv",
+        "cpm",
+        "cpc",
+        "ctr",
+        "cpe",
+        "cpuv"
+      ]
+    },
+    {
+      "id": "wipes-keyword-detail-table",
+      "title": "核心搜索关键词转化与访客成本明细表 (52词)",
+      "category": "performance",
+      "rowCount": 52,
+      "colCount": 12,
+      "keys": [
+        "category",
+        "keyword",
+        "spend",
+        "impressions",
+        "clicks",
+        "interactions",
+        "uv",
+        "cpm",
+        "cpc",
+        "ctr",
+        "cpe",
+        "cpuv"
+      ]
+    },
+    {
+      "id": "wipes-tier-efficiency-table",
+      "title": "达人层级投放结构与转化效率对比表 (全量116篇)",
+      "category": "execution",
+      "rowCount": 5,
+      "colCount": 12,
+      "keys": [
+        "tier",
+        "noteCount",
+        "totalSpend",
+        "kFee",
+        "fsSpend",
+        "impressions",
+        "engagements",
+        "fsUv",
+        "cpm",
+        "cpe",
+        "fsCpuv",
+        "ctr"
+      ]
+    },
+    {
+      "id": "wipes-direction-efficiency-table",
+      "title": "内容方向投放结构与转化效率对比表 (全量116篇)",
+      "category": "performance",
+      "rowCount": 6,
+      "colCount": 12,
+      "keys": [
+        "direction",
+        "noteCount",
+        "totalSpend",
+        "kFee",
+        "fsSpend",
+        "impressions",
+        "engagements",
+        "fsUv",
+        "cpm",
+        "cpe",
+        "fsCpuv",
+        "ctr"
+      ]
+    },
+    {
+      "id": "wipes-audience-packages-table",
+      "title": "聚光定向人群包投流转化效率表 (31个人群包+1条汇总行)",
+      "category": "performance",
+      "rowCount": 32,
+      "colCount": 10,
+      "keys": [
+        "packageName",
+        "spend",
+        "impressions",
+        "clicks",
+        "interactions",
+        "uv",
+        "cpm",
+        "ctr",
+        "cpe",
+        "cpuv"
+      ]
+    },
+    {
+      "id": "wipes-placement-efficiency-table",
+      "title": "广告投放版位（视频内流/搜索/信息流）结构表",
+      "category": "budget",
+      "rowCount": 4,
+      "colCount": 11,
+      "keys": [
+        "placement",
+        "spend",
+        "impressions",
+        "clicks",
+        "interactions",
+        "uv",
+        "cpm",
+        "cpc",
+        "ctr",
+        "cpe",
+        "cpuv"
+      ]
+    },
+    {
+      "id": "wipes-cid-creator-table",
+      "title": "CID组件引流与创作者转化效率明细表",
+      "category": "performance",
+      "rowCount": 11,
+      "colCount": 4,
+      "keys": [
+        "creator",
+        "spend",
+        "componentClicks",
+        "costPerClick"
+      ]
+    }
+  ],
+  "qualityGuarantees": {
+    "nullPreservedNotZero": true,
+    "noNonDeduplicatedUvConfused": true,
+    "weightedRatesNotAveraged": true,
+    "noPeriodCrossContamination": true,
+    "noDoubleCountSummaryRows": true,
+    "ugcFsStrictlySeparated": true,
+    "sensitiveContactsExcluded": true
+  }
+}

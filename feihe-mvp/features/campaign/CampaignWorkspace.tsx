@@ -11,7 +11,12 @@ import { CampaignContentPage } from './CampaignContentPage';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
+import { DashboardFrame } from '../overview/DashboardFrame';
+import { resolveDashboardPreset } from '../overview/dashboard-template';
+import { WorkspaceModuleTabs } from '../../components/ui/operations/WorkspaceModuleTabs';
+import { ProjectContext } from '../../components/project-shell/ProjectContext';
 import './campaign-analytics.css';
+import './campaign-shell.css';
 
 interface CampaignApiResponse {
   error?: string;
@@ -48,6 +53,12 @@ export function CampaignWorkspace({
 }: CampaignWorkspaceProps) {
   const currentSection = resolveSection(section, initialTab);
   const [overviewTab, setOverviewTab] = useProjectTab('overview', ['overview', 'daily']);
+
+  const projectContext = React.useContext(ProjectContext);
+  const project = projectContext?.currentProject?.id === projectId
+    ? projectContext.currentProject
+    : projectContext?.projects?.find((p) => p.id === projectId);
+  const preset = resolveDashboardPreset('content_marketing');
 
   const [dashboard, setDashboard] = useState<CampaignDashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -129,32 +140,76 @@ export function CampaignWorkspace({
   // 严格按项目隔离数据，避免跨项目串流
   const activeDashboard = dashboard && dashboard.projectId === projectId ? dashboard : null;
 
+  const refreshAction = (
+    <button
+      type="button"
+      onClick={handleReload}
+      disabled={loading}
+      className="ca-subnav-reload-btn button button-secondary"
+      title="重新请求最新复盘数据"
+      style={{
+        padding: '4px 12px',
+        borderRadius: 6,
+        fontSize: 13,
+        cursor: loading ? 'not-allowed' : 'pointer',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
+      }}
+    >
+      {loading ? '刷新中…' : '↻ 刷新'}
+    </button>
+  );
+
+  const tabsSlot = currentSection === 'overview' ? (
+    <WorkspaceModuleTabs
+      tabs={[
+        { id: 'overview', title: '数据总览', desc: '预算进度与阶段效果', icon: '📊' },
+        { id: 'daily', title: '分日看板', desc: '多指标趋势与每日明细', icon: '📅' },
+      ]}
+      activeTab={overviewTab}
+      onChange={setOverviewTab}
+      variant="cards"
+    />
+  ) : null;
+
   if (loading && !activeDashboard) {
     return (
-      <div className={`campaign-workspace-root ${className}`}>
-        <LoadingState text="正在准备战役全盘数据…" />
-      </div>
+      <DashboardFrame preset={preset} project={project} actions={refreshAction} tabsSlot={tabsSlot}>
+        <div className={`campaign-workspace-root ${className}`}>
+          <LoadingState text="正在准备战役全盘数据…" />
+        </div>
+      </DashboardFrame>
     );
   }
 
   if (error && !activeDashboard) {
     return (
-      <div className={`campaign-workspace-root ${className}`}>
-        <ErrorState error={error} onRetry={handleReload} />
-      </div>
+      <DashboardFrame preset={preset} project={project} actions={refreshAction} tabsSlot={tabsSlot}>
+        <div className={`campaign-workspace-root ${className}`}>
+          <ErrorState error={error} onRetry={handleReload} />
+        </div>
+      </DashboardFrame>
     );
   }
 
   if (!activeDashboard) {
     return (
-      <div className={`campaign-workspace-root ${className}`}>
-        <ErrorState error="暂无当前项目的复盘数据" onRetry={handleReload} />
-      </div>
+      <DashboardFrame preset={preset} project={project} actions={refreshAction} tabsSlot={tabsSlot}>
+        <div className={`campaign-workspace-root ${className}`}>
+          <ErrorState error="暂无当前项目的复盘数据" onRetry={handleReload} />
+        </div>
+      </DashboardFrame>
     );
   }
 
   return (
-    <div className={`campaign-workspace-root ${className}`}>
+    <DashboardFrame
+      preset={preset}
+      project={project}
+      actions={refreshAction}
+      tabsSlot={tabsSlot}
+    >
+      <div className={`campaign-workspace-root ${className}`}>
       {/* 重新加载失败时的轻量警示条 */}
       {error && (
         <div
@@ -189,106 +244,37 @@ export function CampaignWorkspace({
 
       {/* 投流分析独立页面 */}
       {currentSection === 'ads' && (
-        <CampaignAdsPage dashboard={activeDashboard} />
+        <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
       )}
 
       {/* 内容管理独立页面 */}
       {currentSection === 'content' && (
-        <CampaignContentPage dashboard={activeDashboard} />
+        <CampaignContentPage key={projectId} dashboard={activeDashboard} />
       )}
 
       {/* 首页总览 / 分日看板：仅在 overview 状态下提供紧凑切换条与刷新 */}
       {currentSection === 'overview' && (
-        <>
+        overviewTab === 'daily' ? (
           <div
-            className="ca-overview-subnav-bar"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '6px 16px',
-              background: '#f8fafc',
-              borderBottom: '1px solid #e2e8f0',
-              gap: 12,
-            }}
+            id="workspace-tabpanel-daily"
+            role="tabpanel"
+            aria-labelledby="workspace-tab-daily"
+            tabIndex={0}
           >
-            <div
-              className="ca-overview-subnav-tabs"
-              role="tablist"
-              aria-label="看板模式切换"
-              style={{ display: 'flex', gap: 6 }}
-            >
-              <button
-                type="button"
-                role="tab"
-                aria-selected={overviewTab === 'overview'}
-                className={`ca-subnav-pill ${overviewTab === 'overview' ? 'active' : ''}`}
-                onClick={() => setOverviewTab('overview')}
-                style={{
-                  padding: '5px 14px',
-                  borderRadius: 6,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  border: '1px solid',
-                  borderColor: overviewTab === 'overview' ? '#2c7168' : '#e2e8f0',
-                  background: overviewTab === 'overview' ? '#2c7168' : '#ffffff',
-                  color: overviewTab === 'overview' ? '#ffffff' : '#475569',
-                  cursor: 'pointer',
-                }}
-              >
-                总览
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={overviewTab === 'daily'}
-                className={`ca-subnav-pill ${overviewTab === 'daily' ? 'active' : ''}`}
-                onClick={() => setOverviewTab('daily')}
-                style={{
-                  padding: '5px 14px',
-                  borderRadius: 6,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  border: '1px solid',
-                  borderColor: overviewTab === 'daily' ? '#2c7168' : '#e2e8f0',
-                  background: overviewTab === 'daily' ? '#2c7168' : '#ffffff',
-                  color: overviewTab === 'daily' ? '#ffffff' : '#475569',
-                  cursor: 'pointer',
-                }}
-              >
-                分日
-              </button>
-            </div>
-
-            <div className="ca-overview-subnav-actions">
-              <button
-                type="button"
-                onClick={handleReload}
-                disabled={loading}
-                className="ca-subnav-reload-btn"
-                title="重新请求最新复盘数据"
-                style={{
-                  padding: '4px 10px',
-                  borderRadius: 6,
-                  fontSize: 12,
-                  border: '1px solid #cbd5e1',
-                  background: '#ffffff',
-                  color: '#475569',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                }}
-              >
-                {loading ? '刷新中…' : '↻ 刷新'}
-              </button>
-            </div>
+            <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
           </div>
-
-          {overviewTab === 'daily' ? (
-            <CampaignDailyPage dashboard={activeDashboard} />
-          ) : (
-            <CampaignOverviewPage dashboard={activeDashboard} />
-          )}
-        </>
+        ) : (
+          <div
+            id="workspace-tabpanel-overview"
+            role="tabpanel"
+            aria-labelledby="workspace-tab-overview"
+            tabIndex={0}
+          >
+            <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
+          </div>
+        )
       )}
     </div>
+    </DashboardFrame>
   );
 }

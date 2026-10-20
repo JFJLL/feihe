@@ -84,7 +84,7 @@ export function MetricStrip({
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="ca-metric-strip" role="region" aria-label="核心指标统计概览">
+    <div className="ca-metric-strip bd-kpi-grid-rich" role="region" aria-label="核心指标统计概览">
       {items.map((it, idx) => {
         const isMissing = it.value === null || it.value === undefined;
         let formatted = '—';
@@ -92,19 +92,21 @@ export function MetricStrip({
           formatted = typeof it.value === 'number' ? fmtNum(it.value) : String(it.value);
         }
         return (
-          <div key={idx} className="ca-metric-item">
-            <span className="ca-metric-label" title={it.label}>{it.label}</span>
-            <div className="ca-metric-value-row">
+          <article key={idx} className="ca-metric-item bd-kpi-card-rich">
+            <div className="bd-kpi-head">
+              <span className="ca-metric-label" title={it.label}>{it.label}</span>
+            </div>
+            <div className="ca-metric-value-row bd-kpi-val">
               <span
                 className={`ca-metric-value ${isMissing ? 'ca-metric-missing' : ''}`}
                 title={formatted}
               >
                 {formatted}
               </span>
-              {it.unit && <span className="ca-metric-unit">{it.unit}</span>}
+              {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
             </div>
-            {it.note && <p className="ca-metric-note" title={it.note}>{it.note}</p>}
-          </div>
+            {it.note && <p className="ca-metric-note bd-kpi-sub" title={it.note}>{it.note}</p>}
+          </article>
         );
       })}
     </div>
@@ -131,11 +133,15 @@ export function ChartPanel({
   const panelId = useId();
 
   return (
-    <section className={`ca-panel ${className || ''}`.trim()} aria-labelledby={panelId}>
-      <div className="ca-panel-header">
+    <section
+      className={`ca-panel bd-panel ${className || ''}`.trim()}
+      data-section="spend"
+      aria-labelledby={panelId}
+    >
+      <div className="ca-panel-header bd-panel-head">
         <div className="ca-panel-heading">
           <h3 id={panelId} className="ca-panel-title">{title}</h3>
-          {subtitle && <p className="ca-panel-subtitle">{subtitle}</p>}
+          {subtitle && <p className="ca-panel-subtitle bd-caption">{subtitle}</p>}
         </div>
         {actions && <div className="ca-panel-actions">{actions}</div>}
       </div>
@@ -1564,17 +1570,19 @@ export function ScatterChart({
               >
                 <title>{`${pt.label}\n${xLabel}: ${fmtNum(pt.x)}\n${yLabel}: ${fmtNum(pt.y)}`}</title>
               </circle>
-              <text
-                x={px}
-                y={py - r - 3}
-                textAnchor="middle"
-                fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMuted}
-                fontSize={isSelected ? '11' : '9.5'}
-                fontWeight={isSelected ? '600' : '400'}
-                pointerEvents="none"
-              >
-                {pt.label.length > 6 ? `${pt.label.slice(0, 6)}…` : pt.label}
-              </text>
+              {(validPoints.length <= 10 || isSelected) && (
+                <text
+                  x={px}
+                  y={py - r - 3}
+                  textAnchor="middle"
+                  fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMuted}
+                  fontSize={isSelected ? '11' : '9.5'}
+                  fontWeight={isSelected ? '600' : '400'}
+                  pointerEvents="none"
+                >
+                  {pt.label.length > 6 ? `${pt.label.slice(0, 6)}…` : pt.label}
+                </text>
+              )}
             </g>
           );
         })}

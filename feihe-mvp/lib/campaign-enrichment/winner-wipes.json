@@ -1,0 +1,3103 @@
+{
+  "projectId": "winner-wipes",
+  "extractedAt": "2026-10-20",
+  "sources": [
+    {
+      "id": "wipes-kpi-sheet",
+      "name": "飞书在线KPI底表 (OgJUzb)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=OgJUzb",
+      "status": "ready",
+      "detail": "飞书表格KPI子表真实数据映射，覆盖日常种草、医生专家及CID监控",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-weekly-doc",
+      "name": "飞书在线周报 (稳健玉米酒精湿巾Y26 9-11月)",
+      "url": "https://feishu.cn/docx/LtZ5dlPvnoiA8OxsvAUcV2lAnWb",
+      "status": "ready",
+      "detail": "飞书云文档周期复盘，从正文提取全量笔记已发布数量与节奏",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-wy1hzo",
+      "name": "淘搜指数与分渠道日消耗 (wY1HZO)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=wY1HZO",
+      "status": "ready",
+      "detail": "36天完整淘搜6大关键词指数、K/F/S/CID渠道日消耗及搜索进店UV",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-0qtvhe",
+      "name": "全渠道投放日跟踪与版位透视 (0QTVhE)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=0QTVhE",
+      "status": "ready",
+      "detail": "34天By day日趋势数据及视频内流/搜索推广/信息流推广三大版位效果结构",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-wbp7au",
+      "name": "关键词词类与词级访客成本 (WBP7aU)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=WBP7aU",
+      "status": "ready",
+      "detail": "4大词类大盘聚合与52个核心关键词真实消费、展现、点击、UV及CPUV",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-pfsl9q",
+      "name": "聚光定向人群包透视 (PFSl9q)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=PFSl9q",
+      "status": "ready",
+      "detail": "31个精准定向人群包消耗、展现、互动、站外活跃UV及CPUV量化透视",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-9weg9y-0lnwud",
+      "name": "发布数据汇总明细与专家号专项 (9weg9y / 0lnwuD)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=9weg9y",
+      "status": "ready",
+      "detail": "全量116篇已发布笔记（含3篇医学专家号），覆盖K端达人费与FS聚光投流",
+      "fetchedAt": "2026-10-20"
+    },
+    {
+      "id": "wipes-sheets-tiermz",
+      "name": "CID组件引流数据 (tiermz)",
+      "url": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=tiermz",
+      "status": "ready",
+      "detail": "10位达人素材跨端CID组件点击与访客成本监控",
+      "fetchedAt": "2026-10-20"
+    }
+  ],
+  "tables": [
+    {
+      "id": "wipes-keyword-category-table",
+      "title": "关键词词类效果与转化汇总表",
+      "category": "performance",
+      "period": "源表当前快照（统计截止未注明）",
+      "sourceId": "wipes-sheets-wbp7au",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=WBP7aU",
+      "note": "源表未标注统计截止时间。包含场景词、品类词、品牌词、竞品词4类及总计行（共5行）。UV为30日归因活跃人数，不同词类受众存在交叉重叠，不可跨词类直接累加去重。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "category",
+          "title": "词类",
+          "type": "badge"
+        },
+        {
+          "key": "spend",
+          "title": "消费金额",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "interactions",
+          "title": "互动量",
+          "type": "number"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC(元)",
+          "type": "currency"
+        },
+        {
+          "key": "ctr",
+          "title": "CTR(%)",
+          "type": "percent"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "category": "场景词",
+          "spend": 16387.83,
+          "impressions": 387175,
+          "clicks": 16182,
+          "interactions": 128,
+          "uv": 577,
+          "cpm": 42.0,
+          "cpc": 1.01,
+          "ctr": 4.18,
+          "cpe": 128.03,
+          "cpuv": 28.4
+        },
+        {
+          "category": "竞品词",
+          "spend": 3109.3,
+          "impressions": 74508,
+          "clicks": 3399,
+          "interactions": 46,
+          "uv": 45,
+          "cpm": 42.0,
+          "cpc": 0.91,
+          "ctr": 4.56,
+          "cpe": 67.59,
+          "cpuv": 69.1
+        },
+        {
+          "category": "品类词",
+          "spend": 15600.05,
+          "impressions": 354485,
+          "clicks": 14608,
+          "interactions": 99,
+          "uv": 538,
+          "cpm": 44.0,
+          "cpc": 1.07,
+          "ctr": 4.12,
+          "cpe": 157.58,
+          "cpuv": 29.0
+        },
+        {
+          "category": "品牌词",
+          "spend": 11594.23,
+          "impressions": 266435,
+          "clicks": 10670,
+          "interactions": 55,
+          "uv": 576,
+          "cpm": 44.0,
+          "cpc": 1.09,
+          "ctr": 4.0,
+          "cpe": 210.8,
+          "cpuv": 20.13
+        },
+        {
+          "category": "总计",
+          "spend": 46691.41,
+          "impressions": 1082603,
+          "clicks": 44859,
+          "interactions": 328,
+          "uv": 1736,
+          "cpm": 43.0,
+          "cpc": 1.04,
+          "ctr": 4.14,
+          "cpe": 142.35,
+          "cpuv": 26.9
+        }
+      ]
+    },
+    {
+      "id": "wipes-keyword-detail-table",
+      "title": "核心搜索关键词转化与访客成本明细表 (52词)",
+      "category": "performance",
+      "period": "源表当前快照（统计截止未注明）",
+      "sourceId": "wipes-sheets-wbp7au",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=WBP7aU",
+      "note": "源表未标注统计截止时间。包含52个有效搜索关键词明细（不含合计行）。指标包含展现、点击、互动、站外活跃UV及CPUV访客成本。不同关键词归因UV存在交叉，不可在词间直接相加。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "category",
+          "title": "所属词类",
+          "type": "badge"
+        },
+        {
+          "key": "keyword",
+          "title": "关键词",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "title": "消费金额",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "interactions",
+          "title": "互动量",
+          "type": "number"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC(元)",
+          "type": "currency"
+        },
+        {
+          "key": "ctr",
+          "title": "CTR(%)",
+          "type": "percent"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "category": "品类词",
+          "keyword": "消毒湿巾",
+          "spend": 5997.15,
+          "impressions": 159169,
+          "clicks": 7075,
+          "interactions": 36,
+          "uv": 166,
+          "cpm": 37.68,
+          "cpc": 0.85,
+          "ctr": 4.44,
+          "cpe": 166.59,
+          "cpuv": 36.13
+        },
+        {
+          "category": "场景词",
+          "keyword": "爬爬垫怎么清洁",
+          "spend": 3825.62,
+          "impressions": 100065,
+          "clicks": 4831,
+          "interactions": 31,
+          "uv": 134,
+          "cpm": 38.23,
+          "cpc": 0.79,
+          "ctr": 4.83,
+          "cpe": 123.41,
+          "cpuv": 28.55
+        },
+        {
+          "category": "品牌词",
+          "keyword": "稳健湿巾",
+          "spend": 2212.85,
+          "impressions": 46741,
+          "clicks": 1679,
+          "interactions": 11,
+          "uv": 132,
+          "cpm": 47.34,
+          "cpc": 1.32,
+          "ctr": 3.59,
+          "cpe": 201.17,
+          "cpuv": 16.76
+        },
+        {
+          "category": "品牌词",
+          "keyword": "稳健玉米酒精湿巾",
+          "spend": 2092.46,
+          "impressions": 55681,
+          "clicks": 2502,
+          "interactions": 9,
+          "uv": 69,
+          "cpm": 37.58,
+          "cpc": 0.84,
+          "ctr": 4.49,
+          "cpe": 232.5,
+          "cpuv": 30.33
+        },
+        {
+          "category": "场景词",
+          "keyword": "玩具怎么消毒清洗",
+          "spend": 1910.27,
+          "impressions": 52787,
+          "clicks": 1905,
+          "interactions": 21,
+          "uv": 81,
+          "cpm": 36.19,
+          "cpc": 1.0,
+          "ctr": 3.61,
+          "cpe": 90.97,
+          "cpuv": 23.58
+        },
+        {
+          "category": "品类词",
+          "keyword": "清洁湿巾",
+          "spend": 1813.96,
+          "impressions": 43292,
+          "clicks": 1759,
+          "interactions": 16,
+          "uv": 45,
+          "cpm": 41.9,
+          "cpc": 1.03,
+          "ctr": 4.06,
+          "cpe": 113.37,
+          "cpuv": 40.31
+        },
+        {
+          "category": "品牌词",
+          "keyword": "稳健",
+          "spend": 1778.11,
+          "impressions": 44167,
+          "clicks": 1760,
+          "interactions": 14,
+          "uv": 57,
+          "cpm": 40.26,
+          "cpc": 1.01,
+          "ctr": 3.98,
+          "cpe": 127.01,
+          "cpuv": 31.19
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精湿巾擦餐具",
+          "spend": 1660.38,
+          "impressions": 31645,
+          "clicks": 992,
+          "interactions": 13,
+          "uv": 60,
+          "cpm": 52.47,
+          "cpc": 1.67,
+          "ctr": 3.13,
+          "cpe": 127.72,
+          "cpuv": 27.67
+        },
+        {
+          "category": "场景词",
+          "keyword": "酒精湿巾可以托运吗",
+          "spend": 1547.19,
+          "impressions": 38528,
+          "clicks": 1514,
+          "interactions": 10,
+          "uv": 47,
+          "cpm": 40.16,
+          "cpc": 1.02,
+          "ctr": 3.93,
+          "cpe": 154.72,
+          "cpuv": 32.92
+        },
+        {
+          "category": "场景词",
+          "keyword": "旅游必带清单",
+          "spend": 1511.39,
+          "impressions": 34337,
+          "clicks": 1471,
+          "interactions": 12,
+          "uv": 37,
+          "cpm": 44.02,
+          "cpc": 1.03,
+          "ctr": 4.28,
+          "cpe": 125.95,
+          "cpuv": 40.85
+        },
+        {
+          "category": "品牌词",
+          "keyword": "酒精湿巾稳健",
+          "spend": 1460.69,
+          "impressions": 26419,
+          "clicks": 841,
+          "interactions": 6,
+          "uv": 115,
+          "cpm": 55.29,
+          "cpc": 1.74,
+          "ctr": 3.18,
+          "cpe": 243.45,
+          "cpuv": 12.7
+        },
+        {
+          "category": "品牌词",
+          "keyword": "稳健医疗",
+          "spend": 1416.95,
+          "impressions": 27894,
+          "clicks": 1280,
+          "interactions": 7,
+          "uv": 43,
+          "cpm": 50.8,
+          "cpc": 1.11,
+          "ctr": 4.59,
+          "cpe": 202.42,
+          "cpuv": 32.95
+        },
+        {
+          "category": "场景词",
+          "keyword": "宝宝玩具怎么消毒",
+          "spend": 1373.57,
+          "impressions": 36087,
+          "clicks": 1373,
+          "interactions": 11,
+          "uv": 52,
+          "cpm": 38.06,
+          "cpc": 1.0,
+          "ctr": 3.8,
+          "cpe": 124.87,
+          "cpuv": 26.41
+        },
+        {
+          "category": "品牌词",
+          "keyword": "全棉时代",
+          "spend": 1364.33,
+          "impressions": 36821,
+          "clicks": 1396,
+          "interactions": 4,
+          "uv": 114,
+          "cpm": 37.05,
+          "cpc": 0.98,
+          "ctr": 3.79,
+          "cpe": 341.08,
+          "cpuv": 11.97
+        },
+        {
+          "category": "品牌词",
+          "keyword": "稳健酒精湿巾",
+          "spend": 1268.84,
+          "impressions": 28712,
+          "clicks": 1212,
+          "interactions": 4,
+          "uv": 46,
+          "cpm": 44.19,
+          "cpc": 1.05,
+          "ctr": 4.22,
+          "cpe": 317.21,
+          "cpuv": 27.58
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精湿巾用途",
+          "spend": 974.72,
+          "impressions": 17229,
+          "clicks": 563,
+          "interactions": 4,
+          "uv": 19,
+          "cpm": 56.57,
+          "cpc": 1.73,
+          "ctr": 3.27,
+          "cpe": 243.68,
+          "cpuv": 51.3
+        },
+        {
+          "category": "品类词",
+          "keyword": "宝宝湿巾",
+          "spend": 956.61,
+          "impressions": 21683,
+          "clicks": 912,
+          "interactions": 14,
+          "uv": 93,
+          "cpm": 44.12,
+          "cpc": 1.05,
+          "ctr": 4.21,
+          "cpe": 68.33,
+          "cpuv": 10.29
+        },
+        {
+          "category": "品类词",
+          "keyword": "消毒湿巾推荐",
+          "spend": 956.0,
+          "impressions": 23237,
+          "clicks": 992,
+          "interactions": 3,
+          "uv": 16,
+          "cpm": 41.14,
+          "cpc": 0.96,
+          "ctr": 4.27,
+          "cpe": 318.67,
+          "cpuv": 59.75
+        },
+        {
+          "category": "场景词",
+          "keyword": "换季感冒",
+          "spend": 798.68,
+          "impressions": 18968,
+          "clicks": 996,
+          "interactions": 12,
+          "uv": 18,
+          "cpm": 42.11,
+          "cpc": 0.8,
+          "ctr": 5.25,
+          "cpe": 66.56,
+          "cpuv": 44.37
+        },
+        {
+          "category": "场景词",
+          "keyword": "清洁湿巾推荐",
+          "spend": 749.01,
+          "impressions": 16589,
+          "clicks": 770,
+          "interactions": 3,
+          "uv": 44,
+          "cpm": 45.15,
+          "cpc": 0.97,
+          "ctr": 4.64,
+          "cpe": 249.67,
+          "cpuv": 17.02
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精湿巾哪个牌子比较好",
+          "spend": 613.71,
+          "impressions": 11158,
+          "clicks": 399,
+          "interactions": 6,
+          "uv": 61,
+          "cpm": 55.0,
+          "cpc": 1.54,
+          "ctr": 3.58,
+          "cpe": 102.29,
+          "cpuv": 10.06
+        },
+        {
+          "category": "场景词",
+          "keyword": "厨房清洁",
+          "spend": 594.76,
+          "impressions": 11671,
+          "clicks": 502,
+          "interactions": 9,
+          "uv": 64,
+          "cpm": 50.96,
+          "cpc": 1.18,
+          "ctr": 4.3,
+          "cpe": 66.08,
+          "cpuv": 9.29
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精湿巾推荐",
+          "spend": 587.29,
+          "impressions": 11101,
+          "clicks": 408,
+          "interactions": 1,
+          "uv": 14,
+          "cpm": 52.9,
+          "cpc": 1.44,
+          "ctr": 3.68,
+          "cpe": 587.29,
+          "cpuv": 41.95
+        },
+        {
+          "category": "场景词",
+          "keyword": "酒精湿巾可以带上飞机",
+          "spend": 586.33,
+          "impressions": 7580,
+          "clicks": 323,
+          "interactions": 4,
+          "uv": 11,
+          "cpm": 77.35,
+          "cpc": 1.82,
+          "ctr": 4.26,
+          "cpe": 146.58,
+          "cpuv": 53.3
+        },
+        {
+          "category": "品类词",
+          "keyword": "消毒湿巾和酒精湿巾区别",
+          "spend": 569.19,
+          "impressions": 9980,
+          "clicks": 400,
+          "interactions": 0,
+          "uv": 12,
+          "cpm": 57.03,
+          "cpc": 1.42,
+          "ctr": 4.01,
+          "cpe": null,
+          "cpuv": 47.43
+        },
+        {
+          "category": "场景词",
+          "keyword": "厨房清洁湿巾",
+          "spend": 565.13,
+          "impressions": 11208,
+          "clicks": 333,
+          "interactions": 2,
+          "uv": 10,
+          "cpm": 50.42,
+          "cpc": 1.7,
+          "ctr": 2.97,
+          "cpe": 282.57,
+          "cpuv": 56.51
+        },
+        {
+          "category": "品类词",
+          "keyword": "食品接触级消毒湿巾",
+          "spend": 551.65,
+          "impressions": 10492,
+          "clicks": 361,
+          "interactions": 3,
+          "uv": 26,
+          "cpm": 52.58,
+          "cpc": 1.53,
+          "ctr": 3.44,
+          "cpe": 183.88,
+          "cpuv": 21.22
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精湿巾",
+          "spend": 483.79,
+          "impressions": 7348,
+          "clicks": 473,
+          "interactions": 2,
+          "uv": 24,
+          "cpm": 65.84,
+          "cpc": 1.02,
+          "ctr": 6.44,
+          "cpe": 241.9,
+          "cpuv": 20.16
+        },
+        {
+          "category": "场景词",
+          "keyword": "厨房台面清洁",
+          "spend": 472.06,
+          "impressions": 8903,
+          "clicks": 249,
+          "interactions": 3,
+          "uv": 10,
+          "cpm": 53.02,
+          "cpc": 1.9,
+          "ctr": 2.8,
+          "cpe": 157.35,
+          "cpuv": 47.21
+        },
+        {
+          "category": "场景词",
+          "keyword": "玩具消毒",
+          "spend": 453.25,
+          "impressions": 9968,
+          "clicks": 470,
+          "interactions": 1,
+          "uv": 7,
+          "cpm": 45.47,
+          "cpc": 0.96,
+          "ctr": 4.72,
+          "cpe": 453.25,
+          "cpuv": 64.75
+        },
+        {
+          "category": "场景词",
+          "keyword": "酒精湿巾可以带上飞机吗",
+          "spend": 426.43,
+          "impressions": 7917,
+          "clicks": 341,
+          "interactions": 2,
+          "uv": 14,
+          "cpm": 53.86,
+          "cpc": 1.25,
+          "ctr": 4.31,
+          "cpe": 213.22,
+          "cpuv": 30.46
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精喷雾",
+          "spend": 407.95,
+          "impressions": 7787,
+          "clicks": 258,
+          "interactions": 1,
+          "uv": 1,
+          "cpm": 52.39,
+          "cpc": 1.58,
+          "ctr": 3.31,
+          "cpe": 407.95,
+          "cpuv": 407.95
+        },
+        {
+          "category": "场景词",
+          "keyword": "碗筷消毒",
+          "spend": 347.02,
+          "impressions": 7651,
+          "clicks": 249,
+          "interactions": 0,
+          "uv": 10,
+          "cpm": 45.36,
+          "cpc": 1.39,
+          "ctr": 3.25,
+          "cpe": null,
+          "cpuv": 34.7
+        },
+        {
+          "category": "场景词",
+          "keyword": "出差必带物品清单",
+          "spend": 335.01,
+          "impressions": 7388,
+          "clicks": 193,
+          "interactions": 1,
+          "uv": 14,
+          "cpm": 45.35,
+          "cpc": 1.74,
+          "ctr": 2.61,
+          "cpe": 335.01,
+          "cpuv": 23.93
+        },
+        {
+          "category": "场景词",
+          "keyword": "高铁带娃必备神器",
+          "spend": 132.54,
+          "impressions": 3274,
+          "clicks": 96,
+          "interactions": 1,
+          "uv": 2,
+          "cpm": 40.48,
+          "cpc": 1.38,
+          "ctr": 2.93,
+          "cpe": 132.54,
+          "cpuv": 66.27
+        },
+        {
+          "category": "场景词",
+          "keyword": "酒精湿巾能带上高铁吗",
+          "spend": 103.13,
+          "impressions": 1491,
+          "clicks": 70,
+          "interactions": 0,
+          "uv": 1,
+          "cpm": 69.17,
+          "cpc": 1.47,
+          "ctr": 4.69,
+          "cpe": null,
+          "cpuv": 103.13
+        },
+        {
+          "category": "场景词",
+          "keyword": "高铁可以带酒精湿巾吗",
+          "spend": 98.36,
+          "impressions": 1753,
+          "clicks": 63,
+          "interactions": 0,
+          "uv": 1,
+          "cpm": 56.11,
+          "cpc": 1.56,
+          "ctr": 3.59,
+          "cpe": null,
+          "cpuv": 98.36
+        },
+        {
+          "category": "场景词",
+          "keyword": "家里有甲流其他人怎么预防",
+          "spend": 95.3,
+          "impressions": 2897,
+          "clicks": 108,
+          "interactions": 1,
+          "uv": 4,
+          "cpm": 32.9,
+          "cpc": 0.88,
+          "ctr": 3.73,
+          "cpe": 95.3,
+          "cpuv": 23.83
+        },
+        {
+          "category": "场景词",
+          "keyword": "囤货收纳",
+          "spend": 93.89,
+          "impressions": 1384,
+          "clicks": 83,
+          "interactions": 2,
+          "uv": 5,
+          "cpm": 67.84,
+          "cpc": 1.13,
+          "ctr": 6.0,
+          "cpe": 46.95,
+          "cpuv": 18.78
+        },
+        {
+          "category": "场景词",
+          "keyword": "清洁厨房",
+          "spend": 91.46,
+          "impressions": 2166,
+          "clicks": 72,
+          "interactions": 0,
+          "uv": 3,
+          "cpm": 42.23,
+          "cpc": 1.27,
+          "ctr": 3.32,
+          "cpe": null,
+          "cpuv": 30.49
+        },
+        {
+          "category": "场景词",
+          "keyword": "孕妇感冒怎么办",
+          "spend": 78.58,
+          "impressions": 1169,
+          "clicks": 43,
+          "interactions": 0,
+          "uv": 1,
+          "cpm": 67.22,
+          "cpc": 1.83,
+          "ctr": 3.68,
+          "cpe": null,
+          "cpuv": 78.58
+        },
+        {
+          "category": "场景词",
+          "keyword": "大促必囤清单",
+          "spend": 54.05,
+          "impressions": 1021,
+          "clicks": 30,
+          "interactions": 2,
+          "uv": 3,
+          "cpm": 52.94,
+          "cpc": 1.8,
+          "ctr": 2.94,
+          "cpe": 27.03,
+          "cpuv": 18.02
+        },
+        {
+          "category": "场景词",
+          "keyword": "旅游必带物品清单",
+          "spend": 53.12,
+          "impressions": 1068,
+          "clicks": 32,
+          "interactions": 0,
+          "uv": 4,
+          "cpm": 49.74,
+          "cpc": 1.66,
+          "ctr": 3.0,
+          "cpe": null,
+          "cpuv": 13.28
+        },
+        {
+          "category": "场景词",
+          "keyword": "浴室清洁好物推荐",
+          "spend": 31.48,
+          "impressions": 575,
+          "clicks": 23,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 54.75,
+          "cpc": 1.37,
+          "ctr": 4.0,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "品类词",
+          "keyword": "酒精棉片",
+          "spend": 27.65,
+          "impressions": 364,
+          "clicks": 16,
+          "interactions": 0,
+          "uv": 1,
+          "cpm": 75.96,
+          "cpc": 1.73,
+          "ctr": 4.4,
+          "cpe": null,
+          "cpuv": 27.65
+        },
+        {
+          "category": "场景词",
+          "keyword": "婴儿外出必备",
+          "spend": 26.75,
+          "impressions": 268,
+          "clicks": 15,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 99.81,
+          "cpc": 1.78,
+          "ctr": 5.6,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "场景词",
+          "keyword": "玩具消毒的方法",
+          "spend": 19.59,
+          "impressions": 395,
+          "clicks": 13,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 49.59,
+          "cpc": 1.51,
+          "ctr": 3.29,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "场景词",
+          "keyword": "流感",
+          "spend": 8.8,
+          "impressions": 56,
+          "clicks": 9,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 157.14,
+          "cpc": 0.98,
+          "ctr": 16.07,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "场景词",
+          "keyword": "宝宝手足口",
+          "spend": 1.57,
+          "impressions": 8,
+          "clicks": 2,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 196.25,
+          "cpc": 0.79,
+          "ctr": 25.0,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "场景词",
+          "keyword": "宝宝餐椅清洁",
+          "spend": 1.51,
+          "impressions": 1,
+          "clicks": 1,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 1510.0,
+          "cpc": 1.51,
+          "ctr": 100.0,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "场景词",
+          "keyword": "厨房清洁好物",
+          "spend": 1.13,
+          "impressions": 1,
+          "clicks": 1,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 1130.0,
+          "cpc": 1.13,
+          "ctr": 100.0,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "category": "场景词",
+          "keyword": "小玩具用什么消毒清洗",
+          "spend": 0.85,
+          "impressions": 1,
+          "clicks": 1,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 850.0,
+          "cpc": 0.85,
+          "ctr": 100.0,
+          "cpe": null,
+          "cpuv": null
+        }
+      ]
+    },
+    {
+      "id": "wipes-tier-efficiency-table",
+      "title": "达人层级投放结构与转化效率对比表 (全量116篇)",
+      "category": "execution",
+      "period": "发布档期2026/09/14~10/12（FS投流数据截止10/18）",
+      "sourceId": "wipes-sheets-9weg9y-0lnwud",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=9weg9y",
+      "note": "发布档期按笔记实际发布日期为2026/09/14~10/12，投流效果依据底表明确更新日期截止10/18。涵盖专家(3篇)、腰部KOL(3篇)、尾部KOL(24篇)、素人KOC(86篇)及总计行（共5行，总计116篇）。严格区分K端达人采买费(¥188,049.65)与FS聚光投流费(¥164,978.79)。FS站外活跃UV不可跨层级直接去重累加。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "tier",
+          "title": "达人层级",
+          "type": "badge"
+        },
+        {
+          "key": "noteCount",
+          "title": "发布篇数",
+          "type": "number"
+        },
+        {
+          "key": "totalSpend",
+          "title": "KFS总消耗(元)",
+          "type": "currency"
+        },
+        {
+          "key": "kFee",
+          "title": "K端达人费(元)",
+          "type": "currency"
+        },
+        {
+          "key": "fsSpend",
+          "title": "FS聚光投流(元)",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "总曝光量",
+          "type": "number"
+        },
+        {
+          "key": "engagements",
+          "title": "总互动量",
+          "type": "number"
+        },
+        {
+          "key": "fsUv",
+          "title": "FS站外活跃UV",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "KFS CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpe",
+          "title": "KFS CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "fsCpuv",
+          "title": "FS CPUV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "ctr",
+          "title": "阅读CTR(%)",
+          "type": "percent"
+        }
+      ],
+      "rows": [
+        {
+          "tier": "素人KOC",
+          "noteCount": 86,
+          "totalSpend": 147660.5,
+          "kFee": 47394.66,
+          "fsSpend": 100265.84,
+          "impressions": 3941482,
+          "engagements": 38871,
+          "fsUv": 13741,
+          "cpm": 37.46,
+          "cpe": 3.8,
+          "fsCpuv": 7.3,
+          "ctr": 11.01
+        },
+        {
+          "tier": "尾部KOL",
+          "noteCount": 24,
+          "totalSpend": 121318.95,
+          "kFee": 68586.67,
+          "fsSpend": 52732.28,
+          "impressions": 1816189,
+          "engagements": 19790,
+          "fsUv": 7043,
+          "cpm": 66.8,
+          "cpe": 6.13,
+          "fsCpuv": 7.49,
+          "ctr": 17.63
+        },
+        {
+          "tier": "专家",
+          "noteCount": 3,
+          "totalSpend": 60330.93,
+          "kFee": 51334.31,
+          "fsSpend": 8996.62,
+          "impressions": 444260,
+          "engagements": 11353,
+          "fsUv": 2558,
+          "cpm": 135.8,
+          "cpe": 5.31,
+          "fsCpuv": 3.52,
+          "ctr": 8.6
+        },
+        {
+          "tier": "腰部KOL",
+          "noteCount": 3,
+          "totalSpend": 23718.08,
+          "kFee": 20734.03,
+          "fsSpend": 2984.05,
+          "impressions": 377784,
+          "engagements": 3488,
+          "fsUv": 249,
+          "cpm": 62.78,
+          "cpe": 6.8,
+          "fsCpuv": 11.98,
+          "ctr": 25.01
+        },
+        {
+          "tier": "总计",
+          "noteCount": 116,
+          "totalSpend": 353028.46,
+          "kFee": 188049.67,
+          "fsSpend": 164978.79,
+          "impressions": 6579715,
+          "engagements": 73502,
+          "fsUv": 23591,
+          "cpm": 53.65,
+          "cpe": 4.8,
+          "fsCpuv": 6.99,
+          "ctr": 13.48
+        }
+      ]
+    },
+    {
+      "id": "wipes-direction-efficiency-table",
+      "title": "内容方向投放结构与转化效率对比表 (全量116篇)",
+      "category": "performance",
+      "period": "发布档期2026/09/14~10/12（FS投流数据截止10/18）",
+      "sourceId": "wipes-sheets-9weg9y-0lnwud",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=9weg9y",
+      "note": "发布档期为2026/09/14~10/12，投流效果截止10/18。涵盖居家清洁(31篇)、户外清洁(27篇)、流感换季(31篇)、专家背书(3篇)、大促预热/双11(24篇)及总计行（共6行，总计116篇）。严格区分K端与FS投流费用。内容方向间UV不可直接累加。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "direction",
+          "title": "内容方向",
+          "type": "string"
+        },
+        {
+          "key": "noteCount",
+          "title": "发布篇数",
+          "type": "number"
+        },
+        {
+          "key": "totalSpend",
+          "title": "KFS总消耗(元)",
+          "type": "currency"
+        },
+        {
+          "key": "kFee",
+          "title": "K端达人费(元)",
+          "type": "currency"
+        },
+        {
+          "key": "fsSpend",
+          "title": "FS聚光投流(元)",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "总曝光量",
+          "type": "number"
+        },
+        {
+          "key": "engagements",
+          "title": "总互动量",
+          "type": "number"
+        },
+        {
+          "key": "fsUv",
+          "title": "FS站外活跃UV",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "KFS CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpe",
+          "title": "KFS CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "fsCpuv",
+          "title": "FS CPUV(元)",
+          "type": "currency"
+        },
+        {
+          "key": "ctr",
+          "title": "阅读CTR(%)",
+          "type": "percent"
+        }
+      ],
+      "rows": [
+        {
+          "direction": "居家清洁",
+          "noteCount": 31,
+          "totalSpend": 93715.7,
+          "kFee": 51817.45,
+          "fsSpend": 41898.25,
+          "impressions": 1827866,
+          "engagements": 17386,
+          "fsUv": 6525,
+          "cpm": 51.27,
+          "cpe": 5.39,
+          "fsCpuv": 6.42,
+          "ctr": 14.07
+        },
+        {
+          "direction": "户外清洁",
+          "noteCount": 27,
+          "totalSpend": 83051.63,
+          "kFee": 31826.26,
+          "fsSpend": 51225.37,
+          "impressions": 1604654,
+          "engagements": 15562,
+          "fsUv": 5672,
+          "cpm": 51.76,
+          "cpe": 5.34,
+          "fsCpuv": 9.03,
+          "ctr": 12.3
+        },
+        {
+          "direction": "流感换季",
+          "noteCount": 31,
+          "totalSpend": 77518.63,
+          "kFee": 37087.54,
+          "fsSpend": 40431.09,
+          "impressions": 1701928,
+          "engagements": 18619,
+          "fsUv": 6165,
+          "cpm": 45.55,
+          "cpe": 4.16,
+          "fsCpuv": 6.56,
+          "ctr": 17.01
+        },
+        {
+          "direction": "专家背书",
+          "noteCount": 3,
+          "totalSpend": 60330.93,
+          "kFee": 51334.31,
+          "fsSpend": 8996.62,
+          "impressions": 444260,
+          "engagements": 11353,
+          "fsUv": 2558,
+          "cpm": 135.8,
+          "cpe": 5.31,
+          "fsCpuv": 3.52,
+          "ctr": 8.6
+        },
+        {
+          "direction": "大促预热/双11",
+          "noteCount": 24,
+          "totalSpend": 38411.57,
+          "kFee": 15984.11,
+          "fsSpend": 22427.46,
+          "impressions": 1001007,
+          "engagements": 10582,
+          "fsUv": 2671,
+          "cpm": 38.37,
+          "cpe": 3.63,
+          "fsCpuv": 8.4,
+          "ctr": 10.46
+        },
+        {
+          "direction": "总计",
+          "noteCount": 116,
+          "totalSpend": 353028.46,
+          "kFee": 188049.67,
+          "fsSpend": 164978.79,
+          "impressions": 6579715,
+          "engagements": 73502,
+          "fsUv": 23591,
+          "cpm": 53.65,
+          "cpe": 4.8,
+          "fsCpuv": 6.99,
+          "ctr": 13.48
+        }
+      ]
+    },
+    {
+      "id": "wipes-audience-packages-table",
+      "title": "聚光定向人群包投流转化效率表 (31个人群包+1条汇总行)",
+      "category": "performance",
+      "period": "源表当前快照（统计截止未注明）",
+      "sourceId": "wipes-sheets-pfsl9q",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=PFSl9q",
+      "note": "源表未标注统计截止时间（时间列标注为多项）。包含31个精准定向人群包细分及1条大盘总计行（共32行）。各人群包受众存在交叉重叠，UV为各人群包30日归因活跃人数，不可在组间直接简单累加。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "packageName",
+          "title": "定向人群包",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "title": "消费金额",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "interactions",
+          "title": "互动量",
+          "type": "number"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "ctr",
+          "title": "CTR(%)",
+          "type": "percent"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "packageName": "人群包-全棉&稳健人群",
+          "spend": 35181.32,
+          "impressions": 203876,
+          "clicks": 10552,
+          "interactions": 6154,
+          "uv": 14527,
+          "cpm": 172.56,
+          "ctr": 5.18,
+          "cpe": 5.72,
+          "cpuv": 2.42
+        },
+        {
+          "packageName": "人群包-稳健AIPS人群",
+          "spend": 6083.16,
+          "impressions": 79467,
+          "clicks": 5169,
+          "interactions": 294,
+          "uv": 270,
+          "cpm": 76.55,
+          "ctr": 6.5,
+          "cpe": 20.69,
+          "cpuv": 22.53
+        },
+        {
+          "packageName": "人群包-环清-婴幼呵护党",
+          "spend": 4938.4,
+          "impressions": 35249,
+          "clicks": 2415,
+          "interactions": 1274,
+          "uv": 502,
+          "cpm": 140.1,
+          "ctr": 6.85,
+          "cpe": 3.88,
+          "cpuv": 9.84
+        },
+        {
+          "packageName": "人群包-纸品-遛娃移动护理",
+          "spend": 4635.79,
+          "impressions": 66304,
+          "clicks": 3773,
+          "interactions": 557,
+          "uv": 116,
+          "cpm": 69.92,
+          "ctr": 5.69,
+          "cpe": 8.32,
+          "cpuv": 39.96
+        },
+        {
+          "packageName": "人群包-电商人群（湿纸巾）",
+          "spend": 2130.15,
+          "impressions": 23129,
+          "clicks": 1509,
+          "interactions": 184,
+          "uv": 424,
+          "cpm": 92.1,
+          "ctr": 6.52,
+          "cpe": 11.58,
+          "cpuv": 5.02
+        },
+        {
+          "packageName": "人群包-纸品-脏脏宝爬爬走",
+          "spend": 1911.67,
+          "impressions": 15938,
+          "clicks": 1230,
+          "interactions": 466,
+          "uv": 157,
+          "cpm": 119.94,
+          "ctr": 7.72,
+          "cpe": 4.1,
+          "cpuv": 12.18
+        },
+        {
+          "packageName": "人群包-母婴出行&用品-遛娃必备",
+          "spend": 1716.24,
+          "impressions": 17810,
+          "clicks": 1001,
+          "interactions": 94,
+          "uv": 18,
+          "cpm": 96.36,
+          "ctr": 5.62,
+          "cpe": 18.26,
+          "cpuv": 95.35
+        },
+        {
+          "packageName": "人群包-母婴纸品-囤货党",
+          "spend": 1666.97,
+          "impressions": 6895,
+          "clicks": 451,
+          "interactions": 431,
+          "uv": 111,
+          "cpm": 241.77,
+          "ctr": 6.54,
+          "cpe": 3.87,
+          "cpuv": 15.02
+        },
+        {
+          "packageName": "人群包-纸品-大战口欲期",
+          "spend": 1482.94,
+          "impressions": 19911,
+          "clicks": 1033,
+          "interactions": 76,
+          "uv": 33,
+          "cpm": 74.48,
+          "ctr": 5.19,
+          "cpe": 19.51,
+          "cpuv": 44.94
+        },
+        {
+          "packageName": "人群包-户外出游∩母婴∩23+",
+          "spend": 1125.12,
+          "impressions": 16037,
+          "clicks": 1521,
+          "interactions": 201,
+          "uv": 39,
+          "cpm": 70.16,
+          "ctr": 9.48,
+          "cpe": 5.6,
+          "cpuv": 28.85
+        },
+        {
+          "packageName": "人群包-遛娃全指南",
+          "spend": 923.96,
+          "impressions": 1668,
+          "clicks": 206,
+          "interactions": 260,
+          "uv": 48,
+          "cpm": 553.93,
+          "ctr": 12.35,
+          "cpe": 3.55,
+          "cpuv": 19.25
+        },
+        {
+          "packageName": "人群包-踏青出游∩母婴∩23+",
+          "spend": 866.7,
+          "impressions": 11996,
+          "clicks": 1106,
+          "interactions": 90,
+          "uv": 145,
+          "cpm": 72.25,
+          "ctr": 9.22,
+          "cpe": 9.63,
+          "cpuv": 5.98
+        },
+        {
+          "packageName": "人群包-健康敏感型妈妈",
+          "spend": 533.99,
+          "impressions": 2920,
+          "clicks": 230,
+          "interactions": 165,
+          "uv": 102,
+          "cpm": 182.87,
+          "ctr": 7.88,
+          "cpe": 3.24,
+          "cpuv": 5.24
+        },
+        {
+          "packageName": "人群包-法定节假日∩母婴∩23+",
+          "spend": 493.27,
+          "impressions": 7482,
+          "clicks": 577,
+          "interactions": 22,
+          "uv": 11,
+          "cpm": 65.93,
+          "ctr": 7.71,
+          "cpe": 22.42,
+          "cpuv": 44.84
+        },
+        {
+          "packageName": "人群包-湿纸巾类目+消毒湿巾（排除湿厕纸）",
+          "spend": 279.81,
+          "impressions": 1351,
+          "clicks": 134,
+          "interactions": 88,
+          "uv": 30,
+          "cpm": 207.11,
+          "ctr": 9.92,
+          "cpe": 3.18,
+          "cpuv": 9.33
+        },
+        {
+          "packageName": "人群包-家清-关注成分安全人群",
+          "spend": 245.58,
+          "impressions": 1972,
+          "clicks": 175,
+          "interactions": 43,
+          "uv": 22,
+          "cpm": 124.53,
+          "ctr": 8.87,
+          "cpe": 5.71,
+          "cpuv": 11.16
+        },
+        {
+          "packageName": "人群包-露营人群∩母婴∩23+",
+          "spend": 167.22,
+          "impressions": 2606,
+          "clicks": 213,
+          "interactions": 3,
+          "uv": 4,
+          "cpm": 64.17,
+          "ctr": 8.17,
+          "cpe": 55.74,
+          "cpuv": 41.81
+        },
+        {
+          "packageName": "人群包-衣物清洁-除菌除螨人群",
+          "spend": 149.48,
+          "impressions": 2632,
+          "clicks": 166,
+          "interactions": 0,
+          "uv": 15,
+          "cpm": 56.79,
+          "ctr": 6.31,
+          "cpe": null,
+          "cpuv": 9.97
+        },
+        {
+          "packageName": "人群包-万物皆可啃",
+          "spend": 118.27,
+          "impressions": 1098,
+          "clicks": 159,
+          "interactions": 197,
+          "uv": 15,
+          "cpm": 107.71,
+          "ctr": 14.48,
+          "cpe": 0.6,
+          "cpuv": 7.88
+        },
+        {
+          "packageName": "人群包-婴童尿裤兴趣人群",
+          "spend": 110.91,
+          "impressions": 1316,
+          "clicks": 140,
+          "interactions": 5,
+          "uv": 1,
+          "cpm": 84.28,
+          "ctr": 10.64,
+          "cpe": 22.18,
+          "cpuv": 110.91
+        },
+        {
+          "packageName": "人群包-精致妈妈（消毒清洁、厨房用品、母婴）",
+          "spend": 104.66,
+          "impressions": 1506,
+          "clicks": 82,
+          "interactions": 0,
+          "uv": 4,
+          "cpm": 69.5,
+          "ctr": 5.44,
+          "cpe": null,
+          "cpuv": 26.17
+        },
+        {
+          "packageName": "人群包-环清-消毒刚需人群",
+          "spend": 100.8,
+          "impressions": 808,
+          "clicks": 61,
+          "interactions": 29,
+          "uv": 12,
+          "cpm": 124.75,
+          "ctr": 7.55,
+          "cpe": 3.48,
+          "cpuv": 8.4
+        },
+        {
+          "packageName": "人群包-湿纸巾行业（含消毒湿巾适用需求）",
+          "spend": 98.08,
+          "impressions": 640,
+          "clicks": 57,
+          "interactions": 33,
+          "uv": 30,
+          "cpm": 153.25,
+          "ctr": 8.91,
+          "cpe": 2.97,
+          "cpuv": 3.27
+        },
+        {
+          "packageName": "人群包-第一口辅食",
+          "spend": 84.48,
+          "impressions": 1253,
+          "clicks": 135,
+          "interactions": 8,
+          "uv": 4,
+          "cpm": 67.42,
+          "ctr": 10.77,
+          "cpe": 10.56,
+          "cpuv": 21.12
+        },
+        {
+          "packageName": "人群包-纸品-宝宝新三巾",
+          "spend": 81.07,
+          "impressions": 1363,
+          "clicks": 89,
+          "interactions": 12,
+          "uv": 37,
+          "cpm": 59.48,
+          "ctr": 6.53,
+          "cpe": 6.76,
+          "cpuv": 2.19
+        },
+        {
+          "packageName": "人群包-健康生活家",
+          "spend": 61.64,
+          "impressions": 949,
+          "clicks": 58,
+          "interactions": 0,
+          "uv": 8,
+          "cpm": 64.95,
+          "ctr": 6.11,
+          "cpe": null,
+          "cpuv": 7.71
+        },
+        {
+          "packageName": "人群包-母婴旅游人群",
+          "spend": 43.3,
+          "impressions": 805,
+          "clicks": 59,
+          "interactions": 0,
+          "uv": 3,
+          "cpm": 53.79,
+          "ctr": 7.33,
+          "cpe": null,
+          "cpuv": 14.43
+        },
+        {
+          "packageName": "人群包-精致白领（医疗养生）",
+          "spend": 32.52,
+          "impressions": 754,
+          "clicks": 33,
+          "interactions": 2,
+          "uv": 2,
+          "cpm": 43.13,
+          "ctr": 4.38,
+          "cpe": 16.26,
+          "cpuv": 16.26
+        },
+        {
+          "packageName": "人群包-环清-婴儿房精细清洁",
+          "spend": 28.15,
+          "impressions": 162,
+          "clicks": 26,
+          "interactions": 17,
+          "uv": 0,
+          "cpm": 173.77,
+          "ctr": 16.05,
+          "cpe": 1.66,
+          "cpuv": null
+        },
+        {
+          "packageName": "人群包-稳健TI人群",
+          "spend": 22.82,
+          "impressions": 286,
+          "clicks": 34,
+          "interactions": 0,
+          "uv": 0,
+          "cpm": 79.79,
+          "ctr": 11.89,
+          "cpe": null,
+          "cpuv": null
+        },
+        {
+          "packageName": "人群包-宝宝爬爬走",
+          "spend": 9.5,
+          "impressions": 66,
+          "clicks": 16,
+          "interactions": 11,
+          "uv": 0,
+          "cpm": 143.94,
+          "ctr": 24.24,
+          "cpe": 0.86,
+          "cpuv": null
+        },
+        {
+          "packageName": "总计",
+          "spend": 65427.97,
+          "impressions": 528249,
+          "clicks": 32410,
+          "interactions": 10716,
+          "uv": 16690,
+          "cpm": 123.86,
+          "ctr": 6.14,
+          "cpe": 6.11,
+          "cpuv": 3.92
+        }
+      ]
+    },
+    {
+      "id": "wipes-placement-efficiency-table",
+      "title": "广告投放版位（视频内流/搜索/信息流）结构表",
+      "category": "budget",
+      "period": "2026/09/16~2026/10/19",
+      "sourceId": "wipes-sheets-0qtvhe",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=0QTVhE",
+      "note": "统计期覆盖2026/09/16~10/19（与By day第37行总计完全一致）。包含视频内流、搜索推广、信息流推广三大版位及总计行（共4行）。站外活跃UV为各版位30日归因活跃人数，版位间人群存在重叠，总计行23,593人为源表汇总值而非去重人数。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "placement",
+          "title": "版位类型",
+          "type": "badge"
+        },
+        {
+          "key": "spend",
+          "title": "消耗金额",
+          "type": "currency"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "interactions",
+          "title": "互动量",
+          "type": "number"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC(元)",
+          "type": "currency"
+        },
+        {
+          "key": "ctr",
+          "title": "CTR(%)",
+          "type": "percent"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "placement": "视频内流",
+          "spend": 98002.94,
+          "impressions": 300141,
+          "clicks": 16395,
+          "interactions": 17018,
+          "uv": 20284,
+          "cpm": 326.52,
+          "cpc": 5.98,
+          "ctr": 5.46,
+          "cpe": 5.76,
+          "cpuv": 4.83
+        },
+        {
+          "placement": "搜索推广",
+          "spend": 46733.16,
+          "impressions": 1091162,
+          "clicks": 44907,
+          "interactions": 331,
+          "uv": 1739,
+          "cpm": 42.83,
+          "cpc": 1.04,
+          "ctr": 4.12,
+          "cpe": 141.19,
+          "cpuv": 26.87
+        },
+        {
+          "placement": "信息流推广",
+          "spend": 34131.45,
+          "impressions": 464799,
+          "clicks": 29926,
+          "interactions": 2363,
+          "uv": 1570,
+          "cpm": 73.43,
+          "cpc": 1.14,
+          "ctr": 6.44,
+          "cpe": 14.44,
+          "cpuv": 21.74
+        },
+        {
+          "placement": "总计",
+          "spend": 178867.55,
+          "impressions": 1856102,
+          "clicks": 91228,
+          "interactions": 19712,
+          "uv": 23593,
+          "cpm": 96.37,
+          "cpc": 1.96,
+          "ctr": 4.92,
+          "cpe": 9.07,
+          "cpuv": 7.58
+        }
+      ]
+    },
+    {
+      "id": "wipes-cid-creator-table",
+      "title": "CID组件引流与创作者转化效率明细表",
+      "category": "performance",
+      "period": "源表当前快照（统计截止未注明）",
+      "sourceId": "wipes-sheets-tiermz",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=tiermz",
+      "note": "源表未标注统计截止时间。涵盖10位达人素材跨端CID组件点击与组件点击成本监控及总计行（共11行）。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "creator",
+          "title": "创作者/素材名称",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "title": "CID消耗金额",
+          "type": "currency"
+        },
+        {
+          "key": "componentClicks",
+          "title": "组件点击量",
+          "type": "number"
+        },
+        {
+          "key": "costPerClick",
+          "title": "组件点击成本(元)",
+          "type": "currency"
+        }
+      ],
+      "rows": [
+        {
+          "creator": "灿宝日记-",
+          "spend": 18.35,
+          "componentClicks": 0,
+          "costPerClick": null
+        },
+        {
+          "creator": "宸妈妈",
+          "spend": 617.41,
+          "componentClicks": 32,
+          "costPerClick": 19.29
+        },
+        {
+          "creator": "刘慧教授说健康",
+          "spend": 210.2,
+          "componentClicks": 4,
+          "costPerClick": 52.55
+        },
+        {
+          "creator": "马可菠萝派",
+          "spend": 362.35,
+          "componentClicks": 9,
+          "costPerClick": 40.26
+        },
+        {
+          "creator": "硕士妈妈黄慧(测评版)",
+          "spend": 52.92,
+          "componentClicks": 1,
+          "costPerClick": 52.92
+        },
+        {
+          "creator": "我是小雪呀（哺乳期）",
+          "spend": 582.09,
+          "componentClicks": 20,
+          "costPerClick": 29.1
+        },
+        {
+          "creator": "小糖果",
+          "spend": 21.77,
+          "componentClicks": 0,
+          "costPerClick": null
+        },
+        {
+          "creator": "浠浠敲可爱",
+          "spend": 183.87,
+          "componentClicks": 8,
+          "costPerClick": 22.98
+        },
+        {
+          "creator": "养个小土豆",
+          "spend": 93.54,
+          "componentClicks": 3,
+          "costPerClick": 31.18
+        },
+        {
+          "creator": "柚柚&果果(龙凤胎)",
+          "spend": 639.31,
+          "componentClicks": 23,
+          "costPerClick": 27.8
+        },
+        {
+          "creator": "总计",
+          "spend": 2781.81,
+          "componentClicks": 100,
+          "costPerClick": 27.82
+        }
+      ]
+    }
+  ],
+  "dailyDatasets": [
+    {
+      "id": "wipes-daily-taosou",
+      "label": "稳健玉米湿巾淘搜指数全系列与分渠道投放 (36天)",
+      "period": "2026-09-14 ~ 2026-10-19",
+      "sourceId": "wipes-sheets-wy1hzo",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=wY1HZO",
+      "note": "覆盖2026/09/14~10/19共36个实际投放日。包含6大核心关键词淘搜全系列指标、K/F/S/CID分渠道实际消耗，以及进店UV与小红星站外活跃UV(30日归因)。校验日消耗总和 ¥361,363.47、总指数 9,375，与源表总计行误差 0.00。",
+      "metrics": [
+        {
+          "key": "kw_total_index",
+          "label": "淘搜总指数",
+          "unit": ""
+        },
+        {
+          "key": "kw_wipes",
+          "label": "稳健酒精湿巾",
+          "unit": ""
+        },
+        {
+          "key": "kw_corn_wipes",
+          "label": "稳健玉米酒精湿巾",
+          "unit": ""
+        },
+        {
+          "key": "kw_alcohol",
+          "label": "稳健酒精",
+          "unit": ""
+        },
+        {
+          "key": "kw_alcohol_wipes",
+          "label": "酒精湿巾稳健",
+          "unit": ""
+        },
+        {
+          "key": "kw_corn_alcohol_wipes",
+          "label": "玉米酒精湿巾",
+          "unit": ""
+        },
+        {
+          "key": "kw_disinfect_wipes",
+          "label": "稳健消毒湿巾",
+          "unit": ""
+        },
+        {
+          "key": "spend_total",
+          "label": "总投放消耗",
+          "unit": "元"
+        },
+        {
+          "key": "spend_k",
+          "label": "K端达人消耗",
+          "unit": "元"
+        },
+        {
+          "key": "spend_f",
+          "label": "F端信息流消耗",
+          "unit": "元"
+        },
+        {
+          "key": "spend_s",
+          "label": "S端搜索推广消耗",
+          "unit": "元"
+        },
+        {
+          "key": "spend_cid",
+          "label": "CID端消耗",
+          "unit": "元"
+        },
+        {
+          "key": "search_uv",
+          "label": "搜索进店UV",
+          "unit": "人"
+        },
+        {
+          "key": "shop_uv",
+          "label": "进店总UV",
+          "unit": "人"
+        },
+        {
+          "key": "redstar_uv",
+          "label": "小红星站外活跃UV(30日归因)",
+          "unit": "人"
+        }
+      ],
+      "rows": [
+        {
+          "date": "2026-09-14",
+          "kw_total_index": 175,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 7951.78,
+          "spend_k": 7951.78,
+          "spend_f": 0.0,
+          "spend_s": 0.0,
+          "spend_cid": 0.0,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-09-15",
+          "kw_total_index": 240,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 10,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 3925.56,
+          "spend_k": 3925.56,
+          "spend_f": 0.0,
+          "spend_s": 0.0,
+          "spend_cid": 0.0,
+          "search_uv": 45,
+          "shop_uv": 56,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-09-16",
+          "kw_total_index": 165,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 1922.9,
+          "spend_k": 1308.52,
+          "spend_f": 614.38,
+          "spend_s": 0.0,
+          "spend_cid": 0.0,
+          "search_uv": 4,
+          "shop_uv": 9,
+          "redstar_uv": 9
+        },
+        {
+          "date": "2026-09-17",
+          "kw_total_index": 190,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 0,
+          "spend_total": 4930.11,
+          "spend_k": 4126.87,
+          "spend_f": 803.24,
+          "spend_s": 0.0,
+          "spend_cid": 0.0,
+          "search_uv": 48,
+          "shop_uv": 57,
+          "redstar_uv": 13
+        },
+        {
+          "date": "2026-09-18",
+          "kw_total_index": 200,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 2038.72,
+          "spend_k": 0.0,
+          "spend_f": 1404.72,
+          "spend_s": 634.0,
+          "spend_cid": 0.0,
+          "search_uv": 44,
+          "shop_uv": 61,
+          "redstar_uv": 64
+        },
+        {
+          "date": "2026-09-19",
+          "kw_total_index": 180,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 0,
+          "spend_total": 9893.78,
+          "spend_k": 6955.3,
+          "spend_f": 2304.48,
+          "spend_s": 634.0,
+          "spend_cid": 0.0,
+          "search_uv": 36,
+          "shop_uv": 60,
+          "redstar_uv": 105
+        },
+        {
+          "date": "2026-09-20",
+          "kw_total_index": 265,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 6807.81,
+          "spend_k": 2596.91,
+          "spend_f": 2523.57,
+          "spend_s": 1687.33,
+          "spend_cid": 0.0,
+          "search_uv": 86,
+          "shop_uv": 121,
+          "redstar_uv": 219
+        },
+        {
+          "date": "2026-09-21",
+          "kw_total_index": 190,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 11704.18,
+          "spend_k": 7589.42,
+          "spend_f": 2109.76,
+          "spend_s": 2005.0,
+          "spend_cid": 0.0,
+          "search_uv": 46,
+          "shop_uv": 62,
+          "redstar_uv": 204
+        },
+        {
+          "date": "2026-09-22",
+          "kw_total_index": 165,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 10,
+          "kw_alcohol_wipes": 0,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 7565.08,
+          "spend_k": 3623.6,
+          "spend_f": 1334.74,
+          "spend_s": 2606.74,
+          "spend_cid": 0.0,
+          "search_uv": 58,
+          "shop_uv": 99,
+          "redstar_uv": 498
+        },
+        {
+          "date": "2026-09-23",
+          "kw_total_index": 255,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 0,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 6172.51,
+          "spend_k": 2415.73,
+          "spend_f": 1303.4,
+          "spend_s": 2453.38,
+          "spend_cid": 0.0,
+          "search_uv": 137,
+          "shop_uv": 181,
+          "redstar_uv": 370
+        },
+        {
+          "date": "2026-09-24",
+          "kw_total_index": 175,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 10,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 64947.13,
+          "spend_k": 61171.35,
+          "spend_f": 1159.38,
+          "spend_s": 2616.4,
+          "spend_cid": 0.0,
+          "search_uv": 65,
+          "shop_uv": 112,
+          "redstar_uv": 447
+        },
+        {
+          "date": "2026-09-25",
+          "kw_total_index": 265,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 10579.18,
+          "spend_k": 8052.44,
+          "spend_f": 715.94,
+          "spend_s": 1810.8,
+          "spend_cid": 0.0,
+          "search_uv": 77,
+          "shop_uv": 144,
+          "redstar_uv": 444
+        },
+        {
+          "date": "2026-09-26",
+          "kw_total_index": 155,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 0,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 10732.64,
+          "spend_k": 8475.19,
+          "spend_f": 759.52,
+          "spend_s": 1497.93,
+          "spend_cid": 0.0,
+          "search_uv": 47,
+          "shop_uv": 123,
+          "redstar_uv": 851
+        },
+        {
+          "date": "2026-09-27",
+          "kw_total_index": 225,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 4951.88,
+          "spend_k": 1610.49,
+          "spend_f": 1706.96,
+          "spend_s": 1634.43,
+          "spend_cid": 0.0,
+          "search_uv": 79,
+          "shop_uv": 171,
+          "redstar_uv": 831
+        },
+        {
+          "date": "2026-09-28",
+          "kw_total_index": 380,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 225,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 6136.14,
+          "spend_k": 2315.08,
+          "spend_f": 1895.07,
+          "spend_s": 1925.99,
+          "spend_cid": 0.0,
+          "search_uv": 164,
+          "shop_uv": 285,
+          "redstar_uv": 591
+        },
+        {
+          "date": "2026-09-29",
+          "kw_total_index": 230,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 10,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 0,
+          "spend_total": 3088.53,
+          "spend_k": 0.0,
+          "spend_f": 1183.28,
+          "spend_s": 1905.25,
+          "spend_cid": 0.0,
+          "search_uv": 151,
+          "shop_uv": 305,
+          "redstar_uv": 911
+        },
+        {
+          "date": "2026-09-30",
+          "kw_total_index": 265,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 4457.83,
+          "spend_k": 1308.52,
+          "spend_f": 1634.85,
+          "spend_s": 1514.46,
+          "spend_cid": 0.0,
+          "search_uv": 103,
+          "shop_uv": 268,
+          "redstar_uv": 1940
+        },
+        {
+          "date": "2026-10-01",
+          "kw_total_index": 230,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 10,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 11290.61,
+          "spend_k": 7931.65,
+          "spend_f": 1857.12,
+          "spend_s": 1501.84,
+          "spend_cid": 0.0,
+          "search_uv": 117,
+          "shop_uv": 276,
+          "redstar_uv": 2175
+        },
+        {
+          "date": "2026-10-02",
+          "kw_total_index": 240,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 10,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 7335.63,
+          "spend_k": 3824.91,
+          "spend_f": 2100.88,
+          "spend_s": 1409.84,
+          "spend_cid": 0.0,
+          "search_uv": 121,
+          "shop_uv": 310,
+          "redstar_uv": 785
+        },
+        {
+          "date": "2026-10-03",
+          "kw_total_index": 740,
+          "kw_wipes": 450,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 225,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 6023.43,
+          "spend_k": 2516.39,
+          "spend_f": 2612.34,
+          "spend_s": 894.7,
+          "spend_cid": 0.0,
+          "search_uv": 155,
+          "shop_uv": 347,
+          "redstar_uv": 205
+        },
+        {
+          "date": "2026-10-04",
+          "kw_total_index": 255,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 0,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 3510.39,
+          "spend_k": 0.0,
+          "spend_f": 2607.54,
+          "spend_s": 902.85,
+          "spend_cid": 0.0,
+          "search_uv": 85,
+          "shop_uv": 271,
+          "redstar_uv": 175
+        },
+        {
+          "date": "2026-10-05",
+          "kw_total_index": 165,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 0,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 13779.99,
+          "spend_k": 10494.34,
+          "spend_f": 2266.68,
+          "spend_s": 1018.97,
+          "spend_cid": 0.0,
+          "search_uv": 79,
+          "shop_uv": 244,
+          "redstar_uv": 179
+        },
+        {
+          "date": "2026-10-06",
+          "kw_total_index": 225,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 35,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 3515.31,
+          "spend_k": 0.0,
+          "spend_f": 2627.26,
+          "spend_s": 888.05,
+          "spend_cid": 0.0,
+          "search_uv": 157,
+          "shop_uv": 375,
+          "redstar_uv": 118
+        },
+        {
+          "date": "2026-10-07",
+          "kw_total_index": 290,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 35,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 3505.78,
+          "spend_k": 0.0,
+          "spend_f": 2770.91,
+          "spend_s": 734.87,
+          "spend_cid": 0.0,
+          "search_uv": 188,
+          "shop_uv": 453,
+          "redstar_uv": 89
+        },
+        {
+          "date": "2026-10-08",
+          "kw_total_index": 390,
+          "kw_wipes": 225,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 14015.58,
+          "spend_k": 9059.0,
+          "spend_f": 3950.08,
+          "spend_s": 1006.5,
+          "spend_cid": 0.0,
+          "search_uv": 219,
+          "shop_uv": 510,
+          "redstar_uv": 167
+        },
+        {
+          "date": "2026-10-09",
+          "kw_total_index": 290,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 7387.47,
+          "spend_k": 2375.47,
+          "spend_f": 4004.1,
+          "spend_s": 1007.9,
+          "spend_cid": 0.0,
+          "search_uv": 285,
+          "shop_uv": 620,
+          "redstar_uv": 175
+        },
+        {
+          "date": "2026-10-10",
+          "kw_total_index": 330,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 10698.88,
+          "spend_k": 5848.08,
+          "spend_f": 4043.46,
+          "spend_s": 807.34,
+          "spend_cid": 0.0,
+          "search_uv": 208,
+          "shop_uv": 540,
+          "redstar_uv": 256
+        },
+        {
+          "date": "2026-10-11",
+          "kw_total_index": 355,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 23306.12,
+          "spend_k": 17574.46,
+          "spend_f": 4706.66,
+          "spend_s": 1025.0,
+          "spend_cid": 0.0,
+          "search_uv": 252,
+          "shop_uv": 580,
+          "redstar_uv": 963
+        },
+        {
+          "date": "2026-10-12",
+          "kw_total_index": 380,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 35,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 9422.01,
+          "spend_k": 2516.39,
+          "spend_f": 5456.48,
+          "spend_s": 1449.14,
+          "spend_cid": 0.0,
+          "search_uv": 294,
+          "shop_uv": 724,
+          "redstar_uv": 1003
+        },
+        {
+          "date": "2026-10-13",
+          "kw_total_index": 200,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 9450.74,
+          "spend_k": 0.0,
+          "spend_f": 8093.47,
+          "spend_s": 1357.27,
+          "spend_cid": 0.0,
+          "search_uv": 247,
+          "shop_uv": 663,
+          "redstar_uv": 711
+        },
+        {
+          "date": "2026-10-14",
+          "kw_total_index": 225,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 7423.34,
+          "spend_k": 0.0,
+          "spend_f": 6305.33,
+          "spend_s": 1118.01,
+          "spend_cid": 0.0,
+          "search_uv": 239,
+          "shop_uv": 699,
+          "redstar_uv": 295
+        },
+        {
+          "date": "2026-10-15",
+          "kw_total_index": 175,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 10,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 10010.1,
+          "spend_k": 0.0,
+          "spend_f": 8708.61,
+          "spend_s": 1301.49,
+          "spend_cid": 0.0,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-16",
+          "kw_total_index": 415,
+          "kw_wipes": 225,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 35,
+          "kw_disinfect_wipes": 10,
+          "spend_total": 12473.2,
+          "spend_k": 0.0,
+          "spend_f": 10416.07,
+          "spend_s": 1327.57,
+          "spend_cid": 729.56,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-17",
+          "kw_total_index": 255,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 0,
+          "spend_total": 12416.66,
+          "spend_k": 0.0,
+          "spend_f": 10112.54,
+          "spend_s": 1579.42,
+          "spend_cid": 724.7,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-18",
+          "kw_total_index": 215,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 0,
+          "spend_total": 13843.69,
+          "spend_k": 0.0,
+          "spend_f": 11311.96,
+          "spend_s": 1810.84,
+          "spend_cid": 720.89,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-19",
+          "kw_total_index": 280,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 0,
+          "spend_total": 14148.78,
+          "spend_k": 0.0,
+          "spend_f": 11659.99,
+          "spend_s": 1861.18,
+          "spend_cid": 627.61,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        }
+      ]
+    },
+    {
+      "id": "wipes-daily-delivery",
+      "label": "稳健玉米湿巾投放日趋势 (By day)",
+      "period": "2026-09-16 ~ 2026-10-19",
+      "sourceId": "wipes-sheets-0qtvhe",
+      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=0QTVhE",
+      "note": "稳健玉米消毒湿巾全渠道投放日跟踪表（0QTVhE）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。10/18当日UV为0导致CPUV保持为null。",
+      "metrics": [
+        {
+          "key": "spend",
+          "label": "实际消耗",
+          "unit": "元"
+        },
+        {
+          "key": "impressions",
+          "label": "展现量",
+          "unit": "次"
+        },
+        {
+          "key": "engagements",
+          "label": "互动量",
+          "unit": "次"
+        },
+        {
+          "key": "uv",
+          "label": "站外活跃UV(30日归因)",
+          "unit": "人"
+        },
+        {
+          "key": "cpm",
+          "label": "CPM",
+          "unit": "元"
+        },
+        {
+          "key": "cpe",
+          "label": "CPE",
+          "unit": "元"
+        },
+        {
+          "key": "cpuv",
+          "label": "CPUV",
+          "unit": "元"
+        }
+      ],
+      "rows": [
+        {
+          "date": "2026-09-16",
+          "spend": 614.38,
+          "impressions": 9789,
+          "engagements": 28,
+          "uv": 9,
+          "cpm": 62.76,
+          "cpe": 21.94,
+          "cpuv": 68.26
+        },
+        {
+          "date": "2026-09-17",
+          "spend": 803.24,
+          "impressions": 11485,
+          "engagements": 24,
+          "uv": 13,
+          "cpm": 69.94,
+          "cpe": 33.47,
+          "cpuv": 61.79
+        },
+        {
+          "date": "2026-09-18",
+          "spend": 2039.03,
+          "impressions": 29345,
+          "engagements": 55,
+          "uv": 67,
+          "cpm": 69.48,
+          "cpe": 37.07,
+          "cpuv": 30.43
+        },
+        {
+          "date": "2026-09-19",
+          "spend": 3486.29,
+          "impressions": 49365,
+          "engagements": 98,
+          "uv": 120,
+          "cpm": 70.62,
+          "cpe": 35.57,
+          "cpuv": 29.05
+        },
+        {
+          "date": "2026-09-20",
+          "spend": 4210.9,
+          "impressions": 63565,
+          "engagements": 93,
+          "uv": 244,
+          "cpm": 66.25,
+          "cpe": 45.28,
+          "cpuv": 17.26
+        },
+        {
+          "date": "2026-09-21",
+          "spend": 4114.87,
+          "impressions": 60496,
+          "engagements": 213,
+          "uv": 234,
+          "cpm": 68.02,
+          "cpe": 19.32,
+          "cpuv": 17.58
+        },
+        {
+          "date": "2026-09-22",
+          "spend": 4955.18,
+          "impressions": 75556,
+          "engagements": 165,
+          "uv": 575,
+          "cpm": 65.58,
+          "cpe": 30.03,
+          "cpuv": 8.62
+        },
+        {
+          "date": "2026-09-23",
+          "spend": 4811.72,
+          "impressions": 69865,
+          "engagements": 86,
+          "uv": 422,
+          "cpm": 68.87,
+          "cpe": 55.95,
+          "cpuv": 11.4
+        },
+        {
+          "date": "2026-09-24",
+          "spend": 4949.41,
+          "impressions": 75884,
+          "engagements": 89,
+          "uv": 537,
+          "cpm": 65.22,
+          "cpe": 55.61,
+          "cpuv": 9.22
+        },
+        {
+          "date": "2026-09-25",
+          "spend": 3500.6,
+          "impressions": 50849,
+          "engagements": 19,
+          "uv": 540,
+          "cpm": 68.84,
+          "cpe": 184.24,
+          "cpuv": 6.48
+        },
+        {
+          "date": "2026-09-26",
+          "spend": 3367.38,
+          "impressions": 55003,
+          "engagements": 190,
+          "uv": 976,
+          "cpm": 61.22,
+          "cpe": 17.72,
+          "cpuv": 3.45
+        },
+        {
+          "date": "2026-09-27",
+          "spend": 3341.39,
+          "impressions": 55952,
+          "engagements": 168,
+          "uv": 973,
+          "cpm": 59.72,
+          "cpe": 19.89,
+          "cpuv": 3.43
+        },
+        {
+          "date": "2026-09-28",
+          "spend": 3821.06,
+          "impressions": 66344,
+          "engagements": 394,
+          "uv": 735,
+          "cpm": 57.59,
+          "cpe": 9.7,
+          "cpuv": 5.2
+        },
+        {
+          "date": "2026-09-29",
+          "spend": 3088.53,
+          "impressions": 58516,
+          "engagements": 290,
+          "uv": 1061,
+          "cpm": 52.78,
+          "cpe": 10.65,
+          "cpuv": 2.91
+        },
+        {
+          "date": "2026-09-30",
+          "spend": 3149.31,
+          "impressions": 58532,
+          "engagements": 208,
+          "uv": 2283,
+          "cpm": 53.8,
+          "cpe": 15.14,
+          "cpuv": 1.38
+        },
+        {
+          "date": "2026-10-01",
+          "spend": 3358.96,
+          "impressions": 56233,
+          "engagements": 328,
+          "uv": 2590,
+          "cpm": 59.73,
+          "cpe": 10.24,
+          "cpuv": 1.3
+        },
+        {
+          "date": "2026-10-02",
+          "spend": 3510.72,
+          "impressions": 51397,
+          "engagements": 535,
+          "uv": 911,
+          "cpm": 68.31,
+          "cpe": 6.56,
+          "cpuv": 3.85
+        },
+        {
+          "date": "2026-10-03",
+          "spend": 3507.04,
+          "impressions": 38569,
+          "engagements": 669,
+          "uv": 266,
+          "cpm": 90.93,
+          "cpe": 5.24,
+          "cpuv": 13.18
+        },
+        {
+          "date": "2026-10-04",
+          "spend": 3510.39,
+          "impressions": 41087,
+          "engagements": 651,
+          "uv": 236,
+          "cpm": 85.44,
+          "cpe": 5.39,
+          "cpuv": 14.87
+        },
+        {
+          "date": "2026-10-05",
+          "spend": 3285.65,
+          "impressions": 46221,
+          "engagements": 644,
+          "uv": 237,
+          "cpm": 71.09,
+          "cpe": 5.1,
+          "cpuv": 13.86
+        },
+        {
+          "date": "2026-10-06",
+          "spend": 3515.31,
+          "impressions": 43523,
+          "engagements": 667,
+          "uv": 144,
+          "cpm": 80.77,
+          "cpe": 5.27,
+          "cpuv": 24.41
+        },
+        {
+          "date": "2026-10-07",
+          "spend": 3505.78,
+          "impressions": 36252,
+          "engagements": 652,
+          "uv": 117,
+          "cpm": 96.71,
+          "cpe": 5.38,
+          "cpuv": 29.96
+        },
+        {
+          "date": "2026-10-08",
+          "spend": 4956.58,
+          "impressions": 50320,
+          "engagements": 1107,
+          "uv": 225,
+          "cpm": 98.5,
+          "cpe": 4.48,
+          "cpuv": 22.03
+        },
+        {
+          "date": "2026-10-09",
+          "spend": 5012.0,
+          "impressions": 48957,
+          "engagements": 1057,
+          "uv": 264,
+          "cpm": 102.38,
+          "cpe": 4.74,
+          "cpuv": 18.98
+        },
+        {
+          "date": "2026-10-10",
+          "spend": 4850.8,
+          "impressions": 44776,
+          "engagements": 827,
+          "uv": 387,
+          "cpm": 108.33,
+          "cpe": 5.87,
+          "cpuv": 12.53
+        },
+        {
+          "date": "2026-10-11",
+          "spend": 5731.66,
+          "impressions": 59536,
+          "engagements": 1221,
+          "uv": 1865,
+          "cpm": 96.27,
+          "cpe": 4.69,
+          "cpuv": 3.07
+        },
+        {
+          "date": "2026-10-12",
+          "spend": 6905.62,
+          "impressions": 70613,
+          "engagements": 465,
+          "uv": 2217,
+          "cpm": 97.8,
+          "cpe": 14.85,
+          "cpuv": 3.11
+        },
+        {
+          "date": "2026-10-13",
+          "spend": 9450.74,
+          "impressions": 79586,
+          "engagements": 628,
+          "uv": 2103,
+          "cpm": 118.75,
+          "cpe": 15.05,
+          "cpuv": 4.49
+        },
+        {
+          "date": "2026-10-14",
+          "spend": 7423.34,
+          "impressions": 61975,
+          "engagements": 594,
+          "uv": 1474,
+          "cpm": 119.78,
+          "cpe": 12.5,
+          "cpuv": 5.04
+        },
+        {
+          "date": "2026-10-15",
+          "spend": 10010.1,
+          "impressions": 58042,
+          "engagements": 1426,
+          "uv": 903,
+          "cpm": 172.46,
+          "cpe": 7.02,
+          "cpuv": 11.09
+        },
+        {
+          "date": "2026-10-16",
+          "spend": 11743.64,
+          "impressions": 57200,
+          "engagements": 1478,
+          "uv": 358,
+          "cpm": 205.31,
+          "cpe": 7.95,
+          "cpuv": 32.8
+        },
+        {
+          "date": "2026-10-17",
+          "spend": 11691.96,
+          "impressions": 69568,
+          "engagements": 1470,
+          "uv": 295,
+          "cpm": 168.07,
+          "cpe": 7.95,
+          "cpuv": 39.63
+        },
+        {
+          "date": "2026-10-18",
+          "spend": 13122.8,
+          "impressions": 81194,
+          "engagements": 1480,
+          "uv": 212,
+          "cpm": 161.62,
+          "cpe": 8.87,
+          "cpuv": 61.9
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 13521.17,
+          "impressions": 70507,
+          "engagements": 1693,
+          "uv": 0,
+          "cpm": 191.77,
+          "cpe": 7.99,
+          "cpuv": null
+        }
+      ]
+    }
+  ]
+}

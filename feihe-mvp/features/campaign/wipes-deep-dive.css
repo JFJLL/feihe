@@ -1,0 +1,185 @@
+/**
+ * WipesDeepDive Scoped Styling
+ * Scope: .wipes-dive-*
+ * Responsive grid layout and data exploration container.
+ */
+
+.wipes-dive-root {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wipes-dive-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.wipes-dive-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text, #111827);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wipes-dive-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  background-color: rgba(44, 113, 104, 0.1);
+  color: #2c7168;
+  border: 1px solid rgba(44, 113, 104, 0.2);
+}
+
+.wipes-dive-meta {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.wipes-dive-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.wipes-dive-btn-group {
+  display: inline-flex;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.wipes-dive-btn {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  background: #ffffff;
+  border: none;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.wipes-dive-btn:not(:last-child) {
+  border-right: 1px solid var(--color-border, #d1d5db);
+}
+
+.wipes-dive-btn:hover {
+  background: #f9fafb;
+  color: #111827;
+}
+
+.wipes-dive-btn.active {
+  background: #2c7168;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.wipes-dive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .wipes-dive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wipes-dive-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wipes-dive-note {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #2c7168;
+  margin: 0;
+}
+
+.wipes-dive-details {
+  margin-top: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.wipes-dive-summary {
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #374151;
+  background: #f9fafb;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wipes-dive-summary:hover {
+  background: #f3f4f6;
+}
+
+.wipes-dive-table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border-top: 1px solid #e5e7eb;
+}
+
+.wipes-dive-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  text-align: left;
+}
+
+.wipes-dive-table th {
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 6px 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.wipes-dive-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.wipes-dive-table tr:hover td {
+  background: #f9fafb;
+}
+
+.wipes-dive-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

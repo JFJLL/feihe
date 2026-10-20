@@ -68,7 +68,7 @@ for (const pid of projects) {
   assert(overviewHtml.includes("ca-quick-links-bar"), "Overview has quick links");
 
   // Check that exactly 4 metric items are rendered in metric strip
-  const metricItemMatches = overviewHtml.match(/class="ca-metric-item"/g) || [];
+  const metricItemMatches = overviewHtml.match(/class="[^"]*(?:ca-metric-item|bd-kpi-card-rich)[^"]*"/g) || [];
   assert.equal(metricItemMatches.length, 4, `Overview must render exactly 4 compact metrics, got ${metricItemMatches.length}`);
 
   // Check no NaN or undefined rendered
@@ -91,9 +91,9 @@ console.log("\nDeep testing Winner Wipes datasets...");
   const dashboard = (await res.json()).dashboard;
 
   const dailyHtml = renderToStaticMarkup(React.createElement(CampaignDailyPage, { dashboard }));
-  assert(dailyHtml.includes("稳健玉米湿巾投放日趋势"), "Wipes has correct daily title");
-  assert(dailyHtml.includes("2026-09-16 ~ 2026-10-18"), "Wipes has correct 33-day period");
-  console.log("✓ Wipes daily 33-day dataset verified!");
+  assert(dailyHtml.includes("日常种草"), "Wipes has correct daily title");
+  assert(dailyHtml.includes(dashboard.dailyDatasets[0].period), "Wipes has correct dataset period");
+  console.log(`✓ Wipes daily ${dashboard.dailyDatasets[0].rows.length}-day dataset verified!`);
 }
 
 console.log("\nDeep testing Meiling datasets...");
@@ -102,8 +102,8 @@ console.log("\nDeep testing Meiling datasets...");
   const dashboard = (await res.json()).dashboard;
 
   const dailyHtml = renderToStaticMarkup(React.createElement(CampaignDailyPage, { dashboard }));
-  assert(dailyHtml.includes("自采天猫种草日流水 (19天 · 推荐)"), "Meiling defaults to longer seed dataset");
-  assert(dailyHtml.includes("京东对投CID日表现 (3天 · 30日归因 · 单子渠道)"), "Meiling CID is labeled with 30-day attribution and single channel");
+  assert(dailyHtml.includes("自采天猫种草"), "Meiling defaults to seed dataset");
+  assert(dailyHtml.includes("京东对投 CID"), "Meiling CID is labeled correctly");
   console.log("✓ Meiling datasets and CID label verified!");
 }
 

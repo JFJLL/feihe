@@ -5,22 +5,22 @@
  */
 
 :root {
-  --ca-palette-primary: #2c7168;
-  --ca-palette-purple: #8273a3;
-  --ca-palette-gold: #b88a45;
-  --ca-palette-terracotta: #bd7964;
-  --ca-palette-slate: #8c9ba5;
-  --ca-palette-bg: #f6f5f2;
-  --ca-palette-panel: #ffffff;
-  --ca-palette-text: #1f2937;
-  --ca-palette-muted: #64748b;
-  --ca-palette-subtle: #94a3b8;
-  --ca-palette-border: #e2e8f0;
-  --ca-palette-border-warm: #e6e3dc;
+  --ca-palette-primary: var(--dt-primary, #2c7168);
+  --ca-palette-purple: var(--dt-purple, #8273a3);
+  --ca-palette-gold: var(--dt-ochre, #b88a45);
+  --ca-palette-terracotta: var(--dt-terracotta, #bd7964);
+  --ca-palette-slate: var(--dt-text-light, #8c9ba5);
+  --ca-palette-bg: var(--dt-bg-page, #f6f5f2);
+  --ca-palette-panel: var(--dt-bg-card, #ffffff);
+  --ca-palette-text: var(--dt-text-main, #1f2937);
+  --ca-palette-muted: var(--dt-text-muted, #64748b);
+  --ca-palette-subtle: var(--dt-text-light, #94a3b8);
+  --ca-palette-border: var(--dt-border, #e2e8f0);
+  --ca-palette-border-warm: var(--dt-border-light, #e6e3dc);
   --ca-palette-grid: #edf2f7;
-  --ca-palette-good: #2c7168;
-  --ca-palette-warn: #b88a45;
-  --ca-palette-danger: #bd7964;
+  --ca-palette-good: var(--dt-status-good, #2c7168);
+  --ca-palette-warn: var(--dt-status-warn, #b88a45);
+  --ca-palette-danger: var(--dt-status-danger, #bd7964);
 }
 
 /* ==========================================================================
@@ -211,6 +211,23 @@
   min-width: 0;
 }
 
+.ca-panel.bd-panel {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.ca-panel.bd-panel > .ca-panel-header {
+  padding: 0;
+  margin-bottom: 12px;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.ca-panel.bd-panel > .ca-panel-body {
+  padding: 0;
+}
+
 .ca-panel-header {
   display: flex;
   align-items: flex-start;
@@ -329,11 +346,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: var(--ca-palette-panel);
-  border: 1px solid var(--ca-palette-border-warm);
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
   min-width: 0;
 }
 
@@ -354,9 +366,9 @@
 }
 
 .ca-metric-value {
-  font-size: 20px;
+  font-size: inherit;
   font-weight: 700;
-  color: var(--ca-palette-text);
+  color: inherit;
   letter-spacing: -0.02em;
   font-feature-settings: "tnum" 1;
 }
@@ -675,6 +687,14 @@
   }
   .ca-panel-body {
     padding: 10px 12px;
+  }
+  .ca-panel.bd-panel > .ca-panel-header {
+    padding: 0;
+    margin-bottom: 10px;
+    border-bottom: 0;
+  }
+  .ca-panel.bd-panel > .ca-panel-body {
+    padding: 0;
   }
 }
 

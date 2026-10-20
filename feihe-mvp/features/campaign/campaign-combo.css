@@ -1,0 +1,280 @@
+/**
+ * CampaignComboChart Visual System
+ * Reusable multi-metric combo chart styling (ca-combo- scope)
+ * Embeds cleanly in ChartPanel without double borders / headers.
+ * Palette aligns with CampaignCharts:
+ *   Deep Teal: #2c7168
+ *   Purple: #8273a3
+ *   Amber Gold: #b88a45
+ *   Terracotta: #bd7964
+ *   Slate: #8c9ba5
+ */
+
+:root {
+  --ca-combo-primary: #2c7168;
+  --ca-combo-purple: #8273a3;
+  --ca-combo-gold: #b88a45;
+  --ca-combo-terracotta: #bd7964;
+  --ca-combo-slate: #8c9ba5;
+  --ca-combo-bg: #ffffff;
+  --ca-combo-panel: #ffffff;
+  --ca-combo-text-main: #1f2937;
+  --ca-combo-text-muted: #64748b;
+  --ca-combo-text-subtle: #94a3b8;
+  --ca-combo-border: #e2e8f0;
+  --ca-combo-border-warm: #e6e3dc;
+  --ca-combo-grid: #edf2f7;
+}
+
+/* ==========================================================================
+   1. Wrap Container (No double borders, integrates into ChartPanel)
+   ========================================================================== */
+
+.ca-combo-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--ca-combo-text-main);
+}
+
+/* ==========================================================================
+   2. Readout (Fixed series layout, always renders active/latest row)
+   ========================================================================== */
+
+.ca-combo-readout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 34px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--ca-combo-border);
+  border-radius: 6px;
+  font-size: 11.5px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  line-height: 1.4;
+}
+
+.ca-combo-readout-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ca-combo-readout-date {
+  font-weight: 700;
+  color: var(--ca-combo-text-main);
+  padding-right: 6px;
+  border-right: 1px solid var(--ca-combo-border);
+}
+
+.ca-combo-readout-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.ca-combo-readout-label {
+  color: var(--ca-combo-text-muted);
+  font-weight: 400;
+}
+
+.ca-combo-readout-val {
+  font-weight: 600;
+  color: var(--ca-combo-text-main);
+  font-feature-settings: "tnum" 1;
+}
+
+.ca-combo-readout-null {
+  color: var(--ca-combo-text-subtle);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.ca-combo-readout-unit {
+  font-size: 11px;
+  color: var(--ca-combo-text-muted);
+  font-weight: 400;
+}
+
+.ca-combo-readout-hint {
+  font-size: 11px;
+  color: var(--ca-combo-text-subtle);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ==========================================================================
+   3. SVG Visual Container
+   ========================================================================== */
+
+.ca-combo-svg-wrap {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.ca-combo-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ==========================================================================
+   4. Legend & Mark Shapes
+   ========================================================================== */
+
+.ca-combo-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--ca-combo-text-muted);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ca-combo-border);
+}
+
+.ca-combo-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  user-select: none;
+}
+
+.ca-combo-legend-item:hover {
+  opacity: 0.8;
+}
+
+/* Mark Swatches: Bar, Line, Point */
+.ca-combo-swatch-bar {
+  display: inline-block;
+  width: 12px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.ca-combo-swatch-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 10px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ca-combo-swatch-line-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.ca-combo-swatch-line-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+}
+
+.ca-combo-swatch-point {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.ca-combo-legend-label {
+  font-weight: 500;
+  color: var(--ca-combo-text-main);
+}
+
+.ca-combo-legend-unit {
+  color: var(--ca-combo-text-muted);
+  font-size: 11px;
+}
+
+.ca-combo-legend-axis {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: var(--ca-combo-text-muted);
+}
+
+/* ==========================================================================
+   5. Empty State Container
+   ========================================================================== */
+
+.ca-combo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 20px 16px;
+  text-align: center;
+  color: var(--ca-combo-text-muted);
+  font-size: 12px;
+  gap: 6px;
+}
+
+.ca-combo-empty-title {
+  font-weight: 600;
+  color: var(--ca-combo-text-main);
+}
+
+.ca-combo-empty-hint {
+  font-size: 11px;
+  color: var(--ca-combo-text-subtle);
+  max-width: 320px;
+}
+
+/* ==========================================================================
+   6. Responsive Adaptations (Mobile 390px+)
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .ca-combo-readout {
+    padding: 5px 8px;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .ca-combo-legend {
+    gap: 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 390px) {
+  .ca-combo-readout-item {
+    font-size: 10.5px;
+  }
+
+  .ca-combo-legend {
+    gap: 8px;
+  }
+}

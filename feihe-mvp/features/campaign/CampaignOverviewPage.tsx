@@ -10,7 +10,6 @@ import type {
 import {
   MetricStrip,
   ChartPanel,
-  HorizontalBarChart,
   DonutChart,
   BudgetComparisonChart,
   TargetBulletChart,
@@ -20,33 +19,43 @@ import {
 } from "./CampaignCharts";
 import "./campaign-analytics.css";
 import "./CampaignOverviewPage.css";
+import { CampaignComboChart } from "./CampaignComboChart";
+import { buildCalendarRows } from "./campaign-daily-model";
+import {
+  safeNum,
+  strictSum,
+  isSummaryRow,
+  extractKailasPlacements,
+  extractWipesPlacements,
+  extractMeilingFourLines,
+  type PlacementRecord,
+} from "./campaign-placement-model";
 
 export interface CampaignOverviewPageProps {
   dashboard: CampaignDashboard;
 }
 
-function safeNum(val: unknown): number | null {
-  if (val === null || val === undefined) return null;
-  const s = String(val).trim();
-  if (s === "" || s === "-" || s === "—" || s === "null" || s === "undefined") return null;
-  const cleaned = s.replace(/[,¥%]/g, "").trim();
-  if (cleaned === "") return null;
-  const n = Number(cleaned);
-  return Number.isFinite(n) ? n : null;
+function computeDateRange(
+  rows?: { date: string }[],
+  _fallbackPeriod?: string
+): { minDate: string; maxDate: string; rangeText: string } | null {
+  if (!rows || rows.length === 0) return null;
+  const dates = rows
+    .map((r) => String(r.date || ""))
+    .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))
+    .sort();
+  if (dates.length === 0) return null;
+  const minDate = dates[0];
+  const maxDate = dates[dates.length - 1];
+  return {
+    minDate,
+    maxDate,
+    rangeText: `${minDate} ~ ${maxDate}`,
+  };
 }
-
-function strictSum(numbers: (number | null)[]): number | null {
-  if (!numbers.length) return null;
-  for (const n of numbers) {
-    if (n === null || !Number.isFinite(n)) return null;
-  }
-  return (numbers as number[]).reduce((a, b) => a + b, 0);
-}
-
-const isSummaryRow = (label?: string): boolean => Boolean(label && /(合计|总计|汇总)/.test(label));
 
 export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
-  const { projectId, name, reportPeriod, updatedAt, kpis = [], tables = [] } = dashboard;
+  const { projectId, name, reportPeriod, updatedAt, kpis = [], tables = [], dailyDatasets = [] } = dashboard;
 
   const [activeSnapshot, setActiveSnapshot] = useState<string>(() => {
     if (projectId === "kailas") return "daily-1018";
@@ -104,17 +113,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       }));
   }, [kailasBudgetLinesTable]);
 
-  const kailasFsCpuvData = useMemo((): ChartDatum[] => {
-    if (!kailasFsPlacementsTable?.rows) return [];
-    return kailasFsPlacementsTable.rows
-      .filter((r) => !isSummaryRow(String(r.placement || "")) && safeNum(r.cpuv) !== null)
-      .map((r) => ({
-        id: String(r.placement),
-        label: String(r.placement) + "版位",
-        value: safeNum(r.cpuv),
-        detail: safeNum(r.ctr) !== null ? "CTR: " + String(safeNum(r.ctr)) + "%" : undefined,
-        color: String(r.placement).includes("搜索") ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.purple,
-      }));
+  const kailasFsPlacementsData = useMemo((): PlacementRecord[] => {
+    return extractKailasPlacements(kailasFsPlacementsTable);
   }, [kailasFsPlacementsTable]);
 
   const kailasQ3BudgetComparison = useMemo((): ComparisonDatum[] => {
@@ -223,17 +223,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     });
   }, [meilingExecutionTable]);
 
-  const meilingFourLinesGmvData = useMemo((): ChartDatum[] => {
-    if (!meilingFourLinesTable?.rows) return [];
-    return meilingFourLinesTable.rows
-      .filter((r) => !isSummaryRow(String(r.name || "")))
-      .map((r) => ({
-        id: String(r.name),
-        label: String(r.name),
-        value: safeNum(r.gmv),
-        detail: safeNum(r.kfsRoi) !== null ? "ROI: " + String(safeNum(r.kfsRoi)) : undefined,
-        color: String(r.name).includes("自采") ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.gold,
-      }));
+  const meilingFourLinesData = useMemo((): PlacementRecord[] => {
+    return extractMeilingFourLines(meilingFourLinesTable);
   }, [meilingFourLinesTable]);
 
   const meiling618BulletData = useMemo((): ComparisonDatum[] => {
@@ -301,17 +292,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       }));
   }, [wipesBudgetAllocTable]);
 
-  const wipesPlacementCpuvData = useMemo((): ChartDatum[] => {
-    if (!wipesPlacementsTable?.rows) return [];
-    return wipesPlacementsTable.rows
-      .filter((r) => !isSummaryRow(String(r.name || "")) && safeNum(r.cpuv) !== null)
-      .map((r) => ({
-        id: String(r.name),
-        label: String(r.name) + "版位",
-        value: safeNum(r.cpuv),
-        detail: safeNum(r.ctr) !== null ? "CTR: " + String(safeNum(r.ctr)) + "%" : undefined,
-        color: String(r.name).includes("视频") ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.purple,
-      }));
+  const wipesPlacementsData = useMemo((): PlacementRecord[] => {
+    return extractWipesPlacements(wipesPlacementsTable);
   }, [wipesPlacementsTable]);
 
   const wipesDailyTargetBullets = useMemo((): ComparisonDatum[] => {
@@ -386,18 +368,18 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         const overRuns = kailasBudgetLinesComparison.filter(
           (d) => d.actual !== null && d.target !== null && d.actual > d.target
         );
-        const validCpuv = kailasFsCpuvData.filter((r) => r.value !== null);
-        const lowestCpuv = validCpuv.length > 0 ? [...validCpuv].sort((a, b) => (a.value || 0) - (b.value || 0))[0] : null;
+        const validCpuv = kailasFsPlacementsData.filter((r) => r.cpuv !== null);
+        const lowestCpuv = validCpuv.length > 0 ? [...validCpuv].sort((a, b) => (a.cpuv || 0) - (b.cpuv || 0))[0] : null;
         const parts: string[] = [];
         if (overRuns.length > 0) {
           parts.push(overRuns.map((r) => `${r.label}超支 ${(r.actual! - r.target!).toLocaleString()}元`).join("；"));
         } else {
           parts.push("各预算行当前未见超支记录");
         }
-        if (lowestCpuv?.value !== null && lowestCpuv?.value !== undefined) {
-          parts.push(`版位中${lowestCpuv.label}转化成本最低(${lowestCpuv.value}元/UV)`);
+        if (lowestCpuv?.cpuv !== null && lowestCpuv?.cpuv !== undefined) {
+          parts.push(`版位中${lowestCpuv.name}转化成本最低(${lowestCpuv.cpuv}元/UV)`);
         }
-        return `10.16–10.18 日报现金口径：${parts.join("，")}。UGC版位无UV数据已保持留白。`;
+        return `10.16–10.18 日报现金口径：${parts.join("，")}。FS版位排除汇总，UGC版位独立核算。`;
       }
       const q3Spend = findKpi("kailas-unlocked-kpi-budget");
       return `Q3双周会小结口径 (含返点)：规划预算 ${q3Spend?.target?.toLocaleString() || "—"}元，实际消耗 ${q3Spend?.value?.toLocaleString() || "—"}元。`;
@@ -405,9 +387,9 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
     if (projectId === "meiling") {
       if (activeSnapshot === "double11-1018") {
-        const validGmvRows = meilingFourLinesGmvData.filter((r) => r.value !== null);
-        const bestGmv = validGmvRows.length > 0 ? [...validGmvRows].sort((a, b) => (b.value || 0) - (a.value || 0))[0] : null;
-        return `双11大促执行（截至10月18日累计）：各渠道按调整预算执行；四线转化中${bestGmv ? `${bestGmv.label}产出最高(${bestGmv.value?.toLocaleString()}元，${bestGmv.detail || ""})` : "各链路独立核算"}。`;
+        const validGmvRows = meilingFourLinesData.filter((r) => r.gmv !== null);
+        const bestGmv = validGmvRows.length > 0 ? [...validGmvRows].sort((a, b) => (b.gmv || 0) - (a.gmv || 0))[0] : null;
+        return `双11大促执行（截至10月18日累计）：各渠道按调整预算执行；四线转化中${bestGmv ? `${bestGmv.name}产出最高(${bestGmv.gmv?.toLocaleString()}元，ROI: ${bestGmv.roi ?? "—"})` : "各链路独立核算"}。`;
       }
       const roi618 = findKpi("meiling-unlocked-kpi-618-roi");
       return `618大促已结案归档：全案ROI为 ${roi618?.value || "—"}（目标 ${roi618?.target || "—"}），供大促策略历史参考。`;
@@ -415,9 +397,9 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
     if (projectId === "winner-wipes") {
       if (activeSnapshot === "daily-1019") {
-        const validCpuv = wipesPlacementCpuvData.filter((r) => r.value !== null);
-        const bestPlacement = validCpuv.length > 0 ? [...validCpuv].sort((a, b) => (a.value || 0) - (b.value || 0))[0] : null;
-        return `稳健酒精湿巾10.19日报口径：${bestPlacement ? `${bestPlacement.label}成本最低(${bestPlacement.value}元/UV，${bestPlacement.detail || ""})` : "各版位分化核算"}。底表KPI统计截止未注明，待业务核对。`;
+        const validCpuv = wipesPlacementsData.filter((r) => r.cpuv !== null);
+        const bestPlacement = validCpuv.length > 0 ? [...validCpuv].sort((a, b) => (a.cpuv || 0) - (b.cpuv || 0))[0] : null;
+        return `稳健酒精湿巾10.19日报口径：${bestPlacement ? `${bestPlacement.name}成本最低(${bestPlacement.cpuv}元/UV)` : "各版位分化核算"}。视频真实消耗入账。`;
       }
       const notMet = wipesDailyTargetBullets.filter(
         (d) => d.actual !== null && d.target !== null && (d.direction === "lower" ? d.actual > d.target : d.actual < d.target)
@@ -426,8 +408,55 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     }
 
     return `当前项目业务周期: ${activeHeaderPeriod}。核心数据基于最新入账记录动态呈现，缺值保持留白。`;
-  }, [projectId, activeSnapshot, kailasBudgetLinesComparison, kailasFsCpuvData, meilingFourLinesGmvData, wipesPlacementCpuvData, wipesDailyTargetBullets, findKpi, activeHeaderPeriod]);
+  }, [projectId, activeSnapshot, kailasBudgetLinesComparison, kailasFsPlacementsData, meilingFourLinesData, wipesPlacementsData, wipesDailyTargetBullets, findKpi, activeHeaderPeriod]);
 
+  // Project-specific daily datasets for fullwidth overview trend
+  const kailasDailyDataset = useMemo(() => {
+    return dailyDatasets.find((d) => d.id === "kailas-daily-fuga-creatives") || dailyDatasets[0];
+  }, [dailyDatasets]);
+
+  const meilingDailyDataset = useMemo(() => {
+    return (
+      dailyDatasets.find((d) => d.id === "meiling-daily-tm-seed") ||
+      dailyDatasets.find((d) => d.id === "meiling-daily-cid-jd") ||
+      dailyDatasets[0]
+    );
+  }, [dailyDatasets]);
+
+  const wipesDailyDataset = useMemo(() => {
+    return dailyDatasets.find((d) => d.id === "wipes-daily-delivery") || dailyDatasets[0];
+  }, [dailyDatasets]);
+
+  const kailasDailyInfo = useMemo(() => {
+    if (!kailasDailyDataset) return null;
+    const range = computeDateRange(kailasDailyDataset.rows, kailasDailyDataset.period);
+    if (!range) return null;
+    const rows = buildCalendarRows(kailasDailyDataset, range.minDate, range.maxDate);
+    return { ...range, rows };
+  }, [kailasDailyDataset]);
+
+  const meilingDailyInfo = useMemo(() => {
+    if (!meilingDailyDataset) return null;
+    const range = computeDateRange(meilingDailyDataset.rows, meilingDailyDataset.period);
+    if (!range) return null;
+    const rows = buildCalendarRows(meilingDailyDataset, range.minDate, range.maxDate);
+    return { ...range, rows };
+  }, [meilingDailyDataset]);
+
+  const wipesDailyInfo = useMemo(() => {
+    if (!wipesDailyDataset) return null;
+    const range = computeDateRange(wipesDailyDataset.rows, wipesDailyDataset.period);
+    if (!range) return null;
+    const rows = buildCalendarRows(wipesDailyDataset, range.minDate, range.maxDate);
+    return { ...range, rows };
+  }, [wipesDailyDataset]);
+
+  const activeDailyDataset = useMemo(() => {
+    if (projectId === "kailas" && activeSnapshot === "daily-1018") return kailasDailyDataset;
+    if (projectId === "meiling" && activeSnapshot === "double11-1018") return meilingDailyDataset;
+    if (projectId === "winner-wipes" && activeSnapshot === "daily-1019") return wipesDailyDataset;
+    return undefined;
+  }, [projectId, activeSnapshot, kailasDailyDataset, meilingDailyDataset, wipesDailyDataset]);
   const activeMetrics = useMemo(() => {
     if (projectId === "kailas") return activeSnapshot === "daily-1018" ? kailasDailyMetrics : kailasQ3Metrics;
     if (projectId === "meiling") return activeSnapshot === "double11-1018" ? meilingDouble11Metrics : meiling618Metrics;
@@ -437,11 +466,11 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
   return (
     <div className="ca-page" role="main" aria-label={name + " 营销战役总览"}>
-      {/* 1. Header (单行 h1 + 周期说明 + 业务快照切换器) */}
-      <header className="ca-header">
+      {/* 1. Header (紧凑元信息 toolbar + 周期说明 + 业务快照切换器) */}
+      <header className="ca-header bd-toolbar-compact">
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
-            <h1 className="ca-header-title">{name} · 战役总览</h1>
+            <h2 className="ca-header-title">数据总览</h2>
             <span className="ca-header-badge">营销复盘</span>
             <span className="ca-header-subtitle">{activeHeaderPeriod}</span>
           </div>
@@ -505,7 +534,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                   role="radio"
                   aria-checked={activeSnapshot === "daily-1019"}
                 >
-                  日常种草与今日预算 (10.19日报)
+                  日常种草与计划预算 (10.19日报)
                 </button>
                 <button
                   type="button"
@@ -538,11 +567,54 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             </ChartPanel>
 
             <ChartPanel
-              title="FS 版位千次曝光与 UV 转化成本"
-              subtitle="10.16–10.18 日报口径 · 单位转化成本 (元/UV)"
+              title="FS 版位 CPM 与 CPUV 投放效率"
+              subtitle="10.16–10.18 日报口径 · 左轴 CPM (元/千次曝光) vs 右轴 CPUV (元/UV)"
             >
-              <HorizontalBarChart data={kailasFsCpuvData} unit="元/UV" />
+              <CampaignComboChart
+                rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
+                series={[
+                  { key: "cpm", label: "千次曝光成本 (CPM)", unit: "元/千次曝光", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
+                ]}
+                xKey="name"
+                title="FS 版位 CPM 与 CPUV 效率"
+                height={220}
+              />
             </ChartPanel>
+
+            <ChartPanel
+              title="FS 版位消耗与 UV 引流规模"
+              subtitle="10.16–10.18 日报口径 · 排除汇总项 · 左轴 消耗 (元) vs 右轴 活跃 UV (人)"
+            >
+              <CampaignComboChart
+                rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
+                series={[
+                  { key: "spend", label: "版位消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                  { key: "uv", label: "站外活跃 UV", unit: "人", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
+                ]}
+                xKey="name"
+                title="FS 版位消耗与 UV 规模"
+                height={220}
+              />
+            </ChartPanel>
+
+            {kailasDailyInfo && (
+                <ChartPanel
+                  title={`${kailasDailyDataset?.label || "FUGA大坡王10月投放日流水走势"} (独立日流水)`}
+                  subtitle={`独立日流水 · ${kailasDailyInfo.rangeText} · 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                >
+                  <CampaignComboChart
+                    rows={kailasDailyInfo.rows}
+                    series={[
+                      { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                    ]}
+                    xKey="date"
+                    title="投放日流水消耗与展现走势"
+                    height={220}
+                  />
+                </ChartPanel>
+            )}
           </>
         )}
 
@@ -576,10 +648,53 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="四线任务组累计产出 GMV 与综合 ROI"
-              subtitle="四线投放累计截至10.18 · GMV 单位元 · 各链路独立核算"
+              subtitle="四线投放累计截至10.18 · 左轴 GMV (元) vs 右轴 KFS ROI (倍) · 独立核算"
             >
-              <HorizontalBarChart data={meilingFourLinesGmvData} unit="元" />
+              <CampaignComboChart
+                rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
+                series={[
+                  { key: "gmv", label: "四线累计 GMV", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                  { key: "roi", label: "综合产出比 (KFS ROI)", unit: "倍", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
+                ]}
+                xKey="name"
+                title="四线 GMV 与 ROI"
+                height={220}
+              />
             </ChartPanel>
+
+            <ChartPanel
+              title="四线达人费用 (K) 与广告消耗 (FS) 结构"
+              subtitle="四线投放累计截至10.18 · 支出结构对比 (元)"
+            >
+              <CampaignComboChart
+                rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
+                series={[
+                  { key: "kSpend", label: "达人发文合作 (K费用)", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
+                  { key: "fsSpend", label: "投流广告支出 (FS消耗)", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                ]}
+                xKey="name"
+                title="四线 K 与 FS 支出结构"
+                height={220}
+              />
+            </ChartPanel>
+
+            {meilingDailyInfo && (
+                <ChartPanel
+                  title={`${meilingDailyDataset?.label || "天猫种草分日流水走势"} (独立日流水)`}
+                  subtitle={`独立日流水 · ${meilingDailyInfo.rangeText} · 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                >
+                  <CampaignComboChart
+                    rows={meilingDailyInfo.rows}
+                    series={[
+                      { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                    ]}
+                    xKey="date"
+                    title="分日消耗与展现走势"
+                    height={220}
+                  />
+                </ChartPanel>
+            )}
           </>
         )}
 
@@ -598,18 +713,61 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         {projectId === "winner-wipes" && activeSnapshot === "daily-1019" && (
           <>
             <ChartPanel
-              title="今日规划预算分配结构"
+              title="日报计划预算分配结构"
               subtitle="10.19 日报规划预算分配 (元)"
             >
-              <DonutChart data={wipesBudgetDonutData} unit="元" centerLabel="今日总预算" />
+              <DonutChart data={wipesBudgetDonutData} unit="元" centerLabel="计划预算合计" />
             </ChartPanel>
 
             <ChartPanel
-              title="分版位投放效率 CPUV 对比"
-              subtitle="10.19 日报分版位投放效果 · 单位转化成本 (元/UV)"
+              title="分版位互动成本 (CPE) 与访客成本 (CPUV)"
+              subtitle="10.19 日报口径 · 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
             >
-              <HorizontalBarChart data={wipesPlacementCpuvData} unit="元/UV" />
+              <CampaignComboChart
+                rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
+                series={[
+                  { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
+                ]}
+                xKey="name"
+                title="分版位 CPE 与 CPUV"
+                height={220}
+              />
             </ChartPanel>
+
+            <ChartPanel
+              title="分版位投放消耗与点击率对比"
+              subtitle="10.19 日报口径 · 视频/搜索/信息 · 左轴 消耗 (元) vs 右轴 点击率 (%)"
+            >
+              <CampaignComboChart
+                rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
+                series={[
+                  { key: "spend", label: "版位消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                  { key: "ctr", label: "点击率 (CTR)", unit: "%", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
+                ]}
+                xKey="name"
+                title="分版位消耗与点击率"
+                height={220}
+              />
+            </ChartPanel>
+
+            {wipesDailyInfo && (
+                <ChartPanel
+                  title={`${wipesDailyDataset?.label || "玉米湿巾投放日趋势"} (独立日流水)`}
+                  subtitle={`独立日流水 · ${wipesDailyInfo.rangeText} · 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                >
+                  <CampaignComboChart
+                    rows={wipesDailyInfo.rows}
+                    series={[
+                      { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                    ]}
+                    xKey="date"
+                    title="投放日流水消耗与展现走势"
+                    height={220}
+                  />
+                </ChartPanel>
+            )}
           </>
         )}
 
@@ -657,7 +815,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       {activeDetailTables.length > 0 && (
         <details className="ca-details-collapse">
           <summary className="ca-details-summary">
-            <span>查看关联业务明细数据 (当前看板对应 {activeDetailTables.length} 张表，点击展开)</span>
+            <span>查看关联业务明细数据 (当前看板对应 {activeDetailTables.length + (activeDailyDataset ? 1 : 0)} 项数据源，点击展开)</span>
           </summary>
           <div className="ca-details-body">
             {activeDetailTables.map((t) => (
@@ -690,6 +848,25 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 </table>
               </div>
             ))}
+            {activeDailyDataset && (
+              <div className="ca-table-wrap">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <div>
+                    <strong style={{ fontSize: 13, color: "#1e293b" }}>{activeDailyDataset.label} (独立分日流水)</strong>
+                    <span style={{ fontSize: 11, color: "#64748b", marginLeft: 8 }}>共 {activeDailyDataset.rows.length} 日记录</span>
+                  </div>
+                  {activeDailyDataset.period && <span style={{ fontSize: 11, color: "#64748b" }}>周期: {activeDailyDataset.period}</span>}
+                </div>
+                <div style={{ padding: "10px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 6, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
+                  <span style={{ color: "#475569" }}>
+                    分日流水数据来源于独立分日数据集，包含消耗、展现、互动等完整时序。
+                  </span>
+                  <Link href={`/projects/${projectId}?tab=daily`} className="ca-nav-link" style={{ fontSize: 12 }}>
+                    <span>前往「分日」工作台查看全量表格 →</span>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </details>
       )}

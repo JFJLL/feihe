@@ -89,6 +89,8 @@ export interface CampaignTable {
   columns: CampaignTableColumn[];
   rows: CampaignTableRow[];
   provenance?: CampaignProvenanceType;
+  note?: string;
+  sourceUrl?: string;
 }
 
 export interface CampaignActionItem {

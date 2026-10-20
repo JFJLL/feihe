@@ -11,6 +11,7 @@ import {
   ChartDatum,
   ComparisonDatum,
 } from "./CampaignCharts";
+import { CampaignEnrichmentPanels } from "./CampaignEnrichmentPanels";
 import "./campaign-analytics.css";
 
 export interface CampaignContentPageProps {
@@ -32,7 +33,7 @@ const parseNum = (v: unknown): number | null => {
 };
 
 export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
-  const { projectId, tables, kpis, actions, reportPeriod, updatedAt, name: projectName } = dashboard;
+  const { projectId, tables, kpis, actions, reportPeriod, updatedAt } = dashboard;
   const [distTab, setDistTab] = useState<"platform" | "product">("platform");
   const [showTable, setShowTable] = useState<boolean>(false);
 
@@ -87,7 +88,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         id: String(r.platform),
         label: String(r.platform),
         value: parseNum(r.count),
-        detail: r.count !== null ? `${r.count} 篇 (${r.ratio || ""})` : "—",
+        detail: r.count !== null ? `${r.count} 位 (${r.ratio || ""})` : "—",
       }));
   }, [meilingSpilloverTable]);
 
@@ -99,7 +100,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         id: String(r.productGroup),
         label: String(r.productGroup).replace(" 系列", ""),
         value: parseNum(r.count),
-        detail: r.count !== null ? `${r.count} 篇 (${r.ratio || ""})` : "—",
+        detail: r.count !== null ? `${r.count} 位 (${r.ratio || ""})` : "—",
       }));
   }, [meilingProductTable]);
 
@@ -114,6 +115,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         target: kailasKpi.target !== undefined ? kailasKpi.target : null,
         unit: kailasKpi.unit || "篇",
         direction: "higher",
+        comparison: kailasKpi.comparison,
       },
     ];
   }, [kailasKpi]);
@@ -157,6 +159,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         target: k.target,
         unit: k.unit,
         direction: k.direction,
+        comparison: k.comparison,
       }));
   }, [kpis]);
 
@@ -210,13 +213,13 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
 
   return (
     <div className="ca-page">
-      <header className="ca-header">
+      <header className="ca-header bd-toolbar-compact">
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
-            <h1 className="ca-header-title">内容管理</h1>
-            <span className="ca-header-badge">{projectName}</span>
+            <h2 className="ca-header-title">内容管理</h2>
+            <span className="ca-header-badge">内容看板</span>
           </div>
-          <p className="ca-header-subtitle">达人制作、流转库存分布、产品及渠道归属与业务行动清单</p>
+          <span className="ca-header-subtitle">达人制作、流转库存分布、产品及渠道归属与业务行动清单</span>
         </div>
         <div className="ca-header-meta">
           <span>业务周期：<strong>{displayPeriod}</strong></span>
@@ -238,7 +241,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           </ChartPanel>
           <ChartPanel
             title={distTab === "platform" ? "外溢回流平台分布" : "主推产品型号分布"}
-            subtitle="二核确认达人对应推广目标统计（单位：篇）"
+            subtitle="二核确认达人对应推广目标统计（单位：位）"
             actions={
               <div className="ca-toolbar-group">
                 <button type="button" className={`ca-toolbar-btn ${distTab === "platform" ? "ca-toolbar-btn-primary" : ""}`} onClick={() => setDistTab("platform")}>平台</button>
@@ -248,7 +251,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           >
             <DonutChart
               data={distTab === "platform" ? meilingPlatformData : meilingProductData}
-              unit="篇"
+              unit="位"
               centerLabel={distTab === "platform" ? "平台分布" : "产品分布"}
             />
           </ChartPanel>
@@ -259,7 +262,9 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
       {projectId === "kailas" && (
         <div className="ca-grid-wide">
           <ChartPanel title="Q3 笔记全量发布进度" subtitle="Q3 阶段双周会小结（截至9.27）规划目标对照">
-            <TargetBulletChart data={kailasBulletData} />
+            <div style={{ maxWidth: 680, width: "100%", margin: "0 auto" }}>
+              <TargetBulletChart data={kailasBulletData} />
+            </div>
           </ChartPanel>
         </div>
       )}
@@ -279,6 +284,8 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           </ChartPanel>
         </div>
       )}
+
+      <CampaignEnrichmentPanels dashboard={dashboard} section="content" />
 
       {/* 日报动作记录 (展示原文日期与规划事项，不伪装实时任务执行状态) */}
       <div className="ca-panel">
