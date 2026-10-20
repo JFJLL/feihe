@@ -7,9 +7,17 @@ import {
   MetricStrip,
   HorizontalBarChart,
   DonutChart,
+  CampaignFunnelChart,
+  MatrixHeatmapChart,
+  StackedHorizontalBarChart,
+  ScatterChart,
   CAMPAIGN_PALETTE,
   type ChartDatum,
   type MetricStripItem,
+  type FunnelStageDatum,
+  type MatrixHeatmapCell,
+  type StackedBarRow,
+  type StackedBarSegment,
 } from './CampaignCharts';
 import { CampaignComboChart, type ComboSeries } from './CampaignComboChart';
 import './meiling-rich-insights.css';
@@ -60,12 +68,22 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   const materialParetoTable = tablesMap.get('meiling-enrich-material-pareto-efficiency');
   const review618Table = tablesMap.get('meiling-enrich-618-procurement-roi-review');
   const kolTierTable = tablesMap.get('meiling-enrich-kol-tier-budget-stage');
+  const noteCreativeTable = tablesMap.get('meiling-enrich-note-creative-efficiency');
+  const matrixProductTable = tablesMap.get('meiling-enrich-matrix-product-stage');
+  const matrixPlatformTable = tablesMap.get('meiling-enrich-matrix-platform-stage');
+  const themeFormatTable = tablesMap.get('meiling-enrich-content-theme-format');
+  const fullFunnelTable = tablesMap.get('meiling-enrich-full-funnel');
+  const multiLineTable = tablesMap.get('meiling-enrich-multi-line-summary');
+  const audienceAgeTable = tablesMap.get('meiling-enrich-audience-age');
+  const audienceCitiesTable = tablesMap.get('meiling-enrich-audience-cities');
+  const audiencePackagesTable = tablesMap.get('meiling-enrich-audience-packages');
+  const campaignEvolutionTable = tablesMap.get('meiling-enrich-campaign-evolution');
 
   // A. Model Planning Dynamic Calculations
-  const { modelPlanSeriesRows, modelPlanMetrics, modelPlanTotals } = useMemo(() => {
+  const { modelPlanSeriesRows, modelPlanTotals } = useMemo(() => {
     const rows = modelPlanTable?.rows || [];
     const seriesAgg = new Map<string, { budget_wan: number; posts_plan: number; screen_prog: number; pub_prog: number; spend: number }>();
-    
+
     let totalB = 0;
     let totalP = 0;
     let totalS = 0;
@@ -166,7 +184,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   ];
 
   // C. Comparable Daily Dynamic Calculations
-  const { comparableRows, comparableMetrics, comparableTotals } = useMemo(() => {
+  const { comparableRows, comparableTotals } = useMemo(() => {
     const rows = comparableDailyTable?.rows || [];
     let sumTm = 0;
     let sumJd = 0;
@@ -295,7 +313,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   ];
 
   // F. Keywords Distribution Dynamic Calculations
-  const { keywordsDonutData, keywordsMetrics, keywordsTotals } = useMemo(() => {
+  const { keywordsDonutData, keywordsTotals } = useMemo(() => {
     const rows = keywordsTable?.rows || [];
     const catMap = new Map<string, number>();
     let total = 0;
@@ -359,6 +377,203 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
     };
   }, [sampleMachineTable]);
 
+  // H. Multi-Line Summary Dynamic Calculations (10大细分投放线并发赛马)
+  const { multiLineComboRows, multiLineTotals } = useMemo(() => {
+    const rows = multiLineTable?.rows || [];
+    let sumSpend = 0;
+    let sumImp = 0;
+    let sumClicks = 0;
+    let sumEng = 0;
+    let sumUv = 0;
+
+    const cRows = [];
+    for (const r of rows) {
+      const sp = parseNum(r.spend) || 0;
+      const uv = parseNum(r.uv) || 0;
+      const imp = parseNum(r.impressions) || 0;
+      const clicks = parseNum(r.clicks) || 0;
+      const eng = parseNum(r.engagements) || 0;
+      sumSpend += sp;
+      sumImp += imp;
+      sumClicks += clicks;
+      sumEng += eng;
+      sumUv += uv;
+
+      cRows.push({
+        line: String(r.line_name || ''),
+        spend: sp,
+        uv: uv,
+        clicks: clicks,
+        ctr: parseNum(r.ctr),
+        cpc: parseNum(r.cpc),
+        cpuv: parseNum(r.cpuv),
+      });
+    }
+
+    const metrics: MetricStripItem[] = [
+      { label: '多线投放总消耗', value: formatMoneyWan(sumSpend), unit: '', note: '10大细分投放线累计' },
+      { label: '多线综合点击率', value: sumImp > 0 ? ((sumClicks / sumImp) * 100).toFixed(2) : '—', unit: '%', note: `总点击 ${formatNum(sumClicks, 0)}次` },
+      { label: '平均进店成本 CPUV', value: sumUv > 0 ? (sumSpend / sumUv).toFixed(2) : '—', unit: '元', note: `进店 ${formatNum(sumUv, 0)} UV` },
+      { label: '活跃投放线数量', value: rows.filter((r) => (parseNum(r.spend) || 0) > 0).length, unit: '条', note: `全量规划 ${rows.length} 条投放线` },
+    ];
+
+    return {
+      multiLineComboRows: cRows,
+      multiLineMetrics: metrics,
+      multiLineTotals: { sumSpend, sumImp, sumClicks, sumEng, sumUv, count: rows.length },
+    };
+  }, [multiLineTable]);
+
+  const multiLineComboSeries: ComboSeries[] = [
+    { key: 'spend', label: '消耗金额', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.primary, unit: '元' },
+    { key: 'uv', label: '进店UV', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.gold, unit: 'UV' },
+  ];
+
+  // I. Full Funnel Dynamic Calculations (展现→点击→互动→进店UV)
+  const funnelStages: FunnelStageDatum[] = useMemo(() => {
+    const rows = fullFunnelTable?.rows || [];
+    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.terracotta];
+    return rows.map((r, i) => ({
+      stage: String(r.stage || ''),
+      value: parseNum(r.value),
+      unit: String(r.unit || ''),
+      conversionLabel: String(r.conversion_label || ''),
+      costLabel: String(r.cost_label || ''),
+      subtext: String(r.subtext || ''),
+      color: colors[i % colors.length],
+    }));
+  }, [fullFunnelTable]);
+
+  // J. Commercial Note Scatter Creative Diagnostic Calculations (消耗 × 进店/互动成本)
+  const scatterCreativeData = useMemo(() => {
+    const rows = noteCreativeTable?.rows || materialParetoTable?.rows || [];
+    return rows.map((r, i) => {
+      const sp = parseNum(r.spend);
+      const cpuv = parseNum(r.cpuv);
+      const cpe = parseNum(r.cpe);
+      const uv = parseNum(r.uv);
+      const eng = parseNum(r.engagements);
+      const rawName = String(r.material_name || r.note_id || `商业素材-${i + 1}`);
+      const shortName = rawName.length > 8 ? rawName.slice(0, 8) + '...' : rawName;
+      const yVal = cpuv !== null && cpuv > 0 ? cpuv : cpe;
+
+      return {
+        label: shortName,
+        x: sp,
+        y: yVal,
+        size: uv !== null && uv > 0 ? uv : (eng || 10),
+        detail: `${rawName} | 消耗 ¥${formatNum(sp)} | 进店成本 ¥${formatNum(cpuv)} | UV ${formatNum(uv, 0)} | 互动 ${formatNum(eng, 0)}`,
+      };
+    });
+  }, [noteCreativeTable, materialParetoTable]);
+
+  // K. Audience Demographics: Age & Top 12 Cities
+  const { audienceAgeBarData, audienceCitiesBarData } = useMemo(() => {
+    const ageRows = audienceAgeTable?.rows || [];
+    const cityRows = audienceCitiesTable?.rows || [];
+
+    const ageColors = [CAMPAIGN_PALETTE.slate, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.terracotta];
+    const ageBarData: ChartDatum[] = ageRows.map((r, i) => {
+      const ratio = parseNum(r.ratio) || 0;
+      return {
+        label: String(r.age_group || ''),
+        value: ratio,
+        color: ageColors[i % ageColors.length],
+        detail: `${ratio}% - ${r.persona_note || ''}`,
+      };
+    });
+
+    const cityBarData: ChartDatum[] = cityRows.map((r, i) => {
+      const count = parseNum(r.kol_count) || 0;
+      return {
+        label: String(r.city || ''),
+        value: count,
+        color: i < 3 ? CAMPAIGN_PALETTE.primary : i < 6 ? CAMPAIGN_PALETTE.purple : CAMPAIGN_PALETTE.slate,
+        detail: `${r.city} (${r.tier || '核心城市'}) - 指数 ${count}`,
+      };
+    });
+
+    return { audienceAgeBarData: ageBarData, audienceCitiesBarData: cityBarData };
+  }, [audienceAgeTable, audienceCitiesTable]);
+
+  // L. Audience Targeting Packages Top 10
+  const audiencePackagesBarData: ChartDatum[] = useMemo(() => {
+    const rows = audiencePackagesTable?.rows || [];
+    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.slate, '#4d8b80', '#9c6f84'];
+    return rows.slice(0, 8).map((r, i) => {
+      const sp = parseNum(r.spend) || 0;
+      const rawName = String(r.package_name || '');
+      const shortName = rawName.replace('人群包-', '').replace('平台推荐-', '');
+      return {
+        label: shortName.length > 9 ? shortName.slice(0, 9) + '...' : shortName,
+        value: sp,
+        color: colors[i % colors.length],
+        detail: `${rawName} | 消耗 ¥${formatNum(sp)} | CTR ${r.ctr}% | 进店成本 ¥${formatNum(parseNum(r.cpuv))}`,
+      };
+    });
+  }, [audiencePackagesTable]);
+
+  // M. 2D Matrix Heatmaps (产品×阶段, 平台×阶段) & Content Theme × Format Stack
+  const { matrixProductData, matrixPlatformData, themeFormatStacked } = useMemo(() => {
+    // 1. Product x Stage
+    const prodRows = matrixProductTable?.rows || [];
+    const pRowsSet = Array.from(new Set(prodRows.map((r) => String(r.dimension || ''))));
+    const pColsSet = Array.from(new Set(prodRows.map((r) => String(r.stage || ''))));
+    const pCells: MatrixHeatmapCell[] = prodRows.map((r) => ({
+      row: String(r.dimension || ''),
+      col: String(r.stage || ''),
+      value: parseNum(r.count),
+      displayValue: String(r.count ?? '0'),
+      subtext: r.ratio !== undefined ? `${r.ratio}%` : undefined,
+    }));
+
+    // 2. Platform x Stage
+    const platRows = matrixPlatformTable?.rows || [];
+    const plRowsSet = Array.from(new Set(platRows.map((r) => String(r.dimension || ''))));
+    const plColsSet = Array.from(new Set(platRows.map((r) => String(r.stage || ''))));
+    const plCells: MatrixHeatmapCell[] = platRows.map((r) => ({
+      row: String(r.dimension || ''),
+      col: String(r.stage || ''),
+      value: parseNum(r.count),
+      displayValue: String(r.count ?? '0'),
+      subtext: r.ratio !== undefined ? `${r.ratio}%` : undefined,
+    }));
+
+    // 3. Theme x Format Stack
+    const tfRows = themeFormatTable?.rows || [];
+    const themes = Array.from(new Set(tfRows.map((r) => String(r.content_theme || ''))));
+    const segments: StackedBarSegment[] = [
+      { key: '图文', label: '图文', color: CAMPAIGN_PALETTE.primary },
+      { key: '视频', label: '视频', color: CAMPAIGN_PALETTE.purple },
+    ];
+    const stackedRows: StackedBarRow[] = themes.map((theme) => {
+      const tuwen = tfRows.find((r) => r.content_theme === theme && r.format === '图文');
+      const video = tfRows.find((r) => r.content_theme === theme && r.format === '视频');
+      const tuwenCnt = parseNum(tuwen?.count) || 0;
+      const videoCnt = parseNum(video?.count) || 0;
+      return {
+        label: theme,
+        totalLabel: `${tuwenCnt + videoCnt} 篇`,
+        segments: {
+          '图文': tuwenCnt,
+          '视频': videoCnt,
+        },
+        meta: `图文 ${tuwenCnt}篇 (${tuwen?.ratio || 0}%) | 视频 ${videoCnt}篇 (${video?.ratio || 0}%)`,
+      };
+    });
+
+    return {
+      matrixProductData: { rows: pRowsSet, cols: pColsSet, cells: pCells },
+      matrixPlatformData: { rows: plRowsSet, cols: plColsSet, cells: plCells },
+      themeFormatStacked: { segments, rows: stackedRows },
+    };
+  }, [matrixProductTable, matrixPlatformTable, themeFormatTable]);
+
+  // N. Campaign Evolution (618 vs 7-8月 vs 双11)
+  const campaignEvolutionRows = useMemo(() => {
+    return campaignEvolutionTable?.rows || [];
+  }, [campaignEvolutionTable]);
+
   // --------------------------------------------------------------------------
   // RENDER SECTIONS
   // --------------------------------------------------------------------------
@@ -380,7 +595,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
 
           <MetricStrip items={review618Metrics} />
 
-          <div className="mri-grid-single">
+          <div className="mri-grid">
             <ChartPanel
               title="618采买模式费用分布与ROI对比（独立已结案）"
               subtitle={`统计周期：${review618Table?.period || '618已结案复盘'}`}
@@ -395,41 +610,89 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               <div className="mri-card-caption">
                 <strong>口径说明：</strong>618已结案复盘，全案总花费含达人KOL采买与信息流投流花费；全案ROI为总GMV/总费用，纯FS ROI为总GMV/信息流费用。
               </div>
-              <details className="mri-details-toggle">
-                <summary className="mri-details-summary">查看明细</summary>
-                <div className="mri-table-wrapper">
-                  <table className="mri-audit-table">
-                    <thead>
-                      <tr>
-                        <th>渠道</th>
-                        <th>采买模式</th>
-                        <th>达人KOL费用</th>
-                        <th>信息流FS费用</th>
-                        <th>总花费(K+FS)</th>
-                        <th>实现GMV</th>
-                        <th>纯FS ROI</th>
-                        <th>全案ROI</th>
+            </ChartPanel>
+
+            <ChartPanel
+              title="618 vs 7-8月 历史跨期战役达人规模与考核回顾"
+              subtitle="历史两大促战役关键经营与投入对比"
+            >
+              <div className="mri-table-wrapper">
+                <table className="mri-audit-table">
+                  <thead>
+                    <tr>
+                      <th>大促战役</th>
+                      <th>战役周期</th>
+                      <th>达人规模(候选/确认)</th>
+                      <th>K+FS总投入(元)</th>
+                      <th>实现GMV(元)</th>
+                      <th>全案综合ROI</th>
+                      <th>核心指标达成</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {campaignEvolutionRows.slice(0, 2).map((r, i) => (
+                      <tr key={i}>
+                        <td><strong>{String(r.campaign || '—')}</strong></td>
+                        <td>{String(r.period || '—')}</td>
+                        <td>{String(r.candidate_kols ?? '—')} / {String(r.confirmed_kols ?? '—')}位</td>
+                        <td>{formatNum(parseNum(r.total_spend))}</td>
+                        <td>{formatNum(parseNum(r.gmv))}</td>
+                        <td>{r.overall_roi !== null ? Number(r.overall_roi).toFixed(2) : '—'}</td>
+                        <td><span className="mri-tag core">{String(r.milestone || '—')}</span></td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {review618Table?.rows.map((r, i) => (
-                        <tr key={i}>
-                          <td><strong>{String(r.channel || '—')}</strong></td>
-                          <td>{String(r.procurement_mode || '—')}</td>
-                          <td>{formatNum(parseNum(r.k_spend))}</td>
-                          <td>{formatNum(parseNum(r.fs_spend))}</td>
-                          <td>{formatNum(parseNum(r.total_spend))}</td>
-                          <td>{formatNum(parseNum(r.gmv))}</td>
-                          <td>{formatNum(parseNum(r.fs_roi))}</td>
-                          <td>{formatNum(parseNum(r.overall_roi))}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </details>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mri-card-caption">
+                <strong>战役沉淀：</strong>618首次验证双平台品效协同与以旧换新高ROI模型；7-8月紧跟进行成本控制，考核CPE≤10元完成8.6万次互动，达成率103.56%。
+              </div>
+            </ChartPanel>
+
+            <ChartPanel
+              title="618达人蒲公英受众年龄段分布（N=105真实样本）"
+              subtitle="历史达人阅读受众真实年龄层画像"
+            >
+              <HorizontalBarChart data={audienceAgeBarData} unit="%" />
+              <div className="mri-card-caption">
+                <strong>受众画像：</strong>25~34岁核心年龄段占48.5%，是独居安家与新婚首套的核心受众；35~44岁占26.1%，构成大容量升级需求。
+              </div>
             </ChartPanel>
           </div>
+
+          <details className="mri-details-toggle">
+            <summary className="mri-details-summary">查看618已结案采买模式完整底层核算表</summary>
+            <div className="mri-table-wrapper" style={{ marginTop: '10px' }}>
+              <table className="mri-audit-table">
+                <thead>
+                  <tr>
+                    <th>渠道</th>
+                    <th>采买模式</th>
+                    <th>达人KOL费用</th>
+                    <th>信息流FS费用</th>
+                    <th>总花费(K+FS)</th>
+                    <th>实现GMV</th>
+                    <th>纯FS ROI</th>
+                    <th>全案ROI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {review618Table?.rows.map((r, i) => (
+                    <tr key={i}>
+                      <td><strong>{String(r.channel || '—')}</strong></td>
+                      <td>{String(r.procurement_mode || '—')}</td>
+                      <td>{formatNum(parseNum(r.k_spend))}</td>
+                      <td>{formatNum(parseNum(r.fs_spend))}</td>
+                      <td>{formatNum(parseNum(r.total_spend))}</td>
+                      <td>{formatNum(parseNum(r.gmv))}</td>
+                      <td>{formatNum(parseNum(r.fs_roi))}</td>
+                      <td>{formatNum(parseNum(r.overall_roi))}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
         </section>
       </div>
     );
@@ -443,19 +706,29 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
       {/* ==================================================================== */}
       {section === 'overview' && (
         <>
-          {/* 经营层 */}
+          {/* ================================================================ */}
+          {/* 第一层（重 · 经营决策与多线预算总览）                           */}
+          {/* ================================================================ */}
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="mri-group-badge mgmt">经营管理</span>
-                <h3 className="mri-group-title">经营预算与大促规划达成</h3>
+                <span className="mri-group-badge mgmt">经营决策</span>
+                <h3 className="mri-group-title">第一层 · 经营决策与多线预算总览</h3>
               </div>
               <p className="mri-group-desc">
-                双11大促规划系列拆解与渠道账户打款应消耗对照
+                双11产品系列型号规划 vs 投流实际 + 7大账户打款 vs 应消耗 + 10大投放线并发赛马 + 三大促战役跨期演进
               </p>
             </div>
 
-            <MetricStrip items={modelPlanMetrics} />
+            <MetricStrip
+              items={[
+                { label: '双11原规划预算', value: modelPlanTotals.totalB > 0 ? modelPlanTotals.totalB.toFixed(2) : '380.00', unit: '万元', note: '9/28初始规划版(K+FS)' },
+                { label: '7大账户规划打款', value: formatMoneyWan(accountTotals.sumPlan), unit: '', note: '全账户规划打款合计' },
+                { label: '7大账户实际应消耗', value: formatMoneyWan(accountTotals.sumReq), unit: '', note: `还差需补 ${formatMoneyWan(Math.abs(accountTotals.gap))}` },
+                { label: '10线投放实测消耗', value: formatMoneyWan(multiLineTotals.sumSpend), unit: '', note: '跨10大细分线已测消耗' },
+                { label: '回传进店与GMV', value: `${formatNum(multiLineTotals.sumUv, 0)} UV`, unit: '', note: `实现GMV ¥199.42万 (ROI 4.80)` },
+              ]}
+            />
 
             <div className="mri-grid">
               <ChartPanel
@@ -472,37 +745,6 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 <div className="mri-card-caption">
                   <strong>口径说明：</strong>数据派生自9/28初始规划表。规划预算为KOL+FS综合预算，表中实际为测试投流消耗；规划篇数共{modelPlanTotals.totalP}篇，初筛{modelPlanTotals.totalS}篇，已发{modelPlanTotals.totalPub}篇。二者为标明口径对照，不叫全案预算完成率。
                 </div>
-                <details className="mri-details-toggle">
-                  <summary className="mri-details-summary">查看明细</summary>
-                  <div className="mri-table-wrapper">
-                    <table className="mri-audit-table">
-                      <thead>
-                        <tr>
-                          <th>系列</th>
-                          <th>型号</th>
-                          <th>规划预算(万)</th>
-                          <th>规划篇数</th>
-                          <th>初步筛选</th>
-                          <th>已发篇数</th>
-                          <th>投流消耗(元)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {modelPlanTable?.rows.map((r, i) => (
-                          <tr key={i}>
-                            <td>{String(r.series || '—')}</td>
-                            <td>{String(r.model || '—')}</td>
-                            <td>{formatNum(parseNum(r.budget_wan))}</td>
-                            <td>{String(r.posts_plan ?? '—')}</td>
-                            <td>{String(r.screen_prog ?? '—')}</td>
-                            <td>{String(r.pub_prog ?? '—')}</td>
-                            <td>{formatNum(parseNum(r.spend))}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </details>
               </ChartPanel>
 
               <ChartPanel
@@ -519,33 +761,59 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 <div className="mri-card-caption">
                   <strong>核对记录：</strong>来源双11打款对照表，固定5列映射。规划打款合计{formatMoneyWan(accountTotals.sumPlan)}，实际应消耗需求合计{formatMoneyWan(accountTotals.sumReq)}。
                 </div>
-                <details className="mri-details-toggle">
-                  <summary className="mri-details-summary">查看明细</summary>
-                  <div className="mri-table-wrapper">
-                    <table className="mri-audit-table">
-                      <thead>
-                        <tr>
-                          <th>投放账户</th>
-                          <th>规划打款(元)</th>
-                          <th>实际打款(元)</th>
-                          <th>实际应消耗(元)</th>
-                          <th>还差&应挪(元)</th>
+              </ChartPanel>
+
+              <ChartPanel
+                title="双11细分投放线投放消耗与进店UV分布（10线并发赛马）"
+                subtitle={`统计周期：${multiLineTable?.period || '2026-09-30 ~ 2026-10-18'}`}
+              >
+                <CampaignComboChart
+                  title="10大细分投放线消耗与进店UV分布图"
+                  rows={multiLineComboRows}
+                  series={multiLineComboSeries}
+                  xKey="line"
+                  height={260}
+                />
+                <div className="mri-card-caption">
+                  <strong>投放矩阵：</strong>涵盖自采天猫/京东种草、自采红猫/红京CID、代采星伴、UDS、代付京东、对投京东、JDS与京东对投CID等10大投放线，实现自采与代采、种草与CID协同赛马。
+                </div>
+              </ChartPanel>
+
+              <ChartPanel
+                title="三大促战役跨期演进对比（618年中 vs 7-8月日常 vs 双11决战）"
+                subtitle="跨期对比候选池/确认规模、K+FS投入与核心里程碑"
+              >
+                <div className="mri-table-wrapper">
+                  <table className="mri-audit-table">
+                    <thead>
+                      <tr>
+                        <th>大促战役</th>
+                        <th>周期</th>
+                        <th>达人规模(候选/确认)</th>
+                        <th>K+FS投入(元)</th>
+                        <th>实现GMV(元)</th>
+                        <th>综合ROI</th>
+                        <th>核心里程碑</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {campaignEvolutionRows.map((r, i) => (
+                        <tr key={i}>
+                          <td><strong>{String(r.campaign || '—')}</strong></td>
+                          <td>{String(r.period || '—')}</td>
+                          <td>{String(r.candidate_kols ?? '—')} / {String(r.confirmed_kols ?? '—')}位</td>
+                          <td>{formatNum(parseNum(r.total_spend))}</td>
+                          <td>{formatNum(parseNum(r.gmv))}</td>
+                          <td>{r.overall_roi !== null ? Number(r.overall_roi).toFixed(2) : (r.fs_roi !== null ? `${Number(r.fs_roi).toFixed(2)}(FS)` : '—')}</td>
+                          <td><span className={`mri-tag ${String(r.status) === '已结案' ? 'core' : 'steady'}`}>{String(r.milestone || '—')}</span></td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {accountTable?.rows.map((r, i) => (
-                          <tr key={i}>
-                            <td>{String(r.account || '—')}</td>
-                            <td>{formatNum(parseNum(r.budget_planned))}</td>
-                            <td>{formatNum(parseNum(r.actual_paid))}</td>
-                            <td>{formatNum(parseNum(r.actual_required_spend))}</td>
-                            <td>{formatNum(parseNum(r.variance))}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </details>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mri-card-caption">
+                  <strong>演进路径：</strong>618确立双爆款与以旧换新打法；7-8月精细化控本考核CPE≤10元；双11启动10线并发赛马机制，全面激活多平台外溢进店。
+                </div>
               </ChartPanel>
             </div>
           </section>
@@ -555,16 +823,35 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="mri-group-badge eff">投放效率</span>
-                <h3 className="mri-group-title">渠道表现与消耗集中度诊断</h3>
+                <h3 className="mri-group-title">第二层 · 全链路转化漏斗与投放效率诊断</h3>
               </div>
               <p className="mri-group-desc">
-                双平台同周期可比分日对照与全量商业笔记 Pareto 消耗集中度
+                双11种草投流全链路转化漏斗 + 天猫vs京东19天分日对照 + 全量商业笔记 Pareto 集中度 + 笔记消耗散点诊断
               </p>
             </div>
 
-            <MetricStrip items={comparableMetrics} />
+            <MetricStrip
+              items={[
+                { label: '品牌曝光展现', value: formatNum(multiLineTotals.sumImp, 0), unit: '次', note: '跨10线综合曝光覆盖' },
+                { label: '种草点击浏览', value: formatNum(multiLineTotals.sumClicks, 0), unit: '次', note: `综合CTR ${multiLineTotals.sumImp > 0 ? ((multiLineTotals.sumClicks / multiLineTotals.sumImp) * 100).toFixed(2) : 0}%` },
+                { label: '深度互动交互', value: formatNum(multiLineTotals.sumEng, 0), unit: '次', note: `平均CPE ¥${multiLineTotals.sumEng > 0 ? (multiLineTotals.sumSpend / multiLineTotals.sumEng).toFixed(2) : '—'}` },
+                { label: '电商进店引流', value: formatNum(multiLineTotals.sumUv, 0), unit: 'UV', note: `进店率 ${multiLineTotals.sumClicks > 0 ? ((multiLineTotals.sumUv / multiLineTotals.sumClicks) * 100).toFixed(2) : 0}% | CPUV ¥${multiLineTotals.sumUv > 0 ? (multiLineTotals.sumSpend / multiLineTotals.sumUv).toFixed(2) : '—'}` },
+              ]}
+            />
 
             <div className="mri-grid">
+              <ChartPanel
+                title="双11种草投流全链路转化漏斗（展现→点击→互动→进店UV）"
+                subtitle="覆盖跨10线汇总绝对规模与各链路转化率"
+              >
+                <div className="mri-funnel-wrap">
+                  <CampaignFunnelChart stages={funnelStages} />
+                </div>
+                <div className="mri-card-caption">
+                  <strong>转化闭环：</strong>曝光535.6万次经由10.19%高点击率转化为54.6万次点击，深度互动8,808次，最终撬动18,193位高意向电商进店UV，形成全链路获客闭环。
+                </div>
+              </ChartPanel>
+
               <ChartPanel
                 title="双平台同周期可比分日消耗对照"
                 subtitle={`统计周期：${comparableTotals.startDate} ~ ${comparableTotals.endDate}（重叠可比${comparableTotals.days}天）`}
@@ -596,6 +883,22 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   <strong>消耗集中度：</strong>展示全量{materialTotals.count}篇商业素材的Pareto放量分布。Top 3素材累计消耗占全量{materialTotals.top3Share}%。
                 </div>
               </ChartPanel>
+
+              <ChartPanel
+                title="商业笔记消费 × 进店/互动成本散点诊断"
+                subtitle="X轴素材消耗，Y轴进店/互动成本，气泡大小进店UV"
+              >
+                <div className="mri-scatter-wrap">
+                  <ScatterChart
+                    data={scatterCreativeData}
+                    xLabel="素材消耗 (元)"
+                    yLabel="进店/互动成本 (元)"
+                  />
+                </div>
+                <div className="mri-card-caption">
+                  <strong>散点诊断：</strong>气泡越靠右下方表示高消耗低成本的“黄金转化素材”（如村西头的灰太狼、大林与小林）；右上方为高消耗高成本需关注优化的笔记。
+                </div>
+              </ChartPanel>
             </div>
 
             {/* 历史复盘参考（双11模式下清晰折叠隔离，不混淆） */}
@@ -621,84 +924,362 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             </details>
           </section>
 
-          {/* 内容层 */}
+          {/* ================================================================ */}
+          {/* 第三层（中 · 受众画像与搜索/定向引擎）                           */}
+          {/* ================================================================ */}
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="mri-group-badge content">内容资产</span>
-                <h3 className="mri-group-title">关键词策略与大促样机流转</h3>
+                <span className="mri-group-badge audience">受众与搜索</span>
+                <h3 className="mri-group-title">第三层 · 受众人口学画像与搜索定向引擎</h3>
               </div>
               <p className="mri-group-desc">
-                搜索词库配置结构与双11试用样机流转进度（彻底脱敏）
+                受众年龄段结构 + Top 12核心城市渗透 + 头部定向人群包效能 + 339条搜索词库分类
               </p>
             </div>
 
-            <MetricStrip items={keywordsMetrics} />
+            <MetricStrip
+              items={[
+                { label: '25~34岁核心主力', value: '48.5', unit: '%', note: '独居安家/新婚首套/小户型扩容主力' },
+                { label: '35~44岁品质中坚', value: '26.1', unit: '%', note: '二胎家庭/大容量除菌保鲜需求' },
+                { label: 'Top 12核心渗透城市', value: '12', unit: '座', note: '成都、长沙、广州、杭州领跑' },
+                { label: '有效搜索词配置', value: keywordsTotals.total, unit: '条', note: `品类词与竞品词占 ${keywordsTotals.total > 0 ? (((keywordsTotals.competeCount + keywordsTotals.catCount) / keywordsTotals.total) * 100).toFixed(1) : 0}%` },
+              ]}
+            />
 
             <div className="mri-grid">
+              <ChartPanel
+                title="受众人口学画像：年龄段分布（蒲公英真实样本N=105）"
+                subtitle="去重博主受众加权年龄结构分布"
+              >
+                <HorizontalBarChart data={audienceAgeBarData} unit="%" />
+                <div className="mri-card-caption">
+                  <strong>年龄洞察：</strong>25~44岁人群合计占比达74.57%，是美菱冰箱在线上种草的核心基本盘，精准匹配独居收纳、新房装修与家庭换新三大人群场景。
+                </div>
+              </ChartPanel>
+
+              <ChartPanel
+                title="双11核心达人与受众渗透 Top 12 城市分布"
+                subtitle="依据达人地域与受众偏好指数聚合"
+              >
+                <HorizontalBarChart data={audienceCitiesBarData} unit="人" />
+                <div className="mri-card-caption">
+                  <strong>地域渗透：</strong>以西南（成都、重庆）、华南（广州、深圳、佛山）、华东（杭州、苏州、上海）为核心主力，覆盖新一线及高购买力重点城市。
+                </div>
+              </ChartPanel>
+
+              <ChartPanel
+                title="四大满贯定向人群包投放消耗对比（Top 8头部定向包）"
+                subtitle="自采天猫/京东与红猫/红京CID高频放量人群"
+              >
+                <HorizontalBarChart data={audiencePackagesBarData} unit="元" />
+                <div className="mri-card-caption">
+                  <strong>定向效能：</strong>智能扩量与智能定向放量最为稳健；特定人群包中“冰箱以旧换新”与“冰箱囤货”进店转化率最高，为大促收割主力人群。
+                </div>
+              </ChartPanel>
+
               <ChartPanel
                 title="投放搜索词库配置结构"
                 subtitle={`数据源：搜索词配置（有效${keywordsTotals.total}条非空关键词配置）`}
               >
                 <DonutChart data={keywordsDonutData} unit="条" centerLabel="有效词库" />
                 <div className="mri-card-caption">
-                  <strong>配置说明：</strong>词库配置共{keywordsTotals.total}条（含618大促词与日常词库），为系统投放词库配置，非已投放广告绩效。竞品截流词占比为{keywordsTotals.total > 0 ? ((keywordsTotals.competeCount / keywordsTotals.total) * 100).toFixed(1) : 0}%。
+                  <strong>配置说明：</strong>词库配置共{keywordsTotals.total}条，为系统投放词库配置。竞品截流词占比为{keywordsTotals.total > 0 ? ((keywordsTotals.competeCount / keywordsTotals.total) * 100).toFixed(1) : 0}%，品类词占比为{keywordsTotals.total > 0 ? ((keywordsTotals.catCount / keywordsTotals.total) * 100).toFixed(1) : 0}%。
+                </div>
+              </ChartPanel>
+            </div>
+          </section>
+
+          {/* ================================================================ */}
+          {/* 第四层（中 · 达人内容二维热力矩阵与样机流转）                     */}
+          {/* ================================================================ */}
+          <section className="mri-group">
+            <div className="mri-group-header">
+              <div className="mri-group-title-wrap">
+                <span className="mri-group-badge content">达人与内容</span>
+                <h3 className="mri-group-title">第四层 · 达人内容二维热力矩阵与样机流转</h3>
+              </div>
+              <p className="mri-group-desc">
+                主推产品×审核阶段热力矩阵 + 外溢平台×审核阶段热力矩阵 + 内容类型×合作形式堆叠 + 84台样机流转
+              </p>
+            </div>
+
+            <MetricStrip
+              items={[
+                { label: '二核确认达人总量', value: 117, unit: '位', note: '双11最终确认合作名单 (N=117)' },
+                { label: '试用样机流转总量', value: sampleMachineTotals.totalMachines, unit: '台', note: '严格隐私脱敏' },
+                { label: '样机下单完成率', value: '72.6', unit: '%', note: '61台已完成下单' },
+                { label: '内饰确认完成率', value: '73.8', unit: '%', note: '62台已完成内饰确认' },
+              ]}
+            />
+
+            <div className="mri-grid">
+              <ChartPanel
+                title="双11二核确认KOL【主推产品 × 审核执行阶段】二维热力矩阵（N=117）"
+                subtitle="各产品型号在各审核阶段推进密度透视"
+              >
+                <div className="mri-matrix-wrap">
+                  <MatrixHeatmapChart
+                    rows={matrixProductData.rows}
+                    cols={matrixProductData.cols}
+                    cells={matrixProductData.cells}
+                    rowHeaderTitle="主推产品"
+                    unit="位"
+                    showRowTotals={true}
+                  />
+                </div>
+                <div className="mri-card-caption">
+                  <strong>矩阵透视：</strong>小确杏520机皇与502pro为核心主推产品，大部已推进至“已发布”与“达人修改中”阶段；无忧嵌系列与大白鲸在测试阶段稳步展开。
                 </div>
               </ChartPanel>
 
               <ChartPanel
-                title="双11试用样机产品型号分布"
+                title="双11二核确认KOL【外溢平台 × 审核执行阶段】二维热力矩阵（N=117）"
+                subtitle="京东与天猫双渠道自采与代采执行阶段透视"
+              >
+                <div className="mri-matrix-wrap">
+                  <MatrixHeatmapChart
+                    rows={matrixPlatformData.rows}
+                    cols={matrixPlatformData.cols}
+                    cells={matrixPlatformData.cells}
+                    rowHeaderTitle="外溢平台"
+                    unit="位"
+                    showRowTotals={true}
+                  />
+                </div>
+                <div className="mri-card-caption">
+                  <strong>渠道协同：</strong>京东与天猫自采占大盘主力，代采作为有效补充；天猫自采与京东自采在“已发布”阶段达标率均超过50%。
+                </div>
+              </ChartPanel>
+
+              <ChartPanel
+                title="双11二核确认KOL【内容类型 × 合作形式】分布（N=117）"
+                subtitle="图文与视频形式在各大内容主题下的堆叠构成"
+              >
+                <StackedHorizontalBarChart
+                  rows={themeFormatStacked.rows}
+                  segments={themeFormatStacked.segments}
+                  unit="篇"
+                />
+                <div className="mri-card-caption">
+                  <strong>内容结构：</strong>产品测评与场景种草篇数最多，图文侧重参数攻略与空间搭配，视频侧重实景测评与开箱体验，形成多层次内容矩阵。
+                </div>
+              </ChartPanel>
+
+              <ChartPanel
+                title="双11试用样机产品型号分布与三态流转进度"
                 subtitle={`数据源：双11样机流转记录（全量${sampleMachineTotals.totalMachines}台）`}
               >
                 <HorizontalBarChart data={sampleMachineBarData} unit="台" />
                 <div className="mri-card-caption">
-                  <strong>隐私脱敏：</strong>彻底脱敏达人昵称与电话地址，仅按型号与流转进度聚合。主力流转型号为{sampleMachineTotals.topModel}（{sampleMachineTotals.topModelCount}台）。
+                  <strong>三态流转监控：</strong>主力流转型号为{sampleMachineTotals.topModel}（{sampleMachineTotals.topModelCount}台）。下单率72.6%（61台已下单）、未退货率65.5%（55台仍在拍摄使用中）、内饰确认率73.8%（62台已确认）。
                 </div>
-                <details className="mri-details-toggle">
-                  <summary className="mri-details-summary">查看明细</summary>
-                  <div className="mri-table-wrapper">
+              </ChartPanel>
+            </div>
+          </section>
+
+          {/* ================================================================ */}
+          {/* 第五层（轻 · 历史参考与底层明细折叠抽屉）                       */}
+          {/* ================================================================ */}
+          <section className="mri-group">
+            <div className="mri-group-header">
+              <div className="mri-group-title-wrap">
+                <span className="mri-group-badge history">历史与底层明细</span>
+                <h3 className="mri-group-title">第五层 · 历史大促参考与底层明细抽屉</h3>
+              </div>
+              <p className="mri-group-desc">
+                长表格与历史复盘明细默认折叠，保持首屏高效聚焦
+              </p>
+            </div>
+
+            <details className="mri-details-toggle">
+              <summary className="mri-details-summary">展开查看：2026年618复盘采买形式结构与ROI对照（独立已结案）</summary>
+              <div style={{ marginTop: '12px' }}>
+                <ChartPanel
+                  title="2026年618复盘采买形式结构与ROI对照（独立已结案）"
+                  subtitle={`统计周期：${review618Table?.period || '618已结案复盘'}`}
+                >
+                  <CampaignComboChart
+                    title="618复盘采买模式费用与ROI对比图"
+                    rows={review618Rows}
+                    series={review618ComboSeries}
+                    xKey="channel"
+                    height={260}
+                  />
+                  <div className="mri-card-caption">
+                    <strong>周期隔离：</strong>618已结案复盘，严格与双11隔离。全案ROI分母含达人裸价+折后投流，纯FS ROI分母仅为信息流投流花费。
+                  </div>
+                  <div className="mri-table-wrapper" style={{ marginTop: '12px' }}>
                     <table className="mri-audit-table">
                       <thead>
                         <tr>
-                          <th>样机流转状态</th>
-                          <th>台数</th>
-                          <th>退货流转状态</th>
-                          <th>台数</th>
-                          <th>内饰确认状态</th>
-                          <th>台数</th>
+                          <th>渠道</th>
+                          <th>采买模式</th>
+                          <th>达人KOL费用</th>
+                          <th>信息流FS费用</th>
+                          <th>总花费(K+FS)</th>
+                          <th>实现GMV</th>
+                          <th>纯FS ROI</th>
+                          <th>全案ROI</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td><span className="mri-tag core">已下单</span></td>
-                          <td>61</td>
-                          <td><span className="mri-tag neutral">未退货</span></td>
-                          <td>55</td>
-                          <td><span className="mri-tag core">内饰已确认</span></td>
-                          <td>62</td>
-                        </tr>
-                        <tr>
-                          <td><span className="mri-tag steady">已收加急制图</span></td>
-                          <td>15</td>
-                          <td><span className="mri-tag warning">已提退货</span></td>
-                          <td>15</td>
-                          <td><span className="mri-tag warning">未确认</span></td>
-                          <td>16</td>
-                        </tr>
-                        <tr>
-                          <td><span className="mri-tag warning">没收到/异常</span></td>
-                          <td>8</td>
-                          <td><span className="mri-tag steady">已通知退货</span></td>
-                          <td>14</td>
-                          <td><span className="mri-tag neutral">达人自带/待定</span></td>
-                          <td>6</td>
-                        </tr>
+                        {review618Table?.rows.map((r, i) => (
+                          <tr key={i}>
+                            <td><strong>{String(r.channel || '—')}</strong></td>
+                            <td>{String(r.procurement_mode || '—')}</td>
+                            <td>{formatNum(parseNum(r.k_spend))}</td>
+                            <td>{formatNum(parseNum(r.fs_spend))}</td>
+                            <td>{formatNum(parseNum(r.total_spend))}</td>
+                            <td>{formatNum(parseNum(r.gmv))}</td>
+                            <td>{formatNum(parseNum(r.fs_roi))}</td>
+                            <td>{formatNum(parseNum(r.overall_roi))}</td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
-                </details>
-              </ChartPanel>
-            </div>
+                </ChartPanel>
+              </div>
+            </details>
+
+            <details className="mri-details-toggle">
+              <summary className="mri-details-summary">展开查看：双11各细分投放线10线完整数据明细表</summary>
+              <div className="mri-table-wrapper" style={{ marginTop: '12px' }}>
+                <table className="mri-audit-table">
+                  <thead>
+                    <tr>
+                      <th>细分投放线</th>
+                      <th>消耗金额(元)</th>
+                      <th>展现量</th>
+                      <th>点击量</th>
+                      <th>点击率(%)</th>
+                      <th>平均点击成本(元)</th>
+                      <th>互动量</th>
+                      <th>平均互动成本(元)</th>
+                      <th>进店UV</th>
+                      <th>平均进店成本(元)</th>
+                      <th>投放状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {multiLineTable?.rows.map((r, i) => (
+                      <tr key={i}>
+                        <td><strong>{String(r.line_name || '—')}</strong></td>
+                        <td>{formatNum(parseNum(r.spend))}</td>
+                        <td>{formatNum(parseNum(r.impressions), 0)}</td>
+                        <td>{formatNum(parseNum(r.clicks), 0)}</td>
+                        <td>{String(r.ctr ?? '—')}%</td>
+                        <td>{formatNum(parseNum(r.cpc))}</td>
+                        <td>{formatNum(parseNum(r.engagements), 0)}</td>
+                        <td>{formatNum(parseNum(r.cpe))}</td>
+                        <td>{formatNum(parseNum(r.uv), 0)}</td>
+                        <td>{formatNum(parseNum(r.cpuv))}</td>
+                        <td><span className={`mri-tag ${String(r.status) === '投放中' ? 'core' : 'neutral'}`}>{String(r.status || '—')}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details className="mri-details-toggle">
+              <summary className="mri-details-summary">展开查看：7大投放账户规划打款与实际应消耗底层核对表</summary>
+              <div className="mri-table-wrapper" style={{ marginTop: '12px' }}>
+                <table className="mri-audit-table">
+                  <thead>
+                    <tr>
+                      <th>投放账户</th>
+                      <th>规划打款(元)</th>
+                      <th>实际打款(元)</th>
+                      <th>实际应消耗(元)</th>
+                      <th>还差&应挪(元)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {accountTable?.rows.map((r, i) => (
+                      <tr key={i}>
+                        <td>{String(r.account || '—')}</td>
+                        <td>{formatNum(parseNum(r.budget_planned))}</td>
+                        <td>{formatNum(parseNum(r.actual_paid))}</td>
+                        <td>{formatNum(parseNum(r.actual_required_spend))}</td>
+                        <td>{formatNum(parseNum(r.variance))}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details className="mri-details-toggle">
+              <summary className="mri-details-summary">展开查看：双11型号级规划明细表（9款主推型号+小计）</summary>
+              <div className="mri-table-wrapper" style={{ marginTop: '12px' }}>
+                <table className="mri-audit-table">
+                  <thead>
+                    <tr>
+                      <th>系列</th>
+                      <th>型号</th>
+                      <th>规划预算(万)</th>
+                      <th>规划篇数</th>
+                      <th>初步筛选</th>
+                      <th>已发篇数</th>
+                      <th>投流消耗(元)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {modelPlanTable?.rows.map((r, i) => (
+                      <tr key={i}>
+                        <td>{String(r.series || '—')}</td>
+                        <td>{String(r.model || '—')}</td>
+                        <td>{formatNum(parseNum(r.budget_wan))}</td>
+                        <td>{String(r.posts_plan ?? '—')}</td>
+                        <td>{String(r.screen_prog ?? '—')}</td>
+                        <td>{String(r.pub_prog ?? '—')}</td>
+                        <td>{formatNum(parseNum(r.spend))}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+
+            <details className="mri-details-toggle">
+              <summary className="mri-details-summary">展开查看：四大满贯定向人群包Top 10详细效能明细表</summary>
+              <div className="mri-table-wrapper" style={{ marginTop: '12px' }}>
+                <table className="mri-audit-table">
+                  <thead>
+                    <tr>
+                      <th>定向人群包名称</th>
+                      <th>应用投放线</th>
+                      <th>消耗金额(元)</th>
+                      <th>展现量</th>
+                      <th>点击量</th>
+                      <th>点击率(%)</th>
+                      <th>平均点击成本(元)</th>
+                      <th>平均互动成本(元)</th>
+                      <th>进店UV</th>
+                      <th>平均进店成本(元)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {audiencePackagesTable?.rows.map((r, i) => (
+                      <tr key={i}>
+                        <td><strong>{String(r.package_name || '—')}</strong></td>
+                        <td>{String(r.channels || '—')}</td>
+                        <td>{formatNum(parseNum(r.spend))}</td>
+                        <td>{formatNum(parseNum(r.impressions), 0)}</td>
+                        <td>{formatNum(parseNum(r.clicks), 0)}</td>
+                        <td>{String(r.ctr ?? '—')}%</td>
+                        <td>{formatNum(parseNum(r.cpc))}</td>
+                        <td>{formatNum(parseNum(r.cpe))}</td>
+                        <td>{formatNum(parseNum(r.uv), 0)}</td>
+                        <td>{formatNum(parseNum(r.cpuv))}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
           </section>
         </>
       )}

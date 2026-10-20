@@ -45,9 +45,11 @@ function loadComponent(filename) {
 console.log("Loading CampaignOverviewPage and CampaignDailyPage for comprehensive tests...");
 const overviewModule = loadComponent("features/campaign/CampaignOverviewPage.tsx");
 const dailyModule = loadComponent("features/campaign/CampaignDailyPage.tsx");
+const huangModule = loadComponent("features/campaign/HuangTianeBoard.tsx");
 
 const { CampaignOverviewPage } = overviewModule;
 const { CampaignDailyPage } = dailyModule;
+const { HuangTianeBoard } = huangModule;
 
 const projects = ["kailas", "meiling", "winner-wipes"];
 
@@ -67,9 +69,17 @@ for (const pid of projects) {
   assert(overviewHtml.includes("ca-insight"), "Overview has dynamic insight");
   assert(overviewHtml.includes("ca-quick-links-bar"), "Overview has quick links");
 
-  // Check that exactly 4 metric items are rendered in metric strip
+  // Check that the first (top) metric strip has 4 items and Rich Overview has multi-layer metrics & panels
+  const firstStripEnd = overviewHtml.indexOf("</div", overviewHtml.indexOf("ca-metric-strip") + 1);
   const metricItemMatches = overviewHtml.match(/class="[^"]*(?:ca-metric-item|bd-kpi-card-rich)[^"]*"/g) || [];
-  assert.equal(metricItemMatches.length, 4, `Overview must render exactly 4 compact metrics, got ${metricItemMatches.length}`);
+  assert(metricItemMatches.length >= 8, `Rich Overview for ${pid} must render multi-layer metrics (>=8), got ${metricItemMatches.length}`);
+  assert(firstStripEnd > 0, "Top metric strip container exists");
+
+  const panelMatches = overviewHtml.match(/class="[^"]*ca-panel-title[^"]*"/g) || [];
+  const funnelMatches = overviewHtml.match(/class="[^"]*ca-funnel-list[^"]*"/g) || [];
+  console.log(`  [${pid}] Overview rendered ${panelMatches.length} chart panels, ${metricItemMatches.length} KPI cards, ${funnelMatches.length} funnel charts`);
+  assert(panelMatches.length >= 12, `Overview for ${pid} must render at least 12 chart panels, got ${panelMatches.length}`);
+  assert(funnelMatches.length >= 1, `Overview for ${pid} must render at least 1 full-funnel chart`);
 
   // Check no NaN or undefined rendered
   assert(!overviewHtml.includes("NaN"), "Overview does not contain NaN");
@@ -82,6 +92,26 @@ for (const pid of projects) {
   assert(!dailyHtml.includes("NaN"), "Daily does not contain NaN");
   assert(!dailyHtml.includes("undefined"), "Daily does not render undefined");
   console.log(`✓ Project ${pid} passed baseline render checks!`);
+}
+
+// 2b. Test Huang Tiane Overview & Daily
+{
+  console.log("\nTesting project huang-tiane...");
+  const res = await fetch(`http://localhost:5173/api/campaign-dashboard?projectId=huang-tiane`);
+  const json = await res.json();
+  const dashboard = json.dashboard;
+  assert(dashboard, "Dashboard for huang-tiane must exist");
+
+  const overviewHtml = renderToStaticMarkup(React.createElement(HuangTianeBoard, { dashboard, section: "overview" }));
+  const panelMatches = overviewHtml.match(/class="[^"]*ca-panel-title[^"]*"/g) || [];
+  const funnelMatches = overviewHtml.match(/class="[^"]*ca-funnel-list[^"]*"/g) || [];
+  const metricItemMatches = overviewHtml.match(/class="[^"]*(?:ca-metric-item|bd-kpi-card-rich)[^"]*"/g) || [];
+  console.log(`  [huang-tiane] Overview rendered ${panelMatches.length} chart panels, ${metricItemMatches.length} KPI cards, ${funnelMatches.length} funnel charts`);
+  assert(panelMatches.length >= 14, `Overview for huang-tiane must render at least 14 chart panels, got ${panelMatches.length}`);
+  assert(funnelMatches.length >= 2, `Overview for huang-tiane must render at least 2 funnel charts, got ${funnelMatches.length}`);
+  assert(!overviewHtml.includes("NaN"), "Huang Tiane Overview does not contain NaN");
+  assert(!overviewHtml.includes("undefined"), "Huang Tiane Overview does not render undefined");
+  console.log("✓ Project huang-tiane passed rich overview render checks!");
 }
 
 // 3. Project-specific deep verification

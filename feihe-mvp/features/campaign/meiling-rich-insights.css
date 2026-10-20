@@ -64,6 +64,16 @@
   color: #8273a3;
 }
 
+.mri-group-badge.audience {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.mri-group-badge.history {
+  background: #f1f5f9;
+  color: #475569;
+}
+
 .mri-group-title {
   font-size: 16px;
   font-weight: 700;
@@ -192,4 +202,17 @@
 .mri-tag.neutral {
   background: #f1f5f9;
   color: #475569;
+}
+
+.mri-matrix-wrap {
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+.mri-funnel-wrap {
+  padding: 8px 4px;
+}
+
+.mri-scatter-wrap {
+  padding: 8px 4px;
 }

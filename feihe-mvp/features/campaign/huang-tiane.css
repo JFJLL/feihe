@@ -277,3 +277,158 @@
   background: #f3f4f6;
   color: #6b7280;
 }
+
+/* ==========================================================================
+   Overview Anchor Navigation & Layer Styles
+   ========================================================================== */
+.ht-nav-anchors-container {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #ffffff;
+  border: 1px solid var(--ht-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.ht-nav-anchors {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+
+.ht-nav-anchor {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ht-text-dark);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.ht-nav-anchor:hover {
+  background: #e6f0ed;
+  color: var(--ht-primary);
+  border-color: #a7cfc9;
+}
+
+.ht-layer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scroll-margin-top: 60px;
+}
+
+.ht-layer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #fdfcfb;
+  border-left: 4px solid var(--ht-primary);
+  border-radius: 0 6px 6px 0;
+  border-top: 1px solid var(--ht-border);
+  border-bottom: 1px solid var(--ht-border);
+  border-right: 1px solid var(--ht-border);
+}
+
+.ht-layer-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ht-text-dark);
+  margin: 0;
+}
+
+.ht-layer-sub {
+  font-size: 12px;
+  color: var(--ht-text-muted);
+}
+
+/* Benchmark Comparison Tab & Cards */
+.ht-benchmark-tabs {
+  display: flex;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 6px;
+}
+
+.ht-benchmark-tab {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ht-benchmark-tab.active {
+  background: #ffffff;
+  color: var(--ht-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ht-benchmark-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ht-benchmark-card {
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ht-benchmark-card.highlight {
+  background: #f0f7f5;
+  border-color: #b2ded6;
+}
+
+.ht-benchmark-title {
+  font-size: 12px;
+  color: var(--ht-text-muted);
+}
+
+.ht-benchmark-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ht-text-dark);
+}
+
+.ht-benchmark-card.highlight .ht-benchmark-val {
+  color: var(--ht-primary);
+}
+
+.ht-benchmark-desc {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* Plan & Stock card */
+.ht-reserve-card {
+  padding: 12px;
+  background: #fcfbfa;
+  border: 1px solid #ecdcd1;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

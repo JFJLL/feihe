@@ -81,6 +81,10 @@ export interface MetricStripItem {
   value?: string | number | null;
   unit?: string;
   note?: string;
+  meta?: string;
+  hint?: string;
+  badge?: string;
+  status?: 'default' | 'accent' | 'warning' | 'danger' | 'success' | 'neutral';
   sparkline?: (number | null)[];
 }
 
@@ -149,10 +153,38 @@ export function MetricStrip({
         if (!isMissing) {
           formatted = typeof it.value === 'number' ? fmtNum(it.value) : String(it.value);
         }
+        const subText = it.note || it.meta || it.hint;
+        const statusColor =
+          it.status === 'danger'
+            ? CAMPAIGN_PALETTE.terracotta
+            : it.status === 'warning'
+            ? CAMPAIGN_PALETTE.gold
+            : it.status === 'accent' || it.status === 'success'
+            ? CAMPAIGN_PALETTE.primary
+            : undefined;
         return (
-          <article key={idx} className="ca-metric-item bd-kpi-card-rich">
-            <div className="bd-kpi-head">
+          <article
+            key={idx}
+            className="ca-metric-item bd-kpi-card-rich"
+            style={statusColor ? { borderTop: `3px solid ${statusColor}` } : undefined}
+          >
+            <div className="bd-kpi-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
               <span className="ca-metric-label" title={it.label}>{it.label}</span>
+              {it.badge && (
+                <span
+                  style={{
+                    fontSize: '10.5px',
+                    fontWeight: 600,
+                    padding: '1px 6px',
+                    borderRadius: 999,
+                    background: statusColor ? `${statusColor}18` : '#f1f5f9',
+                    color: statusColor || CAMPAIGN_PALETTE.textMuted,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {it.badge}
+                </span>
+              )}
             </div>
             <div className="ca-metric-value-row bd-kpi-val">
               <span
@@ -164,7 +196,7 @@ export function MetricStrip({
               {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
             </div>
             {it.sparkline && renderMiniSparklineSvg(it.sparkline, 96, 20, CAMPAIGN_PALETTE.primary)}
-            {it.note && <p className="ca-metric-note bd-kpi-sub" title={it.note}>{it.note}</p>}
+            {subText && <p className="ca-metric-note bd-kpi-sub" title={subText}>{subText}</p>}
           </article>
         );
       })}
@@ -439,6 +471,363 @@ export function HorizontalBarChart({
           );
         })}
       </svg>
+    </div>
+  );
+}
+
+// ============================================================================
+// 8. CampaignFunnelChart 全链路转化漏斗与节点成本效率图
+// ============================================================================
+
+export interface FunnelStageDatum {
+  stage: string;
+  value: number | null;
+  unit?: string;
+  conversionLabel?: string;
+  costLabel?: string;
+  subtext?: string;
+  color?: string;
+}
+
+export function CampaignFunnelChart({
+  stages,
+}: {
+  stages: FunnelStageDatum[];
+}) {
+  if (!stages || stages.length === 0) {
+    return (
+      <div className="ca-empty">
+        <div className="ca-empty-title">暂无转化漏斗数据</div>
+      </div>
+    );
+  }
+
+  const validValues = stages
+    .map((s) => s.value)
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0);
+  const maxLog = validValues.length > 0 ? Math.max(...validValues.map((v) => Math.log10(v + 1))) : 1;
+
+  return (
+    <div className="ca-funnel-list" role="list" aria-label="全链路转化漏斗" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {stages.map((st, idx) => {
+        const val = typeof st.value === 'number' && Number.isFinite(st.value) ? st.value : null;
+        // 使用对数平滑宽度，避免曝光(百万级)与订单(百/千级)同屏时末端退化为不可见细线
+        const ratio = val !== null && val > 0 && maxLog > 0 ? Math.max(0.16, Math.min(1, Math.log10(val + 1) / maxLog)) : 0.08;
+        const barColor = st.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
+        return (
+          <div
+            key={st.stage || idx}
+            role="listitem"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(115px, 150px) 1fr minmax(145px, auto)',
+              alignItems: 'center',
+              gap: 12,
+              padding: '8px 12px',
+              background: '#fcfbf9',
+              border: `1px solid ${CAMPAIGN_PALETTE.borderWarm}`,
+              borderRadius: 8,
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 18,
+                    height: 18,
+                    borderRadius: 999,
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    background: `${barColor}1f`,
+                    color: barColor,
+                  }}
+                >
+                  {idx + 1}
+                </span>
+                <strong style={{ fontSize: 12.5, color: CAMPAIGN_PALETTE.textMain }}>{st.stage}</strong>
+              </div>
+              {st.subtext && (
+                <span style={{ fontSize: 11, color: CAMPAIGN_PALETTE.textMuted, paddingLeft: 24 }}>{st.subtext}</span>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <div
+                style={{
+                  width: '100%',
+                  height: 16,
+                  background: '#eef2f6',
+                  borderRadius: 999,
+                  overflow: 'hidden',
+                  position: 'relative',
+                }}
+              >
+                <div
+                  style={{
+                    width: val !== null ? `${(ratio * 100).toFixed(1)}%` : '0%',
+                    height: '100%',
+                    background: barColor,
+                    borderRadius: 999,
+                    transition: 'width 0.25s ease',
+                  }}
+                />
+              </div>
+              {st.conversionLabel && (
+                <span style={{ fontSize: 11, color: CAMPAIGN_PALETTE.textMuted }}>
+                  ↳ 环节转化：{st.conversionLabel}
+                </span>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: CAMPAIGN_PALETTE.textMain }}>
+                {val !== null ? fmtNum(val, val >= 100 ? 0 : 2) : '—'}
+                {st.unit && <small style={{ fontSize: 11, fontWeight: 500, color: CAMPAIGN_PALETTE.textMuted, marginLeft: 3 }}>{st.unit}</small>}
+              </div>
+              {st.costLabel && (
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    padding: '1px 7px',
+                    borderRadius: 999,
+                    background: `${barColor}15`,
+                    color: barColor,
+                  }}
+                >
+                  {st.costLabel}
+                </span>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================================================
+// 9. MatrixHeatmapChart 二维交叉热力矩阵图 (产品×阶段 / 平台×阶段 / 性别×年龄 / 量级×方向)
+// ============================================================================
+
+export interface MatrixHeatmapCell {
+  row: string;
+  col: string;
+  value: number | null;
+  displayValue?: string;
+  subtext?: string;
+}
+
+export function MatrixHeatmapChart({
+  rows,
+  cols,
+  cells,
+  unit = '',
+  rowHeaderTitle = '维度',
+  showRowTotals = true,
+}: {
+  rows: string[];
+  cols: string[];
+  cells: MatrixHeatmapCell[];
+  unit?: string;
+  rowHeaderTitle?: string;
+  showRowTotals?: boolean;
+}) {
+  if (!rows.length || !cols.length) {
+    return (
+      <div className="ca-empty">
+        <div className="ca-empty-title">暂无交叉矩阵数据</div>
+      </div>
+    );
+  }
+
+  const cellMap = new Map<string, MatrixHeatmapCell>();
+  let maxVal = 0;
+  for (const c of cells) {
+    cellMap.set(`${c.row}__${c.col}`, c);
+    if (typeof c.value === 'number' && Number.isFinite(c.value) && c.value > maxVal) {
+      maxVal = c.value;
+    }
+  }
+
+  return (
+    <div className="ca-table-wrap" style={{ overflowX: 'auto' }}>
+      <table className="ca-table" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 3, fontSize: 12 }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: 'left', padding: '6px 8px', background: '#f8fafc', borderRadius: 4 }}>{rowHeaderTitle}</th>
+            {cols.map((col) => (
+              <th key={col} style={{ textAlign: 'center', padding: '6px 8px', background: '#f8fafc', borderRadius: 4, whiteSpace: 'nowrap' }}>
+                {col}
+              </th>
+            ))}
+            {showRowTotals && (
+              <th style={{ textAlign: 'right', padding: '6px 8px', background: '#f1f5f9', borderRadius: 4, whiteSpace: 'nowrap' }}>
+                行合计
+              </th>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => {
+            let rowSum = 0;
+            let hasVal = false;
+            return (
+              <tr key={r}>
+                <td style={{ fontWeight: 600, padding: '6px 8px', color: CAMPAIGN_PALETTE.textMain, background: '#fcfbf9', whiteSpace: 'nowrap' }}>
+                  {r}
+                </td>
+                {cols.map((c) => {
+                  const cell = cellMap.get(`${r}__${c}`);
+                  const val = cell && typeof cell.value === 'number' && Number.isFinite(cell.value) ? cell.value : null;
+                  if (val !== null) {
+                    rowSum += val;
+                    hasVal = true;
+                  }
+                  const intensity = val !== null && val > 0 && maxVal > 0 ? Math.min(1, Math.max(0.08, val / maxVal)) : 0;
+                  const bg =
+                    intensity > 0
+                      ? `rgba(44, 113, 104, ${(0.08 + intensity * 0.72).toFixed(2)})`
+                      : '#f8fafc';
+                  const fg = intensity > 0.55 ? '#ffffff' : CAMPAIGN_PALETTE.textMain;
+                  return (
+                    <td
+                      key={c}
+                      title={cell?.subtext || `${r} × ${c}: ${val !== null ? fmtNum(val) + unit : '—'}`}
+                      style={{
+                        textAlign: 'center',
+                        padding: '6px 8px',
+                        borderRadius: 5,
+                        background: bg,
+                        color: fg,
+                        fontWeight: val && val > 0 ? 600 : 400,
+                      }}
+                    >
+                      <div>{cell?.displayValue ?? (val !== null && val > 0 ? `${fmtNum(val, val >= 100 ? 0 : 1)}${unit}` : '·')}</div>
+                      {cell?.subtext && (
+                        <div style={{ fontSize: 10, opacity: 0.85, fontWeight: 400 }}>{cell.subtext}</div>
+                      )}
+                    </td>
+                  );
+                })}
+                {showRowTotals && (
+                  <td style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 700, background: '#f8fafc', borderRadius: 4, whiteSpace: 'nowrap' }}>
+                    {hasVal ? `${fmtNum(rowSum, rowSum >= 100 ? 0 : 1)}${unit}` : '—'}
+                  </td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ============================================================================
+// 10. StackedHorizontalBarChart 堆叠/分组结构条形图 (K+FS构成 / 自然+推广+加热流量 / 阶段状态结构)
+// ============================================================================
+
+export interface StackedBarSegment {
+  key: string;
+  label: string;
+  color: string;
+}
+
+export interface StackedBarRow {
+  label: string;
+  totalLabel?: string;
+  segments: Record<string, number | null>;
+  meta?: string;
+}
+
+export function StackedHorizontalBarChart({
+  rows,
+  segments,
+  unit = '',
+  normalize100 = false,
+}: {
+  rows: StackedBarRow[];
+  segments: StackedBarSegment[];
+  unit?: string;
+  normalize100?: boolean;
+}) {
+  if (!rows || rows.length === 0) {
+    return (
+      <div className="ca-empty">
+        <div className="ca-empty-title">暂无构成对比数据</div>
+      </div>
+    );
+  }
+
+  const rowTotals = rows.map((r) =>
+    segments.reduce((acc, s) => {
+      const v = r.segments[s.key];
+      return acc + (typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 0);
+    }, 0)
+  );
+  const maxTotal = Math.max(1, ...rowTotals);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 11.5, color: CAMPAIGN_PALETTE.textMuted }}>
+        {segments.map((s) => (
+          <span key={s.key} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <i style={{ width: 10, height: 10, borderRadius: 3, background: s.color, display: 'inline-block' }} />
+            {s.label}
+          </span>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {rows.map((r, i) => {
+          const total = rowTotals[i];
+          const denom = normalize100 ? (total || 1) : maxTotal;
+          return (
+            <div
+              key={r.label || i}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'minmax(110px, 145px) 1fr minmax(95px, auto)',
+                alignItems: 'center',
+                gap: 10,
+                fontSize: 12,
+              }}
+            >
+              <div style={{ fontWeight: 600, color: CAMPAIGN_PALETTE.textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={r.label}>
+                {r.label}
+              </div>
+              <div style={{ display: 'flex', height: 16, background: '#f1f5f9', borderRadius: 6, overflow: 'hidden' }}>
+                {segments.map((s) => {
+                  const v = r.segments[s.key];
+                  const num = typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 0;
+                  const pct = (num / denom) * 100;
+                  if (pct <= 0) return null;
+                  const sharePct = total > 0 ? ((num / total) * 100).toFixed(1) : '0.0';
+                  return (
+                    <div
+                      key={s.key}
+                      title={`${r.label} · ${s.label}: ${fmtNum(num)}${unit} (${sharePct}%)`}
+                      style={{
+                        width: `${pct.toFixed(2)}%`,
+                        background: s.color,
+                        height: '100%',
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              <div style={{ textAlign: 'right', fontSize: 11.5, color: CAMPAIGN_PALETTE.textMain, fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {r.totalLabel || `${fmtNum(total, total >= 100 ? 0 : 1)}${unit}`}
+                {r.meta && <span style={{ display: 'block', fontSize: 10.5, fontWeight: 400, color: CAMPAIGN_PALETTE.textMuted }}>{r.meta}</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

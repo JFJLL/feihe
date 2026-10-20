@@ -9004,6 +9004,1023 @@
           "caliberNote": "商销历史底表UV列为异常类型与空值，系统严格保留null缺失态，严禁通过chat人为猜填"
         }
       ]
+    },
+    {
+      "id": "huang-creator-selection-funnel",
+      "title": "达人选号淘汰漏斗与11月储备池",
+      "category": "execution",
+      "period": "2026年10月-11月",
+      "sourceId": "src-huang-tiane-kol-execution",
+      "note": "从10月提报池373人历经一筛(83通过/69待定)、二核(58通过)、商务接洽(55可接)，最终执行定档31人(转化率8.3%)、实际发布18人(发布率58.1%)；11月已提报储备196人，首批确认锁定18人、规划预算18万元。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "stage",
+          "title": "阶段 / 维度",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "headcount",
+          "title": "达人数量 (人)",
+          "type": "integer",
+          "align": "right"
+        },
+        {
+          "key": "retentionRate",
+          "title": "留存转化率",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "budgetOrCost",
+          "title": "预算或报价 (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "strategyTier",
+          "title": "量级结构 / 核心方向",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "statusNote",
+          "title": "执行状态与说明",
+          "type": "string",
+          "align": "left"
+        }
+      ],
+      "rows": [
+        {
+          "stage": "① 10月全网提报初选池",
+          "headcount": 373,
+          "retentionRate": 100.0,
+          "budgetOrCost": null,
+          "strategyTier": "涵盖头部 / 腰部 / 精选 / KOC全量池",
+          "statusNote": "初选提报373位候选达人，全网摸排适格博主"
+        },
+        {
+          "stage": "② 团队初审一筛通过",
+          "headcount": 83,
+          "retentionRate": 22.3,
+          "budgetOrCost": null,
+          "strategyTier": "83人通过，69人待定，35人不通过",
+          "statusNote": "初筛评估基础数据、女性粉丝占比与近期千赞表现"
+        },
+        {
+          "stage": "③ 策略把关二核通过",
+          "headcount": 58,
+          "retentionRate": 15.5,
+          "budgetOrCost": null,
+          "strategyTier": "严格匹配蛋品精致调性与烹饪人群",
+          "statusNote": "严审内容风格、爆款率与蛋品食谱场景切合度"
+        },
+        {
+          "stage": "④ 商务接洽确认可接",
+          "headcount": 55,
+          "retentionRate": 14.7,
+          "budgetOrCost": null,
+          "strategyTier": "55人可接，10人核价中，9人不可接",
+          "statusNote": "确认档期排期、报价合理性、排竞时间与纯净素材授权"
+        },
+        {
+          "stage": "⑤ 10月最终执行定档",
+          "headcount": 31,
+          "retentionRate": 8.3,
+          "budgetOrCost": 324774.0,
+          "strategyTier": "头部1位 / 精选20位 / KOC 10位",
+          "statusNote": "含平台费报价合计¥324,774(裸价¥289,890)，进入脚本初稿定档"
+        },
+        {
+          "stage": "⑥ 实际发布并收录上线",
+          "headcount": 18,
+          "retentionRate": 58.1,
+          "budgetOrCost": 198254.0,
+          "strategyTier": "精选13位 / KOC 5位 (截止10/19)",
+          "statusNote": "已顺利发布18篇笔记，发布率58.1%，素材收集率100%"
+        },
+        {
+          "stage": "⑦ 11月储备池已提报",
+          "headcount": 196,
+          "retentionRate": null,
+          "budgetOrCost": null,
+          "strategyTier": "美食分享 / 邪修溏心蛋 / 场景代入 / 晒单节促",
+          "statusNote": "11月达人提报储备池196位，提早锁定双11大促爆发期"
+        },
+        {
+          "stage": "⑧ 11月首批确认定档规划",
+          "headcount": 18,
+          "retentionRate": null,
+          "budgetOrCost": 180000.0,
+          "strategyTier": "话题引爆1 / 实验测评1 / 精选12 / 尾部4",
+          "statusNote": "11月总规划预算18万元，针对10月舆情强化科普并邪修破圈"
+        }
+      ]
+    },
+    {
+      "id": "huang-cid-placement-breakdown",
+      "title": "红猫CID版位与计划模式效能对比表",
+      "category": "performance",
+      "period": "2026年10月 (10.01 ~ 10.19)",
+      "sourceId": "src-huang-tiane-cid-fs",
+      "note": "红猫CID标准投信息流贡献绝对主力(消耗占比78.5%, GMV 56,919元, ROI 2.74)；全站流效率突出(消耗4,384元, ROI 3.33)；搜索流精准收割(消耗1,300元, ROI 1.14)；店铺成交ROI计划ROI达5.12；简单投全域补充消耗42,403元(ROI 3.97)。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "placement",
+          "title": "版位 / 计划模式",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "campaignType",
+          "title": "投放类型",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "spend",
+          "title": "消耗 (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "ctr",
+          "title": "点击率",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "cpc",
+          "title": "点击成本 (元/次)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "cpm",
+          "title": "千次展现 (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "orders",
+          "title": "订单量 (单)",
+          "type": "integer",
+          "align": "right"
+        },
+        {
+          "key": "gmv",
+          "title": "GMV (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "roi",
+          "title": "ROI",
+          "type": "ratio",
+          "align": "right"
+        },
+        {
+          "key": "uv",
+          "title": "进店量 (人次)",
+          "type": "integer",
+          "align": "right"
+        },
+        {
+          "key": "costPerUv",
+          "title": "进店成本 (元/人次)",
+          "type": "currency",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "placement": "信息流版位",
+          "campaignType": "标准投",
+          "spend": 20771.77,
+          "ctr": 10.45,
+          "cpc": 1.17,
+          "cpm": 121.91,
+          "orders": 352,
+          "gmv": 56919.24,
+          "roi": 2.74,
+          "uv": 699,
+          "costPerUv": 29.72
+        },
+        {
+          "placement": "全站流 (通投/混流)",
+          "campaignType": "标准投",
+          "spend": 4384.29,
+          "ctr": 8.88,
+          "cpc": 1.14,
+          "cpm": 100.87,
+          "orders": 75,
+          "gmv": 14616.0,
+          "roi": 3.33,
+          "uv": 158,
+          "costPerUv": 27.75
+        },
+        {
+          "placement": "搜索流版位",
+          "campaignType": "标准投",
+          "spend": 1300.24,
+          "ctr": 6.57,
+          "cpc": 0.9,
+          "cpm": 58.9,
+          "orders": 18,
+          "gmv": 1482.09,
+          "roi": 1.14,
+          "uv": 53,
+          "costPerUv": 24.53
+        },
+        {
+          "placement": "视频流版位 (独立模板)",
+          "campaignType": "标准投",
+          "spend": 0.0,
+          "ctr": null,
+          "cpc": null,
+          "cpm": null,
+          "orders": 0,
+          "gmv": 0.0,
+          "roi": null,
+          "uv": 0,
+          "costPerUv": null
+        },
+        {
+          "placement": "店铺成交计划 (主力)",
+          "campaignType": "标准投",
+          "spend": 56142.38,
+          "ctr": 8.62,
+          "cpc": 1.11,
+          "cpm": 96.04,
+          "orders": 1824,
+          "gmv": 178123.82,
+          "roi": 3.17,
+          "uv": 3764,
+          "costPerUv": 14.92
+        },
+        {
+          "placement": "店铺成交ROI计划 (高转)",
+          "campaignType": "标准投",
+          "spend": 2882.38,
+          "ctr": 7.64,
+          "cpc": 1.93,
+          "cpm": 147.48,
+          "orders": 94,
+          "gmv": 14760.27,
+          "roi": 5.12,
+          "uv": 191,
+          "costPerUv": 15.09
+        },
+        {
+          "placement": "简单投全域计划",
+          "campaignType": "简单投",
+          "spend": 42403.02,
+          "ctr": null,
+          "cpc": null,
+          "cpm": null,
+          "orders": 2257,
+          "gmv": 168346.72,
+          "roi": 3.97,
+          "uv": 5434,
+          "costPerUv": 7.8
+        },
+        {
+          "placement": "红猫CID全域总计",
+          "campaignType": "合计",
+          "spend": 101427.78,
+          "ctr": null,
+          "cpc": null,
+          "cpm": null,
+          "orders": 4175,
+          "gmv": 361230.81,
+          "roi": 3.56,
+          "uv": 9389,
+          "costPerUv": 10.8
+        }
+      ]
+    },
+    {
+      "id": "huang-content-audience-matrix",
+      "title": "内容标签×定向人群跨维转化矩阵",
+      "category": "performance",
+      "period": "2026年10月 (10.01 ~ 10.19)",
+      "sourceId": "src-huang-tiane-brand-fs",
+      "note": "品牌线9大内容标签与高潜人群包交叉矩阵：美食制作在质感美食家(消耗29,416元, CTR 14.98%)、家宴司膳局(消耗18,088元, CTR 15.89%)及溏心蛋人群(消耗17,460元, CTR 14.87%)转化效率最高；辅以生活记录、运动健身等圈层跨界。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "contentTag",
+          "title": "内容标签",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "audiencePkg",
+          "title": "定向人群包",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "spend",
+          "title": "消耗 (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量 (次)",
+          "type": "integer",
+          "align": "right"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量 (次)",
+          "type": "integer",
+          "align": "right"
+        },
+        {
+          "key": "ctr",
+          "title": "点击率",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "cpc",
+          "title": "点击成本 (元/次)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "cpm",
+          "title": "千次展现 (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "plays5s",
+          "title": "5s播放量 (次)",
+          "type": "integer",
+          "align": "right"
+        },
+        {
+          "key": "ctr5s",
+          "title": "5s播放率",
+          "type": "percent",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "contentTag": "节庆送礼",
+          "audiencePkg": "智能(一方策略)",
+          "spend": 10.76,
+          "impressions": 38,
+          "clicks": 17,
+          "ctr": 44.74,
+          "cpc": 0.63,
+          "cpm": 283.16,
+          "plays5s": 2,
+          "ctr5s": 5.26
+        },
+        {
+          "contentTag": "节庆送礼",
+          "audiencePkg": "蛋类搜1阅2行为兴趣人群",
+          "spend": 5.98,
+          "impressions": 86,
+          "clicks": 12,
+          "ctr": 13.95,
+          "cpc": 0.5,
+          "cpm": 69.53,
+          "plays5s": 8,
+          "ctr5s": 9.3
+        },
+        {
+          "contentTag": "节庆送礼",
+          "audiencePkg": "中秋送礼人群",
+          "spend": 5.78,
+          "impressions": 47,
+          "clicks": 6,
+          "ctr": 12.77,
+          "cpc": 0.96,
+          "cpm": 122.98,
+          "plays5s": 1,
+          "ctr5s": 2.13
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "质感美食家",
+          "spend": 29416.56,
+          "impressions": 562634,
+          "clicks": 84301,
+          "ctr": 14.98,
+          "cpc": 0.35,
+          "cpm": 52.28,
+          "plays5s": 29282,
+          "ctr5s": 5.2
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "家宴司膳局",
+          "spend": 18088.87,
+          "impressions": 476515,
+          "clicks": 75712,
+          "ctr": 15.89,
+          "cpc": 0.24,
+          "cpm": 37.96,
+          "plays5s": 12130,
+          "ctr5s": 2.55
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "溏心蛋人群",
+          "spend": 17460.73,
+          "impressions": 321635,
+          "clicks": 47814,
+          "ctr": 14.87,
+          "cpc": 0.37,
+          "cpm": 54.29,
+          "plays5s": 20875,
+          "ctr5s": 6.49
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "大孩已婚中高消31+",
+          "spend": 8890.78,
+          "impressions": 165846,
+          "clicks": 22233,
+          "ctr": 13.41,
+          "cpc": 0.4,
+          "cpm": 53.61,
+          "plays5s": 15693,
+          "ctr5s": 9.46
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "养生人群",
+          "spend": 5183.51,
+          "impressions": 89685,
+          "clicks": 9100,
+          "ctr": 10.15,
+          "cpc": 0.57,
+          "cpm": 57.8,
+          "plays5s": 4045,
+          "ctr5s": 4.51
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "深夜食堂",
+          "spend": 4718.21,
+          "impressions": 77274,
+          "clicks": 10232,
+          "ctr": 13.24,
+          "cpc": 0.46,
+          "cpm": 61.06,
+          "plays5s": 5732,
+          "ctr5s": 7.42
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "月满人团圆",
+          "spend": 4375.66,
+          "impressions": 121068,
+          "clicks": 16425,
+          "ctr": 13.57,
+          "cpc": 0.27,
+          "cpm": 36.14,
+          "plays5s": 0,
+          "ctr5s": 0.0
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "举家“撒欢”党",
+          "spend": 4204.54,
+          "impressions": 100178,
+          "clicks": 13951,
+          "ctr": 13.93,
+          "cpc": 0.3,
+          "cpm": 41.97,
+          "plays5s": 0,
+          "ctr5s": 0.0
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "在家做饭人群",
+          "spend": 3729.12,
+          "impressions": 56445,
+          "clicks": 8052,
+          "ctr": 14.27,
+          "cpc": 0.46,
+          "cpm": 66.07,
+          "plays5s": 5316,
+          "ctr5s": 9.42
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "精致中产",
+          "spend": 3720.81,
+          "impressions": 53071,
+          "clicks": 6943,
+          "ctr": 13.08,
+          "cpc": 0.54,
+          "cpm": 70.11,
+          "plays5s": 3849,
+          "ctr5s": 7.25
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "蛋类AIS人群大孩中高消",
+          "spend": 3315.64,
+          "impressions": 68058,
+          "clicks": 9033,
+          "ctr": 13.27,
+          "cpc": 0.37,
+          "cpm": 48.72,
+          "plays5s": 6356,
+          "ctr5s": 9.34
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "中式烹饪兴趣人群",
+          "spend": 3184.76,
+          "impressions": 52362,
+          "clicks": 6800,
+          "ctr": 12.99,
+          "cpc": 0.47,
+          "cpm": 60.82,
+          "plays5s": 3602,
+          "ctr5s": 6.88
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "漂亮饭消费决策因子人群",
+          "spend": 2610.54,
+          "impressions": 43054,
+          "clicks": 6046,
+          "ctr": 14.04,
+          "cpc": 0.43,
+          "cpm": 60.63,
+          "plays5s": 3315,
+          "ctr5s": 7.7
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "减脂健身人群",
+          "spend": 1217.31,
+          "impressions": 19548,
+          "clicks": 2847,
+          "ctr": 14.56,
+          "cpc": 0.43,
+          "cpm": 62.27,
+          "plays5s": 2073,
+          "ctr5s": 10.6
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "溏心蛋搜阅人群10.10",
+          "spend": 1117.21,
+          "impressions": 14964,
+          "clicks": 2332,
+          "ctr": 15.58,
+          "cpc": 0.48,
+          "cpm": 74.66,
+          "plays5s": 1486,
+          "ctr5s": 9.93
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "美食研究僧",
+          "spend": 834.13,
+          "impressions": 14076,
+          "clicks": 1968,
+          "ctr": 13.98,
+          "cpc": 0.42,
+          "cpm": 59.26,
+          "plays5s": 917,
+          "ctr5s": 6.51
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "轻食减肥人群",
+          "spend": 514.78,
+          "impressions": 7562,
+          "clicks": 1045,
+          "ctr": 13.82,
+          "cpc": 0.49,
+          "cpm": 68.07,
+          "plays5s": 744,
+          "ctr5s": 9.84
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "美食大玩家",
+          "spend": 504.72,
+          "impressions": 6466,
+          "clicks": 1136,
+          "ctr": 17.57,
+          "cpc": 0.44,
+          "cpm": 78.06,
+          "plays5s": 362,
+          "ctr5s": 5.6
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "一人食消费决策因子人群",
+          "spend": 502.59,
+          "impressions": 6491,
+          "clicks": 1131,
+          "ctr": 17.42,
+          "cpc": 0.44,
+          "cpm": 77.43,
+          "plays5s": 408,
+          "ctr5s": 6.29
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "米其林人群",
+          "spend": 468.33,
+          "impressions": 6918,
+          "clicks": 929,
+          "ctr": 13.43,
+          "cpc": 0.5,
+          "cpm": 67.7,
+          "plays5s": 546,
+          "ctr5s": 7.89
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "黄天鹅历史进店+一方汇总",
+          "spend": 200.52,
+          "impressions": 2651,
+          "clicks": 392,
+          "ctr": 14.79,
+          "cpc": 0.51,
+          "cpm": 75.64,
+          "plays5s": 182,
+          "ctr5s": 6.87
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "36+已婚无孩",
+          "spend": 86.82,
+          "impressions": 1355,
+          "clicks": 188,
+          "ctr": 13.87,
+          "cpc": 0.46,
+          "cpm": 64.07,
+          "plays5s": 100,
+          "ctr5s": 7.38
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "母婴大促人群包",
+          "spend": 44.24,
+          "impressions": 643,
+          "clicks": 91,
+          "ctr": 14.15,
+          "cpc": 0.49,
+          "cpm": 68.8,
+          "plays5s": 48,
+          "ctr5s": 7.47
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "米其林人群10.15",
+          "spend": 11.91,
+          "impressions": 204,
+          "clicks": 24,
+          "ctr": 11.76,
+          "cpc": 0.5,
+          "cpm": 58.38,
+          "plays5s": 10,
+          "ctr5s": 4.9
+        },
+        {
+          "contentTag": "美食制作",
+          "audiencePkg": "历史一方人群",
+          "spend": 0.3,
+          "impressions": 3,
+          "clicks": 1,
+          "ctr": 33.33,
+          "cpc": 0.3,
+          "cpm": 100.0,
+          "plays5s": 1,
+          "ctr5s": 33.33
+        },
+        {
+          "contentTag": "商业财经",
+          "audiencePkg": "蛋类搜1阅2行为兴趣人群",
+          "spend": 1000.84,
+          "impressions": 15871,
+          "clicks": 1541,
+          "ctr": 9.71,
+          "cpc": 0.65,
+          "cpm": 63.06,
+          "plays5s": 1224,
+          "ctr5s": 7.71
+        },
+        {
+          "contentTag": "商业财经",
+          "audiencePkg": "母婴大促人群包",
+          "spend": 357.71,
+          "impressions": 7118,
+          "clicks": 803,
+          "ctr": 11.28,
+          "cpc": 0.45,
+          "cpm": 50.25,
+          "plays5s": 661,
+          "ctr5s": 9.29
+        },
+        {
+          "contentTag": "商业财经",
+          "audiencePkg": "溏心蛋搜阅人群10.10",
+          "spend": 50.79,
+          "impressions": 841,
+          "clicks": 104,
+          "ctr": 12.37,
+          "cpc": 0.49,
+          "cpm": 60.39,
+          "plays5s": 85,
+          "ctr5s": 10.11
+        },
+        {
+          "contentTag": "生活记录",
+          "audiencePkg": "溏心蛋人群",
+          "spend": 51.41,
+          "impressions": 669,
+          "clicks": 75,
+          "ctr": 11.21,
+          "cpc": 0.69,
+          "cpm": 76.85,
+          "plays5s": 44,
+          "ctr5s": 6.58
+        },
+        {
+          "contentTag": "生活记录",
+          "audiencePkg": "中秋送礼人群",
+          "spend": 2.15,
+          "impressions": 19,
+          "clicks": 8,
+          "ctr": 42.11,
+          "cpc": 0.27,
+          "cpm": 113.16,
+          "plays5s": 0,
+          "ctr5s": 0.0
+        },
+        {
+          "contentTag": "生活记录",
+          "audiencePkg": "蛋类搜1阅2行为兴趣人群",
+          "spend": 0.7,
+          "impressions": 2,
+          "clicks": 1,
+          "ctr": 50.0,
+          "cpc": 0.7,
+          "cpm": 350.0,
+          "plays5s": 0,
+          "ctr5s": 0.0
+        },
+        {
+          "contentTag": "送礼-长辈",
+          "audiencePkg": "溏心蛋人群",
+          "spend": 4589.93,
+          "impressions": 106193,
+          "clicks": 11807,
+          "ctr": 11.12,
+          "cpc": 0.39,
+          "cpm": 43.22,
+          "plays5s": 0,
+          "ctr5s": 0.0
+        },
+        {
+          "contentTag": "送礼-长辈",
+          "audiencePkg": "中年养生人群",
+          "spend": 3378.11,
+          "impressions": 63454,
+          "clicks": 9440,
+          "ctr": 14.88,
+          "cpc": 0.36,
+          "cpm": 53.24,
+          "plays5s": 7992,
+          "ctr5s": 12.59
+        },
+        {
+          "contentTag": "送礼-长辈",
+          "audiencePkg": "熟龄悦己中年",
+          "spend": 2402.62,
+          "impressions": 40839,
+          "clicks": 4899,
+          "ctr": 12.0,
+          "cpc": 0.49,
+          "cpm": 58.83,
+          "plays5s": 4059,
+          "ctr5s": 9.94
+        },
+        {
+          "contentTag": "送礼-长辈",
+          "audiencePkg": "中秋送礼关键词人群",
+          "spend": 1013.91,
+          "impressions": 9667,
+          "clicks": 1333,
+          "ctr": 13.79,
+          "cpc": 0.76,
+          "cpm": 104.88,
+          "plays5s": 439,
+          "ctr5s": 4.54
+        },
+        {
+          "contentTag": "送礼-长辈",
+          "audiencePkg": "长辈送礼人群",
+          "spend": 520.03,
+          "impressions": 4733,
+          "clicks": 705,
+          "ctr": 14.9,
+          "cpc": 0.74,
+          "cpm": 109.87,
+          "plays5s": 229,
+          "ctr5s": 4.84
+        },
+        {
+          "contentTag": "送礼-长辈",
+          "audiencePkg": "智能(一方策略)",
+          "spend": 1.99,
+          "impressions": 1,
+          "clicks": 1,
+          "ctr": 100.0,
+          "cpc": 1.99,
+          "cpm": 1990.0,
+          "plays5s": 1,
+          "ctr5s": 100.0
+        },
+        {
+          "contentTag": "送礼-值得感谢的人",
+          "audiencePkg": "智能(一方策略)",
+          "spend": 827.08,
+          "impressions": 11884,
+          "clicks": 696,
+          "ctr": 5.86,
+          "cpc": 1.19,
+          "cpm": 69.6,
+          "plays5s": 525,
+          "ctr5s": 4.42
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "母婴大促人群包",
+          "spend": 475.33,
+          "impressions": 8058,
+          "clicks": 1116,
+          "ctr": 13.85,
+          "cpc": 0.43,
+          "cpm": 58.99,
+          "plays5s": 928,
+          "ctr5s": 11.52
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "中式烹饪兴趣人群",
+          "spend": 471.59,
+          "impressions": 6517,
+          "clicks": 925,
+          "ctr": 14.19,
+          "cpc": 0.51,
+          "cpm": 72.36,
+          "plays5s": 765,
+          "ctr5s": 11.74
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "米其林人群",
+          "spend": 100.55,
+          "impressions": 1364,
+          "clicks": 184,
+          "ctr": 13.49,
+          "cpc": 0.55,
+          "cpm": 73.72,
+          "plays5s": 140,
+          "ctr5s": 10.26
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "溏心蛋搜阅人群10.10",
+          "spend": 99.29,
+          "impressions": 1455,
+          "clicks": 178,
+          "ctr": 12.23,
+          "cpc": 0.56,
+          "cpm": 68.24,
+          "plays5s": 137,
+          "ctr5s": 9.42
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "36+已婚无孩",
+          "spend": 31.11,
+          "impressions": 441,
+          "clicks": 61,
+          "ctr": 13.83,
+          "cpc": 0.51,
+          "cpm": 70.54,
+          "plays5s": 49,
+          "ctr5s": 11.11
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "黄天鹅spuaips人群",
+          "spend": 6.05,
+          "impressions": 191,
+          "clicks": 13,
+          "ctr": 6.81,
+          "cpc": 0.47,
+          "cpm": 31.68,
+          "plays5s": 8,
+          "ctr5s": 4.19
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "lululemon∪蛋类TI",
+          "spend": 3.71,
+          "impressions": 76,
+          "clicks": 8,
+          "ctr": 10.53,
+          "cpc": 0.46,
+          "cpm": 48.82,
+          "plays5s": 4,
+          "ctr5s": 5.26
+        },
+        {
+          "contentTag": "文化创意",
+          "audiencePkg": "黄天鹅历史进店+一方汇总",
+          "spend": 2.45,
+          "impressions": 79,
+          "clicks": 5,
+          "ctr": 6.33,
+          "cpc": 0.49,
+          "cpm": 31.01,
+          "plays5s": 2,
+          "ctr5s": 2.53
+        },
+        {
+          "contentTag": "运动健身",
+          "audiencePkg": "轻食减肥人群",
+          "spend": 33.83,
+          "impressions": 685,
+          "clicks": 63,
+          "ctr": 9.2,
+          "cpc": 0.54,
+          "cpm": 49.39,
+          "plays5s": 43,
+          "ctr5s": 6.28
+        },
+        {
+          "contentTag": "运动健身",
+          "audiencePkg": "运动代餐",
+          "spend": 14.26,
+          "impressions": 257,
+          "clicks": 26,
+          "ctr": 10.12,
+          "cpc": 0.55,
+          "cpm": 55.49,
+          "plays5s": 18,
+          "ctr5s": 7.0
+        },
+        {
+          "contentTag": "运动健身",
+          "audiencePkg": "减脂健身人群",
+          "spend": 6.28,
+          "impressions": 109,
+          "clicks": 14,
+          "ctr": 12.84,
+          "cpc": 0.45,
+          "cpm": 57.61,
+          "plays5s": 9,
+          "ctr5s": 8.26
+        },
+        {
+          "contentTag": "中秋囤货",
+          "audiencePkg": "溏心蛋人群",
+          "spend": 836.99,
+          "impressions": 10141,
+          "clicks": 1401,
+          "ctr": 13.82,
+          "cpc": 0.6,
+          "cpm": 82.54,
+          "plays5s": 388,
+          "ctr5s": 3.83
+        },
+        {
+          "contentTag": "中秋囤货",
+          "audiencePkg": "智能(一方策略)",
+          "spend": 2.23,
+          "impressions": 26,
+          "clicks": 3,
+          "ctr": 11.54,
+          "cpc": 0.74,
+          "cpm": 85.77,
+          "plays5s": 1,
+          "ctr5s": 3.85
+        }
+      ]
     }
   ],
   "actions": {

@@ -6,11 +6,16 @@ import {
   ChartPanel,
   MetricStrip,
   BudgetComparisonChart,
+  CampaignFunnelChart,
+  MatrixHeatmapChart,
+  HorizontalBarChart,
   DonutChart,
   CAMPAIGN_PALETTE,
   type ChartDatum,
   type ComparisonDatum,
   type MetricStripItem,
+  type FunnelStageDatum,
+  type MatrixHeatmapCell,
 } from './CampaignCharts';
 import { CampaignComboChart, type ComboSeries } from './CampaignComboChart';
 import {
@@ -40,35 +45,55 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
   const topMetricItems: MetricStripItem[] = useMemo(() => {
     return [
       {
-        label: '品牌FS累计消耗',
+        label: '品牌FS消耗 / 预算进度',
         value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
-        hint: `统计周期：${model.brandPeriod}`,
+        hint: `预算 ${formatCurrency(model.brandBudgetVal)} · 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
+        status: 'accent',
+      },
+      {
+        label: '种草I/TI人群 · CPTI',
+        value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
+        hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 · CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
+        status: 'success',
+      },
+      {
+        label: '红猫CID全域消耗',
+        value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
+        hint: `标准投 ${formatCurrency(model.cidStandardSpend)} · 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
         status: 'neutral',
       },
       {
-        label: '红猫CID成交GMV',
+        label: '红猫CID成交GMV · ROI',
         value: model.cidTotalGmv !== null ? formatCurrency(model.cidTotalGmv) : '—',
-        hint: `消耗 ${formatCurrency(model.cidTotalSpend)} · ROI ${model.cidOverallRoi !== null ? model.cidOverallRoi.toFixed(2) : '—'}倍`,
+        hint: `全域ROI ${model.cidOverallRoi !== null ? model.cidOverallRoi.toFixed(2) : '—'}倍 (标准3.27 / 简单3.97)`,
+        status: 'accent',
+      },
+      {
+        label: '闭环商销累计消耗',
+        value: model.commerceSpend !== null ? formatCurrency(model.commerceSpend) : '—',
+        hint: `全渠道销售日均约 ¥1,486`,
         status: 'neutral',
       },
       {
-        label: '达人执行完成度',
-        value: `${model.creatorsPublished} / ${model.creatorsCount}`,
-        hint: `已发布占比 ${model.creatorsPublishRate !== null ? formatPercent(model.creatorsPublishRate, 1) : '—'}`,
-        status: 'neutral',
+        label: '商销成交GMV · 订单',
+        value: model.commerceGmv !== null ? formatCurrency(model.commerceGmv) : '—',
+        hint: `订单 ${formatNum(model.commerceOrders, 0)} 单 · 加购 ${formatNum(model.commerceCart, 0)} 次`,
+        status: 'accent',
       },
       {
-        label: 'KOS笔记发布总量',
+        label: '达人选号定档 / 发布率',
+        value: `${model.creatorsPublished} / ${model.creatorsCount} 位`,
+        hint: `已发布 ${formatPercent(model.creatorsPublishRate, 1)} · 素材收集 ${model.creatorsAssetCollected} 篇`,
+        status: 'success',
+      },
+      {
+        label: 'KOS笔记矩阵发布量',
         value: `${model.kosCount} 篇`,
-        hint: '已登记发布明细',
+        hint: '10/19 集中引爆 · FS/CID/商销多线联动',
         status: 'neutral',
       },
     ];
   }, [model]);
-
-  const statusSummary = useMemo(() => {
-    return model.creatorStatusBreakdown.map((s) => `${s.status} ${s.count} 篇`).join('、');
-  }, [model.creatorStatusBreakdown]);
 
   if (section === 'overview') {
     const budgetData: ComparisonDatum[] = model.brandBudgetVal !== null && model.brandSpend !== null
@@ -82,6 +107,92 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         ]
       : [];
 
+    // Benchmark computation
+    const benchmarkMetric = selectedBenchmarkMetric;
+    const bRows = model.industryBenchmarksTable.rows;
+    const shengshiItem = bRows.find((r) => r.category === '生食/有机蛋' && r.metric === benchmarkMetric);
+    const xinxianItem = bRows.find((r) => r.category === '新鲜蛋' && r.metric === benchmarkMetric);
+    const bs = model.brandSummary;
+    let benpinNum: number | null = null;
+    if (bs) {
+      if (benchmarkMetric === 'CTR') benpinNum = parseNum(bs.ctr);
+      else if (benchmarkMetric === 'CPC') benpinNum = parseNum(bs.cpc);
+      else if (benchmarkMetric === 'CPM') benpinNum = parseNum(bs.cpm);
+      else if (benchmarkMetric === 'CPE') benpinNum = parseNum(bs.cpe);
+      else if (benchmarkMetric === 'CPI') benpinNum = parseNum(bs.cpi);
+      else if (benchmarkMetric === 'CPTI') benpinNum = parseNum(bs.cpti);
+    }
+    const benchmarkUnit = shengshiItem?.unit ? String(shengshiItem.unit) : (benchmarkMetric === 'CTR' ? '%' : '元');
+
+    // Funnel 1: Brand FS Seeding Funnel
+    const brandFunnelStages: FunnelStageDatum[] = bs
+      ? [
+          { stage: '① 品牌曝光展现', value: parseNum(bs.impressions), unit: '次', conversionLabel: '100.0%', color: CAMPAIGN_PALETTE.primary },
+          { stage: '② 笔记有效点击', value: parseNum(bs.clicks), unit: '次', conversionLabel: `CTR ${formatPercent(parseNum(bs.ctr))}`, costLabel: `CPC ${formatCurrency(parseNum(bs.cpc))}`, color: '#3b8b7e' },
+          { stage: '③ 深度受众互动', value: parseNum(bs.engagements), unit: '次', conversionLabel: `互动量 ${formatNum(parseNum(bs.engagements), 0)}`, costLabel: `CPE ${formatCurrency(parseNum(bs.cpe))}`, color: CAMPAIGN_PALETTE.purple },
+          { stage: '④ 种草I人群沉淀', value: parseNum(bs.seed_i), unit: '人', conversionLabel: '初度兴趣人群', costLabel: `CPI ${formatCurrency(parseNum(bs.cpi))}`, color: CAMPAIGN_PALETTE.gold },
+          { stage: '⑤ 种草TI深度心智', value: parseNum(bs.seed_ti), unit: '人', conversionLabel: '深度转化心智', costLabel: `CPTI ${formatCurrency(parseNum(bs.cpti))}`, color: CAMPAIGN_PALETTE.terracotta },
+        ]
+      : [];
+
+    // Funnel 2: Red Cat CID E-Commerce Funnel
+    const cidFunnelStages: FunnelStageDatum[] = [
+      { stage: '① CID全域曝光展现', value: 213846, unit: '次', conversionLabel: '100.0%', color: CAMPAIGN_PALETTE.primary },
+      { stage: '② 电商引流点击跳转', value: 19255, unit: '次', conversionLabel: 'CTR 9.00%', costLabel: 'CPC ¥1.14', color: '#3b8b7e' },
+      { stage: '③ 商品进店访客量', value: model.cidTotalUv, unit: '人次', conversionLabel: '进店率 48.8%', costLabel: `进店成本 ¥${((model.cidTotalSpend || 0) / (model.cidTotalUv || 1)).toFixed(2)}`, color: CAMPAIGN_PALETTE.purple },
+      { stage: '④ 支付成交订单量', value: model.cidTotalOrders, unit: '单', conversionLabel: '客单率 44.5%', costLabel: `订单成本 ¥${((model.cidTotalSpend || 0) / (model.cidTotalOrders || 1)).toFixed(2)}`, color: CAMPAIGN_PALETTE.gold },
+      { stage: '⑤ 最终成交GMV产出', value: model.cidTotalGmv ? Math.round(model.cidTotalGmv) : null, unit: '元', conversionLabel: `ROI ${model.cidOverallRoi?.toFixed(2) ?? '—'}倍`, color: CAMPAIGN_PALETTE.terracotta },
+    ];
+
+    // Funnel 3: Creator Selection Funnel
+    const creatorFunnelChartStages: FunnelStageDatum[] = [
+      { stage: '① 全网初选提报', value: 373, unit: '人', conversionLabel: '100.0%', subtext: '全量初选池373位博主', color: CAMPAIGN_PALETTE.primary },
+      { stage: '② 团队初审一筛通过', value: 83, unit: '人', conversionLabel: '留存 22.3%', subtext: '83人通过 / 69人待定', color: '#3b8b7e' },
+      { stage: '③ 策略把关二核通过', value: 58, unit: '人', conversionLabel: '留存 15.5%', subtext: '蛋品精致调性二核严选', color: CAMPAIGN_PALETTE.purple },
+      { stage: '④ 商务接洽确认可接', value: 55, unit: '人', conversionLabel: '留存 14.7%', subtext: '排期、报价与排竞确认', color: CAMPAIGN_PALETTE.gold },
+      { stage: '⑤ 10月最终执行定档', value: 31, unit: '人', conversionLabel: '定档 8.3%', costLabel: '含税总报价 ¥324,774', color: CAMPAIGN_PALETTE.terracotta },
+      { stage: '⑥ 实际发布并收录上线', value: 18, unit: '篇', conversionLabel: '发布率 58.1%', subtext: '已顺利上线18篇, 收集率100%', color: '#277a6f' },
+    ];
+
+    // Content tags bar chart
+    const contentTagsChartData: ChartDatum[] = model.brandContentTagsTop.slice(0, 8).map((r) => ({
+      label: String(r.contentTag || ''),
+      value: parseNum(r.spend),
+      detail: `CTR ${formatPercent(parseNum(r.ctr))} · CPC ${formatCurrency(parseNum(r.cpc))}`,
+    }));
+
+    // Keywords bar chart
+    const keywordsChartData: ChartDatum[] = model.brandKeywordsTop.slice(0, 8).map((r) => ({
+      label: String(r.keywordCategory || ''),
+      value: parseNum(r.spend),
+      detail: `CTR ${formatPercent(parseNum(r.ctr))} · CPM ${formatCurrency(parseNum(r.cpm))}`,
+    }));
+
+    // Top 12 Provinces bar chart
+    const provincesChartData: ChartDatum[] = model.brandProvincesTop12.map((r) => ({
+      label: String(r.province || ''),
+      value: parseNum(r.spend),
+      detail: `互动 ${formatNum(parseNum(r.engagements), 0)} 次 · CPE ${formatCurrency(parseNum(r.cpe))}`,
+    }));
+
+    // Gender x Age Heatmap Cells
+    const heatmapCells: MatrixHeatmapCell[] = model.genderAgeMatrix.cells.map((c) => ({
+      row: c.gender,
+      col: c.ageGroup,
+      value: c.spend,
+      displayValue: formatCurrency(c.spend, 0),
+      subtext: `互动 ${c.engagements}次 · CPE ${c.cpe ? formatCurrency(c.cpe) : '—'}`,
+    }));
+
+    // Gender Donut
+    const femaleSpend = model.brandGenderTable.rows.find((r) => r.gender === '女')?.spend;
+    const maleSpend = model.brandGenderTable.rows.find((r) => r.gender === '男')?.spend;
+    const genderDonutData: ChartDatum[] = [
+      { label: '女性受众', value: parseNum(femaleSpend), color: CAMPAIGN_PALETTE.primary },
+      { label: '男性受众', value: parseNum(maleSpend), color: CAMPAIGN_PALETTE.purple },
+    ];
+
+    // Series definitions
     const cidCompareSeries: ComboSeries[] = [
       { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
       { key: 'gmv', label: '成交GMV', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
@@ -92,19 +203,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       { key: 'spend', label: '日消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
       { key: 'gmv', label: '成交GMV', unit: '元', axis: 'left', kind: 'line', color: CAMPAIGN_PALETTE.purple },
       { key: 'roi', label: '日成交ROI', unit: '倍', axis: 'right', kind: 'point', color: CAMPAIGN_PALETTE.gold },
-    ];
-
-    const brandSeedingSeries: ComboSeries[] = [
-      { key: 'seed_i', label: '种草I', unit: '人', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'seed_ti', label: '种草TI', unit: '人', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
-      { key: 'cpi', label: 'CPI成本', unit: '元/人', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.gold },
-      { key: 'cpti', label: 'CPTI成本', unit: '元/人', axis: 'right', kind: 'point', color: CAMPAIGN_PALETTE.terracotta },
-    ];
-
-    const brandClicksPlaysSeries: ComboSeries[] = [
-      { key: 'clicks', label: '点击量', unit: '次', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'plays_5s', label: '5秒播放量', unit: '次', axis: 'left', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-      { key: 'ctr', label: '点击率', unit: '%', axis: 'right', kind: 'point', color: CAMPAIGN_PALETTE.gold },
     ];
 
     const commerceMonthlySeries: ComboSeries[] = [
@@ -124,212 +222,461 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       { key: 'totalFee', label: '含平台费报价', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.gold },
     ];
 
-    const contentDirectionSeries: ComboSeries[] = [
-      { key: 'total', label: '计划总篇数', unit: '篇', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'published', label: '已发布篇数', unit: '篇', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
-    ];
-
     return (
       <div className="ht-board" data-testid="huang-tiane-overview">
+        {/* 看板头部 */}
         <div className="ht-header">
           <div className="ht-header-left">
-            <h2 className="ht-header-title">黄天鹅 · 战役全景与经营洞察</h2>
-            <span className="ht-header-badge">多渠道核心数据</span>
+            <h2 className="ht-header-title">黄天鹅 · 战役全域经营洞察与深层数据挖掘</h2>
+            <span className="ht-header-badge">五层递进分析体系</span>
           </div>
           <div className="ht-header-meta">
             品牌与CID周期：{model.brandPeriod} · 商销周期：{model.commercePeriod}
           </div>
         </div>
 
-        <MetricStrip items={topMetricItems} />
+        {/* 分层快速导航锚点条 */}
+        <div className="ht-nav-anchors-container">
+          <nav className="ht-nav-anchors" aria-label="看板分层快速导航">
+            <a href="#ht-layer-1" className="ht-nav-anchor">① 全域经营与行业基准</a>
+            <a href="#ht-layer-2" className="ht-nav-anchor">② 三线转化漏斗与日趋势</a>
+            <a href="#ht-layer-3" className="ht-nav-anchor">③ 内容标签/搜索/人群引擎</a>
+            <a href="#ht-layer-4" className="ht-nav-anchor">④ 受众性别年龄与地域画像</a>
+            <a href="#ht-layer-5" className="ht-nav-anchor">⑤ 达人选号漏斗与KOS矩阵</a>
+          </nav>
+        </div>
 
-        <div className="ht-grid-2">
-          <ChartPanel
-            title="品牌FS预算推进与实绩对照"
-            subtitle={
-              model.brandBudgetVal !== null && model.brandSpend !== null
-                ? `预算额度 ${formatCurrency(model.brandBudgetVal)}，累计消耗 ${formatCurrency(model.brandSpend)}，执行率 ${formatPercent(model.brandBudgetProgress, 1)}`
-                : undefined
-            }
-          >
-            {budgetData.length > 0 ? (
-              <BudgetComparisonChart data={budgetData} unit="元" />
-            ) : (
-              <div className="ht-notice">暂无预算对照数据</div>
-            )}
-          </ChartPanel>
+        {/* 第一层：全域三线经营总览与蛋品行业基准对标 */}
+        <section id="ht-layer-1" className="ht-layer">
+          <div className="ht-layer-header">
+            <h3 className="ht-layer-title">第一层 · 全域三线经营总览与蛋品行业基准对标 (重)</h3>
+            <span className="ht-layer-sub">8项核心全域KPI与蛋品大盘对照</span>
+          </div>
 
-          <ChartPanel
-            title="达人执行三阶段进度"
-            subtitle={`定档 ${model.creatorsCount} 位 · 发布 ${model.creatorsPublished} 篇 · 素材收集 ${model.creatorsAssetCollected} 篇`}
-          >
-            <div className="ht-tri-stage-card">
-              <div className="ht-stage-row">
-                <div className="ht-stage-header">
-                  <span className="ht-stage-name">① 选号定档阶段</span>
-                  <span className="ht-stage-counts">{model.creatorsCount} / {model.creatorsCount} (100.0%)</span>
+          <MetricStrip items={topMetricItems} />
+
+          <div className="ht-grid-2">
+            <ChartPanel
+              title="品牌FS预算推进与实绩对照"
+              subtitle={
+                model.brandBudgetVal !== null && model.brandSpend !== null
+                  ? `预算额度 ${formatCurrency(model.brandBudgetVal)}，累计消耗 ${formatCurrency(model.brandSpend)}，执行率 ${formatPercent(model.brandBudgetProgress, 1)}`
+                  : undefined
+              }
+            >
+              {budgetData.length > 0 ? (
+                <BudgetComparisonChart data={budgetData} unit="元" />
+              ) : (
+                <div className="ht-notice">暂无预算对照数据</div>
+              )}
+              <div className="ht-notice" style={{ marginTop: 12 }}>
+                *剩余可用预算 {formatCurrency((model.brandBudgetVal || 0) - (model.brandSpend || 0))}，消耗进度 31.54%，投放节奏平稳可控。
+              </div>
+            </ChartPanel>
+
+            <ChartPanel
+              title="蛋品行业大盘基准与黄天鹅实绩对标"
+              subtitle={`对标蛋品行业基准 (生食/有机蛋 vs 新鲜蛋) · 当前指标: ${benchmarkMetric}`}
+              actions={
+                <div className="ht-benchmark-tabs">
+                  {(['CTR', 'CPC', 'CPM', 'CPE', 'CPI', 'CPTI'] as const).map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      className={`ht-benchmark-tab ${selectedBenchmarkMetric === m ? 'active' : ''}`}
+                      onClick={() => setSelectedBenchmarkMetric(m)}
+                    >
+                      {m}
+                    </button>
+                  ))}
                 </div>
-                <div className="ht-stage-track">
-                  <div className="ht-stage-fill ht-stage-fill-1" style={{ width: '100%' }} />
+              }
+            >
+              <div className="ht-benchmark-grid">
+                <div className="ht-benchmark-card">
+                  <div className="ht-benchmark-title">生食/有机蛋大盘区间</div>
+                  <div className="ht-benchmark-val">
+                    {shengshiItem ? `${shengshiItem.lower} ~ ${shengshiItem.upper} ${benchmarkUnit}` : '—'}
+                  </div>
+                  <div className="ht-benchmark-desc">行业样本中位区间</div>
+                </div>
+                <div className="ht-benchmark-card">
+                  <div className="ht-benchmark-title">新鲜蛋大盘区间</div>
+                  <div className="ht-benchmark-val">
+                    {xinxianItem ? `${xinxianItem.lower} ~ ${xinxianItem.upper} ${benchmarkUnit}` : '—'}
+                  </div>
+                  <div className="ht-benchmark-desc">大众基础蛋品均值</div>
+                </div>
+                <div className="ht-benchmark-card highlight">
+                  <div className="ht-benchmark-title">黄天鹅本品实绩</div>
+                  <div className="ht-benchmark-val">
+                    {benpinNum !== null ? `${benpinNum} ${benchmarkUnit}` : '—'}
+                  </div>
+                  <div className="ht-benchmark-desc">
+                    {benpinNum !== null && shengshiItem && benpinNum >= (parseNum(shengshiItem.lower) || 0)
+                      ? '✓ 处于生食/高端蛋优势区间'
+                      : '实绩表现受众心智稳固'}
+                  </div>
                 </div>
               </div>
-
-              <div className="ht-stage-row">
-                <div className="ht-stage-header">
-                  <span className="ht-stage-name">② 笔记正式发布</span>
-                  <span className="ht-stage-counts">{model.creatorsPublished} / {model.creatorsCount} ({formatPercent(model.creatorsPublishRate, 1)})</span>
-                </div>
-                <div className="ht-stage-track">
-                  <div className="ht-stage-fill ht-stage-fill-2" style={{ width: `${model.creatorsPublishRate || 0}%` }} />
-                </div>
+              <div className="ht-notice">
+                *蛋品行业基准来源于小红书蛋品行业大盘实盘透视表（涵盖生食蛋/有机蛋6家头部品牌大盘基准数据）。
               </div>
+            </ChartPanel>
+          </div>
+        </section>
 
-              <div className="ht-stage-row">
-                <div className="ht-stage-header">
-                  <span className="ht-stage-name">③ 授权素材回流登记</span>
-                  <span className="ht-stage-counts">{model.creatorsAssetCollected} / {model.creatorsCount} ({formatPercent(model.creatorsAssetRate, 1)})</span>
+        {/* 第二层：三大漏斗与趋势 */}
+        <section id="ht-layer-2" className="ht-layer">
+          <div className="ht-layer-header">
+            <h3 className="ht-layer-title">第二层 · 品牌种草 / 红猫CID / 闭环商销 三大漏斗与趋势 (重)</h3>
+            <span className="ht-layer-sub">全链路展现→点击→进店→转化→GMV与分日走势</span>
+          </div>
+
+          <div className="ht-grid-2">
+            <ChartPanel
+              title="品牌FS 种草人群心智沉淀全链路漏斗"
+              subtitle="展现 (403.8万) → 点击 (51.7万) → 互动 (5606次) → 种草I (2.3万人) → 种草TI (4008人)"
+            >
+              <CampaignFunnelChart stages={brandFunnelStages} />
+            </ChartPanel>
+
+            <ChartPanel
+              title="红猫CID 电商引流转化与成交全链路漏斗"
+              subtitle="展现 (21.4万) → 点击 (1.9万) → 进店 (9389人) → 订单 (4175单) → GMV (¥36.1万)"
+            >
+              <CampaignFunnelChart stages={cidFunnelStages} />
+            </ChartPanel>
+          </div>
+
+          <div className="ht-grid-2">
+            <ChartPanel
+              title="红猫CID 标准投与简单投效能对比"
+              subtitle={`标准投聚合ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'}倍 · 简单投聚合ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}倍`}
+            >
+              <CampaignComboChart
+                rows={model.cidTypeComparison}
+                series={cidCompareSeries}
+                xKey="type"
+                title="标准投与简单投指标对照"
+                height={260}
+              />
+            </ChartPanel>
+
+            <ChartPanel
+              title="红猫CID 日消耗与成交GMV走势"
+              subtitle={
+                model.cidTotalSpend !== null && model.cidTotalGmv !== null
+                  ? `累计消耗 ${formatCurrency(model.cidTotalSpend)}，成交GMV ${formatCurrency(model.cidTotalGmv)}${model.cidOverallRoi !== null ? `，综合ROI ${model.cidOverallRoi.toFixed(2)}倍` : ''}`
+                  : undefined
+              }
+            >
+              <CampaignComboChart
+                rows={model.cidTotal}
+                series={cidDailySeries}
+                xKey="date"
+                title="红猫CID日消耗与成交GMV走势"
+                height={260}
+              />
+            </ChartPanel>
+
+            <ChartPanel
+              title="闭环商销 各月消耗与GMV对照"
+              subtitle={
+                model.commerceSpend !== null && model.commerceGmv !== null
+                  ? `全周期消耗 ${formatCurrency(model.commerceSpend)}，成交GMV ${formatCurrency(model.commerceGmv)}${model.commerceRoi !== null ? `，综合ROI ${model.commerceRoi.toFixed(2)}倍` : ''}`
+                  : undefined
+              }
+            >
+              <CampaignComboChart
+                rows={model.commerceMonths as unknown as Record<string, unknown>[]}
+                series={commerceMonthlySeries}
+                xKey="monthShort"
+                title="商销各月消耗与GMV"
+                height={260}
+              />
+            </ChartPanel>
+
+            <ChartPanel
+              title="闭环商销 加购量与支付订单走势"
+              subtitle={
+                model.commerceCart !== null && model.commerceOrders !== null
+                  ? `加购累计 ${formatNum(model.commerceCart, 0)} 次，支付订单累计 ${formatNum(model.commerceOrders, 0)} 单`
+                  : undefined
+              }
+            >
+              <CampaignComboChart
+                rows={model.commerceDaily}
+                series={commerceCartOrdersSeries}
+                xKey="date"
+                title="商销加购与订单走势"
+                height={260}
+              />
+            </ChartPanel>
+          </div>
+        </section>
+
+        {/* 第三层：内容标签、搜索词类与定向人群 */}
+        <section id="ht-layer-3" className="ht-layer">
+          <div className="ht-layer-header">
+            <h3 className="ht-layer-title">第三层 · 12大内容标签、10大搜索词类与定向人群引擎 (中重)</h3>
+            <span className="ht-layer-sub">内容×人群×关键词三维引擎表现</span>
+          </div>
+
+          <div className="ht-grid-2">
+            <ChartPanel
+              title="品牌线 12大笔记内容标签投放表现"
+              subtitle="美食制作独占81.7%消耗与44万点击，CTR 13.12%表现极佳"
+            >
+              <HorizontalBarChart data={contentTagsChartData} unit="元" height={280} />
+            </ChartPanel>
+
+            <ChartPanel
+              title="品牌线 10大搜索词类投放表现"
+              subtitle="品牌词独占¥28,786消耗与9.9万点击，品类词CTR 11.23%居次"
+            >
+              <HorizontalBarChart data={keywordsChartData} unit="元" height={280} />
+            </ChartPanel>
+
+            <ChartPanel
+              title="品牌线 Top 8 定向人群包消耗与种草表现"
+              subtitle="质感美食家、家宴司膳局、溏心蛋人群构成核心种草引擎"
+            >
+              <HorizontalBarChart
+                data={model.brandAudiencesTop10.slice(0, 8).map((r) => ({
+                  label: String(r.audience || ''),
+                  value: parseNum(r.spend),
+                  detail: `种草I+TI: ${formatNum(parseNum(r.seed_total), 0)}人 · 成本 ${formatCurrency(parseNum(r.cp_total))}`,
+                }))}
+                unit="元"
+                height={280}
+              />
+            </ChartPanel>
+
+            <ChartPanel
+              title="闭环商销 Top 10 成交素材创意排行"
+              subtitle="头部商销素材GMV与转化ROI产出排行"
+            >
+              <HorizontalBarChart
+                data={model.commerceCreativesTop10.slice(0, 8).map((r) => ({
+                  label: String(r.creativeName || '').slice(0, 18),
+                  value: parseNum(r.gmv),
+                  detail: `订单 ${r.orders}单 · ROI ${r.roi ?? '—'} · 展现 ${formatNum(parseNum(r.impressions), 0)}`,
+                }))}
+                unit="元"
+                height={280}
+              />
+            </ChartPanel>
+          </div>
+        </section>
+
+        {/* 第四层：受众人口学 24 维热力矩阵与地域渗透 */}
+        <section id="ht-layer-4" className="ht-layer">
+          <div className="ht-layer-header">
+            <h3 className="ht-layer-title">第四层 · 受众人口学 24 维热力矩阵与地域渗透 (中)</h3>
+            <span className="ht-layer-sub">性别×年龄二维消耗/互动交叉矩阵与重点省份渗透</span>
+          </div>
+
+          <div className="ht-grid-2">
+            <ChartPanel
+              title="品牌线受众 性别×年龄 24维交叉热力矩阵"
+              subtitle="女性33-40岁(¥5.68万)与28-32岁(¥3.68万)为绝对黄金核心客群"
+            >
+              <MatrixHeatmapChart
+                rows={model.genderAgeMatrix.genders}
+                cols={model.genderAgeMatrix.ageGroups}
+                cells={heatmapCells}
+                unit="元"
+                rowHeaderTitle="性别 \ 年龄"
+                showRowTotals={true}
+              />
+            </ChartPanel>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <ChartPanel
+                title="品牌受众 性别基本盘分布"
+                subtitle="女性受众消耗占比 92.4%，男性占比 7.6%"
+              >
+                <DonutChart data={genderDonutData} unit="元" centerLabel="性别分布" />
+              </ChartPanel>
+
+              <ChartPanel
+                title="Top 12 重点渗透省份与地区表现"
+                subtitle="广东(¥2.79万)、江苏(¥2.42万)、浙江(¥1.81万)领衔华东华南高潜市场"
+              >
+                <HorizontalBarChart data={provincesChartData.slice(0, 6)} unit="元" height={200} />
+              </ChartPanel>
+            </div>
+          </div>
+        </section>
+
+        {/* 第五层：达人选号淘汰漏斗、菜品方向与 11 月储备 */}
+        <section id="ht-layer-5" className="ht-layer">
+          <div className="ht-layer-header">
+            <h3 className="ht-layer-title">第五层 · 达人选号淘汰漏斗、菜品方向与 11 月储备池 (轻)</h3>
+            <span className="ht-layer-sub">10月选号漏斗与11月储备池196位规划</span>
+          </div>
+
+          <div className="ht-grid-2">
+            <ChartPanel
+              title="10月达人选号全流程淘汰漏斗"
+              subtitle="提报初选 (373人) → 一筛 (83人) → 二核 (58人) → 可接 (55人) → 定档 (31人) → 发布 (18篇)"
+            >
+              <CampaignFunnelChart stages={creatorFunnelChartStages} />
+            </ChartPanel>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <ChartPanel
+                title="达人层级分布与含平台费报价"
+                subtitle={`共 ${model.creatorsCount} 位达人，涵盖 ${model.creatorTierBreakdown.length} 个账号量级`}
+              >
+                <CampaignComboChart
+                  rows={model.creatorTierBreakdown as unknown as Record<string, unknown>[]}
+                  series={creatorTierSeries}
+                  xKey="tier"
+                  title="达人层级人数与费用"
+                  height={200}
+                />
+              </ChartPanel>
+
+              <ChartPanel
+                title="11月储备池与舆情策略规划预览"
+                subtitle="已储备196位达人 · 首批定档锁定18位 · 规划总预算18万元"
+              >
+                <div className="ht-reserve-card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--ht-primary)' }}>
+                      11月双11爆发期达人储备规划
+                    </span>
+                    <span style={{ fontSize: 12, color: 'var(--ht-gold)', fontWeight: 600 }}>
+                      总规划预算: ¥180,000
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--ht-text-muted)', lineHeight: 1.6 }}>
+                    针对10月账号评论区溏心蛋科普疑虑，11月重点布局：<strong>① 科普实测解惑</strong> (Alex实话实测/我是不白吃, 维护品牌形象)；<strong>② 邪修溏心蛋</strong> (微波炉/空气炸锅邪修教程, 制造破圈话题)；<strong>③ 双11节点晒单收割</strong>。
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+                    <span className="ht-badge ht-badge-active">话题引爆 ¥5万</span>
+                    <span className="ht-badge ht-badge-active">实验测评 ¥3.5万</span>
+                    <span className="ht-badge ht-badge-active">美食分享 ¥3万</span>
+                    <span className="ht-badge ht-badge-active">溏心蛋教程 ¥2.8万</span>
+                    <span className="ht-badge ht-badge-active">场景代入 ¥2.1万</span>
+                    <span className="ht-badge ht-badge-active">晒单节促 ¥1.6万</span>
+                  </div>
                 </div>
-                <div className="ht-stage-track">
-                  <div className="ht-stage-fill ht-stage-fill-3" style={{ width: `${model.creatorsAssetRate || 0}%` }} />
-                </div>
+              </ChartPanel>
+            </div>
+          </div>
+
+          {/* 底部折叠明细表收纳 */}
+          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+            <button
+              type="button"
+              className="ht-btn ht-btn-secondary"
+              onClick={() => setCreatorTableOpen((prev) => !prev)}
+            >
+              {creatorTableOpen ? '收起 31位达人定档执行明细表 ▲' : '查看 31位达人定档执行明细表 ▼'}
+            </button>
+            <button
+              type="button"
+              className="ht-btn ht-btn-secondary"
+              onClick={() => setKosTableOpen((prev) => !prev)}
+            >
+              {kosTableOpen ? '收起 65篇KOS笔记多线联动表 ▲' : '查看 65篇KOS笔记多线联动表 ▼'}
+            </button>
+          </div>
+
+          {creatorTableOpen && (
+            <div className="ht-table-card" style={{ marginTop: 12 }}>
+              <div className="ht-table-title">31位定档达人执行明细 (按计划顺序)</div>
+              <div className="ht-table-wrapper">
+                <table className="ht-table">
+                  <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>达人昵称</th>
+                      <th>量级</th>
+                      <th>内容类型</th>
+                      <th>菜品方向</th>
+                      <th>裸价</th>
+                      <th>含服务费报价</th>
+                      <th>预计发布</th>
+                      <th>执行状态</th>
+                      <th>实际发布</th>
+                      <th>素材收集</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {model.creators.map((c) => (
+                      <tr key={c.index ?? c.kol_name}>
+                        <td>{c.index}</td>
+                        <td style={{ fontWeight: 500 }}>{c.kol_name}</td>
+                        <td><span className="ht-badge">{c.account_tier}</span></td>
+                        <td>{c.content_type || '—'}</td>
+                        <td>{c.dish_type || c.content_direction || '—'}</td>
+                        <td>{formatCurrency(c.price_raw)}</td>
+                        <td>{formatCurrency(c.price_with_fee)}</td>
+                        <td>{c.scheduled_date || '—'}</td>
+                        <td>
+                          <span className={`ht-badge ${c.execution_status === '已发布' ? 'ht-badge-active' : ''}`}>
+                            {c.execution_status || '执行中'}
+                          </span>
+                        </td>
+                        <td>{c.actual_publish_date || '—'}</td>
+                        <td>
+                          <span className={`ht-badge ${c.asset_collected ? 'ht-badge-collected' : 'ht-badge-uncollected'}`}>
+                            {c.asset_collected ? '已收集' : '待收集'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
-            {statusSummary && (
-              <div className="ht-notice" style={{ marginTop: 10 }}>
-                *{statusSummary}
+          )}
+
+          {kosTableOpen && (
+            <div className="ht-table-card" style={{ marginTop: 12 }}>
+              <div className="ht-table-title">65篇KOS多线联动笔记明细 (10/19集中引爆)</div>
+              <div className="ht-table-wrapper">
+                <table className="ht-table">
+                  <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>账号名称</th>
+                      <th>账号量级</th>
+                      <th>内容类型</th>
+                      <th>发布日期</th>
+                      <th>品牌FS联动</th>
+                      <th>红猫CID联动</th>
+                      <th>商销联动</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {model.kosNotes.map((k, idx) => (
+                      <tr key={k.note_id || idx}>
+                        <td>{idx + 1}</td>
+                        <td style={{ fontWeight: 500 }}>{k.account_name}</td>
+                        <td><span className="ht-badge">{k.account_tier}</span></td>
+                        <td>{k.content_type}</td>
+                        <td>{k.publish_date || '2026-10-19'}</td>
+                        <td><span className={`ht-badge ${k.fs_active ? 'ht-badge-active' : ''}`}>{k.fs_active ? '已复用' : '未复用'}</span></td>
+                        <td><span className={`ht-badge ${k.cid_active ? 'ht-badge-active' : ''}`}>{k.cid_active ? '已复用' : '未复用'}</span></td>
+                        <td><span className={`ht-badge ${k.commerce_active ? 'ht-badge-active' : ''}`}>{k.commerce_active ? '已复用' : '未复用'}</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            )}
-          </ChartPanel>
-
-          <ChartPanel
-            title="红猫CID 标准投与简单投效能对比"
-            subtitle={`标准投聚合ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'}倍 · 简单投聚合ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}倍`}
-          >
-            <CampaignComboChart
-              rows={model.cidTypeComparison}
-              series={cidCompareSeries}
-              xKey="type"
-              title="标准投与简单投指标对照"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="红猫CID 日消耗与成交GMV走势"
-            subtitle={
-              model.cidTotalSpend !== null && model.cidTotalGmv !== null
-                ? `累计消耗 ${formatCurrency(model.cidTotalSpend)}，成交GMV ${formatCurrency(model.cidTotalGmv)}${model.cidOverallRoi !== null ? `，综合ROI ${model.cidOverallRoi.toFixed(2)}倍` : ''}`
-                : undefined
-            }
-          >
-            <CampaignComboChart
-              rows={model.cidTotal}
-              series={cidDailySeries}
-              xKey="date"
-              title="红猫CID日消耗与成交GMV走势"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="品牌FS 种草人群资产沉淀与成本"
-            subtitle={
-              model.brandSummary
-                ? `种草I ${formatNum(parseNum(model.brandSummary.seed_i), 0)} 人 (CPI ${formatCurrency(parseNum(model.brandSummary.cpi))}) · 种草TI ${formatNum(parseNum(model.brandSummary.seed_ti), 0)} 人 (CPTI ${formatCurrency(parseNum(model.brandSummary.cpti))})`
-                : undefined
-            }
-          >
-            <CampaignComboChart
-              rows={model.brandDaily}
-              series={brandSeedingSeries}
-              xKey="date"
-              title="品牌FS种草I与种草TI走势"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="品牌FS 点击量与5秒播放量走势"
-            subtitle={
-              model.brandSummary
-                ? `点击 ${formatNum(parseNum(model.brandSummary.clicks), 0)} 次 (CTR ${formatPercent(parseNum(model.brandSummary.ctr))} · CPC ${formatCurrency(parseNum(model.brandSummary.cpc))}) · 5秒播放 ${formatNum(parseNum(model.brandSummary.plays_5s), 0)} 次 (播放率 ${formatPercent(parseNum(model.brandSummary.ctr_5s))})`
-                : undefined
-            }
-          >
-            <CampaignComboChart
-              rows={model.brandDaily}
-              series={brandClicksPlaysSeries}
-              xKey="date"
-              title="品牌FS点击与5秒播放走势"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="闭环商销 各月消耗与GMV对照"
-            subtitle={
-              model.commerceSpend !== null && model.commerceGmv !== null
-                ? `全周期消耗 ${formatCurrency(model.commerceSpend)}，成交GMV ${formatCurrency(model.commerceGmv)}${model.commerceRoi !== null ? `，综合ROI ${model.commerceRoi.toFixed(2)}倍` : ''}`
-                : undefined
-            }
-          >
-            <CampaignComboChart
-              rows={model.commerceMonths as unknown as Record<string, unknown>[]}
-              series={commerceMonthlySeries}
-              xKey="monthShort"
-              title="商销各月消耗与GMV"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="闭环商销 加购量与支付订单走势"
-            subtitle={
-              model.commerceCart !== null && model.commerceOrders !== null
-                ? `加购累计 ${formatNum(model.commerceCart, 0)} 次，支付订单累计 ${formatNum(model.commerceOrders, 0)} 单`
-                : undefined
-            }
-          >
-            <CampaignComboChart
-              rows={model.commerceDaily}
-              series={commerceCartOrdersSeries}
-              xKey="date"
-              title="商销加购与订单走势"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="达人层级分布与含平台费报价"
-            subtitle={`共 ${model.creatorsCount} 位达人，涵盖 ${model.creatorTierBreakdown.length} 个账号量级`}
-          >
-            <CampaignComboChart
-              rows={model.creatorTierBreakdown as unknown as Record<string, unknown>[]}
-              series={creatorTierSeries}
-              xKey="tier"
-              title="达人层级人数与费用"
-              height={260}
-            />
-          </ChartPanel>
-
-          <ChartPanel
-            title="内容方向选题与发布进展"
-            subtitle={`已登记 ${model.creatorDirectionBreakdown.length} 个内容方向，已发布 ${model.creatorsPublished} 篇`}
-          >
-            <CampaignComboChart
-              rows={model.creatorDirectionBreakdown as unknown as Record<string, unknown>[]}
-              series={contentDirectionSeries}
-              xKey="direction"
-              title="内容方向计划与发布"
-              height={260}
-            />
-          </ChartPanel>
-        </div>
+            </div>
+          )}
+        </section>
       </div>
     );
   }
 
-  if (section === 'ads') {
+      if (section === 'ads') {
     const brandAdSeries: ComboSeries[] = [
       { key: 'spend', label: '日消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
       { key: 'cpm', label: 'CPM成本', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.purple },

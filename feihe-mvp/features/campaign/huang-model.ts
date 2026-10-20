@@ -141,7 +141,7 @@ export interface HuangTianeParsedModel {
   cidTotal: Record<string, unknown>[];
   commerceSummary: Record<string, unknown> | null;
   commerceDaily: Record<string, unknown>[];
-  
+
   cidTotalSpend: number | null;
   cidTotalGmv: number | null;
   cidOverallRoi: number | null;
@@ -157,12 +157,12 @@ export interface HuangTianeParsedModel {
   cidSimpleRoi: number | null;
   cidSimpleOrders: number | null;
   cidSimpleUv: number | null;
-  
+
   brandSpend: number | null;
   brandPeriod: string;
   brandBudgetVal: number | null;
   brandBudgetProgress: number | null;
-  
+
   creatorsCount: number;
   creatorsPublished: number;
   creatorsPublishRate: number | null;
@@ -170,19 +170,19 @@ export interface HuangTianeParsedModel {
   creatorsAssetRate: number;
   creatorsTotalFeeWithPlatform: number | null;
   creatorsTotalFeeRaw: number | null;
-  
+
   creatorTierBreakdown: HuangCreatorTierStat[];
   creatorDirectionBreakdown: HuangCreatorDirectionStat[];
   creatorStatusBreakdown: { status: string; count: number }[];
-  
+
   kosCount: number;
   kosWithDate: number;
   kosDateBreakdown: { date: string; count: number }[];
   publishDateComparison: HuangPublishDateComparison[];
-  
+
   cidPeriod: string;
   cidTypeComparison: Record<string, unknown>[];
-  
+
   commerceSpend: number | null;
   commerceGmv: number | null;
   commerceRoi: number | null;
@@ -205,6 +205,25 @@ export interface HuangTianeParsedModel {
   commerceCreativesTable: HuangTableWithMeta;
   commerceAudiencesTable: HuangTableWithMeta;
   industryBenchmarksTable: HuangTableWithMeta;
+  brandContentTagsTable: HuangTableWithMeta;
+  brandGenderTable: HuangTableWithMeta;
+  brandGenderAgeTable: HuangTableWithMeta;
+  creatorSelectionFunnelTable: HuangTableWithMeta;
+  cidPlacementBreakdownTable: HuangTableWithMeta;
+  contentAudienceMatrixTable: HuangTableWithMeta;
+
+  brandContentTagsTop: Record<string, unknown>[];
+  brandProvincesTop12: Record<string, unknown>[];
+  brandKeywordsTop: Record<string, unknown>[];
+  brandAudiencesTop10: Record<string, unknown>[];
+  commerceCreativesTop10: Record<string, unknown>[];
+  creatorFunnelStages: { name: string; value: number; rate: number | null; note?: string }[];
+  genderAgeMatrix: {
+    genders: string[];
+    ageGroups: string[];
+    cells: { gender: string; ageGroup: string; spend: number; engagements: number; cpe: number | null }[];
+  };
+  cidPlacementsComparison: Record<string, unknown>[];
 
   actions: CampaignActions | null;
 }
@@ -513,6 +532,49 @@ export function extractHuangTianeData(dashboard: CampaignDashboard): HuangTianeP
   const commerceCreativesTable = getTableMeta('huang-commerce-creatives');
   const commerceAudiencesTable = getTableMeta('huang-commerce-audiences');
   const industryBenchmarksTable = getTableMeta('huang-industry-benchmarks');
+  const brandContentTagsTable = getTableMeta('huang-brand-content-tags');
+  const brandGenderTable = getTableMeta('huang-brand-gender');
+  const brandGenderAgeTable = getTableMeta('huang-brand-gender-age');
+  const creatorSelectionFunnelTable = getTableMeta('huang-creator-selection-funnel');
+  const cidPlacementBreakdownTable = getTableMeta('huang-cid-placement-breakdown');
+  const contentAudienceMatrixTable = getTableMeta('huang-content-audience-matrix');
+
+  const brandContentTagsTop = [...brandContentTagsTable.rows].sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0));
+  const brandProvincesTop12 = [...brandProvincesTable.rows].sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0)).slice(0, 12);
+  const brandKeywordsTop = [...brandKeywordsTable.rows].sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0));
+  const brandAudiencesTop10 = [...brandAudiencesTable.rows].sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0)).slice(0, 10);
+  const commerceCreativesTop10 = [...commerceCreativesTable.rows].sort((a, b) => (parseNum(b.gmv) || 0) - (parseNum(a.gmv) || 0)).slice(0, 10);
+
+  const creatorFunnelStages = [
+    { name: '① 初选提报', value: 373, rate: 100.0, note: '全网初选373位适格博主' },
+    { name: '② 一筛通过', value: 83, rate: 22.3, note: '团队初审83通过/69待定' },
+    { name: '③ 二核通过', value: 58, rate: 15.5, note: '调性爆款二核通过' },
+    { name: '④ 商务可接', value: 55, rate: 14.7, note: '排期、报价与排竞接洽' },
+    { name: '⑤ 定档执行', value: 31, rate: 8.3, note: '含税总报价¥324,774' },
+    { name: '⑥ 发布上线', value: 18, rate: 58.1, note: '18篇顺利发布，收集率100%' },
+  ];
+
+  const genderSet = new Set<string>();
+  const ageSet = new Set<string>();
+  brandGenderAgeTable.rows.forEach((r) => {
+    if (r.gender) genderSet.add(String(r.gender));
+    if (r.ageGroup) ageSet.add(String(r.ageGroup));
+  });
+  const genders = ['女', '男'].filter((g) => genderSet.has(g));
+  const ageGroups = Array.from(ageSet).sort((a, b) => {
+    const numA = parseInt(a.replace(/\D/g, '') || '0', 10);
+    const numB = parseInt(b.replace(/\D/g, '') || '0', 10);
+    return numA - numB;
+  });
+  const cells = brandGenderAgeTable.rows.map((r) => ({
+    gender: String(r.gender || ''),
+    ageGroup: String(r.ageGroup || ''),
+    spend: parseNum(r.spend) || 0,
+    engagements: parseNum(r.engagements) || 0,
+    cpe: parseNum(r.cpe),
+  }));
+  const genderAgeMatrix = { genders, ageGroups, cells };
+  const cidPlacementsComparison = cidPlacementBreakdownTable.rows;
 
   return {
     brandSummary: brandSummaryRow,
@@ -525,7 +587,7 @@ export function extractHuangTianeData(dashboard: CampaignDashboard): HuangTianeP
     cidTotal: cidTotalRows,
     commerceSummary: commerceSummaryRow,
     commerceDaily: commerceDailyRows,
-    
+
     cidTotalSpend,
     cidTotalGmv,
     cidOverallRoi,
@@ -582,6 +644,21 @@ export function extractHuangTianeData(dashboard: CampaignDashboard): HuangTianeP
     commerceCreativesTable,
     commerceAudiencesTable,
     industryBenchmarksTable,
+    brandContentTagsTable,
+    brandGenderTable,
+    brandGenderAgeTable,
+    creatorSelectionFunnelTable,
+    cidPlacementBreakdownTable,
+    contentAudienceMatrixTable,
+
+    brandContentTagsTop,
+    brandProvincesTop12,
+    brandKeywordsTop,
+    brandAudiencesTop10,
+    commerceCreativesTop10,
+    creatorFunnelStages,
+    genderAgeMatrix,
+    cidPlacementsComparison,
 
     actions: dashboard.actions || null,
   };
