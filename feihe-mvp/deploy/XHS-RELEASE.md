@@ -34,6 +34,8 @@ The worker runs on startup and each Shanghai date change. Disabling daily sync p
 
 Charts show search samples, not full-industry market share or whole-platform daily additions. Brand attribution prefers the platform's brand field, with configured title mentions as a fallback. Unidentified brands remain separate. Returned interaction components are summed without filling missing comments/collections with zero. Configured competitor names only help attribute returned notes; they do not trigger additional unbounded searches.
 
+Exact platform aliases are canonicalized: project SPU labels such as `凯乐石FUGA` map to the project's brand; `美菱电商` maps to `美菱`, and `稳健医疗` to `稳健`. No general prefix matching is used. After changing this mapping, `node scripts/rebuild-industry-snapshot.mjs --project <id>` previews a rebuild from existing raw records; `--apply` preserves the original sample count, interaction totals, and collection provenance without another upstream request.
+
 ## Verification
 
 `npm run typecheck`, `npm run build`, `node scripts/test-project-edit-isolated.mjs`, `node scripts/test-project-logo-persistence.mjs`, `node --test scripts/test-feishu-login.mjs`, `node --test tests/test-industry-monitor.mjs`, `node scripts/test-industry-provider.mjs`, `node scripts/test-runtime-env-safe.mjs`.

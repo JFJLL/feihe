@@ -13,6 +13,9 @@ vm.runInNewContext(`(function(module,exports,require){${code}\n})`, { URL })(mod
   throw Error('Unexpected module in isolated provider test');
 });
 assert.equal(brandMod.exports.canonicalIndustryBrand('凯乐石FUGA', '凯乐石', '凯乐石fuga'), '凯乐石');
+assert.equal(brandMod.exports.canonicalIndustryBrand('美菱电商', '美菱', '美菱冰箱'), '美菱');
+assert.equal(brandMod.exports.canonicalIndustryBrand('稳健医疗', '稳健', '稳健玉米酒精湿巾'), '稳健');
+assert.equal(brandMod.exports.canonicalIndustryBrand('美菱电商', '海尔', '海尔冰箱'), '美菱电商');
 assert.equal(brandMod.exports.canonicalIndustryBrand('凯乐石对比其他品牌', '凯乐石', '凯乐石fuga'), '凯乐石对比其他品牌');
 const { parseIndustryNote, fetchIndustryData } = mod.exports;
 const options = { projectId: 'sample', spu: 'test product', brand: 'Ours', keywords: ['ignored'], competitorBrands: ['Other'] };
