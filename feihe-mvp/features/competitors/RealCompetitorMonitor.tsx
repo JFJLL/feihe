@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import type { Note } from '../../lib/types/project';
 import { useNoteDetail } from '../../lib/hooks/useNoteDetail';
 import type { CompetitorAggregatedData, CompetitorConfig } from '../../lib/competitors/types';
@@ -546,10 +547,11 @@ export function RealCompetitorMonitor({
           <div className="comp-filter-bar" style={{ padding: '0.35rem 0.5rem', display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <div className="comp-filter-item">
               <span>归属品牌:</span>
-              <select
+              <StyledSelect
                 className="comp-filter-select"
                 value={brandFilter}
                 onChange={e => { setBrandFilter(e.target.value); setPage(1); }}
+                aria-label="归属品牌筛选"
               >
                 <option value="">全部品牌</option>
                 {(data?.brandShares || []).map(b => (
@@ -557,31 +559,33 @@ export function RealCompetitorMonitor({
                     {b.brand === 'unknown' ? '待识别品牌' : b.brand} ({b.noteCount}篇)
                   </option>
                 ))}
-              </select>
+              </StyledSelect>
             </div>
             <div className="comp-filter-item">
               <span>关键词:</span>
-              <select
+              <StyledSelect
                 className="comp-filter-select"
                 value={keywordFilter}
                 onChange={e => { setKeywordFilter(e.target.value); setPage(1); }}
+                aria-label="关键词筛选"
               >
                 <option value="">全部</option>
                 {(config?.keywords || []).map(k => <option key={k} value={k}>{k}</option>)}
-              </select>
+              </StyledSelect>
             </div>
             <div className="comp-filter-item">
               <span>内容性质:</span>
-              <select
+              <StyledSelect
                 className="comp-filter-select"
                 value={natureFilter}
                 onChange={e => { setNatureFilter(e.target.value); setPage(1); }}
+                aria-label="内容性质筛选"
               >
                 <option value="">全部</option>
                 <option value="commercial">商业合作</option>
                 <option value="natural">真实自费</option>
                 <option value="unknown">特征待补全</option>
-              </select>
+              </StyledSelect>
             </div>
             {brandFilter && (
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '4px' }}>

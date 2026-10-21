@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from '../../components/ui/AppLink';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import type { KeyComment } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -46,12 +47,12 @@ export function RiskTriage({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <select value={action} onChange={(e) => setAction(e.target.value)}>
+        <StyledSelect value={action} onChange={(e) => setAction(e.target.value)} aria-label="处置动作筛选">
           <option value="">全部动作</option>
           <option>需达人回复</option>
           <option>需删除</option>
           <option>保留观察</option>
-        </select>
+        </StyledSelect>
         <span>{rows.length} 条结果</span>
       </div>
       <div className="comment-list">

@@ -9,6 +9,7 @@ export type Project = {
   description?: string;
   status: string;
   color: string;
+  logoUrl?: string;
   startAt?: string;
   endAt?: string;
   updatedAt: string;

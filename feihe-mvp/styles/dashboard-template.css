@@ -379,6 +379,21 @@ details.bd-aspect-details summary:hover {
   gap: 12px;
 }
 
+/* Keep paired business panels aligned without fixing their content height. */
+.dashboard-template .bd-two-col,
+.business-daily .bd-two-col {
+  align-items: stretch;
+}
+.business-daily .bd-two-col > .bd-panel {
+  align-self: stretch;
+}
+
+@media (min-width: 1101px) {
+  .bd-kpi-grid-rich:has(> :nth-child(5):last-child) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .bd-kpi-grid-rich:has(> :nth-child(6):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bd-kpi-grid-rich:has(> :nth-child(3):last-child) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 .bd-kpi-card-rich {
   background: #ffffff !important;
   border: 1px solid #e4e7e2 !important;
@@ -758,7 +773,8 @@ details.bd-aspect-details summary:hover {
 }
 
 .app-shell .sidebar .project-main-nav a.active .nav-num {
-  color: #2c7168 !important;
+  color: #235b54 !important;
+  background: #dceee9;
 }
 
 .app-shell .sidebar .back-platform:hover {

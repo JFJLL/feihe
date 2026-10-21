@@ -271,7 +271,30 @@
   padding: 14px 16px;
   min-width: 0;
   position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
 }
+
+.ca-panel-body > * { min-width: 0; max-width: 100%; }
+.ca-panel-body > .ca-empty { flex: 1; }
+.ca-panel-header { flex-wrap: wrap; }
+.ca-panel-actions { max-width: 100%; flex-wrap: wrap; }
+.ca-panel-heading { flex: 1 1 220px; }
+
+.ca-funnel-list { display: flex; flex-direction: column; gap: 10px; }
+.ca-funnel-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: 8px 12px; align-items: center; }
+.ca-funnel-row > :first-child { grid-column: 1 / -1; }
+.ca-funnel-row > * { min-width: 0; overflow-wrap: anywhere; }
+.ca-scale-note { font-size: 11px; color: var(--ca-palette-muted); line-height: 1.5; }
+
+.ca-stacked-chart { display: flex; flex-direction: column; gap: 18px; flex: 1; }
+.ca-stacked-rows { display: flex; flex-direction: column; justify-content: space-evenly; gap: 24px; flex: 1; }
+.ca-stacked-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 12px; align-items: center; font-size: 12px; }
+.ca-stacked-track { grid-column: 1 / -1; grid-row: 2; }
+.ca-matrix-wrap td { white-space: normal; }
 
 /* ==========================================================================
    5. Tabs Navigation
@@ -703,3 +726,13 @@
     grid-template-columns: 1fr;
   }
 }
+.ca-budget-chart { display: flex; flex-direction: column; gap: 16px; flex: 1; min-width: 0; }
+.ca-budget-rows { display: flex; flex-direction: column; justify-content: space-evenly; gap: 24px; flex: 1; }
+.ca-budget-row-heading, .ca-budget-row-detail { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; }
+.ca-budget-row-heading { font-size: 13px; align-items: baseline; }
+.ca-budget-row-heading strong { overflow-wrap: anywhere; }
+.ca-budget-row-detail { font-size: 12px; color: var(--ca-palette-muted, #64748b); }
+.ca-budget-track { position: relative; height: 16px; margin: 10px 0; background: #f7f8fa; border-radius: 4px; }
+.ca-budget-target-fill { position: absolute; inset: 0 auto 0 0; background: #e8edf1; border-radius: 4px; }
+.ca-budget-actual { position: absolute; left: 0; top: 3px; height: 10px; border-radius: 3px; }
+.ca-budget-target-mark { position: absolute; top: -3px; height: 22px; border-left: 2px dashed #475569; }

@@ -4,6 +4,40 @@
 
 .campaign-workspace-root {
   width: 100%;
+  min-width: 0;
+}
+
+/* Flexible rows fill the available width even when the KPI count is odd. */
+.campaign-workspace-root .ca-metric-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.campaign-workspace-root .ca-metric-strip > .ca-metric-item {
+  flex: 1 1 calc((100% - (var(--metric-columns, 4) - 1) * 12px) / var(--metric-columns, 4));
+  box-sizing: border-box;
+}
+.campaign-workspace-root .ca-metric-label,
+.campaign-workspace-root .ca-metric-note {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.campaign-workspace-root .ca-metric-value-row { flex-wrap: wrap; }
+.campaign-workspace-root .ca-metric-value { font-size: clamp(19px, 1.7vw, 26px); }
+.campaign-workspace-root :is(.ca-grid, .kri-grid-2, .mri-grid, .ht-grid-2, .wipes-rich-grid-2, .ca-diagnostics-grid) {
+  align-items: stretch;
+}
+.campaign-workspace-root .ca-diag-panel > .ca-panel { flex: 1; }
+.campaign-workspace-root .ca-panel.bd-panel { align-self: stretch; }
+
+@media (max-width: 1100px) {
+  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: calc((100% - 24px) / 3); }
+}
+@media (max-width: 640px) {
+  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: calc((100% - 12px) / 2); }
+}
+@media (max-width: 360px) {
+  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: 100%; }
 }
 
 .ca-subnav-reload-btn {

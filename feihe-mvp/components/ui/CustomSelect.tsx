@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect, useId, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useId, useMemo, Fragment } from 'react';
+import './custom-select.css';
 
 export type SelectOption = {
   value: string;
@@ -8,20 +9,12 @@ export type SelectOption = {
   color?: string;
   badge?: string;
   disabled?: boolean;
+  group?: string;
 };
 
-export function CustomSelect({
-  value,
-  onChange,
-  options,
-  placeholder = '请选择',
-  ariaLabel,
-  disabled = false,
-  defaultOpen = false,
-  className = '',
-  style,
-}: {
-  value: string;
+export interface CustomSelectProps {
+  value?: string | number;
+  defaultValue?: string | number;
   onChange: (val: string) => void;
   options: (string | SelectOption)[];
   placeholder?: string;
@@ -30,24 +23,67 @@ export function CustomSelect({
   defaultOpen?: boolean;
   className?: string;
   style?: React.CSSProperties;
-}) {
+  name?: string;
+  id?: string;
+  required?: boolean;
+  align?: 'left' | 'right';
+}
+
+export function CustomSelect({
+  value,
+  defaultValue,
+  onChange,
+  options,
+  placeholder = '请选择',
+  ariaLabel,
+  disabled = false,
+  defaultOpen = false,
+  className = '',
+  style,
+  name,
+  id,
+  required = false,
+  align,
+}: CustomSelectProps) {
   const [open, setOpen] = useState(defaultOpen);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const baseId = useId();
-  const listboxId = `custom-select-listbox-${baseId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const rawId = id || baseId.replace(/[^a-zA-Z0-9_-]/g, '');
+  const listboxId = `custom-select-listbox-${rawId}`;
+  const triggerId = id || `${listboxId}-trigger`;
+
+  const stringValue = value !== undefined && value !== null ? String(value) : '';
+  const initialDefault = defaultValue !== undefined && defaultValue !== null ? String(defaultValue) : '';
 
   const normalizedOptions: SelectOption[] = useMemo(() => {
     return options.map((opt) =>
-      typeof opt === 'string' ? { value: opt, label: opt } : opt
+      typeof opt === 'string'
+        ? { value: opt, label: opt }
+        : { ...opt, value: String(opt.value) }
     );
   }, [options]);
 
-  const selectedIndex = normalizedOptions.findIndex((o) => o.value === value);
+  const selectedIndex = normalizedOptions.findIndex((o) => o.value === stringValue);
   const selectedOption = selectedIndex >= 0 ? normalizedOptions[selectedIndex] : undefined;
   const [internalActiveIndex, setInternalActiveIndex] = useState<number>(-1);
   const [openUpward, setOpenUpward] = useState(false);
+  const [alignRight, setAlignRight] = useState(align === 'right');
+
+  useEffect(() => {
+    const input = hiddenInputRef.current;
+    if (!input || !input.form) return;
+    const form = input.form;
+    const handleReset = () => {
+      setTimeout(() => {
+        onChange(initialDefault);
+      }, 0);
+    };
+    form.addEventListener('reset', handleReset);
+    return () => form.removeEventListener('reset', handleReset);
+  }, [initialDefault, onChange]);
 
   const isActualOpen = open && !disabled;
   const activeIndex =
@@ -72,22 +108,41 @@ export function CustomSelect({
 
   useEffect(() => {
     if (isActualOpen && listRef.current && activeIndex >= 0) {
-      const activeEl = listRef.current.children[activeIndex] as HTMLElement | undefined;
+      const activeEl = listRef.current.querySelector(`#${listboxId}-opt-${activeIndex}`) as HTMLElement | null;
       activeEl?.scrollIntoView({ block: 'nearest' });
     }
-  }, [isActualOpen, activeIndex]);
+  }, [isActualOpen, activeIndex, listboxId]);
 
   const checkUpward = () => {
     if (triggerRef.current && typeof window !== 'undefined') {
       const rect = triggerRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      setOpenUpward(spaceBelow < 250 && rect.top > 250);
+      const spaceBelowViewport = window.innerHeight - rect.bottom;
+      let spaceBelowParent = spaceBelowViewport;
+      let parent = triggerRef.current.parentElement;
+      while (parent && parent !== document.body) {
+        const computed = window.getComputedStyle(parent);
+        if (/(auto|scroll|hidden)/.test(computed.overflowY + computed.overflow)) {
+          const parentRect = parent.getBoundingClientRect();
+          spaceBelowParent = Math.min(spaceBelowParent, parentRect.bottom - rect.bottom);
+          break;
+        }
+        parent = parent.parentElement;
+      }
+      const minSpace = 220;
+      setOpenUpward((spaceBelowParent < minSpace || spaceBelowViewport < minSpace) && rect.top > minSpace);
+
+      const spaceRight = window.innerWidth - rect.left;
+      if (align === 'right' || spaceRight < 240) {
+        setAlignRight(true);
+      } else {
+        setAlignRight(false);
+      }
     }
   };
 
   const selectOption = (opt: SelectOption) => {
     if (disabled || opt.disabled) return;
-    if (opt.value !== value) {
+    if (opt.value !== stringValue) {
       onChange(opt.value);
     }
     setOpen(false);
@@ -106,11 +161,15 @@ export function CustomSelect({
         setInternalActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
       } else {
         const delta = e.key === 'ArrowDown' ? 1 : -1;
-        setInternalActiveIndex(() => {
-          let next = activeIndex + delta;
-          if (next < 0) next = normalizedOptions.length - 1;
-          if (next >= normalizedOptions.length) next = 0;
-          return next;
+        setInternalActiveIndex((curr) => {
+          const base = curr >= 0 ? curr : (selectedIndex >= 0 ? selectedIndex : 0);
+          for (let step = 1; step <= normalizedOptions.length; step++) {
+            const target = (base + delta * step + normalizedOptions.length) % normalizedOptions.length;
+            if (!normalizedOptions[target]?.disabled) {
+              return target;
+            }
+          }
+          return base;
         });
       }
       return;
@@ -131,19 +190,28 @@ export function CustomSelect({
 
     if (e.key === 'Home' && isActualOpen) {
       e.preventDefault();
-      setInternalActiveIndex(0);
+      const firstIdx = normalizedOptions.findIndex((o) => !o.disabled);
+      if (firstIdx >= 0) setInternalActiveIndex(firstIdx);
       return;
     }
 
     if (e.key === 'End' && isActualOpen) {
       e.preventDefault();
-      setInternalActiveIndex(normalizedOptions.length - 1);
+      let lastIdx = -1;
+      for (let i = normalizedOptions.length - 1; i >= 0; i--) {
+        if (!normalizedOptions[i].disabled) {
+          lastIdx = i;
+          break;
+        }
+      }
+      if (lastIdx >= 0) setInternalActiveIndex(lastIdx);
       return;
     }
 
     if (e.key === 'Escape' && isActualOpen) {
       e.preventDefault();
       e.stopPropagation();
+      e.nativeEvent?.stopImmediatePropagation?.();
       setOpen(false);
       setInternalActiveIndex(-1);
       triggerRef.current?.focus();
@@ -162,11 +230,38 @@ export function CustomSelect({
       className={`custom-select-container ${className} ${isActualOpen ? 'is-open' : ''} ${disabled ? 'is-disabled' : ''}`}
       style={{ position: 'relative', display: 'inline-block', ...style }}
     >
+      <input
+        ref={hiddenInputRef}
+        type="text"
+        name={name}
+        value={stringValue}
+        disabled={disabled}
+        required={required}
+        tabIndex={-1}
+        aria-hidden="true"
+        onChange={() => {}}
+        onInvalid={(e) => {
+          e.preventDefault();
+          triggerRef.current?.focus();
+        }}
+        style={{
+          position: 'absolute',
+          width: 1,
+          height: 1,
+          margin: -1,
+          padding: 0,
+          border: 0,
+          clip: 'rect(0, 0, 0, 0)',
+          overflow: 'hidden',
+          pointerEvents: 'none',
+          opacity: 0,
+        }}
+      />
       <button
         ref={triggerRef}
         type="button"
-        id={`${listboxId}-trigger`}
-        aria-label={ariaLabel || placeholder}
+        id={triggerId}
+        aria-label={ariaLabel}
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={isActualOpen}
@@ -207,9 +302,12 @@ export function CustomSelect({
           id={listboxId}
           className="custom-select-dropdown animate-scale-in"
           role="listbox"
-          aria-labelledby={`${listboxId}-trigger`}
+          aria-labelledby={triggerId}
           tabIndex={-1}
-          style={openUpward ? { top: 'auto', bottom: 'calc(100% + 5px)' } : undefined}
+          style={{
+            ...(openUpward ? { top: 'auto', bottom: 'calc(100% + 5px)' } : {}),
+            ...(alignRight ? { left: 'auto', right: 0 } : { left: 0, right: 'auto' }),
+          }}
         >
           {normalizedOptions.length === 0 ? (
             <li className="custom-select-option" style={{ color: '#94a3b8', cursor: 'default' }}>
@@ -217,19 +315,33 @@ export function CustomSelect({
             </li>
           ) : (
             normalizedOptions.map((opt, idx) => {
-            const isSelected = opt.value === value;
+            const isSelected = opt.value === stringValue;
             const isActive = idx === activeIndex;
+            const prevOpt = idx > 0 ? normalizedOptions[idx - 1] : undefined;
+            const showGroupHeader = opt.group && (!prevOpt || prevOpt.group !== opt.group);
+
             return (
-              <li
-                key={opt.value}
-                id={`${listboxId}-opt-${idx}`}
-                role="option"
-                aria-selected={isSelected}
-                aria-disabled={opt.disabled}
-                onClick={(event) => { event.preventDefault(); event.stopPropagation(); selectOption(opt); }}
-                onMouseEnter={() => setInternalActiveIndex(idx)}
-                className={`custom-select-option ${isSelected ? 'is-selected' : ''} ${isActive ? 'is-active' : ''} ${opt.disabled ? 'is-disabled' : ''}`}
-              >
+              <Fragment key={`${opt.value}-${idx}`}>
+                {showGroupHeader && (
+                  <li className="custom-select-group-header" role="presentation">
+                    {opt.group}
+                  </li>
+                )}
+                <li
+                  id={`${listboxId}-opt-${idx}`}
+                  role="option"
+                  aria-selected={isSelected}
+                  aria-disabled={opt.disabled}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    selectOption(opt);
+                  }}
+                  onMouseEnter={() => {
+                    if (!opt.disabled) setInternalActiveIndex(idx);
+                  }}
+                  className={`custom-select-option ${opt.group ? 'is-grouped' : ''} ${isSelected ? 'is-selected' : ''} ${isActive ? 'is-active' : ''} ${opt.disabled ? 'is-disabled' : ''}`}
+                >
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: opt.disabled ? 0.5 : 1 }}>
                   {opt.color && (
                     <span style={{ width: 8, height: 8, borderRadius: '50%', background: opt.color, display: 'inline-block' }} />
@@ -250,7 +362,8 @@ export function CustomSelect({
                     />
                   </svg>
                 )}
-              </li>
+                </li>
+              </Fragment>
             );
           })
           )}

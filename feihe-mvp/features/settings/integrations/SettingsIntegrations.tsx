@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { StyledSelect } from '../../../components/ui/StyledSelect';
 import type { Integration, IntegrationData } from '../../../lib/types/project';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { ErrorState } from '../../../components/ui/ErrorState';
@@ -220,15 +221,16 @@ export function SettingsIntegrations({
                 </label>
                 <label>
                   提供方
-                  <select
+                  <StyledSelect
                     value={String(integration.provider || 'redtrend')}
                     onChange={(e) => setIntegration({ ...integration, provider: e.target.value })}
+                    aria-label="提供方选择"
                   >
                     <option value="redtrend">RedTrend / 内容与评论</option>
                     <option value="feishu">飞书开放平台</option>
                     <option value="oss">阿里云 OSS</option>
                     <option value="custom_http">自定义 HTTP API</option>
-                  </select>
+                  </StyledSelect>
                 </label>
                 <label className="full">
                   Base URL

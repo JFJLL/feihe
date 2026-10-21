@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import type { CampaignDashboard, CampaignTable } from '../../lib/campaign-types';
 import { ChartPanel, ScatterChart } from './CampaignCharts';
 import { CampaignComboChart } from './CampaignComboChart';
@@ -490,10 +491,11 @@ function ContentDualView({
         <div style={{ fontSize: '0.875rem', color: '#475569', fontWeight: 500 }}>
           执行批次筛选：
         </div>
-        <select
+        <StyledSelect
           className="ca-kdd-select"
           value={selectedBatch}
           onChange={(e) => onBatchChange(e.target.value)}
+          aria-label="执行批次筛选"
         >
           <option value="all">全部执行批次</option>
           {availableBatches.map((b) => (
@@ -501,7 +503,7 @@ function ContentDualView({
               {b}
             </option>
           ))}
-        </select>
+        </StyledSelect>
       </div>
 
       <div className="ca-kdd-grid">

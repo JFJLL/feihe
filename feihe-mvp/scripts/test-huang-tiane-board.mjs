@@ -77,6 +77,28 @@ const mockDashboard = {
 
 const extracted = extractHuangTianeData(mockDashboard);
 
+assert.equal(extracted.aipsStocks.awarenessImpressions, null, 'Exposure counts are not AIPS awareness people');
+assert.equal(extracted.aipsStocks.potentialPlays5s, null, 'Video plays are not AIPS purchase people');
+assert.equal(extracted.aipsStocks.cohortTransitions, null, 'Do not fabricate cohort transitions');
+assert.equal(extracted.beijingShanghaiPrecision.truePenetration, null, 'Regional share is not audience penetration');
+assert.equal(extracted.contentCapacity.theoreticalCapacityLimit, null, 'Inventory does not establish a capacity ceiling');
+assert.equal(extracted.contentCapacity.totalContentSupply, extracted.creatorsPublished + extracted.kosCount);
+const regionalMutation = structuredClone(mockDashboard);
+const regionTable = regionalMutation.tables.find(table => table.id === 'huang-brand-provinces');
+assert(regionTable, 'Regional source is available');
+regionTable.rows = regionTable.rows.filter(row => row.province !== '北京');
+assert.equal(extractHuangTianeData(regionalMutation).beijingShanghaiPrecision.combinedSpend, null, 'Missing Beijing must not become zero in a combined total');
+const matrixMutation = structuredClone(mockDashboard);
+matrixMutation.tables.push({ id: 'huang-brand-gender-age', title: 'test', columns: [], rows: [
+  { gender: '女', ageGroup: '33-40', spend: null, engagements: null },
+  { gender: '男', ageGroup: '18-22', spend: 0, engagements: 0 },
+  { gender: '未知', ageGroup: '未知', spend: 1, engagements: 1 },
+] });
+const matrix = extractHuangTianeData(matrixMutation).genderAgeMatrix;
+assert.deepEqual(matrix.ageGroups, ['18-22', '33-40', '未知']);
+assert.equal(matrix.cells.find(cell => cell.gender === '女').spend, null);
+assert.equal(matrix.cells.find(cell => cell.gender === '男').spend, 0);
+
 // Verify creators
 assert.equal(extracted.creatorsCount, 31, '达人总数必须为31位');
 assert.equal(extracted.creatorsPublished, 18, '已发布达人必须精确为18位 (不得为0)');

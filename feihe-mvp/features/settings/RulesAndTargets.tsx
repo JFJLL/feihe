@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import type { Dashboard, Ops, Pipeline, ReviewRule, Goals } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -565,23 +566,25 @@ export function RulesAndTargets({
               value={rule.keywords || ''}
               onChange={(e) => setRule({ ...rule, keywords: e.target.value })}
             />
-            <select
+            <StyledSelect
               value={rule.sentiment || '中立'}
               onChange={(e) => setRule({ ...rule, sentiment: e.target.value })}
+              aria-label="情绪分类"
             >
               <option>正向</option>
               <option>中立</option>
               <option>问询</option>
               <option>负向</option>
-            </select>
-            <select
+            </StyledSelect>
+            <StyledSelect
               value={rule.action || '保留观察'}
               onChange={(e) => setRule({ ...rule, action: e.target.value })}
+              aria-label="规则处置动作"
             >
               <option>保留观察</option>
               <option>需达人回复</option>
               <option>需删除</option>
-            </select>
+            </StyledSelect>
             <button className="primary" onClick={saveRule}>
               {rule.id ? '保存修改' : '新增规则'}
             </button>

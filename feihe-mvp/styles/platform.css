@@ -477,7 +477,7 @@
 .board-query-fields input { box-sizing: border-box; width: 100%; min-width: 0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; min-height: 38px; }
 .board-query-bar p { margin: 8px 0 0; font-size: 12px; color: #64748b; line-height: 1.6; }
 .board-query-bar [role="alert"] { color: #b91c1c; }
-.shared-board-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.shared-board-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .shared-metric-card { min-width: 0; }
 .shared-metric-wide { grid-column: span 2; }
 .shared-metric-title { overflow-wrap: anywhere; padding-right: 60px; }

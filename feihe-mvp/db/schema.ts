@@ -4,7 +4,7 @@ export const projects = sqliteTable('projects', {
   id: text('id').primaryKey(), name: text('name').notNull(), spu: text('spu').notNull().default(''),
   brand: text('brand').notNull().default(''), category: text('category').notNull().default(''),
   description: text('description').notNull().default(''), status: text('status').notNull().default('进行中'),
-  color: text('color').notNull().default('#1769d5'), startAt: text('start_at'), endAt: text('end_at'),
+  color: text('color').notNull().default('#1769d5'), logoUrl: text('logo_url').notNull().default(''), startAt: text('start_at'), endAt: text('end_at'),
   createdBy: text('created_by').notNull().default(''), createdAt: text('created_at').notNull(), updatedAt: text('updated_at').notNull(),
 });
 

@@ -1,0 +1,45 @@
+/* Standalone dropdown styling for CustomSelect & StyledSelect */
+.custom-select-group-header {
+  padding: 6px 12px 3px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  cursor: default;
+  user-select: none;
+  background: #f8fafc;
+  border-radius: 4px;
+  margin: 4px 0 2px 0;
+}
+
+.custom-select-option.is-grouped {
+  padding-left: 20px;
+}
+
+.custom-select-option.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.custom-select-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* High z-index to escape modals and drawers */
+.custom-select-container {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-select-dropdown {
+  z-index: 99999 !important;
+}

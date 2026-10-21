@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/hooks/use-project-data';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
 type QueueItem = { id: number; link: string; blogger: string; action: string; reason: string; sample: string[]; status: string };
@@ -56,11 +57,11 @@ export function ReviewActionQueue({ projectId }: { projectId: string }) {
     <section className="panel" id="review-queue">
       <PanelHead eyebrow="REVIEW QUEUE" title="判定处置队列" />
       <div className="filterbar">
-        <select value={date} onChange={(e) => { setDate(e.target.value); load(e.target.value); }}>
+        <StyledSelect value={date} onChange={(e) => { setDate(e.target.value); load(e.target.value); }} aria-label="判定批次选择">
           {[...dates].sort().reverse().map((d) => (
             <option key={d} value={d}>{d} 判定批次</option>
           ))}
-        </select>
+        </StyledSelect>
         <button onClick={() => load(date)} disabled={loading}>{loading ? '判定中…' : '重新判定'}</button>
         <span>需回复 {counts.needReply || 0} · 需删除 {counts.needDelete || 0} · 需补充 {counts.needSupplement || 0}</span>
       </div>

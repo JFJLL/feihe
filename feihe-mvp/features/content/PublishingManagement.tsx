@@ -1,4 +1,5 @@
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
@@ -202,12 +203,12 @@ export function PublishingManagement({
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             style={{ width: '240px' }}
           />
-          <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}>
+          <StyledSelect value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }} aria-label="排序方式">
             <option value="publishedAt">按发布时间倒序</option>
             <option value="reads">按阅读量排序</option>
             <option value="interactions">按互动量排序</option>
             <option value="comments">按评论总数排序</option>
-          </select>
+          </StyledSelect>
         </WorkspaceToolbar>
 
         <DataTableShell

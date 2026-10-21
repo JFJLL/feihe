@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import type { CampaignDashboard } from '../../lib/campaign-types';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import {
   ChartPanel,
   MetricStrip,
@@ -21,11 +22,13 @@ import { CampaignComboChart, type ComboSeries } from './CampaignComboChart';
 import {
   extractHuangTianeData,
   formatNum,
+  formatWan,
   formatCurrency,
   formatPercent,
   parseNum,
 } from './huang-model';
 import './huang-tiane.css';
+import { HuangAudienceInsights } from './HuangAudienceInsights';
 
 export interface HuangTianeBoardProps {
   dashboard: CampaignDashboard;
@@ -65,13 +68,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       {
         label: '红猫CID成交GMV · ROI',
         value: model.cidTotalGmv !== null ? formatCurrency(model.cidTotalGmv) : '—',
-        hint: `全域ROI ${model.cidOverallRoi !== null ? model.cidOverallRoi.toFixed(2) : '—'}倍 (标准3.27 / 简单3.97)`,
+        hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} · 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
         status: 'accent',
       },
       {
         label: '闭环商销累计消耗',
         value: model.commerceSpend !== null ? formatCurrency(model.commerceSpend) : '—',
-        hint: `全渠道销售日均约 ¥1,486`,
+        hint: `统计周期：${model.commercePeriod}`,
         status: 'neutral',
       },
       {
@@ -89,7 +92,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       {
         label: 'KOS笔记矩阵发布量',
         value: `${model.kosCount} 篇`,
-        hint: '10/19 集中引爆 · FS/CID/商销多线联动',
+        hint: '以KOS执行表登记为准，不推定已投流或已成交',
         status: 'neutral',
       },
     ];
@@ -124,35 +127,47 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     }
     const benchmarkUnit = shengshiItem?.unit ? String(shengshiItem.unit) : (benchmarkMetric === 'CTR' ? '%' : '元');
 
-    // Funnel 1: Brand FS Seeding Funnel
+    // Funnel 1: Brand FS Seeding Funnel (Fact-derived from bs)
     const brandFunnelStages: FunnelStageDatum[] = bs
       ? [
           { stage: '① 品牌曝光展现', value: parseNum(bs.impressions), unit: '次', conversionLabel: '100.0%', color: CAMPAIGN_PALETTE.primary },
           { stage: '② 笔记有效点击', value: parseNum(bs.clicks), unit: '次', conversionLabel: `CTR ${formatPercent(parseNum(bs.ctr))}`, costLabel: `CPC ${formatCurrency(parseNum(bs.cpc))}`, color: '#3b8b7e' },
-          { stage: '③ 深度受众互动', value: parseNum(bs.engagements), unit: '次', conversionLabel: `互动量 ${formatNum(parseNum(bs.engagements), 0)}`, costLabel: `CPE ${formatCurrency(parseNum(bs.cpe))}`, color: CAMPAIGN_PALETTE.purple },
-          { stage: '④ 种草I人群沉淀', value: parseNum(bs.seed_i), unit: '人', conversionLabel: '初度兴趣人群', costLabel: `CPI ${formatCurrency(parseNum(bs.cpi))}`, color: CAMPAIGN_PALETTE.gold },
-          { stage: '⑤ 种草TI深度心智', value: parseNum(bs.seed_ti), unit: '人', conversionLabel: '深度转化心智', costLabel: `CPTI ${formatCurrency(parseNum(bs.cpti))}`, color: CAMPAIGN_PALETTE.terracotta },
+          { stage: '③ 5秒有效播放', value: parseNum(bs.plays_5s ?? bs.plays5s), unit: '次', conversionLabel: `播放率 ${formatPercent(parseNum(bs.ctr_5s ?? bs.ctr5s))}`, costLabel: `5s成本 ${formatCurrency(parseNum(bs.cpc_5s ?? bs.cpc5s))}`, color: CAMPAIGN_PALETTE.slate },
+          { stage: '④ 深度受众互动', value: parseNum(bs.engagements), unit: '次', conversionLabel: `互动量 ${formatNum(parseNum(bs.engagements), 0)}`, costLabel: `CPE ${formatCurrency(parseNum(bs.cpe))}`, color: CAMPAIGN_PALETTE.purple },
+          { stage: '⑤ 核心种草人群资产', value: parseNum(bs.seed_total), unit: '人', conversionLabel: `I ${formatWan(parseNum(bs.seed_i))} + TI ${formatWan(parseNum(bs.seed_ti))}`, costLabel: `单位成本 ${formatCurrency(parseNum(bs.cp_total))}`, color: CAMPAIGN_PALETTE.terracotta },
         ]
       : [];
 
-    // Funnel 2: Red Cat CID E-Commerce Funnel
+    // Funnel 2: Red Cat CID E-Commerce Funnel (Strict facts: Shop UV -> Orders -> GMV, no fabricated impressions/clicks)
+    const cidCpuv = (model.cidTotalSpend !== null && model.cidTotalUv !== null && model.cidTotalUv > 0)
+      ? (model.cidTotalSpend / model.cidTotalUv).toFixed(2)
+      : '—';
+    const cidOrderRate = (model.cidTotalOrders !== null && model.cidTotalUv !== null && model.cidTotalUv > 0)
+      ? ((model.cidTotalOrders / model.cidTotalUv) * 100).toFixed(1) + '%'
+      : '—';
+    const cidCostPerOrder = (model.cidTotalSpend !== null && model.cidTotalOrders !== null && model.cidTotalOrders > 0)
+      ? (model.cidTotalSpend / model.cidTotalOrders).toFixed(2)
+      : '—';
+    const cidAov = (model.cidTotalGmv !== null && model.cidTotalOrders !== null && model.cidTotalOrders > 0)
+      ? (model.cidTotalGmv / model.cidTotalOrders).toFixed(2)
+      : '—';
+
     const cidFunnelStages: FunnelStageDatum[] = [
-      { stage: '① CID全域曝光展现', value: 213846, unit: '次', conversionLabel: '100.0%', color: CAMPAIGN_PALETTE.primary },
-      { stage: '② 电商引流点击跳转', value: 19255, unit: '次', conversionLabel: 'CTR 9.00%', costLabel: 'CPC ¥1.14', color: '#3b8b7e' },
-      { stage: '③ 商品进店访客量', value: model.cidTotalUv, unit: '人次', conversionLabel: '进店率 48.8%', costLabel: `进店成本 ¥${((model.cidTotalSpend || 0) / (model.cidTotalUv || 1)).toFixed(2)}`, color: CAMPAIGN_PALETTE.purple },
-      { stage: '④ 支付成交订单量', value: model.cidTotalOrders, unit: '单', conversionLabel: '客单率 44.5%', costLabel: `订单成本 ¥${((model.cidTotalSpend || 0) / (model.cidTotalOrders || 1)).toFixed(2)}`, color: CAMPAIGN_PALETTE.gold },
-      { stage: '⑤ 最终成交GMV产出', value: model.cidTotalGmv ? Math.round(model.cidTotalGmv) : null, unit: '元', conversionLabel: `ROI ${model.cidOverallRoi?.toFixed(2) ?? '—'}倍`, color: CAMPAIGN_PALETTE.terracotta },
+      { stage: '① 淘系店铺进店UV', value: model.cidTotalUv, unit: '人', conversionLabel: '全域引流受众', costLabel: `CPUV ¥${cidCpuv}/人`, color: CAMPAIGN_PALETTE.primary },
+      { stage: '② 支付转化成交订单', value: model.cidTotalOrders, unit: '单', conversionLabel: `进店订单率 ${cidOrderRate}`, costLabel: `单均成本 ¥${cidCostPerOrder}`, color: CAMPAIGN_PALETTE.purple },
+      { stage: '③ 全域成交金额GMV', value: model.cidTotalGmv !== null ? Math.round(model.cidTotalGmv) : null, unit: '元', conversionLabel: `ROI ${model.cidOverallRoi?.toFixed(2) ?? '—'}倍`, costLabel: `客单价 ¥${cidAov}`, color: CAMPAIGN_PALETTE.terracotta },
     ];
 
-    // Funnel 3: Creator Selection Funnel
-    const creatorFunnelChartStages: FunnelStageDatum[] = [
-      { stage: '① 全网初选提报', value: 373, unit: '人', conversionLabel: '100.0%', subtext: '全量初选池373位博主', color: CAMPAIGN_PALETTE.primary },
-      { stage: '② 团队初审一筛通过', value: 83, unit: '人', conversionLabel: '留存 22.3%', subtext: '83人通过 / 69人待定', color: '#3b8b7e' },
-      { stage: '③ 策略把关二核通过', value: 58, unit: '人', conversionLabel: '留存 15.5%', subtext: '蛋品精致调性二核严选', color: CAMPAIGN_PALETTE.purple },
-      { stage: '④ 商务接洽确认可接', value: 55, unit: '人', conversionLabel: '留存 14.7%', subtext: '排期、报价与排竞确认', color: CAMPAIGN_PALETTE.gold },
-      { stage: '⑤ 10月最终执行定档', value: 31, unit: '人', conversionLabel: '定档 8.3%', costLabel: '含税总报价 ¥324,774', color: CAMPAIGN_PALETTE.terracotta },
-      { stage: '⑥ 实际发布并收录上线', value: 18, unit: '篇', conversionLabel: '发布率 58.1%', subtext: '已顺利上线18篇, 收集率100%', color: '#277a6f' },
-    ];
+    // Funnel 3: Creator Selection Funnel (Dynamically mapped from model.creatorFunnelStages)
+    const creatorColors = [CAMPAIGN_PALETTE.primary, '#3b8b7e', CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.terracotta, '#277a6f'];
+    const creatorFunnelChartStages: FunnelStageDatum[] = model.creatorFunnelStages.map((st, idx) => ({
+      stage: st.name,
+      value: st.value,
+      unit: idx >= 5 ? '篇' : '人',
+      conversionLabel: st.rate !== null ? `${st.rate}%` : '—',
+      subtext: st.note,
+      color: creatorColors[idx % creatorColors.length],
+    }));
 
     // Content tags bar chart
     const contentTagsChartData: ChartDatum[] = model.brandContentTagsTop.slice(0, 8).map((r) => ({
@@ -177,20 +192,17 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
     // Gender x Age Heatmap Cells
     const heatmapCells: MatrixHeatmapCell[] = model.genderAgeMatrix.cells.map((c) => ({
-      row: c.gender,
-      col: c.ageGroup,
+      row: c.ageGroup,
+      col: c.gender,
       value: c.spend,
       displayValue: formatCurrency(c.spend, 0),
-      subtext: `互动 ${c.engagements}次 · CPE ${c.cpe ? formatCurrency(c.cpe) : '—'}`,
+      subtext: `互动 ${formatNum(c.engagements, 0)}次 · CPE ${formatCurrency(c.cpe)}`,
     }));
 
     // Gender Donut
-    const femaleSpend = model.brandGenderTable.rows.find((r) => r.gender === '女')?.spend;
-    const maleSpend = model.brandGenderTable.rows.find((r) => r.gender === '男')?.spend;
-    const genderDonutData: ChartDatum[] = [
-      { label: '女性受众', value: parseNum(femaleSpend), color: CAMPAIGN_PALETTE.primary },
-      { label: '男性受众', value: parseNum(maleSpend), color: CAMPAIGN_PALETTE.purple },
-    ];
+    const genderDonutData: ChartDatum[] = model.brandGenderTable.rows
+      .filter(row => row.gender && !/合计|总计|汇总/.test(String(row.gender)))
+      .map(row => ({ label: `${String(row.gender)}受众`, value: parseNum(row.spend) }));
 
     // Series definitions
     const cidCompareSeries: ComboSeries[] = [
@@ -227,29 +239,20 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         {/* 看板头部 */}
         <div className="ht-header">
           <div className="ht-header-left">
-            <h2 className="ht-header-title">黄天鹅 · 战役全域经营洞察与深层数据挖掘</h2>
-            <span className="ht-header-badge">五层递进分析体系</span>
+            <h2 className="ht-header-title">黄天鹅 · 战役全域经营洞察</h2>
+            <span className="ht-header-badge">全域经营与受众洞察</span>
           </div>
           <div className="ht-header-meta">
             品牌与CID周期：{model.brandPeriod} · 商销周期：{model.commercePeriod}
           </div>
         </div>
 
-        {/* 分层快速导航锚点条 */}
-        <div className="ht-nav-anchors-container">
-          <nav className="ht-nav-anchors" aria-label="看板分层快速导航">
-            <a href="#ht-layer-1" className="ht-nav-anchor">① 全域经营与行业基准</a>
-            <a href="#ht-layer-2" className="ht-nav-anchor">② 三线转化漏斗与日趋势</a>
-            <a href="#ht-layer-3" className="ht-nav-anchor">③ 内容标签/搜索/人群引擎</a>
-            <a href="#ht-layer-4" className="ht-nav-anchor">④ 受众性别年龄与地域画像</a>
-            <a href="#ht-layer-5" className="ht-nav-anchor">⑤ 达人选号漏斗与KOS矩阵</a>
-          </nav>
-        </div>
+
 
         {/* 第一层：全域三线经营总览与蛋品行业基准对标 */}
-        <section id="ht-layer-1" className="ht-layer">
+        <section className="ht-layer">
           <div className="ht-layer-header">
-            <h3 className="ht-layer-title">第一层 · 全域三线经营总览与蛋品行业基准对标 (重)</h3>
+            <h3 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h3>
             <span className="ht-layer-sub">8项核心全域KPI与蛋品大盘对照</span>
           </div>
 
@@ -270,7 +273,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 <div className="ht-notice">暂无预算对照数据</div>
               )}
               <div className="ht-notice" style={{ marginTop: 12 }}>
-                *剩余可用预算 {formatCurrency((model.brandBudgetVal || 0) - (model.brandSpend || 0))}，消耗进度 31.54%，投放节奏平稳可控。
+                剩余预算 {formatCurrency(model.brandBudgetVal !== null && model.brandSpend !== null ? model.brandBudgetVal - model.brandSpend : null)} · 消耗进度 {formatPercent(model.brandBudgetProgress, 1)}。是否需要调速还需结合剩余排期判断。
               </div>
             </ChartPanel>
 
@@ -292,60 +295,109 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 </div>
               }
             >
-              <div className="ht-benchmark-grid">
-                <div className="ht-benchmark-card">
-                  <div className="ht-benchmark-title">生食/有机蛋大盘区间</div>
-                  <div className="ht-benchmark-val">
-                    {shengshiItem ? `${shengshiItem.lower} ~ ${shengshiItem.upper} ${benchmarkUnit}` : '—'}
+              <div className="ht-benchmark-container">
+                <div className="ht-benchmark-grid">
+                  <div className="ht-benchmark-card">
+                    <div className="ht-benchmark-title">生食/有机蛋大盘区间</div>
+                    <div className="ht-benchmark-val">
+                      {shengshiItem ? `${shengshiItem.lower} ~ ${shengshiItem.upper} ${benchmarkUnit}` : '—'}
+                    </div>
+                    <div className="ht-benchmark-desc">行业样本中位区间</div>
                   </div>
-                  <div className="ht-benchmark-desc">行业样本中位区间</div>
+                  <div className="ht-benchmark-card">
+                    <div className="ht-benchmark-title">新鲜蛋大盘区间</div>
+                    <div className="ht-benchmark-val">
+                      {xinxianItem ? `${xinxianItem.lower} ~ ${xinxianItem.upper} ${benchmarkUnit}` : '—'}
+                    </div>
+                    <div className="ht-benchmark-desc">大众基础蛋品均值</div>
+                  </div>
+                  <div className="ht-benchmark-card highlight">
+                    <div className="ht-benchmark-title">黄天鹅本品实绩</div>
+                    <div className="ht-benchmark-val">
+                      {benpinNum !== null ? `${benpinNum} ${benchmarkUnit}` : '—'}
+                    </div>
+                    <div className="ht-benchmark-desc">
+                      {benchmarkMetric === 'CTR' ? '点击率：数值越高越好' : '单位成本：数值越低越好'}
+                    </div>
+                  </div>
                 </div>
-                <div className="ht-benchmark-card">
-                  <div className="ht-benchmark-title">新鲜蛋大盘区间</div>
-                  <div className="ht-benchmark-val">
-                    {xinxianItem ? `${xinxianItem.lower} ~ ${xinxianItem.upper} ${benchmarkUnit}` : '—'}
-                  </div>
-                  <div className="ht-benchmark-desc">大众基础蛋品均值</div>
+
+                <details className="ht-secondary-details">
+                  <summary>展开六项行业指标对照</summary>
+                <div className="ht-benchmark-table-wrap">
+                  <table className="ht-benchmark-table">
+                    <thead>
+                      <tr>
+                        <th>核心指标</th>
+                        <th>生食/有机蛋区间</th>
+                        <th>新鲜蛋大盘均值</th>
+                        <th>黄天鹅本品实绩</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(['CTR', 'CPC', 'CPM', 'CPE', 'CPI', 'CPTI'] as const).map((m) => {
+                        const sRow = bRows.find((r) => r.category === '生食/有机蛋' && r.metric === m);
+                        const xRow = bRows.find((r) => r.category === '新鲜蛋' && r.metric === m);
+                        const u = m === 'CTR' ? '%' : '元';
+                        let v: number | null = null;
+                        if (bs) {
+                          if (m === 'CTR') v = parseNum(bs.ctr);
+                          else if (m === 'CPC') v = parseNum(bs.cpc);
+                          else if (m === 'CPM') v = parseNum(bs.cpm);
+                          else if (m === 'CPE') v = parseNum(bs.cpe);
+                          else if (m === 'CPI') v = parseNum(bs.cpi);
+                          else if (m === 'CPTI') v = parseNum(bs.cpti);
+                        }
+                        return (
+                          <tr key={m} className={selectedBenchmarkMetric === m ? 'active-row' : ''}>
+                            <td style={{ fontWeight: 600 }}>{m}</td>
+                            <td>{sRow ? `${sRow.lower} ~ ${sRow.upper} ${u}` : '—'}</td>
+                            <td>{xRow ? `${xRow.lower} ~ ${xRow.upper} ${u}` : '—'}</td>
+                            <td className="benpin-val">{v !== null ? `${v} ${u}` : '—'}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
-                <div className="ht-benchmark-card highlight">
-                  <div className="ht-benchmark-title">黄天鹅本品实绩</div>
-                  <div className="ht-benchmark-val">
-                    {benpinNum !== null ? `${benpinNum} ${benchmarkUnit}` : '—'}
-                  </div>
-                  <div className="ht-benchmark-desc">
-                    {benpinNum !== null && shengshiItem && benpinNum >= (parseNum(shengshiItem.lower) || 0)
-                      ? '✓ 处于生食/高端蛋优势区间'
-                      : '实绩表现受众心智稳固'}
-                  </div>
+                </details>
+                <div className="ht-notice">
+                  *蛋品行业基准来源于小红书蛋品行业大盘实盘透视表（涵盖生食蛋/有机蛋6家头部品牌大盘基准数据）。
                 </div>
-              </div>
-              <div className="ht-notice">
-                *蛋品行业基准来源于小红书蛋品行业大盘实盘透视表（涵盖生食蛋/有机蛋6家头部品牌大盘基准数据）。
               </div>
             </ChartPanel>
           </div>
         </section>
 
+        <HuangAudienceInsights model={model} />
+
         {/* 第二层：三大漏斗与趋势 */}
-        <section id="ht-layer-2" className="ht-layer">
+        <section className="ht-layer">
           <div className="ht-layer-header">
-            <h3 className="ht-layer-title">第二层 · 品牌种草 / 红猫CID / 闭环商销 三大漏斗与趋势 (重)</h3>
-            <span className="ht-layer-sub">全链路展现→点击→进店→转化→GMV与分日走势</span>
+            <h3 className="ht-layer-title">三条业务线 · 关键节点与趋势</h3>
+            <span className="ht-layer-sub">三线独立核算，不跨平台拼接转化链路</span>
           </div>
 
           <div className="ht-grid-2">
             <ChartPanel
               title="品牌FS 种草人群心智沉淀全链路漏斗"
-              subtitle="展现 (403.8万) → 点击 (51.7万) → 互动 (5606次) → 种草I (2.3万人) → 种草TI (4008人)"
+              subtitle={
+                bs
+                  ? `展现 (${formatWan(parseNum(bs.impressions))}) → 点击 (${formatWan(parseNum(bs.clicks))}) → 5s播放 (${formatWan(parseNum(bs.plays_5s ?? bs.plays5s))}) → 互动 (${formatNum(parseNum(bs.engagements), 0)}次) → 核心资产 (${formatWan(parseNum(bs.seed_total))})`
+                  : undefined
+              }
             >
               <CampaignFunnelChart stages={brandFunnelStages} />
             </ChartPanel>
 
             <ChartPanel
               title="红猫CID 电商引流转化与成交全链路漏斗"
-              subtitle="展现 (21.4万) → 点击 (1.9万) → 进店 (9389人) → 订单 (4175单) → GMV (¥36.1万)"
+              subtitle={`进店UV (${formatNum(model.cidTotalUv, 0)}人) → 支付订单 (${formatNum(model.cidTotalOrders, 0)}单) → 成交GMV (${formatCurrency(model.cidTotalGmv)}) · 全域实绩ROI ${model.cidOverallRoi !== null ? model.cidOverallRoi.toFixed(2) : '—'}倍`}
             >
               <CampaignFunnelChart stages={cidFunnelStages} />
+              <div className="ht-notice" style={{ marginTop: 10 }}>
+                原表未提供两种投放合计的曝光与点击量，分别展示进店、订单和成交金额，不补造上游节点。
+              </div>
             </ChartPanel>
           </div>
 
@@ -417,23 +469,19 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         </section>
 
         {/* 第三层：内容标签、搜索词类与定向人群 */}
-        <section id="ht-layer-3" className="ht-layer">
-          <div className="ht-layer-header">
-            <h3 className="ht-layer-title">第三层 · 12大内容标签、10大搜索词类与定向人群引擎 (中重)</h3>
-            <span className="ht-layer-sub">内容×人群×关键词三维引擎表现</span>
-          </div>
-
+        <details className="ht-layer ht-secondary-details">
+          <summary>内容标签、搜索词与素材表现</summary>
           <div className="ht-grid-2">
             <ChartPanel
               title="品牌线 12大笔记内容标签投放表现"
-              subtitle="美食制作独占81.7%消耗与44万点击，CTR 13.12%表现极佳"
+              subtitle="按内容标签消耗排序；点击率与成本用于辅助判断"
             >
               <HorizontalBarChart data={contentTagsChartData} unit="元" height={280} />
             </ChartPanel>
 
             <ChartPanel
               title="品牌线 10大搜索词类投放表现"
-              subtitle="品牌词独占¥28,786消耗与9.9万点击，品类词CTR 11.23%居次"
+              subtitle="按搜索词类消耗排序；各词类独立统计"
             >
               <HorizontalBarChart data={keywordsChartData} unit="元" height={280} />
             </ChartPanel>
@@ -468,41 +516,42 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               />
             </ChartPanel>
           </div>
-        </section>
+        </details>
 
         {/* 第四层：受众人口学 24 维热力矩阵与地域渗透 */}
-        <section id="ht-layer-4" className="ht-layer">
+        <section className="ht-layer">
           <div className="ht-layer-header">
-            <h3 className="ht-layer-title">第四层 · 受众人口学 24 维热力矩阵与地域渗透 (中)</h3>
+            <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与地域渗透</h3>
             <span className="ht-layer-sub">性别×年龄二维消耗/互动交叉矩阵与重点省份渗透</span>
           </div>
 
           <div className="ht-grid-2">
             <ChartPanel
-              title="品牌线受众 性别×年龄 24维交叉热力矩阵"
-              subtitle="女性33-40岁(¥5.68万)与28-32岁(¥3.68万)为绝对黄金核心客群"
+              className="ht-audience-matrix"
+              title="年龄 × 性别 · 受众消耗分布"
+              subtitle="年龄纵向排列、性别横向对比；颜色表示消耗，不代表购买偏好"
             >
               <MatrixHeatmapChart
-                rows={model.genderAgeMatrix.genders}
-                cols={model.genderAgeMatrix.ageGroups}
+                rows={model.genderAgeMatrix.ageGroups}
+                cols={model.genderAgeMatrix.genders}
                 cells={heatmapCells}
                 unit="元"
-                rowHeaderTitle="性别 \ 年龄"
-                showRowTotals={true}
+                rowHeaderTitle="年龄 / 性别"
+                showRowTotals={false}
               />
             </ChartPanel>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <ChartPanel
                 title="品牌受众 性别基本盘分布"
-                subtitle="女性受众消耗占比 92.4%，男性占比 7.6%"
+                subtitle="按性别投放消耗构成；不是去重人数占比"
               >
                 <DonutChart data={genderDonutData} unit="元" centerLabel="性别分布" />
               </ChartPanel>
 
               <ChartPanel
-                title="Top 12 重点渗透省份与地区表现"
-                subtitle="广东(¥2.79万)、江苏(¥2.42万)、浙江(¥1.81万)领衔华东华南高潜市场"
+                title="重点投放省份 · 消耗前六"
+                subtitle="按省份消耗排序，地域曝光不等于目标人群渗透"
               >
                 <HorizontalBarChart data={provincesChartData.slice(0, 6)} unit="元" height={200} />
               </ChartPanel>
@@ -511,16 +560,12 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         </section>
 
         {/* 第五层：达人选号淘汰漏斗、菜品方向与 11 月储备 */}
-        <section id="ht-layer-5" className="ht-layer">
-          <div className="ht-layer-header">
-            <h3 className="ht-layer-title">第五层 · 达人选号淘汰漏斗、菜品方向与 11 月储备池 (轻)</h3>
-            <span className="ht-layer-sub">10月选号漏斗与11月储备池196位规划</span>
-          </div>
-
+        <details className="ht-layer ht-secondary-details">
+          <summary>达人执行、内容方向与KOS明细</summary>
           <div className="ht-grid-2">
             <ChartPanel
               title="10月达人选号全流程淘汰漏斗"
-              subtitle="提报初选 (373人) → 一筛 (83人) → 二核 (58人) → 可接 (55人) → 定档 (31人) → 发布 (18篇)"
+              subtitle="以选号表及执行表为准；阶段人数与发布篇数分开查看"
             >
               <CampaignFunnelChart stages={creatorFunnelChartStages} />
             </ChartPanel>
@@ -540,29 +585,30 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               </ChartPanel>
 
               <ChartPanel
-                title="11月储备池与舆情策略规划预览"
-                subtitle="已储备196位达人 · 首批定档锁定18位 · 规划总预算18万元"
+                title="定档达人 · 内容方向与食谱场景"
+                subtitle="基于达人执行底表真实统计 · 场景代入与溏心蛋教程为两大主力方向"
               >
-                <div className="ht-reserve-card">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--ht-primary)' }}>
-                      11月双11爆发期达人储备规划
-                    </span>
-                    <span style={{ fontSize: 12, color: 'var(--ht-gold)', fontWeight: 600 }}>
-                      总规划预算: ¥180,000
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--ht-text-muted)', lineHeight: 1.6 }}>
-                    针对10月账号评论区溏心蛋科普疑虑，11月重点布局：<strong>① 科普实测解惑</strong> (Alex实话实测/我是不白吃, 维护品牌形象)；<strong>② 邪修溏心蛋</strong> (微波炉/空气炸锅邪修教程, 制造破圈话题)；<strong>③ 双11节点晒单收割</strong>。
-                  </div>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
-                    <span className="ht-badge ht-badge-active">话题引爆 ¥5万</span>
-                    <span className="ht-badge ht-badge-active">实验测评 ¥3.5万</span>
-                    <span className="ht-badge ht-badge-active">美食分享 ¥3万</span>
-                    <span className="ht-badge ht-badge-active">溏心蛋教程 ¥2.8万</span>
-                    <span className="ht-badge ht-badge-active">场景代入 ¥2.1万</span>
-                    <span className="ht-badge ht-badge-active">晒单节促 ¥1.6万</span>
-                  </div>
+                <div className="ht-table-wrap">
+                  <table className="ht-table">
+                    <thead>
+                      <tr>
+                        <th>食谱方向 / 场景</th>
+                        <th>计划定档</th>
+                        <th>已发布上线</th>
+                        <th>上线率</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {model.creatorDirectionBreakdown.slice(0, 6).map((d) => (
+                        <tr key={d.direction}>
+                          <td style={{ fontWeight: 600 }}>{d.direction}</td>
+                          <td>{d.total} 位</td>
+                          <td>{d.published} 篇</td>
+                          <td>{d.total > 0 ? ((d.published / d.total) * 100).toFixed(1) + '%' : '—'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </ChartPanel>
             </div>
@@ -671,7 +717,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               </div>
             </div>
           )}
-        </section>
+        </details>
       </div>
     );
   }
@@ -953,26 +999,19 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 actions={
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ fontSize: 12, color: 'var(--ht-text-muted)' }}>切换指标:</span>
-                    <select
-                      aria-label="选择行业对照指标"
+                    <CustomSelect
+                      ariaLabel="选择行业对照指标"
                       value={selectedBenchmarkMetric}
-                      onChange={(e) => setSelectedBenchmarkMetric(e.target.value as 'CTR' | 'CPC' | 'CPM' | 'CPE' | 'CPI' | 'CPTI')}
-                      style={{
-                        padding: '3px 8px',
-                        fontSize: 12,
-                        borderRadius: 4,
-                        border: '1px solid var(--ht-border)',
-                        background: '#fff',
-                        color: 'var(--ht-text-dark)',
-                      }}
-                    >
-                      <option value="CTR">CTR (%)</option>
-                      <option value="CPC">CPC (元)</option>
-                      <option value="CPM">CPM (元)</option>
-                      <option value="CPE">CPE (元)</option>
-                      <option value="CPI">CPI (元)</option>
-                      <option value="CPTI">CPTI (元)</option>
-                    </select>
+                      onChange={(val) => setSelectedBenchmarkMetric(val as 'CTR' | 'CPC' | 'CPM' | 'CPE' | 'CPI' | 'CPTI')}
+                      options={[
+                        { value: 'CTR', label: 'CTR (%)' },
+                        { value: 'CPC', label: 'CPC (元)' },
+                        { value: 'CPM', label: 'CPM (元)' },
+                        { value: 'CPE', label: 'CPE (元)' },
+                        { value: 'CPI', label: 'CPI (元)' },
+                        { value: 'CPTI', label: 'CPTI (元)' },
+                      ]}
+                    />
                   </div>
                 }
               >

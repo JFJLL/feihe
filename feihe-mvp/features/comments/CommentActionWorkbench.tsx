@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import Link from '../../components/ui/AppLink';
 import { MetricCard } from '../../components/ui/operations/MetricCard';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -441,60 +442,65 @@ export function CommentActionWorkbench({
             }}
             style={{ width: '240px' }}
           />
-          <select
+          <StyledSelect
             value={sourceFilter}
             onChange={(e) => {
               setSourceFilter(e.target.value as 'all' | 'key-comment' | 'review-batch');
               setPage(1);
             }}
+            aria-label="来源筛选"
           >
             <option value="all">全部来源（关键评论 + 判定批次）</option>
             <option value="key-comment">仅关键评论</option>
             <option value="review-batch">仅规则判定批次</option>
-          </select>
-          <select
+          </StyledSelect>
+          <StyledSelect
             value={statusFilter}
             onChange={(e) => {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
+            aria-label="状态筛选"
           >
             <option value="pending">待处理任务</option>
             <option value="handled">已处理归档</option>
             <option value="all">全部处理状态</option>
-          </select>
-          <select
+          </StyledSelect>
+          <StyledSelect
             value={actionFilter}
             onChange={(e) => {
               setActionFilter(e.target.value);
               setPage(1);
             }}
+            aria-label="动作筛选"
           >
             <option value="">全部动作类型</option>
             <option value="reply">需回复</option>
             <option value="delete">需删除</option>
             <option value="supplement">需补充</option>
             <option value="observe">保留观察</option>
-          </select>
-          <select
+          </StyledSelect>
+          <StyledSelect
             value={sentimentFilter}
             onChange={(e) => {
               setSentimentFilter(e.target.value);
               setPage(1);
             }}
+            aria-label="情绪筛选"
           >
             <option value="">全部情绪</option>
             <option value="正向">正向</option>
             <option value="负向">负向</option>
             <option value="中立">中立</option>
             <option value="问询">问询</option>
-          </select>
-          <select
+          </StyledSelect>
+          <StyledSelect
             value={categoryFilter}
             onChange={(e) => {
               setCategoryFilter(e.target.value);
               setPage(1);
             }}
+            aria-label="分类筛选"
           >
             <option value="">全部分类</option>
             <option value="产品体验">产品体验</option>
@@ -502,15 +508,16 @@ export function CommentActionWorkbench({
             <option value="导流违规">导流违规</option>
             <option value="竞品提及">竞品提及</option>
             <option value="常规互动">常规互动</option>
-          </select>
+          </StyledSelect>
           {availableDates.length > 0 && (
-            <select
+            <StyledSelect
               value={selectedDate}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
                 setPage(1);
               }}
               style={{ borderColor: '#c7d2fe' }}
+              aria-label="判定日期批次筛选"
             >
               <option value="">全部判定日期</option>
               {availableDates.map((d) => (
@@ -518,7 +525,7 @@ export function CommentActionWorkbench({
                   批次：{d}
                 </option>
               ))}
-            </select>
+            </StyledSelect>
           )}
         </WorkspaceToolbar>
 

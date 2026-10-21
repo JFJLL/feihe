@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useEffect } from 'react';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import { api } from '../../lib/hooks/use-project-data';
 import type { BusinessConfig } from '../../lib/business-daily/store';
 import type { SourceRole } from '../../lib/business-daily/types';
@@ -286,7 +287,7 @@ export function BusinessConfigDrawer({
                           placeholder="key 唯一英文标识"
                           style={{ flex: 1, padding: '4px 8px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
                         />
-                        <select
+                        <StyledSelect
                           aria-label={'业务角色-' + idx}
                           disabled={!canWrite || saving}
                           value={b.role}
@@ -298,7 +299,7 @@ export function BusinessConfigDrawer({
                               {opt.label}
                             </option>
                           ))}
-                        </select>
+                        </StyledSelect>
                         {canWrite && (
                           <button
                             type="button"

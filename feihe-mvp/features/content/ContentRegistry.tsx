@@ -1,4 +1,5 @@
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
@@ -367,25 +368,25 @@ export function ContentRegistry({
             onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             style={{ width: '200px' }}
           />
-          <select value={source} onChange={(e) => { setSource(e.target.value); setPage(1); }}>
+          <StyledSelect value={source} onChange={(e) => { setSource(e.target.value); setPage(1); }} aria-label="来源筛选">
             <option value="">全部来源</option>
             <option value="owned">自有发布</option>
             <option value="commercial">商业合作</option>
             <option value="keyword_scan">关键词扫描</option>
-          </select>
-          <select value={scope} onChange={(e) => { setScope(e.target.value); setPage(1); }}>
+          </StyledSelect>
+          <StyledSelect value={scope} onChange={(e) => { setScope(e.target.value); setPage(1); }} aria-label="范围筛选">
             <option value="">全部范围</option>
             <option value="本品">本品</option>
             <option value="竞品">竞品</option>
             <option value="其他">其他</option>
-          </select>
-          <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
+          </StyledSelect>
+          <StyledSelect value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }} aria-label="验收状态筛选">
             <option value="">全部验收状态</option>
             <option value="符合且能汇报">符合且能汇报</option>
             <option value="符合基础要求">符合基础要求</option>
             <option value="不够30条需补充">不够30条需补充</option>
             <option value="待抓取">待抓取</option>
-          </select>
+          </StyledSelect>
           <button
             type="button"
             className="subtle-btn"
@@ -399,20 +400,20 @@ export function ContentRegistry({
         {showMoreFilters && (
           <div style={{ marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed #e2e8f0' }}>
           <WorkspaceToolbar>
-          <select value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}>
+          <StyledSelect value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }} aria-label="内容方向筛选">
             <option value="">全部内容方向</option>
             <option value="母婴育儿">母婴育儿</option>
             <option value="奶粉测评">奶粉测评</option>
             <option value="成分科普">成分科普</option>
             <option value="日常分享">日常分享</option>
-          </select>
-          <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}>
+          </StyledSelect>
+          <StyledSelect value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }} aria-label="排序规则">
             <option value="">默认排序（更新时间）</option>
             <option value="reads">按阅读量排序</option>
             <option value="interactions">按互动量排序</option>
             <option value="comments">按评论总数排序</option>
             <option value="publishedAt">按发布时间排序</option>
-          </select>
+          </StyledSelect>
           <input
             type="date"
             value={from}

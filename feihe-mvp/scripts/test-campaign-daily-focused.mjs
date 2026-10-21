@@ -44,7 +44,14 @@ function loadComponent(filename) {
     }
     return nativeRequire(name);
   };
-  vm.runInNewContext("(function(require, module, exports) { " + compiled + "\n})", {})(customRequire, result, result.exports);
+  const sandbox = {
+    URLSearchParams: globalThis.URLSearchParams,
+    URL: globalThis.URL,
+    console: globalThis.console,
+    setTimeout: globalThis.setTimeout,
+    clearTimeout: globalThis.clearTimeout,
+  };
+  vm.runInNewContext("(function(require, module, exports) { " + compiled + "\n})", sandbox)(customRequire, result, result.exports);
   moduleCache.set(filename, result.exports);
   return result.exports;
 }

@@ -4,6 +4,7 @@ import { api } from '../../lib/hooks/use-project-data';
 import { useCachedQuery, fetchWithCache, invalidateQueryCache } from '../../lib/cache';
 import { useCacheIdentity } from '../../components/project-shell/IdentityBoundary';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
+import { CustomSelect } from '../../components/ui/CustomSelect';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { LoadingState } from '../../components/ui/LoadingState';
@@ -989,9 +990,12 @@ export function BusinessDailyBoard({
 
   useEffect(() => {
     if (!params.get('day')) {
-      const target = (view as any)?.defaultDay || (view as any)?.latestReportDay;
+      const viewRecord = view as (DailyView & { defaultDay?: string; latestReportDay?: string }) | null;
+      const target = viewRecord?.defaultDay || viewRecord?.latestReportDay;
       if (target && target !== day) {
-        setDay(target);
+        setTimeout(() => {
+          setDay(target);
+        }, 0);
       }
     }
   }, [view, params, day]);
@@ -1055,7 +1059,7 @@ export function BusinessDailyBoard({
     if (overview) return false;
     if (!view?.core) return false;
     return view.core.adSpend?.value === null || view.core.adSpend?.state === 'not_collected';
-  }, [overview, view?.core]);
+  }, [overview, view]);
 
   const filteredTodayActions = useMemo(() => {
     if (!view?.highlights?.today) return [];
@@ -1063,7 +1067,7 @@ export function BusinessDailyBoard({
       return view.highlights.today.filter(item => !item.title.includes('投放实际'));
     }
     return view.highlights.today;
-  }, [view?.highlights?.today, isTodayCostsPending]);
+  }, [view, isTodayCostsPending]);
 
   const table = (title: string) => view?.tables.find(t => t.title === title);
   const monthAuditTable = table('星盟月累计 · 电商与聚光分别核对');
@@ -1203,7 +1207,21 @@ export function BusinessDailyBoard({
                 </label>
               </>
             ) : (
-              <>
+              <div className="bd-daily-date-picker-wrap" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  className="bd-quick-btn"
+                  onClick={() => {
+                    const d = new Date(day + 'T00:00:00Z');
+                    d.setUTCDate(d.getUTCDate() - 1);
+                    setDay(d.toISOString().slice(0, 10));
+                    setNotice('');
+                  }}
+                  aria-label="前一天"
+                  title="切换至前一日"
+                >
+                  ← 前一日
+                </button>
                 <label>
                   业务日期
                   <input
@@ -1216,15 +1234,34 @@ export function BusinessDailyBoard({
                     }}
                   />
                 </label>
-                <label>
+                <button
+                  type="button"
+                  className="bd-quick-btn"
+                  onClick={() => {
+                    const d = new Date(day + 'T00:00:00Z');
+                    d.setUTCDate(d.getUTCDate() + 1);
+                    setDay(d.toISOString().slice(0, 10));
+                    setNotice('');
+                  }}
+                  aria-label="后一天"
+                  title="切换至后一日"
+                >
+                  后一日 →
+                </button>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   数据版本
-                  <select aria-label="数据版本" value={mode} onChange={e => setMode(e.target.value)}>
-                    <option value="latest">当前最新底表</option>
-                    <option value="source_snapshot">来源日报快照</option>
-                    <option value="confirmed">已确认历史日报</option>
-                  </select>
+                  <CustomSelect
+                    ariaLabel="数据版本"
+                    value={mode}
+                    onChange={v => setMode(v)}
+                    options={[
+                      { value: 'latest', label: '当前最新底表' },
+                      { value: 'source_snapshot', label: '来源日报快照' },
+                      { value: 'confirmed', label: '已确认历史日报' },
+                    ]}
+                  />
                 </label>
-              </>
+              </div>
             )}
 
             <button disabled={busy} onClick={() => {
@@ -1746,8 +1783,8 @@ export function BusinessDailyBoard({
                       <section className="bd-panel bd-main-chart" data-section="spend">
                         <div className="bd-panel-head">
                           <div>
-                            <h3>累计计划与实际 · 平台广告消耗（F+S）</h3>
-                            <p className="bd-caption">同口径FS比较；整体KFSOPZ进度另列。累计曲线在缺失日期断开。</p>
+                            <h3>当日渠道费用结构与对账明细 ({day})</h3>
+                            <p className="bd-caption">选定单日FS实际与排期明细对照；整体KFSOPZ进度另列。</p>
                           </div>
                           <div className="bd-progress">
                             <span>月时间进度 {format(view.progress.timeFraction * 100)}%</span>
@@ -1760,20 +1797,6 @@ export function BusinessDailyBoard({
                           </div>
                         </div>
                         <AspectSummaryCard aspectKey="spend" view={view} overview={false} />
-                        <TimeSeriesChart
-                          title="累计FS计划与实际消耗"
-                          height={300}
-                          unit="元"
-                          rows={cumulative}
-                          series={[
-                            { key: 'plan', label: '累计FS计划', color: DASHBOARD_PALETTE.plan },
-                            { key: 'actual', label: '累计平台广告消耗', color: DASHBOARD_PALETTE.actual },
-                          ]}
-                        />
-                        <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
-                        <p className="bd-caption">
-                          截至 {view.businessThrough || '待采集'}，同范围FS计划 {format(view.progress.planThroughData)} 元，实际 {format(view.progress.actualThroughData)} 元，差额（实际−计划）{format(view.progress.gapThroughData)} 元。
-                        </p>
                         {view?.platformNative && (
                           <div className="bd-platform-reconcile-chip" style={{ margin: '8px 0', padding: '8px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#334155' }}>
                             <strong style={{ color: DASHBOARD_PALETTE.actual }}>平台原生观测对账：</strong>
@@ -1813,6 +1836,27 @@ export function BusinessDailyBoard({
                               </div>
                             ))}
                         </div>
+                        <details className="bd-history-details" style={{ margin: '14px 0', border: '1px solid #e2e8f0', borderRadius: 8, padding: '10px 14px', background: '#fafaf9' }}>
+                          <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 13, color: '#475569' }}>
+                            📈 查看月度累计FS走势与历史排期走势 (可选折叠)
+                          </summary>
+                          <div style={{ marginTop: 12 }}>
+                            <TimeSeriesChart
+                              title="累计FS计划与实际消耗"
+                              height={260}
+                              unit="元"
+                              rows={cumulative}
+                              series={[
+                                { key: 'plan', label: '累计FS计划', color: DASHBOARD_PALETTE.plan },
+                                { key: 'actual', label: '累计平台广告消耗', color: DASHBOARD_PALETTE.actual },
+                              ]}
+                            />
+                            <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
+                            <p className="bd-caption" style={{ marginTop: 8 }}>
+                              截至 {view.businessThrough || '待采集'}，同范围FS计划 {format(view.progress.planThroughData)} 元，实际 {format(view.progress.actualThroughData)} 元，差额（实际−计划）{format(view.progress.gapThroughData)} 元。
+                            </p>
+                          </div>
+                        </details>
                         <div className="bd-monthly">
                           日报月预算 {format(view.core.monthlyBudget.value)} 元 · 月累计政策后结算 {format(view.core.monthlySettlement.value)} 元{' '}
                           <Source value={view.core.monthlySettlement.source} />

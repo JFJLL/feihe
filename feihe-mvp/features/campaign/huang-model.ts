@@ -1,4 +1,4 @@
-import type { CampaignDashboard, CampaignTable, CampaignDailyDataset, CampaignActions } from '../../lib/campaign-types';
+﻿import type { CampaignDashboard, CampaignTable, CampaignDailyDataset, CampaignActions } from '../../lib/campaign-types';
 
 export interface HuangCreatorRow {
   index: number | null;
@@ -72,6 +72,61 @@ export interface HuangTableWithMeta {
   note: string;
   rows: Record<string, unknown>[];
   totalSpend: number | null;
+}
+
+export interface HuangRegionalPrecision {
+  shanghaiSpend: number | null;
+  shanghaiImpressions: number | null;
+  shanghaiClicks: number | null;
+  shanghaiCtr: number | null;
+  shanghaiCpc: number | null;
+  shanghaiEngagements: number | null;
+  shanghaiCpe: number | null;
+  shanghaiSpendShare: number | null;
+  shanghaiImprShare: number | null;
+
+  beijingSpend: number | null;
+  beijingImpressions: number | null;
+  beijingClicks: number | null;
+  beijingCtr: number | null;
+  beijingCpc: number | null;
+  beijingEngagements: number | null;
+  beijingCpe: number | null;
+  beijingSpendShare: number | null;
+  beijingImprShare: number | null;
+
+  combinedSpend: number | null;
+  combinedImpressions: number | null;
+  combinedClicks: number | null;
+  combinedSpendShare: number | null;
+  combinedImprShare: number | null;
+
+  targetAudienceDenominator: null;
+  truePenetration: null;
+  penetrationStatusNote: string;
+}
+
+export interface HuangContentCapacityModel {
+  executedCreatorCount: number;
+  executedCreatorPublished: number;
+  executedKosCount: number;
+  totalContentSupply: number;
+  assetCollectedCount: number;
+  assetCollectionRate: number;
+  theoreticalCapacityLimit: null;
+  theoreticalCapacityNote: string;
+}
+
+export interface HuangAipsStockModel {
+  awarenessImpressions: number | null;
+  potentialPlays5s: number | null;
+  interestSeedI: number | null;
+  deepSeedTi: number | null;
+  totalSeed: number | null;
+  cpi: number | null;
+  cpti: number | null;
+  cohortTransitions: null;
+  transitionsStatusNote: string;
 }
 
 export function parseNum(val: unknown): number | null {
@@ -221,9 +276,12 @@ export interface HuangTianeParsedModel {
   genderAgeMatrix: {
     genders: string[];
     ageGroups: string[];
-    cells: { gender: string; ageGroup: string; spend: number; engagements: number; cpe: number | null }[];
+    cells: { gender: string; ageGroup: string; spend: number | null; engagements: number | null; cpe: number | null }[];
   };
   cidPlacementsComparison: Record<string, unknown>[];
+  beijingShanghaiPrecision: HuangRegionalPrecision;
+  contentCapacity: HuangContentCapacityModel;
+  aipsStocks: HuangAipsStockModel;
 
   actions: CampaignActions | null;
 }
@@ -545,14 +603,20 @@ export function extractHuangTianeData(dashboard: CampaignDashboard): HuangTianeP
   const brandAudiencesTop10 = [...brandAudiencesTable.rows].sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0)).slice(0, 10);
   const commerceCreativesTop10 = [...commerceCreativesTable.rows].sort((a, b) => (parseNum(b.gmv) || 0) - (parseNum(a.gmv) || 0)).slice(0, 10);
 
-  const creatorFunnelStages = [
-    { name: '① 初选提报', value: 373, rate: 100.0, note: '全网初选373位适格博主' },
-    { name: '② 一筛通过', value: 83, rate: 22.3, note: '团队初审83通过/69待定' },
-    { name: '③ 二核通过', value: 58, rate: 15.5, note: '调性爆款二核通过' },
-    { name: '④ 商务可接', value: 55, rate: 14.7, note: '排期、报价与排竞接洽' },
-    { name: '⑤ 定档执行', value: 31, rate: 8.3, note: '含税总报价¥324,774' },
-    { name: '⑥ 发布上线', value: 18, rate: 58.1, note: '18篇顺利发布，收集率100%' },
-  ];
+  const creatorFunnelStages = creatorSelectionFunnelTable.rows.length > 0
+    ? creatorSelectionFunnelTable.rows
+        .filter((r) => parseNum(r.headcount) !== null)
+        .slice(0, 6)
+        .map((r) => ({
+          name: String(r.stage || ''),
+          value: parseNum(r.headcount) || 0,
+          rate: parseNum(r.retentionRate),
+          note: String(r.statusNote || r.strategyTier || ''),
+        }))
+    : [
+        { name: '① 定档计划', value: creatorsCount, rate: 100.0, note: String(creatorsCount) + '位定档达人' },
+        { name: '② 成稿发布', value: creatorsPublished, rate: creatorsPublishRate, note: String(creatorsPublished) + '篇发布上线' },
+      ];
 
   const genderSet = new Set<string>();
   const ageSet = new Set<string>();
@@ -561,19 +625,142 @@ export function extractHuangTianeData(dashboard: CampaignDashboard): HuangTianeP
     if (r.ageGroup) ageSet.add(String(r.ageGroup));
   });
   const genders = ['女', '男'].filter((g) => genderSet.has(g));
-  const ageGroups = Array.from(ageSet).sort((a, b) => {
-    const numA = parseInt(a.replace(/\D/g, '') || '0', 10);
-    const numB = parseInt(b.replace(/\D/g, '') || '0', 10);
-    return numA - numB;
+  genderSet.forEach((g) => {
+    if (g !== '女' && g !== '男' && g !== '未知' && g !== '未标注') {
+      genders.push(g);
+    }
   });
+  if (genderSet.has('未知')) genders.push('未知');
+  if (genderSet.has('未标注')) genders.push('未标注');
+
+  const getAgeSortKey = (age: string): number => {
+    const clean = age.trim();
+    if (clean.includes('<18')) return 10;
+    if (clean.includes('18-22')) return 20;
+    if (clean.includes('23-27')) return 30;
+    if (clean.includes('28-32')) return 40;
+    if (clean.includes('33-40')) return 50;
+    if (clean.includes('41-50')) return 60;
+    if (clean.includes('>50') || clean.includes('50+')) return 70;
+    if (clean.includes('未知') || clean.includes('未标注') || clean === 'null' || !clean) return 999;
+    const n = parseInt(clean.replace(/\D/g, '') || '900', 10);
+    return n;
+  };
+  const ageGroups = Array.from(ageSet).sort((a, b) => getAgeSortKey(a) - getAgeSortKey(b));
   const cells = brandGenderAgeTable.rows.map((r) => ({
     gender: String(r.gender || ''),
     ageGroup: String(r.ageGroup || ''),
-    spend: parseNum(r.spend) || 0,
-    engagements: parseNum(r.engagements) || 0,
+    spend: parseNum(r.spend),
+    engagements: parseNum(r.engagements),
     cpe: parseNum(r.cpe),
   }));
   const genderAgeMatrix = { genders, ageGroups, cells };
+  // Regional precision calculation for Beijing & Shanghai
+  const totalProvSpend = strictSum(brandProvincesTable.rows, 'spend');
+  const totalProvImpr = strictSum(brandProvincesTable.rows, 'impressions');
+
+  const shRow = brandProvincesTable.rows.find((r) => r.province === '上海');
+  const bjRow = brandProvincesTable.rows.find((r) => r.province === '北京');
+
+  const shanghaiSpend = parseNum(shRow?.spend);
+  const shanghaiImpressions = parseNum(shRow?.impressions);
+  const shanghaiClicks = parseNum(shRow?.clicks);
+  const shanghaiCtr = parseNum(shRow?.ctr);
+  const shanghaiCpc = parseNum(shRow?.cpc);
+  const shanghaiEngagements = parseNum(shRow?.engagements);
+  const shanghaiCpe = parseNum(shRow?.cpe);
+  const shanghaiSpendShare = (shanghaiSpend !== null && totalProvSpend !== null && totalProvSpend > 0)
+    ? Number(((shanghaiSpend / totalProvSpend) * 100).toFixed(2))
+    : null;
+  const shanghaiImprShare = (shanghaiImpressions !== null && totalProvImpr !== null && totalProvImpr > 0)
+    ? Number(((shanghaiImpressions / totalProvImpr) * 100).toFixed(2))
+    : null;
+
+  const beijingSpend = parseNum(bjRow?.spend);
+  const beijingImpressions = parseNum(bjRow?.impressions);
+  const beijingClicks = parseNum(bjRow?.clicks);
+  const beijingCtr = parseNum(bjRow?.ctr);
+  const beijingCpc = parseNum(bjRow?.cpc);
+  const beijingEngagements = parseNum(bjRow?.engagements);
+  const beijingCpe = parseNum(bjRow?.cpe);
+  const beijingSpendShare = (beijingSpend !== null && totalProvSpend !== null && totalProvSpend > 0)
+    ? Number(((beijingSpend / totalProvSpend) * 100).toFixed(2))
+    : null;
+  const beijingImprShare = (beijingImpressions !== null && totalProvImpr !== null && totalProvImpr > 0)
+    ? Number(((beijingImpressions / totalProvImpr) * 100).toFixed(2))
+    : null;
+
+  const combinedSpend = (shanghaiSpend !== null && beijingSpend !== null)
+    ? Number(((shanghaiSpend || 0) + (beijingSpend || 0)).toFixed(2))
+    : null;
+  const combinedImpressions = (shanghaiImpressions !== null && beijingImpressions !== null)
+    ? (shanghaiImpressions || 0) + (beijingImpressions || 0)
+    : null;
+  const combinedClicks = (shanghaiClicks !== null && beijingClicks !== null)
+    ? (shanghaiClicks || 0) + (beijingClicks || 0)
+    : null;
+  const combinedSpendShare = (combinedSpend !== null && totalProvSpend !== null && totalProvSpend > 0)
+    ? Number(((combinedSpend / totalProvSpend) * 100).toFixed(2))
+    : null;
+  const combinedImprShare = (combinedImpressions !== null && totalProvImpr !== null && totalProvImpr > 0)
+    ? Number(((combinedImpressions / totalProvImpr) * 100).toFixed(2))
+    : null;
+
+  const beijingShanghaiPrecision: HuangRegionalPrecision = {
+    shanghaiSpend,
+    shanghaiImpressions,
+    shanghaiClicks,
+    shanghaiCtr,
+    shanghaiCpc,
+    shanghaiEngagements,
+    shanghaiCpe,
+    shanghaiSpendShare,
+    shanghaiImprShare,
+
+    beijingSpend,
+    beijingImpressions,
+    beijingClicks,
+    beijingCtr,
+    beijingCpc,
+    beijingEngagements,
+    beijingCpe,
+    beijingSpendShare,
+    beijingImprShare,
+
+    combinedSpend,
+    combinedImpressions,
+    combinedClicks,
+    combinedSpendShare,
+    combinedImprShare,
+
+    targetAudienceDenominator: null,
+    truePenetration: null,
+    penetrationStatusNote: '分母缺失：原报表未提供京沪城市高净值生食蛋目标客群基数，仅提供地域投放份额，不能计算目标人群包渗透率。',
+  };
+
+  const contentCapacity: HuangContentCapacityModel = {
+    executedCreatorCount: creatorsCount,
+    executedCreatorPublished: creatorsPublished,
+    executedKosCount: kosCount,
+    totalContentSupply: creatorsPublished + kosCount,
+    assetCollectedCount: creatorsAssetCollected,
+    assetCollectionRate: creatorsAssetRate,
+    theoreticalCapacityLimit: null,
+    theoreticalCapacityNote: '未测定：原报表未包含小红书蛋品垂类内容容量饱和度与搜索承载天花板，现有登记数仅反映物料供给。',
+  };
+
+  const aipsStocks: HuangAipsStockModel = {
+    awarenessImpressions: null,
+    potentialPlays5s: null,
+    interestSeedI: parseNum(brandSummaryRow?.seed_i),
+    deepSeedTi: parseNum(brandSummaryRow?.seed_ti),
+    totalSeed: parseNum(brandSummaryRow?.seed_total),
+    cpi: parseNum(brandSummaryRow?.cpi),
+    cpti: parseNum(brandSummaryRow?.cpti),
+    cohortTransitions: null,
+    transitionsStatusNote: '需千帆双时点受众队列底表支持：阶段流转跃迁率须基于同批受众双时点追踪，当前数据为时点静态存量，不虚构伪流转率。',
+  };
+
   const cidPlacementsComparison = cidPlacementBreakdownTable.rows;
 
   return {
@@ -659,6 +846,9 @@ export function extractHuangTianeData(dashboard: CampaignDashboard): HuangTianeP
     creatorFunnelStages,
     genderAgeMatrix,
     cidPlacementsComparison,
+    beijingShanghaiPrecision,
+    contentCapacity,
+    aipsStocks,
 
     actions: dashboard.actions || null,
   };

@@ -165,7 +165,7 @@ export function CampaignWorkspace({
     <WorkspaceModuleTabs
       tabs={[
         { id: 'overview', title: '数据总览', desc: '预算进度与阶段效果', icon: '📊' },
-        { id: 'daily', title: '分日看板', desc: '多指标趋势与每日明细', icon: '📅' },
+        { id: 'daily', title: '分日看板', desc: '当日指标与明细', icon: '📅' },
       ]}
       activeTab={overviewTab}
       onChange={setOverviewTab}

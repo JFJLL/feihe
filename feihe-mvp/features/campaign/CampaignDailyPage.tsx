@@ -1,22 +1,26 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useCallback, useSyncExternalStore } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
-import { CampaignComboChart } from "./CampaignComboChart";
-import { CampaignDailyDiagnostics } from "./CampaignDailyDiagnostics";
+import { CustomSelect } from "../../components/ui/CustomSelect";
 import {
   resolveDailyDatasets,
-  buildCalendarRows,
-  subtractCalendarDays,
-  getDatasetChartConfigs,
-  computeSummaryMetrics,
   fmtNum,
-  safeNum,
+  CAMPAIGN_PALETTE,
 } from "./campaign-daily-model";
+import {
+  getSingleDayKPIs,
+  getSingleDayDistributions,
+  getCrossDatasetDailyComparison,
+  subtractCalendarDays,
+  addCalendarDays,
+  isValidIsoDate,
+} from "./daily-selection-model";
 import "./campaign-analytics.css";
 import "./campaign-combo.css";
 import "./campaign-daily.css";
+import "./CampaignDailyPage.css";
 
 export interface CampaignDailyPageProps {
   dashboard: CampaignDashboard;
@@ -32,18 +36,52 @@ function formatDatasetDisplay(id: string, fallback: string): string {
   return fallback;
 }
 
+function subscribeToUrl(callback: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("popstate", callback);
+  window.addEventListener("app:context-change", callback);
+  return () => {
+    window.removeEventListener("popstate", callback);
+    window.removeEventListener("app:context-change", callback);
+  };
+}
+
+function getUrlSearchSnapshot(): string {
+  if (typeof window === "undefined") return "";
+  return window.location.search;
+}
+
+function getServerUrlSearchSnapshot(): string {
+  return "";
+}
+
 export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const name = dashboard?.name || "项目";
   const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
 
-  // Selected dataset
-  const [selectedDatasetId, setSelectedDatasetId] = useState<string>("");
+  // Reactive URL search store: guarantees SSR/hydration compatibility and listens to back/forward
+  const urlSearch = useSyncExternalStore(subscribeToUrl, getUrlSearchSnapshot, getServerUrlSearchSnapshot);
+  const searchParams = useMemo(() => {
+    if (typeof URLSearchParams !== "undefined") {
+      return new URLSearchParams(urlSearch);
+    }
+    return { get: () => null } as unknown as URLSearchParams;
+  }, [urlSearch]);
+  const urlDayRaw = searchParams.get("day");
+  const urlDay = urlDayRaw && isValidIsoDate(urlDayRaw) ? urlDayRaw : null;
+  const urlDataset = searchParams.get("dataset") || null;
+
+  // Active dataset derived from URL
   const activeDataset = useMemo(() => {
     if (!datasets.length) return null;
-    return datasets.find((d) => d.id === selectedDatasetId) || datasets[0];
-  }, [datasets, selectedDatasetId]);
+    if (urlDataset) {
+      const match = datasets.find((d) => d.id === urlDataset);
+      if (match) return match;
+    }
+    return datasets[0];
+  }, [datasets, urlDataset]);
 
-  // Available dates for range clamping
+  // Available dates for active dataset
   const allAvailableDates = useMemo(() => {
     if (!activeDataset?.rows) return [];
     return activeDataset.rows
@@ -55,55 +93,74 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const minAvailableDate = allAvailableDates[0] || "";
   const maxAvailableDate = allAvailableDates[allAvailableDates.length - 1] || "";
 
-  const [customStartDate, setCustomStartDate] = useState<string>("");
-  const [customEndDate, setCustomEndDate] = useState<string>("");
+  // Selected date: strictly adheres to URL if valid, otherwise falls back to latest observed day
+  const selectedDate = urlDay !== null ? urlDay : maxAvailableDate;
 
-  const startDate = customStartDate || minAvailableDate;
-  const endDate = customEndDate || maxAvailableDate;
+  // URL state updater (pushes state and triggers context change event for reactive sync)
+  const updateUrl = useCallback(
+    (patch: { day?: string; dataset?: string }) => {
+      if (typeof window === "undefined") return;
+      try {
+        const url = new URL(window.location.href);
+        if (patch.day !== undefined) {
+          if (patch.day) url.searchParams.set("day", patch.day);
+          else url.searchParams.delete("day");
+        }
+        if (patch.dataset !== undefined) {
+          if (patch.dataset) url.searchParams.set("dataset", patch.dataset);
+          else url.searchParams.delete("dataset");
+        }
+        window.history.pushState(window.history.state, "", url);
+        const ctx = {
+          projectId: dashboard?.projectId,
+          day: patch.day !== undefined ? patch.day : url.searchParams.get("day") || "",
+          dataset: patch.dataset !== undefined ? patch.dataset : url.searchParams.get("dataset") || "",
+          tab: "daily",
+        };
+        (window as unknown as { __ACTIVE_AGENT_CONTEXT__?: typeof ctx }).__ACTIVE_AGENT_CONTEXT__ = ctx;
+        window.dispatchEvent(new CustomEvent("app:context-change", { detail: ctx }));
+      } catch {
+        // ignore history push errors
+      }
+    },
+    [dashboard]
+  );
 
-  // 严格检查日期逆序：start > end 禁止出图，展示明确提示
-  const isDateOrderInvalid = Boolean(startDate && endDate && startDate > endDate);
-
-  // Calendar dates with missing gaps filled as null (lines break, zero distinct from null)
-  const chartAndTableRows = useMemo(() => {
-    if (isDateOrderInvalid) return [];
-    return buildCalendarRows(activeDataset, startDate, endDate);
-  }, [activeDataset, startDate, endDate, isDateOrderInvalid]);
-
-  // Valid present rows for table (inspectable in details)
-  const presentTableRows = useMemo(() => {
-    if (!activeDataset || isDateOrderInvalid) return [];
-    return chartAndTableRows.filter((r) => {
-      return activeDataset.metrics.some((m) => safeNum(r[m.key]) !== null);
-    });
-  }, [chartAndTableRows, activeDataset, isDateOrderInvalid]);
-
-  // 4 Fixed compact business summary metrics (传入完整 calendarRows，缺日不隐瞒)
-  const summaryMetrics = useMemo(() => {
-    if (!activeDataset || isDateOrderInvalid) return [];
-    return computeSummaryMetrics(activeDataset, chartAndTableRows);
-  }, [activeDataset, chartAndTableRows, isDateOrderInvalid]);
-
-  // 3-5 multi-metric business combination chart configs (each axis same unit, >=2 series)
-  const chartConfigs = useMemo(() => {
-    if (!activeDataset || isDateOrderInvalid) return [];
-    return getDatasetChartConfigs(activeDataset, chartAndTableRows);
-  }, [activeDataset, chartAndTableRows, isDateOrderInvalid]);
-
-  // Preset date shortcuts
-  const handleQuickPreset = (preset: "all" | "7d" | "14d") => {
-    if (!maxAvailableDate) return;
-    if (preset === "all") {
-      setCustomStartDate(minAvailableDate);
-      setCustomEndDate(maxAvailableDate);
-    } else if (preset === "7d") {
-      setCustomStartDate(subtractCalendarDays(maxAvailableDate, 6));
-      setCustomEndDate(maxAvailableDate);
-    } else if (preset === "14d") {
-      setCustomStartDate(subtractCalendarDays(maxAvailableDate, 13));
-      setCustomEndDate(maxAvailableDate);
+  // Step date helpers
+  const handleStepDay = (step: -1 | 1) => {
+    const current = selectedDate || maxAvailableDate;
+    if (!current) return;
+    const next = step === -1 ? subtractCalendarDays(current, 1) : addCalendarDays(current, 1);
+    if (next) {
+      updateUrl({ day: next });
     }
   };
+
+  // Active row on the selected date
+  const selectedRow = useMemo(() => {
+    if (!activeDataset?.rows || !selectedDate) return null;
+    return activeDataset.rows.find((r) => r.date === selectedDate) || null;
+  }, [activeDataset, selectedDate]);
+
+  const isDateMissing = !selectedRow;
+
+  // Selected Day Core KPIs with Day-over-Day comparisons
+  const summaryMetrics = useMemo(() => {
+    if (!activeDataset || !selectedDate) return [];
+    return getSingleDayKPIs(activeDataset, selectedDate);
+  }, [activeDataset, selectedDate]);
+
+  // Selected Day Distributions (Channel, Keywords, Crowd, Efficiency)
+  const distributions = useMemo(() => {
+    if (!activeDataset || !selectedDate) return [];
+    return getSingleDayDistributions(activeDataset, selectedDate);
+  }, [activeDataset, selectedDate]);
+
+  // Cross-dataset comparisons for the selected date with explicit incompatible scopes
+  const crossDataset = useMemo(() => {
+    if (!datasets.length || !selectedDate) return null;
+    return getCrossDatasetDailyComparison(datasets, selectedDate, dashboard?.projectId);
+  }, [datasets, selectedDate, dashboard?.projectId]);
 
   // Secondary switch for Winner Wipes delivery vs taosou
   const isWipes = activeDataset?.id.startsWith("wipes-daily-");
@@ -121,12 +178,12 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   // Honest empty state when no daily datasets exist (e.g. qicui or unconfigured projects)
   if (!datasets.length || !activeDataset || !activeDataset.rows.length) {
     return (
-      <div className="ca-page" role="main" aria-label={`${name} 分日趋势`}>
+      <div className="ca-page" role="main" aria-label={`${name} 分日看板`}>
         <header className="ca-header bd-toolbar-compact">
           <div className="ca-header-heading">
             <div className="ca-header-title-row">
               <h2 className="ca-header-title">分日看板</h2>
-              <span className="ca-header-badge">逐日趋势</span>
+              <span className="ca-header-badge">当日指标与明细</span>
             </div>
             <p className="ca-header-subtitle">
               项目暂无逐日分日流水记录
@@ -146,13 +203,13 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   }
 
   return (
-    <div className="ca-page" role="main" aria-label={`${name} 分日趋势看板`}>
-      {/* 1. Header (紧凑元信息 toolbar + 周期说明 + 数据集切换) */}
+    <div className="ca-page" role="main" aria-label={`${name} 分日看板`}>
+      {/* 1. Header (紧凑元信息 toolbar + 数据集切换) */}
       <header className="ca-header bd-toolbar-compact">
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">分日看板</h2>
-            <span className="ca-header-badge">多维业务比对</span>
+            <span className="ca-header-badge">当日指标与明细</span>
             <span className="ca-header-subtitle">
               {formatDatasetDisplay(activeDataset.id, activeDataset.label)} ({activeDataset.period})
             </span>
@@ -163,22 +220,17 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
           {datasets.length > 1 && (
             <div className="ca-dataset-picker-item">
               <span className="ca-filter-label">分析范围:</span>
-              <select
-                className="ca-dataset-select"
+              <CustomSelect
+                ariaLabel="选择分日数据集"
                 value={activeDataset.id}
-                onChange={(e) => {
-                  setSelectedDatasetId(e.target.value);
-                  setCustomStartDate("");
-                  setCustomEndDate("");
+                onChange={(val) => {
+                  updateUrl({ dataset: val });
                 }}
-                aria-label="选择分日数据集"
-              >
-                {datasets.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {formatDatasetDisplay(d.id, d.label)}
-                  </option>
-                ))}
-              </select>
+                options={datasets.map((d) => ({
+                  value: d.id,
+                  label: formatDatasetDisplay(d.id, d.label),
+                }))}
+              />
             </div>
           )}
 
@@ -187,9 +239,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
               type="button"
               className="ca-btn-switch-dataset"
               onClick={() => {
-                setSelectedDatasetId(alternateWipesId);
-                setCustomStartDate("");
-                setCustomEndDate("");
+                updateUrl({ dataset: alternateWipesId });
               }}
               title="切换关联分日分析视角"
             >
@@ -199,183 +249,255 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
         </div>
       </header>
 
-      {/* 2. 日期区间控制工具栏 (保留真实日历快捷与日期控制，已完全移除单指标选择胶囊) */}
+      {/* 2. 单日期控制工具栏 (全项目统一单日选择，支持前后日步进与最新日期) */}
       <div className="ca-daily-toolbar" role="toolbar" aria-label="分日分析工具栏">
         <div className="ca-filter-section">
-          <span className="ca-filter-label">业务日期区间:</span>
-          <div className="ca-date-range-box">
+          <span className="ca-filter-label">业务日期:</span>
+          <div className="ca-date-single-box">
+            <button
+              type="button"
+              className="ca-btn-date-step"
+              onClick={() => handleStepDay(-1)}
+              aria-label="前一日"
+              title="切换至前一日"
+            >
+              ← 前一日
+            </button>
             <input
               type="date"
               className="ca-date-input"
-              value={startDate}
+              value={selectedDate || ""}
               min={minAvailableDate}
               max={maxAvailableDate}
-              onChange={(e) => setCustomStartDate(e.target.value)}
-              aria-label="起始日期"
+              onChange={(e) => updateUrl({ day: e.target.value })}
+              aria-label="选择业务日期"
             />
-            <span className="ca-date-sep">~</span>
-            <input
-              type="date"
-              className="ca-date-input"
-              value={endDate}
-              min={minAvailableDate}
-              max={maxAvailableDate}
-              onChange={(e) => setCustomEndDate(e.target.value)}
-              aria-label="结束日期"
-            />
+            <button
+              type="button"
+              className="ca-btn-date-step"
+              onClick={() => handleStepDay(1)}
+              aria-label="后一日"
+              title="切换至后一日"
+            >
+              后一日 →
+            </button>
           </div>
 
-          <button
-            type="button"
-            className="ca-btn-reset"
-            onClick={() => handleQuickPreset("all")}
-            title="重置为全量业务期"
-          >
-            全量 ({allAvailableDates.length}天)
-          </button>
-          {allAvailableDates.length > 7 && (
+          {maxAvailableDate && selectedDate !== maxAvailableDate && (
             <button
               type="button"
               className="ca-btn-reset"
-              onClick={() => handleQuickPreset("7d")}
-              title="按日历天回溯最近7天"
+              onClick={() => updateUrl({ day: maxAvailableDate })}
+              title="切换至最新记录日"
             >
-              近7天
-            </button>
-          )}
-          {allAvailableDates.length > 14 && (
-            <button
-              type="button"
-              className="ca-btn-reset"
-              onClick={() => handleQuickPreset("14d")}
-              title="按日历天回溯最近14天"
-            >
-              近14天
+              最新日期 ({maxAvailableDate})
             </button>
           )}
         </div>
 
-        {!isDateOrderInvalid && (
-          <div style={{ fontSize: 11.5, color: "#64748b" }}>
-            有效采集 <strong>{presentTableRows.length}</strong> 天 · 日历跨度{" "}
-            <strong>{chartAndTableRows.length}</strong> 天
-          </div>
-        )}
+        <div className="ca-daily-status-meta">
+          {isDateMissing ? (
+            <span style={{ fontSize: 11.5, color: "#c25953", fontWeight: 600 }}>
+              ⚠️ 该日期暂无流水记录
+            </span>
+          ) : (
+            <span style={{ fontSize: 11.5, color: "#64748b" }}>
+              有效采集日 · 全量可用区间 {activeDataset.period}
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* 3. 日期逆序异常提示 */}
-      {isDateOrderInvalid && (
+      {/* 3. 缺日明确诚实空态 (绝不静默替换为最新日期) */}
+      {isDateMissing && (
         <div className="ca-daily-empty-box" role="alert">
-          <div className="ca-daily-empty-icon">⚠️</div>
-          <h3 className="ca-daily-empty-title">起始日期不能晚于结束日期</h3>
-          <p className="ca-daily-empty-desc">
-            当前选择的起始日期 ({startDate}) 晚于结束日期 ({endDate})，请调整有效日期范围。
-          </p>
-        </div>
-      )}
-
-      {/* 4. 空日期段明确空态 */}
-      {!isDateOrderInvalid && (chartAndTableRows.length === 0 || presentTableRows.length === 0) && (
-        <div className="ca-daily-empty-box">
           <div className="ca-daily-empty-icon">📅</div>
-          <h3 className="ca-daily-empty-title">所选日期暂无记录</h3>
+          <h3 className="ca-daily-empty-title">所选日期 ({selectedDate}) 暂无流水记录</h3>
           <p className="ca-daily-empty-desc">
-            所选日期区间内未包含任何采集记录，请调整日期区间。
+            当前数据集 ({formatDatasetDisplay(activeDataset.id, activeDataset.label)}) 在 {selectedDate} 未采集到有效流水数据。可用数据区间为 {activeDataset.period}。
           </p>
+          {maxAvailableDate && (
+            <button
+              type="button"
+              className="ca-btn-reset"
+              onClick={() => updateUrl({ day: maxAvailableDate })}
+              style={{ marginTop: 8 }}
+            >
+              切换至该数据集最新记录日期 ({maxAvailableDate})
+            </button>
+          )}
         </div>
       )}
 
-      {/* 5. 4核心精炼业务指标 Strip (严格遵循业务加权与覆盖率，缺日留—) */}
-      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
+      {/* 4. 当日核心指标 Strip (含真实环比，前日无流水诚实标注) */}
+      {!isDateMissing && summaryMetrics.length > 0 && (
         <MetricStrip items={summaryMetrics} />
       )}
 
-      {/* 6. 多图联动业务面板 (默认2列等高约260px，奇数张最后一图跨两列) */}
-      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
+      {/* 5. 当日分布与结构面板 (无虚假小时曲线，聚焦单日结构与跨数据集横向对照) */}
+      {!isDateMissing && (
         <div className="ca-daily-grid">
-          {chartConfigs.map((cfg, idx) => {
-            const isLastOdd = chartConfigs.length % 2 === 1 && idx === chartConfigs.length - 1;
-            return (
-              <div
-                key={cfg.id}
-                className={isLastOdd ? "ca-daily-panel ca-daily-panel-span-2" : "ca-daily-panel"}
+          {/* 5.1 单日分布与结构组 */}
+          {distributions.map((dist) => (
+            <div key={dist.id} className="ca-daily-panel">
+              <ChartPanel
+                title={dist.title}
+                subtitle={`业务日期: ${selectedDate} · ${dist.caption}`}
+                actions={
+                  <span style={{ fontSize: 11.5, color: "#64748b" }}>
+                    {dist.items.length} {dist.isComposition ? "项分布构成" : "项指标"}
+                  </span>
+                }
               >
-                <ChartPanel
-                  title={cfg.title}
-                  subtitle={
-                    cfg.caption
-                      ? `统计区间: ${startDate} ~ ${endDate} · ${cfg.caption}`
-                      : `统计区间: ${startDate} ~ ${endDate}`
-                  }
-                  actions={
-                    <span style={{ fontSize: 11.5, color: "#64748b" }}>
-                      {cfg.series.length} 项联动指标
-                    </span>
-                  }
-                >
-                  <CampaignComboChart
-                    rows={chartAndTableRows}
-                    series={cfg.series}
-                    xKey="date"
-                    title={cfg.title}
-                    height={260}
-                    xLabel={cfg.xLabel}
-                  />
-                </ChartPanel>
-              </div>
-            );
-          })}
+                <div className="ca-dist-list">
+                  {dist.items.map((it) => (
+                    <div key={it.key} className="ca-dist-item">
+                      <div className="ca-dist-item-header">
+                        <span className="ca-dist-label">{it.label}</span>
+                        <div className="ca-dist-val-group">
+                          <strong className="ca-dist-value">{it.formattedValue}</strong>
+                          {dist.isComposition && it.sharePct !== undefined && (
+                            <span className="ca-dist-share">{it.sharePct}%</span>
+                          )}
+                        </div>
+                      </div>
+                      {dist.isComposition && it.sharePct !== undefined && (
+                        <div className="ca-dist-bar-track">
+                          <div
+                            className="ca-dist-bar-fill"
+                            style={{
+                              width: it.sharePct > 0 ? `${Math.min(100, Math.max(0.5, it.sharePct))}%` : "0%",
+                              background: it.color || CAMPAIGN_PALETTE.primary,
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </ChartPanel>
+            </div>
+          ))}
+
+          {/* 5.2 当日跨数据集横向对照 (多数据集项目明确标注不相容口径，不混同相加) */}
+          {crossDataset && crossDataset.hasMultiple && (
+            <div className="ca-daily-panel ca-daily-panel-span-2">
+              <ChartPanel
+                title={`当日跨数据集横向对照 (${selectedDate})`}
+                subtitle="同一业务日在不同采集底表中的表现 · 跨渠道横向对照"
+                actions={
+                  <span style={{ fontSize: 11.5, color: "#64748b" }}>
+                    共 {datasets.length} 个独立数据集
+                  </span>
+                }
+              >
+                <div className="ca-cross-dataset-container">
+                  <div className="ca-scope-notice-banner" role="note">
+                    {crossDataset.scopeNotice}
+                  </div>
+                  <div className="ca-cross-dataset-cards">
+                    {crossDataset.rows.map((row) => (
+                      <div
+                        key={row.datasetId}
+                        className={`ca-cross-card ${row.datasetId === activeDataset.id ? "ca-cross-card-active" : ""}`}
+                      >
+                        <div className="ca-cross-card-head">
+                          <strong className="ca-cross-card-title">{formatDatasetDisplay(row.datasetId, row.datasetLabel)}</strong>
+                          {row.datasetId === activeDataset.id ? (
+                            <span className="ca-cross-badge-active">当前查看</span>
+                          ) : (
+                            <button
+                              type="button"
+                              className="ca-btn-reset"
+                              style={{ padding: "1px 6px", fontSize: 11 }}
+                              onClick={() => updateUrl({ dataset: row.datasetId })}
+                            >
+                              切换至此表
+                            </button>
+                          )}
+                        </div>
+                        {!row.hasDataOnSelectedDate ? (
+                          <div className="ca-cross-card-empty">
+                            <span>当日未采集 / 无流水记录</span>
+                            <small>覆盖区间: {row.period}</small>
+                          </div>
+                        ) : (
+                          <div className="ca-cross-card-metrics">
+                            <div className="ca-cross-metric-row">
+                              <span className="ca-cross-metric-label">广告消耗/支出:</span>
+                              <strong className="ca-cross-metric-val">{row.spend}</strong>
+                            </div>
+                            <div className="ca-cross-metric-row">
+                              <span className="ca-cross-metric-label">{row.primaryMetric.label}:</span>
+                              <strong className="ca-cross-metric-val">{row.primaryMetric.value}</strong>
+                            </div>
+                            <div className="ca-cross-metric-row">
+                              <span className="ca-cross-metric-label">{row.secondaryMetric.label}:</span>
+                              <strong className="ca-cross-metric-val">{row.secondaryMetric.value}</strong>
+                            </div>
+                            <div className="ca-cross-metric-row">
+                              <span className="ca-cross-metric-label">{row.efficiencyMetric.label}:</span>
+                              <strong className="ca-cross-metric-val">{row.efficiencyMetric.value}</strong>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </ChartPanel>
+            </div>
+          )}
         </div>
       )}
 
-      {/* 6.1 分日深度诊断 (累计走势 / 指标热力图 / 规模成本成对散点 / 周度规模加权分析) */}
-      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
-        <CampaignDailyDiagnostics
-          dataset={activeDataset}
-          calendarRows={chartAndTableRows}
-          startDate={startDate}
-          endDate={endDate}
-        />
-      )}
+      {/* 6. 真实数据全量明细表格 (默认收起在 details 内部，所选日高亮突出) */}
+      <details className="ca-daily-details-panel">
+        <summary className="ca-daily-details-summary">
+          <div className="ca-daily-details-summary-title">
+            <span className="ca-daily-details-icon">📊</span>
+            <span>查看完整分日明细数据表</span>
+            <span className="ca-daily-details-badge">共 {activeDataset.rows.length} 条流水记录</span>
+          </div>
+          <span className="ca-daily-details-hint">点击展开 / 收起明细 (点击行可切换业务日)</span>
+        </summary>
 
-      {/* 7. 真实数据全量明细表格 (默认收起在 details 内部，使图表视觉主导，展开可查验完整过滤行) */}
-      {!isDateOrderInvalid && chartAndTableRows.length > 0 && presentTableRows.length > 0 && (
-        <details className="ca-daily-details-panel">
-          <summary className="ca-daily-details-summary">
-            <div className="ca-daily-details-summary-title">
-              <span className="ca-daily-details-icon">📊</span>
-              <span>查看完整分日明细数据表</span>
-              <span className="ca-daily-details-badge">共 {presentTableRows.length} 条有效记录</span>
-            </div>
-            <span className="ca-daily-details-hint">点击展开 / 收起明细</span>
-          </summary>
-
-          <div className="ca-table-wrap">
-            <table className="ca-table">
-              <thead>
+        <div className="ca-table-wrap">
+          <table className="ca-table">
+            <thead>
+              <tr>
+                <th>日期</th>
+                {activeDataset.metrics.map((m) => (
+                  <th key={m.key} style={{ textAlign: "right" }}>
+                    {m.label} {m.unit ? `(${m.unit})` : ""}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {activeDataset.rows.length === 0 ? (
                 <tr>
-                  <th>日期</th>
-                  {activeDataset.metrics.map((m) => (
-                    <th key={m.key} style={{ textAlign: "right" }}>
-                      {m.label} {m.unit ? `(${m.unit})` : ""}
-                    </th>
-                  ))}
+                  <td
+                    colSpan={activeDataset.metrics.length + 1}
+                    style={{ textAlign: "center", padding: "24px 0", color: "#64748b" }}
+                  >
+                    所选日期暂无记录
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {presentTableRows.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={activeDataset.metrics.length + 1}
-                      style={{ textAlign: "center", padding: "24px 0", color: "#64748b" }}
+              ) : (
+                [...activeDataset.rows].reverse().map((row) => {
+                  const isSelected = row.date === selectedDate;
+                  return (
+                    <tr
+                      key={String(row.date)}
+                      className={isSelected ? "ca-table-row-selected" : undefined}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => updateUrl({ day: String(row.date) })}
+                      title={`点击切换到 ${String(row.date)}`}
                     >
-                      所选日期暂无记录
-                    </td>
-                  </tr>
-                ) : (
-                  [...presentTableRows].reverse().map((row) => (
-                    <tr key={String(row.date)}>
-                      <td style={{ fontWeight: "600", color: "#1e293b" }}>{String(row.date)}</td>
+                      <td style={{ fontWeight: isSelected ? "700" : "600", color: isSelected ? "#15803d" : "#1e293b" }}>
+                        {String(row.date)} {isSelected ? "· 当前选中" : ""}
+                      </td>
                       {activeDataset.metrics.map((m) => {
                         const raw = row[m.key];
                         const valStr = fmtNum(raw);
@@ -386,17 +508,17 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                         );
                       })}
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </details>
-      )}
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </details>
 
-      {/* 8. 页脚精简说明 */}
+      {/* 7. 页脚精简说明 */}
       <footer className="ca-footer-date">
-        业务统计区间: {activeDataset.period}
+        业务统计区间: {activeDataset.period} · 当前分析日: {selectedDate || "未选定"}
       </footer>
     </div>
   );

@@ -34,9 +34,9 @@ function parseNum(val: unknown): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-function fmtMoney(val: number | null | undefined): string {
+function fmtMoney(val: number | null | undefined, digits = 0): string {
   if (val === null || val === undefined || !Number.isFinite(val)) return '—';
-  return `¥${val.toLocaleString('zh-CN', { maximumFractionDigits: 0 })}`;
+  return `¥${val.toLocaleString('zh-CN', { maximumFractionDigits: digits })}`;
 }
 
 function fmtNum(val: number | null | undefined, digits = 0): string {
@@ -54,6 +54,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
   }, [dashboard.tables]);
 
   const [auditExpanded, setAuditExpanded] = useState(false);
+  const [stageMetric, setStageMetric] = useState<'ctr' | 'cpe'>('ctr');
 
   // 1. Overall Budget Pacing (kailas-overall-budget-pacing)
   const budgetTable = tablesMap.get('kailas-overall-budget-pacing');
@@ -74,9 +75,11 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
     const stackedRows = budgetTable.rows.map(r => {
       const name = String(r.projectName || '');
       const b = parseNum(r.totalBudget) || 0;
+      const s = parseNum(r.totalSpend) || 0;
       const k = parseNum(r.kSpend) || 0;
       const fsVal = parseNum(r.fsSpend) || 0;
       const remaining = Math.max(0, b - (k + fsVal));
+      const p = parseNum(r.pacingPct) ?? (b > 0 && s !== null ? (s / b) * 100 : 0);
       return {
         label: name,
         segments: {
@@ -84,7 +87,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           fsSpend: fsVal,
           remaining: remaining > 0 ? remaining : 0,
         },
-        meta: `总预算 ${fmtMoney(b)} (进度 ${(b > 0 ? ((k + fsVal) / b) * 100 : 0).toFixed(1)}%)`,
+        meta: `总预算 ${fmtMoney(b)} (进度 ${p.toFixed(1)}%)`,
       };
     });
 
@@ -159,20 +162,12 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
   const funnelTable = tablesMap.get('kailas-full-funnel-summary');
   const funnelData = useMemo(() => {
     const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.terracotta];
-    if (!funnelTable?.rows?.length) {
-      const stages: FunnelStageDatum[] = [
-        { stage: '展现曝光量', value: 21606184, unit: '次', conversionLabel: '基准曝光', costLabel: '全域CPM ¥59.61', color: colors[0], subtext: '全周期自然内容与商业投流全域曝光总量' },
-        { stage: '阅读点击量', value: 2188140, unit: '次', conversionLabel: '整体CTR 10.13%', costLabel: '综合CPC ¥0.59', color: colors[1], subtext: '进入笔记正文与详情浏览的有效点击总量' },
-        { stage: '深度互动量', value: 85372, unit: '次', conversionLabel: '点击互动率 3.90%', costLabel: '综合CPE ¥15.09', color: colors[2], subtext: '赞、藏、评、转等高价值心智种草互动' },
-        { stage: '小红星站外活跃UV', value: 10408, unit: 'UV', conversionLabel: '互动激活率 12.19%', costLabel: '小红星CPUV ¥73.95', color: colors[3], subtext: '联动京东/天猫任务期进店与深度活跃UV外溢' },
-      ];
-      return { stages };
-    }
+    if (!funnelTable?.rows?.length) return null;
     const stages: FunnelStageDatum[] = funnelTable.rows.map((r, i) => ({
       stage: String(r.stage || ''),
       value: parseNum(r.totalValue),
       unit: String(r.unit || ''),
-      conversionLabel: String(r.rateLabel || ''),
+      conversionLabel: '',
       costLabel: String(r.costLabel || ''),
       subtext: String(r.description || ''),
       color: colors[i % colors.length],
@@ -182,21 +177,6 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
 
   // 5. Organic vs Paid Comparison (kailas-q3-organic-vs-paid)
   const organicPaidTable = tablesMap.get('kailas-q3-organic-vs-paid');
-  const organicPaidData = useMemo(() => {
-    if (!organicPaidTable?.rows?.length) return null;
-    return organicPaidTable.rows.map(r => ({
-      channel: String(r.channel || ''),
-      spend: parseNum(r.spend),
-      impressions: parseNum(r.impressions),
-      reads: parseNum(r.reads),
-      engagements: parseNum(r.engagements),
-      ctr: parseNum(r.ctr),
-      cpc: parseNum(r.cpc),
-      cpe: parseNum(r.cpe),
-      cpuv: parseNum(r.cpuv),
-    }));
-  }, [organicPaidTable]);
-
   // 6. 119 Notes Scatter Data (kailas-notes-performance-scatter)
   const scatterTable = tablesMap.get('kailas-notes-performance-scatter');
   const scatterData = useMemo(() => {
@@ -475,17 +455,11 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           {overviewMetrics.length > 0 && <MetricStrip items={overviewMetrics} />}
 
           {/* ----------------- 第一层 (重 · 全口径预算与多阶段演进) ----------------- */}
-          <section className='kri-layer-card' aria-label='第一层：全口径预算与多阶段演进'>
-            <div className='kri-layer-header'>
-              <div className='kri-layer-title-wrap'>
-                <span className='kri-layer-badge kri-layer-badge-heavy'>第一层 · 重</span>
-                <h3 className='kri-layer-title'>全口径预算统筹与多阶段投放演进</h3>
-              </div>
-              <p className='kri-layer-desc'>
-                全景统筹黑山Q3、EX330与跑山女孩子项目预算执行结构，复盘7-10月月度投放与双周阶段效率跃迁。
-              </p>
+          <div className='kri-section'>
+            <div className='kri-section-header'>
+              <h3 className='kri-section-title'>全口径预算统筹与多阶段投放演进</h3>
+              <span className='kri-section-desc'>黑山Q3、EX330与跑山女孩预算执行结构与双周演进</span>
             </div>
-
             <div className='kri-grid-2'>
               {/* 1.1 子项目全口径预算规划 vs 实际消耗 */}
               {budgetData && (
@@ -578,8 +552,26 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               {/* 1.4 Q3双周阶段演化对比表 */}
               {biweeklyData && (
                 <ChartPanel
-                  title='Q3双周阶段演进效率 (CTR / CPC / CPE) 趋势'
+                  title='Q3双周阶段演进效率趋势'
                   subtitle='7.16-8.12首期测新 → 8月全月攻坚 → 8.27-9.8前哨冲刺 → 9.9-9.27决战收官'
+                  actions={
+                    <div className='kri-toggle-group' role='group' aria-label='双周阶段效率指标切换'>
+                      <button
+                        type='button'
+                        className={`kri-toggle-btn ${stageMetric === 'ctr' ? 'active' : ''}`}
+                        onClick={() => setStageMetric('ctr')}
+                      >
+                        点击率 CTR (%)
+                      </button>
+                      <button
+                        type='button'
+                        className={`kri-toggle-btn ${stageMetric === 'cpe' ? 'active' : ''}`}
+                        onClick={() => setStageMetric('cpe')}
+                      >
+                        互动成本 CPE (元)
+                      </button>
+                    </div>
+                  }
                 >
                   <CampaignComboChart
                     title='Q3双周阶段演进效率趋势'
@@ -594,94 +586,72 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                         kind: 'bar',
                         color: CAMPAIGN_PALETTE.purple,
                       },
-                      {
-                        key: 'ctr',
-                        label: '点击率 CTR',
-                        unit: '%',
-                        axis: 'right',
-                        kind: 'line',
-                        color: CAMPAIGN_PALETTE.primary,
-                      },
-                      {
-                        key: 'cpe',
-                        label: '互动成本 CPE',
-                        unit: '元',
-                        axis: 'right',
-                        kind: 'line',
-                        color: CAMPAIGN_PALETTE.gold,
-                      },
+                      stageMetric === 'ctr'
+                        ? {
+                            key: 'ctr',
+                            label: '点击率 CTR',
+                            unit: '%',
+                            axis: 'right',
+                            kind: 'line',
+                            color: CAMPAIGN_PALETTE.primary,
+                          }
+                        : {
+                            key: 'cpe',
+                            label: '互动成本 CPE',
+                            unit: '元',
+                            axis: 'right',
+                            kind: 'line',
+                            color: CAMPAIGN_PALETTE.gold,
+                          },
                     ]}
                     height={250}
                   />
                 </ChartPanel>
               )}
             </div>
-          </section>
+          </div>
 
-          {/* ----------------- 第二层 (重 · 全链路转化漏斗与自然vs商业双轮驱动) ----------------- */}
-          <section className='kri-layer-card' aria-label='第二层：全链路转化漏斗与双轮驱动'>
-            <div className='kri-layer-header'>
-              <div className='kri-layer-title-wrap'>
-                <span className='kri-layer-badge kri-layer-badge-heavy'>第二层 · 重</span>
-                <h3 className='kri-layer-title'>Q3 全链路转化漏斗与自然 vs 商业双轮驱动</h3>
-              </div>
-              <p className='kri-layer-desc'>
-                全周期展现量 (2160万) → 阅读点击量 (218万) → 深度互动量 (8.5万) → 小红星站外活跃UV (10408) 完整节点还原，解析自然内容沉淀与商业投流协同放大效应。
-              </p>
+          <div className='kri-section'>
+            <div className='kri-section-header'>
+              <h3 className='kri-section-title'>关键交付指标与自然 / 投流对比</h3>
+              <span className='kri-section-desc'>各项指标保留原表归因口径，不视为同一人群逐级转化</span>
             </div>
-
             <div className='kri-grid-2'>
               {/* 2.1 全链路种草转化漏斗 */}
               {funnelData && (
                 <ChartPanel
-                  title='Q3种草投流全链路转化漏斗'
-                  subtitle='展现量 → 点击量 (CTR 10.13%) → 互动量 (CPE ¥15.09) → 小红星活跃UV (CPUV ¥73.95)'
+                  title='Q3种草投流 · 关键交付节点'
+                  subtitle='曝光、点击与互动为行为量；站外活跃UV为独立归因人数'
                 >
                   <CampaignFunnelChart stages={funnelData.stages} />
                 </ChartPanel>
               )}
 
               {/* 2.2 自然流量沉淀 vs FS商业投流放大 */}
-              {organicPaidData && (
+              {organicPaidTable && (
                 <ChartPanel
-                  title='自然内容流量沉淀 vs FS商业投流协同放大'
-                  subtitle='对比自然发布获客成本与商业投流放大倍数，直观呈现双轮驱动效应'
+                  title={organicPaidTable.title || '自然内容流量沉淀 vs 商业投流放大数据表'}
+                  subtitle={organicPaidTable.note || '内容端为KOL采购及自然分发沉淀，投流端为FS商业放量'}
                 >
-                  <div className='kri-organic-paid-wrap'>
-                    <div className='kri-op-stat-row'>
-                      <div className='kri-op-stat-card kri-op-stat-organic'>
-                        <span className='kri-op-tag'>自然内容端 (51.8万K采买)</span>
-                        <div className='kri-op-val'>402.1 万 <span>自然展现</span></div>
-                        <div className='kri-op-meta'>阅读 43.7万 (CTR 10.9%) · 互动 1.7万 · CPC ¥1.19 · CPE ¥30.04</div>
+                  <div className="kri-organic-compare">
+                    {organicPaidTable.rows.filter(row => !/全量|汇总/.test(String(row.channel || ''))).map((row, index) => (
+                      <div className="kri-organic-channel" key={String(row.channel || index)}>
+                        <div className="kri-organic-label"><strong>{String(row.channel || '未标注渠道')}</strong><span>投入 {fmtMoney(parseNum(row.spend))}</span></div>
+                        <div className="kri-organic-impressions"><strong>{fmtNum(parseNum(row.impressions))}</strong><span>次曝光</span></div>
+                        <div className="kri-organic-facts">
+                          <span>阅读 <b>{fmtNum(parseNum(row.reads))}</b></span><span>互动 <b>{fmtNum(parseNum(row.engagements))}</b></span>
+                          <span>CPC <b>{fmtMoney(parseNum(row.cpc), 2)}</b></span><span>CPE <b>{fmtMoney(parseNum(row.cpe), 2)}</b></span>
+                        </div>
                       </div>
-                      <div className='kri-op-stat-card kri-op-stat-paid'>
-                        <span className='kri-op-tag kri-op-tag-accent'>FS商业投流端 (77.0万投流)</span>
-                        <div className='kri-op-val'>1758.6 万 <span>投流展现 (放大4.37x)</span></div>
-                        <div className='kri-op-meta'>阅读 175.1万 (CTR 10.0%) · 互动 6.8万 · CPC ¥0.44 (-63%) · CPE ¥11.30 (-62%)</div>
-                      </div>
-                    </div>
-
-                    <div className='kri-op-takeaway'>
-                      <strong>协同倍增结论：</strong> 商业投流将自然曝光扩大了 <strong>4.37 倍</strong>，且带动点击成本 CPC 从 ¥1.19 下降至 ¥0.44 (-63.0%)，互动成本从 ¥30.04 下降至 ¥11.30 (-62.4%)，并向京东/天猫成功引流 <strong>10,408 位站外活跃UV</strong>。
-                    </div>
+                    ))}
+                    <p className="kri-organic-note">投入、曝光与效率并列对照。自然与商业流量可能重叠，不据此推断新增去重人群或因果增量。</p>
                   </div>
                 </ChartPanel>
               )}
             </div>
-          </section>
+          </div>
 
-          {/* ----------------- 第三层 (中重 · 笔记投流杠杆、Pareto 与四象限散点诊断) ----------------- */}
-          <section className='kri-layer-card' aria-label='第三层：笔记投流杠杆与散点诊断'>
-            <div className='kri-layer-header'>
-              <div className='kri-layer-title-wrap'>
-                <span className='kri-layer-badge kri-layer-badge-medium'>第三层 · 中重</span>
-                <h3 className='kri-layer-title'>笔记投流杠杆、Pareto 集中度与四象限散点诊断</h3>
-              </div>
-              <p className='kri-layer-desc'>
-                挖掘 119 篇笔记【消费 × 互动成本 × 互动量】四象限分布，沉淀 Top 10 核心爆文 Pareto 资产，并对比 65 篇高投流杠杆笔记与 9 篇低成本待加推潜力清单。
-              </p>
-            </div>
-
+          <details className="kri-section kri-secondary"><summary>笔记投流杠杆、Pareto 集中度与四象限散点诊断</summary>
             <div className='kri-grid-2'>
               {/* 3.1 119篇笔记四象限散点图 */}
               {scatterData && (
@@ -768,20 +738,9 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 </ChartPanel>
               )}
             </div>
-          </section>
+          </details>
 
-          {/* ----------------- 第四层 (中 · 搜索词类与精准人群定向引擎) ----------------- */}
-          <section className='kri-layer-card' aria-label='第四层：搜索词类与人群定向'>
-            <div className='kri-layer-header'>
-              <div className='kri-layer-title-wrap'>
-                <span className='kri-layer-badge kri-layer-badge-medium'>第四层 · 中</span>
-                <h3 className='kri-layer-title'>搜索词类与精准人群定向投放引擎</h3>
-              </div>
-              <p className='kri-layer-desc'>
-                7,037 条搜索关键词日志聚合 6 大词类竞争格局，协同 63 个精准定向人群包 Top 12 点击成本与转化效率。
-              </p>
-            </div>
-
+          <details className="kri-section kri-secondary"><summary>搜索词类与精准人群定向引擎</summary>
             <div className='kri-grid-2'>
               {/* 4.1 搜索推广大类关键词投放效果多指标分析 */}
               {kwData && (
@@ -849,20 +808,9 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 </ChartPanel>
               )}
             </div>
-          </section>
+          </details>
 
-          {/* ----------------- 第五层 (轻 · 达人选号池、量级×内容方向热力矩阵与审稿质检) ----------------- */}
-          <section className='kri-layer-card' aria-label='第五层：达人选号与审稿质检'>
-            <div className='kri-layer-header'>
-              <div className='kri-layer-title-wrap'>
-                <span className='kri-layer-badge kri-layer-badge-light'>第五层 · 轻</span>
-                <h3 className='kri-layer-title'>达人候选池规模、量级 × 内容方向热力矩阵与审稿质检</h3>
-              </div>
-              <p className='kri-layer-desc'>
-                展现初筛 1530 / 复筛 615 / 签约 70 独立池构成，【达人层级 × 8大内容方向】二维热力分布，收纳达人审核高频问题与质检标准。
-              </p>
-            </div>
-
+          <details className="kri-section kri-secondary"><summary>达人候选池规模、内容方向热力矩阵与审稿质检</summary>
             <div className='kri-grid-2'>
               {/* 5.1 初筛与复筛候选达人独立池状态分布 */}
               {poolData && (
@@ -928,7 +876,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 </div>
               </details>
             </div>
-          </section>
+          </details>
         </>
       )}
 

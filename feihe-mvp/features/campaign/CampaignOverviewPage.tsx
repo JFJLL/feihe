@@ -73,7 +73,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   const kailasQ3BudgetTable = findTable("kailas-unlocked-budget-ZpT73Q");
   const kailasQ3PerfTable = findTable("kailas-unlocked-performance-JPKUX9");
 
-  // Project-specific daily datasets for sparklines and overview trend
+  // Period trends belong in the overview; KPI cards retain their own snapshot scope.
   const kailasDailyDataset = useMemo(() => {
     return dailyDatasets.find((d) => d.id === "kailas-daily-fuga-creatives") || dailyDatasets[0];
   }, [dailyDatasets]);
@@ -119,17 +119,14 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     const totalSpend = findKpi("kailas-spend-total");
     const progress = findKpi("kailas-budget-progress");
     const remaining = findKpi("kailas-budget-remaining");
-    const spendSpark = (kailasDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.spend));
-    const impSpark = (kailasDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.impressions));
-    const clkSpark = (kailasDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.clicks));
 
     return [
       { label: totalPlanned?.label || "规划总预算", value: totalPlanned?.value ?? null, unit: totalPlanned?.unit || "元", note: totalPlanned?.period, badge: "现金口径", status: "default" },
-      { label: totalSpend?.label || "累计总消耗", value: totalSpend?.value ?? null, unit: totalSpend?.unit || "元", note: totalSpend?.note, badge: "日流水走势", status: "accent", sparkline: spendSpark },
-      { label: progress?.label || "预算执行进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.note, badge: Number(progress?.value) > 100 ? "超支预警" : "执行中", status: Number(progress?.value) > 100 ? "danger" : "accent", sparkline: impSpark },
-      { label: remaining?.label || "预算差额", value: remaining?.value ?? null, unit: remaining?.unit || "元", note: remaining?.note, badge: Number(remaining?.value) < 0 ? "超额支出" : "剩余可用", status: Number(remaining?.value) < 0 ? "warning" : "default", sparkline: clkSpark },
+      { label: totalSpend?.label || "累计总消耗", value: totalSpend?.value ?? null, unit: totalSpend?.unit || "元", note: totalSpend?.note, badge: "累计快照", status: "accent" },
+      { label: progress?.label || "预算执行进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.note, badge: Number(progress?.value) > 100 ? "超支预警" : "执行中", status: Number(progress?.value) > 100 ? "danger" : "accent" },
+      { label: remaining?.label || "预算差额", value: remaining?.value ?? null, unit: remaining?.unit || "元", note: remaining?.note, badge: Number(remaining?.value) < 0 ? "超额支出" : "剩余可用", status: Number(remaining?.value) < 0 ? "warning" : "default" },
     ];
-  }, [findKpi, kailasDailyInfo]);
+  }, [findKpi]);
 
   const kailasQ3Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
     const q3SpendKpi = findKpi("kailas-unlocked-kpi-budget");
@@ -211,17 +208,14 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
     const nonSummaryRows = (meilingFourLinesTable?.rows || []).filter((r) => !isSummaryRow(String(r.name || "")));
     const fourLinesGmv = strictSum(nonSummaryRows.map((r) => safeNum(r.gmv)));
-    const spendSpark = (meilingDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.spend));
-    const impSpark = (meilingDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.impressions));
-    const clkSpark = (meilingDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.clicks));
 
     return [
       { label: "双11调整后总预算", value: budgetVal, unit: "元", note: "10.18快照调整预算口径", badge: "调整预算", status: "default" },
-      { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendKpi?.period, badge: "近14日走势", status: "accent", sparkline: spendSpark },
-      { label: progressKpi?.label || "大促消耗进度", value: progressKpi?.value !== null && progressKpi?.value !== undefined ? String(progressKpi.value) + "%" : null, note: "截至10.18累计", badge: "推进中", status: "warning", sparkline: impSpark },
-      { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value !== null && publishedKpi?.value !== undefined ? `${publishedKpi.label}: ${publishedKpi.value}${publishedKpi.unit || "篇"}` : undefined, badge: "四线独立归因", status: "success", sparkline: clkSpark },
+      { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendKpi?.period, badge: "累计快照", status: "accent" },
+      { label: progressKpi?.label || "大促消耗进度", value: progressKpi?.value !== null && progressKpi?.value !== undefined ? String(progressKpi.value) + "%" : null, note: "截至10.18累计", badge: "推进中", status: "warning" },
+      { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value !== null && publishedKpi?.value !== undefined ? `${publishedKpi.label}: ${publishedKpi.value}${publishedKpi.unit || "篇"}` : undefined, badge: "四线独立归因", status: "success" },
     ];
-  }, [meilingExecutionTable, meilingFourLinesTable, findKpi, meilingDailyInfo]);
+  }, [meilingExecutionTable, meilingFourLinesTable, findKpi]);
 
   const meiling618Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
     const gmvKpi = findKpi("meiling-unlocked-kpi-618-gmv");
@@ -304,17 +298,14 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     const progress = findKpi("wipes-cum-progress");
     const cpuvT2 = findKpi("wipes-cum-cpuv-t2");
     const newCust = findKpi("wipes-cum-new-cust");
-    const spendSpark = (wipesDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.spend));
-    const impSpark = (wipesDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.impressions));
-    const clkSpark = (wipesDailyInfo?.rows || []).slice(-14).map((r) => safeNum(r.clicks));
 
     return [
-      { label: cumSpend?.label || "日常种草累计消耗", value: cumSpend?.value ?? null, unit: cumSpend?.unit || "元", note: cumSpend?.period, badge: "近14日消耗", status: "accent", sparkline: spendSpark },
-      { label: progress?.label || "日常种草进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.target !== null && progress?.target !== undefined ? "目标: " + String(progress.target) + "%" : undefined, badge: "节奏跟踪", status: "default", sparkline: impSpark },
-      { label: cpuvT2?.label || "CPUV(T-2)", value: cpuvT2?.value !== null && cpuvT2?.value !== undefined ? "¥" + String(cpuvT2.value) : null, note: cpuvT2?.period, badge: "访客成本", status: "success", sparkline: clkSpark },
+      { label: cumSpend?.label || "日常种草累计消耗", value: cumSpend?.value ?? null, unit: cumSpend?.unit || "元", note: cumSpend?.period, badge: "累计快照", status: "accent" },
+      { label: progress?.label || "日常种草进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.target !== null && progress?.target !== undefined ? "目标: " + String(progress.target) + "%" : undefined, badge: "节奏跟踪", status: "default" },
+      { label: cpuvT2?.label || "CPUV(T-2)", value: cpuvT2?.value !== null && cpuvT2?.value !== undefined ? "¥" + String(cpuvT2.value) : null, note: cpuvT2?.period, badge: "访客成本", status: "success" },
       { label: newCust?.label || "新客占比", value: newCust?.value !== null && newCust?.value !== undefined ? String(newCust.value) + "%" : null, note: newCust?.period, badge: "拉新健康度", status: "accent" },
     ];
-  }, [findKpi, wipesDailyInfo]);
+  }, [findKpi]);
 
   const wipesSheetMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
     const exposure = findKpi("wipes-online-daily-exposure");
@@ -956,7 +947,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     分日流水数据来源于独立分日数据集，包含消耗、展现、互动等完整时序。
                   </span>
                   <Link href={`/projects/${projectId}?tab=daily`} className="ca-nav-link" style={{ fontSize: 12 }}>
-                    <span>前往「分日」工作台查看全量表格 →</span>
+                    <span>前往「分日」工作台查看单日明细 →</span>
                   </Link>
                 </div>
               </div>

@@ -43,6 +43,33 @@ const {
   CAMPAIGN_PALETTE,
 } = charts;
 
+// Shared charts must distinguish missing values from an actual zero.
+{
+  const matrix = renderToStaticMarkup(React.createElement(charts.MatrixHeatmapChart, {
+    rows: ['complete', 'partial'], cols: ['A', 'B'], unit: '元', cells: [
+      { row: 'complete', col: 'A', value: 0 },
+      { row: 'complete', col: 'B', value: 10 },
+      { row: 'partial', col: 'A', value: 10 },
+      { row: 'partial', col: 'B', value: null },
+    ],
+  }));
+  assert(matrix.includes('>0元<'), 'Matrix renders a true zero');
+  const partial = matrix.slice(matrix.indexOf('>partial<'));
+  assert(partial.includes('>—<'), 'Missing cell remains missing');
+  assert(!partial.includes('>10元</td>'), 'Incomplete row must not display a complete total');
+  const zero = renderToStaticMarkup(React.createElement(charts.CampaignFunnelChart, {
+    stages: [{ stage: 'empty', value: 0, unit: '次' }],
+  }));
+  assert(zero.includes('width:0.0%'), 'Zero stage must not draw a positive bar');
+  assert(!zero.includes('NaN') && !zero.includes('Infinity'), 'Empty scales remain finite');
+  const partialStack = renderToStaticMarkup(React.createElement(charts.StackedHorizontalBarChart, {
+    rows: [{ label: 'partial', segments: { paid: 10, organic: null } }], normalize100: true,
+    segments: [{ key: 'paid', label: 'paid', color: '#2c7168' }, { key: 'organic', label: 'organic', color: '#8273a3' }],
+  }));
+  assert(partialStack.includes('数据不完整'), 'Incomplete stacked data is explicit');
+  assert(!partialStack.includes('width:100%'), 'Incomplete data cannot imply 100% composition');
+}
+
 // 1. Test MetricStrip
 console.log('Testing MetricStrip...');
 {
@@ -149,7 +176,13 @@ console.log('Testing BudgetComparisonChart & Overrun non-clipping...');
   assert(budgetHtml.includes('↑超支'), 'Dedicated right column has ↑超支 marker');
   assert(budgetHtml.includes('#bd7964'), 'Overrun uses terracotta alert color #bd7964');
   assert(budgetHtml.includes('未录入'), 'Null actual marked as 未录入');
-  assert(budgetHtml.includes('ca-chart-readout-empty'), 'Renders placeholder readout preventing layout jump');
+  assert(budgetHtml.includes('超支 80,000 元'), 'Overrun amount is always readable without hover');
+  assert(budgetHtml.includes('data-value="0" style="width:0%'), 'Zero actual has no positive bar');
+  assert(budgetHtml.includes('data-value="missing" style="width:0%'), 'Missing actual is not painted as spend');
+  assert(!budgetHtml.includes('<svg'), 'Budget labels must not shrink with an SVG viewBox');
+  const widths = [...budgetHtml.matchAll(/class="ca-budget-actual"[^>]*style="width:([\d.]+)%/g)].map(match => Number(match[1]));
+  assert.equal(widths.length, 4);
+  assert(widths.every(width => width >= 0 && width <= 100), 'Overrun bars remain entirely within the shared amount scale');
 }
 
 // 6. Test TargetBulletChart (Strict comparison lt/gt, neutral priority, no 归一化达成 for cost)

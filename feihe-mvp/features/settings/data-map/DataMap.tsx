@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { StyledSelect } from '../../../components/ui/StyledSelect';
 import type { MapData, Keystone, Row } from '../../../lib/types/project';
 import { EmptyState } from '../../../components/ui/EmptyState';
 import { MetricCard } from '../../../components/ui/operations/MetricCard';
@@ -504,9 +505,10 @@ function EntityEditor({
               {field('账户类型', 'accountType', 'main_account / sub_account')}
               <label>
                 关联工具
-                <select
+                <StyledSelect
                   value={String(r.integrationId || '')}
                   onChange={(e) => set('integrationId', e.target.value)}
+                  aria-label="关联工具"
                 >
                   <option value="">未绑定</option>
                   {data.integrations.map((x) => (
@@ -514,7 +516,7 @@ function EntityEditor({
                       {shown(x.name)}
                     </option>
                   ))}
-                </select>
+                </StyledSelect>
               </label>
               {field('状态', 'status', '未检测')}
               <label className="full">
@@ -533,13 +535,14 @@ function EntityEditor({
               {field('接口 Key', 'key', 'account_daily_report')}
               <label>
                 请求方法
-                <select
+                <StyledSelect
                   value={String(r.method || 'GET')}
                   onChange={(e) => set('method', e.target.value)}
+                  aria-label="请求方法"
                 >
                   <option>GET</option>
                   <option>POST</option>
-                </select>
+                </StyledSelect>
               </label>
               {field('请求路径', 'path', '/v1/report/account/daily')}
               {field('业务分类', 'category', '账户日报')}
@@ -567,15 +570,16 @@ function EntityEditor({
               {field('单位', 'unit', '人')}
               <label>
                 聚合方式
-                <select
+                <StyledSelect
                   value={String(r.aggregation || 'sum')}
                   onChange={(e) => set('aggregation', e.target.value)}
+                  aria-label="聚合方式"
                 >
                   <option value="sum">求和</option>
                   <option value="ratio">比率</option>
                   <option value="avg">平均</option>
                   <option value="latest">最新值</option>
-                </select>
+                </StyledSelect>
               </label>
               {field('公式', 'formula', '例如：spend / seed_users')}
               <label className="full">
@@ -592,9 +596,10 @@ function EntityEditor({
             <>
               <label>
                 标准指标
-                <select
+                <StyledSelect
                   value={String(r.metricId || '')}
                   onChange={(e) => set('metricId', e.target.value)}
+                  aria-label="标准指标"
                 >
                   <option value="">请选择</option>
                   {data.metrics.map((x) => (
@@ -602,13 +607,14 @@ function EntityEditor({
                       {shown(x.name)}
                     </option>
                   ))}
-                </select>
+                </StyledSelect>
               </label>
               <label>
                 数据源
-                <select
+                <StyledSelect
                   value={String(r.sourceId || '')}
                   onChange={(e) => set('sourceId', e.target.value)}
+                  aria-label="数据源"
                 >
                   <option value="">未绑定</option>
                   {data.sources.map((x) => (
@@ -616,13 +622,14 @@ function EntityEditor({
                       {shown(x.name)}
                     </option>
                   ))}
-                </select>
+                </StyledSelect>
               </label>
               <label>
                 接口
-                <select
+                <StyledSelect
                   value={String(r.endpointId || '')}
                   onChange={(e) => set('endpointId', e.target.value)}
+                  aria-label="接口"
                 >
                   <option value="">未绑定</option>
                   {data.endpoints.map((x) => (
@@ -630,7 +637,7 @@ function EntityEditor({
                       {shown(x.name)}
                     </option>
                   ))}
-                </select>
+                </StyledSelect>
               </label>
               {field('原始字段', 'sourceField', 'total_cost')}
               {field('维度 JSON', 'dimensionsJson', '["date","account_id"]')}

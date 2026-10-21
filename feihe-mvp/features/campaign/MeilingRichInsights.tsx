@@ -607,9 +607,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 xKey="channel"
                 height={280}
               />
-              <div className="mri-card-caption">
-                <strong>口径说明：</strong>618已结案复盘，全案总花费含达人KOL采买与信息流投流花费；全案ROI为总GMV/总费用，纯FS ROI为总GMV/信息流费用。
-              </div>
+
             </ChartPanel>
 
             <ChartPanel
@@ -644,9 +642,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   </tbody>
                 </table>
               </div>
-              <div className="mri-card-caption">
-                <strong>战役沉淀：</strong>618首次验证双平台品效协同与以旧换新高ROI模型；7-8月紧跟进行成本控制，考核CPE≤10元完成8.6万次互动，达成率103.56%。
-              </div>
+
             </ChartPanel>
 
             <ChartPanel
@@ -654,9 +650,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               subtitle="历史达人阅读受众真实年龄层画像"
             >
               <HorizontalBarChart data={audienceAgeBarData} unit="%" />
-              <div className="mri-card-caption">
-                <strong>受众画像：</strong>25~34岁核心年龄段占48.5%，是独居安家与新婚首套的核心受众；35~44岁占26.1%，构成大容量升级需求。
-              </div>
+
             </ChartPanel>
           </div>
 
@@ -713,7 +707,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="mri-group-badge mgmt">经营决策</span>
-                <h3 className="mri-group-title">第一层 · 经营决策与多线预算总览</h3>
+                <h3 className="mri-group-title">经营决策与多线预算总览</h3>
               </div>
               <p className="mri-group-desc">
                 双11产品系列型号规划 vs 投流实际 + 7大账户打款 vs 应消耗 + 10大投放线并发赛马 + 三大促战役跨期演进
@@ -742,9 +736,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   xKey="series"
                   height={260}
                 />
-                <div className="mri-card-caption">
-                  <strong>口径说明：</strong>数据派生自9/28初始规划表。规划预算为KOL+FS综合预算，表中实际为测试投流消耗；规划篇数共{modelPlanTotals.totalP}篇，初筛{modelPlanTotals.totalS}篇，已发{modelPlanTotals.totalPub}篇。二者为标明口径对照，不叫全案预算完成率。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -758,9 +750,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   xKey="account"
                   height={260}
                 />
-                <div className="mri-card-caption">
-                  <strong>核对记录：</strong>来源双11打款对照表，固定5列映射。规划打款合计{formatMoneyWan(accountTotals.sumPlan)}，实际应消耗需求合计{formatMoneyWan(accountTotals.sumReq)}。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -774,9 +764,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   xKey="line"
                   height={260}
                 />
-                <div className="mri-card-caption">
-                  <strong>投放矩阵：</strong>涵盖自采天猫/京东种草、自采红猫/红京CID、代采星伴、UDS、代付京东、对投京东、JDS与京东对投CID等10大投放线，实现自采与代采、种草与CID协同赛马。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -811,9 +799,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     </tbody>
                   </table>
                 </div>
-                <div className="mri-card-caption">
-                  <strong>演进路径：</strong>618确立双爆款与以旧换新打法；7-8月精细化控本考核CPE≤10元；双11启动10线并发赛马机制，全面激活多平台外溢进店。
-                </div>
+
               </ChartPanel>
             </div>
           </section>
@@ -823,7 +809,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="mri-group-badge eff">投放效率</span>
-                <h3 className="mri-group-title">第二层 · 全链路转化漏斗与投放效率诊断</h3>
+                <h3 className="mri-group-title">全链路转化漏斗与投放效率诊断</h3>
               </div>
               <p className="mri-group-desc">
                 双11种草投流全链路转化漏斗 + 天猫vs京东19天分日对照 + 全量商业笔记 Pareto 集中度 + 笔记消耗散点诊断
@@ -847,9 +833,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 <div className="mri-funnel-wrap">
                   <CampaignFunnelChart stages={funnelStages} />
                 </div>
-                <div className="mri-card-caption">
-                  <strong>转化闭环：</strong>曝光535.6万次经由10.19%高点击率转化为54.6万次点击，深度互动8,808次，最终撬动18,193位高意向电商进店UV，形成全链路获客闭环。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -863,9 +847,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   xKey="date"
                   height={250}
                 />
-                <div className="mri-card-caption">
-                  <strong>对比说明：</strong>仅取双平台共同投放的{comparableTotals.days}个可比日期（{comparableTotals.startDate} ~ {comparableTotals.endDate}）并排展示。两平台在可比期内总消耗分别为天猫{formatMoneyWan(comparableTotals.sumTm)}与京东{formatMoneyWan(comparableTotals.sumJd)}，消耗比值为{comparableTotals.overallRatio}x。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -879,9 +861,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   xKey="name"
                   height={250}
                 />
-                <div className="mri-card-caption">
-                  <strong>消耗集中度：</strong>展示全量{materialTotals.count}篇商业素材的Pareto放量分布。Top 3素材累计消耗占全量{materialTotals.top3Share}%。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -895,9 +875,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     yLabel="进店/互动成本 (元)"
                   />
                 </div>
-                <div className="mri-card-caption">
-                  <strong>散点诊断：</strong>气泡越靠右下方表示高消耗低成本的“黄金转化素材”（如村西头的灰太狼、大林与小林）；右上方为高消耗高成本需关注优化的笔记。
-                </div>
+
               </ChartPanel>
             </div>
 
@@ -916,9 +894,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     xKey="channel"
                     height={260}
                   />
-                  <div className="mri-card-caption">
-                    <strong>周期隔离：</strong>618已结案复盘，严格与双11隔离。全案ROI分母含达人裸价+折后投流，纯FS ROI分母仅为信息流投流花费。
-                  </div>
+
                 </ChartPanel>
               </div>
             </details>
@@ -927,11 +903,15 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           {/* ================================================================ */}
           {/* 第三层（中 · 受众画像与搜索/定向引擎）                           */}
           {/* ================================================================ */}
-          <section className="mri-group">
+          <details className="mri-details-toggle mri-secondary-section">
+            <summary className="mri-details-summary" style={{ fontSize: '13px', padding: '10px 0' }}>
+              <strong>展开查看次级分析：受众人口学画像与搜索定向引擎</strong>（年龄分布、城市渗透、定向人群包与搜索词库）
+            </summary>
+            <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="mri-group-badge audience">受众与搜索</span>
-                <h3 className="mri-group-title">第三层 · 受众人口学画像与搜索定向引擎</h3>
+                <h3 className="mri-group-title">受众人口学画像与搜索定向引擎</h3>
               </div>
               <p className="mri-group-desc">
                 受众年龄段结构 + Top 12核心城市渗透 + 头部定向人群包效能 + 339条搜索词库分类
@@ -953,9 +933,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 subtitle="去重博主受众加权年龄结构分布"
               >
                 <HorizontalBarChart data={audienceAgeBarData} unit="%" />
-                <div className="mri-card-caption">
-                  <strong>年龄洞察：</strong>25~44岁人群合计占比达74.57%，是美菱冰箱在线上种草的核心基本盘，精准匹配独居收纳、新房装修与家庭换新三大人群场景。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -963,9 +941,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 subtitle="依据达人地域与受众偏好指数聚合"
               >
                 <HorizontalBarChart data={audienceCitiesBarData} unit="人" />
-                <div className="mri-card-caption">
-                  <strong>地域渗透：</strong>以西南（成都、重庆）、华南（广州、深圳、佛山）、华东（杭州、苏州、上海）为核心主力，覆盖新一线及高购买力重点城市。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -973,9 +949,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 subtitle="自采天猫/京东与红猫/红京CID高频放量人群"
               >
                 <HorizontalBarChart data={audiencePackagesBarData} unit="元" />
-                <div className="mri-card-caption">
-                  <strong>定向效能：</strong>智能扩量与智能定向放量最为稳健；特定人群包中“冰箱以旧换新”与“冰箱囤货”进店转化率最高，为大促收割主力人群。
-                </div>
+
               </ChartPanel>
 
               <ChartPanel
@@ -983,12 +957,11 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 subtitle={`数据源：搜索词配置（有效${keywordsTotals.total}条非空关键词配置）`}
               >
                 <DonutChart data={keywordsDonutData} unit="条" centerLabel="有效词库" />
-                <div className="mri-card-caption">
-                  <strong>配置说明：</strong>词库配置共{keywordsTotals.total}条，为系统投放词库配置。竞品截流词占比为{keywordsTotals.total > 0 ? ((keywordsTotals.competeCount / keywordsTotals.total) * 100).toFixed(1) : 0}%，品类词占比为{keywordsTotals.total > 0 ? ((keywordsTotals.catCount / keywordsTotals.total) * 100).toFixed(1) : 0}%。
-                </div>
+
               </ChartPanel>
             </div>
           </section>
+          </details>
 
           {/* ================================================================ */}
           {/* 第四层（中 · 达人内容二维热力矩阵与样机流转）                     */}
@@ -997,7 +970,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="mri-group-badge content">达人与内容</span>
-                <h3 className="mri-group-title">第四层 · 达人内容二维热力矩阵与样机流转</h3>
+                <h3 className="mri-group-title">达人内容合作矩阵与样机流转</h3>
               </div>
               <p className="mri-group-desc">
                 主推产品×审核阶段热力矩阵 + 外溢平台×审核阶段热力矩阵 + 内容类型×合作形式堆叠 + 84台样机流转
@@ -1015,6 +988,31 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
 
             <div className="mri-grid">
               <ChartPanel
+                title="双11二核确认KOL【内容类型 × 合作形式】分布（N=117）"
+                subtitle="图文与视频形式在各大内容主题下的堆叠构成"
+              >
+                <StackedHorizontalBarChart
+                  rows={themeFormatStacked.rows}
+                  segments={themeFormatStacked.segments}
+                  unit="篇"
+                />
+
+              </ChartPanel>
+              <ChartPanel
+                title="双11试用样机产品型号分布与三态流转进度"
+                subtitle={`数据源：双11样机流转记录（全量${sampleMachineTotals.totalMachines}台）`}
+              >
+                <HorizontalBarChart data={sampleMachineBarData} unit="台" />
+
+              </ChartPanel>
+            </div>
+
+            <details className="mri-details-toggle" style={{ marginTop: '14px' }}>
+              <summary className="mri-details-summary">
+                <strong>展开查看深度热力矩阵：主推产品与外溢平台审核阶段分布</strong>（12×9 与 5×9 矩阵）
+              </summary>
+              <div className="mri-grid" style={{ marginTop: '12px' }}>
+                <ChartPanel
                 title="双11二核确认KOL【主推产品 × 审核执行阶段】二维热力矩阵（N=117）"
                 subtitle="各产品型号在各审核阶段推进密度透视"
               >
@@ -1028,12 +1026,9 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     showRowTotals={true}
                   />
                 </div>
-                <div className="mri-card-caption">
-                  <strong>矩阵透视：</strong>小确杏520机皇与502pro为核心主推产品，大部已推进至“已发布”与“达人修改中”阶段；无忧嵌系列与大白鲸在测试阶段稳步展开。
-                </div>
-              </ChartPanel>
 
-              <ChartPanel
+              </ChartPanel>
+                <ChartPanel
                 title="双11二核确认KOL【外溢平台 × 审核执行阶段】二维热力矩阵（N=117）"
                 subtitle="京东与天猫双渠道自采与代采执行阶段透视"
               >
@@ -1047,35 +1042,10 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     showRowTotals={true}
                   />
                 </div>
-                <div className="mri-card-caption">
-                  <strong>渠道协同：</strong>京东与天猫自采占大盘主力，代采作为有效补充；天猫自采与京东自采在“已发布”阶段达标率均超过50%。
-                </div>
-              </ChartPanel>
 
-              <ChartPanel
-                title="双11二核确认KOL【内容类型 × 合作形式】分布（N=117）"
-                subtitle="图文与视频形式在各大内容主题下的堆叠构成"
-              >
-                <StackedHorizontalBarChart
-                  rows={themeFormatStacked.rows}
-                  segments={themeFormatStacked.segments}
-                  unit="篇"
-                />
-                <div className="mri-card-caption">
-                  <strong>内容结构：</strong>产品测评与场景种草篇数最多，图文侧重参数攻略与空间搭配，视频侧重实景测评与开箱体验，形成多层次内容矩阵。
-                </div>
               </ChartPanel>
-
-              <ChartPanel
-                title="双11试用样机产品型号分布与三态流转进度"
-                subtitle={`数据源：双11样机流转记录（全量${sampleMachineTotals.totalMachines}台）`}
-              >
-                <HorizontalBarChart data={sampleMachineBarData} unit="台" />
-                <div className="mri-card-caption">
-                  <strong>三态流转监控：</strong>主力流转型号为{sampleMachineTotals.topModel}（{sampleMachineTotals.topModelCount}台）。下单率72.6%（61台已下单）、未退货率65.5%（55台仍在拍摄使用中）、内饰确认率73.8%（62台已确认）。
-                </div>
-              </ChartPanel>
-            </div>
+              </div>
+            </details>
           </section>
 
           {/* ================================================================ */}
@@ -1085,7 +1055,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="mri-group-badge history">历史与底层明细</span>
-                <h3 className="mri-group-title">第五层 · 历史大促参考与底层明细抽屉</h3>
+                <h3 className="mri-group-title">历史大促参考与底层明细</h3>
               </div>
               <p className="mri-group-desc">
                 长表格与历史复盘明细默认折叠，保持首屏高效聚焦
@@ -1106,9 +1076,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     xKey="channel"
                     height={260}
                   />
-                  <div className="mri-card-caption">
-                    <strong>周期隔离：</strong>618已结案复盘，严格与双11隔离。全案ROI分母含达人裸价+折后投流，纯FS ROI分母仅为信息流投流花费。
-                  </div>
+
                   <div className="mri-table-wrapper" style={{ marginTop: '12px' }}>
                     <table className="mri-audit-table">
                       <thead>
@@ -1323,9 +1291,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 </tbody>
               </table>
             </div>
-            <div className="mri-card-caption">
-              <strong>数据说明：</strong>经核对，源表中进店量与GMV无单元格合并亦无SUM公式，属于单点填报静态源值，无法确证归因范围；遵循严格审计规范仅展示源值，不推算单品或渠道ROI。
-            </div>
+
           </ChartPanel>
 
           <ChartPanel
@@ -1339,9 +1305,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               xKey="account"
               height={260}
             />
-            <div className="mri-card-caption">
-              <strong>核对记录：</strong>来源双11打款对照表，固定5列映射。规划打款合计{formatMoneyWan(accountTotals.sumPlan)}，实际应消耗需求合计{formatMoneyWan(accountTotals.sumReq)}。
-            </div>
+
           </ChartPanel>
 
           <ChartPanel
@@ -1355,9 +1319,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               xKey="date"
               height={250}
             />
-            <div className="mri-card-caption">
-              <strong>对比说明：</strong>仅取双平台共同投放的{comparableTotals.days}个可比日期并排展示，两平台在可比期内总消耗分别为天猫{formatMoneyWan(comparableTotals.sumTm)}与京东{formatMoneyWan(comparableTotals.sumJd)}。
-            </div>
+
           </ChartPanel>
 
           <ChartPanel
@@ -1371,9 +1333,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               xKey="channel"
               height={260}
             />
-            <div className="mri-card-caption">
-              <strong>分母口径：</strong>全案ROI分母含达人裸价+折后投流，纯FS ROI分母仅为信息流投流花费。严禁与双11进行中规划混画。
-            </div>
+
           </ChartPanel>
         </div>
       )}
@@ -1396,9 +1356,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               xKey="name"
               height={250}
             />
-            <div className="mri-card-caption">
-              <strong>消耗集中度：</strong>展示全量{materialTotals.count}篇商业素材的Pareto放量分布。Top 3素材累计消耗占全量{materialTotals.top3Share}%。
-            </div>
+
           </ChartPanel>
 
           <ChartPanel
@@ -1406,9 +1364,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             subtitle={`数据源：搜索词配置（有效${keywordsTotals.total}条非空关键词配置）`}
           >
             <DonutChart data={keywordsDonutData} unit="条" centerLabel="有效词库" />
-            <div className="mri-card-caption">
-              <strong>配置说明：</strong>词库配置共{keywordsTotals.total}条（含618大促词与日常词库），为系统投放词库配置，非已投放广告绩效。
-            </div>
+
           </ChartPanel>
 
           <ChartPanel
@@ -1416,9 +1372,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             subtitle={`数据源：双11样机流转记录（全量${sampleMachineTotals.totalMachines}台）`}
           >
             <HorizontalBarChart data={sampleMachineBarData} unit="台" />
-            <div className="mri-card-caption">
-              <strong>隐私脱敏：</strong>彻底脱敏达人昵称与电话地址，仅按型号与流转进度聚合。
-            </div>
+
           </ChartPanel>
 
           <ChartPanel
@@ -1451,9 +1405,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                 </tbody>
               </table>
             </div>
-            <div className="mri-card-caption">
-              <strong>达人矩阵：</strong>二核确认达人在各量级与各执行阶段下的数量、结算价格均值与视频形式占比。
-            </div>
+
           </ChartPanel>
         </div>
       )}

@@ -1,7 +1,8 @@
 import { getAuthenticatedUser, requireProjectAccess, jsonError } from '@/lib/api-auth';
+import { blobGet } from '@/lib/blob-store';
 import { db, ensureSchema } from '@/lib/db';
 import { saveOrganizationEntry, validateProjectReferences, ensureOwnerMembership } from '@/lib/organization';
-import { automaticProjectColor } from '@/lib/project-form';
+import { automaticProjectColor, isValidLogoUrl, parseLogoKey } from '@/lib/project-form';
 import { TEMPLATE_GUIDES, templateGuide } from '@/lib/project-templates';
 import { projectReadiness } from '@/lib/onboarding';
 import { transformMappedRows, type FieldMappingRule, type MappingContext } from '@/lib/field-mapping';
@@ -17,9 +18,52 @@ const slug = (value: string) =>
     .replace(/^-|-$/g, '')
     .slice(0, 32) || `project-${crypto.randomUUID().slice(0, 8)}`;
 
-const PROJECT_SELECT = 'p.id,p.name,p.spu,p.brand,p.category,p.description,p.status,p.color,p.start_at AS startAt,p.end_at AS endAt,p.org_id AS orgId,p.department_id AS departmentId,p.client_id AS clientId,p.owner_id AS ownerId,p.template_id AS templateId,p.is_archived AS isArchived,p.onboarding_status AS onboardingStatus,p.created_by AS createdBy,p.updated_at AS updatedAt,d.name AS departmentName,c.name AS clientName,u.name AS ownerName,COALESCE(t.name,CASE WHEN p.template_id=\'blank\' THEN \'空白项目\' ELSE \'未配置方向\' END) AS templateName,(SELECT ps.updated_at FROM project_settings ps WHERE ps.project_id=p.id AND ps.key=\'campaign_dashboard\') AS campaignSnapshotAt';
+const PROJECT_SELECT = 'p.id,p.name,p.spu,p.brand,p.category,p.description,p.status,p.color,COALESCE(p.logo_url,\'\') AS logoUrl,p.start_at AS startAt,p.end_at AS endAt,p.org_id AS orgId,p.department_id AS departmentId,p.client_id AS clientId,p.owner_id AS ownerId,p.template_id AS templateId,p.is_archived AS isArchived,p.onboarding_status AS onboardingStatus,p.created_by AS createdBy,p.updated_at AS updatedAt,d.name AS departmentName,c.name AS clientName,u.name AS ownerName,COALESCE(t.name,CASE WHEN p.template_id=\'blank\' THEN \'空白项目\' ELSE \'未配置方向\' END) AS templateName,(SELECT ps.updated_at FROM project_settings ps WHERE ps.project_id=p.id AND ps.key=\'campaign_dashboard\') AS campaignSnapshotAt';
 const PROJECT_JOINS = ' FROM projects p LEFT JOIN departments d ON d.id=p.department_id LEFT JOIN clients c ON c.id=p.client_id LEFT JOIN users u ON u.id=p.owner_id LEFT JOIN project_templates t ON t.id=p.template_id ';
 const DIRECTORY_SQL = 'SELECT u.id,u.name,u.email,u.role,u.department_id AS departmentId FROM users u LEFT JOIN departments d ON d.id=u.department_id WHERE d.org_id=? OR u.department_id IS NULL ORDER BY u.name';
+
+async function validateAndAuthorizeLogo(
+  request: Request,
+  logoUrl: string,
+  user: { userId: string; role: string },
+  existingLogoUrl?: string
+): Promise<{ error?: string; status?: number } | null> {
+  if (!logoUrl) return null;
+  if (!isValidLogoUrl(logoUrl)) {
+    return { error: '项目 Logo 必须为系统内上传的有效本地路径或留空', status: 400 };
+  }
+  const key = parseLogoKey(logoUrl);
+  if (!key) return { error: '无效的 Logo 资源标识', status: 400 };
+
+  // Verify the target blob actually exists on storage; disallow fabricated keys
+  const blobObject = await blobGet(key);
+  if (!blobObject) {
+    return { error: '指定的 Logo 资源不存在或尚未上传', status: 400 };
+  }
+
+  // If this logo is already bound to the project, allow any authorized project editor/admin to keep it
+  if (existingLogoUrl && parseLogoKey(existingLogoUrl) === key) {
+    return null;
+  }
+
+  if (key.startsWith('uploads/logos/')) {
+    const parts = key.split('/');
+    const uploaderId = parts[2];
+    if (uploaderId !== user.userId && user.role !== 'platform_admin') {
+      return { error: '无权使用其他用户上传的 Logo 资源', status: 403 };
+    }
+  } else if (key.startsWith('projects/')) {
+    const parts = key.split('/');
+    const sourceProjectId = parts[1];
+    const accessCheck = await requireProjectAccess(request, sourceProjectId, 'read');
+    if (!accessCheck.ok) {
+      return { error: accessCheck.error || '无权使用该项目的 Logo 资源', status: accessCheck.status || 403 };
+    }
+  } else {
+    return { error: '非法的 Logo 存储路径', status: 400 };
+  }
+  return null;
+}
 
 export async function GET(request?: Request) {
   const user = await getAuthenticatedUser(request);
@@ -123,10 +167,17 @@ export async function POST(request: Request) {
     const spu = text(body.spu);
     const brand = text(body.brand);
     const category = text(body.category);
+    const logoUrl = text(body.logoUrl || body.logo);
     const startAt = text(body.startAt) || null;
     const endAt = text(body.endAt) || null;
 
     if (name.length > 100) return jsonError('项目名称不能超过100字');
+    if (brand.length > 50) return jsonError('品牌名称不能超过50字');
+    if (spu.length > 50) return jsonError('产品/SPU不能超过50字');
+    const logoCheck = await validateAndAuthorizeLogo(request, logoUrl, user);
+    if (logoCheck) {
+      return jsonError(logoCheck.error || '非法的 Logo 资源', logoCheck.status || 400);
+    }
     const referenceError = await validateProjectReferences(user, { departmentId, ownerId, clientId, templateId, status, color });
     if (referenceError) return jsonError(referenceError);
 
@@ -136,11 +187,11 @@ export async function POST(request: Request) {
 
     const projectStatement = d1
       .prepare(
-        `INSERT INTO projects(id, name, spu, brand, category, description, status, color, start_at, end_at,
+        `INSERT INTO projects(id, name, spu, brand, category, description, status, color, logo_url, start_at, end_at,
         org_id, department_id, client_id, owner_id, template_id, is_archived, onboarding_status, created_by, created_at, updated_at)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
       )
-      .bind(id, name, spu, brand, category, description, status, color, startAt, endAt, user.orgId, departmentId, clientId, ownerId, templateId, user.userId, now, now);
+      .bind(id, name, spu, brand, category, description, status, color, logoUrl, startAt, endAt, user.orgId, departmentId, clientId, ownerId, templateId, user.userId, now, now);
     if (structure) await d1.batch([projectStatement, d1.prepare("INSERT INTO project_settings(id,project_id,key,value,updated_at) VALUES(?,?,'structure_blueprint',?,?)").bind(id + ':structure', id, JSON.stringify(structure), now)]);
     else await projectStatement.run();
 
@@ -264,6 +315,13 @@ export async function POST(request: Request) {
     const description = body.description !== undefined ? text(body.description) : (existing.description as string);
     const status = body.status !== undefined ? text(body.status) : (existing.status as string);
     const color = body.color !== undefined ? text(body.color) : (existing.color as string);
+    const logoUrl = body.logoUrl !== undefined ? text(body.logoUrl) : body.logo !== undefined ? text(body.logo) : (existing.logo_url as string || '');
+    if (brand.length > 50) return jsonError('品牌名称不能超过50字');
+    if (spu.length > 50) return jsonError('产品/SPU不能超过50字');
+    const logoCheck = await validateAndAuthorizeLogo(request, logoUrl, access.context!.user, existing.logo_url as string || '');
+    if (logoCheck) {
+      return jsonError(logoCheck.error || '非法的 Logo 资源', logoCheck.status || 400);
+    }
     const departmentId = body.departmentId !== undefined ? text(body.departmentId) : (existing.department_id as string);
     const clientId = body.clientId !== undefined ? text(body.clientId) || null : (existing.client_id as string | null);
     const ownerId = body.ownerId !== undefined ? text(body.ownerId) : (existing.owner_id as string);
@@ -275,7 +333,7 @@ export async function POST(request: Request) {
 
     await d1
       .prepare(
-        `UPDATE projects SET name=?, spu=?, brand=?, category=?, description=?, status=?, color=?,
+        `UPDATE projects SET name=?, spu=?, brand=?, category=?, description=?, status=?, color=?, logo_url=?,
         department_id=?, client_id=?, owner_id=?, start_at=?, end_at=?, onboarding_status=?, updated_at=? WHERE id=?`
       )
       .bind(
@@ -286,6 +344,7 @@ export async function POST(request: Request) {
         description,
         status || '进行中',
         color || '#1769d5',
+        logoUrl,
         departmentId || 'dept-general',
         clientId,
         ownerId || access.context!.user.userId,

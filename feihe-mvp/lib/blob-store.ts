@@ -23,7 +23,7 @@ function extOf(key: string): string {
 }
 async function nodeFs() {
   const [fs, path] = await Promise.all([import('node:fs/promises'), import('node:path')]);
-  const root = path.join(process.cwd(), 'data', 'files');
+  const root = process.env.LOCAL_FILES_PATH || path.join(process.cwd(), 'data', 'files');
   await fs.mkdir(root, { recursive: true });
   return { fs, path, root };
 }

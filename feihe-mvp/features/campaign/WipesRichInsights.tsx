@@ -177,19 +177,20 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       { label: '任务单品直接GMV', value: '¥8,741.81', meta: '购买UV 1,268 (客单¥6.89)', status: 'default' },
     ];
 
-    // Funnel stages (跨端全链路转化漏斗)
-    const funnelColors = ['#2c7168', '#4d8b80', '#8273a3', '#b88a45', '#bd7964', '#8273a3', '#2c7168', '#64748b'];
-    const funnelStages: FunnelStageDatum[] = (fullFunnelTable?.rows || []).map((r, idx) => ({
-      stage: `${String(r.stageName || '')} · ${String(r.metricName || '')}`,
-      value: parseFiniteNum(r.metricValue),
-      unit: String(r.metricUnit || ''),
-      conversionLabel: String(r.conversionRate || ''),
-      costLabel: String(r.costEfficiency || ''),
-      subtext: String(r.attributionRule || r.platform || ''),
-      color: funnelColors[idx % funnelColors.length],
-    }));
+    // In-platform funnel stages (仅统计小红书端内真实串联链路：曝光 → 点击 → 互动，严禁跨端混算)
+    const funnelColors = ['#2c7168', '#4d8b80', '#8273a3'];
+    const inPlatformFunnelStages: FunnelStageDatum[] = (fullFunnelTable?.rows || [])
+      .filter((r) => String(r.platform || '').includes('小红书'))
+      .map((r, idx) => ({
+        stage: `${String(r.stageName || '')} · ${String(r.metricName || '')}`,
+        value: parseFiniteNum(r.metricValue),
+        unit: String(r.metricUnit || ''),
+        conversionLabel: String(r.conversionRate || ''),
+        costLabel: String(r.costEfficiency || ''),
+        subtext: String(r.attributionRule || ''),
+        color: funnelColors[idx % funnelColors.length],
+      }));
 
-    // Top 12 Keywords Pareto
     const rawKwRows = (kwDetailTable?.rows || [])
       .filter((r) => String(r.keyword) !== '总计')
       .map((r) => ({
@@ -318,16 +319,18 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       { key: 'heating', label: '加热流 (官方粉推)', color: '#b88a45' },
     ];
 
-    // Creator funnel elimination reasons
-    const eliminationBarData: ChartDatum[] = [
-      { label: '广告感过强/口条念稿不自然', value: 42, color: '#bd7964', detail: '淘汰 42 位 (22.2%)' },
-      { label: '受众画像不符(大童/男粉高/年龄过低)', value: 36, color: '#b88a45', detail: '淘汰 36 位 (19.0%)' },
-      { label: '数据表现不佳(完播低/疑似刷量)', value: 33, color: '#8273a3', detail: '淘汰 33 位 (17.5%)' },
-      { label: '内容调性不符(纯手工/纯宠物/不搭食物)', value: 28, color: '#4d8b80', detail: '淘汰 28 位 (14.8%)' },
-      { label: '商务因素(报价虚高/性价比低/不降价)', value: 22, color: '#64748b', detail: '淘汰 22 位 (11.6%)' },
-      { label: '档期冲突或已被竞品品牌排期占位', value: 16, color: '#94a3b8', detail: '淘汰 16 位 (8.5%)' },
-      { label: '形式受限(不接受口播/无配音纯沉浸)', value: 12, color: '#cbd5e1', detail: '淘汰 12 位 (6.3%)' },
-    ];
+    // Creator funnel elimination reasons (dynamically derived from source table)
+    const elimColors = ['#bd7964', '#b88a45', '#8273a3', '#4d8b80', '#64748b', '#94a3b8', '#cbd5e1'];
+    const rawElim = (
+      (creatorFunnelTable as unknown as { auxiliary?: { eliminationBreakdown?: Array<{ reasonCategory: string; count: number; share?: string }> } })
+        ?.auxiliary?.eliminationBreakdown || []
+    );
+    const eliminationBarData: ChartDatum[] = rawElim.map((item, idx) => ({
+      label: item.reasonCategory,
+      value: item.count,
+      color: elimColors[idx % elimColors.length],
+      detail: `淘汰 ${item.count} 位${item.share ? ` (${item.share})` : ''}`,
+    }));
 
     // CID Clicks Data (derived dynamically from wipes-cid-full-attribution-table)
     const cidColors = ['#2c7168', '#8273a3', '#b88a45', '#bd7964', '#4d8b80', '#64748b', '#94a3b8', '#cbd5e1', '#4d8b80', '#8273a3'];
@@ -354,7 +357,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         <div className="wipes-rich-header">
           <div className="wipes-rich-header-title">
             <span className="wipes-rich-tag">全景深透看板</span>
-            <span>稳健玉米消毒湿巾专项：全渠道投流、跨端漏斗与深层飞书底表透视</span>
+            <span>稳健玉米消毒湿巾专项：全渠道投流与跨端转化数据看板</span>
           </div>
           <div className="wipes-rich-notice">
             *全店GMV包含自然流量与跨渠道成交，不作广告直接ROI；站外活跃UV为小红星30天后验归因
@@ -367,59 +370,30 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         {/* =========================================================================
             第一层（重 · 双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵）
            ========================================================================= */}
-        <div className="wipes-layer-divider">
-          <span className="wipes-layer-badge" style={{ background: '#2c7168' }}>第一层 · 重</span>
-          <span className="wipes-layer-title">双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵</span>
-        </div>
+        <div className="wipes-section-header"><h3 className="wipes-section-title">双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵</h3></div>
 
-        {/* Panel 1: KPI Goals vs Actuals Matrix */}
+        {/* Core Row 1: KPI 与 预算双轨结构 (并排成对) */}
+        <div className="wipes-rich-grid-2">
+          {/* Panel 1: KPI Goals vs Actuals Matrix */}
         <ChartPanel
           title="KPI目标与实绩全量达成矩阵"
           subtitle="源表最新底表核算（日常种草7项 + 医生专家4项），按成本越低越优、规模越高越优双向判定"
         >
-          <div className="wipes-rich-grid-3">
-            {kpiRows.map((kpi, idx) => {
-              const statusBadge =
-                kpi.isSurpassed === true
-                  ? { text: '超额/达标', cls: 'surpassed' }
-                  : kpi.isSurpassed === false
-                  ? { text: '滞后/超支', cls: 'lagging' }
-                  : { text: '待核验', cls: 'pending' };
-
-              const achNum = parseFiniteNum(kpi.calculatedAchievementPct);
-              const fillPct = achNum !== null ? Math.min(achNum, 100) : 0;
-              return (
-                <div key={idx} className="wipes-kpi-card">
-                  <div className="wipes-kpi-head">
-                    <span className="wipes-kpi-name">
-                      [{kpi.dimension}] {kpi.metric}
-                    </span>
-                    <span className={`wipes-kpi-badge ${statusBadge.cls}`}>
-                      {statusBadge.text}
-                    </span>
-                  </div>
-                  <div className="wipes-kpi-values">
-                    <div className="wipes-kpi-actual">实绩: {kpi.rawActual}</div>
-                    <div className="wipes-kpi-target">目标: {kpi.rawTarget}</div>
-                  </div>
-                  <div className="wipes-kpi-progress-bar">
-                    <div
-                      className={`wipes-kpi-progress-fill ${statusBadge.cls}`}
-                      style={{ width: `${fillPct}%` }}
-                    />
-                  </div>
-                  <div className="wipes-kpi-footer">
-                    <span>达成率: {kpi.calculatedAchievementPct || kpi.sourceProgress || '--'}</span>
-                    <span>{kpi.subChannel ? `渠道: ${kpi.subChannel}` : ''}</span>
-                  </div>
-                  {kpi.auditNote && <div className="wipes-kpi-note">*{kpi.auditNote}</div>}
-                </div>
-              );
-            })}
+          <div className="wipes-kpi-table-wrap">
+            <table className="wipes-summary-table wipes-kpi-table"><thead><tr><th>考核指标</th><th>实际</th><th>目标</th><th>判定</th></tr></thead><tbody>
+              {kpiRows.map((kpi, idx) => {
+                const statusBadge = kpi.isSurpassed === true ? { text: '达标', cls: 'surpassed' } : kpi.isSurpassed === false ? { text: '未达标', cls: 'lagging' } : { text: '待核验', cls: 'pending' };
+                return <tr key={idx} title={kpi.auditNote || undefined}>
+                  <th><strong>{kpi.metric}</strong><small>{kpi.dimension}{kpi.subChannel ? ` · ${kpi.subChannel}` : ''}</small></th>
+                  <td>{kpi.rawActual ?? '—'}</td><td>{kpi.rawTarget ?? '—'}</td>
+                  <td><span className={`wipes-kpi-badge ${statusBadge.cls}`}>{statusBadge.text}</span></td>
+                </tr>;
+              })}
+            </tbody></table>
           </div>
+          {kpiRows.some(row => row.auditNote) && <details className="wipes-kpi-audit"><summary>查看指标核验备注</summary>{kpiRows.filter(row => row.auditNote).map((row, index) => <p key={index}>{row.metric}：{row.auditNote}</p>)}</details>}
         </ChartPanel>
-
-        {/* Panel 2: Budget Dual-Track Visualization */}
+          {/* Panel 2: Budget Dual-Track Visualization */}
         <ChartPanel
           title="预算双轨结构对比（打款账本 vs 可消耗账本）"
           subtitle="对比客户打款口径与实际可消耗口径下各费用类目的规划预算与实际支出"
@@ -500,17 +474,20 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             <strong>账本说明：</strong>打款口径与可消耗口径为两套独立核算账本，不可跨账本累加。发布数据追踪截至10/12，投流数据按T-1更新。
           </div>
         </ChartPanel>
+        </div>
 
-        {/* Panel 3: Channel Spend Structure */}
+        {/* Core Row 2: 全渠道费用构成 与 小红书种草链路独立指标 (并排成对) */}
+        <div className="wipes-rich-grid-2">
+          {/* Panel 3: Channel Spend Structure */}
         <ChartPanel
           title="全渠道费用构成与份额分布（K/F/S/CID）"
           subtitle="淘搜底表全量36天对账（¥369,798.36），各渠道消耗与份额按源表记录动态呈现"
         >
-          <div className="wipes-rich-grid-2">
+          <div className="wipes-channel-summary">
             <DonutChart
               data={channelDonutData}
               unit="元"
-              centerLabel="总支出 ¥369,798"
+              centerLabel="渠道支出合计"
             />
             <div className="wipes-rich-grid-2">
               {channelRows.map((c, i) => (
@@ -535,73 +512,92 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         {/* =========================================================================
             第二层（重 · 小红书种草→淘宝星河→CID 跨端全链路漏斗）
            ========================================================================= */}
-        <div className="wipes-layer-divider">
-          <span className="wipes-layer-badge" style={{ background: '#8273a3' }}>第二层 · 重</span>
-          <span className="wipes-layer-title">小红书种草 → 淘宝星河 → CID 跨端全链路转化漏斗</span>
+          {/* Panel 4: In-platform Funnel & Multi-Platform Metrics */}
+          <ChartPanel
+            title="小红书种草链路转化与多端承接独立指标"
+            subtitle="端内真实串联（曝光→阅读→互动），电商承接与成交指标独立核算，严禁跨端相除"
+          >
+            <CampaignFunnelChart stages={inPlatformFunnelStages} />
+
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#475569', margin: '14px 0 8px' }}>
+              电商外溢与承接独立衡量指标（各端独立核算，严禁跨端相除计算虚假全链路转化率）
+            </div>
+            <div className="wipes-funnel-stat-grid">
+              <div className="wipes-info-card">
+                <div className="wipes-info-title">阿里星河站外活跃 UV</div>
+                <div className="wipes-info-stat" style={{ color: '#2c7168' }}>
+                  {fullFunnelTable?.rows?.[3]?.metricValue ? fmtComboNum(fullFunnelTable.rows[3].metricValue) : '21,085'} 人
+                </div>
+                <div className="wipes-info-desc">
+                  {String(fullFunnelTable?.rows?.[3]?.costEfficiency || 'CPUV ¥8.00')} · 30天后验独立访客
+                </div>
+              </div>
+              <div className="wipes-info-card">
+                <div className="wipes-info-title">手淘笔记直接进店</div>
+                <div className="wipes-info-stat" style={{ color: '#8273a3' }}>
+                  {fullFunnelTable?.rows?.[4]?.metricValue ? fmtComboNum(fullFunnelTable.rows[4].metricValue) : '12,197'} 人
+                </div>
+                <div className="wipes-info-desc">
+                  {String(fullFunnelTable?.rows?.[4]?.costEfficiency || '进店成本 ¥13.54/人')} · 笔记落地页引导
+                </div>
+              </div>
+              <div className="wipes-info-card">
+                <div className="wipes-info-title">手淘搜索主动回流</div>
+                <div className="wipes-info-stat" style={{ color: '#b88a45' }}>
+                  {fullFunnelTable?.rows?.[5]?.metricValue ? fmtComboNum(fullFunnelTable.rows[5].metricValue) : '4,844'} 人
+                </div>
+                <div className="wipes-info-desc">
+                  {String(fullFunnelTable?.rows?.[5]?.costEfficiency || '搜索成本 ¥34.09/人')} · 品牌品类词回搜
+                </div>
+              </div>
+              <div className="wipes-info-card">
+                <div className="wipes-info-title">任务单品直接购买</div>
+                <div className="wipes-info-stat" style={{ color: '#bd7964' }}>
+                  ¥{fullFunnelTable?.rows?.[6]?.metricValue ? fmtComboNum(fullFunnelTable.rows[6].metricValue) : '8,741.81'}
+                </div>
+                <div className="wipes-info-desc">
+                  购买 UV 1,268人 · 客单价 ¥6.89（全店GMV ¥74,489.30仅作大盘参考）
+                </div>
+              </div>
+            </div>
+
+            <details className="wipes-details-box" style={{ marginTop: '12px' }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>
+                查看全口径分端指标明细与归因业务规则（独立记账明细）
+              </summary>
+              <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
+                <thead>
+                  <tr>
+                    <th>链路阶段</th>
+                    <th>端归属</th>
+                    <th>核心指标</th>
+                    <th>实绩数值</th>
+                    <th>流转转化率</th>
+                    <th>成本效率</th>
+                    <th>归因口径说明</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(fullFunnelTable?.rows || []).map((r, i) => (
+                    <tr key={i}>
+                      <td><strong>{String(r.stageName || '')}</strong></td>
+                      <td>{String(r.platform || '')}</td>
+                      <td>{String(r.metricName || '')}</td>
+                      <td>{typeof r.metricValue === 'number' ? fmtComboNum(r.metricValue) : String(r.metricValue || '')} {String(r.metricUnit || '')}</td>
+                      <td>{String(r.conversionRate || '')}</td>
+                      <td>{String(r.costEfficiency || '')}</td>
+                      <td style={{ fontSize: '11px', color: '#64748b' }}>{String(r.attributionRule || '')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </details>
+          </ChartPanel>
         </div>
 
-        {/* Panel 4: Cross-Platform Full Funnel */}
-        <ChartPanel
-          title="跨端全链路转化漏斗（小红书曝光 → 阅读 → 互动 → 小红星活跃UV → 手淘进店 → 单品成交）"
-          subtitle="打通小红书种草端、小红星30天后验归因与手淘星河电商进店及购买链路"
-        >
-          <CampaignFunnelChart stages={funnelStages} />
-
-          <div className="wipes-funnel-stat-grid">
-            <div className="wipes-info-card">
-              <div className="wipes-info-title">曝光转阅读 CTR</div>
-              <div className="wipes-info-stat" style={{ color: '#2c7168' }}>13.68%</div>
-              <div className="wipes-info-desc">84.9万阅读/点击，高出快消湿巾品类均值 1.8倍</div>
-            </div>
-            <div className="wipes-info-card">
-              <div className="wipes-info-title">深度互动成本 CPE</div>
-              <div className="wipes-info-stat" style={{ color: '#8273a3' }}>¥5.95</div>
-              <div className="wipes-info-desc">日常种草CPE 9.47元，医生专家CPE 5.26元</div>
-            </div>
-            <div className="wipes-info-card">
-              <div className="wipes-info-title">外溢获客成本 CPUV</div>
-              <div className="wipes-info-stat" style={{ color: '#b88a45' }}>¥8.00</div>
-              <div className="wipes-info-desc">产生 21,085 站外活跃UV，优于≤10元考核线</div>
-            </div>
-            <div className="wipes-info-card">
-              <div className="wipes-info-title">站外UV进店转化率</div>
-              <div className="wipes-info-stat" style={{ color: '#bd7964' }}>57.85%</div>
-              <div className="wipes-info-desc">12,197人直接进店，手淘搜索再回流 4,844人</div>
-            </div>
-          </div>
-
-          <details className="wipes-details-box">
-            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>查看跨端全链路转化漏斗明细与归因口径表</summary>
-            <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
-              <thead>
-                <tr>
-                  <th>链路阶段</th>
-                  <th>端归属</th>
-                  <th>核心指标</th>
-                  <th>实绩数值</th>
-                  <th>流转转化率</th>
-                  <th>成本指标</th>
-                  <th>归因口径说明</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(fullFunnelTable?.rows || []).map((r, i) => (
-                  <tr key={i}>
-                    <td><strong>{String(r.stageName || '')}</strong></td>
-                    <td>{String(r.platform || '')}</td>
-                    <td>{String(r.metricName || '')}</td>
-                    <td>{typeof r.metricValue === 'number' ? fmtComboNum(r.metricValue) : String(r.metricValue || '')} {String(r.metricUnit || '')}</td>
-                    <td>{String(r.conversionRate || '')}</td>
-                    <td>{String(r.costEfficiency || '')}</td>
-                    <td style={{ fontSize: '11px', color: '#64748b' }}>{String(r.attributionRule || '')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </details>
-        </ChartPanel>
-
-        {/* Panel 5: Taobao Xinghe E-commerce Attribution */}
+        {/* Core Row 3: 淘宝星河电商走势 与 CID 跨端直投 (并排成对) */}
+        <div className="wipes-rich-grid-2">
+          {/* Panel 5: Taobao Xinghe E-commerce Attribution */}
         <ChartPanel
           title={`淘宝星河：手淘搜索曝光进店与全店GMV走势（共 ${xingheRows.length} 天）`}
           subtitle="全店GMV为淘宝全店总成交额，任务单品GMV为玉米湿巾直接成交"
@@ -617,8 +613,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             <strong>数据说明：</strong>全店成交GMV(累计¥74,489.30)包含自然搜索与多渠道转化，不作广告直接ROI。10/8起加大投流后，笔记进店UV（累计12,197人）与手淘搜索进店UV（累计4,844人）保持正向关联，全店新客占比稳定在50%~80%，任务单品直接成交GMV为¥8,741.81。
           </div>
         </ChartPanel>
-
-        {/* Panel 6: CID Attribution */}
+          {/* Panel 6: CID Attribution */}
         <ChartPanel
           title="CID 跨端直投：10位博主淘系引流与成交追踪"
           subtitle="通过CID链路引导受众直接跳转手淘购买，累计消耗¥2,881.17，产生105次有效组件点击"
@@ -653,12 +648,11 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         {/* =========================================================================
             第三层（中重 · 五阶段 Sprint 演进与搜索/人群定向引擎）
            ========================================================================= */}
-        <div className="wipes-layer-divider">
-          <span className="wipes-layer-badge" style={{ background: '#b88a45' }}>第三层 · 中重</span>
-          <span className="wipes-layer-title">五阶段 Sprint 演进与搜索/人群定向引擎</span>
         </div>
 
-        {/* Panel 7: Weekly Progression */}
+        {/* Core Row 4: 五阶段 Sprint 演进 与 搜索关键词 Pareto (并排成对) */}
+        <div className="wipes-rich-grid-2">
+          {/* Panel 7: Weekly Progression */}
         <ChartPanel
           title={`各阶段消耗与访客成本对比（共 ${weeklyRows.length} 期 Sprint 演进）`}
           subtitle="源表第5期行标为10/13-10/29规划窗口，实测加总截止10/19共7天（消耗¥76,964，日均¥10,995/天）"
@@ -691,8 +685,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
           </div>
         </ChartPanel>
-
-        {/* Panel 8: Search Keyword Pareto Engine */}
+          {/* Panel 8: Search Keyword Pareto Engine */}
         <ChartPanel
           title="搜索枢纽：四大搜索词类构成与 Top 12 关键词 Pareto 分析"
           subtitle="淘搜大盘52个关键词聚合，头部核心词承接大部分搜索回流"
@@ -722,8 +715,15 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             height={280}
           />
         </ChartPanel>
+        </div>
 
-        {/* Panel 9: 31 Audience Packages Scatter */}
+        {/* 次级分析折叠 1：定向人群包、达人层级与场景热力矩阵 */}
+        <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '13px', color: '#1e293b', padding: '6px 0' }}>
+            展开查看次级分析：定向人群包散点、4大达人层级费用与场景热力矩阵
+          </summary>
+          <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
+            {/* Panel 9: 31 Audience Packages Scatter */}
         <ChartPanel
           title="定向引擎：31个定向人群包消费与 CPUV 效率分布"
           subtitle="气泡大小对应站外活跃UV规模，X轴为投流消耗，Y轴为访客成本CPUV"
@@ -741,12 +741,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         {/* =========================================================================
             第四层（中 · 达人层级 × 内容方向 × 人群矩阵与流量来源拆解）
            ========================================================================= */}
-        <div className="wipes-layer-divider">
-          <span className="wipes-layer-badge" style={{ background: '#bd7964' }}>第四层 · 中</span>
-          <span className="wipes-layer-title">达人层级 × 内容方向 × 人群矩阵与流量来源拆解</span>
-        </div>
-
-        {/* Panel 10: Creator Tier Spending Breakdown */}
+            {/* Panel 10: Creator Tier Spending Breakdown */}
         <ChartPanel
           title="4大达人层级费用构成（K端达人费 vs FS投流加热费）"
           subtitle="专家(3篇) + 腰部(3篇) + 尾部(24篇) + KOC(86篇) 双轨费用堆叠结构"
@@ -779,8 +774,9 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
           </div>
         </ChartPanel>
-
-        {/* Panel 11: Direction x Audience Heatmap */}
+          </div>
+          <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
+            {/* Panel 11: Direction x Audience Heatmap */}
         <ChartPanel
           title="内容方向 × 精准定向人群 二维交叉效率热力矩阵"
           subtitle="提取自周报4S9Ojh及底表ntH2Mw，展示不同场景切角与人群包的消耗与CPUV表现"
@@ -793,8 +789,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             rowHeaderTitle="内容方向 \ 核心定向人群"
           />
         </ChartPanel>
-
-        {/* Panel 12: Note Traffic Sources Structure */}
+            {/* Panel 12: Note Traffic Sources Structure */}
         <ChartPanel
           title="笔记流量来源拆解（自然流量 vs 商业推广流量 vs 加热流量）"
           subtitle="从蒲公英数据底表qub0Zh与发布汇总提取，全案自然曝光占比超70%，沉淀健康长尾搜索资产"
@@ -825,12 +820,16 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         {/* =========================================================================
             第五层（轻 · 达人选号漏斗、三甲医生授权池与卡审质检）
            ========================================================================= */}
-        <div className="wipes-layer-divider">
-          <span className="wipes-layer-badge" style={{ background: '#4d8b80' }}>第五层 · 轻</span>
-          <span className="wipes-layer-title">达人选号淘汰漏斗、三甲医生授权池与卡审质检</span>
-        </div>
+          </div>
+        </details>
 
-        {/* Panel 13: Creator Selection Funnel */}
+        {/* 次级分析折叠 2：达人选号淘汰漏斗与三甲医生专家矩阵 */}
+        <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '13px', color: '#1e293b', padding: '6px 0' }}>
+            展开查看次级分析：达人选号全流程淘汰漏斗与三甲医生专家背书候选池
+          </summary>
+          <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
+            {/* Panel 13: Creator Selection Funnel */}
         <ChartPanel
           title="达人选号全流程淘汰漏斗与未合作原因分布"
           subtitle="提报初筛池baaf26 (370人) → 二核意愿vliKvB (131人) → 终选定档履约 (116人)"
@@ -891,8 +890,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </table>
           </details>
         </ChartPanel>
-
-        {/* Panel 14: Doctor Hospital Pool */}
+            {/* Panel 14: Doctor Hospital Pool */}
         <ChartPanel
           title="三甲医院医生专家背书候选池与授权边界质检"
           subtitle="提取自在线表44AKMG，三甲综合与妇幼专科占比超90%，严格把控医疗合规红线"
@@ -945,8 +943,16 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </table>
           </details>
         </ChartPanel>
+          </div>
+        </details>
 
-        {/* Panel 15: Review Blockers Quality Assurance */}
+        {/* 次级分析折叠 3：商业投放笔记卡审质检跟踪 */}
+        <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '13px', color: '#1e293b', padding: '6px 0' }}>
+            展开查看次级分析：商业投放笔记卡审合规质检与过审响应跟踪（9大高频问题规范）
+          </summary>
+          <div style={{ marginTop: '14px' }}>
+            {/* Panel 15: Review Blockers Quality Assurance */}
         <ChartPanel
           title="商业投放笔记卡审合规质检与过审响应跟踪"
           subtitle="提取自卡审跟踪底表yYmwWo，针对医药合规两大约束实现A级响应与100%过审"
@@ -1009,6 +1015,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </table>
           </details>
         </ChartPanel>
+          </div>
+        </details>
       </div>
     );
   }

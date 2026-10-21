@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { StyledSelect } from "../../components/ui/StyledSelect";
 import type {
   CampaignDashboard as CampaignDashboardData,
   CampaignKpi,
@@ -344,7 +345,7 @@ export const CampaignDashboard: React.FC<CampaignDashboardProps> = (props) => {
   const warnings = useMemo(() => data?.warnings ?? [], [data?.warnings]);
 
   // 最新资料读取时间
-  
+
   // 当 kpis 或 tables 同时包含 manual 与 feishu 来源时，顶栏周期采用复合标注
   const displayReportPeriod = useMemo(() => {
     const provenances = new Set<string>();
@@ -489,7 +490,7 @@ export const CampaignDashboard: React.FC<CampaignDashboardProps> = (props) => {
         <label htmlFor={idPrefix + "-period-select"} className="campaign-filter-label">
           统计期:
         </label>
-        <select
+        <StyledSelect
           id={idPrefix + "-period-select"}
           className="campaign-select"
           value={effectivePeriod}
@@ -505,7 +506,7 @@ export const CampaignDashboard: React.FC<CampaignDashboardProps> = (props) => {
               </option>
             );
           })}
-        </select>
+        </StyledSelect>
       </div>
     );
   };

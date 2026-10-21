@@ -72,6 +72,38 @@
   border-radius: 6px;
 }
 
+.ca-date-single-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f8fafc;
+  padding: 2px 4px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.ca-btn-date-step {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ca-btn-date-step:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.ca-btn-date-step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .ca-date-input {
   border: none;
   background: transparent;
@@ -143,4 +175,197 @@
   color: #64748b;
   max-width: 480px;
   line-height: 1.6;
+}
+
+/* Daily Grid & Panels True Equal Height */
+.ca-daily-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.ca-daily-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ca-daily-panel > .ca-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ca-daily-panel > .ca-panel > .ca-panel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ca-daily-panel-span-2 {
+  grid-column: span 2;
+}
+
+/* Single Day Distribution Styles */
+.ca-dist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.ca-dist-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ca-dist-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.ca-dist-label {
+  font-weight: 500;
+  color: #334155;
+}
+
+.ca-dist-val-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ca-dist-value {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ca-dist-share {
+  font-size: 11px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.ca-dist-bar-track {
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ca-dist-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Cross Dataset Comparison */
+.ca-cross-dataset-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ca-scope-notice-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #92400e;
+  line-height: 1.5;
+}
+
+.ca-cross-dataset-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.ca-cross-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.15s ease;
+}
+
+.ca-cross-card-active {
+  border-color: #2c7168;
+  box-shadow: 0 0 0 1px #2c7168;
+  background: #fafdfc;
+}
+
+.ca-cross-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 8px;
+}
+
+.ca-cross-card-title {
+  font-size: 13px;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.ca-cross-badge-active {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #2c7168;
+  background: #e6f3f0;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.ca-cross-card-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 0;
+  color: #94a3b8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.ca-cross-card-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ca-cross-metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.ca-cross-metric-label {
+  color: #64748b;
+}
+
+.ca-cross-metric-val {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.ca-table-row-selected {
+  background: #f0fdf4 !important;
+  outline: 1px solid #86efac;
 }

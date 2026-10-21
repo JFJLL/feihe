@@ -1,4 +1,3 @@
-import React from 'react';
 import assert from 'assert';
 import fs from 'fs';
 import path from 'path';
@@ -11,7 +10,18 @@ const kailasData = JSON.parse(fs.readFileSync(kailasJsonPath, 'utf-8'));
 console.log('Verifying kailas.json payload structure...');
 assert.strictEqual(kailasData.projectId, 'kailas', 'projectId is kailas');
 assert(Array.isArray(kailasData.tables), 'tables is array');
-assert.strictEqual(kailasData.tables.length, 5, 'contains 5 enriched tables');
+const expectedTableIds = [
+  'kailas-q3-organic-vs-paid', 'kailas-notes-performance-scatter',
+  'kailas-kol-material-kfs-dual', 'kailas-search-keywords-category',
+  'kailas-notes-leverage-fs-k', 'kailas-overall-budget-pacing',
+  'kailas-monthly-creative-trend', 'kailas-notes-119-pareto-concentration',
+  'kailas-keyword-category-full', 'kailas-targeting-audience',
+  'kailas-candidate-pool-status', 'kailas-kol-tier-matrix',
+  'kailas-content-direction-summary', 'kailas-potential-notes-boost',
+  'kailas-full-funnel-summary', 'kailas-biweekly-stage-evolution',
+  'kailas-tier-direction-matrix', 'kailas-audit-common-issues',
+];
+assert.deepStrictEqual(kailasData.tables.map(table => table.id).sort(), expectedTableIds.sort(), 'All current source tables exist exactly once');
 
 const tableIds = kailasData.tables.map(t => t.id);
 assert(tableIds.includes('kailas-notes-performance-scatter'), 'includes notes scatter table');
@@ -25,16 +35,17 @@ for (const table of kailasData.tables) {
   assert(table.title, 'table has title');
   assert(table.period, 'table has period');
   assert(table.sourceId, 'table has sourceId');
+  assert(kailasData.sources.some(source => source.id === table.sourceId), 'Table provenance references a registered source');
   assert(table.columns, 'table has columns');
   assert(Array.isArray(table.rows), 'table rows is array');
-  
+
   if (table.id === 'kailas-q3-organic-vs-paid') {
     assert(!table.columns.some(c => c.key === 'role'), 'no role column');
     for (const r of table.rows) {
       assert(!('role' in r), 'no role property in rows');
     }
   }
-  
+
   if (table.id === 'kailas-notes-performance-scatter') {
     assert(table.columns.some(c => c.key === 'taskSpend'), 'taskSpend in columns');
     assert.strictEqual(table.rows.length, 119, 'exactly 119 notes');

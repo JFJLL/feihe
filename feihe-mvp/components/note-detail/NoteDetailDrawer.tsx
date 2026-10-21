@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { Note, NoteDetail } from '../../lib/types/project';
 import { api, cnTime, pct } from '../../lib/hooks/use-project-data';
 import { NoteCover } from '../ui/NoteCover';
+import { StyledSelect } from '../ui/StyledSelect';
 
 function isValidHttpUrl(url: unknown): boolean {
   if (typeof url !== 'string') return false;
@@ -403,25 +404,27 @@ export function NoteDetailDrawer({
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         <label>
                           来源分类
-                          <select
+                          <StyledSelect
                             value={draft.sourceType || 'scan'}
                             onChange={(e) => setDraft({ ...draft, sourceType: e.target.value })}
+                            aria-label="来源分类"
                           >
                             <option value="owned">自有发布</option>
                             <option value="commercial">商业合作</option>
                             <option value="keyword_scan">关键词扫描</option>
-                          </select>
+                          </StyledSelect>
                         </label>
                         <label>
                           产品范围
-                          <select
+                          <StyledSelect
                             value={draft.productScope || '本品'}
                             onChange={(e) => setDraft({ ...draft, productScope: e.target.value })}
+                            aria-label="产品范围"
                           >
                             <option value="本品">本品</option>
                             <option value="竞品">竞品</option>
                             <option value="其他">其他</option>
-                          </select>
+                          </StyledSelect>
                         </label>
                       </div>
 
@@ -535,15 +538,16 @@ export function NoteDetailDrawer({
                   <div style={{ display: 'grid', gap: '8px', marginTop: '8px' }}>
                     <label style={{ fontSize: '12px', color: '#15803d' }}>
                       校正验收结果
-                      <select
+                      <StyledSelect
                         value={draft?.status || '待抓取'}
                         onChange={(e) => setDraft((prev) => (prev ? { ...prev, status: e.target.value } : prev))}
+                        aria-label="校正验收结果"
                       >
                         <option value="待抓取">待抓取</option>
                         <option value="符合基础要求">符合基础要求</option>
                         <option value="符合且能汇报">符合且能汇报</option>
                         <option value={`不够${baseCount}条需补充`}>不够{baseCount}条需补充</option>
-                      </select>
+                      </StyledSelect>
                     </label>
                     <label style={{ fontSize: '12px', color: '#15803d' }}>
                       校正原因说明

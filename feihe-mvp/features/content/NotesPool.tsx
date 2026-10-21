@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from '../../components/ui/AppLink';
+import { StyledSelect } from '../../components/ui/StyledSelect';
 import type { Dashboard } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -122,13 +123,13 @@ export function NotesPool({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <StyledSelect value={status} onChange={(e) => setStatus(e.target.value)} aria-label="验收状态筛选">
             <option value="">全部验收状态</option>
             <option>符合且能汇报</option>
             <option>符合基础要求</option>
             <option>不够30条需补充</option>
             <option>待抓取</option>
-          </select>
+          </StyledSelect>
           <button
             disabled={!selected.length || loading}
             onClick={() => runFetch(selected.join('\n'))}

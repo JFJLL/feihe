@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import { StyledSelect } from "../../components/ui/StyledSelect";
 import type { CampaignDashboard, CampaignTable } from "../../lib/campaign-types";
 import {
   MetricStrip,
@@ -240,9 +241,9 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
       <div className="ca-toolbar">
         <div className="ca-toolbar-group">
           <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ca-palette-muted)" }}>分析视角：</span>
-          <select className="ca-toolbar-select" value={activeKey} onChange={(e) => setStateKey(e.target.value)} aria-label="投流数据视图切换">
+          <StyledSelect className="ca-toolbar-select" value={activeKey} onChange={(e) => setStateKey(e.target.value)} aria-label="投流数据视图切换">
             {views.map((v) => <option key={v.key} value={v.key}>{v.label}</option>)}
-          </select>
+          </StyledSelect>
         </div>
       </div>
 

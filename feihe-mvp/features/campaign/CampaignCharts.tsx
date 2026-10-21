@@ -65,13 +65,6 @@ function fmtNum(val: number | null | undefined, maxDigits = 2): string {
   return val.toLocaleString('zh-CN', { maximumFractionDigits: maxDigits });
 }
 
-function fmtPct(val: number | null | undefined, maxDigits = 1): string {
-  if (val === null || val === undefined || isNaN(val) || !Number.isFinite(val)) {
-    return '—';
-  }
-  return `${val.toLocaleString('zh-CN', { maximumFractionDigits: maxDigits })}%`;
-}
-
 // ============================================================================
 // 1. MetricStrip 紧凑指标条 (首屏 4 简洁指标，移动端 390 紧凑 2 列，防止大数溢出)
 // ============================================================================
@@ -146,7 +139,8 @@ export function MetricStrip({
   if (!items || items.length === 0) return null;
 
   return (
-    <div className="ca-metric-strip bd-kpi-grid-rich" role="region" aria-label="核心指标统计概览">
+    <div className="ca-metric-strip bd-kpi-grid-rich" role="region" aria-label="核心指标统计概览"
+      style={{ '--metric-columns': items.length <= 5 ? items.length : items.length === 6 ? 3 : 4 } as React.CSSProperties}>
       {items.map((it, idx) => {
         const isMissing = it.value === null || it.value === undefined;
         let formatted = '—';
@@ -508,21 +502,18 @@ export function CampaignFunnelChart({
   const maxLog = validValues.length > 0 ? Math.max(...validValues.map((v) => Math.log10(v + 1))) : 1;
 
   return (
-    <div className="ca-funnel-list" role="list" aria-label="全链路转化漏斗" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div className="ca-funnel-list" role="list" aria-label="指标节点明细">
       {stages.map((st, idx) => {
         const val = typeof st.value === 'number' && Number.isFinite(st.value) ? st.value : null;
         // 使用对数平滑宽度，避免曝光(百万级)与订单(百/千级)同屏时末端退化为不可见细线
-        const ratio = val !== null && val > 0 && maxLog > 0 ? Math.max(0.16, Math.min(1, Math.log10(val + 1) / maxLog)) : 0.08;
+        const ratio = val !== null && val > 0 && maxLog > 0 ? Math.log10(val + 1) / maxLog : 0;
         const barColor = st.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
         return (
           <div
             key={st.stage || idx}
             role="listitem"
+            className="ca-funnel-row"
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(115px, 150px) 1fr minmax(145px, auto)',
-              alignItems: 'center',
-              gap: 12,
               padding: '8px 12px',
               background: '#fcfbf9',
               border: `1px solid ${CAMPAIGN_PALETTE.borderWarm}`,
@@ -577,7 +568,7 @@ export function CampaignFunnelChart({
               </div>
               {st.conversionLabel && (
                 <span style={{ fontSize: 11, color: CAMPAIGN_PALETTE.textMuted }}>
-                  ↳ 环节转化：{st.conversionLabel}
+                  {st.conversionLabel}
                 </span>
               )}
             </div>
@@ -605,6 +596,7 @@ export function CampaignFunnelChart({
           </div>
         );
       })}
+      <small className="ca-scale-note">条长为对数刻度；不同单位的节点独立查看，不代表逐级转化率。</small>
     </div>
   );
 }
@@ -654,7 +646,7 @@ export function MatrixHeatmapChart({
   }
 
   return (
-    <div className="ca-table-wrap" style={{ overflowX: 'auto' }}>
+    <div className="ca-table-wrap ca-matrix-wrap" style={{ overflowX: 'auto' }}>
       <table className="ca-table" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 3, fontSize: 12 }}>
         <thead>
           <tr>
@@ -673,8 +665,9 @@ export function MatrixHeatmapChart({
         </thead>
         <tbody>
           {rows.map((r) => {
-            let rowSum = 0;
-            let hasVal = false;
+            const rowValues = cols.map(c => cellMap.get(`${r}__${c}`)?.value);
+            const complete = rowValues.every(v => typeof v === 'number' && Number.isFinite(v));
+            const rowSum = complete ? (rowValues as number[]).reduce((sum, value) => sum + value, 0) : null;
             return (
               <tr key={r}>
                 <td style={{ fontWeight: 600, padding: '6px 8px', color: CAMPAIGN_PALETTE.textMain, background: '#fcfbf9', whiteSpace: 'nowrap' }}>
@@ -683,10 +676,6 @@ export function MatrixHeatmapChart({
                 {cols.map((c) => {
                   const cell = cellMap.get(`${r}__${c}`);
                   const val = cell && typeof cell.value === 'number' && Number.isFinite(cell.value) ? cell.value : null;
-                  if (val !== null) {
-                    rowSum += val;
-                    hasVal = true;
-                  }
                   const intensity = val !== null && val > 0 && maxVal > 0 ? Math.min(1, Math.max(0.08, val / maxVal)) : 0;
                   const bg =
                     intensity > 0
@@ -706,7 +695,7 @@ export function MatrixHeatmapChart({
                         fontWeight: val && val > 0 ? 600 : 400,
                       }}
                     >
-                      <div>{cell?.displayValue ?? (val !== null && val > 0 ? `${fmtNum(val, val >= 100 ? 0 : 1)}${unit}` : '·')}</div>
+                      <div>{val === null ? '—' : cell?.displayValue ?? `${fmtNum(val)}${unit}`}</div>
                       {cell?.subtext && (
                         <div style={{ fontSize: 10, opacity: 0.85, fontWeight: 400 }}>{cell.subtext}</div>
                       )}
@@ -715,7 +704,7 @@ export function MatrixHeatmapChart({
                 })}
                 {showRowTotals && (
                   <td style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 700, background: '#f8fafc', borderRadius: 4, whiteSpace: 'nowrap' }}>
-                    {hasVal ? `${fmtNum(rowSum, rowSum >= 100 ? 0 : 1)}${unit}` : '—'}
+                    {rowSum !== null ? `${fmtNum(rowSum)}${unit}` : '—'}
                   </td>
                 )}
               </tr>
@@ -772,7 +761,7 @@ export function StackedHorizontalBarChart({
   const maxTotal = Math.max(1, ...rowTotals);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div className="ca-stacked-chart">
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 11.5, color: CAMPAIGN_PALETTE.textMuted }}>
         {segments.map((s) => (
           <span key={s.key} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
@@ -782,35 +771,33 @@ export function StackedHorizontalBarChart({
         ))}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className="ca-stacked-rows">
         {rows.map((r, i) => {
           const total = rowTotals[i];
+          const complete = segments.length > 0 && segments.every(s => {
+            const value = r.segments[s.key];
+            return typeof value === 'number' && Number.isFinite(value) && value >= 0;
+          });
           const denom = normalize100 ? (total || 1) : maxTotal;
           return (
             <div
               key={r.label || i}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'minmax(110px, 145px) 1fr minmax(95px, auto)',
-                alignItems: 'center',
-                gap: 10,
-                fontSize: 12,
-              }}
+              className="ca-stacked-row"
             >
               <div style={{ fontWeight: 600, color: CAMPAIGN_PALETTE.textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={r.label}>
                 {r.label}
               </div>
-              <div style={{ display: 'flex', height: 16, background: '#f1f5f9', borderRadius: 6, overflow: 'hidden' }}>
+              <div className="ca-stacked-track" style={{ display: 'flex', height: 18, background: '#f1f5f9', borderRadius: 6, overflow: 'hidden' }}>
                 {segments.map((s) => {
                   const v = r.segments[s.key];
                   const num = typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 0;
-                  const pct = (num / denom) * 100;
+                  const pct = normalize100 && !complete ? 0 : (num / denom) * 100;
                   if (pct <= 0) return null;
                   const sharePct = total > 0 ? ((num / total) * 100).toFixed(1) : '0.0';
                   return (
                     <div
                       key={s.key}
-                      title={`${r.label} · ${s.label}: ${fmtNum(num)}${unit} (${sharePct}%)`}
+                      title={`${r.label} · ${s.label}: ${fmtNum(num)}${unit}${complete ? ` (${sharePct}%)` : '（部分数据）'}`}
                       style={{
                         width: `${pct.toFixed(2)}%`,
                         background: s.color,
@@ -821,7 +808,7 @@ export function StackedHorizontalBarChart({
                 })}
               </div>
               <div style={{ textAlign: 'right', fontSize: 11.5, color: CAMPAIGN_PALETTE.textMain, fontWeight: 600, whiteSpace: 'nowrap' }}>
-                {r.totalLabel || `${fmtNum(total, total >= 100 ? 0 : 1)}${unit}`}
+                {r.totalLabel || (complete ? `${fmtNum(total)}${unit}` : '— · 数据不完整')}
                 {r.meta && <span style={{ display: 'block', fontSize: 10.5, fontWeight: 400, color: CAMPAIGN_PALETTE.textMuted }}>{r.meta}</span>}
               </div>
             </div>
@@ -1063,274 +1050,47 @@ export function DonutChart({
 // 5. BudgetComparisonChart 预算与实际对比 (固定值列防裁切, 超出不截断, 0值不虚假画长)
 // ============================================================================
 
-export function BudgetComparisonChart({
-  data,
-  unit = '元',
-}: {
+export function BudgetComparisonChart({ data, unit = '元' }: {
   data: ComparisonDatum[];
   unit?: string;
 }) {
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-
-  if (!data || data.length === 0) {
-    return (
-      <div className="ca-empty">
-        <div className="ca-empty-title">暂无预算对比数据</div>
-        <div className="ca-empty-hint">预算与实际消耗登记后自动呈现对比</div>
-      </div>
-    );
-  }
-
-  // 最大值基准：考虑实际超支，预留 8% 空间，条形全部在 plotWidth 内，不向右裁切
-  const maxVal = Math.max(
-    1,
-    ...data.flatMap((d) => [
-      typeof d.actual === 'number' && Number.isFinite(d.actual) ? d.actual : 0,
-      typeof d.target === 'number' && Number.isFinite(d.target) ? d.target : 0,
-    ])
-  ) * 1.08;
-
-  const leftPad = 120;
-  const rightPad = 140; // 预留固定数值与状态列，超支长注放入固定 Readout，彻底消除右边界裁切
-  const topPad = 32;
-  const bottomPad = 24;
-  const rowHeight = 48;
-  const totalWidth = 660;
-
-  const minNeededHeight = data.length * rowHeight + topPad + bottomPad;
-  const totalHeight = Math.max(160, minNeededHeight);
-  const plotWidth = totalWidth - leftPad - rightPad;
-
-  const current = activeIdx !== null && activeIdx < data.length ? data[activeIdx] : null;
-
+  if (!data?.length) return <div className="ca-empty">暂无预算对比数据</div>;
+  const finite = (value: number | null): value is number => typeof value === 'number' && Number.isFinite(value);
+  const maxValue = Math.max(1, ...data.flatMap(row => [row.actual, row.target].filter(finite))) * 1.08;
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
-      <div className="ca-chart-legend" style={{ marginBottom: 10 }}>
-        <span className="ca-chart-legend-item">
-          <span className="ca-chart-swatch" style={{ background: CAMPAIGN_PALETTE.primary }} />
-          预算内实际消耗
-        </span>
-        <span className="ca-chart-legend-item">
-          <span className="ca-chart-swatch" style={{ background: CAMPAIGN_PALETTE.terracotta }} />
-          超支消耗 (&gt;100% 预算)
-        </span>
-        <span className="ca-chart-legend-item">
-          <span className="ca-chart-swatch-line" style={{ background: CAMPAIGN_PALETTE.slate }} />
-          预算控制线 (100% 目标)
-        </span>
+    <div className="ca-budget-chart" role="group" aria-label={`预算对比图，共 ${data.length} 项`}>
+      <div className="ca-chart-legend">
+        <span className="ca-chart-legend-item"><span className="ca-chart-swatch" style={{ background: CAMPAIGN_PALETTE.primary }} />实际消耗</span>
+        <span className="ca-chart-legend-item"><span className="ca-chart-swatch" style={{ background: CAMPAIGN_PALETTE.terracotta }} />超支消耗</span>
+        <span className="ca-chart-legend-item">虚线：100% 预算目标</span>
       </div>
-
-      {/* 固定高度 Readout，未悬停保持占位，绝不推挤 SVG */}
-      <div className="ca-chart-readout" aria-live="polite">
-        {current ? (
-          <>
-            <strong>{current.label}</strong>
-            <span>实际: {fmtNum(current.actual)} {unit}</span>
-            <span>预算: {fmtNum(current.target)} {unit}</span>
-            {current.actual !== null && current.target !== null && current.target > 0 && (
-              <span
-                style={{
-                  color: current.actual > current.target ? CAMPAIGN_PALETTE.terracotta : CAMPAIGN_PALETTE.primary,
-                  fontWeight: 600,
-                }}
-              >
-                {current.actual > current.target
-                  ? `超支 +${fmtNum(current.actual - current.target)} (+${fmtPct((current.actual / current.target) * 100 - 100)})`
-                  : `预算占用 ${fmtPct((current.actual / current.target) * 100)} (结余 ${fmtNum(current.target - current.actual)})`}
-              </span>
-            )}
-          </>
-        ) : (
-          <span className="ca-chart-readout-empty">
-            悬停预算条或使用方向键聚焦查看详细超支与结余核算
-          </span>
-        )}
-      </div>
-
-      <svg
-        viewBox={`0 0 ${totalWidth} ${totalHeight}`}
-        className="ca-chart-svg"
-        role="graphics-document"
-        aria-label={`预算对比图，共 ${data.length} 项`}
-        onMouseLeave={() => setActiveIdx(null)}
-      >
-        <title>{`预算对比图，共 ${data.length} 项。超支条形完整越界呈现。`}</title>
-        {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
-          const xPos = leftPad + ratio * plotWidth;
-          const tickVal = maxVal * ratio;
+      <div className="ca-budget-rows">
+        {data.map((row, index) => {
+          const actual = finite(row.actual) ? row.actual : null;
+          const target = finite(row.target) && row.target >= 0 ? row.target : null;
+          const overrun = actual !== null && target !== null && actual > target;
+          const color = overrun ? CAMPAIGN_PALETTE.terracotta : CAMPAIGN_PALETTE.primary;
+          const width = actual !== null ? Math.max(0, actual) / maxValue * 100 : 0;
           return (
-            <g key={ratio}>
-              <line
-                x1={xPos}
-                x2={xPos}
-                y1={topPad}
-                y2={totalHeight - bottomPad}
-                stroke={CAMPAIGN_PALETTE.gridLine}
-                strokeDasharray="3 3"
-              />
-              <text
-                x={xPos}
-                y={topPad - 8}
-                textAnchor="middle"
-                fill={CAMPAIGN_PALETTE.textMuted}
-                fontSize="10"
-              >
-                {fmtNum(tickVal, 0)}
-              </text>
-            </g>
+            <div key={`${row.label}-${index}`} className="ca-budget-row">
+              <div className="ca-budget-row-heading">
+                <strong>{row.label}</strong>
+                <span style={{ color }}>{actual === null ? '未录入' : `${fmtNum(actual)} ${unit}`} {overrun && <b>↑超支</b>}</span>
+              </div>
+              <div className="ca-budget-track" role="img" aria-label={`${row.label}：实际 ${actual === null ? '未录入' : fmtNum(actual)}，预算 ${target === null ? '未录入' : fmtNum(target)}`}>
+                {target !== null && <span className="ca-budget-target-fill" style={{ width: `${target / maxValue * 100}%` }} />}
+                <span className="ca-budget-actual" data-value={actual ?? 'missing'} style={{ width: `${width}%`, background: color }} />
+                {target !== null && <span className="ca-budget-target-mark" style={{ left: `${target / maxValue * 100}%` }} />}
+              </div>
+              <div className="ca-budget-row-detail">
+                <span>{target === null ? '预算未录入' : `预算 ${fmtNum(target)} ${unit}`}</span>
+                <span>{actual === null || target === null ? '暂不可判断预算执行' : overrun ? `超支 ${fmtNum(actual - target)} ${unit}` : `结余 ${fmtNum(target - actual)} ${unit}`}</span>
+              </div>
+            </div>
           );
         })}
-
-        {data.map((item, idx) => {
-          const y = topPad + idx * rowHeight;
-          const isSelected = activeIdx === idx;
-          const hasActual = typeof item.actual === 'number' && Number.isFinite(item.actual);
-          const hasTarget = typeof item.target === 'number' && Number.isFinite(item.target) && item.target > 0;
-          const isZero = hasActual && item.actual === 0;
-
-          const targetX = hasTarget ? leftPad + (item.target! / maxVal) * plotWidth : null;
-          // 0 实际不画正宽度
-          const actualWidth = hasActual && !isZero ? Math.max(3, (item.actual! / maxVal) * plotWidth) : 0;
-          const isOverrun = hasActual && hasTarget && item.actual! > item.target!;
-          const barColor = isOverrun ? CAMPAIGN_PALETTE.terracotta : CAMPAIGN_PALETTE.primary;
-
-          return (
-            <g
-              key={item.label || idx}
-              tabIndex={0}
-              role="button"
-              aria-label={`${item.label} 实际 ${fmtNum(item.actual)}${unit}，预算 ${fmtNum(item.target)}${unit}`}
-              onMouseEnter={() => setActiveIdx(idx)}
-              onFocus={() => setActiveIdx(idx)}
-              onBlur={() => setActiveIdx(null)}
-              onKeyDown={(e) => {
-                if (e.key === 'ArrowDown') {
-                  e.preventDefault();
-                  setActiveIdx(Math.min(data.length - 1, idx + 1));
-                } else if (e.key === 'ArrowUp') {
-                  e.preventDefault();
-                  setActiveIdx(Math.max(0, idx - 1));
-                }
-              }}
-              style={{ cursor: 'pointer', outline: 'none' }}
-            >
-              <rect
-                x={0}
-                y={y}
-                width={totalWidth}
-                height={rowHeight - 6}
-                fill={isSelected ? 'rgba(44, 113, 104, 0.05)' : 'transparent'}
-                rx={4}
-              />
-
-              {/* 左侧渠道名称 */}
-              <text
-                x={leftPad - 12}
-                y={y + 19}
-                textAnchor="end"
-                fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMain}
-                fontWeight={isSelected ? '600' : '400'}
-                fontSize="12"
-              >
-                {item.label.length > 10 ? `${item.label.slice(0, 10)}…` : item.label}
-                <title>{item.label}</title>
-              </text>
-
-              {/* 预算底轨 (浅灰槽) */}
-              {targetX !== null && (
-                <rect
-                  x={leftPad}
-                  y={y + 6}
-                  width={targetX - leftPad}
-                  height={18}
-                  rx={3}
-                  fill="#f1f5f9"
-                  stroke="#e2e8f0"
-                  strokeWidth="1"
-                />
-              )}
-
-              {/* 实际消耗条 (超支时越过目标线，绝不截断；0实际画零刻度) */}
-              {hasActual ? (
-                isZero ? (
-                  <line
-                    x1={leftPad}
-                    x2={leftPad}
-                    y1={y + 5}
-                    y2={y + 25}
-                    stroke={CAMPAIGN_PALETTE.slate}
-                    strokeWidth="2.5"
-                  />
-                ) : (
-                  <rect
-                    x={leftPad}
-                    y={y + 8}
-                    width={actualWidth}
-                    height={14}
-                    rx={2.5}
-                    fill={barColor}
-                    opacity={isSelected ? 1 : 0.9}
-                  />
-                )
-              ) : (
-                <rect
-                  x={leftPad}
-                  y={y + 8}
-                  width={60}
-                  height={14}
-                  rx={2.5}
-                  fill="none"
-                  stroke="#cbd5e1"
-                  strokeDasharray="3 3"
-                />
-              )}
-
-              {/* 目标控制坚线标尺 */}
-              {targetX !== null && (
-                <g>
-                  <line
-                    x1={targetX}
-                    x2={targetX}
-                    y1={y + 3}
-                    y2={y + 27}
-                    stroke={CAMPAIGN_PALETTE.textMain}
-                    strokeWidth="2"
-                    strokeDasharray="3 2"
-                  />
-                </g>
-              )}
-
-              {/* 右侧固定数值列 (右对齐，彻底消除超支注在末尾裁切的问题) */}
-              <g>
-                <text
-                  x={totalWidth - 14}
-                  y={y + 17}
-                  textAnchor="end"
-                  fill={isOverrun ? CAMPAIGN_PALETTE.terracotta : hasActual ? CAMPAIGN_PALETTE.textMain : CAMPAIGN_PALETTE.textSubtle}
-                  fontWeight="600"
-                  fontSize="12"
-                >
-                  {hasActual ? `${fmtNum(item.actual)}` : '未录入'}
-                  {isOverrun && (
-                    <tspan fill={CAMPAIGN_PALETTE.terracotta} fontWeight="700" fontSize="10.5">
-                      {' ↑超支'}
-                    </tspan>
-                  )}
-                </text>
-                <text
-                  x={totalWidth - 14}
-                  y={y + 31}
-                  textAnchor="end"
-                  fill={CAMPAIGN_PALETTE.textMuted}
-                  fontSize="10.5"
-                >
-                  {hasTarget ? `预算 ${fmtNum(item.target)}` : '无预算目标'}
-                </text>
-              </g>
-            </g>
-          );
-        })}
-      </svg>
+      </div>
+      <small className="ca-scale-note">按同一金额刻度对比，虚线标记各项预算上限。</small>
     </div>
   );
 }

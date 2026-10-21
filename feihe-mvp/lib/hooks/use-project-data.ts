@@ -126,12 +126,16 @@ export class ApiError extends Error {
 }
 
 export async function api<T>(url: string, options?: RequestInit): Promise<T> {
+  const headers = new Headers(options?.headers);
+  if (typeof FormData !== 'undefined' && options?.body instanceof FormData) {
+    // The browser supplies the multipart boundary for file uploads.
+    headers.delete('Content-Type');
+  } else if (!headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
   const response = await fetch(url, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {}),
-    },
+    headers,
   });
   let data: (T & { ok?: boolean; error?: string }) | null = null;
   const rawText = await response.text().catch(() => '');

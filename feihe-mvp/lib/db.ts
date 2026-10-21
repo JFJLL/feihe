@@ -127,7 +127,7 @@ export async function ensureSchema() {
       d1.prepare(`CREATE TABLE IF NOT EXISTS projects (
         id TEXT PRIMARY KEY,name TEXT NOT NULL,spu TEXT NOT NULL DEFAULT '',brand TEXT NOT NULL DEFAULT '',
         category TEXT NOT NULL DEFAULT '',description TEXT NOT NULL DEFAULT '',status TEXT NOT NULL DEFAULT '进行中',
-        color TEXT NOT NULL DEFAULT '#1769d5',start_at TEXT,end_at TEXT,created_by TEXT NOT NULL DEFAULT '',
+        color TEXT NOT NULL DEFAULT '#1769d5',logo_url TEXT NOT NULL DEFAULT '',start_at TEXT,end_at TEXT,created_by TEXT NOT NULL DEFAULT '',
         created_at TEXT NOT NULL,updated_at TEXT NOT NULL
       )`),
       d1.prepare(`CREATE TABLE IF NOT EXISTS project_notes (
@@ -436,6 +436,7 @@ export async function ensureSchema() {
       if (!(existing.results || []).some((item) => item.name === column)) await d1.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
     };
     await ensureColumn('note_profiles', 'source_metrics_json', 'TEXT');
+    await ensureColumn('projects', 'logo_url', "TEXT NOT NULL DEFAULT ''");
     await ensureColumn('comment_snapshots', 'project_id', `TEXT NOT NULL DEFAULT '${DEFAULT_PROJECT_ID}'`);
     await ensureColumn('data_sources', 'mapping_json', `TEXT NOT NULL DEFAULT '{}'`);
     await ensureColumn('dashboards', 'save_token', "TEXT NOT NULL DEFAULT ''");
