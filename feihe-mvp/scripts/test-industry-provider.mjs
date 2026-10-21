@@ -5,7 +5,15 @@ import ts from 'typescript';
 const source = fs.readFileSync(new URL('../lib/industry-provider.ts', import.meta.url), 'utf8');
 const code = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText;
 const mod = { exports: {} };
-vm.runInNewContext(`(function(module,exports){${code}\n})`, { URL })(mod, mod.exports);
+const brandSource = fs.readFileSync(new URL('../lib/industry-brand.ts', import.meta.url), 'utf8');
+const brandMod = { exports: {} };
+vm.runInNewContext(`(function(module,exports){${ts.transpileModule(brandSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText}\n})`)(brandMod, brandMod.exports);
+vm.runInNewContext(`(function(module,exports,require){${code}\n})`, { URL })(mod, mod.exports, name => {
+  if (name === './industry-brand') return brandMod.exports;
+  throw Error('Unexpected module in isolated provider test');
+});
+assert.equal(brandMod.exports.canonicalIndustryBrand('凯乐石FUGA', '凯乐石', '凯乐石fuga'), '凯乐石');
+assert.equal(brandMod.exports.canonicalIndustryBrand('凯乐石对比其他品牌', '凯乐石', '凯乐石fuga'), '凯乐石对比其他品牌');
 const { parseIndustryNote, fetchIndustryData } = mod.exports;
 const options = { projectId: 'sample', spu: 'test product', brand: 'Ours', keywords: ['ignored'], competitorBrands: ['Other'] };
 const raw = { noteInfo: { noteId: '1234567890abcdef12345678', title: 'Ours vs Other', favNum: 0 }, brandInfo: { brandName: 'Other' }, userInfo: { nickName: 'Author' } };

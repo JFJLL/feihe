@@ -1,3 +1,4 @@
+import { canonicalIndustryBrand } from './industry-brand';
 import type {
   IndustryNoteItem,
   IndustrySnapshot,
@@ -18,7 +19,11 @@ export function analyzeIndustryNotes(params: {
   provider: IndustryProviderType;
   liveVerified: boolean;
 }): IndustrySnapshot {
-  const { projectId, spu, brand, competitorBrands, notes, dateKey, provider, liveVerified } = params;
+  const { projectId, spu, brand, competitorBrands, dateKey, provider, liveVerified } = params;
+  const notes = params.notes.map(note => {
+    const canonical = canonicalIndustryBrand(note.brand, brand, spu);
+    return { ...note, brand: canonical, isOurBrand: Boolean(brand) && canonical === brand };
+  });
   const totalNotes = notes.length;
   const now = new Date().toISOString();
 

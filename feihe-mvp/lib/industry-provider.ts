@@ -1,4 +1,5 @@
 import type { IndustryNoteItem, ProviderFetchOptions, ProviderFetchResult } from './industry-types';
+import { canonicalIndustryBrand } from './industry-brand';
 
 type RecordValue = Record<string, unknown>;
 const record = (value: unknown): RecordValue => value && typeof value === 'object' && !Array.isArray(value) ? value as RecordValue : {};
@@ -18,7 +19,7 @@ function publication(value: unknown): string | null {
   return /^\d{4}-\d{2}-\d{2}(?:[ T].*)?$/.test(candidate) && Number.isFinite(Date.parse(candidate)) ? candidate : null;
 }
 
-export function parseIndustryNote(raw: unknown, options: Pick<ProviderFetchOptions, 'projectId' | 'brand' | 'competitorBrands'>, fetchedAt: string): IndustryNoteItem | null {
+export function parseIndustryNote(raw: unknown, options: Pick<ProviderFetchOptions, 'projectId' | 'brand' | 'competitorBrands'> & { spu?: string }, fetchedAt: string): IndustryNoteItem | null {
   const item = record(raw);
   const note = record(item.noteInfo ?? item.note_info);
   const user = record(item.userInfo ?? item.user_info);
@@ -28,7 +29,7 @@ export function parseIndustryNote(raw: unknown, options: Pick<ProviderFetchOptio
   const title = text(note.title) || '无标题笔记';
   // Prefer source attribution. Multiple brand mentions do not establish exclusive attribution.
   const mentioned = [options.brand, ...options.competitorBrands].filter(Boolean).filter(b => title.toLowerCase().includes(b.toLowerCase()));
-  const brand = text(brandInfo.brandName) || (new Set(mentioned).size === 1 ? mentioned[0] : '未识别品牌');
+  const brand = canonicalIndustryBrand(text(brandInfo.brandName) || (new Set(mentioned).size === 1 ? mentioned[0] : '未识别品牌'), options.brand, options.spu);
   const cooper = note.cooperNote;
   const nature = cooper === 1 || cooper === '1' || cooper === true ? 'commercial'
     : cooper === 0 || cooper === '0' || cooper === false ? 'natural' : 'unknown';
