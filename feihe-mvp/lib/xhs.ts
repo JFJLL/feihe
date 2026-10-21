@@ -266,3 +266,44 @@ export async function searchNotes(keyword: string, startDate: string, endDate: s
   }
   return { keyword, total, fetched: notes.length, notes };
 }
+
+export async function searchIndustryNotesPage(
+  keyword: string,
+  startDate: string,
+  endDate: string,
+  pageNum = 1,
+  pageSize = 60,
+  project = DEFAULT_PROJECT_ID,
+  options: { cooperNote?: number } = {},
+): Promise<{ total: number | null; noteList: Array<Record<string, unknown>> }> {
+  const config = await settings(project);
+  if (!config.baseUrl) throw new Error('小红书接口地址未配置');
+  const base = new URL(config.baseUrl);
+  if (!['https:', 'http:'].includes(base.protocol) || base.username || base.password) {
+    throw new Error('小红书接口地址无效');
+  }
+  const cookies = await cookiePool(project);
+  const cookie = Object.entries(cookies[0]).map(([key, value]) => `${key}=${value}`).join('; ');
+  const headers = {
+    Cookie: cookie,
+    'Content-Type': 'application/json;charset=UTF-8',
+    Origin: 'https://pgy.xiaohongshu.com',
+    Referer: 'https://pgy.xiaohongshu.com/solar/creative/content',
+    'User-Agent': 'Mozilla/5.0',
+  };
+  const size = Math.max(1, Math.min(60, pageSize || config.searchPageSize));
+  const cooperNote = options.cooperNote ?? -1;
+  const payload: Record<string, unknown> = {
+    searchWord: keyword,
+    pageSize: size,
+    pageNum,
+    notePublishTimeStart: `${startDate} 00:00:00`,
+    notePublishTimeEnd: `${endDate} 23:59:59`,
+    sorts: [{ column: 'hot', sort: 'desc' }],
+  };
+  if (cooperNote >= 0) payload.cooperNote = cooperNote;
+  const data = await requestJson(`${config.baseUrl.replace(/\/$/, '')}${config.searchPath}`, { method: 'POST', headers, body: JSON.stringify(payload) }, config.timeout);
+  if (!Array.isArray(data.noteList)) throw new Error('Invalid searchNote response: noteList is not an array');
+  const total = data.total != null && Number.isFinite(Number(data.total)) ? Number(data.total) : null;
+  return { total, noteList: data.noteList as Array<Record<string, unknown>> };
+}

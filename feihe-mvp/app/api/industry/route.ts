@@ -9,8 +9,9 @@ import {
 } from '../../../lib/industry-db';
 import {
   resolveProjectIndustryMeta,
-  runIndustrySync,
 } from '../../../lib/industry-service';
+import { getIndustryV2Report, queueIndustryV2 } from '../../../lib/industry-v2-service';
+import { saveIndustryV2Config, IndustryConfigError } from '../../../lib/industry-v2-store';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,8 +63,10 @@ export async function GET(request: Request) {
       snapshot,
       history,
       liveVerified,
-    });
-  } catch {
+      ...await getIndustryV2Report(projectId, new Date(), url.searchParams.get('queryId') || undefined),
+    }, { headers: { 'Cache-Control': 'no-store' } });
+  } catch (error) {
+    if (error instanceof IndustryConfigError) return jsonError(error.message, 400);
     return jsonError('获取行业分析数据失败，请稍后重试', 500);
   }
 }
@@ -97,6 +100,25 @@ export async function POST(request: Request) {
 
     const action = typeof body.action === 'string' ? body.action : 'trigger_sync';
 
+    if (action === 'save_config_v2') {
+      try {
+        const configV2 = await saveIndustryV2Config(projectId, body);
+        if (configV2.spu) await queueIndustryV2(projectId, new Date(), false);
+        return Response.json({ ok: true, configV2, message: '检索配置已保存，历史采集已排队' });
+      } catch (error) {
+        if (error instanceof IndustryConfigError) return jsonError(error.message, 400);
+        throw error;
+      }
+    }
+    if (action === 'enqueue_v2' || action === 'trigger_sync') {
+      try {
+        const queued = await queueIndustryV2(projectId);
+        return Response.json({ ok: true, queued: true, ...queued, message: '已加入后台采集队列；按日渐进补齐，同一检索任务不重复抓取' });
+      } catch (error) {
+        if (error instanceof IndustryConfigError) return jsonError(error.message, 400);
+        throw error;
+      }
+    }
     if (action === 'save_config') {
       let validatedCompetitors: string[] | undefined = undefined;
       if (body.competitorBrands !== undefined) {
@@ -144,23 +166,6 @@ export async function POST(request: Request) {
       const reason = typeof body.reason === 'string' ? body.reason.slice(0, 100) : '用户手动废弃旧分析快照';
       await invalidateIndustrySnapshot(projectId, oldSpu, newSpu, reason);
       return Response.json({ ok: true, message: '旧分析结果已废弃' });
-    }
-
-    if (action === 'trigger_sync') {
-      const result = await runIndustrySync({
-        projectId,
-        force: Boolean(body.force),
-      });
-      return Response.json({
-        ok: result.ok,
-        status: result.status,
-        skipped: result.skipped,
-        snapshot: result.snapshot,
-        error: result.error,
-        message: result.ok
-          ? (result.skipped ? '今日任务已完成，无需重复同步' : '行业数据同步已完成')
-          : (result.error || '同步未完全成功'),
-      }, { status: result.ok ? 200 : 400 });
     }
 
     return jsonError('不支持的 action 类型', 400);
