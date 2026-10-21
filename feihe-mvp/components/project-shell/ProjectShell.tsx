@@ -23,6 +23,7 @@ import { MetricWorkspace } from '../../features/metrics/MetricWorkspace';
 import { DatasetAdOverview } from '../../features/overview/DatasetAdOverview';
 import { ReportsWorkspace } from '../../features/reports/ReportsWorkspace';
 import { AdsPlaceholder } from '../../features/overview/AdsPlaceholder';
+import { IndustryWorkspace } from '../../features/industry/IndustryWorkspace';
 import { getProjectThemeTag } from '../../features/overview/dashboard-template';
 
 function ProjectShellContent({
@@ -161,6 +162,14 @@ function ProjectShellContent({
       } else {
         content = currentProject?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} /> : <AdsPlaceholder />;
       }
+      break;
+    case "industry":
+      content = (
+        <IndustryWorkspace
+          key={projectId}
+          projectId={projectId}
+        />
+      );
       break;
     case "reports":
       content = <ReportsWorkspace key={projectId} projectId={projectId} />;

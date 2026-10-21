@@ -1,6 +1,8 @@
 import { db } from './db';
 import { jsonError, type AuthUser } from './api-auth';
 import { PROJECT_STATUSES } from './project-form';
+import { TEMPLATE_GUIDES } from './project-templates';
+export { STANDARD_DEPARTMENTS } from './project-form';
 
 export async function saveOrganizationEntry(user: AuthUser, action: string, body: Record<string, unknown>) {
   if (user.role !== 'platform_admin') return jsonError('需要平台管理员维护客户与部门', 403);
@@ -42,12 +44,14 @@ export async function validateProjectReferences(user: AuthUser, input: { departm
   const d1 = db();
   const [department, owner, client, template] = await Promise.all([
     d1.prepare('SELECT id FROM departments WHERE id=? AND org_id=?').bind(input.departmentId, user.orgId).first(),
-    d1.prepare('SELECT u.id FROM users u LEFT JOIN departments d ON d.id=u.department_id WHERE u.id=? AND (d.org_id=? OR u.department_id IS NULL)').bind(input.ownerId, user.orgId).first(),
+    input.ownerId
+      ? d1.prepare('SELECT u.id FROM users u LEFT JOIN departments d ON d.id=u.department_id WHERE u.id=? AND (d.org_id=? OR u.department_id IS NULL)').bind(input.ownerId, user.orgId).first()
+      : Promise.resolve({ id: '' }),
     input.clientId ? d1.prepare('SELECT id FROM clients WHERE id=? AND org_id=?').bind(input.clientId, user.orgId).first() : Promise.resolve(true),
-    input.templateId === 'blank' ? Promise.resolve(true) : d1.prepare('SELECT id FROM project_templates WHERE id=?').bind(input.templateId).first(),
+    input.templateId === 'blank' || TEMPLATE_GUIDES.some(t => t.id === input.templateId) ? Promise.resolve(true) : d1.prepare('SELECT id FROM project_templates WHERE id=?').bind(input.templateId).first(),
   ]);
   if (!department) return '负责部门不存在或不属于当前组织';
-  if (!owner) return '负责人不存在或不属于当前组织';
+  if (input.ownerId && !owner) return '负责人账号不存在或不属于当前组织';
   if (!client) return '客户不存在或不属于当前组织';
   if (!template) return '业务方向不存在';
   if (!PROJECT_STATUSES.includes(input.status)) return '请选择有效的业务状态';
@@ -55,6 +59,7 @@ export async function validateProjectReferences(user: AuthUser, input: { departm
   return null;
 }
 export async function ensureOwnerMembership(project: string, owner: string) {
+  if (!owner || !owner.trim()) return;
   const now = new Date().toISOString();
   await db().prepare("INSERT INTO project_members(id,project_id,user_id,role,created_at,updated_at) VALUES(?,?,?,'project_admin',?,?) ON CONFLICT(id) DO UPDATE SET role='project_admin',updated_at=excluded.updated_at")
     .bind(project + ':' + owner, project, owner, now, now).run();

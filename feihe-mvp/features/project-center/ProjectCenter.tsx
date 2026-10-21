@@ -14,6 +14,7 @@ import { useCacheIdentity } from '../../components/project-shell/IdentityBoundar
 import { AccessState } from '../../components/ui/AccessState';
 import { ProjectFormDialog } from './ProjectFormDialog';
 import { OrganizationManager } from './OrganizationManager';
+import { FeishuLogin } from '@/components/auth/FeishuLogin';
 
 export function ProjectCenter({ userName, isDevLocal = false }: { userName: string; isDevLocal?: boolean }) {
   const identity = useCacheIdentity();
@@ -21,7 +22,7 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true), [error, setError] = useState('');
   const [editing, setEditing] = useState<Project | null | undefined>(undefined);
-  const [organization, setOrganization] = useState(false), [contact, setContact] = useState(false);
+  const [organization, setOrganization] = useState(false);
   const [view, setView] = useState<'cards' | 'list'>('cards');
   const [query, setQuery] = useState(''), [scope, setScope] = useState('all');
   const [client, setClient] = useState('all'), [department, setDepartment] = useState('all');
@@ -50,13 +51,24 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
   useEffect(() => { const returned = () => { void refresh(); }; window.addEventListener('focus', returned); return () => window.removeEventListener('focus', returned); }, [refresh]);
   const metadata = workspace?.metadata;
   const projects = useMemo(() => workspace?.projects || [], [workspace]);
+  const ownerOptions = useMemo(() => {
+    const names = new Set<string>();
+    for (const p of projects) {
+      const name = p.ownerName?.trim();
+      if (name) names.add(name);
+    }
+    return [
+      { value: 'all', label: '全部负责人' },
+      ...Array.from(names).sort().map(name => ({ value: name, label: name })),
+    ];
+  }, [projects]);
   const filtered = useMemo(() => projects.filter(p => {
     const currentId = metadata?.currentUser?.userId;
     if (scope === 'owned' && p.ownerId !== currentId) return false;
     if (scope === 'participating' && !p.isParticipant && p.ownerId !== currentId) return false;
     if (client !== 'all' && (p.clientId || 'internal') !== client) return false;
     if (department !== 'all' && p.departmentId !== department) return false;
-    if (owner !== 'all' && p.ownerId !== owner) return false;
+    if (owner !== 'all' && (p.ownerName || '') !== owner) return false;
     if (status !== 'all' && p.status !== status) return false;
     const needle = query.trim().toLowerCase();
     return !needle || [p.name, p.description, p.clientName, p.departmentName, p.ownerName].some(v => v?.toLowerCase().includes(needle));
@@ -93,11 +105,11 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
   if (accessFailure) return <AccessState status={accessFailure.status} message={accessFailure.message} />;
   return <div className="platform-shell">
     <header className="platform-top"><Link className="platform-brand" href="/"><b>协同</b><span>项目数据与报告协作</span></Link>
-      <div className="platform-user"><span>{metadata?.currentUser?.displayName || (workspace ? userName : '验证身份中')}{(isDevLocal || metadata?.isDevLocal) && <span style={{ marginLeft: 6, fontSize: '0.72rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 6px', borderRadius: 4 }}>本地开发</span>}<small>{metadata?.currentUser?.role === 'platform_admin' ? '平台管理员' : '公司成员'}</small></span></div>
+      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} style={{ marginLeft: 8, fontSize: '0.72rem', color: '#0284c7', background: '#e0f2fe', padding: '2px 6px', borderRadius: 4 }}>本地开发</span>}</div>
     </header>
     <main className="platform-main integration-center">
       <section className="integration-page-heading"><div><h1>项目中心</h1><p>查看负责的工作，或为团队建立自己的数据工作台。</p></div><div className="integration-actions">
-        {metadata?.canManageOrganization ? <button type="button" onClick={() => setOrganization(true)}>客户与部门</button> : metadata && <button type="button" onClick={() => setContact(true)}>联系平台管理员</button>}
+        {metadata?.canManageOrganization && <button type="button" onClick={() => setOrganization(true)}>客户与部门</button>}
         <button type="button" className="primary" disabled={!metadata} onClick={() => setEditing(null)}>＋ 新建项目</button>
       </div></section>
       {error && <ErrorState error={error} onRetry={refresh} />}
@@ -107,7 +119,7 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
         <label>项目范围<CustomSelect ariaLabel="项目范围" value={scope} onChange={setScope} options={[{ value: 'all', label: '全部可见项目' }, { value: 'participating', label: '我参与的' }, { value: 'owned', label: '我负责的' }]} /></label>
         <label>客户<CustomSelect ariaLabel="筛选客户" value={client} onChange={setClient} options={[{ value: 'all', label: '全部客户' }, { value: 'internal', label: '内部项目' }, ...(metadata?.clients || []).map(c => ({ value: c.id, label: c.name }))]} /></label>
         <label>部门<CustomSelect ariaLabel="筛选部门" value={department} onChange={setDepartment} options={[{ value: 'all', label: '全部部门' }, ...(metadata?.departments || []).map(d => ({ value: d.id, label: d.name }))]} /></label>
-        <label>负责人<CustomSelect ariaLabel="筛选负责人" value={owner} onChange={setOwner} options={[{ value: 'all', label: '全部负责人' }, ...(metadata?.users || []).map(u => ({ value: u.id, label: u.name }))]} /></label>
+        <label>负责人<CustomSelect ariaLabel="筛选负责人" value={owner} onChange={setOwner} options={ownerOptions} /></label>
         <label>状态<CustomSelect ariaLabel="筛选状态" value={status} onChange={setStatus} options={[{ value: 'all', label: '全部状态' }, ...['筹备中', '进行中', '已结束', '已归档'].map(s => ({ value: s, label: s }))]} /></label>
       </section>
       <div className="integration-list-toolbar"><span>{filtered.length} 个授权项目</span><div role="group" aria-label="项目显示方式"><button type="button" aria-pressed={view === 'cards'} onClick={() => setView('cards')}>项目卡片</button><button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')}>紧凑列表</button></div></div>
@@ -131,7 +143,6 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
     </main>
     {editing !== undefined && metadata && <ProjectFormDialog key={editing?.id || 'create'} project={editing} metadata={metadata} projects={projects} onClose={() => setEditing(undefined)} onSaved={async id => { const creating = editing === null; setEditing(undefined); notify(creating ? '项目已创建' : '项目资料已更新'); await refresh(); if (creating) window.location.href = '/projects/' + encodeURIComponent(id); }} />}
     {organization && metadata && <OrganizationManager metadata={metadata} onClose={() => setOrganization(false)} onRefresh={refresh} />}
-    {contact && <Dialog title="联系平台管理员" onClose={() => setContact(false)}><p>客户、部门和公司成员由平台管理员维护。请说明需要登记的名称或企业账号；已有项目的接入与看板设置由项目负责人完成。</p>{(metadata?.platformContacts || []).map(c => <p key={c.id}>{c.name} · <a href={'mailto:' + c.email}>{c.email}</a></p>)}{!metadata?.platformContacts?.length && <p>管理员联系方式尚未登记，请联系公司平台运维负责人。</p>}</Dialog>}
     {confirm && <Dialog title={(confirm.action === 'delete' ? '删除项目“' : confirm.action === 'archive' ? '归档项目“' : '恢复项目“') + confirm.project.name + '”'} onClose={() => { if (!busy) setConfirm(null); }}
       footer={<><button disabled={busy} onClick={() => setConfirm(null)}>取消</button><button className="primary" disabled={busy} onClick={() => void confirmedAction()}>{busy ? '处理中…' : confirm.action === 'delete' ? '彻底删除' : confirm.action === 'archive' ? '确认归档' : '确认恢复'}</button></>}>
       <p>{confirm.action === 'delete' ? '永久删除该项目数据及配置，无法恢复。' : confirm.action === 'archive' ? '归档保留数据并暂停写入，之后可恢复。' : '恢复后可继续编辑与同步。'}</p>

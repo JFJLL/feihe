@@ -49,6 +49,15 @@ export const PROJECT_NAV_ITEMS: NavItem[] = [
     inSidebar: true,
   },
   {
+    id: 'industry',
+    path: 'industry',
+    number: '04',
+    label: '行业分析',
+    title: '行业分析',
+    description: '行业趋势、搜索心智与竞品表现',
+    inSidebar: true,
+  },
+  {
     id: 'comments',
     path: 'comments',
     number: '04',

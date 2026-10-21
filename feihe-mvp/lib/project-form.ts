@@ -5,6 +5,15 @@ export const PROJECT_COLORS = [
   { value: '#0891b2', label: '青色' }, { value: '#475569', label: '石板灰' },
 ];
 export const PROJECT_STATUSES = ['筹备中', '进行中', '已结束'];
+export const STANDARD_DEPARTMENTS = [
+  { id: 'dept-client-1', name: '客户一部' },
+  { id: 'dept-client-2', name: '客户二部' },
+  { id: 'dept-client-3', name: '客户三部' },
+  { id: 'dept-client-4', name: '客户四部' },
+  { id: 'dept-client-5', name: '客户五部' },
+  { id: 'dept-client-6', name: '客户六部' },
+  { id: 'dept-hongmo', name: '弘摩' },
+] as const;
 export const MAX_LOGO_SIZE = 2 * 1024 * 1024; // 2MB
 export const ALLOWED_LOGO_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'] as const;
 export const LOGO_KEY_REGEX = /^(?:projects\/[a-zA-Z0-9_-]+\/logo|uploads\/logos\/[a-zA-Z0-9_-]+)\/[a-zA-Z0-9_.-]+\.(?:png|jpe?g|webp|gif)$/;
@@ -112,7 +121,7 @@ export function automaticProjectColor(name: string) {
   return PROJECT_COLORS[hash % PROJECT_COLORS.length].value;
 }
 export interface ProjectDraft {
-  id?: string; name: string; departmentId: string; ownerId: string; clientId: string;
+  id?: string; name: string; departmentId: string; ownerId: string; ownerName?: string; clientId: string;
   description: string; templateId: string; status: string; color: string;
   brand: string; spu: string; category: string; logoUrl?: string;
 }
@@ -126,7 +135,7 @@ export function projectDraftErrors(draft: ProjectDraft) {
     errors.push('项目 Logo 必须为系统上传的本地图片路径或留空');
   }
   if (!draft.departmentId) errors.push('请选择负责部门');
-  if (!draft.ownerId) errors.push('请选择负责人');
+  if (!draft.ownerName?.trim() && !draft.ownerId?.trim()) errors.push('请填写项目负责人');
   if (!PROJECT_STATUSES.includes(draft.status)) errors.push('请选择有效的业务状态');
   if (draft.color && !/^#[a-f0-9]{6}$/i.test(draft.color)) errors.push('项目识别色格式不正确');
   return errors;

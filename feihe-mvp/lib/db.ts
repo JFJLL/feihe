@@ -456,6 +456,7 @@ export async function ensureSchema() {
     await ensureColumn('projects', 'department_id', "TEXT NOT NULL DEFAULT 'dept-marketing'");
     await ensureColumn('projects', 'client_id', "TEXT");
     await ensureColumn('projects', 'owner_id', "TEXT NOT NULL DEFAULT 'user-admin'");
+    await ensureColumn('projects', 'owner_name', "TEXT NOT NULL DEFAULT ''");
     await ensureColumn('projects', 'template_id', "TEXT NOT NULL DEFAULT 'content_marketing'");
     await ensureColumn('projects', 'is_archived', "INTEGER NOT NULL DEFAULT 0");
     await ensureColumn('projects', 'archived_at', "TEXT");
@@ -486,6 +487,20 @@ export async function ensureSchema() {
         VALUES('dept-brand', 'org-default', '品牌战略部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
         VALUES('dept-general', 'org-default', '综合管理部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-client-1', 'org-default', '客户一部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-client-2', 'org-default', '客户二部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-client-3', 'org-default', '客户三部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-client-4', 'org-default', '客户四部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-client-5', 'org-default', '客户五部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-client-6', 'org-default', '客户六部', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+      d1.prepare(`INSERT OR IGNORE INTO departments(id, org_id, name, created_at, updated_at)
+        VALUES('dept-hongmo', 'org-default', '弘摩', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO clients(id, org_id, name, industry, created_at, updated_at)
         VALUES('client-feihe', 'org-default', '飞鹤乳业', '快消母婴', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO clients(id, org_id, name, industry, created_at, updated_at)
@@ -532,6 +547,10 @@ export async function ensureSchema() {
         '["spend","impressions","clicks","ctr","cpc","cpm"]',
         '{"cards":[{"id":"ad1","title":"广告消耗","type":"metric_card","metric":"spend"},{"id":"ad2","title":"总曝光量","type":"metric_card","metric":"impressions"},{"id":"ad3","title":"总点击量","type":"metric_card","metric":"clicks"},{"id":"ad4","title":"平均点击率 CTR","type":"metric_card","metric":"ctr"}]}',
         '1.0.0')`),
+      d1.prepare(`INSERT OR IGNORE INTO project_templates(id, name, description, icon, modules_json, default_metrics_json, default_dashboard_json, version)
+        VALUES('campaign_review', '轻量营销看板', '营销复盘与轻量营销看板，无预设目标。', 'layout',
+        '["overview","content","ads","data","metrics","reports","settings"]',
+        '[]', '{}', '1.0.0')`),
       d1.prepare(`INSERT OR IGNORE INTO pipelines(id,name,target_count,delivered_count,budget,spent) VALUES('viral','素人评论大爆文',200,128,24000,15360)`),
       d1.prepare(`INSERT OR IGNORE INTO pipelines(id,name,target_count,delivered_count,budget,spent) VALUES('value_scan','价值笔记扫描',68,43,12000,7200)`),
       d1.prepare(`INSERT OR IGNORE INTO pipelines(id,name,target_count,delivered_count,budget,spent) VALUES('commercial','新发商业笔记',360,276,42000,30660)`),

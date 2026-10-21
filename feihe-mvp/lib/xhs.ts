@@ -66,7 +66,7 @@ async function cookiePool(project = DEFAULT_PROJECT_ID, explicitObjectKey?: stri
   const signature = bytesToBase64(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(canonical)));
   const endpointUrl = new URL(endpoint);
   const url = `${endpointUrl.protocol}//${bucket}.${endpointUrl.host}/${objectKey.replace(/^\//, '').split('/').map(encodeURIComponent).join('/')}`;
-  const response = await fetch(url, { headers: { Date: date, Authorization: `OSS ${accessKeyId}:${signature}` } });
+  const response = await fetch(url, { headers: { Date: date, Authorization: `OSS ${accessKeyId}:${signature}` }, signal: AbortSignal.timeout(30_000) });
   if (!response.ok) throw new Error(`Cookie 池下载失败 HTTP ${response.status}`);
   const text = await response.text();
   const pool = text.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line) as Record<string, string>);
@@ -244,21 +244,25 @@ export async function fetchAllComments(noteId: string, project = DEFAULT_PROJECT
   return { noteId, reportedL1, fetchedL1: l1Items.length, fetchedL2: comments.filter((c) => c.depth === 2).length, comments };
 }
 
-export async function searchNotes(keyword: string, startDate: string, endDate: string, maxPages = 3, project = DEFAULT_PROJECT_ID) {
+export async function searchNotes(keyword: string, startDate: string, endDate: string, maxPages = 3, project = DEFAULT_PROJECT_ID, options: { cooperNote?: number; pageSize?: number } = {}) {
   const config = await settings(project);
   const cookies = await cookiePool(project);
   const cookie = Object.entries(cookies[0]).map(([key, value]) => `${key}=${value}`).join('; ');
   const headers = { Cookie: cookie, 'Content-Type': 'application/json;charset=UTF-8', Origin: 'https://pgy.xiaohongshu.com', Referer: 'https://pgy.xiaohongshu.com/solar/creative/content', 'User-Agent': 'Mozilla/5.0' };
   const notes: Array<Record<string, unknown>> = [];
   let total = 0;
+  const pageSize = Math.max(1, Math.min(60, options.pageSize || config.searchPageSize));
+  const cooperNote = options.cooperNote ?? 0;
   for (let pageNum = 1; pageNum <= maxPages; pageNum += 1) {
+    if (pageNum > 1) await new Promise(resolve => setTimeout(resolve, 1200));
     const data = await requestJson(`${config.baseUrl.replace(/\/$/, '')}${config.searchPath}`, {
-      method: 'POST', headers, body: JSON.stringify({ searchWord: keyword, pageSize: config.searchPageSize, pageNum, cooperNote: 0, notePublishTimeStart: `${startDate} 00:00:00`, notePublishTimeEnd: `${endDate} 23:59:59`, sorts: [{ column: 'hot', sort: 'desc' }] }),
+      method: 'POST', headers, body: JSON.stringify({ searchWord: keyword, pageSize, pageNum, ...(cooperNote >= 0 ? { cooperNote } : {}), notePublishTimeStart: `${startDate} 00:00:00`, notePublishTimeEnd: `${endDate} 23:59:59`, sorts: [{ column: 'hot', sort: 'desc' }] }),
     }, config.timeout);
     total = Number(data.total || total);
-    const batch = (data.noteList || []) as Array<Record<string, unknown>>;
+    if (!Array.isArray(data.noteList)) throw new Error('Invalid searchNote response');
+    const batch = data.noteList as Array<Record<string, unknown>>;
     notes.push(...batch);
-    if (!batch.length || notes.length >= total) break;
+    if (!batch.length || batch.length < pageSize || (total > 0 && notes.length >= total)) break;
   }
   return { keyword, total, fetched: notes.length, notes };
 }

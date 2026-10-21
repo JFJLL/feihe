@@ -7,11 +7,9 @@ let cachedConfigFile: Record<string, unknown> | null = null;
 function readConfigFile(): Record<string, unknown> {
   if (cachedConfigFile) return cachedConfigFile;
   try {
-    if (typeof process !== 'undefined' && process.versions?.node) {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const fs = require('node:fs') as typeof import('node:fs');
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const path = require('node:path') as typeof import('node:path');
+    if (typeof process !== 'undefined' && process.versions?.node && process.getBuiltinModule) {
+      const fs = process.getBuiltinModule('node:fs');
+      const path = process.getBuiltinModule('node:path');
       const candidates = [
         path.resolve(process.cwd(), 'config.json'),
         path.resolve(process.cwd(), '..', 'config.json'),
@@ -61,9 +59,6 @@ export function envVar(name: string, fallback = ''): string {
   if (name === 'KEYSTONE_MODEL' && cfg.keystone?.model) return cfg.keystone.model;
   if (name === 'KEYSTONE_IMAGE_MODEL' && cfg.keystone?.image_model) return cfg.keystone.image_model;
   // 默认生产环境变量映射兜底
-  if (name === 'FEISHU_APP_ID') return Buffer.from('Y2xpX2E2NjhmM2QwMGRiOTEwMGU=', 'base64').toString();
-  if (name === 'FEISHU_APP_SECRET') return Buffer.from('TGxvUDREalhmSDFZcUU5REw2T2J3ZlZVNXVSaEk3VEY=', 'base64').toString();
-  if (name === 'KEYSTONE_API_KEY') return Buffer.from('c2stVFVrSHF2a3JqQ3BxVXhEZWI1NUNFcDR6TVFVTnBEOWZ1dDFDbURkT1U1TkVrMDJO', 'base64').toString();
   if (name === 'KEYSTONE_BASE_URL') return 'https://keystonehk.ai/v1';
   if (name === 'KEYSTONE_MODEL') return 'gpt-5.6-terra';
   if (name === 'KEYSTONE_IMAGE_MODEL') return 'gpt-image-2';
@@ -90,9 +85,6 @@ export function runtimeVars(): Record<string, string | undefined> {
   if (!out.KEYSTONE_MODEL && cfg.keystone?.model) out.KEYSTONE_MODEL = cfg.keystone.model;
   if (!out.KEYSTONE_IMAGE_MODEL && cfg.keystone?.image_model) out.KEYSTONE_IMAGE_MODEL = cfg.keystone.image_model;
 
-  if (!out.FEISHU_APP_ID) out.FEISHU_APP_ID = Buffer.from('Y2xpX2E2NjhmM2QwMGRiOTEwMGU=', 'base64').toString();
-  if (!out.FEISHU_APP_SECRET) out.FEISHU_APP_SECRET = Buffer.from('TGxvUDREalhmSDFZcUU5REw2T2J3ZlZVNXVSaEk3VEY=', 'base64').toString();
-  if (!out.KEYSTONE_API_KEY) out.KEYSTONE_API_KEY = Buffer.from('c2stVFVrSHF2a3JqQ3BxVXhEZWI1NUNFcDR6TVFVTnBEOWZ1dDFDbURkT1U1TkVrMDJO', 'base64').toString();
   if (!out.KEYSTONE_BASE_URL) out.KEYSTONE_BASE_URL = 'https://keystonehk.ai/v1';
   if (!out.KEYSTONE_MODEL) out.KEYSTONE_MODEL = 'gpt-5.6-terra';
   if (!out.KEYSTONE_IMAGE_MODEL) out.KEYSTONE_IMAGE_MODEL = 'gpt-image-2';

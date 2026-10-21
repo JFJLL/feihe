@@ -6,6 +6,15 @@ export const projects = sqliteTable('projects', {
   description: text('description').notNull().default(''), status: text('status').notNull().default('进行中'),
   color: text('color').notNull().default('#1769d5'), logoUrl: text('logo_url').notNull().default(''), startAt: text('start_at'), endAt: text('end_at'),
   createdBy: text('created_by').notNull().default(''), createdAt: text('created_at').notNull(), updatedAt: text('updated_at').notNull(),
+  orgId: text('org_id').notNull().default('org-default'),
+  departmentId: text('department_id').notNull().default('dept-client-1'),
+  clientId: text('client_id').notNull().default(''),
+  ownerId: text('owner_id').notNull().default(''),
+  ownerName: text('owner_name').notNull().default(''),
+  templateId: text('template_id').notNull().default('general_workbench'),
+  isArchived: integer('is_archived').notNull().default(0),
+  archivedAt: text('archived_at'),
+  onboardingStatus: text('onboarding_status').notNull().default('ready'),
 });
 
 export const projectNotes = sqliteTable('project_notes', {

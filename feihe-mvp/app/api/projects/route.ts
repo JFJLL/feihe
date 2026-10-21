@@ -18,7 +18,7 @@ const slug = (value: string) =>
     .replace(/^-|-$/g, '')
     .slice(0, 32) || `project-${crypto.randomUUID().slice(0, 8)}`;
 
-const PROJECT_SELECT = 'p.id,p.name,p.spu,p.brand,p.category,p.description,p.status,p.color,COALESCE(p.logo_url,\'\') AS logoUrl,p.start_at AS startAt,p.end_at AS endAt,p.org_id AS orgId,p.department_id AS departmentId,p.client_id AS clientId,p.owner_id AS ownerId,p.template_id AS templateId,p.is_archived AS isArchived,p.onboarding_status AS onboardingStatus,p.created_by AS createdBy,p.updated_at AS updatedAt,d.name AS departmentName,c.name AS clientName,u.name AS ownerName,COALESCE(t.name,CASE WHEN p.template_id=\'blank\' THEN \'空白项目\' ELSE \'未配置方向\' END) AS templateName,(SELECT ps.updated_at FROM project_settings ps WHERE ps.project_id=p.id AND ps.key=\'campaign_dashboard\') AS campaignSnapshotAt';
+const PROJECT_SELECT = 'p.id,p.name,p.spu,p.brand,p.category,p.description,p.status,p.color,COALESCE(p.logo_url,\'\') AS logoUrl,p.start_at AS startAt,p.end_at AS endAt,p.org_id AS orgId,p.department_id AS departmentId,COALESCE(p.client_id,\'\') AS clientId,p.owner_id AS ownerId,p.template_id AS templateId,p.is_archived AS isArchived,p.onboarding_status AS onboardingStatus,p.created_by AS createdBy,p.updated_at AS updatedAt,d.name AS departmentName,c.name AS clientName,COALESCE(NULLIF(p.owner_name,\'\'),u.name,p.owner_id,\'\') AS ownerName,COALESCE(t.name,CASE WHEN p.template_id=\'blank\' THEN \'空白项目\' ELSE \'未配置方向\' END) AS templateName,(SELECT ps.updated_at FROM project_settings ps WHERE ps.project_id=p.id AND ps.key=\'campaign_dashboard\') AS campaignSnapshotAt';
 const PROJECT_JOINS = ' FROM projects p LEFT JOIN departments d ON d.id=p.department_id LEFT JOIN clients c ON c.id=p.client_id LEFT JOIN users u ON u.id=p.owner_id LEFT JOIN project_templates t ON t.id=p.template_id ';
 const DIRECTORY_SQL = 'SELECT u.id,u.name,u.email,u.role,u.department_id AS departmentId FROM users u LEFT JOIN departments d ON d.id=u.department_id WHERE d.org_id=? OR u.department_id IS NULL ORDER BY u.name';
 
@@ -159,8 +159,9 @@ export async function POST(request: Request) {
       } catch (error) { return jsonError(error instanceof Error ? error.message : '结构读取失败', error instanceof DefinitionError ? error.status : 500); }
     }
     const departmentId = text(body.departmentId) || user.departmentId || 'dept-general';
-    const clientId = text(body.clientId) || null;
-    const ownerId = text(body.ownerId) || user.userId;
+    const clientId = text(body.clientId);
+    const ownerName = text(body.ownerName || body.owner);
+    const ownerId = user.userId;
     const status = text(body.status) || '筹备中';
     const color = text(body.color) || automaticProjectColor(name);
     const description = text(body.description);
@@ -188,10 +189,10 @@ export async function POST(request: Request) {
     const projectStatement = d1
       .prepare(
         `INSERT INTO projects(id, name, spu, brand, category, description, status, color, logo_url, start_at, end_at,
-        org_id, department_id, client_id, owner_id, template_id, is_archived, onboarding_status, created_by, created_at, updated_at)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
+        org_id, department_id, client_id, owner_id, owner_name, template_id, is_archived, onboarding_status, created_by, created_at, updated_at)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'source', ?, ?, ?)`
       )
-      .bind(id, name, spu, brand, category, description, status, color, logoUrl, startAt, endAt, user.orgId, departmentId, clientId, ownerId, templateId, user.userId, now, now);
+      .bind(id, name, spu, brand, category, description, status, color, logoUrl, startAt, endAt, user.orgId, departmentId, clientId, ownerId, ownerName, templateId, user.userId, now, now);
     if (structure) await d1.batch([projectStatement, d1.prepare("INSERT INTO project_settings(id,project_id,key,value,updated_at) VALUES(?,?,'structure_blueprint',?,?)").bind(id + ':structure', id, JSON.stringify(structure), now)]);
     else await projectStatement.run();
 
@@ -323,18 +324,26 @@ export async function POST(request: Request) {
       return jsonError(logoCheck.error || '非法的 Logo 资源', logoCheck.status || 400);
     }
     const departmentId = body.departmentId !== undefined ? text(body.departmentId) : (existing.department_id as string);
-    const clientId = body.clientId !== undefined ? text(body.clientId) || null : (existing.client_id as string | null);
-    const ownerId = body.ownerId !== undefined ? text(body.ownerId) : (existing.owner_id as string);
+    const clientId = body.clientId !== undefined ? text(body.clientId) : (existing.client_id as string || '');
+    const existingOwnerId = String(existing.owner_id || '');
+    let ownerId = existingOwnerId;
+    if (body.ownerId !== undefined && text(body.ownerId) && text(body.ownerId) !== existingOwnerId) {
+      if (access.context!.isPlatformAdmin) {
+        const userCheck = await d1.prepare('SELECT id FROM users WHERE id=?').bind(text(body.ownerId)).first();
+        if (userCheck) ownerId = text(body.ownerId);
+      }
+    }
+    const ownerName = body.ownerName !== undefined ? text(body.ownerName) : body.owner !== undefined ? text(body.owner) : (existing.owner_name as string || '');
     const startAt = body.startAt !== undefined ? text(body.startAt) || null : (existing.start_at as string | null);
     const endAt = body.endAt !== undefined ? text(body.endAt) || null : (existing.end_at as string | null);
     const onboardingStatus = body.onboardingStatus !== undefined ? text(body.onboardingStatus) : (existing.onboarding_status as string);
-    const referenceError = await validateProjectReferences(access.context!.user, { departmentId: departmentId || 'dept-general', ownerId: ownerId || access.context!.user.userId, clientId, templateId: String(existing.template_id || 'general_workbench'), status, color });
+    const referenceError = await validateProjectReferences(access.context!.user, { departmentId: departmentId || 'dept-general', ownerId: ownerId || '', clientId, templateId: String(existing.template_id || 'general_workbench'), status, color });
     if (referenceError) return jsonError(referenceError);
 
     await d1
       .prepare(
         `UPDATE projects SET name=?, spu=?, brand=?, category=?, description=?, status=?, color=?, logo_url=?,
-        department_id=?, client_id=?, owner_id=?, start_at=?, end_at=?, onboarding_status=?, updated_at=? WHERE id=?`
+        department_id=?, client_id=?, owner_id=?, owner_name=?, start_at=?, end_at=?, onboarding_status=?, updated_at=? WHERE id=?`
       )
       .bind(
         name,
@@ -347,7 +356,8 @@ export async function POST(request: Request) {
         logoUrl,
         departmentId || 'dept-general',
         clientId,
-        ownerId || access.context!.user.userId,
+        ownerId,
+        ownerName,
         startAt,
         endAt,
         onboardingStatus || 'pending',
@@ -356,7 +366,9 @@ export async function POST(request: Request) {
       )
       .run();
 
-    await ensureOwnerMembership(id, ownerId || access.context!.user.userId);
+    if (ownerId && ownerId !== existingOwnerId) {
+      await ensureOwnerMembership(id, ownerId);
+    }
 
     if (body.onboardingStatus === 'ready') {
       await d1.prepare(`UPDATE project_onboarding SET current_step='ready', completed_steps_json=?, updated_at=? WHERE project_id=?`).bind(JSON.stringify(readiness?.completedSteps || []), now, id).run();
