@@ -14,7 +14,7 @@
 2. Link the release's `config.json`, `feihe-mvp/data`, and `feihe-mvp/runtime` to the existing protected deployment resources. Install/build with the Node 22 runtime; do not replace the database with a development copy.
 3. Run `node scripts/migrate-spu-departments.mjs` for a read-only preview. After verifying all five projects and the backup, run with `--apply`. This only updates the requested SPUs and inserts missing standard departments; it preserves legacy department assignments and ownership.
 4. Configure the private `runtime/site-env.json` file, mode 0600. `scripts/run-deployed.mjs` loads it into the child process without putting credentials in PM2 configuration or Git.
-5. Start/reload only the two named processes using `deploy/ecosystem.xhs.cjs`. Validate public pages, project-edit persistence, OAuth start/callback handling, and worker output. Preserve the previous PM2 process definition for rollback.
+5. Run `node scripts/render-deploy-config.mjs` to generate `runtime/ecosystem.xhs.json`; older PM2 versions cannot load `.cjs` directly. If the script/cwd changed, back up the process definition and recreate only `feihe-local` with `pm2 delete feihe-local` then `pm2 start runtime/ecosystem.xhs.json --only feihe-local`. Start the worker with `--only xhs-industry-monitor`. Do not use `startOrReload` to migrate a legacy pnpm process: older PM2 preserves its old script and cwd. Validate public pages and both named processes, then persist only these entries without altering other applications' saved definitions.
 
 ## Private runtime configuration
 
