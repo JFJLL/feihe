@@ -2,7 +2,8 @@
  * Unlocked KPI adapter for Meiling Campaign Dashboard.
  *
  * Implements pure function `applyUnlockedMeilingKpi` to parse unlocked
- * Meiling KPI sheets (HNDCwmdpkiw4DgkFSNycB3cbnSc: L986LN, FkLCad, 4SGaOf).
+ * Meiling KPI sheets from the internal maintained workbook RQffw002Aik9aNkW9PScJ05knre
+ * (7-8月KPI, 618KPI, 双11进度更新). The former HNDCwmdpkiw4DgkFSNycB3cbnSc copy is no longer used.
  *
  * Dynamic parsing from rows; idempotent with prefix 'meiling-kpi-unlocked-'.
  */
@@ -181,8 +182,8 @@ export function applyUnlockedMeilingKpi(dashboard: CampaignDashboard, newLinks: 
   if (!newLinks || typeof newLinks !== 'object') return dashboard;
   const anyLinks = newLinks as Record<string, unknown>;
   const target = (Array.isArray(anyLinks.targets)
-    ? anyLinks.targets.find((t: RawTarget) => t.wiki_token === 'HNDCwmdpkiw4DgkFSNycB3cbnSc' || (t.url && t.url.includes('HNDCwmdpkiw4DgkFSNycB3cbnSc')))
-    : (anyLinks.wiki_token === 'HNDCwmdpkiw4DgkFSNycB3cbnSc' ? anyLinks : null)) as RawTarget | null;
+    ? anyLinks.targets.find((t: RawTarget) => t.wiki_token === 'RQffw002Aik9aNkW9PScJ05knre' || (t.url && t.url.includes('RQffw002Aik9aNkW9PScJ05knre')))
+    : (anyLinks.wiki_token === 'RQffw002Aik9aNkW9PScJ05knre' ? anyLinks : null)) as RawTarget | null;
 
   if (!target || !Array.isArray(target.core_sub_sheets) || target.core_sub_sheets.length === 0) return dashboard;
 
@@ -268,12 +269,12 @@ export function applyUnlockedMeilingKpi(dashboard: CampaignDashboard, newLinks: 
 
   const hasValidRows = sheets.some((s) => Array.isArray(s.rows) && s.rows.length > 1);
   const updatedSource: CampaignSource = {
-    id: REUSED_SOURCE_ID, name: target.node_details?.title || '美菱冰箱kpi管理表 副本',
-    url: target.url || 'https://yimeichuanbo.feishu.cn/wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc',
+    id: REUSED_SOURCE_ID, name: target.node_details?.title || '美菱冰箱kpi管理表',
+    url: target.url || 'https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre',
     status: hasValidRows ? 'ready' : 'pending',
-    detail: hasValidRows ? '官方KPI管理表（含7-8月KPI、618KPI、双11进度更新已解锁）' : '官方KPI管理表已访问但无有效行数据',
+    detail: hasValidRows ? '内部真实源KPI管理表（含7-8月KPI、618KPI、双11进度更新）' : '内部KPI管理表已访问但无有效行数据',
     fetchedAt: target.readAt || target.batch_readAt || null,
-    provenance: { type: 'feishu', sourceName: '飞书文档/表格', externalId: target.wiki_token || 'HNDCwmdpkiw4DgkFSNycB3cbnSc', syncedAt: target.readAt || target.batch_readAt || null, note: '美菱冰箱KPI管理表已解锁访问' },
+    provenance: { type: 'feishu', sourceName: '飞书文档/表格', externalId: target.wiki_token || 'RQffw002Aik9aNkW9PScJ05knre', syncedAt: target.readAt || target.batch_readAt || null, note: '美菱冰箱KPI管理表内部真实源' },
   };
 
   const newSources = dashboard.sources.map((s) => (s.id === REUSED_SOURCE_ID ? updatedSource : s));

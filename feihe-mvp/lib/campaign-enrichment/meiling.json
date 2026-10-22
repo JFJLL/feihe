@@ -30,8 +30,8 @@
     },
     {
       "id": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
-      "name": "美菱冰箱双11日报表 副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "name": "美菱冰箱双11日报表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
       "status": "ready",
       "detail": "双11大促日报表工作簿（RoAtsw3KTh56ZBtT7cmcTYaznJb），包含天猫/京东种草数据源细表与打款表",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -44,7 +44,7 @@
     {
       "id": "src-meiling-sheets-D9ddm3",
       "name": "美菱双11日报表 - 自采天猫种草数据源流水",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=D9ddm3",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=D9ddm3",
       "status": "ready",
       "detail": "自采天猫种草全量底表（7632行，实际可比19天，9篇笔记素材）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -57,7 +57,7 @@
     {
       "id": "src-meiling-sheets-BI2xBs",
       "name": "美菱双11日报表 - 自采京东种草数据源流水",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=BI2xBs",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=BI2xBs",
       "status": "ready",
       "detail": "自采京东种草全量底表（14992行，实际可比20天，5篇笔记素材）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -70,7 +70,7 @@
     {
       "id": "src-meiling-sheets-Trvrou",
       "name": "美菱双11日报表 - 京东对投CID日流水",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Trvrou",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
       "status": "ready",
       "detail": "京东对投CID真实消耗与成交转化（10/16-10/18，3天分日流水）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -83,7 +83,7 @@
     {
       "id": "src-meiling-sheets-Y7qNOu",
       "name": "美菱双11日报表 - 打款与应消耗对照表",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Y7qNOu",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Y7qNOu",
       "status": "ready",
       "detail": "双11各渠道投放账户规划打款与实际应消耗（7大账户固定列映射）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -96,7 +96,7 @@
     {
       "id": "src-meiling-sheets-mG2COI",
       "name": "美菱双11日报表 - 笔记&词类配置表",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=mG2COI",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=mG2COI",
       "status": "ready",
       "detail": "小红书投放搜索词类与产品渗透聚类（有效339条非空词，竞品/品类/品牌/大促词）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -109,7 +109,7 @@
     {
       "id": "src-meiling-sheets-ACntPW",
       "name": "美菱双11日报表 - 代采星伴种草数据源流水",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=ACntPW",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=ACntPW",
       "status": "ready",
       "detail": "代采星伴种草底表（2979行明细聚合，10/15-10/18共4天流水）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -122,7 +122,7 @@
     {
       "id": "src-meiling-sheets-zF2qee",
       "name": "美菱双11日报表 - 京东对投种草数据源流水",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=zF2qee",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=zF2qee",
       "status": "ready",
       "detail": "京东对投种草底表（13954行明细聚合，10/15-10/18共4天流水）",
       "fetchedAt": "2026-10-19T18:25:00+08:00",
@@ -134,8 +134,8 @@
     },
     {
       "id": "src-meiling-node-HNDCwmdpkiw4DgkFSNycB3cbnSc",
-      "name": "美菱冰箱kpi管理表 副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "name": "美菱冰箱kpi管理表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre",
       "status": "ready",
       "detail": "美菱KPI管理表，接替无权限之RQff，包含双11进度更新（4SGaOf）、筛号透视（SI0mQy）及618/7-8月KPI总览",
       "fetchedAt": "2026-10-19T08:38:11+08:00",
@@ -148,7 +148,7 @@
     {
       "id": "src-meiling-sheets-4SGaOf",
       "name": "美菱冰箱kpi管理表 - 双11进度更新表",
-      "url": "https://yimeichuanbo.feishu.cn/sheets/N2bssx2dBh8xyItaFEfccqaznHY?sheet=4SGaOf",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre?sheet=4SGaOf",
       "status": "ready",
       "detail": "双11各产品系列与型号原规划预算（380万/117篇）及京东/天猫渠道级回传GMV（9/28更新）",
       "fetchedAt": "2026-10-19T08:38:11+08:00",
@@ -160,8 +160,8 @@
     },
     {
       "id": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
-      "name": "美菱冰箱618复盘数据 副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "name": "美菱冰箱618复盘数据",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh",
       "status": "ready",
       "detail": "2026年618大促结案复盘工作簿（XSKrspszhhgvPvtxMNicmYlUnEc），包含全量105篇达人明细与财务级ROI",
       "fetchedAt": "2026-10-19T16:47:29+08:00",
@@ -767,7 +767,7 @@
       "category": "performance",
       "period": "天猫 2026-09-30 ~ 2026-10-18 / 京东 2026-09-29 ~ 2026-10-18",
       "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
       "note": "基于天猫自采775条（2026-09-30~2026-10-18）与京东自采1209条（2026-09-29~2026-10-18）真实流水全量聚合。展现量、点击量、互动量和消耗为实际累计；CTR、CPC、CPM、CPE、CPUV基于总量计算，绝不使用算术平均；UV为30日归因UV累计值。",
       "provenance": "feishu",
       "columns": [
@@ -897,7 +897,7 @@
       "category": "performance",
       "period": "2026/09/29 ~ 2026/10/18",
       "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
       "note": "汇总1984条细表中全量14篇商业笔记素材投放消耗与转化效果（天猫9篇、京东5篇）。素材名称为投放流水中的创意标记，非实名达人姓名；UV为各创意30日归因UV累计值（非全案去重人数）。各行带准确真实投放期间。",
       "provenance": "feishu",
       "columns": [
@@ -1238,7 +1238,7 @@
       "title": "双11各渠道投放账户规划打款与实际应消耗（7大账户）",
       "description": "来源DkdO双11日报Y7qNOu表，固定A/B/C/D/E列位置映射。包含红猫种草、红盟种草、京东对投、星伴等7个账户的规划打款额与实际应消耗需求",
       "sourceId": "src-meiling-sheets-Y7qNOu",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Y7qNOu",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Y7qNOu",
       "period": "双11大促周期（打款与应消耗对照）",
       "columns": [
         {
@@ -1336,7 +1336,7 @@
       "title": "双11各产品系列与型号原规划预算、篇数及投流消耗（9/28规划版·380万）",
       "description": "来源HNDC kpi管理表4SGaOf前11行。覆盖小确杏、黑珍珠、大白鲸、无忧嵌四大系列的规划预算（380万）、规划篇数（117篇）、初步筛选（81篇）、已发布（13篇）及投流消耗（41.52万）。本表型号级无独立GMV归因，严格呈现源数不造假ROI。",
       "sourceId": "src-meiling-sheets-4SGaOf",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/N2bssx2dBh8xyItaFEfccqaznHY?sheet=4SGaOf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre?sheet=4SGaOf",
       "period": "2026.9.28更新（原规划表，截止未注明）",
       "columns": [
         {
@@ -1490,7 +1490,7 @@
       "title": "双11分平台目标规划与渠道级回传GMV总览（京东 vs 天猫）",
       "description": "来源HNDC kpi管理表4SGaOf平台合并区块。进店量与GMV在原表为平台级数据（京东平台11508进店/136.8万GMV/投流ROI 5.17；天猫平台6151进店/62.6万GMV/投流ROI 4.16）。严格保留渠道合并口径。",
       "sourceId": "src-meiling-sheets-4SGaOf",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/N2bssx2dBh8xyItaFEfccqaznHY?sheet=4SGaOf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre?sheet=4SGaOf",
       "period": "2026.9.28更新（原规划表，截止未注明）",
       "columns": [
         {
@@ -1667,7 +1667,7 @@
       "title": "小红书投放搜索词类与产品渗透聚类（有效339条非空词）",
       "description": "来源DkdO双11日报mG2COI表，剔除空白网格后实际有效339条关键词。竞品截流词占比59.9%（203条）、品类词24.2%（82条）、品牌词8.3%（28条）、618大促词7.4%（25条）。",
       "sourceId": "src-meiling-sheets-mG2COI",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=mG2COI",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=mG2COI",
       "period": "投放搜索词绑定（339条有效关键词）",
       "columns": [
         {
@@ -1793,7 +1793,7 @@
       "title": "双平台同周期可比分日消耗与效率对照（天猫自采 vs 京东自采 09/30~10/18）",
       "description": "天猫自采与京东自采在相同19个日期区间内并排对比分日消耗、曝光、点击与CTR/CPC/CPE，避免盲目跨期加总。",
       "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
       "period": "2026-09-30 ~ 2026-10-18 (可比19天)",
       "columns": [
         {
@@ -2093,7 +2093,7 @@
       "title": "双11全量14篇商业笔记素材消耗Pareto与能效层级诊断",
       "description": "全量14篇商业笔记素材按累计消耗降序排列。揭示Top 3头部素材占70.2%消耗的集中度特征，并标注高成本/低效消耗素材（CPUV>30或CPE>20）。",
       "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
       "period": "2026-09-29 ~ 2026-10-18 (天猫09/30起，京东09/29起)",
       "columns": [
         {
@@ -2409,7 +2409,7 @@
       "title": "2026年618复盘采买形式KOL+FS vs 纯FS结构与ROI口径拆解（独立已结案）",
       "description": "来源MMPZ 618复盘数据与HNDC FkLCad表。严格独立呈现618结案数据（总花费197.6万/GMV 1696万/全案ROI 8.58），区分KOL采买费与信息流投流费，严禁与双11混同。",
       "sourceId": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh",
       "period": "2026-05-20 ~ 2026-06-20 (618已结案复盘)",
       "columns": [
         {
@@ -3265,7 +3265,7 @@
       "label": "美菱双11-京东对投CID日表现 (CID渠道)",
       "period": "2026-10-16 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-Trvrou",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Trvrou",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
       "note": "美菱双11京东对投CID子渠道日透视数据（明确仅限京东对投CID单一链路，不可当做美菱全案大盘）。小红盟站外UV为30日归因口径（各创意归因UV之和，非项目去重人数）。",
       "metrics": [
         {
@@ -3382,7 +3382,7 @@
       "label": "美菱双11-自采天猫种草日流水 (TM种草)",
       "period": "2026-09-30 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-D9ddm3",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=D9ddm3",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=D9ddm3",
       "note": "美菱双11自采天猫种草底表（775条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
       "metrics": [
         {
@@ -3715,7 +3715,7 @@
       "label": "美菱双11-自采京东种草日流水 (JD种草)",
       "period": "2026-09-29 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-BI2xBs",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=BI2xBs",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=BI2xBs",
       "note": "美菱双11自采京东种草底表（1209条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
       "metrics": [
         {
@@ -4062,7 +4062,7 @@
       "label": "代采星伴种草分日流水",
       "period": "2026-10-15 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-ACntPW",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=ACntPW",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=ACntPW",
       "note": "由ACntPW数据源2979条明细按日聚合",
       "metrics": {
         "totalSpend": 28371.46
@@ -4123,7 +4123,7 @@
       "label": "京东对投种草分日流水",
       "period": "2026-10-15 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-zF2qee",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=zF2qee",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=zF2qee",
       "note": "由zF2qee数据源13954条明细按日聚合",
       "metrics": {
         "totalSpend": 15779.52

@@ -39,6 +39,46 @@ function loadJson(relPath) {
   return JSON.parse(fs.readFileSync(full, "utf8"));
 }
 
+// Historical fixtures were captured from the now-retired copy nodes. Normalize the
+// identifiers at load time so adapters exercise the internal maintained sources.
+function normalizeLegacyTokens(value) {
+  const clone = JSON.parse(JSON.stringify(value));
+  const tokenMap = {
+    HNDCwmdpkiw4DgkFSNycB3cbnSc: "RQffw002Aik9aNkW9PScJ05knre",
+    MMPZwhQbMiVmIKkcyb9c7mDQnHp: "E7LWwhPFhi8XNTkSXvoceiZfnJh",
+    DkdOwDEk0i9FTUkXlh1cTE0fnOd: "DMMpwdQShiyEpyk89jVcP6GInjg",
+  };
+  const urlMap = {
+    "https://yimeichuanbo.feishu.cn/wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc":
+      "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre",
+    "https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp":
+      "https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh",
+    "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd":
+      "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
+  };
+  const walk = (node) => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== "object") return;
+    for (const [key, item] of Object.entries(node)) {
+      if (typeof item === "string") {
+        if (item in tokenMap) node[key] = tokenMap[item];
+        else if (item in urlMap) node[key] = urlMap[item];
+        else {
+          let next = item;
+          for (const [oldToken, newToken] of Object.entries(tokenMap)) {
+            next = next.split(oldToken).join(newToken);
+          }
+          node[key] = next;
+        }
+      } else {
+        walk(item);
+      }
+    }
+  };
+  walk(clone);
+  return clone;
+}
+
 const results = [];
 
 function record(name, pass, detail = "") {
@@ -52,8 +92,8 @@ async function runTests() {
 
   const meilingBaseRaw = loadJson("meiling-base.json");
   const kailasSheetsRaw = loadJson("kailas-sheets.json");
-  const newLinksRaw = loadJson("access-update-new-links.json");
-  const meilingReportsRaw = loadJson("access-update-meiling.json");
+  const newLinksRaw = normalizeLegacyTokens(loadJson("access-update-new-links.json"));
+  const meilingReportsRaw = normalizeLegacyTokens(loadJson("access-update-meiling.json"));
 
   // Construct realistic baseline dashboards
   const meilingOnline = applyMeilingSnapshot(MEILING_MANUAL_DASHBOARD, meilingBaseRaw);
@@ -253,7 +293,7 @@ async function runTests() {
 
     const mutatedNewLinks = JSON.parse(JSON.stringify(newLinksRaw));
     const hndc = mutatedNewLinks.targets.find(
-      (t) => t.wiki_token === "HNDCwmdpkiw4DgkFSNycB3cbnSc"
+      (t) => t.wiki_token === "RQffw002Aik9aNkW9PScJ05knre"
     );
     const fklc = hndc.core_sub_sheets.find((s) => s.sheetId === "FkLCad");
     fklc.rows[0][22] = "CPC≤0.5";
@@ -330,7 +370,7 @@ async function runTests() {
 
     const mutatedReopened = JSON.parse(JSON.stringify(meilingReportsRaw));
     const mmpz = mutatedReopened.workbooks.find(
-      (w) => w.node_token === "MMPZwhQbMiVmIKkcyb9c7mDQnHp"
+      (w) => w.node_token === "E7LWwhPFhi8XNTkSXvoceiZfnJh"
     );
     const hmtx = mmpz.captured_tabs.find((t) => t.sheet_id === "hmtx2k");
     for (const row of hmtx.rows) {

@@ -64,8 +64,8 @@ export function applyUnlockedMeilingReports(
 
   const wbMap = new Map<string, ReopenedWorkbook>();
   for (const wb of payload.workbooks) wbMap.set(wb.node_token, wb);
-  const mmpzWb = wbMap.get('MMPZwhQbMiVmIKkcyb9c7mDQnHp');
-  const dkdWb = wbMap.get('DkdOwDEk0i9FTUkXlh1cTE0fnOd');
+  const mmpzWb = wbMap.get('E7LWwhPFhi8XNTkSXvoceiZfnJh');
+  const dkdWb = wbMap.get('DMMpwdQShiyEpyk89jVcP6GInjg');
   if (!mmpzWb && !dkdWb) return dashboard;
 
   const srcMmpzId = 'src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp';
@@ -85,10 +85,10 @@ export function applyUnlockedMeilingReports(
   });
   const existingSrcIds = new Set(dashboard.sources.map((s) => s.id));
   if (mmpzWb && !existingSrcIds.has(srcMmpzId)) {
-    updatedSources.push({ id: srcMmpzId, name: mmpzWb.real_title || '美菱冰箱618复盘数据', url: mmpzWb.URL || 'https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp', status: mmpzHasRows ? 'ready' : 'pending', detail: '飞书文档已开放：618大促历史结案复盘', fetchedAt: readAt, provenance: { type: 'feishu', sourceName: '飞书电子表格', syncedAt: readAt } });
+    updatedSources.push({ id: srcMmpzId, name: mmpzWb.real_title || '美菱冰箱618复盘数据', url: mmpzWb.URL || 'https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh', status: mmpzHasRows ? 'ready' : 'pending', detail: '内部真实源：618大促历史结案复盘', fetchedAt: readAt, provenance: { type: 'feishu', sourceName: '飞书电子表格', syncedAt: readAt } });
   }
   if (dkdWb && !existingSrcIds.has(srcDkdId)) {
-    updatedSources.push({ id: srcDkdId, name: dkdWb.real_title || '美菱冰箱双11日报表', url: dkdWb.URL || 'https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd', status: dkdHasRows ? 'ready' : 'pending', detail: '飞书文档已开放：双11投放执行与分日数据', fetchedAt: readAt, provenance: { type: 'feishu', sourceName: '飞书电子表格', syncedAt: readAt } });
+    updatedSources.push({ id: srcDkdId, name: dkdWb.real_title || '美菱冰箱双11日报表', url: dkdWb.URL || 'https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg', status: dkdHasRows ? 'ready' : 'pending', detail: '内部真实源：双11投放执行与分日数据', fetchedAt: readAt, provenance: { type: 'feishu', sourceName: '飞书电子表格', syncedAt: readAt } });
   }
 
   const newTables: CampaignTable[] = [];

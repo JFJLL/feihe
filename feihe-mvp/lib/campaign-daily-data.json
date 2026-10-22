@@ -5,7 +5,7 @@
       "label": "稳健玉米湿巾投放日趋势 (By day)",
       "period": "2026-09-16 ~ 2026-10-18",
       "sourceId": "src-wipes-sheets-0QTVhE",
-      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=0QTVhE",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/Jo2cwK3c9ishJdkq40ycfNSMnTh?sheet=0QTVhE",
       "note": "稳健玉米消毒湿巾全渠道投放日跟踪表（0QTVhE）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。10/18当日UV为0导致CPUV保持为null。",
       "metrics": [
         {
@@ -382,7 +382,7 @@
       "label": "稳健淘搜指数与分渠道日消耗 (淘搜)",
       "period": "2026-09-14 ~ 2026-10-18",
       "sourceId": "src-wipes-sheets-wY1HZO",
-      "sourceUrl": "https://feishu.cn/sheets/Ero1shDTFhVzwttqDMLceZQ4nMb?sheet=wY1HZO",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/Jo2cwK3c9ishJdkq40ycfNSMnTh?sheet=wY1HZO",
       "note": "淘搜每日搜索指数及K/F/S/CID分渠道实际消耗，10/19及后续未来无投放空行已严格剔除（不计作实际0消耗）。",
       "metrics": [
         {
@@ -961,7 +961,7 @@
       "label": "美菱双11-京东对投CID日表现 (CID渠道)",
       "period": "2026-10-16 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-Trvrou",
-      "sourceUrl": "https://feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=Trvrou",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
       "note": "美菱双11京东对投CID子渠道日透视数据（明确仅限京东对投CID单一链路，不可当做美菱全案大盘）。小红盟站外UV为30日归因口径（各创意归因UV之和，非项目去重人数）。",
       "metrics": [
         {
@@ -1078,7 +1078,7 @@
       "label": "美菱双11-自采天猫种草日流水 (TM种草)",
       "period": "2026-09-30 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-D9ddm3",
-      "sourceUrl": "https://feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=D9ddm3",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=D9ddm3",
       "note": "美菱双11自采天猫种草底表（775条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
       "metrics": [
         {
@@ -1411,7 +1411,7 @@
       "label": "美菱双11-自采京东种草日流水 (JD种草)",
       "period": "2026-09-29 ~ 2026-10-18",
       "sourceId": "src-meiling-sheets-BI2xBs",
-      "sourceUrl": "https://feishu.cn/sheets/RoAtsw3KTh56ZBtT7cmcTYaznJb?sheet=BI2xBs",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=BI2xBs",
       "note": "美菱双11自采京东种草底表（1209条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
       "metrics": [
         {

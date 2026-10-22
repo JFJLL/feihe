@@ -204,8 +204,8 @@ function validateSnapshotOutputs(projectId, snap) {
     if (!rqffSrc || rqffSrc.status !== 'ready') {
       throw new Error('[CRITICAL] 美菱快照中未找到就绪的 RQff 数据源');
     }
-    if (!rqffSrc.url || !rqffSrc.url.includes('HNDCwmdpkiw4DgkFSNycB3cbnSc')) {
-      throw new Error(`[CRITICAL] 美菱 RQff 数据源 URL 未指向新目标 HNDC: ${rqffSrc.url}`);
+    if (!rqffSrc.url || !rqffSrc.url.includes('RQffw002Aik9aNkW9PScJ05knre')) {
+      throw new Error(`[CRITICAL] 美菱 RQff 数据源 URL 未指向内部真实源 RQff: ${rqffSrc.url}`);
     }
     if (!mmpzSrc || mmpzSrc.status !== 'ready') {
       throw new Error('[CRITICAL] 美菱快照中未找到就绪的 MMPZ 618 数据源');
@@ -370,71 +370,69 @@ const ALL_SOURCES = [
     detail: '元数据已核验/内容待导入 (618历史参考)',
   },
   {
-    // Replaced from RQffw002Aik9aNkW9PScJ05knre -> HNDCwmdpkiw4DgkFSNycB3cbnSc
+    // Internal maintained source (was the HNDCwmdpkiw4DgkFSNycB3cbnSc copy)
     projectId: 'meiling',
     id: 'src-meiling-node-RQffw002Aik9aNkW9PScJ05knre',
     type: 'feishu_sheet',
-    name: '美菱冰箱kpi管理表 副本',
-    spreadsheet: 'https://yimeichuanbo.feishu.cn/wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc',
+    name: '美菱冰箱kpi管理表',
+    spreadsheet: 'https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre',
     sheet_id: '4SGaOf',
     kind: 'meiling_kpi_access',
     status: '元数据已核验',
     probe_status: 'accessible',
     last_error: '',
     mapping_json: JSON.stringify({
-      obj_token: 'N2bssx2dBh8xyItaFEfccqaznHY',
+      obj_token: 'NclHsAryQhAk52tGECXcF2JTnwb',
       obj_type: 'sheet',
-      wiki_token: 'HNDCwmdpkiw4DgkFSNycB3cbnSc',
+      wiki_token: 'RQffw002Aik9aNkW9PScJ05knre',
       sheet_id: '4SGaOf',
-      replaces: 'https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre',
-      replaces_token: 'RQffw002Aik9aNkW9PScJ05knre',
-      detail: '飞书表格已开放权限：美菱冰箱kpi管理表 副本（替代未授权Wiki RQffw002Aik9aNkW9PScJ05knre）',
+      detail: '内部真实维护源：美菱冰箱kpi管理表（原 HNDCwmdpkiw4DgkFSNycB3cbnSc 副本已停用）',
     }),
-    detail: '飞书表格已开放权限：美菱冰箱kpi管理表 副本（已替代未授权Wiki）',
+    detail: '内部真实维护源：美菱冰箱kpi管理表（含双11进度更新、筛号透视与618/7-8月KPI总览）',
     fetchedAt: meilingKpiReadAt,
   },
   {
-    // Reopened MMPZwhQbMiVmIKkcyb9c7mDQnHp
+    // Internal maintained source (was the MMPZwhQbMiVmIKkcyb9c7mDQnHp copy)
     projectId: 'meiling',
     id: 'src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp',
     type: 'feishu_sheet',
-    name: '美菱冰箱618复盘数据 副本',
-    spreadsheet: 'https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp',
+    name: '美菱冰箱618复盘数据',
+    spreadsheet: 'https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh',
     sheet_id: '4a19cf',
     kind: 'meiling_618_review_sheet',
     status: '元数据已核验',
     probe_status: 'accessible',
     last_error: '',
     mapping_json: JSON.stringify({
-      obj_token: 'XSKrspszhhgvPvtxMNicmYlUnEc',
+      obj_token: 'IRHvsTWqXhzMU8tgdD7ctnVqnYb',
       obj_type: 'sheet',
-      wiki_token: 'MMPZwhQbMiVmIKkcyb9c7mDQnHp',
+      wiki_token: 'E7LWwhPFhi8XNTkSXvoceiZfnJh',
       sheet_id: '4a19cf',
-      detail: '原未授权Wiki节点已获权限：618大促历史复盘数据',
+      detail: '内部真实维护源：618大促历史复盘数据（原 MMPZwhQbMiVmIKkcyb9c7mDQnHp 副本已停用）',
     }),
-    detail: '飞书Wiki已开放权限：618大促历史复盘（已动态提取KPI与全渠道GMV）',
+    detail: '内部真实维护源：618大促历史复盘（已动态提取KPI与全渠道GMV）',
     fetchedAt: meilingReportsReadAt,
   },
   {
-    // Reopened DkdOwDEk0i9FTUkXlh1cTE0fnOd
+    // Internal maintained source (was the DkdOwDEk0i9FTUkXlh1cTE0fnOd copy)
     projectId: 'meiling',
     id: 'src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd',
     type: 'feishu_sheet',
-    name: '美菱冰箱双11日报表  副本',
-    spreadsheet: 'https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd',
+    name: '美菱冰箱双11日报表',
+    spreadsheet: 'https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg',
     sheet_id: 'smsJa2',
     kind: 'meiling_daily_sheet',
     status: '元数据已核验',
     probe_status: 'accessible',
     last_error: '',
     mapping_json: JSON.stringify({
-      obj_token: 'RoAtsw3KTh56ZBtT7cmcTYaznJb',
+      obj_token: 'K63bsyzvNhXuWTtY4aLcF9kpnnd',
       obj_type: 'sheet',
-      wiki_token: 'DkdOwDEk0i9FTUkXlh1cTE0fnOd',
+      wiki_token: 'DMMpwdQShiyEpyk89jVcP6GInjg',
       sheet_id: 'smsJa2',
-      detail: '原未授权Wiki节点已获权限：双11投放日报与分日明细',
+      detail: '内部真实维护源：双11投放日报与分日明细（原 DkdOwDEk0i9FTUkXlh1cTE0fnOd 副本已停用）',
     }),
-    detail: '飞书Wiki已开放权限：双11投放日报（已动态提取预算进度、全渠道汇总与CID分日）',
+    detail: '内部真实维护源：双11投放日报（已动态提取预算进度、全渠道汇总与CID分日）',
     fetchedAt: meilingReportsReadAt,
   },
   {

@@ -26,10 +26,10 @@
     },
     {
       "id": "src-huang-tiane-cid-fs",
-      "name": "黄天鹅红猫CID 26年10月项目报表-fs 副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/KpHrwJt1picaxBkWB9NcaLlsnih",
+      "name": "黄天鹅红猫CID 26年10月项目报表-fs",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "status": "ready",
-      "detail": "红猫CID与FS报表（20个子表，包含标准投、简单投及两类投放合计流水）",
+      "detail": "红猫CID与FS报表（20个子表，包含标准投、简单投及两类投放合计流水；内部真实维护源）",
       "fetchedAt": "2026-10-20T06:31:52.920Z",
       "provenance": "feishu"
     },
@@ -44,19 +44,10 @@
     },
     {
       "id": "src-huang-tiane-commerce-canonical",
-      "name": "黄天鹅商销日报主表",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/CqyPwlUTNiiD0lkXlZJcuyIYnCc",
+      "name": "黄天鹅商销日报表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c",
       "status": "ready",
-      "detail": "商销日报主表（8个子表，全渠道销售与GMV以此为准；历史UV缺失保持null）",
-      "fetchedAt": "2026-10-20T06:34:37.915Z",
-      "provenance": "feishu"
-    },
-    {
-      "id": "src-huang-tiane-commerce-alt",
-      "name": "黄天鹅商销日报副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/T2eowqaUOi74Q9kPvQLcu8sSn9c",
-      "status": "ready",
-      "detail": "商销日报副本（8个子表，与主表为同业务副本，仅统计主表）",
+      "detail": "商销日报主表（8个子表，全渠道销售与GMV以此为准；历史UV缺失保持null；内部真实维护源）",
       "fetchedAt": "2026-10-20T06:34:37.915Z",
       "provenance": "feishu"
     }
@@ -437,7 +428,7 @@
       "title": "商销全期底表汇总",
       "period": "2026-07-27 ~ 2026-10-19",
       "sourceId": "src-huang-tiane-commerce-canonical",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/CqyPwlUTNiiD0lkXlZJcuyIYnCc",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c",
       "columns": [
         {
           "key": "spend",
@@ -10071,7 +10062,7 @@
     ]
   },
   "warnings": [
-    "商销两份表为同一业务副本，仅统计主表。",
+    "商销日报仅统计内部真实维护主表（副本已停用，不重复累计）。",
     "日报写3181，飞书原表31.81，本页采用原表。"
   ],
   "dailyDatasets": [
@@ -10606,7 +10597,7 @@
       "label": "商销投放",
       "period": "2026-07-27 ~ 2026-10-19",
       "sourceId": "src-huang-tiane-commerce-canonical",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/CqyPwlUTNiiD0lkXlZJcuyIYnCc",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c",
       "note": "跨7-10月累计；按转化时间的7日归因指标。历史UV百分值类型异常保留null，非真实0；来源透视#REF!由原始底表重建。",
       "metrics": [
         {
@@ -12404,7 +12395,7 @@
       "label": "红猫CID · 标准投",
       "period": "2026-10-01 ~ 2026-10-19",
       "sourceId": "src-huang-tiane-cid-fs",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/KpHrwJt1picaxBkWB9NcaLlsnih",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "标准投与简单投各自独立统计；进店量不可跨账号去重。",
       "metrics": [
         {
@@ -12713,7 +12704,7 @@
       "label": "红猫CID · 简单投",
       "period": "2026-10-01 ~ 2026-10-19",
       "sourceId": "src-huang-tiane-cid-fs",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/KpHrwJt1picaxBkWB9NcaLlsnih",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "标准投与简单投各自独立统计；进店量不可跨账号去重。",
       "metrics": [
         {
@@ -13022,7 +13013,7 @@
       "label": "红猫CID · 两类投放合计",
       "period": "2026-10-01 ~ 2026-10-19",
       "sourceId": "src-huang-tiane-cid-fs",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/KpHrwJt1picaxBkWB9NcaLlsnih",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "按日期对齐标准投与简单投，规模相加，ROI按GMV/消耗重算；进店量为账号叠加非去重，未平均CTR/CPC。",
       "metrics": [
         {
