@@ -1,0 +1,333 @@
+/* Custom Non-Native Date & Month Picker */
+.custom-date-picker-container {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.custom-date-trigger-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.custom-date-input-field {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 6px 32px 6px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1e293b;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+/* Completely hide native browser date/calendar indicators */
+.custom-date-input-field::-webkit-calendar-picker-indicator {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.custom-date-input-field::-webkit-inner-spin-button,
+.custom-date-input-field::-webkit-clear-button {
+  display: none !important;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.custom-date-input-field:hover:not(:disabled) {
+  border-color: #94a3b8;
+}
+
+.custom-date-input-field:focus-visible,
+.custom-date-picker-container.is-open .custom-date-input-field {
+  border-color: #2c7168;
+  box-shadow: 0 0 0 3px rgba(44, 113, 104, 0.16);
+}
+
+.custom-date-input-field:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
+
+.custom-date-icon-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: inline-grid;
+  place-content: center;
+  border: 0;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 4px;
+  pointer-events: auto;
+  transition: color 0.15s ease;
+}
+
+.custom-date-icon-btn:hover {
+  color: #2c7168;
+}
+
+.custom-date-icon-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.custom-date-svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Custom Popover */
+.custom-date-popover {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  user-select: none;
+  animation: customDateFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes customDateFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.custom-date-card {
+  width: 268px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.custom-date-card.month-mode {
+  width: 240px;
+}
+
+/* Header */
+.custom-date-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.custom-date-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+  flex: 1;
+  text-align: center;
+}
+
+.custom-date-nav-btn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: inline-grid;
+  place-content: center;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.custom-date-nav-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #e2e8f0;
+}
+
+/* Weekday labels */
+.custom-date-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.custom-date-weekday {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-align: center;
+  padding: 4px 0;
+}
+
+/* Days Grid */
+.custom-date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.custom-date-cell {
+  width: 100%;
+  height: 30px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: all 0.12s ease;
+}
+
+.custom-date-cell:hover:not(:disabled) {
+  background: #edf7f5;
+  color: #2c7168;
+}
+
+.custom-date-cell.is-outside {
+  color: #cbd5e1;
+}
+
+.custom-date-cell.is-today {
+  border-color: #2c7168;
+  font-weight: 700;
+  color: #2c7168;
+}
+
+.custom-date-cell.is-selected {
+  background: #2c7168 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  border-color: #2c7168;
+  box-shadow: 0 1px 4px rgba(44, 113, 104, 0.35);
+}
+
+.custom-date-cell.is-disabled {
+  color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Month Grid */
+.custom-month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 6px;
+  margin: 8px 0;
+}
+
+.custom-month-cell {
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #1e293b;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: all 0.12s ease;
+}
+
+.custom-month-cell:hover:not(:disabled) {
+  background: #edf7f5;
+  color: #2c7168;
+}
+
+.custom-month-cell.is-today {
+  border-color: #2c7168;
+  color: #2c7168;
+  font-weight: 700;
+}
+
+.custom-month-cell.is-selected {
+  background: #2c7168 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  border-color: #2c7168;
+  box-shadow: 0 1px 4px rgba(44, 113, 104, 0.35);
+}
+
+.custom-month-cell.is-disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Footer Quick Actions */
+.custom-date-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.custom-date-quick-btn {
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: #2c7168;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.custom-date-quick-btn:hover:not(:disabled) {
+  background: #edf7f5;
+}
+
+.custom-date-quick-btn:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.custom-date-quick-btn.clear-btn {
+  color: #64748b;
+  margin-left: auto;
+}
+
+.custom-date-quick-btn.clear-btn:hover {
+  color: #ef4444;
+  background: #fef2f2;
+}

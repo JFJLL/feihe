@@ -47,6 +47,24 @@ export function formatMoneyWan(val: number | null | undefined): string {
   return (val / 10000).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '万';
 }
 
+export function renderInCellBar(val: number | null | undefined, maxVal: number, unit = '', color: string = CAMPAIGN_PALETTE.primary) {
+  if (val === null || val === undefined || !Number.isFinite(val)) {
+    return '—';
+  }
+  const pct = maxVal > 0 && val > 0 ? Math.min(100, Math.max(0, (val / maxVal) * 100)) : 0;
+  return (
+    <div className="mri-cell-bar-wrap">
+      <span className="mri-cell-bar-num">{formatNum(val)}{unit}</span>
+      <div className="mri-cell-bar-track">
+        <div
+          className="mri-cell-bar-fill"
+          style={{ width: `${pct.toFixed(1)}%`, background: color }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRichInsightsProps) {
   const isHistory618 = snapshot === 'history-618';
 
@@ -628,17 +646,21 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                     </tr>
                   </thead>
                   <tbody>
-                    {campaignEvolutionRows.slice(0, 2).map((r, i) => (
-                      <tr key={i}>
-                        <td><strong>{String(r.campaign || '—')}</strong></td>
-                        <td>{String(r.period || '—')}</td>
-                        <td>{String(r.candidate_kols ?? '—')} / {String(r.confirmed_kols ?? '—')}位</td>
-                        <td>{formatNum(parseNum(r.total_spend))}</td>
-                        <td>{formatNum(parseNum(r.gmv))}</td>
-                        <td>{r.overall_roi !== null ? Number(r.overall_roi).toFixed(2) : '—'}</td>
-                        <td><span className="mri-tag core">{String(r.milestone || '—')}</span></td>
-                      </tr>
-                    ))}
+                    {campaignEvolutionRows.slice(0, 2).map((r, i) => {
+                      const sp = parseNum(r.total_spend);
+                      const gmvVal = parseNum(r.gmv);
+                      return (
+                        <tr key={i}>
+                          <td><strong>{String(r.campaign || '—')}</strong></td>
+                          <td>{String(r.period || '—')}</td>
+                          <td>{String(r.candidate_kols ?? '—')} / {String(r.confirmed_kols ?? '—')}位</td>
+                          <td>{renderInCellBar(sp, 2000000)}</td>
+                          <td>{renderInCellBar(gmvVal, 10000000, '', CAMPAIGN_PALETTE.purple)}</td>
+                          <td>{r.overall_roi !== null ? Number(r.overall_roi).toFixed(2) : '—'}</td>
+                          <td><span className="mri-tag core">{String(r.milestone || '—')}</span></td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -671,18 +693,24 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   </tr>
                 </thead>
                 <tbody>
-                  {review618Table?.rows.map((r, i) => (
-                    <tr key={i}>
-                      <td><strong>{String(r.channel || '—')}</strong></td>
-                      <td>{String(r.procurement_mode || '—')}</td>
-                      <td>{formatNum(parseNum(r.k_spend))}</td>
-                      <td>{formatNum(parseNum(r.fs_spend))}</td>
-                      <td>{formatNum(parseNum(r.total_spend))}</td>
-                      <td>{formatNum(parseNum(r.gmv))}</td>
-                      <td>{formatNum(parseNum(r.fs_roi))}</td>
-                      <td>{formatNum(parseNum(r.overall_roi))}</td>
-                    </tr>
-                  ))}
+                  {review618Table?.rows.map((r, i) => {
+                    const kSp = parseNum(r.k_spend);
+                    const fsSp = parseNum(r.fs_spend);
+                    const totSp = parseNum(r.total_spend);
+                    const gmvVal = parseNum(r.gmv);
+                    return (
+                      <tr key={i}>
+                        <td><strong>{String(r.channel || '—')}</strong></td>
+                        <td>{String(r.procurement_mode || '—')}</td>
+                        <td>{formatNum(kSp)}</td>
+                        <td>{formatNum(fsSp)}</td>
+                        <td>{renderInCellBar(totSp, 1000000)}</td>
+                        <td>{renderInCellBar(gmvVal, 4000000, '', CAMPAIGN_PALETTE.purple)}</td>
+                        <td>{formatNum(parseNum(r.fs_roi))}</td>
+                        <td>{formatNum(parseNum(r.overall_roi))}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

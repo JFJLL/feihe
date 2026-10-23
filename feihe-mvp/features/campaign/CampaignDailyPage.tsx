@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback, useSyncExternalStore } from "react";
+import React, { useState, useMemo, useCallback, useSyncExternalStore } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
 import { CustomSelect } from "../../components/ui/CustomSelect";
@@ -58,6 +58,7 @@ function getServerUrlSearchSnapshot(): string {
 export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const name = dashboard?.name || "项目";
   const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
+  const [quickPickerOpen, setQuickPickerOpen] = useState(false);
 
   // Reactive URL search store: guarantees SSR/hydration compatibility and listens to back/forward
   const urlSearch = useSyncExternalStore(subscribeToUrl, getUrlSearchSnapshot, getServerUrlSearchSnapshot);
@@ -95,6 +96,11 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
   // Selected date: strictly adheres to URL if valid, otherwise falls back to latest observed day
   const selectedDate = urlDay !== null ? urlDay : maxAvailableDate;
+  const selectedIndex = allAvailableDates.indexOf(selectedDate);
+  const dayProgressLabel =
+    selectedIndex >= 0
+      ? `共 ${allAvailableDates.length} 个有效采集日 · 当前第 ${selectedIndex + 1}/${allAvailableDates.length} 日`
+      : `共 ${allAvailableDates.length} 个有效采集日`;
 
   // URL state updater (pushes state and triggers context change event for reactive sync)
   const updateUrl = useCallback(
@@ -263,15 +269,31 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             >
               ← 前一日
             </button>
-            <input
-              type="date"
-              className="ca-date-input"
-              value={selectedDate || ""}
-              min={minAvailableDate}
-              max={maxAvailableDate}
-              onChange={(e) => updateUrl({ day: e.target.value })}
-              aria-label="选择业务日期"
-            />
+            <div className="ca-date-input-wrap">
+              <input
+                type="date"
+                className="ca-date-input"
+                value={selectedDate || ""}
+                min={minAvailableDate}
+                max={maxAvailableDate}
+                onChange={(e) => updateUrl({ day: e.target.value })}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setQuickPickerOpen((prev) => !prev);
+                }}
+                aria-label="选择业务日期"
+              />
+              <button
+                type="button"
+                className={`ca-btn-quick-dates-toggle ${quickPickerOpen ? "active" : ""}`}
+                onClick={() => setQuickPickerOpen((prev) => !prev)}
+                title="展开全量有效业务日速选面板"
+                aria-label="快速选日"
+                aria-expanded={quickPickerOpen}
+              >
+                📅 快捷选日
+              </button>
+            </div>
             <button
               type="button"
               className="ca-btn-date-step"
@@ -281,6 +303,41 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             >
               后一日 →
             </button>
+
+            {quickPickerOpen && allAvailableDates.length > 0 && (
+              <div className="ca-quick-dates-dropdown" role="menu" aria-label="有效业务日速选面板">
+                <div className="ca-quick-dates-header">
+                  <span className="ca-quick-dates-title">有效采集日速选 ({allAvailableDates.length}日)</span>
+                  <button
+                    type="button"
+                    className="ca-quick-dates-close"
+                    onClick={() => setQuickPickerOpen(false)}
+                    aria-label="关闭"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="ca-quick-dates-grid">
+                  {allAvailableDates.map((d, idx) => {
+                    const isSelected = d === selectedDate;
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        className={`ca-quick-date-item ${isSelected ? "active" : ""}`}
+                        onClick={() => {
+                          updateUrl({ day: d });
+                          setQuickPickerOpen(false);
+                        }}
+                      >
+                        <span className="ca-quick-date-idx">{idx + 1}</span>
+                        <span className="ca-quick-date-val">{d}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {maxAvailableDate && selectedDate !== maxAvailableDate && (
@@ -298,11 +355,11 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
         <div className="ca-daily-status-meta">
           {isDateMissing ? (
             <span style={{ fontSize: 11.5, color: "#c25953", fontWeight: 600 }}>
-              ⚠️ 该日期暂无流水记录
+              ⚠️ 该日期暂无流水记录 · {dayProgressLabel}
             </span>
           ) : (
-            <span style={{ fontSize: 11.5, color: "#64748b" }}>
-              有效采集日 · 全量可用区间 {activeDataset.period}
+            <span style={{ fontSize: 11.5, color: "#2c7168", fontWeight: 500 }}>
+              ● {dayProgressLabel} · 区间 {activeDataset.period}
             </span>
           )}
         </div>

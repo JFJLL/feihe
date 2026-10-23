@@ -244,6 +244,19 @@ export function CampaignComboChart({
   const [containerWidth, setContainerWidth] = useState<number>(640);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [hiddenSeries, setHiddenSeries] = useState<Set<string>>(() => new Set());
+
+  const toggleSeries = (key: string) => {
+    setHiddenSeries((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else if (series.length - next.size > 1) {
+        next.add(key);
+      }
+      return next;
+    });
+  };
 
   // Measure actual container width via ResizeObserver so SVG text is 1:1 crisp
   useEffect(() => {
@@ -350,7 +363,7 @@ export function CampaignComboChart({
   };
 
   // Grouped bars: strictly bounded by bandWidth to prevent cross-band overlapping
-  const barSeriesList = styledSeries.filter((s) => s.kind === 'bar');
+  const barSeriesList = styledSeries.filter((s) => s.kind === 'bar' && !hiddenSeries.has(s.key));
   const barCount = barSeriesList.length;
   const maxClusterW = Math.min(bandWidth * 0.82, 64);
   const barGap = barCount > 1 ? Math.min(1.5, (maxClusterW * 0.1) / (barCount - 1)) : 0;
@@ -410,6 +423,7 @@ export function CampaignComboChart({
           {styledSeries.map((s) => {
             const val = activeRow[s.key];
             const isNum = isFiniteNumber(val);
+            const isMuted = hiddenSeries.has(s.key);
             return (
               <span key={s.key} className="ca-combo-readout-item">
                 <span
@@ -445,6 +459,14 @@ export function CampaignComboChart({
           <desc>
             {`多指标组合图，共 ${rowCount} 项数据${xLabel ? `，横轴：${xLabel}` : ""}。左轴[${leftUnit || "数值"}]，${hasRightAxis ? `右轴[${rightUnit || "数值"}]` : "无右轴"}。`}
           </desc>
+          <defs>
+            {styledSeries.map((s) => (
+              <linearGradient key={`grad-${s.key}`} id={`cc-grad-${s.key}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={s.color} stopOpacity="1" />
+                <stop offset="100%" stopColor={s.color} stopOpacity="0.85" />
+              </linearGradient>
+            ))}
+          </defs>
 
           {/* Horizontal Gridlines */}
           {leftScale.ticks.map((tickVal, idx) => {
@@ -583,7 +605,7 @@ export function CampaignComboChart({
                     y={by}
                     width={singleBarW}
                     height={bh}
-                    fill={s.color}
+                    fill={`url(#cc-grad-${s.key})`}
                     rx={Math.min(2, singleBarW / 2)}
                     opacity={activeIndex === rowIdx ? 1 : 0.85}
                     data-metric-type="bar"
@@ -624,7 +646,7 @@ export function CampaignComboChart({
 
           {/* 2. Line Series (Lines break at null/missing, points drawn at observed samples) */}
           {styledSeries
-            .filter((s) => s.kind === 'line')
+            .filter((s) => s.kind === 'line' && !hiddenSeries.has(s.key))
             .map((s) => {
               const pts: (Point | null)[] = validRows.map((r, i) => {
                 const val = r[s.key];
@@ -687,7 +709,7 @@ export function CampaignComboChart({
 
           {/* 3. Point Series (Discrete points for category costs, avoiding false continuous trend) */}
           {styledSeries
-            .filter((s) => s.kind === 'point')
+            .filter((s) => s.kind === 'point' && !hiddenSeries.has(s.key))
             .map((s) => (
               <g key={`point-group-${s.key}`} data-series-key={s.key} data-axis={s.axis}>
                 {validRows.map((r, i) => {
@@ -722,16 +744,27 @@ export function CampaignComboChart({
 
           {/* Active Hover Crosshair Line */}
           {activeIndex !== null && activeIndex < validRows.length && (
-            <line
-              x1={getCenterX(activeIndex)}
-              x2={getCenterX(activeIndex)}
-              y1={topPad}
-              y2={totalHeight - bottomPad}
-              stroke="#94a3b8"
-              strokeWidth="1.2"
-              strokeDasharray="3 3"
-              pointerEvents="none"
-            />
+            <g pointerEvents="none">
+              <rect
+                className="cc-hover-band ca-combo-hover-band"
+                x={getBandLeft(activeIndex)}
+                y={topPad}
+                width={bandWidth}
+                height={plotHeight}
+                fill="rgba(44, 113, 104, 0.06)"
+                rx={3}
+              />
+              <line
+                className="cc-crosshair"
+                x1={getCenterX(activeIndex)}
+                x2={getCenterX(activeIndex)}
+                y1={topPad}
+                y2={totalHeight - bottomPad}
+                stroke="#94a3b8"
+                strokeWidth="1.2"
+                strokeDasharray="3 3"
+              />
+            </g>
           )}
 
           {/* 4. Interactive Hit Bands (For keyboard focus & hover without layout jumps) */}
@@ -830,12 +863,59 @@ export function CampaignComboChart({
             })}
           </g>
         </svg>
+
+        {/* Frosted Glass Floating Tooltip */}
+        {hoverIndex !== null && validRows[hoverIndex] && (
+          <div
+            className="cc-glass-tooltip"
+            style={{
+              left: `${Math.min(Math.max(80, getCenterX(hoverIndex)), totalWidth - 90)}px`,
+              top: `${topPad + 8}px`,
+              transform: 'translate(-50%, 0)',
+            }}
+          >
+            <div className="cc-tooltip-date">{String(validRows[hoverIndex][xKey])}</div>
+            <div className="cc-tooltip-items">
+              {styledSeries
+                .filter((s) => !hiddenSeries.has(s.key))
+                .map((s) => {
+                  const val = validRows[hoverIndex][s.key];
+                  const isNum = isFiniteNumber(val);
+                  return (
+                    <div key={s.key} className="cc-tooltip-row">
+                      <span className="cc-tooltip-dot" style={{ backgroundColor: s.color }} />
+                      <span className="cc-tooltip-label">{s.label}:</span>
+                      <span className="cc-tooltip-val">
+                        {isNum ? `${fmtComboNum(val)} ${s.unit}` : '未录入'}
+                      </span>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Legend with mark shape and unit */}
       <div className="ca-combo-legend" data-testid="combo-legend">
-        {styledSeries.map((s) => (
-          <div key={s.key} className="ca-combo-legend-item">
+        {styledSeries.map((s) => {
+          const isMuted = hiddenSeries.has(s.key);
+          return (
+          <div
+            key={s.key}
+            className={`ca-combo-legend-item cc-legend-item ${isMuted ? 'is-muted' : ''}`}
+            role="button"
+            tabIndex={0}
+            aria-pressed={!isMuted}
+            title={isMuted ? `点击显示 ${s.label}` : `点击隐藏 ${s.label}`}
+            onClick={() => toggleSeries(s.key)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleSeries(s.key);
+              }
+            }}
+          >
             {s.kind === 'bar' && (
               <span
                 className="ca-combo-swatch-bar"
@@ -868,7 +948,7 @@ export function CampaignComboChart({
               {s.axis === 'right' ? '右轴' : '左轴'}
             </span>
           </div>
-        ))}
+        );})}
       </div>
     </div>
   );

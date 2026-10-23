@@ -5,6 +5,7 @@ import { useCachedQuery, fetchWithCache, invalidateQueryCache } from '../../lib/
 import { useCacheIdentity } from '../../components/project-shell/IdentityBoundary';
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import { CustomSelect } from '../../components/ui/CustomSelect';
+import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { LoadingState } from '../../components/ui/LoadingState';
@@ -1175,29 +1176,26 @@ export function BusinessDailyBoard({
                     本月
                   </button>
                 </div>
-                <label>
-                  从
-                  <input
-                    type="date"
+                <label className="bd-date-input-capsule">
+                  <span className="bd-capsule-label">从</span>
+                  <CustomDatePicker
                     aria-label="统计开始"
                     value={from || day.slice(0, 7) + '-01'}
                     onChange={e => setFrom(e.target.value)}
                   />
                 </label>
-                <label>
-                  至
-                  <input
-                    type="date"
+                <label className="bd-date-input-capsule">
+                  <span className="bd-capsule-label">至</span>
+                  <CustomDatePicker
                     aria-label="统计结束"
                     value={to || day}
                     onChange={e => setTo(e.target.value)}
                   />
                 </label>
-                <label>
-                  基准日
-                  <input
+                <label className="bd-date-input-capsule">
+                  <span className="bd-capsule-label">基准日</span>
+                  <CustomDatePicker
                     aria-label="业务基准日"
-                    type="date"
                     value={day}
                     onChange={e => {
                       setDay(e.target.value);
@@ -1208,46 +1206,47 @@ export function BusinessDailyBoard({
               </>
             ) : (
               <div className="bd-daily-date-picker-wrap" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  className="bd-quick-btn"
-                  onClick={() => {
-                    const d = new Date(day + 'T00:00:00Z');
-                    d.setUTCDate(d.getUTCDate() - 1);
-                    setDay(d.toISOString().slice(0, 10));
-                    setNotice('');
-                  }}
-                  aria-label="前一天"
-                  title="切换至前一日"
-                >
-                  ← 前一日
-                </button>
-                <label>
-                  业务日期
-                  <input
-                    aria-label="业务日期"
-                    type="date"
-                    value={day}
-                    onChange={e => {
-                      setDay(e.target.value);
+                <div className="bd-date-step-pill-group">
+                  <button
+                    type="button"
+                    className="bd-quick-btn bd-step-btn"
+                    onClick={() => {
+                      const d = new Date(day + 'T00:00:00Z');
+                      d.setUTCDate(d.getUTCDate() - 1);
+                      setDay(d.toISOString().slice(0, 10));
                       setNotice('');
                     }}
-                  />
-                </label>
-                <button
-                  type="button"
-                  className="bd-quick-btn"
-                  onClick={() => {
-                    const d = new Date(day + 'T00:00:00Z');
-                    d.setUTCDate(d.getUTCDate() + 1);
-                    setDay(d.toISOString().slice(0, 10));
-                    setNotice('');
-                  }}
-                  aria-label="后一天"
-                  title="切换至后一日"
-                >
-                  后一日 →
-                </button>
+                    aria-label="前一天"
+                    title="切换至前一日"
+                  >
+                    ← 前一日
+                  </button>
+                  <label className="bd-date-capsule-body">
+                    <span className="bd-date-icon" aria-hidden="true">📅</span>
+                    <CustomDatePicker
+                      aria-label="业务日期"
+                      value={day}
+                      onChange={e => {
+                        setDay(e.target.value);
+                        setNotice('');
+                      }}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="bd-quick-btn bd-step-btn"
+                    onClick={() => {
+                      const d = new Date(day + 'T00:00:00Z');
+                      d.setUTCDate(d.getUTCDate() + 1);
+                      setDay(d.toISOString().slice(0, 10));
+                      setNotice('');
+                    }}
+                    aria-label="后一天"
+                    title="切换至后一日"
+                  >
+                    后一日 →
+                  </button>
+                </div>
                 <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   数据版本
                   <CustomSelect
@@ -1307,41 +1306,19 @@ export function BusinessDailyBoard({
                   <nav
                     className="bd-section-nav"
                     aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      flexWrap: 'wrap',
-                      padding: 0,
-                      background: 'transparent',
-                      border: 'none',
-                      margin: '4px 0 8px',
-                      fontSize: 12,
-                    }}
                   >
                     {(overview ? overviewNavItems : dailyNavItems).map(item => (
                       <a
                         key={item.id}
                         href={'#' + item.id}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          padding: '3px 10px',
-                          borderRadius: 4,
-                          background: '#f6f5f2',
-                          border: '1px solid #e4e7e2',
-                          color: '#334155',
-                          textDecoration: 'none',
-                          fontSize: 11.5,
-                          fontWeight: 500,
-                          transition: 'all 0.15s ease',
-                        }}
                         onClick={e => {
-                          const target = document.getElementById(item.id);
-                          if (target) {
-                            e.preventDefault();
-                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            target.focus({ preventScroll: true });
+                          if (typeof document !== 'undefined') {
+                            const target = document.getElementById(item.id);
+                            if (target) {
+                              e.preventDefault();
+                              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              target.focus({ preventScroll: true });
+                            }
                           }
                         }}
                       >

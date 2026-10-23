@@ -33,9 +33,10 @@ export function DashboardFrame({
 
   return (
     <div
-      className={`dashboard-template dashboard-template-${preset.kind} theme-${preset.themeTag}`}
+      className={`dashboard-template dashboard-template-${preset.kind} theme-${preset.themeTag}${tabsSlot ? ' has-tabs' : ''}`}
       data-preset={preset.kind}
       data-project-template={project?.templateId || 'general_workbench'}
+      data-has-tabs={Boolean(tabsSlot)}
     >
       <header className="dashboard-template-header ui-page-header">
         <div className="dashboard-template-header-main ui-page-header-main">

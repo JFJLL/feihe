@@ -386,28 +386,36 @@
 /* ---------- Tables ---------- */
 [data-workspace-ui='v2'] .ops-table {
   font-size: 13px;
+  border-collapse: separate;
+  border-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
 [data-workspace-ui='v2'] .ops-table th {
   background: var(--ws-surface-soft);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: var(--ws-text-muted);
   font-size: 12px;
   font-weight: 600;
   padding: 10px 12px;
   border-bottom: 1px solid var(--ws-border);
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 [data-workspace-ui='v2'] .ops-table td {
   padding: 11px 12px;
   border-bottom: 1px solid var(--ws-border-soft);
   color: var(--ws-text);
   vertical-align: middle;
+  transition: background 0.15s ease;
 }
 [data-workspace-ui='v2'] .ops-table tbody tr:last-child td {
   border-bottom: 0;
 }
 [data-workspace-ui='v2'] .ops-table tbody tr:hover td {
-  background: #f7fafc;
+  background: #f0f6f5;
 }
 [data-workspace-ui='v2'] .ops-table td.num,
 [data-workspace-ui='v2'] .ops-table th.num {
@@ -417,6 +425,9 @@
 [data-workspace-ui='v2'] .ops-table-wrap {
   border-color: var(--ws-border);
   border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  overflow-x: auto;
+  position: relative;
 }
 [data-workspace-ui='v2'] .ops-table-note-title {
   color: var(--ws-interactive);
@@ -473,6 +484,10 @@
   padding: 16px 18px !important;
   gap: 5px;
   box-shadow: var(--ws-shadow-card) !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease !important;
+}
+[data-workspace-ui='v2'] .ops-metric-card:hover {
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.07) !important;
 }
 [data-workspace-ui='v2'] .ops-metric-card-blue { --metric-accent: var(--ws-data-blue); }
 [data-workspace-ui='v2'] .ops-metric-card-teal { --metric-accent: var(--ws-data-teal); }
@@ -548,6 +563,78 @@
 [data-workspace-ui='v2'] .pastel-card.pastel-red,
 [data-workspace-ui='v2'] .pastel-card.pastel-orange { border-top-color: var(--ws-data-coral) !important; }
 
+/* ---------- Filterbar & Module Tabs Polish ---------- */
+[data-workspace-ui='v2'] .filterbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--ws-surface);
+  border: 1px solid var(--ws-border);
+  border-radius: var(--ws-radius-card, 12px);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--ws-shadow-card);
+}
+
+[data-workspace-ui='v2'] .filterbar input,
+[data-workspace-ui='v2'] .filterbar select {
+  border: 1px solid var(--ws-border);
+  border-radius: var(--ws-radius-control, 8px);
+  background: #ffffff;
+  padding: 7px 12px;
+  color: var(--ws-text);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+[data-workspace-ui='v2'] .filterbar input:focus,
+[data-workspace-ui='v2'] .filterbar select:focus {
+  border-color: var(--ws-interactive);
+  box-shadow: 0 0 0 3px rgba(30, 96, 145, 0.12);
+}
+
+[data-workspace-ui='v2'] .ops-module-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 16px;
+  border: 1px solid var(--ws-border);
+}
+
+[data-workspace-ui='v2'] .ops-module-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ws-text-muted);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+[data-workspace-ui='v2'] .ops-module-tab:hover {
+  color: var(--ws-text);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+[data-workspace-ui='v2'] .ops-module-tab.active,
+[data-workspace-ui='v2'] .ops-module-tab[aria-selected='true'] {
+  background: #ffffff;
+  color: var(--ws-text);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
 /* ---------- Status badges ---------- */
 [data-workspace-ui='v2'] .ops-badge {
   border-radius: 999px;

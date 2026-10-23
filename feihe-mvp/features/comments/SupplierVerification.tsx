@@ -10,6 +10,7 @@ import { WorkspaceToolbar } from '../../components/ui/operations/WorkspaceToolba
 import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { CustomSelect } from '../../components/ui/CustomSelect';
+import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
 import { api, cnTime } from '../../lib/hooks/use-project-data';
 import type { Ops } from '../../lib/types/project';
 import type { SupplierCommentItem } from './comment-view-model';
@@ -354,15 +355,15 @@ export function SupplierVerification({
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '12.5px', color: '#64748b' }}>核验时间：</span>
-            <input
-              type="date"
+            <CustomDatePicker
+              aria-label="核验开始时间"
               value={from}
               onChange={(e) => { setFrom(e.target.value); setPage(1); }}
               style={{ width: '130px' }}
             />
             <span style={{ fontSize: '12px', color: '#94a3b8' }}>至</span>
-            <input
-              type="date"
+            <CustomDatePicker
+              aria-label="核验结束时间"
               value={to}
               onChange={(e) => { setTo(e.target.value); setPage(1); }}
               style={{ width: '130px' }}

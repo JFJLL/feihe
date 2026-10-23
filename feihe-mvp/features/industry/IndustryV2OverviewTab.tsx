@@ -168,10 +168,30 @@ export function IndustryV2OverviewTab({
                           <span className="v2-denom"> ({item.impressions.known}/{item.impressions.total})</span>
                         </td>
                         <td style={{ textAlign: 'right' }}>
-                          {formatMetricPercent(item.commercialRate)}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3 }}>
+                            <span className="v2-num">{formatMetricPercent(item.commercialRate)}</span>
+                            {item.commercialRate?.value !== null && item.commercialRate?.value !== undefined && item.commercialRate.value > 0 ? (
+                              <div className="v2-rate-track">
+                                <div
+                                  className="v2-rate-fill v2-rate-comm"
+                                  style={{ width: `${Math.min(100, Math.max(0, item.commercialRate.value * 100))}%` }}
+                                />
+                              </div>
+                            ) : null}
+                          </div>
                         </td>
                         <td style={{ textAlign: 'right' }}>
-                          {formatMetricPercent(item.promotedRate)}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3 }}>
+                            <span className="v2-num">{formatMetricPercent(item.promotedRate)}</span>
+                            {item.promotedRate?.value !== null && item.promotedRate?.value !== undefined && item.promotedRate.value > 0 ? (
+                              <div className="v2-rate-track">
+                                <div
+                                  className="v2-rate-fill v2-rate-promo"
+                                  style={{ width: `${Math.min(100, Math.max(0, item.promotedRate.value * 100))}%` }}
+                                />
+                              </div>
+                            ) : null}
+                          </div>
                         </td>
                         <td style={{ textAlign: 'center' }}>
                           <span

@@ -19,6 +19,65 @@
   color: var(--ht-text-dark);
 }
 
+/* Sticky Section Jump Bar */
+.ht-section-jumpbar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--ht-border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  box-shadow: 0 1px 4px rgba(37, 43, 42, 0.04);
+}
+
+.ht-jumpbar-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ht-text-muted);
+  white-space: nowrap;
+}
+
+.ht-jumpbar-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ht-jump-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  background: #f5f4f0;
+  border: 1px solid #e4e1d8;
+  transition: all 0.15s ease;
+}
+
+.ht-jump-pill:hover {
+  background: #ffffff;
+  color: var(--ht-primary);
+  border-color: #c3dcd7;
+  box-shadow: 0 1px 3px rgba(44, 113, 104, 0.1);
+}
+
+/* Sticky jump bar scroll offset for anchor sections */
+[id^="ht-sec-"] {
+  scroll-margin-top: 76px;
+}
+
 /* Header */
 .ht-header {
   display: flex;
@@ -150,33 +209,36 @@
 
 /* Scope Tabs */
 .ht-scope-tabs {
-  display: flex;
-  gap: 8px;
-  border-bottom: 2px solid var(--ht-border);
-  padding-bottom: 4px;
+  display: inline-flex;
+  gap: 4px;
+  background: #edebe6;
+  padding: 3px;
+  border-radius: 8px;
+  border: none;
 }
 
 .ht-scope-tab-btn {
   background: transparent;
   border: none;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--ht-text-muted);
   cursor: pointer;
-  border-radius: 6px 6px 0 0;
-  transition: all 0.2s ease;
+  border-radius: 6px;
+  transition: all 0.15s ease;
 }
 
 .ht-scope-tab-btn:hover {
-  color: var(--ht-text-dark);
-  background: #f1efeb;
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .ht-scope-tab-btn.active {
   color: var(--ht-primary);
-  background: #edebe6;
-  border-bottom: 2px solid var(--ht-primary);
+  background: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 /* Collapsible Section */

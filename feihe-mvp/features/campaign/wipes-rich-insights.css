@@ -238,27 +238,70 @@
 /* Table Mini Visualizer */
 .wipes-summary-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .wipes-summary-table th {
   text-align: left;
-  padding: 8px 10px;
-  background: #f8fafc;
+  padding: 8px 12px;
+  background: #f8faf9;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: #475569;
   font-weight: 600;
   border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .wipes-summary-table td {
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-bottom: 1px solid #f1f5f9;
   color: #334155;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease;
 }
 
 .wipes-summary-table tr:hover td {
-  background: #fafbfc;
+  background: #f0f6f5;
+}
+
+/* In-cell data bars */
+.wipes-cell-bar-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-width: 70px;
+}
+
+.wipes-cell-bar-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  min-width: 36px;
+}
+
+.wipes-cell-bar-track {
+  flex: 1;
+  height: 5px;
+  background: #edf2f7;
+  border-radius: 2.5px;
+  overflow: hidden;
+  min-width: 28px;
+}
+
+.wipes-cell-bar-fill {
+  height: 100%;
+  border-radius: 2.5px;
+  background: #2c7168;
+  transition: width 0.3s ease;
 }
 
 /* SVG Pareto & Concentric Charts */

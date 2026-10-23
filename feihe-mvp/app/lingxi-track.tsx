@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { CustomDatePicker } from '../components/ui/CustomDatePicker';
 
 type LingxiCategory = {
   name: string;
@@ -311,30 +312,18 @@ export function LingxiTrackLive({
               <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginRight: '6px' }}>
                 时间:
               </span>
-              <input
-                type="date"
+              <CustomDatePicker
+                aria-label="开始日期"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--text-main)',
-                  fontSize: '12px',
-                  outline: 'none',
-                }}
+                style={{ width: '130px', fontSize: '12px' }}
               />
               <span style={{ color: '#94a3b8', margin: '0 4px' }}>-</span>
-              <input
-                type="date"
+              <CustomDatePicker
+                aria-label="结束日期"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: 'var(--text-main)',
-                  fontSize: '12px',
-                  outline: 'none',
-                }}
+                style={{ width: '130px', fontSize: '12px' }}
               />
             </div>
             <button

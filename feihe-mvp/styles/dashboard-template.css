@@ -78,9 +78,9 @@
   background: #ffffff !important;
   color: #252b2a !important;
   border: 1px solid #e4e7e2 !important;
-  border-radius: 12px;
-  padding: 14px 20px !important;
-  margin: 0 0 12px 0 !important;
+  border-radius: 10px;
+  padding: 10px 18px !important;
+  margin: 0 0 8px 0 !important;
   box-shadow: 0 1px 3px rgba(37, 43, 42, 0.04) !important;
   display: flex;
   justify-content: space-between;
@@ -91,85 +91,95 @@
 .dashboard-template .ui-page-header-eyebrow,
 .overview-colorful-page.reference-workspace .ui-page-header-eyebrow {
   color: #2c7168 !important;
-  font-size: 11px !important;
+  font-size: 10.5px !important;
   font-weight: 700 !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
-  margin-bottom: 3px !important;
+  margin-bottom: 2px !important;
 }
 
 .dashboard-template .ui-page-header-title,
 .overview-colorful-page.reference-workspace .ui-page-header-title {
   color: #252b2a !important;
-  font-size: 20px !important;
+  font-size: 18px !important;
   font-weight: 700 !important;
-  line-height: 1.3 !important;
+  line-height: 1.25 !important;
   margin: 0 !important;
 }
 
 .dashboard-template .ui-page-header-subtitle,
 .overview-colorful-page.reference-workspace .ui-page-header-subtitle {
   color: #6f7875 !important;
-  font-size: 12.5px !important;
-  line-height: 1.5 !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
 }
 
-/* --- 2. Nav Region (.dashboard-template-nav) & Module Switcher Cards (~60px) --- */
+/* --- 2. Nav Region (.dashboard-template-nav) & Segmented Pill Control (~40px) --- */
 .dashboard-template-nav {
-  margin: 0 0 12px 0;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
 }
 
 .dashboard-template .ops-module-tabs,
 .overview-colorful-page .ops-module-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 0 0 12px 0;
+  display: inline-flex;
+  background: #ebe8e1 !important;
+  padding: 3px;
+  border-radius: 9px;
+  border: 1px solid #ddd9d0 !important;
+  gap: 3px;
+  margin: 0 !important;
+  width: auto;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .dashboard-template .ops-module-tab,
 .overview-colorful-page .ops-module-tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  background: #ffffff !important;
-  border: 1px solid #e4e7e2 !important;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 0 14px;
+  min-height: 38px;
+  height: 38px;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 7px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(37, 43, 42, 0.03);
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: none !important;
   position: relative;
-  min-height: 58px;
+  white-space: nowrap;
 }
 
 .dashboard-template .ops-module-tab:hover:not(.active),
 .overview-colorful-page .ops-module-tab:hover:not(.active) {
-  background: #faf9f7 !important;
-  border-color: #d3d8d0 !important;
-  box-shadow: 0 2px 6px rgba(37, 43, 42, 0.06);
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: #252b2a !important;
+  box-shadow: none !important;
 }
 
 .dashboard-template .ops-module-tab .ops-module-tab-icon,
 .overview-colorful-page .ops-module-tab .ops-module-tab-icon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 34px;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  font-size: 17px;
-  transition: all 0.2s ease;
-  background: #f6f5f2 !important;
-  border: 1px solid #e4e7e2 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  font-size: 13px;
+  transition: all 0.18s ease;
+  background: transparent !important;
+  border: none !important;
 }
 
 .dashboard-template .ops-module-tab.active,
 .overview-colorful-page .ops-module-tab.active {
   background: #ffffff !important;
-  border: 1.5px solid #2c7168 !important;
-  box-shadow: 0 2px 8px rgba(44, 113, 104, 0.08), inset 0 2px 0 #2c7168 !important;
+  color: #2c7168 !important;
+  box-shadow: 0 1px 4px rgba(37, 43, 42, 0.1), 0 0 0 1px rgba(44, 113, 104, 0.18) !important;
 }
 
 .dashboard-template .ops-module-tab.active .ops-module-tab-icon,
@@ -179,11 +189,19 @@
   color: #2c7168 !important;
 }
 
+.dashboard-template .ops-module-tab-body,
+.overview-colorful-page .ops-module-tab-body {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .dashboard-template .ops-module-tab strong,
 .overview-colorful-page .ops-module-tab strong {
-  color: #252b2a !important;
-  font-size: 13.5px;
+  color: #374151 !important;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1;
 }
 
 .dashboard-template .ops-module-tab.active strong,
@@ -193,9 +211,18 @@
 
 .dashboard-template .ops-module-tab .ops-module-tab-desc,
 .overview-colorful-page .ops-module-tab .ops-module-tab-desc {
-  color: #6f7875 !important;
-  font-size: 11.5px;
-  line-height: 1.35;
+  color: #6b7280 !important;
+  font-size: 11px;
+  line-height: 1.4;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.dashboard-template .ops-module-tab.active .ops-module-tab-desc,
+.overview-colorful-page .ops-module-tab.active .ops-module-tab-desc {
+  color: #2c7168 !important;
+  background: #eef6f4 !important;
 }
 
 /* --- 3. Body Region (.dashboard-template-body) --- */

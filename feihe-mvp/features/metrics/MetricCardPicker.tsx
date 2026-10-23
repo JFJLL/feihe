@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Dialog } from '../../components/ui/Dialog';
 import { CustomSelect } from '../../components/ui/CustomSelect';
+import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { api } from '../../lib/hooks/use-project-data';
 import type { ReusableMetric } from '../../lib/metrics/definitions';
@@ -65,7 +66,7 @@ export function MetricCardPicker({ projectId, metricId, initialCard, query = {},
         {type === 'progress_card' && <label>目标数值{config?.format === 'percent' || config?.aggregation === 'ratio' ? '（%）' : config?.unit ? '（' + config.unit + '）' : ''}<input aria-label="目标数值" type="number" min="0" step="any" value={targetInput} onChange={e => setTarget(e.target.value)} /><small>请填写本项目确认的目标。百分比输入20表示20%；计数或金额目标沿用指标单位。</small>{(!targetInput || Number(targetInput) <= 0) && <small role="alert">填写正数目标后才能加入草稿</small>}</label>}
         {targetNeedsConfirmation && <p role="alert">指标结果单位已变化。旧目标对应指标 v{initialCard?.targetMetricVersion}，请核对新单位并重新填写目标后保存。</p>}
         <label>卡片日期范围<CustomSelect ariaLabel="卡片日期范围" value={rangePolicy} onChange={setRangePolicy} options={[{ value: 'project', label: '跟随项目周期' }, { value: 'independent', label: '使用独立周期', disabled: !config?.dateField }]} /></label>
-        {rangePolicy === 'independent' && <div className="card-edit-fields"><label>卡片开始日期<input aria-label="卡片开始日期" type="date" value={from} onChange={e => setFrom(e.target.value)} /></label><label>卡片结束日期<input aria-label="卡片结束日期" type="date" value={to} onChange={e => setTo(e.target.value)} /></label></div>}
+        {rangePolicy === 'independent' && <div className="card-edit-fields"><label>卡片开始日期<CustomDatePicker aria-label="卡片开始日期" value={from} onChange={e => setFrom(e.target.value)} /></label><label>卡片结束日期<CustomDatePicker aria-label="卡片结束日期" value={to} onChange={e => setTo(e.target.value)} /></label></div>}
         <label>指标版本<CustomSelect ariaLabel="指标版本" value={policy} onChange={setPolicy} options={[{ value: 'latest', label: '跟随最新版本（推荐）' }, ...(metric?.versions || []).map(version => ({ value: String(version.version), label: '固定 v' + version.version }))]} /></label>
         <p>计算来源、单位与缺失规则由指标定义统一维护；当前来源：{metric?.datasetName}。</p>
         {currentPreview?.error ? <p role="alert">{currentPreview.error}</p> : currentPreview?.metric ? <p role="status">预览：{currentPreview.metric.formattedValue} · 指标 v{currentPreview.metric.definition?.version}{!['ok', 'zero'].includes(currentPreview.metric.status) && ' · ' + currentPreview.metric.statusLabel}</p> : <p>等待有效配置试算…</p>}

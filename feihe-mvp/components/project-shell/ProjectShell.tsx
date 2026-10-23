@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { ProjectBootstrap } from '../../lib/project-bootstrap';
 import { ProjectProvider, useProject } from './ProjectContext';
 import { ProjectSidebar } from './ProjectSidebar';
@@ -52,13 +52,34 @@ function ProjectShellContent({
   const themeTag = getProjectThemeTag(currentProject?.templateId);
   const isCampaignReview = currentProject?.templateId === 'campaign_review';
 
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('feihe_sidebar_collapsed');
+      if (saved === 'true') {
+        setSidebarCollapsed(true);
+      }
+    } catch {}
+  }, []);
+
+  const toggleSidebar = useCallback(() => {
+    setSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('feihe_sidebar_collapsed', String(next));
+      } catch {}
+      return next;
+    });
+  }, []);
+
   const isSettingsOrData = ['settings', 'data', 'metrics', 'reports'].includes(activeSection);
 
   // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞，战役项目由专属工作区独立加载）
   if (dataLoading && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
-      <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
-        <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} />
+      <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
+        <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
         <main className="main">
           <LoadingState text="正在准备项目全盘数据…" />
         </main>
@@ -68,8 +89,8 @@ function ProjectShellContent({
 
   if (dataError && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
-      <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
-        <ProjectSidebar userName={userName} signedIn={signedIn} />
+      <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
+        <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
         <main className="main">
           <ErrorState error={dataError} onRetry={refreshData} />
         </main>
@@ -216,8 +237,8 @@ function ProjectShellContent({
   }
 
   return (
-    <div className={`app-shell theme-${themeTag}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
-      <ProjectSidebar userName={userName} signedIn={signedIn} />
+    <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
+      <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
       <main className="main">
         <React.Fragment key={currentProject?.projectRole || 'pending'}>{content}</React.Fragment>
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />

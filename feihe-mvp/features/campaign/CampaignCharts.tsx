@@ -92,6 +92,8 @@ function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 
   const innerH = height - pad * 2;
 
   let d = '';
+  let firstX = 0;
+  let lastX = 0;
   let inLine = false;
 
   points.forEach((val, i) => {
@@ -103,21 +105,33 @@ function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 
     const y = pad + innerH - ((val - min) / range) * innerH;
     if (!inLine) {
       d += `M ${x.toFixed(1)} ${y.toFixed(1)}`;
+      firstX = x;
       inLine = true;
     } else {
       d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
     }
+    lastX = x;
   });
 
   if (!d) return null;
 
+  const areaD = `${d} L ${lastX.toFixed(1)} ${height} L ${firstX.toFixed(1)} ${height} Z`;
+  const gradId = `ca-spark-grad-${strokeColor.replace(/[^a-zA-Z0-9]/g, '')}`;
+
   return (
-    <div style={{ width: '100%', height: `${height}px`, marginTop: '4px', opacity: 0.85 }} aria-hidden="true">
+    <div style={{ width: '100%', height: `${height}px`, marginTop: '4px', opacity: 0.9 }} aria-hidden="true">
       <svg
         viewBox={`0 0 ${width} ${height}`}
         style={{ width: '100%', height: '100%', overflow: 'visible' }}
         preserveAspectRatio="none"
       >
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={strokeColor} stopOpacity="0.25" />
+            <stop offset="100%" stopColor={strokeColor} stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+        <path d={areaD} fill={`url(#${gradId})`} />
         <path
           d={d}
           fill="none"
@@ -156,6 +170,44 @@ export function MetricStrip({
             : it.status === 'accent' || it.status === 'success'
             ? CAMPAIGN_PALETTE.primary
             : undefined;
+
+        // Micro progress detection: either metric value itself has % or note specifies progress
+        let progressPct: number | null = null;
+        if (typeof it.value === 'number' && it.unit === '%' && it.value >= 0 && Number.isFinite(it.value)) {
+          progressPct = Math.min(100, Math.max(0, it.value));
+        } else if (
+          typeof it.value === 'string' &&
+          it.value.trim().endsWith('%') &&
+          /(?:进度|达成|完成率)/.test(it.label)
+        ) {
+          const valNum = parseFloat(it.value);
+          if (Number.isFinite(valNum) && valNum >= 0) progressPct = Math.min(100, valNum);
+        } else if (subText) {
+          const m = subText.match(/(?:进度|达成|完成率?|执行)\s*([\d.]+)%/);
+          if (m) {
+            const p = parseFloat(m[1]);
+            if (Number.isFinite(p) && p >= 0) progressPct = Math.min(100, p);
+          }
+        }
+
+        const renderNoteContent = (text: string) => {
+          if (!/(?:较前|环比|同比|较上)/.test(text)) return text;
+          const m = text.match(/(?<![\d/.])([+-]\s*\d[\d,]*(?:\.\d+)?%?)/);
+          if (!m) return text;
+          const diff = m[1];
+          const isUp = diff.startsWith('+');
+          const parts = text.split(diff);
+          return (
+            <>
+              {parts[0]}
+              <span className={`ca-trend-pill ${isUp ? 'ca-trend-up' : 'ca-trend-down'}`}>
+                {diff}
+              </span>
+              {parts.slice(1).join(diff)}
+            </>
+          );
+        };
+
         return (
           <article
             key={idx}
@@ -190,7 +242,18 @@ export function MetricStrip({
               {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
             </div>
             {it.sparkline && renderMiniSparklineSvg(it.sparkline, 96, 20, CAMPAIGN_PALETTE.primary)}
-            {subText && <p className="ca-metric-note bd-kpi-sub" title={subText}>{subText}</p>}
+            {progressPct !== null && (
+              <div className="ca-metric-progress-track" title={`达成进度 ${progressPct.toFixed(1)}%`}>
+                <div
+                  className="ca-metric-progress-bar"
+                  style={{
+                    width: `${Math.min(100, Math.max(0, progressPct))}%`,
+                    background: statusColor || (progressPct >= 100 ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.gold),
+                  }}
+                />
+              </div>
+            )}
+            {subText && <p className="ca-metric-note bd-kpi-sub" title={subText}>{renderNoteContent(subText)}</p>}
           </article>
         );
       })}
@@ -1071,11 +1134,20 @@ export function BudgetComparisonChart({ data, unit = '元' }: {
           const overrun = actual !== null && target !== null && actual > target;
           const color = overrun ? CAMPAIGN_PALETTE.terracotta : CAMPAIGN_PALETTE.primary;
           const width = actual !== null ? Math.max(0, actual) / maxValue * 100 : 0;
+            const ratioStr = actual !== null && target !== null && target > 0 ? ((actual / target) * 100).toFixed(1) : null;
           return (
             <div key={`${row.label}-${index}`} className="ca-budget-row">
               <div className="ca-budget-row-heading">
                 <strong>{row.label}</strong>
-                <span style={{ color }}>{actual === null ? '未录入' : `${fmtNum(actual)} ${unit}`} {overrun && <b>↑超支</b>}</span>
+                  <span style={{ color, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    {actual === null ? '未录入' : `${fmtNum(actual)} ${unit}`}
+                    {ratioStr && (
+                      <span className={`ca-budget-pct-pill ${overrun ? 'ca-budget-pct-overrun' : 'ca-budget-pct-normal'}`}>
+                        {ratioStr}%
+                      </span>
+                    )}
+                    {overrun && <b>↑超支</b>}
+                  </span>
               </div>
               <div className="ca-budget-track" role="img" aria-label={`${row.label}：实际 ${actual === null ? '未录入' : fmtNum(actual)}，预算 ${target === null ? '未录入' : fmtNum(target)}`}>
                 {target !== null && <span className="ca-budget-target-fill" style={{ width: `${target / maxValue * 100}%` }} />}
@@ -1528,6 +1600,8 @@ export function TargetBulletChart({
                 stroke="#0f172a"
                 strokeWidth="2.5"
               />
+              <circle cx={targetX100} cy={y + 4} r={1.5} fill="#0f172a" />
+              <circle cx={targetX100} cy={y + 26} r={1.5} fill="#0f172a" />
             </g>
           );
         })}

@@ -1,0 +1,170 @@
+/* Global Custom Non-Native Controls */
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  vertical-align: middle;
+  transition: all 0.15s ease;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+input[type="checkbox"]:hover:not(:disabled) {
+  border-color: #2c7168;
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: none;
+  border-color: #2c7168;
+  box-shadow: 0 0 0 3px rgba(44, 113, 104, 0.16);
+}
+
+input[type="checkbox"]:checked {
+  background: #2c7168;
+  border-color: #2c7168;
+}
+
+input[type="checkbox"]:checked::before {
+  content: "";
+  width: 8px;
+  height: 5px;
+  border-left: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: rotate(-45deg) translate(0.5px, -0.5px);
+}
+
+input[type="checkbox"]:disabled {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Radio styling */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  vertical-align: middle;
+  transition: all 0.15s ease;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+input[type="radio"]:hover:not(:disabled) {
+  border-color: #2c7168;
+}
+
+input[type="radio"]:focus-visible {
+  outline: none;
+  border-color: #2c7168;
+  box-shadow: 0 0 0 3px rgba(44, 113, 104, 0.16);
+}
+
+input[type="radio"]:checked {
+  background: #ffffff;
+  border-color: #2c7168;
+}
+
+input[type="radio"]:checked::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2c7168;
+}
+
+input[type="radio"]:disabled {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Number input spin removal & tabular nums */
+input[type="number"] {
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Details > Summary non-native indicator */
+details > summary {
+  list-style: none;
+  position: relative;
+  padding-right: 24px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid #64748b;
+  border-bottom: 2px solid #64748b;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s ease;
+  pointer-events: none;
+}
+
+details[open] > summary::after {
+  transform: translateY(-30%) rotate(-135deg);
+  border-color: #2c7168;
+}
+
+/* Global refined scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

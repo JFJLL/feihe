@@ -456,6 +456,13 @@
   flex-direction: column;
   justify-content: space-between;
   min-width: 0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.v2-kpi-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
 }
 
 .v2-kpi-top {
@@ -687,8 +694,10 @@
 .v2-table-wrapper {
   overflow-x: auto;
   border: 1px solid var(--v2-border);
-  border-radius: 8px;
+  border-radius: 10px;
   -webkit-overflow-scrolling: touch;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  position: relative;
 }
 
 .v2-table {
@@ -699,18 +708,26 @@
 }
 
 .v2-table th {
-  background: #f8fafc;
+  background: #f8faf9;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   padding: 10px 14px;
   font-weight: 600;
   color: #475569;
   border-bottom: 1px solid var(--v2-border);
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
 }
 
 .v2-table td {
   padding: 12px 14px;
   border-bottom: 1px solid var(--v2-border-light);
   vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease;
 }
 
 .v2-table tr:last-child td {
@@ -718,7 +735,7 @@
 }
 
 .v2-table tr:hover td {
-  background: #fcfdfe;
+  background: #f0f6f5;
 }
 
 .v2-num {
@@ -728,6 +745,42 @@
 .v2-denom {
   font-size: 0.75rem;
   color: var(--v2-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.v2-kpi-denominator {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(39, 118, 110, 0.08);
+  color: var(--v2-teal-dark);
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Micro rate progress tracks */
+.v2-rate-track {
+  width: 48px;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.v2-rate-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.v2-rate-comm {
+  background: #d97706;
+}
+
+.v2-rate-promo {
+  background: #dc2626;
 }
 
 .v2-link-title {
@@ -779,11 +832,26 @@
 .v2-tag-promo { font-size: 0.7rem; padding: 1px 4px; border-radius: 3px; background: #fce7f3; color: #be185d; }
 
 .v2-price-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 4px;
   font-size: 0.8rem;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
-.v2-price-known { color: #b45309; }
-.v2-price-unknown { color: #94a3b8; font-weight: normal; }
+.v2-price-known {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+  font-weight: 600;
+}
+.v2-price-unknown {
+  background: #f1f5f9;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  font-weight: normal;
+}
 
 /* Distribution Cards (Tab 2) */
 .v2-dist-card {

@@ -21,7 +21,12 @@
   border: 1px solid var(--border-color, #e2e8f0);
   border-radius: 12px;
   padding: 22px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.2s ease;
+}
+
+.kri-layer-card:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
 }
 
 .kri-layer-header {
@@ -410,33 +415,49 @@
   width: 100%;
   overflow-x: auto;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  position: relative;
 }
 
 .kri-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 12px;
   text-align: left;
+  font-variant-numeric: tabular-nums;
 }
 
 .kri-table th {
-  background: #f8fafc;
+  background: #f8faf9;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: #475569;
   font-weight: 600;
   padding: 8px 12px;
   border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
 }
 
 .kri-table td {
   padding: 8px 12px;
   border-bottom: 1px solid #f1f5f9;
   color: #1e293b;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease;
 }
 
 .kri-table tr:last-child td {
   border-bottom: none;
+}
+
+.kri-table tr:hover td {
+  background: #f0f6f5;
 }
 
 .kri-empty {
@@ -535,23 +556,37 @@
 
 .kri-summary-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .kri-summary-table th {
   padding: 8px 10px;
-  background: #f8fafc;
+  background: #f8faf9;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: #475569;
   font-weight: 600;
   border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
 }
 
 .kri-summary-table td {
   padding: 8px 10px;
   border-bottom: 1px solid #f1f5f9;
   color: #334155;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease;
+}
+
+.kri-summary-table tr:hover td {
+  background: #f0f6f5;
 }
 
 .kri-total-row td {

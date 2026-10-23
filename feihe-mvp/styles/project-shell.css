@@ -1,8 +1,13 @@
 .app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-columns: 232px minmax(0, 1fr);
   background: var(--bg-page);
+  transition: grid-template-columns 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.app-shell.sidebar-collapsed {
+  grid-template-columns: 68px minmax(0, 1fr);
 }
 
 .sidebar {
@@ -10,7 +15,8 @@
   top: 0;
   height: 100vh;
   overflow-y: auto;
-  padding: 20px 14px 18px;
+  overflow-x: hidden;
+  padding: 16px 12px 18px;
   background: #ffffff;
   color: var(--sidebar-text);
   display: flex;
@@ -18,13 +24,42 @@
   border-right: 1px solid #e2e8f0;
   z-index: 20;
   box-shadow: 1px 0 6px rgba(0, 0, 0, 0.02);
+  transition: padding 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0 2px 12px;
+}
+
+.sidebar-toggle-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-content: center;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #edf7f5;
+  color: #2c7168;
+  border-color: #cbe3de;
 }
 
 .back-platform {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin: 0 4px 14px;
+  margin: 0;
   color: #64748b;
   font-size: 12px;
   font-weight: 500;
@@ -37,9 +72,9 @@
 }
 
 .back-platform:hover {
-  color: #0284c7;
-  background: #f0f9ff;
-  border-color: #bae6fd;
+  color: #2c7168;
+  background: #edf7f5;
+  border-color: #cbe3de;
 }
 
 .brand {
@@ -58,11 +93,11 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
+  background: linear-gradient(135deg, #2c7168, #235b54);
   color: white;
   font-size: 18px;
   font-weight: 800;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  box-shadow: 0 4px 12px rgba(44, 113, 104, 0.25);
 }
 
 .brand small {
@@ -165,26 +200,113 @@
 }
 
 .project-main-nav a:hover {
-  color: #0284c7;
-  background: #f0f9ff;
-  border-color: #e0f2fe;
+  color: #2c7168;
+  background: #edf7f5;
+  border-color: #cbe3de;
 }
 .project-main-nav a:hover .nav-num {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: #cbe3de;
+  color: #235b54;
 }
 
 .project-main-nav a.active {
-  color: #0369a1;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border-color: #bae6fd;
+  color: #235b54;
+  background: linear-gradient(135deg, #edf7f5 0%, #e1f1ee 100%);
+  border-color: #cbe3de;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08);
+  box-shadow: 0 2px 8px rgba(44, 113, 104, 0.1);
 }
 
 .project-main-nav a.active .nav-num {
   color: #235b54;
   background: #dceee9;
+}
+
+/* Sidebar Collapsed State Rules */
+.sidebar-collapsed .sidebar {
+  padding: 14px 6px;
+  align-items: center;
+}
+
+.sidebar-collapsed .sidebar-header-row {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sidebar-collapsed .back-platform {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 0;
+  justify-content: center;
+  border-radius: 6px;
+  position: relative;
+}
+
+.sidebar-collapsed .back-platform::before {
+  content: "←";
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sidebar-collapsed .brand {
+  padding: 0 0 12px;
+  justify-content: center;
+}
+
+.sidebar-collapsed .brand > div {
+  display: none;
+}
+
+.sidebar-collapsed .project-switcher {
+  padding: 6px 2px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-collapsed .project-switcher small,
+.sidebar-collapsed .project-subtext,
+.sidebar-collapsed .switcher-control select {
+  display: none;
+}
+
+.sidebar-collapsed .project-main-nav {
+  width: 100%;
+}
+
+.sidebar-collapsed .project-main-nav a {
+  padding: 9px 0;
+  justify-content: center;
+  gap: 0;
+  text-align: center;
+}
+
+.sidebar-collapsed .project-main-nav a .nav-label {
+  display: none;
+}
+
+.sidebar-collapsed .project-main-nav a .nav-num {
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.sidebar-collapsed .sidebar-foot {
+  width: 100%;
+  padding: 8px 2px;
+  text-align: center;
+  font-size: 0;
+}
+
+.sidebar-collapsed .sidebar-foot i {
+  margin: 0;
+}
+
+.sidebar-collapsed .sidebar-foot small {
+  display: none;
 }
 
 .sidebar-foot {
@@ -272,7 +394,7 @@
   gap: 6px;
   padding: 8px 14px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #0284c7, #0369a1);
+  background: linear-gradient(135deg, #2c7168, #235b54);
   color: white;
   text-decoration: none;
   font-size: 13px;
@@ -283,25 +405,25 @@
 
 .ai-header-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.28);
+  box-shadow: 0 6px 18px rgba(44, 113, 104, 0.32);
 }
 
 /* Floating AI assistant */
 .floating-agent-btn {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  height: 44px;
-  min-width: 44px;
-  padding: 0 16px 0 12px;
+  right: 20px;
+  bottom: 20px;
+  height: 38px;
+  min-width: 38px;
+  padding: 0 14px 0 10px;
   border: 0;
-  border-radius: 22px;
+  border-radius: 19px;
   cursor: pointer;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
+  background: linear-gradient(135deg, #2c7168, #235b54);
+  box-shadow: 0 4px 16px rgba(44, 113, 104, 0.32);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   z-index: 70;
   transition: all 0.2s ease;
 }
@@ -311,7 +433,7 @@
 }
 .floating-agent-label {
   color: #fff;
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.02em;
   white-space: nowrap;
@@ -320,7 +442,7 @@
   display: block;
   margin-top: 6px;
   font-size: 11px;
-  color: #0284c7;
+  color: #2c7168;
   font-weight: 600;
 }
 .floating-agent-sources {
@@ -346,19 +468,19 @@
 }
 .floating-agent-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.45);
+  box-shadow: 0 8px 22px rgba(44, 113, 104, 0.45);
 }
 .floating-agent-icon {
   color: #fff;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 800;
 }
 .floating-agent-pulse {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 10px;
-  height: 10px;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #16a34a;
   border: 2px solid #fff;

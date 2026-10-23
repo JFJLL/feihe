@@ -10,10 +10,14 @@ export function ProjectSidebar({
   userName,
   signedIn = true,
   isDevLocal = false,
+  collapsed = false,
+  onToggleCollapse,
 }: {
   userName: string;
   signedIn?: boolean;
   isDevLocal?: boolean;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }) {
   const {
     projectId,
@@ -34,9 +38,26 @@ export function ProjectSidebar({
 
   return (
     <aside className="sidebar" aria-label="项目主要导航">
-      <Link className="back-platform" href="/" aria-label="返回项目中心">
-        ← 项目中心
-      </Link>
+      <div className="sidebar-header-row">
+        <Link className="back-platform" href="/" aria-label="返回项目中心">
+          ← 项目中心
+        </Link>
+        <button
+          type="button"
+          className="sidebar-toggle-btn"
+          aria-label={collapsed ? '展开侧边栏' : '折叠侧边栏'}
+          title={collapsed ? '展开侧边栏' : '折叠侧边栏'}
+          onClick={onToggleCollapse}
+        >
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor">
+            {collapsed ? (
+              <path d="M6 3l5 5-5 5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            ) : (
+              <path d="M10 3l-5 5 5 5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            )}
+          </svg>
+        </button>
+      </div>
 
       <div className="brand">
         <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a5f3fc" strokeWidth="4" strokeLinecap="round"/></svg></span>
@@ -83,6 +104,7 @@ export function ProjectSidebar({
               key={item.id}
               href={href}
               aria-label={item.label}
+              title={item.label}
               className={isActive ? 'active' : ''}
               aria-current={isActive ? 'page' : undefined}
               onClick={(e) => {

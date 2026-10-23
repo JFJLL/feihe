@@ -1,5 +1,6 @@
 import { NoteThumbnail } from '../../components/ui/NoteThumbnail';
 import { StyledSelect } from '../../components/ui/StyledSelect';
+import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
@@ -289,18 +290,18 @@ export function ContentRegistry({
               onChange={(e) => setKeywords(e.target.value)}
               placeholder="关键词用逗号分隔"
             />
-            <input
-              type="date"
-              style={{ padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '12px' }}
+            <CustomDatePicker
+              style={{ width: '130px', fontSize: '12px' }}
               value={scanFrom}
               onChange={(e) => setScanFrom(e.target.value)}
+              placeholder="开始日期"
             />
             <span style={{ fontSize: '12px', color: '#64748b' }}>至</span>
-            <input
-              type="date"
-              style={{ padding: '5px 8px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '12px' }}
+            <CustomDatePicker
+              style={{ width: '130px', fontSize: '12px' }}
               value={scanTo}
               onChange={(e) => setScanTo(e.target.value)}
+              placeholder="结束日期"
             />
             <button
               type="button"
@@ -414,19 +415,19 @@ export function ContentRegistry({
             <option value="comments">按评论总数排序</option>
             <option value="publishedAt">按发布时间排序</option>
           </StyledSelect>
-          <input
-            type="date"
+          <CustomDatePicker
             value={from}
             onChange={(e) => { setFrom(e.target.value); setPage(1); }}
             title="开始日期"
             aria-label="开始日期"
+            style={{ width: '135px' }}
           />
-          <input
-            type="date"
+          <CustomDatePicker
             value={to}
             onChange={(e) => { setTo(e.target.value); setPage(1); }}
             title="结束日期"
             aria-label="结束日期"
+            style={{ width: '135px' }}
           />
           </WorkspaceToolbar>
           </div>

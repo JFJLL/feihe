@@ -45,6 +45,16 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
   const [showAllCreatives, setShowAllCreatives] = useState<boolean>(false);
   const [selectedBenchmarkMetric, setSelectedBenchmarkMetric] = useState<'CTR' | 'CPC' | 'CPM' | 'CPE' | 'CPI' | 'CPTI'>('CTR');
 
+  const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (typeof document !== 'undefined') {
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   const topMetricItems: MetricStripItem[] = useMemo(() => {
     return [
       {
@@ -249,8 +259,20 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
 
 
+        {/* 吸顶分区快速定位导航条 */}
+        <nav className="ht-section-jumpbar" aria-label="黄天鹅总览吸顶分区导航">
+          <div className="ht-jumpbar-label">⚡ 分区定位:</div>
+          <div className="ht-jumpbar-links">
+            <a href="#ht-sec-top-kpi" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-top-kpi')}>🎯 核心指标</a>
+            <a href="#ht-sec-budget-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-budget-benchmarks')}>⚖️ 预算与基准对标</a>
+            <a href="#ht-sec-funnels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-funnels')}>🔻 三线转化漏斗</a>
+            <a href="#ht-sec-audiences-keywords" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-audiences-keywords')}>👥 关键词与人群画像</a>
+            <a href="#ht-sec-creators-detail" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-creators-detail')}>✍️ 达人/KOS明细</a>
+          </div>
+        </nav>
+
         {/* 第一层：全域三线经营总览与蛋品行业基准对标 */}
-        <section className="ht-layer">
+        <section id="ht-sec-top-kpi" className="ht-layer">
           <div className="ht-layer-header">
             <h3 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h3>
             <span className="ht-layer-sub">8项核心全域KPI与蛋品大盘对照</span>
@@ -258,7 +280,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
           <MetricStrip items={topMetricItems} />
 
-          <div className="ht-grid-2">
+          <div id="ht-sec-budget-benchmarks" className="ht-grid-2">
             <ChartPanel
               title="品牌FS预算推进与实绩对照"
               subtitle={
@@ -372,7 +394,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <HuangAudienceInsights model={model} />
 
         {/* 第二层：三大漏斗与趋势 */}
-        <section className="ht-layer">
+        <section id="ht-sec-funnels" className="ht-layer">
           <div className="ht-layer-header">
             <h3 className="ht-layer-title">三条业务线 · 关键节点与趋势</h3>
             <span className="ht-layer-sub">三线独立核算，不跨平台拼接转化链路</span>
@@ -519,7 +541,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         </details>
 
         {/* 第四层：受众人口学 24 维热力矩阵与地域渗透 */}
-        <section className="ht-layer">
+        <section id="ht-sec-audiences-keywords" className="ht-layer">
           <div className="ht-layer-header">
             <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与地域渗透</h3>
             <span className="ht-layer-sub">性别×年龄二维消耗/互动交叉矩阵与重点省份渗透</span>
@@ -559,8 +581,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
         </section>
 
-        {/* 第五层：达人选号淘汰漏斗、菜品方向与 11 月储备 */}
-        <details className="ht-layer ht-secondary-details">
+        {/* 达人选号淘汰漏斗、菜品方向与 11 月储备 */}
+        <details id="ht-sec-creators-detail" className="ht-layer ht-secondary-details">
           <summary>达人执行、内容方向与KOS明细</summary>
           <div className="ht-grid-2">
             <ChartPanel
@@ -834,8 +856,18 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
         </div>
 
+        {/* 投放分析吸顶分区导航 */}
+        <nav className="ht-section-jumpbar" aria-label="投放渠道导航">
+          <div className="ht-jumpbar-label">⚡ 投放定位:</div>
+          <div className="ht-jumpbar-links">
+            <a href="#ht-sec-ads-channels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-channels')}>📊 渠道日变走势</a>
+            <a href="#ht-sec-ads-audiences" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-audiences')}>👥 人群包与地域</a>
+            <a href="#ht-sec-ads-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-benchmarks')}>⚖️ 行业基准对标</a>
+          </div>
+        </nav>
+
         {adsScope === 'brand' && (
-          <div className="ht-grid-2">
+          <div id="ht-sec-ads-channels" className="ht-grid-2">
             <ChartPanel
               title="品牌FS 19日消耗与CPM走势"
               subtitle={`统计周期：${model.brandPeriod}`}
@@ -1274,7 +1306,17 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         </div>
       </div>
 
-      <div className="ht-grid-2">
+      {/* 内容执行吸顶导航 */}
+      <nav className="ht-section-jumpbar" aria-label="内容执行导航">
+        <div className="ht-jumpbar-label">⚡ 内容定位:</div>
+        <div className="ht-jumpbar-links">
+          <a href="#ht-sec-content-status" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-status')}>🎯 达人执行阶段</a>
+          <a href="#ht-sec-content-funnel" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-funnel')}>📅 排期与发布走势</a>
+          <a href="#ht-sec-content-pricing" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-pricing')}>💰 采买报价与明细</a>
+        </div>
+      </nav>
+
+      <div id="ht-sec-content-status" className="ht-grid-2">
         <ChartPanel
           title="达人执行阶段分布"
           subtitle={`全量 ${model.creatorsCount} 位达人当前执行状态`}

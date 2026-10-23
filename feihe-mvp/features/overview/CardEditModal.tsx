@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { CustomSelect } from '../../components/ui/CustomSelect';
+import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
 import { api } from '../../lib/hooks/use-project-data';
 import { Dialog } from '../../components/ui/Dialog';
 import type { MetricComputeResult } from '../../lib/metrics/engine';
@@ -288,7 +289,7 @@ export function CardEditModal({
           </>}
           <label>缺失值规则<CustomSelect ariaLabel="缺失值规则" value={card.missingPolicy || 'skip'} onChange={value => setCard({ ...card, missingPolicy: value as 'skip' | 'zero' })} options={[{ value: 'skip', label: '缺失不补零（忽略空值）' }, { value: 'zero', label: '明确补零' }]} /></label>
           <label>日期字段<CustomSelect ariaLabel="日期字段" value={card.dateField || ''} onChange={value => setCard({ ...card, dateField: value, ...(value ? {} : { from: '', to: '' }) })} options={[{ value: '', label: '不限定日期' }, ...columns.filter(c => c.type === 'date').map(c => ({ value: c.key, label: c.name }))]} /></label>
-          {card.dateField && <div className="card-edit-fields" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}><label>开始日期<input type="date" value={card.from || ''} onChange={e => setCard({ ...card, from: e.target.value })} /></label><label>结束日期<input type="date" value={card.to || ''} onChange={e => setCard({ ...card, to: e.target.value })} /></label></div>}
+          {card.dateField && <div className="card-edit-fields" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}><label>开始日期<CustomDatePicker aria-label="开始日期" value={card.from || ''} onChange={e => setCard({ ...card, from: e.target.value })} /></label><label>结束日期<CustomDatePicker aria-label="结束日期" value={card.to || ''} onChange={e => setCard({ ...card, to: e.target.value })} /></label></div>}
           {card.dateField && <small>按项目时区包含完整结束日；无日期记录不进入指定周期。</small>}
           {validationErrors.length > 0 && <div role="alert">{validationErrors.join('；')}</div>}
           {card.displayNeedsConfirmation && <button type="button" onClick={() => setCard(transitionCardConfig(card, { kind: 'confirm' }, columns))}>确认当前显示设置</button>}

@@ -418,6 +418,44 @@
   text-overflow: ellipsis;
 }
 
+/* Progress Track inside Metric Card */
+.ca-metric-progress-track {
+  width: 100%;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.ca-metric-progress-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.35s ease;
+}
+
+/* Trend Micro Pills */
+.ca-trend-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  margin: 0 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ca-trend-up {
+  background: rgba(44, 113, 104, 0.12);
+  color: #2c7168;
+}
+
+.ca-trend-down {
+  background: rgba(189, 121, 100, 0.14);
+  color: #bd7964;
+}
+
 /* ==========================================================================
    7. Tables & Responsive Horizontal Scroll
    ========================================================================== */
@@ -427,31 +465,42 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border: 1px solid var(--ca-palette-border-warm);
-  border-radius: 8px;
+  border-radius: 10px;
   background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  position: relative;
 }
 
 .ca-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 12.5px;
   text-align: left;
 }
 
 .ca-table th {
-  padding: 8px 12px;
-  background: #f8fafc;
+  padding: 9px 12px;
+  background: #f8faf9;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   color: var(--ca-palette-muted);
   font-weight: 600;
   border-bottom: 1px solid var(--ca-palette-border);
   white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-variant-numeric: tabular-nums;
 }
 
 .ca-table td {
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-bottom: 1px solid #f1f5f9;
   color: var(--ca-palette-text);
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease;
 }
 
 .ca-table tr:last-child td {
@@ -459,7 +508,52 @@
 }
 
 .ca-table tr:hover td {
-  background: #fcfdfe;
+  background: #f0f6f5;
+}
+
+/* Sticky First Column for wide scrollable tables */
+.ca-table-sticky-col th:first-child,
+.ca-table-sticky-col td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #ffffff;
+  box-shadow: 2px 0 6px rgba(15, 23, 42, 0.04);
+}
+
+.ca-table-sticky-col th:first-child {
+  z-index: 3;
+  background: #f8faf9;
+}
+
+/* In-Cell Data Bar Micro Visuals */
+.ca-cell-bar-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 90px;
+}
+
+.ca-cell-bar-num {
+  font-variant-numeric: tabular-nums;
+  min-width: 44px;
+}
+
+.ca-cell-bar-track {
+  flex: 1;
+  height: 6px;
+  background: #edf2f7;
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 36px;
+}
+
+.ca-cell-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--ca-palette-primary);
+  transition: width 0.3s ease;
 }
 
 /* ==========================================================================
@@ -735,4 +829,7 @@
 .ca-budget-track { position: relative; height: 16px; margin: 10px 0; background: #f7f8fa; border-radius: 4px; }
 .ca-budget-target-fill { position: absolute; inset: 0 auto 0 0; background: #e8edf1; border-radius: 4px; }
 .ca-budget-actual { position: absolute; left: 0; top: 3px; height: 10px; border-radius: 3px; }
-.ca-budget-target-mark { position: absolute; top: -3px; height: 22px; border-left: 2px dashed #475569; }
+.ca-budget-target-mark { position: absolute; top: -3px; height: 22px; border-left: 2px dashed #475569; box-shadow: 0 0 4px rgba(71, 85, 105, 0.35); }
+.ca-budget-pct-pill { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ca-budget-pct-normal { background: rgba(44, 113, 104, 0.1); color: var(--ca-palette-primary); }
+.ca-budget-pct-overrun { background: rgba(189, 121, 100, 0.14); color: var(--ca-palette-terracotta); }

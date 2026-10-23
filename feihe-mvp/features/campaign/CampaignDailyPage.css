@@ -62,24 +62,23 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.ca-date-range-box {
+.ca-date-single-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  padding: 3px 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.ca-date-input-wrap {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f8fafc;
-  padding: 3px 8px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-}
-
-.ca-date-single-box {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: #f8fafc;
-  padding: 2px 4px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  padding: 0 4px;
 }
 
 .ca-btn-date-step {
@@ -112,6 +111,122 @@
   font-family: inherit;
   outline: none;
   padding: 2px 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ca-date-input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  opacity: 0;
+  width: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ca-btn-quick-dates-toggle {
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.ca-btn-quick-dates-toggle:hover,
+.ca-btn-quick-dates-toggle.active {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #86efac;
+}
+
+/* Quick dates grid dropdown */
+.ca-quick-dates-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  padding: 10px;
+  width: 320px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.ca-quick-dates-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ca-quick-dates-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.ca-quick-dates-close {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.ca-quick-dates-close:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+.ca-quick-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.ca-quick-date-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  font-size: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: #fafaf9;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.ca-quick-date-item:hover {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.ca-quick-date-item.active {
+  background: #2c7168;
+  border-color: #2c7168;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.ca-quick-date-idx {
+  font-size: 9.5px;
+  opacity: 0.7;
 }
 
 .ca-date-sep {
@@ -296,6 +411,7 @@
 .ca-cross-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
+  border-top: 3px solid #cbd5e1;
   border-radius: 8px;
   padding: 12px 14px;
   display: flex;
@@ -305,8 +421,9 @@
 }
 
 .ca-cross-card-active {
-  border-color: #2c7168;
-  box-shadow: 0 0 0 1px #2c7168;
+  border-top: 3px solid #2c7168 !important;
+  border-color: #c3dcd7;
+  box-shadow: 0 4px 12px rgba(44, 113, 104, 0.12);
   background: #fafdfc;
 }
 
@@ -351,18 +468,33 @@
 
 .ca-cross-metric-row {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
-  align-items: center;
+  gap: 8px;
   font-size: 12px;
+  position: relative;
+}
+
+.ca-cross-metric-row::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dashed #e2e8f0;
+  order: 2;
+  margin: 0 4px;
 }
 
 .ca-cross-metric-label {
+  order: 1;
   color: #64748b;
+  white-space: nowrap;
 }
 
 .ca-cross-metric-val {
+  order: 3;
   color: #1e293b;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .ca-table-row-selected {

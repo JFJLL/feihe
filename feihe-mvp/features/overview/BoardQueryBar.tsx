@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { CustomSelect } from '../../components/ui/CustomSelect';
+import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
 import { api } from '../../lib/hooks/use-project-data';
 import { queryErrors, type MetricQuery } from '../../lib/metrics/query';
 
@@ -23,8 +24,8 @@ export function BoardQueryBar({ projectId, dataset, query, disabled, editing, on
   const errors = queryErrors(query);
   return <section className="board-query-bar" aria-label="项目周期与共同筛选">
     <div className="board-query-fields">
-      <label>开始日期<input aria-label="项目开始日期" type="date" disabled={disabled} value={query.from || ''} onChange={e => onChange({ ...query, from: e.target.value })} /></label>
-      <label>结束日期<input aria-label="项目结束日期" type="date" disabled={disabled} value={query.to || ''} onChange={e => onChange({ ...query, to: e.target.value })} /></label>
+      <label>开始日期<CustomDatePicker aria-label="项目开始日期" disabled={disabled} value={query.from || ''} onChange={e => onChange({ ...query, from: e.target.value })} /></label>
+      <label>结束日期<CustomDatePicker aria-label="项目结束日期" disabled={disabled} value={query.to || ''} onChange={e => onChange({ ...query, to: e.target.value })} /></label>
       <label>共同筛选字段<CustomSelect ariaLabel="共同筛选字段" disabled={disabled} value={field} onChange={key => onChange({ ...query, filters: key ? [{ key, value: '' }] : undefined })} options={[{ value: '', label: '不筛选' }, ...(dataset?.columns || []).filter(column => column.type !== 'date').map(column => ({ value: column.key, label: column.name }))]} /></label>
       {field && <label>筛选值<CustomSelect ariaLabel="共同筛选值" disabled={disabled || !current} value={filter?.value || ''} onChange={value => onChange({ ...query, filters: [{ key: field, value }] })} options={[{ value: '', label: '全部' }, ...(current?.values || []).map(value => ({ value, label: value }))]} /></label>}
       <button className="secondary" disabled={disabled} onClick={() => onChange({})}>清除周期与筛选</button>

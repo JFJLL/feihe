@@ -477,6 +477,16 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return kpis.slice(0, 4).map((k) => ({ label: k.label, value: k.value, unit: k.unit, note: k.period }));
   }, [projectId, activeSnapshot, kailasDailyMetrics, kailasQ3Metrics, meilingDouble11Metrics, meiling618Metrics, wipesDailyMetrics, wipesSheetMetrics, kpis]);
 
+  const handleAnchorClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (typeof document !== "undefined") {
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, []);
+
   return (
     <div className="ca-page" role="main" aria-label={name + " 营销战役总览"}>
       {/* 1. Header (紧凑元信息 toolbar + 周期说明 + 业务快照切换器) */}
@@ -564,11 +574,60 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         </div>
       </header>
 
+      {/* 页内吸顶快速定位导航条 (Sticky Section Jump Bar) */}
+      <nav className="ca-section-jumpbar" aria-label="页内吸顶快速定位导航">
+        <div className="ca-jumpbar-label">
+          <span className="ca-jumpbar-icon">⚡</span>
+          <span>定位:</span>
+        </div>
+        <div className="ca-jumpbar-links">
+          <a
+            href="#ca-sec-kpi"
+            className="ca-jump-pill"
+            onClick={(e) => handleAnchorClick(e, "ca-sec-kpi")}
+          >
+            <span>🎯 核心指标</span>
+          </a>
+          <a
+            href="#ca-sec-charts"
+            className="ca-jump-pill"
+            onClick={(e) => handleAnchorClick(e, "ca-sec-charts")}
+          >
+            <span>📈 核心主图</span>
+          </a>
+          <a
+            href="#ca-sec-enrichment"
+            className="ca-jump-pill"
+            onClick={(e) => handleAnchorClick(e, "ca-sec-enrichment")}
+          >
+            <span>🧩 深度拆解</span>
+          </a>
+          <a
+            href="#ca-sec-insight"
+            className="ca-jump-pill"
+            onClick={(e) => handleAnchorClick(e, "ca-sec-insight")}
+          >
+            <span>💡 核心观察</span>
+          </a>
+          {activeDetailTables.length > 0 && (
+            <a
+              href="#ca-sec-details"
+              className="ca-jump-pill"
+              onClick={(e) => handleAnchorClick(e, "ca-sec-details")}
+            >
+              <span>📋 底层明细</span>
+            </a>
+          )}
+        </div>
+      </nav>
+
       {/* 2. 核心指标条：严格 4 个紧凑指标，单行排布不折行挤占图表 */}
-      <MetricStrip items={activeMetrics} />
+      <section id="ca-sec-kpi" className="ca-section-kpi" aria-label="核心决策指标">
+        <MetricStrip items={activeMetrics} />
+      </section>
 
       {/* 3. 首屏核心主体图表 (每图注明明确周期与口径，绝不混加) */}
-      <div className="ca-grid" role="region" aria-label="核心业务图表分析">
+      <div id="ca-sec-charts" className="ca-grid" role="region" aria-label="核心业务图表分析">
         {/* ---------------- 凯乐石 KAILAS ---------------- */}
         {projectId === "kailas" && activeSnapshot === "daily-1018" && (
           <>
@@ -873,11 +932,16 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       </div>
 
       {/* 3.1 战役增强面板 (各项目总览 Rich 扩展分析卡) */}
-      <CampaignEnrichmentPanels dashboard={dashboard} section="overview" activeSnapshot={activeSnapshot} />
+      <section id="ca-sec-enrichment" className="ca-section-enrichment" aria-label="深度业务拆解">
+        <CampaignEnrichmentPanels dashboard={dashboard} section="overview" activeSnapshot={activeSnapshot} />
+      </section>
 
       {/* 4. 底部业务洞察 (从真实数据动态派生，无硬编码虚假结论) */}
-      <section className="ca-insight" aria-label="战役业务解读">
-        <h4 className="ca-insight-title">💡 战役分析与核心观察</h4>
+      <section id="ca-sec-insight" className="ca-insight" aria-label="战役业务解读">
+        <div className="ca-insight-header">
+          <h4 className="ca-insight-title">💡 战役分析与核心观察</h4>
+          <span className="ca-insight-tag">经营解读</span>
+        </div>
         <p className="ca-insight-text">{dynamicInsight}</p>
       </section>
 
@@ -898,7 +962,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
       {/* 6. 底层明细表格 (仅展示当前图表关联表，完整呈现全部行不静默截断) */}
       {activeDetailTables.length > 0 && (
-        <details className="ca-details-collapse">
+        <details id="ca-sec-details" className="ca-details-collapse">
           <summary className="ca-details-summary">
             <span>查看关联业务明细数据 (当前看板对应 {activeDetailTables.length + (activeDailyDataset ? 1 : 0)} 项数据源，点击展开)</span>
           </summary>
