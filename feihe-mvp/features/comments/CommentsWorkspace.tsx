@@ -166,11 +166,11 @@ function LegacyCommentsWorkspace({
         }
       >
         <div className="workspace-header-actions">
+          <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
           <SyncButton projectId={projectId} onRefresh={onRefresh} />
         </div>
       </PageHeader>
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       <div

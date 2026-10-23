@@ -131,7 +131,13 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
     return (
       <div className="mdd-root">
         <div className="mdd-header">
-          <h3 className="mdd-title">商业笔记素材投放效率</h3>
+          <div className="mdd-header-left">
+            <span className="mdd-chapter-badge">01</span>
+            <div>
+              <h3 className="mdd-title">商业笔记素材投放效率</h3>
+              <span className="mdd-subtitle">商单素材投流规模、归因UV成本与全量笔记效率明细</span>
+            </div>
+          </div>
           <div className="mdd-btn-group" role="group" aria-label="渠道筛选">
             <button
               type="button"
@@ -359,6 +365,27 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
       return 'mdd-cell-high';
     }
 
+    let maxCellCount = 1;
+    cellCountMap.forEach((cnt) => {
+      if (cnt && cnt > maxCellCount) maxCellCount = cnt;
+    });
+
+    let maxDimTotal = 1;
+    dimTotalMap.forEach((tot) => {
+      if (tot > maxDimTotal) maxDimTotal = tot;
+    });
+
+    function getCellHeatStyle(count: number | null): React.CSSProperties | undefined {
+      if (count === null || count === 0) return undefined;
+      const ratio = Math.min(1, count / maxCellCount);
+      const alpha = 0.12 + ratio * 0.72;
+      return {
+        backgroundColor: `rgba(44, 113, 104, ${alpha.toFixed(2)})`,
+        color: ratio > 0.45 ? '#ffffff' : '#004d40',
+        fontWeight: ratio > 0.25 ? 700 : 600,
+      };
+    }
+
     // 2. Build Theme & Format Bars for Area 2
     const themeRows = themeTable?.rows || [];
     const themeMap = new Map<string, { imageText: number; video: number; other: number; total: number }>();
@@ -420,7 +447,13 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
     return (
       <div className="mdd-root">
         <div className="mdd-header">
-          <h3 className="mdd-title">二核合作达人执行状态与内容形式</h3>
+          <div className="mdd-header-left">
+            <span className="mdd-chapter-badge">02</span>
+            <div>
+              <h3 className="mdd-title">二核合作达人执行状态与内容形式</h3>
+              <span className="mdd-subtitle">主推型号全链路审核进度与图文视频内容分布</span>
+            </div>
+          </div>
         </div>
 
         <div className="mdd-grid">
@@ -474,12 +507,28 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
                               const key = `${dim}::${st}`;
                               const count = cellCountMap.has(key) ? cellCountMap.get(key)! : 0;
                               return (
-                                <td key={st} className={`mdd-matrix-cell ${getCellClass(count)}`}>
+                                <td
+                                  key={st}
+                                  className={`mdd-matrix-cell ${getCellClass(count)}`}
+                                  style={getCellHeatStyle(count)}
+                                >
                                   {count === null ? '—' : count}
                                 </td>
                               );
                             })}
-                            <td className="mdd-matrix-row-total">{rowHasNull ? '—' : rowTot}</td>
+                            <td className="mdd-matrix-row-total">
+                              <div className="mdd-row-total-wrap">
+                                <span>{rowHasNull ? '—' : rowTot}</span>
+                                {!rowHasNull && rowTot > 0 && (
+                                  <div className="mdd-row-total-bar-track">
+                                    <div
+                                      className="mdd-row-total-bar-fill"
+                                      style={{ width: `${Math.min(100, (rowTot / maxDimTotal) * 100)}%` }}
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            </td>
                           </tr>
                         );
                       })}

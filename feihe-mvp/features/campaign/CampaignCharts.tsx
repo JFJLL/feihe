@@ -1714,6 +1714,92 @@ export function ScatterChart({
         onMouseLeave={() => setActiveIdx(null)}
       >
         <title>{`散点相关图: 横轴 ${xLabel}，纵轴 ${yLabel}`}</title>
+        {/* 四象限柔和底色与水印标签 */}
+        {(() => {
+          const splitX = Math.max(leftPad, Math.min(totalWidth - rightPad, scaleX(avgX)));
+          const splitY = Math.max(topPad, Math.min(totalHeight - bottomPad, scaleY(avgY)));
+          return (
+            <g className="ca-scatter-quadrants">
+              {/* 左上: 🌟 高效优质区 */}
+              <rect
+                x={leftPad}
+                y={topPad}
+                width={Math.max(0, splitX - leftPad)}
+                height={Math.max(0, splitY - topPad)}
+                fill="rgba(44, 113, 104, 0.05)"
+                rx={4}
+              />
+              <text
+                x={leftPad + 8}
+                y={topPad + 15}
+                fill="rgba(44, 113, 104, 0.75)"
+                fontSize="10.5"
+                fontWeight="700"
+              >
+                🌟 高效优质区
+              </text>
+
+              {/* 右上: ⚡ 放量竞争区 */}
+              <rect
+                x={splitX}
+                y={topPad}
+                width={Math.max(0, totalWidth - rightPad - splitX)}
+                height={Math.max(0, splitY - topPad)}
+                fill="rgba(184, 138, 69, 0.04)"
+                rx={4}
+              />
+              <text
+                x={totalWidth - rightPad - 8}
+                y={topPad + 15}
+                textAnchor="end"
+                fill="rgba(184, 138, 69, 0.75)"
+                fontSize="10.5"
+                fontWeight="700"
+              >
+                ⚡ 放量竞争区
+              </text>
+
+              {/* 左下: 🔍 低耗观察区 */}
+              <rect
+                x={leftPad}
+                y={splitY}
+                width={Math.max(0, splitX - leftPad)}
+                height={Math.max(0, totalHeight - bottomPad - splitY)}
+                fill="rgba(130, 115, 163, 0.04)"
+                rx={4}
+              />
+              <text
+                x={leftPad + 8}
+                y={totalHeight - bottomPad - 8}
+                fill="rgba(130, 115, 163, 0.75)"
+                fontSize="10.5"
+                fontWeight="700"
+              >
+                🔍 低耗观察区
+              </text>
+
+              {/* 右下: ⚠️ 高本待优区 */}
+              <rect
+                x={splitX}
+                y={splitY}
+                width={Math.max(0, totalWidth - rightPad - splitX)}
+                height={Math.max(0, totalHeight - bottomPad - splitY)}
+                fill="rgba(189, 121, 100, 0.05)"
+                rx={4}
+              />
+              <text
+                x={totalWidth - rightPad - 8}
+                y={totalHeight - bottomPad - 8}
+                textAnchor="end"
+                fill="rgba(189, 121, 100, 0.75)"
+                fontSize="10.5"
+                fontWeight="700"
+              >
+                ⚠️ 高本待优区
+              </text>
+            </g>
+          );
+        })()}
         {[0, 0.25, 0.5, 0.75, 1].map((t) => {
           const val = minX + t * (maxX - minX);
           const xPos = scaleX(val);
@@ -1784,6 +1870,23 @@ export function ScatterChart({
           strokeWidth="1.2"
           strokeDasharray="4 4"
         />
+        <text
+          x={scaleX(avgX) + 4}
+          y={topPad + 28}
+          fill={CAMPAIGN_PALETTE.textSubtle}
+          fontSize="9.5"
+        >
+          X均值 {fmtNum(avgX, 2)}
+        </text>
+        <text
+          x={totalWidth - rightPad - 4}
+          y={scaleY(avgY) - 4}
+          textAnchor="end"
+          fill={CAMPAIGN_PALETTE.textSubtle}
+          fontSize="9.5"
+        >
+          Y均值 {fmtNum(avgY, 2)}
+        </text>
 
         <text
           x={totalWidth / 2}
@@ -1869,6 +1972,672 @@ export function ScatterChart({
           );
         })}
       </svg>
+    </div>
+  );
+}
+
+// ============================================================================
+// 8. DualArenaChart (双阵营拔河对决卡: 100% 拔河比例条 + 多指标对决行)
+// ============================================================================
+
+export interface DualArenaMetricRow {
+  label: string;
+  leftValue: number | null;
+  rightValue: number | null;
+  unit?: string;
+  higherIsBetter?: boolean; // true: 大值优(如CTR/ROI), false: 小值优(如CPC/CPM/CPE)
+}
+
+export interface DualArenaChartProps {
+  leftTitle: string;
+  rightTitle: string;
+  leftPrimary: number | null;
+  rightPrimary: number | null;
+  primaryLabel?: string;
+  primaryUnit?: string;
+  metrics: DualArenaMetricRow[];
+  leftColor?: string;
+  rightColor?: string;
+}
+
+export function DualArenaChart({
+  leftTitle,
+  rightTitle,
+  leftPrimary,
+  rightPrimary,
+  primaryLabel = '消耗金额',
+  primaryUnit = '元',
+  metrics = [],
+  leftColor = CAMPAIGN_PALETTE.primary,
+  rightColor = CAMPAIGN_PALETTE.purple,
+}: DualArenaChartProps) {
+  const hasLeftPrimary = typeof leftPrimary === 'number' && Number.isFinite(leftPrimary);
+  const hasRightPrimary = typeof rightPrimary === 'number' && Number.isFinite(rightPrimary);
+  const totalPrimary = (hasLeftPrimary ? leftPrimary! : 0) + (hasRightPrimary ? rightPrimary! : 0);
+  const leftPct = totalPrimary > 0 && hasLeftPrimary ? (leftPrimary! / totalPrimary) * 100 : 50;
+  const rightPct = totalPrimary > 0 && hasRightPrimary ? 100 - leftPct : 50;
+
+  return (
+    <div className="ca-dual-arena">
+      {/* 顶部拔河对决比例卡 */}
+      <div className="ca-arena-header">
+        <div className="ca-arena-side-info ca-arena-side-info-left">
+          <div className="ca-arena-title-tag" style={{ borderLeftColor: leftColor }}>
+            {leftTitle}
+          </div>
+          <div className="ca-arena-primary-num" style={{ color: leftColor }}>
+            {fmtNum(leftPrimary)}
+            <span className="ca-arena-primary-unit">{primaryUnit}</span>
+          </div>
+          <div className="ca-arena-primary-sub">
+            {primaryLabel} · <strong>{hasLeftPrimary && totalPrimary > 0 ? `${leftPct.toFixed(1)}%` : '—'}</strong>
+          </div>
+        </div>
+
+        <div className="ca-arena-vs-badge">VS</div>
+
+        <div className="ca-arena-side-info ca-arena-side-info-right">
+          <div className="ca-arena-title-tag" style={{ borderRightColor: rightColor }}>
+            {rightTitle}
+          </div>
+          <div className="ca-arena-primary-num" style={{ color: rightColor }}>
+            {fmtNum(rightPrimary)}
+            <span className="ca-arena-primary-unit">{primaryUnit}</span>
+          </div>
+          <div className="ca-arena-primary-sub">
+            {primaryLabel} · <strong>{hasRightPrimary && totalPrimary > 0 ? `${rightPct.toFixed(1)}%` : '—'}</strong>
+          </div>
+        </div>
+      </div>
+
+      {/* 100% 拔河进度条 */}
+      <div className="ca-arena-track" role="progressbar" aria-label={`${leftTitle} vs ${rightTitle} 拔河比例`}>
+        <div
+          className="ca-arena-track-bar ca-arena-track-left"
+          style={{ width: `${leftPct}%`, backgroundColor: leftColor }}
+        >
+          <span className="ca-arena-track-pct">{leftPct.toFixed(1)}%</span>
+        </div>
+        <div className="ca-arena-track-divider" />
+        <div
+          className="ca-arena-track-bar ca-arena-track-right"
+          style={{ width: `${rightPct}%`, backgroundColor: rightColor }}
+        >
+          <span className="ca-arena-track-pct">{rightPct.toFixed(1)}%</span>
+        </div>
+      </div>
+
+      {/* 下方多指标对决行 */}
+      <div className="ca-arena-metrics">
+        {metrics.map((row, idx) => {
+          const hasLeft = typeof row.leftValue === 'number' && Number.isFinite(row.leftValue);
+          const hasRight = typeof row.rightValue === 'number' && Number.isFinite(row.rightValue);
+          const higherIsBetter = row.higherIsBetter !== false;
+
+          let leftWins = false;
+          let rightWins = false;
+          if (hasLeft && hasRight && row.leftValue !== row.rightValue) {
+            if (higherIsBetter) {
+              leftWins = row.leftValue! > row.rightValue!;
+              rightWins = row.rightValue! > row.leftValue!;
+            } else {
+              leftWins = row.leftValue! < row.rightValue!;
+              rightWins = row.rightValue! < row.leftValue!;
+            }
+          }
+
+          const maxVal =
+            Math.max(hasLeft ? Math.abs(row.leftValue!) : 0, hasRight ? Math.abs(row.rightValue!) : 0) || 1;
+          const leftBarPct =
+            hasLeft && maxVal > 0 ? Math.min(100, Math.max(6, (Math.abs(row.leftValue!) / maxVal) * 100)) : 0;
+          const rightBarPct =
+            hasRight && maxVal > 0 ? Math.min(100, Math.max(6, (Math.abs(row.rightValue!) / maxVal) * 100)) : 0;
+
+          return (
+            <div key={row.label || idx} className="ca-arena-row" tabIndex={0}>
+              {/* 左翼 */}
+              <div className="ca-arena-cell ca-arena-cell-left">
+                {leftWins && <span className="ca-arena-badge-win">优势</span>}
+                <span className={`ca-arena-val ${leftWins ? 'ca-arena-val-win' : ''}`}>
+                  {fmtNum(row.leftValue)} {row.unit || ''}
+                </span>
+                <div className="ca-arena-bar-track ca-arena-track-reverse">
+                  {hasLeft ? (
+                    <div
+                      className="ca-arena-bar-fill"
+                      style={{ width: `${leftBarPct}%`, backgroundColor: leftColor }}
+                    />
+                  ) : (
+                    <span className="ca-arena-na">—</span>
+                  )}
+                </div>
+              </div>
+
+              {/* 中轴指标名称 */}
+              <div className="ca-arena-label-col">
+                <span className="ca-arena-metric-label">{row.label}</span>
+                <span className="ca-arena-metric-dir">{higherIsBetter ? '高优' : '低优'}</span>
+              </div>
+
+              {/* 右翼 */}
+              <div className="ca-arena-cell ca-arena-cell-right">
+                <div className="ca-arena-bar-track">
+                  {hasRight ? (
+                    <div
+                      className="ca-arena-bar-fill"
+                      style={{ width: `${rightBarPct}%`, backgroundColor: rightColor }}
+                    />
+                  ) : (
+                    <span className="ca-arena-na">—</span>
+                  )}
+                </div>
+                <span className={`ca-arena-val ${rightWins ? 'ca-arena-val-win' : ''}`}>
+                  {fmtNum(row.rightValue)} {row.unit || ''}
+                </span>
+                {rightWins && <span className="ca-arena-badge-win">优势</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// 9. ButterflyCostChart (单位成本双翼蝴蝶图: 中轴对称 + 双向成本对比)
+// ============================================================================
+
+export interface ButterflyDatum {
+  label: string;
+  leftVal: number | null;
+  rightVal: number | null;
+  spend?: number | null;
+}
+
+export interface ButterflyCostChartProps {
+  data: ButterflyDatum[];
+  leftLabel: string;
+  rightLabel: string;
+  leftUnit?: string;
+  rightUnit?: string;
+  leftColor?: string;
+  rightColor?: string;
+}
+
+export function ButterflyCostChart({
+  data,
+  leftLabel,
+  rightLabel,
+  leftUnit = '元',
+  rightUnit = '元',
+  leftColor = CAMPAIGN_PALETTE.primary,
+  rightColor = CAMPAIGN_PALETTE.purple,
+}: ButterflyCostChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="ca-empty">
+        <div className="ca-empty-title">暂无可对比的成本数据</div>
+        <div className="ca-empty-hint">录入单位成本后呈现双翼中轴对称对比</div>
+      </div>
+    );
+  }
+
+  const validLeft = data.filter(
+    (d): d is ButterflyDatum & { leftVal: number } =>
+      typeof d.leftVal === 'number' && Number.isFinite(d.leftVal) && d.leftVal > 0
+  );
+  const validRight = data.filter(
+    (d): d is ButterflyDatum & { rightVal: number } =>
+      typeof d.rightVal === 'number' && Number.isFinite(d.rightVal) && d.rightVal > 0
+  );
+  const maxLeft = validLeft.length ? Math.max(...validLeft.map((d) => d.leftVal)) : 1;
+  const maxRight = validRight.length ? Math.max(...validRight.map((d) => d.rightVal)) : 1;
+  const minLeft = validLeft.length ? Math.min(...validLeft.map((d) => d.leftVal)) : null;
+  const minRight = validRight.length ? Math.min(...validRight.map((d) => d.rightVal)) : null;
+
+  return (
+    <div className="ca-butterfly-chart">
+      {/* 表头三栏 */}
+      <div className="ca-butterfly-header">
+        <div className="ca-butterfly-header-col ca-butterfly-header-left" style={{ color: leftColor }}>
+          <span>◀ {leftLabel}</span>
+          <span className="ca-butterfly-header-unit">({leftUnit})</span>
+        </div>
+        <div className="ca-butterfly-header-col ca-butterfly-header-center">
+          <span>投放版位 / 任务组</span>
+        </div>
+        <div className="ca-butterfly-header-col ca-butterfly-header-right" style={{ color: rightColor }}>
+          <span>{rightLabel} ▶</span>
+          <span className="ca-butterfly-header-unit">({rightUnit})</span>
+        </div>
+      </div>
+
+      {/* 每一行对称双翼条 */}
+      <div className="ca-butterfly-rows">
+        {data.map((item, idx) => {
+          const hasLeft = typeof item.leftVal === 'number' && Number.isFinite(item.leftVal);
+          const hasRight = typeof item.rightVal === 'number' && Number.isFinite(item.rightVal);
+          const leftBarPct = hasLeft && maxLeft > 0 ? Math.min(100, Math.max(6, (item.leftVal! / maxLeft) * 100)) : 0;
+          const rightBarPct =
+            hasRight && maxRight > 0 ? Math.min(100, Math.max(6, (item.rightVal! / maxRight) * 100)) : 0;
+          const isBestLeft = minLeft !== null && item.leftVal === minLeft;
+          const isBestRight = minRight !== null && item.rightVal === minRight;
+
+          return (
+            <div
+              key={item.label || idx}
+              className="ca-butterfly-row"
+              tabIndex={0}
+              role="row"
+              aria-label={`${item.label}: ${leftLabel}=${fmtNum(item.leftVal)} ${leftUnit}, ${rightLabel}=${fmtNum(item.rightVal)} ${rightUnit}`}
+            >
+              {/* 左翼条 (向左延伸) */}
+              <div className="ca-butterfly-wing ca-butterfly-wing-left">
+                <div className="ca-butterfly-val-wrap ca-butterfly-val-left">
+                  {isBestLeft && <span className="ca-butterfly-badge-tag ca-badge-left">⚡低耗</span>}
+                  <span className={`ca-butterfly-val ${isBestLeft ? 'ca-butterfly-val-best' : ''}`}>
+                    {fmtNum(item.leftVal)}
+                    {hasLeft && <span className="ca-butterfly-unit"> {leftUnit}</span>}
+                  </span>
+                </div>
+                <div className="ca-butterfly-bar-container ca-bar-container-left">
+                  {hasLeft ? (
+                    <div
+                      className="ca-butterfly-bar ca-bar-left"
+                      style={{
+                        width: `${leftBarPct}%`,
+                        backgroundColor: leftColor,
+                      }}
+                    />
+                  ) : (
+                    <span className="ca-butterfly-na">—</span>
+                  )}
+                </div>
+              </div>
+
+              {/* 中轴版位胶囊徽标 */}
+              <div className="ca-butterfly-center-col">
+                <div className="ca-butterfly-badge" title={item.label}>
+                  <span className="ca-butterfly-badge-text">{item.label}</span>
+                  {typeof item.spend === 'number' && item.spend > 0 && (
+                    <span className="ca-butterfly-badge-sub">¥{fmtNum(item.spend, 0)}</span>
+                  )}
+                </div>
+              </div>
+
+              {/* 右翼条 (向右延伸) */}
+              <div className="ca-butterfly-wing ca-butterfly-wing-right">
+                <div className="ca-butterfly-bar-container ca-bar-container-right">
+                  {hasRight ? (
+                    <div
+                      className="ca-butterfly-bar ca-bar-right"
+                      style={{
+                        width: `${rightBarPct}%`,
+                        backgroundColor: rightColor,
+                      }}
+                    />
+                  ) : (
+                    <span className="ca-butterfly-na">—</span>
+                  )}
+                </div>
+                <div className="ca-butterfly-val-wrap ca-butterfly-val-right">
+                  <span className={`ca-butterfly-val ${isBestRight ? 'ca-butterfly-val-best' : ''}`}>
+                    {fmtNum(item.rightVal)}
+                    {hasRight && <span className="ca-butterfly-unit"> {rightUnit}</span>}
+                  </span>
+                  {isBestRight && <span className="ca-butterfly-badge-tag ca-badge-right">🏆最优引流</span>}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// 10. PlacementScorecardChart (多维版位效能评分矩阵 + 100% 消耗构成色带)
+// ============================================================================
+
+export interface ScorecardRow {
+  name: string;
+  spend: number | null;
+  ctr?: number | null;
+  cpc?: number | null;
+  cpm?: number | null;
+  cpe?: number | null;
+  cpuv?: number | null;
+  roi?: number | null;
+  gmv?: number | null;
+}
+
+export interface PlacementScorecardChartProps {
+  rows: ScorecardRow[];
+  mode?: 'placement' | 'four-lines';
+}
+
+export function PlacementScorecardChart({
+  rows = [],
+  mode = 'placement',
+}: PlacementScorecardChartProps) {
+  if (!rows || rows.length === 0) {
+    return (
+      <div className="ca-empty">
+        <div className="ca-empty-title">暂无评分矩阵数据</div>
+        <div className="ca-empty-hint">录入版位或任务组数据后自动生成多维评分卡</div>
+      </div>
+    );
+  }
+
+  const validSpends = rows
+    .map((r) => r.spend)
+    .filter((s): s is number => typeof s === 'number' && Number.isFinite(s) && s > 0);
+  const totalSpend = validSpends.reduce((a, b) => a + b, 0);
+
+  const findBest = (vals: (number | null | undefined)[], higherBetter: boolean) => {
+    const valid = vals.filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
+    if (!valid.length) return null;
+    return higherBetter ? Math.max(...valid) : Math.min(...valid);
+  };
+
+  const bestCtr = findBest(rows.map((r) => r.ctr), true);
+  const bestCpc = findBest(rows.map((r) => r.cpc), false);
+  const bestCpm = findBest(rows.map((r) => r.cpm), false);
+  const bestCpe = findBest(rows.map((r) => r.cpe), false);
+  const bestCpuv = findBest(rows.map((r) => r.cpuv), false);
+  const bestGmv = findBest(rows.map((r) => r.gmv), true);
+  const bestRoi = findBest(rows.map((r) => r.roi), true);
+
+  const colors = DEFAULT_SERIES_COLORS;
+
+  return (
+    <div className="ca-scorecard-wrap">
+      {/* 顶部 100% 消耗构成 Segmented 分段色带 */}
+      <div className="ca-scorecard-header-bar">
+        <div className="ca-scorecard-bar-title">
+          <span>消耗构成分布</span>
+          <span className="ca-scorecard-total-spend">总额 ¥{fmtNum(totalSpend)}</span>
+        </div>
+        <div className="ca-scorecard-segments" role="progressbar" aria-label="消耗构成比例">
+          {rows.map((r, i) => {
+            const hasSpend = typeof r.spend === 'number' && Number.isFinite(r.spend) && r.spend > 0;
+            const pct = totalSpend > 0 && hasSpend ? (r.spend! / totalSpend) * 100 : 0;
+            const color = colors[i % colors.length];
+            if (pct <= 0) return null;
+            return (
+              <div
+                key={r.name || i}
+                className="ca-scorecard-seg-item"
+                style={{ width: `${pct}%`, backgroundColor: color }}
+                title={`${r.name}: ¥${fmtNum(r.spend)} (${pct.toFixed(1)}%)`}
+              />
+            );
+          })}
+        </div>
+        <div className="ca-scorecard-legend">
+          {rows.map((r, i) => {
+            const hasSpend = typeof r.spend === 'number' && Number.isFinite(r.spend) && r.spend > 0;
+            const pct = totalSpend > 0 && hasSpend ? (r.spend! / totalSpend) * 100 : 0;
+            const color = colors[i % colors.length];
+            return (
+              <span key={r.name || i} className="ca-scorecard-legend-item">
+                <span className="ca-scorecard-dot" style={{ backgroundColor: color }} />
+                <strong>{r.name}</strong>
+                <span>¥{fmtNum(r.spend)}</span>
+                <span className="ca-scorecard-pct">({pct > 0 ? `${pct.toFixed(1)}%` : '—'})</span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 主体多维指标热力评分矩阵表 */}
+      <div className="ca-table-wrap ca-scorecard-table-wrap">
+        <table className="ca-scorecard-table" role="table">
+          <thead>
+            <tr>
+              <th className="ca-scorecard-th ca-th-name">{mode === 'four-lines' ? '任务组 / 渠道' : '投放版位'}</th>
+              <th className="ca-scorecard-th">消耗份额</th>
+              <th className="ca-scorecard-th">点击率 (CTR)</th>
+              {mode === 'four-lines' ? (
+                <>
+                  <th className="ca-scorecard-th">点击成本 (CPC)</th>
+                  <th className="ca-scorecard-th">访客成本 (CPUV)</th>
+                  <th className="ca-scorecard-th">归因产出 (GMV)</th>
+                  <th className="ca-scorecard-th">综合投资比 (ROI)</th>
+                </>
+              ) : (
+                <>
+                  <th className="ca-scorecard-th">曝光成本 (CPM)</th>
+                  <th className="ca-scorecard-th">点击成本 (CPC)</th>
+                  <th className="ca-scorecard-th">互动成本 (CPE)</th>
+                  <th className="ca-scorecard-th">访客成本 (CPUV)</th>
+                </>
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, idx) => {
+              const hasSpend = typeof r.spend === 'number' && Number.isFinite(r.spend) && r.spend > 0;
+              const spendPct = totalSpend > 0 && hasSpend ? (r.spend! / totalSpend) * 100 : 0;
+              const isBestCtr = bestCtr !== null && r.ctr === bestCtr;
+              const isBestCpc = bestCpc !== null && r.cpc === bestCpc;
+              const isBestCpm = bestCpm !== null && r.cpm === bestCpm;
+              const isBestCpe = bestCpe !== null && r.cpe === bestCpe;
+              const isBestCpuv = bestCpuv !== null && r.cpuv === bestCpuv;
+              const isBestGmv = bestGmv !== null && r.gmv === bestGmv;
+              const isBestRoi = bestRoi !== null && r.roi === bestRoi;
+
+              return (
+                <tr key={r.name || idx} className="ca-scorecard-tr">
+                  <td className="ca-scorecard-td ca-td-name">
+                    <span className="ca-scorecard-name-badge">{r.name}</span>
+                  </td>
+                  <td className="ca-scorecard-td">
+                    <div className="ca-scorecard-bar-cell">
+                      <div className="ca-scorecard-mini-bar">
+                        <div
+                          className="ca-scorecard-mini-fill"
+                          style={{
+                            width: `${Math.min(100, spendPct)}%`,
+                            backgroundColor: colors[idx % colors.length],
+                          }}
+                        />
+                      </div>
+                      <span className="ca-scorecard-cell-val">{spendPct > 0 ? `${spendPct.toFixed(1)}%` : '—'}</span>
+                    </div>
+                  </td>
+                  <td className={`ca-scorecard-td ${isBestCtr ? 'ca-scorecard-cell-best' : ''}`}>
+                    <span className="ca-scorecard-cell-val">
+                      {typeof r.ctr === 'number' && Number.isFinite(r.ctr) ? `${fmtNum(r.ctr, 2)}%` : '—'}
+                    </span>
+                    {isBestCtr && <span className="ca-scorecard-tag-best">🏆最高</span>}
+                  </td>
+                  {mode === 'four-lines' ? (
+                    <>
+                      <td className={`ca-scorecard-td ${isBestCpc ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.cpc === 'number' && Number.isFinite(r.cpc) ? `¥${fmtNum(r.cpc, 2)}` : '—'}
+                        </span>
+                        {isBestCpc && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                      </td>
+                      <td className={`ca-scorecard-td ${isBestCpuv ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.cpuv === 'number' && Number.isFinite(r.cpuv) ? `¥${fmtNum(r.cpuv, 2)}` : '—'}
+                        </span>
+                        {isBestCpuv && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                      </td>
+                      <td className={`ca-scorecard-td ${isBestGmv ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.gmv === 'number' && Number.isFinite(r.gmv) ? `¥${fmtNum(r.gmv, 2)}` : '—'}
+                        </span>
+                        {isBestGmv && <span className="ca-scorecard-tag-best">🏆最高</span>}
+                      </td>
+                      <td className={`ca-scorecard-td ${isBestRoi ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.roi === 'number' && Number.isFinite(r.roi) ? `${fmtNum(r.roi, 2)}倍` : '—'}
+                        </span>
+                        {isBestRoi && <span className="ca-scorecard-tag-best">🏆最高</span>}
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className={`ca-scorecard-td ${isBestCpm ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.cpm === 'number' && Number.isFinite(r.cpm) ? `¥${fmtNum(r.cpm, 2)}` : '—'}
+                        </span>
+                        {isBestCpm && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                      </td>
+                      <td className={`ca-scorecard-td ${isBestCpc ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.cpc === 'number' && Number.isFinite(r.cpc) ? `¥${fmtNum(r.cpc, 2)}` : '—'}
+                        </span>
+                        {isBestCpc && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                      </td>
+                      <td className={`ca-scorecard-td ${isBestCpe ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.cpe === 'number' && Number.isFinite(r.cpe) ? `¥${fmtNum(r.cpe, 2)}` : '—'}
+                        </span>
+                        {isBestCpe && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                      </td>
+                      <td className={`ca-scorecard-td ${isBestCpuv ? 'ca-scorecard-cell-best' : ''}`}>
+                        <span className="ca-scorecard-cell-val">
+                          {typeof r.cpuv === 'number' && Number.isFinite(r.cpuv) ? `¥${fmtNum(r.cpuv, 2)}` : '—'}
+                        </span>
+                        {isBestCpuv && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                      </td>
+                    </>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// 11. LollipopRankChart (棒棒糖排行榜 + 辅助指标胶囊)
+// ============================================================================
+
+export interface LollipopDatum {
+  label: string;
+  value: number | null;
+  secondaryLabel?: string;
+  secondaryValue?: string;
+  badge?: string;
+  color?: string;
+}
+
+export interface LollipopRankChartProps {
+  data: LollipopDatum[];
+  unit?: string;
+  maxItems?: number;
+}
+
+export function LollipopRankChart({
+  data = [],
+  unit = '',
+  maxItems = 10,
+}: LollipopRankChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="ca-empty">
+        <div className="ca-empty-title">暂无排行榜数据</div>
+        <div className="ca-empty-hint">录入指标项后自动按序呈现棒棒糖排行榜</div>
+      </div>
+    );
+  }
+
+  const items = data.slice(0, maxItems);
+  const validVals = items
+    .map((d) => d.value)
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v > 0);
+  const maxVal = validVals.length ? Math.max(...validVals) : 1;
+
+  const rankBadgeColors = [
+    CAMPAIGN_PALETTE.gold, // Top 1: 金
+    CAMPAIGN_PALETTE.purple, // Top 2: 紫
+    CAMPAIGN_PALETTE.primary, // Top 3: 青
+  ];
+
+  return (
+    <div className="ca-lollipop-chart">
+      {items.map((item, idx) => {
+        const hasVal = typeof item.value === 'number' && Number.isFinite(item.value);
+        const isZero = hasVal && item.value === 0;
+        const pct = hasVal && !isZero && maxVal > 0 ? Math.min(100, Math.max(3, (item.value! / maxVal) * 100)) : 0;
+        const rankNum = idx + 1;
+        const rankStr = rankNum < 10 ? `0${rankNum}` : `${rankNum}`;
+        const rankColor = rankNum <= 3 ? rankBadgeColors[rankNum - 1] : CAMPAIGN_PALETTE.slate;
+        const itemColor = item.color || (rankNum <= 3 ? rankBadgeColors[rankNum - 1] : CAMPAIGN_PALETTE.primary);
+
+        return (
+          <div
+            key={item.label || idx}
+            className="ca-lollipop-row"
+            tabIndex={0}
+            role="row"
+            aria-label={`排名 ${rankNum}: ${item.label}, 数值: ${hasVal ? `${fmtNum(item.value)} ${unit}` : '未录入'}`}
+          >
+            {/* 序号徽章 */}
+            <div
+              className={`ca-lollipop-rank ${rankNum <= 3 ? 'ca-lollipop-rank-top' : ''}`}
+              style={{ backgroundColor: rankColor }}
+            >
+              {rankStr}
+            </div>
+
+            {/* 项目名称 */}
+            <div className="ca-lollipop-label" title={item.label}>
+              <span>{item.label}</span>
+              {item.badge && <span className="ca-lollipop-badge">{item.badge}</span>}
+            </div>
+
+            {/* 棒棒糖导引杆与发光圆头 */}
+            <div className="ca-lollipop-track">
+              <div
+                className="ca-lollipop-stem"
+                style={{
+                  width: `${pct}%`,
+                  background: `linear-gradient(90deg, rgba(226, 232, 240, 0.4) 0%, ${itemColor} 100%)`,
+                }}
+              />
+              <div
+                className="ca-lollipop-dot"
+                style={{
+                  left: `${pct}%`,
+                  backgroundColor: itemColor,
+                  boxShadow: `0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 6px ${itemColor}66`,
+                }}
+              />
+            </div>
+
+            {/* 右侧数值与辅助效率胶囊 */}
+            <div className="ca-lollipop-readout">
+              <span className="ca-lollipop-val">
+                {hasVal ? (
+                  <>
+                    <strong>{fmtNum(item.value)}</strong>
+                    {unit && <span className="ca-lollipop-unit"> {unit}</span>}
+                  </>
+                ) : (
+                  <span className="ca-lollipop-na">—</span>
+                )}
+              </span>
+              {item.secondaryValue && (
+                <span className="ca-lollipop-secondary" title={item.secondaryLabel}>
+                  {item.secondaryValue}
+                </span>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

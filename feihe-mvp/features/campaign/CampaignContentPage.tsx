@@ -232,6 +232,20 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
 
       <MetricStrip items={stripItems} />
 
+      {/* 01 章节头: 达人执行漏斗与发布结构 */}
+      <div className="ca-chapter-header">
+        <div className="ca-chapter-title-group">
+          <span className="ca-chapter-badge">01</span>
+          <div className="ca-chapter-heading">
+            <h3 className="ca-chapter-title">达人执行漏斗与发布结构</h3>
+            <span className="ca-chapter-desc">达人履约流转节点、内容矩阵配比与发布目标达成跟踪</span>
+          </div>
+        </div>
+        <div className="ca-chapter-meta">
+          <span className="ca-chapter-period-tag">统计周期：{displayPeriod}</span>
+        </div>
+      </div>
+
       {/* 美菱专属: 环节库存柱图 + 平台/产品分布 */}
       {projectId === "meiling" && (
         <div className="ca-grid">
@@ -288,7 +302,9 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         </div>
       )}
 
-      <CampaignEnrichmentPanels dashboard={dashboard} section="content" />
+      <div id="ca-content-enrichment-slot" className="ca-content-enrichment-slot">
+        <CampaignEnrichmentPanels dashboard={dashboard} section="content" />
+      </div>
 
       {/* 日报动作记录 (展示原文日期与规划事项，不伪装实时任务执行状态) */}
       <div className="ca-panel">

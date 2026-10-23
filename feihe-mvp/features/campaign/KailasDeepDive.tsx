@@ -142,7 +142,14 @@ export function KailasDeepDive({ dashboard, section }: KailasDeepDiveProps) {
   if (section === 'ads') {
     return (
       <section className="ca-kdd-root">
-        <div className="ca-kdd-controls">
+        <div className="ca-kdd-header">
+          <div className="ca-kdd-header-left">
+            <span className="ca-kdd-chapter-badge">01</span>
+            <div>
+              <h3 className="ca-kdd-title">商业笔记与搜索词深度下钻</h3>
+              <span className="ca-kdd-subtitle">达人投放散点分布、Top8笔记效能与搜索词类CPUV透视</span>
+            </div>
+          </div>
           <div className="ca-kdd-toggle-group">
             <button
               type="button"
@@ -176,6 +183,15 @@ export function KailasDeepDive({ dashboard, section }: KailasDeepDiveProps) {
 
   return (
     <section className="ca-kdd-root">
+      <div className="ca-kdd-header">
+        <div className="ca-kdd-header-left">
+          <span className="ca-kdd-chapter-badge">02</span>
+          <div>
+            <h3 className="ca-kdd-title">内容端与投流端双轨洞察</h3>
+            <span className="ca-kdd-subtitle">自然端与投流端曝光互动对比、各执行批次达人素材费用构成</span>
+          </div>
+        </div>
+      </div>
       <ContentDualView
         organicVsPaidTable={organicVsPaidTable}
         materialDualTable={materialDualTable}

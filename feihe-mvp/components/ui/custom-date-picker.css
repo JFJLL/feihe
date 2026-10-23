@@ -16,10 +16,10 @@
 
 .custom-date-input-field {
   width: 100%;
-  min-width: 0;
+  min-width: 146px;
   min-height: 36px;
   box-sizing: border-box;
-  padding: 6px 32px 6px 10px;
+  padding: 6px 36px 6px 10px !important;
   font-family: inherit;
   font-size: 13px;
   color: #1e293b;
@@ -32,6 +32,11 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: textfield;
+}
+
+input[type="month"].custom-date-input-field {
+  min-width: 152px;
+  padding-right: 36px !important;
 }
 
 /* Completely hide native browser date/calendar indicators */

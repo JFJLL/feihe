@@ -30,6 +30,421 @@ import {
 import './huang-tiane.css';
 import { HuangAudienceInsights } from './HuangAudienceInsights';
 
+/* ==========================================================================
+   Subcomponents: Enterprise BI v5 Diverse Visualizations
+   ========================================================================== */
+
+interface ArenaMetricRow {
+  label: string;
+  valA: number | null;
+  valB: number | null;
+  formatA?: string;
+  formatB?: string;
+  unit?: string;
+  betterWhen?: 'higher' | 'lower';
+}
+
+interface DualArenaCardProps {
+  title: string;
+  subtitle?: string;
+  sideA: {
+    name: string;
+    spend: number | null;
+    spendRatio?: number | null;
+  };
+  sideB: {
+    name: string;
+    spend: number | null;
+    spendRatio?: number | null;
+  };
+  rows: ArenaMetricRow[];
+}
+
+function DualArenaCard({ title, subtitle, sideA, sideB, rows }: DualArenaCardProps) {
+  const totSpend = (sideA.spend || 0) + (sideB.spend || 0);
+  const ratioA =
+    typeof sideA.spendRatio === 'number' && Number.isFinite(sideA.spendRatio)
+      ? sideA.spendRatio
+      : totSpend > 0
+      ? ((sideA.spend || 0) / totSpend) * 100
+      : 50;
+  const ratioB =
+    typeof sideB.spendRatio === 'number' && Number.isFinite(sideB.spendRatio)
+      ? sideB.spendRatio
+      : totSpend > 0
+      ? ((sideB.spend || 0) / totSpend) * 100
+      : 50;
+
+  return (
+    <ChartPanel title={title} subtitle={subtitle}>
+      <div className="ht-dual-arena">
+        <div className="ht-arena-header">
+          <div className="ht-arena-side left">
+            <span className="ht-arena-dot left" />
+            <span className="ht-arena-name">{sideA.name}</span>
+            <span className="ht-arena-spend">{sideA.spend !== null ? formatCurrency(sideA.spend) : '—'}</span>
+            <span className="ht-arena-ratio-tag left">{ratioA.toFixed(1)}%</span>
+          </div>
+          <div className="ht-arena-vs">VS</div>
+          <div className="ht-arena-side right">
+            <span className="ht-arena-ratio-tag right">{ratioB.toFixed(1)}%</span>
+            <span className="ht-arena-spend">{sideB.spend !== null ? formatCurrency(sideB.spend) : '—'}</span>
+            <span className="ht-arena-name">{sideB.name}</span>
+            <span className="ht-arena-dot right" />
+          </div>
+        </div>
+
+        <div className="ht-arena-track" role="progressbar" aria-valuenow={ratioA} aria-valuemin={0} aria-valuemax={100}>
+          <div
+            className="ht-arena-bar left"
+            style={{ width: `${ratioA}%` }}
+            title={`${sideA.name}: ${ratioA.toFixed(1)}%`}
+          />
+          <div className="ht-arena-divider" />
+          <div
+            className="ht-arena-bar right"
+            style={{ width: `${ratioB}%` }}
+            title={`${sideB.name}: ${ratioB.toFixed(1)}%`}
+          />
+        </div>
+
+        <div className="ht-arena-rows">
+          {rows.map((row, idx) => {
+            const vA = row.valA;
+            const vB = row.valB;
+            let isABetter = false;
+            let isBBetter = false;
+            if (vA !== null && vB !== null && vA !== vB && row.betterWhen) {
+              if (row.betterWhen === 'higher') {
+                isABetter = vA > vB;
+                isBBetter = vB > vA;
+              } else {
+                isABetter = vA < vB;
+                isBBetter = vB < vA;
+              }
+            }
+
+            const absA = vA !== null ? Math.abs(vA) : 0;
+            const absB = vB !== null ? Math.abs(vB) : 0;
+            const sumVal = absA + absB;
+            const barA = sumVal > 0 ? (absA / sumVal) * 100 : 50;
+            const barB = 100 - barA;
+
+            return (
+              <div key={idx} className="ht-arena-row">
+                <div className={`ht-arena-cell left ${isABetter ? 'winner' : ''}`}>
+                  {isABetter && <span className="ht-advantage-badge">🏆 优势</span>}
+                  <span className="ht-arena-val">{row.formatA ?? (vA !== null ? formatNum(vA, 1) : '—')}</span>
+                  <div className="ht-arena-micro-track left">
+                    <div
+                      className="ht-arena-micro-fill left"
+                      style={{ width: `${Math.min(100, Math.max(10, barA))}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="ht-arena-mid-label">
+                  <span>{row.label}</span>
+                </div>
+
+                <div className={`ht-arena-cell right ${isBBetter ? 'winner' : ''}`}>
+                  <div className="ht-arena-micro-track right">
+                    <div
+                      className="ht-arena-micro-fill right"
+                      style={{ width: `${Math.min(100, Math.max(10, barB))}%` }}
+                    />
+                  </div>
+                  <span className="ht-arena-val">{row.formatB ?? (vB !== null ? formatNum(vB, 1) : '—')}</span>
+                  {isBBetter && <span className="ht-advantage-badge">🏆 优势</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </ChartPanel>
+  );
+}
+
+interface LollipopRow {
+  rank: number;
+  label: string;
+  spend: number | null;
+  clicks: number | null;
+  ctr: number | null;
+  cpc: number | null;
+}
+
+interface LollipopListProps {
+  title: string;
+  subtitle?: string;
+  rows: LollipopRow[];
+  maxSpend?: number;
+}
+
+function LollipopList({ title, subtitle, rows, maxSpend }: LollipopListProps) {
+  const computedMaxSpend =
+    maxSpend ||
+    Math.max(
+      ...rows.map((r) => r.spend || 0),
+      1
+    );
+
+  return (
+    <ChartPanel title={title} subtitle={subtitle}>
+      <div className="ht-lollipop-list">
+        {rows.map((row) => {
+          const ratio = row.spend ? Math.min(100, Math.max(4, (row.spend / computedMaxSpend) * 100)) : 0;
+          const isTop3 = row.rank <= 3;
+          return (
+            <div key={row.rank} className="ht-lollipop-item">
+              <span className={`ht-lollipop-rank ${isTop3 ? 'top' : ''}`}>
+                {String(row.rank).padStart(2, '0')}
+              </span>
+              <span className="ht-lollipop-name" title={row.label}>
+                {row.label}
+              </span>
+
+              <div className="ht-lollipop-bar-wrap">
+                <div className="ht-lollipop-track">
+                  <div className="ht-lollipop-fill" style={{ width: `${ratio}%` }}>
+                    <span className="ht-lollipop-head" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="ht-lollipop-metrics">
+                <span className="ht-lollipop-spend">
+                  {row.spend !== null ? formatCurrency(row.spend) : '—'}
+                </span>
+                <span className="ht-lollipop-capsule clicks">
+                  {row.clicks !== null ? `${formatNum(row.clicks, 0)} 点击` : '—'}
+                </span>
+                <span className="ht-lollipop-capsule ctr">
+                  {row.ctr !== null ? `CTR ${formatPercent(row.ctr, 2)}` : '—'}
+                </span>
+                <span className="ht-lollipop-capsule cpc">
+                  {row.cpc !== null ? `CPC ${formatCurrency(row.cpc)}` : '—'}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </ChartPanel>
+  );
+}
+
+interface ButterflyRow {
+  label: string;
+  spend: number | null;
+  middleInfo?: string;
+  costVal: number | null;
+  costLabel: string;
+  costUnit?: string;
+  costThresholdLow: number;
+  costThresholdHigh: number;
+  subCostVal?: number | null;
+  subCostLabel?: string;
+}
+
+interface ButterflyCardProps {
+  title: string;
+  subtitle?: string;
+  rows: ButterflyRow[];
+  maxSpend?: number;
+}
+
+function ButterflyCard({ title, subtitle, rows, maxSpend }: ButterflyCardProps) {
+  const computedMaxSpend =
+    maxSpend ||
+    Math.max(
+      ...rows.map((r) => r.spend || 0),
+      1
+    );
+
+  return (
+    <ChartPanel title={title} subtitle={subtitle}>
+      <div className="ht-butterfly-card">
+        <div className="ht-butterfly-header">
+          <span className="col-left">投放规模与消耗</span>
+          <span className="col-mid">转化基础</span>
+          <span className="col-right">单位成本与效能评定</span>
+        </div>
+
+        <div className="ht-butterfly-body">
+          {rows.map((r, idx) => {
+            const barWidth = r.spend ? Math.min(100, Math.max(6, (r.spend / computedMaxSpend) * 100)) : 0;
+            const cost = r.costVal;
+            let costTier: 'green' | 'teal' | 'amber' = 'teal';
+            if (cost !== null) {
+              if (cost <= r.costThresholdLow) costTier = 'green';
+              else if (cost > r.costThresholdHigh) costTier = 'amber';
+            }
+
+            return (
+              <div key={idx} className="ht-butterfly-row">
+                <div className="ht-butterfly-left">
+                  <span className="ht-butterfly-row-label" title={r.label}>
+                    {r.label}
+                  </span>
+                  <div className="ht-butterfly-bar-container">
+                    <div className="ht-butterfly-bar" style={{ width: `${barWidth}%` }} />
+                    <span className="ht-butterfly-spend-val">
+                      {r.spend !== null ? formatCurrency(r.spend) : '—'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="ht-butterfly-mid">
+                  <span>{r.middleInfo || '—'}</span>
+                </div>
+
+                <div className="ht-butterfly-right">
+                  <div className={`ht-butterfly-cost-badge ${costTier}`}>
+                    <span className="cost-name">{r.costLabel}</span>
+                    <span className="cost-num">
+                      {cost !== null ? (r.costUnit === '%' ? formatPercent(cost, 2) : formatCurrency(cost)) : '—'}
+                    </span>
+                  </div>
+                  {r.subCostVal !== null && r.subCostVal !== undefined && (
+                    <span className="ht-butterfly-subcost">
+                      {r.subCostLabel}: {formatCurrency(r.subCostVal)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </ChartPanel>
+  );
+}
+
+interface RegionRankGridProps {
+  title: string;
+  subtitle?: string;
+  provinces: Record<string, unknown>[];
+  totalSpend: number | null;
+  expanded: boolean;
+  onToggleExpand: () => void;
+}
+
+function RegionRankGrid({
+  title,
+  subtitle,
+  provinces,
+  totalSpend,
+  expanded,
+  onToggleExpand,
+}: RegionRankGridProps) {
+  const top10 = provinces.slice(0, 10);
+  const maxSpend = top10.length > 0 ? (parseNum(top10[0].spend) || 1) : 1;
+
+  return (
+    <ChartPanel
+      title={title}
+      subtitle={subtitle}
+      actions={
+        provinces.length > 10 ? (
+          <button type="button" className="ht-scope-tab-btn" onClick={onToggleExpand}>
+            {expanded ? '收起至Top10' : `展开全量(${provinces.length})`}
+          </button>
+        ) : undefined
+      }
+    >
+      <div className="ht-region-container">
+        <div className="ht-region-rank-grid">
+          {top10.map((p, idx) => {
+            const rank = idx + 1;
+            const provName = String(p.province || '—');
+            const spend = parseNum(p.spend);
+            const ratio = spend ? Math.min(100, Math.max(5, (spend / maxSpend) * 100)) : 0;
+            const engagements = parseNum(p.engagements);
+            const cpe = parseNum(p.cpe);
+            const ctr = parseNum(p.ctr);
+
+            return (
+              <div key={provName} className="ht-region-card">
+                <div className="ht-region-card-top">
+                  <div className="ht-region-info">
+                    <span
+                      className={`ht-region-badge ${
+                        rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'neutral'
+                      }`}
+                    >
+                      {rank <= 3 ? ['🥇 01', '🥈 02', '🥉 03'][rank - 1] : String(rank).padStart(2, '0')}
+                    </span>
+                    <span className="ht-region-name">{provName}</span>
+                  </div>
+                  <span className="ht-region-spend">{spend !== null ? formatCurrency(spend) : '—'}</span>
+                </div>
+
+                <div className="ht-region-bar-track">
+                  <div
+                    className={`ht-region-bar-fill ${rank <= 3 ? 'top' : ''}`}
+                    style={{ width: `${ratio}%` }}
+                  />
+                </div>
+
+                <div className="ht-region-card-bottom">
+                  <span className="ht-region-tag eng">
+                    {engagements !== null ? `${formatNum(engagements, 0)} 互动` : '—'}
+                  </span>
+                  <span className="ht-region-tag cpe">
+                    {cpe !== null ? `CPE ${formatCurrency(cpe)}` : '—'}
+                  </span>
+                  <span className="ht-region-tag ctr">
+                    {ctr !== null ? `CTR ${formatPercent(ctr, 2)}` : '—'}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {expanded && (
+          <div className="ht-table-wrap" style={{ marginTop: 14 }}>
+            <table className="ht-table">
+              <thead>
+                <tr>
+                  <th>排名</th>
+                  <th>省份 / 地区</th>
+                  <th>消耗金额</th>
+                  <th>展现量</th>
+                  <th>点击量</th>
+                  <th>点击率 CTR</th>
+                  <th>点击成本 CPC</th>
+                  <th>千次展现 CPM</th>
+                  <th>互动量</th>
+                  <th>互动成本 CPE</th>
+                </tr>
+              </thead>
+              <tbody>
+                {provinces.map((p, i) => (
+                  <tr key={String(p.province || i)}>
+                    <td>{i + 1}</td>
+                    <td style={{ fontWeight: 600 }}>{String(p.province || '—')}</td>
+                    <td>{formatCurrency(parseNum(p.spend))}</td>
+                    <td>{formatNum(parseNum(p.impressions), 0)}</td>
+                    <td>{formatNum(parseNum(p.clicks), 0)}</td>
+                    <td>{formatPercent(parseNum(p.ctr), 2)}</td>
+                    <td>{formatCurrency(parseNum(p.cpc))}</td>
+                    <td>{formatCurrency(parseNum(p.cpm))}</td>
+                    <td>{formatNum(parseNum(p.engagements), 0)}</td>
+                    <td>{formatCurrency(parseNum(p.cpe))}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </ChartPanel>
+  );
+}
+
 export interface HuangTianeBoardProps {
   dashboard: CampaignDashboard;
   section?: 'overview' | 'ads' | 'content';
@@ -822,39 +1237,9 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       { key: 'roi', label: '日度ROI', unit: '倍', axis: 'right', kind: 'point', color: CAMPAIGN_PALETTE.gold },
     ];
 
-    const brandAdTypeSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'ctr', label: '点击率', unit: '%', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-    ];
-
     const brandAudienceSeries: ComboSeries[] = [
       { key: 'seed_total', label: '种草人群', unit: '人', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
       { key: 'cp_total', label: '单位种草成本', unit: '元/人', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.gold },
-    ];
-
-    const brandKeywordSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'clicks', label: '点击量', unit: '次', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-    ];
-
-    const brandKolTierSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'cpc', label: '点击成本', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-    ];
-
-    const brandNoteTypeSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'plays5s', label: '5秒播放量', unit: '次', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-    ];
-
-    const brandAgeSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'cpe', label: '互动成本', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.terracotta },
-    ];
-
-    const brandProvinceSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'engagements', label: '互动量', unit: '次', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.purple },
     ];
 
     const cidAdvSeries: ComboSeries[] = [
@@ -874,13 +1259,394 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       ? model.brandAudiencesTable.rows
       : model.brandAudiencesTable.rows.slice(0, 10);
 
-    const provinceRows = showAllProvinces
-      ? model.brandProvincesTable.rows
-      : model.brandProvincesTable.rows.slice(0, 10);
-
     const creativeRows = showAllCreatives
       ? model.commerceCreativesTable.rows
       : model.commerceCreativesTable.rows.slice(0, 10);
+
+    // 1. Current Ads Metric Strip Items
+    const currentAdsMetricItems: MetricStripItem[] = [
+      ...(adsScope === 'brand'
+        ? [
+            {
+              label: '品牌FS总消耗 / 预算进度',
+              value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
+              hint: `预算 ${formatCurrency(model.brandBudgetVal)} · 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
+              badge: '品牌FS种草线',
+              status: 'accent' as const,
+            },
+            {
+              label: '品牌FS总展现量 / CPM',
+              value: `${formatNum(model.brandDaily.reduce((acc, r) => acc + (parseNum(r.impressions) || 0), 0) || parseNum(model.brandSummary?.impressions), 0)} 次`,
+              hint: `千次展现成本 CPM ${formatCurrency(parseNum(model.brandSummary?.cpm))}`,
+              badge: '曝光与渗透',
+              status: 'default' as const,
+            },
+            {
+              label: '加权点击率与成本 (CTR / CPC)',
+              value: `CTR ${formatPercent(parseNum(model.brandSummary?.ctr))} · CPC ${formatCurrency(parseNum(model.brandSummary?.cpc))}`,
+              hint: `累计产生点击 ${formatNum(model.brandDaily.reduce((acc, r) => acc + (parseNum(r.clicks) || 0), 0) || parseNum(model.brandSummary?.clicks), 0)} 次`,
+              badge: '点击效能',
+              status: 'success' as const,
+            },
+            {
+              label: '种草人群资产规模 (I + TI)',
+              value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
+              hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 · CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
+              badge: '5A人群资产',
+              status: 'success' as const,
+            },
+          ]
+        : adsScope === 'cid'
+        ? [
+            {
+              label: '红猫CID全域投流消耗',
+              value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
+              hint: `标准投 ${formatCurrency(model.cidStandardSpend)} · 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
+              badge: '红猫引流线',
+              status: 'accent' as const,
+            },
+            {
+              label: '进店总访客 / CPUV成本',
+              value: `${formatNum(model.cidTotalUv, 0)} UV`,
+              hint: `综合访客成本 CPUV ${formatCurrency(model.cidTotalSpend && model.cidTotalUv ? model.cidTotalSpend / model.cidTotalUv : null)}`,
+              badge: '进店引流',
+              status: 'default' as const,
+            },
+            {
+              label: '全域成交订单与GMV',
+              value: `${formatNum(model.cidTotalOrders, 0)} 单 · ${formatCurrency(model.cidTotalGmv)}`,
+              hint: `标准投 ${formatCurrency(model.cidStandardGmv)} · 简单投 ${formatCurrency(model.cidSimpleGmv)}`,
+              badge: '成交规模',
+              status: 'success' as const,
+            },
+            {
+              label: '聚合引流成交 ROI',
+              value: `${model.cidOverallRoi?.toFixed(2) ?? '—'} 倍`,
+              hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} · 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
+              badge: '投资回报',
+              status: 'success' as const,
+            },
+          ]
+        : [
+            {
+              label: '闭环商销累计消耗',
+              value: model.commerceSpend !== null ? formatCurrency(model.commerceSpend) : '—',
+              hint: `观察周期：${model.commercePeriod}`,
+              badge: '闭环商销',
+              status: 'accent' as const,
+            },
+            {
+              label: '商销全周期成交GMV',
+              value: model.commerceGmv !== null ? formatCurrency(model.commerceGmv) : '—',
+              hint: '底表对账汇总GMV ¥28,023.72',
+              badge: '闭环成交',
+              status: 'success' as const,
+            },
+            {
+              label: '商销整体成交 ROI',
+              value: model.commerceRoi !== null ? `${model.commerceRoi.toFixed(2)} 倍` : '—',
+              hint: '带货转化回报水平',
+              badge: '经营效能',
+              status: 'warning' as const,
+            },
+            {
+              label: '成交支付订单 / 加购量',
+              value: `${formatNum(model.commerceOrders, 0)} 单`,
+              hint: `商品加购量 ${formatNum(model.commerceCart, 0)} 次`,
+              badge: '转化规模',
+              status: 'default' as const,
+            },
+          ]),
+    ];
+
+    // 2. Data Mappings for New Visuals
+    // 2a. Brand Ad Types Arena
+    const adTypeRows = model.brandAdTypesTable.rows;
+    const feedRow = adTypeRows.find((r) => String(r.adType || '').includes('信息流')) || adTypeRows[0] || {};
+    const searchRow = adTypeRows.find((r) => String(r.adType || '').includes('搜索')) || adTypeRows[1] || {};
+    const feedSpend = parseNum(feedRow.spend);
+    const searchSpend = parseNum(searchRow.spend);
+    const feedRatio = parseNum(feedRow.spendRatio) ?? (feedSpend && searchSpend ? (feedSpend / (feedSpend + searchSpend)) * 100 : 73.29);
+    const searchRatio = parseNum(searchRow.spendRatio) ?? (feedSpend && searchSpend ? (searchSpend / (feedSpend + searchSpend)) * 100 : 26.71);
+
+    const brandAdTypeArenaRows: ArenaMetricRow[] = [
+      {
+        label: '展现量 (曝光规模)',
+        valA: parseNum(feedRow.impressions),
+        valB: parseNum(searchRow.impressions),
+        formatA: `${formatNum(parseNum(feedRow.impressions), 0)} 次`,
+        formatB: `${formatNum(parseNum(searchRow.impressions), 0)} 次`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '点击量 (总引流)',
+        valA: parseNum(feedRow.clicks),
+        valB: parseNum(searchRow.clicks),
+        formatA: `${formatNum(parseNum(feedRow.clicks), 0)} 次`,
+        formatB: `${formatNum(parseNum(searchRow.clicks), 0)} 次`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '点击率 CTR',
+        valA: parseNum(feedRow.ctr),
+        valB: parseNum(searchRow.ctr),
+        formatA: formatPercent(parseNum(feedRow.ctr), 2),
+        formatB: formatPercent(parseNum(searchRow.ctr), 2),
+        betterWhen: 'higher',
+      },
+      {
+        label: '点击成本 CPC',
+        valA: parseNum(feedRow.cpc),
+        valB: parseNum(searchRow.cpc),
+        formatA: formatCurrency(parseNum(feedRow.cpc)),
+        formatB: formatCurrency(parseNum(searchRow.cpc)),
+        betterWhen: 'lower',
+      },
+      {
+        label: '千次展现 CPM',
+        valA: parseNum(feedRow.cpm),
+        valB: parseNum(searchRow.cpm),
+        formatA: formatCurrency(parseNum(feedRow.cpm)),
+        formatB: formatCurrency(parseNum(searchRow.cpm)),
+        betterWhen: 'lower',
+      },
+      {
+        label: '互动成本 CPE',
+        valA: parseNum(feedRow.cpe),
+        valB: parseNum(searchRow.cpe),
+        formatA: formatCurrency(parseNum(feedRow.cpe)),
+        formatB: formatCurrency(parseNum(searchRow.cpe)),
+        betterWhen: 'lower',
+      },
+      {
+        label: '种草人群资产 (I+TI)',
+        valA: parseNum(feedRow.seed_total),
+        valB: parseNum(searchRow.seed_total),
+        formatA: `${formatNum(parseNum(feedRow.seed_total), 0)} 人`,
+        formatB: `${formatNum(parseNum(searchRow.seed_total), 0)} 人`,
+        betterWhen: 'higher',
+      },
+    ];
+
+    // 2b. Brand Note Types Arena
+    const noteTypeRows = model.brandNoteTypesTable.rows;
+    const videoRow = noteTypeRows.find((r) => String(r.noteFormat || '').includes('视频')) || noteTypeRows[0] || {};
+    const imgRow = noteTypeRows.find((r) => String(r.noteFormat || '').includes('图文')) || noteTypeRows[1] || {};
+    const videoSpend = parseNum(videoRow.spend);
+    const imgSpend = parseNum(imgRow.spend);
+    const videoRatio = videoSpend && imgSpend ? (videoSpend / (videoSpend + imgSpend)) * 100 : 61.7;
+    const imgRatio = 100 - videoRatio;
+
+    const brandNoteTypeArenaRows: ArenaMetricRow[] = [
+      {
+        label: '展现量 (曝光规模)',
+        valA: parseNum(videoRow.impressions),
+        valB: parseNum(imgRow.impressions),
+        formatA: `${formatNum(parseNum(videoRow.impressions), 0)} 次`,
+        formatB: `${formatNum(parseNum(imgRow.impressions), 0)} 次`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '点击量 (总引流)',
+        valA: parseNum(videoRow.clicks),
+        valB: parseNum(imgRow.clicks),
+        formatA: `${formatNum(parseNum(videoRow.clicks), 0)} 次`,
+        formatB: `${formatNum(parseNum(imgRow.clicks), 0)} 次`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '点击率 CTR',
+        valA: parseNum(videoRow.ctr),
+        valB: parseNum(imgRow.ctr),
+        formatA: formatPercent(parseNum(videoRow.ctr), 2),
+        formatB: formatPercent(parseNum(imgRow.ctr), 2),
+        betterWhen: 'higher',
+      },
+      {
+        label: '点击成本 CPC',
+        valA: parseNum(videoRow.cpc),
+        valB: parseNum(imgRow.cpc),
+        formatA: formatCurrency(parseNum(videoRow.cpc)),
+        formatB: formatCurrency(parseNum(imgRow.cpc)),
+        betterWhen: 'lower',
+      },
+      {
+        label: '千次展现 CPM',
+        valA: parseNum(videoRow.cpm),
+        valB: parseNum(imgRow.cpm),
+        formatA: formatCurrency(parseNum(videoRow.cpm)),
+        formatB: formatCurrency(parseNum(imgRow.cpm)),
+        betterWhen: 'lower',
+      },
+      {
+        label: '5秒有效播放量',
+        valA: parseNum(videoRow.plays5s),
+        valB: parseNum(imgRow.plays5s),
+        formatA: `${formatNum(parseNum(videoRow.plays5s), 0)} 次`,
+        formatB: imgRow.plays5s ? `${formatNum(parseNum(imgRow.plays5s), 0)} 次` : '非视频形式',
+        betterWhen: 'higher',
+      },
+    ];
+
+    // 2c. Brand Keywords Lollipop
+    const brandKeywordLollipopRows: LollipopRow[] = [...model.brandKeywordsTable.rows]
+      .sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0))
+      .map((r, i) => ({
+        rank: i + 1,
+        label: String(r.keywordCategory || '未分类'),
+        spend: parseNum(r.spend),
+        clicks: parseNum(r.clicks),
+        ctr: parseNum(r.ctr),
+        cpc: parseNum(r.cpc),
+      }));
+
+    // 2d. Brand KOL Tiers Butterfly
+    const brandKolTierButterflyRows: ButterflyRow[] = [...model.brandKolTiersTable.rows]
+      .sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0))
+      .map((r) => {
+        const clicks = parseNum(r.clicks);
+        const impr = parseNum(r.impressions);
+        return {
+          label: String(r.tier || '未知量级'),
+          spend: parseNum(r.spend),
+          middleInfo: `${clicks !== null ? formatWan(clicks) : '—'}点击 · ${impr !== null ? formatWan(impr) : '—'}曝光`,
+          costVal: parseNum(r.cpc),
+          costLabel: 'CPC',
+          costThresholdLow: 0.35,
+          costThresholdHigh: 0.42,
+          subCostVal: parseNum(r.cpm),
+          subCostLabel: 'CPM',
+        };
+      });
+
+    // 2e. Brand Age Butterfly
+    const brandAgeButterflyRows: ButterflyRow[] = [...model.brandAgeTable.rows]
+      .sort((a, b) => (parseNum(b.spend) || 0) - (parseNum(a.spend) || 0))
+      .map((r) => {
+        const eng = parseNum(r.engagements);
+        const ctr = parseNum(r.ctr);
+        return {
+          label: `${String(r.ageGroup || '未知')}岁`,
+          spend: parseNum(r.spend),
+          middleInfo: `${eng !== null ? formatNum(eng, 0) : '—'}次互动 · CTR ${formatPercent(ctr, 2)}`,
+          costVal: parseNum(r.cpe),
+          costLabel: 'CPE',
+          costThresholdLow: 30.0,
+          costThresholdHigh: 36.0,
+          subCostVal: parseNum(r.cpc),
+          subCostLabel: 'CPC',
+        };
+      });
+
+    // 2f. CID Arena
+    const cidTotSpend = (model.cidStandardSpend || 0) + (model.cidSimpleSpend || 0);
+    const cidStandardRatio = cidTotSpend > 0 ? ((model.cidStandardSpend || 0) / cidTotSpend) * 100 : 58.2;
+    const cidSimpleRatio = 100 - cidStandardRatio;
+    const cidStandardCpuv = model.cidStandardSpend && model.cidStandardUv ? model.cidStandardSpend / model.cidStandardUv : null;
+    const cidSimpleCpuv = model.cidSimpleSpend && model.cidSimpleUv ? model.cidSimpleSpend / model.cidSimpleUv : null;
+
+    const cidArenaRows: ArenaMetricRow[] = [
+      {
+        label: '消耗金额 (预算占比)',
+        valA: model.cidStandardSpend,
+        valB: model.cidSimpleSpend,
+        formatA: formatCurrency(model.cidStandardSpend),
+        formatB: formatCurrency(model.cidSimpleSpend),
+        betterWhen: 'higher',
+      },
+      {
+        label: '进店访客 UV',
+        valA: model.cidStandardUv,
+        valB: model.cidSimpleUv,
+        formatA: `${formatNum(model.cidStandardUv, 0)} UV`,
+        formatB: `${formatNum(model.cidSimpleUv, 0)} UV`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '访客成本 CPUV',
+        valA: cidStandardCpuv,
+        valB: cidSimpleCpuv,
+        formatA: formatCurrency(cidStandardCpuv),
+        formatB: formatCurrency(cidSimpleCpuv),
+        betterWhen: 'lower',
+      },
+      {
+        label: '成交支付订单量',
+        valA: model.cidStandardOrders,
+        valB: model.cidSimpleOrders,
+        formatA: `${formatNum(model.cidStandardOrders, 0)} 单`,
+        formatB: `${formatNum(model.cidSimpleOrders, 0)} 单`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '成交金额 GMV',
+        valA: model.cidStandardGmv,
+        valB: model.cidSimpleGmv,
+        formatA: formatCurrency(model.cidStandardGmv),
+        formatB: formatCurrency(model.cidSimpleGmv),
+        betterWhen: 'higher',
+      },
+      {
+        label: '聚合成交 ROI',
+        valA: model.cidStandardRoi,
+        valB: model.cidSimpleRoi,
+        formatA: `${model.cidStandardRoi?.toFixed(2) ?? '—'} 倍`,
+        formatB: `${model.cidSimpleRoi?.toFixed(2) ?? '—'} 倍`,
+        betterWhen: 'higher',
+      },
+    ];
+
+    // 2g. CID Note Types Arena
+    const cidNoteRows = model.cidNoteTypesTable.rows;
+    const cidVideoRow = cidNoteRows.find((r) => String(r.noteFormat || '').includes('视频')) || cidNoteRows[0] || {};
+    const cidImgRow = cidNoteRows.find((r) => String(r.noteFormat || '').includes('图文')) || cidNoteRows[1] || {};
+    const cidVideoSpend = parseNum(cidVideoRow.spend);
+    const cidImgSpend = parseNum(cidImgRow.spend);
+    const cidVideoRatio = cidVideoSpend && cidImgSpend ? (cidVideoSpend / (cidVideoSpend + cidImgSpend)) * 100 : 50;
+    const cidImgRatio = 100 - cidVideoRatio;
+
+    const cidNoteArenaRows: ArenaMetricRow[] = [
+      {
+        label: '消耗金额 (元)',
+        valA: cidVideoSpend,
+        valB: cidImgSpend,
+        formatA: formatCurrency(cidVideoSpend),
+        formatB: formatCurrency(cidImgSpend),
+        betterWhen: 'higher',
+      },
+      {
+        label: '进店访客 UV',
+        valA: parseNum(cidVideoRow.uv),
+        valB: parseNum(cidImgRow.uv),
+        formatA: `${formatNum(parseNum(cidVideoRow.uv), 0)} UV`,
+        formatB: `${formatNum(parseNum(cidImgRow.uv), 0)} UV`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '成交订单量',
+        valA: parseNum(cidVideoRow.orders),
+        valB: parseNum(cidImgRow.orders),
+        formatA: `${formatNum(parseNum(cidVideoRow.orders), 0)} 单`,
+        formatB: `${formatNum(parseNum(cidImgRow.orders), 0)} 单`,
+        betterWhen: 'higher',
+      },
+      {
+        label: '成交金额 GMV',
+        valA: parseNum(cidVideoRow.gmv),
+        valB: parseNum(cidImgRow.gmv),
+        formatA: formatCurrency(parseNum(cidVideoRow.gmv)),
+        formatB: formatCurrency(parseNum(cidImgRow.gmv)),
+        betterWhen: 'higher',
+      },
+      {
+        label: '成交转化 ROI',
+        valA: parseNum(cidVideoRow.roi),
+        valB: parseNum(cidImgRow.roi),
+        formatA: `${parseNum(cidVideoRow.roi)?.toFixed(2) ?? '—'} 倍`,
+        formatB: `${parseNum(cidImgRow.roi)?.toFixed(2) ?? '—'} 倍`,
+        betterWhen: 'higher',
+      },
+    ];
 
     return (
       <div className="ht-board" data-testid="huang-tiane-ads">
@@ -932,6 +1698,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
         </div>
 
+        <MetricStrip items={currentAdsMetricItems} />
+
         {adsScope === 'brand' && (
           <div id="ht-sec-ads-channels" className="ht-grid-2">
             <ChartPanel
@@ -965,103 +1733,58 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             </ChartPanel>
 
             {model.brandAdTypesTable.rows.length > 0 && (
-              <ChartPanel
+              <DualArenaCard
                 title="品牌FS 广告类型投放分布 (信息流 vs 搜索)"
                 subtitle={model.brandAdTypesTable.period ? `统计区间：${model.brandAdTypesTable.period}` : undefined}
-              >
-                <CampaignComboChart
-                  rows={model.brandAdTypesTable.rows}
-                  series={brandAdTypeSeries}
-                  xKey="adType"
-                  title="广告类型消耗与成本走势"
-                  height={270}
-                />
-              </ChartPanel>
-            )}
-
-            {model.brandKeywordsTable.rows.length > 0 && (
-              <ChartPanel
-                title="品牌FS 关键词类别投流结构"
-                subtitle={model.brandKeywordsTable.period ? `统计区间：${model.brandKeywordsTable.period}` : undefined}
-              >
-                <CampaignComboChart
-                  rows={model.brandKeywordsTable.rows}
-                  series={brandKeywordSeries}
-                  xKey="keywordCategory"
-                  title="关键词分类消耗与点击"
-                  height={270}
-                />
-              </ChartPanel>
+                sideA={{ name: String(feedRow.adType || '信息流'), spend: feedSpend, spendRatio: feedRatio }}
+                sideB={{ name: String(searchRow.adType || '搜索'), spend: searchSpend, spendRatio: searchRatio }}
+                rows={brandAdTypeArenaRows}
+              />
             )}
 
             {model.brandNoteTypesTable.rows.length > 0 && (
-              <ChartPanel
+              <DualArenaCard
                 title="品牌FS 笔记素材形式投放对照 (视频 vs 图文)"
                 subtitle={model.brandNoteTypesTable.period ? `统计区间：${model.brandNoteTypesTable.period}` : undefined}
-              >
-                <CampaignComboChart
-                  rows={model.brandNoteTypesTable.rows}
-                  series={brandNoteTypeSeries}
-                  xKey="noteFormat"
-                  title="笔记形式消耗与5秒播放"
-                  height={270}
-                />
-              </ChartPanel>
+                sideA={{ name: String(videoRow.noteFormat || '视频'), spend: videoSpend, spendRatio: videoRatio }}
+                sideB={{ name: String(imgRow.noteFormat || '图文'), spend: imgSpend, spendRatio: imgRatio }}
+                rows={brandNoteTypeArenaRows}
+              />
+            )}
+
+            {model.brandKeywordsTable.rows.length > 0 && (
+              <LollipopList
+                title="品牌FS 关键词类别投流结构与效能"
+                subtitle={model.brandKeywordsTable.period ? `统计区间：${model.brandKeywordsTable.period} · 按消耗降序呈现词类份额矩阵` : undefined}
+                rows={brandKeywordLollipopRows}
+              />
             )}
 
             {model.brandKolTiersTable.rows.length > 0 && (
-              <ChartPanel
+              <ButterflyCard
                 title="品牌FS 达人层级投放效益对照"
-                subtitle={model.brandKolTiersTable.period ? `统计区间：${model.brandKolTiersTable.period}` : undefined}
-              >
-                <CampaignComboChart
-                  rows={model.brandKolTiersTable.rows}
-                  series={brandKolTierSeries}
-                  xKey="tier"
-                  title="达人层级投放消耗与成本"
-                  height={270}
-                />
-              </ChartPanel>
+                subtitle={model.brandKolTiersTable.period ? `统计区间：${model.brandKolTiersTable.period} · 各量级消耗规模与CPC/CPM成本评级` : undefined}
+                rows={brandKolTierButterflyRows}
+              />
             )}
 
             {model.brandAgeTable.rows.length > 0 && (
-              <ChartPanel
+              <ButterflyCard
                 title="品牌FS 受众年龄段投流渗透与成本"
-                subtitle={model.brandAgeTable.period ? `统计区间：${model.brandAgeTable.period}` : undefined}
-              >
-                <CampaignComboChart
-                  rows={model.brandAgeTable.rows}
-                  series={brandAgeSeries}
-                  xKey="ageGroup"
-                  title="年龄段消耗与互动成本"
-                  height={270}
-                />
-              </ChartPanel>
+                subtitle={model.brandAgeTable.period ? `统计区间：${model.brandAgeTable.period} · 各年龄段消耗规模与互动成本CPE评定` : undefined}
+                rows={brandAgeButterflyRows}
+              />
             )}
 
             {model.brandProvincesTable.rows.length > 0 && (
-              <ChartPanel
+              <RegionRankGrid
                 title="品牌FS 地域（省份/地区）投放排行 (Top 10)"
-                subtitle={model.brandProvincesTable.period ? `统计区间：${model.brandProvincesTable.period}` : undefined}
-                actions={
-                  model.brandProvincesTable.rows.length > 10 ? (
-                    <button
-                      className="ht-scope-tab-btn"
-                      onClick={() => setShowAllProvinces((prev) => !prev)}
-                    >
-                      {showAllProvinces ? '收起至Top10' : `展开全量(${model.brandProvincesTable.rows.length})`}
-                    </button>
-                  ) : undefined
-                }
-              >
-                <CampaignComboChart
-                  rows={provinceRows}
-                  series={brandProvinceSeries}
-                  xKey="province"
-                  title="主要省份消耗与互动走势"
-                  height={270}
-                />
-              </ChartPanel>
+                subtitle={model.brandProvincesTable.period ? `统计区间：${model.brandProvincesTable.period} · 双列热力榜单` : undefined}
+                provinces={model.brandProvincesTable.rows}
+                totalSpend={model.brandProvincesTable.totalSpend}
+                expanded={showAllProvinces}
+                onToggleExpand={() => setShowAllProvinces((prev) => !prev)}
+              />
             )}
 
             {model.brandAudiencesTable.rows.length > 0 && (
@@ -1152,39 +1875,44 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
         {adsScope === 'cid' && (
           <div className="ht-grid-2">
+            <DualArenaCard
+              title="红猫CID · 标准投与简单投效能对决"
+              subtitle="全域聚合投放19日对照 · 标准投58.2% vs 简单投41.8%全面效能PK"
+              sideA={{ name: '标准投', spend: model.cidStandardSpend, spendRatio: cidStandardRatio }}
+              sideB={{ name: '简单投', spend: model.cidSimpleSpend, spendRatio: cidSimpleRatio }}
+              rows={cidArenaRows}
+            />
+
             <ChartPanel
-              title="红猫CID · 标准投日变走势"
+              title="红猫CID · 全域日消耗与成交GMV走势"
               subtitle={
-                model.cidStandardSpend !== null && model.cidStandardGmv !== null
-                  ? `消耗 ${formatCurrency(model.cidStandardSpend)}，GMV ${formatCurrency(model.cidStandardGmv)}，聚合ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'}倍`
+                model.cidTotalSpend !== null && model.cidTotalGmv !== null
+                  ? `全域消耗 ${formatCurrency(model.cidTotalSpend)}，成交GMV ${formatCurrency(model.cidTotalGmv)}，聚合ROI ${model.cidOverallRoi?.toFixed(2) ?? '—'}倍`
                   : undefined
               }
             >
               <CampaignComboChart
-                rows={model.cidStandard}
+                rows={model.cidTotal}
                 series={cidSeriesStandard}
                 xKey="date"
-                title="红猫CID标准投日变走势"
+                title="红猫CID全域日度走势"
                 height={270}
               />
             </ChartPanel>
 
-            <ChartPanel
-              title="红猫CID · 简单投日变走势"
-              subtitle={
-                model.cidSimpleSpend !== null && model.cidSimpleGmv !== null
-                  ? `消耗 ${formatCurrency(model.cidSimpleSpend)}，GMV ${formatCurrency(model.cidSimpleGmv)}，聚合ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}倍`
-                  : undefined
-              }
-            >
-              <CampaignComboChart
-                rows={model.cidSimple}
-                series={cidSeriesStandard}
-                xKey="date"
-                title="红猫CID简单投日变走势"
-                height={270}
+            {model.cidNoteTypesTable.rows.length > 0 && (
+              <DualArenaCard
+                title="红猫CID · 笔记素材形式转化 (视频 vs 图文)"
+                subtitle={
+                  model.cidNoteTypesTable.period
+                    ? `统计区间：${model.cidNoteTypesTable.period}${model.cidNoteTypesTable.totalSpend !== null ? ` · 合计消耗 ${formatCurrency(model.cidNoteTypesTable.totalSpend)}` : ''}`
+                    : undefined
+                }
+                sideA={{ name: String(cidVideoRow.noteFormat || '视频'), spend: cidVideoSpend, spendRatio: cidVideoRatio }}
+                sideB={{ name: String(cidImgRow.noteFormat || '图文'), spend: cidImgSpend, spendRatio: cidImgRatio }}
+                rows={cidNoteArenaRows}
               />
-            </ChartPanel>
+            )}
 
             {model.cidAdTypesTable.rows.length > 0 && (
               <ChartPanel
@@ -1219,25 +1947,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                   series={cidAdvSeries}
                   xKey="audience"
                   title="CID人群包消耗与转化"
-                  height={270}
-                />
-              </ChartPanel>
-            )}
-
-            {model.cidNoteTypesTable.rows.length > 0 && (
-              <ChartPanel
-                title="红猫CID · 笔记素材形式转化 (视频 vs 图文)"
-                subtitle={
-                  model.cidNoteTypesTable.period
-                    ? `统计区间：${model.cidNoteTypesTable.period}${model.cidNoteTypesTable.totalSpend !== null ? ` · 合计消耗 ${formatCurrency(model.cidNoteTypesTable.totalSpend)}` : ''}`
-                    : undefined
-                }
-              >
-                <CampaignComboChart
-                  rows={model.cidNoteTypesTable.rows}
-                  series={cidAdvSeries}
-                  xKey="noteFormat"
-                  title="CID笔记形式消耗与转化"
                   height={270}
                 />
               </ChartPanel>
@@ -1360,6 +2069,39 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
 
 
+  const contentMetricItems: MetricStripItem[] = [
+    {
+      label: '定档合作达人总数',
+      value: `${model.creatorsCount} 位`,
+      hint: '全量合作达人储备',
+      badge: '达人矩阵',
+      status: 'default',
+    },
+    {
+      label: '达人已发布上线',
+      value: `${model.creatorsPublished} 篇 · ${formatPercent(model.creatorsPublishRate, 1)}`,
+      hint: `已收集素材 ${model.creatorsAssetCollected} 篇`,
+      badge: '履约进度',
+      status: 'success',
+    },
+    {
+      label: 'KOS矩阵发布量',
+      value: `${model.kosCount} 篇`,
+      hint: '全部登记于 2026-10-19 发布',
+      badge: 'KOS蓄水',
+      status: 'accent',
+    },
+    {
+      label: '含平台费总报价',
+      value: formatCurrency(model.creatorsTotalFeeWithPlatform, 0),
+      hint: `达人裸价 ${formatCurrency(model.creatorsTotalFeeRaw, 0)}`,
+      badge: '采买规模',
+      status: 'warning',
+    },
+  ];
+
+  const maxTierFee = Math.max(...model.creatorTierBreakdown.map((t) => t.totalFee || 0), 1);
+
   return (
     <div className="ht-board" data-testid="huang-tiane-content">
       <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="内容执行控制台">
@@ -1381,6 +2123,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           <span className="ht-period-pill">素材已收 {model.creatorsAssetCollected} 篇</span>
         </div>
       </div>
+
+      <MetricStrip items={contentMetricItems} />
 
       <div id="ht-sec-content-status" className="ht-grid-2">
         <ChartPanel
@@ -1460,15 +2204,39 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 </tr>
               </thead>
               <tbody>
-                {model.creatorTierBreakdown.map((t) => (
-                  <tr key={t.tier}>
-                    <td style={{ fontWeight: 600 }}>{t.tier}</td>
-                    <td>{t.count} 位</td>
-                    <td>{t.publishedCount} 位</td>
-                    <td>{formatCurrency(t.totalFee, 0)}</td>
-                    <td>{formatCurrency(t.avgFee, 0)}</td>
-                  </tr>
-                ))}
+                {model.creatorTierBreakdown.map((t) => {
+                  const pubRate = t.count > 0 ? (t.publishedCount / t.count) * 100 : 0;
+                    const feeRatio = t.totalFee ? (t.totalFee / maxTierFee) * 100 : 0;
+                  return (
+                    <tr key={t.tier}>
+                      <td style={{ fontWeight: 600 }}>{t.tier}</td>
+                      <td>{t.count} 位</td>
+                      <td>
+                        <div className="ht-inline-bar-cell">
+                          <span>{t.publishedCount} / {t.count} 位 ({pubRate.toFixed(0)}%)</span>
+                          <div className="ht-inline-bar-track">
+                            <div
+                              className="ht-inline-bar-fill success"
+                              style={{ width: `${pubRate}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="ht-inline-bar-cell">
+                          <span>{formatCurrency(t.totalFee, 0)}</span>
+                          <div className="ht-inline-bar-track">
+                            <div
+                              className="ht-inline-bar-fill primary"
+                              style={{ width: `${feeRatio}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td>{formatCurrency(t.avgFee, 0)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

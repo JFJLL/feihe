@@ -54,7 +54,7 @@ export function IndustryV2Header({
     <header className="v2-header">
       {/* Top Banner Row */}
       <div className="v2-banner">
-        <div className="v2-banner-main">
+        <div className="v2-banner-row">
           <div className="v2-banner-title-row">
             <span
               className={`v2-status-dot ${
@@ -94,6 +94,44 @@ export function IndustryV2Header({
               </span>
             )}
           </div>
+
+
+        {/* Right actions */}
+        {canWrite && (
+          <div className="v2-header-actions">
+            <button
+              type="button"
+              className="v2-btn v2-btn-secondary"
+              onClick={onOpenConfig}
+            >
+              ⚙️ 配置词包与参数
+            </button>
+            <button
+              type="button"
+              className="v2-btn v2-btn-primary"
+              disabled={syncing || isRunning || !spu}
+              onClick={onTriggerEnqueue}
+              title={
+                !spu
+                  ? '请先配置 SPU'
+                  : isRunning
+                  ? '后台采集中，请稍候'
+                  : isPending
+                  ? '将待补采任务交给后台调度，仍遵守每日额度；暂停自动更新时也可手动提交'
+                  : '排队补采历史数据'
+              }
+            >
+              {syncing
+                ? '排队中...'
+                : isRunning
+                ? '采集中...'
+                : isPending
+                ? '⚡ 调度补采 (排队中)'
+                : '⚡ 排队补采'}
+            </button>
+          </div>
+        )}
+        </div>
 
           {/* Collection Coverage Bar */}
           {coverage ? (
@@ -160,43 +198,6 @@ export function IndustryV2Header({
               </span>
             </div>
           )}
-        </div>
-
-        {/* Right actions */}
-        {canWrite && (
-          <div className="v2-header-actions">
-            <button
-              type="button"
-              className="v2-btn v2-btn-secondary"
-              onClick={onOpenConfig}
-            >
-              ⚙️ 配置词包与参数
-            </button>
-            <button
-              type="button"
-              className="v2-btn v2-btn-primary"
-              disabled={syncing || isRunning || !spu}
-              onClick={onTriggerEnqueue}
-              title={
-                !spu
-                  ? '请先配置 SPU'
-                  : isRunning
-                  ? '后台采集中，请稍候'
-                  : isPending
-                  ? '将待补采任务交给后台调度，仍遵守每日额度；暂停自动更新时也可手动提交'
-                  : '排队补采历史数据'
-              }
-            >
-              {syncing
-                ? '排队中...'
-                : isRunning
-                ? '采集中...'
-                : isPending
-                ? '⚡ 调度补采 (排队中)'
-                : '⚡ 排队补采'}
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Navigation Tabs */}

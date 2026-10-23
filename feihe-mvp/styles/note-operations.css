@@ -1,3 +1,384 @@
-.note-operations h2{font-size:24px;font-weight:600;margin:6px 0 12px}.co-queue-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.co-queue-tabs button{display:flex;flex-direction:column;text-align:left;gap:8px;padding:16px;background:#f7faff;border:1px solid #dbe7f4}.co-queue-tabs button strong{font-size:16px}.co-queue-tabs button span{color:#718299;font-size:12px}.co-queue-tabs button.active{border-color:#5e95cc;background:#edf5ff;box-shadow:inset 0 3px #4285c6}.co-queue-table{max-height:680px}.co-queue-table td:first-child{min-width:220px;max-width:290px}.co-queue-table td{min-width:110px}.co-queue-table td strong{font-size:13px}.co-pagination,.co-link-row{display:flex;gap:12px;align-items:center;margin-top:16px}.co-link-row a{font-size:12px;color:#1b65a8}.co-text{white-space:pre-wrap;font-size:13px;line-height:1.85;overflow-wrap:anywhere}.co-review-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.co-review-form label{display:flex;flex-direction:column;gap:7px;font-size:12px;color:#526a81}.co-review-form label:has(textarea){grid-column:1/-1}.co-review-form input,.co-review-form select,.co-review-form textarea{border:1px solid #ccdae7;background:#fff;border-radius:7px;padding:8px;color:#23364d;min-width:0}.co-review-form button{justify-self:start}.co-thread{border:1px solid #dfe8f1;border-radius:10px;margin:14px 0;overflow:hidden}.co-comment{padding:16px 20px;font-size:13px;line-height:1.8}.co-comment>div{display:flex;gap:14px;align-items:center}.co-comment span,.co-comment small{font-size:11px;color:#74859a}.co-comment p{margin:9px 0;white-space:pre-wrap}.co-reply{border-top:1px solid #e2eaf2;background:#f8fbff;margin-left:30px;border-left:3px solid #c9dcee}.co-error{color:#a56029!important}.co-distributions p{display:flex;justify-content:space-between;border-bottom:1px solid #edf1f6;padding-bottom:8px;font-size:13px}.co-topic-tags{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.co-topic-tags span{background:#eef5fa;color:#4b7295;border-radius:6px;padding:5px 9px;font-size:12px}.note-operations .bd-kpis strong{font-size:21px}.note-operations .bd-panel td{max-width:400px;overflow-wrap:anywhere}
+/* Note Operations Workspace Enterprise BI Styling */
+.note-operations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-.co-settings-drawer{margin-bottom:18px;border:1px solid #c8d9ea;background:#fafdff;padding:16px 20px}.co-settings-drawer h3{margin:0 0 4px;font-size:16px;color:#1c3d5a}
+.note-operations h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* 1. Integrated Enterprise Header Toolbar */
+.co-toolbar-deck {
+  background: #ffffff;
+  border: 1px solid #dce4e0;
+  border-left: 4px solid #2c7168;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin: 0 0 4px 0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.co-toolbar-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.co-toolbar-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.co-toolbar-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2c7168;
+  box-shadow: 0 0 0 3px rgba(44, 113, 104, 0.18);
+  flex-shrink: 0;
+}
+
+.co-toolbar-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #eaf3f1;
+  color: #2c7168;
+  border: 1px solid #c2e0dc;
+}
+
+.co-toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.co-toolbar-month-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #52657c;
+  margin: 0;
+}
+
+.co-toolbar-month-label span {
+  white-space: nowrap;
+}
+
+.co-btn-settings {
+  min-height: 34px;
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #334155;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.co-btn-settings:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.co-btn-refresh {
+  min-height: 34px;
+  padding: 6px 14px;
+  background: #2c7168 !important;
+  border: 1px solid #2c7168 !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.co-btn-refresh:hover {
+  background: #225952 !important;
+  border-color: #225952 !important;
+}
+
+/* 2. Queue Selector Tabs */
+.co-queue-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.co-queue-tabs button {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 6px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #dce4e0;
+  border-top: 3px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.co-queue-tabs button:hover:not(.active) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.co-queue-tabs button.active {
+  border-color: #2c7168 !important;
+  border-top: 3px solid #2c7168 !important;
+  background: linear-gradient(180deg, #f0f6f5 0%, #ffffff 100%) !important;
+  box-shadow: 0 2px 6px rgba(44, 113, 104, 0.14) !important;
+}
+
+.co-queue-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.co-queue-tabs button strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.co-queue-tabs button span {
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.co-queue-active-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #2c7168;
+  color: #ffffff;
+}
+
+/* 3. In-cell Spend Bar & Table Polish */
+.co-queue-table {
+  max-height: 680px;
+}
+
+.co-queue-table td:first-child {
+  min-width: 220px;
+  max-width: 290px;
+}
+
+.co-queue-table td {
+  min-width: 110px;
+  vertical-align: middle;
+}
+
+.co-queue-table td strong {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.co-spend-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 120px;
+}
+
+.co-spend-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+
+.co-spend-bar-track {
+  width: 100%;
+  max-width: 130px;
+  height: 5px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 2px 0 1px;
+}
+
+.co-spend-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4da499, #2c7168);
+  border-radius: 3px;
+}
+
+.co-partial-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* 4. Common Controls & Panels */
+.co-pagination, .co-link-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.co-link-row a {
+  font-size: 12px;
+  color: #2c7168;
+}
+
+.co-text {
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+.co-review-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.co-review-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  color: #526a81;
+}
+
+.co-review-form label:has(textarea) {
+  grid-column: 1/-1;
+}
+
+.co-review-form input, .co-review-form select, .co-review-form textarea {
+  border: 1px solid #ccdae7;
+  background: #fff;
+  border-radius: 7px;
+  padding: 8px;
+  color: #23364d;
+  min-width: 0;
+}
+
+.co-review-form button {
+  justify-self: start;
+}
+
+.co-thread {
+  border: 1px solid #dfe8f1;
+  border-radius: 10px;
+  margin: 14px 0;
+  overflow: hidden;
+}
+
+.co-comment {
+  padding: 16px 20px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.co-comment > div {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.co-comment span, .co-comment small {
+  font-size: 11px;
+  color: #74859a;
+}
+
+.co-comment p {
+  margin: 9px 0;
+  white-space: pre-wrap;
+}
+
+.co-reply {
+  border-top: 1px solid #e2eaf2;
+  background: #f8fbff;
+  margin-left: 30px;
+  border-left: 3px solid #c9dcee;
+}
+
+.co-error {
+  color: #a56029 !important;
+}
+
+.co-distributions p {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #edf1f6;
+  padding-bottom: 8px;
+  font-size: 13px;
+}
+
+.co-topic-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.co-topic-tags span {
+  background: #eef5fa;
+  color: #4b7295;
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 12px;
+}
+
+.note-operations .bd-kpis strong {
+  font-size: 21px;
+}
+
+.note-operations .bd-panel td {
+  max-width: 400px;
+  overflow-wrap: anywhere;
+}
+
+.co-settings-drawer {
+  margin-bottom: 18px;
+  border: 1px solid #c8d9ea;
+  background: #fafdff;
+  padding: 16px 20px;
+  border-radius: 10px;
+}
+
+.co-settings-drawer h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: #1c3d5a;
+}

@@ -21,12 +21,139 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
   useEffect(()=>{const onBack=()=>{const p=new URLSearchParams(window.location.search);setNoteId(p.get('noteId') || '');setMonth(p.get('month') || new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date()).slice(0,7));setQueue(p.get('queue') || 'active');setOffset(0);};window.addEventListener('popstate',onBack);return()=>window.removeEventListener('popstate',onBack);},[]);
   if(noteId)return <NoteDetail key={projectId+':'+noteId} projectId={projectId} noteId={noteId} onBack={()=>setNoteId('')} onRefresh={()=>setRevision(r=>r+1)} />;
   const data=current?.data;
-  return <div className="business-daily note-operations" data-testid="note-operations"><div className="bd-toolbar"><div><h2>笔记评论巡查</h2><p className="bd-caption">围绕整篇笔记、对话和整改复核，查看当前检查样本与覆盖范围。</p></div><div className="bd-controls"><label>业务月份<CustomDatePicker type="month" aria-label="巡查月份" value={month} onChange={e=>{setMonth(e.target.value);setOffset(0);}} /></label><button onClick={()=>setShowSettings(s=>!s)}>{showSettings ? '收起配置' : '巡查与品牌配置'}</button><button onClick={()=>setRevision(r=>r+1)}>刷新本地数据</button></div></div>
+  const maxSpend = useMemo(() => {
+    if (!data?.items?.length) return 1;
+    const vals = data.items.map(n => (n.spendMonth === month && typeof n.monthlySpend?.value === 'number') ? n.monthlySpend.value : 0);
+    return Math.max(...vals, 1);
+  }, [data?.items, month]);
+
+  return <div className="business-daily note-operations" data-testid="note-operations">
+    <div className="bd-toolbar co-toolbar-deck">
+      <div className="co-toolbar-title-wrap">
+        <div className="co-toolbar-title-row">
+          <span className="co-toolbar-status-dot" title="运营巡查中" />
+          <h2>笔记评论巡查</h2>
+          <span className="co-toolbar-tag">飞鹤启萃营销复盘</span>
+        </div>
+        <p className="bd-caption">围绕整篇笔记、对话和整改复核，查看当前检查样本与覆盖范围。</p>
+      </div>
+      <div className="bd-controls co-toolbar-controls">
+        <label className="co-toolbar-month-label">
+          <span>业务月份</span>
+          <CustomDatePicker type="month" aria-label="巡查月份" value={month} onChange={e=>{setMonth(e.target.value);setOffset(0);}} />
+        </label>
+        <button type="button" className="co-btn-settings" onClick={()=>setShowSettings(s=>!s)}>
+          {showSettings ? '收起配置' : '巡查与品牌配置'}
+        </button>
+        <button type="button" className="co-btn-refresh primary-btn" onClick={()=>setRevision(r=>r+1)}>
+          刷新本地数据
+        </button>
+      </div>
+    </div>
     {showSettings && <CommentSettingsDrawer projectId={projectId} onSaved={()=>setRevision(r=>r+1)} />}
-    <div className="co-queue-tabs" role="tablist" aria-label="笔记巡查队列">{[['active','在投高消耗笔记','按当月累计消耗排序'],['new','当月新发笔记','按发布日期，历史投放独立'],['history','历史笔记档案','未明确发布日期的档案同时留存']].map(([id,title,desc])=><button key={id} role="tab" aria-selected={queue===id} className={queue===id ? 'active':''} onClick={()=>{setQueue(id);setOffset(0);}}><strong>{title}</strong><span>{desc}</span></button>)}</div>
+    <div className="co-queue-tabs" role="tablist" aria-label="笔记巡查队列">
+      {[
+        ['active','在投高消耗笔记','按当月累计消耗排序'],
+        ['new','当月新发笔记','按发布日期，历史投放独立'],
+        ['history','历史笔记档案','未明确发布日期的档案同时留存']
+      ].map(([id,title,desc])=>(
+        <button
+          key={id}
+          role="tab"
+          aria-selected={queue===id}
+          className={queue===id ? 'active':''}
+          onClick={()=>{setQueue(id);setOffset(0);}}
+        >
+          <div className="co-queue-card-head">
+            <strong>{title}</strong>
+            {queue === id && <span className="co-queue-active-badge">当前视图</span>}
+          </div>
+          <span>{desc}</span>
+        </button>
+      ))}
+    </div>
     {current?.error && <div role="alert" className="bd-alerts"><p>{current.error}</p></div>}
-    {!current ? <p>读取本项目本地巡查队列…</p>:data && <><div className="bd-kpis">{[['队列笔记',number(data.total)],['已检查样本',`${data.summary.checked} 篇`],['样本合格率',percent(data.summary.qualityRate)],['笔记检查覆盖率',percent(data.summary.checkedCoverage)]].map(([title,value])=><article key={title}><h4>{title}</h4><strong>{value}</strong></article>)}</div><p className="bd-caption">合格率＝当前分析版本已人工复核为合格的笔记 / 已检查笔记。尚未检查保持未知；逐篇评论覆盖率另列。</p><div className="bd-alerts"><p>{data.ranking}</p><p>{data.sourceStatus.deliveries}</p><p>{data.sourceStatus.comments}</p></div>
-      <section className="bd-panel"><div className="bd-panel-head"><h3>{queue==='active' ? '本月在投巡查顺序':queue==='new' ? '本月新发档案':'历史档案'} · {data.total} 篇</h3><span className="bd-caption">第{offset+1}–{offset+data.items.length}条</span></div>{!data.items.length ? <p>本项目当前范围尚无笔记。请配置本项目自己的执行或投放来源。</p>:<div className="bd-scroll co-queue-table"><table><thead><tr>{['笔记与发布时间','月累计消耗','平台总数 / 已采集 / 已分析','交付登记','检查与整改','档案'].map(t=><th key={t}>{t}</th>)}</tr></thead><tbody>{data.items.map((n,index)=><tr key={n.id}><td><strong>{offset+index+1}. {n.title || n.author || '已存档笔记'}</strong><small>{n.author} · {n.tier || '层级未登记'} · {n.publishedDay || '发布日期未明确'}</small><small>{n.id}</small></td><td>{n.spendMonth===month ? number(n.monthlySpend.value):'—'} 元<small>{n.spendMonth===month ? n.monthlySpend.state==='observed' ? '源表月累计':'消耗缺失':'本月未取得消耗观测'}</small></td><td>{n.capture ? <>{number(n.capture.platformTotal)}（{n.capture.totalScope==='roots' ? '主评论':'统计口径待核验'}） / {n.capture.fetched} / {n.capture.analyzed}<small>{n.capture.complete ? '接口范围完整核对':'部分采集'} · {percent(n.capture.coverage)}覆盖</small><small>{time(n.capture.capturedAt)}</small></>:<span>尚未采集 / — / —</span>}{n.lastAttempt && <small className={n.lastAttempt.error ? 'co-error':''}>{n.lastAttempt.status} {n.lastAttempt.error}</small>}</td><td>{number(n.registeredDeliveries)} 条<small>源表登记，不代表平台可见</small></td><td>{reviewStates[n.review.state]}<small>{n.review.owner || n.sourceOwner || '负责人待确认'}{n.review.deadline ? ' · '+n.review.deadline:''}</small><small>巡查：{time(n.review.inspectedAt)}{n.review.stale ? ' · 数据更新需复核':''}</small></td><td><button onClick={()=>setNoteId(n.id)}>查看整篇笔记</button></td></tr>)}</tbody></table></div>}<div className="co-pagination"><button disabled={!offset} onClick={()=>setOffset(n=>Math.max(0,n-30))}>上一页</button><button disabled={!data.hasMore} onClick={()=>setOffset(n=>n+30)}>下一页</button></div></section></>}
+    {!current ? <p>读取本项目本地巡查队列…</p>:data && <>
+      <div className="bd-kpis">{[['队列笔记',number(data.total)],['已检查样本',`${data.summary.checked} 篇`],['样本合格率',percent(data.summary.qualityRate)],['笔记检查覆盖率',percent(data.summary.checkedCoverage)]].map(([title,value])=><article key={title}><h4>{title}</h4><strong>{value}</strong></article>)}</div>
+      <p className="bd-caption">合格率＝当前分析版本已人工复核为合格的笔记 / 已检查笔记。尚未检查保持未知；逐篇评论覆盖率另列。</p>
+      <div className="bd-alerts"><p>{data.ranking}</p><p>{data.sourceStatus.deliveries}</p><p>{data.sourceStatus.comments}</p></div>
+      <section className="bd-panel">
+        <div className="bd-panel-head">
+          <h3>{queue==='active' ? '本月在投巡查顺序':queue==='new' ? '本月新发档案':'历史档案'} · {data.total} 篇</h3>
+          <span className="bd-caption">第{offset+1}–{offset+data.items.length}条</span>
+        </div>
+        {!data.items.length ? (
+          <p>本项目当前范围尚无笔记。请配置本项目自己的执行或投放来源。</p>
+        ) : (
+          <div className="bd-scroll co-queue-table">
+            <table>
+              <thead>
+                <tr>{['笔记与发布时间','月累计消耗','平台总数 / 已采集 / 已分析','交付登记','检查与整改','档案'].map(t=><th key={t}>{t}</th>)}</tr>
+              </thead>
+              <tbody>
+                {data.items.map((n,index)=>{
+                  const spendVal = (n.spendMonth === month && typeof n.monthlySpend?.value === 'number') ? n.monthlySpend.value : 0;
+                  const spendRatio = Math.min(100, Math.max(0, (spendVal / maxSpend) * 100));
+                  return (
+                    <tr key={n.id}>
+                      <td>
+                        <strong>{offset+index+1}. {n.title || n.author || '已存档笔记'}</strong>
+                        <small>{n.author} · {n.tier || '层级未登记'} · {n.publishedDay || '发布日期未明确'}</small>
+                        <small>{n.id}</small>
+                      </td>
+                      <td>
+                        <div className="co-spend-cell">
+                          <div className="co-spend-num">
+                            {n.spendMonth===month ? number(n.monthlySpend.value):'—'} 元
+                          </div>
+                          {spendVal > 0 && (
+                            <div className="co-spend-bar-track" title={`占本页最高消耗比例: ${spendRatio.toFixed(1)}%`}>
+                              <div className="co-spend-bar-fill" style={{ width: `${Math.max(spendRatio, 3)}%` }} />
+                            </div>
+                          )}
+                          <small>{n.spendMonth===month ? n.monthlySpend.state==='observed' ? '源表月累计':'消耗缺失':'本月未取得消耗观测'}</small>
+                        </div>
+                      </td>
+                      <td>
+                        {n.capture ? (
+                          <>
+                            {number(n.capture.platformTotal)}（{n.capture.totalScope==='roots' ? '主评论':'统计口径待核验'}） / {n.capture.fetched} / {n.capture.analyzed}
+                            <small>{n.capture.complete ? '接口范围完整核对':'部分采集'} · {percent(n.capture.coverage)}覆盖</small>
+                            <small>{time(n.capture.capturedAt)}</small>
+                          </>
+                        ) : (
+                          <span>尚未采集 / — / —</span>
+                        )}
+                        {n.lastAttempt && (
+                          (n.lastAttempt.status === 'partial' || n.lastAttempt.error?.includes('主评论')) ? (
+                            <span
+                              className="co-partial-badge"
+                              data-status={n.lastAttempt.status}
+                              title={`partial ${n.lastAttempt.error || ""}`.trim()}
+                            >
+                              部分覆盖 · {n.lastAttempt.error || '主评论数量未完整核对'}
+                            </span>
+                          ) : (
+                            <small className={n.lastAttempt.error ? 'co-error':''}>{n.lastAttempt.status} {n.lastAttempt.error}</small>
+                          )
+                        )}
+                      </td>
+                      <td>{number(n.registeredDeliveries)} 条<small>源表登记，不代表平台可见</small></td>
+                      <td>{reviewStates[n.review.state]}<small>{n.review.owner || n.sourceOwner || '负责人待确认'}{n.review.deadline ? ' · '+n.review.deadline:''}</small><small>巡查：{time(n.review.inspectedAt)}{n.review.stale ? ' · 数据更新需复核':''}</small></td>
+                      <td><button onClick={()=>setNoteId(n.id)}>查看整篇笔记</button></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <div className="co-pagination">
+          <button disabled={!offset} onClick={()=>setOffset(n=>Math.max(0,n-30))}>上一页</button>
+          <button disabled={!data.hasMore} onClick={()=>setOffset(n=>n+30)}>下一页</button>
+        </div>
+      </section>
+    </>}
   </div>;
 }
 function NoteDetail({projectId,noteId,onBack,onRefresh}:{projectId:string;noteId:string;onBack:()=>void;onRefresh:()=>void}) {

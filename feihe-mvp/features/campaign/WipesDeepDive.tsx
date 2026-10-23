@@ -123,7 +123,13 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
     return (
       <div className="wipes-dive-root">
         <div className="wipes-dive-header">
-          <h3 className="wipes-dive-title">搜索与人群</h3>
+          <div className="wipes-dive-header-left">
+            <span className="wipes-dive-chapter-badge">01</span>
+            <div>
+              <h3 className="wipes-dive-title">搜索与人群</h3>
+              <span className="wipes-dive-subtitle">四词类大盘消耗与CPUV结构、定向人群包Top8投放效能</span>
+            </div>
+          </div>
         </div>
 
         <div className="wipes-dive-grid">
@@ -329,7 +335,13 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
     return (
       <div className="wipes-dive-root">
         <div className="wipes-dive-header">
-          <h3 className="wipes-dive-title">达人与内容效率</h3>
+          <div className="wipes-dive-header-left">
+            <span className="wipes-dive-chapter-badge">02</span>
+            <div>
+              <h3 className="wipes-dive-title">达人与内容效率</h3>
+              <span className="wipes-dive-subtitle">K端达人采买与FS投流费双轴透视、各内容方向互动与KFS成本</span>
+            </div>
+          </div>
         </div>
 
         <div className="wipes-dive-grid">

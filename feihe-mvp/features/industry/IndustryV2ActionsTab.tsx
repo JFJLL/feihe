@@ -4,6 +4,7 @@ import {
   SafeExternalLink,
   EmptyStateBox,
   formatMetricNumber,
+  KpiCard,
 } from './IndustryV2Widgets';
 
 export function IndustryV2ActionsTab({
@@ -30,34 +31,24 @@ export function IndustryV2ActionsTab({
       {/* Aggregated priority summary */}
       <section className="v2-section" aria-label="行动机会概览">
         <div className="v2-grid-3">
-          <div className="v2-kpi-card">
-            <span className="v2-kpi-label">识别机会总数</span>
-            <div className="v2-kpi-value-row">
-              <span className="v2-kpi-value">{actions.length}</span>
-              <span className="v2-kpi-unit">项</span>
-            </div>
-            <span className="v2-kpi-subtext">基于当前采样样本特征观察</span>
-          </div>
-          <div className="v2-kpi-card">
-            <span className="v2-kpi-label">高优先级建议 (High)</span>
-            <div className="v2-kpi-value-row">
-              <span className="v2-kpi-value" style={{ color: '#b91c1c' }}>
-                {highPriorityCount}
-              </span>
-              <span className="v2-kpi-unit">项</span>
-            </div>
-            <span className="v2-kpi-subtext">建议近期优先立项或重点优化</span>
-          </div>
-          <div className="v2-kpi-card">
-            <span className="v2-kpi-label">中优先级建议 (Medium)</span>
-            <div className="v2-kpi-value-row">
-              <span className="v2-kpi-value" style={{ color: '#0369a1' }}>
-                {mediumPriorityCount}
-              </span>
-              <span className="v2-kpi-unit">项</span>
-            </div>
-            <span className="v2-kpi-subtext">可持续跟进并按节奏排期尝试</span>
-          </div>
+          <KpiCard
+            label="识别机会总数"
+            value={actions.length}
+            unit="项"
+            subtext="基于当前采样样本特征观察"
+          />
+          <KpiCard
+            label="高优先级建议 (High)"
+            value={<span style={{ color: '#b91c1c' }}>{highPriorityCount}</span>}
+            unit="项"
+            subtext="建议近期优先立项或重点优化"
+          />
+          <KpiCard
+            label="中优先级建议 (Medium)"
+            value={<span style={{ color: '#0369a1' }}>{mediumPriorityCount}</span>}
+            unit="项"
+            subtext="可持续跟进并按节奏排期尝试"
+          />
         </div>
       </section>
 

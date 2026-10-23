@@ -11,6 +11,10 @@ import {
   BudgetComparisonChart,
   TargetBulletChart,
   ComparisonDatum,
+  DualArenaChart,
+  ButterflyCostChart,
+  PlacementScorecardChart,
+  LollipopRankChart,
   CAMPAIGN_PALETTE,
 } from "./CampaignCharts";
 import { CampaignComboChart } from "./CampaignComboChart";
@@ -255,6 +259,20 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
 
       <MetricStrip items={stripItems} />
 
+      {/* 01 章节头: 核心渠道与版位效能矩阵 */}
+      <div className="ca-chapter-header">
+        <div className="ca-chapter-title-group">
+          <span className="ca-chapter-badge">01</span>
+          <div className="ca-chapter-heading">
+            <h3 className="ca-chapter-title">核心渠道与版位效能矩阵</h3>
+            <span className="ca-chapter-desc">核心广告消耗结构、多维单位转化成本及四象限效率诊断</span>
+          </div>
+        </div>
+        <div className="ca-chapter-meta">
+          <span className="ca-chapter-period-tag">统计周期：{displayPeriod}</span>
+        </div>
+      </div>
+
       <div className="ca-grid">
         {targetBulletData.length > 0 ? (
           <>
@@ -327,18 +345,6 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         ) : activeKey === "four-lines" ? (
           <>
-            <ChartPanel title="四线广告消耗与点击率" subtitle={`业务周期：${displayPeriod} · 左轴 FS消耗 (元) vs 右轴 点击率 (%)`}>
-              <CampaignComboChart
-                rows={records as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "spend", label: "投流广告支出 (FS)", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "ctr", label: "点击率 (CTR)", unit: "%", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                ]}
-                xKey="name"
-                title="四线消耗与点击率"
-                height={220}
-              />
-            </ChartPanel>
             <ChartPanel title="四线全额投入 (K+FS) 与产出 GMV / ROI" subtitle={`业务周期：${displayPeriod} · 左轴 全额投入与GMV (元) vs 右轴 综合ROI (倍)`}>
               <CampaignComboChart
                 rows={records as unknown as Record<string, unknown>[]}
@@ -352,19 +358,35 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="四线点击成本 (CPC) 与访客成本 (CPUV)" subtitle={`业务周期：${displayPeriod} · 左轴 CPC (元/次) vs 右轴 CPUV (元/UV)`}>
-              <CampaignComboChart
-                rows={records as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "cpc", label: "点击成本 (CPC)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
-                ]}
-                xKey="name"
-                title="四线 CPC 与 CPUV 成本"
-                height={220}
+            <ChartPanel title="四线点击成本 (CPC) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} · 左翼 CPC (元/次) vs 右翼 CPUV (元/UV)`}>
+              <ButterflyCostChart
+                data={records.map((r) => ({
+                  label: r.name,
+                  leftVal: r.cpc ?? null,
+                  rightVal: r.cpuv ?? null,
+                  spend: r.fsSpend ?? r.spend ?? null,
+                }))}
+                leftLabel="前端点击成本 (CPC)"
+                rightLabel="后端进店成本 (CPUV)"
+                leftUnit="元"
+                rightUnit="元"
               />
             </ChartPanel>
-            <ChartPanel title="点击成本与点击率效率分布" subtitle="横轴 点击成本 CPC (元)，纵轴 点击率 CTR (%)，气泡大小代表广告消耗金额">
+            <ChartPanel title="四线消耗结构与全链路效能评分卡" subtitle={`业务周期：${displayPeriod} · 消耗构成份额与全链路效能多维诊断矩阵`}>
+              <PlacementScorecardChart
+                rows={records.map((r) => ({
+                  name: r.name,
+                  spend: r.fsSpend ?? r.spend ?? null,
+                  ctr: r.ctr ?? null,
+                  cpc: r.cpc ?? null,
+                  cpuv: r.cpuv ?? null,
+                  gmv: r.gmv ?? null,
+                  roi: r.roi ?? null,
+                }))}
+                mode="four-lines"
+              />
+            </ChartPanel>
+            <ChartPanel title="点击成本与点击率四象限效率分布" subtitle="横轴 点击成本 CPC (元)，纵轴 点击率 CTR (%)，气泡大小代表广告消耗金额">
               {scatterPoints.length > 0 ? (
                 <ScatterChart data={scatterPoints} xLabel="点击成本 CPC (元)" yLabel="点击率 CTR (%)" />
               ) : (
@@ -374,7 +396,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         ) : activeKey === "fs-placements" || activeKey === "wipes-placements" ? (
           <>
-            <ChartPanel title="版位广告消耗与点击率" subtitle={`业务周期：${displayPeriod} · 左轴 消耗 (元) vs 右轴 点击率 (%)`}>
+            <ChartPanel title="版位广告消耗与点击率 (CTR)" subtitle={`业务周期：${displayPeriod} · 左轴 消耗 (元) vs 右轴 点击率 (%)`}>
               <CampaignComboChart
                 rows={records as unknown as Record<string, unknown>[]}
                 series={[
@@ -386,31 +408,35 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV)" subtitle={`业务周期：${displayPeriod} · 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)`}>
-              <CampaignComboChart
-                rows={records as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
-                ]}
-                xKey="name"
-                title="版位 CPE 与 CPUV 成本"
-                height={220}
+            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} · 左翼 CPE (元/次) vs 右翼 CPUV (元/UV)`}>
+              <ButterflyCostChart
+                data={records.map((r) => ({
+                  label: r.name,
+                  leftVal: r.cpe ?? null,
+                  rightVal: r.cpuv ?? null,
+                  spend: r.spend ?? null,
+                }))}
+                leftLabel="前端互动成本 (CPE)"
+                rightLabel="后端进店成本 (CPUV)"
+                leftUnit="元"
+                rightUnit="元"
               />
             </ChartPanel>
-            <ChartPanel title="版位千次曝光成本 (CPM) 与点击成本 (CPC)" subtitle={`业务周期：${displayPeriod} · 左轴 CPM (元/千次曝光) vs 右轴 CPC (元/次)`}>
-              <CampaignComboChart
-                rows={records as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "cpm", label: "千次曝光成本 (CPM)", unit: "元/千次曝光", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "cpc", label: "点击成本 (CPC)", unit: "元/次", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                ]}
-                xKey="name"
-                title="版位 CPM 与 CPC 成本"
-                height={220}
+            <ChartPanel title="分版位消耗份额与全维成本矩阵 (CPM / CPC / CPE / CPUV)" subtitle={`业务周期：${displayPeriod} · 消耗构成份额与 CPM / CPC / CPE / CPUV 全成本矩阵`}>
+              <PlacementScorecardChart
+                rows={records.map((r) => ({
+                  name: r.name,
+                  spend: r.spend ?? null,
+                  ctr: r.ctr ?? null,
+                  cpm: r.cpm ?? null,
+                  cpc: r.cpc ?? null,
+                  cpe: r.cpe ?? null,
+                  cpuv: r.cpuv ?? null,
+                }))}
+                mode="placement"
               />
             </ChartPanel>
-            <ChartPanel title="点击成本与点击率效率分布" subtitle="横轴 点击成本 CPC (元)，纵轴 点击率 CTR (%)，气泡大小代表广告消耗金额">
+            <ChartPanel title="点击成本与点击率四象限效率分布" subtitle="横轴 点击成本 CPC (元)，纵轴 点击率 CTR (%)，气泡大小代表广告消耗金额">
               {scatterPoints.length > 0 ? (
                 <ScatterChart data={scatterPoints} xLabel="点击成本 CPC (元)" yLabel="点击率 CTR (%)" />
               ) : (
@@ -432,37 +458,35 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            {records.some((r) => r.cpe !== null && r.cpe !== undefined) &&
-              records.some((r) => r.cpuv !== null && r.cpuv !== undefined) && (
-                <ChartPanel title="单位转化成本 (CPE 与 CPUV)" subtitle={`业务周期：${displayPeriod} · 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)`}>
-                  <CampaignComboChart
-                    rows={records as unknown as Record<string, unknown>[]}
-                    series={[
-                      { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                      { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
-                    ]}
-                    xKey="name"
-                    title="CPE 与 CPUV 对比"
-                    height={220}
-                  />
-                </ChartPanel>
-              )}
-            {records.some((r) => r.cpm !== null && r.cpm !== undefined) &&
-              records.some((r) => r.cpc !== null && r.cpc !== undefined) && (
-                <ChartPanel title="曝光成本与点击成本 (CPM 与 CPC)" subtitle={`业务周期：${displayPeriod} · 左轴 CPM (元/千次曝光) vs 右轴 CPC (元/次)`}>
-                  <CampaignComboChart
-                    rows={records as unknown as Record<string, unknown>[]}
-                    series={[
-                      { key: "cpm", label: "千次曝光成本 (CPM)", unit: "元/千次曝光", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                      { key: "cpc", label: "点击成本 (CPC)", unit: "元/次", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                    ]}
-                    xKey="name"
-                    title="CPM 与 CPC 对比"
-                    height={220}
-                  />
-                </ChartPanel>
-              )}
-            <ChartPanel title="点击成本与点击率效率分布" subtitle="横轴 CPC (元)，纵轴 CTR (%)，气泡大小代表消耗金额">
+            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} · 左翼 CPE (元/次) vs 右翼 CPUV (元/UV)`}>
+              <ButterflyCostChart
+                data={records.map((r) => ({
+                  label: r.name,
+                  leftVal: r.cpe ?? r.cpc ?? null,
+                  rightVal: r.cpuv ?? null,
+                  spend: r.spend ?? null,
+                }))}
+                leftLabel={records.some((r) => r.cpe !== null && r.cpe !== undefined) ? "互动成本 (CPE)" : "点击成本 (CPC)"}
+                rightLabel="访客转化成本 (CPUV)"
+                leftUnit="元"
+                rightUnit="元"
+              />
+            </ChartPanel>
+            <ChartPanel title="分版位消耗份额与全维成本矩阵" subtitle={`业务周期：${displayPeriod} · 消耗构成份额与成本评分矩阵`}>
+              <PlacementScorecardChart
+                rows={records.map((r) => ({
+                  name: r.name,
+                  spend: r.spend ?? null,
+                  ctr: r.ctr ?? null,
+                  cpm: r.cpm ?? null,
+                  cpc: r.cpc ?? null,
+                  cpe: r.cpe ?? null,
+                  cpuv: r.cpuv ?? null,
+                }))}
+                mode="placement"
+              />
+            </ChartPanel>
+            <ChartPanel title="点击成本与点击率四象限效率分布" subtitle="横轴 CPC (元)，纵轴 CTR (%)，气泡大小代表消耗金额">
               {scatterPoints.length > 0 ? (
                 <ScatterChart data={scatterPoints} xLabel="点击成本 CPC (元)" yLabel="点击率 CTR (%)" />
               ) : (

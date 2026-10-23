@@ -22,6 +22,34 @@
   padding-bottom: 12px;
 }
 
+.mdd-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mdd-chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #2c7168;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.mdd-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  display: block;
+  margin-top: 2px;
+}
+
 .mdd-title {
   font-size: 18px;
   font-weight: 700;
@@ -200,6 +228,28 @@
   font-weight: 700;
   color: #0f172a;
   text-align: center;
+}
+
+.mdd-row-total-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.mdd-row-total-bar-track {
+  width: 48px;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mdd-row-total-bar-fill {
+  height: 100%;
+  background: #2c7168;
+  border-radius: 2px;
+  transition: width 0.3s ease;
 }
 
 .mdd-matrix-legend {

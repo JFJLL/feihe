@@ -7,6 +7,7 @@ import {
   PaginationBar,
   EmptyStateBox,
   QueryPillBadge,
+  KpiCard,
 } from './IndustryV2Widgets';
 
 export function IndustryV2CreatorsTab({
@@ -39,30 +40,24 @@ export function IndustryV2CreatorsTab({
       {/* Summary KPI row */}
       <section className="v2-section" aria-label="创作者概况">
         <div className="v2-grid-3">
-          <div className="v2-kpi-card">
-            <span className="v2-kpi-label">覆盖创作者总量</span>
-            <div className="v2-kpi-value-row">
-              <span className="v2-kpi-value">{report.summary.creators}</span>
-              <span className="v2-kpi-unit">位</span>
-            </div>
-            <span className="v2-kpi-subtext">样本涉及的去重创作者数</span>
-          </div>
-          <div className="v2-kpi-card">
-            <span className="v2-kpi-label">多篇发文 / 高频创作者</span>
-            <div className="v2-kpi-value-row">
-              <span className="v2-kpi-value">{creators.repeatCreators}</span>
-              <span className="v2-kpi-unit">位</span>
-            </div>
-            <span className="v2-kpi-subtext">样本期内发文 ≥ 2 篇的博主</span>
-          </div>
-          <div className="v2-kpi-card">
-            <span className="v2-kpi-label">缺少创作者标识的笔记</span>
-            <div className="v2-kpi-value-row">
-              <span className="v2-kpi-value">{creators.unknownCreators}</span>
-              <span className="v2-kpi-unit">篇</span>
-            </div>
-            <span className="v2-kpi-subtext">源数据未返回有效创作者唯一 ID</span>
-          </div>
+          <KpiCard
+            label="覆盖创作者总量"
+            value={formatMetricNumber(report.summary.creators)}
+            unit="位"
+            subtext="样本涉及的去重创作者数"
+          />
+          <KpiCard
+            label="多篇发文 / 高频创作者"
+            value={formatMetricNumber(creators.repeatCreators)}
+            unit="位"
+            subtext="样本期内发文 ≥ 2 篇的博主"
+          />
+          <KpiCard
+            label="缺少创作者标识的笔记"
+            value={formatMetricNumber(creators.unknownCreators)}
+            unit="篇"
+            subtext="源数据未返回有效创作者唯一 ID"
+          />
         </div>
       </section>
 

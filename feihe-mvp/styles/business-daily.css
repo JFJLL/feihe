@@ -11,7 +11,7 @@
 }
 
 /* Restored Textured Deep Navy Gradient PageHeader (Controlled Height) */
-.overview-colorful-page.reference-workspace .ui-page-header {
+.overview-colorful-page.reference-workspace:not([data-workspace-ui="v2"]) .ui-page-header {
   background: linear-gradient(135deg, #0d213f 0%, #153a6b 55%, #185287 100%) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -23,7 +23,7 @@
   align-items: center;
 }
 
-.overview-colorful-page.reference-workspace .ui-page-header-eyebrow {
+.overview-colorful-page.reference-workspace:not([data-workspace-ui="v2"]) .ui-page-header-eyebrow {
   color: #93c5fd !important;
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -32,7 +32,7 @@
   margin-bottom: 3px !important;
 }
 
-.overview-colorful-page.reference-workspace .ui-page-header-title {
+.overview-colorful-page.reference-workspace:not([data-workspace-ui="v2"]) .ui-page-header-title {
   color: #ffffff !important;
   font-size: 20px !important;
   font-weight: 700 !important;
@@ -40,7 +40,7 @@
   margin: 0 !important;
 }
 
-.overview-colorful-page.reference-workspace .ui-page-header-subtitle {
+.overview-colorful-page.reference-workspace:not([data-workspace-ui="v2"]) .ui-page-header-subtitle {
   color: #bfdbfe !important;
   font-size: 12px !important;
   line-height: 1.5 !important;
@@ -48,14 +48,14 @@
   opacity: 0.92;
 }
 
-.overview-colorful-page.reference-workspace .ui-page-header .sync-button {
+.overview-colorful-page.reference-workspace:not([data-workspace-ui="v2"]) .ui-page-header .sync-button {
   background: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   backdrop-filter: blur(4px);
 }
 
-.overview-colorful-page.reference-workspace .ui-page-header .sync-button:hover:not(:disabled) {
+.overview-colorful-page.reference-workspace:not([data-workspace-ui="v2"]) .ui-page-header .sync-button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.25) !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
 }

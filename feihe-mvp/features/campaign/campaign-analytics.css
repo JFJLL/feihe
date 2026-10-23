@@ -1083,3 +1083,741 @@
   height: 2.5px !important;
   margin-top: 3px;
 }
+
+/* ==========================================================================
+   DualArenaChart (双阵营拔河对决卡)
+   ========================================================================== */
+.ca-dual-arena {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 4px;
+}
+
+.ca-arena-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid var(--ca-palette-border, #e2e8f0);
+}
+
+.ca-arena-side-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ca-arena-side-info-left {
+  align-items: flex-start;
+}
+
+.ca-arena-side-info-right {
+  align-items: flex-end;
+}
+
+.ca-arena-title-tag {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ca-palette-text, #1f2937);
+  padding: 0 6px;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+.ca-arena-primary-num {
+  font-size: 19px;
+  font-weight: 800;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  line-height: 1.2;
+}
+
+.ca-arena-primary-unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ca-palette-muted, #64748b);
+  margin-left: 2px;
+}
+
+.ca-arena-primary-sub {
+  font-size: 11px;
+  color: var(--ca-palette-muted, #64748b);
+}
+
+.ca-arena-vs-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid var(--ca-palette-border-warm, #e6e3dc);
+  color: var(--ca-palette-muted, #64748b);
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.ca-arena-track {
+  display: flex;
+  align-items: center;
+  height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #e2e8f0;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.ca-arena-track-bar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transition: width 0.3s ease;
+  min-width: 28px;
+}
+
+.ca-arena-track-left {
+  justify-content: flex-start;
+  padding-left: 8px;
+}
+
+.ca-arena-track-right {
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+
+.ca-arena-track-pct {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: ui-monospace, monospace;
+}
+
+.ca-arena-track-divider {
+  width: 2px;
+  height: 100%;
+  background: #ffffff;
+  transform: skewX(-20deg);
+  flex-shrink: 0;
+}
+
+.ca-arena-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.ca-arena-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ca-arena-row:hover,
+.ca-arena-row:focus-within {
+  background: #f8fafc;
+  border-color: var(--ca-palette-border, #e2e8f0);
+}
+
+.ca-arena-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ca-arena-cell-left {
+  justify-content: flex-end;
+}
+
+.ca-arena-cell-right {
+  justify-content: flex-start;
+}
+
+.ca-arena-bar-track {
+  flex: 1;
+  max-width: 140px;
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+}
+
+.ca-arena-track-reverse {
+  justify-content: flex-end;
+}
+
+.ca-arena-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.ca-arena-label-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.ca-arena-metric-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ca-palette-text, #1f2937);
+  white-space: nowrap;
+}
+
+.ca-arena-metric-dir {
+  font-size: 9.5px;
+  color: var(--ca-palette-subtle, #94a3b8);
+}
+
+.ca-arena-val {
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  color: var(--ca-palette-text, #1f2937);
+  white-space: nowrap;
+}
+
+.ca-arena-val-win {
+  font-weight: 700;
+  color: var(--ca-palette-primary, #2c7168);
+}
+
+.ca-arena-badge-win {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(44, 113, 104, 0.12);
+  color: #2c7168;
+  white-space: nowrap;
+}
+
+.ca-arena-na {
+  font-size: 11px;
+  color: var(--ca-palette-subtle, #94a3b8);
+}
+
+/* ==========================================================================
+   ButterflyCostChart (单位成本双翼蝴蝶图)
+   ========================================================================== */
+.ca-butterfly-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.ca-butterfly-header {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid var(--ca-palette-border, #e2e8f0);
+}
+
+.ca-butterfly-header-col {
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ca-butterfly-header-left {
+  justify-content: flex-end;
+}
+
+.ca-butterfly-header-center {
+  justify-content: center;
+  color: var(--ca-palette-text, #1f2937);
+}
+
+.ca-butterfly-header-right {
+  justify-content: flex-start;
+}
+
+.ca-butterfly-header-unit {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--ca-palette-muted, #64748b);
+}
+
+.ca-butterfly-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ca-butterfly-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  transition: all 0.15s ease;
+}
+
+.ca-butterfly-row:hover,
+.ca-butterfly-row:focus-within {
+  background: #fbfbfa;
+  border-color: var(--ca-palette-border, #e2e8f0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.ca-butterfly-wing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ca-butterfly-wing-left {
+  justify-content: flex-end;
+}
+
+.ca-butterfly-wing-right {
+  justify-content: flex-start;
+}
+
+.ca-butterfly-bar-container {
+  flex: 1;
+  max-width: 150px;
+  height: 14px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+}
+
+.ca-bar-container-left {
+  justify-content: flex-end;
+}
+
+.ca-bar-container-right {
+  justify-content: flex-start;
+}
+
+.ca-butterfly-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.ca-butterfly-val-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.ca-butterfly-val {
+  font-size: 12.5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  color: var(--ca-palette-text, #1f2937);
+  white-space: nowrap;
+}
+
+.ca-butterfly-val-best {
+  font-weight: 700;
+  color: var(--ca-palette-primary, #2c7168);
+}
+
+.ca-butterfly-unit {
+  font-size: 10px;
+  color: var(--ca-palette-muted, #64748b);
+}
+
+.ca-butterfly-badge-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.ca-badge-left {
+  background: rgba(44, 113, 104, 0.12);
+  color: #2c7168;
+}
+
+.ca-badge-right {
+  background: rgba(130, 115, 163, 0.14);
+  color: #8273a3;
+}
+
+.ca-butterfly-center-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ca-butterfly-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-radius: 12px;
+  max-width: 110px;
+  width: 100%;
+}
+
+.ca-butterfly-badge-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ca-palette-text, #1f2937);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.ca-butterfly-badge-sub {
+  font-size: 9.5px;
+  color: var(--ca-palette-muted, #64748b);
+  font-family: ui-monospace, monospace;
+}
+
+.ca-butterfly-na {
+  font-size: 11px;
+  color: var(--ca-palette-subtle, #94a3b8);
+}
+
+/* ==========================================================================
+   PlacementScorecardChart (版位多维效能评分矩阵)
+   ========================================================================== */
+.ca-scorecard-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.ca-scorecard-header-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid var(--ca-palette-border, #e2e8f0);
+}
+
+.ca-scorecard-bar-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ca-palette-text, #1f2937);
+}
+
+.ca-scorecard-total-spend {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ca-palette-primary, #2c7168);
+  font-family: ui-monospace, monospace;
+}
+
+.ca-scorecard-segments {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
+.ca-scorecard-seg-item {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.ca-scorecard-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.ca-scorecard-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--ca-palette-text, #1f2937);
+}
+
+.ca-scorecard-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ca-scorecard-pct {
+  color: var(--ca-palette-muted, #64748b);
+  font-size: 10.5px;
+}
+
+.ca-scorecard-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.ca-scorecard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.ca-scorecard-th {
+  padding: 8px 10px;
+  background: #f8fafc;
+  color: var(--ca-palette-muted, #64748b);
+  font-weight: 600;
+  font-size: 11.5px;
+  border-bottom: 1px solid var(--ca-palette-border, #e2e8f0);
+  white-space: nowrap;
+}
+
+.ca-th-name {
+  min-width: 110px;
+}
+
+.ca-scorecard-td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.ca-scorecard-tr:hover {
+  background: #fbfbfa;
+}
+
+.ca-scorecard-name-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #f1f5f9;
+  border: 1px solid var(--ca-palette-border, #e2e8f0);
+  border-radius: 4px;
+  font-weight: 600;
+  color: var(--ca-palette-text, #1f2937);
+}
+
+.ca-scorecard-bar-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ca-scorecard-mini-bar {
+  width: 50px;
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ca-scorecard-mini-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.ca-scorecard-cell-val {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 12px;
+  color: var(--ca-palette-text, #1f2937);
+}
+
+.ca-scorecard-cell-best {
+  background: rgba(44, 113, 104, 0.06);
+}
+
+.ca-scorecard-cell-best .ca-scorecard-cell-val {
+  font-weight: 700;
+  color: var(--ca-palette-primary, #2c7168);
+}
+
+.ca-scorecard-tag-best {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 0 4px;
+  margin-left: 4px;
+  border-radius: 3px;
+  background: rgba(44, 113, 104, 0.15);
+  color: #2c7168;
+}
+
+/* ==========================================================================
+   LollipopRankChart (棒棒糖排行榜)
+   ========================================================================== */
+.ca-lollipop-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.ca-lollipop-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #f8fafc;
+  transition: all 0.15s ease;
+}
+
+.ca-lollipop-row:hover,
+.ca-lollipop-row:focus-within {
+  background: #fbfbfa;
+  border-color: var(--ca-palette-border, #e2e8f0);
+}
+
+.ca-lollipop-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: ui-monospace, monospace;
+  flex-shrink: 0;
+}
+
+.ca-lollipop-rank-top {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.ca-lollipop-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 90px;
+  max-width: 130px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ca-palette-text, #1f2937);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ca-lollipop-badge {
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: #f1f5f9;
+  color: var(--ca-palette-muted, #64748b);
+}
+
+.ca-lollipop-track {
+  flex: 1;
+  height: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 60px;
+}
+
+.ca-lollipop-stem {
+  height: 3px;
+  border-radius: 1.5px;
+  transition: width 0.3s ease;
+}
+
+.ca-lollipop-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: left 0.3s ease;
+}
+
+.ca-lollipop-readout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ca-lollipop-val {
+  font-size: 12.5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  color: var(--ca-palette-text, #1f2937);
+  min-width: 60px;
+  text-align: right;
+}
+
+.ca-lollipop-unit {
+  font-size: 10.5px;
+  color: var(--ca-palette-muted, #64748b);
+  font-weight: 400;
+}
+
+.ca-lollipop-secondary {
+  font-size: 10.5px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  border: 1px solid var(--ca-palette-border, #e2e8f0);
+  color: var(--ca-palette-muted, #64748b);
+  white-space: nowrap;
+}
+
+.ca-lollipop-na {
+  color: var(--ca-palette-subtle, #94a3b8);
+}
+
+@media (max-width: 640px) {
+  .ca-butterfly-header,
+  .ca-butterfly-row {
+    grid-template-columns: 1fr 90px 1fr;
+    gap: 6px;
+    padding: 6px 4px;
+  }
+  .ca-arena-row {
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 6px;
+  }
+  .ca-lollipop-label {
+    min-width: 70px;
+    max-width: 90px;
+  }
+}

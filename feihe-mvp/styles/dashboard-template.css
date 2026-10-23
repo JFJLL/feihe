@@ -1,4 +1,4 @@
-﻿/* =========================================================================
+/* =========================================================================
    DASHBOARD TEMPLATE FRAMEWORK (WARM NEUTRAL THEME)
    Delivery V1 Implementation:
    - Base Palette: Warm Neutral #f6f5f2, White Surface #ffffff, Border #e4e7e2
@@ -125,7 +125,8 @@
   flex-shrink: 0;
 }
 
-.dashboard-template .ui-page-header-title {
+.dashboard-template .ui-page-header-title,
+.overview-colorful-page.reference-workspace .ui-page-header-title {
   color: #1f2937 !important;
   font-size: 18px !important;
   font-weight: 700 !important;

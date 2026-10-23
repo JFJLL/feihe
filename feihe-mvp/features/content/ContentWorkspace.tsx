@@ -102,11 +102,11 @@ export function ContentWorkspace({
         badge={<span>{dashboard.metrics.noteCount.toLocaleString()} 篇笔记资产</span>}
       >
         <div className="workspace-header-actions">
+          <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
           <SyncButton projectId={projectId} onRefresh={onRefresh} />
         </div>
       </PageHeader>
 
-      <WorkspaceModuleTabs tabs={tabs} activeTab={tab} onChange={setTab} variant="compact" />
       <FeishuSources data={dashboard.feishu} projectId={projectId} />
 
       <div
