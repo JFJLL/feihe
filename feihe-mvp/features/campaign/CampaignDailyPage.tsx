@@ -210,8 +210,8 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
   return (
     <div className="ca-page" role="main" aria-label={`${name} 分日看板`}>
-      {/* 1. Header (紧凑元信息 toolbar + 数据集切换) */}
-      <header className="ca-header bd-toolbar-compact">
+      {/* 1. Header & Daily Toolbar Integrated Compact Console */}
+      <header className="ca-header bd-toolbar-compact ca-daily-header-console">
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">分日看板</h2>
@@ -256,7 +256,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
       </header>
 
       {/* 2. 单日期控制工具栏 (全项目统一单日选择，支持前后日步进与最新日期) */}
-      <div className="ca-daily-toolbar" role="toolbar" aria-label="分日分析工具栏">
+      <div className="ca-daily-toolbar ca-daily-toolbar-docked" role="toolbar" aria-label="分日分析工具栏">
         <div className="ca-filter-section">
           <span className="ca-filter-label">业务日期:</span>
           <div className="ca-date-single-box">

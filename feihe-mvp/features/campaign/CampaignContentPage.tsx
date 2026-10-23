@@ -218,6 +218,9 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">内容管理</h2>
             <span className="ca-header-badge">内容看板</span>
+            <span className="ca-header-period-pill" style={{ fontSize: "11px", color: "#64748b", background: "#f8fafc", border: "1px solid #e2e8f0", padding: "2px 8px", borderRadius: "4px" }}>
+              统计周期：{displayPeriod}
+            </span>
           </div>
           <span className="ca-header-subtitle">达人制作、流转库存分布、产品及渠道归属与业务行动清单</span>
         </div>

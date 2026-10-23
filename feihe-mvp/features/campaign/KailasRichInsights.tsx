@@ -457,7 +457,11 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           {/* ----------------- 第一层 (重 · 全口径预算与多阶段演进) ----------------- */}
           <div className='kri-section'>
             <div className='kri-section-header'>
-              <h3 className='kri-section-title'>全口径预算统筹与多阶段投放演进</h3>
+              <div className='kri-section-title-wrap'>
+                <span className='ca-chapter-num'>02</span>
+                <span className='kri-badge'>预算演进</span>
+                <h3 className='kri-section-title'>全口径预算统筹与多阶段投放演进</h3>
+              </div>
               <span className='kri-section-desc'>黑山Q3、EX330与跑山女孩预算执行结构与双周演进</span>
             </div>
             <div className='kri-grid-2'>
@@ -613,7 +617,11 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
 
           <div className='kri-section'>
             <div className='kri-section-header'>
-              <h3 className='kri-section-title'>关键交付指标与自然 / 投流对比</h3>
+              <div className='kri-section-title-wrap'>
+                <span className='ca-chapter-num'>03</span>
+                <span className='kri-badge'>自然 / 投流</span>
+                <h3 className='kri-section-title'>关键交付指标与自然 / 投流对比</h3>
+              </div>
               <span className='kri-section-desc'>各项指标保留原表归因口径，不视为同一人群逐级转化</span>
             </div>
             <div className='kri-grid-2'>

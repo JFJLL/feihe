@@ -16,8 +16,9 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border: 1px solid var(--border-color, #e2e8f0);
-  border-radius: 12px;
+  border: 1px solid var(--border-color, #e6e3dc);
+  border-top: 3px solid var(--ca-palette-primary, #2c7168);
+  border-radius: 10px;
   padding: 20px;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
@@ -34,7 +35,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  border-bottom: 2px solid #f1f5f9;
+  border-bottom: 1px solid #edf0ec;
   padding-bottom: 12px;
 }
 
@@ -84,6 +85,23 @@
   font-weight: 700;
   color: #1e293b;
   margin: 0;
+}
+
+/* Numbered Chapter Badge */
+.ca-chapter-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, #2c7168 0%, #1e524b 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  box-shadow: 0 1px 3px rgba(44, 113, 104, 0.25);
+  flex-shrink: 0;
 }
 
 .mri-group-desc {

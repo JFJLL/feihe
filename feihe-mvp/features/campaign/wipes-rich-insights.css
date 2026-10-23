@@ -379,21 +379,59 @@
 }
 
 /* Clean Section Headers */
+.wri-section,
+.wipes-section-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e6e3dc;
+  border-top: 3px solid #2c7168;
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-sizing: border-box;
+}
+
+.wri-section-header,
 .wipes-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 0;
   margin-bottom: 4px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf0ec;
 }
 
+.wri-section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wri-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  background: #e6f0ee;
+  color: #2c7168;
+}
+
+.wri-section-title,
 .wipes-section-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   color: #1e293b;
   margin: 0;
+}
+
+.wri-section-desc {
+  font-size: 12px;
+  color: #64748b;
 }
 .wipes-kpi-table-wrap { overflow-x: auto; }
 .wipes-kpi-table :is(th,td) { padding: 10px 7px; font-size: 12px; }

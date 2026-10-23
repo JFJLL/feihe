@@ -186,20 +186,37 @@
 }
 
 /* =========================================================================
-   COMPACT UNIFIED TOOLBAR
+   COMPACT UNIFIED COCKPIT TOOLBAR
    ========================================================================= */
 
-.bd-toolbar-compact {
+.business-daily .bd-cockpit-toolbar,
+.bd-cockpit-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dce4e0;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 0 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.bd-cockpit-top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: 12px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 8px 14px;
-  margin-bottom: 0 !important;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.bd-cockpit-nav-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-top: 8px;
+  border-top: 1px dashed #e4e7e2;
 }
 
 .bd-toolbar-meta {
@@ -1136,47 +1153,52 @@
 }
 
 /* =========================================================================
-   STICKY FROSTED GLASS SECTION NAV & REFINED DATE CONTROLLERS
+   INTEGRATED COCKPIT SECTION NAV & REFINED DATE CONTROLLERS
    ========================================================================= */
 
 .bd-section-nav {
-  position: sticky !important;
-  top: 8px !important;
-  z-index: 15 !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  background: rgba(255, 255, 255, 0.92) !important;
-  border: 1px solid #e4e7e2 !important;
-  border-radius: 999px !important;
-  padding: 4px 12px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
   flex-wrap: wrap !important;
-  margin: 4px 0 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  position: static !important;
   font-size: 12px !important;
+}
+
+.bd-section-nav-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+  margin-right: 4px;
+  white-space: nowrap;
 }
 
 .bd-section-nav a {
   display: inline-flex !important;
   align-items: center !important;
-  padding: 3px 10px !important;
-  border-radius: 999px !important;
-  background: #f6f5f2 !important;
-  border: 1px solid #e4e7e2 !important;
+  padding: 4px 12px !important;
+  border-radius: 7px !important;
+  background: #f1f5f3 !important;
+  border: 1px solid #d5e0dc !important;
   color: #334155 !important;
   text-decoration: none !important;
-  font-size: 11.5px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
   transition: all 0.15s ease !important;
+  white-space: nowrap;
 }
 
 .bd-section-nav a:hover {
   background: #ffffff !important;
   color: #2c7168 !important;
-  border-color: #c3dcd7 !important;
-  box-shadow: 0 1px 3px rgba(44, 113, 104, 0.1) !important;
+  border-color: #2c7168 !important;
+  box-shadow: 0 1px 4px rgba(44, 113, 104, 0.12) !important;
 }
 
 /* Refined Date Controllers */

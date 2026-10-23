@@ -1109,9 +1109,10 @@ export function BusinessDailyBoard({
         className="business-daily"
         data-testid={overview ? 'business-data-overview' : 'business-daily-board'}
       >
-        {/* Compact, Unified Toolbar */}
-        <div className="bd-toolbar-compact">
-          <div className="bd-toolbar-meta">
+        {/* Compact, Unified Cockpit Toolbar */}
+        <div className="bd-toolbar-compact bd-cockpit-toolbar">
+          <div className="bd-cockpit-top-row">
+            <div className="bd-toolbar-meta">
             <span className="bd-meta-chip">{overview ? '数据总览 · 全盘效果' : '分日看板 · 执行底表'}</span>
             <span className="bd-meta-text">
               {overview ? (
@@ -1281,6 +1282,34 @@ export function BusinessDailyBoard({
               </button>
             )}
           </div>
+          </div>
+
+          <div className="bd-cockpit-nav-row">
+            <nav
+              className="bd-section-nav"
+              aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
+            >
+              <span className="bd-section-nav-label">⚡ 快速定位:</span>
+              {(overview ? overviewNavItems : dailyNavItems).map(item => (
+                <a
+                  key={item.id}
+                  href={'#' + item.id}
+                  onClick={e => {
+                    if (typeof document !== 'undefined') {
+                      const target = document.getElementById(item.id);
+                      if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        target.focus({ preventScroll: true });
+                      }
+                    }
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          </div>
         </div>
 
         {notice && <p role="status" className="bd-notice-banner">{notice}</p>}
@@ -1302,30 +1331,6 @@ export function BusinessDailyBoard({
 
               {view.sourceVersions.length > 0 && (
                 <>
-                  {/* Lightweight Section Anchor Navigation */}
-                  <nav
-                    className="bd-section-nav"
-                    aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
-                  >
-                    {(overview ? overviewNavItems : dailyNavItems).map(item => (
-                      <a
-                        key={item.id}
-                        href={'#' + item.id}
-                        onClick={e => {
-                          if (typeof document !== 'undefined') {
-                            const target = document.getElementById(item.id);
-                            if (target) {
-                              e.preventDefault();
-                              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                              target.focus({ preventScroll: true });
-                            }
-                          }
-                        }}
-                      >
-                        {item.label}
-                      </a>
-                    ))}
-                  </nav>
 
                   {/* Overview Group 1: 经营表现 */}
                   {overview && (

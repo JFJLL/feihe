@@ -38,6 +38,7 @@ export interface HuangTianeBoardProps {
 export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeBoardProps) {
   const model = useMemo(() => extractHuangTianeData(dashboard), [dashboard]);
   const [adsScope, setAdsScope] = useState<'brand' | 'cid' | 'commerce'>('brand');
+  const [focusedChapter, setFocusedChapter] = useState<string | null>(null);
   const [creatorTableOpen, setCreatorTableOpen] = useState<boolean>(false);
   const [kosTableOpen, setKosTableOpen] = useState<boolean>(false);
   const [showAllAudiences, setShowAllAudiences] = useState<boolean>(false);
@@ -61,49 +62,57 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         label: '品牌FS消耗 / 预算进度',
         value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
         hint: `预算 ${formatCurrency(model.brandBudgetVal)} · 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
+        badge: '品牌FS种草线',
         status: 'accent',
       },
       {
         label: '种草I/TI人群 · CPTI',
         value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
         hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 · CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
+        badge: '品牌FS种草线',
         status: 'success',
       },
       {
         label: '红猫CID全域消耗',
         value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
         hint: `标准投 ${formatCurrency(model.cidStandardSpend)} · 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
-        status: 'neutral',
+        badge: '红猫CID引流线',
+        status: 'accent',
       },
       {
         label: '红猫CID成交GMV · ROI',
         value: model.cidTotalGmv !== null ? formatCurrency(model.cidTotalGmv) : '—',
         hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} · 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
+        badge: '红猫CID引流线',
         status: 'accent',
       },
       {
         label: '闭环商销累计消耗',
         value: model.commerceSpend !== null ? formatCurrency(model.commerceSpend) : '—',
         hint: `统计周期：${model.commercePeriod}`,
-        status: 'neutral',
+        badge: '闭环商销成交线',
+        status: 'warning',
       },
       {
         label: '商销成交GMV · 订单',
         value: model.commerceGmv !== null ? formatCurrency(model.commerceGmv) : '—',
         hint: `订单 ${formatNum(model.commerceOrders, 0)} 单 · 加购 ${formatNum(model.commerceCart, 0)} 次`,
+        badge: '闭环商销成交线',
         status: 'accent',
       },
       {
         label: '达人选号定档 / 发布率',
         value: `${model.creatorsPublished} / ${model.creatorsCount} 位`,
         hint: `已发布 ${formatPercent(model.creatorsPublishRate, 1)} · 素材收集 ${model.creatorsAssetCollected} 篇`,
+        badge: '达人与KOS矩阵',
         status: 'success',
       },
       {
         label: 'KOS笔记矩阵发布量',
         value: `${model.kosCount} 篇`,
         hint: '以KOS执行表登记为准，不推定已投流或已成交',
-        status: 'neutral',
+        badge: '达人与KOS矩阵',
+        status: 'default',
       },
     ];
   }, [model]);
@@ -246,35 +255,63 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
     return (
       <div className="ht-board" data-testid="huang-tiane-overview">
-        {/* 看板头部 */}
-        <div className="ht-header">
-          <div className="ht-header-left">
-            <h2 className="ht-header-title">黄天鹅 · 战役全域经营洞察</h2>
-            <span className="ht-header-badge">全域经营与受众洞察</span>
+        {/* 吸顶章节导航与周期控制台 (一体化指挥舱) */}
+        <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="黄天鹅全域章节导航与周期控制台">
+          <div className="ht-command-bar-left">
+            <div className="ht-command-bar-brand">
+              <h2 className="ht-header-title">黄天鹅 · 战役全域经营洞察</h2>
+              <span className="ht-header-badge">全域经营与受众洞察</span>
+            </div>
+            <span className="ht-jumpbar-label">📊 章节导航</span>
+            <div className="ht-jumpbar-links">
+              {([
+                { id: 'ht-sec-top-kpi', num: '01', label: '全域总览' },
+                { id: 'ht-sec-content-audience', num: '02', label: '内容与人群' },
+                { id: 'ht-sec-funnels', num: '03', label: '三线转化漏斗' },
+                { id: 'ht-sec-tags-keywords', num: '04', label: '标签与词包' },
+                { id: 'ht-sec-audiences-keywords', num: '05', label: '热力与达人矩阵' },
+              ] as const).map((chap) => {
+                const isFocused = focusedChapter === chap.num;
+                return (
+                  <a
+                    key={chap.id}
+                    href={`#${chap.id}`}
+                    className={`ht-jump-pill ${isFocused ? 'active' : ''}`}
+                    onClick={(e) => {
+                      handleAnchorClick(e, chap.id);
+                      setFocusedChapter((prev) => (prev === chap.num ? null : chap.num));
+                    }}
+                  >
+                    <span className="ht-jump-num">{chap.num}</span>
+                    <span>{chap.label}</span>
+                  </a>
+                );
+              })}
+              {focusedChapter && (
+                <button
+                  type="button"
+                  className="ht-jump-reset-btn"
+                  onClick={() => setFocusedChapter(null)}
+                  title="重置章节高亮"
+                >
+                  全部展开
+                </button>
+              )}
+            </div>
           </div>
           <div className="ht-header-meta">
-            品牌与CID周期：{model.brandPeriod} · 商销周期：{model.commercePeriod}
+            <span className="ht-period-pill">品牌/CID {model.brandPeriod}</span>
+            <span className="ht-period-pill">商销 {model.commercePeriod}</span>
           </div>
         </div>
 
-
-
-        {/* 吸顶分区快速定位导航条 */}
-        <nav className="ht-section-jumpbar" aria-label="黄天鹅总览吸顶分区导航">
-          <div className="ht-jumpbar-label">⚡ 分区定位:</div>
-          <div className="ht-jumpbar-links">
-            <a href="#ht-sec-top-kpi" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-top-kpi')}>🎯 核心指标</a>
-            <a href="#ht-sec-budget-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-budget-benchmarks')}>⚖️ 预算与基准对标</a>
-            <a href="#ht-sec-funnels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-funnels')}>🔻 三线转化漏斗</a>
-            <a href="#ht-sec-audiences-keywords" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-audiences-keywords')}>👥 关键词与人群画像</a>
-            <a href="#ht-sec-creators-detail" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-creators-detail')}>✍️ 达人/KOS明细</a>
-          </div>
-        </nav>
-
         {/* 第一层：全域三线经营总览与蛋品行业基准对标 */}
-        <section id="ht-sec-top-kpi" className="ht-layer">
+        <section id="ht-sec-top-kpi" className={`ht-layer ${focusedChapter === '01' ? 'ht-layer-focused' : ''}`}>
           <div className="ht-layer-header">
-            <h3 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h3>
+            <div className="ht-layer-header-left">
+              <span className="ht-chapter-num">01</span>
+              <h3 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h3>
+            </div>
             <span className="ht-layer-sub">8项核心全域KPI与蛋品大盘对照</span>
           </div>
 
@@ -393,10 +430,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
         <HuangAudienceInsights model={model} />
 
-        {/* 第二层：三大漏斗与趋势 */}
-        <section id="ht-sec-funnels" className="ht-layer">
+        {/* 第三章：三条业务线转化漏斗与趋势 */}
+        <section id="ht-sec-funnels" className={`ht-layer ${focusedChapter === '03' ? 'ht-layer-focused' : ''}`}>
           <div className="ht-layer-header">
-            <h3 className="ht-layer-title">三条业务线 · 关键节点与趋势</h3>
+            <div className="ht-layer-header-left">
+              <span className="ht-chapter-num">03</span>
+              <h3 className="ht-layer-title">三条业务线 · 关键节点与趋势</h3>
+            </div>
             <span className="ht-layer-sub">三线独立核算，不跨平台拼接转化链路</span>
           </div>
 
@@ -490,9 +530,15 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
         </section>
 
-        {/* 第三层：内容标签、搜索词类与定向人群 */}
-        <details className="ht-layer ht-secondary-details">
-          <summary>内容标签、搜索词与素材表现</summary>
+        {/* 第四章：内容标签、搜索词与素材表现 */}
+        <details id="ht-sec-tags-keywords" open className={`ht-layer ht-secondary-details ht-layer-details ${focusedChapter === '04' ? 'ht-layer-focused' : ''}`}>
+          <summary className="ht-layer-header ht-summary-header">
+            <div className="ht-layer-header-left">
+              <span className="ht-chapter-num">04</span>
+              <h3 className="ht-layer-title">内容标签、搜索词与素材表现</h3>
+            </div>
+            <span className="ht-layer-sub">12大笔记标签、10大搜索词类与商销Top素材 · 点击折叠</span>
+          </summary>
           <div className="ht-grid-2">
             <ChartPanel
               title="品牌线 12大笔记内容标签投放表现"
@@ -540,11 +586,14 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
         </details>
 
-        {/* 第四层：受众人口学 24 维热力矩阵与地域渗透 */}
-        <section id="ht-sec-audiences-keywords" className="ht-layer">
+        {/* 第五章：受众人口学 24 维热力矩阵与达人/KOS明细 */}
+        <section id="ht-sec-audiences-keywords" className={`ht-layer ${focusedChapter === '05' ? 'ht-layer-focused' : ''}`}>
           <div className="ht-layer-header">
-            <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与地域渗透</h3>
-            <span className="ht-layer-sub">性别×年龄二维消耗/互动交叉矩阵与重点省份渗透</span>
+            <div className="ht-layer-header-left">
+              <span className="ht-chapter-num">05</span>
+              <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与达人/KOS明细</h3>
+            </div>
+            <span className="ht-layer-sub">性别×年龄二维消耗交叉矩阵 · 达人选号与KOS矩阵全貌</span>
           </div>
 
           <div className="ht-grid-2">
@@ -582,8 +631,14 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         </section>
 
         {/* 达人选号淘汰漏斗、菜品方向与 11 月储备 */}
-        <details id="ht-sec-creators-detail" className="ht-layer ht-secondary-details">
-          <summary>达人执行、内容方向与KOS明细</summary>
+        <details id="ht-sec-creators-detail" open className="ht-layer ht-secondary-details ht-layer-details">
+          <summary className="ht-layer-header ht-summary-header">
+            <div className="ht-layer-header-left">
+              <span className="ht-chapter-num">05-附</span>
+              <h3 className="ht-layer-title">达人执行、内容方向与KOS明细</h3>
+            </div>
+            <span className="ht-layer-sub">31位达人选号漏斗与65篇KOS发布底表 · 点击折叠</span>
+          </summary>
           <div className="ht-grid-2">
             <ChartPanel
               title="10月达人选号全流程淘汰漏斗"
@@ -829,42 +884,53 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
     return (
       <div className="ht-board" data-testid="huang-tiane-ads">
-        <div className="ht-header">
-          <div className="ht-header-left">
-            <h2 className="ht-header-title">黄天鹅 · 投放效果与渠道分析</h2>
-            <span className="ht-header-badge">渠道独立视图</span>
+        <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="投放渠道控制台">
+          <div className="ht-command-bar-left">
+            <div className="ht-command-bar-brand">
+              <h2 className="ht-header-title">黄天鹅 · 投放效果与渠道分析</h2>
+              <span className="ht-header-badge">渠道独立视图</span>
+            </div>
+            <span className="ht-jumpbar-label">📊 渠道导航</span>
+            <div className="ht-scope-tabs" role="tablist" aria-label="渠道切换">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={adsScope === 'brand'}
+                className={`ht-scope-tab-btn ${adsScope === 'brand' ? 'active' : ''}`}
+                onClick={() => setAdsScope('brand')}
+              >
+                🎯 品牌FS ({model.brandDaily.length}日)
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={adsScope === 'cid'}
+                className={`ht-scope-tab-btn ${adsScope === 'cid' ? 'active' : ''}`}
+                onClick={() => setAdsScope('cid')}
+              >
+                🛒 红猫CID (两类对照)
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={adsScope === 'commerce'}
+                className={`ht-scope-tab-btn ${adsScope === 'commerce' ? 'active' : ''}`}
+                onClick={() => setAdsScope('commerce')}
+              >
+                📦 闭环商销 ({model.commerceDaily.length}日)
+              </button>
+            </div>
+            <div className="ht-jumpbar-links">
+              <a href="#ht-sec-ads-channels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-channels')}>📊 渠道走势</a>
+              <a href="#ht-sec-ads-audiences" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-audiences')}>👥 人群地域</a>
+              <a href="#ht-sec-ads-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-benchmarks')}>⚖️ 行业基准</a>
+            </div>
           </div>
-          <div className="ht-scope-tabs">
-            <button
-              className={`ht-scope-tab-btn ${adsScope === 'brand' ? 'active' : ''}`}
-              onClick={() => setAdsScope('brand')}
-            >
-              品牌FS ({model.brandDaily.length}日)
-            </button>
-            <button
-              className={`ht-scope-tab-btn ${adsScope === 'cid' ? 'active' : ''}`}
-              onClick={() => setAdsScope('cid')}
-            >
-              红猫CID (两类对照)
-            </button>
-            <button
-              className={`ht-scope-tab-btn ${adsScope === 'commerce' ? 'active' : ''}`}
-              onClick={() => setAdsScope('commerce')}
-            >
-              闭环商销 ({model.commerceDaily.length}日)
-            </button>
+          <div className="ht-header-meta">
+            <span className="ht-period-pill">品牌与CID：{model.brandPeriod}</span>
+            <span className="ht-period-pill">商销：{model.commercePeriod}</span>
           </div>
         </div>
-
-        {/* 投放分析吸顶分区导航 */}
-        <nav className="ht-section-jumpbar" aria-label="投放渠道导航">
-          <div className="ht-jumpbar-label">⚡ 投放定位:</div>
-          <div className="ht-jumpbar-links">
-            <a href="#ht-sec-ads-channels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-channels')}>📊 渠道日变走势</a>
-            <a href="#ht-sec-ads-audiences" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-audiences')}>👥 人群包与地域</a>
-            <a href="#ht-sec-ads-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-benchmarks')}>⚖️ 行业基准对标</a>
-          </div>
-        </nav>
 
         {adsScope === 'brand' && (
           <div id="ht-sec-ads-channels" className="ht-grid-2">
@@ -1296,25 +1362,25 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
   return (
     <div className="ht-board" data-testid="huang-tiane-content">
-      <div className="ht-header">
-        <div className="ht-header-left">
-          <h2 className="ht-header-title">黄天鹅 · 内容执行与KOS发布明细</h2>
-          <span className="ht-header-badge">达人{model.creatorsCount}篇 + KOS{model.kosCount}篇</span>
+      <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="内容执行控制台">
+        <div className="ht-command-bar-left">
+          <div className="ht-command-bar-brand">
+            <h2 className="ht-header-title">黄天鹅 · 内容执行与KOS明细</h2>
+            <span className="ht-header-badge">达人{model.creatorsCount}篇 + KOS{model.kosCount}篇</span>
+          </div>
+          <span className="ht-jumpbar-label">📊 章节导航</span>
+          <div className="ht-jumpbar-links">
+            <a href="#ht-sec-content-status" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-status')}>🎯 执行阶段</a>
+            <a href="#ht-sec-content-funnel" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-funnel')}>📅 排期与发布</a>
+            <a href="#ht-sec-content-pricing" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-pricing')}>💰 采买报价</a>
+          </div>
         </div>
         <div className="ht-header-meta">
-          达人已发布 {model.creatorsPublished} 篇 · KOS已发布 {model.kosCount} 篇 · 素材收集 {model.creatorsAssetCollected} 篇
+          <span className="ht-period-pill">达人已发 {model.creatorsPublished} 篇</span>
+          <span className="ht-period-pill">KOS已发 {model.kosCount} 篇</span>
+          <span className="ht-period-pill">素材已收 {model.creatorsAssetCollected} 篇</span>
         </div>
       </div>
-
-      {/* 内容执行吸顶导航 */}
-      <nav className="ht-section-jumpbar" aria-label="内容执行导航">
-        <div className="ht-jumpbar-label">⚡ 内容定位:</div>
-        <div className="ht-jumpbar-links">
-          <a href="#ht-sec-content-status" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-status')}>🎯 达人执行阶段</a>
-          <a href="#ht-sec-content-funnel" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-funnel')}>📅 排期与发布走势</a>
-          <a href="#ht-sec-content-pricing" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-pricing')}>💰 采买报价与明细</a>
-        </div>
-      </nav>
 
       <div id="ht-sec-content-status" className="ht-grid-2">
         <ChartPanel

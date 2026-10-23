@@ -13,9 +13,12 @@ export function HuangAudienceInsights({ model }: { model: Model }) {
     { label: '达人已发布', value: model.creatorsPublished, color: '#2c7168' },
     { label: 'KOS登记笔记', value: model.kosCount, color: '#8273a3' },
   ];
-  return <section className="ht-layer" aria-label="内容容量与核心人群">
+  return <section id="ht-sec-content-audience" className="ht-layer" aria-label="内容供给与核心人群">
     <div className="ht-layer-header">
-      <h3 className="ht-layer-title">内容供给与核心人群</h3>
+      <div className="ht-layer-header-left">
+        <span className="ht-chapter-num">02</span>
+        <h3 className="ht-layer-title">内容供给与核心人群</h3>
+      </div>
       <span className="ht-layer-sub">先看可用内容，再看人群质量与京沪覆盖</span>
     </div>
     <div className="ht-grid-2">

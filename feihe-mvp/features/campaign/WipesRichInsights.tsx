@@ -370,7 +370,15 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         {/* =========================================================================
             第一层（重 · 双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵）
            ========================================================================= */}
-        <div className="wipes-section-header"><h3 className="wipes-section-title">双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵</h3></div>
+        <div className="wri-section wipes-section-wrap">
+          <div className="wri-section-header wipes-section-header">
+            <div className="wri-section-title-wrap">
+              <span className="ca-chapter-num">02</span>
+              <span className="wri-badge">双轨核算</span>
+              <h3 className="wri-section-title wipes-section-title">双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵</h3>
+            </div>
+            <span className="wri-section-desc">源表最新底表核算（日常种草7项 + 医生专家4项考核）</span>
+          </div>
 
         {/* Core Row 1: KPI 与 预算双轨结构 (并排成对) */}
         <div className="wipes-rich-grid-2">
@@ -715,6 +723,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             height={280}
           />
         </ChartPanel>
+        </div>
         </div>
 
         {/* 次级分析折叠 1：定向人群包、达人层级与场景热力矩阵 */}

@@ -603,6 +603,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
         <section className="mri-group">
           <div className="mri-group-header">
             <div className="mri-group-title-wrap">
+              <span className="ca-chapter-num">02</span>
               <span className="mri-group-badge mgmt">618历史复盘</span>
               <h3 className="mri-group-title">2026年618大促全案采买结构与ROI复盘</h3>
             </div>
@@ -734,6 +735,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
+                <span className="ca-chapter-num">02</span>
                 <span className="mri-group-badge mgmt">经营决策</span>
                 <h3 className="mri-group-title">经营决策与多线预算总览</h3>
               </div>
@@ -836,6 +838,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
+                <span className="ca-chapter-num">03</span>
                 <span className="mri-group-badge eff">投放效率</span>
                 <h3 className="mri-group-title">全链路转化漏斗与投放效率诊断</h3>
               </div>
@@ -938,6 +941,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
+                <span className="ca-chapter-num">04</span>
                 <span className="mri-group-badge audience">受众与搜索</span>
                 <h3 className="mri-group-title">受众人口学画像与搜索定向引擎</h3>
               </div>
@@ -997,6 +1001,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
+                <span className="ca-chapter-num">05</span>
                 <span className="mri-group-badge content">达人与内容</span>
                 <h3 className="mri-group-title">达人内容合作矩阵与样机流转</h3>
               </div>

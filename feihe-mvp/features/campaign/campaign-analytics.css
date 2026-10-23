@@ -833,3 +833,253 @@
 .ca-budget-pct-pill { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ca-budget-pct-normal { background: rgba(44, 113, 104, 0.1); color: var(--ca-palette-primary); }
 .ca-budget-pct-overrun { background: rgba(189, 121, 100, 0.14); color: var(--ca-palette-terracotta); }
+
+/* ==========================================================================
+   Executive Strip: Top diagnostic insight + Fast-track workstation buttons
+   ========================================================================== */
+.ca-executive-strip {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  margin: 10px 0 16px;
+  width: 100%;
+}
+
+.ca-executive-strip .ca-insight {
+  flex: 1 1 0%;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e4e7e2);
+  border-left: 4px solid var(--ca-palette-primary, #2c7168);
+  border-radius: 8px;
+  padding: 10px 16px;
+  box-shadow: 0 1px 3px rgba(37, 43, 42, 0.03);
+}
+
+.ca-executive-strip .ca-quick-links-bar {
+  flex: 0 0 auto;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e4e7e2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  box-shadow: 0 1px 3px rgba(37, 43, 42, 0.03);
+}
+
+@media (max-width: 980px) {
+  .ca-executive-strip {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ==========================================================================
+   Chapter Header Canvas: Standardized 01, 02, 03, 04 section dividers
+   ========================================================================== */
+.ca-chapter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-top: 3px solid var(--ca-palette-primary, #2c7168);
+  border-radius: 8px 8px 0 0;
+  margin-top: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.ca-chapter-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ca-chapter-badge,
+.ca-chapter-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, #2c7168 0%, #1e524b 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  box-shadow: 0 1px 3px rgba(44, 113, 104, 0.25);
+  flex-shrink: 0;
+}
+
+.ca-chapter-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ca-chapter-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.ca-chapter-desc {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ca-chapter-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ca-chapter-period-tag {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #64748b;
+  background: #f4f3ef;
+  border: 1px solid #e5e2da;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Secondary Sub-Ribbon KPI Band (Inside Chapter Modules)
+   ========================================================================== */
+.mri-group .ca-metric-strip,
+.kri-section .ca-metric-strip,
+.wri-section .ca-metric-strip,
+.wri-section-wrap .ca-metric-strip,
+.wipes-rich-container .ca-metric-strip,
+.campaign-enrichment-stack .ca-metric-strip,
+.ca-section-enrichment .ca-metric-strip {
+  display: grid;
+  grid-template-columns: repeat(var(--metric-columns, 4), minmax(0, 1fr));
+  gap: 8px;
+  background: #f7faf9;
+  border: 1px solid #e2ece9;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 6px 0 14px 0;
+}
+
+.mri-group .ca-metric-item,
+.kri-section .ca-metric-item,
+.wri-section .ca-metric-item,
+.wri-section-wrap .ca-metric-item,
+.wipes-rich-container .ca-metric-item,
+.campaign-enrichment-stack .ca-metric-item,
+.ca-section-enrichment .ca-metric-item {
+  background: #ffffff !important;
+  border: 1px solid #e6eeec !important;
+  border-top: 1px solid #e6eeec !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  min-height: 56px;
+  max-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: none !important;
+  position: relative;
+}
+
+.mri-group .ca-metric-item::before,
+.kri-section .ca-metric-item::before,
+.wri-section .ca-metric-item::before,
+.wri-section-wrap .ca-metric-item::before,
+.wipes-rich-container .ca-metric-item::before,
+.campaign-enrichment-stack .ca-metric-item::before,
+.ca-section-enrichment .ca-metric-item::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ca-palette-primary, #2c7168);
+}
+
+.mri-group .ca-metric-label,
+.kri-section .ca-metric-label,
+.wri-section .ca-metric-label,
+.wri-section-wrap .ca-metric-label,
+.wipes-rich-container .ca-metric-label,
+.campaign-enrichment-stack .ca-metric-label,
+.ca-section-enrichment .ca-metric-label {
+  font-size: 11.5px !important;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 2px;
+  padding-left: 10px;
+}
+
+.mri-group .ca-metric-value,
+.kri-section .ca-metric-value,
+.wri-section .ca-metric-value,
+.wri-section-wrap .ca-metric-value,
+.wipes-rich-container .ca-metric-value,
+.campaign-enrichment-stack .ca-metric-value,
+.ca-section-enrichment .ca-metric-value {
+  font-size: 17px !important;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.mri-group .ca-metric-missing,
+.kri-section .ca-metric-missing,
+.wri-section .ca-metric-missing,
+.wri-section-wrap .ca-metric-missing,
+.wipes-rich-container .ca-metric-missing,
+.campaign-enrichment-stack .ca-metric-missing,
+.ca-section-enrichment .ca-metric-missing {
+  font-size: 15px !important;
+}
+
+.mri-group .ca-metric-unit,
+.kri-section .ca-metric-unit,
+.wri-section .ca-metric-unit,
+.wri-section-wrap .ca-metric-unit,
+.wipes-rich-container .ca-metric-unit,
+.campaign-enrichment-stack .ca-metric-unit,
+.ca-section-enrichment .ca-metric-unit {
+  font-size: 11px !important;
+}
+
+.mri-group .ca-metric-note,
+.kri-section .ca-metric-note,
+.wri-section .ca-metric-note,
+.wri-section-wrap .ca-metric-note,
+.wipes-rich-container .ca-metric-note,
+.campaign-enrichment-stack .ca-metric-note,
+.ca-section-enrichment .ca-metric-note {
+  font-size: 10.5px !important;
+  margin-top: 2px;
+  color: #94a3b8;
+}
+
+.mri-group .ca-metric-progress-track,
+.kri-section .ca-metric-progress-track,
+.wri-section .ca-metric-progress-track,
+.wri-section-wrap .ca-metric-progress-track,
+.wipes-rich-container .ca-metric-progress-track,
+.campaign-enrichment-stack .ca-metric-progress-track,
+.ca-section-enrichment .ca-metric-progress-track {
+  height: 2.5px !important;
+  margin-top: 3px;
+}

@@ -7,6 +7,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .ca-overview-selector-label {
@@ -47,32 +49,82 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* --- Sticky Section Jumpbar --- */
-.ca-section-jumpbar {
+/* --- Sticky Console & Integrated Jumpbar --- */
+.ca-sticky-console,
+.ca-header {
   position: sticky;
   top: 0;
-  z-index: 20;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(8px);
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--ca-palette-border-warm, #e4e7e2);
   border-radius: 8px;
-  padding: 6px 12px;
-  margin: 0 0 10px 0;
+  padding: 8px 14px !important;
+  min-height: 44px;
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between !important;
+  gap: 12px;
+  flex-wrap: nowrap !important;
+  box-shadow: 0 1px 4px rgba(37, 43, 42, 0.05);
+}
+
+@media (max-width: 768px) {
+  .ca-sticky-console,
+  .ca-header {
+    flex-wrap: wrap !important;
+  }
+}
+
+.ca-console-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.ca-console-brand,
+.ca-header-period-pill,
+.ca-header-subtitle {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+
+.ca-section-jumpbar {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  box-shadow: 0 1px 4px rgba(37, 43, 42, 0.04);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  flex-wrap: nowrap;
 }
 
 .ca-jumpbar-label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #64748b;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #2c7168;
+  background: #f0f6f5;
+  border: 1px solid #c3dcd7;
+  padding: 2px 7px;
+  border-radius: 5px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ca-jumpbar-icon {
@@ -84,22 +136,25 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .ca-jump-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
+  gap: 5px;
+  padding: 4px 9px;
   border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 11.5px;
+  font-weight: 600;
   color: #475569;
   text-decoration: none;
   background: #f4f3ef;
   border: 1px solid #e5e2da;
   transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .ca-jump-pill:hover {
@@ -107,6 +162,16 @@
   color: #2c7168;
   border-color: #c3dcd7;
   box-shadow: 0 1px 3px rgba(44, 113, 104, 0.1);
+}
+
+.ca-jump-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: #2c7168;
+  background: rgba(44, 113, 104, 0.1);
+  padding: 0 4px;
+  border-radius: 3px;
 }
 
 /* Sticky jump bar scroll offset for anchor sections */
@@ -128,6 +193,12 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 14px;
+  background: #fdfcfb;
+  margin-bottom: 12px;
 }
 
 /* --- Tier 3: Deep Enrichment & Business Insight --- */

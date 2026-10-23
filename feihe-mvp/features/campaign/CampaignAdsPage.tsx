@@ -229,6 +229,12 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">投流分析</h2>
             <span className="ca-header-badge">投放看板</span>
+            <div className="ca-header-view-group" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: 8 }}>
+              <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ca-palette-muted)" }}>分析视角：</span>
+              <StyledSelect className="ca-toolbar-select" value={activeKey} onChange={(e) => setStateKey(e.target.value)} aria-label="投流数据视图切换">
+                {views.map((v) => <option key={v.key} value={v.key}>{v.label}</option>)}
+              </StyledSelect>
+            </div>
           </div>
           <span className="ca-header-subtitle">广告消耗结构、点击与转化效率对比及投放指标跟踪</span>
         </div>
@@ -238,7 +244,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
         </div>
       </header>
 
-      <div className="ca-toolbar">
+      <div className="ca-toolbar" style={{ display: "none" }} aria-hidden="true">
         <div className="ca-toolbar-group">
           <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ca-palette-muted)" }}>分析视角：</span>
           <StyledSelect className="ca-toolbar-select" value={activeKey} onChange={(e) => setStateKey(e.target.value)} aria-label="投流数据视图切换">

@@ -489,14 +489,57 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
   return (
     <div className="ca-page" role="main" aria-label={name + " 营销战役总览"}>
-      {/* 1. Header (紧凑元信息 toolbar + 周期说明 + 业务快照切换器) */}
-      <header className="ca-header bd-toolbar-compact">
-        <div className="ca-header-heading">
-          <div className="ca-header-title-row">
+      {/* 1. 一体式吸顶控制台 (章节快速定位 + 统计周期 + 业务快照切换器) */}
+      <header className="ca-header ca-sticky-console bd-toolbar-compact">
+        <div className="ca-console-left">
+          <div className="ca-console-brand">
             <h2 className="ca-header-title">数据总览</h2>
             <span className="ca-header-badge">营销复盘</span>
-            <span className="ca-header-subtitle">{activeHeaderPeriod}</span>
           </div>
+
+          <nav className="ca-section-jumpbar" aria-label="页内吸顶快速定位导航">
+            <span className="ca-jumpbar-label">📊 章节导航</span>
+            <div className="ca-jumpbar-links">
+              <a
+                href="#ca-sec-kpi"
+                className="ca-jump-pill"
+                onClick={(e) => handleAnchorClick(e, "ca-sec-kpi")}
+              >
+                <span className="ca-jump-num">01</span>
+                <span>核心指标</span>
+              </a>
+              <a
+                href="#ca-sec-charts"
+                className="ca-jump-pill"
+                onClick={(e) => handleAnchorClick(e, "ca-sec-charts")}
+              >
+                <span className="ca-jump-num">02</span>
+                <span>预算与版位</span>
+              </a>
+              <a
+                href="#ca-sec-enrichment"
+                className="ca-jump-pill"
+                onClick={(e) => handleAnchorClick(e, "ca-sec-enrichment")}
+              >
+                <span className="ca-jump-num">03</span>
+                <span>深度拆解</span>
+              </a>
+              {activeDetailTables.length > 0 && (
+                <a
+                  href="#ca-sec-details"
+                  className="ca-jump-pill"
+                  onClick={(e) => handleAnchorClick(e, "ca-sec-details")}
+                >
+                  <span className="ca-jump-num">04</span>
+                  <span>底层明细</span>
+                </a>
+              )}
+            </div>
+          </nav>
+
+          <span className="ca-header-subtitle ca-header-period-pill" title={activeHeaderPeriod}>
+            📅 {activeHeaderPeriod}
+          </span>
         </div>
 
         <div className="ca-overview-selector-wrap">
@@ -574,59 +617,53 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         </div>
       </header>
 
-      {/* 页内吸顶快速定位导航条 (Sticky Section Jump Bar) */}
-      <nav className="ca-section-jumpbar" aria-label="页内吸顶快速定位导航">
-        <div className="ca-jumpbar-label">
-          <span className="ca-jumpbar-icon">⚡</span>
-          <span>定位:</span>
-        </div>
-        <div className="ca-jumpbar-links">
-          <a
-            href="#ca-sec-kpi"
-            className="ca-jump-pill"
-            onClick={(e) => handleAnchorClick(e, "ca-sec-kpi")}
-          >
-            <span>🎯 核心指标</span>
-          </a>
-          <a
-            href="#ca-sec-charts"
-            className="ca-jump-pill"
-            onClick={(e) => handleAnchorClick(e, "ca-sec-charts")}
-          >
-            <span>📈 核心主图</span>
-          </a>
-          <a
-            href="#ca-sec-enrichment"
-            className="ca-jump-pill"
-            onClick={(e) => handleAnchorClick(e, "ca-sec-enrichment")}
-          >
-            <span>🧩 深度拆解</span>
-          </a>
-          <a
-            href="#ca-sec-insight"
-            className="ca-jump-pill"
-            onClick={(e) => handleAnchorClick(e, "ca-sec-insight")}
-          >
-            <span>💡 核心观察</span>
-          </a>
-          {activeDetailTables.length > 0 && (
-            <a
-              href="#ca-sec-details"
-              className="ca-jump-pill"
-              onClick={(e) => handleAnchorClick(e, "ca-sec-details")}
-            >
-              <span>📋 底层明细</span>
-            </a>
-          )}
-        </div>
-      </nav>
-
       {/* 2. 核心指标条：严格 4 个紧凑指标，单行排布不折行挤占图表 */}
       <section id="ca-sec-kpi" className="ca-section-kpi" aria-label="核心决策指标">
         <MetricStrip items={activeMetrics} />
       </section>
 
-      {/* 3. 首屏核心主体图表 (每图注明明确周期与口径，绝不混加) */}
+      {/* 2.1 首屏经营诊断与专项直达横幅 (战役分析核心观察置顶 + 专项工作台直达胶囊) */}
+      <div className="ca-executive-strip">
+        <section id="ca-sec-insight" className="ca-insight" aria-label="战役业务解读">
+          <div className="ca-insight-header">
+            <div className="ca-insight-badge-group">
+              <span className="ca-insight-icon">💡</span>
+              <h4 className="ca-insight-title">战役分析与核心观察</h4>
+              <span className="ca-insight-tag">AI 经营速览</span>
+            </div>
+          </div>
+          <p className="ca-insight-text">{dynamicInsight}</p>
+        </section>
+
+        <div className="ca-quick-links-bar">
+          <span className="ca-quick-links-label">专项直达:</span>
+          <div className="ca-quick-links-group">
+            <Link href={"/projects/" + projectId + "/ads"} className="ca-nav-link">
+              <span>📊 投流分析看板</span>
+              <span>→</span>
+            </Link>
+            <Link href={"/projects/" + projectId + "/content"} className="ca-nav-link">
+              <span>✍️ 内容与达人管理</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. 01 章节头与核心主体图表大盘 */}
+      <div className="ca-chapter-header">
+        <div className="ca-chapter-title-group">
+          <span className="ca-chapter-badge">01</span>
+          <div className="ca-chapter-heading">
+            <h3 className="ca-chapter-title">核心预算执行与版位效率大盘</h3>
+            <span className="ca-chapter-desc">核心渠道预算达成、版位投放效率与分日流水宏观大盘</span>
+          </div>
+        </div>
+        <div className="ca-chapter-meta">
+          <span className="ca-chapter-period-tag">统计周期：{activeHeaderPeriod}</span>
+        </div>
+      </div>
+
       <div id="ca-sec-charts" className="ca-grid" role="region" aria-label="核心业务图表分析">
         {/* ---------------- 凯乐石 KAILAS ---------------- */}
         {projectId === "kailas" && activeSnapshot === "daily-1018" && (
@@ -935,30 +972,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       <section id="ca-sec-enrichment" className="ca-section-enrichment" aria-label="深度业务拆解">
         <CampaignEnrichmentPanels dashboard={dashboard} section="overview" activeSnapshot={activeSnapshot} />
       </section>
-
-      {/* 4. 底部业务洞察 (从真实数据动态派生，无硬编码虚假结论) */}
-      <section id="ca-sec-insight" className="ca-insight" aria-label="战役业务解读">
-        <div className="ca-insight-header">
-          <h4 className="ca-insight-title">💡 战役分析与核心观察</h4>
-          <span className="ca-insight-tag">经营解读</span>
-        </div>
-        <p className="ca-insight-text">{dynamicInsight}</p>
-      </section>
-
-      {/* 5. 快速导航操作区 (仅保留专职投流 / 内容跳转，移除重复设置链接) */}
-      <div className="ca-quick-links-bar">
-        <span style={{ color: "#64748b" }}>专项工作台直达:</span>
-        <div className="ca-quick-links-group">
-          <Link href={"/projects/" + projectId + "/ads"} className="ca-nav-link">
-            <span>📊 投流分析看板</span>
-            <span>→</span>
-          </Link>
-          <Link href={"/projects/" + projectId + "/content"} className="ca-nav-link">
-            <span>✍️ 内容与达人管理</span>
-            <span>→</span>
-          </Link>
-        </div>
-      </div>
 
       {/* 6. 底层明细表格 (仅展示当前图表关联表，完整呈现全部行不静默截断) */}
       {activeDetailTables.length > 0 && (
