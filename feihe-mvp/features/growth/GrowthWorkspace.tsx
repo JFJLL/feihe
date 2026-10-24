@@ -66,7 +66,7 @@ export function GrowthWorkspace({
       <PageHeader
         variant="light"
         title="竞品分析"
-        subtitle="项目样本竞争格局 · 独立来源搜索趋势 · 关键词机会与选题流转"
+        subtitle="项目样本竞争格局 / 独立来源搜索趋势 / 关键词机会与选题流转"
         badge={<span>{dashboard.analytics.brands?.length || 0} 个品牌分组</span>}
       >
         <div className="workspace-header-actions">

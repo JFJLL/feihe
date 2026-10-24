@@ -118,7 +118,7 @@ export function ProjectFormDialog({ project, metadata, projects = [], onClose, o
             options={departmentOptions}
           />
           {isLegacyDept && (
-            <small style={{ color: '#64748b', fontSize: '12px', display: 'block', marginTop: '4px' }}>
+            <small style={{ color: '#60646c', fontSize: '12px', display: 'block', marginTop: '4px' }}>
               当前项目保留历史部门“{project?.departmentName || form.departmentId}”，更新时请选择上方 7 个标准部门之一。
             </small>
           )}
@@ -126,29 +126,29 @@ export function ProjectFormDialog({ project, metadata, projects = [], onClose, o
         <label>项目负责人<input aria-label="项目负责人" value={form.ownerName || ''} disabled={busy} onChange={e => field('ownerName', e.target.value)} maxLength={50} placeholder="填写负责人姓名，如：张晓" required /></label>
         <label className="full-field">客户或内部项目<CustomSelect ariaLabel="客户或内部项目" value={form.clientId} disabled={busy} onChange={value => field('clientId', value)} options={[{ value: '', label: '内部项目' }, ...metadata.clients.map(c => ({ value: c.id, label: c.name }))]} /></label>
         <div className="full-field project-logo-field">
-          <span className="project-logo-label" style={{ fontSize: '13px', fontWeight: 500, color: '#334155', display: 'block', marginBottom: '6px' }}>项目 Logo（选填）</span>
-          <div className="project-logo-uploader" style={{ border: '1px dashed #cbd5e1', borderRadius: '8px', padding: '12px 16px', background: '#f8fafc' }}>
+          <span className="project-logo-label" style={{ fontSize: 14, fontWeight: 500, color: '#1c2024', display: 'block', marginBottom: '6px' }}>项目 Logo（选填）</span>
+          <div className="project-logo-uploader" style={{ border: '0.5px dashed #cdced6', borderRadius: '8px', padding: '12px 16px', background: '#f9f9fb' }}>
             {logoPreview ? (
               <div className="project-logo-preview-row" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <img src={logoPreview} alt="Logo 预览" className="project-logo-preview" style={{ width: '56px', height: '56px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #e2e8f0', background: '#fff' }} />
+                <img src={logoPreview} alt="Logo 预览" className="project-logo-preview" style={{ width: '56px', height: '56px', borderRadius: '8px', objectFit: 'cover', border: '0.5px solid #d9d9e0', background: '#fff' }} />
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <label className="project-logo-btn secondary" style={{ cursor: 'pointer', padding: '6px 12px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px', background: '#fff', color: '#334155' }}>
+                  <label className="project-logo-btn secondary" style={{ cursor: 'pointer', padding: '6px 12px', border: '0.5px solid #cdced6', borderRadius: '6px', fontSize: 14, background: '#fff', color: '#1c2024' }}>
                     更换图片
                     <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="更换项目Logo" onChange={handleLogoFileSelect} style={{ display: 'none' }} />
                   </label>
-                  <button type="button" className="project-logo-btn danger" onClick={handleLogoRemove} style={{ cursor: 'pointer', padding: '6px 12px', border: '1px solid #fecaca', borderRadius: '6px', fontSize: '13px', background: '#fef2f2', color: '#b91c1c' }}>移除</button>
+                  <button type="button" className="project-logo-btn danger" onClick={handleLogoRemove} style={{ cursor: 'pointer', padding: '6px 12px', border: '0.5px solid #fdbdbe', borderRadius: '6px', fontSize: 14, background: '#feebec', color: '#ce2c31' }}>移除</button>
                 </div>
               </div>
             ) : (
               <div className="project-logo-empty-row" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label className="project-logo-upload-btn" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 'fit-content', padding: '7px 14px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px', background: '#fff', color: '#1e293b', fontWeight: 500 }}>
+                <label className="project-logo-upload-btn" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 'fit-content', padding: '7px 14px', border: '0.5px solid #cdced6', borderRadius: '6px', fontSize: 14, background: '#fff', color: '#1c2024', fontWeight: 500 }}>
                   <span>＋ 上传 Logo 图片</span>
                   <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="上传项目Logo" onChange={handleLogoFileSelect} style={{ display: 'none' }} />
                 </label>
-                <small style={{ color: '#64748b', fontSize: '12px' }}>支持 PNG、JPEG、WebP、GIF，不超过 2MB；不支持 SVG 格式</small>
+                <small style={{ color: '#60646c', fontSize: '12px' }}>支持 PNG、JPEG、WebP、GIF，不超过 2MB；不支持 SVG 格式</small>
               </div>
             )}
-            {logoError && <p role="alert" style={{ color: '#dc2626', fontSize: '12px', margin: '8px 0 0' }}>{logoError}</p>}
+            {logoError && <p role="alert" style={{ color: '#ce2c31', fontSize: '12px', margin: '8px 0 0' }}>{logoError}</p>}
           </div>
         </div>
         <label className="full-field">项目说明<textarea aria-label="项目说明" value={form.description} onChange={e => field('description', e.target.value)} rows={2} placeholder="这项工作要回答什么问题，团队如何使用结果" /></label>

@@ -6,7 +6,7 @@ import type { DailyRecord } from './overview-data';
 // ======================== Mini Sparkline ========================
 export function Sparkline({
   data,
-  color = '#1e6091',
+  color = '#0d74ce',
   height = 36,
 }: {
   data: number[];
@@ -168,12 +168,12 @@ export function SpendTrendChart({
       {/* Legend */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, marginBottom: 8, justifyContent: 'flex-end' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 2, background: '#0284c7', display: 'inline-block' }} />
-          <span style={{ color: '#0369a1', fontWeight: 600 }}>实际消耗</span>
+          <span style={{ width: 14, height: 2, background: '#0d74ce', display: 'inline-block' }} />
+          <span style={{ color: '#0d74ce', fontWeight: 600 }}>实际消耗</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 2, borderTop: '2px dashed #94a3b8', display: 'inline-block' }} />
-          <span style={{ color: '#64748b' }}>计划消耗</span>
+          <span style={{ width: 14, height: 2, borderTop: '2px dashed #60646c', display: 'inline-block' }} />
+          <span style={{ color: 'var(--slate-11, #60646c)' }}>计划消耗</span>
         </div>
       </div>
 
@@ -184,8 +184,8 @@ export function SpendTrendChart({
       >
         <defs>
           <linearGradient id="spend-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0284c7" stopOpacity={0.24} />
-            <stop offset="100%" stopColor="#0284c7" stopOpacity={0.01} />
+            <stop offset="0%" stopColor="#0d74ce" stopOpacity={0.24} />
+            <stop offset="100%" stopColor="#0d74ce" stopOpacity={0.01} />
           </linearGradient>
         </defs>
 
@@ -194,8 +194,8 @@ export function SpendTrendChart({
           const y = getY(val);
           return (
             <g key={idx}>
-              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#e2e8f0" strokeDasharray="3 3" />
-              <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#94a3b8">
+              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#d9d9e0" strokeDasharray="3 3" />
+              <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="12" fill="#60646c">
                 ¥{Math.round(val / 1000)}k
               </text>
             </g>
@@ -203,19 +203,19 @@ export function SpendTrendChart({
         })}
 
         {/* Baseline */}
-        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
 
         {/* Areas and paths */}
         <path d={actualArea} fill="url(#spend-grad)" />
-        <path d={planPath} fill="none" stroke="#94a3b8" strokeWidth="2" strokeDasharray="5 4" />
-        <path d={actualPath} fill="none" stroke="#0284c7" strokeWidth="2.5" strokeLinecap="round" />
+        <path d={planPath} fill="none" stroke="#60646c" strokeWidth="2" strokeDasharray="5 4" />
+        <path d={actualPath} fill="none" stroke="#0d74ce" strokeWidth="2.5" strokeLinecap="round" />
 
         {/* X Ticks */}
         {xIndices.map((i) => {
           const x = getX(i);
           const label = records[i].date.slice(5);
           return (
-            <text key={i} x={x} y={height - 8} textAnchor="middle" fontSize="10" fill="#94a3b8">
+            <text key={i} x={x} y={height - 8} textAnchor="middle" fontSize="12" fill="#60646c">
               {label}
             </text>
           );
@@ -229,7 +229,7 @@ export function SpendTrendChart({
               y1={padT}
               x2={getX(hoverIdx)}
               y2={padT + plotH}
-              stroke="#0284c7"
+              stroke="#0d74ce"
               strokeWidth="1"
               strokeDasharray="2 2"
             />
@@ -237,7 +237,7 @@ export function SpendTrendChart({
               cx={getX(hoverIdx)}
               cy={getY(records[hoverIdx].actual_spend)}
               r="4.5"
-              fill="#0284c7"
+              fill="#0d74ce"
               stroke="#fff"
               strokeWidth="2"
             />
@@ -245,7 +245,7 @@ export function SpendTrendChart({
               cx={getX(hoverIdx)}
               cy={getY(records[hoverIdx].plan_spend)}
               r="3.5"
-              fill="#94a3b8"
+              fill="#60646c"
               stroke="#fff"
               strokeWidth="1.5"
             />
@@ -278,11 +278,11 @@ export function SpendTrendChart({
             left: Math.min(Math.max(10, (getX(hoverIdx) / w) * 100), 85) + '%',
             top: 20,
             transform: 'translateX(-50%)',
-            background: 'rgba(15, 23, 42, 0.92)',
+            background: 'rgba(28, 32, 36, 0.92)',
             color: '#fff',
             padding: '6px 12px',
             borderRadius: 6,
-            fontSize: 11,
+            fontSize: 12,
             pointerEvents: 'none',
             zIndex: 10,
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -290,8 +290,8 @@ export function SpendTrendChart({
           }}
         >
           <div style={{ fontWeight: 700, marginBottom: 2 }}>{hovered.date}</div>
-          <div style={{ color: '#38bdf8' }}>实际：¥{hovered.actual_spend.toLocaleString()}</div>
-          <div style={{ color: '#cbd5e1' }}>计划：¥{hovered.plan_spend.toLocaleString()} (达成 {hovered.achieve_pct}%)</div>
+          <div style={{ color: '#5eb1ef' }}>实际：¥{hovered.actual_spend.toLocaleString()}</div>
+          <div style={{ color: '#cdced6' }}>计划：¥{hovered.plan_spend.toLocaleString()} (达成 {hovered.achieve_pct}%)</div>
         </div>
       )}
     </div>
@@ -354,16 +354,16 @@ export function CtrTrendChart({
       {/* Legend */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, marginBottom: 8, justifyContent: 'flex-end' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 2, background: '#16a34a', display: 'inline-block' }} />
-          <span style={{ color: '#15803d', fontWeight: 600 }}>信息流 CTR</span>
+          <span style={{ width: 14, height: 2, background: '#29a383', display: 'inline-block' }} />
+          <span style={{ color: '#208368', fontWeight: 600 }}>信息流 CTR</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 2, background: '#dc2626', display: 'inline-block' }} />
-          <span style={{ color: '#b91c1c', fontWeight: 600 }}>搜索 CTR</span>
+          <span style={{ width: 14, height: 2, background: '#ce2c31', display: 'inline-block' }} />
+          <span style={{ color: '#ce2c31', fontWeight: 600 }}>搜索 CTR</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 2, borderTop: '2px dashed #94a3b8', display: 'inline-block' }} />
-          <span style={{ color: '#64748b' }}>KPI基准 (6%)</span>
+          <span style={{ width: 14, height: 2, borderTop: '2px dashed #60646c', display: 'inline-block' }} />
+          <span style={{ color: 'var(--slate-11, #60646c)' }}>KPI基准 (6%)</span>
         </div>
       </div>
 
@@ -373,8 +373,8 @@ export function CtrTrendChart({
         onMouseLeave={() => setHoverIdx(null)}
       >
         {/* KPI Benchmark line */}
-        <line x1={padL} y1={kpiY} x2={w - padR} y2={kpiY} stroke="#94a3b8" strokeDasharray="4 4" strokeWidth="1.2" />
-        <text x={w - padR + 4} y={kpiY + 3} fontSize="9" fill="#64748b" textAnchor="start">
+        <line x1={padL} y1={kpiY} x2={w - padR} y2={kpiY} stroke="#60646c" strokeDasharray="4 4" strokeWidth="1.2" />
+        <text x={w - padR + 4} y={kpiY + 3} fontSize="12" fill="#60646c" textAnchor="start">
           KPI 6%
         </text>
 
@@ -383,8 +383,8 @@ export function CtrTrendChart({
           const y = getY(val);
           return (
             <g key={idx}>
-              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#e2e8f0" strokeDasharray="3 3" />
-              <text x={padL - 6} y={y + 4} textAnchor="end" fontSize="10" fill="#94a3b8">
+              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#d9d9e0" strokeDasharray="3 3" />
+              <text x={padL - 6} y={y + 4} textAnchor="end" fontSize="12" fill="#60646c">
                 {val.toFixed(1)}%
               </text>
             </g>
@@ -392,18 +392,18 @@ export function CtrTrendChart({
         })}
 
         {/* Baseline */}
-        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
 
         {/* Curves */}
-        <path d={feedPath} fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" />
-        <path d={searchPath} fill="none" stroke="#dc2626" strokeWidth="2.5" strokeLinecap="round" />
+        <path d={feedPath} fill="none" stroke="#29a383" strokeWidth="2.5" strokeLinecap="round" />
+        <path d={searchPath} fill="none" stroke="#ce2c31" strokeWidth="2.5" strokeLinecap="round" />
 
         {/* X Ticks */}
         {xIndices.map((i) => {
           const x = getX(i);
           const label = records[i].date.slice(5);
           return (
-            <text key={i} x={x} y={height - 8} textAnchor="middle" fontSize="10" fill="#94a3b8">
+            <text key={i} x={x} y={height - 8} textAnchor="middle" fontSize="12" fill="#60646c">
               {label}
             </text>
           );
@@ -417,7 +417,7 @@ export function CtrTrendChart({
               y1={padT}
               x2={getX(hoverIdx)}
               y2={padT + plotH}
-              stroke="#64748b"
+              stroke="#60646c"
               strokeWidth="1"
               strokeDasharray="2 2"
             />
@@ -425,7 +425,7 @@ export function CtrTrendChart({
               cx={getX(hoverIdx)}
               cy={getY(records[hoverIdx].feed_ctr)}
               r="4.5"
-              fill="#16a34a"
+              fill="#29a383"
               stroke="#fff"
               strokeWidth="2"
             />
@@ -433,7 +433,7 @@ export function CtrTrendChart({
               cx={getX(hoverIdx)}
               cy={getY(records[hoverIdx].search_ctr)}
               r="4.5"
-              fill="#dc2626"
+              fill="#ce2c31"
               stroke="#fff"
               strokeWidth="2"
             />
@@ -466,11 +466,11 @@ export function CtrTrendChart({
             left: Math.min(Math.max(10, (getX(hoverIdx) / w) * 100), 85) + '%',
             top: 20,
             transform: 'translateX(-50%)',
-            background: 'rgba(15, 23, 42, 0.92)',
+            background: 'rgba(28, 32, 36, 0.92)',
             color: '#fff',
             padding: '6px 12px',
             borderRadius: 6,
-            fontSize: 11,
+            fontSize: 12,
             pointerEvents: 'none',
             zIndex: 10,
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
@@ -478,8 +478,8 @@ export function CtrTrendChart({
           }}
         >
           <div style={{ fontWeight: 700, marginBottom: 2 }}>{hovered.date}</div>
-          <div style={{ color: '#4ade80' }}>信息流 CTR: {hovered.feed_ctr}% (超标)</div>
-          <div style={{ color: '#f87171' }}>搜索 CTR: {hovered.search_ctr}% {hovered.search_ctr < 7 ? '(需优化)' : ''}</div>
+          <div style={{ color: '#56ba9f' }}>信息流 CTR: {hovered.feed_ctr}% (超标)</div>
+          <div style={{ color: '#eb8e90' }}>搜索 CTR: {hovered.search_ctr}% {hovered.search_ctr < 7 ? '(需优化)' : ''}</div>
         </div>
       )}
     </div>
@@ -523,7 +523,7 @@ export function TierDoughnutChart({
             cy={center}
             r={(size - baseStroke) / 2}
             fill="none"
-            stroke="#f1f5f9"
+            stroke="#f0f0f3"
             strokeWidth={baseStroke}
           />
           {slices.map((s, idx) => {
@@ -567,20 +567,20 @@ export function TierDoughnutChart({
         >
           {activeItem ? (
             <>
-              <span style={{ fontSize: 18, fontWeight: 800, color: activeItem.color, lineHeight: 1.1 }}>
+              <span style={{ fontSize: 16, fontWeight: 800, color: activeItem.color, lineHeight: 1.1 }}>
                 {activeItem.count}篇
               </span>
-              <span style={{ fontSize: 11, fontWeight: 600, color: '#334155', marginTop: 3 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#1c2024', marginTop: 3 }}>
                 {activeItem.label}
               </span>
-              <span style={{ fontSize: 10.5, color: '#64748b' }}>
+              <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                 {typeof activeItem.pct === 'number' ? activeItem.pct.toFixed(1) : activeItem.pct}%
               </span>
             </>
           ) : (
             <>
-              <span style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{total}</span>
-              <span style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>总篇数</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: '#1c2024', lineHeight: 1 }}>{total}</span>
+              <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', marginTop: 2 }}>总篇数</span>
             </>
           )}
         </div>
@@ -602,19 +602,19 @@ export function TierDoughnutChart({
                 fontSize: 12,
                 padding: '6px 10px',
                 borderRadius: 6,
-                background: isHovered ? '#f0f9ff' : '#f8fafc',
-                border: isHovered ? `1px solid ${item.color}` : '1px solid transparent',
+                background: isHovered ? '#e6f4fe' : '#f9f9fb',
+                border: isHovered ? `0.5px solid ${item.color}` : '0.5px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: item.color, display: 'inline-block' }} />
-                <span style={{ color: isHovered ? '#0369a1' : '#334155', fontWeight: isHovered ? 700 : 500 }}>{item.label}</span>
+                <span style={{ color: isHovered ? '#0d74ce' : '#1c2024', fontWeight: isHovered ? 700 : 500 }}>{item.label}</span>
               </div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
-                <b style={{ color: '#0f172a' }}>{item.count}篇</b>
-                <span style={{ color: isHovered ? item.color : '#94a3b8', fontSize: 11, fontWeight: isHovered ? 600 : 400 }}>
+                <b style={{ color: '#1c2024' }}>{item.count}篇</b>
+                <span style={{ color: isHovered ? item.color : '#60646c', fontSize: 12, fontWeight: isHovered ? 600 : 400 }}>
                   ({typeof item.pct === 'number' ? item.pct.toFixed(1) : item.pct}%)
                 </span>
               </div>
@@ -636,7 +636,7 @@ export function KfsStackedAreaChart({
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const data = rows.filter(r => r.date && (r.feed_spend !== null || r.search_spend !== null));
-  if (!data.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无 KFS 分渠道消耗数据</div>;
+  if (!data.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无 KFS 分渠道消耗数据</div>;
 
   const w = 680;
   const padL = 56, padR = 20, padT = 28, padB = 36;
@@ -677,47 +677,47 @@ export function KfsStackedAreaChart({
     <div style={{ position: 'relative', width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 12, marginBottom: 6, justifyContent: 'flex-end' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 10, background: '#1e6091', borderRadius: 2, display: 'inline-block' }} />
-          <span style={{ color: '#0c4a6e', fontWeight: 600 }}>信息流 F</span>
+          <span style={{ width: 14, height: 10, background: '#0d74ce', borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ color: '#113264', fontWeight: 600 }}>信息流 F</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 10, background: '#7c3aed', borderRadius: 2, display: 'inline-block' }} />
-          <span style={{ color: '#5b21b6', fontWeight: 600 }}>搜索 S</span>
+          <span style={{ width: 14, height: 10, background: '#5753c6', borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ color: '#272962', fontWeight: 600 }}>搜索 S</span>
         </div>
       </div>
       <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', maxHeight: 240, display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
         <defs>
           <linearGradient id="kfs-feed-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1e6091" stopOpacity={0.7} />
-            <stop offset="100%" stopColor="#1e6091" stopOpacity={0.15} />
+            <stop offset="0%" stopColor="#0d74ce" stopOpacity={0.7} />
+            <stop offset="100%" stopColor="#0d74ce" stopOpacity={0.15} />
           </linearGradient>
           <linearGradient id="kfs-search-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.65} />
-            <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.1} />
+            <stop offset="0%" stopColor="#5753c6" stopOpacity={0.65} />
+            <stop offset="100%" stopColor="#5753c6" stopOpacity={0.1} />
           </linearGradient>
         </defs>
         {yTicks.map((val, i) => {
           const y = getY(val);
           return (
             <g key={i}>
-              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#e2e8f0" strokeDasharray="3 3" />
-              <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#94a3b8">¥{(val / 10000).toFixed(1)}w</text>
+              <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#d9d9e0" strokeDasharray="3 3" />
+              <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="12" fill="#60646c">¥{(val / 10000).toFixed(1)}w</text>
             </g>
           );
         })}
-        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
         <path d={feedArea} fill="url(#kfs-feed-grad)" />
         <path d={searchArea} fill="url(#kfs-search-grad)" />
-        <path d={smoothPath(searchTopPoints)} fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" />
-        <path d={smoothPath(feedPoints)} fill="none" stroke="#1e6091" strokeWidth="2" strokeLinecap="round" />
+        <path d={smoothPath(searchTopPoints)} fill="none" stroke="#5753c6" strokeWidth="2" strokeLinecap="round" />
+        <path d={smoothPath(feedPoints)} fill="none" stroke="#0d74ce" strokeWidth="2" strokeLinecap="round" />
         {xIndices.map(i => (
-          <text key={i} x={getX(i)} y={height - 10} textAnchor="middle" fontSize="10" fill="#94a3b8">{data[i].date.slice(5)}</text>
+          <text key={i} x={getX(i)} y={height - 10} textAnchor="middle" fontSize="12" fill="#60646c">{data[i].date.slice(5)}</text>
         ))}
         {hoverIdx !== null && (
           <g>
-            <line x1={getX(hoverIdx)} y1={padT} x2={getX(hoverIdx)} y2={padT + plotH} stroke="#64748b" strokeWidth="1" strokeDasharray="3 3" />
-            <circle cx={getX(hoverIdx)} cy={getY(hovered?.feed_spend || 0)} r="4" fill="#1e6091" stroke="#fff" strokeWidth="1.5" />
-            <circle cx={getX(hoverIdx)} cy={getY((hovered?.feed_spend || 0) + (hovered?.search_spend || 0))} r="4" fill="#7c3aed" stroke="#fff" strokeWidth="1.5" />
+            <line x1={getX(hoverIdx)} y1={padT} x2={getX(hoverIdx)} y2={padT + plotH} stroke="#60646c" strokeWidth="1" strokeDasharray="3 3" />
+            <circle cx={getX(hoverIdx)} cy={getY(hovered?.feed_spend || 0)} r="4" fill="#0d74ce" stroke="#fff" strokeWidth="1.5" />
+            <circle cx={getX(hoverIdx)} cy={getY((hovered?.feed_spend || 0) + (hovered?.search_spend || 0))} r="4" fill="#5753c6" stroke="#fff" strokeWidth="1.5" />
           </g>
         )}
         {data.map((_, i) => (
@@ -725,11 +725,11 @@ export function KfsStackedAreaChart({
         ))}
       </svg>
       {hovered && hoverIdx !== null && (
-        <div style={{ position: 'absolute', left: `${Math.min(82, Math.max(10, (getX(hoverIdx) / w) * 100))}%`, top: 28, transform: 'translateX(-50%)', background: 'rgba(15,23,42,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 11.5, pointerEvents: 'none', zIndex: 10, whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
+        <div style={{ position: 'absolute', left: `${Math.min(82, Math.max(10, (getX(hoverIdx) / w) * 100))}%`, top: 28, transform: 'translateX(-50%)', background: 'rgba(28, 32, 36,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 12, pointerEvents: 'none', zIndex: 10, whiteSpace: 'nowrap', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
           <div style={{ fontWeight: 700, marginBottom: 4 }}>{hovered.date}</div>
-          <div style={{ color: '#93c5fd' }}>信息流 F：¥{(hovered.feed_spend || 0).toLocaleString()}</div>
-          <div style={{ color: '#c4b5fd' }}>搜索 S：¥{(hovered.search_spend || 0).toLocaleString()}</div>
-          <div style={{ color: '#e2e8f0', marginTop: 2, borderTop: '1px solid #334155', paddingTop: 3 }}>合计：¥{((hovered.feed_spend || 0) + (hovered.search_spend || 0)).toLocaleString()}</div>
+          <div style={{ color: '#acd8fc' }}>信息流 F：¥{(hovered.feed_spend || 0).toLocaleString()}</div>
+          <div style={{ color: '#cbcdff' }}>搜索 S：¥{(hovered.search_spend || 0).toLocaleString()}</div>
+          <div style={{ color: '#d9d9e0', marginTop: 2, borderTop: '0.5px solid #1c2024', paddingTop: 3 }}>合计：¥{((hovered.feed_spend || 0) + (hovered.search_spend || 0)).toLocaleString()}</div>
         </div>
       )}
     </div>
@@ -748,7 +748,7 @@ export function TierSpendDistribution({
   const total = items.reduce((s, it) => s + it.spend, 0) || 1;
   const max = Math.max(...items.map(it => it.spend), 1);
 
-  if (!items.length) return <div style={{ padding: 20, textAlign: 'center', color: '#94a3b8', fontSize: 13 }}>暂无达人层级采买数据</div>;
+  if (!items.length) return <div style={{ padding: 20, textAlign: 'center', color: '#60646c', fontSize: 14 }}>暂无达人层级采买数据</div>;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -758,22 +758,22 @@ export function TierSpendDistribution({
         const barW = (it.spend / max) * 100;
         return (
           <div key={it.label} onMouseEnter={() => setHoveredIdx(idx)} onMouseLeave={() => setHoveredIdx(null)} onClick={() => onItemClick && onItemClick(it)}
-            style={{ padding: '7px 10px', borderRadius: 8, background: isHovered ? '#f8fafc' : 'transparent', border: isHovered ? '1px solid #e2e8f0' : '1px solid transparent', cursor: 'pointer', transition: 'all 0.15s ease' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5, alignItems: 'baseline' }}>
-              <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#0f172a' : '#1e293b' }}>{it.label}</span>
+            style={{ padding: '7px 10px', borderRadius: 8, background: isHovered ? '#f9f9fb' : 'transparent', border: isHovered ? '0.5px solid #d9d9e0' : '0.5px solid transparent', cursor: 'pointer', transition: 'all 0.15s ease' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 5, alignItems: 'baseline' }}>
+              <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#1c2024' : '#1c2024' }}>{it.label}</span>
               <div style={{ display: 'flex', gap: 10, alignItems: 'baseline' }}>
-                <span style={{ color: '#64748b', fontSize: 11.5 }}>{it.count} 篇</span>
-                <strong style={{ color: it.color, fontSize: 13 }}>¥{(it.spend / 10000).toFixed(1)}w</strong>
-                <span style={{ color: isHovered ? it.color : '#94a3b8', fontSize: 11, fontWeight: isHovered ? 600 : 400, width: 38, textAlign: 'right' }}>{pct.toFixed(1)}%</span>
+                <span style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>{it.count} 篇</span>
+                <strong style={{ color: it.color, fontSize: 14 }}>¥{(it.spend / 10000).toFixed(1)}w</strong>
+                <span style={{ color: isHovered ? it.color : '#60646c', fontSize: 12, fontWeight: isHovered ? 600 : 400, width: 38, textAlign: 'right' }}>{pct.toFixed(1)}%</span>
               </div>
             </div>
-            <div style={{ height: 9, background: '#f1f5f9', borderRadius: 5, overflow: 'hidden', position: 'relative' }}>
+            <div style={{ height: 9, background: '#f0f0f3', borderRadius: 5, overflow: 'hidden', position: 'relative' }}>
               <div style={{ width: `${Math.min(100, Math.max(2, barW))}%`, height: '100%', background: `linear-gradient(90deg, ${it.color}cc, ${it.color})`, borderRadius: 5, transition: 'width 0.5s ease' }} />
             </div>
           </div>
         );
       })}
-      <div style={{ textAlign: 'right', fontSize: 11, color: '#94a3b8', marginTop: 2 }}>采买总金额 ¥{(total / 10000).toFixed(1)}w · 基于笔记库已填报价</div>
+      <div style={{ textAlign: 'right', fontSize: 12, color: '#60646c', marginTop: 2 }}>采买总金额 ¥{(total / 10000).toFixed(1)}w / 基于笔记库已填报价</div>
     </div>
   );
 }
@@ -803,25 +803,25 @@ export function HorizontalBarList({
             style={{
               padding: '6px 8px',
               borderRadius: 8,
-              background: isHovered ? '#f8fafc' : 'transparent',
-              border: isHovered ? '1px solid #e2e8f0' : '1px solid transparent',
+              background: isHovered ? '#f9f9fb' : 'transparent',
+              border: isHovered ? '0.5px solid #d9d9e0' : '0.5px solid transparent',
               cursor: onItemClick ? 'pointer' : 'default',
               transition: 'all 0.15s ease',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 5 }}>
-              <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#0f172a' : '#1e293b' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 5 }}>
+              <span style={{ fontWeight: isHovered ? 700 : 600, color: isHovered ? '#1c2024' : '#1c2024' }}>
                 {it.label}
               </span>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ color: '#64748b', fontSize: 12 }}>{it.subText || `¥${it.amount}万`}</span>
-                <strong style={{ color: it.color, fontSize: 13 }}>{pctNum.toFixed(1)}%</strong>
+                <span style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>{it.subText || `¥${it.amount}万`}</span>
+                <strong style={{ color: it.color, fontSize: 14 }}>{pctNum.toFixed(1)}%</strong>
               </div>
             </div>
             <div
               style={{
                 height: 10,
-                background: '#f1f5f9',
+                background: '#f0f0f3',
                 borderRadius: 5,
                 overflow: 'hidden',
                 position: 'relative',

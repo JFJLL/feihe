@@ -14,14 +14,16 @@ function load(relative) {
   const filename = path.resolve(root, relative);
   if (cache.has(filename)) return cache.get(filename);
   const compiled = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
-    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
   const result = { exports: {} };
   const nativeRequire = createRequire(filename);
   const require = name => {
+    if (name.endsWith('.css')) return {};
     if (!name.startsWith('.')) return nativeRequire(name);
     const base = path.resolve(path.dirname(filename), name);
-    const resolved = ['.tsx', '.ts'].map(ext => base + ext).find(file => fs.existsSync(file));
+    const candidates = [base, base + '.tsx', base + '.ts', base + '.jsx', base + '.js', path.join(base, 'index.tsx'), path.join(base, 'index.ts')];
+    const resolved = candidates.find(file => fs.existsSync(file) && fs.statSync(file).isFile());
     assert(resolved, `Local import resolves: ${name}`);
     return load(resolved);
   };

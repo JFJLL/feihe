@@ -49,11 +49,11 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
       <title>{`${title}，${data.length} 个日期。悬停或使用下方日期选择查看数值；缺失样本断开显示。`}</title>
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.10" />
-          <stop offset="100%" stopColor={series[0]?.color || '#1e6091'} stopOpacity="0.00" />
+          <stop offset="0%" stopColor={series[0]?.color || '#0d74ce'} stopOpacity="0.10" />
+          <stop offset="100%" stopColor={series[0]?.color || '#0d74ce'} stopOpacity="0.00" />
         </linearGradient>
       </defs>
-      {[0,.25,.5,.75,1].map(t=><g key={t}><line x1={left} x2={w-right} y1={y(max*t)} y2={y(max*t)} stroke="#e2e8f0" strokeDasharray="3 3"/><text x={left-8} y={y(max*t)+4} textAnchor="end" fill="#64748b" fontSize="10.5">{fmtY(max*t)}</text></g>)}
+      {[0,.25,.5,.75,1].map(t=><g key={t}><line x1={left} x2={w-right} y1={y(max*t)} y2={y(max*t)} stroke="#d9d9e0" strokeDasharray="3 3"/><text x={left-8} y={y(max*t)+4} textAnchor="end" fill="#60646c" fontSize="12">{fmtY(max*t)}</text></g>)}
       {/* 渐变面积填充 (主要指标) */}
       {(() => {
         if (!series[0]) return null;
@@ -84,7 +84,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
         </g>;
       })}
       {/* 悬停竖向对齐虚线 */}
-      <line x1={x(activeIndex)} y1={top} x2={x(activeIndex)} y2={h-bottom} stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" pointerEvents="none" />
+      <line x1={x(activeIndex)} y1={top} x2={x(activeIndex)} y2={h-bottom} stroke="#60646c" strokeWidth="1" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" pointerEvents="none" />
       {/* 交互热区与键盘导航点 */}
       {data.map((r, i) => (
         <rect
@@ -132,7 +132,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
   {dateTicks.map(r => {
     const idx = data.findIndex(d => d.date === r.date);
     const anchor = idx === 0 ? 'start' : idx === data.length - 1 ? 'end' : 'middle';
-    return <text key={r.date} x={x(idx)} y={h-12} textAnchor={anchor} fill="#64748b" fontSize="11">{r.date.length > 7 ? r.date.slice(5) : r.date}</text>;
+    return <text key={r.date} x={x(idx)} y={h-12} textAnchor={anchor} fill="#60646c" fontSize="12">{r.date.length > 7 ? r.date.slice(5) : r.date}</text>;
   })}
 </svg>
     {/* 浮动交互提示框 */}

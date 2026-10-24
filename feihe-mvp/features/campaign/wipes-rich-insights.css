@@ -1,14 +1,14 @@
 /* ==========================================================================
    WipesRichInsights Styling - Design System Compliant
-   Colors: #2c7168 (Teal), #8273a3 (Purple), #b88a45 (Gold), #bd7964 (Terracotta)
+   Colors: var(--teal-11, #008573) (Teal), var(--iris-9, #0d74ce) (Purple), var(--amber-9, #ffc53d) (Gold), var(--red-9, #e5484d) (Terracotta)
    ========================================================================== */
 
 .wipes-rich-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
   margin-top: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 /* Header & Notice */
@@ -17,11 +17,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 18px;
-  background: #fdfbf7;
-  border: 1px solid #ebd9c8;
+  background: #fefdfb;
+  border:0.5px solid #f3d673;
   border-radius: 8px;
-  font-size: 13px;
-  color: #5c432d;
+  font-size: 14px;
+  color:#4f3422;
 }
 
 .wipes-rich-header-title {
@@ -34,16 +34,16 @@
 .wipes-rich-tag {
   display: inline-block;
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 4px;
-  background: #2c7168;
-  color: #ffffff;
+  background: var(--teal-11, #008573);
+  color:#ffffff;
 }
 
 .wipes-rich-notice {
   font-size: 12px;
-  color: #7c624b;
+  color:#4f3422;
 }
 
 /* Grid layouts */
@@ -69,7 +69,7 @@
 
 .wipes-secondary-section {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   padding: 14px 18px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
@@ -98,17 +98,17 @@
 /* KPI Matrix Card */
 .wipes-kpi-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: box-shadow 250ms ease-out, border-color 250ms ease-out;
 }
 
 .wipes-kpi-card:hover {
-  border-color: #cbd5e1;
+  border-color:#d9d9e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -119,31 +119,31 @@
 }
 
 .wipes-kpi-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1f2937;
+  color:#1c2024;
 }
 
 .wipes-kpi-badge {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   padding: 2px 6px;
   border-radius: 4px;
 }
 
 .wipes-kpi-badge.surpassed {
-  background: #e6f4ea;
-  color: #137333;
+  background: #e6f7ed;
+  color:#208368;
 }
 
 .wipes-kpi-badge.lagging {
-  background: #fce8e6;
-  color: #c5221f;
+  background: #f0f0f3;
+  color:#ce2c31;
 }
 
 .wipes-kpi-badge.pending {
-  background: #f1f3f4;
-  color: #5f6368;
+  background: #f0f0f3;
+  color:#60646c;
 }
 
 .wipes-kpi-values {
@@ -154,20 +154,20 @@
 }
 
 .wipes-kpi-actual {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  color: #111827;
+  color:#1c2024;
 }
 
 .wipes-kpi-target {
   font-size: 12px;
-  color: #64748b;
+  color:#60646c;
 }
 
 .wipes-kpi-progress-bar {
   width: 100%;
   height: 6px;
-  background: #f1f5f9;
+  background: #f0f0f3;
   border-radius: 3px;
   overflow: hidden;
   margin-top: 4px;
@@ -176,27 +176,27 @@
 .wipes-kpi-progress-fill {
   height: 100%;
   border-radius: 3px;
-  transition: width 0.3s ease;
+  transition: none;
 }
 
 .wipes-kpi-progress-fill.surpassed {
-  background: #2c7168;
+  background: var(--teal-11, #008573);
 }
 
 .wipes-kpi-progress-fill.lagging {
-  background: #bd7964;
+  background: var(--red-9, #e5484d);
 }
 
 .wipes-kpi-footer {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
-  color: #64748b;
+  font-size: 12px;
+  color:#60646c;
 }
 
 .wipes-kpi-note {
-  font-size: 11px;
-  color: #94a3b8;
+  font-size: 12px;
+  color:#60646c;
   line-height: 1.4;
   margin-top: 2px;
   font-style: italic;
@@ -204,8 +204,8 @@
 
 /* Highlight Info Card */
 .wipes-info-card {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f9f9fb;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -214,24 +214,24 @@
 }
 
 .wipes-info-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color:#60646c;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
 .wipes-info-stat {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  color: #0f172a;
+  color:#1c2024;
   font-family: ui-monospace, SFMono-Regular, monospace;
 }
 
 .wipes-info-desc {
   font-size: 12px;
-  color: #64748b;
+  color:#60646c;
   line-height: 1.5;
 }
 
@@ -247,12 +247,12 @@
 .wipes-summary-table th {
   text-align: left;
   padding: 8px 12px;
-  background: #f8faf9;
+  background: #f9f9fb;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  color: #475569;
+  color:#60646c;
   font-weight: 600;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom:0.5px solid #d9d9e0;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -262,15 +262,15 @@
 
 .wipes-summary-table td {
   padding: 8px 12px;
-  border-bottom: 1px solid #f1f5f9;
-  color: #334155;
+  border-bottom:0.5px solid #f0f0f3;
+  color:#60646c;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  transition: background 0.15s ease;
+  transition: background 250ms ease-out;
 }
 
 .wipes-summary-table tr:hover td {
-  background: #f0f6f5;
+  background: #f0f0f3;
 }
 
 /* In-cell data bars */
@@ -291,7 +291,7 @@
 .wipes-cell-bar-track {
   flex: 1;
   height: 5px;
-  background: #edf2f7;
+  background: #e8e8ec;
   border-radius: 2.5px;
   overflow: hidden;
   min-width: 28px;
@@ -300,8 +300,8 @@
 .wipes-cell-bar-fill {
   height: 100%;
   border-radius: 2.5px;
-  background: #2c7168;
-  transition: width 0.3s ease;
+  background: var(--teal-11, #008573);
+  transition: none;
 }
 
 /* SVG Pareto & Concentric Charts */
@@ -316,16 +316,16 @@
   align-items: flex-start;
   gap: 8px;
   padding: 10px 14px;
-  background: #fefce8;
-  border: 1px solid #fef08a;
+  background: #fcfcfd;
+  border:0.5px solid #ffee9c;
   border-radius: 6px;
   font-size: 12px;
-  color: #854d0e;
+  color:#ab6400;
   line-height: 1.5;
 }
 
 .wipes-attribution-callout strong {
-  color: #713f12;
+  color:#4f3422;
 }
 
 /* Layer Section Dividers */
@@ -336,33 +336,33 @@
   margin-top: 18px;
   margin-bottom: 2px;
   padding: 8px 14px;
-  background: #f8fafc;
-  border-left: 4px solid #2c7168;
-  border-radius: 4px;
+  background: #f9f9fb;
+  border:0.5px solid #d9d9e0;
+  border-radius: 8px;
 }
 
 .wipes-layer-badge {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 4px;
-  color: #ffffff;
+  color:#ffffff;
 }
 
 .wipes-layer-title {
   font-size: 14px;
   font-weight: 700;
-  color: #1e293b;
+  color:#1c2024;
 }
 
 /* Styled Details Accordion */
 .wipes-details-box {
   margin-top: 12px;
   padding: 10px 14px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f9f9fb;
+  border:0.5px solid #d9d9e0;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .wipes-funnel-stat-grid {
@@ -383,14 +383,13 @@
 .wipes-section-wrap {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
   width: 100%;
   background: #ffffff;
-  border: 1px solid #e6e3dc;
-  border-top: 3px solid #2c7168;
-  border-radius: 10px;
-  padding: 18px 20px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  border:0.5px solid #d9d9e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
   box-sizing: border-box;
 }
 
@@ -402,7 +401,7 @@
   margin-top: 0;
   margin-bottom: 4px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #edf0ec;
+  border-bottom:0.5px solid #e8e8ec;
 }
 
 .wri-section-title-wrap {
@@ -414,31 +413,31 @@
 .wri-badge {
   display: inline-block;
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   border-radius: 4px;
-  background: #e6f0ee;
-  color: #2c7168;
+  background: #e0f8f3;
+  color:var(--teal-11, #008573);
 }
 
 .wri-section-title,
 .wipes-section-title {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
+  color:#1c2024;
   margin: 0;
 }
 
 .wri-section-desc {
   font-size: 12px;
-  color: #64748b;
+  color:#60646c;
 }
 .wipes-kpi-table-wrap { overflow-x: auto; }
 .wipes-kpi-table :is(th,td) { padding: 10px 7px; font-size: 12px; }
 .wipes-kpi-table tbody th { text-align: left; font-weight: 500; }
-.wipes-kpi-table tbody th small { display: block; color: #64748b; font-size: 10px; margin-top: 4px; font-weight: 400; }
+.wipes-kpi-table tbody th small { display: block; color:#60646c; font-size: 12px; margin-top: 4px; font-weight: 400; }
 .wipes-kpi-table tbody td { font-variant-numeric: tabular-nums; }
 .wipes-kpi-table .wipes-kpi-badge { white-space: nowrap; }
-.wipes-kpi-audit { font-size: 12px; color: #64748b; }
+.wipes-kpi-audit { font-size: 12px; color:#60646c; }
 .wipes-kpi-audit summary { cursor: pointer; }
 .wipes-channel-summary { display: flex; flex-direction: column; gap: 18px; }

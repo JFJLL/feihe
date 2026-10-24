@@ -8,19 +8,19 @@ import './campaign-analytics.css';
  * 暖白底色 #f6f5f2, 主深青 #2c7168, 辅助紫 #8273a3, 赭金 #b88a45, 陶土 #bd7964, 计划灰 #8c9ba5
  */
 export const CAMPAIGN_PALETTE = {
-  primary: '#2c7168',    // 主深青 (实际消耗 / 核心达标)
-  purple: '#8273a3',     // 辅助紫 (结算 / 搜索侧 / 快照参考)
-  gold: '#b88a45',       // 赭金 (项目投入 / 达人采买 / 预警)
-  terracotta: '#bd7964', // 陶土 (超支异常 / 缺陷整改 / 高于控制目标)
-  slate: '#8c9ba5',      // 计划灰 (基准线 / 目标标线)
-  warmBg: '#f6f5f2',     // 暖白底色
+  primary: '#12a594',    // 主深青 (Radix teal-9)
+  purple: '#5b5bd6',     // 辅助紫 (Radix iris-9)
+  gold: '#ab6400',       // 赭金 (Radix amber-11, 增强12px可读性)
+  terracotta: '#e5484d', // 陶土 (Radix red-9)
+  slate: '#8b8d98',      // 计划灰 (Radix slate-9)
+  warmBg: '#f9f9fb',     // 暖白底色 (Radix slate-2)
   panelBg: '#ffffff',    // 卡片白
-  textMain: '#1f2937',   // 深灰主文字
-  textMuted: '#64748b',  // 次级辅助文字
-  textSubtle: '#94a3b8', // 弱化占位文字
-  border: '#e2e8f0',     // 结构边框
-  borderWarm: '#e6e3dc', // 暖色微边框
-  gridLine: '#edf2f7',   // 坐标网格线
+  textMain: '#1c2024',   // 深灰主文字 (Radix slate-12)
+  textMuted: '#60646c',  // 次级辅助文字 (Radix slate-11)
+  textSubtle: '#8b8d98', // 弱化占位文字 (Radix slate-9)
+  border: '#d9d9e0',     // 结构边框 (Radix slate-6)
+  borderWarm: '#d9d9e0', // 暖色微边框 (Radix slate-6)
+  gridLine: '#e8e8ec',   // 坐标网格线 (Radix slate-4)
 } as const;
 
 export const DEFAULT_SERIES_COLORS = [
@@ -28,8 +28,8 @@ export const DEFAULT_SERIES_COLORS = [
   CAMPAIGN_PALETTE.purple,
   CAMPAIGN_PALETTE.gold,
   CAMPAIGN_PALETTE.terracotta,
-  '#4d8b80',
-  '#9c6f84',
+  '#0090ff',
+  '#29a383',
   CAMPAIGN_PALETTE.slate,
 ];
 
@@ -81,7 +81,7 @@ export interface MetricStripItem {
   sparkline?: (number | null)[];
 }
 
-function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 20, strokeColor = '#2c7168') {
+function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 20, strokeColor = '#12a594') {
   const valid = points.filter((p): p is number => p !== null && Number.isFinite(p));
   if (valid.length < 2) return null;
   const min = Math.min(...valid);
@@ -212,18 +212,17 @@ export function MetricStrip({
           <article
             key={idx}
             className="ca-metric-item bd-kpi-card-rich"
-            style={statusColor ? { borderTop: `3px solid ${statusColor}` } : undefined}
           >
             <div className="bd-kpi-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
               <span className="ca-metric-label" title={it.label}>{it.label}</span>
               {it.badge && (
                 <span
                   style={{
-                    fontSize: '10.5px',
+                    fontSize: '12px',
                     fontWeight: 600,
                     padding: '1px 6px',
                     borderRadius: 999,
-                    background: statusColor ? `${statusColor}18` : '#f1f5f9',
+                    background: statusColor ? `${statusColor}18` : '#f0f0f3',
                     color: statusColor || CAMPAIGN_PALETTE.textMuted,
                     whiteSpace: 'nowrap',
                   }}
@@ -363,12 +362,10 @@ export function HorizontalBarChart({
             <span>
               {current.value !== null ? `${fmtNum(current.value)} ${unit}` : '实际未录入'}
             </span>
-            {current.detail && <span style={{ color: '#64748b' }}>({current.detail})</span>}
+            {current.detail && <span style={{ color: '#60646c' }}>({current.detail})</span>}
           </>
         ) : (
-          <span className="ca-chart-readout-empty">
-            悬停条形或使用方向键聚焦查看准确数值
-          </span>
+          <span className="ca-chart-readout-empty" aria-hidden="true" />
         )}
       </div>
 
@@ -398,7 +395,7 @@ export function HorizontalBarChart({
                 y={totalHeight - 8}
                 textAnchor="middle"
                 fill={CAMPAIGN_PALETTE.textMuted}
-                fontSize="10"
+                fontSize="12"
               >
                 {fmtNum(tickVal, 0)}
               </text>
@@ -411,8 +408,8 @@ export function HorizontalBarChart({
           const isSelected = activeIdx === idx;
           const hasVal = typeof item.value === 'number' && Number.isFinite(item.value);
           const isZero = hasVal && item.value === 0;
-          // 0 实际不画正宽度，正数才计算宽度
-          const barWidth = hasVal && !isZero ? Math.max(3, (item.value! / maxVal) * barPlotWidth) : 0;
+          // 0 实际不画正宽度，真实比例不放大
+          const barWidth = hasVal && item.value! > 0 && maxVal > 0 ? (item.value! / maxVal) * barPlotWidth : 0;
           const color = item.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
 
           return (
@@ -473,7 +470,7 @@ export function HorizontalBarChart({
                       y={y + 18}
                       textAnchor="start"
                       fill={CAMPAIGN_PALETTE.textMuted}
-                      fontSize="11"
+                      fontSize="12"
                     >
                       0 {unit}
                     </text>
@@ -495,10 +492,10 @@ export function HorizontalBarChart({
                       textAnchor="start"
                       fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMain}
                       fontWeight="600"
-                      fontSize="11.5"
+                      fontSize="12"
                     >
                       {fmtNum(item.value)}
-                      {unit && <tspan fill={CAMPAIGN_PALETTE.textMuted} fontSize="10"> {unit}</tspan>}
+                      {unit && <tspan fill={CAMPAIGN_PALETTE.textMuted} fontSize="12"> {unit}</tspan>}
                     </text>
                   </>
                 )
@@ -511,14 +508,14 @@ export function HorizontalBarChart({
                     height={14}
                     rx={3}
                     fill="none"
-                    stroke="#cbd5e1"
+                    stroke="#d9d9e0"
                     strokeDasharray="3 3"
                   />
                   <text
                     x={leftPad + 8}
                     y={y + 18}
                     fill={CAMPAIGN_PALETTE.textSubtle}
-                    fontSize="10.5"
+                    fontSize="12"
                   >
                     未录入
                   </text>
@@ -578,8 +575,8 @@ export function CampaignFunnelChart({
             className="ca-funnel-row"
             style={{
               padding: '8px 12px',
-              background: '#fcfbf9',
-              border: `1px solid ${CAMPAIGN_PALETTE.borderWarm}`,
+              background: '#f9f9fb',
+              border: `0.5px solid ${CAMPAIGN_PALETTE.borderWarm}`,
               borderRadius: 8,
             }}
           >
@@ -593,7 +590,7 @@ export function CampaignFunnelChart({
                     width: 18,
                     height: 18,
                     borderRadius: 999,
-                    fontSize: 10.5,
+                    fontSize: 12,
                     fontWeight: 700,
                     background: `${barColor}1f`,
                     color: barColor,
@@ -601,10 +598,10 @@ export function CampaignFunnelChart({
                 >
                   {idx + 1}
                 </span>
-                <strong style={{ fontSize: 12.5, color: CAMPAIGN_PALETTE.textMain }}>{st.stage}</strong>
+                <strong style={{ fontSize: 12, color: CAMPAIGN_PALETTE.textMain }}>{st.stage}</strong>
               </div>
               {st.subtext && (
-                <span style={{ fontSize: 11, color: CAMPAIGN_PALETTE.textMuted, paddingLeft: 24 }}>{st.subtext}</span>
+                <span style={{ fontSize: 12, color: CAMPAIGN_PALETTE.textMuted, paddingLeft: 24 }}>{st.subtext}</span>
               )}
             </div>
 
@@ -613,7 +610,7 @@ export function CampaignFunnelChart({
                 style={{
                   width: '100%',
                   height: 16,
-                  background: '#eef2f6',
+                  background: '#f0f0f3',
                   borderRadius: 999,
                   overflow: 'hidden',
                   position: 'relative',
@@ -630,21 +627,21 @@ export function CampaignFunnelChart({
                 />
               </div>
               {st.conversionLabel && (
-                <span style={{ fontSize: 11, color: CAMPAIGN_PALETTE.textMuted }}>
+                <span style={{ fontSize: 12, color: CAMPAIGN_PALETTE.textMuted }}>
                   {st.conversionLabel}
                 </span>
               )}
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 700, color: CAMPAIGN_PALETTE.textMain }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: CAMPAIGN_PALETTE.textMain }}>
                 {val !== null ? fmtNum(val, val >= 100 ? 0 : 2) : '—'}
-                {st.unit && <small style={{ fontSize: 11, fontWeight: 500, color: CAMPAIGN_PALETTE.textMuted, marginLeft: 3 }}>{st.unit}</small>}
+                {st.unit && <small style={{ fontSize: 12, fontWeight: 500, color: CAMPAIGN_PALETTE.textMuted, marginLeft: 3 }}>{st.unit}</small>}
               </div>
               {st.costLabel && (
                 <span
                   style={{
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: 600,
                     padding: '1px 7px',
                     borderRadius: 999,
@@ -713,14 +710,14 @@ export function MatrixHeatmapChart({
       <table className="ca-table" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 3, fontSize: 12 }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '6px 8px', background: '#f8fafc', borderRadius: 4 }}>{rowHeaderTitle}</th>
+            <th style={{ textAlign: 'left', padding: '6px 8px', background: '#f9f9fb', borderRadius: 4 }}>{rowHeaderTitle}</th>
             {cols.map((col) => (
-              <th key={col} style={{ textAlign: 'center', padding: '6px 8px', background: '#f8fafc', borderRadius: 4, whiteSpace: 'nowrap' }}>
+              <th key={col} style={{ textAlign: 'center', padding: '6px 8px', background: '#f9f9fb', borderRadius: 4, whiteSpace: 'nowrap' }}>
                 {col}
               </th>
             ))}
             {showRowTotals && (
-              <th style={{ textAlign: 'right', padding: '6px 8px', background: '#f1f5f9', borderRadius: 4, whiteSpace: 'nowrap' }}>
+              <th style={{ textAlign: 'right', padding: '6px 8px', background: '#f0f0f3', borderRadius: 4, whiteSpace: 'nowrap' }}>
                 行合计
               </th>
             )}
@@ -733,7 +730,7 @@ export function MatrixHeatmapChart({
             const rowSum = complete ? (rowValues as number[]).reduce((sum, value) => sum + value, 0) : null;
             return (
               <tr key={r}>
-                <td style={{ fontWeight: 600, padding: '6px 8px', color: CAMPAIGN_PALETTE.textMain, background: '#fcfbf9', whiteSpace: 'nowrap' }}>
+                <td style={{ fontWeight: 600, padding: '6px 8px', color: CAMPAIGN_PALETTE.textMain, background: '#f9f9fb', whiteSpace: 'nowrap' }}>
                   {r}
                 </td>
                 {cols.map((c) => {
@@ -743,7 +740,7 @@ export function MatrixHeatmapChart({
                   const bg =
                     intensity > 0
                       ? `rgba(44, 113, 104, ${(0.08 + intensity * 0.72).toFixed(2)})`
-                      : '#f8fafc';
+                      : '#f9f9fb';
                   const fg = intensity > 0.55 ? '#ffffff' : CAMPAIGN_PALETTE.textMain;
                   return (
                     <td
@@ -760,13 +757,13 @@ export function MatrixHeatmapChart({
                     >
                       <div>{val === null ? '—' : cell?.displayValue ?? `${fmtNum(val)}${unit}`}</div>
                       {cell?.subtext && (
-                        <div style={{ fontSize: 10, opacity: 0.85, fontWeight: 400 }}>{cell.subtext}</div>
+                        <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 400 }}>{cell.subtext}</div>
                       )}
                     </td>
                   );
                 })}
                 {showRowTotals && (
-                  <td style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 700, background: '#f8fafc', borderRadius: 4, whiteSpace: 'nowrap' }}>
+                  <td style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 700, background: '#f9f9fb', borderRadius: 4, whiteSpace: 'nowrap' }}>
                     {rowSum !== null ? `${fmtNum(rowSum)}${unit}` : '—'}
                   </td>
                 )}
@@ -825,7 +822,7 @@ export function StackedHorizontalBarChart({
 
   return (
     <div className="ca-stacked-chart">
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 11.5, color: CAMPAIGN_PALETTE.textMuted }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 12, color: CAMPAIGN_PALETTE.textMuted }}>
         {segments.map((s) => (
           <span key={s.key} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
             <i style={{ width: 10, height: 10, borderRadius: 3, background: s.color, display: 'inline-block' }} />
@@ -850,7 +847,7 @@ export function StackedHorizontalBarChart({
               <div style={{ fontWeight: 600, color: CAMPAIGN_PALETTE.textMain, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={r.label}>
                 {r.label}
               </div>
-              <div className="ca-stacked-track" style={{ display: 'flex', height: 18, background: '#f1f5f9', borderRadius: 6, overflow: 'hidden' }}>
+              <div className="ca-stacked-track" style={{ display: 'flex', height: 18, background: '#f0f0f3', borderRadius: 6, overflow: 'hidden' }}>
                 {segments.map((s) => {
                   const v = r.segments[s.key];
                   const num = typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : 0;
@@ -860,7 +857,7 @@ export function StackedHorizontalBarChart({
                   return (
                     <div
                       key={s.key}
-                      title={`${r.label} · ${s.label}: ${fmtNum(num)}${unit}${complete ? ` (${sharePct}%)` : '（部分数据）'}`}
+                      title={`${r.label} / ${s.label}: ${fmtNum(num)}${unit}${complete ? ` (${sharePct}%)` : '（部分数据）'}`}
                       style={{
                         width: `${pct.toFixed(2)}%`,
                         background: s.color,
@@ -870,14 +867,15 @@ export function StackedHorizontalBarChart({
                   );
                 })}
               </div>
-              <div style={{ textAlign: 'right', fontSize: 11.5, color: CAMPAIGN_PALETTE.textMain, fontWeight: 600, whiteSpace: 'nowrap' }}>
-                {r.totalLabel || (complete ? `${fmtNum(total)}${unit}` : '— · 数据不完整')}
-                {r.meta && <span style={{ display: 'block', fontSize: 10.5, fontWeight: 400, color: CAMPAIGN_PALETTE.textMuted }}>{r.meta}</span>}
+              <div style={{ textAlign: 'right', fontSize: 12, color: CAMPAIGN_PALETTE.textMain, fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {r.totalLabel || (complete ? `${fmtNum(total)}${unit}` : '— (数据不完整)')}
+                {r.meta && <span style={{ display: 'block', fontSize: 12, fontWeight: 400, color: CAMPAIGN_PALETTE.textMuted }}>{r.meta}</span>}
               </div>
             </div>
           );
         })}
       </div>
+      <small className="ca-scale-note">左右独立刻度</small>
     </div>
   );
 }
@@ -1016,7 +1014,7 @@ export function DonutChart({
               y={cy - 12}
               textAnchor="middle"
               fill={CAMPAIGN_PALETTE.textMuted}
-              fontSize="11.5"
+              fontSize="12"
             >
               {activeSlice ? (activeSlice.label.length > 8 ? `${activeSlice.label.slice(0, 8)}…` : activeSlice.label) : (centerLabel || '总计')}
             </text>
@@ -1036,7 +1034,7 @@ export function DonutChart({
               textAnchor="middle"
               fill={activeSlice ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMuted}
               fontWeight="600"
-              fontSize="10.5"
+              fontSize="12"
             >
               {activeSlice ? `${activeSlice.percent.toFixed(1)}%` : unit}
             </text>
@@ -1089,7 +1087,7 @@ export function DonutChart({
                   {item.label}
                 </span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, flexShrink: 0 }}>
                 {slice ? (
                   <>
                     <strong style={{ color: CAMPAIGN_PALETTE.textMain }}>{fmtNum(slice.value)}</strong>
@@ -1400,7 +1398,7 @@ export function TargetBulletChart({
           </span>
         )}
         <span className="ca-chart-legend-item">
-          <span className="ca-chart-swatch-line" style={{ background: '#0f172a' }} />
+          <span className="ca-chart-swatch-line" style={{ background: '#1c2024' }} />
           100% 目标线
         </span>
       </div>
@@ -1414,12 +1412,10 @@ export function TargetBulletChart({
             <span style={{ color: currentEval.barColor, fontWeight: 700 }}>
               [{currentEval.statusLabel}]
             </span>
-            <span style={{ color: '#64748b' }}>({currentEval.directionNote})</span>
+            <span style={{ color: '#60646c' }}>({currentEval.directionNote})</span>
           </>
         ) : (
-          <span className="ca-chart-readout-empty">
-            悬停指标或使用方向键聚焦查看各项评估方向与达标判定
-          </span>
+          <span className="ca-chart-readout-empty" aria-hidden="true" />
         )}
       </div>
 
@@ -1441,7 +1437,7 @@ export function TargetBulletChart({
                 x2={xPos}
                 y1={topPad}
                 y2={totalHeight - bottomPad}
-                stroke={isTarget100 ? '#94a3b8' : CAMPAIGN_PALETTE.gridLine}
+                stroke={isTarget100 ? '#8b8d98' : CAMPAIGN_PALETTE.gridLine}
                 strokeWidth={isTarget100 ? 1.5 : 1}
                 strokeDasharray={isTarget100 ? '4 2' : '3 3'}
               />
@@ -1451,7 +1447,7 @@ export function TargetBulletChart({
                 textAnchor="middle"
                 fill={isTarget100 ? CAMPAIGN_PALETTE.textMain : CAMPAIGN_PALETTE.textMuted}
                 fontWeight={isTarget100 ? '700' : '400'}
-                fontSize="10"
+                fontSize="12"
               >
                 {pctVal}%{isTarget100 ? ' 目标' : ''}
               </text>
@@ -1466,8 +1462,8 @@ export function TargetBulletChart({
           const hasRatio = ev.ratio !== null;
           const isZero = ev.hasActual && item.actual === 0;
 
-          // 0 实际不画正宽度
-          const barWidth = hasRatio && !isZero ? Math.max(3, (ev.ratio! / maxRatioVal) * plotWidth) : 0;
+          // 0 实际不画正宽度，真实比例不放大
+          const barWidth = hasRatio && ev.ratio! > 0 && maxRatioVal > 0 ? (ev.ratio! / maxRatioVal) * plotWidth : 0;
 
           return (
             <g
@@ -1514,7 +1510,7 @@ export function TargetBulletChart({
                 y={y + 28}
                 textAnchor="end"
                 fill={CAMPAIGN_PALETTE.textMuted}
-                fontSize="10"
+                fontSize="12"
               >
                 {ev.directionNote}
               </text>
@@ -1525,8 +1521,8 @@ export function TargetBulletChart({
                 width={plotWidth}
                 height={14}
                 rx={3}
-                fill="#f8fafc"
-                stroke="#e2e8f0"
+                fill="#f9f9fb"
+                stroke="#e8e8ec"
               />
 
               {hasRatio ? (
@@ -1546,10 +1542,10 @@ export function TargetBulletChart({
                       textAnchor="start"
                       fill={ev.barColor}
                       fontWeight="700"
-                      fontSize="11"
+                      fontSize="12"
                     >
                       0%
-                      <tspan fill={CAMPAIGN_PALETTE.textMuted} fontSize="10" fontWeight="400">
+                      <tspan fill={CAMPAIGN_PALETTE.textMuted} fontSize="12" fontWeight="400">
                         {` (${ev.statusLabel})`}
                       </tspan>
                     </text>
@@ -1571,10 +1567,10 @@ export function TargetBulletChart({
                       textAnchor="start"
                       fill={ev.barColor}
                       fontWeight="700"
-                      fontSize="11.5"
+                      fontSize="12"
                     >
                       {ev.ratio!.toFixed(0)}%
-                      <tspan fill={CAMPAIGN_PALETTE.textMuted} fontSize="10" fontWeight="400">
+                      <tspan fill={CAMPAIGN_PALETTE.textMuted} fontSize="12" fontWeight="400">
                         {` (${ev.statusLabel})`}
                       </tspan>
                     </text>
@@ -1585,7 +1581,7 @@ export function TargetBulletChart({
                   x={leftPad + 10}
                   y={y + 19}
                   fill={CAMPAIGN_PALETTE.textSubtle}
-                  fontSize="10.5"
+                  fontSize="12"
                 >
                   {item.target === null ? '目标未设定' : '实际值待登记'}
                 </text>
@@ -1597,11 +1593,11 @@ export function TargetBulletChart({
                 x2={targetX100}
                 y1={y + 4}
                 y2={y + 26}
-                stroke="#0f172a"
+                stroke="#1c2024"
                 strokeWidth="2.5"
               />
-              <circle cx={targetX100} cy={y + 4} r={1.5} fill="#0f172a" />
-              <circle cx={targetX100} cy={y + 26} r={1.5} fill="#0f172a" />
+              <circle cx={targetX100} cy={y + 4} r={1.5} fill="#1c2024" />
+              <circle cx={targetX100} cy={y + 26} r={1.5} fill="#1c2024" />
             </g>
           );
         })}
@@ -1700,9 +1696,7 @@ export function ScatterChart({
             {current.size !== null && <span>规模: {fmtNum(current.size)}</span>}
           </>
         ) : (
-          <span className="ca-chart-readout-empty">
-            悬停散点或使用左右键聚焦查看多维坐标准确数值
-          </span>
+          <span className="ca-chart-readout-empty" aria-hidden="true" />
         )}
       </div>
 
@@ -1714,92 +1708,6 @@ export function ScatterChart({
         onMouseLeave={() => setActiveIdx(null)}
       >
         <title>{`散点相关图: 横轴 ${xLabel}，纵轴 ${yLabel}`}</title>
-        {/* 四象限柔和底色与水印标签 */}
-        {(() => {
-          const splitX = Math.max(leftPad, Math.min(totalWidth - rightPad, scaleX(avgX)));
-          const splitY = Math.max(topPad, Math.min(totalHeight - bottomPad, scaleY(avgY)));
-          return (
-            <g className="ca-scatter-quadrants">
-              {/* 左上: 🌟 高效优质区 */}
-              <rect
-                x={leftPad}
-                y={topPad}
-                width={Math.max(0, splitX - leftPad)}
-                height={Math.max(0, splitY - topPad)}
-                fill="rgba(44, 113, 104, 0.05)"
-                rx={4}
-              />
-              <text
-                x={leftPad + 8}
-                y={topPad + 15}
-                fill="rgba(44, 113, 104, 0.75)"
-                fontSize="10.5"
-                fontWeight="700"
-              >
-                🌟 高效优质区
-              </text>
-
-              {/* 右上: ⚡ 放量竞争区 */}
-              <rect
-                x={splitX}
-                y={topPad}
-                width={Math.max(0, totalWidth - rightPad - splitX)}
-                height={Math.max(0, splitY - topPad)}
-                fill="rgba(184, 138, 69, 0.04)"
-                rx={4}
-              />
-              <text
-                x={totalWidth - rightPad - 8}
-                y={topPad + 15}
-                textAnchor="end"
-                fill="rgba(184, 138, 69, 0.75)"
-                fontSize="10.5"
-                fontWeight="700"
-              >
-                ⚡ 放量竞争区
-              </text>
-
-              {/* 左下: 🔍 低耗观察区 */}
-              <rect
-                x={leftPad}
-                y={splitY}
-                width={Math.max(0, splitX - leftPad)}
-                height={Math.max(0, totalHeight - bottomPad - splitY)}
-                fill="rgba(130, 115, 163, 0.04)"
-                rx={4}
-              />
-              <text
-                x={leftPad + 8}
-                y={totalHeight - bottomPad - 8}
-                fill="rgba(130, 115, 163, 0.75)"
-                fontSize="10.5"
-                fontWeight="700"
-              >
-                🔍 低耗观察区
-              </text>
-
-              {/* 右下: ⚠️ 高本待优区 */}
-              <rect
-                x={splitX}
-                y={splitY}
-                width={Math.max(0, totalWidth - rightPad - splitX)}
-                height={Math.max(0, totalHeight - bottomPad - splitY)}
-                fill="rgba(189, 121, 100, 0.05)"
-                rx={4}
-              />
-              <text
-                x={totalWidth - rightPad - 8}
-                y={totalHeight - bottomPad - 8}
-                textAnchor="end"
-                fill="rgba(189, 121, 100, 0.75)"
-                fontSize="10.5"
-                fontWeight="700"
-              >
-                ⚠️ 高本待优区
-              </text>
-            </g>
-          );
-        })()}
         {[0, 0.25, 0.5, 0.75, 1].map((t) => {
           const val = minX + t * (maxX - minX);
           const xPos = scaleX(val);
@@ -1818,7 +1726,7 @@ export function ScatterChart({
                 y={totalHeight - bottomPad + 16}
                 textAnchor="middle"
                 fill={CAMPAIGN_PALETTE.textMuted}
-                fontSize="10"
+                fontSize="12"
               >
                 {fmtNum(val, 1)}
               </text>
@@ -1844,7 +1752,7 @@ export function ScatterChart({
                 y={yPos + 3.5}
                 textAnchor="end"
                 fill={CAMPAIGN_PALETTE.textMuted}
-                fontSize="10"
+                fontSize="12"
               >
                 {fmtNum(val, 1)}
               </text>
@@ -1857,7 +1765,7 @@ export function ScatterChart({
           x2={scaleX(avgX)}
           y1={topPad}
           y2={totalHeight - bottomPad}
-          stroke="#cbd5e1"
+          stroke="#d9d9e0"
           strokeWidth="1.2"
           strokeDasharray="4 4"
         />
@@ -1866,7 +1774,7 @@ export function ScatterChart({
           x2={totalWidth - rightPad}
           y1={scaleY(avgY)}
           y2={scaleY(avgY)}
-          stroke="#cbd5e1"
+          stroke="#d9d9e0"
           strokeWidth="1.2"
           strokeDasharray="4 4"
         />
@@ -1874,7 +1782,7 @@ export function ScatterChart({
           x={scaleX(avgX) + 4}
           y={topPad + 28}
           fill={CAMPAIGN_PALETTE.textSubtle}
-          fontSize="9.5"
+          fontSize="12"
         >
           X均值 {fmtNum(avgX, 2)}
         </text>
@@ -1883,7 +1791,7 @@ export function ScatterChart({
           y={scaleY(avgY) - 4}
           textAnchor="end"
           fill={CAMPAIGN_PALETTE.textSubtle}
-          fontSize="9.5"
+          fontSize="12"
         >
           Y均值 {fmtNum(avgY, 2)}
         </text>
@@ -1894,7 +1802,7 @@ export function ScatterChart({
           textAnchor="middle"
           fill={CAMPAIGN_PALETTE.textMain}
           fontWeight="600"
-          fontSize="11"
+          fontSize="12"
         >
           {xLabel} →
         </text>
@@ -1904,7 +1812,7 @@ export function ScatterChart({
           textAnchor="start"
           fill={CAMPAIGN_PALETTE.textMain}
           fontWeight="600"
-          fontSize="11"
+          fontSize="12"
         >
           ↑ {yLabel}
         </text>
@@ -1961,7 +1869,7 @@ export function ScatterChart({
                   y={py - r - 3}
                   textAnchor="middle"
                   fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMuted}
-                  fontSize={isSelected ? '11' : '9.5'}
+                  fontSize="12"
                   fontWeight={isSelected ? '600' : '400'}
                   pointerEvents="none"
                 >
@@ -1977,7 +1885,7 @@ export function ScatterChart({
 }
 
 // ============================================================================
-// 8. DualArenaChart (双阵营拔河对决卡: 100% 拔河比例条 + 多指标对决行)
+// 8. DualArenaChart (双阵营对比卡: 100% 对比比例条 + 多指标对比行)
 // ============================================================================
 
 export interface DualArenaMetricRow {
@@ -2011,18 +1919,21 @@ export function DualArenaChart({
   leftColor = CAMPAIGN_PALETTE.primary,
   rightColor = CAMPAIGN_PALETTE.purple,
 }: DualArenaChartProps) {
-  const hasLeftPrimary = typeof leftPrimary === 'number' && Number.isFinite(leftPrimary);
-  const hasRightPrimary = typeof rightPrimary === 'number' && Number.isFinite(rightPrimary);
-  const totalPrimary = (hasLeftPrimary ? leftPrimary! : 0) + (hasRightPrimary ? rightPrimary! : 0);
-  const leftPct = totalPrimary > 0 && hasLeftPrimary ? (leftPrimary! / totalPrimary) * 100 : 50;
-  const rightPct = totalPrimary > 0 && hasRightPrimary ? 100 - leftPct : 50;
+  const isFiniteNonNeg = (v: number | null | undefined): v is number =>
+    typeof v === 'number' && Number.isFinite(v) && v >= 0;
+  const hasLeftPrimary = isFiniteNonNeg(leftPrimary);
+  const hasRightPrimary = isFiniteNonNeg(rightPrimary);
+  const canCompare = hasLeftPrimary && hasRightPrimary && leftPrimary + rightPrimary > 0;
+  const totalPrimary = canCompare ? leftPrimary + rightPrimary : 0;
+  const leftPct = canCompare ? (leftPrimary / totalPrimary) * 100 : null;
+  const rightPct = canCompare ? (rightPrimary / totalPrimary) * 100 : null;
 
   return (
     <div className="ca-dual-arena">
-      {/* 顶部拔河对决比例卡 */}
+      {/* 顶部对比比例卡 */}
       <div className="ca-arena-header">
         <div className="ca-arena-side-info ca-arena-side-info-left">
-          <div className="ca-arena-title-tag" style={{ borderLeftColor: leftColor }}>
+          <div className="ca-arena-title-tag">
             {leftTitle}
           </div>
           <div className="ca-arena-primary-num" style={{ color: leftColor }}>
@@ -2030,14 +1941,14 @@ export function DualArenaChart({
             <span className="ca-arena-primary-unit">{primaryUnit}</span>
           </div>
           <div className="ca-arena-primary-sub">
-            {primaryLabel} · <strong>{hasLeftPrimary && totalPrimary > 0 ? `${leftPct.toFixed(1)}%` : '—'}</strong>
+            {primaryLabel} <strong>{leftPct !== null ? `${leftPct.toFixed(1)}%` : '—'}</strong>
           </div>
         </div>
 
         <div className="ca-arena-vs-badge">VS</div>
 
         <div className="ca-arena-side-info ca-arena-side-info-right">
-          <div className="ca-arena-title-tag" style={{ borderRightColor: rightColor }}>
+          <div className="ca-arena-title-tag">
             {rightTitle}
           </div>
           <div className="ca-arena-primary-num" style={{ color: rightColor }}>
@@ -2045,39 +1956,56 @@ export function DualArenaChart({
             <span className="ca-arena-primary-unit">{primaryUnit}</span>
           </div>
           <div className="ca-arena-primary-sub">
-            {primaryLabel} · <strong>{hasRightPrimary && totalPrimary > 0 ? `${rightPct.toFixed(1)}%` : '—'}</strong>
+            {primaryLabel} <strong>{rightPct !== null ? `${rightPct.toFixed(1)}%` : '—'}</strong>
           </div>
         </div>
       </div>
 
-      {/* 100% 拔河进度条 */}
-      <div className="ca-arena-track" role="progressbar" aria-label={`${leftTitle} vs ${rightTitle} 拔河比例`}>
-        <div
-          className="ca-arena-track-bar ca-arena-track-left"
-          style={{ width: `${leftPct}%`, backgroundColor: leftColor }}
-        >
-          <span className="ca-arena-track-pct">{leftPct.toFixed(1)}%</span>
+      {/* 100% 对比进度条 */}
+      {canCompare && leftPct !== null && rightPct !== null ? (
+        <div className="ca-arena-track" role="progressbar" aria-label={`${leftTitle} vs ${rightTitle} 对比比例`}>
+          <div
+            className="ca-arena-track-bar ca-arena-track-left"
+            style={{ width: `${leftPct}%`, backgroundColor: leftColor }}
+          >
+            <span className="ca-arena-track-pct">{leftPct.toFixed(1)}%</span>
+          </div>
+          <div className="ca-arena-track-divider" />
+          <div
+            className="ca-arena-track-bar ca-arena-track-right"
+            style={{ width: `${rightPct}%`, backgroundColor: rightColor }}
+          >
+            <span className="ca-arena-track-pct">{rightPct.toFixed(1)}%</span>
+          </div>
         </div>
-        <div className="ca-arena-track-divider" />
+      ) : (
         <div
-          className="ca-arena-track-bar ca-arena-track-right"
-          style={{ width: `${rightPct}%`, backgroundColor: rightColor }}
+          className="ca-arena-empty-track"
+          style={{
+            textAlign: 'center',
+            padding: '8px 12px',
+            color: CAMPAIGN_PALETTE.textMuted,
+            fontSize: 12,
+            border: `0.5px dashed ${CAMPAIGN_PALETTE.border}`,
+            borderRadius: 6,
+            margin: '8px 0',
+          }}
         >
-          <span className="ca-arena-track-pct">{rightPct.toFixed(1)}%</span>
+          暂无可比较消耗
         </div>
-      </div>
+      )}
 
-      {/* 下方多指标对决行 */}
+      {/* 下方多指标对比行 */}
       <div className="ca-arena-metrics">
         {metrics.map((row, idx) => {
           const hasLeft = typeof row.leftValue === 'number' && Number.isFinite(row.leftValue);
           const hasRight = typeof row.rightValue === 'number' && Number.isFinite(row.rightValue);
-          const higherIsBetter = row.higherIsBetter !== false;
+          const hasDirection = typeof row.higherIsBetter === 'boolean';
 
           let leftWins = false;
           let rightWins = false;
-          if (hasLeft && hasRight && row.leftValue !== row.rightValue) {
-            if (higherIsBetter) {
+          if (hasDirection && hasLeft && hasRight && row.leftValue !== row.rightValue) {
+            if (row.higherIsBetter) {
               leftWins = row.leftValue! > row.rightValue!;
               rightWins = row.rightValue! > row.leftValue!;
             } else {
@@ -2086,12 +2014,12 @@ export function DualArenaChart({
             }
           }
 
-          const maxVal =
-            Math.max(hasLeft ? Math.abs(row.leftValue!) : 0, hasRight ? Math.abs(row.rightValue!) : 0) || 1;
-          const leftBarPct =
-            hasLeft && maxVal > 0 ? Math.min(100, Math.max(6, (Math.abs(row.leftValue!) / maxVal) * 100)) : 0;
-          const rightBarPct =
-            hasRight && maxVal > 0 ? Math.min(100, Math.max(6, (Math.abs(row.rightValue!) / maxVal) * 100)) : 0;
+          // 真实比例，零0%，小正值不放大，缺值—，负值/非有限不进正向消耗构成
+          const leftValid = hasLeft && row.leftValue! >= 0 ? row.leftValue! : 0;
+          const rightValid = hasRight && row.rightValue! >= 0 ? row.rightValue! : 0;
+          const maxVal = Math.max(leftValid, rightValid) || 1;
+          const leftBarPct = hasLeft && row.leftValue! > 0 ? Math.min(100, (row.leftValue! / maxVal) * 100) : 0;
+          const rightBarPct = hasRight && row.rightValue! > 0 ? Math.min(100, (row.rightValue! / maxVal) * 100) : 0;
 
           return (
             <div key={row.label || idx} className="ca-arena-row" tabIndex={0}>
@@ -2099,7 +2027,7 @@ export function DualArenaChart({
               <div className="ca-arena-cell ca-arena-cell-left">
                 {leftWins && <span className="ca-arena-badge-win">优势</span>}
                 <span className={`ca-arena-val ${leftWins ? 'ca-arena-val-win' : ''}`}>
-                  {fmtNum(row.leftValue)} {row.unit || ''}
+                  {hasLeft ? `${fmtNum(row.leftValue)} ${row.unit || ''}`.trim() : '—'}
                 </span>
                 <div className="ca-arena-bar-track ca-arena-track-reverse">
                   {hasLeft ? (
@@ -2116,7 +2044,7 @@ export function DualArenaChart({
               {/* 中轴指标名称 */}
               <div className="ca-arena-label-col">
                 <span className="ca-arena-metric-label">{row.label}</span>
-                <span className="ca-arena-metric-dir">{higherIsBetter ? '高优' : '低优'}</span>
+                <span className="ca-arena-metric-dir">{hasDirection ? (row.higherIsBetter ? '高优' : '低优') : '数值对比'}</span>
               </div>
 
               {/* 右翼 */}
@@ -2132,7 +2060,7 @@ export function DualArenaChart({
                   )}
                 </div>
                 <span className={`ca-arena-val ${rightWins ? 'ca-arena-val-win' : ''}`}>
-                  {fmtNum(row.rightValue)} {row.unit || ''}
+                  {hasRight ? `${fmtNum(row.rightValue)} ${row.unit || ''}`.trim() : '—'}
                 </span>
                 {rightWins && <span className="ca-arena-badge-win">优势</span>}
               </div>
@@ -2206,6 +2134,7 @@ export function ButterflyCostChart({
         </div>
         <div className="ca-butterfly-header-col ca-butterfly-header-center">
           <span>投放版位 / 任务组</span>
+          <span style={{ fontSize: 12, color: CAMPAIGN_PALETTE.textSubtle, fontWeight: 400 }}> (左右独立刻度)</span>
         </div>
         <div className="ca-butterfly-header-col ca-butterfly-header-right" style={{ color: rightColor }}>
           <span>{rightLabel} ▶</span>
@@ -2218,9 +2147,8 @@ export function ButterflyCostChart({
         {data.map((item, idx) => {
           const hasLeft = typeof item.leftVal === 'number' && Number.isFinite(item.leftVal);
           const hasRight = typeof item.rightVal === 'number' && Number.isFinite(item.rightVal);
-          const leftBarPct = hasLeft && maxLeft > 0 ? Math.min(100, Math.max(6, (item.leftVal! / maxLeft) * 100)) : 0;
-          const rightBarPct =
-            hasRight && maxRight > 0 ? Math.min(100, Math.max(6, (item.rightVal! / maxRight) * 100)) : 0;
+          const leftBarPct = hasLeft && item.leftVal! > 0 && maxLeft > 0 ? Math.min(100, (item.leftVal! / maxLeft) * 100) : 0;
+          const rightBarPct = hasRight && item.rightVal! > 0 && maxRight > 0 ? Math.min(100, (item.rightVal! / maxRight) * 100) : 0;
           const isBestLeft = minLeft !== null && item.leftVal === minLeft;
           const isBestRight = minRight !== null && item.rightVal === minRight;
 
@@ -2235,7 +2163,7 @@ export function ButterflyCostChart({
               {/* 左翼条 (向左延伸) */}
               <div className="ca-butterfly-wing ca-butterfly-wing-left">
                 <div className="ca-butterfly-val-wrap ca-butterfly-val-left">
-                  {isBestLeft && <span className="ca-butterfly-badge-tag ca-badge-left">⚡低耗</span>}
+                  {isBestLeft && <span className="ca-butterfly-badge-tag ca-badge-left">本组最低</span>}
                   <span className={`ca-butterfly-val ${isBestLeft ? 'ca-butterfly-val-best' : ''}`}>
                     {fmtNum(item.leftVal)}
                     {hasLeft && <span className="ca-butterfly-unit"> {leftUnit}</span>}
@@ -2286,7 +2214,7 @@ export function ButterflyCostChart({
                     {fmtNum(item.rightVal)}
                     {hasRight && <span className="ca-butterfly-unit"> {rightUnit}</span>}
                   </span>
-                  {isBestRight && <span className="ca-butterfly-badge-tag ca-badge-right">🏆最优引流</span>}
+                  {isBestRight && <span className="ca-butterfly-badge-tag ca-badge-right">本组最低</span>}
                 </div>
               </div>
             </div>
@@ -2298,7 +2226,7 @@ export function ButterflyCostChart({
 }
 
 // ============================================================================
-// 10. PlacementScorecardChart (多维版位效能评分矩阵 + 100% 消耗构成色带)
+// 10. PlacementScorecardChart (多维版位效能表现对比矩阵 + 100% 消耗构成色带)
 // ============================================================================
 
 export interface ScorecardRow {
@@ -2325,16 +2253,30 @@ export function PlacementScorecardChart({
   if (!rows || rows.length === 0) {
     return (
       <div className="ca-empty">
-        <div className="ca-empty-title">暂无评分矩阵数据</div>
-        <div className="ca-empty-hint">录入版位或任务组数据后自动生成多维评分卡</div>
+        <div className="ca-empty-title">暂无表现对比矩阵数据</div>
+        <div className="ca-empty-hint">录入版位或任务组数据后自动生成多维表现对比卡</div>
       </div>
     );
   }
 
-  const validSpends = rows
-    .map((r) => r.spend)
-    .filter((s): s is number => typeof s === 'number' && Number.isFinite(s) && s > 0);
-  const totalSpend = validSpends.reduce((a, b) => a + b, 0);
+  const isFiniteNonNeg = (v: unknown): v is number =>
+    typeof v === 'number' && Number.isFinite(v) && v >= 0;
+
+  const totalCount = rows.length;
+  const validSpendRows = rows.filter((r) => isFiniteNonNeg(r.spend));
+  const validCount = validSpendRows.length;
+  const allMissing = validCount === 0;
+  const isComplete = validCount === totalCount;
+  const knownSpendTotal = validSpendRows.reduce((a, b) => a + (b.spend as number), 0);
+
+  // 份额仅完整有效非负样本且 total > 0 时算；全0分母为0不显示假份额
+  const canComputeShare = isComplete && knownSpendTotal > 0;
+
+  const totalSpendDisplay = allMissing
+    ? '总额 —'
+    : !isComplete
+    ? `已知消耗 ¥${fmtNum(knownSpendTotal)} (覆盖 ${validCount}/${totalCount})`
+    : `总额 ¥${fmtNum(knownSpendTotal)}`;
 
   const findBest = (vals: (number | null | undefined)[], higherBetter: boolean) => {
     const valid = vals.filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
@@ -2358,42 +2300,47 @@ export function PlacementScorecardChart({
       <div className="ca-scorecard-header-bar">
         <div className="ca-scorecard-bar-title">
           <span>消耗构成分布</span>
-          <span className="ca-scorecard-total-spend">总额 ¥{fmtNum(totalSpend)}</span>
+          <span className="ca-scorecard-total-spend">{totalSpendDisplay}</span>
         </div>
         <div className="ca-scorecard-segments" role="progressbar" aria-label="消耗构成比例">
-          {rows.map((r, i) => {
-            const hasSpend = typeof r.spend === 'number' && Number.isFinite(r.spend) && r.spend > 0;
-            const pct = totalSpend > 0 && hasSpend ? (r.spend! / totalSpend) * 100 : 0;
-            const color = colors[i % colors.length];
-            if (pct <= 0) return null;
-            return (
-              <div
-                key={r.name || i}
-                className="ca-scorecard-seg-item"
-                style={{ width: `${pct}%`, backgroundColor: color }}
-                title={`${r.name}: ¥${fmtNum(r.spend)} (${pct.toFixed(1)}%)`}
-              />
-            );
-          })}
+          {canComputeShare &&
+            rows.map((r, i) => {
+              const spend = r.spend as number;
+              const pct = (spend / knownSpendTotal) * 100;
+              const color = colors[i % colors.length];
+              if (pct <= 0) return null;
+              return (
+                <div
+                  key={r.name || i}
+                  className="ca-scorecard-seg-item"
+                  style={{ width: `${pct}%`, backgroundColor: color }}
+                  title={`${r.name}: ¥${fmtNum(spend)} (${pct.toFixed(1)}%)`}
+                />
+              );
+            })}
         </div>
         <div className="ca-scorecard-legend">
           {rows.map((r, i) => {
-            const hasSpend = typeof r.spend === 'number' && Number.isFinite(r.spend) && r.spend > 0;
-            const pct = totalSpend > 0 && hasSpend ? (r.spend! / totalSpend) * 100 : 0;
+            const hasSpend = isFiniteNonNeg(r.spend);
+            let pctStr = '—';
+            if (canComputeShare && hasSpend) {
+              const pct = ((r.spend as number) / knownSpendTotal) * 100;
+              pctStr = `${pct.toFixed(1)}%`;
+            }
             const color = colors[i % colors.length];
             return (
               <span key={r.name || i} className="ca-scorecard-legend-item">
                 <span className="ca-scorecard-dot" style={{ backgroundColor: color }} />
                 <strong>{r.name}</strong>
-                <span>¥{fmtNum(r.spend)}</span>
-                <span className="ca-scorecard-pct">({pct > 0 ? `${pct.toFixed(1)}%` : '—'})</span>
+                <span>{hasSpend ? `¥${fmtNum(r.spend)}` : '—'}</span>
+                <span className="ca-scorecard-pct">({pctStr})</span>
               </span>
             );
           })}
         </div>
       </div>
 
-      {/* 主体多维指标热力评分矩阵表 */}
+      {/* 主体多维指标热力表现对比矩阵表 */}
       <div className="ca-table-wrap ca-scorecard-table-wrap">
         <table className="ca-scorecard-table" role="table">
           <thead>
@@ -2420,8 +2367,9 @@ export function PlacementScorecardChart({
           </thead>
           <tbody>
             {rows.map((r, idx) => {
-              const hasSpend = typeof r.spend === 'number' && Number.isFinite(r.spend) && r.spend > 0;
-              const spendPct = totalSpend > 0 && hasSpend ? (r.spend! / totalSpend) * 100 : 0;
+              const hasSpend = isFiniteNonNeg(r.spend);
+              const spendPct = canComputeShare && hasSpend ? ((r.spend as number) / knownSpendTotal) * 100 : 0;
+              const spendPctStr = canComputeShare && hasSpend ? `${spendPct.toFixed(1)}%` : '—';
               const isBestCtr = bestCtr !== null && r.ctr === bestCtr;
               const isBestCpc = bestCpc !== null && r.cpc === bestCpc;
               const isBestCpm = bestCpm !== null && r.cpm === bestCpm;
@@ -2438,22 +2386,24 @@ export function PlacementScorecardChart({
                   <td className="ca-scorecard-td">
                     <div className="ca-scorecard-bar-cell">
                       <div className="ca-scorecard-mini-bar">
-                        <div
-                          className="ca-scorecard-mini-fill"
-                          style={{
-                            width: `${Math.min(100, spendPct)}%`,
-                            backgroundColor: colors[idx % colors.length],
-                          }}
-                        />
+                        {canComputeShare && hasSpend && spendPct > 0 && (
+                          <div
+                            className="ca-scorecard-mini-fill"
+                            style={{
+                              width: `${Math.min(100, spendPct)}%`,
+                              backgroundColor: colors[idx % colors.length],
+                            }}
+                          />
+                        )}
                       </div>
-                      <span className="ca-scorecard-cell-val">{spendPct > 0 ? `${spendPct.toFixed(1)}%` : '—'}</span>
+                      <span className="ca-scorecard-cell-val">{spendPctStr}</span>
                     </div>
                   </td>
                   <td className={`ca-scorecard-td ${isBestCtr ? 'ca-scorecard-cell-best' : ''}`}>
                     <span className="ca-scorecard-cell-val">
                       {typeof r.ctr === 'number' && Number.isFinite(r.ctr) ? `${fmtNum(r.ctr, 2)}%` : '—'}
                     </span>
-                    {isBestCtr && <span className="ca-scorecard-tag-best">🏆最高</span>}
+                    {isBestCtr && <span className="ca-scorecard-tag-best">最高</span>}
                   </td>
                   {mode === 'four-lines' ? (
                     <>
@@ -2461,25 +2411,25 @@ export function PlacementScorecardChart({
                         <span className="ca-scorecard-cell-val">
                           {typeof r.cpc === 'number' && Number.isFinite(r.cpc) ? `¥${fmtNum(r.cpc, 2)}` : '—'}
                         </span>
-                        {isBestCpc && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                        {isBestCpc && <span className="ca-scorecard-tag-best">最低</span>}
                       </td>
                       <td className={`ca-scorecard-td ${isBestCpuv ? 'ca-scorecard-cell-best' : ''}`}>
                         <span className="ca-scorecard-cell-val">
                           {typeof r.cpuv === 'number' && Number.isFinite(r.cpuv) ? `¥${fmtNum(r.cpuv, 2)}` : '—'}
                         </span>
-                        {isBestCpuv && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                        {isBestCpuv && <span className="ca-scorecard-tag-best">最低</span>}
                       </td>
                       <td className={`ca-scorecard-td ${isBestGmv ? 'ca-scorecard-cell-best' : ''}`}>
                         <span className="ca-scorecard-cell-val">
                           {typeof r.gmv === 'number' && Number.isFinite(r.gmv) ? `¥${fmtNum(r.gmv, 2)}` : '—'}
                         </span>
-                        {isBestGmv && <span className="ca-scorecard-tag-best">🏆最高</span>}
+                        {isBestGmv && <span className="ca-scorecard-tag-best">最高</span>}
                       </td>
                       <td className={`ca-scorecard-td ${isBestRoi ? 'ca-scorecard-cell-best' : ''}`}>
                         <span className="ca-scorecard-cell-val">
                           {typeof r.roi === 'number' && Number.isFinite(r.roi) ? `${fmtNum(r.roi, 2)}倍` : '—'}
                         </span>
-                        {isBestRoi && <span className="ca-scorecard-tag-best">🏆最高</span>}
+                        {isBestRoi && <span className="ca-scorecard-tag-best">最高</span>}
                       </td>
                     </>
                   ) : (
@@ -2488,25 +2438,25 @@ export function PlacementScorecardChart({
                         <span className="ca-scorecard-cell-val">
                           {typeof r.cpm === 'number' && Number.isFinite(r.cpm) ? `¥${fmtNum(r.cpm, 2)}` : '—'}
                         </span>
-                        {isBestCpm && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                        {isBestCpm && <span className="ca-scorecard-tag-best">最低</span>}
                       </td>
                       <td className={`ca-scorecard-td ${isBestCpc ? 'ca-scorecard-cell-best' : ''}`}>
                         <span className="ca-scorecard-cell-val">
                           {typeof r.cpc === 'number' && Number.isFinite(r.cpc) ? `¥${fmtNum(r.cpc, 2)}` : '—'}
                         </span>
-                        {isBestCpc && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                        {isBestCpc && <span className="ca-scorecard-tag-best">最低</span>}
                       </td>
                       <td className={`ca-scorecard-td ${isBestCpe ? 'ca-scorecard-cell-best' : ''}`}>
                         <span className="ca-scorecard-cell-val">
                           {typeof r.cpe === 'number' && Number.isFinite(r.cpe) ? `¥${fmtNum(r.cpe, 2)}` : '—'}
                         </span>
-                        {isBestCpe && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                        {isBestCpe && <span className="ca-scorecard-tag-best">最低</span>}
                       </td>
                       <td className={`ca-scorecard-td ${isBestCpuv ? 'ca-scorecard-cell-best' : ''}`}>
                         <span className="ca-scorecard-cell-val">
                           {typeof r.cpuv === 'number' && Number.isFinite(r.cpuv) ? `¥${fmtNum(r.cpuv, 2)}` : '—'}
                         </span>
-                        {isBestCpuv && <span className="ca-scorecard-tag-best">⚡最低</span>}
+                        {isBestCpuv && <span className="ca-scorecard-tag-best">最低</span>}
                       </td>
                     </>
                   )}
@@ -2569,8 +2519,7 @@ export function LollipopRankChart({
     <div className="ca-lollipop-chart">
       {items.map((item, idx) => {
         const hasVal = typeof item.value === 'number' && Number.isFinite(item.value);
-        const isZero = hasVal && item.value === 0;
-        const pct = hasVal && !isZero && maxVal > 0 ? Math.min(100, Math.max(3, (item.value! / maxVal) * 100)) : 0;
+        const pct = hasVal && item.value! > 0 && maxVal > 0 ? Math.min(100, (item.value! / maxVal) * 100) : 0;
         const rankNum = idx + 1;
         const rankStr = rankNum < 10 ? `0${rankNum}` : `${rankNum}`;
         const rankColor = rankNum <= 3 ? rankBadgeColors[rankNum - 1] : CAMPAIGN_PALETTE.slate;
@@ -2612,7 +2561,7 @@ export function LollipopRankChart({
                 style={{
                   left: `${pct}%`,
                   backgroundColor: itemColor,
-                  boxShadow: `0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 6px ${itemColor}66`,
+                  boxShadow: `0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 6px ${typeof itemColor === 'string' && itemColor.startsWith('var(') ? `color-mix(in srgb, ${itemColor} 40%, transparent)` : `${itemColor}66`}`,
                 }}
               />
             </div>

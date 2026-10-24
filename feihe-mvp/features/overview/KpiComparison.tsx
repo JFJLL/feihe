@@ -44,7 +44,7 @@ export function KpiComparison({ data }: { data?: FeishuData }) {
       <p className="metric-note">消耗进度不代表效果达成；爆文率使用该范围源值，不平均不同范围的比率。人群资产不跨周期加总。</p>
     </>}
     {(data?.itiRetention || []).length > 0 && <TimeSeriesChart rows={(data?.itiRetention || []).filter(r => r.date >= '2025-12-31').map(r => ({ ...r }))}
-      title="I+TI 人群资产趋势" unit="人" series={[{ key: 'feiheIti', label: '飞鹤整体', color: '#1e40af' }, { key: 'qicuiIti', label: '启萃', color: '#7c3aed' }, { key: 'qicuiEarlyIti', label: '启萃早阶', color: '#0d9488' }]} />}
+      title="I+TI 人群资产趋势" unit="人" series={[{ key: 'feiheIti', label: '飞鹤整体', color: '#0d74ce' }, { key: 'qicuiIti', label: '启萃', color: '#5753c6' }, { key: 'qicuiEarlyIti', label: '启萃早阶', color: '#008573' }]} />}
     {(data?.kpiInternal || []).some(r => r.dimension === '实际') && <details style={{ marginTop: 16 }}><summary>月度实际明细（各项目、渠道独立展示）</summary>
       <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>月份</th><th>项目</th><th>渠道</th><th>费用（元）</th><th>曝光</th><th>互动</th></tr></thead><tbody>
         {data?.kpiInternal?.filter(r => r.dimension === '实际').map((r, i) => <tr key={i}><td>{r.month.replace(/月$/, '')}月</td><td>{r.project}</td><td>{r.lat}</td><td>{display(r.cost)}</td><td>{display(r.exposure)}</td><td>{display(r.interaction)}</td></tr>)}

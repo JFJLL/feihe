@@ -145,7 +145,7 @@ function LegacyCommentsWorkspace({
   }
 
   const tabs: ModuleTab[] = [
-    { id: 'actions', title: '口碑与处置', desc: '情绪构成、动态话题与规则闭环', badge: `${pct(dashboard.metrics.positiveRate)} · ${pendingRisk}待办`, icon: '💬' },
+    { id: 'actions', title: '口碑与处置', desc: '情绪构成、动态话题与规则闭环', badge: `${pct(dashboard.metrics.positiveRate)} / ${pendingRisk}待办`, icon: '💬' },
     { id: 'collection', title: '采集监测', desc: '按ID/链接抓取、批量采集与快照变动', badge: dashboard.metrics.commentTotal || 0, icon: '🛰️' },
     { id: 'acceptance', title: '交付验收', desc: '主线交付、可汇报线与品牌提及率', badge: dashboard.metrics.noteCount || 0, icon: '🎯' },
     { id: 'supplier', title: '供应商核验', desc: '交付Excel导入、隔天外显与共性分析', badge: verifiedCount || 0, icon: '🛡️' },
@@ -161,7 +161,7 @@ function LegacyCommentsWorkspace({
         subtitle="笔记评论采集、风险处置与供应商核验；需要对应来源与外部服务。"
         badge={
           <span>
-            {verifiedCount} 已确认外显 · {pendingRisk} 风险待办
+            {verifiedCount} 已确认外显 / {pendingRisk} 风险待办
           </span>
         }
       >

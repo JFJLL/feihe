@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import type { Dashboard, GrowthSettings, Note } from '../../lib/types/project';
@@ -33,7 +33,7 @@ export function InspirationLibrary({
       return (n.category1 === direction) || (n.category2 === direction) || (contentDirectionLabel(n.category1) === normTarget) || (sampleDirection(n) === direction);
     });
     openCategoryNotes({
-      title: '内容方向机会 · ' + normTarget,
+      title: '内容方向机会 / ' + normTarget,
       subtitle: '方向下共收录 ' + matched.length + ' 篇样本，展示前 50 篇（按互动量降序）',
       tag: '灵感方向',
       notes: matched,
@@ -108,7 +108,7 @@ export function InspirationLibrary({
   return (
     <div className="stack">
       <div className="reference-daily-grid">
-        {stages.map((stage, i) => <MetricCard key={stage} label={stage} value={growth.inspirations.filter(item => item.stage === stage).length} unit="条" theme={(['blue', 'teal', 'purple', 'green'] as const)[i]} desc={'当前阶段占比 ' + percent(ratio(growth.inspirations.filter(item => item.stage === stage).length, growth.inspirations.length)) + ' · 非历史转化率'} />)}
+        {stages.map((stage, i) => <MetricCard key={stage} label={stage} value={growth.inspirations.filter(item => item.stage === stage).length} unit="条" theme={(['blue', 'teal', 'purple', 'green'] as const)[i]} desc={'当前阶段占比 ' + percent(ratio(growth.inspirations.filter(item => item.stage === stage).length, growth.inspirations.length)) + ' / 非历史转化率'} />)}
       </div>
       <GrowthSampleBoard notes={data.notes} threshold={growth.thresholds.breakoutInteractions} onDirectionClick={handleDirectionClick} />
       <section className="inspiration-split">
@@ -119,7 +119,7 @@ export function InspirationLibrary({
           </p>
           <div className="idea-source-list">
             {auto.slice(0, 10).map((note) => (
-              <div key={note.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
+              <div key={note.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '0.5px solid #f0f0f3' }}>
                 <div style={{ width: '48px', height: '48px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
                 <NoteCover
                   src={note.coverUrl}
@@ -131,11 +131,11 @@ export function InspirationLibrary({
                 />
                 </div>
                 <span style={{ flex: 1, minWidth: 0 }}>
-                  <strong style={{ display: 'block', fontSize: '13px', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <strong style={{ display: 'block', fontSize: '14px', color: '#1c2024', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {note.title || note.id}
                   </strong>
-                  <small style={{ display: 'block', fontSize: '11.5px', color: '#64748b', marginTop: '2px' }}>
-                    {noteDirection(note)} · 互动 {compact(note.interactionCount)} · 评论 {display(note.commentTotal)}
+                  <small style={{ display: 'block', fontSize: '12px', color: 'var(--slate-11, #60646c)', marginTop: '2px' }}>
+                    {noteDirection(note)} / 互动 {compact(note.interactionCount)} / 评论 {display(note.commentTotal)}
                   </small>
                 </span>
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
@@ -224,22 +224,22 @@ export function InspirationLibrary({
                       )}
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                          <span className="section-mini-tag tag-blue" style={{ fontSize: '10px', padding: '1px 6px' }}>{item.sourceType}</span>
-                          {item.keyword && <span className="section-mini-tag tag-teal" style={{ fontSize: '10px', padding: '1px 6px' }}>{item.keyword}</span>}
-                          <span className="section-mini-tag tag-purple" style={{ fontSize: '10px', padding: '1px 6px' }}>{item.stage}</span>
+                          <span className="section-mini-tag tag-blue" style={{ fontSize: '12px', padding: '1px 6px' }}>{item.sourceType}</span>
+                          {item.keyword && <span className="section-mini-tag tag-teal" style={{ fontSize: '12px', padding: '1px 6px' }}>{item.keyword}</span>}
+                          <span className="section-mini-tag tag-purple" style={{ fontSize: '12px', padding: '1px 6px' }}>{item.stage}</span>
                         </div>
-                        <strong style={{ display: 'block', fontSize: '13px', marginTop: '4px', color: '#0f172a' }}>{item.title}</strong>
+                        <strong style={{ display: 'block', fontSize: '14px', marginTop: '4px', color: '#1c2024' }}>{item.title}</strong>
                       </div>
                     </div>
-                    <p style={{ margin: 0, fontSize: '12px', color: '#475569', lineHeight: 1.5 }}>{item.reason || '尚未补充判断理由'}</p>
-                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '4px', borderTop: '1px solid #f1f5f9', paddingTop: '6px' }}>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#60646c', lineHeight: 1.5 }}>{item.reason || '尚未补充判断理由'}</p>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '4px', borderTop: '0.5px solid #f0f0f3', paddingTop: '6px' }}>
                       {item.sourceNoteId && openNote && (
-                        <button type="button" className="subtle-btn" style={{ padding: '3px 8px', fontSize: '11.5px' }} onClick={() => openNote(item.sourceNoteId!)}>来源笔记</button>
+                        <button type="button" className="subtle-btn" style={{ padding: '3px 8px', fontSize: '12px' }} onClick={() => openNote(item.sourceNoteId!)}>来源笔记</button>
                       )}
                       <button
                         type="button"
                         className="subtle-btn"
-                        style={{ padding: '3px 8px', fontSize: '11.5px', color: '#0284c7' }}
+                        style={{ padding: '3px 8px', fontSize: '12px', color: '#0d74ce' }}
                         onClick={() => {
                           const next = stages[Math.min(stages.length - 1, stages.indexOf(stage) + 1)];
                           void save(
@@ -259,7 +259,7 @@ export function InspirationLibrary({
                       <button
                         type="button"
                         className="danger-link"
-                        style={{ padding: '3px 6px', fontSize: '11.5px', marginLeft: 'auto' }}
+                        style={{ padding: '3px 6px', fontSize: '12px', marginLeft: 'auto' }}
                         onClick={() =>
                           void save(
                             {

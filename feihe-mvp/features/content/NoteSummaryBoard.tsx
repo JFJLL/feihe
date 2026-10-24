@@ -27,7 +27,7 @@ export function NoteSummaryBoard({ summary, mode, loading, error }: {
       {error ? <div role="status" className="empty">看板暂不可用：{error}</div> : loading ? <div role="status" className="empty">正在读取真实汇总…</div> : summary.total > 0 ? (
         <div className="stack">
           {rows.map(row => <div key={row.label}>
-            <div className="card-header-row"><strong>{row.label}</strong><span>{row.count.toLocaleString()} / {summary.total.toLocaleString()} 篇 · {(row.count / summary.total * 100).toFixed(1)}%</span></div>
+            <div className="card-header-row"><strong>{row.label}</strong><span>{row.count.toLocaleString()} / {summary.total.toLocaleString()} 篇 / {(row.count / summary.total * 100).toFixed(1)}%</span></div>
             <ProgressBar value={row.count} max={summary.total} theme={row.theme} />
           </div>)}
           {unknown > 0 && <p className="muted">另有 {unknown.toLocaleString()} 篇状态未归类，不计入以上两组。</p>}

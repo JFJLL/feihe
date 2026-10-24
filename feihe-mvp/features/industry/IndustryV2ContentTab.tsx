@@ -111,7 +111,7 @@ export function IndustryV2ContentTab({
                     <span className="v2-dist-count">
                       {item.count} 篇
                       {item.meanInteractions !== null && item.meanInteractions !== undefined && (
-                        <small> · 均互动 {Math.round(item.meanInteractions)}</small>
+                        <small> (均互动 {Math.round(item.meanInteractions)})</small>
                       )}
                     </span>
                   </div>
@@ -169,7 +169,7 @@ export function IndustryV2ContentTab({
             <div>
               <h3 className="v2-card-title">
                 {activeEvidenceFilter
-                  ? `关联证据笔记明细 · 「${activeEvidenceFilter.label}」(${displayedNotes.length} 篇)`
+                  ? `关联证据笔记明细 「${activeEvidenceFilter.label}」(${displayedNotes.length} 篇)`
                   : `高热度样本笔记明细 (共 ${displayedNotes.length} 条)`}
               </h3>
               <p className="v2-card-subtitle">
@@ -276,7 +276,7 @@ export function IndustryV2ContentTab({
                             )}
                           </div>
                         </td>
-                        <td style={{ whiteSpace: 'nowrap', color: '#64748b', fontSize: '0.8rem' }}>
+                        <td style={{ whiteSpace: 'nowrap', color: '#60646c', fontSize: 14 }}>
                           {note.publishedDate || (note.publishedAt ? note.publishedAt.slice(0, 10) : '-')}
                         </td>
                       </tr>

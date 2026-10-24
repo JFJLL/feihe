@@ -45,14 +45,14 @@ export function ScenePerformanceBoard({
           >
             <td>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontWeight: 600, color: onRowClick ? '#0284c7' : 'inherit' }}>{contentDirectionLabel(r.scene)} / {r.level}</span>
-                {onRowClick && <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>}
+                <span style={{ fontWeight: 600, color: onRowClick ? '#0d74ce' : 'inherit' }}>{contentDirectionLabel(r.scene)} / {r.level}</span>
+                {onRowClick && <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#e6f4fe', color: '#0d74ce', border: '0.5px solid #e6f4fe', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>}
               </div>
             </td>
             <td>{r.count}</td>
             <td>{show(r.avg)}</td>
             <td>{show(r.cpe)}</td>
-            <td>互动 {r.samples} · 成本 {r.costSamples}{r.samples < 5 ? ' · 小样本' : ''}</td>
+            <td>互动 {r.samples} / 成本 {r.costSamples}{r.samples < 5 ? ' / 小样本' : ''}</td>
           </tr>
         ))}
       </tbody></table></div> : <EmptyState title="暂无内容效果样本" text="同步笔记表现后查看各方向的发布数量和效果。" />}

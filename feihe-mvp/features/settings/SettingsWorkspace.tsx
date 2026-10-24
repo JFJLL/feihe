@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import '../../styles/settings-layout.css';
 import type { Dashboard, Project, Ops, MapData } from '../../lib/types/project';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { ErrorState } from '../../components/ui/ErrorState';
@@ -67,6 +68,8 @@ export function SettingsWorkspace({
     'metrics',
     'reports',
   ]);
+
+  const activeTab = tab === 'members' ? 'profile' : tab;
 
   // If someone visits /projects/[id]/settings?tab=data, metrics, reports, or data-sources, route seamlessly
   useEffect(() => {
@@ -146,39 +149,18 @@ export function SettingsWorkspace({
     await onRefresh({ fresh: true });
   };
 
-  const ruleWordCount = (ops?.settings?.rules?.brands?.length || 0) + (ops?.settings?.rules?.competitors?.length || 0);
-
   return (
-    <div className="stack ops-workspace reference-workspace settings-workspace" data-workspace-ui="v2">
-      <PageHeader
-        variant="light"
-        title="项目设置"
-        subtitle={
-          isCampaignReview
-            ? "集中管理当前项目的资料、目标规则、成员权限、数据来源与工具集成。"
-            : "集中管理当前项目的资料、目标规则、成员权限、工具与数据地图。"
-        }
-        badge={
-          isCampaignReview ? (
-            <span>战役复盘资料与数据管理</span>
-          ) : (
-            <span>
-              {ruleWordCount} 个识别词 ·{' '}
-              {dashboard.pipelines?.length || 0} 条主线
-            </span>
-          )
-        }
-      />
+    <div className="stack ops-workspace reference-workspace settings-workspace settings-workspace-stack" data-workspace-ui="v2">
+      <PageHeader variant="light" title="项目设置">
+        <SettingsSubNav activeTab={activeTab} />
+      </PageHeader>
 
-      <SettingsSubNav activeTab={tab} />
-
-      {visited.has('profile') && (
+      {(visited.has('profile') || visited.has('members')) && (
         <div
           id="workspace-tabpanel-profile"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-profile"
+          aria-label="项目资料"
           tabIndex={0}
-          style={{ display: tab === 'profile' ? 'block' : 'none' }}
+          style={{ display: activeTab === 'profile' ? 'flex' : 'none', flexDirection: 'column', gap: '28px' }}
         >
           <ProjectProfile
             key={projectId}
@@ -187,19 +169,8 @@ export function SettingsWorkspace({
             onDone={handleProfileOrSourceUpdate}
             toast={showToast}
           />
-        </div>
-      )}
-
-      {visited.has('members') && (
-        <div
-          id="workspace-tabpanel-members"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-members"
-          tabIndex={0}
-          style={{ display: tab === 'members' ? 'block' : 'none' }}
-        >
           <MemberManagement
-            key={projectId}
+            key={`${projectId}-profile-members`}
             projectId={projectId}
             onDone={handleProfileOrSourceUpdate}
             toast={showToast}
@@ -210,10 +181,9 @@ export function SettingsWorkspace({
       {visited.has('data-sources') && isCampaignReview && (
         <div
           id="workspace-tabpanel-data-sources"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-data-sources"
+          aria-label="数据来源"
           tabIndex={0}
-          style={{ display: tab === 'data-sources' ? 'block' : 'none' }}
+          style={{ display: activeTab === 'data-sources' ? 'block' : 'none' }}
         >
           <CampaignSourcesPanel
             key={projectId}
@@ -226,10 +196,9 @@ export function SettingsWorkspace({
       {visited.has('rules') && (
         <div
           id="workspace-tabpanel-rules"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-rules"
+          aria-label="目标与规则"
           tabIndex={0}
-          style={{ display: tab === 'rules' ? 'block' : 'none' }}
+          style={{ display: activeTab === 'rules' ? 'block' : 'none' }}
         >
           <RulesAndTargets
             key={projectId}
@@ -245,10 +214,9 @@ export function SettingsWorkspace({
       {visited.has('board') && (
         <div
           id="workspace-tabpanel-board"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-board"
+          aria-label="团队看板"
           tabIndex={0}
-          style={{ display: tab === 'board' ? 'block' : 'none' }}
+          style={{ display: activeTab === 'board' ? 'block' : 'none' }}
         >
           <GeneralWorkbenchBoard
             key={projectId}
@@ -261,10 +229,9 @@ export function SettingsWorkspace({
       {visited.has('integrations') && (
         <div
           id="workspace-tabpanel-integrations"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-integrations"
+          aria-label="工具集成"
           tabIndex={0}
-          style={{ display: tab === 'integrations' ? 'block' : 'none' }}
+          style={{ display: activeTab === 'integrations' ? 'block' : 'none' }}
         >
           <SettingsIntegrations
             key={projectId}
@@ -277,10 +244,9 @@ export function SettingsWorkspace({
       {visited.has('data-map') && (
         <div
           id="workspace-tabpanel-data-map"
-          role="tabpanel"
-          aria-labelledby="workspace-tab-data-map"
+          aria-label="数据地图"
           tabIndex={0}
-          style={{ display: tab === 'data-map' ? 'block' : 'none' }}
+          style={{ display: activeTab === 'data-map' ? 'block' : 'none' }}
         >
           {mapError && !mapData ? (
             <ErrorState error={mapError} onRetry={reloadMap} />

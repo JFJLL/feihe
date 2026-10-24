@@ -481,14 +481,14 @@ export function GeneralWorkbenchBoard({
           padding: '14px 18px',
           background: '#ffffff',
           borderRadius: 10,
-          border: '1px solid #e2e8f0',
+          border: '0.5px solid var(--slate-6, #d9d9e0)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
           flexWrap: 'wrap',
           gap: 12,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: '#475569' }}>当前业务数据集:</span>
+          <span style={{ fontSize: 14, fontWeight: 600, color: '#60646c' }}>当前业务数据集:</span>
           {datasets.length > 0 ? (
             <CustomSelect
               ariaLabel="当前业务数据集"
@@ -503,23 +503,23 @@ export function GeneralWorkbenchBoard({
               style={{ width: 280 }}
             />
           ) : (
-            <span style={{ fontSize: 13, color: '#94a3b8' }}>暂无导入数据集</span>
+            <span style={{ fontSize: 14, color: '#60646c' }}>暂无导入数据集</span>
           )}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ display: 'flex', border: '1px solid #cbd5e1', borderRadius: 6, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 6, overflow: 'hidden' }}>
             <button
               onClick={() => setViewMode('board')}
               className={'workbench-view-mode-btn' + (viewMode === 'board' ? ' active' : '')}
               style={{
                 padding: '6px 14px',
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: 600,
                 border: 'none',
                 cursor: 'pointer',
-                background: viewMode === 'board' ? '#2c7168' : '#fff',
-                color: viewMode === 'board' ? '#fff' : '#475569',
+                background: viewMode === 'board' ? '#008573' : '#fff',
+                color: viewMode === 'board' ? '#fff' : '#60646c',
               }}
             >
               📊 看板视图
@@ -529,12 +529,12 @@ export function GeneralWorkbenchBoard({
               className={'workbench-view-mode-btn' + (viewMode === 'data' ? ' active' : '')}
               style={{
                 padding: '6px 14px',
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: 600,
                 border: 'none',
                 cursor: 'pointer',
-                background: viewMode === 'data' ? '#2c7168' : '#fff',
-                color: viewMode === 'data' ? '#fff' : '#475569',
+                background: viewMode === 'data' ? '#008573' : '#fff',
+                color: viewMode === 'data' ? '#fff' : '#60646c',
               }}
             >
               📋 数据明细 ({totalCount} 行)
@@ -551,12 +551,12 @@ export function GeneralWorkbenchBoard({
                     onClick={handleAddCardClick}
                     style={{
                       padding: '6px 12px',
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: 600,
                       borderRadius: 6,
-                      border: '1px solid #2c7168',
-                      background: '#f0f6f5',
-                      color: '#2c7168',
+                      border: '0.5px solid #008573',
+                      background: '#f3fbf9',
+                      color: 'var(--teal-11, #008573)',
                       cursor: 'pointer',
                     }}
                   >
@@ -567,11 +567,11 @@ export function GeneralWorkbenchBoard({
                     onClick={() => saveDashboard(false)}
                     style={{
                       padding: '6px 14px',
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: 600,
                       borderRadius: 6,
                       border: 'none',
-                      background: '#16a34a',
+                      background: '#29a383',
                       color: '#fff',
                       cursor: 'pointer',
                     }}
@@ -583,11 +583,11 @@ export function GeneralWorkbenchBoard({
                     onClick={handleCancelEdit}
                     style={{
                       padding: '6px 12px',
-                      fontSize: 13,
+                      fontSize: 14,
                       borderRadius: 6,
-                      border: '1px solid #cbd5e1',
+                      border: '0.5px solid var(--slate-6, #d9d9e0)',
                       background: '#fff',
-                      color: '#64748b',
+                      color: 'var(--slate-11, #60646c)',
                       cursor: 'pointer',
                     }}
                   >
@@ -603,12 +603,12 @@ export function GeneralWorkbenchBoard({
                   }}
                   style={{
                     padding: '6px 14px',
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 600,
                     borderRadius: 6,
-                    border: '1px solid #cbd5e1',
+                    border: '0.5px solid var(--slate-6, #d9d9e0)',
                     background: '#fff',
-                    color: '#1e293b',
+                    color: '#1c2024',
                     cursor: 'pointer',
                   }}
                 >
@@ -633,7 +633,7 @@ export function GeneralWorkbenchBoard({
               text={canConfigure ? '接入业务表后，选择适用的指标与图表。飞书原表保持不变。' : '工作台由项目负责人接入数据。已有结果发布后会显示在这里。'}
               action={canConfigure ? (<Link
                   href={`/projects/${encodeURIComponent(projectId)}/settings?tab=data-sources`}
-                  style={{ padding: '8px 16px', background: '#2c7168', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 13 }}
+                  style={{ padding: '8px 16px', background: '#008573', color: '#fff', borderRadius: 6, textDecoration: 'none', fontSize: 14 }}
                 >
                   前往接入数据源 →
                 </Link>) : undefined}
@@ -641,9 +641,9 @@ export function GeneralWorkbenchBoard({
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {isEditingBoard && (
-                <div style={{ padding: 12, background: '#fefce8', border: '1px solid #fef08a', borderRadius: 8, fontSize: 13, color: '#854d0e', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ padding: 12, background: '#fff7c2', border: '0.5px solid #f3d673', borderRadius: 8, fontSize: 14, color: '#ab6400', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span>您正在编辑看板布局。您可以添加卡片、修改指标规则、调整顺序或删除卡片。修改完成后点击「保存并发布看板」。</span>
-                  <span style={{ fontSize: 12, color: '#a16207' }}>版本: v{dashboardVersion}</span>
+                  <span style={{ fontSize: 12, color: '#ab6400' }}>版本: v{dashboardVersion}</span>
                 </div>
               )}
 
@@ -655,7 +655,7 @@ export function GeneralWorkbenchBoard({
                     !canConfigure ? undefined : isEditingBoard ? (
                       <button
                         onClick={handleAddCardClick}
-                        style={{ padding: '8px 16px', background: '#2c7168', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
+                        style={{ padding: '8px 16px', background: '#008573', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 14, fontWeight: 600 }}
                       >
                         添加第一张卡片
                       </button>
@@ -667,7 +667,7 @@ export function GeneralWorkbenchBoard({
                           setIsEditingBoard(true);
                           handleAddCardClick();
                         }}
-                        style={{ padding: '8px 16px', background: '#2c7168', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
+                        style={{ padding: '8px 16px', background: '#008573', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 14, fontWeight: 600 }}
                       >
                         创建第一张卡片
                       </button>
@@ -705,11 +705,11 @@ export function GeneralWorkbenchBoard({
         </>
       ) : (
         /* Data Detail View with Server-Side Pagination and Search */
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0', padding: 20 }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '0.5px solid var(--slate-6, #d9d9e0)', padding: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: 16, color: '#0f172a' }}>数据集记录明细</h3>
-              <p style={{ margin: '2px 0 0', fontSize: 12, color: '#64748b' }}>
+              <h3 style={{ margin: 0, fontSize: 16, color: '#1c2024' }}>数据集记录明细</h3>
+              <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                 查看已从飞书表格同步的结构化原始数据，服务端全量检索与分页。
               </p>
             </div>
@@ -721,20 +721,20 @@ export function GeneralWorkbenchBoard({
                 setSearchTable(e.target.value);
                 setCurrentPage(1);
               }}
-              style={{ width: 220, padding: '7px 12px', fontSize: 13, borderRadius: 6, border: '1px solid #cbd5e1' }}
+              style={{ width: 220, padding: '7px 12px', fontSize: 14, borderRadius: 6, border: '0.5px solid var(--slate-6, #d9d9e0)' }}
             />
           </div>
 
           {!currentRows.length ? (
-            <div style={{ padding: 32, textAlign: 'center', color: '#94a3b8' }}>没有匹配的数据记录</div>
+            <div style={{ padding: 32, textAlign: 'center', color: '#60646c' }}>没有匹配的数据记录</div>
           ) : (
-            <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: 8 }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
+            <div style={{ overflowX: 'auto', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 8 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                    <th style={{ padding: '8px 12px', color: '#64748b' }}>#</th>
+                  <tr style={{ background: '#f9f9fb', borderBottom: '0.5px solid #d9d9e0' }}>
+                    <th style={{ padding: '8px 12px', color: 'var(--slate-11, #60646c)' }}>#</th>
                     {availableColumns.map((col) => (
-                      <th key={col.key} style={{ padding: '8px 12px', color: '#475569', fontWeight: 600 }}>
+                      <th key={col.key} style={{ padding: '8px 12px', color: '#60646c', fontWeight: 600 }}>
                         {col.name}
                       </th>
                     ))}
@@ -742,12 +742,12 @@ export function GeneralWorkbenchBoard({
                 </thead>
                 <tbody>
                   {currentRows.map((row, rIdx) => (
-                    <tr key={rIdx} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '8px 12px', color: '#94a3b8' }}>
+                    <tr key={rIdx} style={{ borderBottom: '0.5px solid #f0f0f3' }}>
+                      <td style={{ padding: '8px 12px', color: '#60646c' }}>
                         {(currentPage - 1) * pageSize + rIdx + 1}
                       </td>
                       {availableColumns.map((col) => (
-                        <td key={col.key} style={{ padding: '8px 12px', color: '#1e293b' }}>
+                        <td key={col.key} style={{ padding: '8px 12px', color: '#1c2024' }}>
                           {String(row[col.key] ?? '—')}
                         </td>
                       ))}
@@ -759,21 +759,21 @@ export function GeneralWorkbenchBoard({
           )}
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
-            <span style={{ fontSize: 12, color: '#64748b' }}>
-              共 {totalCount} 条记录 · 第 {currentPage} / {totalPages} 页
+            <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+              共 {totalCount} 条记录 / 第 {currentPage} / {totalPages} 页
             </span>
             <div style={{ display: 'flex', gap: 8 }}>
               <button
                 disabled={currentPage <= 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                style={{ padding: '4px 10px', fontSize: 12, borderRadius: 4, border: '1px solid #cbd5e1', background: '#fff', cursor: currentPage <= 1 ? 'default' : 'pointer' }}
+                style={{ padding: '4px 10px', fontSize: 12, borderRadius: 4, border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#fff', cursor: currentPage <= 1 ? 'default' : 'pointer' }}
               >
                 上一页
               </button>
               <button
                 disabled={currentPage >= totalPages}
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                style={{ padding: '4px 10px', fontSize: 12, borderRadius: 4, border: '1px solid #cbd5e1', background: '#fff', cursor: currentPage >= totalPages ? 'default' : 'pointer' }}
+                style={{ padding: '4px 10px', fontSize: 12, borderRadius: 4, border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#fff', cursor: currentPage >= totalPages ? 'default' : 'pointer' }}
               >
                 下一页
               </button>

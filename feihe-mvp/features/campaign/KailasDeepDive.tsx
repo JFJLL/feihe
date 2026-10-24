@@ -263,25 +263,22 @@ function AdsNotesView({
       <div className="ca-kdd-grid">
         <ChartPanel
           title="达人笔记消费与互动成本分布"
-          subtitle={table?.period ? `业务周期：${table.period} · 消费与互动成本散点分布` : '业务周期：统计截止未注明 · 消费与互动成本散点分布'}
+          subtitle={table?.period ? `业务周期：${table.period} / 消费与互动成本散点分布` : '业务周期：统计截止未注明 / 消费与互动成本散点分布'}
         >
           <ScatterChart data={scatterData} xLabel="消费 (元)" yLabel="互动成本 CPE (元/次)" />
-          <div className="ca-kdd-caption">
-            各笔记消费与互动成本对应分布；气泡越大表示互动量越多。
-          </div>
         </ChartPanel>
 
         <ChartPanel
           title="笔记消费与互动量对比 (Top 8)"
-          subtitle={table?.period ? `业务周期：${table.period} · 按消费排序前列笔记` : '业务周期：统计截止未注明 · 按消费排序前列笔记'}
+          subtitle={table?.period ? `业务周期：${table.period} / 按消费排序前列笔记` : '业务周期：统计截止未注明 / 按消费排序前列笔记'}
         >
           <CampaignComboChart
             title="达人笔记消费与互动量对比 (Top 8)"
             rows={top8Rows}
             xKey="kolName"
             series={[
-              { key: 'spend', label: '消费', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-              { key: 'engagements', label: '互动量', unit: '次', axis: 'right', kind: 'line', color: '#b88a45' },
+              { key: 'spend', label: '消费', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+              { key: 'engagements', label: '互动量', unit: '次', axis: 'right', kind: 'line', color: '#ffc53d' },
             ]}
           />
           <div className="ca-kdd-caption">
@@ -373,15 +370,15 @@ function AdsKeywordsView({ table }: { table?: CampaignTable }) {
       <div className="ca-kdd-grid">
         <ChartPanel
           title="搜索词类消费与点击率对比"
-          subtitle={table?.period ? `业务周期：${table.period} · 搜索消费规模与点击率` : '业务周期：统计截止未注明 · 搜索消费规模与点击率'}
+          subtitle={table?.period ? `业务周期：${table.period} / 搜索消费规模与点击率` : '业务周期：统计截止未注明 / 搜索消费规模与点击率'}
         >
           <CampaignComboChart
             title="搜索词类消费与点击率对比"
             rows={parsedRows}
             xKey="category"
             series={[
-              { key: 'spend', label: '搜索消费', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-              { key: 'ctr', label: '点击率', unit: '%', axis: 'right', kind: 'line', color: '#bd7964' },
+              { key: 'spend', label: '搜索消费', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+              { key: 'ctr', label: '点击率', unit: '%', axis: 'right', kind: 'line', color: '#e5484d' },
             ]}
           />
           <div className="ca-kdd-caption">
@@ -391,15 +388,15 @@ function AdsKeywordsView({ table }: { table?: CampaignTable }) {
 
         <ChartPanel
           title="搜索词类原表成本对比 (CPUV 与 CPC)"
-          subtitle={table?.period ? `业务周期：${table.period} · 原表成本结构` : '业务周期：统计截止未注明 · 原表成本结构'}
+          subtitle={table?.period ? `业务周期：${table.period} / 原表成本结构` : '业务周期：统计截止未注明 / 原表成本结构'}
         >
           <CampaignComboChart
             title="搜索词类原表成本对比 (CPUV 与 CPC)"
             rows={parsedRows}
             xKey="category"
             series={[
-              { key: 'cpuv', label: '原表CPUV', unit: '元', axis: 'left', kind: 'bar', color: '#8273a3' },
-              { key: 'cpc', label: 'CPC', unit: '元', axis: 'right', kind: 'line', color: '#2c7168' },
+              { key: 'cpuv', label: '原表CPUV', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+              { key: 'cpc', label: 'CPC', unit: '元', axis: 'right', kind: 'line', color: '#008573' },
             ]}
           />
           <div className="ca-kdd-caption">
@@ -504,7 +501,7 @@ function ContentDualView({
   return (
     <>
       <div className="ca-kdd-controls">
-        <div style={{ fontSize: '0.875rem', color: '#475569', fontWeight: 500 }}>
+        <div style={{ fontSize: '0.875rem', color: '#60646c', fontWeight: 500 }}>
           执行批次筛选：
         </div>
         <StyledSelect
@@ -525,15 +522,15 @@ function ContentDualView({
       <div className="ca-kdd-grid">
         <ChartPanel
           title="自然端与投流端曝光及互动对比"
-          subtitle={organicVsPaidTable?.period ? `业务周期：${organicVsPaidTable.period} · 内容端自然沉淀与投流端商业放量` : '业务周期：统计截止未注明 · 内容端自然沉淀与投流端商业放量'}
+          subtitle={organicVsPaidTable?.period ? `业务周期：${organicVsPaidTable.period} / 内容端自然沉淀与投流端商业放量` : '业务周期：统计截止未注明 / 内容端自然沉淀与投流端商业放量'}
         >
           <CampaignComboChart
             title="自然端与投流端曝光及互动对比"
             rows={organicPaidRows}
             xKey="channel"
             series={[
-              { key: 'impressions', label: '曝光量', unit: '次', axis: 'left', kind: 'bar', color: '#2c7168' },
-              { key: 'engagements', label: '互动量', unit: '次', axis: 'right', kind: 'line', color: '#b88a45' },
+              { key: 'impressions', label: '曝光量', unit: '次', axis: 'left', kind: 'bar', color: '#008573' },
+              { key: 'engagements', label: '互动量', unit: '次', axis: 'right', kind: 'line', color: '#ffc53d' },
             ]}
           />
           <div className="ca-kdd-caption">
@@ -543,15 +540,15 @@ function ContentDualView({
 
         <ChartPanel
           title="达人素材按内容类型费用构成"
-          subtitle={materialDualTable?.period ? `业务周期：${materialDualTable.period} · 达人采买金额与投流消耗对比` : '业务周期：统计截止未注明 · 达人采买金额与投流消耗对比'}
+          subtitle={materialDualTable?.period ? `业务周期：${materialDualTable.period} / 达人采买金额与投流消耗对比` : '业务周期：统计截止未注明 / 达人采买金额与投流消耗对比'}
         >
           <CampaignComboChart
             title="达人素材按内容类型费用构成"
             rows={groupedContentTypeRows}
             xKey="contentType"
             series={[
-              { key: 'kCost', label: 'K端合作金额', unit: '元', axis: 'left', kind: 'bar', color: '#8273a3' },
-              { key: 'fsSpend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#bd7964' },
+              { key: 'kCost', label: 'K端合作金额', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+              { key: 'fsSpend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#e5484d' },
             ]}
           />
           <div className="ca-kdd-caption">

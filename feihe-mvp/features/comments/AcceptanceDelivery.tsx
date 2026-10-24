@@ -37,7 +37,7 @@ export function AcceptanceDelivery({
       return p === clean || clean.includes(p) || (n.title || '').includes(clean);
     });
     openCategoryNotes({
-      title: '投放主线 · ' + clean,
+      title: '投放主线 / ' + clean,
       subtitle: '该主线已收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '投放主线',
       notes: matched.length ? matched : (dashboard.notes || []).slice(0, 30),
@@ -205,21 +205,21 @@ export function AcceptanceDelivery({
       </section>
 
       {/* 真实验收规则展示卡 */}
-      <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '14px 18px', display: 'flex',
+      <div style={{ background: '#e6f7ed', border: '0.5px solid #acdec8', borderRadius: '10px', padding: '14px 18px', display: 'flex',
                   cursor: openCategoryNotes ? 'pointer' : 'default', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '18px' }}>📋</span>
+          <span style={{ fontSize: '16px' }}>📋</span>
           <div>
-            <strong style={{ fontSize: '13.5px', color: '#166534' }}>当前项目验收判定规则配置</strong>
-            <div style={{ fontSize: '12px', color: '#15803d', marginTop: '2px' }}>
-              {targetsConfirmed ? <>可汇报线：≥ <strong>{reportReq}</strong> 条 · 基础达标线：≥ <strong>{baseReq}</strong> 条 · 前5主评品牌提及率阈值：≥ <strong>{pct(brandReqRate)}</strong></> : '验收目标未设置'} · 新鲜度：{acceptance.freshnessHours || 24}小时
+            <strong style={{ fontSize: '14px', color: '#208368' }}>当前项目验收判定规则配置</strong>
+            <div style={{ fontSize: '12px', color: '#208368', marginTop: '2px' }}>
+              {targetsConfirmed ? <>可汇报线：≥ <strong>{reportReq}</strong> 条 / 基础达标线：≥ <strong>{baseReq}</strong> 条 / 前5主评品牌提及率阈值：≥ <strong>{pct(brandReqRate)}</strong></> : '验收目标未设置'} / 新鲜度：{acceptance.freshnessHours || 24}小时
             </div>
           </div>
         </div>
         <Link
           href={`/projects/${encodeURIComponent(projectId)}/settings?tab=rules`}
           className="btn-link"
-          style={{ fontSize: '12.5px', color: '#15803d' }}
+          style={{ fontSize: 14, color: '#208368' }}
         >
           修改项目规则配置 →
         </Link>
@@ -233,7 +233,7 @@ export function AcceptanceDelivery({
         extra={
           <Link
             className="btn-link"
-            style={{ fontSize: '13px' }}
+            style={{ fontSize: '14px' }}
             href={'/api/export?type=jobs&projectId=' + encodeURIComponent(projectId)}
           >
             导出交付记录 ↗
@@ -258,7 +258,7 @@ export function AcceptanceDelivery({
                 title={openCategoryNotes ? ('点击查看「' + p.name + '」主线笔记') : undefined}
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
                   borderRadius: '12px',
                   padding: '18px',
                   boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
@@ -268,12 +268,12 @@ export function AcceptanceDelivery({
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <strong style={{ fontSize: '15px', color: '#0f172a' }}>{p.name}</strong>
+                  <strong style={{ fontSize: '16px', color: '#1c2024' }}>{p.name}</strong>
                   <StatusBadge status={isComplete ? '已完成' : '执行中'} theme={isComplete ? 'green' : 'blue'} />
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--slate-11, #60646c)', marginBottom: '4px' }}>
                     <span>交付条数：<strong>{p.deliveredCount}</strong> / {p.targetCount || '—'} 条</span>
                     <span>完成率：{commentRate}%</span>
                   </div>
@@ -281,14 +281,14 @@ export function AcceptanceDelivery({
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: isOverBudget ? '#dc2626' : '#64748b', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: isOverBudget ? '#ce2c31' : '#60646c', marginBottom: '4px' }}>
                     <span>预算消耗：¥<strong>{p.spent.toLocaleString()}</strong> / ¥{p.budget.toLocaleString()}</span>
                     <span>{isOverBudget ? `超支 ${budgetRate}% (+¥${overBudgetAmount.toLocaleString()} / +${overBudgetRate}%)` : `消耗率：${budgetRate}%`}</span>
                   </div>
                   <ProgressBar value={p.spent} max={p.budget || p.spent || 100} theme={isOverBudget ? 'red' : 'teal'} />
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#475569', paddingTop: '4px', borderTop: '1px solid #f1f5f9' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#60646c', paddingTop: '4px', borderTop: '0.5px solid #f0f0f3' }}>
                   <span>剩余交付：<strong>{remaining}</strong> 条</span>
                   <span>结余预算：¥{Math.max(0, p.budget - p.spent).toLocaleString()}</span>
                 </div>
@@ -356,10 +356,10 @@ export function AcceptanceDelivery({
                   gapText = `距基础达标差 ${baseReq - totalC} 条`;
                 } else if (totalC < reportReq) {
                   const mentionOk = (note.brandMentionTop5 || 0) >= brandReqRate;
-                  gapText = `距可汇报差 ${reportReq - totalC} 条${mentionOk ? '' : ' · 品牌提及未达标'}`;
+                  gapText = `距可汇报差 ${reportReq - totalC} 条${mentionOk ? '' : ' / 品牌提及未达标'}`;
                 } else {
                   const mentionOk = (note.brandMentionTop5 || 0) >= brandReqRate;
-                  gapText = mentionOk ? '已全面达标' : '总数达标 · 需补品牌提及';
+                  gapText = mentionOk ? '已全面达标' : '总数达标 / 需补品牌提及';
                 }
 
                 return (
@@ -393,30 +393,30 @@ export function AcceptanceDelivery({
                           <span
                             className="ops-table-note-title"
                             title={note.title || note.id}
-                            style={{ cursor: 'pointer', color: '#0284c7' }}
+                            style={{ cursor: 'pointer', color: '#0d74ce' }}
                             onClick={() => openNote(note.id)}
                           >
                             {note.title || '未命名笔记'}
                           </span>
                           <span className="ops-table-note-sub">
-                            {note.author || '未知博主'} · <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 10)}…</small>
+                            {note.author || '未知博主'} / <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 10)}…</small>
                           </span>
                         </div>
                       </div>
                     </td>
                     <td><strong>{note.commentTotal}</strong></td>
                     <td>
-                      <span style={{ color: '#15803d', fontWeight: 600 }}>
+                      <span style={{ color: '#208368', fontWeight: 600 }}>
                         {note.positiveCount || 0}
                       </span>
                     </td>
                     <td>
-                      <span style={{ color: (note.negativeCount || 0) + (note.questionCount || 0) > 0 ? '#b91c1c' : '#64748b' }}>
+                      <span style={{ color: (note.negativeCount || 0) + (note.questionCount || 0) > 0 ? '#ce2c31' : '#60646c' }}>
                         {(note.negativeCount || 0) + (note.questionCount || 0)}
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontWeight: 600, color: (note.brandMentionTop5 || 0) >= brandReqRate ? '#15803d' : '#b45309' }}>
+                      <span style={{ fontWeight: 600, color: (note.brandMentionTop5 || 0) >= brandReqRate ? '#208368' : '#ab6400' }}>
                         {pct(note.brandMentionTop5 || 0)}
                       </span>
                     </td>
@@ -424,12 +424,12 @@ export function AcceptanceDelivery({
                       <StatusBadge status={note.status || '待抓取'} />
                     </td>
                     <td>
-                      <span style={{ fontSize: '12px', color: gapText.includes('已') ? '#15803d' : '#b45309', fontWeight: 500 }}>
+                      <span style={{ fontSize: '12px', color: gapText.includes('已') ? '#208368' : '#ab6400', fontWeight: 500 }}>
                         {gapText}
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontSize: '12px', color: '#64748b' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
                         {note.lastFetchedAt ? cnTime(note.lastFetchedAt).slice(5) : '待抓取'}
                       </span>
                     </td>
@@ -466,20 +466,20 @@ export function AcceptanceDelivery({
             onMouseDown={(e) => e.stopPropagation()}
             style={{ width: '860px', maxWidth: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
           >
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '14px', marginBottom: '14px' }}>
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '0.5px solid #d9d9e0', paddingBottom: '14px', marginBottom: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span className={`section-mini-tag tag-${modalFilter.theme === 'yellow' ? 'amber' : modalFilter.theme === 'red' ? 'rose' : modalFilter.theme}`}>
                   {modalFilter.tag}
                 </span>
-                <h2 style={{ fontSize: '17px', margin: 0, fontWeight: 700, color: '#0f172a' }}>
-                  {modalFilter.title} ({modalLoading ? '加载中' : `${modalTotal} 篇${modalFilter.type === 'replyPending' ? ' · 已去重' : ''}`})
+                <h2 style={{ fontSize: '16px', margin: 0, fontWeight: 700, color: '#1c2024' }}>
+                  {modalFilter.title} ({modalLoading ? '加载中' : `${modalTotal} 篇${modalFilter.type === 'replyPending' ? ' / 已去重' : ''}`})
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setModalFilter(null)}
                 aria-label="关闭弹窗"
-                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: '#64748b' }}
+                style={{ background: 'none', border: 'none', fontSize: '22px', cursor: 'pointer', color: 'var(--slate-11, #60646c)' }}
               >
                 ×
               </button>
@@ -487,7 +487,7 @@ export function AcceptanceDelivery({
 
             <div style={{ flex: 1, overflowY: 'auto', minHeight: '320px' }}>
               {modalLoading ? (
-                <div style={{ padding: '40px 0', textAlign: 'center', color: '#64748b' }}>正在加载笔记列表…</div>
+                <div style={{ padding: '40px 0', textAlign: 'center', color: 'var(--slate-11, #60646c)' }}>正在加载笔记列表…</div>
               ) : modalItems.length > 0 ? (
                 <table className="ops-table">
                   <thead>
@@ -514,25 +514,25 @@ export function AcceptanceDelivery({
                               <span
                                 className="ops-table-note-title"
                                 title={note.title || note.id}
-                                style={{ cursor: 'pointer', color: '#0284c7' }}
+                                style={{ cursor: 'pointer', color: '#0d74ce' }}
                                 onClick={() => openNote(note.id)}
                               >
                                 {note.title || '未命名笔记'}
                               </span>
                               <span className="ops-table-note-sub">
-                                {note.author || '未知博主'} · <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 8)}…</small>
+                                {note.author || '未知博主'} / <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 8)}…</small>
                               </span>
                             </div>
                           </div>
                         </td>
                         <td><strong>{note.commentTotal}</strong> 条</td>
                         <td>
-                          <span style={{ fontWeight: 600, color: (note.brandMentionTop5 || 0) >= brandReqRate ? '#15803d' : '#b45309' }}>
+                          <span style={{ fontWeight: 600, color: (note.brandMentionTop5 || 0) >= brandReqRate ? '#208368' : '#ab6400' }}>
                             {pct(note.brandMentionTop5 || 0)}
                           </span>
                         </td>
                         <td>
-                          <span style={{ color: (note.pendingRiskCount || 0) > 0 ? '#dc2626' : '#64748b', fontWeight: 600 }}>
+                          <span style={{ color: (note.pendingRiskCount || 0) > 0 ? '#ce2c31' : '#60646c', fontWeight: 600 }}>
                             {modalFilter.type === 'replyPending' ? `${note.replyPendingCount || 0} 条` : `${note.pendingRiskCount || 0} 项`}
                           </span>
                         </td>
@@ -542,13 +542,13 @@ export function AcceptanceDelivery({
                             <button
                               type="button"
                               className="text-link"
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#0284c7', fontWeight: 600 }}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#0d74ce', fontWeight: 600 }}
                               onClick={() => openNote(note.id)}
                             >
                               查看明细 →
                             </button>
                             {note.url && (
-                              <a href={note.url} target="_blank" rel="noreferrer" className="text-link" style={{ color: '#64748b' }}>
+                              <a href={note.url} target="_blank" rel="noreferrer" className="text-link" style={{ color: 'var(--slate-11, #60646c)' }}>
                                 原笔记 ↗
                               </a>
                             )}
@@ -559,22 +559,22 @@ export function AcceptanceDelivery({
                   </tbody>
                 </table>
               ) : (
-                <div style={{ padding: '40px 0', textAlign: 'center', color: '#94a3b8' }}>
+                <div style={{ padding: '40px 0', textAlign: 'center', color: '#60646c' }}>
                   暂无符合此条件的笔记记录
                 </div>
               )}
             </div>
 
-            <footer style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #e2e8f0', paddingTop: '12px', marginTop: '12px' }}>
-              <span style={{ fontSize: '12.5px', color: '#64748b' }}>
-                共 {modalTotal} 篇笔记 · 第 {modalPage} / {Math.max(1, Math.ceil(modalTotal / 12))} 页
+            <footer style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '0.5px solid #d9d9e0', paddingTop: '12px', marginTop: '12px' }}>
+              <span style={{ fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
+                共 {modalTotal} 篇笔记 / 第 {modalPage} / {Math.max(1, Math.ceil(modalTotal / 12))} 页
               </span>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   type="button"
                   disabled={modalPage <= 1 || modalLoading}
                   onClick={() => { setModalLoading(true); setModalPage((p) => Math.max(1, p - 1)); }}
-                  style={{ padding: '4px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: '12.5px' }}
+                  style={{ padding: '4px 12px', borderRadius: '6px', border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#fff', cursor: 'pointer', fontSize: 14 }}
                 >
                   上一页
                 </button>
@@ -582,7 +582,7 @@ export function AcceptanceDelivery({
                   type="button"
                   disabled={modalPage >= Math.ceil(modalTotal / 12) || modalLoading}
                   onClick={() => { setModalLoading(true); setModalPage((p) => p + 1); }}
-                  style={{ padding: '4px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: '12.5px' }}
+                  style={{ padding: '4px 12px', borderRadius: '6px', border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#fff', cursor: 'pointer', fontSize: 14 }}
                 >
                   下一页
                 </button>
@@ -590,7 +590,7 @@ export function AcceptanceDelivery({
                   type="button"
                   className="primary"
                   onClick={() => setModalFilter(null)}
-                  style={{ padding: '4px 14px', fontSize: '12.5px' }}
+                  style={{ padding: '4px 14px', fontSize: 14 }}
                 >
                   关闭
                 </button>

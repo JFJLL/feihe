@@ -39,13 +39,13 @@ export function IndustryV2ActionsTab({
           />
           <KpiCard
             label="高优先级建议 (High)"
-            value={<span style={{ color: '#b91c1c' }}>{highPriorityCount}</span>}
+            value={<span style={{ color: '#ce2c31' }}>{highPriorityCount}</span>}
             unit="项"
             subtext="建议近期优先立项或重点优化"
           />
           <KpiCard
             label="中优先级建议 (Medium)"
-            value={<span style={{ color: '#0369a1' }}>{mediumPriorityCount}</span>}
+            value={<span style={{ color: '#0d74ce' }}>{mediumPriorityCount}</span>}
             unit="项"
             subtext="可持续跟进并按节奏排期尝试"
           />
@@ -115,9 +115,9 @@ export function IndustryV2ActionsTab({
                               </SafeExternalLink>
                               <div className="v2-evidence-meta">
                                 <span>{ev.brand || '未知品牌'}</span>
-                                <span>·</span>
+                                <span className="v2-meta-divider">/</span>
                                 <span>{ev.creatorName || '匿名博主'}</span>
-                                <span>·</span>
+                                <span className="v2-meta-divider">/</span>
                                 <span>互动 {formatMetricNumber(ev.interactions)}</span>
                               </div>
                             </div>

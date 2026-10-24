@@ -31,6 +31,7 @@ import {
 } from "./campaign-placement-model";
 import "./campaign-analytics.css";
 import "./campaign-combo.css";
+import "./CampaignOverviewPage.css";
 import { CampaignEnrichmentPanels } from "./CampaignEnrichmentPanels";
 
 export interface CampaignAdsPageProps {
@@ -232,7 +233,6 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">投流分析</h2>
-            <span className="ca-header-badge">投放看板</span>
             <div className="ca-header-view-group" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: 8 }}>
               <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ca-palette-muted)" }}>分析视角：</span>
               <StyledSelect className="ca-toolbar-select" value={activeKey} onChange={(e) => setStateKey(e.target.value)} aria-label="投流数据视图切换">
@@ -257,21 +257,23 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
         </div>
       </div>
 
-      <MetricStrip items={stripItems} />
+      {/* 核心渠道与版位效能大卡片 (24px padding, 28px间距) */}
+      <div className="ca-section-macro-card">
+        <MetricStrip items={stripItems} />
 
-      {/* 01 章节头: 核心渠道与版位效能矩阵 */}
-      <div className="ca-chapter-header">
-        <div className="ca-chapter-title-group">
-          <span className="ca-chapter-badge">01</span>
-          <div className="ca-chapter-heading">
-            <h3 className="ca-chapter-title">核心渠道与版位效能矩阵</h3>
-            <span className="ca-chapter-desc">核心广告消耗结构、多维单位转化成本及四象限效率诊断</span>
+        {/* 01 章节头: 核心渠道与版位效能矩阵 */}
+        <div className="ca-chapter-header">
+          <div className="ca-chapter-title-group">
+            <span className="ca-chapter-badge">01</span>
+            <div className="ca-chapter-heading">
+              <h3 className="ca-chapter-title">核心渠道与版位效能矩阵</h3>
+              <span className="ca-chapter-desc">核心广告消耗结构、多维单位转化成本及四象限效率诊断</span>
+            </div>
+          </div>
+          <div className="ca-chapter-meta">
+            <span className="ca-chapter-period-tag">统计周期：{displayPeriod}</span>
           </div>
         </div>
-        <div className="ca-chapter-meta">
-          <span className="ca-chapter-period-tag">统计周期：{displayPeriod}</span>
-        </div>
-      </div>
 
       <div className="ca-grid">
         {targetBulletData.length > 0 ? (
@@ -298,7 +300,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         ) : activeKey === "cid-daily" && meilingCidTrend.length > 0 ? (
           <>
-            <ChartPanel title="CID 分日消耗、GMV 与 ROI" subtitle={`业务周期：${displayPeriod} · 左轴 消耗与GMV (元) vs 右轴 成交ROI (倍)`}>
+            <ChartPanel title="CID 分日消耗、GMV 与 ROI" subtitle={`业务周期：${displayPeriod} / 左轴 消耗与GMV (元) vs 右轴 成交ROI (倍)`}>
               <CampaignComboChart
                 rows={meilingCidTrend}
                 series={[
@@ -311,7 +313,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="CID 流量点击规模与点击率" subtitle={`业务周期：${displayPeriod} · 左轴 点击量 (次) vs 右轴 点击率 (%)`}>
+            <ChartPanel title="CID 流量点击规模与点击率" subtitle={`业务周期：${displayPeriod} / 左轴 点击量 (次) vs 右轴 点击率 (%)`}>
               <CampaignComboChart
                 rows={meilingCidTrend}
                 series={[
@@ -323,7 +325,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="CID 广告消耗与进店人数 (UV)" subtitle={`业务周期：${displayPeriod} · 左轴 消耗 (元) vs 右轴 进店人数 (人)`}>
+            <ChartPanel title="CID 广告消耗与进店人数 (UV)" subtitle={`业务周期：${displayPeriod} / 左轴 消耗 (元) vs 右轴 进店人数 (人)`}>
               <CampaignComboChart
                 rows={meilingCidTrend}
                 series={[
@@ -345,7 +347,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         ) : activeKey === "four-lines" ? (
           <>
-            <ChartPanel title="四线全额投入 (K+FS) 与产出 GMV / ROI" subtitle={`业务周期：${displayPeriod} · 左轴 全额投入与GMV (元) vs 右轴 综合ROI (倍)`}>
+            <ChartPanel title="四线全额投入 (K+FS) 与产出 GMV / ROI" subtitle={`业务周期：${displayPeriod} / 左轴 全额投入与GMV (元) vs 右轴 综合ROI (倍)`}>
               <CampaignComboChart
                 rows={records as unknown as Record<string, unknown>[]}
                 series={[
@@ -358,7 +360,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="四线点击成本 (CPC) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} · 左翼 CPC (元/次) vs 右翼 CPUV (元/UV)`}>
+            <ChartPanel title="四线点击成本 (CPC) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} / 左翼 CPC (元/次) vs 右翼 CPUV (元/UV)`}>
               <ButterflyCostChart
                 data={records.map((r) => ({
                   label: r.name,
@@ -372,7 +374,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 rightUnit="元"
               />
             </ChartPanel>
-            <ChartPanel title="四线消耗结构与全链路效能评分卡" subtitle={`业务周期：${displayPeriod} · 消耗构成份额与全链路效能多维诊断矩阵`}>
+            <ChartPanel title="四线消耗结构与全链路效能评分卡" subtitle={`业务周期：${displayPeriod} / 消耗构成份额与全链路效能多维诊断矩阵`}>
               <PlacementScorecardChart
                 rows={records.map((r) => ({
                   name: r.name,
@@ -396,7 +398,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         ) : activeKey === "fs-placements" || activeKey === "wipes-placements" ? (
           <>
-            <ChartPanel title="版位广告消耗与点击率 (CTR)" subtitle={`业务周期：${displayPeriod} · 左轴 消耗 (元) vs 右轴 点击率 (%)`}>
+            <ChartPanel title="版位广告消耗与点击率 (CTR)" subtitle={`业务周期：${displayPeriod} / 左轴 消耗 (元) vs 右轴 点击率 (%)`}>
               <CampaignComboChart
                 rows={records as unknown as Record<string, unknown>[]}
                 series={[
@@ -408,7 +410,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} · 左翼 CPE (元/次) vs 右翼 CPUV (元/UV)`}>
+            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} / 左翼 CPE (元/次) vs 右翼 CPUV (元/UV)`}>
               <ButterflyCostChart
                 data={records.map((r) => ({
                   label: r.name,
@@ -422,7 +424,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 rightUnit="元"
               />
             </ChartPanel>
-            <ChartPanel title="分版位消耗份额与全维成本矩阵 (CPM / CPC / CPE / CPUV)" subtitle={`业务周期：${displayPeriod} · 消耗构成份额与 CPM / CPC / CPE / CPUV 全成本矩阵`}>
+            <ChartPanel title="分版位消耗份额与全维成本矩阵 (CPM / CPC / CPE / CPUV)" subtitle={`业务周期：${displayPeriod} / 消耗构成份额与 CPM / CPC / CPE / CPUV 全成本矩阵`}>
               <PlacementScorecardChart
                 rows={records.map((r) => ({
                   name: r.name,
@@ -446,7 +448,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         ) : (
           <>
-            <ChartPanel title="投放消耗与点击率对比" subtitle={`业务周期：${displayPeriod} · 左轴 消耗 (元) vs 右轴 点击率 (%)`}>
+            <ChartPanel title="投放消耗与点击率对比" subtitle={`业务周期：${displayPeriod} / 左轴 消耗 (元) vs 右轴 点击率 (%)`}>
               <CampaignComboChart
                 rows={records as unknown as Record<string, unknown>[]}
                 series={[
@@ -458,7 +460,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 height={220}
               />
             </ChartPanel>
-            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} · 左翼 CPE (元/次) vs 右翼 CPUV (元/UV)`}>
+            <ChartPanel title="版位互动成本 (CPE) 与访客成本 (CPUV) 双翼对比" subtitle={`业务周期：${displayPeriod} / 左翼 CPE (元/次) vs 右翼 CPUV (元/UV)`}>
               <ButterflyCostChart
                 data={records.map((r) => ({
                   label: r.name,
@@ -472,7 +474,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
                 rightUnit="元"
               />
             </ChartPanel>
-            <ChartPanel title="分版位消耗份额与全维成本矩阵" subtitle={`业务周期：${displayPeriod} · 消耗构成份额与成本评分矩阵`}>
+            <ChartPanel title="分版位消耗份额与全维成本矩阵" subtitle={`业务周期：${displayPeriod} / 消耗构成份额与成本评分矩阵`}>
               <PlacementScorecardChart
                 rows={records.map((r) => ({
                   name: r.name,
@@ -496,13 +498,14 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           </>
         )}
       </div>
+      </div>
 
       {/* 深入分析扩展接入区（Ohm 交付的真实深入分析组件） */}
       <div id="ca-ads-enrichment-slot" className="ca-ads-enrichment-slot">
         <CampaignEnrichmentPanels dashboard={dashboard} section="ads" />
       </div>
 
-      <div className="ca-panel">
+      <div className="ca-panel ca-section-macro-card">
         <div className="ca-panel-header">
           <div className="ca-panel-heading">
             <h3 className="ca-panel-title">{cleanTitle(activeTable?.title || "报表明细")}</h3>

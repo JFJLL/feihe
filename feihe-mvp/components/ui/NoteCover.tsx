@@ -204,7 +204,7 @@ export function NoteCover({
         style={{
           aspectRatio: aspectRatio === '3:4' ? '3 / 4' : aspectRatio === '1:1' ? '1 / 1' : aspectRatio,
         }}
-        title={`${title || author || '笔记'} · 封面未获取`}
+        title={`${title || author || '笔记'} / 封面未获取`}
         data-cover-state="unfetched"
       >
         <div className="note-cover-placeholder-inner">

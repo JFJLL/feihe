@@ -164,7 +164,7 @@ export function CategoryNotesModal({
                 <div className="category-notes-breadcrumb">
                   <span>{title}</span>
                   <span className="breadcrumb-sep">/</span>
-                  <strong style={{ color: '#0f172a' }}>单篇笔记画像</strong>
+                  <strong style={{ color: '#1c2024' }}>单篇笔记画像</strong>
                 </div>
               </div>
               <button
@@ -253,25 +253,25 @@ export function CategoryNotesModal({
                 </div>
                 <div className="note-kpi-card card-purple">
                   <span className="kpi-label">累计互动量</span>
-                  <div className="kpi-num" style={{ color: '#7c3aed' }}>
+                  <div className="kpi-num" style={{ color: '#5753c6' }}>
                     {compact(selectedNote.interactionCount)}
                   </div>
                   <span className="kpi-desc">
-                    点赞 {compact(selectedNote.likeCount)} · 收藏 {compact(selectedNote.favoriteCount)} · 分享 {compact(selectedNote.shareCount)}
+                    点赞 {compact(selectedNote.likeCount)} / 收藏 {compact(selectedNote.favoriteCount)} / 分享 {compact(selectedNote.shareCount)}
                   </span>
                 </div>
                 <div className="note-kpi-card card-teal">
                   <span className="kpi-label">评论快照总数</span>
-                  <div className="kpi-num" style={{ color: '#0d9488' }}>
+                  <div className="kpi-num" style={{ color: '#008573' }}>
                     {compact(selectedNote.commentTotal)}
                   </div>
                   <span className="kpi-desc">
-                    正向 {selectedNote.positiveCount ?? 0} · 负向 {selectedNote.negativeCount ?? 0} · 问询 {selectedNote.questionCount ?? 0}
+                    正向 {selectedNote.positiveCount ?? 0} / 负向 {selectedNote.negativeCount ?? 0} / 问询 {selectedNote.questionCount ?? 0}
                   </span>
                 </div>
                 <div className="note-kpi-card card-amber">
                   <span className="kpi-label">达人采买报价</span>
-                  <div className="kpi-num" style={{ color: '#b45309' }}>
+                  <div className="kpi-num" style={{ color: '#ab6400' }}>
                     {num(selectedNote.notePrice) > 0 ? `¥${num(selectedNote.notePrice).toLocaleString()}` : '—'}
                   </div>
                   <span className="kpi-desc">
@@ -361,7 +361,7 @@ export function CategoryNotesModal({
                 <div className="category-notes-header-tags">
                   <span className="category-notes-tag">{tag}</span>
                   <span className="category-notes-count-badge">
-                    样本总计 {notes.length} 篇 · 当前展示前 {Math.min(notes.length, maxCount)} 篇
+                    样本总计 {notes.length} 篇 / 当前展示前 {Math.min(notes.length, maxCount)} 篇
                   </span>
                 </div>
                 <h2 id="category-notes-modal-title" className="category-notes-title">
@@ -394,7 +394,7 @@ export function CategoryNotesModal({
                 </div>
                 <div className="category-notes-stat-pill stat-purple">
                   <span className="stat-label">累计互动量</span>
-                  <strong className="stat-value" style={{ color: '#7c3aed' }}>
+                  <strong className="stat-value" style={{ color: '#5753c6' }}>
                     {compact(stats.totalInteractions)}
                   </strong>
                 </div>
@@ -537,9 +537,9 @@ export function CategoryNotesModal({
                               {compact(reads)}
                             </td>
                             <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
-                              <strong style={{ color: '#0284c7' }}>{compact(interactions)}</strong>
+                              <strong style={{ color: '#0d74ce' }}>{compact(interactions)}</strong>
                             </td>
-                            <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: '#64748b' }}>
+                            <td style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: 'var(--slate-11, #60646c)' }}>
                               {compact(comments)}
                             </td>
                             <td style={{ textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>

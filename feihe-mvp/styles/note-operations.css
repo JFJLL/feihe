@@ -6,9 +6,9 @@
 }
 
 .note-operations h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  color: #0f172a;
+  color:#1c2024;
   margin: 0;
   line-height: 1.3;
 }
@@ -16,12 +16,11 @@
 /* 1. Integrated Enterprise Header Toolbar */
 .co-toolbar-deck {
   background: #ffffff;
-  border: 1px solid #dce4e0;
-  border-left: 4px solid #2c7168;
+  border:0.5px solid #d9d9e0;
   border-radius: 12px;
   padding: 12px 18px;
   margin: 0 0 4px 0;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 3px rgba(28, 32, 36, 0.03);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,19 +44,19 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #2c7168;
-  box-shadow: 0 0 0 3px rgba(44, 113, 104, 0.18);
+  background: var(--teal-11, #008573);
+  box-shadow: 0 0 0 3px rgba(0, 133, 115, 0.18);
   flex-shrink: 0;
 }
 
 .co-toolbar-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 6px;
-  background: #eaf3f1;
-  color: #2c7168;
-  border: 1px solid #c2e0dc;
+  background: #e0f8f3;
+  color:var(--teal-11, #008573);
+  border:0.5px solid #b8eae0;
 }
 
 .co-toolbar-controls {
@@ -71,9 +70,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
-  color: #52657c;
+  color:#60646c;
   margin: 0;
 }
 
@@ -85,37 +84,37 @@
   min-height: 34px;
   padding: 6px 14px;
   background: #ffffff;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   border-radius: 6px;
-  color: #334155;
-  font-size: 12.5px;
+  color:#60646c;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .co-btn-settings:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
-  color: #0f172a;
+  background: #f9f9fb;
+  border-color:#60646c;
+  color:#1c2024;
 }
 
 .co-btn-refresh {
   min-height: 34px;
   padding: 6px 14px;
-  background: #2c7168 !important;
-  border: 1px solid #2c7168 !important;
-  color: #ffffff !important;
+  background: var(--teal-11, #008573) !important;
+  border:0.5px solid var(--teal-11, #008573) !important;
+  color:#ffffff !important;
   border-radius: 6px;
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .co-btn-refresh:hover {
-  background: #225952 !important;
-  border-color: #225952 !important;
+  background: var(--teal-12, #0d3d38) !important;
+  border-color:var(--teal-12, #0d3d38) !important;
 }
 
 /* 2. Queue Selector Tabs */
@@ -133,24 +132,22 @@
   gap: 6px;
   padding: 14px 16px;
   background: #ffffff;
-  border: 1px solid #dce4e0;
-  border-top: 3px solid transparent;
+  border:0.5px solid #d9d9e0;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.18s ease;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  transition: all 250ms ease-out;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
 }
 
 .co-queue-tabs button:hover:not(.active) {
-  background: #f8fafc;
-  border-color: #cbd5e1;
+  background: #f9f9fb;
+  border-color:#d9d9e0;
 }
 
 .co-queue-tabs button.active {
-  border-color: #2c7168 !important;
-  border-top: 3px solid #2c7168 !important;
-  background: linear-gradient(180deg, #f0f6f5 0%, #ffffff 100%) !important;
-  box-shadow: 0 2px 6px rgba(44, 113, 104, 0.14) !important;
+  border-color:var(--teal-11, #008573) !important;
+  background: linear-gradient(180deg, #f0f0f3 0%, #ffffff 100%) !important;
+  box-shadow: 0 2px 6px rgba(0, 133, 115, 0.14) !important;
 }
 
 .co-queue-card-head {
@@ -161,24 +158,24 @@
 }
 
 .co-queue-tabs button strong {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  color: #0f172a;
+  color:#1c2024;
 }
 
 .co-queue-tabs button span {
-  color: #64748b;
+  color:#60646c;
   font-size: 12px;
   line-height: 1.45;
 }
 
 .co-queue-active-badge {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 999px;
-  background: #2c7168;
-  color: #ffffff;
+  background: var(--teal-11, #008573);
+  color:#ffffff;
 }
 
 /* 3. In-cell Spend Bar & Table Polish */
@@ -197,8 +194,8 @@
 }
 
 .co-queue-table td strong {
-  font-size: 13px;
-  color: #0f172a;
+  font-size: 14px;
+  color:#1c2024;
 }
 
 .co-spend-cell {
@@ -209,9 +206,9 @@
 }
 
 .co-spend-num {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color:#1c2024;
   font-variant-numeric: tabular-nums;
 }
 
@@ -219,7 +216,7 @@
   width: 100%;
   max-width: 130px;
   height: 5px;
-  background: #e2e8f0;
+  background: #d9d9e0;
   border-radius: 3px;
   overflow: hidden;
   margin: 2px 0 1px;
@@ -227,7 +224,7 @@
 
 .co-spend-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4da499, #2c7168);
+  background: linear-gradient(90deg, #12a594, var(--teal-11, #008573));
   border-radius: 3px;
 }
 
@@ -236,11 +233,11 @@
   align-items: center;
   padding: 2px 8px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: #ffee9c;
+  color:#ab6400;
+  border:0.5px solid #fbe577;
   margin-top: 4px;
   line-height: 1.3;
 }
@@ -255,12 +252,12 @@
 
 .co-link-row a {
   font-size: 12px;
-  color: #2c7168;
+  color:var(--teal-11, #008573);
 }
 
 .co-text {
   white-space: pre-wrap;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.85;
   overflow-wrap: anywhere;
 }
@@ -277,7 +274,7 @@
   flex-direction: column;
   gap: 7px;
   font-size: 12px;
-  color: #526a81;
+  color:#0d74ce;
 }
 
 .co-review-form label:has(textarea) {
@@ -285,11 +282,11 @@
 }
 
 .co-review-form input, .co-review-form select, .co-review-form textarea {
-  border: 1px solid #ccdae7;
-  background: #fff;
+  border:0.5px solid #c2e5ff;
+  background: #ffffff;
   border-radius: 7px;
   padding: 8px;
-  color: #23364d;
+  color:#1c2024;
   min-width: 0;
 }
 
@@ -298,7 +295,7 @@
 }
 
 .co-thread {
-  border: 1px solid #dfe8f1;
+  border:0.5px solid #d5efff;
   border-radius: 10px;
   margin: 14px 0;
   overflow: hidden;
@@ -306,7 +303,7 @@
 
 .co-comment {
   padding: 16px 20px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.8;
 }
 
@@ -317,8 +314,8 @@
 }
 
 .co-comment span, .co-comment small {
-  font-size: 11px;
-  color: #74859a;
+  font-size: 12px;
+  color:#80838d;
 }
 
 .co-comment p {
@@ -327,22 +324,23 @@
 }
 
 .co-reply {
-  border-top: 1px solid #e2eaf2;
-  background: #f8fbff;
+  border-top:0.5px solid #e6f4fe;
+  background: #f9f9fb;
   margin-left: 30px;
-  border-left: 3px solid #c9dcee;
+  border:0.5px solid #d9d9e0;
+  border-radius: 6px;
 }
 
 .co-error {
-  color: #a56029 !important;
+  color:#ab6400 !important;
 }
 
 .co-distributions p {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #edf1f6;
+  border-bottom:0.5px solid #e8e8ec;
   padding-bottom: 8px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .co-topic-tags {
@@ -353,15 +351,15 @@
 }
 
 .co-topic-tags span {
-  background: #eef5fa;
-  color: #4b7295;
+  background: #f0f0f3;
+  color:#0d74ce;
   border-radius: 6px;
   padding: 5px 9px;
   font-size: 12px;
 }
 
 .note-operations .bd-kpis strong {
-  font-size: 21px;
+  font-size: 22px;
 }
 
 .note-operations .bd-panel td {
@@ -371,8 +369,8 @@
 
 .co-settings-drawer {
   margin-bottom: 18px;
-  border: 1px solid #c8d9ea;
-  background: #fafdff;
+  border:0.5px solid #c2e5ff;
+  background: #fcfcfd;
   padding: 16px 20px;
   border-radius: 10px;
 }
@@ -380,5 +378,5 @@
 .co-settings-drawer h3 {
   margin: 0 0 4px;
   font-size: 16px;
-  color: #1c3d5a;
+  color:#113264;
 }

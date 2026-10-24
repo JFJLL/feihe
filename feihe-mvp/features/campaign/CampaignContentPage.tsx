@@ -13,6 +13,7 @@ import {
 } from "./CampaignCharts";
 import { CampaignEnrichmentPanels } from "./CampaignEnrichmentPanels";
 import "./campaign-analytics.css";
+import "./CampaignOverviewPage.css";
 
 export interface CampaignContentPageProps {
   dashboard: CampaignDashboard;
@@ -169,7 +170,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         ? ((meilingPublished / meilingTotal) * 100).toFixed(1)
         : "—";
       return [
-        { label: "二核确认母集", value: meilingTotal ?? "—", unit: "位", note: "基准确认达人总数" },
+        { label: "确认合作达人总数", value: meilingTotal ?? "—", unit: "位", note: "基准确认达人总数" },
         { label: "已发布上线", value: meilingPublished ?? "—", unit: "位", note: `同口径占比 ${rate}%` },
         { label: "待品牌审核", value: meilingBrandReview ?? "—", unit: "位", note: "等待品牌终审环节" },
         { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod },
@@ -217,8 +218,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">内容管理</h2>
-            <span className="ca-header-badge">内容看板</span>
-            <span className="ca-header-period-pill" style={{ fontSize: "11px", color: "#64748b", background: "#f8fafc", border: "1px solid #e2e8f0", padding: "2px 8px", borderRadius: "4px" }}>
+            <span className="ca-header-period-pill" style={{ fontSize: "12px", color: "#60646c", background: "#f9f9fb", border: "0.5px solid #d9d9e0", padding: "2px 8px", borderRadius: "4px" }}>
               统计周期：{displayPeriod}
             </span>
           </div>
@@ -230,89 +230,92 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         </div>
       </header>
 
-      <MetricStrip items={stripItems} />
+      {/* 达人执行漏斗与发布结构大卡片 (24px padding, 28px间距) */}
+      <div className="ca-section-macro-card">
+        <MetricStrip items={stripItems} />
 
-      {/* 01 章节头: 达人执行漏斗与发布结构 */}
-      <div className="ca-chapter-header">
-        <div className="ca-chapter-title-group">
-          <span className="ca-chapter-badge">01</span>
-          <div className="ca-chapter-heading">
-            <h3 className="ca-chapter-title">达人执行漏斗与发布结构</h3>
-            <span className="ca-chapter-desc">达人履约流转节点、内容矩阵配比与发布目标达成跟踪</span>
+        {/* 01 章节头: 达人执行漏斗与发布结构 */}
+        <div className="ca-chapter-header">
+          <div className="ca-chapter-title-group">
+            <span className="ca-chapter-badge">01</span>
+            <div className="ca-chapter-heading">
+              <h3 className="ca-chapter-title">达人执行漏斗与发布结构</h3>
+              <span className="ca-chapter-desc">达人履约流转节点、内容矩阵配比与发布目标达成跟踪</span>
+            </div>
+          </div>
+          <div className="ca-chapter-meta">
+            <span className="ca-chapter-period-tag">统计周期：{displayPeriod}</span>
           </div>
         </div>
-        <div className="ca-chapter-meta">
-          <span className="ca-chapter-period-tag">统计周期：{displayPeriod}</span>
-        </div>
-      </div>
 
-      {/* 美菱专属: 环节库存柱图 + 平台/产品分布 */}
-      {projectId === "meiling" && (
-        <div className="ca-grid">
-          <ChartPanel title="各执行环节达人库存分布" subtitle="反映当前各流转节点滞留量（单位：位）">
-            {meilingStageChartData.length > 0 ? (
-              <HorizontalBarChart data={meilingStageChartData} unit="位" height={220} />
-            ) : (
-              <div className="ca-empty"><span className="ca-empty-title">暂无环节分布数据</span></div>
-            )}
-          </ChartPanel>
-          <ChartPanel
-            title={distTab === "platform" ? "外溢回流平台分布" : "主推产品型号分布"}
-            subtitle="二核确认达人对应推广目标统计（单位：位）"
-            actions={
-              <div className="ca-toolbar-group">
-                <button type="button" className={`ca-toolbar-btn ${distTab === "platform" ? "ca-toolbar-btn-primary" : ""}`} onClick={() => setDistTab("platform")}>平台</button>
-                <button type="button" className={`ca-toolbar-btn ${distTab === "product" ? "ca-toolbar-btn-primary" : ""}`} onClick={() => setDistTab("product")}>产品</button>
+        {/* 美菱专属: 环节库存柱图 + 平台/产品分布 */}
+        {projectId === "meiling" && (
+          <div className="ca-grid">
+            <ChartPanel title="各执行环节达人库存分布" subtitle="反映当前各流转节点滞留量（单位：位）">
+              {meilingStageChartData.length > 0 ? (
+                <HorizontalBarChart data={meilingStageChartData} unit="位" height={220} />
+              ) : (
+                <div className="ca-empty"><span className="ca-empty-title">暂无环节分布数据</span></div>
+              )}
+            </ChartPanel>
+            <ChartPanel
+              title={distTab === "platform" ? "外溢回流平台分布" : "主推产品型号分布"}
+              subtitle="二核确认达人对应推广目标统计（单位：位）"
+              actions={
+                <div className="ca-toolbar-group">
+                  <button type="button" className={`ca-toolbar-btn ${distTab === "platform" ? "ca-toolbar-btn-primary" : ""}`} onClick={() => setDistTab("platform")}>平台</button>
+                  <button type="button" className={`ca-toolbar-btn ${distTab === "product" ? "ca-toolbar-btn-primary" : ""}`} onClick={() => setDistTab("product")}>产品</button>
+                </div>
+              }
+            >
+              <DonutChart
+                data={distTab === "platform" ? meilingPlatformData : meilingProductData}
+                unit="位"
+                centerLabel={distTab === "platform" ? "平台分布" : "产品分布"}
+              />
+            </ChartPanel>
+          </div>
+        )}
+
+        {/* 凯乐石专属: 单一全宽发布进度图 (不硬凑第二图) */}
+        {projectId === "kailas" && (
+          <div className="ca-grid-wide">
+            <ChartPanel title="Q3 笔记全量发布进度" subtitle="Q3 阶段双周会小结（截至9.27）规划目标对照">
+              <div style={{ maxWidth: 680, width: "100%", margin: "0 auto" }}>
+                <TargetBulletChart data={kailasBulletData} />
               </div>
-            }
-          >
-            <DonutChart
-              data={distTab === "platform" ? meilingPlatformData : meilingProductData}
-              unit="位"
-              centerLabel={distTab === "platform" ? "平台分布" : "产品分布"}
-            />
-          </ChartPanel>
-        </div>
-      )}
+            </ChartPanel>
+          </div>
+        )}
 
-      {/* 凯乐石专属: 单一全宽发布进度图 (不硬凑第二图) */}
-      {projectId === "kailas" && (
-        <div className="ca-grid-wide">
-          <ChartPanel title="Q3 笔记全量发布进度" subtitle="Q3 阶段双周会小结（截至9.27）规划目标对照">
-            <div style={{ maxWidth: 680, width: "100%", margin: "0 auto" }}>
-              <TargetBulletChart data={kailasBulletData} />
-            </div>
-          </ChartPanel>
-        </div>
-      )}
-
-      {/* 稳健湿巾专属: 发布构成 + 内容效果目标对照 (医生曝光未达标可见) */}
-      {projectId === "winner-wipes" && (
-        <div className="ca-grid">
-          <ChartPanel title="达人矩阵发布结构" subtitle="KOL 与 KOC 细分占比">
-            <DonutChart data={wipesDonutData} unit="篇" centerLabel={wipesCounts.total ? `共${wipesCounts.total}篇` : undefined} />
-          </ChartPanel>
-          <ChartPanel title="内容效果目标对照" subtitle="底表快照 · 统计截止未注明">
-            {wipesContentBulletData.length > 0 ? (
-              <TargetBulletChart data={wipesContentBulletData} />
-            ) : (
-              <div className="ca-empty"><span className="ca-empty-title">暂无效果对照指标</span></div>
-            )}
-          </ChartPanel>
-        </div>
-      )}
+        {/* 稳健湿巾专属: 发布构成 + 内容效果目标对照 (医生曝光未达标可见) */}
+        {projectId === "winner-wipes" && (
+          <div className="ca-grid">
+            <ChartPanel title="达人矩阵发布结构" subtitle="KOL 与 KOC 细分占比">
+              <DonutChart data={wipesDonutData} unit="篇" centerLabel={wipesCounts.total ? `共${wipesCounts.total}篇` : undefined} />
+            </ChartPanel>
+            <ChartPanel title="内容效果目标对照" subtitle="底表快照 / 统计截止未注明">
+              {wipesContentBulletData.length > 0 ? (
+                <TargetBulletChart data={wipesContentBulletData} />
+              ) : (
+                <div className="ca-empty"><span className="ca-empty-title">暂无效果对照指标</span></div>
+              )}
+            </ChartPanel>
+          </div>
+        )}
+      </div>
 
       <div id="ca-content-enrichment-slot" className="ca-content-enrichment-slot">
         <CampaignEnrichmentPanels dashboard={dashboard} section="content" />
       </div>
 
       {/* 日报动作记录 (展示原文日期与规划事项，不伪装实时任务执行状态) */}
-      <div className="ca-panel">
+      <div className="ca-panel ca-section-macro-card">
         <div className="ca-panel-header">
           <div className="ca-panel-heading">
             <h3 className="ca-panel-title">日报动作记录</h3>
             <p className="ca-panel-subtitle">
-              记录周期：{reportPeriod} · 摘录自业务日报规划事项（非任务流实时工单）
+              记录周期：{reportPeriod} / 摘录自业务日报规划事项（非任务流实时工单）
             </p>
           </div>
           <span className="ca-header-badge">共 {actions?.items?.length || 0} 项</span>
@@ -323,9 +326,9 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
               const title = typeof raw === "string" ? raw : raw.title || "";
               const desc = typeof raw === "object" ? raw.description || "" : "";
               return (
-                <div key={idx} style={{ display: "flex", flexDirection: "column", padding: "8px 12px", background: "#f8fafc", border: "1px solid var(--ca-palette-border)", borderRadius: "6px", gap: "2px" }}>
-                  <span style={{ fontSize: "12.5px", fontWeight: 600, color: "var(--ca-palette-text)" }}>{title}</span>
-                  {desc && <span style={{ fontSize: "11.5px", color: "var(--ca-palette-muted)", lineHeight: 1.4 }}>{desc}</span>}
+                <div key={idx} style={{ display: "flex", flexDirection: "column", padding: "8px 12px", background: "#f9f9fb", border: "0.5px solid var(--ca-palette-border)", borderRadius: "6px", gap: "2px" }}>
+                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ca-palette-text)" }}>{title}</span>
+                  {desc && <span style={{ fontSize: "12px", color: "var(--ca-palette-muted)", lineHeight: 1.4 }}>{desc}</span>}
                 </div>
               );
             })}
@@ -333,7 +336,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
         </div>
       </div>
 
-      <div className="ca-panel">
+      <div className="ca-panel ca-section-macro-card">
         <div className="ca-panel-header">
           <div className="ca-panel-heading">
             <h3 className="ca-panel-title">{cleanTitle(activeTable?.title || "报表明细")}</h3>

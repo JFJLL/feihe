@@ -10,17 +10,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_ORIGIN || 'http://localhost:5173'),
   openGraph: {
     title: '社媒增长中台',
-    description: '多项目管理 · 数据接入 · 评论审查 · 增长复盘',
+    description: '多项目管理 / 数据接入 / 评论审查 / 增长复盘',
     images: ['/og.png'],
   },
   twitter: {
     card: 'summary_large_image',
     title: '社媒增长中台',
-    description: '多项目管理 · 数据接入 · 评论审查 · 增长复盘',
+    description: '多项目管理 / 数据接入 / 评论审查 / 增长复盘',
     images: ['/og.png'],
   },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="zh-CN"><head><meta name="referrer" content="no-referrer" /><link rel="icon" href="/app-icon.svg?v=2" type="image/svg+xml" /><link rel="manifest" href="/manifest.webmanifest" /><meta name="theme-color" content="#0284c7" /></head><body>{children}</body></html>;
+  return <html lang="zh-CN"><head><meta name="referrer" content="no-referrer" /><link rel="icon" href="/app-icon.svg?v=2" type="image/svg+xml" /><link rel="manifest" href="/manifest.webmanifest" /><meta name="theme-color" content="#008573" /></head><body>{children}</body></html>;
 }

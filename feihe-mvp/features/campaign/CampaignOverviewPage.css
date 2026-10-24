@@ -1,6 +1,6 @@
 /**
  * CampaignOverviewPage Scoped Styles
- * 暖白底色 #f6f5f2, 主深青 #2c7168, 边框 #e6e3dc
+ * 暖白底色 #f9f9fb, 主深青 var(--teal-11, #008573), 边框 #d9d9e0
  */
 
 .ca-overview-selector-wrap {
@@ -13,38 +13,38 @@
 
 .ca-overview-selector-label {
   font-size: 12px;
-  color: var(--ca-palette-muted, #64748b);
+  color:var(--ca-palette-muted, #60646c);
   font-weight: 500;
   white-space: nowrap;
 }
 
 .ca-snapshot-pills {
   display: inline-flex;
-  background: #edebe6;
+  background: #e8e8ec;
   padding: 2px;
   border-radius: 8px;
   gap: 2px;
 }
 
 .ca-snapshot-btn {
-  border: none;
+  border:none;
   background: transparent;
   padding: 5px 12px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
-  color: #475569;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-snapshot-btn:hover {
-  color: #1e293b;
+  color:#1c2024;
 }
 
 .ca-snapshot-btn.active {
   background: #ffffff;
-  color: var(--ca-palette-primary, #2c7168);
+  color:var(--ca-palette-primary, var(--teal-11, #008573));
   font-weight: 600;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
@@ -57,7 +57,7 @@
   z-index: 30;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--ca-palette-border-warm, #e4e7e2);
+  border:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 8px;
   padding: 8px 14px !important;
   min-height: 44px;
@@ -68,7 +68,7 @@
   justify-content: space-between !important;
   gap: 12px;
   flex-wrap: nowrap !important;
-  box-shadow: 0 1px 4px rgba(37, 43, 42, 0.05);
+  box-shadow: 0 1px 4px rgba(28, 32, 36, 0.05);
 }
 
 @media (max-width: 768px) {
@@ -97,7 +97,7 @@
   margin: -1px !important;
   overflow: hidden !important;
   clip: rect(0, 0, 0, 0) !important;
-  border: 0 !important;
+  border:0 !important;
 }
 
 .ca-section-jumpbar {
@@ -107,7 +107,7 @@
   margin: 0;
   padding: 0;
   background: transparent;
-  border: none;
+  border:none;
   box-shadow: none;
   flex-wrap: nowrap;
 }
@@ -116,11 +116,11 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
-  color: #2c7168;
-  background: #f0f6f5;
-  border: 1px solid #c3dcd7;
+  color:var(--teal-11, #008573);
+  background: #f0f0f3;
+  border:0.5px solid #b8eae0;
   padding: 2px 7px;
   border-radius: 5px;
   white-space: nowrap;
@@ -128,8 +128,8 @@
 }
 
 .ca-jumpbar-icon {
-  font-size: 13px;
-  color: #2c7168;
+  font-size: 14px;
+  color:var(--teal-11, #008573);
 }
 
 .ca-jumpbar-links {
@@ -146,30 +146,30 @@
   gap: 5px;
   padding: 4px 9px;
   border-radius: 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color:#60646c;
   text-decoration: none;
-  background: #f4f3ef;
-  border: 1px solid #e5e2da;
-  transition: all 0.15s ease;
+  background: #f0f0f3;
+  border:0.5px solid #e0e1e6;
+  transition: all 250ms ease-out;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .ca-jump-pill:hover {
   background: #ffffff;
-  color: #2c7168;
-  border-color: #c3dcd7;
-  box-shadow: 0 1px 3px rgba(44, 113, 104, 0.1);
+  color:var(--teal-11, #008573);
+  border-color:#b8eae0;
+  box-shadow: 0 1px 3px rgba(0, 133, 115, 0.1);
 }
 
 .ca-jump-num {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
-  color: #2c7168;
-  background: rgba(44, 113, 104, 0.1);
+  color:var(--teal-11, #008573);
+  background: rgba(0, 133, 115, 0.1);
   padding: 0 4px;
   border-radius: 3px;
 }
@@ -183,37 +183,60 @@
   scroll-margin-top: 76px;
 }
 
+/* --- Macro Section Cards (28px vertical spacing, 24px padding) --- */
+.ca-section-macro-card {
+  background: #ffffff;
+  border:0.5px solid #d9d9e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+.ca-section-macro-card .ca-chapter-header {
+  border:none !important;
+  border-top:none !important;
+  border-radius: 0;
+  padding: 0 0 16px 0;
+  margin-top: 0;
+  margin-bottom: 16px;
+  background: transparent;
+  box-shadow: none;
+  border-bottom:0.5px solid #e0e1e6;
+}
+
 /* --- Tier 1: KPI Decision Band --- */
 .ca-section-kpi {
   margin-bottom: 12px;
 }
 
-/* --- Tier 2: Core Charts Grid --- */
+/* --- Tier 2: Core Charts Grid (16px micro gap) --- */
 #ca-sec-charts.ca-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
-  border-top: none;
-  border-radius: 0 0 8px 8px;
-  padding: 14px;
-  background: #fdfcfb;
-  margin-bottom: 12px;
+  gap: 16px;
+  border:none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  margin-bottom: 0;
 }
 
 /* --- Tier 3: Deep Enrichment & Business Insight --- */
 .ca-section-enrichment {
-  margin-top: 12px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-block: 0;
 }
 
 .ca-insight {
   background: #ffffff;
-  border: 1px solid var(--ca-palette-border-warm, #e4e7e2);
-  border-left: 4px solid var(--ca-palette-primary, #2c7168);
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
-  padding: 12px 16px;
-  margin: 12px 0 8px;
-  box-shadow: 0 1px 3px rgba(37, 43, 42, 0.03);
+  padding: 14px 18px;
+  margin: 14px 0 10px;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
 }
 
 .ca-insight-header {
@@ -224,26 +247,26 @@
 }
 
 .ca-insight-title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
-  color: #1e293b;
+  color:#1c2024;
   margin: 0;
 }
 
 .ca-insight-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: #2c7168;
-  background: #f0f6f5;
-  border: 1px solid #c3dcd7;
+  color:var(--teal-11, #008573);
+  background: #f0f0f3;
+  border:0.5px solid #b8eae0;
   padding: 1px 6px;
   border-radius: 4px;
 }
 
 .ca-insight-text {
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.6;
-  color: #334155;
+  color:#60646c;
   margin: 0;
 }
 
@@ -253,11 +276,11 @@
   justify-content: space-between;
   padding: 10px 14px;
   background: #ffffff;
-  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px solid #e0e1e6;
   border-radius: 8px;
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 12px;
-  box-shadow: 0 1px 3px rgba(37, 43, 42, 0.03);
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
 }
 
 .ca-quick-links-group {
@@ -270,39 +293,40 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--ca-palette-primary, #2c7168);
+  color:var(--ca-palette-primary, var(--teal-11, #008573));
   text-decoration: none;
   font-weight: 600;
   font-size: 12px;
   padding: 6px 12px;
   border-radius: 6px;
-  background: #f0f6f5;
-  border: 1px solid #c3dcd7;
-  transition: all 0.15s ease;
+  background: #f0f0f3;
+  border:0.5px solid #b8eae0;
+  transition: all 250ms ease-out;
 }
 
 .ca-nav-link:hover {
-  background: #2c7168;
-  color: #ffffff;
-  border-color: #2c7168;
-  box-shadow: 0 2px 6px rgba(44, 113, 104, 0.2);
+  background: var(--teal-11, #008573);
+  color:#ffffff;
+  border-color:var(--teal-11, #008573);
+  box-shadow: 0 2px 6px rgba(0, 133, 115, 0.2);
 }
 
 .ca-details-collapse {
   background: #ffffff;
-  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px solid #e0e1e6;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 4px;
+  margin-top: 0;
+  margin-block: 0;
 }
 
 .ca-details-summary {
   padding: 10px 14px;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color:#60646c;
   cursor: pointer;
-  background: #faf9f6;
+  background: #f9f9fb;
   user-select: none;
   list-style: none;
   display: flex;
@@ -316,9 +340,9 @@
 
 .ca-details-summary::after {
   content: "▼";
-  font-size: 10px;
-  color: #94a3b8;
-  transition: transform 0.2s ease;
+  font-size: 12px;
+  color:#60646c;
+  transition: transform 250ms ease-out;
 }
 
 .ca-details-collapse[open] .ca-details-summary::after {
@@ -330,12 +354,12 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-top: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border-top:0.5px solid #e0e1e6;
 }
 
 .ca-footer-date {
-  font-size: 11px;
-  color: var(--ca-palette-subtle, #94a3b8);
+  font-size: 12px;
+  color:var(--ca-palette-subtle, #60646c);
   text-align: right;
   margin-top: 4px;
 }

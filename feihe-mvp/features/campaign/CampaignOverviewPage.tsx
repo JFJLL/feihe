@@ -241,7 +241,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       }
       const form = String(r.procurementForm || "其他").trim();
       const channel = String(r.channel || "-").trim();
-      const key = `${form} · ${channel}`;
+      const key = `${form} / ${channel}`;
 
       if (!groups.has(key)) {
         groups.set(key, { label: key, actuals: [], targets: [] });
@@ -494,7 +494,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         <div className="ca-console-left">
           <div className="ca-console-brand">
             <h2 className="ca-header-title">数据总览</h2>
-            <span className="ca-header-badge">营销复盘</span>
           </div>
 
           <nav className="ca-section-jumpbar" aria-label="页内吸顶快速定位导航">
@@ -617,67 +616,68 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         </div>
       </header>
 
-      {/* 2. 核心指标条：严格 4 个紧凑指标，单行排布不折行挤占图表 */}
-      <section id="ca-sec-kpi" className="ca-section-kpi" aria-label="核心决策指标">
-        <MetricStrip items={activeMetrics} />
-      </section>
-
-      {/* 2.1 首屏经营诊断与专项直达横幅 (战役分析核心观察置顶 + 专项工作台直达胶囊) */}
-      <div className="ca-executive-strip">
-        <section id="ca-sec-insight" className="ca-insight" aria-label="战役业务解读">
-          <div className="ca-insight-header">
-            <div className="ca-insight-badge-group">
-              <span className="ca-insight-icon">💡</span>
-              <h4 className="ca-insight-title">战役分析与核心观察</h4>
-              <span className="ca-insight-tag">AI 经营速览</span>
-            </div>
-          </div>
-          <p className="ca-insight-text">{dynamicInsight}</p>
+      {/* 2. 核心指标大卡片 (包含核心指标条 + 战役分析核心观察 + 专项直达) */}
+      <div className="ca-section-macro-card" id="ca-macro-kpi">
+        <section id="ca-sec-kpi" className="ca-section-kpi" aria-label="核心决策指标">
+          <MetricStrip items={activeMetrics} />
         </section>
 
-        <div className="ca-quick-links-bar">
-          <span className="ca-quick-links-label">专项直达:</span>
-          <div className="ca-quick-links-group">
-            <Link href={"/projects/" + projectId + "/ads"} className="ca-nav-link">
-              <span>📊 投流分析看板</span>
-              <span>→</span>
-            </Link>
-            <Link href={"/projects/" + projectId + "/content"} className="ca-nav-link">
-              <span>✍️ 内容与达人管理</span>
-              <span>→</span>
-            </Link>
+        <div className="ca-executive-strip">
+          <section id="ca-sec-insight" className="ca-insight" aria-label="战役业务解读">
+            <div className="ca-insight-header">
+              <div className="ca-insight-badge-group">
+                <span className="ca-insight-icon">💡</span>
+                <h4 className="ca-insight-title">战役分析与核心观察</h4>
+              </div>
+            </div>
+            <p className="ca-insight-text">{dynamicInsight}</p>
+          </section>
+
+          <div className="ca-quick-links-bar">
+            <span className="ca-quick-links-label">专项直达:</span>
+            <div className="ca-quick-links-group">
+              <Link href={"/projects/" + projectId + "/ads"} className="ca-nav-link">
+                <span>📊 投流分析看板</span>
+                <span>→</span>
+              </Link>
+              <Link href={"/projects/" + projectId + "/content"} className="ca-nav-link">
+                <span>✍️ 内容与达人管理</span>
+                <span>→</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 3. 01 章节头与核心主体图表大盘 */}
-      <div className="ca-chapter-header">
-        <div className="ca-chapter-title-group">
-          <span className="ca-chapter-badge">01</span>
-          <div className="ca-chapter-heading">
-            <h3 className="ca-chapter-title">核心预算执行与版位效率大盘</h3>
-            <span className="ca-chapter-desc">核心渠道预算达成、版位投放效率与分日流水宏观大盘</span>
+      {/* 3. 业务图表大卡片 (包含 01 章节头 + 业务图表网格) */}
+      <div className="ca-section-macro-card" id="ca-macro-charts">
+        <div className="ca-chapter-header">
+          <div className="ca-chapter-title-group">
+            <span className="ca-chapter-badge">01</span>
+            <div className="ca-chapter-heading">
+              <h3 className="ca-chapter-title">核心预算执行与版位效率大盘</h3>
+              <span className="ca-chapter-desc">核心渠道预算达成、版位投放效率与分日流水宏观大盘</span>
+            </div>
+          </div>
+          <div className="ca-chapter-meta">
+            <span className="ca-chapter-period-tag">统计周期：{activeHeaderPeriod}</span>
           </div>
         </div>
-        <div className="ca-chapter-meta">
-          <span className="ca-chapter-period-tag">统计周期：{activeHeaderPeriod}</span>
-        </div>
-      </div>
 
-      <div id="ca-sec-charts" className="ca-grid" role="region" aria-label="核心业务图表分析">
+        <div id="ca-sec-charts" className="ca-grid" role="region" aria-label="核心业务图表分析">
         {/* ---------------- 凯乐石 KAILAS ---------------- */}
         {projectId === "kailas" && activeSnapshot === "daily-1018" && (
           <>
             <ChartPanel
               title="现金预算分配与执行进度 (实际 vs 计划)"
-              subtitle="10.16–10.18 日报口径 · 现金预算对比 (元)"
+              subtitle="10.16–10.18 日报口径 / 现金预算对比 (元)"
             >
               <BudgetComparisonChart data={kailasBudgetLinesComparison} unit="元" />
             </ChartPanel>
 
             <ChartPanel
               title="FS 版位 CPM 与 CPUV 投放效率"
-              subtitle="10.16–10.18 日报口径 · 左轴 CPM (元/千次曝光) vs 右轴 CPUV (元/UV)"
+              subtitle="10.16–10.18 日报口径 / 左轴 CPM (元/千次曝光) vs 右轴 CPUV (元/UV)"
             >
               <CampaignComboChart
                 rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
@@ -693,7 +693,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="FS 版位消耗与 UV 引流规模"
-              subtitle="10.16–10.18 日报口径 · 排除汇总项 · 左轴 消耗 (元) vs 右轴 活跃 UV (人)"
+              subtitle="10.16–10.18 日报口径 / 排除汇总项 / 左轴 消耗 (元) vs 右轴 活跃 UV (人)"
             >
               <CampaignComboChart
                 rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
@@ -710,7 +710,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             {kailasDailyInfo && (
                 <ChartPanel
                   title={`${kailasDailyDataset?.label || "FUGA大坡王10月投放日流水走势"} (独立日流水)`}
-                  subtitle={`独立日流水 · ${kailasDailyInfo.rangeText} · 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                  subtitle={`独立日流水 / ${kailasDailyInfo.rangeText} / 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
                 >
                   <CampaignComboChart
                     rows={kailasDailyInfo.rows}
@@ -731,14 +731,14 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
           <>
             <ChartPanel
               title="Q3 阶段预算规划 vs 实际消耗 (含返点)"
-              subtitle="7.16-9.27 Q3阶段小结 · 费用项规划与实际对比 (元)"
+              subtitle="7.16-9.27 Q3阶段小结 / 费用项规划与实际对比 (元)"
             >
               <BudgetComparisonChart data={kailasQ3BudgetComparison} unit="元" />
             </ChartPanel>
 
             <ChartPanel
               title="Q3 核心考核指标达成目标标靶"
-              subtitle="7.16-9.27 Q3双周会小结口径 · 目标值 vs 实际完成"
+              subtitle="7.16-9.27 Q3双周会小结口径 / 目标值 vs 实际完成"
             >
               <TargetBulletChart data={kailasQ3TargetBullets} />
             </ChartPanel>
@@ -746,7 +746,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             {kailasQ3PerfTable && kailasQ3PerfTable.rows.length > 0 && (
               <ChartPanel
                 title="Q3 阶段细分指标达成与进度明细"
-                subtitle="7.16-9.27 Q3双周会小结内嵌表 · 考核目标与实际完成对照"
+                subtitle="7.16-9.27 Q3双周会小结内嵌表 / 考核目标与实际完成对照"
               >
                 <div className="ca-table-wrap">
                   <table className="ca-table">
@@ -775,7 +775,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="FS 版位 CPM 与 CPUV 投放效率对照"
-              subtitle="10.16–10.18 日报口径参考 · 左轴 CPM (元/千次曝光) vs 右轴 CPUV (元/UV)"
+              subtitle="10.16–10.18 日报口径参考 / 左轴 CPM (元/千次曝光) vs 右轴 CPUV (元/UV)"
             >
               <CampaignComboChart
                 rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
@@ -795,15 +795,15 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         {projectId === "meiling" && activeSnapshot === "double11-1018" && (
           <>
             <ChartPanel
-              title="双11渠道预算执行进度 (采购形式 · 回流渠道)"
-              subtitle="双11大促截至10.18快照 · 调整预算对比 (元)"
+              title="双11渠道预算执行进度 (采购形式 / 回流渠道)"
+              subtitle="双11大促截至10.18快照 / 调整预算对比 (元)"
             >
               <BudgetComparisonChart data={meilingBudgetAggregatedData} unit="元" />
             </ChartPanel>
 
             <ChartPanel
               title="四线任务组累计产出 GMV 与综合 ROI"
-              subtitle="四线投放累计截至10.18 · 左轴 GMV (元) vs 右轴 KFS ROI (倍) · 独立核算"
+              subtitle="四线投放累计截至10.18 / 左轴 GMV (元) vs 右轴 KFS ROI (倍) / 独立核算"
             >
               <CampaignComboChart
                 rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
@@ -819,7 +819,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="四线达人费用 (K) 与广告消耗 (FS) 结构"
-              subtitle="四线投放累计截至10.18 · 支出结构对比 (元)"
+              subtitle="四线投放累计截至10.18 / 支出结构对比 (元)"
             >
               <CampaignComboChart
                 rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
@@ -836,7 +836,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             {meilingDailyInfo && (
                 <ChartPanel
                   title={`${meilingDailyDataset?.label || "天猫种草分日流水走势"} (独立日流水)`}
-                  subtitle={`独立日流水 · ${meilingDailyInfo.rangeText} · 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                  subtitle={`独立日流水 / ${meilingDailyInfo.rangeText} / 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
                 >
                   <CampaignComboChart
                     rows={meilingDailyInfo.rows}
@@ -876,7 +876,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="分版位互动成本 (CPE) 与访客成本 (CPUV)"
-              subtitle="10.19 日报口径 · 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
+              subtitle="10.19 日报口径 / 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
             >
               <CampaignComboChart
                 rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
@@ -892,7 +892,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="分版位投放消耗与点击率对比"
-              subtitle="10.19 日报口径 · 视频/搜索/信息 · 左轴 消耗 (元) vs 右轴 点击率 (%)"
+              subtitle="10.19 日报口径 / 视频/搜索/信息 / 左轴 消耗 (元) vs 右轴 点击率 (%)"
             >
               <CampaignComboChart
                 rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
@@ -909,7 +909,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             {wipesDailyInfo && (
                 <ChartPanel
                   title={`${wipesDailyDataset?.label || "玉米湿巾投放日趋势"} (独立日流水)`}
-                  subtitle={`独立日流水 · ${wipesDailyInfo.rangeText} · 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                  subtitle={`独立日流水 / ${wipesDailyInfo.rangeText} / 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
                 >
                   <CampaignComboChart
                     rows={wipesDailyInfo.rows}
@@ -930,14 +930,14 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
           <>
             <ChartPanel
               title="日常种草核心考核达成 (全量 7 项)"
-              subtitle="飞书底表快照 · 目标值 vs 实际完成"
+              subtitle="飞书底表快照 / 目标值 vs 实际完成"
             >
               <TargetBulletChart data={wipesDailyTargetBullets} />
             </ChartPanel>
 
             <ChartPanel
               title="医生专家板块考核达成 (全量 4 项)"
-              subtitle="飞书底表快照 · 目标值 vs 实际完成"
+              subtitle="飞书底表快照 / 目标值 vs 实际完成"
             >
               <TargetBulletChart data={wipesDocTargetBullets} />
             </ChartPanel>
@@ -951,7 +951,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             <ChartPanel
               title="分版位互动成本 (CPE) 与访客成本 (CPUV)"
-              subtitle="10.19 日报口径 · 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
+              subtitle="10.19 日报口径 / 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
             >
               <CampaignComboChart
                 rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
@@ -966,6 +966,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             </ChartPanel>
           </>
         )}
+      </div>
       </div>
 
       {/* 3.1 战役增强面板 (各项目总览 Rich 扩展分析卡) */}
@@ -983,8 +984,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             {activeDetailTables.map((t) => (
               <div key={t.id} className="ca-table-wrap">
                 <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                  <strong style={{ fontSize: 13, color: "#1e293b" }}>{t.title}</strong>
-                  {t.period && <span style={{ fontSize: 11, color: "#64748b" }}>周期: {t.period}</span>}
+                  <strong style={{ fontSize: 14, color: "#1c2024" }}>{t.title}</strong>
+                  {t.period && <span style={{ fontSize: 12, color: "#60646c" }}>周期: {t.period}</span>}
                 </div>
                 <table className="ca-table">
                   <thead>
@@ -1014,13 +1015,13 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
               <div className="ca-table-wrap">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
                   <div>
-                    <strong style={{ fontSize: 13, color: "#1e293b" }}>{activeDailyDataset.label} (独立分日流水)</strong>
-                    <span style={{ fontSize: 11, color: "#64748b", marginLeft: 8 }}>共 {activeDailyDataset.rows.length} 日记录</span>
+                    <strong style={{ fontSize: 14, color: "#1c2024" }}>{activeDailyDataset.label} (独立分日流水)</strong>
+                    <span style={{ fontSize: 12, color: "#60646c", marginLeft: 8 }}>共 {activeDailyDataset.rows.length} 日记录</span>
                   </div>
-                  {activeDailyDataset.period && <span style={{ fontSize: 11, color: "#64748b" }}>周期: {activeDailyDataset.period}</span>}
+                  {activeDailyDataset.period && <span style={{ fontSize: 12, color: "#60646c" }}>周期: {activeDailyDataset.period}</span>}
                 </div>
-                <div style={{ padding: "10px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 6, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
-                  <span style={{ color: "#475569" }}>
+                <div style={{ padding: "10px 12px", background: "#f9f9fb", border: "0.5px solid #d9d9e0", borderRadius: 6, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
+                  <span style={{ color: "#60646c" }}>
                     分日流水数据来源于独立分日数据集，包含消耗、展现、互动等完整时序。
                   </span>
                   <Link href={`/projects/${projectId}?tab=daily`} className="ca-nav-link" style={{ fontSize: 12 }}>

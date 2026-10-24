@@ -372,7 +372,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   // G. Sample Machine Distribution Dynamic Calculations
   const { sampleMachineBarData, sampleMachineTotals } = useMemo(() => {
     const rows = sampleMachineTable?.rows || [];
-    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.slate, '#4d8b80', '#9c6f84'];
+    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.slate, '#12a594', '#5753c6'];
     const totalMachines = rows.reduce((s, r) => s + (parseNum(r.count) || 0), 0);
 
     const barData: ChartDatum[] = rows.map((r, i) => {
@@ -517,7 +517,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   // L. Audience Targeting Packages Top 10
   const audiencePackagesBarData: ChartDatum[] = useMemo(() => {
     const rows = audiencePackagesTable?.rows || [];
-    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.slate, '#4d8b80', '#9c6f84'];
+    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.slate, '#12a594', '#5753c6'];
     return rows.slice(0, 8).map((r, i) => {
       const sp = parseNum(r.spend) || 0;
       const rawName = String(r.package_name || '');
@@ -604,7 +604,6 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <div className="mri-group-header">
             <div className="mri-group-title-wrap">
               <span className="ca-chapter-num">02</span>
-              <span className="mri-group-badge mgmt">618历史复盘</span>
               <h3 className="mri-group-title">2026年618大促全案采买结构与ROI复盘</h3>
             </div>
             <p className="mri-group-desc">
@@ -730,17 +729,16 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
       {section === 'overview' && (
         <>
           {/* ================================================================ */}
-          {/* 第一层（重 · 经营决策与多线预算总览）                           */}
+          {/* 第一层（经营决策与多线预算总览）                           */}
           {/* ================================================================ */}
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="ca-chapter-num">02</span>
-                <span className="mri-group-badge mgmt">经营决策</span>
                 <h3 className="mri-group-title">经营决策与多线预算总览</h3>
               </div>
               <p className="mri-group-desc">
-                双11产品系列型号规划 vs 投流实际 + 7大账户打款 vs 应消耗 + 10大投放线并发赛马 + 三大促战役跨期演进
+                双11产品系列型号规划 vs 投流实际 + 7大账户打款 vs 应消耗 + 10条细分投放线效果对比 + 三大促战役跨期演进
               </p>
             </div>
 
@@ -784,11 +782,11 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               </ChartPanel>
 
               <ChartPanel
-                title="双11细分投放线投放消耗与进店UV分布（10线并发赛马）"
+                title="双11细分投放线投放消耗与进店UV分布（10条细分投放线效果对比）"
                 subtitle={`统计周期：${multiLineTable?.period || '2026-09-30 ~ 2026-10-18'}`}
               >
                 <CampaignComboChart
-                  title="10大细分投放线消耗与进店UV分布图"
+                  title="10条细分投放线消耗与进店UV分布图"
                   rows={multiLineComboRows}
                   series={multiLineComboSeries}
                   xKey="line"
@@ -839,7 +837,6 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="ca-chapter-num">03</span>
-                <span className="mri-group-badge eff">投放效率</span>
                 <h3 className="mri-group-title">全链路转化漏斗与投放效率诊断</h3>
               </div>
               <p className="mri-group-desc">
@@ -932,17 +929,16 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           </section>
 
           {/* ================================================================ */}
-          {/* 第三层（中 · 受众画像与搜索/定向引擎）                           */}
+          {/* 第三层（受众画像与搜索/定向引擎）                           */}
           {/* ================================================================ */}
           <details className="mri-details-toggle mri-secondary-section">
-            <summary className="mri-details-summary" style={{ fontSize: '13px', padding: '10px 0' }}>
+            <summary className="mri-details-summary" style={{ fontSize: 14, padding: '10px 0' }}>
               <strong>展开查看次级分析：受众人口学画像与搜索定向引擎</strong>（年龄分布、城市渗透、定向人群包与搜索词库）
             </summary>
             <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="ca-chapter-num">04</span>
-                <span className="mri-group-badge audience">受众与搜索</span>
                 <h3 className="mri-group-title">受众人口学画像与搜索定向引擎</h3>
               </div>
               <p className="mri-group-desc">
@@ -996,13 +992,12 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           </details>
 
           {/* ================================================================ */}
-          {/* 第四层（中 · 达人内容二维热力矩阵与样机流转）                     */}
+          {/* 第四层（达人内容二维热力矩阵与样机流转）                     */}
           {/* ================================================================ */}
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
                 <span className="ca-chapter-num">05</span>
-                <span className="mri-group-badge content">达人与内容</span>
                 <h3 className="mri-group-title">达人内容合作矩阵与样机流转</h3>
               </div>
               <p className="mri-group-desc">
@@ -1082,12 +1077,11 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           </section>
 
           {/* ================================================================ */}
-          {/* 第五层（轻 · 历史参考与底层明细折叠抽屉）                       */}
+          {/* 第五层（历史参考与底层明细折叠抽屉）                       */}
           {/* ================================================================ */}
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="mri-group-badge history">历史与底层明细</span>
                 <h3 className="mri-group-title">历史大促参考与底层明细</h3>
               </div>
               <p className="mri-group-desc">

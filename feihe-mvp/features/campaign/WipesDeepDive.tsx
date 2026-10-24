@@ -65,8 +65,8 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
       }));
 
     const categorySeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#b88a45' },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#ffc53d' },
     ];
 
     // 2. Audience packages Top 8 (filter out total row, sort with nulls last)
@@ -88,8 +88,8 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
     const top8Audiences = audienceDetailRows.slice(0, 8);
 
     const audienceSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#8273a3' },
-      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#bd7964' },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#e5484d' },
     ];
 
     // Alternative: Keywords Top 8 (filter out total row, sort with nulls last)
@@ -111,8 +111,8 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
     const top8Keywords = keywordDetailRows.slice(0, 8);
 
     const keywordSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#b88a45' },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#ffc53d' },
     ];
 
     const activeRightPeriod =
@@ -225,7 +225,7 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
                 </thead>
                 <tbody>
                   {(audienceTable.rows || []).map((r, i) => (
-                    <tr key={i} style={r.packageName === '总计' ? { fontWeight: 'bold', background: '#f9fafb' } : undefined}>
+                    <tr key={i} style={r.packageName === '总计' ? { fontWeight: 'bold', background: '#f9f9fb' } : undefined}>
                       <td>{String(r.packageName || '-')}</td>
                       <td className="num">{fmtComboNum(r.spend)}</td>
                       <td className="num">{fmtComboNum(r.impressions, 0)}</td>
@@ -313,9 +313,9 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
       }));
 
     const tierSeries: ComboSeries[] = [
-      { key: 'kFee', label: '达人采买费', unit: '元', axis: 'left', kind: 'bar', color: '#8273a3' },
-      { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'noteCount', label: '笔记篇数', unit: '篇', axis: 'right', kind: 'line', color: '#b88a45' },
+      { key: 'kFee', label: '达人采买费', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+      { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'noteCount', label: '笔记篇数', unit: '篇', axis: 'right', kind: 'line', color: '#ffc53d' },
     ];
 
     // 2. Direction efficiency rows (filter out total row)
@@ -328,8 +328,8 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
       }));
 
     const directionSeries: ComboSeries[] = [
-      { key: 'engagements', label: '总互动量', unit: '次', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cpe', label: 'KFS CPE', unit: '元/次', axis: 'right', kind: 'line', color: '#bd7964' },
+      { key: 'engagements', label: '总互动量', unit: '次', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'cpe', label: 'KFS CPE', unit: '元/次', axis: 'right', kind: 'line', color: '#e5484d' },
     ];
 
     return (
@@ -411,7 +411,7 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
                 </thead>
                 <tbody>
                   {(tierTable.rows || []).map((r, i) => (
-                    <tr key={i} style={r.tier === '总计' ? { fontWeight: 'bold', background: '#f9fafb' } : undefined}>
+                    <tr key={i} style={r.tier === '总计' ? { fontWeight: 'bold', background: '#f9f9fb' } : undefined}>
                       <td>{String(r.tier || '-')}</td>
                       <td className="num">{fmtComboNum(r.noteCount, 0)}</td>
                       <td className="num">{fmtComboNum(r.totalSpend)}</td>
@@ -458,7 +458,7 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
                 </thead>
                 <tbody>
                   {(directionTable.rows || []).map((r, i) => (
-                    <tr key={i} style={r.direction === '总计' ? { fontWeight: 'bold', background: '#f9fafb' } : undefined}>
+                    <tr key={i} style={r.direction === '总计' ? { fontWeight: 'bold', background: '#f9f9fb' } : undefined}>
                       <td>{String(r.direction || '-')}</td>
                       <td className="num">{fmtComboNum(r.noteCount, 0)}</td>
                       <td className="num">{fmtComboNum(r.totalSpend)}</td>

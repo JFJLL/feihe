@@ -64,7 +64,7 @@ const {
   assert(!zero.includes('NaN') && !zero.includes('Infinity'), 'Empty scales remain finite');
   const partialStack = renderToStaticMarkup(React.createElement(charts.StackedHorizontalBarChart, {
     rows: [{ label: 'partial', segments: { paid: 10, organic: null } }], normalize100: true,
-    segments: [{ key: 'paid', label: 'paid', color: '#2c7168' }, { key: 'organic', label: 'organic', color: '#8273a3' }],
+    segments: [{ key: 'paid', label: 'paid', color: CAMPAIGN_PALETTE.primary }, { key: 'organic', label: 'organic', color: CAMPAIGN_PALETTE.purple }],
   }));
   assert(partialStack.includes('数据不完整'), 'Incomplete stacked data is explicit');
   assert(!partialStack.includes('width:100%'), 'Incomplete data cannot imply 100% composition');
@@ -174,7 +174,7 @@ console.log('Testing BudgetComparisonChart & Overrun non-clipping...');
 
   assert(budgetHtml.includes('超支'), 'Highlights over-budget items with 超支');
   assert(budgetHtml.includes('↑超支'), 'Dedicated right column has ↑超支 marker');
-  assert(budgetHtml.includes('#bd7964'), 'Overrun uses terracotta alert color #bd7964');
+  assert(budgetHtml.includes(CAMPAIGN_PALETTE.terracotta), `Overrun uses terracotta alert color ${CAMPAIGN_PALETTE.terracotta}`);
   assert(budgetHtml.includes('未录入'), 'Null actual marked as 未录入');
   assert(budgetHtml.includes('超支 80,000 元'), 'Overrun amount is always readable without hover');
   assert(budgetHtml.includes('data-value="0" style="width:0%'), 'Zero actual has no positive bar');

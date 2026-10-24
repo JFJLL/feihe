@@ -137,7 +137,7 @@ console.log('\n3. Testing multi-metric dual-axis chart (grouped bar + line + poi
   assert(html.includes('890'), 'Readout renders latest row clicks');
   assert(html.includes('14.8'), 'Readout renders latest row cpa');
   assert(html.includes('18'), 'Readout renders latest row benchmark');
-  assert(html.includes('悬停或按箭头键切换'), 'Readout has concise practical hint without implementation jargon');
+  assert(!html.includes('悬停或按箭头键切换'), 'Readout does not contain redundant hint text');
 
   // Legend marks: bar swatch, line swatch, point swatch
   assert(html.includes('ca-combo-swatch-bar'), 'Legend contains bar swatch');

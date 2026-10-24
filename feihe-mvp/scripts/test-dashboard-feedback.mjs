@@ -52,6 +52,8 @@ try {
   // vs missing source metrics, across more than 500 notes.
   const dbmod = await vite.ssrLoadModule('/lib/db.ts');
   await dbmod.ensureSchema();
+  const { ensureCommentOpsSchema } = await vite.ssrLoadModule('/lib/comment-ops/store.ts');
+  await ensureCommentOpsSchema();
   const sql = dbmod.db();
   for(let i=0;i<750;i++) {
     await sql.prepare('INSERT INTO notes(id,url) VALUES(?,?)').bind('full-'+i,'https://example.test/'+i).run();
@@ -60,6 +62,7 @@ try {
   for(const [id,json] of [[0,JSON.stringify({read_count:0,interaction_count:null})],[1,null]]) {
     await sql.prepare('INSERT INTO note_profiles(note_id,source_metrics_json,updated_at) VALUES(?,?,?)').bind('full-'+id,json,'2026-09-09').run();
   }
+  const projMod = await vite.ssrLoadModule('/lib/project-notes-projection.ts');
   const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
   const dataMod={exports:{}};
   const mod={exports:{}};
@@ -67,12 +70,14 @@ try {
     '@/lib/api-auth':{apiUser:async()=>true,jsonError:(error,status)=>Response.json({error},{status})},
     '@/lib/db':dbmod,'@/lib/projects':{projectId:v=>v||'qicui'},
     './db':dbmod,'./feishu-sync':{readFeishuData:async()=>({})},
+    './project-notes-projection':projMod,
+    '@/lib/project-notes-projection':projMod,
     '@/lib/project-dashboard':dataMod.exports,
   })[name];
-  vm.runInNewContext(`(function(require,module,exports){${compiled}\n})`,{Response,URL,URLSearchParams})(require,dataMod,dataMod.exports);
+  vm.runInNewContext(`(function(require,module,exports){${compiled}\n})`,{Response,URL,URLSearchParams,console})(require,dataMod,dataMod.exports);
   const routeSource=fs.readFileSync(new URL('../app/api/dashboard/route.ts',import.meta.url),'utf8');
   const routeCompiled=ts.transpileModule(routeSource,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-  vm.runInNewContext(`(function(require,module,exports){${routeCompiled}\n})`,{Response,URL,URLSearchParams})(require,mod,mod.exports);
+  vm.runInNewContext(`(function(require,module,exports){${routeCompiled}\n})`,{Response,URL,URLSearchParams,console})(require,mod,mod.exports);
   const response=await mod.exports.GET(new Request('http://localhost/api/dashboard?projectId=full-test&fresh=1'));
   const payload=await response.json();
   assert.equal(response.status,200,JSON.stringify(payload));

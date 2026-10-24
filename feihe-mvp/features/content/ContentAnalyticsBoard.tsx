@@ -5,7 +5,7 @@ import { sourceLabel } from './content-view-model';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { TierDoughnutChart, HorizontalBarList } from '../overview/OverviewCharts';
 
-const colors = ['#1e6091', '#3f815e', '#7864a5', '#a66f22', '#64748b'];
+const colors = ['#0d74ce', '#29a383', '#5753c6', '#ab6400', '#60646c'];
 const count = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : 0;
 const cleanName = (val: unknown) => {
   const str = String(val || '').trim();
@@ -72,10 +72,10 @@ export function ContentAnalyticsBoard({
                 }))}
               />
               {scopes.length > 0 && (
-                <div style={{ paddingTop: 12, borderTop: '1px solid #f1f5f9' }}>
+                <div style={{ paddingTop: 12, borderTop: '0.5px solid #f0f0f3' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: '#475569' }}>产品讨论范围分布</span>
-                    <span style={{ fontSize: 11, color: '#94a3b8' }}>本品 vs 竞品/泛行业</span>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: '#60646c' }}>产品讨论范围分布</span>
+                    <span style={{ fontSize: 12, color: '#60646c' }}>本品 vs 竞品/泛行业</span>
                   </div>
                   <HorizontalBarList
                     items={scopes.map((row, index) => ({
@@ -83,7 +83,7 @@ export function ContentAnalyticsBoard({
                       amount: count(row.count),
                       pct: scopeTotal > 0 ? (count(row.count) / scopeTotal) * 100 : 0,
                       color: colors[(index + 2) % colors.length],
-                      subText: `${count(row.count).toLocaleString()} 篇 · ${count(row.comments).toLocaleString()} 评论`,
+                      subText: `${count(row.count).toLocaleString()} 篇 / ${count(row.comments).toLocaleString()} 评论`,
                     }))}
                   />
                 </div>
@@ -106,22 +106,22 @@ export function ContentAnalyticsBoard({
                   key={item.label}
                   style={{
                     padding: '12px 14px',
-                    background: '#f8fafc',
-                    border: '1px solid #e2e8f0',
+                    background: '#f9f9fb',
+                    border: '0.5px solid var(--slate-6, #d9d9e0)',
                     borderRadius: '10px',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '6px',
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
-                    <strong style={{ color: '#0f172a' }}>{item.label}</strong>
-                    <span style={{ fontSize: '12.5px', fontWeight: 700, color: item.color }}>{item.pct.toFixed(1)}%</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '14px' }}>
+                    <strong style={{ color: '#1c2024' }}>{item.label}</strong>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: item.color }}>{item.pct.toFixed(1)}%</span>
                   </div>
-                  <div style={{ height: 8, background: '#e2e8f0', borderRadius: 4, overflow: 'hidden' }}>
+                  <div style={{ height: 8, background: '#d9d9e0', borderRadius: 4, overflow: 'hidden' }}>
                     <div style={{ width: `${item.pct}%`, height: '100%', background: item.color, borderRadius: 4 }} />
                   </div>
-                  <span style={{ fontSize: '11.5px', color: '#64748b' }}>{item.subText}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>{item.subText}</span>
                 </div>
               ))}
             </div>
@@ -146,7 +146,7 @@ export function ContentAnalyticsBoard({
                 amount: count(row.interactions),
                 pct: (count(row.interactions) / interactions) * 100,
                 color: colors[index % colors.length],
-                subText: `${count(row.interactions).toLocaleString()} 次互动 · ${count(row.count)} 篇`,
+                subText: `${count(row.interactions).toLocaleString()} 次互动 / ${count(row.count)} 篇`,
               }))}
             />
           ) : (
@@ -166,13 +166,13 @@ export function ContentAnalyticsBoard({
                 const interVal = hasInter ? (row.avgInteraction as number) : 0;
                 const pct = hasInter && maxInteraction > 0 ? (interVal / maxInteraction) * 100 : 0;
                 const sub = hasInter
-                  ? `${interVal.toLocaleString('zh-CN', { maximumFractionDigits: 1 })} 次/篇 · ${count(row.count)} 篇`
-                  : `未采集表现指标 · ${count(row.count)} 篇`;
+                  ? `${interVal.toLocaleString('zh-CN', { maximumFractionDigits: 1 })} 次/篇 / ${count(row.count)} 篇`
+                  : `未采集表现指标 / ${count(row.count)} 篇`;
                 return {
                   label: cleanName(row.name),
                   amount: interVal,
                   pct,
-                  color: hasInter ? colors[index % colors.length] : '#94a3b8',
+                  color: hasInter ? colors[index % colors.length] : '#60646c',
                   subText: sub,
                 };
               })}

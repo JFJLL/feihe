@@ -29,17 +29,17 @@ export function FieldMappingEditor({
   const mappedHeaders = [...new Set(mappedPreviewRows.flatMap(row => Object.keys(row)))];
 
   return (
-    <div style={{ marginTop: 20, borderTop: '1px solid #e2e8f0', paddingTop: 16 }}>
+    <div style={{ marginTop: 20, borderTop: '0.5px solid #d9d9e0', paddingTop: 16 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
         <div>
-          <h4 style={{ margin: 0, fontSize: 15, color: '#0f172a', fontWeight: 700 }}>
+          <h4 style={{ margin: 0, fontSize: 16, color: '#1c2024', fontWeight: 700 }}>
             ⚙ 可视化字段映射配置
           </h4>
-          <p style={{ margin: '2px 0 0', fontSize: 12, color: '#64748b' }}>
+          <p style={{ margin: '2px 0 0', fontSize: 12, color: '#60646c' }}>
             定义来源字段对应项目数据集的目标字段名、数据类型、主键及空值处理。已自动解析 {rawHeaders.length} 个字段。
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 6, border: '1px solid #cbd5e1', borderRadius: 6, overflow: 'hidden' }}>
+        <div style={{ display: 'flex', gap: 6, border: '0.5px solid #cdced6', borderRadius: 6, overflow: 'hidden' }}>
           <button
             type="button"
             onClick={() => setPreviewMode('mapped')}
@@ -47,8 +47,8 @@ export function FieldMappingEditor({
               padding: '4px 10px',
               fontSize: 12,
               border: 'none',
-              background: previewMode === 'mapped' ? '#2563eb' : '#fff',
-              color: previewMode === 'mapped' ? '#fff' : '#475569',
+              background: previewMode === 'mapped' ? '#0090ff' : '#fff',
+              color: previewMode === 'mapped' ? '#fff' : '#60646c',
               cursor: 'pointer',
             }}
           >
@@ -61,8 +61,8 @@ export function FieldMappingEditor({
               padding: '4px 10px',
               fontSize: 12,
               border: 'none',
-              background: previewMode === 'raw' ? '#2563eb' : '#fff',
-              color: previewMode === 'raw' ? '#fff' : '#475569',
+              background: previewMode === 'raw' ? '#0090ff' : '#fff',
+              color: previewMode === 'raw' ? '#fff' : '#60646c',
               cursor: 'pointer',
             }}
           >
@@ -73,10 +73,10 @@ export function FieldMappingEditor({
 
       <p style={{ fontSize: 12 }}>多个主键字段组成联合主键；空主键、重复主键和非法值会拒绝整次导入。必填检查先于补值，未映射字段保留。</p>
       {transformed.errors.length > 0 && <div role="alert">{transformed.errors.join('；')}</div>}
-      <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: 8, background: '#fff', marginBottom: 14 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
+      <div style={{ overflowX: 'auto', border: '0.5px solid #d9d9e0', borderRadius: 8, background: '#fff', marginBottom: 14 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, textAlign: 'left' }}>
           <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#475569' }}>
+            <tr style={{ background: '#f9f9fb', borderBottom: '0.5px solid #d9d9e0', color: '#60646c' }}>
               <th style={{ padding: '8px 12px' }}>来源原字段</th>
               <th style={{ padding: '8px 12px' }}>目标项目字段名</th>
               <th style={{ padding: '8px 12px' }}>目标数据类型</th>
@@ -88,8 +88,8 @@ export function FieldMappingEditor({
           </thead>
           <tbody>
             {mappingRules.map((rule, idx) => (
-              <tr key={rule.sourceField} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                <td style={{ padding: '8px 12px', fontWeight: 600, color: '#1e293b' }}>
+              <tr key={rule.sourceField} style={{ borderBottom: '0.5px solid #f0f0f3' }}>
+                <td style={{ padding: '8px 12px', fontWeight: 600, color: '#1c2024' }}>
                   {rule.sourceField}
                 </td>
                 <td style={{ padding: '8px 12px' }}>
@@ -97,7 +97,7 @@ export function FieldMappingEditor({
                     aria-label={rule.sourceField + '目标字段'}
                     value={rule.targetField}
                     onChange={(e) => updateRule(idx, { targetField: e.target.value })}
-                    style={{ height: 32, padding: '0 8px', borderRadius: 4, border: '1px solid #cbd5e1', fontSize: 13, width: 140 }}
+                    style={{ height: 32, padding: '0 8px', borderRadius: 4, border: '0.5px solid #cdced6', fontSize: 14, width: 140 }}
                   />
                 </td>
                 <td style={{ padding: '8px 12px' }}>
@@ -161,24 +161,24 @@ export function FieldMappingEditor({
       </div>
 
       {/* Preview Table */}
-      <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 8 }}>
+      <div style={{ background: '#f9f9fb', padding: 12, borderRadius: 8, border: '0.5px solid #d9d9e0' }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: '#60646c', marginBottom: 8 }}>
           {previewMode === 'mapped' ? '🔍 映射转换后数据预览（前 5 行）：' : '📄 原始飞书表格数据预览（前 5 行）：'}
         </div>
-        <div style={{ overflowX: 'auto', background: '#fff', border: '1px solid #cbd5e1', borderRadius: 6 }}>
+        <div style={{ overflowX: 'auto', background: '#fff', border: '0.5px solid #cdced6', borderRadius: 6 }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
             <thead>
-              <tr style={{ background: '#f1f5f9' }}>
+              <tr style={{ background: '#f0f0f3' }}>
                 {(previewMode === 'mapped' ? mappedHeaders : rawHeaders).map((h) => (
-                  <th key={h} style={{ padding: '6px 10px', color: '#475569' }}>{h}</th>
+                  <th key={h} style={{ padding: '6px 10px', color: '#60646c' }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {(previewMode === 'mapped' ? mappedPreviewRows : rawPreviewRows).slice(0, 5).map((r, rIdx) => (
-                <tr key={rIdx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <tr key={rIdx} style={{ borderBottom: '0.5px solid #f0f0f3' }}>
                   {(previewMode === 'mapped' ? mappedHeaders : rawHeaders).map((h) => (
-                    <td key={h} style={{ padding: '6px 10px', color: '#1e293b' }}>
+                    <td key={h} style={{ padding: '6px 10px', color: '#1c2024' }}>
                       {String(r[h] ?? '—')}
                     </td>
                   ))}

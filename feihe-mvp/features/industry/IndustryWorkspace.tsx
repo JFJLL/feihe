@@ -294,7 +294,7 @@ export function IndustryWorkspace({ projectId }: { projectId: string }) {
 
       {/* Background Partial/Failed Notice */}
       {lastErrorText && !error && (
-        <div className="v2-feedback-banner" style={{ background: '#fff7ed', borderColor: '#fed7aa', color: '#9a3412' }}>
+        <div className="v2-feedback-banner" style={{ background: '#fff7c2', borderColor: '#f3d673', color: '#ab6400' }}>
           <span>⚠️ {lastErrorText}</span>
         </div>
       )}
@@ -311,7 +311,13 @@ export function IndustryWorkspace({ projectId }: { projectId: string }) {
 
       {/* Main Tab Content */}
       {report ? (
-        <div className="v2-main-content" key={`${projectId}:${selectedQueryId}`}>
+        <div
+          className="v2-main-content"
+          key={`${projectId}:${selectedQueryId}`}
+          id={`industry-tabpanel-${activeTab}`}
+          role="tabpanel"
+          aria-labelledby={`industry-tab-${activeTab}`}
+        >
           {activeTab === 'overview' && (
             <IndustryV2OverviewTab
               report={report}

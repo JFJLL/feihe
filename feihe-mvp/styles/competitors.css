@@ -15,7 +15,7 @@
   gap: 1rem;
   padding: 0.875rem 1.25rem;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 10px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
@@ -31,45 +31,45 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  background: #29a383;
+  box-shadow: 0 0 0 3px rgba(41, 163, 131, 0.2);
 }
 
 .comp-pulse-dot.error {
-  background: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+  background: #e5484d;
+  box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.2);
 }
 
 .comp-tag {
   display: inline-flex;
   align-items: center;
   padding: 0.2rem 0.55rem;
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 4px;
 }
 
 .comp-tag.warning {
-  background: #fef3c7;
-  color: #b45309;
-  border: 1px solid #fde68a;
+  background: #ffee9c;
+  color:#ab6400;
+  border:0.5px solid #fbe577;
 }
 
 .comp-tag.info {
-  background: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
+  background: #e6f4fe;
+  color:#0d74ce;
+  border:0.5px solid #acd8fc;
 }
 
 .comp-tag.success {
-  background: #dcfce7;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
+  background: #e6f7ed;
+  color:#208368;
+  border:0.5px solid #acdec8;
 }
 
 .comp-status-meta {
-  font-size: 0.8125rem;
-  color: #64748b;
+  font-size: 14px;
+  color:#60646c;
 }
 
 .comp-status-actions {
@@ -83,29 +83,29 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.4rem 0.75rem;
-  font-size: 0.8125rem;
+  font-size: 14px;
   font-weight: 500;
   border-radius: 6px;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   background: #ffffff;
-  color: #334155;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .comp-btn:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
+  background: #f9f9fb;
+  border-color:#60646c;
 }
 
 .comp-btn.primary {
-  background: #0284c7;
-  color: #ffffff;
-  border-color: #0284c7;
+  background: #0090ff;
+  color:#ffffff;
+  border-color:#0d74ce;
 }
 
 .comp-btn.primary:hover {
-  background: #0369a1;
+  background: #0090ff;
 }
 
 /* 筛选工具栏 */
@@ -114,8 +114,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: #f9f9fb;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   flex-wrap: wrap;
 }
@@ -124,17 +124,17 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.8125rem;
-  color: #475569;
+  font-size: 14px;
+  color:#60646c;
 }
 
 .comp-filter-select {
   padding: 0.3rem 0.6rem;
-  font-size: 0.8125rem;
-  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  border:0.5px solid #d9d9e0;
   border-radius: 5px;
   background: #ffffff;
-  color: #1e293b;
+  color:#1c2024;
 }
 
 /* 核心指标统计卡片网格 */
@@ -147,29 +147,29 @@
 .comp-card {
   padding: 1.125rem 1.25rem;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 10px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .comp-card-label {
-  font-size: 0.78125rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color:#60646c;
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
 
 .comp-card-val {
-  font-size: 1.625rem;
+  font-size: 22px;
   font-weight: 700;
-  color: #0f172a;
+  color:#1c2024;
   margin: 0.35rem 0 0.2rem 0;
 }
 
 .comp-card-sub {
-  font-size: 0.75rem;
-  color: #64748b;
+  font-size: 12px;
+  color:#60646c;
   line-height: 1.4;
 }
 
@@ -183,29 +183,29 @@
 .comp-issue-card {
   padding: 1rem 1.125rem;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
-  border-left: 4px solid #f59e0b;
+  border-left: 0.5px solid #d9d9e0;
 }
 
 .comp-issue-card.digestive {
-  border-left-color: #ef4444;
+  border-left-color:#ce2c31;
 }
 
 .comp-issue-card.taste {
-  border-left-color: #f59e0b;
+  border-left-color:#e2a336;
 }
 
 .comp-issue-card.mixability {
-  border-left-color: #8b5cf6;
+  border-left-color:#5753c6;
 }
 
 .comp-issue-card.safety {
-  border-left-color: #dc2626;
+  border-left-color:#ce2c31;
 }
 
 .comp-issue-card.service {
-  border-left-color: #0284c7;
+  border-left-color:#0d74ce;
 }
 
 .comp-issue-title {
@@ -213,17 +213,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color:#1c2024;
 }
 
 .comp-issue-badge {
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
-  font-size: 0.75rem;
-  background: #fef3c7;
-  color: #92400e;
+  font-size: 12px;
+  background: #ffee9c;
+  color:#ab6400;
   font-weight: 600;
 }
 
@@ -237,20 +237,20 @@
 .comp-issue-kw-pill {
   padding: 0.15rem 0.4rem;
   border-radius: 3px;
-  background: #f1f5f9;
-  font-size: 0.71875rem;
-  color: #475569;
+  background: #f0f0f3;
+  font-size: 12px;
+  color:#60646c;
 }
 
 .comp-issue-excerpt {
   padding: 0.45rem 0.6rem;
-  background: #f8fafc;
+  background: #f9f9fb;
   border-radius: 4px;
-  font-size: 0.75rem;
-  color: #475569;
+  font-size: 12px;
+  color:#60646c;
   line-height: 1.45;
   margin-top: 0.35rem;
-  border-left: 2px solid #cbd5e1;
+  border-left:2px solid #d9d9e0;
 }
 
 /* 笔记明细表 */
@@ -258,54 +258,54 @@
   width: 100%;
   overflow-x: auto;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
 }
 
 .comp-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8125rem;
+  font-size: 14px;
   text-align: left;
 }
 
 .comp-table th {
   padding: 0.65rem 0.875rem;
-  background: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
+  background: #f9f9fb;
+  border-bottom:0.5px solid #d9d9e0;
   font-weight: 600;
-  color: #475569;
+  color:#60646c;
   white-space: nowrap;
 }
 
 .comp-table td {
   padding: 0.65rem 0.875rem;
-  border-bottom: 1px solid #f1f5f9;
-  color: #1e293b;
+  border-bottom:0.5px solid #f0f0f3;
+  color:#1c2024;
   vertical-align: middle;
 }
 
 .comp-table tr:hover {
-  background: #f8fafc;
+  background: #f9f9fb;
 }
 
 .comp-hex-len {
   display: inline-block;
   padding: 0.1rem 0.35rem;
   border-radius: 3px;
-  font-size: 0.6875rem;
+  font-size: 12px;
   font-family: monospace;
-  background: #f1f5f9;
-  color: #64748b;
+  background: #f0f0f3;
+  color:#60646c;
 }
 
 .comp-dup-warning {
   display: inline-block;
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
-  font-size: 0.71875rem;
-  background: #fef2f2;
-  color: #b91c1c;
+  font-size: 12px;
+  background: #f9f9fb;
+  color:#ce2c31;
   font-weight: 600;
 }
 
@@ -313,16 +313,16 @@
 .comp-legacy-archive {
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
+  background: #f9f9fb;
+  border:0.5px dashed #d9d9e0;
   border-radius: 8px;
 }
 
 .comp-legacy-archive summary {
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #475569;
+  color:#60646c;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -336,26 +336,26 @@
   justify-content: center;
   padding: 3rem 1.5rem;
   background: #ffffff;
-  border: 1px dashed #cbd5e1;
+  border:0.5px dashed #d9d9e0;
   border-radius: 12px;
   text-align: center;
 }
 
 .comp-empty-icon {
-  font-size: 2.5rem;
+  font-size: 22px;
   margin-bottom: 0.75rem;
 }
 
 .comp-empty-title {
-  font-size: 1.125rem;
+  font-size: 16px;
   font-weight: 700;
-  color: #0f172a;
+  color:#1c2024;
   margin-bottom: 0.35rem;
 }
 
 .comp-empty-desc {
-  font-size: 0.875rem;
-  color: #64748b;
+  font-size: 14px;
+  color:#60646c;
   max-width: 480px;
   line-height: 1.5;
   margin-bottom: 1.25rem;

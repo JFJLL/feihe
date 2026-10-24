@@ -63,7 +63,7 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
     const totalCount = filteredNotes.length;
 
     // Dynamic period based on selected channel scope (never single note period)
-    const activePeriod = useMemo(() => {
+    const activePeriod = (() => {
       if (channelFilter === 'tm') {
         const tmRow = chanEffTable?.rows?.find((r) => String(r.channel || '').includes('天猫'));
         return (tmRow?.period as string) || '2026-09-30 ~ 2026-10-18';
@@ -73,7 +73,7 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
         return (jdRow?.period as string) || '2026-09-29 ~ 2026-10-18';
       }
       return noteEffTable.period || '2026-09-29 ~ 2026-10-18';
-    }, [channelFilter, chanEffTable, noteEffTable]);
+    })();
 
     // 2. Chart 1: Notes Top 8 by Spend + CPUV Combo
     const sortedBySpend = [...filteredNotes].sort((a, b) => {
@@ -99,8 +99,8 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
     });
 
     const comboSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cpuv', label: '30日归因UV成本', unit: '元/人', axis: 'right', kind: 'point', color: '#b88a45' },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#12a594' },
+      { key: 'cpuv', label: '30日归因UV成本', unit: '元/人', axis: 'right', kind: 'point', color: '#ffc53d' },
     ];
 
     // 3. Chart 2: Scatter Plot with Spend Threshold Filter
@@ -380,8 +380,8 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
       const ratio = Math.min(1, count / maxCellCount);
       const alpha = 0.12 + ratio * 0.72;
       return {
-        backgroundColor: `rgba(44, 113, 104, ${alpha.toFixed(2)})`,
-        color: ratio > 0.45 ? '#ffffff' : '#004d40',
+        backgroundColor: `rgba(18, 165, 148, ${alpha.toFixed(2)})`,
+        color: ratio > 0.45 ? '#ffffff' : '#0d3d38',
         fontWeight: ratio > 0.25 ? 700 : 600,
       };
     }
@@ -440,8 +440,8 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
       }));
 
     const platComboSeries: ComboSeries[] = [
-      { key: 'confirmed', label: '二核确认达人', unit: '位', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'published', label: '实际已发布', unit: '位', axis: 'left', kind: 'bar', color: '#8273a3' },
+      { key: 'confirmed', label: '二核确认达人', unit: '位', axis: 'left', kind: 'bar', color: '#12a594' },
+      { key: 'published', label: '实际已发布', unit: '位', axis: 'left', kind: 'bar', color: '#5b5bd6' },
     ];
 
     return (
@@ -623,10 +623,10 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
 
               <div className="mdd-matrix-legend">
                 <span className="mdd-legend-item">
-                  <span className="mdd-legend-swatch" style={{ background: '#2c7168' }} /> 图文
+                  <span className="mdd-legend-swatch" style={{ background: '#12a594' }} /> 图文
                 </span>
                 <span className="mdd-legend-item">
-                  <span className="mdd-legend-swatch" style={{ background: '#8273a3' }} /> 视频
+                  <span className="mdd-legend-swatch" style={{ background: '#5b5bd6' }} /> 视频
                 </span>
               </div>
 

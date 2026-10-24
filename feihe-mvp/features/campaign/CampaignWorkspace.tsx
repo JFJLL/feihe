@@ -151,7 +151,7 @@ export function CampaignWorkspace({
       style={{
         padding: '4px 12px',
         borderRadius: 6,
-        fontSize: 13,
+        fontSize: 14,
         cursor: loading ? 'not-allowed' : 'pointer',
         whiteSpace: 'nowrap',
         flexShrink: 0,
@@ -216,11 +216,11 @@ export function CampaignWorkspace({
         <div
           role="alert"
           style={{
-            background: '#fffbeb',
-            border: '1px solid #fde68a',
-            color: '#92400e',
+            background: '#fff7c2',
+            border: '0.5px solid #f3d673',
+            color: '#ab6400',
             padding: '8px 16px',
-            fontSize: 13,
+            fontSize: 14,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -233,7 +233,7 @@ export function CampaignWorkspace({
             style={{
               background: 'transparent',
               border: 'none',
-              color: '#0284c7',
+              color: '#0d74ce',
               cursor: 'pointer',
               fontWeight: 500,
             }}

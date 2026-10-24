@@ -82,7 +82,7 @@ export function IndustryV2RhythmTab({
                         <span className="v2-dist-count">
                           {item.count} 篇
                           {item.meanInteractions !== null && item.meanInteractions !== undefined && (
-                            <small> · 篇均互动 {Math.round(item.meanInteractions)}</small>
+                            <small> (篇均互动 {Math.round(item.meanInteractions)})</small>
                           )}
                         </span>
                       </div>
@@ -111,7 +111,7 @@ export function IndustryV2RhythmTab({
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div>
-                <h5 style={{ margin: '0 0 8px', fontSize: '0.85rem', color: '#475569' }}>
+                <h5 style={{ margin: '0 0 8px', fontSize: 14, color: '#60646c' }}>
                   商业笔记 vs 自然笔记
                 </h5>
                 <div className="v2-dist-list">
@@ -125,7 +125,7 @@ export function IndustryV2RhythmTab({
                           <span className="v2-dist-count">
                             {item.count} 篇
                             {item.interactions !== null && item.interactions !== undefined && (
-                              <small> · 总互动 {formatMetricNumber(item.interactions)}</small>
+                              <small> (总互动 {formatMetricNumber(item.interactions)})</small>
                             )}
                           </span>
                         </div>
@@ -141,7 +141,7 @@ export function IndustryV2RhythmTab({
                 </div>
               </div>
               <div>
-                <h5 style={{ margin: '0 0 8px', fontSize: '0.85rem', color: '#475569' }}>
+                <h5 style={{ margin: '0 0 8px', fontSize: 14, color: '#60646c' }}>
                   投流笔记 vs 自然流
                 </h5>
                 <div className="v2-dist-list">
@@ -155,7 +155,7 @@ export function IndustryV2RhythmTab({
                           <span className="v2-dist-count">
                             {item.count} 篇
                             {item.interactions !== null && item.interactions !== undefined && (
-                              <small> · 总互动 {formatMetricNumber(item.interactions)}</small>
+                              <small> (总互动 {formatMetricNumber(item.interactions)})</small>
                             )}
                           </span>
                         </div>
@@ -241,7 +241,7 @@ export function IndustryV2RhythmTab({
                             )}
                           </div>
                         </td>
-                        <td style={{ whiteSpace: 'nowrap', color: '#64748b', fontSize: '0.8rem' }}>
+                        <td style={{ whiteSpace: 'nowrap', color: '#60646c', fontSize: 14 }}>
                           {note.publishedDate || (note.publishedAt ? note.publishedAt.slice(0, 10) : '-')}
                         </td>
                       </tr>

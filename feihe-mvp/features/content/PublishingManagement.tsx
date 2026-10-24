@@ -134,7 +134,7 @@ export function PublishingManagement({
           theme={hasPublishTarget && achievePct >= 100 ? 'green' : 'yellow'}
           label="发布目标完成度"
           value={hasPublishTarget ? `${achievePct}%` : '未设置'}
-          desc={hasPublishTarget ? `目标 ${publishTarget} 篇 · 差额 ${gap} 篇` : '前往项目设置 → 规则与目标，配置发布目标'}
+          desc={hasPublishTarget ? `目标 ${publishTarget} 篇 / 差额 ${gap} 篇` : '前往项目设置 → 规则与目标，配置发布目标'}
           tag="目标节奏"
         />
         <MetricCard
@@ -150,7 +150,7 @@ export function PublishingManagement({
           label="方向缺口"
           value={opportunitiesCount}
           unit="个"
-          desc={`自然互动 ${compact(naturalTotalInteractions)} · 自然样本数高于自有与商业合计`}
+          desc={`自然互动 ${compact(naturalTotalInteractions)} / 自然样本数高于自有与商业合计`}
           tag="覆盖缺口"
         />
       </section>
@@ -161,19 +161,19 @@ export function PublishingManagement({
         title="发布进度与目标达成"
         desc="监控自有投放与商业合作的实际落地节奏，对比考核目标。"
       >
-        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px 20px' }}>
+        <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '16px 20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <strong style={{ fontSize: '15px', color: '#0f172a' }}>全盘发布完成度</strong>
+              <strong style={{ fontSize: '16px', color: '#1c2024' }}>全盘发布完成度</strong>
               <StatusBadge status={!hasPublishTarget ? '尚未配置目标' : achievePct >= 100 ? '已达标' : '推进中'} />
             </div>
-            <span style={{ fontSize: '13px', color: '#64748b' }}>
+            <span style={{ fontSize: '14px', color: 'var(--slate-11, #60646c)' }}>
               实际已发布 <strong>{publishedCount}</strong> 篇 / 目标 <strong>{hasPublishTarget ? publishTarget : '—'}</strong> 篇
             </span>
           </div>
           {hasPublishTarget && <ProgressBar value={publishedCount} max={publishTarget} theme={achievePct >= 100 ? 'green' : 'blue'} />}
           {!hasPublishTarget && <Link className="subtle-btn" href={`/projects/${encodeURIComponent(projectId)}/settings?tab=rules`}>设置发布目标 →</Link>}
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '12px', color: '#64748b' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
             <span>{hasPublishTarget ? `已完成 ${achievePct}%` : '暂无约束目标'}</span>
             <span>{hasPublishTarget ? `还需发布 ${gap} 篇即可达成` : ''}</span>
           </div>
@@ -188,7 +188,7 @@ export function PublishingManagement({
         extra={
           <Link
             className="btn-link"
-            style={{ fontSize: '13px' }}
+            style={{ fontSize: '14px' }}
             href={'/api/export?type=notes&projectId=' + encodeURIComponent(projectId)}
           >
             导出清单 ↗
@@ -254,18 +254,18 @@ export function PublishingManagement({
                     </div>
                   </td>
                   <td>
-                    <span style={{ fontSize: '12.5px', color: '#475569' }}>
+                    <span style={{ fontSize: 14, color: '#60646c' }}>
                       {note.publishedAt ? note.publishedAt.slice(0, 10) : '待补充'}
                     </span>
                   </td>
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 600 }}>{note.author || '未知博主'}</span>
+                      <span style={{ fontSize: '14px', fontWeight: 600 }}>{note.author || '未知博主'}</span>
                       <StatusBadge status={note.sourceType === 'commercial' ? '商业合作' : '自有笔记'} />
                     </div>
                   </td>
                   <td>
-                    <span style={{ fontSize: '13px', color: '#334155' }}>
+                    <span style={{ fontSize: '14px', color: '#1c2024' }}>
                       {note.category1 || note.noteType || '—'}
                     </span>
                   </td>
@@ -294,7 +294,7 @@ export function PublishingManagement({
                           target="_blank"
                           rel="noreferrer"
                           className="text-link"
-                          style={{ color: '#64748b' }}
+                          style={{ color: 'var(--slate-11, #60646c)' }}
                         >
                           原笔记 ↗
                         </a>
@@ -338,7 +338,7 @@ export function PublishingManagement({
                 {feedbackRows.map((row) => (
                   <tr key={row.direction}>
                     <td><strong>{row.direction}</strong></td>
-                    <td>{row.owned + row.commercial} 篇 <small style={{ color: '#64748b' }}>(自有 {row.owned} / 商业 {row.commercial})</small></td>
+                    <td>{row.owned + row.commercial} 篇 <small style={{ color: 'var(--slate-11, #60646c)' }}>(自有 {row.owned} / 商业 {row.commercial})</small></td>
                     <td>{row.natural} 篇</td>
                     <td>{compact(row.interactions)}</td>
                     <td>{compact(row.comments)}</td>

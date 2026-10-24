@@ -38,7 +38,7 @@ export function MetricDetailTable({ projectId, card, query, initial, datasetVers
   if (!data) return <div>{snapshot.key === key && snapshot.error ? <p role="alert">{snapshot.error}<button onClick={() => setPage(1)}>返回首页重试</button></p> : <p role="status">{snapshot.key === key && snapshot.notice || '正在查询明细…'}</p>}</div>;
   return <div className="metric-detail">
     <div className="data-table-scroll" tabIndex={0} aria-label="指标明细横向滚动" onKeyDown={e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); e.currentTarget.scrollBy({ left: e.key === 'ArrowRight' ? 120 : -120 }); } }}><table aria-label={card.title + '明细'}><thead><tr>{data.columns.map(column => <th key={column.key}>{column.name}</th>)}</tr></thead><tbody>{data.rows.map((row, index) => <tr key={index}>{data.columns.map(column => <td key={column.key}>{cell(row[column.key], column)}</td>)}</tr>)}</tbody></table></div>
-    <p>共 {data.total} 条符合条件记录 · 第 {data.page} / {data.totalPages} 页</p>
+    <p>共 {data.total} 条符合条件记录 / 第 {data.page} / {data.totalPages} 页</p>
     {!data.rows.length && <p>当前周期和筛选没有记录。</p>}
     <div className="data-actions"><button disabled={data.page <= 1} onClick={() => setPage(data.page - 1)}>明细上一页</button><button disabled={data.page >= data.totalPages} onClick={() => setPage(data.page + 1)}>明细下一页</button></div>
   </div>;

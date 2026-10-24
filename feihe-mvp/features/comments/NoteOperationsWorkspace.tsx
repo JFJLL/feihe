@@ -19,13 +19,13 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
   useEffect(()=>{let valid=true;const load=()=>api<CommentQueue>('/api/comment-ops?'+new URLSearchParams({projectId,month,queue,offset:String(offset),limit:'30'})).then(data=>{if(valid)setSnapshot({key,data});}).catch(e=>{if(valid)setSnapshot({key,error:e instanceof Error ? e.message:'巡查队列读取失败'});});void load();const interval=setInterval(load,30000);return()=>{valid=false;clearInterval(interval);};},[projectId,month,queue,offset,key]);
   useEffect(()=>{const p=new URLSearchParams(window.location.search);p.set('month',month);p.set('queue',queue);if(noteId)p.set('noteId',noteId);else p.delete('noteId');window.history.replaceState(null,'','?'+p);},[month,queue,noteId]);
   useEffect(()=>{const onBack=()=>{const p=new URLSearchParams(window.location.search);setNoteId(p.get('noteId') || '');setMonth(p.get('month') || new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date()).slice(0,7));setQueue(p.get('queue') || 'active');setOffset(0);};window.addEventListener('popstate',onBack);return()=>window.removeEventListener('popstate',onBack);},[]);
-  if(noteId)return <NoteDetail key={projectId+':'+noteId} projectId={projectId} noteId={noteId} onBack={()=>setNoteId('')} onRefresh={()=>setRevision(r=>r+1)} />;
   const data=current?.data;
-  const maxSpend = useMemo(() => {
+  const maxSpend = (() => {
     if (!data?.items?.length) return 1;
     const vals = data.items.map(n => (n.spendMonth === month && typeof n.monthlySpend?.value === 'number') ? n.monthlySpend.value : 0);
     return Math.max(...vals, 1);
-  }, [data?.items, month]);
+  })();
+  if(noteId)return <NoteDetail key={projectId+':'+noteId} projectId={projectId} noteId={noteId} onBack={()=>setNoteId('')} onRefresh={()=>setRevision(r=>r+1)} />;
 
   return <div className="business-daily note-operations" data-testid="note-operations">
     <div className="bd-toolbar co-toolbar-deck">
@@ -33,8 +33,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
         <div className="co-toolbar-title-row">
           <span className="co-toolbar-status-dot" title="运营巡查中" />
           <h2>笔记评论巡查</h2>
-          <span className="co-toolbar-tag">飞鹤启萃营销复盘</span>
-        </div>
+                  </div>
         <p className="bd-caption">围绕整篇笔记、对话和整改复核，查看当前检查样本与覆盖范围。</p>
       </div>
       <div className="bd-controls co-toolbar-controls">
@@ -79,7 +78,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
       <div className="bd-alerts"><p>{data.ranking}</p><p>{data.sourceStatus.deliveries}</p><p>{data.sourceStatus.comments}</p></div>
       <section className="bd-panel">
         <div className="bd-panel-head">
-          <h3>{queue==='active' ? '本月在投巡查顺序':queue==='new' ? '本月新发档案':'历史档案'} · {data.total} 篇</h3>
+          <h3>{queue==='active' ? '本月在投巡查顺序':queue==='new' ? '本月新发档案':'历史档案'} / {data.total} 篇</h3>
           <span className="bd-caption">第{offset+1}–{offset+data.items.length}条</span>
         </div>
         {!data.items.length ? (
@@ -92,23 +91,26 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
               </thead>
               <tbody>
                 {data.items.map((n,index)=>{
-                  const spendVal = (n.spendMonth === month && typeof n.monthlySpend?.value === 'number') ? n.monthlySpend.value : 0;
-                  const spendRatio = Math.min(100, Math.max(0, (spendVal / maxSpend) * 100));
+                  const hasSpend = n.spendMonth === month && typeof n.monthlySpend?.value === 'number';
+                  const spendVal = hasSpend ? (n.monthlySpend.value as number) : null;
+                  const spendRatio = (spendVal !== null && spendVal > 0 && maxSpend > 0)
+                    ? Math.min(100, Math.max(0, (spendVal / maxSpend) * 100))
+                    : 0;
                   return (
                     <tr key={n.id}>
                       <td>
                         <strong>{offset+index+1}. {n.title || n.author || '已存档笔记'}</strong>
-                        <small>{n.author} · {n.tier || '层级未登记'} · {n.publishedDay || '发布日期未明确'}</small>
+                        <small>{n.author} / {n.tier || '层级未登记'} / {n.publishedDay || '发布日期未明确'}</small>
                         <small>{n.id}</small>
                       </td>
                       <td>
                         <div className="co-spend-cell">
                           <div className="co-spend-num">
-                            {n.spendMonth===month ? number(n.monthlySpend.value):'—'} 元
+                            {hasSpend ? `${number(spendVal)} 元` : '—'}
                           </div>
-                          {spendVal > 0 && (
+                          {hasSpend && (
                             <div className="co-spend-bar-track" title={`占本页最高消耗比例: ${spendRatio.toFixed(1)}%`}>
-                              <div className="co-spend-bar-fill" style={{ width: `${Math.max(spendRatio, 3)}%` }} />
+                              <div className="co-spend-bar-fill" style={{ width: `${spendRatio}%` }} />
                             </div>
                           )}
                           <small>{n.spendMonth===month ? n.monthlySpend.state==='observed' ? '源表月累计':'消耗缺失':'本月未取得消耗观测'}</small>
@@ -118,7 +120,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
                         {n.capture ? (
                           <>
                             {number(n.capture.platformTotal)}（{n.capture.totalScope==='roots' ? '主评论':'统计口径待核验'}） / {n.capture.fetched} / {n.capture.analyzed}
-                            <small>{n.capture.complete ? '接口范围完整核对':'部分采集'} · {percent(n.capture.coverage)}覆盖</small>
+                            <small>{n.capture.complete ? '接口范围完整核对':'部分采集'} / {percent(n.capture.coverage)}覆盖</small>
                             <small>{time(n.capture.capturedAt)}</small>
                           </>
                         ) : (
@@ -131,7 +133,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
                               data-status={n.lastAttempt.status}
                               title={`partial ${n.lastAttempt.error || ""}`.trim()}
                             >
-                              部分覆盖 · {n.lastAttempt.error || '主评论数量未完整核对'}
+                              部分覆盖 / {n.lastAttempt.error || '主评论数量未完整核对'}
                             </span>
                           ) : (
                             <small className={n.lastAttempt.error ? 'co-error':''}>{n.lastAttempt.status} {n.lastAttempt.error}</small>
@@ -139,7 +141,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
                         )}
                       </td>
                       <td>{number(n.registeredDeliveries)} 条<small>源表登记，不代表平台可见</small></td>
-                      <td>{reviewStates[n.review.state]}<small>{n.review.owner || n.sourceOwner || '负责人待确认'}{n.review.deadline ? ' · '+n.review.deadline:''}</small><small>巡查：{time(n.review.inspectedAt)}{n.review.stale ? ' · 数据更新需复核':''}</small></td>
+                      <td>{reviewStates[n.review.state]}<small>{n.review.owner || n.sourceOwner || '负责人待确认'}{n.review.deadline ? ' / '+n.review.deadline:''}</small><small>巡查：{time(n.review.inspectedAt)}{n.review.stale ? ' / 数据更新需复核':''}</small></td>
                       <td><button onClick={()=>setNoteId(n.id)}>查看整篇笔记</button></td>
                     </tr>
                   );
@@ -161,16 +163,16 @@ function NoteDetail({projectId,noteId,onBack,onRefresh}:{projectId:string;noteId
   const key=JSON.stringify({projectId,noteId,revision,deliveryOffset}),[snapshot,setSnapshot]=useState<{key:string;data?:Detail;error?:string}>({key:''});const detail=snapshot.key===key ? snapshot.data:undefined;
   useEffect(()=>{let valid=true;api<Detail>('/api/comment-ops?'+new URLSearchParams({projectId,noteId,deliveryOffset:String(deliveryOffset),deliveryLimit:'20'})).then(data=>{if(valid)setSnapshot({key,data});}).catch(e=>{if(valid)setSnapshot({key,error:e instanceof Error ? e.message:'档案读取失败'});});return()=>{valid=false;};},[projectId,noteId,deliveryOffset,key]);
   async function action(body:Record<string,unknown>){setBusy(true);setNotice('');try{await api('/api/comment-ops',{method:'POST',body:JSON.stringify({projectId,noteId,...body})});setNotice(body.action==='collect' ? '已交给独立后台采集，关闭网页后仍可执行。':'已保存。');setRevision(r=>r+1);onRefresh();return true;}catch(e){setNotice(e instanceof Error ? e.message:'操作失败');return false;}finally{setBusy(false);}}
-  const stats=useMemo(()=>{const sentiment=new Map<string,number>(),themes=new Map<string,number>();for(const j of detail?.judgments || []){const label=j.target+' · '+sentiments[j.sentiment];sentiment.set(label,(sentiment.get(label) || 0)+1);for(const topic of j.topics)themes.set(topic,(themes.get(topic) || 0)+1);}return {sentiment:[...sentiment],themes:[...themes],pending:detail?.judgments.filter(j=>j.needsReview).length || 0};},[detail]);
+  const stats=useMemo(()=>{const sentiment=new Map<string,number>(),themes=new Map<string,number>();for(const j of detail?.judgments || []){const label=j.target+' / '+sentiments[j.sentiment];sentiment.set(label,(sentiment.get(label) || 0)+1);for(const topic of j.topics)themes.set(topic,(themes.get(topic) || 0)+1);}return {sentiment:[...sentiment],themes:[...themes],pending:detail?.judgments.filter(j=>j.needsReview).length || 0};},[detail]);
   const roots=detail?.capture?.comments.filter(c=>c.depth===1) || [];
   return <div className="business-daily note-operations" data-testid="note-operation-detail"><div className="bd-toolbar"><button onClick={onBack}>← 返回巡查队列</button><button onClick={()=>setRevision(r=>r+1)}>刷新档案与后台结果</button></div>{notice && <p role="status">{notice}</p>}{snapshot.key===key && snapshot.error && <p role="alert">{snapshot.error}</p>}{!detail ? <p>读取本地笔记档案…</p>:<>
-    <section className="bd-panel"><h2>{detail.note.title || detail.note.author || '已留存的笔记档案'}</h2><p>{detail.note.author} · {detail.note.tier || '层级未登记'} · 发布：{detail.note.publishedDay || '待确认'}</p><p className="bd-caption">稳定笔记ID：{noteId}</p><div className="co-link-row">{detail.note.links.slice(0,3).map((url,i)=><a key={url} href={url} target="_blank" rel="noreferrer">{i ? '备用原文入口':'保留的原文入口'} ↗</a>)}<span className="bd-caption">链接{detail.note.linkState==='unchecked' ? '未校验':detail.note.linkState} · {time(detail.note.linkCheckedAt)}</span>{detail.canWrite && <button disabled={busy} onClick={()=>action({action:'check_link'})}>校验原文入口</button>}</div><p className="bd-caption">原文入口失效时仍可读取本地档案；入口可用性以实际校验为准。</p><details><summary>已保存的笔记正文</summary><p className="co-text">{detail.note.content || '正文尚未采集。已保存的标题、作者、发布日期、投放与交付登记可继续查看。'}</p></details><details><summary>来源与保存时间</summary>{detail.note.sources.map((s,i)=><p className="bd-caption" key={i}><a href={s.url} target="_blank" rel="noreferrer">{s.sourceKey} · 第{s.row || '—'}行 ↗</a> · {time(s.capturedAt)} · {s.version}</p>)}</details></section>
+    <section className="bd-panel"><h2>{detail.note.title || detail.note.author || '已留存的笔记档案'}</h2><p>{detail.note.author} / {detail.note.tier || '层级未登记'} / 发布：{detail.note.publishedDay || '待确认'}</p><p className="bd-caption">稳定笔记ID：{noteId}</p><div className="co-link-row">{detail.note.links.slice(0,3).map((url,i)=><a key={url} href={url} target="_blank" rel="noreferrer">{i ? '备用原文入口':'保留的原文入口'} ↗</a>)}<span className="bd-caption">链接{detail.note.linkState==='unchecked' ? '未校验':detail.note.linkState} / {time(detail.note.linkCheckedAt)}</span>{detail.canWrite && <button disabled={busy} onClick={()=>action({action:'check_link'})}>校验原文入口</button>}</div><p className="bd-caption">原文入口失效时仍可读取本地档案；入口可用性以实际校验为准。</p><details><summary>已保存的笔记正文</summary><p className="co-text">{detail.note.content || '正文尚未采集。已保存的标题、作者、发布日期、投放与交付登记可继续查看。'}</p></details><details><summary>来源与保存时间</summary>{detail.note.sources.map((s,i)=><p className="bd-caption" key={i}><a href={s.url} target="_blank" rel="noreferrer">{s.sourceKey} / 第{s.row || '—'}行 ↗</a> / {time(s.capturedAt)} / {s.version}</p>)}</details></section>
     <div className="bd-kpis">{[['月累计投放消耗',number(detail.note.monthlySpend.value)+' 元'],['平台报告总数',detail.capture ? number(detail.capture.platformTotal)+(detail.capture.totalScope==='roots' ? ' 主评论':'（口径未确定）'):'尚未采集'],['已抓取 / 已分析',detail.metrics ? `${detail.metrics.fetched} / ${detail.metrics.analyzed}`:'— / —'],['供应商交付登记',number(detail.note.registeredDeliveries)+' 条']].map(([title,value])=><article key={title}><h4>{title}</h4><strong>{value}</strong></article>)}</div>
-    <div className="bd-alerts"><p>月消耗范围：{detail.note.spendMonth || '待明确'}。评论采集：{time(detail.capture?.capturedAt)}；人工巡查：{time(detail.review.inspectedAt)}。</p><p>采集覆盖：{percent(detail.metrics?.coverage)} · {detail.capture?.complete ? '主评论与已报告回复已核对':'完整覆盖尚未确认'}。平台前台可见与折叠仅采用明确观测证据，不能用交付量推算。</p>{detail.note.sourceAudit && <p>源表整改登记：{detail.note.sourceAudit} · {detail.note.sourceProblem || '具体问题未登记'}。本次巡查状态：{reviewStates[detail.review.state]}。</p>}{detail.capture?.issues.map((issue,i)=><p key={i}>{issue}</p>)}{detail.attempts[0] && <p>最近采集任务：{detail.attempts[0].status} · {time(detail.attempts[0].updated_at)} {detail.attempts[0].error}</p>}</div>
+    <div className="bd-alerts"><p>月消耗范围：{detail.note.spendMonth || '待明确'}。评论采集：{time(detail.capture?.capturedAt)}；人工巡查：{time(detail.review.inspectedAt)}。</p><p>采集覆盖：{percent(detail.metrics?.coverage)} / {detail.capture?.complete ? '主评论与已报告回复已核对':'完整覆盖尚未确认'}。平台前台可见与折叠仅采用明确观测证据，不能用交付量推算。</p>{detail.note.sourceAudit && <p>源表整改登记：{detail.note.sourceAudit} / {detail.note.sourceProblem || '具体问题未登记'}。本次巡查状态：{reviewStates[detail.review.state]}。</p>}{detail.capture?.issues.map((issue,i)=><p key={i}>{issue}</p>)}{detail.attempts[0] && <p>最近采集任务：{detail.attempts[0].status} / {time(detail.attempts[0].updated_at)} {detail.attempts[0].error}</p>}</div>
     <div className="bd-two-col"><section className="bd-panel"><h3>整篇笔记的对话概况</h3><p className="bd-caption">按评论提及对象分别判断；话题为多标签。规则依据强度不代表统计概率。</p>{!detail.judgments.length ? <p>尚无实际采集的评论样本，情绪与话题保持未知。</p>:<><div className="co-distributions">{stats.sentiment.map(([label,n])=><p key={label}><span>{label}</span><strong>{n}条</strong></p>)}</div><div className="co-topic-tags">{stats.themes.map(([label,n])=><span key={label}>{label} {n}</span>)}</div><p className="bd-caption">低置信度待人工复核：{stats.pending}条。每条的依据、对话和纠正记录在下方。</p></>}{detail.canWrite && <button disabled={busy} onClick={()=>action({action:'collect',requestId:crypto.randomUUID()})}>采集并分析当前评论</button>}</section><section className="bd-panel"><h3>整改负责人及复核</h3><ReviewForm key={detail.analysisId+':'+detail.review.version} projectId={projectId} noteId={noteId} review={detail.review} analysisId={detail.analysisId} canWrite={detail.canWrite} busy={busy} onSave={review=>action({action:'review',review})} /><p className="bd-caption">源表结论只作登记参考；没有检查样本，或低置信度评论未复核时，不能标为合格。</p></section></div>
-    <section className="bd-panel"><h3>主评论与回复 · {detail.metrics?.fetched ?? '尚未采集'} 条</h3>{roots.slice(0,visibleRoots).map(root=><article key={root.id} className="co-thread">{[root,...(detail.capture?.comments.filter(c=>c.parentId===root.id) || [])].map(c=>{const j=detail.judgments.find(v=>v.commentId===c.id);return <div key={c.id} className={'co-comment '+(c.depth===2 ? 'co-reply':'')}><div><strong>{c.author || '作者未提供'}</strong><span>{c.depth===2 ? '回复主评论':'主评论'} · {c.createdAt || '发表时间未知'}</span></div><p>{c.content || '正文缺失'}</p><small>{c.evidence}</small>{j && <><p className={j.needsReview ? 'co-error':'bd-caption'}>{j.target} · {sentiments[j.sentiment]} · 依据强度 {percent(j.confidence)} · {j.corrected ? '已人工纠正':j.needsReview ? '待人工复核':'规则判断'}</p><details><summary>判断依据与人工纠正</summary><p className="co-text">{j.reasons.join('\n')}</p>{detail.canWrite && <CorrectionForm judgment={j} busy={busy} onSave={body=>action({action:'correct',commentId:c.id,analysisId:detail.analysisId,...body})} />}</details></>}</div>;})}</article>)}{!roots.length && <p>尚无实际采集评论；供应商话术登记在下方单独查看。</p>}{visibleRoots<roots.length && <button onClick={()=>setVisibleRoots(n=>n+20)}>展开更多主评论及其回复</button>}</section>
-    <section className="bd-panel"><h3>供应商话术与交付登记 · {detail.deliveries.total} 条</h3><p className="bd-caption">登记不能证明平台可见。主评论A/B回复A等源表盖楼标记保留，不能冒充平台真实评论ID与回复关系。</p><div className="bd-scroll"><table><thead><tr><th>登记 / 计划</th><th>话术与执行方向</th><th>评论时间 / 上评</th><th>形式与盖楼</th><th>证据</th></tr></thead><tbody>{detail.deliveries.items.map((d,i)=><tr key={i}><td>{d.status==='registered' ? '时间/人员已登记':'计划或待确认'}</td><td>{d.content}<small>{d.direction}</small></td><td>{d.commentDay || '未登记'}<small>{d.operator || '上评人员未登记'}</small></td><td>{d.form}<small>{d.replyRelation}</small></td><td><a href={d.source.url} target="_blank" rel="noreferrer">第{d.source.row}行 ↗</a><small>{d.screenshot ? '源表有截图附件登记':'未登记截图'}</small><small>{d.progress || '执行进度未登记'}</small></td></tr>)}</tbody></table></div><div className="co-pagination"><button disabled={!deliveryOffset} onClick={()=>setDeliveryOffset(n=>Math.max(0,n-20))}>上一页登记</button><button disabled={!detail.deliveries.hasMore} onClick={()=>setDeliveryOffset(n=>n+20)}>下一页登记</button></div></section>
-    <details className="bd-panel"><summary>巡查与纠正留痕</summary>{detail.history.map((h,i)=><p className="bd-caption" key={i}>{time(h.created_at)} · {h.actor} · {JSON.parse(h.data_json).reason}</p>)}{detail.corrections.map(c=><p className="bd-caption" key={c.id}>{time(c.at)} · {c.actor} · {c.target} / {sentiments[c.sentiment]}：{c.reason}</p>)}{!detail.history.length && !detail.corrections.length && <p>尚无人工巡查或纠正记录。</p>}</details>
+    <section className="bd-panel"><h3>主评论与回复 / {detail.metrics?.fetched ?? '尚未采集'} 条</h3>{roots.slice(0,visibleRoots).map(root=><article key={root.id} className="co-thread">{[root,...(detail.capture?.comments.filter(c=>c.parentId===root.id) || [])].map(c=>{const j=detail.judgments.find(v=>v.commentId===c.id);return <div key={c.id} className={'co-comment '+(c.depth===2 ? 'co-reply':'')}><div><strong>{c.author || '作者未提供'}</strong><span>{c.depth===2 ? '回复主评论':'主评论'} / {c.createdAt || '发表时间未知'}</span></div><p>{c.content || '正文缺失'}</p><small>{c.evidence}</small>{j && <><p className={j.needsReview ? 'co-error':'bd-caption'}>{j.target} / {sentiments[j.sentiment]} / 依据强度 {percent(j.confidence)} / {j.corrected ? '已人工纠正':j.needsReview ? '待人工复核':'规则判断'}</p><details><summary>判断依据与人工纠正</summary><p className="co-text">{j.reasons.join('\n')}</p>{detail.canWrite && <CorrectionForm judgment={j} busy={busy} onSave={body=>action({action:'correct',commentId:c.id,analysisId:detail.analysisId,...body})} />}</details></>}</div>;})}</article>)}{!roots.length && <p>尚无实际采集评论；供应商话术登记在下方单独查看。</p>}{visibleRoots<roots.length && <button onClick={()=>setVisibleRoots(n=>n+20)}>展开更多主评论及其回复</button>}</section>
+    <section className="bd-panel"><h3>供应商话术与交付登记 / {detail.deliveries.total} 条</h3><p className="bd-caption">登记不能证明平台可见。主评论A/B回复A等源表盖楼标记保留，不能冒充平台真实评论ID与回复关系。</p><div className="bd-scroll"><table><thead><tr><th>登记 / 计划</th><th>话术与执行方向</th><th>评论时间 / 上评</th><th>形式与盖楼</th><th>证据</th></tr></thead><tbody>{detail.deliveries.items.map((d,i)=><tr key={i}><td>{d.status==='registered' ? '时间/人员已登记':'计划或待确认'}</td><td>{d.content}<small>{d.direction}</small></td><td>{d.commentDay || '未登记'}<small>{d.operator || '上评人员未登记'}</small></td><td>{d.form}<small>{d.replyRelation}</small></td><td><a href={d.source.url} target="_blank" rel="noreferrer">第{d.source.row}行 ↗</a><small>{d.screenshot ? '源表有截图附件登记':'未登记截图'}</small><small>{d.progress || '执行进度未登记'}</small></td></tr>)}</tbody></table></div><div className="co-pagination"><button disabled={!deliveryOffset} onClick={()=>setDeliveryOffset(n=>Math.max(0,n-20))}>上一页登记</button><button disabled={!detail.deliveries.hasMore} onClick={()=>setDeliveryOffset(n=>n+20)}>下一页登记</button></div></section>
+    <details className="bd-panel"><summary>巡查与纠正留痕</summary>{detail.history.map((h,i)=><p className="bd-caption" key={i}>{time(h.created_at)} / {h.actor} / {JSON.parse(h.data_json).reason}</p>)}{detail.corrections.map(c=><p className="bd-caption" key={c.id}>{time(c.at)} / {c.actor} / {c.target} / {sentiments[c.sentiment]}：{c.reason}</p>)}{!detail.history.length && !detail.corrections.length && <p>尚无人工巡查或纠正记录。</p>}</details>
   </>}</div>;
 }
 function ReviewForm({projectId,noteId,review,analysisId,canWrite,busy,onSave}:{projectId:string;noteId:string;review:NoteReview;analysisId:string|null;canWrite:boolean;busy:boolean;onSave:(value:NoteReview)=>Promise<boolean>}) {

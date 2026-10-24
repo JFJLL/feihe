@@ -53,7 +53,7 @@ export function CardRenderView({
       style={{
         background: '#fff',
         borderRadius: 12,
-        border: isEditing ? '2px dashed #93c5fd' : '1px solid #e2e8f0',
+        border: isEditing ? '2px dashed #acd8fc' : '0.5px solid #d9d9e0',
         padding: '20px',
         boxShadow: '0 2px 6px rgba(0,0,0,0.03)',
         display: 'flex',
@@ -71,7 +71,7 @@ export function CardRenderView({
             disabled={index === 0}
             onClick={() => onMove(-1)}
             title="前移"
-            style={{ padding: '2px 6px', fontSize: 12, borderRadius: 4, border: '1px solid #cbd5e1', background: '#fff', cursor: index === 0 ? 'default' : 'pointer', opacity: index === 0 ? 0.35 : 1 }}
+            style={{ padding: '2px 6px', fontSize: 12, borderRadius: 4, border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#fff', cursor: index === 0 ? 'default' : 'pointer', opacity: index === 0 ? 0.35 : 1 }}
           >
             ←
           </button>
@@ -80,7 +80,7 @@ export function CardRenderView({
             disabled={index === totalCards - 1}
             onClick={() => onMove(1)}
             title="后移"
-            style={{ padding: '2px 6px', fontSize: 12, borderRadius: 4, border: '1px solid #cbd5e1', background: '#fff', cursor: index === totalCards - 1 ? 'default' : 'pointer', opacity: index === totalCards - 1 ? 0.35 : 1 }}
+            style={{ padding: '2px 6px', fontSize: 12, borderRadius: 4, border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#fff', cursor: index === totalCards - 1 ? 'default' : 'pointer', opacity: index === totalCards - 1 ? 0.35 : 1 }}
           >
             →
           </button>
@@ -88,7 +88,7 @@ export function CardRenderView({
             type="button"
             onClick={onEdit}
             title="编辑卡片"
-            style={{ padding: '2px 8px', fontSize: 12, borderRadius: 4, border: '1px solid #93c5fd', background: '#eff6ff', color: '#2563eb', cursor: 'pointer' }}
+            style={{ padding: '2px 8px', fontSize: 12, borderRadius: 4, border: '0.5px solid #acd8fc', background: '#e6f4fe', color: '#0090ff', cursor: 'pointer' }}
           >
             ✏
           </button>
@@ -96,7 +96,7 @@ export function CardRenderView({
             type="button"
             onClick={onRemove}
             title="删除卡片"
-            style={{ padding: '2px 6px', fontSize: 12, borderRadius: 4, border: '1px solid #fca5a5', background: '#fee2e2', color: '#ef4444', cursor: 'pointer' }}
+            style={{ padding: '2px 6px', fontSize: 12, borderRadius: 4, border: '0.5px solid #fdbdbe', background: '#feebec', color: '#e5484d', cursor: 'pointer' }}
           >
             ✕
           </button>
@@ -105,51 +105,51 @@ export function CardRenderView({
 
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span className="shared-metric-title" style={{ fontSize: 13, color: '#64748b', fontWeight: 600 }}>{card.title}</span>
+          <span className="shared-metric-title" style={{ fontSize: 14, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>{card.title}</span>
           {isMissingSource && (
-            <span style={{ fontSize: 10, background: '#fee2e2', color: '#ef4444', padding: '1px 5px', borderRadius: 4 }}>
+            <span style={{ fontSize: 12, background: '#feebec', color: '#e5484d', padding: '1px 5px', borderRadius: 4 }}>
               来源缺失
             </span>
           )}
         </div>
 
-        <div style={{ fontSize: 28, fontWeight: 700, color: isMissingSource || isEmpty ? '#94a3b8' : '#0f172a', margin: '8px 0 4px' }}>
+        <div style={{ fontSize: 22, fontWeight: 700, color: isMissingSource || isEmpty ? '#60646c' : '#1c2024', margin: '8px 0 4px' }}>
           {displayVal}
           {effective.unit && !displayVal.endsWith(effective.unit) && !displayVal.endsWith('%') && !displayVal.startsWith('¥') && displayVal !== '—' ? (
-            <small style={{ fontSize: 14, fontWeight: 500, color: '#64748b', marginLeft: 4 }}>{effective.unit}</small>
+            <small style={{ fontSize: 14, fontWeight: 500, color: 'var(--slate-11, #60646c)', marginLeft: 4 }}>{effective.unit}</small>
           ) : null}
         </div>
 
         {isZeroDiv && (
-          <div style={{ fontSize: 11, color: '#e11d48', marginTop: 2 }}>
+          <div style={{ fontSize: 12, color: '#ce2c31', marginTop: 2 }}>
             分母为0，无法计算比率
           </div>
         )}
-        {metric && !['ok', 'zero', 'zero_division'].includes(metric.status) && <div style={{ fontSize: 12, color: '#b91c1c' }}>{metric.statusLabel}</div>}
+        {metric && !['ok', 'zero', 'zero_division'].includes(metric.status) && <div style={{ fontSize: 12, color: '#ce2c31' }}>{metric.statusLabel}</div>}
 
         {/* Progress Card Display */}
         {card.type === 'progress_card' && (
           <div style={{ marginTop: 10 }}>
-            <p>{metric?.status === 'error' && !metric.effectiveConfig ? '目标待确认或计算失败' : card.target !== undefined ? <>目标：{format(card.target)} · 达成 {progressValue === null ? '—' : progressValue.toFixed(1) + '%'}</> : '历史比率基准100%（尚未设置业务目标）'}</p>
-            <div style={{ height: 6, background: '#f1f5f9', borderRadius: 3, overflow: 'hidden' }}>
+            <p>{metric?.status === 'error' && !metric.effectiveConfig ? '目标待确认或计算失败' : card.target !== undefined ? <>目标：{format(card.target)} / 达成 {progressValue === null ? '—' : progressValue.toFixed(1) + '%'}</> : '历史比率基准100%（尚未设置业务目标）'}</p>
+            <div style={{ height: 6, background: '#f0f0f3', borderRadius: 3, overflow: 'hidden' }}>
               <div
                 style={{
                   width: `${Math.min(100, Math.max(0, progressValue ?? 0))}%`,
                   height: '100%',
-                  background: progressValue !== null && progressValue >= 100 ? '#16a34a' : '#2563eb',
+                  background: progressValue !== null && progressValue >= 100 ? '#29a383' : '#0090ff',
                   borderRadius: 3,
                 }}
               />
             </div>
-            {(metric?.numerator !== undefined || metric?.denominator !== undefined) && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#64748b', marginTop: 4 }}>
+            {(metric?.numerator !== undefined || metric?.denominator !== undefined) && <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--slate-11, #60646c)', marginTop: 4 }}>
               <span>分子: {metric?.numerator !== undefined && metric.numerator !== null ? metric.numerator.toLocaleString() : '—'}</span>
               <span>分母: {metric?.denominator !== undefined && metric.denominator !== null ? metric.denominator.toLocaleString() : '—'}</span>
             </div>}
           </div>
         )}
         {card.type === 'time_trend' && metric?.trend && <div className="shared-metric-trend">
-          <TimeSeriesChart rows={metric.trend.map(point => ({ date: point.date, value: point.value }))} series={[{ key: 'value', label: metric.definition?.name || card.title, color: '#2563eb' }]} title={card.title + '时间趋势'} unit="" valueFormatter={value => format(value)} />
-          <details><summary>查看每日数值与样本</summary><div className="data-table-scroll" tabIndex={0}><table aria-label={card.title + '每日结果'}><thead><tr><th>日期</th><th>指标结果</th><th>样本</th></tr></thead><tbody>{metric.trend.map(point => <tr key={point.date}><td>{point.date}</td><td>{point.formattedValue}</td><td>{point.pairedValidCount !== undefined ? ratioSampleLabel(point, effective.missingPolicy === 'zero') : point.sampleSize + ' 行'}{!['ok', 'zero'].includes(point.status) && ' · ' + point.statusLabel}</td></tr>)}</tbody></table></div></details>
+          <TimeSeriesChart rows={metric.trend.map(point => ({ date: point.date, value: point.value }))} series={[{ key: 'value', label: metric.definition?.name || card.title, color: '#0090ff' }]} title={card.title + '时间趋势'} unit="" valueFormatter={value => format(value)} />
+          <details><summary>查看每日数值与样本</summary><div className="data-table-scroll" tabIndex={0}><table aria-label={card.title + '每日结果'}><thead><tr><th>日期</th><th>指标结果</th><th>样本</th></tr></thead><tbody>{metric.trend.map(point => <tr key={point.date}><td>{point.date}</td><td>{point.formattedValue}</td><td>{point.pairedValidCount !== undefined ? ratioSampleLabel(point, effective.missingPolicy === 'zero') : point.sampleSize + ' 行'}{!['ok', 'zero'].includes(point.status) && ' / ' + point.statusLabel}</td></tr>)}</tbody></table></div></details>
         </div>}
         {card.type === 'detail_table' && metric?.detail && projectId && <MetricDetailTable key={JSON.stringify({ definition: metric.definition, data: metric.datasetVersion, query, card })} projectId={projectId} card={card} query={query} initial={metric.detail} datasetVersion={metric.datasetVersion} definitionVersion={metric.definition?.version} />}
 
@@ -157,11 +157,11 @@ export function CardRenderView({
         {metric?.groups && metric.groups.length > 0 && (
           <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 5 }}>
             {(showAllGroups ? metric.groups : metric.groups.slice(0, 4)).map((g) => (
-              <div key={g.label} data-testid="metric-group" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', fontSize: 12, borderBottom: '1px dashed #f1f5f9', paddingBottom: 2 }}>
-                <span style={{ color: '#475569' }}>{g.label}</span>
-                <strong style={{ color: '#0f172a' }}>
+              <div key={g.label} data-testid="metric-group" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', fontSize: 12, borderBottom: '0.5px dashed #f0f0f3', paddingBottom: 2 }}>
+                <span style={{ color: '#60646c' }}>{g.label}</span>
+                <strong style={{ color: '#1c2024' }}>
                   {g.formattedValue}
-                  {g.count !== undefined && <small style={{ fontWeight: 400, color: '#64748b', marginLeft: 4 }}>({g.count})</small>}
+                  {g.count !== undefined && <small style={{ fontWeight: 400, color: 'var(--slate-11, #60646c)', marginLeft: 4 }}>({g.count})</small>}
                 </strong>
                 {g.pairedValidCount !== undefined && <small style={{ flexBasis: '100%' }}>{ratioSampleLabel(g, effective.missingPolicy === 'zero')}</small>}
               </div>
@@ -171,11 +171,11 @@ export function CardRenderView({
         )}
       </div>
 
-      <div style={{ marginTop: 14, paddingTop: 8, borderTop: '1px solid #f1f5f9', fontSize: 11, color: '#64748b', display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'space-between' }}>
+      <div style={{ marginTop: 14, paddingTop: 8, borderTop: '0.5px solid #f0f0f3', fontSize: 12, color: 'var(--slate-11, #60646c)', display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'space-between' }}>
         <span>来源: {metric?.datasetName || datasetName || '当前数据集'}</span>
-        {metric?.definition && <span>指标 v{metric.definition.version} · {metric.definition.policy === 'pinned' ? '固定口径' : '跟随最新'} · 数据 v{metric.datasetVersion}</span>}
+        {metric?.definition && <span>指标 v{metric.definition.version} / {metric.definition.policy === 'pinned' ? '固定口径' : '跟随最新'} / 数据 v{metric.datasetVersion}</span>}
         <span>{metric?.pairedValidCount !== undefined ? ratioSampleLabel(metric, effective.missingPolicy === 'zero') : `有效样本: ${sampleSize} 行`}</span>
-        {metric?.appliedQuery && <span className="shared-metric-period">{metric.appliedQuery.rangePolicy === 'independent' ? '独立周期' : '项目周期'}：{metric.appliedQuery.from || '不限开始'} ～ {metric.appliedQuery.to || '不限结束'} · {metric.appliedQuery.timeZone}{Boolean(metric.appliedQuery.undatedRows) && ` · 无日期 ${metric.appliedQuery.undatedRows} 行${metric.appliedQuery.from || metric.appliedQuery.to || card.type === 'time_trend' ? '不参与日期范围或趋势' : '参与未限期总量'}`}</span>}
+        {metric?.appliedQuery && <span className="shared-metric-period">{metric.appliedQuery.rangePolicy === 'independent' ? '独立周期' : '项目周期'}：{metric.appliedQuery.from || '不限开始'} ～ {metric.appliedQuery.to || '不限结束'} / {metric.appliedQuery.timeZone}{Boolean(metric.appliedQuery.undatedRows) && ` / 无日期 ${metric.appliedQuery.undatedRows} 行${metric.appliedQuery.from || metric.appliedQuery.to || card.type === 'time_trend' ? '不参与日期范围或趋势' : '参与未限期总量'}`}</span>}
       </div>
     </div>
   );

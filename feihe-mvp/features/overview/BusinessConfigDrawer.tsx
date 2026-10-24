@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { StyledSelect } from '../../components/ui/StyledSelect';
@@ -190,21 +190,21 @@ export function BusinessConfigDrawer({
         <button className="drawer-close" onClick={onClose} aria-label="关闭抽屉">
           ×
         </button>
-        <small style={{ color: '#4175a0', fontWeight: 600 }}>BUSINESS CONFIGURATION</small>
+        <small style={{ color: '#0d74ce', fontWeight: 600 }}>BUSINESS CONFIGURATION</small>
         <h2>项目业务来源与规则配置</h2>
         <p className="drawer-meta">
-          项目 ID: <code>{projectId}</code> · 当前版本: v{expectedVersion} ·{' '}
-          {canWrite ? <span style={{ color: '#0d9488' }}>可编辑</span> : <span style={{ color: '#9a691e' }}>只读模式</span>}
+          项目 ID: <code>{projectId}</code> / 当前版本: v{expectedVersion} ·{' '}
+          {canWrite ? <span style={{ color: '#008573' }}>可编辑</span> : <span style={{ color: '#ab6400' }}>只读模式</span>}
         </p>
 
-        {notice && <p role="status" style={{ background: '#ecfdf5', color: '#065f46', padding: '8px 12px', borderRadius: '6px', fontSize: '13px' }}>{notice}</p>}
-        {error && <p role="alert" style={{ background: '#fff1f2', color: '#9f1239', padding: '8px 12px', borderRadius: '6px', fontSize: '13px' }}>{error}</p>}
+        {notice && <p role="status" style={{ background: '#e6f7ed', color: '#1d3b31', padding: '8px 12px', borderRadius: '6px', fontSize: '14px' }}>{notice}</p>}
+        {error && <p role="alert" style={{ background: '#feebec', color: '#641723', padding: '8px 12px', borderRadius: '6px', fontSize: '14px' }}>{error}</p>}
 
         {loading ? (
           <p className="bd-caption">正在拉取项目配置详情…</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '8px' }}>
-            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px' }}>
               <strong>本品品牌与词库（逗号分隔）</strong>
               <input
                 aria-label="本品品牌与词库"
@@ -213,11 +213,11 @@ export function BusinessConfigDrawer({
                 value={brandsText}
                 onChange={(e) => setBrandsText(e.target.value)}
                 placeholder="例如: 飞鹤启萃"
-                style={{ padding: '8px 10px', border: '1px solid #cdd8e6', borderRadius: '6px', fontSize: '13px' }}
+                style={{ padding: '8px 10px', border: '0.5px solid #d9d9e0', borderRadius: '6px', fontSize: '14px' }}
               />
             </label>
 
-            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px' }}>
               <strong>竞品对比词（逗号分隔）</strong>
               <input
                 aria-label="竞品对比词"
@@ -226,11 +226,11 @@ export function BusinessConfigDrawer({
                 value={competitorWordsText}
                 onChange={(e) => setCompetitorWordsText(e.target.value)}
                 placeholder="例如: 合生元派星, a2至初"
-                style={{ padding: '8px 10px', border: '1px solid #cdd8e6', borderRadius: '6px', fontSize: '13px' }}
+                style={{ padding: '8px 10px', border: '0.5px solid #d9d9e0', borderRadius: '6px', fontSize: '14px' }}
               />
             </label>
 
-            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+            <label style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '14px' }}>
               <strong>FS 业务排期落后预警阈值（百分点）</strong>
               <input
                 aria-label="预警阈值"
@@ -240,7 +240,7 @@ export function BusinessConfigDrawer({
                 disabled={!canWrite || saving}
                 value={alertThreshold}
                 onChange={(e) => setAlertThreshold(Number(e.target.value))}
-                style={{ padding: '8px 10px', border: '1px solid #cdd8e6', borderRadius: '6px', fontSize: '13px', width: '120px' }}
+                style={{ padding: '8px 10px', border: '0.5px solid #d9d9e0', borderRadius: '6px', fontSize: '14px', width: '120px' }}
               />
             </label>
 
@@ -252,7 +252,7 @@ export function BusinessConfigDrawer({
                     type="button"
                     onClick={addBinding}
                     disabled={saving}
-                    style={{ padding: '4px 10px', fontSize: '12px', background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', borderRadius: '5px', cursor: 'pointer' }}
+                    style={{ padding: '4px 10px', fontSize: '12px', background: '#e6f7ed', color: '#208368', border: '0.5px solid #acdec8', borderRadius: '5px', cursor: 'pointer' }}
                   >
                     + 新增来源绑定
                   </button>
@@ -268,8 +268,8 @@ export function BusinessConfigDrawer({
                       key={idx}
                       style={{
                         padding: '12px',
-                        background: '#f8fafc',
-                        border: '1px solid #e2e8f0',
+                        background: '#f9f9fb',
+                        border: '0.5px solid var(--slate-6, #d9d9e0)',
                         borderRadius: '8px',
                         display: 'flex',
                         flexDirection: 'column',
@@ -277,7 +277,7 @@ export function BusinessConfigDrawer({
                       }}
                     >
                       <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>#{idx + 1}</span>
+                        <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>#{idx + 1}</span>
                         <input
                           aria-label={'来源标识-' + idx}
                           type="text"
@@ -285,14 +285,14 @@ export function BusinessConfigDrawer({
                           value={b.key}
                           onChange={(e) => updateBinding(idx, 'key', e.target.value)}
                           placeholder="key 唯一英文标识"
-                          style={{ flex: 1, padding: '4px 8px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                          style={{ flex: 1, padding: '4px 8px', fontSize: '12px', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '4px' }}
                         />
                         <StyledSelect
                           aria-label={'业务角色-' + idx}
                           disabled={!canWrite || saving}
                           value={b.role}
                           onChange={(e) => updateBinding(idx, 'role', e.target.value as SourceRole)}
-                          style={{ padding: '4px 8px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '4px', maxWidth: '200px' }}
+                          style={{ padding: '4px 8px', fontSize: '12px', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '4px', maxWidth: '200px' }}
                         >
                           {ROLE_OPTIONS.map((opt) => (
                             <option key={opt.role} value={opt.role}>
@@ -306,7 +306,7 @@ export function BusinessConfigDrawer({
                             onClick={() => removeBinding(idx)}
                             disabled={saving}
                             aria-label={'删除来源-' + idx}
-                            style={{ padding: '4px 8px', fontSize: '12px', color: '#dc2626', border: '1px solid #fecaca', background: '#fff', borderRadius: '4px', cursor: 'pointer' }}
+                            style={{ padding: '4px 8px', fontSize: '12px', color: '#ce2c31', border: '0.5px solid #fdbdbe', background: '#fff', borderRadius: '4px', cursor: 'pointer' }}
                           >
                             删除
                           </button>
@@ -319,7 +319,7 @@ export function BusinessConfigDrawer({
                         value={b.url}
                         onChange={(e) => updateBinding(idx, 'url', e.target.value)}
                         placeholder="飞书表格、文档或系统接口的有效 http/https URL"
-                        style={{ width: '100%', padding: '5px 8px', fontSize: '12px', border: '1px solid #cbd5e1', borderRadius: '4px' }}
+                        style={{ width: '100%', padding: '5px 8px', fontSize: '12px', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '4px' }}
                       />
                     </div>
                   ))}
@@ -327,12 +327,12 @@ export function BusinessConfigDrawer({
               )}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px', paddingTop: '12px', borderTop: '0.5px solid #d9d9e0' }}>
               <button
                 type="button"
                 onClick={onClose}
                 disabled={saving}
-                style={{ padding: '8px 16px', fontSize: '13px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+                style={{ padding: '8px 16px', fontSize: '14px', background: '#fff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', cursor: 'pointer' }}
               >
                 取消
               </button>
@@ -342,7 +342,7 @@ export function BusinessConfigDrawer({
                   className="primary-btn"
                   onClick={handleSave}
                   disabled={saving || loading}
-                  style={{ padding: '8px 18px', fontSize: '13px', background: '#1769d5', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                  style={{ padding: '8px 18px', fontSize: '14px', background: '#0d74ce', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
                 >
                   {saving ? '正在保存…' : '保存配置'}
                 </button>

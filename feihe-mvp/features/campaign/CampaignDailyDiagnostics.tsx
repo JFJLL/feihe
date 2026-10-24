@@ -1,4 +1,4 @@
-﻿/**
+/**
  * CampaignDailyDiagnostics.tsx
  *
  * Daily Diagnostic Analysis:
@@ -128,13 +128,13 @@ export function CampaignDailyDiagnostics({
                 selectedHeatmapCell && (
                   <span
                     style={{
-                      fontSize: 11.5,
-                      color: '#1e293b',
+                      fontSize: 12,
+                      color: '#1c2024',
                       fontWeight: 600,
-                      background: '#f8fafc',
+                      background: '#f9f9fb',
                       padding: '2px 8px',
                       borderRadius: 4,
-                      border: '1px solid #e2e8f0',
+                      border: '0.5px solid #d9d9e0',
                     }}
                     role="status"
                     aria-live="polite"
@@ -159,7 +159,7 @@ export function CampaignDailyDiagnostics({
                     <div className="ca-heatmap-cells" role="group" aria-label={`${m.label}每日强度`}>
                       {m.cells.map((c) => {
                         const bg = c.isMissing
-                          ? '#f1f5f9'
+                          ? '#f0f0f3'
                           : `${m.themeColor}${Math.round(c.intensity * 215 + 40)
                               .toString(16)
                               .padStart(2, '0')}`;
@@ -173,8 +173,8 @@ export function CampaignDailyDiagnostics({
                             className={`ca-heatmap-cell ${c.isMissing ? 'ca-heatmap-cell-missing' : ''}`}
                             style={{
                               backgroundColor: bg,
-                              outline: isFocused ? '2px solid #0f172a' : 'none',
-                              border: isFocused ? '1px solid #fff' : undefined,
+                              outline: isFocused ? '2px solid #1c2024' : 'none',
+                              border: isFocused ? '0.5px solid #fff' : undefined,
                             }}
                             tabIndex={0}
                             aria-label={`${c.date} ${m.label}: ${c.formatted}${c.unit ? ` ${c.unit}` : ''}`}
@@ -208,7 +208,7 @@ export function CampaignDailyDiagnostics({
                 {/* Date labels row */}
                 <div className="ca-heatmap-dates-row" aria-hidden="true">
                   <div className="ca-heatmap-label-col">
-                    <span style={{ fontSize: 10, color: '#94a3b8' }}>日期序列</span>
+                    <span style={{ fontSize: 12, color: '#60646c' }}>日期序列</span>
                   </div>
                   <div className="ca-heatmap-cells">
                     {calendarRows.map((r, i) => {
@@ -268,9 +268,9 @@ export function CampaignDailyDiagnostics({
                         style={{
                           padding: '6px 10px',
                           borderRadius: 6,
-                          border: '1px solid #e2e8f0',
-                          background: '#f8fafc',
-                          fontSize: 11.5,
+                          border: '0.5px solid #d9d9e0',
+                          background: '#f9f9fb',
+                          fontSize: 12,
                           flex: '1 1 140px',
                         }}
                       >
@@ -292,15 +292,15 @@ export function CampaignDailyDiagnostics({
                             {w.validDays}/{w.calendarDays}天{w.isCompleteInSpan && !w.isFullCalendarWeek ? ' (区间完整)' : ''}
                           </span>
                         </div>
-                        <div style={{ color: '#475569' }}>
+                        <div style={{ color: '#60646c' }}>
                           消耗: {w.weekSpend !== null ? `¥${w.weekSpend.toLocaleString()}` : `— (${w.coverageNote})`}
                         </div>
                         {w.weightedEfficiency !== null ? (
-                          <div style={{ color: '#b88a45', fontWeight: 600 }}>
+                          <div style={{ color: '#ffc53d', fontWeight: 600 }}>
                             {w.efficiencyLabel}: {w.weightedEfficiency} {w.efficiencyUnit}
                           </div>
                         ) : (
-                          <div style={{ color: '#94a3b8', fontSize: 10.5 }}>
+                          <div style={{ color: '#60646c', fontSize: 12 }}>
                             {w.efficiencyLabel}: — (按所选日期，缺数时不计算单位成本)
                           </div>
                         )}

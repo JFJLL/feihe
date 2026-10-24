@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from '../../components/ui/AppLink';
@@ -81,7 +81,7 @@ export function NotesPool({
             placeholder="如：启萃,飞鹤奶粉"
           />
           <p>
-            {from} 至 {to} · 最多 5 页/关键词 · 自动去重归类
+            {from} 至 {to} / 最多 5 页/关键词 / 自动去重归类
           </p>
           <button className="primary wide" disabled={loading} onClick={runSearch}>
             扫描并入库
@@ -159,7 +159,7 @@ export function NotesPool({
                   />
                   <strong>{n.title || n.id}</strong>
                   <small>
-                    {n.author || '未知作者'} · {n.productScope || '本品'} · {n.category1 || '未分类'}
+                    {n.author || '未知作者'} / {n.productScope || '本品'} / {n.category1 || '未分类'}
                   </small>
                 </span>
                 <span>{n.sourceType || '关键词扫描'}</span>

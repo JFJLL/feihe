@@ -201,7 +201,7 @@ export function CommentCollection({
           theme="purple"
           label="监测资产覆盖率"
           value={summary.total ? `${Math.round((summary.fetchedCount / summary.total) * 1000) / 10}%` : '—'}
-          desc={`总资产 ${summary.total} 篇 · 已纳管采集`}
+          desc={`总资产 ${summary.total} 篇 / 已纳管采集`}
           tag="覆盖比例"
         />
       </section>
@@ -218,7 +218,7 @@ export function CommentCollection({
         desc="输入小红书笔记 ID 或链接，每行一个；系统将按规则抓取全量主评论与楼中楼，自动增量比对并计算验收状态。"
       >
         <div className="ops-action-card ops-action-card-teal" style={{ padding: '20px' }}>
-          <label style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a', marginBottom: '6px', display: 'block' }}>
+          <label style={{ fontSize: '14px', fontWeight: 600, color: '#1c2024', marginBottom: '6px', display: 'block' }}>
             小红书笔记 ID 或完整链接（支持粘贴多行，单次上限 20 篇）
           </label>
           <textarea
@@ -230,15 +230,15 @@ export function CommentCollection({
               width: '100%',
               padding: '10px 12px',
               borderRadius: '8px',
-              border: '1px solid #99f6e4',
+              border: '0.5px solid #a1ded2',
               background: '#ffffff',
-              fontSize: '13px',
+              fontSize: '14px',
               fontFamily: 'monospace',
               outline: 'none',
             }}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', flexWrap: 'wrap', gap: '10px' }}>
-            <span style={{ fontSize: '12px', color: '#0f766e' }}>
+            <span style={{ fontSize: '12px', color: '#008573' }}>
               💡 提示：从内容台账点击“前往评论监测”可自动预填 ID。确认后点击开始抓取。
             </span>
             <button
@@ -253,7 +253,7 @@ export function CommentCollection({
                 }
                 executeFetch(lines);
               }}
-              style={{ background: '#0d9488', borderColor: '#0f766e', minWidth: '130px' }}
+              style={{ background: '#008573', borderColor: '#008573', minWidth: '130px' }}
             >
               {fetching ? '正在采集比对…' : '开始抓取评论'}
             </button>
@@ -272,7 +272,7 @@ export function CommentCollection({
         title="评论快照与监测明细"
         desc="监控所有笔记的评论总量、增量变化与验收状态，支持单篇重新采集与批量顺序抓取。"
         extra={
-          <Link href={`/projects/${encodeURIComponent(projectId)}/comments?tab=acceptance`} className="btn-link" style={{ fontSize: '13px' }}>
+          <Link href={`/projects/${encodeURIComponent(projectId)}/comments?tab=acceptance`} className="btn-link" style={{ fontSize: '14px' }}>
             前往交付验收 →
           </Link>
         }
@@ -280,8 +280,8 @@ export function CommentCollection({
         <WorkspaceToolbar
           extra={
             selectedIds.length > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#e0f2fe', padding: '4px 12px', borderRadius: '8px' }}>
-                <span style={{ fontSize: '12.5px', color: '#0369a1', fontWeight: 600 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#e6f4fe', padding: '4px 12px', borderRadius: '8px' }}>
+                <span style={{ fontSize: 14, color: '#0d74ce', fontWeight: 600 }}>
                   已勾选 {selectedIds.length} 篇
                 </span>
                 <button
@@ -295,7 +295,7 @@ export function CommentCollection({
                 </button>
                 <button
                   type="button"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', color: '#64748b' }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '12px', color: 'var(--slate-11, #60646c)' }}
                   onClick={() => setSelectedIds([])}
                 >
                   取消
@@ -355,7 +355,7 @@ export function CommentCollection({
               {items.map((note) => {
                 const isSelected = selectedIds.includes(note.id);
                 return (
-                  <tr key={note.id} style={{ background: isSelected ? '#f0f9ff' : undefined }}>
+                  <tr key={note.id} style={{ background: isSelected ? '#e6f4fe' : undefined }}>
                     <td>
                       <input
                         type="checkbox"
@@ -392,13 +392,13 @@ export function CommentCollection({
                           <span
                             className="ops-table-note-title"
                             title={note.title || note.id}
-                            style={{ cursor: 'pointer', color: '#0284c7' }}
+                            style={{ cursor: 'pointer', color: '#0d74ce' }}
                             onClick={() => openNote(note.id)}
                           >
                             {note.title || '未命名笔记'}
                           </span>
                           <span className="ops-table-note-sub">
-                            {note.author || '未知博主'} · <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 10)}…</small>
+                            {note.author || '未知博主'} / <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 10)}…</small>
                           </span>
                         </div>
                       </div>
@@ -407,7 +407,7 @@ export function CommentCollection({
                       <StatusBadge status={note.sourceType === 'owned' ? '自有发布' : note.sourceType === 'commercial' ? '商业合作' : '外部扫描'} />
                     </td>
                     <td>
-                      <span style={{ fontSize: '12.5px', color: '#475569' }}>
+                      <span style={{ fontSize: 14, color: '#60646c' }}>
                         {note.lastFetchedAt ? cnTime(note.lastFetchedAt) : '尚未抓取'}
                       </span>
                     </td>
@@ -422,13 +422,13 @@ export function CommentCollection({
                     </td>
                     <td>
                       {note.commentDelta == null ? (
-                        <span style={{ color: '#94a3b8' }}>{note.latestSnapshotTotal != null ? '首次采集' : '—'}</span>
+                        <span style={{ color: '#60646c' }}>{note.latestSnapshotTotal != null ? '首次采集' : '—'}</span>
                       ) : note.commentDelta > 0 ? (
-                        <span style={{ color: '#15803d', fontWeight: 600 }}>+{note.commentDelta}</span>
+                        <span style={{ color: '#208368', fontWeight: 600 }}>+{note.commentDelta}</span>
                       ) : note.commentDelta < 0 ? (
-                        <span style={{ color: '#b91c1c', fontWeight: 600 }}>{note.commentDelta}</span>
+                        <span style={{ color: '#ce2c31', fontWeight: 600 }}>{note.commentDelta}</span>
                       ) : (
-                        <span style={{ color: '#64748b' }}>持平</span>
+                        <span style={{ color: 'var(--slate-11, #60646c)' }}>持平</span>
                       )}
                     </td>
                     <td>
@@ -447,7 +447,7 @@ export function CommentCollection({
                         <button
                           type="button"
                           className="text-link"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#0d9488' }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#008573' }}
                           disabled={fetching}
                           onClick={() => executeFetch([note.id])}
                         >
@@ -459,7 +459,7 @@ export function CommentCollection({
                             target="_blank"
                             rel="noreferrer"
                             className="text-link"
-                            style={{ color: '#64748b' }}
+                            style={{ color: 'var(--slate-11, #60646c)' }}
                           >
                             原笔记 ↗
                           </a>

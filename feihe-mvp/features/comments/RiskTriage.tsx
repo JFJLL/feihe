@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from '../../components/ui/AppLink';
@@ -77,8 +77,8 @@ export function RiskTriage({
                 </div>
                 <p>{item.content}</p>
                 <small>
-                  {item.author || '未知用户'} · 最近检出 {cnTime(item.lastSeenAt)}
-                  {item.disappearedAt ? ' · 已消失' : ''} · 回复 {item.replyCount}
+                  {item.author || '未知用户'} / 最近检出 {cnTime(item.lastSeenAt)}
+                  {item.disappearedAt ? ' / 已消失' : ''} / 回复 {item.replyCount}
                 </small>
               </div>
               <div className="comment-actions">

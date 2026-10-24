@@ -76,7 +76,7 @@ export function SpendBars({
             <span className="spend-bars-unit-chip">单位：元</span>
           </div>
           <small>
-            每日信息流 (F) + 搜索 (S) 实际消耗 · 截至 {view.businessThrough || '待采集'} · 缺失或未填报不计为0
+            每日信息流 (F) + 搜索 (S) 实际消耗 / 截至 {view.businessThrough || '待采集'} / 缺失或未填报不计为0
           </small>
         </div>
         <div className="spend-bars-legend">
@@ -178,7 +178,7 @@ export function SpendBars({
                               const diff = ratio - 100;
                               return (
                                 <span className={'spend-tooltip-ratio ' + (isOver ? 'is-over' : 'is-normal')}>
-                                  (预算消耗比 {ratio.toFixed(1)}%{isOver ? ` · 超计划 ${diff.toFixed(1)}%` : ''})
+                                  (预算消耗比 {ratio.toFixed(1)}%{isOver ? ` / 超计划 ${diff.toFixed(1)}%` : ''})
                                 </span>
                               );
                             })()}

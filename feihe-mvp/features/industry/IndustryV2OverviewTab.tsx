@@ -27,13 +27,18 @@ export function IndustryV2OverviewTab({
 
   return (
     <div className="v2-tab-content">
-      {/* Data source statement */}
-      <div className="v2-source-banner">
-        <span>📌 <strong>数据来源：</strong>小红书蒲公英笔记检索样本（受关键词及单日调用上限约束，各查询词独立采样，非全网无界爬虫）</span>
-      </div>
-
-      {/* 6 Key Performance Indicators */}
-      <section className="v2-section" aria-label="核心指标总览">
+      {/* 6 Key Performance Indicators & Data source statement */}
+      <section className="v2-section" aria-label="核心指标总览" style={{ marginBottom: '28px' }}>
+        <div
+          className="v2-macro-card"
+          style={{
+            background: '#ffffff',
+            border: '0.5px solid #d9d9e0',
+            borderRadius: '12px',
+            padding: '24px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
+          }}
+        >
         <div className="v2-kpi-grid">
           <KpiCard
             label="样本笔记总量"
@@ -78,7 +83,7 @@ export function IndustryV2OverviewTab({
             label="有效互动量合计"
             value={formatMetricNumber(summary.interactions.value)}
             denominator={`覆盖 ${summary.interactions.known}/${summary.interactions.total} 篇`}
-            subtext="平台返回互动总量（engageNum，缺项不补0）"
+            subtext="未返回项不计入汇总"
           />
 
           <KpiCard
@@ -88,6 +93,11 @@ export function IndustryV2OverviewTab({
             subtext={`投流率: ${formatMetricPercent(summary.promotedRate)}（已标 ${summary.promotedRate.known}/${summary.promotedRate.total}）`}
           />
         </div>
+
+          <div className="v2-source-banner" style={{ marginTop: '16px' }}>
+            <span>📌 <strong>数据来源：</strong>小红书蒲公英，仅代表所选监测词的采集样本。</span>
+          </div>
+        </div>
       </section>
 
       {/* Independent Query Comparison (Unified single view, no duplicate cards+table) */}
@@ -95,7 +105,7 @@ export function IndustryV2OverviewTab({
         <div className="v2-card">
           <div className="v2-card-header">
             <div>
-              <h3 className="v2-card-title">品类 · 本品 · 竞品独立查询采样对比</h3>
+              <h3 className="v2-card-title">品类 / 本品 / 竞品独立查询采样对比</h3>
               <p className="v2-card-subtitle">
                 ⚠️ 各查询词为独立采样，不可直接相加或折算为全网市场份额 / 真实大盘总额。
               </p>

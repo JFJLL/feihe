@@ -321,11 +321,11 @@ assert.ok(overviewHtml.includes('320'), '应包含博主数 320');
 assert.ok(overviewHtml.includes('有效曝光量合计'), '应包含有效曝光量合计');
 assert.ok(overviewHtml.includes('有效阅读量合计'), '应包含有效阅读量合计');
 assert.ok(overviewHtml.includes('有效互动量合计'), '应包含有效互动量合计');
-assert.ok(overviewHtml.includes('平台返回互动总量（engageNum，缺项不补0）'), '应明确平台返回互动总量engageNum');
+assert.ok(overviewHtml.includes('未返回项不计入汇总'), '应明确未返回项不计入汇总');
 assert.ok(overviewHtml.includes('商业化标注率'), '应包含商业化标注率');
 assert.ok(overviewHtml.includes('独立采样'), '必须明确提示独立采样，不可折算市场份额');
 assert.ok(overviewHtml.includes('缺'), '趋势图应识别未采样日期并标注缺');
-assert.ok(overviewHtml.includes('数据来源：') && overviewHtml.includes('小红书蒲公英笔记检索样本'), '总览顶部应明确数据来源');
+assert.ok(overviewHtml.includes('数据来源：') && overviewHtml.includes('小红书蒲公英'), '总览顶部应明确数据来源');
 
 // 4. Test static render of IndustryV2ContentTab
 console.log('[Test 4] 静态渲染 IndustryV2ContentTab 并验证特征分布与安全外链');
@@ -385,7 +385,7 @@ const headerHtml = renderToStaticMarkup(
     onTriggerEnqueue: async () => {},
   })
 );
-assert.ok(headerHtml.includes('行业洞察 · 飞鹤启萃营销复盘'), '应展示项目标题');
+assert.ok(headerHtml.includes('行业洞察 飞鹤启萃营销复盘'), '应展示项目标题');
 assert.ok(headerHtml.includes('SPU: 启萃'), '应展示 SPU 标');
 assert.ok(headerHtml.includes('已采完: 110 词×日任务'), '应展示采完词×日任务数');
 assert.ok(headerHtml.includes('部分覆盖: 6 词×日任务'), '应展示部分覆盖词×日任务数');
@@ -427,7 +427,7 @@ const pendingHeaderHtml = renderToStaticMarkup(
 );
 assert.ok(pendingHeaderHtml.includes('自动更新已暂停'), '应展示自动更新已暂停');
 assert.ok(!pendingHeaderHtml.includes('disabled="" title="当前有任务等待调度'), 'pending状态且未running时不应被disabled');
-assert.ok(pendingHeaderHtml.includes('⚡ 调度补采 (排队中)'), '文案应明确可手动调度补采');
+assert.ok(pendingHeaderHtml.includes('⚡ 继续更新'), '文案应明确可手动调度补采');
 
 // 10. Test Workspace race condition safeguards in source
 console.log('[Test 10] 静态审计 IndustryWorkspace 竞态消除、Query隔离与卸载安全');

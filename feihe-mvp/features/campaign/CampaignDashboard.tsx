@@ -634,7 +634,7 @@ export const CampaignDashboard: React.FC<CampaignDashboardProps> = (props) => {
                 </span>
               )}
               {kpi.period && (
-                <span className="campaign-meta-refresh" style={{ fontSize: "11px" }}>
+                <span className="campaign-meta-refresh" style={{ fontSize: 12 }}>
                   周期: {kpi.period}
                 </span>
               )}
@@ -677,7 +677,7 @@ export const CampaignDashboard: React.FC<CampaignDashboardProps> = (props) => {
             </div>
           )}
           {kpi.note && (
-            <div style={{ fontSize: "11px", color: "#64748b", marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: "#60646c", marginTop: 2 }}>
               说明: {kpi.note}
             </div>
           )}

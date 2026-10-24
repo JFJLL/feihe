@@ -150,8 +150,8 @@ export function NoteDetailDrawer({
             <span className="note-detail-modal-eyebrow">
               NOTE DETAIL
               {!canEdit && (
-                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>
-                  · 🔒 {readonlyReason}
+                <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 500 }}>
+                  / 🔒 {readonlyReason}
                 </span>
               )}
             </span>
@@ -213,7 +213,7 @@ export function NoteDetailDrawer({
                       width: 24,
                       height: 24,
                       padding: 0,
-                      border: activeImageIdx === idx ? '2px solid var(--dt-primary, #2c7168)' : '1px solid #cbd5e1',
+                      border: activeImageIdx === idx ? '2px solid var(--dt-primary, #008573)' : '0.5px solid #cdced6',
                       borderRadius: 4,
                       overflow: 'hidden',
                       cursor: 'pointer',
@@ -261,8 +261,8 @@ export function NoteDetailDrawer({
               {n?.content ? (
                 n.content
               ) : (
-                <span style={{ color: '#94a3b8' }}>
-                  源数据未提供正文长文本{n?.category1 || n?.category2 ? `（分类切角：${[n.category1, n.category2].filter(Boolean).join(' · ')}）` : ''}
+                <span style={{ color: '#60646c' }}>
+                  源数据未提供正文长文本{n?.category1 || n?.category2 ? `（分类切角：${[n.category1, n.category2].filter(Boolean).join(' / ')}）` : ''}
                 </span>
               )}
             </div>
@@ -273,12 +273,12 @@ export function NoteDetailDrawer({
                 target="_blank"
                 rel="noreferrer"
                 className="text-link"
-                style={{ fontSize: '12px', color: '#0284c7', alignSelf: 'flex-start', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                style={{ fontSize: '12px', color: '#0d74ce', alignSelf: 'flex-start', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4 }}
               >
                 在小红书查看原笔记 ↗
               </a>
             ) : n?.url ? (
-              <span style={{ fontSize: '11.5px', color: '#94a3b8' }}>原笔记标识: {n.url}</span>
+              <span style={{ fontSize: '12px', color: '#60646c' }}>原笔记标识: {n.url}</span>
             ) : null}
           </div>
         </section>
@@ -331,43 +331,43 @@ export function NoteDetailDrawer({
                 <section className="note-editor">
                   {!canEdit || context === 'comments' || context === 'acceptance' ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
-                        <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>笔记标题</span>
-                        <div style={{ fontSize: '14px', color: '#0f172a', fontWeight: 600, marginTop: '2px' }}>{draft.title || '未命名笔记'}</div>
+                      <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '12px' }}>
+                        <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>笔记标题</span>
+                        <div style={{ fontSize: '14px', color: '#1c2024', fontWeight: 600, marginTop: '2px' }}>{draft.title || '未命名笔记'}</div>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>作者 / 博主</span>
-                          <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>{draft.author || '未知博主'}</div>
+                        <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>作者 / 博主</span>
+                          <div style={{ fontSize: '14px', color: '#1c2024', marginTop: '2px' }}>{draft.author || '未知博主'}</div>
                         </div>
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>产品范围</span>
-                          <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>{draft.productScope || '本品'}</div>
+                        <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>产品范围</span>
+                          <div style={{ fontSize: '14px', color: '#1c2024', marginTop: '2px' }}>{draft.productScope || '本品'}</div>
                         </div>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>来源分类</span>
-                          <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>
+                        <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>来源分类</span>
+                          <div style={{ fontSize: '14px', color: '#1c2024', marginTop: '2px' }}>
                             {draft.sourceType === 'owned' ? '自有发布' : draft.sourceType === 'commercial' ? '商业合作' : '关键词扫描'}
                           </div>
                         </div>
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>收录状态</span>
-                          <div style={{ fontSize: '13px', color: '#1e293b', fontWeight: 600, marginTop: '2px' }}>{draft.status || '已收录'}</div>
+                        <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>收录状态</span>
+                          <div style={{ fontSize: '14px', color: '#1c2024', fontWeight: 600, marginTop: '2px' }}>{draft.status || '已收录'}</div>
                         </div>
                       </div>
                       {draft.url && (
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>笔记链接</span>
+                        <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                          <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>笔记链接</span>
                           <div style={{ marginTop: '2px', wordBreak: 'break-all' }}>
                             {isValidHttpUrl(draft.url) ? (
-                              <a href={draft.url} target="_blank" rel="noreferrer" className="text-link" style={{ fontSize: '12.5px' }}>
+                              <a href={draft.url} target="_blank" rel="noreferrer" className="text-link" style={{ fontSize: 14 }}>
                                 {draft.url} ↗
                               </a>
                             ) : (
-                              <span style={{ fontSize: '12px', color: '#475569' }}>
-                                {draft.url} <small style={{ color: '#94a3b8' }}>(内部标识，未提供前台外链)</small>
+                              <span style={{ fontSize: '12px', color: '#60646c' }}>
+                                {draft.url} <small style={{ color: '#60646c' }}>(内部标识，未提供前台外链)</small>
                               </span>
                             )}
                           </div>
@@ -428,7 +428,7 @@ export function NoteDetailDrawer({
                         </label>
                       </div>
 
-                      <div style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 8px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', margin: '4px 0 8px' }}>
                         验收状态：<strong>{draft.status || '待抓取'}</strong>
                       </div>
 
@@ -475,7 +475,7 @@ export function NoteDetailDrawer({
                 </article>
               </section>
 
-              <div style={{ marginTop: '16px', fontSize: '13px', display: 'grid', gap: '8px', background: '#f8fafc', padding: 14, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+              <div style={{ marginTop: '16px', fontSize: '14px', display: 'grid', gap: '8px', background: '#f9f9fb', padding: 14, borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                 <div><strong>内容方向：</strong>{n?.category1 || '待补充'}</div>
                 <div><strong>内容形式：</strong>{n?.noteType || '待补充'}</div>
                 <div><strong>达人层级：</strong>{n?.creatorLevel || '待补充'}</div>
@@ -519,7 +519,7 @@ export function NoteDetailDrawer({
                     </div>
                   ))
                 ) : (
-                  <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>暂无历史快照</div>
+                  <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#60646c', fontSize: '12px' }}>暂无历史快照</div>
                 )}
               </div>
             </div>
@@ -527,16 +527,16 @@ export function NoteDetailDrawer({
 
           {tab === 'acceptance' && (
             <div role="tabpanel" aria-label="验收与处置">
-              <div style={{ marginBottom: '16px', padding: '12px', background: '#f8fafc', borderRadius: '8px', fontSize: '13px', border: '1px solid #e2e8f0' }}>
+              <div style={{ marginBottom: '16px', padding: '12px', background: '#f9f9fb', borderRadius: '8px', fontSize: '14px', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                 <div><strong>当前验收状态：</strong>{n?.status || '已收录'}</div>
                 <div><strong>前5主评品牌提及率：</strong>{pct(n?.brandMentionTop5 || 0)}</div>
               </div>
 
               {allowEditStatus && canCalibrate ? (
-                <div style={{ margin: '16px 0', padding: '14px', background: '#f0fdf4', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
-                  <strong style={{ fontSize: '13.5px', color: '#166534' }}>人工验收校正（独立审计归档）</strong>
+                <div style={{ margin: '16px 0', padding: '14px', background: '#e6f7ed', borderRadius: '8px', border: '0.5px solid #acdec8' }}>
+                  <strong style={{ fontSize: '14px', color: '#208368' }}>人工验收校正（独立审计归档）</strong>
                   <div style={{ display: 'grid', gap: '8px', marginTop: '8px' }}>
-                    <label style={{ fontSize: '12px', color: '#15803d' }}>
+                    <label style={{ fontSize: '12px', color: '#208368' }}>
                       校正验收结果
                       <StyledSelect
                         value={draft?.status || '待抓取'}
@@ -549,7 +549,7 @@ export function NoteDetailDrawer({
                         <option value={`不够${baseCount}条需补充`}>不够{baseCount}条需补充</option>
                       </StyledSelect>
                     </label>
-                    <label style={{ fontSize: '12px', color: '#15803d' }}>
+                    <label style={{ fontSize: '12px', color: '#208368' }}>
                       校正原因说明
                       <input
                         placeholder="例如：人工复核前5条主评品牌提及达标"
@@ -561,18 +561,18 @@ export function NoteDetailDrawer({
                       type="button"
                       className="primary"
                       disabled={calibrating}
-                      style={{ background: '#16a34a', borderColor: '#15803d', fontSize: '12.5px', padding: '6px 12px' }}
+                      style={{ background: '#29a383', borderColor: '#208368', fontSize: 14, padding: '6px 12px' }}
                       onClick={handleCalibrateAcceptance}
                     >
                       {calibrating ? '校正提交中…' : '提交人工验收校正'}
                     </button>
                     {calibrationSuccess && (
-                      <span style={{ fontSize: '12px', color: '#15803d' }}>✓ {calibrationSuccess}</span>
+                      <span style={{ fontSize: '12px', color: '#208368' }}>✓ {calibrationSuccess}</span>
                     )}
                   </div>
                 </div>
               ) : allowEditStatus && !canCalibrate ? (
-                <div style={{ margin: '16px 0', padding: '12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12.5px', color: '#64748b' }}>
+                <div style={{ margin: '16px 0', padding: '12px', background: '#f9f9fb', borderRadius: '8px', border: '0.5px solid var(--slate-6, #d9d9e0)', fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
                   🔒 验收状态源自业务采集记录（只读），不支持人工覆盖校正
                 </div>
               ) : null}
@@ -583,16 +583,16 @@ export function NoteDetailDrawer({
                   detail.comments.map((x) => (
                     <article key={x.id}>
                       <span>
-                        {x.sentiment} · {x.category}
+                        {x.sentiment} / {x.category}
                       </span>
                       <p>{x.content}</p>
                       <small>
-                        {x.action} · {x.treatmentStatus}
+                        {x.action} / {x.treatmentStatus}
                       </small>
                     </article>
                   ))
                 ) : (
-                  <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>暂无需处置的关键评论</div>
+                  <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#60646c', fontSize: '12px' }}>暂无需处置的关键评论</div>
                 )}
               </div>
             </div>

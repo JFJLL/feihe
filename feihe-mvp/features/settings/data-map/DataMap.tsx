@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from '../../../components/ui/AppLink';
+import { Dialog } from '../../../components/ui/Dialog';
 import { StyledSelect } from '../../../components/ui/StyledSelect';
 import type { MapData, Keystone, Row } from '../../../lib/types/project';
 import { EmptyState } from '../../../components/ui/EmptyState';
-import { MetricCard } from '../../../components/ui/operations/MetricCard';
 import { api, shown, cnTime, size } from '../../../lib/hooks/use-project-data';
 
 const entityLabels: Record<string, string> = {
@@ -43,6 +44,7 @@ export function DataMap({
   async function save() {
     if (!editor) return;
     setBusy('save');
+    const label = entityLabels[editor.entity] || '配置';
     try {
       await api('/api/data-map', {
         method: 'POST',
@@ -53,33 +55,71 @@ export function DataMap({
           ...editor.row,
         }),
       });
-      toast(entityLabels[editor.entity] + '已保存', 'success');
-      setEditor(null);
-      await reload();
     } catch (e) {
       toast(e instanceof Error ? e.message : '保存失败', 'error');
-    } finally {
       setBusy('');
+      return;
+    }
+
+    setEditor(null);
+    setBusy('');
+    toast(label + '已保存', 'success');
+
+    try {
+      await reload();
+    } catch (e) {
+      toast(label + '已保存，但刷新列表失败：' + (e instanceof Error ? e.message : '未知异常'), 'error');
     }
   }
 
-  async function remove(entity: string, row: Row) {
-    if (!confirm('确认删除“' + shown(row.name || row.key) + '”？')) return;
+  // Delete modal states
+  const [pendingDelete, setPendingDelete] = useState<{ entity: string; row: Row } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  function requestDelete(entity: string, row: Row) {
+    if (isDeleting) return;
+    setPendingDelete({ entity, row });
+    setDeleteError(null);
+  }
+
+  function handleCancelDelete() {
+    if (isDeleting) return; // Busy protection
+    setPendingDelete(null);
+    setDeleteError(null);
+  }
+
+  async function handleConfirmDelete() {
+    if (!pendingDelete || isDeleting) return;
+    setIsDeleting(true);
+    setDeleteError(null);
     try {
       await api('/api/data-map', {
         method: 'POST',
         body: JSON.stringify({
           action: 'delete',
-          entity,
+          entity: pendingDelete.entity,
           projectId,
-          id: row.id,
-          name: row.name,
+          id: pendingDelete.row.id,
+          name: pendingDelete.row.name,
         }),
       });
-      toast('已删除', 'success');
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : '删除失败';
+      setDeleteError(msg);
+      toast(msg, 'error');
+      setIsDeleting(false);
+      return;
+    }
+
+    setPendingDelete(null);
+    setIsDeleting(false);
+    toast('已删除', 'success');
+
+    try {
       await reload();
     } catch (e) {
-      toast(e instanceof Error ? e.message : '删除失败', 'error');
+      toast('已删除，但刷新列表失败：' + (e instanceof Error ? e.message : '未知异常'), 'error');
     }
   }
 
@@ -109,16 +149,34 @@ export function DataMap({
   ];
 
   return (
-    <div className="intel-stack">
-      <section className="pastel-card reference-section section-blue">
+    <article
+      className="platform-panel"
+      style={{
+        background: 'var(--ws-surface, #ffffff)',
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
+        borderRadius: 12,
+        padding: 24,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <small>DATA SEMANTIC LAYER</small>
-          <h2>数据来源、业务指标与映射关系</h2>
-          <p>
-            从项目数据源追溯到账户、接口与标准指标。下方数量表示已登记的配置，实际连接状态以检测结果为准。
+          <h2 style={{ margin: '0 0 4px', fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
+            数据来源、业务指标与映射关系
+          </h2>
+          <p style={{ margin: 0, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+            从项目数据源追溯到账户、接口与标准指标。已登记配置数量统计见下方，实际连接状态以检测结果为准。
           </p>
         </div>
-      </section>
+        <Link
+          href={`/projects/${encodeURIComponent(projectId)}/settings?tab=integrations`}
+          style={{ padding: '6px 14px', borderRadius: 'var(--ws-radius-control, 8px)', background: 'var(--slate-2, #f9f9fb)', color: 'var(--slate-12, #1c2024)', fontSize: 12, fontWeight: 500, textDecoration: 'none', border: '0.5px solid var(--slate-6, #d9d9e0)' }}
+        >
+          工具与接口集成 ↗
+        </Link>
+      </div>
 
       <nav className="map-tabs">
         {tabs.map(([id, label]) => (
@@ -135,14 +193,43 @@ export function DataMap({
 
       {tab === 'overview' && (
         <>
-          <section className="ops-metric-grid" aria-label="数据地图登记概况">
-            {Object.entries(coverage).map(([k, v]) => (
-              <MetricCard key={k} label={({ sources: '数据源与集成', accounts: '业务账户', endpoints: '已登记接口', metrics: '标准指标', bindings: '字段映射' } as Record<string, string>)[k]} value={v} unit="项" theme={k === 'metrics' ? 'purple' : k === 'bindings' ? 'teal' : 'blue'} tag="已登记" desc={({ sources: '来源：项目数据源与工具集成配置', accounts: '来源：业务账户目录', endpoints: '登记数量不等于已验证可用数量', metrics: '来源：标准指标字典', bindings: '来源：原始字段与标准指标映射' } as Record<string, string>)[k]} />
+          <section
+            aria-label="数据地图登记概况"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+              gap: 16,
+              padding: '14px 18px',
+              background: 'var(--slate-2, #f9f9fb)',
+              borderRadius: 'var(--ws-radius-control, 8px)',
+              border: '0.5px solid var(--slate-6, #d9d9e0)',
+            }}
+          >
+            {[
+              { key: 'sources', label: '数据源与集成', count: coverage.sources, note: '已登记' },
+              { key: 'accounts', label: '业务账户', count: coverage.accounts, note: '已登记' },
+              { key: 'endpoints', label: '业务接口', count: coverage.endpoints, note: '登记数≠连接正常' },
+              { key: 'metrics', label: '标准指标', count: coverage.metrics, note: '已登记' },
+              { key: 'bindings', label: '字段映射', count: coverage.bindings, note: '已登记' },
+            ].map((item) => (
+              <div key={item.key} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 500 }}>
+                  {item.label}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                  <span style={{ fontSize: 22, fontWeight: 700, color: 'var(--slate-12, #1c2024)', lineHeight: 1.2 }}>
+                    {item.count}
+                  </span>
+                  <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>项</span>
+                  <span style={{ fontSize: 12, padding: '1px 6px', borderRadius: 4, background: 'var(--slate-3, #f0f0f3)', color: 'var(--slate-11, #60646c)', marginLeft: 'auto' }}>
+                    {item.note}
+                  </span>
+                </div>
+              </div>
             ))}
           </section>
 
-
-          <section className="platform-split" style={{ gridTemplateColumns: '1.4fr 1fr', gap: '16px' }}>
+          <section className="platform-split" style={{ gridTemplateColumns: '1.4fr 1fr', gap: 16 }}>
             {(() => {
               const k = data.keystone;
               const isConfigured = Boolean(k.configured);
@@ -150,31 +237,31 @@ export function DataMap({
               const hasTextModel = Boolean(k.textModels?.includes(k.textModel));
               const hasImageModel = Boolean(k.imageModels?.includes(k.imageModel));
 
-              let statusColor = '#94a3b8';
+              let statusColor = 'var(--slate-9, #8b8d98)';
               let statusText = k.status || '未配置密钥';
               if (!isConfigured) {
-                statusColor = '#94a3b8';
+                statusColor = 'var(--slate-9, #8b8d98)';
                 statusText = k.status || '未配置密钥';
               } else if (isFailed) {
-                statusColor = '#dc2626';
+                statusColor = 'var(--red-9, #e5484d)';
                 statusText = k.error ? `连接失败 (${k.error})` : '连接失败';
               } else if (hasTextModel) {
-                statusColor = '#16a34a';
+                statusColor = 'var(--jade-11, #208368)';
                 statusText = k.status || '文本与生图模型可用';
               } else {
-                statusColor = '#ea580c';
+                statusColor = 'var(--amber-11, #ab6400)';
                 statusText = k.status || '已连接 · 目标模型待验证';
               }
 
               let poolContent: React.ReactNode;
               if (!isConfigured) {
-                poolContent = <span style={{ color: '#94a3b8' }}>未配置网关密钥</span>;
+                poolContent = <span style={{ color: 'var(--slate-9, #8b8d98)' }}>未配置网关密钥</span>;
               } else if (isFailed) {
-                poolContent = <span style={{ color: '#dc2626' }}>连接失败：{k.error || '无法获取模型列表'}</span>;
+                poolContent = <span style={{ color: 'var(--red-9, #e5484d)' }}>连接失败：{k.error || '无法获取模型列表'}</span>;
               } else if (!k.models || k.models.length === 0) {
-                poolContent = <span style={{ color: '#b45309' }}>已连接但可用模型列表为空</span>;
+                poolContent = <span style={{ color: 'var(--amber-11, #ab6400)' }}>已连接但可用模型列表为空</span>;
               } else {
-                poolContent = <span style={{ color: '#334155' }}>{k.models.join(', ')}</span>;
+                poolContent = <span style={{ color: 'var(--slate-12, #1c2024)' }}>{k.models.join(', ')}</span>;
               }
 
               return (
@@ -189,39 +276,39 @@ export function DataMap({
                   {statusText}
                 </span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '12.5px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, background: 'var(--slate-2, #f9f9fb)', padding: 14, borderRadius: 'var(--ws-radius-control, 8px)', border: '0.5px solid var(--slate-6, #d9d9e0)', fontSize: 12 }}>
                 <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>Base URL</span>
-                  <code style={{ color: '#0f172a', wordBreak: 'break-all' }}>{k.baseUrl}</code>
+                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>Base URL</span>
+                  <code style={{ color: 'var(--slate-12, #1c2024)', wordBreak: 'break-all' }}>{k.baseUrl}</code>
                 </div>
                 <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>文本推理模型</span>
-                  <strong style={{ color: '#0f172a' }}>{k.textModel}</strong>{' '}
+                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>文本推理模型</span>
+                  <strong style={{ color: 'var(--slate-12, #1c2024)' }}>{k.textModel}</strong>{' '}
                   {!isConfigured ? (
-                    <span className="section-mini-tag" style={{ fontSize: '10px', background: '#f1f5f9', color: '#64748b', border: '1px solid #e2e8f0' }}>未配置</span>
+                    <span className="section-mini-tag" style={{ fontSize: 12, background: 'var(--slate-3, #f0f0f3)', color: 'var(--slate-11, #60646c)', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>未配置</span>
                   ) : isFailed ? (
-                    <span className="section-mini-tag tag-rose" style={{ fontSize: '10px' }}>不可用</span>
+                    <span className="section-mini-tag tag-rose" style={{ fontSize: 12 }}>不可用</span>
                   ) : hasTextModel ? (
-                    <span className="section-mini-tag tag-green" style={{ fontSize: '10px' }}>已验证可用</span>
+                    <span className="section-mini-tag tag-green" style={{ fontSize: 12 }}>已验证可用</span>
                   ) : (
-                    <span className="section-mini-tag tag-amber" style={{ fontSize: '10px' }}>待验证（未在列表中）</span>
+                    <span className="section-mini-tag tag-amber" style={{ fontSize: 12 }}>待验证（未在列表中）</span>
                   )}
                 </div>
                 <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>生图模型</span>
-                  <strong style={{ color: '#0f172a' }}>{k.imageModel}</strong>{' '}
+                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>生图模型</span>
+                  <strong style={{ color: 'var(--slate-12, #1c2024)' }}>{k.imageModel}</strong>{' '}
                   {!isConfigured ? (
-                    <span className="section-mini-tag" style={{ fontSize: '10px', background: '#f1f5f9', color: '#64748b', border: '1px solid #e2e8f0' }}>未配置</span>
+                    <span className="section-mini-tag" style={{ fontSize: 12, background: 'var(--slate-3, #f0f0f3)', color: 'var(--slate-11, #60646c)', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>未配置</span>
                   ) : isFailed ? (
-                    <span className="section-mini-tag tag-rose" style={{ fontSize: '10px' }}>不可用</span>
+                    <span className="section-mini-tag tag-rose" style={{ fontSize: 12 }}>不可用</span>
                   ) : hasImageModel ? (
-                    <span className="section-mini-tag tag-purple" style={{ fontSize: '10px' }}>已授权可用</span>
+                    <span className="section-mini-tag tag-purple" style={{ fontSize: 12 }}>已授权可用</span>
                   ) : (
-                    <span className="section-mini-tag tag-blue" style={{ fontSize: '10px' }}>配置已保留（未在列表中）</span>
+                    <span className="section-mini-tag tag-blue" style={{ fontSize: 12 }}>配置已保留（未在列表中）</span>
                   )}
                 </div>
                 <div>
-                  <span style={{ color: '#64748b', display: 'block', marginBottom: '3px' }}>可用模型令牌池</span>
+                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>可用模型令牌池</span>
                   {poolContent}
                 </div>
               </div>
@@ -231,7 +318,7 @@ export function DataMap({
                   className="primary"
                   disabled={busy === 'probe'}
                   onClick={probe}
-                  style={{ padding: '7px 14px', fontSize: '13px' }}
+                  style={{ padding: '6px 14px', fontSize: 12 }}
                 >
                   {busy === 'probe' ? '正在检测…' : '重新检测模型网关'}
                 </button>
@@ -240,14 +327,13 @@ export function DataMap({
               );
             })()}
 
-            <article className="platform-panel pastel-card reference-section section-teal" style={{ padding: '20px' }}>
+            <article className="platform-panel" style={{ background: 'var(--ws-surface, #ffffff)', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 'var(--ws-radius-card, 12px)', padding: 20 }}>
               <div className="card-header-row" style={{ marginBottom: '14px' }}>
                 <div className="header-left">
-                  <span className="section-mini-tag tag-teal">DATA QUALITY</span>
                   <h3 style={{ margin: 0 }}>数据地图建设进度</h3>
                 </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {[
                   { done: Boolean(coverage.accounts), text: '配置各聚光主账户与子账户' },
                   { done: Boolean(coverage.endpoints), text: '登记账户级报表接口和请求参数' },
@@ -255,8 +341,8 @@ export function DataMap({
                   { done: Boolean(data.keystone.configured && data.keystone.textModels?.includes(data.keystone.textModel)), text: `验证 ${data.keystone.textModel} 文本推理` },
                   { done: Boolean(data.keystone.configured && data.keystone.imageModels?.includes(data.keystone.imageModel)), text: `验证 ${data.keystone.imageModel} 生图模型` },
                 ].map((item, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: item.done ? '#0f172a' : '#64748b' }}>
-                    <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: item.done ? '#dcfce7' : '#f1f5f9', color: item.done ? '#15803d' : '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold' }}>
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, color: item.done ? 'var(--slate-12, #1c2024)' : 'var(--slate-11, #60646c)' }}>
+                    <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: item.done ? 'var(--jade-3, #e6f7ed)' : 'var(--slate-3, #f0f0f3)', color: item.done ? 'var(--jade-11, #208368)' : 'var(--slate-9, #8b8d98)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold' }}>
                       {item.done ? '✓' : (idx + 1)}
                     </span>
                     <span>{item.text}</span>
@@ -273,7 +359,7 @@ export function DataMap({
           tab={tab}
           data={data}
           edit={(entity, row) => setEditor({ entity, row })}
-          remove={remove}
+          requestDelete={requestDelete}
         />
       )}
 
@@ -286,7 +372,63 @@ export function DataMap({
           busy={busy}
         />
       )}
-    </div>
+
+      {/* Delete Confirmation Dialog */}
+      {pendingDelete && (
+        <Dialog
+          open={Boolean(pendingDelete)}
+          title={`确认删除${entityLabels[pendingDelete.entity] || ''}“${shown(pendingDelete.row.name || pendingDelete.row.key || pendingDelete.row.id)}”？`}
+          width={460}
+          onClose={handleCancelDelete}
+          footer={
+            <>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleCancelDelete}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 'var(--ws-radius-control, 8px)',
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
+                  background: 'var(--ws-surface, #ffffff)',
+                  color: 'var(--slate-12, #1c2024)',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  fontSize: 12,
+                }}
+              >
+                取消
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleConfirmDelete}
+                style={{
+                  padding: '6px 16px',
+                  borderRadius: 'var(--ws-radius-control, 8px)',
+                  border: 'none',
+                  background: 'var(--red-9, #e5484d)',
+                  color: '#ffffff',
+                  cursor: isDeleting ? 'not-allowed' : 'pointer',
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
+              >
+                {isDeleting ? '正在删除…' : '确认删除'}
+              </button>
+            </>
+          }
+        >
+          <p style={{ margin: '0 0 10px 0', fontSize: 14, color: 'var(--slate-11, #60646c)', lineHeight: 1.5 }}>
+            删除后，当前项目的该{entityLabels[pendingDelete.entity] || '项'}将被移除，依赖此映射或接口的看板与分析计算可能会受影响。
+          </p>
+          {deleteError && (
+            <div style={{ marginTop: 8, padding: '8px 12px', background: 'var(--red-3, #feebec)', color: 'var(--red-11, #ce2c31)', borderRadius: 'var(--ws-radius-control, 8px)', fontSize: 12, border: '0.5px solid var(--red-6, #fdbdbe)' }}>
+              删除失败：{deleteError}
+            </div>
+          )}
+        </Dialog>
+      )}
+    </article>
   );
 }
 
@@ -294,12 +436,12 @@ function MapList({
   tab,
   data,
   edit,
-  remove,
+  requestDelete,
 }: {
   tab: string;
   data: MapData;
   edit: (entity: string, row: Row) => void;
-  remove: (entity: string, row: Row) => void;
+  requestDelete: (entity: string, row: Row) => void;
 }) {
   const cfg: Record<
     string,
@@ -383,16 +525,16 @@ function MapList({
           </button>
         )}
       </div>
-      <div className="ops-table-wrap" style={{ marginTop: '14px', background: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', overflowX: 'auto' }}>
+      <div className="ops-table-wrap" style={{ marginTop: '14px', background: 'var(--ws-surface, #ffffff)', borderRadius: 'var(--ws-radius-control, 8px)', border: '0.5px solid var(--slate-6, #d9d9e0)', overflowX: 'auto' }}>
         <table className="ops-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
               {c.cols.map((x) => (
-                <th key={x[0]} style={{ whiteSpace: 'nowrap', textAlign: 'left', padding: '12px 14px', background: '#f8fafc', color: '#475569', fontSize: '12.5px', borderBottom: '1px solid #e2e8f0' }}>
+                <th key={x[0]} style={{ whiteSpace: 'nowrap', textAlign: 'left', padding: '12px 14px', background: 'var(--slate-2, #f9f9fb)', color: 'var(--slate-11, #60646c)', fontSize: 12, borderBottom: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                   {x[1]}
                 </th>
               ))}
-              <th style={{ whiteSpace: 'nowrap', textAlign: 'right', padding: '12px 14px', background: '#f8fafc', color: '#475569', fontSize: '12.5px', borderBottom: '1px solid #e2e8f0', width: '120px' }}>
+              <th style={{ whiteSpace: 'nowrap', textAlign: 'right', padding: '12px 14px', background: 'var(--slate-2, #f9f9fb)', color: 'var(--slate-11, #60646c)', fontSize: 12, borderBottom: '0.5px solid var(--slate-6, #d9d9e0)', width: '120px' }}>
                 操作
               </th>
             </tr>
@@ -400,19 +542,19 @@ function MapList({
           <tbody>
             {c.rows.length > 0 ? (
               c.rows.map((row) => (
-                <tr key={String(row.id)} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                <tr key={String(row.id)} style={{ borderBottom: '0.5px solid var(--slate-4, #e8e8ec)' }}>
                   {c.cols.map(([key]) => (
-                    <td key={key} style={{ padding: '12px 14px', fontSize: '13px', color: '#1e293b' }}>
+                    <td key={key} style={{ padding: '12px 14px', fontSize: 12, color: 'var(--slate-12, #1c2024)' }}>
                       {key === 'size' ? (
                         size(row[key])
                       ) : key.includes('At') ? (
-                        <span style={{ color: '#64748b', fontSize: '12px' }}>{cnTime(String(row[key]))}</span>
+                        <span style={{ color: 'var(--slate-11, #60646c)', fontSize: '12px' }}>{cnTime(String(row[key]))}</span>
                       ) : key === 'enabled' ? (
-                        <span className={`section-mini-tag tag-${Number(row[key]) ? 'green' : 'gray'}`} style={{ fontSize: '11px' }}>
+                        <span className={`section-mini-tag tag-${Number(row[key]) ? 'green' : 'gray'}`} style={{ fontSize: 12 }}>
                           {Number(row[key]) ? '是' : '否'}
                         </span>
                       ) : key === 'path' ? (
-                        <code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', fontSize: '12px', color: '#0369a1' }}>
+                        <code style={{ background: 'var(--slate-3, #f0f0f3)', padding: '2px 6px', borderRadius: 4, fontSize: 12, color: 'var(--teal-11, #008573)' }}>
                           {shown(row[key])}
                         </code>
                       ) : (
@@ -426,15 +568,15 @@ function MapList({
                         <button
                           type="button"
                           onClick={() => edit(c.entity, { ...row })}
-                          style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#ffffff', cursor: 'pointer' }}
+                          style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '6px', border: '0.5px solid var(--slate-6, #d9d9e0)', background: 'var(--ws-surface, #ffffff)', color: 'var(--slate-12, #1c2024)', cursor: 'pointer' }}
                         >
                           编辑
                         </button>
                         <button
                           type="button"
                           className="danger"
-                          onClick={() => remove(c.entity, row)}
-                          style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '6px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer' }}
+                          onClick={() => requestDelete(c.entity, row)}
+                          style={{ padding: '4px 8px', fontSize: '12px', borderRadius: '6px', border: '0.5px solid var(--red-6, #fdbdbe)', background: 'var(--red-3, #feebec)', color: 'var(--red-11, #ce2c31)', cursor: 'pointer' }}
                         >
                           删除
                         </button>

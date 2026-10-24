@@ -36,15 +36,15 @@ export interface SummaryMetricItem {
 }
 
 export const CAMPAIGN_PALETTE = {
-  primary: "#2c7168",
-  purple: "#8273a3",
-  gold: "#b88a45",
-  terracotta: "#bd7964",
-  slate: "#8c9ba5",
-  deepTeal: "#1e524b",
-  coral: "#c25953",
-  warmBg: "#f6f5f2",
-  borderWarm: "#e6e3dc",
+  primary: "#12a594",
+  purple: "#5b5bd6",
+  gold: "#ffc53d",
+  terracotta: "#e5484d",
+  slate: "#8b8d98",
+  deepTeal: "#008573",
+  coral: "#e5484d",
+  warmBg: "#f9f9fb",
+  borderWarm: "#d9d9e0",
 } as const;
 
 export const VERIFIED_KEYWORD_LABELS: Record<string, string> = {

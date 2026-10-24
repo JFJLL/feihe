@@ -60,7 +60,7 @@ export function ProjectSidebar({
       </div>
 
       <div className="brand">
-        <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a5f3fc" strokeWidth="4" strokeLinecap="round"/></svg></span>
+        <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a1ded2" strokeWidth="4" strokeLinecap="round"/></svg></span>
         <div>
           项目工作台
         </div>
@@ -123,7 +123,7 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')}{(isDevLocal || workspace?.metadata?.isDevLocal) && <span style={{ marginLeft: 6, fontSize: '0.72rem', color: '#0284c7', background: '#e0f2fe', padding: '1px 6px', borderRadius: 4 }}>本地开发</span>} ·{' '}
+          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')}{(isDevLocal || workspace?.metadata?.isDevLocal) && <span style={{ marginLeft: 6, fontSize: 12, color: 'var(--blue-11, #0d74ce)', background: 'var(--blue-3, #e6f4fe)', padding: '1px 6px', borderRadius: 4 }}>本地开发</span>} <span style={{ margin: '0 4px', opacity: 0.35 }}>/</span>{' '}
           {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '就绪'}
         </small>
       </div>

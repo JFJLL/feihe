@@ -41,7 +41,7 @@ export function OnboardingWizard({ projectId, project, role = '', onFinish = asy
     finally { submitting.current = false; setBusy(false); }
   }
   return <section className="integration-onboarding" aria-label="首次设置">
-    <div className="integration-page-heading"><div><small>首次设置 · {project?.templateName || '通用数据工作台'}</small><h2>下一步：{next}</h2><p>{!dataReady ? '保留飞书原表，不必添加任务、预算或负责人列。接入后按实际字段选择适用的分析。' : !metricsReady ? '先得到可核对的指标，再选择趋势、分组或明细。已有设置会保留。' : '发布后进入日常工作界面，成员可以查看同一份结果。'}</p></div>
+    <div className="integration-page-heading"><div><small>首次设置 / {project?.templateName || '通用数据工作台'}</small><h2>下一步：{next}</h2><p>{!dataReady ? '保留飞书原表，不必添加任务、预算或负责人列。接入后按实际字段选择适用的分析。' : !metricsReady ? '先得到可核对的指标，再选择趋势、分组或明细。已有设置会保留。' : '发布后进入日常工作界面，成员可以查看同一份结果。'}</p></div>
       {!dataReady ? <Link className="primary" href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=data-sources'}>接入飞书数据源 →</Link> : !metricsReady ? <button className="primary" onClick={() => window.dispatchEvent(new CustomEvent('workbench:configure', { detail: { projectId } }))}>查看看板与配置 →</button> : null}
     </div>
     {error && <p role="alert" className="integration-error">{error}</p>}

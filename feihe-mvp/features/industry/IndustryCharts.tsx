@@ -16,7 +16,7 @@ export function IndustryCharts({ snapshot }: { snapshot: IndustrySnapshot }) {
     <section className="industry-chart-card" aria-label="品牌样本构成">
       <header><h3>品牌样本构成</h3><p>当前 SPU 搜索样本中的品牌归因，不代表市场份额</p></header>
       <div className="industry-brand-bars">{brands.map(b => <div className="industry-brand-row" key={b.brand}>
-        <span title={b.brand}>{b.brand}</span><div className="industry-track"><i style={{ width: `${b.noteCount / maxBrand * 100}%`, background: b.isOurBrand ? 'var(--industry-teal)' : b.brand === '未识别品牌' ? '#a0aeba' : '#bb8a41' }} /></div><strong>{b.noteCount}<small> 篇</small></strong>
+        <span title={b.brand}>{b.brand}</span><div className="industry-track"><i style={{ width: `${b.noteCount / maxBrand * 100}%`, background: b.isOurBrand ? 'var(--industry-teal)' : b.brand === '未识别品牌' ? '#8b8d98' : '#ffc53d' }} /></div><strong>{b.noteCount}<small> 篇</small></strong>
       </div>)}</div>
       <footer>展示前 {brands.length} 个归因品牌 · 未识别样本单列，不默认计为本品</footer>
     </section>

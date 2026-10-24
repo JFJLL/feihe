@@ -61,19 +61,44 @@ interface DualArenaCardProps {
 }
 
 function DualArenaCard({ title, subtitle, sideA, sideB, rows }: DualArenaCardProps) {
-  const totSpend = (sideA.spend || 0) + (sideB.spend || 0);
-  const ratioA =
-    typeof sideA.spendRatio === 'number' && Number.isFinite(sideA.spendRatio)
-      ? sideA.spendRatio
-      : totSpend > 0
-      ? ((sideA.spend || 0) / totSpend) * 100
-      : 50;
-  const ratioB =
-    typeof sideB.spendRatio === 'number' && Number.isFinite(sideB.spendRatio)
-      ? sideB.spendRatio
-      : totSpend > 0
-      ? ((sideB.spend || 0) / totSpend) * 100
-      : 50;
+  const isFiniteNonNeg = (v: number | null | undefined): v is number =>
+    typeof v === 'number' && Number.isFinite(v) && v >= 0;
+
+  const hasSpendA = isFiniteNonNeg(sideA.spend);
+  const hasSpendB = isFiniteNonNeg(sideB.spend);
+
+  const hasRatioParamA = typeof sideA.spendRatio === 'number' && Number.isFinite(sideA.spendRatio);
+  const hasRatioParamB = typeof sideB.spendRatio === 'number' && Number.isFinite(sideB.spendRatio);
+  const hasAnyRatioParam = sideA.spendRatio !== undefined || sideB.spendRatio !== undefined;
+
+  let ratioA: number | null = null;
+  let ratioB: number | null = null;
+  let canDrawTrack = false;
+  let fallbackMessage = '暂无可比较消耗';
+
+  if (hasAnyRatioParam) {
+    // 保留来源原数字
+    ratioA = hasRatioParamA ? sideA.spendRatio! : null;
+    ratioB = hasRatioParamB ? sideB.spendRatio! : null;
+
+    // 仅两者 [0,100] 且合计约 100 (允许四舍五入 0.1 误差) 才画双份额条
+    const isValidRangeA = hasRatioParamA && sideA.spendRatio! >= 0 && sideA.spendRatio! <= 100;
+    const isValidRangeB = hasRatioParamB && sideB.spendRatio! >= 0 && sideB.spendRatio! <= 100;
+    const sumRatios = (hasRatioParamA ? sideA.spendRatio! : 0) + (hasRatioParamB ? sideB.spendRatio! : 0);
+    const isSumNear100 = Math.abs(sumRatios - 100) <= 0.15;
+
+    if (isValidRangeA && isValidRangeB && isSumNear100) {
+      canDrawTrack = true;
+    } else {
+      canDrawTrack = false;
+      fallbackMessage = '份额口径需核对';
+    }
+  } else if (hasSpendA && hasSpendB && (sideA.spend! + sideB.spend! > 0)) {
+    const totSpend = sideA.spend! + sideB.spend!;
+    ratioA = (sideA.spend! / totSpend) * 100;
+    ratioB = (sideB.spend! / totSpend) * 100;
+    canDrawTrack = true;
+  }
 
   return (
     <ChartPanel title={title} subtitle={subtitle}>
@@ -82,18 +107,19 @@ function DualArenaCard({ title, subtitle, sideA, sideB, rows }: DualArenaCardPro
           <div className="ht-arena-side left">
             <span className="ht-arena-dot left" />
             <span className="ht-arena-name">{sideA.name}</span>
-            <span className="ht-arena-spend">{sideA.spend !== null ? formatCurrency(sideA.spend) : '—'}</span>
-            <span className="ht-arena-ratio-tag left">{ratioA.toFixed(1)}%</span>
+            <span className="ht-arena-spend">{hasSpendA ? formatCurrency(sideA.spend) : '—'}</span>
+            <span className="ht-arena-ratio-tag left">{ratioA !== null ? `${ratioA.toFixed(1)}%` : '—'}</span>
           </div>
           <div className="ht-arena-vs">VS</div>
           <div className="ht-arena-side right">
-            <span className="ht-arena-ratio-tag right">{ratioB.toFixed(1)}%</span>
-            <span className="ht-arena-spend">{sideB.spend !== null ? formatCurrency(sideB.spend) : '—'}</span>
+            <span className="ht-arena-ratio-tag right">{ratioB !== null ? `${ratioB.toFixed(1)}%` : '—'}</span>
+            <span className="ht-arena-spend">{hasSpendB ? formatCurrency(sideB.spend) : '—'}</span>
             <span className="ht-arena-name">{sideB.name}</span>
             <span className="ht-arena-dot right" />
           </div>
         </div>
 
+        {canDrawTrack && ratioA !== null && ratioB !== null ? (
         <div className="ht-arena-track" role="progressbar" aria-valuenow={ratioA} aria-valuemin={0} aria-valuemax={100}>
           <div
             className="ht-arena-bar left"
@@ -107,38 +133,43 @@ function DualArenaCard({ title, subtitle, sideA, sideB, rows }: DualArenaCardPro
             title={`${sideB.name}: ${ratioB.toFixed(1)}%`}
           />
         </div>
+        ) : (
+          <div className="ht-arena-empty">{fallbackMessage}</div>
+        )}
 
         <div className="ht-arena-rows">
           {rows.map((row, idx) => {
             const vA = row.valA;
             const vB = row.valB;
+            const hasAVal = vA !== null && Number.isFinite(vA);
+            const hasBVal = vB !== null && Number.isFinite(vB);
             let isABetter = false;
             let isBBetter = false;
-            if (vA !== null && vB !== null && vA !== vB && row.betterWhen) {
+            if (hasAVal && hasBVal && vA !== vB && row.betterWhen) {
               if (row.betterWhen === 'higher') {
-                isABetter = vA > vB;
-                isBBetter = vB > vA;
-              } else {
-                isABetter = vA < vB;
-                isBBetter = vB < vA;
+                isABetter = vA! > vB!;
+                isBBetter = vB! > vA!;
+              } else if (row.betterWhen === 'lower') {
+                isABetter = vA! < vB!;
+                isBBetter = vB! < vA!;
               }
             }
 
-            const absA = vA !== null ? Math.abs(vA) : 0;
-            const absB = vB !== null ? Math.abs(vB) : 0;
-            const sumVal = absA + absB;
-            const barA = sumVal > 0 ? (absA / sumVal) * 100 : 50;
-            const barB = 100 - barA;
+            const valA = hasAVal && vA! >= 0 ? vA! : 0;
+            const valB = hasBVal && vB! >= 0 ? vB! : 0;
+            const sumVal = valA + valB;
+            const barA = sumVal > 0 && valA > 0 ? (valA / sumVal) * 100 : 0;
+            const barB = sumVal > 0 && valB > 0 ? (valB / sumVal) * 100 : 0;
 
             return (
               <div key={idx} className="ht-arena-row">
                 <div className={`ht-arena-cell left ${isABetter ? 'winner' : ''}`}>
-                  {isABetter && <span className="ht-advantage-badge">🏆 优势</span>}
-                  <span className="ht-arena-val">{row.formatA ?? (vA !== null ? formatNum(vA, 1) : '—')}</span>
+                  {isABetter && <span className="ht-advantage-badge">优势</span>}
+                  <span className="ht-arena-val">{row.formatA ?? (hasAVal ? formatNum(vA!, 1) : '—')}</span>
                   <div className="ht-arena-micro-track left">
                     <div
                       className="ht-arena-micro-fill left"
-                      style={{ width: `${Math.min(100, Math.max(10, barA))}%` }}
+                      style={{ width: `${Math.min(100, barA)}%` }}
                     />
                   </div>
                 </div>
@@ -151,11 +182,11 @@ function DualArenaCard({ title, subtitle, sideA, sideB, rows }: DualArenaCardPro
                   <div className="ht-arena-micro-track right">
                     <div
                       className="ht-arena-micro-fill right"
-                      style={{ width: `${Math.min(100, Math.max(10, barB))}%` }}
+                      style={{ width: `${Math.min(100, barB)}%` }}
                     />
                   </div>
-                  <span className="ht-arena-val">{row.formatB ?? (vB !== null ? formatNum(vB, 1) : '—')}</span>
-                  {isBBetter && <span className="ht-advantage-badge">🏆 优势</span>}
+                  <span className="ht-arena-val">{row.formatB ?? (hasBVal ? formatNum(vB!, 1) : '—')}</span>
+                  {isBBetter && <span className="ht-advantage-badge">优势</span>}
                 </div>
               </div>
             );
@@ -194,7 +225,7 @@ function LollipopList({ title, subtitle, rows, maxSpend }: LollipopListProps) {
     <ChartPanel title={title} subtitle={subtitle}>
       <div className="ht-lollipop-list">
         {rows.map((row) => {
-          const ratio = row.spend ? Math.min(100, Math.max(4, (row.spend / computedMaxSpend) * 100)) : 0;
+          const ratio = row.spend && row.spend > 0 ? Math.min(100, (row.spend / computedMaxSpend) * 100) : 0;
           const isTop3 = row.rank <= 3;
           return (
             <div key={row.rank} className="ht-lollipop-item">
@@ -242,8 +273,6 @@ interface ButterflyRow {
   costVal: number | null;
   costLabel: string;
   costUnit?: string;
-  costThresholdLow: number;
-  costThresholdHigh: number;
   subCostVal?: number | null;
   subCostLabel?: string;
 }
@@ -269,18 +298,13 @@ function ButterflyCard({ title, subtitle, rows, maxSpend }: ButterflyCardProps) 
         <div className="ht-butterfly-header">
           <span className="col-left">投放规模与消耗</span>
           <span className="col-mid">转化基础</span>
-          <span className="col-right">单位成本与效能评定</span>
+          <span className="col-right">单位成本对比</span>
         </div>
 
         <div className="ht-butterfly-body">
           {rows.map((r, idx) => {
-            const barWidth = r.spend ? Math.min(100, Math.max(6, (r.spend / computedMaxSpend) * 100)) : 0;
+            const barWidth = r.spend !== null && Number.isFinite(r.spend) && r.spend > 0 ? Math.min(100, (r.spend / computedMaxSpend) * 100) : 0;
             const cost = r.costVal;
-            let costTier: 'green' | 'teal' | 'amber' = 'teal';
-            if (cost !== null) {
-              if (cost <= r.costThresholdLow) costTier = 'green';
-              else if (cost > r.costThresholdHigh) costTier = 'amber';
-            }
 
             return (
               <div key={idx} className="ht-butterfly-row">
@@ -301,7 +325,7 @@ function ButterflyCard({ title, subtitle, rows, maxSpend }: ButterflyCardProps) 
                 </div>
 
                 <div className="ht-butterfly-right">
-                  <div className={`ht-butterfly-cost-badge ${costTier}`}>
+                  <div className="ht-butterfly-cost-badge neutral">
                     <span className="cost-name">{r.costLabel}</span>
                     <span className="cost-num">
                       {cost !== null ? (r.costUnit === '%' ? formatPercent(cost, 2) : formatCurrency(cost)) : '—'}
@@ -335,7 +359,6 @@ function RegionRankGrid({
   title,
   subtitle,
   provinces,
-  totalSpend,
   expanded,
   onToggleExpand,
 }: RegionRankGridProps) {
@@ -360,7 +383,7 @@ function RegionRankGrid({
             const rank = idx + 1;
             const provName = String(p.province || '—');
             const spend = parseNum(p.spend);
-            const ratio = spend ? Math.min(100, Math.max(5, (spend / maxSpend) * 100)) : 0;
+            const ratio = spend && spend > 0 ? Math.min(100, (spend / maxSpend) * 100) : 0;
             const engagements = parseNum(p.engagements);
             const cpe = parseNum(p.cpe);
             const ctr = parseNum(p.ctr);
@@ -374,7 +397,7 @@ function RegionRankGrid({
                         rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'neutral'
                       }`}
                     >
-                      {rank <= 3 ? ['🥇 01', '🥈 02', '🥉 03'][rank - 1] : String(rank).padStart(2, '0')}
+                      {String(rank).padStart(2, '0')}
                     </span>
                     <span className="ht-region-name">{provName}</span>
                   </div>
@@ -476,28 +499,28 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       {
         label: '品牌FS消耗 / 预算进度',
         value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
-        hint: `预算 ${formatCurrency(model.brandBudgetVal)} · 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
+        hint: `预算 ${formatCurrency(model.brandBudgetVal)} / 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
         badge: '品牌FS种草线',
         status: 'accent',
       },
       {
-        label: '种草I/TI人群 · CPTI',
+        label: '种草I/TI人群 / CPTI',
         value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
-        hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 · CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
+        hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 / CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
         badge: '品牌FS种草线',
         status: 'success',
       },
       {
         label: '红猫CID全域消耗',
         value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
-        hint: `标准投 ${formatCurrency(model.cidStandardSpend)} · 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
+        hint: `标准投 ${formatCurrency(model.cidStandardSpend)} / 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
         badge: '红猫CID引流线',
         status: 'accent',
       },
       {
-        label: '红猫CID成交GMV · ROI',
+        label: '红猫CID成交GMV / ROI',
         value: model.cidTotalGmv !== null ? formatCurrency(model.cidTotalGmv) : '—',
-        hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} · 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
+        hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} / 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
         badge: '红猫CID引流线',
         status: 'accent',
       },
@@ -509,16 +532,16 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         status: 'warning',
       },
       {
-        label: '商销成交GMV · 订单',
+        label: '商销成交GMV / 订单',
         value: model.commerceGmv !== null ? formatCurrency(model.commerceGmv) : '—',
-        hint: `订单 ${formatNum(model.commerceOrders, 0)} 单 · 加购 ${formatNum(model.commerceCart, 0)} 次`,
+        hint: `订单 ${formatNum(model.commerceOrders, 0)} 单 / 加购 ${formatNum(model.commerceCart, 0)} 次`,
         badge: '闭环商销成交线',
         status: 'accent',
       },
       {
         label: '达人选号定档 / 发布率',
         value: `${model.creatorsPublished} / ${model.creatorsCount} 位`,
-        hint: `已发布 ${formatPercent(model.creatorsPublishRate, 1)} · 素材收集 ${model.creatorsAssetCollected} 篇`,
+        hint: `已发布 ${formatPercent(model.creatorsPublishRate, 1)} / 素材收集 ${model.creatorsAssetCollected} 篇`,
         badge: '达人与KOS矩阵',
         status: 'success',
       },
@@ -565,7 +588,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     const brandFunnelStages: FunnelStageDatum[] = bs
       ? [
           { stage: '① 品牌曝光展现', value: parseNum(bs.impressions), unit: '次', conversionLabel: '100.0%', color: CAMPAIGN_PALETTE.primary },
-          { stage: '② 笔记有效点击', value: parseNum(bs.clicks), unit: '次', conversionLabel: `CTR ${formatPercent(parseNum(bs.ctr))}`, costLabel: `CPC ${formatCurrency(parseNum(bs.cpc))}`, color: '#3b8b7e' },
+          { stage: '② 笔记有效点击', value: parseNum(bs.clicks), unit: '次', conversionLabel: `CTR ${formatPercent(parseNum(bs.ctr))}`, costLabel: `CPC ${formatCurrency(parseNum(bs.cpc))}`, color: '#0d9b8a' },
           { stage: '③ 5秒有效播放', value: parseNum(bs.plays_5s ?? bs.plays5s), unit: '次', conversionLabel: `播放率 ${formatPercent(parseNum(bs.ctr_5s ?? bs.ctr5s))}`, costLabel: `5s成本 ${formatCurrency(parseNum(bs.cpc_5s ?? bs.cpc5s))}`, color: CAMPAIGN_PALETTE.slate },
           { stage: '④ 深度受众互动', value: parseNum(bs.engagements), unit: '次', conversionLabel: `互动量 ${formatNum(parseNum(bs.engagements), 0)}`, costLabel: `CPE ${formatCurrency(parseNum(bs.cpe))}`, color: CAMPAIGN_PALETTE.purple },
           { stage: '⑤ 核心种草人群资产', value: parseNum(bs.seed_total), unit: '人', conversionLabel: `I ${formatWan(parseNum(bs.seed_i))} + TI ${formatWan(parseNum(bs.seed_ti))}`, costLabel: `单位成本 ${formatCurrency(parseNum(bs.cp_total))}`, color: CAMPAIGN_PALETTE.terracotta },
@@ -593,7 +616,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     ];
 
     // Funnel 3: Creator Selection Funnel (Dynamically mapped from model.creatorFunnelStages)
-    const creatorColors = [CAMPAIGN_PALETTE.primary, '#3b8b7e', CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.terracotta, '#277a6f'];
+    const creatorColors = [CAMPAIGN_PALETTE.primary, '#0090ff', CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.terracotta, '#29a383'];
     const creatorFunnelChartStages: FunnelStageDatum[] = model.creatorFunnelStages.map((st, idx) => ({
       stage: st.name,
       value: st.value,
@@ -607,21 +630,21 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     const contentTagsChartData: ChartDatum[] = model.brandContentTagsTop.slice(0, 8).map((r) => ({
       label: String(r.contentTag || ''),
       value: parseNum(r.spend),
-      detail: `CTR ${formatPercent(parseNum(r.ctr))} · CPC ${formatCurrency(parseNum(r.cpc))}`,
+      detail: `CTR ${formatPercent(parseNum(r.ctr))} / CPC ${formatCurrency(parseNum(r.cpc))}`,
     }));
 
     // Keywords bar chart
     const keywordsChartData: ChartDatum[] = model.brandKeywordsTop.slice(0, 8).map((r) => ({
       label: String(r.keywordCategory || ''),
       value: parseNum(r.spend),
-      detail: `CTR ${formatPercent(parseNum(r.ctr))} · CPM ${formatCurrency(parseNum(r.cpm))}`,
+      detail: `CTR ${formatPercent(parseNum(r.ctr))} / CPM ${formatCurrency(parseNum(r.cpm))}`,
     }));
 
     // Top 12 Provinces bar chart
     const provincesChartData: ChartDatum[] = model.brandProvincesTop12.map((r) => ({
       label: String(r.province || ''),
       value: parseNum(r.spend),
-      detail: `互动 ${formatNum(parseNum(r.engagements), 0)} 次 · CPE ${formatCurrency(parseNum(r.cpe))}`,
+      detail: `互动 ${formatNum(parseNum(r.engagements), 0)} 次 / CPE ${formatCurrency(parseNum(r.cpe))}`,
     }));
 
     // Gender x Age Heatmap Cells
@@ -630,7 +653,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       col: c.gender,
       value: c.spend,
       displayValue: formatCurrency(c.spend, 0),
-      subtext: `互动 ${formatNum(c.engagements, 0)}次 · CPE ${formatCurrency(c.cpe)}`,
+      subtext: `互动 ${formatNum(c.engagements, 0)}次 / CPE ${formatCurrency(c.cpe)}`,
     }));
 
     // Gender Donut
@@ -674,7 +697,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="黄天鹅全域章节导航与周期控制台">
           <div className="ht-command-bar-left">
             <div className="ht-command-bar-brand">
-              <h2 className="ht-header-title">黄天鹅 · 战役全域经营洞察</h2>
+            <h2 className="ht-header-title">黄天鹅 战役全域经营洞察</h2>
               <span className="ht-header-badge">全域经营与受众洞察</span>
             </div>
             <span className="ht-jumpbar-label">📊 章节导航</span>
@@ -747,13 +770,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 <div className="ht-notice">暂无预算对照数据</div>
               )}
               <div className="ht-notice" style={{ marginTop: 12 }}>
-                剩余预算 {formatCurrency(model.brandBudgetVal !== null && model.brandSpend !== null ? model.brandBudgetVal - model.brandSpend : null)} · 消耗进度 {formatPercent(model.brandBudgetProgress, 1)}。是否需要调速还需结合剩余排期判断。
+                剩余预算 {formatCurrency(model.brandBudgetVal !== null && model.brandSpend !== null ? model.brandBudgetVal - model.brandSpend : null)} / 消耗进度 {formatPercent(model.brandBudgetProgress, 1)}。是否需要调速还需结合剩余排期判断。
               </div>
             </ChartPanel>
 
             <ChartPanel
               title="蛋品行业大盘基准与黄天鹅实绩对标"
-              subtitle={`对标蛋品行业基准 (生食/有机蛋 vs 新鲜蛋) · 当前指标: ${benchmarkMetric}`}
+              subtitle={`对标蛋品行业基准 (生食/有机蛋 vs 新鲜蛋) / 当前指标: ${benchmarkMetric}`}
               actions={
                 <div className="ht-benchmark-tabs">
                   {(['CTR', 'CPC', 'CPM', 'CPE', 'CPI', 'CPTI'] as const).map((m) => (
@@ -850,7 +873,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           <div className="ht-layer-header">
             <div className="ht-layer-header-left">
               <span className="ht-chapter-num">03</span>
-              <h3 className="ht-layer-title">三条业务线 · 关键节点与趋势</h3>
+              <h3 className="ht-layer-title">三条业务线 关键节点与趋势</h3>
             </div>
             <span className="ht-layer-sub">三线独立核算，不跨平台拼接转化链路</span>
           </div>
@@ -869,7 +892,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
             <ChartPanel
               title="红猫CID 电商引流转化与成交全链路漏斗"
-              subtitle={`进店UV (${formatNum(model.cidTotalUv, 0)}人) → 支付订单 (${formatNum(model.cidTotalOrders, 0)}单) → 成交GMV (${formatCurrency(model.cidTotalGmv)}) · 全域实绩ROI ${model.cidOverallRoi !== null ? model.cidOverallRoi.toFixed(2) : '—'}倍`}
+              subtitle={`进店UV (${formatNum(model.cidTotalUv, 0)}人) → 支付订单 (${formatNum(model.cidTotalOrders, 0)}单) → 成交GMV (${formatCurrency(model.cidTotalGmv)}) / 全域实绩ROI ${model.cidOverallRoi !== null ? model.cidOverallRoi.toFixed(2) : '—'}倍`}
             >
               <CampaignFunnelChart stages={cidFunnelStages} />
               <div className="ht-notice" style={{ marginTop: 10 }}>
@@ -881,7 +904,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           <div className="ht-grid-2">
             <ChartPanel
               title="红猫CID 标准投与简单投效能对比"
-              subtitle={`标准投聚合ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'}倍 · 简单投聚合ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}倍`}
+              subtitle={`标准投聚合ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'}倍 / 简单投聚合ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}倍`}
             >
               <CampaignComboChart
                 rows={model.cidTypeComparison}
@@ -952,7 +975,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">04</span>
               <h3 className="ht-layer-title">内容标签、搜索词与素材表现</h3>
             </div>
-            <span className="ht-layer-sub">12大笔记标签、10大搜索词类与商销Top素材 · 点击折叠</span>
+            <span className="ht-layer-sub">12大笔记标签、10大搜索词类与商销Top素材 / 点击折叠</span>
           </summary>
           <div className="ht-grid-2">
             <ChartPanel
@@ -977,7 +1000,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 data={model.brandAudiencesTop10.slice(0, 8).map((r) => ({
                   label: String(r.audience || ''),
                   value: parseNum(r.spend),
-                  detail: `种草I+TI: ${formatNum(parseNum(r.seed_total), 0)}人 · 成本 ${formatCurrency(parseNum(r.cp_total))}`,
+                  detail: `种草I+TI: ${formatNum(parseNum(r.seed_total), 0)}人 / 成本 ${formatCurrency(parseNum(r.cp_total))}`,
                 }))}
                 unit="元"
                 height={280}
@@ -992,7 +1015,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 data={model.commerceCreativesTop10.slice(0, 8).map((r) => ({
                   label: String(r.creativeName || '').slice(0, 18),
                   value: parseNum(r.gmv),
-                  detail: `订单 ${r.orders}单 · ROI ${r.roi ?? '—'} · 展现 ${formatNum(parseNum(r.impressions), 0)}`,
+                  detail: `订单 ${r.orders}单 / ROI ${r.roi ?? '—'} / 展现 ${formatNum(parseNum(r.impressions), 0)}`,
                 }))}
                 unit="元"
                 height={280}
@@ -1008,13 +1031,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">05</span>
               <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与达人/KOS明细</h3>
             </div>
-            <span className="ht-layer-sub">性别×年龄二维消耗交叉矩阵 · 达人选号与KOS矩阵全貌</span>
+            <span className="ht-layer-sub">性别×年龄二维消耗交叉矩阵 / 达人选号与KOS矩阵全貌</span>
           </div>
 
           <div className="ht-grid-2">
             <ChartPanel
               className="ht-audience-matrix"
-              title="年龄 × 性别 · 受众消耗分布"
+              title="年龄 × 性别 / 受众消耗分布"
               subtitle="年龄纵向排列、性别横向对比；颜色表示消耗，不代表购买偏好"
             >
               <MatrixHeatmapChart
@@ -1036,7 +1059,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               </ChartPanel>
 
               <ChartPanel
-                title="重点投放省份 · 消耗前六"
+                title="重点投放省份 (消耗前六)"
                 subtitle="按省份消耗排序，地域曝光不等于目标人群渗透"
               >
                 <HorizontalBarChart data={provincesChartData.slice(0, 6)} unit="元" height={200} />
@@ -1052,7 +1075,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">05-附</span>
               <h3 className="ht-layer-title">达人执行、内容方向与KOS明细</h3>
             </div>
-            <span className="ht-layer-sub">31位达人选号漏斗与65篇KOS发布底表 · 点击折叠</span>
+            <span className="ht-layer-sub">31位达人选号漏斗与65篇KOS发布底表 / 点击折叠</span>
           </summary>
           <div className="ht-grid-2">
             <ChartPanel
@@ -1077,8 +1100,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               </ChartPanel>
 
               <ChartPanel
-                title="定档达人 · 内容方向与食谱场景"
-                subtitle="基于达人执行底表真实统计 · 场景代入与溏心蛋教程为两大主力方向"
+                title="定档达人 内容方向与食谱场景"
+                subtitle="基于达人执行底表真实统计 / 场景代入与溏心蛋教程为两大主力方向"
               >
                 <div className="ht-table-wrap">
                   <table className="ht-table">
@@ -1270,7 +1293,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {
               label: '品牌FS总消耗 / 预算进度',
               value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
-              hint: `预算 ${formatCurrency(model.brandBudgetVal)} · 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
+              hint: `预算 ${formatCurrency(model.brandBudgetVal)} / 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
               badge: '品牌FS种草线',
               status: 'accent' as const,
             },
@@ -1283,7 +1306,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             },
             {
               label: '加权点击率与成本 (CTR / CPC)',
-              value: `CTR ${formatPercent(parseNum(model.brandSummary?.ctr))} · CPC ${formatCurrency(parseNum(model.brandSummary?.cpc))}`,
+              value: `CTR ${formatPercent(parseNum(model.brandSummary?.ctr))} / CPC ${formatCurrency(parseNum(model.brandSummary?.cpc))}`,
               hint: `累计产生点击 ${formatNum(model.brandDaily.reduce((acc, r) => acc + (parseNum(r.clicks) || 0), 0) || parseNum(model.brandSummary?.clicks), 0)} 次`,
               badge: '点击效能',
               status: 'success' as const,
@@ -1291,7 +1314,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {
               label: '种草人群资产规模 (I + TI)',
               value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
-              hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 · CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
+              hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 / CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
               badge: '5A人群资产',
               status: 'success' as const,
             },
@@ -1301,7 +1324,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {
               label: '红猫CID全域投流消耗',
               value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
-              hint: `标准投 ${formatCurrency(model.cidStandardSpend)} · 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
+              hint: `标准投 ${formatCurrency(model.cidStandardSpend)} / 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
               badge: '红猫引流线',
               status: 'accent' as const,
             },
@@ -1314,15 +1337,15 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             },
             {
               label: '全域成交订单与GMV',
-              value: `${formatNum(model.cidTotalOrders, 0)} 单 · ${formatCurrency(model.cidTotalGmv)}`,
-              hint: `标准投 ${formatCurrency(model.cidStandardGmv)} · 简单投 ${formatCurrency(model.cidSimpleGmv)}`,
+              value: `${formatNum(model.cidTotalOrders, 0)} 单 / ${formatCurrency(model.cidTotalGmv)}`,
+              hint: `标准投 ${formatCurrency(model.cidStandardGmv)} / 简单投 ${formatCurrency(model.cidSimpleGmv)}`,
               badge: '成交规模',
               status: 'success' as const,
             },
             {
               label: '聚合引流成交 ROI',
               value: `${model.cidOverallRoi?.toFixed(2) ?? '—'} 倍`,
-              hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} · 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
+              hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} / 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
               badge: '投资回报',
               status: 'success' as const,
             },
@@ -1366,8 +1389,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     const searchRow = adTypeRows.find((r) => String(r.adType || '').includes('搜索')) || adTypeRows[1] || {};
     const feedSpend = parseNum(feedRow.spend);
     const searchSpend = parseNum(searchRow.spend);
-    const feedRatio = parseNum(feedRow.spendRatio) ?? (feedSpend && searchSpend ? (feedSpend / (feedSpend + searchSpend)) * 100 : 73.29);
-    const searchRatio = parseNum(searchRow.spendRatio) ?? (feedSpend && searchSpend ? (searchSpend / (feedSpend + searchSpend)) * 100 : 26.71);
+    const feedRatio = parseNum(feedRow.spendRatio);
+    const searchRatio = parseNum(searchRow.spendRatio);
 
     const brandAdTypeArenaRows: ArenaMetricRow[] = [
       {
@@ -1376,7 +1399,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(searchRow.impressions),
         formatA: `${formatNum(parseNum(feedRow.impressions), 0)} 次`,
         formatB: `${formatNum(parseNum(searchRow.impressions), 0)} 次`,
-        betterWhen: 'higher',
       },
       {
         label: '点击量 (总引流)',
@@ -1384,7 +1406,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(searchRow.clicks),
         formatA: `${formatNum(parseNum(feedRow.clicks), 0)} 次`,
         formatB: `${formatNum(parseNum(searchRow.clicks), 0)} 次`,
-        betterWhen: 'higher',
       },
       {
         label: '点击率 CTR',
@@ -1424,7 +1445,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(searchRow.seed_total),
         formatA: `${formatNum(parseNum(feedRow.seed_total), 0)} 人`,
         formatB: `${formatNum(parseNum(searchRow.seed_total), 0)} 人`,
-        betterWhen: 'higher',
       },
     ];
 
@@ -1434,8 +1454,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     const imgRow = noteTypeRows.find((r) => String(r.noteFormat || '').includes('图文')) || noteTypeRows[1] || {};
     const videoSpend = parseNum(videoRow.spend);
     const imgSpend = parseNum(imgRow.spend);
-    const videoRatio = videoSpend && imgSpend ? (videoSpend / (videoSpend + imgSpend)) * 100 : 61.7;
-    const imgRatio = 100 - videoRatio;
+    const videoRatio = parseNum(videoRow.spendRatio);
+    const imgRatio = parseNum(imgRow.spendRatio);
 
     const brandNoteTypeArenaRows: ArenaMetricRow[] = [
       {
@@ -1444,7 +1464,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(imgRow.impressions),
         formatA: `${formatNum(parseNum(videoRow.impressions), 0)} 次`,
         formatB: `${formatNum(parseNum(imgRow.impressions), 0)} 次`,
-        betterWhen: 'higher',
       },
       {
         label: '点击量 (总引流)',
@@ -1452,7 +1471,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(imgRow.clicks),
         formatA: `${formatNum(parseNum(videoRow.clicks), 0)} 次`,
         formatB: `${formatNum(parseNum(imgRow.clicks), 0)} 次`,
-        betterWhen: 'higher',
       },
       {
         label: '点击率 CTR',
@@ -1484,7 +1502,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(imgRow.plays5s),
         formatA: `${formatNum(parseNum(videoRow.plays5s), 0)} 次`,
         formatB: imgRow.plays5s ? `${formatNum(parseNum(imgRow.plays5s), 0)} 次` : '非视频形式',
-        betterWhen: 'higher',
       },
     ];
 
@@ -1509,11 +1526,9 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         return {
           label: String(r.tier || '未知量级'),
           spend: parseNum(r.spend),
-          middleInfo: `${clicks !== null ? formatWan(clicks) : '—'}点击 · ${impr !== null ? formatWan(impr) : '—'}曝光`,
+          middleInfo: `${clicks !== null ? formatWan(clicks) : '—'}点击 / ${impr !== null ? formatWan(impr) : '—'}曝光`,
           costVal: parseNum(r.cpc),
           costLabel: 'CPC',
-          costThresholdLow: 0.35,
-          costThresholdHigh: 0.42,
           subCostVal: parseNum(r.cpm),
           subCostLabel: 'CPM',
         };
@@ -1528,20 +1543,22 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         return {
           label: `${String(r.ageGroup || '未知')}岁`,
           spend: parseNum(r.spend),
-          middleInfo: `${eng !== null ? formatNum(eng, 0) : '—'}次互动 · CTR ${formatPercent(ctr, 2)}`,
+          middleInfo: `${eng !== null ? formatNum(eng, 0) : '—'}次互动 / CTR ${formatPercent(ctr, 2)}`,
           costVal: parseNum(r.cpe),
           costLabel: 'CPE',
-          costThresholdLow: 30.0,
-          costThresholdHigh: 36.0,
           subCostVal: parseNum(r.cpc),
           subCostLabel: 'CPC',
         };
       });
 
     // 2f. CID Arena
-    const cidTotSpend = (model.cidStandardSpend || 0) + (model.cidSimpleSpend || 0);
-    const cidStandardRatio = cidTotSpend > 0 ? ((model.cidStandardSpend || 0) / cidTotSpend) * 100 : 58.2;
-    const cidSimpleRatio = 100 - cidStandardRatio;
+    const hasCidStandard = typeof model.cidStandardSpend === 'number' && Number.isFinite(model.cidStandardSpend) && model.cidStandardSpend >= 0;
+    const hasCidSimple = typeof model.cidSimpleSpend === 'number' && Number.isFinite(model.cidSimpleSpend) && model.cidSimpleSpend >= 0;
+    const cidTotSpend = hasCidStandard && hasCidSimple && (model.cidStandardSpend! + model.cidSimpleSpend!) > 0
+      ? model.cidStandardSpend! + model.cidSimpleSpend!
+      : null;
+    const cidStandardRatio = cidTotSpend !== null ? (model.cidStandardSpend! / cidTotSpend) * 100 : null;
+    const cidSimpleRatio = cidStandardRatio !== null ? 100 - cidStandardRatio : null;
     const cidStandardCpuv = model.cidStandardSpend && model.cidStandardUv ? model.cidStandardSpend / model.cidStandardUv : null;
     const cidSimpleCpuv = model.cidSimpleSpend && model.cidSimpleUv ? model.cidSimpleSpend / model.cidSimpleUv : null;
 
@@ -1552,7 +1569,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: model.cidSimpleSpend,
         formatA: formatCurrency(model.cidStandardSpend),
         formatB: formatCurrency(model.cidSimpleSpend),
-        betterWhen: 'higher',
       },
       {
         label: '进店访客 UV',
@@ -1560,7 +1576,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: model.cidSimpleUv,
         formatA: `${formatNum(model.cidStandardUv, 0)} UV`,
         formatB: `${formatNum(model.cidSimpleUv, 0)} UV`,
-        betterWhen: 'higher',
       },
       {
         label: '访客成本 CPUV',
@@ -1576,7 +1591,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: model.cidSimpleOrders,
         formatA: `${formatNum(model.cidStandardOrders, 0)} 单`,
         formatB: `${formatNum(model.cidSimpleOrders, 0)} 单`,
-        betterWhen: 'higher',
       },
       {
         label: '成交金额 GMV',
@@ -1584,7 +1598,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: model.cidSimpleGmv,
         formatA: formatCurrency(model.cidStandardGmv),
         formatB: formatCurrency(model.cidSimpleGmv),
-        betterWhen: 'higher',
       },
       {
         label: '聚合成交 ROI',
@@ -1602,8 +1615,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     const cidImgRow = cidNoteRows.find((r) => String(r.noteFormat || '').includes('图文')) || cidNoteRows[1] || {};
     const cidVideoSpend = parseNum(cidVideoRow.spend);
     const cidImgSpend = parseNum(cidImgRow.spend);
-    const cidVideoRatio = cidVideoSpend && cidImgSpend ? (cidVideoSpend / (cidVideoSpend + cidImgSpend)) * 100 : 50;
-    const cidImgRatio = 100 - cidVideoRatio;
+    const cidVideoRatio = parseNum(cidVideoRow.spendRatio);
+    const cidImgRatio = parseNum(cidImgRow.spendRatio);
 
     const cidNoteArenaRows: ArenaMetricRow[] = [
       {
@@ -1612,7 +1625,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: cidImgSpend,
         formatA: formatCurrency(cidVideoSpend),
         formatB: formatCurrency(cidImgSpend),
-        betterWhen: 'higher',
       },
       {
         label: '进店访客 UV',
@@ -1620,7 +1632,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(cidImgRow.uv),
         formatA: `${formatNum(parseNum(cidVideoRow.uv), 0)} UV`,
         formatB: `${formatNum(parseNum(cidImgRow.uv), 0)} UV`,
-        betterWhen: 'higher',
       },
       {
         label: '成交订单量',
@@ -1628,7 +1639,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(cidImgRow.orders),
         formatA: `${formatNum(parseNum(cidVideoRow.orders), 0)} 单`,
         formatB: `${formatNum(parseNum(cidImgRow.orders), 0)} 单`,
-        betterWhen: 'higher',
       },
       {
         label: '成交金额 GMV',
@@ -1636,7 +1646,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         valB: parseNum(cidImgRow.gmv),
         formatA: formatCurrency(parseNum(cidVideoRow.gmv)),
         formatB: formatCurrency(parseNum(cidImgRow.gmv)),
-        betterWhen: 'higher',
       },
       {
         label: '成交转化 ROI',
@@ -1653,7 +1662,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="投放渠道控制台">
           <div className="ht-command-bar-left">
             <div className="ht-command-bar-brand">
-              <h2 className="ht-header-title">黄天鹅 · 投放效果与渠道分析</h2>
+            <h2 className="ht-header-title">黄天鹅 投放效果与渠道分析</h2>
               <span className="ht-header-badge">渠道独立视图</span>
             </div>
             <span className="ht-jumpbar-label">📊 渠道导航</span>
@@ -1698,10 +1707,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
         </div>
 
-        <MetricStrip items={currentAdsMetricItems} />
+        <div className="ht-layer">
+          <MetricStrip items={currentAdsMetricItems} />
+        </div>
 
         {adsScope === 'brand' && (
-          <div id="ht-sec-ads-channels" className="ht-grid-2">
+          <div id="ht-sec-ads-channels" className="ht-layer">
+            <div className="ht-grid-2">
             <ChartPanel
               title="品牌FS 19日消耗与CPM走势"
               subtitle={`统计周期：${model.brandPeriod}`}
@@ -1736,8 +1748,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <DualArenaCard
                 title="品牌FS 广告类型投放分布 (信息流 vs 搜索)"
                 subtitle={model.brandAdTypesTable.period ? `统计区间：${model.brandAdTypesTable.period}` : undefined}
-                sideA={{ name: String(feedRow.adType || '信息流'), spend: feedSpend, spendRatio: feedRatio }}
-                sideB={{ name: String(searchRow.adType || '搜索'), spend: searchSpend, spendRatio: searchRatio }}
+                sideA={{ name: String(feedRow.adType || '信息流'), spend: feedSpend, spendRatio: feedRatio ?? undefined }}
+                sideB={{ name: String(searchRow.adType || '搜索'), spend: searchSpend, spendRatio: searchRatio ?? undefined }}
                 rows={brandAdTypeArenaRows}
               />
             )}
@@ -1746,8 +1758,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <DualArenaCard
                 title="品牌FS 笔记素材形式投放对照 (视频 vs 图文)"
                 subtitle={model.brandNoteTypesTable.period ? `统计区间：${model.brandNoteTypesTable.period}` : undefined}
-                sideA={{ name: String(videoRow.noteFormat || '视频'), spend: videoSpend, spendRatio: videoRatio }}
-                sideB={{ name: String(imgRow.noteFormat || '图文'), spend: imgSpend, spendRatio: imgRatio }}
+                sideA={{ name: String(videoRow.noteFormat || '视频'), spend: videoSpend, spendRatio: videoRatio ?? undefined }}
+                sideB={{ name: String(imgRow.noteFormat || '图文'), spend: imgSpend, spendRatio: imgRatio ?? undefined }}
                 rows={brandNoteTypeArenaRows}
               />
             )}
@@ -1755,7 +1767,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {model.brandKeywordsTable.rows.length > 0 && (
               <LollipopList
                 title="品牌FS 关键词类别投流结构与效能"
-                subtitle={model.brandKeywordsTable.period ? `统计区间：${model.brandKeywordsTable.period} · 按消耗降序呈现词类份额矩阵` : undefined}
+                subtitle={model.brandKeywordsTable.period ? `统计区间：${model.brandKeywordsTable.period} / 按消耗降序呈现词类份额矩阵` : undefined}
                 rows={brandKeywordLollipopRows}
               />
             )}
@@ -1763,7 +1775,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {model.brandKolTiersTable.rows.length > 0 && (
               <ButterflyCard
                 title="品牌FS 达人层级投放效益对照"
-                subtitle={model.brandKolTiersTable.period ? `统计区间：${model.brandKolTiersTable.period} · 各量级消耗规模与CPC/CPM成本评级` : undefined}
+                subtitle={model.brandKolTiersTable.period ? `统计区间：${model.brandKolTiersTable.period} / 各量级消耗规模与CPC/CPM成本评级` : undefined}
                 rows={brandKolTierButterflyRows}
               />
             )}
@@ -1771,7 +1783,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {model.brandAgeTable.rows.length > 0 && (
               <ButterflyCard
                 title="品牌FS 受众年龄段投流渗透与成本"
-                subtitle={model.brandAgeTable.period ? `统计区间：${model.brandAgeTable.period} · 各年龄段消耗规模与互动成本CPE评定` : undefined}
+                subtitle={model.brandAgeTable.period ? `统计区间：${model.brandAgeTable.period} / 各年龄段消耗规模与互动成本CPE评定` : undefined}
                 rows={brandAgeButterflyRows}
               />
             )}
@@ -1779,7 +1791,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {model.brandProvincesTable.rows.length > 0 && (
               <RegionRankGrid
                 title="品牌FS 地域（省份/地区）投放排行 (Top 10)"
-                subtitle={model.brandProvincesTable.period ? `统计区间：${model.brandProvincesTable.period} · 双列热力榜单` : undefined}
+                subtitle={model.brandProvincesTable.period ? `统计区间：${model.brandProvincesTable.period} / 双列热力榜单` : undefined}
                 provinces={model.brandProvincesTable.rows}
                 totalSpend={model.brandProvincesTable.totalSpend}
                 expanded={showAllProvinces}
@@ -1790,7 +1802,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             {model.brandAudiencesTable.rows.length > 0 && (
               <ChartPanel
                 title="品牌FS 定向人群包投放效能 (Top 10)"
-                subtitle={`按消耗Top10排序呈现种草人群资产规模与单位成本${model.brandAudiencesTable.period ? ` · 统计区间：${model.brandAudiencesTable.period}` : ''}`}
+                subtitle={`按消耗Top10排序呈现种草人群资产规模与单位成本${model.brandAudiencesTable.period ? ` / 统计区间：${model.brandAudiencesTable.period}` : ''}`}
                 actions={
                   model.brandAudiencesTable.rows.length > 10 ? (
                     <button
@@ -1870,21 +1882,23 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 />
               </ChartPanel>
             )}
+            </div>
           </div>
         )}
 
         {adsScope === 'cid' && (
-          <div className="ht-grid-2">
+          <div className="ht-layer">
+            <div className="ht-grid-2">
             <DualArenaCard
-              title="红猫CID · 标准投与简单投效能对决"
-              subtitle="全域聚合投放19日对照 · 标准投58.2% vs 简单投41.8%全面效能PK"
+              title="红猫CID 标准投与简单投效能对比"
+              subtitle="全域聚合投放19日对照 / 标准投58.2% vs 简单投41.8%全面效能PK"
               sideA={{ name: '标准投', spend: model.cidStandardSpend, spendRatio: cidStandardRatio }}
               sideB={{ name: '简单投', spend: model.cidSimpleSpend, spendRatio: cidSimpleRatio }}
               rows={cidArenaRows}
             />
 
             <ChartPanel
-              title="红猫CID · 全域日消耗与成交GMV走势"
+              title="红猫CID 全域日消耗与成交GMV走势"
               subtitle={
                 model.cidTotalSpend !== null && model.cidTotalGmv !== null
                   ? `全域消耗 ${formatCurrency(model.cidTotalSpend)}，成交GMV ${formatCurrency(model.cidTotalGmv)}，聚合ROI ${model.cidOverallRoi?.toFixed(2) ?? '—'}倍`
@@ -1902,24 +1916,24 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
 
             {model.cidNoteTypesTable.rows.length > 0 && (
               <DualArenaCard
-                title="红猫CID · 笔记素材形式转化 (视频 vs 图文)"
+                title="红猫CID 笔记素材形式转化 (视频 vs 图文)"
                 subtitle={
                   model.cidNoteTypesTable.period
-                    ? `统计区间：${model.cidNoteTypesTable.period}${model.cidNoteTypesTable.totalSpend !== null ? ` · 合计消耗 ${formatCurrency(model.cidNoteTypesTable.totalSpend)}` : ''}`
+                    ? `统计区间：${model.cidNoteTypesTable.period}${model.cidNoteTypesTable.totalSpend !== null ? ` / 合计消耗 ${formatCurrency(model.cidNoteTypesTable.totalSpend)}` : ''}`
                     : undefined
                 }
-                sideA={{ name: String(cidVideoRow.noteFormat || '视频'), spend: cidVideoSpend, spendRatio: cidVideoRatio }}
-                sideB={{ name: String(cidImgRow.noteFormat || '图文'), spend: cidImgSpend, spendRatio: cidImgRatio }}
+                sideA={{ name: String(cidVideoRow.noteFormat || '视频'), spend: cidVideoSpend, spendRatio: cidVideoRatio ?? undefined }}
+                sideB={{ name: String(cidImgRow.noteFormat || '图文'), spend: cidImgSpend, spendRatio: cidImgRatio ?? undefined }}
                 rows={cidNoteArenaRows}
               />
             )}
 
             {model.cidAdTypesTable.rows.length > 0 && (
               <ChartPanel
-                title="红猫CID · 标准投计划广告类型"
+                title="红猫CID 标准投计划广告类型"
                 subtitle={
                   model.cidAdTypesTable.period
-                    ? `透视区间：${model.cidAdTypesTable.period}${model.cidAdTypesTable.totalSpend !== null ? ` · 样本合计消耗 ${formatCurrency(model.cidAdTypesTable.totalSpend)}` : ''}`
+                    ? `透视区间：${model.cidAdTypesTable.period}${model.cidAdTypesTable.totalSpend !== null ? ` / 样本合计消耗 ${formatCurrency(model.cidAdTypesTable.totalSpend)}` : ''}`
                     : undefined
                 }
               >
@@ -1938,7 +1952,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 title="CID信息流人群包转化"
                 subtitle={
                   model.cidAudiencesTable.period
-                    ? `透视区间：${model.cidAudiencesTable.period}${model.cidAudiencesTable.totalSpend !== null ? ` · 样本合计消耗 ${formatCurrency(model.cidAudiencesTable.totalSpend)}` : ''}`
+                    ? `透视区间：${model.cidAudiencesTable.period}${model.cidAudiencesTable.totalSpend !== null ? ` / 样本合计消耗 ${formatCurrency(model.cidAudiencesTable.totalSpend)}` : ''}`
                     : undefined
                 }
               >
@@ -1951,11 +1965,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 />
               </ChartPanel>
             )}
+            </div>
           </div>
         )}
 
         {adsScope === 'commerce' && (
-          <div className="ht-grid-2">
+          <div className="ht-layer">
+            <div className="ht-grid-2">
             <ChartPanel
               title="闭环商销 全周期消耗与GMV日变"
               subtitle={`观察周期：${model.commercePeriod}`}
@@ -2011,7 +2027,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 title="闭环商销 素材创意成交与订单排行 (Top 10)"
                 subtitle={
                   model.commerceCreativesTable.period
-                    ? `观察区间：${model.commerceCreativesTable.period} · 按成交GMV降序呈现原报业务实绩`
+                    ? `观察区间：${model.commerceCreativesTable.period} / 按成交GMV降序呈现原报业务实绩`
                     : undefined
                 }
                 actions={
@@ -2052,6 +2068,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 />
               </ChartPanel>
             )}
+            </div>
           </div>
         )}
       </div>
@@ -2079,7 +2096,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     },
     {
       label: '达人已发布上线',
-      value: `${model.creatorsPublished} 篇 · ${formatPercent(model.creatorsPublishRate, 1)}`,
+      value: `${model.creatorsPublished} 篇 / ${formatPercent(model.creatorsPublishRate, 1)}`,
       hint: `已收集素材 ${model.creatorsAssetCollected} 篇`,
       badge: '履约进度',
       status: 'success',
@@ -2107,7 +2124,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="内容执行控制台">
         <div className="ht-command-bar-left">
           <div className="ht-command-bar-brand">
-            <h2 className="ht-header-title">黄天鹅 · 内容执行与KOS明细</h2>
+            <h2 className="ht-header-title">黄天鹅 内容执行与KOS明细</h2>
             <span className="ht-header-badge">达人{model.creatorsCount}篇 + KOS{model.kosCount}篇</span>
           </div>
           <span className="ht-jumpbar-label">📊 章节导航</span>
@@ -2124,9 +2141,12 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         </div>
       </div>
 
-      <MetricStrip items={contentMetricItems} />
+      <div className="ht-layer">
+        <MetricStrip items={contentMetricItems} />
+      </div>
 
-      <div id="ht-sec-content-status" className="ht-grid-2">
+      <div id="ht-sec-content-status" className="ht-layer">
+        <div className="ht-grid-2">
         <ChartPanel
           title="达人执行阶段分布"
           subtitle={`全量 ${model.creatorsCount} 位达人当前执行状态`}
@@ -2241,9 +2261,11 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             </table>
           </div>
         </ChartPanel>
+        </div>
       </div>
 
       {model.actions && model.actions.items && model.actions.items.length > 0 && (
+        <div className="ht-layer">
         <ChartPanel
           title="战役执行行动项与待办清单"
           subtitle="由战役管理中枢录入的重点跟进事项"
@@ -2284,6 +2306,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             </table>
           </div>
         </ChartPanel>
+        </div>
       )}
 
       <div>
@@ -2340,7 +2363,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                         {c.asset_collected === true ? '已收集' : '未登记'}
                       </span>
                     </td>
-                    <td style={{ fontFamily: 'monospace', fontSize: 11 }}>{c.note_id || '—'}</td>
+                    <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{c.note_id || '—'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -2382,7 +2405,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                     <td>{k.account_tier}</td>
                     <td>{k.content_type}</td>
                     <td>{k.publish_date || k.source_date_text || '—'}</td>
-                    <td style={{ fontFamily: 'monospace', fontSize: 11 }}>{k.note_id || '—'}</td>
+                    <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{k.note_id || '—'}</td>
                     <td>{k.fs_active === true ? '是' : '—'}</td>
                     <td>{k.cid_active === true ? '是' : '—'}</td>
                     <td>{k.commerce_active === true ? '是' : '—'}</td>

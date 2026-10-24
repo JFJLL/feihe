@@ -111,11 +111,11 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     });
 
     const xingheSeries: ComboSeries[] = [
-      { key: 'fs_spend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'task_item_gmv', label: '任务单品直接GMV', unit: '元', axis: 'left', kind: 'bar', color: '#b88a45' },
-      { key: 'shop_total_gmv', label: '全店成交GMV (参考大盘)', unit: '元', axis: 'left', kind: 'line', color: '#8273a3' },
-      { key: 'note_in_uv', label: '笔记进店UV', unit: '人', axis: 'right', kind: 'point', color: '#bd7964' },
-      { key: 'search_in_uv', label: '手淘搜索进店UV', unit: '人', axis: 'right', kind: 'line', color: '#4d8b80' },
+      { key: 'fs_spend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'task_item_gmv', label: '任务单品直接GMV', unit: '元', axis: 'left', kind: 'bar', color: '#ffc53d' },
+      { key: 'shop_total_gmv', label: '全店成交GMV (参考大盘)', unit: '元', axis: 'left', kind: 'line', color: '#5b5bd6' },
+      { key: 'note_in_uv', label: '笔记进店UV', unit: '人', axis: 'right', kind: 'point', color: '#e5484d' },
+      { key: 'search_in_uv', label: '手淘搜索进店UV', unit: '人', axis: 'right', kind: 'line', color: '#12a594' },
     ];
 
     const weeklyRows = (weeklyTable?.rows || []).map((r) => ({
@@ -129,16 +129,16 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     }));
 
     const weeklySeries: ComboSeries[] = [
-      { key: 'spend', label: '阶段累计消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cpuv', label: '阶段访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'line', color: '#b88a45' },
+      { key: 'spend', label: '阶段累计消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'cpuv', label: '阶段访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'line', color: '#ffc53d' },
     ];
 
     const channelRows = (channelsTable?.rows || []).filter((r) => String(r.channel) !== 'Total');
     const channelDonutData: ChartDatum[] = channelRows.map((c, i) => ({
       label: `${String(c.channel ?? '')}端 ${String(c.channelName ?? '')}`,
       value: parseFiniteNum(c.spend),
-      color: i === 0 ? '#8273a3' : i === 1 ? '#2c7168' : i === 2 ? '#b88a45' : '#bd7964',
-      detail: `支出 ¥${fmtComboNum(c.spend)} · 占比 ${String(c.share ?? '--')}`,
+      color: i === 0 ? '#5b5bd6' : i === 1 ? '#008573' : i === 2 ? '#ffc53d' : '#e5484d',
+      detail: `支出 ¥${fmtComboNum(c.spend)} / 占比 ${String(c.share ?? '--')}`,
     }));
 
     // Budget Dynamic Derivations (zero hardcoding)
@@ -162,10 +162,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     });
 
     const budgetComboSeries: ComboSeries[] = [
-      { key: 'clientBudget', label: '客户预算', unit: '元', axis: 'left', kind: 'bar', color: '#b88a45' },
-      { key: 'clientSpent', label: '客户已用', unit: '元', axis: 'left', kind: 'bar', color: '#bd7964' },
-      { key: 'usableBudget', label: '可消耗预算', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'usableSpent', label: '实际可消耗已用', unit: '元', axis: 'left', kind: 'bar', color: '#4d8b80' },
+      { key: 'clientBudget', label: '客户预算', unit: '元', axis: 'left', kind: 'bar', color: '#ffc53d' },
+      { key: 'clientSpent', label: '客户已用', unit: '元', axis: 'left', kind: 'bar', color: '#e5484d' },
+      { key: 'usableBudget', label: '可消耗预算', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'usableSpent', label: '实际可消耗已用', unit: '元', axis: 'left', kind: 'bar', color: '#12a594' },
     ];
 
     const metricStripItems: MetricStripItem[] = [
@@ -178,11 +178,11 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     ];
 
     // In-platform funnel stages (仅统计小红书端内真实串联链路：曝光 → 点击 → 互动，严禁跨端混算)
-    const funnelColors = ['#2c7168', '#4d8b80', '#8273a3'];
+    const funnelColors = ['#008573', '#12a594', '#5b5bd6'];
     const inPlatformFunnelStages: FunnelStageDatum[] = (fullFunnelTable?.rows || [])
       .filter((r) => String(r.platform || '').includes('小红书'))
       .map((r, idx) => ({
-        stage: `${String(r.stageName || '')} · ${String(r.metricName || '')}`,
+        stage: `${String(r.stageName || '')} / ${String(r.metricName || '')}`,
         value: parseFiniteNum(r.metricValue),
         unit: String(r.metricUnit || ''),
         conversionLabel: String(r.conversionRate || ''),
@@ -217,8 +217,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
     const top12Pareto = paretoKwRows.slice(0, 12);
     const paretoSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cumSpendShare', label: '累计消耗占比', unit: '%', axis: 'right', kind: 'line', color: '#b88a45' },
+      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'cumSpendShare', label: '累计消耗占比', unit: '%', axis: 'right', kind: 'line', color: '#ffc53d' },
     ];
 
     const catRows = (kwCatTable?.rows || []).filter((r) => String(r.category) !== '总计');
@@ -236,7 +236,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           x: s,
           y: cpuv,
           size: Math.max(8, Math.min(32, Math.sqrt(uv || s) * 0.8)),
-          detail: `消耗 ¥${fmtComboNum(s)} · CPUV ¥${cpuv.toFixed(2)} · 站外活跃UV ${fmtComboNum(uv)}人`,
+          detail: `消耗 ¥${fmtComboNum(s)} / CPUV ¥${cpuv.toFixed(2)} / 站外活跃UV ${fmtComboNum(uv)}人`,
         };
       });
 
@@ -256,8 +256,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       };
     });
     const tierStackedSegments: StackedBarSegment[] = [
-      { key: 'kSpend', label: '达人采买费 (K端)', color: '#8273a3' },
-      { key: 'fsSpend', label: '投流加热费 (FS端)', color: '#2c7168' },
+      { key: 'kSpend', label: '达人采买费 (K端)', color: '#5b5bd6' },
+      { key: 'fsSpend', label: '投流加热费 (FS端)', color: '#008573' },
     ];
 
     // Direction x Audience Matrix Heatmap (derived dynamically from wipes-direction-audience-matrix)
@@ -283,7 +283,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           row: String(r.direction || ''),
           col: String(r.audience || ''),
           value: sp,
-          displayValue: sp !== null ? `¥${fmtComboNum(sp, 0)}` : '·',
+          displayValue: sp !== null ? `¥${fmtComboNum(sp, 0)}` : '—',
           subtext: cpuv !== null ? `CPUV ¥${cpuv.toFixed(2)}` : (cpe !== null ? `CPE ¥${cpe.toFixed(2)}` : undefined),
         };
       });
@@ -314,13 +314,13 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       },
     ];
     const noteTrafficSegments: StackedBarSegment[] = [
-      { key: 'natural', label: '自然流量 (蒲公英沉淀)', color: '#2c7168' },
-      { key: 'promo', label: '商业推广 (聚光+信息流)', color: '#8273a3' },
-      { key: 'heating', label: '加热流 (官方粉推)', color: '#b88a45' },
+      { key: 'natural', label: '自然流量 (蒲公英沉淀)', color: '#008573' },
+      { key: 'promo', label: '商业推广 (聚光+信息流)', color: '#5b5bd6' },
+      { key: 'heating', label: '加热流 (官方粉推)', color: '#ffc53d' },
     ];
 
     // Creator funnel elimination reasons (dynamically derived from source table)
-    const elimColors = ['#bd7964', '#b88a45', '#8273a3', '#4d8b80', '#64748b', '#94a3b8', '#cbd5e1'];
+    const elimColors = ['#e5484d', '#ffc53d', '#5b5bd6', '#12a594', '#60646c', '#60646c', '#cdced6'];
     const rawElim = (
       (creatorFunnelTable as unknown as { auxiliary?: { eliminationBreakdown?: Array<{ reasonCategory: string; count: number; share?: string }> } })
         ?.auxiliary?.eliminationBreakdown || []
@@ -333,7 +333,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     }));
 
     // CID Clicks Data (derived dynamically from wipes-cid-full-attribution-table)
-    const cidColors = ['#2c7168', '#8273a3', '#b88a45', '#bd7964', '#4d8b80', '#64748b', '#94a3b8', '#cbd5e1', '#4d8b80', '#8273a3'];
+    const cidColors = ['#008573', '#5b5bd6', '#ffc53d', '#e5484d', '#12a594', '#60646c', '#60646c', '#cdced6', '#12a594', '#5b5bd6'];
     const cidClicksData: ChartDatum[] = (cidTable?.rows || [])
       .filter((r) => String(r.creator) !== '总计')
       .map((r, idx) => {
@@ -348,7 +348,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           label,
           value: clicks,
           color: cidColors[idx % cidColors.length],
-          detail: `消耗 ¥${fmtComboNum(sp)} · 点击 ${fmtComboNum(clicks, 0)}次`,
+          detail: `消耗 ¥${fmtComboNum(sp)} / 点击 ${fmtComboNum(clicks, 0)}次`,
         };
       });
 
@@ -356,7 +356,6 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       <div className="wipes-rich-container">
         <div className="wipes-rich-header">
           <div className="wipes-rich-header-title">
-            <span className="wipes-rich-tag">全景深透看板</span>
             <span>稳健玉米消毒湿巾专项：全渠道投流与跨端转化数据看板</span>
           </div>
           <div className="wipes-rich-notice">
@@ -368,13 +367,12 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         <MetricStrip items={metricStripItems} />
 
         {/* =========================================================================
-            第一层（重 · 双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵）
+            第一层（双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵）
            ========================================================================= */}
         <div className="wri-section wipes-section-wrap">
           <div className="wri-section-header wipes-section-header">
             <div className="wri-section-title-wrap">
               <span className="ca-chapter-num">02</span>
-              <span className="wri-badge">双轨核算</span>
               <h3 className="wri-section-title wipes-section-title">双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵</h3>
             </div>
             <span className="wri-section-desc">源表最新底表核算（日常种草7项 + 医生专家4项考核）</span>
@@ -392,7 +390,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               {kpiRows.map((kpi, idx) => {
                 const statusBadge = kpi.isSurpassed === true ? { text: '达标', cls: 'surpassed' } : kpi.isSurpassed === false ? { text: '未达标', cls: 'lagging' } : { text: '待核验', cls: 'pending' };
                 return <tr key={idx} title={kpi.auditNote || undefined}>
-                  <th><strong>{kpi.metric}</strong><small>{kpi.dimension}{kpi.subChannel ? ` · ${kpi.subChannel}` : ''}</small></th>
+                  <th><strong>{kpi.metric}</strong><small>{kpi.dimension}{kpi.subChannel ? ` / ${kpi.subChannel}` : ''}</small></th>
                   <td>{kpi.rawActual ?? '—'}</td><td>{kpi.rawTarget ?? '—'}</td>
                   <td><span className={`wipes-kpi-badge ${statusBadge.cls}`}>{statusBadge.text}</span></td>
                 </tr>;
@@ -442,7 +440,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
           </div>
 
-          <details style={{ marginTop: '12px', cursor: 'pointer', fontSize: '13px', color: '#475569' }}>
+          <details style={{ marginTop: '12px', cursor: 'pointer', fontSize: 14, color: '#60646c' }}>
             <summary style={{ padding: '6px 0', fontWeight: 600 }}>查看费用类目双轨明细表</summary>
             <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
               <thead>
@@ -466,7 +464,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                     <td>¥{fmtComboNum(p.usableSpent)}</td>
                   </tr>
                 ))}
-                <tr style={{ fontWeight: 'bold', background: '#f8fafc' }}>
+                <tr style={{ fontWeight: 'bold', background: '#f9f9fb' }}>
                   <td>总计</td>
                   <td>¥{fmtComboNum(clientTotal?.budget)}</td>
                   <td>¥{fmtComboNum(clientTotal?.spent)}</td>
@@ -501,12 +499,12 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               {channelRows.map((c, i) => (
                 <div key={i} className="wipes-info-card">
                   <div className="wipes-info-title">
-                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#8273a3' : i === 1 ? '#2c7168' : i === 2 ? '#b88a45' : '#bd7964' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#5b5bd6' : i === 1 ? '#008573' : i === 2 ? '#ffc53d' : '#e5484d' }}>
                       {String(c.channel ?? '')}端
                     </span>
                     <span>{String(c.channelName ?? '')}</span>
                   </div>
-                  <div className="wipes-info-stat" style={{ fontSize: '20px' }}>¥{fmtComboNum(c.spend)}</div>
+                  <div className="wipes-info-stat" style={{ fontSize: 22 }}>¥{fmtComboNum(c.spend)}</div>
                   <div className="wipes-info-desc">
                     <p><strong>占比：</strong>{String(c.share ?? '--')}</p>
                     <p><strong>定位：</strong>{String(c.role ?? '--')}</p>
@@ -518,7 +516,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </ChartPanel>
 
         {/* =========================================================================
-            第二层（重 · 小红书种草→淘宝星河→CID 跨端全链路漏斗）
+            第二层（小红书种草→淘宝星河→CID 跨端全链路漏斗）
            ========================================================================= */}
           {/* Panel 4: In-platform Funnel & Multi-Platform Metrics */}
           <ChartPanel
@@ -527,50 +525,50 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           >
             <CampaignFunnelChart stages={inPlatformFunnelStages} />
 
-            <div style={{ fontSize: '12px', fontWeight: 600, color: '#475569', margin: '14px 0 8px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#60646c', margin: '14px 0 8px' }}>
               电商外溢与承接独立衡量指标（各端独立核算，严禁跨端相除计算虚假全链路转化率）
             </div>
             <div className="wipes-funnel-stat-grid">
               <div className="wipes-info-card">
                 <div className="wipes-info-title">阿里星河站外活跃 UV</div>
-                <div className="wipes-info-stat" style={{ color: '#2c7168' }}>
+                <div className="wipes-info-stat" style={{ color: '#008573' }}>
                   {fullFunnelTable?.rows?.[3]?.metricValue ? fmtComboNum(fullFunnelTable.rows[3].metricValue) : '21,085'} 人
                 </div>
                 <div className="wipes-info-desc">
-                  {String(fullFunnelTable?.rows?.[3]?.costEfficiency || 'CPUV ¥8.00')} · 30天后验独立访客
+                  {String(fullFunnelTable?.rows?.[3]?.costEfficiency || 'CPUV ¥8.00')} / 30天后验独立访客
                 </div>
               </div>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">手淘笔记直接进店</div>
-                <div className="wipes-info-stat" style={{ color: '#8273a3' }}>
+                <div className="wipes-info-stat" style={{ color: '#5b5bd6' }}>
                   {fullFunnelTable?.rows?.[4]?.metricValue ? fmtComboNum(fullFunnelTable.rows[4].metricValue) : '12,197'} 人
                 </div>
                 <div className="wipes-info-desc">
-                  {String(fullFunnelTable?.rows?.[4]?.costEfficiency || '进店成本 ¥13.54/人')} · 笔记落地页引导
+                  {String(fullFunnelTable?.rows?.[4]?.costEfficiency || '进店成本 ¥13.54/人')} / 笔记落地页引导
                 </div>
               </div>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">手淘搜索主动回流</div>
-                <div className="wipes-info-stat" style={{ color: '#b88a45' }}>
+                <div className="wipes-info-stat" style={{ color: '#ffc53d' }}>
                   {fullFunnelTable?.rows?.[5]?.metricValue ? fmtComboNum(fullFunnelTable.rows[5].metricValue) : '4,844'} 人
                 </div>
                 <div className="wipes-info-desc">
-                  {String(fullFunnelTable?.rows?.[5]?.costEfficiency || '搜索成本 ¥34.09/人')} · 品牌品类词回搜
+                  {String(fullFunnelTable?.rows?.[5]?.costEfficiency || '搜索成本 ¥34.09/人')} / 品牌品类词回搜
                 </div>
               </div>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">任务单品直接购买</div>
-                <div className="wipes-info-stat" style={{ color: '#bd7964' }}>
+                <div className="wipes-info-stat" style={{ color: '#e5484d' }}>
                   ¥{fullFunnelTable?.rows?.[6]?.metricValue ? fmtComboNum(fullFunnelTable.rows[6].metricValue) : '8,741.81'}
                 </div>
                 <div className="wipes-info-desc">
-                  购买 UV 1,268人 · 客单价 ¥6.89（全店GMV ¥74,489.30仅作大盘参考）
+                  购买 UV 1,268人 / 客单价 ¥6.89（全店GMV ¥74,489.30仅作大盘参考）
                 </div>
               </div>
             </div>
 
             <details className="wipes-details-box" style={{ marginTop: '12px' }}>
-              <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#1c2024' }}>
                 查看全口径分端指标明细与归因业务规则（独立记账明细）
               </summary>
               <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
@@ -594,7 +592,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                       <td>{typeof r.metricValue === 'number' ? fmtComboNum(r.metricValue) : String(r.metricValue || '')} {String(r.metricUnit || '')}</td>
                       <td>{String(r.conversionRate || '')}</td>
                       <td>{String(r.costEfficiency || '')}</td>
-                      <td style={{ fontSize: '11px', color: '#64748b' }}>{String(r.attributionRule || '')}</td>
+                      <td style={{ fontSize: 12, color: '#60646c' }}>{String(r.attributionRule || '')}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -628,7 +626,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         >
           <div className="wipes-rich-grid-2">
             <div>
-              <div style={{ fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '8px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#60646c', marginBottom: '8px' }}>
                 10位CID达人手淘组件点击量排行
               </div>
               <HorizontalBarChart data={cidClicksData} unit="次" height={260} />
@@ -636,10 +634,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">
-                  <span className="wipes-rich-tag" style={{ background: '#2c7168' }}>唯一出单博主</span>
+                  <span className="wipes-rich-tag" style={{ background: '#008573' }}>唯一出单博主</span>
                   <span>宸妈妈 (素人KOC)</span>
                 </div>
-                <div className="wipes-info-stat" style={{ color: '#2c7168' }}>1单 · ¥25.55</div>
+                <div className="wipes-info-stat" style={{ color: '#008573' }}>1单 / ¥25.55</div>
                 <div className="wipes-info-desc">
                   <p><strong>• 消耗支出：</strong>¥632.74 (CID投流)</p>
                   <p><strong>• 组件点击：</strong>21次 (全案最高点击)</p>
@@ -654,7 +652,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </ChartPanel>
 
         {/* =========================================================================
-            第三层（中重 · 五阶段 Sprint 演进与搜索/人群定向引擎）
+            第三层（五阶段 Sprint 演进与搜索/人群定向引擎）
            ========================================================================= */}
         </div>
 
@@ -702,11 +700,11 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             {catRows.map((cat, i) => (
               <div key={i} className="wipes-info-card">
                 <div className="wipes-info-title">
-                  <span className="wipes-rich-tag" style={{ background: i === 0 ? '#2c7168' : i === 1 ? '#8273a3' : i === 2 ? '#b88a45' : '#bd7964' }}>
+                  <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#ffc53d' : '#e5484d' }}>
                     {String(cat.category || '')}
                   </span>
                 </div>
-                <div className="wipes-info-stat" style={{ fontSize: '18px' }}>¥{fmtComboNum(cat.spend)}</div>
+                <div className="wipes-info-stat" style={{ fontSize: 16 }}>¥{fmtComboNum(cat.spend)}</div>
                 <div className="wipes-info-desc">
                   <p><strong>• 点击量：</strong>{fmtComboNum(cat.clicks)}次</p>
                   <p><strong>• 均客CPUV：</strong>¥{fmtComboNum(cat.cpuv)}</p>
@@ -728,7 +726,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
         {/* 次级分析折叠 1：定向人群包、达人层级与场景热力矩阵 */}
         <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '13px', color: '#1e293b', padding: '6px 0' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0' }}>
             展开查看次级分析：定向人群包散点、4大达人层级费用与场景热力矩阵
           </summary>
           <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
@@ -748,7 +746,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </ChartPanel>
 
         {/* =========================================================================
-            第四层（中 · 达人层级 × 内容方向 × 人群矩阵与流量来源拆解）
+            第四层（达人层级 × 内容方向 × 人群矩阵与流量来源拆解）
            ========================================================================= */}
             {/* Panel 10: Creator Tier Spending Breakdown */}
         <ChartPanel
@@ -763,22 +761,22 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           <div className="wipes-rich-grid-4" style={{ marginTop: '14px' }}>
             <div className="wipes-info-card">
               <div className="wipes-info-title">医学专家 (3篇)</div>
-              <div className="wipes-info-stat" style={{ fontSize: '18px' }}>¥76,000</div>
+              <div className="wipes-info-stat" style={{ fontSize: 16 }}>¥76,000</div>
               <div className="wipes-info-desc">权威背书，CPE ¥5.26超额达成目标</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">腰部KOL (3篇)</div>
-              <div className="wipes-info-stat" style={{ fontSize: '18px' }}>¥54,840</div>
+              <div className="wipes-info-stat" style={{ fontSize: 16 }}>¥54,840</div>
               <div className="wipes-info-desc">打造破圈标杆，贡献高赞藏爆文</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">尾部KOL (24篇)</div>
-              <div className="wipes-info-stat" style={{ fontSize: '18px' }}>¥137,508</div>
+              <div className="wipes-info-stat" style={{ fontSize: 16 }}>¥137,508</div>
               <div className="wipes-info-desc">主力消耗中坚，投流加热重点倾斜</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">素人KOC (86篇)</div>
-              <div className="wipes-info-stat" style={{ fontSize: '18px' }}>¥75,334</div>
+              <div className="wipes-info-stat" style={{ fontSize: 16 }}>¥75,334</div>
               <div className="wipes-info-desc">高性价比铺量，真实生活场景渗透</div>
             </div>
           </div>
@@ -827,14 +825,14 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </ChartPanel>
 
         {/* =========================================================================
-            第五层（轻 · 达人选号漏斗、三甲医生授权池与卡审质检）
+            第五层（达人选号漏斗、三甲医生授权池与卡审质检）
            ========================================================================= */}
           </div>
         </details>
 
         {/* 次级分析折叠 2：达人选号淘汰漏斗与三甲医生专家矩阵 */}
         <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '13px', color: '#1e293b', padding: '6px 0' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0' }}>
             展开查看次级分析：达人选号全流程淘汰漏斗与三甲医生专家背书候选池
           </summary>
           <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
@@ -846,33 +844,33 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           <div className="wipes-rich-grid-4" style={{ marginBottom: '14px' }}>
             <div className="wipes-info-card">
               <div className="wipes-info-title">1. 初筛提报池</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px' }}>370 位</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22 }}>370 位</div>
               <div className="wipes-info-desc">全网海选亲子母婴及健康博主</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">2. 品牌初筛通过</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px' }}>180 位</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22 }}>180 位</div>
               <div className="wipes-info-desc">初筛通过率 48.65% (淘汰190位)</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">3. 二询意向达成</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px' }}>131 位</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22 }}>131 位</div>
               <div className="wipes-info-desc">二询达成率 72.78% (锁定排期与脚本)</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">4. 最终定档合作</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px', color: '#2c7168' }}>116 篇</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#008573' }}>116 篇</div>
               <div className="wipes-info-desc">全案留存率 31.35% (100%履约交付)</div>
             </div>
           </div>
 
-          <div style={{ fontSize: '12px', fontWeight: 600, color: '#475569', marginBottom: '8px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 600, color: '#60646c', marginBottom: '8px' }}>
             7大核心淘汰原因分布排行
           </div>
           <HorizontalBarChart data={eliminationBarData} unit="位" height={220} />
 
           <details className="wipes-details-box">
-            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>查看达人选号漏斗与履约明细表</summary>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#1c2024' }}>查看达人选号漏斗与履约明细表</summary>
             <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
               <thead>
                 <tr>
@@ -892,7 +890,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                     <td>{String(r.stagePassRate || '')}</td>
                     <td>{String(r.cumRetentionRate || '')}</td>
                     <td>{typeof r.eliminatedCount === 'number' ? r.eliminatedCount : String(r.eliminatedCount || '')} 人</td>
-                    <td style={{ fontSize: '11px', color: '#64748b' }}>{String(r.keyReasonOrAction || '')}</td>
+                    <td style={{ fontSize: 12, color: '#60646c' }}>{String(r.keyReasonOrAction || '')}</td>
                   </tr>
                 ))}
               </tbody>
@@ -907,23 +905,23 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           <div className="wipes-rich-grid-3">
             <div className="wipes-info-card">
               <div className="wipes-info-title">三甲医院等级构成</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px', color: '#2c7168' }}>三甲占比 95%</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#008573' }}>三甲占比 95%</div>
               <div className="wipes-info-desc">三甲综合 55%（湘雅二院、暨大附一、浙立同德）+ 三甲妇幼儿童专科 40%（深圳儿童医院、罗湖妇幼）</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">授权范围与期限管控</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px', color: '#8273a3' }}>站内原生流 3个月</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#5b5bd6' }}>站内原生流 3个月</div>
               <div className="wipes-info-desc">100%严格限定小红书站内信息流投放，严禁二剪、严禁转出站外直发，全面规避肖像侵权风险</div>
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">定档履约成单率</div>
-              <div className="wipes-info-stat" style={{ fontSize: '20px', color: '#b88a45' }}>3位 100% 履约</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#ffc53d' }}>3位 100% 履约</div>
               <div className="wipes-info-desc">硕士妈妈黄慧、刘慧教授说健康、沈主任有点忙，高质过审发布并贡献超万次互动</div>
             </div>
           </div>
 
           <details className="wipes-details-box">
-            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>查看医生专家候选池明细表（已脱敏）</summary>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#1c2024' }}>查看医生专家候选池明细表（已脱敏）</summary>
             <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
               <thead>
                 <tr>
@@ -941,11 +939,11 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                   <tr key={i}>
                     <td><strong>{String(r.doctorAlias || '')}</strong></td>
                     <td>{String(r.hospital || '')}</td>
-                    <td><span className="wipes-rich-tag" style={{ background: '#2c7168' }}>{String(r.hospitalTier || '')}</span></td>
+                    <td><span className="wipes-rich-tag" style={{ background: '#008573' }}>{String(r.hospitalTier || '')}</span></td>
                     <td>{String(r.region || '')}</td>
                     <td>¥{fmtComboNum(r.quotePrice)}</td>
                     <td>{String(r.progressStatus || '')}</td>
-                    <td style={{ fontSize: '11px', color: '#64748b' }}>{String(r.licenseTerms || '')}</td>
+                    <td style={{ fontSize: 12, color: '#60646c' }}>{String(r.licenseTerms || '')}</td>
                   </tr>
                 ))}
               </tbody>
@@ -957,7 +955,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
         {/* 次级分析折叠 3：商业投放笔记卡审质检跟踪 */}
         <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: '13px', color: '#1e293b', padding: '6px 0' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0' }}>
             展开查看次级分析：商业投放笔记卡审合规质检与过审响应跟踪（9大高频问题规范）
           </summary>
           <div style={{ marginTop: '14px' }}>
@@ -969,7 +967,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           <div className="wipes-rich-grid-2">
             <div className="wipes-info-card">
               <div className="wipes-info-title">
-                <span className="wipes-rich-tag" style={{ background: '#bd7964' }}>典型卡审点 1</span>
+                <span className="wipes-rich-tag" style={{ background: '#e5484d' }}>典型卡审点 1</span>
                 <span>疾病临床症状违规</span>
               </div>
               <div className="wipes-info-desc">
@@ -981,7 +979,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
             <div className="wipes-info-card">
               <div className="wipes-info-title">
-                <span className="wipes-rich-tag" style={{ background: '#b88a45' }}>典型卡审点 2</span>
+                <span className="wipes-rich-tag" style={{ background: '#ffc53d' }}>典型卡审点 2</span>
                 <span>绝对化/未报备认证违规</span>
               </div>
               <div className="wipes-info-desc">
@@ -993,7 +991,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           </div>
 
           <details className="wipes-details-box">
-            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#334155' }}>查看卡审记录明细与201篇笔记流量底表</summary>
+            <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#1c2024' }}>查看卡审记录明细与201篇笔记流量底表</summary>
             <table className="wipes-summary-table" style={{ marginTop: '8px' }}>
               <thead>
                 <tr>
@@ -1012,9 +1010,9 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                   <tr key={i}>
                     <td>{String(r.blockerDate || '')}</td>
                     <td><strong>{String(r.creator || '')}</strong></td>
-                    <td><span className="wipes-rich-tag" style={{ background: '#bd7964' }}>{String(r.riskCategory || '')}</span></td>
-                    <td style={{ fontSize: '11px' }}>{String(r.blockerReason || '')}</td>
-                    <td style={{ fontSize: '11px', color: '#2c7168' }}>{String(r.modifyProgress || '')}</td>
+                    <td><span className="wipes-rich-tag" style={{ background: '#e5484d' }}>{String(r.riskCategory || '')}</span></td>
+                    <td style={{ fontSize: 12 }}>{String(r.blockerReason || '')}</td>
+                    <td style={{ fontSize: 12, color: '#008573' }}>{String(r.modifyProgress || '')}</td>
                     <td>{String(r.resolvedDate || '')}</td>
                     <td>{String(r.feedPriority || '')}</td>
                     <td><strong>{String(r.turnaroundHours || '')}</strong></td>
@@ -1060,8 +1058,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
     const top12Pareto = paretoKwRows.slice(0, 12);
     const paretoSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'cumSpendShare', label: '累计消耗占比', unit: '%', axis: 'right', kind: 'line', color: '#b88a45' },
+      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'cumSpendShare', label: '累计消耗占比', unit: '%', axis: 'right', kind: 'line', color: '#ffc53d' },
     ];
 
     const catRows = (kwCatTable?.rows || []).filter((r) => String(r.category) !== '总计');
@@ -1087,8 +1085,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       : audienceRows.filter((r) => (r.uv || 0) > 0);
 
     const audienceSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#8273a3' },
-      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#bd7964' },
+      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#e5484d' },
     ];
 
     const placementRows = (placementTable?.rows || []).filter((r) => String(r.placement) !== '总计');
@@ -1128,7 +1126,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             {catRows.map((cat, i) => (
               <div key={i} className="wipes-info-card">
                 <div className="wipes-info-title">
-                  <span className="wipes-rich-tag" style={{ background: i === 0 ? '#2c7168' : i === 1 ? '#8273a3' : i === 2 ? '#b88a45' : '#bd7964' }}>
+                  <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#ffc53d' : '#e5484d' }}>
                     {String(cat.category ?? '')}
                   </span>
                 </div>
@@ -1150,7 +1148,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           subtitle="支持按成本区间（CPUV ≤ 20元 vs CPUV > 20元）或是否产生转化进行筛选查看"
           actions={
             <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-              <span style={{ fontSize: '11px', color: '#64748b' }}>筛选条件:</span>
+              <span style={{ fontSize: 12, color: '#60646c' }}>筛选条件:</span>
               <button
                 className={`btn btn-sm ${audienceCostFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
                 onClick={() => setAudienceCostFilter('all')}
@@ -1246,8 +1244,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       : cidRows;
 
     const cidSeries: ComboSeries[] = [
-      { key: 'spend', label: 'CID消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'component_clicks', label: '组件点击量', unit: '次', axis: 'right', kind: 'bar', color: '#8273a3' },
+      { key: 'spend', label: 'CID消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'component_clicks', label: '组件点击量', unit: '次', axis: 'right', kind: 'bar', color: '#5b5bd6' },
     ];
 
     const tierChartRows = (tierTable?.rows || [])
@@ -1263,9 +1261,9 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       }));
 
     const tierSeries: ComboSeries[] = [
-      { key: 'kFee', label: 'K端达人费', unit: '元', axis: 'left', kind: 'bar', color: '#b88a45' },
-      { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'engagements', label: '总互动量', unit: '次', axis: 'right', kind: 'line', color: '#8273a3' },
+      { key: 'kFee', label: 'K端达人费', unit: '元', axis: 'left', kind: 'bar', color: '#ffc53d' },
+      { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'engagements', label: '总互动量', unit: '次', axis: 'right', kind: 'line', color: '#5b5bd6' },
     ];
 
     const directionChartRows = (directionTable?.rows || [])
@@ -1279,8 +1277,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       }));
 
     const directionSeries: ComboSeries[] = [
-      { key: 'totalSpend', label: '总消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#2c7168' },
-      { key: 'fsUv', label: 'FS站外活跃UV', unit: '人', axis: 'right', kind: 'bar', color: '#8273a3' },
+      { key: 'totalSpend', label: '总消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'fsUv', label: 'FS站外活跃UV', unit: '人', axis: 'right', kind: 'bar', color: '#5b5bd6' },
     ];
 
     return (

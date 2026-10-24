@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { api } from '../../../lib/hooks/use-project-data';
-import { CustomSelect } from '../../../components/ui/CustomSelect';
-import { MetricCard } from '../../../components/ui/operations/MetricCard';
 import { LoadingState } from '../../../components/ui/LoadingState';
 import { ErrorState } from '../../../components/ui/ErrorState';
 import { EmptyState } from '../../../components/ui/EmptyState';
+import { Dialog } from '../../../components/ui/Dialog';
+import { CustomSelect } from '../../../components/ui/CustomSelect';
 
 interface ProjectMember {
   id: string;
@@ -27,9 +27,9 @@ interface AvailableUser {
 }
 
 const ROLE_OPTIONS = [
-  { value: 'project_admin', label: '项目管理员', color: '#2563eb', badge: '全部权限' },
-  { value: 'editor', label: '业务编辑者', color: '#059669', badge: '可同步与编辑' },
-  { value: 'viewer', label: '只读观察员', color: '#64748b', badge: '仅查看看板' },
+  { value: 'project_admin', label: '项目管理员', color: 'var(--teal-11, #008573)', badge: '全部权限' },
+  { value: 'editor', label: '业务编辑者', color: 'var(--jade-11, #208368)', badge: '可同步与编辑' },
+  { value: 'viewer', label: '只读观察员', color: 'var(--slate-11, #60646c)', badge: '仅查看看板' },
 ];
 
 export function MemberManagement({
@@ -178,87 +178,74 @@ export function MemberManagement({
   const viewerCount = members.filter((m) => m.role === 'viewer').length;
 
   return (
-    <div className="stack" style={{ gap: 20 }}>
-      {/* Overview Metric Cards */}
-      <section className="ops-metric-grid" aria-label="项目成员概况">
-        <MetricCard label="成员总数" value={members.length} unit="人" theme="blue" desc="已加入当前项目的协同成员" />
-        <MetricCard label="项目管理员" value={adminCount} unit="人" theme="purple" desc="具备数据接入、指标发布与授权权限" />
-        <MetricCard label="业务编辑者" value={editorCount} unit="人" theme="green" desc="具备业务数据编辑与同步权限" />
-        <MetricCard label="只读观察员" value={viewerCount} unit="人" theme="teal" desc="仅具备看板查看与报告导出权限" />
-      </section>
-
-      {/* Role Notice Banner */}
-      <div
-        style={{
-          background: canManageMembers ? '#eff6ff' : '#f8fafc',
-          border: canManageMembers ? '1px solid #bfdbfe' : '1px solid #e2e8f0',
-          borderRadius: 8,
-          padding: '12px 16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 10,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, color: '#1e293b' }}>
-            当前操作身份：<strong>{currentUser?.displayName || '用户'}</strong>
-          </span>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              padding: '2px 8px',
-              borderRadius: 4,
-              background: canManageMembers ? '#2563eb' : '#64748b',
-              color: '#fff',
-            }}
-          >
-            {canManageMembers ? '具备成员管理权限' : '只读查看成员'}
-          </span>
-        </div>
-        {!canManageMembers && (
-          <span style={{ fontSize: 12, color: '#64748b' }}>如需调整角色或邀请新成员，请联系项目管理员。</span>
-        )}
-      </div>
-
+    <>
       {loading && <LoadingState text="正在获取项目成员列表…" />}
       {error && <ErrorState error={error} onRetry={loadData} />}
 
       {/* Member Table Panel */}
       {!loading && !error && (
-        <article className="pastel-card reference-section section-blue" style={{ padding: 24, borderRadius: 12, border: '1px solid #cbd5e1' }}>
+        <article style={{ background: 'var(--ws-surface, #ffffff)', padding: 24, borderRadius: 'var(--ws-radius-card, 12px)', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
             <div>
-              <span className="section-mini-tag tag-blue">MEMBER ACCESS MATRIX</span>
-              <h3 style={{ margin: '4px 0 2px', fontSize: 18, color: '#0f172a' }}>项目成员与权限列表</h3>
-              <p style={{ margin: 0, fontSize: 13, color: '#64748b' }}>不同成员按角色隔离飞书应用凭证、写操作与删除权限。</p>
+              <h3 style={{ margin: '4px 0 2px', fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>项目成员与权限列表</h3>
+              <p style={{ margin: 0, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>不同成员按角色隔离飞书应用凭证、写操作与删除权限。</p>
             </div>
 
-            {canManageMembers && (
-              <button
-                type="button"
-                className="primary"
-                onClick={() => {
-                  setSelectedUserId(unassignedUsers[0]?.id || '');
-                  setSelectedRole('editor');
-                  setShowAddModal(true);
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '4px 10px',
+                  background: canManageMembers ? 'var(--teal-2, #f3fbf9)' : 'var(--slate-2, #f9f9fb)',
+                  border: `0.5px solid ${canManageMembers ? 'var(--teal-6, #a1ded2)' : 'var(--slate-6, #d9d9e0)'}`,
+                  borderRadius: 'var(--ws-radius-control, 8px)',
                 }}
-                style={{ padding: '8px 16px', fontSize: 13, fontWeight: 600, borderRadius: 6, display: 'inline-flex', alignItems: 'center', gap: 6 }}
               >
-                <span>＋</span> 添加已有成员
-              </button>
-            )}
+                <span style={{ fontSize: 12, color: 'var(--slate-12, #1c2024)' }}>
+                  当前操作身份：<strong>{currentUser?.displayName || '用户'}</strong>
+                </span>
+                <span
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 600,
+                    padding: '1px 6px',
+                    borderRadius: 4,
+                    background: canManageMembers ? 'var(--teal-9, #12a594)' : 'var(--slate-9, #8b8d98)',
+                    color: '#ffffff',
+                  }}
+                >
+                  {canManageMembers ? '具备管理权限' : '只读查看'}
+                </span>
+              </div>
+              <span style={{ fontSize: 12, padding: '4px 10px', background: 'var(--slate-2, #f9f9fb)', color: 'var(--slate-11, #60646c)', borderRadius: 'var(--ws-radius-control, 8px)', fontWeight: 500, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+                共 {members.length} 名成员 / 管理员 {adminCount} / 编辑 {editorCount} / 观察员 {viewerCount}
+              </span>
+              {canManageMembers && (
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() => {
+                    setSelectedUserId(unassignedUsers[0]?.id || '');
+                    setSelectedRole('editor');
+                    setShowAddModal(true);
+                  }}
+                  style={{ padding: '7px 14px', fontSize: 12, fontWeight: 600, borderRadius: 'var(--ws-radius-control, 8px)', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                >
+                  <span>＋</span> 添加成员
+                </button>
+              )}
+            </div>
           </div>
 
           {members.length === 0 ? (
             <EmptyState title="当前项目暂无成员" text="点击上方「添加已有成员」邀请团队成员协作。" />
           ) : (
-            <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: 8 }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, textAlign: 'left' }}>
+            <div style={{ overflowX: 'auto', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 'var(--ws-radius-control, 8px)' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#475569' }}>
+                  <tr style={{ background: 'var(--slate-2, #f9f9fb)', borderBottom: '0.5px solid var(--slate-6, #d9d9e0)', color: 'var(--slate-11, #60646c)' }}>
                     <th style={{ padding: '10px 14px', fontWeight: 600 }}>成员姓名</th>
                     <th style={{ padding: '10px 14px', fontWeight: 600 }}>系统账号 / 邮箱</th>
                     <th style={{ padding: '10px 14px', fontWeight: 600 }}>项目角色</th>
@@ -270,40 +257,43 @@ export function MemberManagement({
                   {members.map((m) => {
                     const roleInfo = ROLE_OPTIONS.find((r) => r.value === m.role) || ROLE_OPTIONS[2];
                     const isSelf = m.userId === currentUser?.userId;
-                    const protectedMember = m.userId === ownerId || m.role === 'project_admin' && adminCount <= 1;
+                    const protectedMember = m.userId === ownerId || (m.role === 'project_admin' && adminCount <= 1);
 
                     return (
-                      <tr key={m.userId} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                        <td style={{ padding: '12px 14px', fontWeight: 600, color: '#0f172a' }}>
+                      <tr key={m.userId} style={{ borderBottom: '0.5px solid var(--slate-4, #e8e8ec)' }}>
+                        <td style={{ padding: '12px 14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
                           {m.name}
                           {isSelf && (
-                            <span style={{ marginLeft: 6, fontSize: 10, padding: '1px 5px', background: '#eff6ff', color: '#2563eb', borderRadius: 3 }}>
+                            <span style={{ marginLeft: 6, fontSize: 12, padding: '1px 5px', background: 'var(--teal-3, #e0f8f3)', color: 'var(--teal-11, #008573)', borderRadius: 3 }}>
                               (您)
                             </span>
                           )}
                         </td>
-                        <td style={{ padding: '12px 14px', color: '#64748b' }}>
+                        <td style={{ padding: '12px 14px', color: 'var(--slate-11, #60646c)' }}>
                           <code>{m.email || m.userId}</code>
                         </td>
                         <td style={{ padding: '12px 14px' }}>
                           {canManageMembers && !isSelf ? (
                             <CustomSelect
                               value={m.role}
-                              ariaLabel={m.name + '项目角色'}
+                              ariaLabel={`${m.name}项目角色`}
                               disabled={Boolean(busy) || protectedMember}
                               onChange={(val) => handleRoleChange(m.userId, val)}
-                              options={ROLE_OPTIONS}
+                              options={ROLE_OPTIONS.map((r) => ({
+                                value: r.value,
+                                label: r.label,
+                              }))}
                               style={{ width: 140 }}
                             />
                           ) : (
-                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: roleInfo.color }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: roleInfo.color }}>
                               <span style={{ width: 8, height: 8, borderRadius: '50%', background: roleInfo.color }} />
                               {roleInfo.label}
                             </span>
                           )}
-                          {m.userId === ownerId && <p>当前负责人；角色调整需先交接项目资料。</p>}
+                          {m.userId === ownerId && <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--slate-11, #60646c)' }}>当前负责人；角色调整需先交接项目资料。</p>}
                         </td>
-                        <td style={{ padding: '12px 14px', color: '#475569' }}>
+                        <td style={{ padding: '12px 14px', color: 'var(--slate-11, #60646c)' }}>
                           {m.role === 'project_admin'
                             ? '完整数据接入、指标配置、看板发布与成员管理'
                             : m.role === 'editor'
@@ -318,13 +308,13 @@ export function MemberManagement({
                                 disabled={Boolean(busy) || protectedMember}
                                 onClick={() => setConfirmRemove({ open: true, member: m })}
                                 style={{
-                                  background: 'transparent',
-                                  border: '1px solid #fca5a5',
-                                  color: '#ef4444',
-                                  borderRadius: 4,
+                                  background: 'var(--red-3, #feebec)',
+                                  border: '0.5px solid var(--red-6, #fdbdbe)',
+                                  color: 'var(--red-11, #ce2c31)',
+                                  borderRadius: 'var(--ws-radius-control, 8px)',
                                   padding: '4px 10px',
                                   fontSize: 12,
-                                  cursor: 'pointer',
+                                  cursor: Boolean(busy) || protectedMember ? 'not-allowed' : 'pointer',
                                 }}
                               >
                                 {busy === m.userId ? '正在移除…' : '移除'}
@@ -342,53 +332,30 @@ export function MemberManagement({
         </article>
       )}
 
-      {/* Add Member Modal */}
+      {/* Add Member Dialog */}
       {showAddModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.45)', display: 'grid', placeItems: 'center', zIndex: 9999 }}>
-          <div style={{ background: '#fff', borderRadius: 12, padding: '24px', maxWidth: 460, width: '90%', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: 18, color: '#0f172a', fontWeight: 700 }}>添加项目成员</h3>
-              <button onClick={() => setShowAddModal(false)} style={{ background: 'transparent', border: 'none', fontSize: 20, cursor: 'pointer', color: '#94a3b8' }}>×</button>
-            </div>
-
-            <p style={{ margin: '0 0 18px 0', fontSize: 13, color: '#64748b' }}>
-              从公司组织中选择已有成员加入当前项目，并为其分配权限角色。
-            </p>
-
-            {unassignedUsers.length === 0 ? (
-              <div style={{ padding: 16, background: '#f8fafc', borderRadius: 8, fontSize: 13, color: '#64748b' }}>
-                组织内所有可用成员已全数加入当前项目。
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
-                  选择成员
-                  <CustomSelect
-                    value={selectedUserId}
-                    onChange={setSelectedUserId}
-                    options={unassignedUsers.map((u) => ({
-                      value: u.id,
-                      label: `${u.name} (${u.email || u.id})`,
-                    }))}
-                  />
-                </label>
-
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, fontWeight: 600 }}>
-                  分配项目角色
-                  <CustomSelect
-                    value={selectedRole}
-                    onChange={setSelectedRole}
-                    options={ROLE_OPTIONS}
-                  />
-                </label>
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 24 }}>
+        <Dialog
+          open={showAddModal}
+          title="添加项目成员"
+          width={480}
+          onClose={() => {
+            if (busy !== 'add') setShowAddModal(false);
+          }}
+          footer={
+            <>
               <button
                 type="button"
+                disabled={busy === 'add'}
                 onClick={() => setShowAddModal(false)}
-                style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: 13 }}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 'var(--ws-radius-control, 8px)',
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
+                  background: 'var(--ws-surface, #ffffff)',
+                  color: 'var(--slate-12, #1c2024)',
+                  cursor: busy === 'add' ? 'not-allowed' : 'pointer',
+                  fontSize: 12,
+                }}
               >
                 取消
               </button>
@@ -398,45 +365,117 @@ export function MemberManagement({
                   className="primary"
                   disabled={busy === 'add' || !selectedUserId}
                   onClick={handleAddMember}
-                  style={{ padding: '8px 18px', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
+                  style={{
+                    padding: '6px 16px',
+                    borderRadius: 'var(--ws-radius-control, 8px)',
+                    cursor: busy === 'add' || !selectedUserId ? 'not-allowed' : 'pointer',
+                    fontSize: 12,
+                    fontWeight: 600,
+                  }}
                 >
                   {busy === 'add' ? '正在添加…' : '确认添加'}
                 </button>
               )}
+            </>
+          }
+        >
+          <p style={{ margin: '0 0 16px 0', fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+            从组织中选择已有成员加入当前项目，并为其分配权限角色。
+          </p>
+
+          {unassignedUsers.length === 0 ? (
+            <div style={{ padding: 14, background: 'var(--slate-2, #f9f9fb)', borderRadius: 'var(--ws-radius-control, 8px)', fontSize: 12, color: 'var(--slate-11, #60646c)', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+              组织内所有可用成员已全数加入当前项目。
             </div>
-          </div>
-        </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
+                选择成员
+                <CustomSelect
+                  value={selectedUserId}
+                  ariaLabel="选择成员"
+                  placeholder="请选择成员"
+                  disabled={busy === 'add'}
+                  onChange={(val) => setSelectedUserId(val)}
+                  options={unassignedUsers.map((u) => ({
+                    value: u.id,
+                    label: `${u.name} (${u.email || u.id})`,
+                  }))}
+                />
+              </label>
+
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
+                分配项目角色
+                <CustomSelect
+                  value={selectedRole}
+                  ariaLabel="分配项目角色"
+                  disabled={busy === 'add'}
+                  onChange={(val) => setSelectedRole(val)}
+                  options={ROLE_OPTIONS.map((r) => ({
+                    value: r.value,
+                    label: `${r.label} (${r.badge})`,
+                  }))}
+                />
+              </label>
+            </div>
+          )}
+        </Dialog>
       )}
 
       {/* Confirmation Dialog for Removal */}
       {confirmRemove.open && confirmRemove.member && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(15,23,42,0.45)', display: 'grid', placeItems: 'center', zIndex: 9999 }}>
-          <div style={{ background: '#fff', borderRadius: 12, padding: '24px', maxWidth: 440, width: '90%', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
-            <h3 style={{ margin: '0 0 10px 0', fontSize: 18, fontWeight: 700, color: '#0f172a' }}>
-              确认将「{confirmRemove.member.name}」移出项目？
-            </h3>
-            <p style={{ margin: '0 0 20px 0', fontSize: 14, color: '#475569', lineHeight: 1.5 }}>
-              移除后，该成员将立即失去对当前项目数据、数据源与看板的访问权限。
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+        <Dialog
+          open={confirmRemove.open && Boolean(confirmRemove.member)}
+          title={`确认将「${confirmRemove.member.name}」移出项目？`}
+          width={460}
+          onClose={() => {
+            if (busy !== confirmRemove.member?.userId) {
+              setConfirmRemove({ open: false, member: null });
+            }
+          }}
+          footer={
+            <>
               <button
                 type="button"
+                disabled={busy === confirmRemove.member.userId}
                 onClick={() => setConfirmRemove({ open: false, member: null })}
-                style={{ padding: '8px 16px', borderRadius: 6, border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer', fontSize: 13 }}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 'var(--ws-radius-control, 8px)',
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
+                  background: 'var(--ws-surface, #ffffff)',
+                  color: 'var(--slate-12, #1c2024)',
+                  cursor: busy === confirmRemove.member.userId ? 'not-allowed' : 'pointer',
+                  fontSize: 12,
+                }}
               >
                 取消
               </button>
               <button
                 type="button"
+                disabled={busy === confirmRemove.member.userId}
                 onClick={() => executeRemove(confirmRemove.member!)}
-                style={{ padding: '8px 18px', borderRadius: 6, border: 'none', background: '#ef4444', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}
+                style={{
+                  padding: '6px 16px',
+                  borderRadius: 'var(--ws-radius-control, 8px)',
+                  border: 'none',
+                  background: 'var(--red-9, #e5484d)',
+                  color: '#ffffff',
+                  cursor: busy === confirmRemove.member.userId ? 'not-allowed' : 'pointer',
+                  fontWeight: 600,
+                  fontSize: 12,
+                }}
               >
-                确认移除
+                {busy === confirmRemove.member.userId ? '正在移除…' : '确认移除'}
               </button>
-            </div>
-          </div>
-        </div>
+            </>
+          }
+        >
+          <p style={{ margin: '0 0 12px 0', fontSize: 14, color: 'var(--slate-11, #60646c)', lineHeight: 1.5 }}>
+            移除后，该成员将立即失去对当前项目数据、数据源与看板的访问权限。
+          </p>
+        </Dialog>
       )}
-    </div>
+    </>
   );
 }

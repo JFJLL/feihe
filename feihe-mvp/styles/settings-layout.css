@@ -1,0 +1,170 @@
+/* Settings Workspace unified layout rules:
+   - Colors: Radix CSS variables (--slate-*, --teal-*, --jade-*, --amber-*, --red-*)
+   - Font sizes strictly: 12px, 14px, 16px, 22px
+   - Borders: 0.5px solid var(--slate-6)
+   - Spacing: macro 28px, micro 16px, inner 24px
+   - Radii: 12px (macro / panels) and 8px (micro / inputs, buttons, pills)
+   - Separators: /
+*/
+
+.settings-workspace-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.settings-nav-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 16px 0;
+  width: 100%;
+}
+
+/* Auxiliary always-visible navigation row */
+.settings-aux-nav-track {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 10px;
+  background: var(--slate-2, #f9f9fb);
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.settings-aux-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--slate-11, #60646c);
+  text-decoration: none;
+  background: transparent;
+  transition: background 250ms ease-out, color 250ms ease-out;
+}
+
+.settings-aux-nav-link:hover {
+  background: var(--slate-4, #e8e8ec);
+  color: var(--slate-12, #1c2024);
+}
+
+.settings-aux-nav-link.active,
+.settings-aux-nav-link[aria-current='page'] {
+  background: var(--bg-card, #ffffff);
+  color: var(--teal-11, #008573);
+  font-weight: 600;
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+}
+
+/* Card Panels */
+.settings-panel-box {
+  background: var(--bg-card, #ffffff);
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-panel-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--slate-12, #1c2024);
+}
+
+.settings-panel-desc {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--slate-11, #60646c);
+  line-height: 1.5;
+}
+
+/* Sticky / Fixed Bottom Action Bar */
+.settings-sticky-action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 25;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 -2px 10px rgba(28, 32, 36, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 0;
+}
+
+.settings-sticky-action-desc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--slate-11, #60646c);
+}
+
+.settings-sticky-action-btn {
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Compact Completed Jobs Bar */
+.rules-completed-jobs-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--slate-2, #f9f9fb);
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  border-radius: 8px;
+  padding: 12px 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rules-completed-jobs-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rules-completed-jobs-count {
+  font-size: 14px;
+  color: var(--slate-12, #1c2024);
+}
+
+.rules-completed-jobs-count strong {
+  font-size: 16px;
+  color: var(--teal-11, #008573);
+  font-weight: 600;
+}
+
+.rules-completed-jobs-hint {
+  font-size: 12px;
+  color: var(--slate-11, #60646c);
+}
+
+.rules-view-jobs-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--bg-card, #ffffff);
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  color: var(--slate-12, #1c2024);
+  cursor: pointer;
+  transition: background 250ms ease-out;
+}
+
+.rules-view-jobs-btn:hover {
+  background: var(--slate-3, #f0f0f3);
+}

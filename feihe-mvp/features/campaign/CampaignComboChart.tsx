@@ -13,19 +13,19 @@ import './campaign-combo.css';
  *   Slate: #8c9ba5 (Baseline / grid line / reference)
  */
 export const CAMPAIGN_PALETTE = {
-  primary: '#2c7168',
-  purple: '#8273a3',
-  gold: '#b88a45',
-  terracotta: '#bd7964',
-  slate: '#8c9ba5',
-  warmBg: '#f6f5f2',
+  primary: '#008573',
+  purple: '#5b5bd6',
+  gold: '#ffc53d',
+  terracotta: '#e5484d',
+  slate: '#8b8d98',
+  warmBg: '#f9f9fb',
   panelBg: '#ffffff',
-  textMain: '#1f2937',
-  textMuted: '#64748b',
-  textSubtle: '#94a3b8',
-  border: '#e2e8f0',
-  borderWarm: '#e6e3dc',
-  gridLine: '#edf2f7',
+  textMain: '#1c2024',
+  textMuted: '#60646c',
+  textSubtle: '#8b8d98',
+  border: '#d9d9e0',
+  borderWarm: '#d9d9e0',
+  gridLine: '#f0f0f3',
 } as const;
 
 export const DEFAULT_SERIES_COLORS = [
@@ -33,8 +33,8 @@ export const DEFAULT_SERIES_COLORS = [
   CAMPAIGN_PALETTE.purple,
   CAMPAIGN_PALETTE.gold,
   CAMPAIGN_PALETTE.terracotta,
-  '#4d8b80',
-  '#9c6f84',
+  '#12a594',
+  '#5753c6',
   CAMPAIGN_PALETTE.slate,
 ];
 
@@ -442,7 +442,6 @@ export function CampaignComboChart({
             );
           })}
         </div>
-        <span className="ca-combo-readout-hint">悬停或按箭头键切换</span>
       </div>
 
       {/* SVG Canvas (viewBox matches containerWidth for 1:1 crisp text) */}
@@ -492,7 +491,7 @@ export function CampaignComboChart({
               x2={totalWidth - rightPad}
               y1={getY('left', 0)}
               y2={getY('left', 0)}
-              stroke="#cbd5e1"
+              stroke="#cdced6"
               strokeWidth="1.2"
             />
           )}
@@ -504,7 +503,7 @@ export function CampaignComboChart({
               y={topPad - 10}
               textAnchor="start"
               fill={CAMPAIGN_PALETTE.textMuted}
-              fontSize="11"
+              fontSize="12"
               fontWeight="600"
             >
               {leftUnit ? `${leftUnit} (左轴)` : '左轴'}
@@ -518,7 +517,7 @@ export function CampaignComboChart({
                   y={y + 3.5}
                   textAnchor="end"
                   fill={CAMPAIGN_PALETTE.textMuted}
-                  fontSize="10.5"
+                  fontSize="12"
                   data-axis-tick="left"
                 >
                   {fmtAxisTick(tickVal, leftScale.step)}
@@ -535,7 +534,7 @@ export function CampaignComboChart({
                 y={topPad - 10}
                 textAnchor="end"
                 fill={CAMPAIGN_PALETTE.textMuted}
-                fontSize="11"
+                fontSize="12"
                 fontWeight="600"
               >
                 {rightUnit ? `${rightUnit} (右轴)` : '右轴'}
@@ -549,7 +548,7 @@ export function CampaignComboChart({
                     y={y + 3.5}
                     textAnchor="start"
                     fill={CAMPAIGN_PALETTE.textMuted}
-                    fontSize="10.5"
+                    fontSize="12"
                     data-axis-tick="right"
                   >
                     {fmtAxisTick(tickVal, rightScale.step)}
@@ -751,7 +750,7 @@ export function CampaignComboChart({
                 y={topPad}
                 width={bandWidth}
                 height={plotHeight}
-                fill="rgba(44, 113, 104, 0.06)"
+                fill="rgba(0, 133, 115, 0.06)"
                 rx={3}
               />
               <line
@@ -760,7 +759,7 @@ export function CampaignComboChart({
                 x2={getCenterX(activeIndex)}
                 y1={topPad}
                 y2={totalHeight - bottomPad}
-                stroke="#94a3b8"
+                stroke="#60646c"
                 strokeWidth="1.2"
                 strokeDasharray="3 3"
               />
@@ -786,7 +785,7 @@ export function CampaignComboChart({
                 y={topPad}
                 width={bandWidth}
                 height={plotHeight}
-                fill={isSelected ? 'rgba(44, 113, 104, 0.06)' : 'transparent'}
+                fill={isSelected ? 'rgba(0, 133, 115, 0.06)' : 'transparent'}
                 tabIndex={0}
                 role="button"
                 aria-label={readoutSummary}
@@ -853,7 +852,7 @@ export function CampaignComboChart({
                   textAnchor={anchor}
                   fill={activeIndex === i ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMuted}
                   fontWeight={activeIndex === i ? '600' : '400'}
-                  fontSize="10.5"
+                  fontSize="12"
                   data-axis-tick="x"
                 >
                   {displayLabel}

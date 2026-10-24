@@ -1,7 +1,7 @@
 /**
  * Campaign Daily Dashboard Scoped Styles
  * Unified with CampaignCharts:
- *   Warm bg: #f6f5f2, Primary: #2c7168, Purple: #8273a3, Gold: #b88a45, Border: #e6e3dc
+ *   Warm bg: #f9f9fb, Primary: var(--teal-11, #008573), Purple: var(--iris-9, #0d74ce), Gold: var(--amber-9, #ffc53d), Border: #d9d9e0
  */
 
 .ca-daily-toolbar {
@@ -12,7 +12,7 @@
   flex-wrap: wrap;
   padding: 12px 16px;
   background: #ffffff;
-  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 10px;
 }
 
@@ -26,7 +26,7 @@
 .ca-filter-label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--ca-palette-muted, #64748b);
+  color:var(--ca-palette-muted, #60646c);
   white-space: nowrap;
 }
 
@@ -34,42 +34,42 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #f8fafc;
+  background: #f9f9fb;
   padding: 4px 10px;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   border-radius: 6px;
 }
 
 .ca-date-input {
-  border: none;
+  border:none;
   background: transparent;
   font-size: 12px;
-  color: #1e293b;
+  color:#1c2024;
   font-family: inherit;
   outline: none;
   padding: 2px 0;
 }
 
 .ca-date-sep {
-  color: #94a3b8;
+  color:#60646c;
   font-size: 12px;
 }
 
 .ca-btn-reset {
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   background: #ffffff;
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 11.5px;
-  color: #64748b;
+  font-size: 12px;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
   white-space: nowrap;
 }
 
 .ca-btn-reset:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: #f0f0f3;
+  color:#1c2024;
 }
 
 
@@ -94,13 +94,13 @@
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   background: #ffffff;
   padding: 5px 10px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
-  color: #1e293b;
+  color:#1c2024;
   outline: none;
   cursor: pointer;
 }
@@ -111,18 +111,18 @@
   gap: 6px;
   padding: 4px 12px;
   border-radius: 6px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--ca-palette-primary, #2c7168);
-  background: rgba(44, 113, 104, 0.08);
-  border: 1px solid rgba(44, 113, 104, 0.25);
+  color:var(--ca-palette-primary, var(--teal-11, #008573));
+  background: rgba(0, 133, 115, 0.08);
+  border:0.5px solid rgba(0, 133, 115, 0.25);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-btn-switch-dataset:hover {
-  background: rgba(44, 113, 104, 0.16);
-  color: #1a4943;
+  background: rgba(0, 133, 115, 0.16);
+  color:#0d3d38;
 }
 
 /* ==========================================================================
@@ -156,17 +156,17 @@
 .ca-chart-caption {
   margin: 0 0 10px 0;
   padding: 6px 10px;
-  background: #f8fafc;
-  border-left: 3px solid var(--ca-palette-primary, #2c7168);
+  background: #f9f9fb;
+  border-left: 0.5px solid #d9d9e0;
   border-radius: 0 4px 4px 0;
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1.5;
-  color: #475569;
+  color:#60646c;
 }
 
 /* 消除 ComboChart 在 ChartPanel 内部的重复标题与多余嵌套边框 */
 .ca-panel .ca-combo-card {
-  border: none;
+  border:none;
   box-shadow: none;
   padding: 0;
   background: transparent;
@@ -182,10 +182,10 @@
 
 .ca-daily-details-panel {
   background: #ffffff;
-  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 3px rgba(28, 32, 36, 0.03);
 }
 
 .ca-daily-details-summary {
@@ -196,14 +196,14 @@
   background: #ffffff;
   cursor: pointer;
   user-select: none;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
-  transition: background-color 0.15s ease;
+  color:#1c2024;
+  transition: background-color 250ms ease-out;
 }
 
 .ca-daily-details-summary:hover {
-  background: #f8fafc;
+  background: #f9f9fb;
 }
 
 .ca-daily-details-summary::-webkit-details-marker {
@@ -217,7 +217,7 @@
 }
 
 .ca-daily-details-icon {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .ca-daily-details-badge {
@@ -225,21 +225,21 @@
   align-items: center;
   padding: 1px 8px;
   border-radius: 9999px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  background: #f1f5f9;
-  color: #64748b;
+  background: #f0f0f3;
+  color:#60646c;
 }
 
 .ca-daily-details-hint {
-  font-size: 11.5px;
-  color: #94a3b8;
+  font-size: 12px;
+  color:#60646c;
   font-weight: 400;
 }
 
 .ca-daily-details-panel[open] .ca-daily-details-summary {
-  border-bottom: 1px solid var(--ca-palette-border-warm, #e6e3dc);
-  background: #f8fafc;
+  border-bottom:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
+  background: #f9f9fb;
 }
 
 .ca-daily-details-panel .ca-table-wrap {
@@ -259,25 +259,25 @@
   justify-content: center;
   padding: 48px 24px;
   background: #ffffff;
-  border: 1px dashed var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px dashed var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 12px;
   text-align: center;
   gap: 10px;
 }
 
 .ca-daily-empty-icon {
-  font-size: 32px;
+  font-size: 22px;
 }
 
 .ca-daily-empty-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  color: #1e293b;
+  color:#1c2024;
 }
 
 .ca-daily-empty-desc {
-  font-size: 12.5px;
-  color: #64748b;
+  font-size: 14px;
+  color:#60646c;
   max-width: 480px;
   line-height: 1.6;
 }

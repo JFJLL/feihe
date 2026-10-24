@@ -79,7 +79,7 @@ export function CompetitorConfigModal({
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(15, 23, 42, 0.45)',
+      background: 'rgba(28, 32, 36, 0.45)',
       backdropFilter: 'blur(3px)',
       display: 'flex',
       alignItems: 'center',
@@ -93,21 +93,21 @@ export function CompetitorConfigModal({
         width: '100%',
         maxWidth: '540px',
         boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-        border: '1px solid #e2e8f0',
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
         overflow: 'hidden',
       }}>
         <div style={{
           padding: '1.125rem 1.5rem',
-          borderBottom: '1px solid #e2e8f0',
+          borderBottom: '0.5px solid #d9d9e0',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.0625rem', fontWeight: 700, color: '#0f172a' }}>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1c2024' }}>
               竞品监测数据源绑定与调度参数
             </h3>
-            <small style={{ color: '#64748b' }}>项目专属配置 · 仅管理员/编辑权限可修改</small>
+            <small style={{ color: 'var(--slate-11, #60646c)' }}>项目专属配置 / 仅管理员/编辑权限可修改</small>
           </div>
           <button
             type="button"
@@ -115,9 +115,9 @@ export function CompetitorConfigModal({
             style={{
               background: 'none',
               border: 'none',
-              fontSize: '1.25rem',
+              fontSize: 22,
               cursor: 'pointer',
-              color: '#94a3b8',
+              color: '#60646c',
             }}
           >
             ✕
@@ -128,11 +128,11 @@ export function CompetitorConfigModal({
           {error && (
             <div style={{
               padding: '0.625rem 0.875rem',
-              background: '#fef2f2',
-              border: '1px solid #fecaca',
+              background: '#feebec',
+              border: '0.5px solid #fdbdbe',
               borderRadius: '6px',
-              color: '#b91c1c',
-              fontSize: '0.8125rem',
+              color: '#ce2c31',
+              fontSize: 14,
               marginBottom: '1rem',
             }}>
               {error}
@@ -140,8 +140,8 @@ export function CompetitorConfigModal({
           )}
 
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
-              上游采集系统 Task ID <span style={{ color: '#ef4444' }}>*</span>
+            <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#1c2024', marginBottom: '0.35rem' }}>
+              上游采集系统 Task ID <span style={{ color: '#e5484d' }}>*</span>
             </label>
             <input
               type="text"
@@ -151,20 +151,20 @@ export function CompetitorConfigModal({
               style={{
                 width: '100%',
                 padding: '0.5rem 0.75rem',
-                fontSize: '0.8125rem',
-                border: '1px solid #cbd5e1',
+                fontSize: 14,
+                border: '0.5px solid var(--slate-6, #d9d9e0)',
                 borderRadius: '6px',
                 fontFamily: 'monospace',
               }}
             />
-            <small style={{ display: 'block', color: '#64748b', marginTop: '0.25rem', fontSize: '0.75rem' }}>
+            <small style={{ display: 'block', color: 'var(--slate-11, #60646c)', marginTop: '0.25rem', fontSize: '0.75rem' }}>
               必须为公司采集系统 (http://xhs.yq.ipscg.com/grab) 中经核验的只读任务 ID，禁止跨项目越权。
             </small>
           </div>
 
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
-              监测竞品关键词 (逗号分隔) <span style={{ color: '#ef4444' }}>*</span>
+            <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#1c2024', marginBottom: '0.35rem' }}>
+              监测竞品关键词 (逗号分隔) <span style={{ color: '#e5484d' }}>*</span>
             </label>
             <input
               type="text"
@@ -174,8 +174,8 @@ export function CompetitorConfigModal({
               style={{
                 width: '100%',
                 padding: '0.5rem 0.75rem',
-                fontSize: '0.8125rem',
-                border: '1px solid #cbd5e1',
+                fontSize: 14,
+                border: '0.5px solid var(--slate-6, #d9d9e0)',
                 borderRadius: '6px',
               }}
             />
@@ -183,7 +183,7 @@ export function CompetitorConfigModal({
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+              <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#1c2024', marginBottom: '0.35rem' }}>
                 单次增量预算页数
               </label>
               <input
@@ -195,15 +195,15 @@ export function CompetitorConfigModal({
                 style={{
                   width: '100%',
                   padding: '0.45rem 0.65rem',
-                  fontSize: '0.8125rem',
-                  border: '1px solid #cbd5e1',
+                  fontSize: 14,
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
                   borderRadius: '6px',
                 }}
               />
-              <small style={{ color: '#64748b', fontSize: '0.71875rem' }}>单次运行限制页数，防止耗尽额度</small>
+              <small style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>单次运行限制页数，防止耗尽额度</small>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+              <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#1c2024', marginBottom: '0.35rem' }}>
                 每页记录条数
               </label>
               <input
@@ -215,18 +215,18 @@ export function CompetitorConfigModal({
                 style={{
                   width: '100%',
                   padding: '0.45rem 0.65rem',
-                  fontSize: '0.8125rem',
-                  border: '1px solid #cbd5e1',
+                  fontSize: 14,
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
                   borderRadius: '6px',
                 }}
               />
-              <small style={{ color: '#64748b', fontSize: '0.71875rem' }}>建议 20 条，验证时可调小</small>
+              <small style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>建议 20 条，验证时可调小</small>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+              <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#1c2024', marginBottom: '0.35rem' }}>
                 安全限速延时 (ms)
               </label>
               <input
@@ -238,15 +238,15 @@ export function CompetitorConfigModal({
                 style={{
                   width: '100%',
                   padding: '0.45rem 0.65rem',
-                  fontSize: '0.8125rem',
-                  border: '1px solid #cbd5e1',
+                  fontSize: 14,
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
                   borderRadius: '6px',
                 }}
               />
-              <small style={{ color: '#64748b', fontSize: '0.71875rem' }}>必须 &gt;= 1000ms 保护上游</small>
+              <small style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>必须 &gt;= 1000ms 保护上游</small>
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+              <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#1c2024', marginBottom: '0.35rem' }}>
                 近期回刷窗口 (天)
               </label>
               <input
@@ -258,12 +258,12 @@ export function CompetitorConfigModal({
                 style={{
                   width: '100%',
                   padding: '0.45rem 0.65rem',
-                  fontSize: '0.8125rem',
-                  border: '1px solid #cbd5e1',
+                  fontSize: 14,
+                  border: '0.5px solid var(--slate-6, #d9d9e0)',
                   borderRadius: '6px',
                 }}
               />
-              <small style={{ color: '#64748b', fontSize: '0.71875rem' }}>重叠回刷应对排序不稳定</small>
+              <small style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>重叠回刷应对排序不稳定</small>
             </div>
           </div>
 
@@ -271,7 +271,7 @@ export function CompetitorConfigModal({
             display: 'flex',
             justifyContent: 'flex-end',
             gap: '0.625rem',
-            borderTop: '1px solid #e2e8f0',
+            borderTop: '0.5px solid #d9d9e0',
             paddingTop: '1rem',
           }}>
             <button
@@ -279,9 +279,9 @@ export function CompetitorConfigModal({
               onClick={onClose}
               style={{
                 padding: '0.45rem 0.875rem',
-                fontSize: '0.8125rem',
+                fontSize: 14,
                 background: '#ffffff',
-                border: '1px solid #cbd5e1',
+                border: '0.5px solid var(--slate-6, #d9d9e0)',
                 borderRadius: '6px',
                 cursor: 'pointer',
               }}
@@ -293,11 +293,11 @@ export function CompetitorConfigModal({
               disabled={saving}
               style={{
                 padding: '0.45rem 1rem',
-                fontSize: '0.8125rem',
+                fontSize: 14,
                 fontWeight: 600,
-                background: '#0284c7',
+                background: '#0d74ce',
                 color: '#ffffff',
-                border: '1px solid #0284c7',
+                border: '0.5px solid #0d74ce',
                 borderRadius: '6px',
                 cursor: saving ? 'not-allowed' : 'pointer',
                 opacity: saving ? 0.7 : 1,

@@ -40,7 +40,7 @@ export function OrganizationManager({ metadata, onClose, onRefresh }: { metadata
       <div className="integration-actions"><button type="button" disabled={busy} onClick={() => setEditing(null)}>取消编辑</button><button type="submit" className="primary" disabled={busy || !editing.name.trim()}>{busy ? '正在保存…' : '保存' + label}</button></div>
     </form>}
     <div className="integration-table-scroll"><table className="data-table" aria-label={label + '目录'}><thead><tr><th>名称</th><th>{kind === 'client' ? '行业' : kind === 'user' ? '邮箱 / 部门' : '项目使用'}</th><th>操作</th></tr></thead><tbody>
-      {entries.map(entry => <tr key={entry.id}><td>{entry.name}</td><td>{kind === 'client' ? entry.industry || '未填写' : kind === 'user' ? (entry.email || '') + ' · ' + (metadata.departments.find(d => d.id === entry.departmentId)?.name || '未设置') : '可用于项目归属'}</td><td><button type="button" disabled={busy} aria-label={'编辑' + label + '：' + entry.name} onClick={() => edit(entry)}>编辑</button></td></tr>)}
+      {entries.map(entry => <tr key={entry.id}><td>{entry.name}</td><td>{kind === 'client' ? entry.industry || '未填写' : kind === 'user' ? (entry.email || '') + ' / ' + (metadata.departments.find(d => d.id === entry.departmentId)?.name || '未设置') : '可用于项目归属'}</td><td><button type="button" disabled={busy} aria-label={'编辑' + label + '：' + entry.name} onClick={() => edit(entry)}>编辑</button></td></tr>)}
       {!entries.length && <tr><td colSpan={3}>暂无{label}，可从上方登记。</td></tr>}
     </tbody></table></div>
   </Dialog>;

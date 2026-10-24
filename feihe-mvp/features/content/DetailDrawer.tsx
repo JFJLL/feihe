@@ -90,8 +90,8 @@ export function DetailDrawer({
             <span className="note-detail-modal-eyebrow">
               NOTE DETAIL
               {!canEdit && (
-                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>
-                  · 🔒 {readonlyReason}
+                <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 500 }}>
+                  / 🔒 {readonlyReason}
                 </span>
               )}
             </span>
@@ -166,7 +166,7 @@ export function DetailDrawer({
               {n?.content ? (
                 n.content
               ) : (
-                <span style={{ color: '#94a3b8' }}>源数据未提供正文长文本</span>
+                <span style={{ color: '#60646c' }}>源数据未提供正文长文本</span>
               )}
             </div>
 
@@ -176,12 +176,12 @@ export function DetailDrawer({
                 target="_blank"
                 rel="noreferrer"
                 className="text-link"
-                style={{ fontSize: '12px', color: '#0284c7', alignSelf: 'flex-start', fontWeight: 600 }}
+                style={{ fontSize: '12px', color: '#0d74ce', alignSelf: 'flex-start', fontWeight: 600 }}
               >
                 在小红书查看原笔记 ↗
               </a>
             ) : n?.url ? (
-              <span style={{ fontSize: '11.5px', color: '#94a3b8' }}>原笔记标识: {n.url}</span>
+              <span style={{ fontSize: '12px', color: '#60646c' }}>原笔记标识: {n.url}</span>
             ) : null}
           </div>
         </section>
@@ -212,18 +212,18 @@ export function DetailDrawer({
             <section className="note-editor">
               {!canEdit ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>标题</span>
-                    <div style={{ fontSize: '13.5px', color: '#0f172a', fontWeight: 600, marginTop: '2px' }}>{draft.title || '未命名'}</div>
+                  <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>标题</span>
+                    <div style={{ fontSize: '14px', color: '#1c2024', fontWeight: 600, marginTop: '2px' }}>{draft.title || '未命名'}</div>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>博主</span>
-                      <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>{draft.author || '未知'}</div>
+                    <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>博主</span>
+                      <div style={{ fontSize: '14px', color: '#1c2024', marginTop: '2px' }}>{draft.author || '未知'}</div>
                     </div>
-                    <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '10px 12px' }}>
-                      <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 600 }}>产品范围</span>
-                      <div style={{ fontSize: '13px', color: '#1e293b', marginTop: '2px' }}>{draft.productScope || '本品'}</div>
+                    <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '8px', padding: '10px 12px' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>产品范围</span>
+                      <div style={{ fontSize: '14px', color: '#1c2024', marginTop: '2px' }}>{draft.productScope || '本品'}</div>
                     </div>
                   </div>
                   <div className="note-readonly-banner">
@@ -296,7 +296,7 @@ export function DetailDrawer({
                 </div>
               ))
             ) : (
-              <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>暂无历史快照</div>
+              <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#60646c', fontSize: '12px' }}>暂无历史快照</div>
             )}
           </div>
 
@@ -306,16 +306,16 @@ export function DetailDrawer({
               detail.comments.map((x) => (
                 <article key={x.id}>
                   <span>
-                    {x.sentiment} · {x.category}
+                    {x.sentiment} / {x.category}
                   </span>
                   <p>{x.content}</p>
                   <small>
-                    {x.action} · {x.treatmentStatus}
+                    {x.action} / {x.treatmentStatus}
                   </small>
                 </article>
               ))
             ) : (
-              <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>暂无需处置的关键评论</div>
+              <div className="empty" style={{ padding: 12, textAlign: 'center', color: '#60646c', fontSize: '12px' }}>暂无需处置的关键评论</div>
             )}
           </div>
         </div>

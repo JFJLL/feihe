@@ -415,7 +415,7 @@ export function CommentActionWorkbench({
             <button
               type="button"
               className="primary"
-              style={{ fontSize: '13px', padding: '6px 14px' }}
+              style={{ fontSize: '14px', padding: '6px 14px' }}
               onClick={loadWorkbenchData}
               disabled={loading}
             >
@@ -423,7 +423,7 @@ export function CommentActionWorkbench({
             </button>
             <Link
               className="btn-link"
-              style={{ fontSize: '13px' }}
+              style={{ fontSize: '14px' }}
               href={'/api/export?type=comments&projectId=' + encodeURIComponent(projectId)}
             >
               导出关键评论 ↗
@@ -516,7 +516,7 @@ export function CommentActionWorkbench({
                 setSelectedDate(e.target.value);
                 setPage(1);
               }}
-              style={{ borderColor: '#c7d2fe' }}
+              style={{ borderColor: '#cbcdff' }}
               aria-label="判定日期批次筛选"
             >
               <option value="">全部判定日期</option>
@@ -530,14 +530,14 @@ export function CommentActionWorkbench({
         </WorkspaceToolbar>
 
         {needsRecalculation && (
-          <div style={{ marginBottom: '14px', padding: '12px 16px', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ color: '#92400e', fontSize: '13px', fontWeight: 600 }}>该日期尚未生成规则判定</span>
+          <div style={{ marginBottom: '14px', padding: '12px 16px', background: '#fff7c2', border: '0.5px solid #f3d673', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: '#ab6400', fontSize: '14px', fontWeight: 600 }}>该日期尚未生成规则判定</span>
             {canWrite && <button
               type="button"
               className="primary"
               disabled={recalculating}
               onClick={handleRecalculate}
-              style={{ fontSize: '12.5px', padding: '4px 12px' }}
+              style={{ fontSize: 14, padding: '4px 12px' }}
             >
               {recalculating ? '正在生成判定…' : '生成本批次判定'}
             </button>}
@@ -590,15 +590,15 @@ export function CommentActionWorkbench({
                       />
                       <strong
                         style={{
-                          fontSize: '13px',
+                          fontSize: '14px',
                           color:
                             item.action === 'delete'
-                              ? '#b91c1c'
+                              ? '#ce2c31'
                               : item.action === 'reply'
-                              ? '#0369a1'
+                              ? '#0d74ce'
                               : item.action === 'supplement'
-                              ? '#d97706'
-                              : '#334155',
+                              ? '#ffc53d'
+                              : '#1c2024',
                         }}
                       >
                         {item.action === 'reply'
@@ -614,20 +614,20 @@ export function CommentActionWorkbench({
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                       {item.sentiment && <StatusBadge status={item.sentiment} />}
-                      <span style={{ fontSize: '12px', color: '#64748b' }}>{item.category || '规则判定'}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>{item.category || '规则判定'}</span>
                     </div>
                   </td>
                   <td style={{ maxWidth: '320px' }}>
-                    <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: '#0f172a' }}>
+                    <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.5, color: '#1c2024' }}>
                       {item.content}
                     </p>
                   </td>
                   <td>
-                    <span style={{ fontSize: '12.5px', color: '#475569' }}>{item.reason}</span>
+                    <span style={{ fontSize: 14, color: '#60646c' }}>{item.reason}</span>
                   </td>
                   <td>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 600 }}>{item.author || '未知作者'}</span>
+                      <span style={{ fontSize: '14px', fontWeight: 600 }}>{item.author || '未知作者'}</span>
                       {item.link ? (
                         <a
                           href={item.link}
@@ -650,7 +650,7 @@ export function CommentActionWorkbench({
                               笔记明细 ({item.noteId.slice(0, 8)}…) →
                             </button>
                           ) : (
-                            <small style={{ color: '#94a3b8' }}>{item.noteId.slice(0, 10)}…</small>
+                            <small style={{ color: '#60646c' }}>{item.noteId.slice(0, 10)}…</small>
                           )
                         )
                       )}
@@ -658,7 +658,7 @@ export function CommentActionWorkbench({
                         <button
                           type="button"
                           className="text-link"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '12px', color: '#0284c7', textAlign: 'left' }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '12px', color: '#0d74ce', textAlign: 'left' }}
                           onClick={() => openNote(item.noteId!)}
                         >
                           笔记明细 →
@@ -680,7 +680,7 @@ export function CommentActionWorkbench({
                             <button
                               type="button"
                               className="primary"
-                              style={{ fontSize: '12px', padding: '4px 10px', background: '#0284c7' }}
+                              style={{ fontSize: '12px', padding: '4px 10px', background: '#0d74ce' }}
                               onClick={() => handleResolve(item, '已回复')}
                             >
                               标记已回复
@@ -690,7 +690,7 @@ export function CommentActionWorkbench({
                             <button
                               type="button"
                               className="primary"
-                              style={{ fontSize: '12px', padding: '4px 10px', background: '#dc2626', borderColor: '#b91c1c' }}
+                              style={{ fontSize: '12px', padding: '4px 10px', background: '#ce2c31', borderColor: '#ce2c31' }}
                               onClick={() => handleResolve(item, '已删除')}
                             >
                               标记已删除
@@ -700,7 +700,7 @@ export function CommentActionWorkbench({
                             <button
                               type="button"
                               className="primary"
-                              style={{ fontSize: '12px', padding: '4px 10px', background: '#d97706', borderColor: '#b45309' }}
+                              style={{ fontSize: '12px', padding: '4px 10px', background: '#ffc53d', borderColor: '#ab6400' }}
                               onClick={() => handleResolve(item, '已补充')}
                             >
                               标记已补充
@@ -710,7 +710,7 @@ export function CommentActionWorkbench({
                             <button
                               type="button"
                               className="primary"
-                              style={{ fontSize: '12px', padding: '4px 10px', background: '#475569' }}
+                              style={{ fontSize: '12px', padding: '4px 10px', background: '#60646c' }}
                               onClick={() => handleResolve(item, '已确认观察')}
                             >
                               标记已处理
@@ -718,7 +718,7 @@ export function CommentActionWorkbench({
                           )}
                         </>
                       ) : (
-                        <span style={{ fontSize: '12px', color: '#166534', fontWeight: 600 }}>{item.status === 'handled' ? '✓ 已闭环' : '待处理 · 只读'}</span>
+                        <span style={{ fontSize: '12px', color: '#208368', fontWeight: 600 }}>{item.status === 'handled' ? '✓ 已闭环' : '待处理 / 只读'}</span>
                       )}
 
                       {canWrite && item.source === 'key-comment' && (

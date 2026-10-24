@@ -170,8 +170,8 @@ export function CampaignSourcesPanel({
       {/* 顶部概览说明条 */}
       <div
         style={{
-          background: '#f8fafc',
-          border: '1px solid #e2e8f0',
+          background: '#f9f9fb',
+          border: '0.5px solid #d9d9e0',
           borderRadius: 8,
           padding: '16px 20px',
           display: 'flex',
@@ -182,13 +182,13 @@ export function CampaignSourcesPanel({
         }}
       >
         <div>
-          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#0f172a' }}>
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#1c2024' }}>
             战役复盘底表与快照数据源
           </h3>
-          <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>
+          <p style={{ margin: '4px 0 0', fontSize: 14, color: '#60646c' }}>
             展示当前战役项目绑定的飞书文档、多维表格与离线日报元数据，真实反映读取状态与快照周期。
             {activeDashboard?.reportPeriod && (
-              <span style={{ marginLeft: 8, fontWeight: 500, color: '#334155' }}>
+              <span style={{ marginLeft: 8, fontWeight: 500, color: '#1c2024' }}>
                 统计周期：{activeDashboard.reportPeriod}
               </span>
             )}
@@ -196,7 +196,7 @@ export function CampaignSourcesPanel({
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {activeDashboard?.updatedAt && (
-            <span style={{ fontSize: 12, color: '#64748b' }}>
+            <span style={{ fontSize: 12, color: '#60646c' }}>
               快照时间：{activeDashboard.updatedAt}
             </span>
           )}
@@ -205,12 +205,12 @@ export function CampaignSourcesPanel({
             onClick={handleReload}
             disabled={loading}
             style={{
-              fontSize: 13,
+              fontSize: 14,
               padding: '6px 14px',
               borderRadius: 6,
-              border: '1px solid #cbd5e1',
+              border: '0.5px solid #cdced6',
               background: '#fff',
-              color: '#334155',
+              color: '#1c2024',
               cursor: loading ? 'not-allowed' : 'pointer',
             }}
           >
@@ -223,21 +223,21 @@ export function CampaignSourcesPanel({
       {activeDashboard?.warnings && activeDashboard.warnings.length > 0 && (
         <div
           style={{
-            background: '#fffbeb',
-            border: '1px solid #fef3c7',
+            background: '#fff7c2',
+            border: '0.5px solid #fff7c2',
             borderRadius: 8,
             padding: '14px 18px',
           }}
         >
-          <h4 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 600, color: '#92400e' }}>
+          <h4 style={{ margin: '0 0 8px', fontSize: 14, fontWeight: 600, color: '#ab6400' }}>
             ⚠️ 数据源核对与口径注意事项 ({activeDashboard.warnings.length}项)
           </h4>
-          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: '#b45309', lineHeight: 1.6 }}>
+          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: '#ab6400', lineHeight: 1.6 }}>
             {activeDashboard.warnings.slice(0, 5).map((w, idx) => (
               <li key={idx}>{w}</li>
             ))}
             {activeDashboard.warnings.length > 5 && (
-              <li style={{ color: '#78350f', listStyleType: 'none', marginTop: 4 }}>
+              <li style={{ color: '#4f3422', listStyleType: 'none', marginTop: 4 }}>
                 …其余 {activeDashboard.warnings.length - 5} 项异常说明已在对应明细指标中标识。
               </li>
             )}
@@ -247,11 +247,11 @@ export function CampaignSourcesPanel({
 
       {/* 1. 复盘底表卡片网格 */}
       <div>
-        <h4 style={{ margin: '0 0 12px', fontSize: 14, fontWeight: 600, color: '#1e293b' }}>
+        <h4 style={{ margin: '0 0 12px', fontSize: 14, fontWeight: 600, color: '#1c2024' }}>
           底表与快照清单 ({sources.length})
         </h4>
         {sources.length === 0 ? (
-          <div style={{ padding: 24, textAlign: 'center', background: '#f8fafc', borderRadius: 8, color: '#94a3b8' }}>
+          <div style={{ padding: 24, textAlign: 'center', background: '#f9f9fb', borderRadius: 8, color: '#60646c' }}>
             暂无绑定的底表或快照来源
           </div>
         ) : (
@@ -270,26 +270,26 @@ export function CampaignSourcesPanel({
 
               const badgeBg =
                 statusInfo.tone === 'success'
-                  ? '#dcfce7'
+                  ? '#e6f7ed'
                   : statusInfo.tone === 'danger'
-                  ? '#fee2e2'
+                  ? '#feebec'
                   : statusInfo.tone === 'warning'
-                  ? '#fef3c7'
-                  : '#f1f5f9';
+                  ? '#fff7c2'
+                  : '#f0f0f3';
               const badgeColor =
                 statusInfo.tone === 'success'
-                  ? '#166534'
+                  ? '#208368'
                   : statusInfo.tone === 'danger'
-                  ? '#991b1b'
+                  ? '#641723'
                   : statusInfo.tone === 'warning'
-                  ? '#92400e'
-                  : '#475569';
+                  ? '#ab6400'
+                  : '#60646c';
 
               return (
                 <div
                   key={src.id}
                   style={{
-                    border: '1px solid #e2e8f0',
+                    border: '0.5px solid #d9d9e0',
                     borderRadius: 8,
                     padding: 16,
                     background: '#ffffff',
@@ -302,14 +302,14 @@ export function CampaignSourcesPanel({
                 >
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
-                      <h5 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#0f172a', lineHeight: 1.4 }}>
+                      <h5 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1c2024', lineHeight: 1.4 }}>
                         {src.name}
                       </h5>
                       <span
                         style={{
                           padding: '2px 8px',
                           borderRadius: 4,
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: 600,
                           whiteSpace: 'nowrap',
                           background: badgeBg,
@@ -319,16 +319,16 @@ export function CampaignSourcesPanel({
                         {statusInfo.label}
                       </span>
                     </div>
-                    <div style={{ marginTop: 6, fontSize: 12, color: '#64748b' }}>
+                    <div style={{ marginTop: 6, fontSize: 12, color: '#60646c' }}>
                       来源通道：{provText}
                     </div>
                     {src.detail && (
-                      <p style={{ margin: '8px 0 0', fontSize: 12, color: '#475569', lineHeight: 1.5 }}>
+                      <p style={{ margin: '8px 0 0', fontSize: 12, color: '#60646c', lineHeight: 1.5 }}>
                         {src.detail}
                       </p>
                     )}
                     {isKailasH9 && (
-                      <p style={{ margin: '6px 0 0', fontSize: 11, color: '#b45309', background: '#fffbeb', padding: '4px 8px', borderRadius: 4 }}>
+                      <p style={{ margin: '6px 0 0', fontSize: 12, color: '#ab6400', background: '#fff7c2', padding: '4px 8px', borderRadius: 4 }}>
                         ⚠️ 原汇总表公式存在 #REF 异常保持异常标记；分日流水已由同工作簿底表清洗后供 Daily 独立使用。
                       </p>
                     )}
@@ -336,13 +336,13 @@ export function CampaignSourcesPanel({
 
                   <div
                     style={{
-                      borderTop: '1px solid #f1f5f9',
+                      borderTop: '0.5px solid #f0f0f3',
                       paddingTop: 10,
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      fontSize: 11,
-                      color: '#94a3b8',
+                      fontSize: 12,
+                      color: '#60646c',
                     }}
                   >
                     <span>
@@ -353,7 +353,7 @@ export function CampaignSourcesPanel({
                         href={safeUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: '#0284c7', textDecoration: 'none', fontWeight: 500 }}
+                        style={{ color: '#0d74ce', textDecoration: 'none', fontWeight: 500 }}
                       >
                         访问原表 ↗
                       </a>
@@ -372,17 +372,17 @@ export function CampaignSourcesPanel({
       {dailyDatasets.length > 0 && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <h4 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1e293b' }}>
+            <h4 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#1c2024' }}>
               分日流水数据集来源与周期 ({dailyDatasets.length})
             </h4>
-            <span style={{ fontSize: 12, color: '#64748b' }}>
+            <span style={{ fontSize: 12, color: '#60646c' }}>
               专供「首页分日看板」绘制真实时序走势，与大盘累计 KPI 严格隔离
             </span>
           </div>
-          <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: 8, background: '#ffffff' }}>
+          <div style={{ overflowX: 'auto', border: '0.5px solid #d9d9e0', borderRadius: 8, background: '#ffffff' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, textAlign: 'left' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#475569' }}>
+                <tr style={{ background: '#f9f9fb', borderBottom: '0.5px solid #d9d9e0', color: '#60646c' }}>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>数据集名称</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>覆盖周期</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>记录天数</th>
@@ -395,14 +395,14 @@ export function CampaignSourcesPanel({
                 {dailyDatasets.map((ds) => {
                   const safeUrl = getSafeUrl(ds.sourceUrl);
                   return (
-                    <tr key={ds.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '10px 14px', fontWeight: 500, color: '#0f172a' }}>{ds.label}</td>
-                      <td style={{ padding: '10px 14px', color: '#334155' }}>{ds.period}</td>
-                      <td style={{ padding: '10px 14px', color: '#334155' }}>{ds.rows?.length || 0} 天</td>
-                      <td style={{ padding: '10px 14px', color: '#64748b' }}>
+                    <tr key={ds.id} style={{ borderBottom: '0.5px solid #f0f0f3' }}>
+                      <td style={{ padding: '10px 14px', fontWeight: 500, color: '#1c2024' }}>{ds.label}</td>
+                      <td style={{ padding: '10px 14px', color: '#1c2024' }}>{ds.period}</td>
+                      <td style={{ padding: '10px 14px', color: '#1c2024' }}>{ds.rows?.length || 0} 天</td>
+                      <td style={{ padding: '10px 14px', color: '#60646c' }}>
                         {ds.metrics?.map((m) => m.label).join('、') || '—'}
                       </td>
-                      <td style={{ padding: '10px 14px', color: '#475569', maxWidth: 260 }}>
+                      <td style={{ padding: '10px 14px', color: '#60646c', maxWidth: 260 }}>
                         {ds.note || '—'}
                       </td>
                       <td style={{ padding: '10px 14px' }}>
@@ -411,12 +411,12 @@ export function CampaignSourcesPanel({
                             href={safeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ color: '#0284c7', textDecoration: 'none', fontWeight: 500 }}
+                            style={{ color: '#0d74ce', textDecoration: 'none', fontWeight: 500 }}
                           >
                             打开原表 ↗
                           </a>
                         ) : (
-                          <span style={{ color: '#94a3b8' }}>同工作簿底表</span>
+                          <span style={{ color: '#60646c' }}>同工作簿底表</span>
                         )}
                       </td>
                     </tr>
@@ -431,7 +431,7 @@ export function CampaignSourcesPanel({
       {/* 3. 保留现有数据源登记与权限管理（收纳在折叠卡片中，避免与上方卡片巨大重复） */}
       <details
         style={{
-          border: '1px solid #e2e8f0',
+          border: '0.5px solid #d9d9e0',
           borderRadius: 8,
           background: '#ffffff',
           padding: '14px 18px',
@@ -443,7 +443,7 @@ export function CampaignSourcesPanel({
             cursor: 'pointer',
             fontWeight: 600,
             fontSize: 14,
-            color: '#334155',
+            color: '#1c2024',
             userSelect: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -451,12 +451,12 @@ export function CampaignSourcesPanel({
           }}
         >
           <span>⚙️ 底表登记与授权管理 (高级配置)</span>
-          <span style={{ fontSize: 12, color: '#64748b', fontWeight: 'normal' }}>
+          <span style={{ fontSize: 12, color: '#60646c', fontWeight: 'normal' }}>
             展开配置飞书表格绑定与字段映射 ▼
           </span>
         </summary>
-        <div style={{ marginTop: 16, borderTop: '1px solid #f1f5f9', paddingTop: 16 }}>
-          <p style={{ margin: '0 0 16px', fontSize: 12, color: '#64748b' }}>
+        <div style={{ marginTop: 16, borderTop: '0.5px solid #f0f0f3', paddingTop: 16 }}>
+          <p style={{ margin: '0 0 16px', fontSize: 12, color: '#60646c' }}>
             支持管理员与编辑者补充登记飞书电子表格、多维表格与自定义映射规则。
           </p>
           <SettingsDataSources

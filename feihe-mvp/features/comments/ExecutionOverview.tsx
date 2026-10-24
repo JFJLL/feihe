@@ -16,14 +16,14 @@ function ProgressRow({ label, done, total, tone = 'blue', detail }: {
   return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 5 }}>
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#1e293b' }}>{label}</span>
-        <span style={{ fontSize: 12.5, color: '#64748b' }}>
-          <strong style={{ color: '#0f172a', fontSize: 14 }}>{done}</strong> / {total}
-          <span style={{ marginLeft: 8, color: tone === 'green' ? '#16a34a' : tone === 'red' ? '#dc2626' : '#2563eb', fontWeight: 700 }}>{rate}%</span>
+        <span style={{ fontSize: 14, fontWeight: 600, color: '#1c2024' }}>{label}</span>
+        <span style={{ fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
+          <strong style={{ color: '#1c2024', fontSize: 14 }}>{done}</strong> / {total}
+          <span style={{ marginLeft: 8, color: tone === 'green' ? '#29a383' : tone === 'red' ? '#ce2c31' : '#0090ff', fontWeight: 700 }}>{rate}%</span>
         </span>
       </div>
       <ProgressBar value={done} max={total || 1} theme={tone} />
-      {detail && <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 3 }}>{detail}</div>}
+      {detail && <div style={{ fontSize: 12, color: '#60646c', marginTop: 3 }}>{detail}</div>}
     </div>
   );
 }
@@ -149,7 +149,7 @@ export function ExecutionOverview({
             label="评论执行总量"
             value={totalExec.toLocaleString()}
             unit="条"
-            desc={`纯文案 ${totalText.toLocaleString()} · 表情包 ${totalEmoji.toLocaleString()}`}
+            desc={`纯文案 ${totalText.toLocaleString()} / 表情包 ${totalEmoji.toLocaleString()}`}
             tag={`表情包占比 ${emojiRatio}`}
           />
           <MetricCard
@@ -173,7 +173,7 @@ export function ExecutionOverview({
             label="链接失效 / 需修改"
             value={(brokenCount + modifiedCount).toLocaleString()}
             unit="条"
-            desc={`链接失效 ${brokenCount} · 需修改 ${modifiedCount}`}
+            desc={`链接失效 ${brokenCount} / 需修改 ${modifiedCount}`}
             tag="质量监控"
           />
         </section>
@@ -191,28 +191,28 @@ export function ExecutionOverview({
               const completeRate = stats.total > 0 ? pct(stats.completed / stats.total) : '—';
               const settleRate = stats.total > 0 ? pct(stats.settled / stats.total) : '0%';
               return (
-                <div key={month} style={{ padding: '16px 18px', background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)', borderRadius: 12, border: '1px solid #bae6fd' }}>
+                <div key={month} style={{ padding: '16px 18px', background: 'linear-gradient(135deg, #e6f4fe 0%, #e6f4fe 100%)', borderRadius: 12, border: '0.5px solid #acd8fc' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                    <span style={{ fontSize: 16, fontWeight: 800, color: '#0c4a6e' }}>{month}执行统计</span>
-                    <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 20, background: '#0284c7', color: '#fff', fontWeight: 700 }}>完成率 {completeRate}</span>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: '#113264' }}>{month}执行统计</span>
+                    <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 20, background: '#0d74ce', color: '#fff', fontWeight: 700 }}>完成率 {completeRate}</span>
                   </div>
-                  <div style={{ fontSize: 32, fontWeight: 900, color: '#0369a1', marginBottom: 4 }}>{stats.total.toLocaleString()}<span style={{ fontSize: 14, fontWeight: 500, color: '#0369a1', marginLeft: 6 }}>条</span></div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: '#0d74ce', marginBottom: 4 }}>{stats.total.toLocaleString()}<span style={{ fontSize: 14, fontWeight: 500, color: '#0d74ce', marginLeft: 6 }}>条</span></div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
-                      <div style={{ fontSize: 10.5, color: '#64748b' }}>达人评论</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: '#1e40af' }}>{stats.darent.toLocaleString()}</div>
+                      <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>达人评论</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#0d74ce' }}>{stats.darent.toLocaleString()}</div>
                     </div>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
-                      <div style={{ fontSize: 10.5, color: '#64748b' }}>素人评论</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: '#7c3aed' }}>{stats.amateur.toLocaleString()}</div>
+                      <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>素人评论</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#5753c6' }}>{stats.amateur.toLocaleString()}</div>
                     </div>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
-                      <div style={{ fontSize: 10.5, color: '#64748b' }}>纯文案</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: '#0f766e' }}>{stats.text.toLocaleString()}</div>
+                      <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>纯文案</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#008573' }}>{stats.text.toLocaleString()}</div>
                     </div>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
-                      <div style={{ fontSize: 10.5, color: '#64748b' }}>表情包</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: '#b45309' }}>{stats.emoji.toLocaleString()}</div>
+                      <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>表情包</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#ab6400' }}>{stats.emoji.toLocaleString()}</div>
                     </div>
                   </div>
                   <div style={{ marginTop: 12 }}>
@@ -239,9 +239,9 @@ export function ExecutionOverview({
               title="日执行量趋势"
               unit="条"
               series={[
-                { key: 'total', label: '总执行', color: '#1e6091' },
-                { key: 'darent', label: '达人评论', color: '#2563eb' },
-                { key: 'amateur', label: '素人评论', color: '#7c3aed' },
+                { key: 'total', label: '总执行', color: '#0d74ce' },
+                { key: 'darent', label: '达人评论', color: '#0090ff' },
+                { key: 'amateur', label: '素人评论', color: '#5753c6' },
               ]}
             />
           </DashboardSection>
@@ -254,17 +254,17 @@ export function ExecutionOverview({
             <div style={{ padding: '8px 0' }}>
               <div onClick={() => handleCreatorTypeClick('达人')} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? '点击查看达人笔记' : undefined}><ProgressRow label="达人评论执行量" done={totalDarent} total={totalExec} tone="blue" detail={`纯文案为主，占比 ${totalDarent > 0 ? pct(totalDarent / totalExec) : '—'}`} /></div>
               <div onClick={() => handleCreatorTypeClick('素人')} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? '点击查看素人笔记' : undefined}><ProgressRow label="素人评论执行量" done={totalAmateur} total={totalExec} tone="teal" detail={`占比 ${totalAmateur > 0 ? pct(totalAmateur / totalExec) : '—'}`} /></div>
-              <div style={{ marginTop: 16, padding: '12px 14px', background: '#f8fafc', borderRadius: 8 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#1e293b', marginBottom: 8 }}>执行形式构成</div>
+              <div style={{ marginTop: 16, padding: '12px 14px', background: '#f9f9fb', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#1c2024', marginBottom: 8 }}>执行形式构成</div>
                 <div style={{ display: 'flex', height: 24, borderRadius: 6, overflow: 'hidden' }}>
-                  <div style={{ width: `${totalExec > 0 ? (totalText / totalExec) * 100 : 0}%`, background: '#0d9488', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11, fontWeight: 700 }}>
+                  <div style={{ width: `${totalExec > 0 ? (totalText / totalExec) * 100 : 0}%`, background: '#008573', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700 }}>
                     {totalExec > 0 && totalText / totalExec > 0.15 ? `纯文案 ${pct(totalText / totalExec)}` : ''}
                   </div>
-                  <div style={{ width: `${totalExec > 0 ? (totalEmoji / totalExec) * 100 : 0}%`, background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 11, fontWeight: 700 }}>
+                  <div style={{ width: `${totalExec > 0 ? (totalEmoji / totalExec) * 100 : 0}%`, background: '#ffc53d', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700 }}>
                     {totalExec > 0 && totalEmoji / totalExec > 0.15 ? `表情包 ${pct(totalEmoji / totalExec)}` : ''}
                   </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: '#64748b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                   <span>纯文案 {totalText.toLocaleString()} 条</span>
                   <span>表情包 {totalEmoji.toLocaleString()} 条</span>
                 </div>
@@ -283,23 +283,23 @@ export function ExecutionOverview({
         >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
             <div className="pastel-card pastel-red" style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 12, color: '#991b1b' }}>链接失效评论</div>
-              <div style={{ fontSize: 28, fontWeight: 800, color: '#dc2626', margin: '4px 0' }}>{brokenCount}</div>
-              <div style={{ fontSize: 11.5, color: '#991b1b' }}>审核通过 {brokenApproved} 条</div>
+              <div style={{ fontSize: 12, color: '#641723' }}>链接失效评论</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#ce2c31', margin: '4px 0' }}>{brokenCount}</div>
+              <div style={{ fontSize: 12, color: '#641723' }}>审核通过 {brokenApproved} 条</div>
             </div>
             <div className="pastel-card pastel-amber" style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 12, color: '#92400e' }}>需修改评论</div>
-              <div style={{ fontSize: 28, fontWeight: 800, color: '#d97706', margin: '4px 0' }}>{modifiedCount}</div>
-              <div style={{ fontSize: 11.5, color: '#92400e' }}>内部审核不通过需修改</div>
+              <div style={{ fontSize: 12, color: '#ab6400' }}>需修改评论</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#ffc53d', margin: '4px 0' }}>{modifiedCount}</div>
+              <div style={{ fontSize: 12, color: '#ab6400' }}>内部审核不通过需修改</div>
             </div>
             <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 12, color: '#1e40af' }}>7月异常记录数</div>
-              <div style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', margin: '4px 0' }}>{brokenCount + modifiedCount}</div>
-              <div style={{ fontSize: 11.5, color: '#1e40af' }}>两张异常表的记录合计，未去重，不计算跨月异常率</div>
+              <div style={{ fontSize: 12, color: '#0d74ce' }}>7月异常记录数</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#0090ff', margin: '4px 0' }}>{brokenCount + modifiedCount}</div>
+              <div style={{ fontSize: 12, color: '#0d74ce' }}>两张异常表的记录合计，未去重，不计算跨月异常率</div>
             </div>
             <div className="pastel-card pastel-teal" style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 12, color: '#115e59' }}>修改原因分布</div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#0f766e', marginTop: 6 }}>
+              <div style={{ fontSize: 12, color: '#0d3d38' }}>修改原因分布</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: '#008573', marginTop: 6 }}>
                 {Object.entries(modifiedReasons).sort(([, a], [, b]) => b - a).map(([reason, count]) => (
                   <div key={reason} style={{ marginBottom: 3 }}>{reason}: {count}条</div>
                 ))}
@@ -336,7 +336,7 @@ export function ExecutionOverview({
               done={replyPending + deletePending}
               total={totalActions}
               tone={replyPending + deletePending > 0 ? 'red' : 'teal'}
-              detail={replyPending + deletePending > 0 ? `待回复 ${replyPending} 条 · 待删除 ${deletePending} 条，需加快闭环` : '所有风险评论均已处置或自然消失'}
+              detail={replyPending + deletePending > 0 ? `待回复 ${replyPending} 条 / 待删除 ${deletePending} 条，需加快闭环` : '所有风险评论均已处置或自然消失'}
             />
           </div>
         </DashboardSection>
@@ -380,33 +380,33 @@ export function ExecutionOverview({
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
           <div className="pastel-card pastel-red" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: 12, color: '#991b1b' }}>未外显 / 链接失效</div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#dc2626', margin: '4px 0' }}>{supplierMissing}</div>
-            <div style={{ fontSize: 11.5, color: '#991b1b' }}>供应商交付未在前台检索到</div>
+            <div style={{ fontSize: 12, color: '#641723' }}>未外显 / 链接失效</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#ce2c31', margin: '4px 0' }}>{supplierMissing}</div>
+            <div style={{ fontSize: 12, color: '#641723' }}>供应商交付未在前台检索到</div>
           </div>
           <div className="pastel-card pastel-amber" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: 12, color: '#92400e' }}>有修改外显</div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#d97706', margin: '4px 0' }}>{supplierModified}</div>
-            <div style={{ fontSize: 11.5, color: '#92400e' }}>执行团队改写后成功外显</div>
+            <div style={{ fontSize: 12, color: '#ab6400' }}>有修改外显</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#ffc53d', margin: '4px 0' }}>{supplierModified}</div>
+            <div style={{ fontSize: 12, color: '#ab6400' }}>执行团队改写后成功外显</div>
           </div>
           <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: 12, color: '#1e40af' }}>待核验评论</div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#2563eb', margin: '4px 0' }}>{num(supplier.pendingCount)}</div>
-            <div style={{ fontSize: 11.5, color: '#1e40af' }}>新导入等待下一轮核验比对</div>
+            <div style={{ fontSize: 12, color: '#0d74ce' }}>待核验评论</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#0090ff', margin: '4px 0' }}>{num(supplier.pendingCount)}</div>
+            <div style={{ fontSize: 12, color: '#0d74ce' }}>新导入等待下一轮核验比对</div>
           </div>
           <div className="pastel-card pastel-teal" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: 12, color: '#115e59' }}>进行中任务</div>
-            <div style={{ fontSize: 24, fontWeight: 800, color: '#0d9488', margin: '4px 0' }}>{activeJobs.length}</div>
-            <div style={{ fontSize: 11.5, color: '#115e59' }}>采集 / 核验 / 导入等异步任务</div>
+            <div style={{ fontSize: 12, color: '#0d3d38' }}>进行中任务</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#008573', margin: '4px 0' }}>{activeJobs.length}</div>
+            <div style={{ fontSize: 12, color: '#0d3d38' }}>采集 / 核验 / 导入等异步任务</div>
           </div>
         </div>
         {activeJobs.length > 0 && (
           <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
             {activeJobs.slice(0, 3).map(job => (
-              <div key={job.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', background: '#f0fdfa', borderRadius: 8, border: '1px solid #99f6e4' }}>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: '#0f766e', minWidth: 100 }}>{job.title}</span>
+              <div key={job.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', background: '#e0f8f3', borderRadius: 8, border: '0.5px solid #a1ded2' }}>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#008573', minWidth: 100 }}>{job.title}</span>
                 <ProgressBar value={job.progress} max={job.total || 100} theme="teal" />
-                <span style={{ fontSize: 11.5, color: '#0f766e', whiteSpace: 'nowrap' }}>{job.progress}/{job.total}</span>
+                <span style={{ fontSize: 12, color: '#008573', whiteSpace: 'nowrap' }}>{job.progress}/{job.total}</span>
               </div>
             ))}
           </div>
@@ -426,9 +426,9 @@ export function ExecutionOverview({
               title="评论监测日度趋势"
               unit="条"
               series={[
-                { key: 'total', label: '总评论', color: '#1e6091' },
-                { key: 'positive', label: '正向', color: '#16a34a' },
-                { key: 'negative', label: '负向', color: '#dc2626' },
+                { key: 'total', label: '总评论', color: '#0d74ce' },
+                { key: 'positive', label: '正向', color: '#29a383' },
+                { key: 'negative', label: '负向', color: '#ce2c31' },
               ]}
             />
           ) : (
@@ -443,33 +443,33 @@ export function ExecutionOverview({
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div style={{ background: '#f0f9ff', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
-                <div style={{ fontSize: 11.5, color: '#0369a1' }}>已完成任务</div>
-                <strong style={{ fontSize: 22, color: '#075985' }}>{completedJobs.length}</strong>
+              <div style={{ background: '#e6f4fe', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
+                <div style={{ fontSize: 12, color: '#0d74ce' }}>已完成任务</div>
+                <strong style={{ fontSize: 22, color: '#113264' }}>{completedJobs.length}</strong>
               </div>
-              <div style={{ background: '#fefce8', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
-                <div style={{ fontSize: 11.5, color: '#a16207' }}>进行中任务</div>
-                <strong style={{ fontSize: 22, color: '#854d0e' }}>{activeJobs.length}</strong>
+              <div style={{ background: '#fff7c2', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
+                <div style={{ fontSize: 12, color: '#ab6400' }}>进行中任务</div>
+                <strong style={{ fontSize: 22, color: '#ab6400' }}>{activeJobs.length}</strong>
               </div>
             </div>
             {ops.jobs && ops.jobs.length > 0 ? (
               <div style={{ maxHeight: 200, overflowY: 'auto' }}>
                 {[...ops.jobs].reverse().slice(0, 8).map(job => (
-                  <div key={job.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 10px', borderBottom: '1px solid #f1f5f9', fontSize: 12 }}>
-                    <span style={{ color: '#334155', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 180 }}>{job.title}</span>
+                  <div key={job.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 10px', borderBottom: '0.5px solid #f0f0f3', fontSize: 12 }}>
+                    <span style={{ color: '#1c2024', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 180 }}>{job.title}</span>
                     <span style={{
-                      fontSize: 10.5,
+                      fontSize: 12,
                       padding: '2px 8px',
                       borderRadius: 4,
                       fontWeight: 600,
-                      background: job.status === 'completed' ? '#f0fdf4' : job.status === 'running' ? '#f0f9ff' : '#fef2f2',
-                      color: job.status === 'completed' ? '#15803d' : job.status === 'running' ? '#0369a1' : '#b91c1c',
+                      background: job.status === 'completed' ? '#e6f7ed' : job.status === 'running' ? '#e6f4fe' : '#feebec',
+                      color: job.status === 'completed' ? '#208368' : job.status === 'running' ? '#0d74ce' : '#ce2c31',
                     }}>{job.status === 'completed' ? '已完成' : job.status === 'running' ? '进行中' : job.status}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div style={{ fontSize: 12.5, color: '#94a3b8', textAlign: 'center', padding: 16 }}>暂无异步任务记录</div>
+              <div style={{ fontSize: 14, color: '#60646c', textAlign: 'center', padding: 16 }}>暂无异步任务记录</div>
             )}
           </div>
         </DashboardSection>

@@ -43,29 +43,29 @@ export function IndustryHeader({
           className={'comp-pulse-dot ' + dotClass}
           title={!spu ? '缺少 SPU' : healthy ? '真实数据已更新' : '待更新或上次更新失败'}
         />
-        <h2 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0, color: '#0f172a' }}>
+        <h2 style={{ fontSize: 22, fontWeight: 700, margin: 0, color: '#1c2024' }}>
           行业分析 · {projectName}
         </h2>
 
         {Boolean(spu) && (
-          <span className="comp-tag info" style={{ background: '#e0f2fe', color: '#0284c7' }}>
+          <span className="comp-tag info" style={{ background: '#e6f4fe', color: '#0d74ce' }}>
             SPU: {spu}
           </span>
         )}
 
         {Boolean(brand) && (
-          <span className="comp-tag" style={{ background: '#f1f5f9', color: '#475569' }}>
+          <span className="comp-tag" style={{ background: '#f0f0f3', color: '#60646c' }}>
             本品: {brand}
           </span>
         )}
 
         {Boolean(category) && (
-          <span className="comp-tag" style={{ background: '#f8fafc', color: '#64748b' }}>
+          <span className="comp-tag" style={{ background: '#f9f9fb', color: '#60646c' }}>
             品类: {category}
           </span>
         )}
 
-        <span style={{ fontSize: '0.82rem', color: '#64748b', marginLeft: 8 }}>
+        <span style={{ fontSize: 14, color: '#60646c', marginLeft: 8 }}>
           上次更新: {lastSyncText}
           {' · '}{config?.dailySyncEnabled === false ? '自动更新已暂停' : '每日自动更新'}
         </span>
@@ -77,7 +77,7 @@ export function IndustryHeader({
             type="button"
             className="ops-btn-secondary"
             onClick={onOpenConfig}
-            style={{ padding: '6px 12px', fontSize: '0.85rem' }}
+            style={{ padding: '6px 12px', fontSize: 14 }}
           >
             配置竞品与归因
           </button>
@@ -88,8 +88,8 @@ export function IndustryHeader({
             onClick={onTriggerSync}
             style={{
               padding: '6px 14px',
-              fontSize: '0.85rem',
-              background: syncing || !spu ? '#94a3b8' : '#0284c7',
+              fontSize: 14,
+              background: syncing || !spu ? '#60646c' : '#0d74ce',
               color: '#fff',
               border: 'none',
               borderRadius: 6,

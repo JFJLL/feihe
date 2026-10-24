@@ -1,7 +1,7 @@
-﻿'use client';
+'use client';
 
 import { contentDirectionLabel } from '../../lib/dashboard-display';
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import type { Dashboard, Ops, Project } from '../../lib/types/project';
@@ -36,13 +36,13 @@ const formatDateZh = (val: string | null | undefined) => {
   const match = String(val).match(/(\d{4}-)?(\d{1,2})-(\d{1,2})/);
   return match ? `${Number(match[2])}月${Number(match[3])}日` : String(val);
 };
-const colors = ['#1e6091', '#16a34a', '#7c3aed', '#f59e0b', '#0d9488', '#64748b'];
+const colors = ['#0090ff', '#29a383', '#5b5bd6', '#ffc53d', '#12a594', '#8b8d98'];
 
 function Section({ tag, title, tone = 'blue', hint, children, componentId }: {
   tag: string; title: string; tone?: string; hint?: string; children: ReactNode; componentId?: string;
 }) {
-  return <section data-business-component={componentId} className={`pastel-card reference-section section-${tone}`}>
-    <div className="card-header-row"><div className="header-left"><span className={`section-mini-tag tag-${tone}`}>{tag}</span><h3>{title}</h3></div>{hint && <span className="header-tag">{hint}</span>}</div>{children}
+  return <section data-business-component={componentId} className="pastel-card reference-section" style={{ background: '#ffffff', border: '0.5px solid #d9d9e0', borderRadius: 12, padding: 24, boxShadow: '0 1px 3px rgba(28, 32, 36, 0.04)' }}>
+    <div className="card-header-row"><div className="header-left"><span className={`section-mini-tag tag-${tone}`}>{tag}</span><h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>{title}</h3></div>{hint && <span className="header-tag">{hint}</span>}</div>{children}
   </section>;
 }
 
@@ -67,8 +67,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     const targetNote = (dashboard.notes || []).find(n => String(n.id) === String(noteId));
     if (targetNote) {
       openCategoryNotes({
-        title: '散点笔记画像 · ' + (targetNote.title || '无标题'),
-        subtitle: '博主：' + (targetNote.author || '未知') + ' · 互动：' + compact(targetNote.interactionCount),
+        title: '散点笔记画像 / ' + (targetNote.title || '无标题'),
+        subtitle: '博主：' + (targetNote.author || '未知') + ' / 互动：' + compact(targetNote.interactionCount),
         tag: '笔记画像',
         notes: [targetNote],
         maxCount: 1,
@@ -85,7 +85,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       return (n.category1 === categoryName) || (contentDirectionLabel(n.category1) === normTarget);
     });
     openCategoryNotes({
-      title: '内容切角 / 场景 · ' + normTarget,
+      title: '内容切角 / 场景 / ' + normTarget,
       subtitle: '该分类下共关联 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '内容切角',
       notes: matched,
@@ -100,7 +100,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       return l === cleanLabel || l.includes(cleanLabel) || cleanLabel.includes(l);
     });
     openCategoryNotes({
-      title: '达人层级 · ' + cleanLabel,
+      title: '达人层级 / ' + cleanLabel,
       subtitle: '该层级共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '达人层级',
       notes: matched,
@@ -115,7 +115,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       return t === cleanLabel;
     });
     openCategoryNotes({
-      title: '内容形式 · ' + cleanLabel,
+      title: '内容形式 / ' + cleanLabel,
       subtitle: '该形式共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '内容形式',
       notes: matched,
@@ -137,7 +137,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       return r !== null && r >= lo && r < hi;
     });
     openCategoryNotes({
-      title: '阅读量区间 · ' + bin.label,
+      title: '阅读量区间 / ' + bin.label,
       subtitle: '区间内共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '阅读量分布',
       notes: matched,
@@ -149,12 +149,12 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const searchParams = useSearchParams();
   const urlDay = searchParams.get('day') || '';
   const [selected, setSelected] = useState(urlDay);
+  const [prevUrlDay, setPrevUrlDay] = useState(urlDay);
 
-  useEffect(() => {
-    if (urlDay && urlDay !== selected) {
-      setSelected(urlDay);
-    }
-  }, [urlDay]);
+  if (urlDay !== prevUrlDay) {
+    setPrevUrlDay(urlDay);
+    setSelected(urlDay);
+  }
   const [scatterCategory, setScatterCategory] = useState('');
   const [prompt, setPrompt] = useState('根据当前项目数据复盘投放、内容表现与评论风险，给出下一步行动。');
   const [busy, setBusy] = useState(false);
@@ -196,8 +196,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     .filter(n => finiteMetric(n.readCount) !== null && finiteMetric(n.interactionCount) !== null)
     .map((n, i) => {
       const cat = contentDirectionLabel(n.category1);
-      if (!categoryColorMap.has(cat)) categoryColorMap.set(cat, cat === '未标注' ? '#94a3b8' : colors[categoryColorMap.size % colors.length]);
-      return { x: num(n.readCount), y: num(n.interactionCount), size: num(n.commentTotal), color: categoryColorMap.get(cat) || colors[0], label: `${n.title || '无标题'} · ${cat} · ${n.author || '未知达人'}`, id: String(n.id || i) };
+      if (!categoryColorMap.has(cat)) categoryColorMap.set(cat, cat === '未标注' ? '#8b8d98' : colors[categoryColorMap.size % colors.length]);
+      return { x: num(n.readCount), y: num(n.interactionCount), size: num(n.commentTotal), color: categoryColorMap.get(cat) || colors[0], label: `${n.title || '无标题'} / ${cat} / ${n.author || '未知达人'}`, id: String(n.id || i) };
     });
   // 笔记阅读量分布直方图
   const readValues = (dashboard.notes || []).map(n => finiteMetric(n.readCount)).filter((v): v is number => v !== null && v >= 0);
@@ -239,9 +239,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   // 互动质量分析（点赞/收藏/分享/分享占比）
   const totalInteraction = num(m.likeCount) + num(m.favoriteCount) + num(m.shareCount);
   const interactionQuality = [
-    { label: '点赞', value: num(m.likeCount), pct: totalInteraction ? num(m.likeCount) / totalInteraction * 100 : 0, color: '#3b82f6', icon: '♥' },
-    { label: '收藏', value: num(m.favoriteCount), pct: totalInteraction ? num(m.favoriteCount) / totalInteraction * 100 : 0, color: '#f59e0b', icon: '★' },
-    { label: '分享', value: num(m.shareCount), pct: totalInteraction ? num(m.shareCount) / totalInteraction * 100 : 0, color: '#10b981', icon: '↗' },
+    { label: '点赞', value: num(m.likeCount), pct: totalInteraction ? num(m.likeCount) / totalInteraction * 100 : 0, color: '#0090ff', icon: '♥' },
+    { label: '收藏', value: num(m.favoriteCount), pct: totalInteraction ? num(m.favoriteCount) / totalInteraction * 100 : 0, color: '#ffc53d', icon: '★' },
+    { label: '分享', value: num(m.shareCount), pct: totalInteraction ? num(m.shareCount) / totalInteraction * 100 : 0, color: '#29a383', icon: '↗' },
   ].filter(i => i.value > 0);
   const recent: Array<Record<string, string | number | null> & { date: string }> = quarterRows.slice(-30).map(r => ({ ...r, date: String(r.date) }));
   const previous = quarterRows.at(-2);
@@ -289,7 +289,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const isDatasetContent = project?.templateId === 'content_marketing' && projectId !== 'qicui' && !(dashboard.notes || []).length;
 
   const headerSubtitle = isGeneral
-    ? `${project?.departmentName || '业务部门'} · 结构化数据集与度量监控看板`
+    ? `${project?.departmentName || '业务部门'} / 结构化数据集与度量监控看板`
     : isCommentQc
     ? '本项目评论记录、来源标注与处置状态'
     : isAd
@@ -344,8 +344,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <MetricCard label="搜索消耗" value={amount(searchSpend)} unit="元" />
           <MetricCard label="计划达成率" value={amount(daily?.achieve_pct)} unit="%" />
         </section>
-        <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#2563eb' }, { key: 'feed_spend', label: '信息流消耗', color: '#16a34a' }, { key: 'search_spend', label: '搜索消耗', color: '#7c3aed' }]} /></Section>
-        <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#16a34a' }, { key: 'search_ctr', label: '搜索CTR', color: '#7c3aed' }]} /></Section>
+        <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#0090ff' }, { key: 'feed_spend', label: '信息流消耗', color: '#29a383' }, { key: 'search_spend', label: '搜索消耗', color: '#5b5bd6' }]} /></Section>
+        <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#29a383' }, { key: 'search_ctr', label: '搜索CTR', color: '#5b5bd6' }]} /></Section>
       </div>
     ) : undefined} /> : (
       <>
@@ -354,27 +354,27 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     <FeishuSources data={dashboard.feishu} projectId={projectId} />
     {tab === 'overview' && <BusinessComponentBoard projectId={projectId} view="overview" canManage={Boolean(project?.canManage && !project.isArchived)} period={date}>
       <section data-business-component="decision" className="pastel-card health-overview-card">
-        <div className="health-card-head"><span className="section-mini-tag tag-blue">决策层 · 今日指标与待办</span><span className="health-date-hint">投放 {date || '待同步'} · 笔记 {latestNoteDate || '待同步'}</span></div>
+        <div className="health-card-head"><span className="section-mini-tag tag-blue">决策层 / 今日指标与待办</span><span className="health-date-hint">投放 {date || '待同步'} / 笔记 {latestNoteDate || '待同步'}</span></div>
         <div className="health-main-row">
           <div className="health-score-dial"><div className="score-number">{amount(daily?.achieve_pct)}<small>%</small></div><div className="score-label">当日计划达成率</div><div className="score-badge">实际消耗 / 已填计划</div></div>
           <div className="health-indicators-grid">{[
             { title: '消耗节奏', value: `¥${amount(daily?.actual_spend)}`, desc: `当日计划 ¥${amount(daily?.plan_spend)}`, tone: 'green' },
             { title: '信息流 CTR', value: `${amount(daily?.feed_ctr)}%`, desc: '点击合计 / 展现合计', tone: 'teal' },
             { title: '搜索 CTR', value: `${amount(daily?.search_ctr)}%`, desc: '搜索广告实际点击效率', tone: 'purple' },
-            { title: '待处置风险', value: `${pending} 条`, desc: `待回复 ${num(m.actions?.replyPending)} · 待删除 ${num(m.actions?.deletePending)}`, tone: pending ? 'amber' : 'green' },
+            { title: '待处置风险', value: `${pending} 条`, desc: `待回复 ${num(m.actions?.replyPending)} / 待删除 ${num(m.actions?.deletePending)}`, tone: pending ? 'amber' : 'green' },
           ].map(item => <div key={item.title} className={`health-indicator-card pastel-${item.tone}`}><div className="indicator-top"><strong>{item.title}</strong></div><div className="indicator-val">{item.value}</div><div className="indicator-desc">{item.desc}</div></div>)}</div>
         </div>
-        <div className="health-exec-summary"><div className="exec-title"><strong>Executive Summary · 关键数据摘要</strong></div><ul className="exec-summary-list">{summary.map(item => <li className="exec-item" key={item.tag}><span className={`exec-tag ${item.tag === '行动' ? 'tag-warn' : 'tag-blue'}`}>{item.tag}</span><span>{item.text}</span></li>)}</ul></div>
+        <div className="health-exec-summary"><div className="exec-title"><strong>Executive Summary / 关键数据摘要</strong></div><ul className="exec-summary-list">{summary.map(item => <li className="exec-item" key={item.tag}><span className={`exec-tag ${item.tag === '行动' ? 'tag-warn' : 'tag-blue'}`}>{item.tag}</span><span>{item.text}</span></li>)}</ul></div>
       </section>
 
       <Section componentId="budget" tag="预算节奏" title="预算消耗节奏对比" tone="amber" hint="当月进度与季度全盘">
         {date ? <div className="budget-dual-grid">{[
-          { title: `${Number(date.slice(5, 7))}月当月 · 截至${formatDateZh(date)}`, spend: monthSpend, budget: monthBudget, time: monthDay / monthDays * 100, days: `${monthDay}/${monthDays}`, tone: 'blue', count: monthRows.length },
-          { title: `${quarterName} 累计 · ${quarterStartZh}—${formatDateZh(date)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / quarterTotalDays * 100, days: `${quarterDay}/${quarterTotalDays}`, tone: 'purple', count: quarterRows.length },
+          { title: `${Number(date.slice(5, 7))}月当月 / 截至${formatDateZh(date)}`, spend: monthSpend, budget: monthBudget, time: monthDay / monthDays * 100, days: `${monthDay}/${monthDays}`, tone: 'blue', count: monthRows.length },
+          { title: `${quarterName} 累计 / ${quarterStartZh}—${formatDateZh(date)}`, spend: quarterSpend, budget: quarterBudget, time: quarterDay / quarterTotalDays * 100, days: `${quarterDay}/${quarterTotalDays}`, tone: 'purple', count: quarterRows.length },
         ].map(item => <div key={item.title} className={`budget-sub-card pastel-${item.tone}`}>
           <div className="sub-card-title"><strong>{item.title}</strong></div>
           <Progress label={`时间进度（${item.days} 天）`} value={item.time} tone="gray" />
-          <Progress label="同日期 · 消耗 / 计划" value={item.budget.plan && item.budget.spend !== null ? item.budget.spend / item.budget.plan * 100 : null} tone={item.tone} detail={`${item.budget.count} 个可比日期 · 实际 ¥${amount(item.budget.spend)} / 计划 ¥${amount(item.budget.plan)}`} />
+          <Progress label="同日期 / 消耗 / 计划" value={item.budget.plan && item.budget.spend !== null ? item.budget.spend / item.budget.plan * 100 : null} tone={item.tone} detail={`${item.budget.count} 个可比日期 / 实际 ¥${amount(item.budget.spend)} / 计划 ¥${amount(item.budget.plan)}`} />
           <div className="budget-diff-box"><span className="diff-val">{item.spend === null ? '—' : `¥${compact(item.spend)}`}</span><span className="diff-desc">覆盖 {item.count} 个有投放数据的日期</span></div>
         </div>)}</div> : <EmptyState title="等待投放数据" text="点击同步最新数据后展示月度与季度进度。" />}
         <div className="budget-footer-notes">计划为已填日期的预算合计，并非完整月度或季度预算。时间进度按自然日计算。</div>
@@ -387,14 +387,14 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               {channelTotal ? <HorizontalBarList items={[{ label: '信息流 F', amount: num(feedSpend), pct: num(feedSpend) / channelTotal * 100, color: colors[0], subText: `¥${amount(feedSpend)}` }, { label: '搜索 S', amount: num(searchSpend), pct: num(searchSpend) / channelTotal * 100, color: colors[2], subText: `¥${amount(searchSpend)}` }]} /> : <EmptyState title="暂无投流结构" text="同步已填写的信息流与搜索消耗后显示。" />}
             </div>
             <div className="chart-inner-panel" style={{ flex: 1 }}>
-              <div className="inner-head"><strong>达人 K · 内容采买</strong><small>项目笔记报价合计</small></div>
+              <div className="inner-head"><strong>达人 K / 内容采买</strong><small>项目笔记报价合计</small></div>
               <div className="reference-big-number">¥{compact(m.creatorCost)}</div>
               <div className="reference-stat-pair"><span>商业合作笔记<strong>{num(m.commercialCount)} 篇</strong></span><span>内容平均 CPE<strong>¥{amount(m.cpe)}</strong></span></div>
               <p className="reference-note" style={{ margin: 0 }}>使用笔记库已有报价与互动表现；采买费用与投流消耗为不同口径。</p>
             </div>
           </div>
           <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
-            <div className="inner-head"><strong>KFS 分渠道消耗趋势（堆叠面积）</strong><small>近 {recent.length} 个数据日 · 信息流 F + 搜索 S</small></div>
+            <div className="inner-head"><strong>KFS 分渠道消耗趋势（堆叠面积）</strong><small>近 {recent.length} 个数据日 / 信息流 F + 搜索 S</small></div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
               {recent.some(r => finiteMetric(r.feed_spend) !== null || finiteMetric(r.search_spend) !== null)
                 ? <KfsStackedAreaChart height={220} rows={recent.map(r => ({ date: String(r.date), feed_spend: finiteMetric(r.feed_spend), search_spend: finiteMetric(r.search_spend) }))} />
@@ -412,7 +412,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         ].map(item => <div key={item.label} className={`pastel-card pastel-${item.tone} content-stat-box`}><div className="stat-head">{item.label}</div><div className="stat-value">{item.value}<small> {item.unit}</small></div><div className="stat-sub">{item.desc}</div></div>)}</div>
         <div className="two-col-chart-grid reference-content-detail">
           <div className="chart-inner-panel"><div className="inner-head"><strong>达人量级结构分布</strong><small>{creatorTotal} 篇已收录笔记</small></div>{creatorTotal ? <TierDoughnutChart items={tierItems} total={creatorTotal} onItemClick={it => handleTierClick(it.label)} /> : <EmptyState title="达人层级待补充" text="同步笔记库后显示层级分布。" />}</div>
-          <div className="chart-inner-panel"><div className="inner-head"><strong>内容形式分布</strong><small>已收录笔记</small></div><HorizontalBarList items={formatRows.map((r, i) => ({ label: String(r.name), amount: num(r.count), pct: formatTotal ? num(r.count) / formatTotal * 100 : 0, color: colors[i % colors.length], subText: `${num(r.count)} 篇 · ${compact(r.interactions)} 互动` }))} onItemClick={it => handleFormatClick(it.label)} /></div>
+          <div className="chart-inner-panel"><div className="inner-head"><strong>内容形式分布</strong><small>已收录笔记</small></div><HorizontalBarList items={formatRows.map((r, i) => ({ label: String(r.name), amount: num(r.count), pct: formatTotal ? num(r.count) / formatTotal * 100 : 0, color: colors[i % colors.length], subText: `${num(r.count)} 篇 / ${compact(r.interactions)} 互动` }))} onItemClick={it => handleFormatClick(it.label)} /></div>
         </div>
         <div className="two-col-chart-grid reference-content-detail" style={{ marginTop: 14, alignItems: 'stretch' }}>
           {tierSpendItems.length > 0 ? (
@@ -430,8 +430,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
                   <tr key={`${r.name}-${i}`} onClick={() => handleCategoryClick(String(r.name))} style={{ cursor: 'pointer' }} title="点击查看该切角下的具体笔记">
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <span style={{ fontWeight: 600, color: '#0369a1' }}>{contentDirectionLabel(r.name)}</span>
-                        <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>
+                        <span style={{ fontWeight: 600, color: 'var(--blue-11, #0d74ce)' }}>{contentDirectionLabel(r.name)}</span>
+                        <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: 'var(--blue-2, #f4faff)', color: 'var(--blue-11, #0d74ce)', border: '0.5px solid var(--blue-6, #acd8fc)', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>
                       </div>
                     </td>
                     <td>{num(r.count)}</td>
@@ -446,19 +446,19 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         </div>
       </Section>
 
-      <Section componentId="content-effects" tag="三、内容效果" title="内容效果深度分析" tone="blue" hint="散点矩阵 · 分布直方图 · 箱线图">
+      <Section componentId="content-effects" tag="三、内容效果" title="内容效果深度分析" tone="blue" hint="散点矩阵 / 分布直方图 / 箱线图">
         <div className="two-col-chart-grid">
-          <div className="chart-inner-panel"><div className="inner-head"><strong>笔记阅读与互动效果（散点图）</strong><small>X=阅读量 Y=互动量 · {scatterPoints.length}篇完整记录（含零值）· 点大小=采集评论数</small></div>
+          <div className="chart-inner-panel"><div className="inner-head"><strong>笔记阅读与互动效果（散点图）</strong><small>X=阅读量 Y=互动量 / {scatterPoints.length}篇完整记录（含零值）/ 点大小=采集评论数</small></div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>内容方向<CustomSelect ariaLabel="散点图内容方向" value={scatterCategory} onChange={setScatterCategory} options={[{ value: '', label: '全部方向' }, ...[...new Set(dashboard.notes.map(n => contentDirectionLabel(n.category1)))].sort().map(value => ({ value, label: value }))]} /></label>
             {scatterPoints.length > 0 ? <EffectScatterChart points={scatterPoints} onPointClick={handleScatterPointClick} /> : <EmptyState title="暂无散点数据" text="同步笔记阅读与互动指标后生成效果矩阵。" />}
           </div>
           <div className="chart-inner-panel" style={{ display: 'flex', flexDirection: 'column' }}>
             <div className="inner-head"><strong>笔记阅读量分布直方图</strong><small>{readValues.length} 篇有阅读数据的笔记</small></div>
-            <div style={{ display: 'flex', alignItems: 'center', height: 38, marginBottom: 10, fontSize: 12, color: '#64748b' }}>
-              <span>{dominantReadBands.length ? <>已记录阅读量最多的区间：<strong style={{ color: '#0f172a' }}>{dominantReadBands.join('、')}</strong>{dominantReadBands.length > 1 ? '（并列）' : ''}</> : '尚无可统计的阅读量'}</span>
+            <div style={{ display: 'flex', alignItems: 'center', height: 38, marginBottom: 10, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+              <span>{dominantReadBands.length ? <>已记录阅读量最多的区间：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{dominantReadBands.join('、')}</strong>{dominantReadBands.length > 1 ? '（并列）' : ''}</> : '尚无可统计的阅读量'}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#1e6091" height={280} onBinClick={handleHistogramBinClick} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
+              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#0090ff" height={280} onBinClick={handleHistogramBinClick} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
             </div>
           </div>
         </div>
@@ -471,7 +471,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       <div data-business-component="kpi-comparison"><KpiComparison data={dashboard.feishu} /></div>
 
       <Section componentId="top-content" tag="五、爆文排行" title="高热内容 TOP20 排行榜" tone="amber" hint="项目全量笔记按互动量排序">
-        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)} onClick={() => handleNoteInspect(String(n.id || i))} style={{ cursor: 'pointer' }} title="点击查看该笔记画像"><td><strong style={{ color: i < 3 ? '#f59e0b' : '#64748b' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
+        {top20Notes.length > 0 ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr><th>#</th><th>笔记标题</th><th>达人</th><th>内容方向</th><th>阅读量</th><th>互动量</th><th>评论数</th><th>互动率</th></tr></thead><tbody>{top20Notes.map((n, i) => <tr key={String(n.id || i)} onClick={() => handleNoteInspect(String(n.id || i))} style={{ cursor: 'pointer' }} title="点击查看该笔记画像"><td><strong style={{ color: i < 3 ? '#ffc53d' : '#8b8d98' }}>{i + 1}</strong></td><td style={{ maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(n.title || '')}>{String(n.title || '无标题')}</td><td>{String(n.author || '未知')}</td><td>{contentDirectionLabel(n.category1)}</td><td>{compact(n.readCount)}</td><td><strong>{compact(n.interactionCount)}</strong></td><td>{compact(n.commentTotal)}</td><td>{num(n.readCount) > 0 ? (num(n.interactionCount) / num(n.readCount) * 100).toFixed(2) + '%' : '—'}</td></tr>)}</tbody></table></div> : <EmptyState title="暂无爆文数据" text="同步笔记互动指标后生成TOP20排行榜。" />}
       </Section>
 
       {/* ===== 新增：内容健康度仪表盘 + 达人效率排行 ===== */}
@@ -495,7 +495,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
             { label: '达人层级', count: (dashboard.notes || []).filter(n => n.creatorLevel).length },
             { label: '阅读量', count: readValues.length },
             { label: '互动量', count: (dashboard.notes || []).filter(n => finiteMetric(n.interactionCount) !== null).length },
-          ].map((item, i) => ({ label: item.label, amount: item.count, pct: dashboard.notes.length ? item.count / dashboard.notes.length * 100 : 0, color: colors[i], subText: `${item.count} 篇有记录 · ${dashboard.notes.length - item.count} 篇待补充` }))} />
+          ].map((item, i) => ({ label: item.label, amount: item.count, pct: dashboard.notes.length ? item.count / dashboard.notes.length * 100 : 0, color: colors[i], subText: `${item.count} 篇有记录 / ${dashboard.notes.length - item.count} 篇待补充` }))} />
           <p className="metric-note">方向缺失的笔记仍计入阅读和互动总量；不参与已标注方向的效果判断。</p>
         </Section></div>
 
@@ -503,19 +503,19 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           {creatorEfficiency.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
               {creatorEfficiency.map((c, i) => (
-                <div key={i} onClick={() => handleTierClick(c.name)} title="点击查看该层级笔记" style={{ padding: '12px 14px', background: i === 0 ? 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' : '#f8fafc', borderRadius: 10, border: "1px solid " + (i === 0 ? "#fbbf24" : "#e2e8f0"), position: 'relative', cursor: 'pointer' }}>
+                <div key={i} onClick={() => handleTierClick(c.name)} title="点击查看该层级笔记" style={{ padding: '12px 14px', background: i === 0 ? 'linear-gradient(135deg, #fff7c2 0%, #f3d673 100%)' : '#f9f9fb', borderRadius: 10, border: "0.5px solid " + (i === 0 ? "var(--amber-6, #f3d673)" : "var(--slate-6, #d9d9e0)"), position: 'relative', cursor: 'pointer' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: i === 0 ? '#f59e0b' : i === 1 ? '#94a3b8' : i === 2 ? '#cd7f32' : '#e2e8f0', color: i < 3 ? '#fff' : '#64748b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800 }}>{i + 1}</span>
-                      <strong style={{ fontSize: 14, color: '#1e293b' }}>{c.name}</strong>
+                      <span style={{ width: 22, height: 22, borderRadius: '50%', background: i === 0 ? '#ffc53d' : i === 1 ? '#8b8d98' : i === 2 ? '#ffc53d' : 'var(--slate-3, #f0f0f3)', color: i < 3 ? '#fff' : 'var(--slate-11, #60646c)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800 }}>{i + 1}</span>
+                      <strong style={{ fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>{c.name}</strong>
                     </div>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: '#0d9488', background: '#ccfbf1', padding: '3px 10px', borderRadius: 999 }}>篇均CPE {c.efficiency === null ? '—' : '¥' + c.efficiency.toFixed(2)}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--teal-11, #008573)', background: 'var(--teal-3, #e0f8f3)', padding: '3px 10px', borderRadius: 999 }}>篇均CPE {c.efficiency === null ? '—' : '¥' + c.efficiency.toFixed(2)}</span>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, fontSize: 11 }}>
-                    <div><span style={{ color: '#94a3b8' }}>笔记数</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{c.count}</strong></div>
-                    <div><span style={{ color: '#94a3b8' }}>均阅读</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{compact(c.avgRead)}</strong></div>
-                    <div><span style={{ color: '#94a3b8' }}>均互动</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{compact(c.avgInteraction)}</strong></div>
-                    <div><span style={{ color: '#94a3b8' }}>均CPE</span><br /><strong style={{ color: '#334155', fontSize: 13 }}>{c.efficiency !== null ? '¥' + c.efficiency.toFixed(1) : '—'}</strong></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, fontSize: 12 }}>
+                    <div><span style={{ color: 'var(--slate-10, #80838d)' }}>笔记数</span><br /><strong style={{ color: 'var(--slate-12, #1c2024)', fontSize: 14 }}>{c.count}</strong></div>
+                    <div><span style={{ color: 'var(--slate-10, #80838d)' }}>均阅读</span><br /><strong style={{ color: 'var(--slate-12, #1c2024)', fontSize: 14 }}>{compact(c.avgRead)}</strong></div>
+                    <div><span style={{ color: 'var(--slate-10, #80838d)' }}>均互动</span><br /><strong style={{ color: 'var(--slate-12, #1c2024)', fontSize: 14 }}>{compact(c.avgInteraction)}</strong></div>
+                    <div><span style={{ color: 'var(--slate-10, #80838d)' }}>均CPE</span><br /><strong style={{ color: 'var(--slate-12, #1c2024)', fontSize: 14 }}>{c.efficiency !== null ? '¥' + c.efficiency.toFixed(1) : '—'}</strong></div>
                   </div>
                 </div>
               ))}
@@ -534,37 +534,37 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <span style={{ width: 28, height: 28, borderRadius: 8, background: item.color + '15', color: item.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>{item.icon}</span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>{item.label}</span>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>{item.label}</span>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <span style={{ fontSize: 16, fontWeight: 800, color: '#0f172a' }}>{item.value.toLocaleString()}</span>
-                      <span style={{ fontSize: 11, color: '#94a3b8', marginLeft: 6 }}>{item.pct.toFixed(1)}%</span>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: '#1c2024' }}>{item.value.toLocaleString()}</span>
+                      <span style={{ fontSize: 12, color: 'var(--slate-10, #80838d)', marginLeft: 6 }}>{item.pct.toFixed(1)}%</span>
                     </div>
                   </div>
-                  <div style={{ height: 10, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
+                  <div style={{ height: 10, background: '#f0f0f3', borderRadius: 999, overflow: 'hidden' }}>
                     <div style={{ width: `${item.pct}%`, height: '100%', background: `linear-gradient(90deg, ${item.color}cc, ${item.color})`, borderRadius: 999, transition: 'width 0.6s ease' }} />
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ padding: '16px', background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', borderRadius: 12, border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#475569', marginBottom: 12, letterSpacing: '0.5px' }}>互动质量洞察</div>
+          <div style={{ padding: '16px', background: 'linear-gradient(135deg, #f9f9fb 0%, #f0f0f3 100%)', borderRadius: 12, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--slate-11, #60646c)', marginBottom: 12, letterSpacing: '0.5px' }}>互动质量洞察</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
-              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #3b82f6' }}>
-                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>点赞占比</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{interactionQuality.find(i => i.label === '点赞')?.pct.toFixed(1) || 0}%</div>
-                <div style={{ fontSize: 10.5, color: '#94a3b8' }}>浅层互动，反映内容吸引力</div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #0090ff' }}>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>点赞占比</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{interactionQuality.find(i => i.label === '点赞')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>浅层互动，反映内容吸引力</div>
               </div>
-              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #f59e0b' }}>
-                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>收藏占比</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{interactionQuality.find(i => i.label === '收藏')?.pct.toFixed(1) || 0}%</div>
-                <div style={{ fontSize: 10.5, color: '#94a3b8' }}>深度互动，反映内容价值密度</div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #ffc53d' }}>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>收藏占比</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{interactionQuality.find(i => i.label === '收藏')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>深度互动，反映内容价值密度</div>
               </div>
-              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #8b5cf6' }}>
-                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>分享占比</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: '#1e293b' }}>{interactionQuality.find(i => i.label === '分享')?.pct.toFixed(1) || 0}%</div>
-                <div style={{ fontSize: 10.5, color: '#94a3b8' }}>采集评论单独查看，不计入此构成</div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #5b5bd6' }}>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>分享占比</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{interactionQuality.find(i => i.label === '分享')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>采集评论单独查看，不计入此构成</div>
               </div>
             </div>
           </div>
@@ -601,7 +601,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
                   <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{row.formula}</td>
                   <td>{row.source}</td>
                   <td>{row.module}</td>
-                  <td style={{ color: '#64748b', fontSize: 12 }}>{row.note}</td>
+                  <td style={{ color: 'var(--slate-11, #60646c)', fontSize: 12 }}>{row.note}</td>
                 </tr>
               ))}
             </tbody>
@@ -612,7 +612,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     </BusinessComponentBoard>}
 
     {tab === 'daily' && <BusinessComponentBoard projectId={projectId} view="daily" canManage={Boolean(project?.canManage && !project.isArchived)} period={date}>
-      <div className="reference-date-toolbar"><div><span className="section-mini-tag tag-blue">分析层 · 日报数据</span><small>选择日期后，指标与趋势一起更新</small></div><div className="reference-date-controls"><button onClick={() => stepDate(-1)} disabled={!date || date === rows[0]?.date} aria-label="前一个数据日期">←</button><label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>日报日期 <CustomSelect value={date} onChange={setSelected} options={[...rows].reverse().map(r => ({ value: String(r.date), label: `${String(r.date)}${String(r.date) === String(rows.at(-1)?.date) ? ' (最新)' : ''}` }))} /></label><button onClick={() => stepDate(1)} disabled={!date || date === rows.at(-1)?.date} aria-label="后一个数据日期">→</button><button onClick={() => setSelected('')}>最新日期</button></div></div>
+      <div className="reference-date-toolbar"><div><span className="section-mini-tag tag-blue">分析层 / 日报数据</span><small>选择日期后，指标与趋势一起更新</small></div><div className="reference-date-controls"><button onClick={() => stepDate(-1)} disabled={!date || date === rows[0]?.date} aria-label="前一个数据日期">←</button><label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>日报日期 <CustomSelect value={date} onChange={setSelected} options={[...rows].reverse().map(r => ({ value: String(r.date), label: `${String(r.date)}${String(r.date) === String(rows.at(-1)?.date) ? ' (最新)' : ''}` }))} /></label><button onClick={() => stepDate(1)} disabled={!date || date === rows.at(-1)?.date} aria-label="后一个数据日期">→</button><button onClick={() => setSelected('')}>最新日期</button></div></div>
       {!daily ? <EmptyState title="尚无日度投放数据" text="同步现有飞书数据源后查看日报。" /> : <>
         <div data-business-component="daily-summary" className="reference-daily-grid">{dailyCards.map(item => {
           const currentValue = finiteMetric(daily[item.key]);
@@ -621,8 +621,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           const spark = quarterRows.slice(-14).map(r => finiteMetric(r[item.key]));
           return <article className={`pastel-card pastel-${item.tone} reference-kpi`} key={item.key}><div className="stat-head"><span>{item.title}</span><span className={`section-mini-tag tag-${item.tone}`}>日报</span></div><div className="stat-value">{amount(currentValue)}<small> {item.unit}</small></div><div className="reference-kpi-meta">{item.desc}</div><div className="reference-kpi-delta">{delta === null ? '暂无可比前期' : `较前一数据日 ${delta >= 0 ? '+' : ''}${amount(delta)}%`}</div>{spark.every(v => v !== null) && <Sparkline data={spark as number[]} color={item.tone === 'purple' ? colors[2] : colors[0]} />}</article>;
         })}</div>
-        <div data-business-component="daily-trends" className="workspace-two-col"><Section tag="消耗趋势" title="近30个数据日 · 计划与实际"><TimeSeriesChart rows={recent} title="计划与实际消耗" unit="元" series={[{ key: 'plan_spend', label: '计划', color: '#94a3b8' }, { key: 'actual_spend', label: '实际', color: colors[0] }]} /></Section><Section tag="CTR趋势" title="信息流与搜索 · 点击效率" tone="teal"><TimeSeriesChart rows={recent} title="信息流与搜索CTR" unit="%" series={[{ key: 'feed_ctr', label: '信息流', color: '#0d9488' }, { key: 'search_ctr', label: '搜索', color: colors[2] }]} /></Section></div>
-        <div data-business-component="daily-efficiency" className="workspace-two-col" style={{ marginTop: 14 }}><Section tag="CPUV趋势" title="小红盟 / 小红星 · UV成本趋势" tone="amber"><TimeSeriesChart rows={recent} title="CPUV 周趋势" unit="元" series={[{ key: 'xhm_cpuv', label: '小红盟 CPUV', color: '#f59e0b' }, { key: 'xhx_cpuv', label: '小红星 CPUV', color: '#ea580c' }]} /></Section><Section tag="效率对比" title="核心效率指标 · 当日 vs 前一日" tone="purple">
+        <div data-business-component="daily-trends" className="workspace-two-col"><Section tag="消耗趋势" title="近30个数据日 / 计划与实际"><TimeSeriesChart rows={recent} title="计划与实际消耗" unit="元" series={[{ key: 'plan_spend', label: '计划', color: '#8b8d98' }, { key: 'actual_spend', label: '实际', color: colors[0] }]} /></Section><Section tag="CTR趋势" title="信息流与搜索 / 点击效率" tone="teal"><TimeSeriesChart rows={recent} title="信息流与搜索CTR" unit="%" series={[{ key: 'feed_ctr', label: '信息流', color: '#12a594' }, { key: 'search_ctr', label: '搜索', color: colors[2] }]} /></Section></div>
+        <div data-business-component="daily-efficiency" className="workspace-two-col" style={{ marginTop: 14 }}><Section tag="CPUV趋势" title="小红盟 / 小红星 / UV成本趋势" tone="amber"><TimeSeriesChart rows={recent} title="CPUV 周趋势" unit="元" series={[{ key: 'xhm_cpuv', label: '小红盟 CPUV', color: '#ffc53d' }, { key: 'xhx_cpuv', label: '小红星 CPUV', color: '#e5484d' }]} /></Section><Section tag="效率对比" title="核心效率指标 / 当日 vs 前一日" tone="purple">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
             {([
               { label: '信息流 CTR', current: finiteMetric(daily?.feed_ctr), prev: finiteMetric(previous?.feed_ctr), unit: '%', tone: 'teal' as const, benchmark: null as number | null, lowerIsBetter: false },
@@ -634,15 +634,15 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               const isGood = delta === null ? null : item.lowerIsBetter ? delta <= 0 : delta >= 0;
               const meetsBench = item.benchmark === null || item.current === null ? null : item.lowerIsBetter ? item.current <= item.benchmark : item.current >= item.benchmark;
               return (
-                <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: item.tone === 'teal' ? '#0d9488' : item.tone === 'purple' ? '#7c3aed' : item.tone === 'amber' ? '#f59e0b' : '#ea580c' }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#1e293b' }}>{item.label}</span>
-                    {item.benchmark !== null && <span style={{ fontSize: 10.5, color: meetsBench ? '#16a34a' : '#dc2626', background: meetsBench ? '#f0fdf4' : '#fef2f2', padding: '2px 6px', borderRadius: 4 }}>基准 {item.benchmark}{item.unit}</span>}
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: item.tone === 'teal' ? '#12a594' : item.tone === 'purple' ? '#5b5bd6' : item.tone === 'amber' ? '#ffc53d' : '#e5484d' }} />
+                    <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>{item.label}</span>
+                    {item.benchmark !== null && <span style={{ fontSize: 12, color: meetsBench ? 'var(--jade-11, #208368)' : 'var(--red-11, #ce2c31)', background: meetsBench ? 'var(--jade-3, #e6f7ed)' : 'var(--red-3, #feebec)', padding: '2px 6px', borderRadius: 4 }}>基准 {item.benchmark}{item.unit}</span>}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-                    <strong style={{ fontSize: 18, fontWeight: 800, color: '#0f172a' }}>{item.current === null ? '—' : amount(item.current)}<small style={{ fontSize: 11, color: '#64748b', fontWeight: 400 }}> {item.unit}</small></strong>
-                    <span style={{ fontSize: 11.5, fontWeight: 600, color: delta === null ? '#94a3b8' : isGood ? '#16a34a' : '#dc2626' }}>{delta === null ? '无前期对比' : `${delta >= 0 ? '+' : ''}${amount(delta)}%`}</span>
+                    <strong style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{item.current === null ? '—' : amount(item.current)}<small style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 400 }}> {item.unit}</small></strong>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: delta === null ? 'var(--slate-10, #80838d)' : isGood ? 'var(--jade-11, #208368)' : 'var(--red-11, #ce2c31)' }}>{delta === null ? '无前期对比' : `${delta >= 0 ? '+' : ''}${amount(delta)}%`}</span>
                   </div>
                 </div>
               );

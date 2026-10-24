@@ -343,7 +343,7 @@ export function FloatingAgent({
                   <div key={s.id} className={'floating-agent-history-item' + (s.id === activeId ? ' active' : '')}>
                     <button type="button" className="floating-agent-history-main" onClick={() => openSession(s.id)}>
                       <strong>{s.title}</strong>
-                      <span>{timeLabel(s.updatedAt)} · {s.messages.length} 条</span>
+                      <span>{timeLabel(s.updatedAt)} / {s.messages.length} 条</span>
                     </button>
                     <button type="button" className="floating-agent-history-del" title="删除" onClick={() => removeSession(s.id)}>删</button>
                   </div>
@@ -431,7 +431,7 @@ export function FloatingAgent({
                         if (matched.length === 0) return null;
                         return (
                           <div className="floating-agent-sources">
-                            <span style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>参考出处：</span>
+                            <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>参考出处：</span>
                             {matched.map((s, i) => (
                               s.url ? (
                                 <a

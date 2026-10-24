@@ -31,14 +31,14 @@ export function Dialog({ open = true, title, children, footer, onClose, width = 
       }
     }}
     onCancel={event => { event.preventDefault(); onClose(); }}
-    style={{ width: `min(${width}px, calc(100vw - 24px))`, maxWidth: 'calc(100vw - 24px)', maxHeight: '90dvh', padding: 0, border: '1px solid #e2e8f0', borderRadius: 12, color: '#0f172a' }}>
+    style={{ width: `min(${width}px, calc(100vw - 24px))`, maxWidth: 'calc(100vw - 24px)', maxHeight: '90dvh', padding: 0, border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 12, color: 'var(--slate-12, #1c2024)', background: '#ffffff' }}>
     <div style={{ display: 'flex', flexDirection: 'column', maxHeight: 'calc(90dvh - 2px)', minHeight: 0 }}>
-      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '16px 20px', borderBottom: '1px solid #e2e8f0', flexShrink: 0 }}>
-        <h3 id={titleId} style={{ margin: 0, fontSize: 17 }}>{title}</h3>
-        <button type="button" aria-label="关闭弹窗" onClick={onClose} style={{ background: 'transparent', border: 0, cursor: 'pointer', padding: 6 }}>✕</button>
+      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '16px 20px', borderBottom: '0.5px solid var(--slate-6, #d9d9e0)', flexShrink: 0 }}>
+        <h3 id={titleId} style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--slate-12, #1c2024)' }}>{title}</h3>
+        <button type="button" aria-label="关闭弹窗" onClick={onClose} style={{ background: 'transparent', border: 0, cursor: 'pointer', padding: 6, color: 'var(--slate-11, #60646c)' }}>✕</button>
       </header>
       <div style={{ padding: 20, overflowY: 'auto', minHeight: 0 }}>{children}</div>
-      {footer && <footer style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 10, padding: '14px 20px', borderTop: '1px solid #e2e8f0', flexShrink: 0 }}>{footer}</footer>}
+      {footer && <footer style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 10, padding: '14px 20px', borderTop: '0.5px solid var(--slate-6, #d9d9e0)', flexShrink: 0 }}>{footer}</footer>}
     </div>
   </dialog>;
 }

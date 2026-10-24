@@ -13,13 +13,33 @@ function loadComponent(filename) {
   filename = path.resolve(filename);
   if (moduleCache.has(filename)) return moduleCache.get(filename);
   const compiled = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
-    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
   const result = { exports: {} };
   const nativeRequire = createRequire(filename);
-  const require = name => name.startsWith('.')
-    ? loadComponent(path.resolve(path.dirname(filename), `${name}.tsx`))
-    : nativeRequire(name);
+  const require = name => {
+    if (name.endsWith('.css')) return {};
+    if (name.startsWith('.') || name.startsWith('@/')) {
+      const dir = name.startsWith('@/') ? process.cwd() : path.dirname(filename);
+      const sub = name.startsWith('@/') ? name.slice(2) : name;
+      const candidates = [
+        path.resolve(dir, sub),
+        path.resolve(dir, sub + '.tsx'),
+        path.resolve(dir, sub + '.ts'),
+        path.resolve(dir, sub + '.jsx'),
+        path.resolve(dir, sub + '.js'),
+        path.resolve(dir, sub, 'index.tsx'),
+        path.resolve(dir, sub, 'index.ts'),
+      ];
+      for (const cand of candidates) {
+        if (fs.existsSync(cand) && fs.statSync(cand).isFile()) {
+          return loadComponent(cand);
+        }
+      }
+      throw new Error(`Cannot resolve module ${name} from ${filename}`);
+    }
+    return nativeRequire(name);
+  };
   vm.runInNewContext(`(function(require, module, exports) { ${compiled}\n})`, {})(require, result, result.exports);
   moduleCache.set(filename, result.exports);
   return result.exports;
@@ -43,7 +63,7 @@ assert(gap.includes('aria-label="2026-09-01'), '交互热区具备可访问名�
 assert(!gap.includes('NaN') && !gap.includes('Infinity'), '绘图坐标必须有限');
 
 const empty = renderToStaticMarkup(chart([]));
-assert(empty.includes('暂无可绘制的数据') && !empty.includes('<svg'), '空数据展示空状态');
+assert(empty.includes('暂无可绘制的数据') && !empty.replace(/<svg[^>]*class="empty-state-svg"[\s\S]*?<\/svg>/g, '').includes('<svg'), '空数据展示空状态');
 const single = renderToStaticMarkup(chart([{ date: '2026-09-01', count: 0 }]));
 assert(single.includes('cx="380"') && !single.includes('NaN'), '单日期零值位于图表中间');
 const invalid = renderToStaticMarkup(chart([{ date: '2026-09-01', count: Infinity }]));
@@ -157,7 +177,7 @@ const { CustomSelect } = loadComponent('components/ui/CustomSelect.tsx');
         setVal(next);
       },
     });
-    triggerProps = el.type(el.props).props.children[0].props;
+    const ch1 = el.type(el.props).props.children; triggerProps = (Array.isArray(ch1) ? ch1.find(c => c && c.type === 'button') : ch1).props;
     return null;
   }
   renderToStaticMarkup(React.createElement(InteractiveSelectHarness));
@@ -181,7 +201,7 @@ const { CustomSelect } = loadComponent('components/ui/CustomSelect.tsx');
       defaultOpen: true,
       onChange: () => {},
     });
-    openTriggerProps = el.type(el.props).props.children[0].props;
+    const ch2 = el.type(el.props).props.children; openTriggerProps = (Array.isArray(ch2) ? ch2.find(c => c && c.type === 'button') : ch2).props;
     return null;
   }
   renderToStaticMarkup(React.createElement(OpenSelectHarness));

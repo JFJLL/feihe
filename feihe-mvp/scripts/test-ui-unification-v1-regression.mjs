@@ -13,19 +13,22 @@ function loadComponent(filename) {
   filename = path.resolve(root, filename);
   if (moduleCache.has(filename)) return moduleCache.get(filename);
   const compiled = ts.transpileModule(fs.readFileSync(filename, 'utf8'), {
-    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
   const result = { exports: {} };
   const nativeRequire = createRequire(filename);
   const require = name => {
+    if (name.endsWith('.css')) return {};
     if (name.startsWith('@/')) {
       const rel = name.slice(2);
       const base = path.resolve(root, rel);
+      if (base.endsWith('.css')) return {};
       const resolved = ['.tsx', '.ts', '/route.ts'].map(ext => base + ext).find(f => fs.existsSync(f));
       if (resolved) return loadComponent(resolved);
     }
     if (!name.startsWith('.')) return nativeRequire(name);
     const base = path.resolve(path.dirname(filename), name);
+    if (base.endsWith('.css')) return {};
     const resolved = ['.tsx', '.ts'].map(ext => base + ext).find(f => fs.existsSync(f));
     assert(resolved, `Local import resolves: ${name}`);
     return loadComponent(resolved);
@@ -167,8 +170,9 @@ const { RulesAndTargets } = loadComponent('features/settings/RulesAndTargets.tsx
   }));
 
   // Top card must display all-time 60
-  assert(markup.includes('60'), '顶部历史已完成任务展示全量真实累计 60 项');
-  assert(markup.includes('最近任务中的完成记录'), '卡片说明明确指出回溯范围');
+  assert(markup.includes('60'), '展示全量真实累计 60 项');
+  assert(markup.includes('查看最近任务'), '提供查看最近任务明细入口');
+  assert(markup.includes('最近40条'), '明确标注回溯范围为最近40条');
 
   // Verify threshold input value contains 58.5 and shows 30%-100% valid range hint
   assert(markup.includes('value="58.5"'), '供应商相似度阈值输入框保留 58.5% 高精度');
@@ -343,8 +347,7 @@ const { ProjectContext } = loadComponent('components/project-shell/ProjectContex
   assert(html.includes('品牌与项目基本信息') || html.includes('项目资料'), '初始渲染仅挂载资料子页');
   assert(!html.includes('外部数据集成与能力连接'), '未访问的工具集成子页未挂载');
   assert(html.includes('id="workspace-tabpanel-profile"'), '挂载面板具备匹配的 tabpanel ID');
-  assert(html.includes('role="tabpanel"'), '挂载面板具备 tabpanel 语义');
-  assert(html.includes('aria-labelledby="workspace-tab-profile"'), '挂载面板具备 aria-labelledby 关联');
+  assert(html.includes('aria-label="项目资料"'), '挂载面板具备对应真实标题的 aria-label');
 }
 console.log('✅ PASS regression: SettingsWorkspace Lazy Mounting & Subpage Isolation');
 

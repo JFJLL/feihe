@@ -217,7 +217,7 @@ function ProjectShellContent({
       content = (
         <>
           {dataError && !isCampaignReview && (
-            <div style={{ padding: "10px 16px", background: "#fef3c7", border: "1px solid #fde68a", color: "#92400e", borderRadius: 8, marginBottom: 16, fontSize: 13 }}>
+            <div style={{ padding: "10px 16px", background: "#fff7c2", border: "0.5px solid #f3d673", color: "#ab6400", borderRadius: 8, marginBottom: 16, fontSize: 14 }}>
               ⚠️ 分析数据接口暂不可用，但您可以正常维护项目设置、数据源与成员权限。
             </div>
           )}

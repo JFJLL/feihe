@@ -63,7 +63,7 @@ export function KeywordRadar({
       return (n.category1 === direction) || (n.category2 === direction) || (contentDirectionLabel(n.category1) === normTarget) || (sampleDirection(n) === direction);
     });
     openCategoryNotes({
-      title: '内容方向机会 · ' + normTarget,
+      title: '内容方向机会 / ' + normTarget,
       subtitle: '方向下共收录 ' + matched.length + ' 篇样本，展示前 50 篇（按互动量降序）',
       tag: '机会方向',
       notes: matched,
@@ -123,14 +123,14 @@ export function KeywordRadar({
       <div className="view-toggle-bar" style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
         <button
           className={'primary ' + (dataView === 'project' ? '' : 'subtle-btn')}
-          style={dataView !== 'project' ? { background: '#ffffff', color: '#475569', borderColor: '#cbd5e1' } : {}}
+          style={dataView !== 'project' ? { background: '#ffffff', color: '#60646c', borderColor: '#cdced6' } : {}}
           onClick={() => setDataView('project')}
         >
           📊 项目内容机会
         </button>
         <button
           className={'primary ' + (dataView === 'lingxi' ? '' : 'subtle-btn')}
-          style={dataView !== 'lingxi' ? { background: '#ffffff', color: '#475569', borderColor: '#cbd5e1' } : {}}
+          style={dataView !== 'lingxi' ? { background: '#ffffff', color: '#60646c', borderColor: '#cdced6' } : {}}
           onClick={() => setDataView('lingxi')}
         >
           🌐 灵犀数据查询
@@ -145,7 +145,7 @@ export function KeywordRadar({
           <section className="panel keyword-control" id="growth-keywords">
             <div>
               <PanelHead eyebrow="WATCHLIST" title="关键词观察清单" />
-              <p style={{ margin: '4px 0 12px', color: 'var(--text-muted)', fontSize: '13px' }}>
+              <p style={{ margin: '4px 0 12px', color: 'var(--text-muted)', fontSize: '14px' }}>
                 匹配本次载入最多 500 篇笔记的标题、作者、分类、品牌与范围。范围为观察标签，不额外过滤笔记；关键词可能交叉命中。任一匹配样本缺少指标时，该项合计显示 —。
               </p>
             </div>
@@ -240,7 +240,7 @@ export function KeywordRadar({
                     <span>
                       <strong>{item.keyword}</strong>
                       <small>
-                        {item.scope} · {item.source}
+                        {item.scope} / {item.source}
                       </small>
                     </span>
                     <span>{matches.length}</span>
@@ -299,7 +299,7 @@ export function KeywordRadar({
                   </div>
                   <strong>{note.title || note.id}</strong>
                   <p>
-                    {noteDirection(note)} · {note.author || '未知作者'}
+                    {noteDirection(note)} / {note.author || '未知作者'}
                   </p>
                   <dl>
                     <div>

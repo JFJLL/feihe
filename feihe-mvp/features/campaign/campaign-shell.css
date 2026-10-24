@@ -23,7 +23,7 @@
   overflow-wrap: anywhere;
 }
 .campaign-workspace-root .ca-metric-value-row { flex-wrap: wrap; }
-.campaign-workspace-root .ca-metric-value { font-size: clamp(19px, 1.7vw, 26px); }
+.campaign-workspace-root .ca-metric-value { font-size: 22px; }
 .campaign-workspace-root :is(.ca-grid, .kri-grid-2, .mri-grid, .ht-grid-2, .wipes-rich-grid-2, .ca-diagnostics-grid) {
   align-items: stretch;
 }
@@ -64,7 +64,7 @@
 
 .campaign-workspace-root .ca-header .ca-header-title,
 .ca-header.bd-toolbar-compact .ca-header-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
   margin: 0;

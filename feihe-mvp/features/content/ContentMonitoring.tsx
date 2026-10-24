@@ -122,7 +122,7 @@ export function ContentMonitoring({
           label="双指标完整表现样本"
           value={summary.performanceMetricCount.toLocaleString()}
           unit="篇"
-          desc={`占总盘 ${perfRate}% · 阅读与互动均已沉淀`}
+          desc={`占总盘 ${perfRate}% / 阅读与互动均已沉淀`}
           tag="完整指标"
         />
         <MetricCard
@@ -158,25 +158,25 @@ export function ContentMonitoring({
         desc="项目全量笔记，不随列表筛选变化；阅读与互动均大于 0 才计为双指标完整，原文链接仅检查是否已填写。"
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>封面图覆盖率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{coverRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#15803d' }}>已入库 {summary.coverCount} / {summary.total} 篇</div>
+          <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>封面图覆盖率</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{coverRate}%</div>
+            <div style={{ fontSize: '12px', color: '#208368' }}>已入库 {summary.coverCount} / {summary.total} 篇</div>
           </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>内容方向归类率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{categoryRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#0369a1' }}>已完成分类 {summary.categoryCount} / {summary.total} 篇</div>
+          <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>内容方向归类率</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{categoryRate}%</div>
+            <div style={{ fontSize: '12px', color: '#0d74ce' }}>已完成分类 {summary.categoryCount} / {summary.total} 篇</div>
           </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>阅读 / 互动完整率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{perfRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#0f766e' }}>指标有效 {summary.performanceMetricCount} / {summary.total} 篇</div>
+          <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>阅读 / 互动完整率</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{perfRate}%</div>
+            <div style={{ fontSize: '12px', color: '#008573' }}>指标有效 {summary.performanceMetricCount} / {summary.total} 篇</div>
           </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>原文链接填写率</div>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: '4px 0' }}>{linkRate}%</div>
-            <div style={{ fontSize: '11.5px', color: '#6366f1' }}>已填原文 {summary.linkCount} / {summary.total} 篇</div>
+          <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
+            <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>原文链接填写率</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{linkRate}%</div>
+            <div style={{ fontSize: '12px', color: '#5b5bd6' }}>已填原文 {summary.linkCount} / {summary.total} 篇</div>
           </div>
         </div>
       </DashboardSection>
@@ -272,8 +272,8 @@ export function ContentMonitoring({
                     </td>
                     <td>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span style={{ fontSize: '13px', fontWeight: 600 }}>{note.author || '未知博主'}</span>
-                        <span style={{ fontSize: '12px', color: '#64748b' }}>{note.category1 || note.noteType || '待归类'}</span>
+                        <span style={{ fontSize: '14px', fontWeight: 600 }}>{note.author || '未知博主'}</span>
+                        <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>{note.category1 || note.noteType || '待归类'}</span>
                       </div>
                     </td>
                     <td>
@@ -283,13 +283,13 @@ export function ContentMonitoring({
                       <strong>{hasInteractions && Number(note.interactionCount) > 0 ? compact(note.interactionCount) : '待同步'}</strong>
                     </td>
                     <td>
-                      <span style={{ color: hasReads ? '#0f172a' : '#64748b' }}>{engagementRate}</span>
+                      <span style={{ color: hasReads ? '#1c2024' : '#60646c' }}>{engagementRate}</span>
                     </td>
                     <td>
                       <strong>{note.commentTotal}</strong>
                     </td>
                     <td>
-                      <span style={{ fontWeight: 600, color: note.cpe != null ? '#0f172a' : '#94a3b8' }}>
+                      <span style={{ fontWeight: 600, color: note.cpe != null ? '#1c2024' : '#60646c' }}>
                         {note.cpe != null ? '￥' + Number(note.cpe).toFixed(2) : '—'}
                       </span>
                     </td>
@@ -300,7 +300,7 @@ export function ContentMonitoring({
                       />
                     </td>
                     <td>
-                      <span style={{ fontSize: '12px', color: '#64748b' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
                         {note.lastFetchedAt ? cnTime(note.lastFetchedAt).slice(5) : '待抓取'}
                       </span>
                     </td>
@@ -329,15 +329,15 @@ export function ContentMonitoring({
         </DataTableShell>
 
         {/* 底部次级跳转入口 */}
-        <div style={{ marginTop: '20px', padding: '16px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ marginTop: '20px', padding: '16px', background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <strong style={{ fontSize: '13.5px', color: '#0f172a' }}>需要查看聚合分析分布与宏观排行？</strong>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>包含内容形式分布、达人层级效率矩阵与全盘内容分析报表。</div>
+            <strong style={{ fontSize: '14px', color: '#1c2024' }}>需要查看聚合分析分布与宏观排行？</strong>
+            <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>包含内容形式分布、达人层级效率矩阵与全盘内容分析报表。</div>
           </div>
           <Link
             href={`/projects/${encodeURIComponent(projectId)}/content?tab=analysis`}
             className="btn-link"
-            style={{ fontSize: '13px', fontWeight: 600 }}
+            style={{ fontSize: '14px', fontWeight: 600 }}
           >
             进入内容分析主看板查看聚合报表 →
           </Link>

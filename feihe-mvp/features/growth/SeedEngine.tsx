@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from '../../components/ui/AppLink';
 import type { Dashboard, GrowthSettings, GrowthKeyword, Note } from '../../lib/types/project';
@@ -99,7 +99,7 @@ export function SeedEngine({
               <span>
                 <strong>{note.title || note.id}</strong>
                 <small>
-                  {note.author || '未知作者'} · {note.sourceType || '来源未标注'}
+                  {note.author || '未知作者'} / {note.sourceType || '来源未标注'}
                 </small>
               </span>
               <span>

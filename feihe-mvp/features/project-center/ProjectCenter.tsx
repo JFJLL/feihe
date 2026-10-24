@@ -16,7 +16,7 @@ import { ProjectFormDialog } from './ProjectFormDialog';
 import { OrganizationManager } from './OrganizationManager';
 import { FeishuLogin } from '@/components/auth/FeishuLogin';
 
-export const PRESET_COLORS = ['#2c7168', '#0284c7', '#0d9488', '#16a34a', '#eab308', '#ea580c', '#e11d48', '#7c3aed'];
+export const PRESET_COLORS = ['#12a594', '#0090ff', '#29a383', '#5b5bd6', '#ffc53d', '#e5484d'];
 
 export function ProjectCenter({ userName, isDevLocal = false }: { userName: string; isDevLocal?: boolean }) {
   const identity = useCacheIdentity();
@@ -57,9 +57,9 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
 
   const kpiStats = useMemo(() => {
     const total = projects.length;
-    const active = projects.filter(p => p.status === '进行中').length;
+    const active = projects.filter(p => ['进行中', 'active', 'in_progress'].includes(p.status)).length;
     const campaign = projects.filter(p => p.templateId === 'campaign_review').length;
-    const connected = projects.filter(p => Boolean(p.sourceCount || p.dataRowCount || p.templateId === 'campaign_review')).length;
+    const connected = projects.filter(p => (p.sourceCount ?? 0) > 0).length;
     return { total, active, campaign, connected };
   }, [projects]);
 
@@ -81,7 +81,13 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
     if (client !== 'all' && (p.clientId || 'internal') !== client) return false;
     if (department !== 'all' && p.departmentId !== department) return false;
     if (owner !== 'all' && (p.ownerName || '') !== owner) return false;
-    if (status !== 'all' && p.status !== status) return false;
+    if (status !== 'all') {
+      if (status === '进行中') {
+        if (!['进行中', 'active', 'in_progress'].includes(p.status)) return false;
+      } else if (p.status !== status) {
+        return false;
+      }
+    }
     const needle = query.trim().toLowerCase();
     return !needle || [p.name, p.description, p.clientName, p.departmentName, p.ownerName].some(v => v?.toLowerCase().includes(needle));
   }), [projects, metadata, scope, client, department, owner, status, query]);
@@ -117,7 +123,7 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
   if (accessFailure) return <AccessState status={accessFailure.status} message={accessFailure.message} />;
   return <div className="platform-shell">
     <header className="platform-top"><Link className="platform-brand" href="/"><b>协同</b><span>项目数据与报告协作</span></Link>
-      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} style={{ marginLeft: 8, fontSize: '0.72rem', color: '#0284c7', background: '#e0f2fe', padding: '2px 6px', borderRadius: 4 }}>本地开发</span>}</div>
+      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} style={{ marginLeft: 8, fontSize: 12, color: 'var(--blue-11, #0d74ce)', background: 'var(--blue-3, #e6f4fe)', padding: '2px 6px', borderRadius: 4 }}>本地开发</span>}</div>
     </header>
     <main className="platform-main integration-center">
       <section className="integration-page-heading"><div><h1>项目中心</h1><p>查看负责的工作，或为团队建立自己的数据工作台。</p></div><div className="integration-actions">
@@ -143,9 +149,9 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
           <small className="portfolio-kpi-hint">重点战役与多源归因评估</small>
         </div>
         <div className="portfolio-kpi-card">
-          <span className="portfolio-kpi-label">已接入数据源项目</span>
+          <span className="portfolio-kpi-label">已配置数据源</span>
           <strong className="portfolio-kpi-val source-val">{kpiStats.connected}</strong>
-          <small className="portfolio-kpi-hint">已打通飞书或本地分析数据</small>
+          <small className="portfolio-kpi-hint">已绑定数据源配置</small>
         </div>
       </section>
 
@@ -162,7 +168,7 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
       <div className="project-status-pills-bar" role="tablist" aria-label="项目状态快捷筛选">
         {[
           { id: 'all', label: '全部项目', count: projects.length },
-          { id: '进行中', label: '进行中', count: projects.filter(p => p.status === '进行中').length },
+          { id: '进行中', label: '进行中', count: projects.filter(p => ['进行中', 'active', 'in_progress'].includes(p.status)).length },
           { id: '筹备中', label: '筹备中', count: projects.filter(p => p.status === '筹备中').length },
           { id: '已结束', label: '已结束', count: projects.filter(p => p.status === '已结束').length },
           { id: '已归档', label: '已归档', count: projects.filter(p => p.status === '已归档' || p.isArchived).length },
@@ -191,16 +197,16 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
       </section>
       <div className="integration-list-toolbar"><span>{filtered.length} 个授权项目</span><div role="group" aria-label="项目显示方式"><button type="button" aria-pressed={view === 'cards'} onClick={() => setView('cards')}>项目卡片</button><button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')}>紧凑列表</button></div></div>
       {!filtered.length ? <EmptyState title="没有符合条件的项目" text={projects.length ? '调整筛选条件查看其他已授权项目。' : '新建项目，或请项目负责人将您加入团队。'} /> : view === 'cards' ?
-        <div className="integration-project-grid">{filtered.map(p => <article key={p.id} aria-label={p.name} className="integration-project-card" style={{ borderTopColor: p.color }}>
+        <div className="integration-project-grid">{filtered.map(p => <article key={p.id} aria-label={p.name} className="integration-project-card">
           <div className="integration-card-status">
             <span className={`status-pill status-${p.status}`}>{p.status}</span>
             <small className="template-pill">{p.templateName}</small>
           </div>
           <div className="integration-project-card-header" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {p.logoUrl ? <img src={p.logoUrl} alt="" className="project-card-logo" style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #e2e8f0', flexShrink: 0 }} /> : null}
+            {p.logoUrl ? <img src={p.logoUrl} alt="" className="project-card-logo" style={{ width: '36px', height: '36px', borderRadius: '8px', objectFit: 'cover', border: '0.5px solid var(--slate-6, #d9d9e0)', flexShrink: 0 }} /> : null}
             <div style={{ minWidth: 0, flex: 1 }}>
               <h2>{p.name}</h2>
-              {(p.brand || p.spu) && <small style={{ color: '#2c7168', fontSize: '12px', fontWeight: 600 }}>{[p.brand, p.spu].filter(Boolean).join(' · ')}</small>}
+              {(p.brand || p.spu) && <small style={{ color: 'var(--teal-11, #008573)', fontSize: 12, fontWeight: 600 }}>{[p.brand, p.spu].filter(Boolean).join(' / ')}</small>}
             </div>
           </div>
           <div className="project-card-meta-grid">
@@ -218,13 +224,13 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
             </div>
           </div>
           <p className="integration-project-dom-subtext" style={{ display: 'none' }}>
-            {p.clientName || '内部项目'} · {p.departmentName || '部门待设置'} 负责人：{p.ownerName || '待设置'}
+            {p.clientName || '内部项目'} / {p.departmentName || '部门待设置'} 负责人：{p.ownerName || '待设置'}
           </p>
           <p className="integration-project-description">{p.description || '团队数据、分析与报告工作台'}</p>
           <small>{freshness(p)}</small>{p.onboardingStatus !== 'ready' && <small className="integration-setup-status">{p.canManage ? '首次设置未完成' : '工作台待负责人发布'}</small>}
           {actions(p)}
         </article>)}</div> :
-        <div className="integration-table-scroll"><table className="data-table" aria-label="项目紧凑列表"><thead><tr><th>项目</th><th>客户 / 部门</th><th>负责人</th><th>状态 / 数据</th><th>操作</th></tr></thead><tbody>{filtered.map(p => <tr key={p.id}><td><div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>{p.logoUrl ? <img src={p.logoUrl} alt="" className="project-list-logo" style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0', flexShrink: 0 }} /> : null}<div style={{ minWidth: 0 }}><strong>{p.name}</strong>{(p.brand || p.spu) && <span style={{ marginLeft: '6px', fontSize: '12px', color: '#0369a1' }}>({[p.brand, p.spu].filter(Boolean).join(' · ')})</span>}<small>{p.templateName}</small></div></div></td><td>{p.clientName || '内部项目'}<small>{p.departmentName}</small></td><td>{p.ownerName || '待设置'}</td><td>{p.status}<small>{freshness(p)}</small></td><td>{actions(p)}</td></tr>)}</tbody></table></div>}
+        <div className="integration-table-scroll"><table className="data-table" aria-label="项目紧凑列表"><thead><tr><th>项目</th><th>客户 / 部门</th><th>负责人</th><th>状态 / 数据</th><th>操作</th></tr></thead><tbody>{filtered.map(p => <tr key={p.id}><td><div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>{p.logoUrl ? <img src={p.logoUrl} alt="" className="project-list-logo" style={{ width: '28px', height: '28px', borderRadius: '6px', objectFit: 'cover', border: '0.5px solid var(--slate-6, #d9d9e0)', flexShrink: 0 }} /> : null}<div style={{ minWidth: 0 }}><strong>{p.name}</strong>{(p.brand || p.spu) && <span style={{ marginLeft: '6px', fontSize: 12, color: 'var(--blue-11, #0d74ce)' }}>({[p.brand, p.spu].filter(Boolean).join(' / ')})</span>}<small>{p.templateName}</small></div></div></td><td>{p.clientName || '内部项目'}<small>{p.departmentName}</small></td><td>{p.ownerName || '待设置'}</td><td>{p.status}<small>{freshness(p)}</small></td><td>{actions(p)}</td></tr>)}</tbody></table></div>}
       </>}
     </main>
     {editing !== undefined && metadata && <ProjectFormDialog key={editing?.id || 'create'} project={editing} metadata={metadata} projects={projects} onClose={() => setEditing(undefined)} onSaved={async id => { const creating = editing === null; setEditing(undefined); notify(creating ? '项目已创建' : '项目资料已更新'); await refresh(); if (creating) window.location.href = '/projects/' + encodeURIComponent(id); }} />}

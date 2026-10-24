@@ -23,7 +23,7 @@ export function EffectScatterChart({
   const plotW = w - padL - padR;
   const plotH = height - padT - padB;
 
-  if (!points.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无散点数据</div>;
+  if (!points.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无散点数据</div>;
 
   const xMax = Math.max(...points.map(p => p.x), 1) * 1.1;
   const yMax = Math.max(...points.map(p => p.y), 1) * 1.1;
@@ -44,19 +44,19 @@ export function EffectScatterChart({
       <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
         {yTicks.map((v, i) => (
           <g key={`y${i}`}>
-            <line x1={padL} y1={getY(v)} x2={w - padR} y2={getY(v)} stroke="#e2e8f0" strokeDasharray="3 3" />
-            <text x={padL - 8} y={getY(v) + 4} textAnchor="end" fontSize="10" fill="#94a3b8">{fmt(v)}</text>
+            <line x1={padL} y1={getY(v)} x2={w - padR} y2={getY(v)} stroke="#d9d9e0" strokeDasharray="3 3" />
+            <text x={padL - 8} y={getY(v) + 4} textAnchor="end" fontSize="12" fill="#60646c">{fmt(v)}</text>
           </g>
         ))}
         {xTicks.map((v, i) => (
           <g key={`x${i}`}>
-            <line x1={getX(v)} y1={padT} x2={getX(v)} y2={padT + plotH} stroke="#f1f5f9" />
-            <text x={getX(v)} y={height - 12} textAnchor="middle" fontSize="10" fill="#94a3b8">{fmt(v)}</text>
+            <line x1={getX(v)} y1={padT} x2={getX(v)} y2={padT + plotH} stroke="#f0f0f3" />
+            <text x={getX(v)} y={height - 12} textAnchor="middle" fontSize="12" fill="#60646c">{fmt(v)}</text>
           </g>
         ))}
-        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
-        <text x={w / 2} y={height - 1} textAnchor="middle" fontSize="11" fill="#64748b" fontWeight={600}>{xLabel}</text>
-        <text x={14} y={padT + plotH / 2} textAnchor="middle" fontSize="11" fill="#64748b" fontWeight={600} transform={`rotate(-90, 14, ${padT + plotH / 2})`}>{yLabel}</text>
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
+        <text x={w / 2} y={height - 1} textAnchor="middle" fontSize="12" fill="#60646c" fontWeight={600}>{xLabel}</text>
+        <text x={14} y={padT + plotH / 2} textAnchor="middle" fontSize="12" fill="#60646c" fontWeight={600} transform={`rotate(-90, 14, ${padT + plotH / 2})`}>{yLabel}</text>
         {points.map((p, i) => (
           <circle
             key={p.id || i}
@@ -72,7 +72,7 @@ export function EffectScatterChart({
         ))}
       </svg>
       {hovered && (
-        <div style={{ position: 'absolute', left: 8, right: 8, top: 20, background: 'rgba(15,23,42,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 11.5, pointerEvents: 'none', zIndex: 10, whiteSpace: 'normal', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
+        <div style={{ position: 'absolute', left: 8, right: 8, top: 20, background: 'rgba(28, 32, 36,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 12, pointerEvents: 'none', zIndex: 10, whiteSpace: 'normal', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
           <div style={{ fontWeight: 700, marginBottom: 3 }}>{hovered.label}</div>
           <div>{xLabel}：{fmt(hovered.x)}</div>
           <div>{yLabel}：{fmt(hovered.y)}</div>
@@ -86,7 +86,7 @@ export function EffectScatterChart({
 // ======================== Histogram Chart (笔记效果分布) ========================
 export function DistributionHistogram({
   bins,
-  color = '#1e6091',
+  color = '#0d74ce',
   height = 280,
   unit = '篇',
   onBinClick,
@@ -98,7 +98,7 @@ export function DistributionHistogram({
   onBinClick?: (bin: { label: string; count: number }, index: number) => void;
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
-  if (!bins.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无分布数据</div>;
+  if (!bins.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无分布数据</div>;
 
   const w = 680;
   const padL = 50, padR = 20, padT = 24, padB = 44;
@@ -119,8 +119,8 @@ export function DistributionHistogram({
         </defs>
         {[0, 0.25, 0.5, 0.75, 1].map((t, i) => (
           <g key={i}>
-            <line x1={padL} y1={padT + plotH - t * plotH} x2={w - padR} y2={padT + plotH - t * plotH} stroke="#e2e8f0" strokeDasharray="3 3" />
-            <text x={padL - 8} y={padT + plotH - t * plotH + 4} textAnchor="end" fontSize="10" fill="#94a3b8">{Math.round(max * t)}</text>
+            <line x1={padL} y1={padT + plotH - t * plotH} x2={w - padR} y2={padT + plotH - t * plotH} stroke="#d9d9e0" strokeDasharray="3 3" />
+            <text x={padL - 8} y={padT + plotH - t * plotH + 4} textAnchor="end" fontSize="12" fill="#60646c">{Math.round(max * t)}</text>
           </g>
         ))}
         {bins.map((b, i) => {
@@ -131,12 +131,12 @@ export function DistributionHistogram({
           return (
             <g key={i} onMouseEnter={() => setHoverIdx(i)} onClick={() => onBinClick && onBinClick(b, i)} style={{ cursor: 'pointer' }}>
               <rect x={x} y={y} width={barW} height={h} fill="url(#hist-grad)" rx={3} style={{ transition: 'all 0.2s ease', opacity: hoverIdx === null || isHovered ? 1 : 0.5 }} />
-              {isHovered && <text x={x + barW / 2} y={y - 6} textAnchor="middle" fontSize="11" fontWeight={700} fill="#0f172a">{b.count} {unit}</text>}
-              <text x={x + barW / 2} y={height - 14} textAnchor="middle" fontSize="9.5" fill="#64748b">{b.label}</text>
+              {isHovered && <text x={x + barW / 2} y={y - 6} textAnchor="middle" fontSize="12" fontWeight={700} fill="#1c2024">{b.count} {unit}</text>}
+              <text x={x + barW / 2} y={height - 14} textAnchor="middle" fontSize="12" fill="#60646c">{b.label}</text>
             </g>
           );
         })}
-        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
       </svg>
     </div>
   );
@@ -150,7 +150,7 @@ export function EfficiencyRadarChart({
   metrics: Array<{ label: string; value: number; max: number; color?: string }>;
   height?: number;
 }) {
-  if (!metrics.length || metrics.length < 3) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>雷达图至少需要3个指标</div>;
+  if (!metrics.length || metrics.length < 3) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>雷达图至少需要3个指标</div>;
 
   const size = Math.min(340, height);
   const center = size / 2;
@@ -171,22 +171,22 @@ export function EfficiencyRadarChart({
             key={i}
             points={metrics.map((_, j) => { const p = point(j, r * radius); return `${p.x},${p.y}`; }).join(' ')}
             fill="none"
-            stroke="#e2e8f0"
+            stroke="#d9d9e0"
             strokeWidth={1}
           />
         ))}
         {metrics.map((_, i) => {
           const p = point(i, radius);
-          return <line key={i} x1={center} y1={center} x2={p.x} y2={p.y} stroke="#e2e8f0" strokeWidth={1} />;
+          return <line key={i} x1={center} y1={center} x2={p.x} y2={p.y} stroke="#d9d9e0" strokeWidth={1} />;
         })}
-        <path d={path} fill="#3b82f6" fillOpacity={0.2} stroke="#3b82f6" strokeWidth={2} />
+        <path d={path} fill="#0090ff" fillOpacity={0.2} stroke="#0090ff" strokeWidth={2} />
         {dataPoints.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={4} fill="#3b82f6" stroke="#fff" strokeWidth={1.5} />
+          <circle key={i} cx={p.x} cy={p.y} r={4} fill="#0090ff" stroke="#fff" strokeWidth={1.5} />
         ))}
         {metrics.map((m, i) => {
           const p = point(i, radius + 22);
           return (
-            <text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="11" fontWeight={600} fill="#334155">
+            <text key={i} x={p.x} y={p.y} textAnchor="middle" dominantBaseline="middle" fontSize="12" fontWeight={600} fill="#1c2024">
               {m.label}
             </text>
           );
@@ -194,9 +194,9 @@ export function EfficiencyRadarChart({
       </svg>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 140 }}>
         {metrics.map((m, i) => (
-          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, padding: '4px 8px', background: '#f8fafc', borderRadius: 6 }}>
-            <span style={{ color: '#475569', fontWeight: 500 }}>{m.label}</span>
-            <span style={{ fontWeight: 700, color: '#0f172a' }}>{m.value.toFixed(m.value < 10 ? 2 : 0)}</span>
+          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, padding: '4px 8px', background: '#f9f9fb', borderRadius: 6 }}>
+            <span style={{ color: '#60646c', fontWeight: 500 }}>{m.label}</span>
+            <span style={{ fontWeight: 700, color: '#1c2024' }}>{m.value.toFixed(m.value < 10 ? 2 : 0)}</span>
           </div>
         ))}
       </div>
@@ -213,24 +213,24 @@ export function ConversionFunnelChart({
   height?: number;
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
-  if (!stages.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无漏斗数据</div>;
+  if (!stages.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无漏斗数据</div>;
 
   const max = stages[0].value || 1;
-  const colors = ['#1e40af', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#475569'];
+  const colors = ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31', '#60646c'];
   const stageH = Math.min(52, (height - 20) / stages.length);
   const totalDrop = stages.length > 1 ? ((stages[0].value - stages[stages.length - 1].value) / stages[0].value * 100).toFixed(1) : '0';
 
   return (
     <div style={{ width: '100%' }}>
       {/* 顶部汇总条 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, padding: '10px 16px', background: 'linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)', borderRadius: 10, border: '1px solid #e0e7ff' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, padding: '10px 16px', background: 'linear-gradient(135deg, #f9f9fb 0%, #f0f1fe 100%)', borderRadius: 10, border: '0.5px solid #e6e7ff' }}>
         <div>
-          <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, letterSpacing: '0.5px' }}>全链路转化</div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: '#1e293b', marginTop: 2 }}>{stages[0].value.toLocaleString()} <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>to {stages[stages.length - 1].value.toLocaleString()}</span></div>
+          <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, letterSpacing: '0.5px' }}>全链路转化</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: '#1c2024', marginTop: 2 }}>{stages[0].value.toLocaleString()} <span style={{ fontSize: 12, color: '#60646c', fontWeight: 500 }}>to {stages[stages.length - 1].value.toLocaleString()}</span></div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>整体流失率</div>
-          <div style={{ fontSize: 22, fontWeight: 800, color: '#dc2626', marginTop: 2 }}>{totalDrop}%</div>
+          <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>整体流失率</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: '#ce2c31', marginTop: 2 }}>{totalDrop}%</div>
         </div>
       </div>
 
@@ -245,31 +245,31 @@ export function ConversionFunnelChart({
           return (
             <div key={i} style={{ position: 'relative' }} onMouseEnter={() => setHoverIdx(i)} onMouseLeave={() => setHoverIdx(null)}>
               {/* 阶段序号 */}
-              <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 28, height: 28, borderRadius: '50%', background: color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 800, zIndex: 2, boxShadow: `0 2px 8px ${color}40` }}>
+              <div style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', width: 28, height: 28, borderRadius: '50%', background: color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, zIndex: 2, boxShadow: `0 2px 8px ${color}40` }}>
                 {i + 1}
               </div>
               {/* 漏斗条 */}
-              <div style={{ marginLeft: 38, position: 'relative', height: stageH, borderRadius: 8, overflow: 'hidden', background: '#f1f5f9', transition: 'all 0.25s ease', transform: isHovered ? 'scale(1.01)' : 'scale(1)', boxShadow: isHovered ? `0 4px 16px ${color}30` : '0 1px 3px rgba(0,0,0,0.06)' }}>
+              <div style={{ marginLeft: 38, position: 'relative', height: stageH, borderRadius: 8, overflow: 'hidden', background: '#f0f0f3', transition: 'all 0.25s ease', transform: isHovered ? 'scale(1.01)' : 'scale(1)', boxShadow: isHovered ? `0 4px 16px ${color}30` : '0 1px 3px rgba(0,0,0,0.06)' }}>
                 <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: `linear-gradient(90deg, ${color} 0%, ${color}dd 100%)`, borderRadius: 8, transition: 'width 0.5s ease' }} />
                 {/* 文字内容 */}
                 <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%', padding: '0 16px 0 14px' }}>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: pct > 35 ? '#fff' : '#1e293b', textShadow: pct > 35 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none', whiteSpace: 'nowrap' }}>{s.label}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: pct > 35 ? '#fff' : '#1c2024', textShadow: pct > 35 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none', whiteSpace: 'nowrap' }}>{s.label}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     {convRate && (
-                      <span style={{ fontSize: 11.5, fontWeight: 600, color: pct > 50 ? '#fff' : '#059669', background: pct > 50 ? 'rgba(255,255,255,0.2)' : '#d1fae5', padding: '3px 10px', borderRadius: 999, whiteSpace: 'nowrap' }}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: pct > 50 ? '#fff' : '#29a383', background: pct > 50 ? 'rgba(255,255,255,0.2)' : '#acdec8', padding: '3px 10px', borderRadius: 999, whiteSpace: 'nowrap' }}>
                         转化 {convRate}%
                       </span>
                     )}
                     {dropRate && Number(dropRate) > 0 && (
-                      <span style={{ fontSize: 11, fontWeight: 600, color: pct > 55 ? '#fecaca' : '#dc2626', whiteSpace: 'nowrap' }}>-{dropRate}%</span>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: pct > 55 ? '#fdbdbe' : '#ce2c31', whiteSpace: 'nowrap' }}>-{dropRate}%</span>
                     )}
-                    <span style={{ fontSize: 16, fontWeight: 800, color: pct > 30 ? '#fff' : '#0f172a', textShadow: pct > 30 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none', fontVariantNumeric: 'tabular-nums', minWidth: 70, textAlign: 'right' }}>{s.value.toLocaleString()}</span>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: pct > 30 ? '#fff' : '#1c2024', textShadow: pct > 30 ? '0 1px 2px rgba(0,0,0,0.2)' : 'none', fontVariantNumeric: 'tabular-nums', minWidth: 70, textAlign: 'right' }}>{s.value.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
               {/* 连接箭头 */}
               {i < stages.length - 1 && (
-                <div style={{ marginLeft: 52, height: 14, display: 'flex', alignItems: 'center', color: '#cbd5e1' }}>
+                <div style={{ marginLeft: 52, height: 14, display: 'flex', alignItems: 'center', color: '#cdced6' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
                 </div>
               )}
@@ -286,7 +286,7 @@ export function MatrixHeatmap({
   rows,
   cols,
   data,
-  colorScale = ['#eff6ff', '#3b82f6', '#1e3a8a'],
+  colorScale = ['#e6f4fe', '#0090ff', '#113264'],
   height = 300,
   onCellClick,
 }: {
@@ -298,7 +298,7 @@ export function MatrixHeatmap({
   onCellClick?: (row: string, col: string, value: number) => void;
 }) {
   const [hover, setHover] = useState<{ r: number; c: number } | null>(null);
-  if (!rows.length || !cols.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无热力图数据</div>;
+  if (!rows.length || !cols.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无热力图数据</div>;
 
   const max = Math.max(...data.flat(), 1);
   const cellW = 560 / cols.length;
@@ -320,10 +320,10 @@ export function MatrixHeatmap({
     <div style={{ overflowX: 'auto', width: '100%' }}>
       <svg width={w} height={h} style={{ minWidth: w }} onMouseLeave={() => setHover(null)}>
         {cols.map((c, i) => (
-          <text key={`c${i}`} x={80 + i * cellW + cellW / 2} y={16} textAnchor="middle" fontSize="10.5" fontWeight={600} fill="#475569">{c}</text>
+          <text key={`c${i}`} x={80 + i * cellW + cellW / 2} y={16} textAnchor="middle" fontSize="12" fontWeight={600} fill="#60646c">{c}</text>
         ))}
         {rows.map((r, i) => (
-          <text key={`r${i}`} x={72} y={36 + i * cellH + cellH / 2} textAnchor="end" dominantBaseline="middle" fontSize="10.5" fontWeight={600} fill="#475569">{r}</text>
+          <text key={`r${i}`} x={72} y={36 + i * cellH + cellH / 2} textAnchor="end" dominantBaseline="middle" fontSize="12" fontWeight={600} fill="#60646c">{r}</text>
         ))}
         {rows.map((r, i) =>
           cols.map((c, j) => {
@@ -338,10 +338,10 @@ export function MatrixHeatmap({
                   height={cellH - 2}
                   fill={getColor(v)}
                   rx={3}
-                  stroke={isHovered ? '#0f172a' : 'transparent'}
+                  stroke={isHovered ? '#1c2024' : 'transparent'}
                   strokeWidth={isHovered ? 2 : 0}
                 />
-                <text x={80 + j * cellW + cellW / 2} y={28 + i * cellH + cellH / 2} textAnchor="middle" dominantBaseline="middle" fontSize="11" fontWeight={700} fill={v / max > 0.5 ? '#fff' : '#1e293b'}>
+                <text x={80 + j * cellW + cellW / 2} y={28 + i * cellH + cellH / 2} textAnchor="middle" dominantBaseline="middle" fontSize="12" fontWeight={700} fill={v / max > 0.5 ? '#fff' : '#1c2024'}>
                   {v > 0 ? v : ''}
                 </text>
               </g>
@@ -350,8 +350,8 @@ export function MatrixHeatmap({
         )}
       </svg>
       {hover && (
-        <div style={{ marginTop: 4, fontSize: 11.5, color: '#64748b' }}>
-          {rows[hover.r]} × {cols[hover.c]}：<strong style={{ color: '#0f172a' }}>{data[hover.r]?.[hover.c] || 0}</strong>
+        <div style={{ marginTop: 4, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+          {rows[hover.r]} × {cols[hover.c]}：<strong style={{ color: '#1c2024' }}>{data[hover.r]?.[hover.c] || 0}</strong>
         </div>
       )}
     </div>
@@ -379,7 +379,7 @@ export function BoxPlotChart({
 }) {
   const [active, setActive] = useState<number | null>(null);
   const [focusMain, setFocusMain] = useState(true);
-  if (!groups.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无箱线图数据</div>;
+  if (!groups.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无箱线图数据</div>;
 
   const w = 680;
   const padL = 50, padR = 20, padT = 20, padB = 40;
@@ -397,18 +397,18 @@ export function BoxPlotChart({
   const groupW = plotW / groups.length;
   const boxW = Math.min(40, groupW * 0.5);
 
-  const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626'];
+  const colors = ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31'];
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, minHeight: 36, padding: '4px 0' }}>
-        <div aria-live="polite" style={{ fontSize: 12, color: '#334155' }}>
-          {active !== null && groups[active] ? `${groups[active].label} · ${stats[active].count} 篇 · 最小 ${stats[active].min} · 下四分位 ${stats[active].q1} · 中位 ${stats[active].median} · 上四分位 ${stats[active].q3} · 最大 ${stats[active].max} ${unit}` : '悬停、点击或用 Tab 聚焦层级，查看样本数与五项分布值'}
+        <div aria-live="polite" style={{ fontSize: 12, color: '#1c2024' }}>
+          {active !== null && groups[active] ? `${groups[active].label} / ${stats[active].count} 篇 / 最小 ${stats[active].min} / 下四分位 ${stats[active].q1} / 中位 ${stats[active].median} / 上四分位 ${stats[active].q3} / 最大 ${stats[active].max} ${unit}` : '悬停、点击或用 Tab 聚焦层级，查看样本数与五项分布值'}
         </div>
         <button
           type="button"
           onClick={() => setFocusMain(!focusMain)}
-          style={{ padding: '3px 10px', fontSize: '11px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#f8fafc', color: '#475569', cursor: 'pointer' }}
+          style={{ padding: '3px 10px', fontSize: '12px', borderRadius: '6px', border: '0.5px solid var(--slate-6, #d9d9e0)', background: '#f9f9fb', color: '#60646c', cursor: 'pointer' }}
         >
           {focusMain ? '当前：主体分布（常规范围）' : '当前：全量跨度（含6.1w爆文）'}
         </button>
@@ -419,8 +419,8 @@ export function BoxPlotChart({
         const y = getY(v);
         return (
           <g key={i}>
-            <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#e2e8f0" strokeDasharray="3 3" />
-            <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="10" fill="#94a3b8">{v >= 10000 ? (v / 10000).toFixed(1) + 'w' : Math.round(v)}</text>
+            <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="#d9d9e0" strokeDasharray="3 3" />
+            <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="12" fill="#60646c">{v >= 10000 ? (v / 10000).toFixed(1) + 'w' : Math.round(v)}</text>
           </g>
         );
       })}
@@ -439,7 +439,7 @@ export function BoxPlotChart({
         const hasOutlier = focusMain && s.max > plotMax;
         return (
           <g key={i} tabIndex={0} role="button" aria-label={`${g.label}，${g.values.length} 篇，中位数 ${s.median} ${unit}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => { setActive(i); if (onGroupClick) onGroupClick(g, i); }} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); if (onGroupClick) onGroupClick(g, i); } }} style={{ cursor: 'pointer' }}>
-            <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#e0f2fe' : 'transparent'} />
+            <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#e6f4fe' : 'transparent'} />
             <line x1={cx} y1={getY(s.min)} x2={cx} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(s.min)} x2={cx + boxW / 3} y2={getY(s.min)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(clampedUpper)} x2={cx + boxW / 3} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
@@ -450,12 +450,12 @@ export function BoxPlotChart({
                 <title>{`最高爆文：${s.max >= 10000 ? (s.max / 10000).toFixed(1) + 'w' : s.max}`}</title>
               </circle>
             )}
-            <text x={cx} y={height - 14} textAnchor="middle" fontSize="10.5" fontWeight={600} fill="#475569">{g.label}</text>
-            <text x={cx} y={height - 2} textAnchor="middle" fontSize="9" fill="#94a3b8">n={g.values.length}</text>
+            <text x={cx} y={height - 14} textAnchor="middle" fontSize="12" fontWeight={600} fill="#60646c">{g.label}</text>
+            <text x={cx} y={height - 2} textAnchor="middle" fontSize="12" fill="#60646c">n={g.values.length}</text>
           </g>
         );
       })}
-      <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cbd5e1" />
+      <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
     </svg></div>
   );
 }
@@ -468,16 +468,16 @@ export function WordCloudChart({
   words: Array<{ text: string; count: number; sentiment?: 'positive' | 'negative' | 'neutral' }>;
   height?: number;
 }) {
-  if (!words.length) return <div style={{ height, display: 'flex', alignItems: 'center', alignContent: 'center', justifyContent: 'flex-start', color: '#94a3b8', fontSize: 13 }}>暂无词云数据</div>;
+  if (!words.length) return <div style={{ height, display: 'flex', alignItems: 'center', alignContent: 'center', justifyContent: 'flex-start', color: '#60646c', fontSize: 14 }}>暂无词云数据</div>;
 
   const max = Math.max(...words.map(w => w.count), 1);
-  const colors = { positive: '#16a34a', negative: '#dc2626', neutral: '#64748b' };
+  const colors = { positive: '#29a383', negative: '#ce2c31', neutral: '#60646c' };
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px', alignItems: 'center', alignContent: 'center', justifyContent: 'flex-start', padding: '16px', minHeight: height }}>
       {words.slice(0, 40).map((w, i) => {
         const size = 14 + Math.sqrt(w.count / max) * 18;
-        const color = w.sentiment ? colors[w.sentiment] : '#334155';
+        const color = w.sentiment ? colors[w.sentiment] : '#1c2024';
         const opacity = 1;
         return (
           <span
@@ -493,7 +493,7 @@ export function WordCloudChart({
             }}
             title={`${w.text}：${w.count} 次`}
           >
-            {w.text}<small style={{ fontSize: 12, marginLeft: 6, color: '#475569' }}>{w.count.toLocaleString()} 条</small>
+            {w.text}<small style={{ fontSize: 12, marginLeft: 6, color: '#60646c' }}>{w.count.toLocaleString()} 条</small>
           </span>
         );
       })}
@@ -512,11 +512,11 @@ export function TreeMapChart({
   onItemClick?: (item: { label: string; value: number }) => void;
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
-  if (!items.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 13 }}>暂无树状图数据</div>;
+  if (!items.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无树状图数据</div>;
 
   const w = 680;
   const total = items.reduce((s, it) => s + it.value, 0) || 1;
-  const colors = ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#0891b2', '#65a30d', '#db2777'];
+  const colors = ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31', '#0090ff', '#29a383', '#ce2c31'];
 
   // Simple horizontal split layout
   const rects = items.map((it, i) => {
@@ -545,19 +545,19 @@ export function TreeMapChart({
               />
               {r.width > 80 && (
                 <>
-                  <text x={r.x + r.width / 2} y={height / 2 - 8} textAnchor="middle" fontSize="13" fontWeight={700} fill="#fff">{r.label}</text>
-                  <text x={r.x + r.width / 2} y={height / 2 + 12} textAnchor="middle" fontSize="11" fill="#fff" fillOpacity={0.9}>{r.value} · {(r.value / total * 100).toFixed(1)}%</text>
+                  <text x={r.x + r.width / 2} y={height / 2 - 8} textAnchor="middle" fontSize="14" fontWeight={700} fill="#fff">{r.label}</text>
+                  <text x={r.x + r.width / 2} y={height / 2 + 12} textAnchor="middle" fontSize="12" fill="#fff" fillOpacity={0.9}>{r.value} / {(r.value / total * 100).toFixed(1)}%</text>
                 </>
               )}
               {r.width > 120 && r.subItems && r.subItems.length > 0 && (
-                <text x={r.x + r.width / 2} y={height / 2 + 28} textAnchor="middle" fontSize="9.5" fill="#fff" fillOpacity={0.75}>{r.subItems.map(s => s.label).join(' · ')}</text>
+                <text x={r.x + r.width / 2} y={height / 2 + 28} textAnchor="middle" fontSize="12" fill="#fff" fillOpacity={0.75}>{r.subItems.map(s => s.label).join(' / ')}</text>
               )}
             </g>
           );
         })}
       </svg>
       {hoverIdx !== null && rects[hoverIdx] && (
-        <div style={{ position: 'absolute', bottom: -24, left: rects[hoverIdx].x + rects[hoverIdx].width / 2, transform: 'translateX(-50%)', background: 'rgba(15,23,42,0.92)', color: '#fff', padding: '4px 10px', borderRadius: 6, fontSize: 11, whiteSpace: 'nowrap', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', bottom: -24, left: rects[hoverIdx].x + rects[hoverIdx].width / 2, transform: 'translateX(-50%)', background: 'rgba(28, 32, 36,0.92)', color: '#fff', padding: '4px 10px', borderRadius: 6, fontSize: 12, whiteSpace: 'nowrap', pointerEvents: 'none' }}>
           {rects[hoverIdx].label}：{rects[hoverIdx].value} ({(rects[hoverIdx].value / total * 100).toFixed(1)}%)
         </div>
       )}

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { Project } from '../../lib/types/project';
@@ -42,14 +42,17 @@ export function ProjectSwitcher({
           options={projects.length > 0 ? projects.map(p => ({
             value: p.id,
             label: p.name,
-            color: p.color || '#2563eb',
+            color: p.color || '#0090ff',
           })) : [{ value: currentProjectId, label: loading ? '项目加载中…' : currentProjectId }]}
         />
       </div>
       {currentProject ? (
         <p className="project-subtext">
-          {currentProject.brand || '品牌未设置'} · {currentProject.spu || currentProject.name} ·{' '}
-          {currentProject.status || '进行中'}
+          <span>{currentProject.brand || '品牌未设置'}</span>
+          <span style={{ margin: '0 5px', opacity: 0.35 }}>/</span>
+          <span>{currentProject.spu || currentProject.name}</span>
+          <span style={{ margin: '0 5px', opacity: 0.35 }}>/</span>
+          <span>{currentProject.status || '进行中'}</span>
         </p>
       ) : (
         <p className="project-subtext">

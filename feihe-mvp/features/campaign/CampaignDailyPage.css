@@ -1,11 +1,11 @@
 /**
  * CampaignDailyPage Scoped Styles
- * 暖白底色 #f6f5f2, 主深青 #2c7168, 辅助紫 #8273a3, 边框 #e6e3dc
+ * 暖白底色 #f9f9fb, 主深青 var(--teal-11, #008573), 辅助紫 var(--iris-9, #0d74ce), 边框 #d9d9e0
  */
 
 /* Unified Console: docked header and toolbar */
 .ca-daily-header-console {
-  border-bottom: none;
+  border-bottom:none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   margin-bottom: 0;
@@ -13,13 +13,13 @@
 }
 
 .ca-daily-toolbar.ca-daily-toolbar-docked {
-  border-top: 1px solid #edf0ec;
+  border-top:0.5px solid #e8e8ec;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   margin-top: 0;
   margin-bottom: 12px;
   padding: 8px 16px;
-  background: #fbfbf9;
+  background: #f9f9fb;
 }
 
 .ca-daily-toolbar {
@@ -30,7 +30,7 @@
   flex-wrap: wrap;
   padding: 12px 16px;
   background: #ffffff;
-  border: 1px solid var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 10px;
 }
 
@@ -44,13 +44,13 @@
 .ca-filter-label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--ca-palette-muted, #64748b);
+  color:var(--ca-palette-muted, #60646c);
   white-space: nowrap;
 }
 
 .ca-metric-pills {
   display: inline-flex;
-  background: #f1f5f9;
+  background: #f0f0f3;
   padding: 3px;
   border-radius: 8px;
   gap: 4px;
@@ -58,25 +58,25 @@
 }
 
 .ca-metric-pill-btn {
-  border: none;
+  border:none;
   background: transparent;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
-  color: #475569;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-metric-pill-btn:hover {
-  color: #0f172a;
+  color:#1c2024;
   background: rgba(255, 255, 255, 0.6);
 }
 
 .ca-metric-pill-btn.active {
   background: #ffffff;
-  color: var(--ca-palette-primary, #2c7168);
+  color:var(--ca-palette-primary, var(--teal-11, #008573));
   font-weight: 600;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
@@ -87,10 +87,10 @@
   gap: 4px;
   background: #ffffff;
   padding: 3px 6px;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   position: relative;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04);
 }
 
 .ca-date-input-wrap {
@@ -101,20 +101,20 @@
 }
 
 .ca-btn-date-step {
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   background: #ffffff;
   padding: 2px 8px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  color: #475569;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-btn-date-step:hover:not(:disabled) {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #f0f0f3;
+  color:#1c2024;
 }
 
 .ca-btn-date-step:disabled {
@@ -123,10 +123,10 @@
 }
 
 .ca-date-input {
-  border: none;
+  border:none;
   background: transparent;
-  font-size: 11.5px;
-  color: #1e293b;
+  font-size: 12px;
+  color:#1c2024;
   font-family: inherit;
   outline: none;
   padding: 2px 0;
@@ -145,23 +145,23 @@
 }
 
 .ca-btn-quick-dates-toggle {
-  border: 1px solid #d1d5db;
-  background: #f8fafc;
+  border:0.5px solid #d9d9e0;
+  background: #f9f9fb;
   padding: 2px 7px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  color: #475569;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
   white-space: nowrap;
 }
 
 .ca-btn-quick-dates-toggle:hover,
 .ca-btn-quick-dates-toggle.active {
-  background: #f0fdf4;
-  color: #166534;
-  border-color: #86efac;
+  background: #f4fbf7;
+  color:#208368;
+  border-color:#8bceb6;
 }
 
 /* Quick dates grid dropdown */
@@ -171,7 +171,7 @@
   left: 0;
   z-index: 50;
   background: #ffffff;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
   padding: 10px;
@@ -186,28 +186,28 @@
   justify-content: space-between;
   padding-bottom: 6px;
   margin-bottom: 6px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom:0.5px solid #d9d9e0;
 }
 
 .ca-quick-dates-title {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: #334155;
+  color:#60646c;
 }
 
 .ca-quick-dates-close {
-  border: none;
+  border:none;
   background: transparent;
   font-size: 12px;
-  color: #94a3b8;
+  color:#60646c;
   cursor: pointer;
   padding: 1px 4px;
   border-radius: 3px;
 }
 
 .ca-quick-dates-close:hover {
-  color: #0f172a;
-  background: #f1f5f9;
+  color:#1c2024;
+  background: #f0f0f3;
 }
 
 .ca-quick-dates-grid {
@@ -221,62 +221,62 @@
   align-items: center;
   justify-content: space-between;
   padding: 4px 8px;
-  font-size: 11px;
-  border: 1px solid #e2e8f0;
+  font-size: 12px;
+  border:0.5px solid #d9d9e0;
   border-radius: 4px;
-  background: #fafaf9;
-  color: #334155;
+  background: #f9f9fb;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-quick-date-item:hover {
-  background: #f0fdf4;
-  border-color: #86efac;
-  color: #166534;
+  background: #f4fbf7;
+  border-color:#8bceb6;
+  color:#208368;
 }
 
 .ca-quick-date-item.active {
-  background: #2c7168;
-  border-color: #2c7168;
-  color: #ffffff;
+  background: var(--teal-11, #008573);
+  border-color:var(--teal-11, #008573);
+  color:#ffffff;
   font-weight: 600;
 }
 
 .ca-quick-date-idx {
-  font-size: 9.5px;
+  font-size: 12px;
   opacity: 0.7;
 }
 
 .ca-date-sep {
-  color: #94a3b8;
+  color:#60646c;
   font-size: 12px;
 }
 
 .ca-btn-reset {
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   background: #ffffff;
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 11.5px;
-  color: #64748b;
+  font-size: 12px;
+  color:#60646c;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-btn-reset:hover {
-  background: #f1f5f9;
-  color: #1e293b;
+  background: #f0f0f3;
+  color:#1c2024;
 }
 
 .ca-dataset-select {
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   background: #ffffff;
   padding: 5px 10px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
-  color: #1e293b;
+  color:#1c2024;
   outline: none;
   cursor: pointer;
 }
@@ -288,27 +288,38 @@
   justify-content: center;
   padding: 48px 24px;
   background: #ffffff;
-  border: 1px dashed var(--ca-palette-border-warm, #e6e3dc);
+  border:0.5px dashed var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 12px;
   text-align: center;
   gap: 10px;
 }
 
 .ca-daily-empty-icon {
-  font-size: 32px;
+  font-size: 22px;
 }
 
 .ca-daily-empty-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  color: #1e293b;
+  color:#1c2024;
 }
 
 .ca-daily-empty-desc {
-  font-size: 12.5px;
-  color: #64748b;
+  font-size: 12px;
+  color:#60646c;
   max-width: 480px;
   line-height: 1.6;
+}
+
+/* Macro Section Card for Daily Page */
+.ca-section-macro-card {
+  background: #ffffff;
+  border:0.5px solid #d9d9e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  margin-bottom: 0;
+  box-sizing: border-box;
 }
 
 /* Daily Grid & Panels True Equal Height */
@@ -366,7 +377,7 @@
 
 .ca-dist-label {
   font-weight: 500;
-  color: #334155;
+  color:#60646c;
 }
 
 .ca-dist-val-group {
@@ -377,20 +388,20 @@
 
 .ca-dist-value {
   font-weight: 600;
-  color: #0f172a;
+  color:#1c2024;
 }
 
 .ca-dist-share {
-  font-size: 11px;
-  color: #64748b;
-  background: #f1f5f9;
+  font-size: 12px;
+  color:#60646c;
+  background: #f0f0f3;
   padding: 1px 6px;
   border-radius: 4px;
 }
 
 .ca-dist-bar-track {
   height: 6px;
-  background: #f1f5f9;
+  background: #f0f0f3;
   border-radius: 999px;
   overflow: hidden;
 }
@@ -398,7 +409,7 @@
 .ca-dist-bar-fill {
   height: 100%;
   border-radius: 999px;
-  transition: width 0.3s ease;
+  transition: none;
 }
 
 /* Cross Dataset Comparison */
@@ -413,11 +424,11 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: #fffbeb;
-  border: 1px solid #fde68a;
+  background: #fcfcfd;
+  border:0.5px solid #fbe577;
   border-radius: 6px;
   font-size: 12px;
-  color: #92400e;
+  color:#ab6400;
   line-height: 1.5;
 }
 
@@ -429,42 +440,40 @@
 
 .ca-cross-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-top: 3px solid #cbd5e1;
+  border:0.5px solid #e0e1e6;
   border-radius: 8px;
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: all 0.15s ease;
+  transition: all 250ms ease-out;
 }
 
 .ca-cross-card-active {
-  border-top: 3px solid #2c7168 !important;
-  border-color: #c3dcd7;
-  box-shadow: 0 4px 12px rgba(44, 113, 104, 0.12);
-  background: #fafdfc;
+  border:0.5px solid var(--teal-11, #008573) !important;
+  box-shadow: 0 4px 12px rgba(0, 133, 115, 0.12);
+  background: #fcfcfd;
 }
 
 .ca-cross-card-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom:0.5px solid #f0f0f3;
   padding-bottom: 8px;
 }
 
 .ca-cross-card-title {
-  font-size: 13px;
-  color: #1e293b;
+  font-size: 14px;
+  color:#1c2024;
   font-weight: 600;
 }
 
 .ca-cross-badge-active {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
-  color: #2c7168;
-  background: #e6f3f0;
+  color:var(--teal-11, #008573);
+  background: #e0f8f3;
   padding: 1px 6px;
   border-radius: 4px;
 }
@@ -474,7 +483,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 12px 0;
-  color: #94a3b8;
+  color:#60646c;
   font-size: 12px;
   text-align: center;
 }
@@ -497,26 +506,37 @@
 .ca-cross-metric-row::after {
   content: "";
   flex: 1;
-  border-bottom: 1px dashed #e2e8f0;
+  border-bottom:0.5px dashed #d9d9e0;
   order: 2;
   margin: 0 4px;
 }
 
 .ca-cross-metric-label {
   order: 1;
-  color: #64748b;
+  color:#60646c;
   white-space: nowrap;
 }
 
 .ca-cross-metric-val {
   order: 3;
-  color: #1e293b;
+  color:#1c2024;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .ca-table-row-selected {
-  background: #f0fdf4 !important;
-  outline: 1px solid #86efac;
+  background: #f4fbf7 !important;
+  outline: 1px solid #8bceb6;
+}
+
+/* Daily Details Panel Macro Section Card */
+.ca-daily-details-panel {
+  background: #ffffff;
+  border:0.5px solid #d9d9e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  margin-top: 28px;
+  box-sizing: border-box;
 }

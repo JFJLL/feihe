@@ -99,7 +99,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const selectedIndex = allAvailableDates.indexOf(selectedDate);
   const dayProgressLabel =
     selectedIndex >= 0
-      ? `共 ${allAvailableDates.length} 个有效采集日 · 当前第 ${selectedIndex + 1}/${allAvailableDates.length} 日`
+      ? `共 ${allAvailableDates.length} 个有效采集日 / 当前第 ${selectedIndex + 1}/${allAvailableDates.length} 日`
       : `共 ${allAvailableDates.length} 个有效采集日`;
 
   // URL state updater (pushes state and triggers context change event for reactive sync)
@@ -189,7 +189,6 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
           <div className="ca-header-heading">
             <div className="ca-header-title-row">
               <h2 className="ca-header-title">分日看板</h2>
-              <span className="ca-header-badge">当日指标与明细</span>
             </div>
             <p className="ca-header-subtitle">
               项目暂无逐日分日流水记录
@@ -215,7 +214,6 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
         <div className="ca-header-heading">
           <div className="ca-header-title-row">
             <h2 className="ca-header-title">分日看板</h2>
-            <span className="ca-header-badge">当日指标与明细</span>
             <span className="ca-header-subtitle">
               {formatDatasetDisplay(activeDataset.id, activeDataset.label)} ({activeDataset.period})
             </span>
@@ -354,12 +352,12 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
         <div className="ca-daily-status-meta">
           {isDateMissing ? (
-            <span style={{ fontSize: 11.5, color: "#c25953", fontWeight: 600 }}>
-              ⚠️ 该日期暂无流水记录 · {dayProgressLabel}
+            <span style={{ fontSize: 12, color: "#ce2c31", fontWeight: 600 }}>
+              ⚠️ 该日期暂无流水记录 / {dayProgressLabel}
             </span>
           ) : (
-            <span style={{ fontSize: 11.5, color: "#2c7168", fontWeight: 500 }}>
-              ● {dayProgressLabel} · 区间 {activeDataset.period}
+            <span style={{ fontSize: 12, color: "#008573", fontWeight: 500 }}>
+              ● {dayProgressLabel} / 区间 {activeDataset.period}
             </span>
           )}
         </div>
@@ -386,22 +384,23 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
         </div>
       )}
 
-      {/* 4. 当日核心指标 Strip (含真实环比，前日无流水诚实标注) */}
-      {!isDateMissing && summaryMetrics.length > 0 && (
-        <MetricStrip items={summaryMetrics} />
-      )}
-
-      {/* 5. 当日分布与结构面板 (无虚假小时曲线，聚焦单日结构与跨数据集横向对照) */}
+      {/* 4. 当日核心指标与分布大卡片 (Macro Section Card, 28px间距) */}
       {!isDateMissing && (
+        <div className="ca-section-macro-card">
+          {summaryMetrics.length > 0 && (
+            <MetricStrip items={summaryMetrics} />
+          )}
+
+          {/* 当日分布与结构面板 (无虚假小时曲线，聚焦单日结构与跨数据集横向对照) */}
         <div className="ca-daily-grid">
           {/* 5.1 单日分布与结构组 */}
           {distributions.map((dist) => (
             <div key={dist.id} className="ca-daily-panel">
               <ChartPanel
                 title={dist.title}
-                subtitle={`业务日期: ${selectedDate} · ${dist.caption}`}
+                subtitle={`业务日期: ${selectedDate} / ${dist.caption}`}
                 actions={
-                  <span style={{ fontSize: 11.5, color: "#64748b" }}>
+                  <span style={{ fontSize: 12, color: "#60646c" }}>
                     {dist.items.length} {dist.isComposition ? "项分布构成" : "项指标"}
                   </span>
                 }
@@ -441,9 +440,9 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             <div className="ca-daily-panel ca-daily-panel-span-2">
               <ChartPanel
                 title={`当日跨数据集横向对照 (${selectedDate})`}
-                subtitle="同一业务日在不同采集底表中的表现 · 跨渠道横向对照"
+                subtitle="同一业务日在不同采集底表中的表现 / 跨渠道横向对照"
                 actions={
-                  <span style={{ fontSize: 11.5, color: "#64748b" }}>
+                  <span style={{ fontSize: 12, color: "#60646c" }}>
                     共 {datasets.length} 个独立数据集
                   </span>
                 }
@@ -466,7 +465,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                             <button
                               type="button"
                               className="ca-btn-reset"
-                              style={{ padding: "1px 6px", fontSize: 11 }}
+                              style={{ padding: "1px 6px", fontSize: 12 }}
                               onClick={() => updateUrl({ dataset: row.datasetId })}
                             >
                               切换至此表
@@ -506,6 +505,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             </div>
           )}
         </div>
+        </div>
       )}
 
       {/* 6. 真实数据全量明细表格 (默认收起在 details 内部，所选日高亮突出) */}
@@ -516,7 +516,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             <span>查看完整分日明细数据表</span>
             <span className="ca-daily-details-badge">共 {activeDataset.rows.length} 条流水记录</span>
           </div>
-          <span className="ca-daily-details-hint">点击展开 / 收起明细 (点击行可切换业务日)</span>
+          <span className="ca-daily-details-hint">{`展开分日明细 (${activeDataset.rows.length} 条)`}</span>
         </summary>
 
         <div className="ca-table-wrap">
@@ -536,7 +536,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                 <tr>
                   <td
                     colSpan={activeDataset.metrics.length + 1}
-                    style={{ textAlign: "center", padding: "24px 0", color: "#64748b" }}
+                    style={{ textAlign: "center", padding: "24px 0", color: "#60646c" }}
                   >
                     所选日期暂无记录
                   </td>
@@ -552,8 +552,8 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                       onClick={() => updateUrl({ day: String(row.date) })}
                       title={`点击切换到 ${String(row.date)}`}
                     >
-                      <td style={{ fontWeight: isSelected ? "700" : "600", color: isSelected ? "#15803d" : "#1e293b" }}>
-                        {String(row.date)} {isSelected ? "· 当前选中" : ""}
+                      <td style={{ fontWeight: isSelected ? "700" : "600", color: isSelected ? "#208368" : "#1c2024" }}>
+                        {String(row.date)} {isSelected ? " (当前选中)" : ""}
                       </td>
                       {activeDataset.metrics.map((m) => {
                         const raw = row[m.key];
@@ -575,7 +575,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
       {/* 7. 页脚精简说明 */}
       <footer className="ca-footer-date">
-        业务统计区间: {activeDataset.period} · 当前分析日: {selectedDate || "未选定"}
+        业务统计区间: {activeDataset.period} / 当前分析日: {selectedDate || "未选定"}
       </footer>
     </div>
   );

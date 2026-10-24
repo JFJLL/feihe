@@ -21,13 +21,13 @@
   box-sizing: border-box;
   padding: 6px 36px 6px 10px !important;
   font-family: inherit;
-  font-size: 13px;
-  color: #1e293b;
+  font-size: 14px;
+  color:#1c2024;
   background: #ffffff;
-  border: 1px solid #cbd5e1;
+  border:0.5px solid #d9d9e0;
   border-radius: 6px;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 250ms ease-out, box-shadow 250ms ease-out;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
@@ -58,20 +58,20 @@ input[type="month"].custom-date-input-field {
 }
 
 .custom-date-input-field:hover:not(:disabled) {
-  border-color: #94a3b8;
+  border-color:#60646c;
 }
 
 .custom-date-input-field:focus-visible,
 .custom-date-picker-container.is-open .custom-date-input-field {
-  border-color: #2c7168;
-  box-shadow: 0 0 0 3px rgba(44, 113, 104, 0.16);
+  border-color:#008573;
+  box-shadow: 0 0 0 3px rgba(0, 133, 115, 0.16);
 }
 
 .custom-date-input-field:disabled {
-  background: #f8fafc;
-  color: #94a3b8;
+  background: #f9f9fb;
+  color:#60646c;
   cursor: not-allowed;
-  border-color: #e2e8f0;
+  border-color:#d9d9e0;
 }
 
 .custom-date-icon-btn {
@@ -84,17 +84,17 @@ input[type="month"].custom-date-input-field {
   padding: 0;
   display: inline-grid;
   place-content: center;
-  border: 0;
+  border:0;
   background: transparent;
-  color: #64748b;
+  color:#60646c;
   cursor: pointer;
   border-radius: 4px;
   pointer-events: auto;
-  transition: color 0.15s ease;
+  transition: color 250ms ease-out;
 }
 
 .custom-date-icon-btn:hover {
-  color: #2c7168;
+  color:#008573;
 }
 
 .custom-date-icon-btn:disabled {
@@ -110,9 +110,9 @@ input[type="month"].custom-date-input-field {
 /* Custom Popover */
 .custom-date-popover {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 10px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 25px -5px rgba(28, 32, 36, 0.12), 0 8px 10px -6px rgba(28, 32, 36, 0.08);
   user-select: none;
   animation: customDateFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -148,9 +148,9 @@ input[type="month"].custom-date-input-field {
 }
 
 .custom-date-title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
-  color: #0f172a;
+  color:#1c2024;
   letter-spacing: -0.01em;
   flex: 1;
   text-align: center;
@@ -162,21 +162,21 @@ input[type="month"].custom-date-input-field {
   padding: 0;
   display: inline-grid;
   place-content: center;
-  border: 1px solid transparent;
+  border:0.5px solid transparent;
   border-radius: 4px;
   background: transparent;
-  color: #475569;
+  color:#60646c;
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 250ms ease-out;
 }
 
 .custom-date-nav-btn:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-  border-color: #e2e8f0;
+  background: #f0f0f3;
+  color:#1c2024;
+  border-color:#d9d9e0;
 }
 
 /* Weekday labels */
@@ -188,9 +188,9 @@ input[type="month"].custom-date-input-field {
 }
 
 .custom-date-weekday {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: #94a3b8;
+  color:#60646c;
   text-align: center;
   padding: 4px 0;
 }
@@ -206,43 +206,43 @@ input[type="month"].custom-date-input-field {
   width: 100%;
   height: 30px;
   padding: 0;
-  border: 1px solid transparent;
+  border:0.5px solid transparent;
   border-radius: 6px;
   background: transparent;
-  color: #1e293b;
+  color:#1c2024;
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   display: grid;
   place-content: center;
-  transition: all 0.12s ease;
+  transition: all 250ms ease-out;
 }
 
 .custom-date-cell:hover:not(:disabled) {
-  background: #edf7f5;
-  color: #2c7168;
+  background: #e0f8f3;
+  color:#008573;
 }
 
 .custom-date-cell.is-outside {
-  color: #cbd5e1;
+  color:#d9d9e0;
 }
 
 .custom-date-cell.is-today {
-  border-color: #2c7168;
+  border-color:#008573;
   font-weight: 700;
-  color: #2c7168;
+  color:#008573;
 }
 
 .custom-date-cell.is-selected {
-  background: #2c7168 !important;
-  color: #ffffff !important;
+  background: #008573 !important;
+  color:#ffffff !important;
   font-weight: 700;
-  border-color: #2c7168;
-  box-shadow: 0 1px 4px rgba(44, 113, 104, 0.35);
+  border-color:#008573;
+  box-shadow: 0 1px 4px rgba(0, 133, 115, 0.35);
 }
 
 .custom-date-cell.is-disabled {
-  color: #e2e8f0;
+  color:#d9d9e0;
   cursor: not-allowed;
   opacity: 0.4;
 }
@@ -258,39 +258,39 @@ input[type="month"].custom-date-input-field {
 .custom-month-cell {
   height: 36px;
   padding: 0;
-  border: 1px solid transparent;
+  border:0.5px solid transparent;
   border-radius: 6px;
   background: transparent;
-  color: #1e293b;
-  font-size: 12.5px;
+  color:#1c2024;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   display: grid;
   place-content: center;
-  transition: all 0.12s ease;
+  transition: all 250ms ease-out;
 }
 
 .custom-month-cell:hover:not(:disabled) {
-  background: #edf7f5;
-  color: #2c7168;
+  background: #e0f8f3;
+  color:#008573;
 }
 
 .custom-month-cell.is-today {
-  border-color: #2c7168;
-  color: #2c7168;
+  border-color:#008573;
+  color:#008573;
   font-weight: 700;
 }
 
 .custom-month-cell.is-selected {
-  background: #2c7168 !important;
-  color: #ffffff !important;
+  background: #008573 !important;
+  color:#ffffff !important;
   font-weight: 700;
-  border-color: #2c7168;
-  box-shadow: 0 1px 4px rgba(44, 113, 104, 0.35);
+  border-color:#008573;
+  box-shadow: 0 1px 4px rgba(0, 133, 115, 0.35);
 }
 
 .custom-month-cell.is-disabled {
-  color: #cbd5e1;
+  color:#d9d9e0;
   cursor: not-allowed;
   opacity: 0.4;
 }
@@ -303,36 +303,36 @@ input[type="month"].custom-date-input-field {
   gap: 6px;
   margin-top: 10px;
   padding-top: 8px;
-  border-top: 1px solid #f1f5f9;
+  border-top:0.5px solid #f0f0f3;
 }
 
 .custom-date-quick-btn {
   padding: 4px 8px;
-  border: 0;
+  border:0;
   background: transparent;
-  color: #2c7168;
+  color:#008573;
   font-size: 12px;
   font-weight: 600;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.12s ease, color 0.12s ease;
+  transition: background 250ms ease-out, color 250ms ease-out;
 }
 
 .custom-date-quick-btn:hover:not(:disabled) {
-  background: #edf7f5;
+  background: #e0f8f3;
 }
 
 .custom-date-quick-btn:disabled {
-  color: #cbd5e1;
+  color:#d9d9e0;
   cursor: not-allowed;
 }
 
 .custom-date-quick-btn.clear-btn {
-  color: #64748b;
+  color:#60646c;
   margin-left: auto;
 }
 
 .custom-date-quick-btn.clear-btn:hover {
-  color: #ef4444;
-  background: #fef2f2;
+  color:#ce2c31;
+  background: #f9f9fb;
 }

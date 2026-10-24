@@ -40,39 +40,39 @@ export function BrandLandscape({ brands, onBrandClick }: { brands: AnalyticRow[]
                 padding: '22px',
                 borderRadius: 14,
                 background: '#ffffff',
-                border: '1px solid #e2e8f0',
-                boxShadow: '0 2px 7px rgba(22, 52, 76, 0.04)', cursor: onBrandClick ? 'pointer' : 'default',
+                border: '0.5px solid var(--slate-6, #d9d9e0)',
+                boxShadow: '0 2px 7px rgba(28, 32, 36, 0.04)', cursor: onBrandClick ? 'pointer' : 'default',
               }}
             >
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <strong style={{ fontSize: 18, fontWeight: 700, color: '#0f172a' }}>{String(row.brand)}</strong>
+                  <strong style={{ fontSize: 16, fontWeight: 700, color: '#1c2024' }}>{String(row.brand)}</strong>
                   <span className="section-mini-tag tag-blue">
                     {'笔记份额 ' + percent(ratio(row.notes, totalNotes))}
                   </span>
                 </div>
                 <div style={{ margin: '10px 0 4px' }}>
-                  <div style={{ fontSize: 34, fontWeight: 800, color: '#0284c7', lineHeight: 1.15 }}>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#0d74ce', lineHeight: 1.15 }}>
                     <GrowthReadout value={row.interactions} />
-                    <small style={{ fontSize: 13, fontWeight: 500, color: '#64748b', marginLeft: 6 }}>互动</small>
+                    <small style={{ fontSize: 14, fontWeight: 500, color: 'var(--slate-11, #60646c)', marginLeft: 6 }}>互动</small>
                   </div>
-                  <p className="metric-note" style={{ margin: '6px 0 0', fontSize: 12, color: '#64748b' }}>
-                    已记录互动 · {display(row.interactionSamples)} / {display(row.notes)} 篇有记录
+                  <p className="metric-note" style={{ margin: '6px 0 0', fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+                    已记录互动 / {display(row.interactionSamples)} / {display(row.notes)} 篇有记录
                   </p>
                 </div>
               </div>
-              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 14, marginTop: 18 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#334155', marginBottom: 6 }}>
+              <div style={{ borderTop: '0.5px solid #f0f0f3', paddingTop: 14, marginTop: 18 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#1c2024', marginBottom: 6 }}>
                   <span>笔记 <strong><GrowthReadout value={row.notes} /></strong> 篇</span>
                   <span>评论 <strong><GrowthReadout value={row.comments} /></strong> 条</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#334155', marginBottom: 6 }}>
-                  <span>正向率 <strong style={{ color: '#10b981' }}>{percent(ratio(row.positive, row.comments))}</strong></span>
-                  <span>负向率 <strong style={{ color: '#ef4444' }}>{percent(ratio(row.negative, row.comments))}</strong></span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#1c2024', marginBottom: 6 }}>
+                  <span>正向率 <strong style={{ color: '#29a383' }}>{percent(ratio(row.positive, row.comments))}</strong></span>
+                  <span>负向率 <strong style={{ color: '#e5484d' }}>{percent(ratio(row.negative, row.comments))}</strong></span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, color: '#64748b' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
                   <span>篇均互动</span>
-                  <strong style={{ color: '#0284c7' }}><GrowthReadout value={ratio(row.interactions, row.interactionSamples)} /> 次/篇</strong>
+                  <strong style={{ color: '#0d74ce' }}><GrowthReadout value={ratio(row.interactions, row.interactionSamples)} /> 次/篇</strong>
                 </div>
               </div>
             </div>
@@ -80,19 +80,19 @@ export function BrandLandscape({ brands, onBrandClick }: { brands: AnalyticRow[]
         })}
         <section className="panel" aria-label="品牌笔记样本贡献" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', margin: 0, padding: '18px', borderRadius: 12 }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>笔记样本构成</h3>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>笔记样本构成</h3>
             <p className="metric-note">分母：当前筛选全部品牌 {compactMetric(totalNotes)} 篇笔记。单品牌 100% 仅表示当前样本构成。</p>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, padding: '8px 0' }}>
             {totalNotes !== null && totalNotes > 0 ? <TierDoughnutChart total={totalNotes} onItemClick={it => onBrandClick && onBrandClick(it.label)} items={colored.map(({ row, color }) => ({ label: String(row.brand), count: Number(row.notes), pct: Number(ratio(row.notes, totalNotes)) * 100, color }))} /> : <EmptyState title="暂无可计算的笔记份额" text="笔记总数为 0 或缺失时不绘制占比。" />};
           </div>
-          <div style={{ fontSize: 12, color: '#64748b', textAlign: 'center', borderTop: '1px solid #f1f5f9', paddingTop: 6 }}>
+          <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', textAlign: 'center', borderTop: '0.5px solid #f0f0f3', paddingTop: 6 }}>
             单品精细化运营样本，覆盖蒲公英达人与KFS投放笔记
           </div>
         </section>
         <section className="panel" aria-label="品牌已记录互动贡献" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', margin: 0, padding: '18px', borderRadius: 12 }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>已记录互动贡献</h3>
+            <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>已记录互动贡献</h3>
             <p className="metric-note">分母：{observed.length} / {brands.length} 个品牌已记录互动之和 <GrowthReadout value={totalInteractions} />；缺失品牌不参与。零值保留在卡片，不绘制非零条形。</p>
           </div>
           <div style={{ margin: '10px 0', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -100,10 +100,10 @@ export function BrandLandscape({ brands, onBrandClick }: { brands: AnalyticRow[]
               <HorizontalBarList onItemClick={it => onBrandClick && onBrandClick(it.label)} items={[{ label: String(row.brand), amount: Number(row.interactions), pct: Number(ratio(row.interactions, totalInteractions)) * 100, color, subText: compactMetric(row.interactions) + ' 次互动' }]} />;
             </div>) : <EmptyState title="暂无可计算的互动贡献" text="已记录互动合计为 0 或缺失，不生成份额。" />}
           </div>
-          <div style={{ background: '#f8fafc', borderRadius: 8, padding: '8px 12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ background: '#f9f9fb', borderRadius: 8, padding: '8px 12px', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-              <span style={{ color: '#64748b' }}>互动/阅读转化率</span>
-              <strong style={{ color: '#10b981' }}>{percent(ratio(single?.pairedInteractions, single?.pairedReads))}</strong>
+              <span style={{ color: 'var(--slate-11, #60646c)' }}>互动/阅读转化率</span>
+              <strong style={{ color: '#29a383' }}>{percent(ratio(single?.pairedInteractions, single?.pairedReads))}</strong>
             </div>
           </div>
         </section>

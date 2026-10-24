@@ -63,7 +63,7 @@ export function ReviewActionQueue({ projectId }: { projectId: string }) {
           ))}
         </StyledSelect>
         <button onClick={() => load(date)} disabled={loading}>{loading ? '判定中…' : '重新判定'}</button>
-        <span>需回复 {counts.needReply || 0} · 需删除 {counts.needDelete || 0} · 需补充 {counts.needSupplement || 0}</span>
+        <span>需回复 {counts.needReply || 0} / 需删除 {counts.needDelete || 0} / 需补充 {counts.needSupplement || 0}</span>
       </div>
       {note ? <p className="muted">{note}</p> : null}
       <div className="queue-grid">
@@ -82,7 +82,7 @@ export function ReviewActionQueue({ projectId }: { projectId: string }) {
                       <div className="queue-main">
                         <div><b>{it.blogger || '未知博主'}</b><span>{it.reason}</span></div>
                         {(it.sample || []).slice(0, 1).map((s, i) => (<p key={i}>“{s.slice(0, 60)}”</p>))}
-                        <small><a href={it.link} target="_blank" rel="noreferrer">打开笔记 ↗</a> · {it.status}</small>
+                        <small><a href={it.link} target="_blank" rel="noreferrer">打开笔记 ↗</a> / {it.status}</small>
                       </div>
                       {it.status !== '已处理' ? (
                         <button onClick={() => resolve(it.id)}>已处理</button>

@@ -1,6 +1,6 @@
 /**
  * MeilingRichInsights Scoped Styling
- * Aligns with CAMPAIGN_PALETTE (#2c7168 teal, #8273a3 purple, #b88a45 gold, #bd7964 terracotta)
+ * Aligns with CAMPAIGN_PALETTE (var(--teal-11, #008573) teal, var(--iris-9, #0d74ce) purple, var(--amber-9, #ffc53d) gold, var(--red-9, #e5484d) terracotta)
  */
 
 .mri-root {
@@ -16,17 +16,16 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border: 1px solid var(--border-color, #e6e3dc);
-  border-top: 3px solid var(--ca-palette-primary, #2c7168);
-  border-radius: 10px;
-  padding: 20px;
+  border:0.5px solid #d9d9e0;
+  border-radius: 12px;
+  padding: 24px;
   background: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
-  transition: box-shadow 0.2s ease;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  transition: box-shadow 250ms ease-out;
 }
 
 .mri-group:hover {
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 3px 10px rgba(28, 32, 36, 0.06);
 }
 
 .mri-group-header {
@@ -35,7 +34,7 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  border-bottom: 1px solid #edf0ec;
+  border-bottom:0.5px solid #e8e8ec;
   padding-bottom: 12px;
 }
 
@@ -48,7 +47,7 @@
 .mri-group-badge {
   display: inline-block;
   padding: 3px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   border-radius: 4px;
   text-transform: uppercase;
@@ -56,34 +55,34 @@
 }
 
 .mri-group-badge.mgmt {
-  background: #e6f0ee;
-  color: #2c7168;
+  background: #e0f8f3;
+  color:var(--teal-11, #008573);
 }
 
 .mri-group-badge.eff {
-  background: #fbf3e6;
-  color: #b88a45;
+  background: #fefbe9;
+  color:var(--amber-9, #ab6400);
 }
 
 .mri-group-badge.content {
-  background: #f3f0f7;
-  color: #8273a3;
+  background: #f0f1fe;
+  color:var(--iris-9, #0d74ce);
 }
 
 .mri-group-badge.audience {
-  background: #eff6ff;
-  color: #2563eb;
+  background: #e6f4fe;
+  color:#0d74ce;
 }
 
 .mri-group-badge.history {
-  background: #f1f5f9;
-  color: #475569;
+  background: #f0f0f3;
+  color:#60646c;
 }
 
 .mri-group-title {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
+  color:#1c2024;
   margin: 0;
 }
 
@@ -94,19 +93,19 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  background: linear-gradient(135deg, #2c7168 0%, #1e524b 100%);
-  color: #ffffff;
-  font-size: 13px;
+  background: linear-gradient(135deg, var(--teal-11, #008573) 0%, var(--teal-12, #0d3d38) 100%);
+  color:#ffffff;
+  font-size: 14px;
   font-weight: 800;
   border-radius: 6px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  box-shadow: 0 1px 3px rgba(44, 113, 104, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 133, 115, 0.25);
   flex-shrink: 0;
 }
 
 .mri-group-desc {
   font-size: 12px;
-  color: #64748b;
+  color:#60646c;
   margin: 0;
 }
 
@@ -143,23 +142,23 @@
 }
 
 .mri-card-caption {
-  font-size: 11.5px;
-  color: #64748b;
+  font-size: 12px;
+  color:#60646c;
   line-height: 1.5;
-  background: #f8fafc;
-  border-left: 3px solid #cbd5e1;
+  background: #f9f9fb;
+  border:0.5px solid #d9d9e0;
   padding: 8px 12px;
   margin-top: 12px;
-  border-radius: 0 6px 6px 0;
+  border-radius: 6px;
 }
 
 .mri-card-caption strong {
-  color: #334155;
+  color:#60646c;
 }
 
 .mri-details-toggle {
   margin-top: 8px;
-  border-top: 1px dashed #e2e8f0;
+  border-top:0.5px dashed #d9d9e0;
   padding-top: 8px;
 }
 
@@ -167,7 +166,7 @@
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  color: #2c7168;
+  color:var(--teal-11, #008573);
   outline: none;
   user-select: none;
   display: inline-flex;
@@ -176,16 +175,16 @@
 }
 
 .mri-details-summary:hover {
-  color: #1f5049;
+  color:#0d3d38;
   text-decoration: underline;
 }
 
 .mri-table-wrapper {
   overflow-x: auto;
   margin-top: 10px;
-  border: 1px solid #e2e8f0;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04);
   max-height: 280px;
   overflow-y: auto;
   position: relative;
@@ -195,37 +194,37 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 11px;
+  font-size: 12px;
   text-align: left;
   font-variant-numeric: tabular-nums;
 }
 
 .mri-audit-table th {
-  background: #f8faf9;
+  background: #f9f9fb;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  color: #475569;
+  color:#60646c;
   padding: 8px 10px;
   font-weight: 600;
   position: sticky;
   top: 0;
   z-index: 2;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom:0.5px solid #d9d9e0;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
 
 .mri-audit-table td {
   padding: 8px 10px;
-  border-bottom: 1px solid #f1f5f9;
-  color: #334155;
+  border-bottom:0.5px solid #f0f0f3;
+  color:#60646c;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  transition: background 0.15s ease;
+  transition: background 250ms ease-out;
 }
 
 .mri-audit-table tr:hover td {
-  background: #f0f6f5;
+  background: #f0f0f3;
 }
 
 /* In-cell data bars for high density metrics */
@@ -246,7 +245,7 @@
 .mri-cell-bar-track {
   flex: 1;
   height: 5px;
-  background: #edf2f7;
+  background: #e8e8ec;
   border-radius: 2.5px;
   overflow: hidden;
   min-width: 28px;
@@ -255,36 +254,36 @@
 .mri-cell-bar-fill {
   height: 100%;
   border-radius: 2.5px;
-  background: #2c7168;
-  transition: width 0.3s ease;
+  background: var(--teal-11, #008573);
+  transition: none;
 }
 
 .mri-tag {
   display: inline-block;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
 }
 
 .mri-tag.core {
-  background: #dcfce7;
-  color: #15803d;
+  background: #e6f7ed;
+  color:#208368;
 }
 
 .mri-tag.warning {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: #e8e8ec;
+  color:#ce2c31;
 }
 
 .mri-tag.steady {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: #e6f4fe;
+  color:#0d74ce;
 }
 
 .mri-tag.neutral {
-  background: #f1f5f9;
-  color: #475569;
+  background: #f0f0f3;
+  color:#60646c;
 }
 
 .mri-matrix-wrap {

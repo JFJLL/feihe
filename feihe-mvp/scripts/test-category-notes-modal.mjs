@@ -13,11 +13,12 @@ function loadComponent(filename) {
   if (moduleCache.has(filename)) return moduleCache.get(filename);
   const code = fs.readFileSync(filename, 'utf8');
   const compiled = ts.transpileModule(code, {
-    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
   const result = { exports: {} };
   const nativeRequire = createRequire(filename);
   const require = name => {
+    if (name.endsWith('.css')) return {};
     if (name.startsWith('.')) {
       const dir = path.dirname(filename);
       const base = path.resolve(dir, name);
@@ -36,7 +37,6 @@ function loadComponent(filename) {
 }
 
 const { CategoryNotesModal } = loadComponent('components/notes-modal/CategoryNotesModal.tsx');
-
 // Generate 120 mock notes
 const mockNotes = Array.from({ length: 120 }, (_, i) => ({
   id: `note-${i + 1}`,
@@ -77,7 +77,8 @@ const html = renderToStaticMarkup(
 );
 
 assert.ok(html.includes('内容切角 / 场景 · 素人妈妈实证'), 'Modal title should render');
-assert.ok(html.includes('样本总计 120 篇 · 当前展示前 50 篇'), 'Count badge should show total and top 50');
+assert.ok(html.includes('样本总计 120 篇 / 当前展示前 50 篇'), 'Count badge should show total and top 50');
+assert.ok(!html.includes('样本总计 120 篇 · 当前展示前 50 篇'), 'Count badge must not use obsolete middle-dot separator');
 assert.ok(html.includes('category-notes-modal'), 'Modal container should exist');
 
 // Check that only 50 rows are rendered

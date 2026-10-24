@@ -272,10 +272,10 @@ export function LingxiTrackLive({
                   alignItems: 'center',
                   gap: '4px',
                   background: 'rgba(16,185,129,0.1)',
-                  color: '#059669',
+                  color: '#29a383',
                   padding: '2px 8px',
                   borderRadius: '12px',
-                  fontSize: '11px',
+                  fontSize: 12,
                   fontWeight: 600,
                 }}
               >
@@ -284,17 +284,17 @@ export function LingxiTrackLive({
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
-                    background: '#10b981',
+                    background: '#29a383',
                     display: 'inline-block',
                   }}
                 />{' '}
-                实时按需直连 · 免落库
+                实时按需直连 / 免落库
               </span>
             </div>
-            <h2 style={{ margin: '4px 0', fontSize: '18px', color: 'var(--text-main)' }}>
-              小红书灵犀 · 母婴全类目市场机会
+            <h2 style={{ margin: '4px 0', fontSize: 16, color: 'var(--text-main)' }}>
+              小红书灵犀 / 母婴全类目市场机会
             </h2>
-            <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--text-muted)' }}>
+            <p style={{ margin: 0, fontSize: 14, color: 'var(--text-muted)' }}>
               按需向小红书灵犀大盘拉取母婴赛道供需图、竞争气泡与 Top 30 排行榜，支持按细分品类下钻。
             </p>
           </div>
@@ -303,10 +303,10 @@ export function LingxiTrackLive({
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: '#f8fafc',
+                background: '#f9f9fb',
                 padding: '4px 10px',
                 borderRadius: '8px',
-                border: '1px solid var(--border-line)',
+                border: '0.5px solid var(--border-line)',
               }}
             >
               <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginRight: '6px' }}>
@@ -318,7 +318,7 @@ export function LingxiTrackLive({
                 onChange={(e) => setStartDate(e.target.value)}
                 style={{ width: '130px', fontSize: '12px' }}
               />
-              <span style={{ color: '#94a3b8', margin: '0 4px' }}>-</span>
+              <span style={{ color: '#60646c', margin: '0 4px' }}>-</span>
               <CustomDatePicker
                 aria-label="结束日期"
                 value={endDate}
@@ -343,7 +343,7 @@ export function LingxiTrackLive({
                 borderRadius: 'var(--radius-md)',
                 background: '#ffffff',
                 color: 'var(--text-main)',
-                border: '1px solid var(--border-line)',
+                border: '0.5px solid var(--border-line)',
                 cursor: 'pointer',
               }}
             >
@@ -353,8 +353,8 @@ export function LingxiTrackLive({
         </div>
 
         {/* 13 个细分市场切换 */}
-        <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid var(--border-light)' }}>
-          <small style={{ color: 'var(--text-muted)', fontSize: '11.5px', display: 'block', marginBottom: '8px' }}>
+        <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '0.5px solid var(--border-light)' }}>
+          <small style={{ color: 'var(--text-muted)', fontSize: 12, display: 'block', marginBottom: '8px' }}>
             细分赛道快捷切换（共 13 个母婴细分市场）：
           </small>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -367,9 +367,9 @@ export function LingxiTrackLive({
                     fontSize: '12px',
                     padding: '4px 10px',
                     borderRadius: '6px',
-                    background: isSelected ? 'var(--primary-blue)' : '#f8fafc',
+                    background: isSelected ? 'var(--primary-blue)' : '#f9f9fb',
                     color: isSelected ? '#ffffff' : 'var(--text-main)',
-                    border: '1px solid ' + (isSelected ? 'var(--primary-blue)' : 'var(--border-line)'),
+                    border: '0.5px solid ' + (isSelected ? 'var(--primary-blue)' : 'var(--border-line)'),
                     cursor: 'pointer',
                     fontWeight: isSelected ? 600 : 400,
                   }}
@@ -409,7 +409,7 @@ export function LingxiTrackLive({
         {/* 1. 市场供需与潜力四象限 */}
         <section className="panel" style={{ minHeight: '460px', display: 'flex', flexDirection: 'column' }}>
           <header style={{ marginBottom: '8px' }}>
-            <small style={{ color: 'var(--primary-blue)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1px' }}>
+            <small style={{ color: 'var(--primary-blue)', fontSize: 12, fontWeight: 700, letterSpacing: '1px' }}>
               MARKET DEMAND & POTENTIAL
             </small>
             <h3 style={{ margin: '2px 0 4px', fontSize: '16px', color: 'var(--text-main)' }}>
@@ -423,7 +423,7 @@ export function LingxiTrackLive({
             style={{
               display: 'flex',
               gap: '16px',
-              fontSize: '11.5px',
+              fontSize: 12,
               color: 'var(--text-muted)',
               marginBottom: '10px',
             }}
@@ -439,9 +439,9 @@ export function LingxiTrackLive({
             style={{
               flex: 1,
               position: 'relative',
-              background: '#f8fafc',
+              background: '#f9f9fb',
               borderRadius: '10px',
-              border: '1px solid var(--border-line)',
+              border: '0.5px solid var(--border-line)',
               padding: '16px',
               minHeight: '320px',
               overflow: 'hidden',
@@ -453,8 +453,8 @@ export function LingxiTrackLive({
                 position: 'absolute',
                 top: '10px',
                 left: '12px',
-                fontSize: '10.5px',
-                color: '#2563eb',
+                fontSize: 12,
+                color: '#0090ff',
                 background: 'rgba(37,99,235,0.08)',
                 padding: '2px 8px',
                 borderRadius: '4px',
@@ -469,8 +469,8 @@ export function LingxiTrackLive({
                 position: 'absolute',
                 top: '10px',
                 right: '12px',
-                fontSize: '10.5px',
-                color: '#db2777',
+                fontSize: 12,
+                color: '#ce2c31',
                 background: 'rgba(219,39,119,0.08)',
                 padding: '2px 8px',
                 borderRadius: '4px',
@@ -485,8 +485,8 @@ export function LingxiTrackLive({
                 position: 'absolute',
                 bottom: '10px',
                 left: '12px',
-                fontSize: '10.5px',
-                color: '#64748b',
+                fontSize: 12,
+                color: '#60646c',
                 background: 'rgba(100,116,139,0.08)',
                 padding: '2px 8px',
                 borderRadius: '4px',
@@ -501,8 +501,8 @@ export function LingxiTrackLive({
                 position: 'absolute',
                 bottom: '10px',
                 right: '12px',
-                fontSize: '10.5px',
-                color: '#059669',
+                fontSize: 12,
+                color: '#29a383',
                 background: 'rgba(5,150,105,0.08)',
                 padding: '2px 8px',
                 borderRadius: '4px',
@@ -521,7 +521,7 @@ export function LingxiTrackLive({
                 left: '0',
                 right: '0',
                 height: '1px',
-                borderTop: '1px dashed #94a3b8',
+                borderTop: '0.5px dashed #60646c',
                 zIndex: 1,
               }}
               title={'供给基准线: ' + avgNote.toLocaleString()}
@@ -533,7 +533,7 @@ export function LingxiTrackLive({
                 top: '0',
                 bottom: '0',
                 width: '1px',
-                borderLeft: '1px dashed #94a3b8',
+                borderLeft: '0.5px dashed #60646c',
                 zIndex: 1,
               }}
               title={'需求基准线: ' + avgSearch.toLocaleString()}
@@ -589,12 +589,12 @@ export function LingxiTrackLive({
                       width: size + 'px',
                       height: size + 'px',
                       borderRadius: '50%',
-                      background: isSelected ? '#1d4ed8' : cat.color || '#3b82f6',
+                      background: isSelected ? '#0d74ce' : cat.color || '#0090ff',
                       opacity: isSelected ? 0.95 : 0.75,
                       boxShadow: isSelected
                         ? '0 0 0 3px rgba(37,99,235,0.3), 0 4px 12px rgba(29,78,216,0.3)'
                         : '0 2px 6px rgba(0,0,0,0.1)',
-                      border: isSelected ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.8)',
+                      border: isSelected ? '2px solid #ffffff' : '0.5px solid rgba(255,255,255,0.8)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -608,9 +608,9 @@ export function LingxiTrackLive({
                       style={{
                         position: 'absolute',
                         bottom: '-18px',
-                        fontSize: '10px',
+                        fontSize: 12,
                         whiteSpace: 'nowrap',
-                        color: isSelected ? '#1d4ed8' : '#475569',
+                        color: isSelected ? '#0d74ce' : '#60646c',
                         fontWeight: isSelected ? 700 : 500,
                       }}
                     >
@@ -624,7 +624,7 @@ export function LingxiTrackLive({
           <div
             style={{
               marginTop: '12px',
-              fontSize: '11.5px',
+              fontSize: 12,
               color: 'var(--text-muted)',
               display: 'flex',
               justifyContent: 'space-between',
@@ -648,7 +648,7 @@ export function LingxiTrackLive({
             }}
           >
             <header>
-              <small style={{ color: 'var(--primary-blue)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1px' }}>
+              <small style={{ color: 'var(--primary-blue)', fontSize: 12, fontWeight: 700, letterSpacing: '1px' }}>
                 COMPETITIVE LANDSCAPE
               </small>
               <h3 style={{ margin: '2px 0 4px', fontSize: '16px', color: 'var(--text-main)' }}>
@@ -658,7 +658,7 @@ export function LingxiTrackLive({
             <div
               style={{
                 display: 'flex',
-                background: '#f1f5f9',
+                background: '#f0f0f3',
                 padding: '2px',
                 borderRadius: '6px',
               }}
@@ -667,7 +667,7 @@ export function LingxiTrackLive({
                 onClick={() => setSubject('brand')}
                 style={{
                   padding: '3px 10px',
-                  fontSize: '11px',
+                  fontSize: 12,
                   borderRadius: '4px',
                   background: subject === 'brand' ? 'var(--primary-blue)' : 'transparent',
                   color: subject === 'brand' ? '#fff' : 'var(--text-muted)',
@@ -682,7 +682,7 @@ export function LingxiTrackLive({
                 onClick={() => setSubject('spu')}
                 style={{
                   padding: '3px 10px',
-                  fontSize: '11px',
+                  fontSize: 12,
                   borderRadius: '4px',
                   background: subject === 'spu' ? 'var(--primary-blue)' : 'transparent',
                   color: subject === 'spu' ? '#fff' : 'var(--text-muted)',
@@ -702,7 +702,7 @@ export function LingxiTrackLive({
             style={{
               display: 'flex',
               gap: '16px',
-              fontSize: '11.5px',
+              fontSize: 12,
               color: 'var(--text-muted)',
               marginBottom: '10px',
             }}
@@ -718,9 +718,9 @@ export function LingxiTrackLive({
             style={{
               flex: 1,
               position: 'relative',
-              background: '#f8fafc',
+              background: '#f9f9fb',
               borderRadius: '10px',
-              border: '1px solid var(--border-line)',
+              border: '0.5px solid var(--border-line)',
               padding: '16px',
               minHeight: '320px',
               overflow: 'hidden',
@@ -734,7 +734,7 @@ export function LingxiTrackLive({
                 left: '0',
                 right: '0',
                 height: '1px',
-                borderTop: '1px dashed #94a3b8',
+                borderTop: '0.5px dashed #60646c',
                 zIndex: 1,
               }}
               title={'阅读率基准线: ' + (compAvgReadRate * 100).toFixed(1) + '%'}
@@ -746,23 +746,23 @@ export function LingxiTrackLive({
                 top: '0',
                 bottom: '0',
                 width: '1px',
-                borderLeft: '1px dashed #94a3b8',
+                borderLeft: '0.5px dashed #60646c',
                 zIndex: 1,
               }}
               title={'搜索基准线: ' + Math.round(compAvgSearch).toLocaleString()}
             />
 
             {/* 象限标识 */}
-            <span style={{ position: 'absolute', top: '10px', left: '12px', fontSize: '10px', color: '#64748b', zIndex: 1 }}>
+            <span style={{ position: 'absolute', top: '10px', left: '12px', fontSize: 12, color: '#60646c', zIndex: 1 }}>
               高转化, 低搜索 (潜力黑马)
             </span>
-            <span style={{ position: 'absolute', top: '10px', right: '12px', fontSize: '10px', color: 'var(--primary-blue)', fontWeight: 600, zIndex: 1 }}>
+            <span style={{ position: 'absolute', top: '10px', right: '12px', fontSize: 12, color: 'var(--primary-blue)', fontWeight: 600, zIndex: 1 }}>
               高转化, 高搜索 (核心标杆)
             </span>
-            <span style={{ position: 'absolute', bottom: '10px', left: '12px', fontSize: '10px', color: '#94a3b8', zIndex: 1 }}>
+            <span style={{ position: 'absolute', bottom: '10px', left: '12px', fontSize: 12, color: '#60646c', zIndex: 1 }}>
               低转化, 低搜索 (基础长尾)
             </span>
-            <span style={{ position: 'absolute', bottom: '10px', right: '12px', fontSize: '10px', color: '#d97706', zIndex: 1 }}>
+            <span style={{ position: 'absolute', bottom: '10px', right: '12px', fontSize: 12, color: '#ffc53d', zIndex: 1 }}>
               低转化, 高搜索 (待承接)
             </span>
 
@@ -815,12 +815,12 @@ export function LingxiTrackLive({
                       width: size + 'px',
                       height: size + 'px',
                       borderRadius: '50%',
-                      background: isHighlight ? '#1d4ed8' : '#64748b',
+                      background: isHighlight ? '#0d74ce' : '#60646c',
                       opacity: isHighlight ? 0.95 : 0.72,
                       boxShadow: isHighlight
                         ? '0 0 14px rgba(29,78,216,0.4), 0 0 0 2px rgba(255,255,255,0.9)'
                         : '0 1px 4px rgba(0,0,0,0.1)',
-                      border: isHighlight ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.8)',
+                      border: isHighlight ? '2px solid #ffffff' : '0.5px solid rgba(255,255,255,0.8)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -833,9 +833,9 @@ export function LingxiTrackLive({
                       style={{
                         position: 'absolute',
                         bottom: '-16px',
-                        fontSize: '9.5px',
+                        fontSize: 12,
                         whiteSpace: 'nowrap',
-                        color: isHighlight ? '#1d4ed8' : '#475569',
+                        color: isHighlight ? '#0d74ce' : '#60646c',
                         fontWeight: isHighlight ? 700 : 500,
                       }}
                     >
@@ -862,14 +862,14 @@ export function LingxiTrackLive({
             }}
           >
             <header>
-              <small style={{ color: 'var(--primary-blue)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1px' }}>
+              <small style={{ color: 'var(--primary-blue)', fontSize: 12, fontWeight: 700, letterSpacing: '1px' }}>
                 BRAND RANKINGS
               </small>
               <h3 style={{ margin: '2px 0 0', fontSize: '16px', color: 'var(--text-main)' }}>
                 3. 品牌排行 Top 30
               </h3>
             </header>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>按搜索热度降序</span>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>按搜索热度降序</span>
           </div>
           <div
             style={{
@@ -896,8 +896,8 @@ export function LingxiTrackLive({
                     gap: '8px',
                     padding: '6px 10px',
                     borderRadius: '6px',
-                    background: isHighlight ? 'rgba(37,99,235,0.08)' : '#f8fafc',
-                    border: isHighlight ? '1px solid rgba(37,99,235,0.3)' : '1px solid var(--border-light)',
+                    background: isHighlight ? 'rgba(37,99,235,0.08)' : '#f9f9fb',
+                    border: isHighlight ? '0.5px solid rgba(37,99,235,0.3)' : '0.5px solid var(--border-light)',
                   }}
                 >
                   <span
@@ -908,10 +908,10 @@ export function LingxiTrackLive({
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderRadius: '4px',
-                      fontSize: '11px',
+                      fontSize: 12,
                       fontWeight: 700,
-                      background: isTop3 ? 'var(--primary-blue)' : '#e2e8f0',
-                      color: isTop3 ? '#fff' : '#64748b',
+                      background: isTop3 ? 'var(--primary-blue)' : '#d9d9e0',
+                      color: isTop3 ? '#fff' : '#60646c',
                     }}
                   >
                     {b.rank}
@@ -931,7 +931,7 @@ export function LingxiTrackLive({
                     style={{
                       position: 'relative',
                       height: '7px',
-                      background: '#e2e8f0',
+                      background: '#d9d9e0',
                       borderRadius: '4px',
                       overflow: 'hidden',
                     }}
@@ -943,14 +943,14 @@ export function LingxiTrackLive({
                         top: 0,
                         bottom: 0,
                         width: pct + '%',
-                        background: isTop3 ? 'var(--primary-blue)' : '#94a3b8',
+                        background: isTop3 ? 'var(--primary-blue)' : '#60646c',
                         borderRadius: '4px',
                       }}
                     />
                   </div>
                   <span
                     style={{
-                      fontSize: '11.5px',
+                      fontSize: 12,
                       color: 'var(--text-muted)',
                       textAlign: 'right',
                       fontFamily: 'monospace',
@@ -975,14 +975,14 @@ export function LingxiTrackLive({
             }}
           >
             <header>
-              <small style={{ color: 'var(--primary-blue)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1px' }}>
+              <small style={{ color: 'var(--primary-blue)', fontSize: 12, fontWeight: 700, letterSpacing: '1px' }}>
                 SPU RANKINGS
               </small>
               <h3 style={{ margin: '2px 0 0', fontSize: '16px', color: 'var(--text-main)' }}>
                 4. SPU 排行 Top 30
               </h3>
             </header>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>细分单品爆款榜</span>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>细分单品爆款榜</span>
           </div>
           <div
             style={{
@@ -1010,8 +1010,8 @@ export function LingxiTrackLive({
                     gap: '8px',
                     padding: '6px 10px',
                     borderRadius: '6px',
-                    background: isHighlight ? 'rgba(37,99,235,0.08)' : '#f8fafc',
-                    border: isHighlight ? '1px solid rgba(37,99,235,0.3)' : '1px solid var(--border-light)',
+                    background: isHighlight ? 'rgba(37,99,235,0.08)' : '#f9f9fb',
+                    border: isHighlight ? '0.5px solid rgba(37,99,235,0.3)' : '0.5px solid var(--border-light)',
                   }}
                 >
                   <span
@@ -1022,10 +1022,10 @@ export function LingxiTrackLive({
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderRadius: '4px',
-                      fontSize: '11px',
+                      fontSize: 12,
                       fontWeight: 700,
-                      background: isTop3 ? '#7c3aed' : '#e2e8f0',
-                      color: isTop3 ? '#fff' : '#64748b',
+                      background: isTop3 ? '#5753c6' : '#d9d9e0',
+                      color: isTop3 ? '#fff' : '#60646c',
                     }}
                   >
                     {s.rank}
@@ -1043,13 +1043,13 @@ export function LingxiTrackLive({
                     >
                       {s.name}
                     </strong>
-                    <small style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{s.brand}</small>
+                    <small style={{ fontSize: 12, color: 'var(--text-muted)' }}>{s.brand}</small>
                   </div>
                   <div
                     style={{
                       position: 'relative',
                       height: '7px',
-                      background: '#e2e8f0',
+                      background: '#d9d9e0',
                       borderRadius: '4px',
                       overflow: 'hidden',
                     }}
@@ -1061,14 +1061,14 @@ export function LingxiTrackLive({
                         top: 0,
                         bottom: 0,
                         width: pct + '%',
-                        background: isTop3 ? '#7c3aed' : '#94a3b8',
+                        background: isTop3 ? '#5753c6' : '#60646c',
                         borderRadius: '4px',
                       }}
                     />
                   </div>
                   <span
                     style={{
-                      fontSize: '11.5px',
+                      fontSize: 12,
                       color: 'var(--text-muted)',
                       textAlign: 'right',
                       fontFamily: 'monospace',
@@ -1086,7 +1086,7 @@ export function LingxiTrackLive({
       {/* 5. 母婴 13 细分市场指标一览表 */}
       <section className="panel">
         <header style={{ marginBottom: '12px' }}>
-          <small style={{ color: 'var(--primary-blue)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '1px' }}>
+          <small style={{ color: 'var(--primary-blue)', fontSize: 12, fontWeight: 700, letterSpacing: '1px' }}>
             TAXONOMY BENCHMARKS
           </small>
           <h3 style={{ margin: '2px 0 0', fontSize: '16px', color: 'var(--text-main)' }}>
@@ -1125,7 +1125,7 @@ export function LingxiTrackLive({
                         display: 'inline-block',
                         padding: '2px 8px',
                         borderRadius: '4px',
-                        fontSize: '11px',
+                        fontSize: 12,
                         background:
                           c.demand === '高需求' && c.supply === '低供给'
                             ? 'rgba(16,185,129,0.1)'
@@ -1134,26 +1134,26 @@ export function LingxiTrackLive({
                             : 'rgba(37,99,235,0.1)',
                         color:
                           c.demand === '高需求' && c.supply === '低供给'
-                            ? '#059669'
+                            ? '#29a383'
                             : c.demand === '高需求'
-                            ? '#d97706'
-                            : '#2563eb',
+                            ? '#ffc53d'
+                            : '#0090ff',
                         fontWeight: 600,
                       }}
                     >
-                      {c.demand} · {c.supply}
+                      {c.demand} / {c.supply}
                     </span>
                   </td>
                   <td>
                     <button
                       onClick={() => setSubMarket(c.name)}
                       style={{
-                        fontSize: '11.5px',
+                        fontSize: 12,
                         padding: '3px 10px',
                         borderRadius: '4px',
                         background: '#ffffff',
                         color: subMarket === c.name ? 'var(--primary-blue)' : 'var(--text-main)',
-                        border: '1px solid ' + (subMarket === c.name ? 'var(--primary-blue)' : 'var(--border-line)'),
+                        border: '0.5px solid ' + (subMarket === c.name ? 'var(--primary-blue)' : 'var(--border-line)'),
                         cursor: 'pointer',
                         fontWeight: subMarket === c.name ? 600 : 400,
                       }}

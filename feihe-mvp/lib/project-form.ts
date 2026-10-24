@@ -1,8 +1,8 @@
 export const PROJECT_COLORS = [
-  { value: '#2563eb', label: '蓝色' }, { value: '#059669', label: '绿色' },
-  { value: '#4f46e5', label: '靛蓝' }, { value: '#d97706', label: '琥珀色' },
-  { value: '#e11d48', label: '玫瑰色' }, { value: '#7c3aed', label: '紫色' },
-  { value: '#0891b2', label: '青色' }, { value: '#475569', label: '石板灰' },
+  { value: '#0090ff', label: '蓝色' }, { value: '#29a383', label: '绿色' },
+  { value: '#5b5bd6', label: '靛蓝' }, { value: '#ffc53d', label: '琥珀色' },
+  { value: '#e5484d', label: '玫瑰色' }, { value: '#5753c6', label: '紫色' },
+  { value: '#12a594', label: '青色' }, { value: '#8b8d98', label: '石板灰' },
 ];
 export const PROJECT_STATUSES = ['筹备中', '进行中', '已结束'];
 export const STANDARD_DEPARTMENTS = [

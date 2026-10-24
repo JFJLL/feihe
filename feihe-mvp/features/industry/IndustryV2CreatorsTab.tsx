@@ -86,10 +86,10 @@ export function IndustryV2CreatorsTab({
                       <span className="v2-dist-count">
                         {tier.count} 篇
                         {tier.interactions !== null && tier.interactions !== undefined && (
-                          <small> · 总互动 {formatMetricNumber(tier.interactions)}</small>
+                            <small> (总互动 {formatMetricNumber(tier.interactions)})</small>
                         )}
                         {tier.meanInteractions !== null && tier.meanInteractions !== undefined && (
-                          <small> · 篇均互动 {Math.round(tier.meanInteractions)}</small>
+                            <small> (篇均互动 {Math.round(tier.meanInteractions)})</small>
                         )}
                       </span>
                     </div>
@@ -154,7 +154,7 @@ export function IndustryV2CreatorsTab({
                       return (
                         <tr key={creator.id || creator.name}>
                           <td>
-                            <strong style={{ color: '#0f172a' }}>{creator.name}</strong>
+                            <strong style={{ color: '#1c2024' }}>{creator.name}</strong>
                           </td>
                           <td style={{ textAlign: 'right' }} className="v2-num">
                             {fansDisplay}

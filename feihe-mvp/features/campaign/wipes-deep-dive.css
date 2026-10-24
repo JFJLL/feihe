@@ -5,11 +5,15 @@
  */
 
 .wipes-dive-root {
-  margin-top: 24px;
-  margin-bottom: 24px;
+  margin: 0 0 28px 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 28px;
+  background: #ffffff;
+  border:0.5px solid #d9d9e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
 }
 
 .wipes-dive-header {
@@ -19,7 +23,7 @@
   flex-wrap: wrap;
   gap: 8px;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  border-bottom:0.5px solid var(--color-border, #d9d9e0);
 }
 
 .wipes-dive-header-left {
@@ -35,8 +39,8 @@
   min-width: 26px;
   height: 26px;
   border-radius: 6px;
-  background: #2c7168;
-  color: #ffffff;
+  background: var(--teal-11, #008573);
+  color:#ffffff;
   font-family: monospace;
   font-size: 12px;
   font-weight: 700;
@@ -45,15 +49,15 @@
 
 .wipes-dive-subtitle {
   font-size: 12px;
-  color: #6b7280;
+  color:#60646c;
   display: block;
   margin-top: 2px;
 }
 
 .wipes-dive-title {
-  font-size: 1.125rem;
+  font-size: 16px;
   font-weight: 600;
-  color: var(--color-text, #111827);
+  color:var(--color-text, #1c2024);
   margin: 0;
   display: flex;
   align-items: center;
@@ -64,17 +68,17 @@
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 500;
   border-radius: 9999px;
-  background-color: rgba(44, 113, 104, 0.1);
-  color: #2c7168;
-  border: 1px solid rgba(44, 113, 104, 0.2);
+  background-color:rgba(0, 133, 115, 0.1);
+  color:var(--teal-11, #008573);
+  border:0.5px solid rgba(0, 133, 115, 0.2);
 }
 
 .wipes-dive-meta {
-  font-size: 0.8125rem;
-  color: var(--color-text-muted, #6b7280);
+  font-size: 12px;
+  color:var(--color-text-muted, #60646c);
 }
 
 .wipes-dive-controls {
@@ -86,33 +90,33 @@
 
 .wipes-dive-btn-group {
   display: inline-flex;
-  border: 1px solid var(--color-border, #d1d5db);
+  border:0.5px solid var(--color-border, #d9d9e0);
   border-radius: 6px;
   overflow: hidden;
 }
 
 .wipes-dive-btn {
   padding: 4px 10px;
-  font-size: 0.75rem;
+  font-size: 12px;
   background: #ffffff;
-  border: none;
-  color: #4b5563;
+  border:none;
+  color:#60646c;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 250ms ease-out, color 250ms ease-out;
 }
 
 .wipes-dive-btn:not(:last-child) {
-  border-right: 1px solid var(--color-border, #d1d5db);
+  border-right:0.5px solid var(--color-border, #d9d9e0);
 }
 
 .wipes-dive-btn:hover {
-  background: #f9fafb;
-  color: #111827;
+  background: #f9f9fb;
+  color:#1c2024;
 }
 
 .wipes-dive-btn.active {
-  background: #2c7168;
-  color: #ffffff;
+  background: var(--teal-11, #008573);
+  color:#ffffff;
   font-weight: 500;
 }
 
@@ -135,19 +139,19 @@
 }
 
 .wipes-dive-note {
-  font-size: 0.75rem;
+  font-size: 12px;
   line-height: 1.4;
-  color: #6b7280;
-  background: #f9fafb;
+  color:#60646c;
+  background: #f9f9fb;
   padding: 8px 12px;
+  border:0.5px solid #d9d9e0;
   border-radius: 6px;
-  border-left: 3px solid #2c7168;
   margin: 0;
 }
 
 .wipes-dive-details {
   margin-top: 8px;
-  border: 1px solid #e5e7eb;
+  border:0.5px solid #d9d9e0;
   border-radius: 8px;
   overflow: hidden;
   background: #ffffff;
@@ -155,10 +159,10 @@
 
 .wipes-dive-summary {
   padding: 10px 14px;
-  font-size: 0.8125rem;
+  font-size: 12px;
   font-weight: 500;
-  color: #374151;
-  background: #f9fafb;
+  color:#1c2024;
+  background: #f9f9fb;
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -167,44 +171,44 @@
 }
 
 .wipes-dive-summary:hover {
-  background: #f3f4f6;
+  background: #f0f0f3;
 }
 
 .wipes-dive-table-wrap {
   max-height: 320px;
   overflow-y: auto;
   overflow-x: auto;
-  border-top: 1px solid #e5e7eb;
+  border-top:0.5px solid #d9d9e0;
 }
 
 .wipes-dive-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.75rem;
+  font-size: 12px;
   text-align: left;
 }
 
 .wipes-dive-table th {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: #f0f0f3;
+  color:#60646c;
   padding: 6px 10px;
   font-weight: 600;
   white-space: nowrap;
   position: sticky;
   top: 0;
   z-index: 1;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom:0.5px solid #d9d9e0;
 }
 
 .wipes-dive-table td {
   padding: 6px 10px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #1f2937;
+  border-bottom:0.5px solid #f0f0f3;
+  color:#1c2024;
   white-space: nowrap;
 }
 
 .wipes-dive-table tr:hover td {
-  background: #f9fafb;
+  background: #f9f9fb;
 }
 
 .wipes-dive-table td.num {

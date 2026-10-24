@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import type { Dashboard } from '../../lib/types/project';
 import { PanelHead } from '../../components/ui/PanelHead';
@@ -107,7 +107,7 @@ export function PublicationLinkage({
           {owned.slice(0, 12).map((note) => (
             <article key={note.id}>
               <small>
-                {note.publishedAt ? cnTime(note.publishedAt) : '发布时间待补充'} · {noteDirection(note)}
+                {note.publishedAt ? cnTime(note.publishedAt) : '发布时间待补充'} / {noteDirection(note)}
               </small>
               <strong>{note.title || note.id}</strong>
               <dl>

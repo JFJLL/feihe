@@ -206,7 +206,7 @@ export function ContentRegistry({
           label="自有 / 商业内容"
           value={summary.ownedCount.toLocaleString()}
           unit="篇"
-          desc={summary.total ? `占总盘 ${pct(summary.ownedCount / summary.total)} · 自有投放与达人合作` : '—'}
+          desc={summary.total ? `占总盘 ${pct(summary.ownedCount / summary.total)} / 自有投放与达人合作` : '—'}
           tag="重点运营"
         />
         <MetricCard
@@ -214,7 +214,7 @@ export function ContentRegistry({
           label="外部扫描样本"
           value={summary.scanCount.toLocaleString()}
           unit="篇"
-          desc={summary.total ? `占总盘 ${pct(summary.scanCount / summary.total)} · 关键词自然讨论池` : '—'}
+          desc={summary.total ? `占总盘 ${pct(summary.scanCount / summary.total)} / 关键词自然讨论池` : '—'}
           tag="自然沉淀"
         />
         <MetricCard
@@ -229,16 +229,16 @@ export function ContentRegistry({
 
       {/* 按需展开的入库操作抽屉/区域 */}
       {activeIngestion === 'import' && (
-        <div className="ops-action-card ops-action-card-blue animate-scale-in" style={{ marginBottom: '14px', border: '1px solid #bfdbfe' }}>
+        <div className="ops-action-card ops-action-card-blue animate-scale-in" style={{ marginBottom: '14px', border: '0.5px solid #acd8fc' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>📥</span>
+              <span style={{ fontSize: 22 }}>📥</span>
               <div>
-                <strong style={{ fontSize: '14px', color: '#0f172a' }}>导入自有发布内容</strong>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>支持 .xlsx / .xls 格式，自动识别笔记 ID、达人与产品范围</div>
+                <strong style={{ fontSize: '14px', color: '#1c2024' }}>导入自有发布内容</strong>
+                <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>支持 .xlsx / .xls 格式，自动识别笔记 ID、达人与产品范围</div>
               </div>
             </div>
-            <button type="button" onClick={() => setActiveIngestion(null)} style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: '#64748b' }}>✕ 收起</button>
+            <button type="button" onClick={() => setActiveIngestion(null)} style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: 'var(--slate-11, #60646c)' }}>✕ 收起</button>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '10px' }}>
             <label className="upload" style={{ margin: 0, cursor: 'pointer' }}>
@@ -262,30 +262,30 @@ export function ContentRegistry({
               />
             </label>
             {uploadFileName && (
-              <span style={{ fontSize: '12px', color: '#0284c7', fontWeight: 500 }}>
+              <span style={{ fontSize: '12px', color: '#0d74ce', fontWeight: 500 }}>
                 已选：{uploadFileName}
               </span>
             )}
-            {globalLoading && <span style={{ fontSize: '12px', color: '#64748b' }}>上传导入中…</span>}
+            {globalLoading && <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>上传导入中…</span>}
           </div>
         </div>
       )}
 
       {activeIngestion === 'scan' && (
-        <div className="ops-action-card ops-action-card-purple animate-scale-in" style={{ marginBottom: '14px', border: '1px solid #ddd6fe' }}>
+        <div className="ops-action-card ops-action-card-purple animate-scale-in" style={{ marginBottom: '14px', border: '0.5px solid #cbcdff' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>🔍</span>
+              <span style={{ fontSize: 22 }}>🔍</span>
               <div>
-                <strong style={{ fontSize: '14px', color: '#0f172a' }}>关键词扫描外部样本</strong>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>补充自然讨论样本池</div>
+                <strong style={{ fontSize: '14px', color: '#1c2024' }}>关键词扫描外部样本</strong>
+                <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>补充自然讨论样本池</div>
               </div>
             </div>
-            <button type="button" onClick={() => setActiveIngestion(null)} style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: '#64748b' }}>✕ 收起</button>
+            <button type="button" onClick={() => setActiveIngestion(null)} style={{ background: 'none', border: 'none', fontSize: '16px', cursor: 'pointer', color: 'var(--slate-11, #60646c)' }}>✕ 收起</button>
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center', marginTop: '10px' }}>
             <input
-              style={{ flex: 1, minWidth: '180px', padding: '6px 10px', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '13px' }}
+              style={{ flex: 1, minWidth: '180px', padding: '6px 10px', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', fontSize: '14px' }}
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
               placeholder="关键词用逗号分隔"
@@ -296,7 +296,7 @@ export function ContentRegistry({
               onChange={(e) => setScanFrom(e.target.value)}
               placeholder="开始日期"
             />
-            <span style={{ fontSize: '12px', color: '#64748b' }}>至</span>
+            <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>至</span>
             <CustomDatePicker
               style={{ width: '130px', fontSize: '12px' }}
               value={scanTo}
@@ -306,14 +306,14 @@ export function ContentRegistry({
             <button
               type="button"
               className="primary"
-              style={{ fontSize: '12.5px', padding: '6px 12px', background: '#6d28d9', borderColor: '#5b21b6' }}
+              style={{ fontSize: 14, padding: '6px 12px', background: '#5753c6', borderColor: '#272962' }}
               disabled={scanning || !keywords.trim()}
               onClick={handleScan}
             >
               {scanning ? '扫描中…' : '执行扫描'}
             </button>
           </div>
-          {scanResult && <div style={{ fontSize: '12px', color: '#6d28d9', marginTop: '6px' }}>{scanResult}</div>}
+          {scanResult && <div style={{ fontSize: '12px', color: '#5753c6', marginTop: '6px' }}>{scanResult}</div>}
         </div>
       )}
 
@@ -327,7 +327,7 @@ export function ContentRegistry({
             <button
               type="button"
               className="subtle-btn"
-              style={{ fontSize: '12.5px', padding: '5px 12px', background: activeIngestion === 'import' ? '#eff6ff' : '#fff', color: activeIngestion === 'import' ? '#0284c7' : '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+              style={{ fontSize: 14, padding: '5px 12px', background: activeIngestion === 'import' ? '#e6f4fe' : '#fff', color: activeIngestion === 'import' ? '#0d74ce' : '#1c2024', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', cursor: 'pointer' }}
               onClick={() => setActiveIngestion(activeIngestion === 'import' ? null : 'import')}
             >
               📥 批量导入内容
@@ -335,7 +335,7 @@ export function ContentRegistry({
             <button
               type="button"
               className="subtle-btn"
-              style={{ fontSize: '12.5px', padding: '5px 12px', background: activeIngestion === 'scan' ? '#f5f3ff' : '#fff', color: activeIngestion === 'scan' ? '#7c3aed' : '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+              style={{ fontSize: 14, padding: '5px 12px', background: activeIngestion === 'scan' ? '#f0f1fe' : '#fff', color: activeIngestion === 'scan' ? '#5753c6' : '#1c2024', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', cursor: 'pointer' }}
               onClick={() => setActiveIngestion(activeIngestion === 'scan' ? null : 'scan')}
             >
               🔍 扫描外部样本
@@ -343,7 +343,7 @@ export function ContentRegistry({
             <button
               type="button"
               className="subtle-btn"
-              style={{ fontSize: '12.5px', padding: '5px 12px', background: '#ffffff', color: '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+              style={{ fontSize: 14, padding: '5px 12px', background: '#ffffff', color: '#1c2024', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', cursor: 'pointer' }}
               onClick={() => { loadData(); onRefresh(); }}
               disabled={loading}
             >
@@ -351,7 +351,7 @@ export function ContentRegistry({
             </button>
             <Link
               className="subtle-btn"
-              style={{ fontSize: '12.5px', padding: '5px 12px', background: '#ffffff', color: '#334155', border: '1px solid #cbd5e1', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+              style={{ fontSize: 14, padding: '5px 12px', background: '#ffffff', color: '#1c2024', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
               href={'/api/export?type=notes&projectId=' + encodeURIComponent(projectId)}
             >
               导出台账 ↗
@@ -391,7 +391,7 @@ export function ContentRegistry({
           <button
             type="button"
             className="subtle-btn"
-            style={{ fontSize: '12.5px', padding: '5px 10px', background: showMoreFilters || hasAdvancedFilters ? '#f0f9ff' : '#ffffff', color: showMoreFilters || hasAdvancedFilters ? '#0284c7' : '#475569', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer' }}
+            style={{ fontSize: 14, padding: '5px 10px', background: showMoreFilters || hasAdvancedFilters ? '#e6f4fe' : '#ffffff', color: showMoreFilters || hasAdvancedFilters ? '#0d74ce' : '#60646c', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '6px', cursor: 'pointer' }}
             onClick={() => setShowMoreFilters(!showMoreFilters)}
           >
             更多筛选 {hasAdvancedFilters ? '(已设)' : '▾'}
@@ -399,7 +399,7 @@ export function ContentRegistry({
         </WorkspaceToolbar>
 
         {showMoreFilters && (
-          <div style={{ marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed #e2e8f0' }}>
+          <div style={{ marginTop: '6px', paddingTop: '6px', borderTop: '0.5px dashed #d9d9e0' }}>
           <WorkspaceToolbar>
           <StyledSelect value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }} aria-label="内容方向筛选">
             <option value="">全部内容方向</option>
@@ -434,19 +434,19 @@ export function ContentRegistry({
         )}
 
         {activeFilterCount > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', margin: '8px 0 12px', fontSize: '12px', color: '#64748b' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', margin: '8px 0 12px', fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
             <span>已生效筛选 ({activeFilterCount})：</span>
-            {query && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>搜索: {query}</span>}
-            {source && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>来源: {source === 'owned' ? '自有发布' : source === 'commercial' ? '商业合作' : '关键词扫描'}</span>}
-            {scope && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>范围: {scope}</span>}
-            {status && <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>状态: {status}</span>}
-            {category && <span className="section-mini-tag tag-teal" style={{ fontSize: '11px' }}>方向: {category}</span>}
-            {sort && <span className="section-mini-tag tag-purple" style={{ fontSize: '11px' }}>排序: {sort}</span>}
-            {(from || to) && <span className="section-mini-tag tag-teal" style={{ fontSize: '11px' }}>日期: {from || '不限'} ~ {to || '不限'}</span>}
+            {query && <span className="section-mini-tag tag-blue" style={{ fontSize: '12px' }}>搜索: {query}</span>}
+            {source && <span className="section-mini-tag tag-blue" style={{ fontSize: '12px' }}>来源: {source === 'owned' ? '自有发布' : source === 'commercial' ? '商业合作' : '关键词扫描'}</span>}
+            {scope && <span className="section-mini-tag tag-blue" style={{ fontSize: '12px' }}>范围: {scope}</span>}
+            {status && <span className="section-mini-tag tag-blue" style={{ fontSize: '12px' }}>状态: {status}</span>}
+            {category && <span className="section-mini-tag tag-teal" style={{ fontSize: '12px' }}>方向: {category}</span>}
+            {sort && <span className="section-mini-tag tag-purple" style={{ fontSize: '12px' }}>排序: {sort}</span>}
+            {(from || to) && <span className="section-mini-tag tag-teal" style={{ fontSize: '12px' }}>日期: {from || '不限'} ~ {to || '不限'}</span>}
             <button
               type="button"
               className="text-link"
-              style={{ fontSize: '11.5px', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}
+              style={{ fontSize: '12px', color: '#ce2c31', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 6px' }}
               onClick={resetFilters}
             >
               清除全部筛选
@@ -491,7 +491,7 @@ export function ContentRegistry({
                           {note.title || '未命名笔记'}
                         </span>
                         <span className="ops-table-note-sub">
-                          {note.author || '未知博主'} · <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 10)}…</small>
+                          {note.author || '未知博主'} / <small style={{ fontFamily: 'monospace' }}>{note.id.slice(0, 10)}…</small>
                         </span>
                       </div>
                     </div>
@@ -501,30 +501,30 @@ export function ContentRegistry({
                       <StatusBadge
                         status={note.sourceType === 'owned' ? '自有发布' : note.sourceType === 'commercial' ? '商业合作' : '外部扫描'}
                       />
-                      <span style={{ fontSize: '11.5px', color: '#64748b' }}>{note.productScope || '本品'}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>{note.productScope || '本品'}</span>
                     </div>
                   </td>
                   <td>
-                    <span style={{ fontSize: '13px', color: '#334155' }}>
+                    <span style={{ fontSize: '14px', color: '#1c2024' }}>
                       {note.category1 || note.noteType || '待补充'}
                     </span>
                   </td>
                   <td>
-                    <span style={{ fontSize: '12px', color: '#64748b' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
                       {note.publishedAt ? note.publishedAt.slice(0, 10) : '—'}
                     </span>
                   </td>
                   <td className="num" style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '12.5px' }}>
+                    <div style={{ fontSize: 14 }}>
                       <div>阅读：<strong>{compact(note.readCount)}</strong></div>
-                      <div style={{ color: '#64748b' }}>互动：{compact(note.interactionCount)}</div>
+                      <div style={{ color: 'var(--slate-11, #60646c)' }}>互动：{compact(note.interactionCount)}</div>
                     </div>
                   </td>
                   <td className="num" style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '12px' }}>
                       <div>总评：<strong>{note.commentTotal}</strong></div>
-                      <div style={{ color: '#64748b' }}>
-                        {note.isFetched ? `已抓取 · ${cnTime(note.lastFetchedAt).slice(5)}` : '待抓取'}
+                      <div style={{ color: 'var(--slate-11, #60646c)' }}>
+                        {note.isFetched ? `已抓取 / ${cnTime(note.lastFetchedAt).slice(5)}` : '待抓取'}
                       </div>
                     </div>
                   </td>
@@ -547,7 +547,7 @@ export function ContentRegistry({
                           target="_blank"
                           rel="noreferrer"
                           className="text-link"
-                          style={{ color: '#64748b' }}
+                          style={{ color: 'var(--slate-11, #60646c)' }}
                         >
                           原笔记 ↗
                         </a>
@@ -555,7 +555,7 @@ export function ContentRegistry({
                       <Link
                         href={`/projects/${encodeURIComponent(projectId)}/comments?tab=collection&noteId=${encodeURIComponent(note.id)}`}
                         className="text-link"
-                        style={{ color: '#0284c7' }}
+                        style={{ color: '#0d74ce' }}
                       >
                         前往评论监测 →
                       </Link>

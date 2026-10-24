@@ -20,10 +20,10 @@ export function CommentEfficiencyBoard({
   onSelectAction: (action: string) => void;
 }) {
   const actions = [
-    { action: 'reply', label: '需回复', amount: summary.replyPending, color: '#1e6091' },
-    { action: 'delete', label: '需删除', amount: summary.deletePending, color: '#b0483f' },
-    { action: 'supplement', label: '需补充', amount: summary.supplementPending, color: '#a66f22' },
-    { action: 'observe', label: '保留观察', amount: summary.observePending, color: '#64748b' },
+    { action: 'reply', label: '需回复', amount: summary.replyPending, color: '#0d74ce' },
+    { action: 'delete', label: '需删除', amount: summary.deletePending, color: '#ce2c31' },
+    { action: 'supplement', label: '需补充', amount: summary.supplementPending, color: '#ab6400' },
+    { action: 'observe', label: '保留观察', amount: summary.observePending, color: '#60646c' },
   ];
 
   const pendingMatches = actions.reduce((sum, item) => sum + item.amount, 0);
@@ -92,18 +92,18 @@ export function CommentEfficiencyBoard({
           </div>
 
           {/* 状态看板提示卡片 */}
-          <div style={{ padding: '14px 16px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <div style={{ fontWeight: 600, fontSize: 13, color: '#334155' }}>处置统计与口径约束</div>
+          <div style={{ padding: '14px 16px', background: '#f9f9fb', borderRadius: '10px', border: '0.5px solid #d9d9e0', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ fontWeight: 600, fontSize: 14, color: '#1c2024' }}>处置统计与口径约束</div>
             <p className="muted" style={{ margin: 0, fontSize: 12, lineHeight: 1.6 }}>
               待办动作共 {pendingMatches.toLocaleString()} 次命中，包含保留观察 {summary.observePending.toLocaleString()} 次。
             </p>
-            <p className="muted" style={{ margin: 0, fontSize: 12, lineHeight: 1.6, color: '#64748b' }}>
+            <p className="muted" style={{ margin: 0, fontSize: 12, lineHeight: 1.6, color: '#60646c' }}>
               接口未提供同口径的去重待办总数，暂不计算闭环率。
             </p>
           </div>
 
           {/* 底部详细口径提示 */}
-          <div style={{ padding: '10px 12px', background: '#f1f5f9', borderRadius: '8px', fontSize: '11.5px', color: '#64748b', lineHeight: 1.5 }}>
+          <div style={{ padding: '10px 12px', background: '#f0f0f3', borderRadius: '8px', fontSize: 12, color: '#60646c', lineHeight: 1.5 }}>
             <div>• 已处理按物理记录条数归档，待办按规则动作独立命中计数。</div>
             <div>• 若单篇笔记命中多个不同处置动作，待办状态下分别跟进，处置后统一归入归档池。</div>
           </div>

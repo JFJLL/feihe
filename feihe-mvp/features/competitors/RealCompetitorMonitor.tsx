@@ -128,7 +128,7 @@ export function RealCompetitorMonitor({
   if (loading && !data && isConfigured) {
     return (
       <div className="competitor-monitor" style={{ padding: '2rem 1rem', textAlign: 'center' }}>
-        <div style={{ color: '#64748b', fontSize: '0.875rem' }}>正在读取本地真实竞品数据...</div>
+        <div style={{ color: 'var(--slate-11, #60646c)', fontSize: '0.875rem' }}>正在读取本地真实竞品数据...</div>
       </div>
     );
   }
@@ -151,7 +151,7 @@ export function RealCompetitorMonitor({
               ⚙️ 立即绑定数据源与配置
             </button>
           ) : (
-            <div style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>
+            <div style={{ fontSize: 14, color: '#60646c' }}>
               您当前为观察者权限，请联系项目管理员进行数据源配置。
             </div>
           )}
@@ -177,7 +177,7 @@ export function RealCompetitorMonitor({
       <div className="comp-status-banner">
         <div className="comp-status-left">
           <div className="comp-pulse-dot" />
-          <strong style={{ fontSize: '0.875rem', color: '#0f172a' }}>
+          <strong style={{ fontSize: '0.875rem', color: '#1c2024' }}>
             真实竞品监测 (本地归一化库)
           </strong>
           <span className="comp-tag info">
@@ -189,7 +189,7 @@ export function RealCompetitorMonitor({
           <div className="comp-status-meta">
             {summary?.dateRange.minDate ? (
               <span>
-                有效窗口: {summary.dateRange.minDate} 至 {summary.dateRange.maxDate} · 共已入库 {summary.totalNotes} 篇样本
+                有效窗口: {summary.dateRange.minDate} 至 {summary.dateRange.maxDate} / 共已入库 {summary.totalNotes} 篇样本
               </span>
             ) : (
               <span>尚无入库样本</span>
@@ -198,7 +198,7 @@ export function RealCompetitorMonitor({
         </div>
         <div className="comp-status-actions">
           {syncMessage && (
-            <span style={{ fontSize: '0.75rem', color: '#0284c7', marginRight: '0.5rem' }}>
+            <span style={{ fontSize: '0.75rem', color: '#0d74ce', marginRight: '0.5rem' }}>
               {syncMessage}
             </span>
           )}
@@ -230,13 +230,13 @@ export function RealCompetitorMonitor({
         gap: '0.5rem',
         flexWrap: 'wrap',
         padding: '0.625rem 0.875rem',
-        background: '#f8fafc',
-        border: '1px solid #e2e8f0',
+        background: '#f9f9fb',
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
         borderRadius: '8px',
-        fontSize: '0.78125rem',
+        fontSize: 14,
         alignItems: 'center',
       }}>
-        <strong style={{ color: '#475569' }}>监测关键词与游标:</strong>
+        <strong style={{ color: '#60646c' }}>监测关键词与游标:</strong>
         {(config?.keywords || []).map(kw => {
           const cp = checkpoints.find(c => c.keyword === kw);
           const hasData = cp && cp.rowsImported > 0;
@@ -246,20 +246,20 @@ export function RealCompetitorMonitor({
               style={{
                 padding: '0.2rem 0.5rem',
                 background: '#ffffff',
-                border: '1px solid #cbd5e1',
+                border: '0.5px solid var(--slate-6, #d9d9e0)',
                 borderRadius: '4px',
                 display: 'flex',
                 gap: '0.35rem',
                 alignItems: 'center',
               }}
             >
-              <span style={{ fontWeight: 600, color: '#0f172a' }}>{kw}</span>
+              <span style={{ fontWeight: 600, color: '#1c2024' }}>{kw}</span>
               {hasData ? (
-                <span style={{ color: '#059669', fontSize: '0.71875rem' }}>
+                <span style={{ color: '#29a383', fontSize: 12 }}>
                   已收 {cp.rowsImported} 条 (第 {cp.pageCursor} 页)
                 </span>
               ) : (
-                <span style={{ color: '#94a3b8', fontSize: '0.71875rem' }}>待首次同步</span>
+                <span style={{ color: '#60646c', fontSize: 12 }}>待首次同步</span>
               )}
             </div>
           );
@@ -271,14 +271,14 @@ export function RealCompetitorMonitor({
           <div className="comp-card-label">总入库监测样本</div>
           <div className="comp-card-val">{summary?.totalNotes ?? 0} <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>篇</span></div>
           <div className="comp-card-sub">
-            上游评估总数约 {summary?.upstreamTotalCount ? summary.upstreamTotalCount.toLocaleString() : '32,000+'} 条 · 当前为经验证抽样
+            上游评估总数约 {summary?.upstreamTotalCount ? summary.upstreamTotalCount.toLocaleString() : '32,000+'} 条 / 当前为经验证抽样
           </div>
         </div>
         <div className="comp-card">
           <div className="comp-card-label">累计互动量 (转评赞藏)</div>
           <div className="comp-card-val">{summary?.totalInteractions ?? 0} <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>次</span></div>
           <div className="comp-card-sub">
-            来自真实采集字段统计 · 无广告金额别称
+            来自真实采集字段统计 / 无广告金额别称
           </div>
         </div>
         <div className="comp-card">
@@ -287,12 +287,12 @@ export function RealCompetitorMonitor({
             {summary?.commercialRatio ? summary.commercialRatio.toFixed(1) + '%' : '0.0%'}
           </div>
           <div className="comp-card-sub">
-            商业合作 {summary?.commercialCount ?? 0} 篇 · 真实自费 {summary?.naturalCount ?? 0} 篇 · 特征待补全 {summary?.unknownNatureCount ?? 0} 篇
+            商业合作 {summary?.commercialCount ?? 0} 篇 / 真实自费 {summary?.naturalCount ?? 0} 篇 / 特征待补全 {summary?.unknownNatureCount ?? 0} 篇
           </div>
         </div>
         <div className="comp-card">
           <div className="comp-card-label">消费者问题与反馈</div>
-          <div className="comp-card-val" style={{ color: '#dc2626' }}>
+          <div className="comp-card-val" style={{ color: '#ce2c31' }}>
             {summary?.consumerIssuesCount ?? 0} <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>条线索</span>
           </div>
           <div className="comp-card-sub">
@@ -303,15 +303,15 @@ export function RealCompetitorMonitor({
 
       <div style={{
         background: '#ffffff',
-        border: '1px solid #e2e8f0',
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
         borderRadius: '10px',
         padding: '1.25rem',
       }}>
         <div style={{ marginBottom: '0.875rem' }}>
-          <h4 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a' }}>
+          <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1c2024' }}>
             竞品品牌声量份额与篇均效率 (基于明确提及判定)
           </h4>
-          <small style={{ color: '#64748b' }}>
+          <small style={{ color: 'var(--slate-11, #60646c)' }}>
             核心准则：关键词命中不等于品牌归属。仅当正文或标题明确指向某品牌时归类，多品牌或通用品类分别标出。
           </small>
         </div>
@@ -336,7 +336,7 @@ export function RealCompetitorMonitor({
                       key={b.brand}
                       style={{
                         cursor: 'pointer',
-                        backgroundColor: isSelected ? '#f0f9ff' : undefined,
+                        backgroundColor: isSelected ? '#e6f4fe' : undefined,
                         transition: 'background-color 0.2s',
                       }}
                       onClick={() => handleBrandFilter(b.brand)}
@@ -350,7 +350,7 @@ export function RealCompetitorMonitor({
                             border: 'none',
                             padding: 0,
                             fontWeight: 700,
-                            color: '#0284c7',
+                            color: '#0d74ce',
                             cursor: 'pointer',
                             fontSize: 'inherit',
                             textAlign: 'left',
@@ -370,11 +370,11 @@ export function RealCompetitorMonitor({
                           type="button"
                           style={{
                             background: 'none',
-                            border: '1px solid #bfdbfe',
+                            border: '0.5px solid #acd8fc',
                             padding: '2px 8px',
                             borderRadius: '4px',
-                            color: '#0284c7',
-                            backgroundColor: isSelected ? '#dbeafe' : '#eff6ff',
+                            color: '#0d74ce',
+                            backgroundColor: isSelected ? '#e6f4fe' : '#e6f4fe',
                             fontWeight: 600,
                             cursor: 'pointer',
                             fontSize: 'inherit',
@@ -396,7 +396,7 @@ export function RealCompetitorMonitor({
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', color: '#94a3b8', padding: '1.5rem' }}>
+                  <td colSpan={5} style={{ textAlign: 'center', color: '#60646c', padding: '1.5rem' }}>
                     暂无品牌样本统计
                   </td>
                 </tr>
@@ -408,15 +408,15 @@ export function RealCompetitorMonitor({
 
       <div style={{
         background: '#ffffff',
-        border: '1px solid #e2e8f0',
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
         borderRadius: '10px',
         padding: '1.25rem',
       }}>
         <div style={{ marginBottom: '1rem' }}>
-          <h4 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a' }}>
+          <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1c2024' }}>
             消费者疑问、反馈与风险线索分析 (真实原文提取)
           </h4>
-          <small style={{ color: '#64748b' }}>
+          <small style={{ color: 'var(--slate-11, #60646c)' }}>
             基于自然语言规则从真实笔记标题与内容中提取的痛点线索；规则洞察不冒充已证实消费者真实性，附带原文证据核验。
           </small>
         </div>
@@ -436,7 +436,7 @@ export function RealCompetitorMonitor({
               </div>
               {cat.sampleNotes.length > 0 && (
                 <div>
-                  <div style={{ fontSize: '0.71875rem', fontWeight: 600, color: '#64748b', marginBottom: '0.2rem' }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--slate-11, #60646c)', marginBottom: '0.2rem' }}>
                     代表笔记与证据引用 (点击查看详情):
                   </div>
                   {cat.sampleNotes.slice(0, 2).map((s, idx) => {
@@ -455,7 +455,7 @@ export function RealCompetitorMonitor({
                               background: 'none',
                               border: 'none',
                               padding: 0,
-                              color: '#0284c7',
+                              color: '#0d74ce',
                               fontWeight: 600,
                               cursor: 'pointer',
                               textAlign: 'left',
@@ -466,7 +466,7 @@ export function RealCompetitorMonitor({
                           >
                             [{displayBrand}] {s.title}
                           </button>
-                          <span style={{ color: '#475569', marginLeft: '4px' }}>: {s.excerpt}</span>
+                          <span style={{ color: '#60646c', marginLeft: '4px' }}>: {s.excerpt}</span>
                         </div>
                         <button
                           type="button"
@@ -474,9 +474,9 @@ export function RealCompetitorMonitor({
                           style={{
                             flexShrink: 0,
                             fontSize: '0.75rem',
-                            background: '#eff6ff',
-                            border: '1px solid #bfdbfe',
-                            color: '#0284c7',
+                            background: '#e6f4fe',
+                            border: '0.5px solid #acd8fc',
+                            color: '#0d74ce',
                             padding: '1px 6px',
                             borderRadius: '4px',
                             cursor: 'pointer',
@@ -497,18 +497,18 @@ export function RealCompetitorMonitor({
 
       <div style={{
         background: '#ffffff',
-        border: '1px solid #e2e8f0',
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
         borderRadius: '10px',
         padding: '1.25rem',
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <h4 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a' }}>
+          <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1c2024' }}>
             达人层级分布
           </h4>
           <span className="comp-tag">粉丝数未提供</span>
         </div>
-        <details style={{ margin: '0 0 0.75rem 0', fontSize: '0.8125rem', color: '#64748b' }}>
-          <summary style={{ cursor: 'pointer', color: '#0284c7' }}>口径说明</summary>
+        <details style={{ margin: '0 0 0.75rem 0', fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
+          <summary style={{ cursor: 'pointer', color: '#0d74ce' }}>口径说明</summary>
           上游采集接口原始记录中未提供达人粉丝数字段，系统严格按事实标注为粉丝数未提供，不凭空推测或伪造层级。
         </details>
         <div style={{
@@ -516,12 +516,12 @@ export function RealCompetitorMonitor({
           gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: '0.75rem',
         }}>
-          <div style={{ padding: '0.75rem', background: '#f8fafc', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: '0.75rem', color: '#64748b' }}>粉丝数未提供</div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0f172a', margin: '0.2rem 0' }}>
+          <div style={{ padding: '0.75rem', background: '#f9f9fb', borderRadius: '6px', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--slate-11, #60646c)' }}>粉丝数未提供</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '0.2rem 0' }}>
               {summary?.totalNotes ?? 0} 篇
             </div>
-            <div style={{ fontSize: '0.71875rem', color: '#0284c7' }}>占比 100%</div>
+            <div style={{ fontSize: 12, color: '#0d74ce' }}>占比 100%</div>
           </div>
         </div>
       </div>
@@ -530,18 +530,18 @@ export function RealCompetitorMonitor({
         ref={evidenceTableRef}
         style={{
           background: '#ffffff',
-          border: '1px solid #e2e8f0',
+          border: '0.5px solid var(--slate-6, #d9d9e0)',
           borderRadius: '10px',
           padding: '1.25rem',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.875rem', flexWrap: 'wrap', gap: '0.5rem' }}>
           <div>
-            <h4 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 700, color: '#0f172a' }}>
+            <h4 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1c2024' }}>
               证据笔记明细列表 (服务端分页)
             </h4>
-            <small style={{ color: '#64748b' }}>
-              显示真实发布时间、采集入库时间、24/32位 ID 原型及疑似重复标记；点击标题可查看正文详情{data?.pagination ? `（共 ${data.pagination.total} 篇笔记${brandFilter ? ` · 已筛选品牌: ${brandFilter === 'unknown' ? '待识别品牌' : brandFilter}` : ''}）` : ''}
+            <small style={{ color: 'var(--slate-11, #60646c)' }}>
+              显示真实发布时间、采集入库时间、24/32位 ID 原型及疑似重复标记；点击标题可查看正文详情{data?.pagination ? `（共 ${data.pagination.total} 篇笔记${brandFilter ? ` / 已筛选品牌: ${brandFilter === 'unknown' ? '待识别品牌' : brandFilter}` : ''}）` : ''}
             </small>
           </div>
           <div className="comp-filter-bar" style={{ padding: '0.35rem 0.5rem', display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -588,12 +588,12 @@ export function RealCompetitorMonitor({
               </StyledSelect>
             </div>
             {brandFilter && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '4px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', background: '#e6f4fe', color: '#0d74ce', padding: '2px 8px', borderRadius: '4px' }}>
                 <span>已筛选: <strong>{brandFilter === 'unknown' ? '待识别品牌' : brandFilter}</strong></span>
                 <button
                   type="button"
                   onClick={() => { setBrandFilter(''); setPage(1); }}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0369a1', fontWeight: 700, padding: 0 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0d74ce', fontWeight: 700, padding: 0 }}
                   aria-label="清除品牌筛选"
                 >
                   ×
@@ -630,7 +630,7 @@ export function RealCompetitorMonitor({
                           padding: 0,
                           textAlign: 'left',
                           fontWeight: 600,
-                          color: '#0284c7',
+                          color: '#0d74ce',
                           cursor: 'pointer',
                           fontSize: '0.875rem',
                           marginBottom: '0.2rem',
@@ -646,19 +646,19 @@ export function RealCompetitorMonitor({
                           href={n.noteUrl}
                           target="_blank"
                           rel="noreferrer"
-                          style={{ fontSize: '0.75rem', color: '#0284c7', textDecoration: 'none' }}
+                          style={{ fontSize: '0.75rem', color: '#0d74ce', textDecoration: 'none' }}
                         >
                           打开小红书原文 ↗
                         </a>
                       ) : n.noteUrl ? (
-                        <span style={{ fontSize: '0.71875rem', color: '#94a3b8' }}>
+                        <span style={{ fontSize: 12, color: '#60646c' }}>
                           ID: {n.noteUrl}
                         </span>
                       ) : null}
                     </td>
                     <td>
-                      <div style={{ fontSize: '0.8125rem' }}>{n.keywordHit}</div>
-                      <div style={{ fontSize: '0.71875rem', color: '#64748b' }}>
+                      <div style={{ fontSize: 14 }}>{n.keywordHit}</div>
+                      <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                         归属: <strong>{n.brandAttributed === 'unknown' ? '待识别品牌' : n.brandAttributed}</strong> ({n.productLine})
                       </div>
                     </td>
@@ -682,7 +682,7 @@ export function RealCompetitorMonitor({
                     </td>
                     <td>
                       <strong>{n.interactionTotal}</strong>
-                      <div style={{ fontSize: '0.6875rem', color: '#64748b' }}>
+                      <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                         {n.likedCount} / {n.commentCount} / {n.collectedCount} / {n.shareCount}
                       </div>
                     </td>
@@ -690,7 +690,7 @@ export function RealCompetitorMonitor({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', color: '#94a3b8', padding: '1.5rem' }}>
+                  <td colSpan={7} style={{ textAlign: 'center', color: '#60646c', padding: '1.5rem' }}>
                     暂无匹配的笔记样本
                   </td>
                 </tr>
@@ -705,10 +705,10 @@ export function RealCompetitorMonitor({
             justifyContent: 'space-between',
             alignItems: 'center',
             marginTop: '0.875rem',
-            fontSize: '0.8125rem',
+            fontSize: 14,
           }}>
-            <span style={{ color: '#64748b' }}>
-              第 {data.pagination.page} / {data.pagination.totalPages} 页 · 共 {data.pagination.total} 条
+            <span style={{ color: 'var(--slate-11, #60646c)' }}>
+              第 {data.pagination.page} / {data.pagination.totalPages} 页 / 共 {data.pagination.total} 条
             </span>
             <div style={{ display: 'flex', gap: '0.35rem' }}>
               <button

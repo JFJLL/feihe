@@ -61,16 +61,16 @@ function GroupHeading({
         flexWrap: 'wrap',
         margin: '12px 0 6px',
         padding: '4px 0 2px',
-        borderBottom: '2px solid #eef2f6',
+        borderBottom: '2px solid #f0f0f3',
         outline: 'none',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <h3
           style={{
-            fontSize: 14.5,
+            fontSize: 14,
             fontWeight: 700,
-            color: '#1f2937',
+            color: 'var(--slate-12, #1c2024)',
             margin: 0,
             display: 'flex',
             alignItems: 'center',
@@ -80,11 +80,11 @@ function GroupHeading({
           {badge && (
             <span
               style={{
-                fontFamily: 'monospace', fontSize: 11, fontWeight: 700,
+                fontFamily: 'monospace', fontSize: 12, fontWeight: 700,
                 padding: '1px 5px',
                 borderRadius: 3,
-                background: '#eaf2f0',
-                color: '#2c7168',
+                background: 'var(--teal-3, #e0f8f3)',
+                color: 'var(--teal-11, #008573)',
               }}
             >
               {badge}
@@ -93,7 +93,7 @@ function GroupHeading({
           {title}
         </h3>
         {subtitle && (
-          <span style={{ fontSize: 11.5, color: '#64748b' }}>{subtitle}</span>
+          <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>{subtitle}</span>
         )}
       </div>
     </div>
@@ -132,7 +132,7 @@ function Source({ value }: { value?: SourceRef }) {
       <a href={value.url} target="_blank" rel="noreferrer">原始业务来源 ↗</a>
       <span>
         版本 {value.version}
-        {value.row ? (' · 第' + value.row + '行' + (value.column ? '第' + value.column + '列' : '')) : ''} · {value.sourceKey}
+        {value.row ? (' / 第' + value.row + '行' + (value.column ? '第' + value.column + '列' : '')) : ''} / {value.sourceKey}
       </span>
       {value.range && (
         <>
@@ -169,7 +169,7 @@ function Value({ value, unit = '元' }: { value: Cell; unit?: string }) {
       </strong>
       <small className={'bd-state bd-' + value.state}>
         {value.state === 'observed' && value.value === 0 ? '真实零' : cellLabels[value.state]}
-        {value.reason ? ' · ' + value.reason : ''}
+        {value.reason ? ' / ' + value.reason : ''}
       </small>
       <Source value={value.source} />
     </>
@@ -287,7 +287,7 @@ function NarrativeBlock({ title, view }: { title: string; view: DailyView }) {
   const sections = view.narrative.filter(n => n.title.includes(title));
   return sections.length ? (
     <details className="bv-report-text">
-      <summary>展开作者判断与动作 · {title}</summary>
+      <summary>展开作者判断与动作 / {title}</summary>
       {sections.map((n, i) => (
         <div className="bd-narrative" key={i}>
           <h4>{n.title}</h4>
@@ -312,8 +312,8 @@ function NoteRows({ notes, projectId, day }: { notes: DailyView['notes']; projec
               <td>
                 <b>{n.author || n.id}</b>
                 <small>
-                  {format(n.monthSpend.value)} 元 · {n.publishedDay || '发布日期待确认'}
-                  {n.publishedDay && !n.publishedDay.startsWith(day.slice(0, 7)) ? ' · 历史笔记本月在投' : ''}
+                  {format(n.monthSpend.value)} 元 / {n.publishedDay || '发布日期待确认'}
+                  {n.publishedDay && !n.publishedDay.startsWith(day.slice(0, 7)) ? ' / 历史笔记本月在投' : ''}
                 </small>
               </td>
               <td>
@@ -428,23 +428,23 @@ function Funnel({
       ];
 
   return (
-    <article className="bd-funnel" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, padding: 14 }}>
+    <article className="bd-funnel" style={{ background: '#ffffff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 8, padding: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <h4 style={{ margin: 0, fontSize: 13, color: '#1f2937' }}>{title}</h4>
+        <h4 style={{ margin: 0, fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>{title}</h4>
         <span
           style={{
-            fontSize: 10.5,
+            fontSize: 12,
             fontWeight: 600,
             padding: '1px 6px',
             borderRadius: 4,
-            background: isComplete ? '#eaf2f0' : hasObserved ? '#fef3c7' : '#f1f5f9',
-            color: isComplete ? '#2c7168' : hasObserved ? '#b45309' : '#64748b',
+            background: isComplete ? 'var(--teal-3, #e0f8f3)' : hasObserved ? 'var(--amber-3, #fff7c2)' : 'var(--slate-3, #f0f0f3)',
+            color: isComplete ? 'var(--teal-11, #008573)' : hasObserved ? 'var(--amber-11, #ab6400)' : 'var(--slate-11, #60646c)',
           }}
         >
           {isComplete
             ? `全区间已回传 (${coveredDays}/${totalDays}天)`
             : hasObserved
-            ? `已回传实绩 · ${periodText} (${coveredDays}/${totalDays}天)`
+            ? `已回传实绩 / ${periodText} (${coveredDays}/${totalDays}天)`
             : '该区间暂未回传'}
         </span>
       </div>
@@ -453,47 +453,47 @@ function Funnel({
         <>
       <div className="bd-funnel-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 }}>
           {steps.map(([name, val, sub]) => (
-          <div key={name} style={{ background: '#f8fafc', border: '1px solid #edf2f7', borderRadius: 6, padding: '8px 10px' }}>
-            <span style={{ fontSize: 11, color: '#64748b' }}>{name}</span>
-              <strong style={{ display: 'block', fontSize: 16, margin: '4px 0 2px', color: '#1f2937' }}>
+          <div key={name} style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-4, #e8e8ec)', borderRadius: 6, padding: '8px 10px' }}>
+            <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>{name}</span>
+              <strong style={{ display: 'block', fontSize: 16, margin: '4px 0 2px', color: 'var(--slate-12, #1c2024)' }}>
                 {format(val)}
               </strong>
-              <small style={{ fontSize: 10, color: '#8c9ba5' }}>{sub}</small>
+              <small style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>{sub}</small>
           </div>
         ))}
       </div>
 
           {!isComplete && (
-            <div style={{ marginTop: 8, padding: '6px 10px', background: '#fafaf9', border: '1px solid #e7e5e4', borderRadius: 5 }}>
-              <span style={{ fontSize: 11, color: '#78716c' }}>
+            <div style={{ marginTop: 8, padding: '6px 10px', background: '#fcfcfd', border: '0.5px solid var(--slate-5, #e0e1e6)', borderRadius: 5 }}>
+              <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                 {title.includes('星') ? '10月14日–15日' : '10月13日–15日'}底表暂未回传；未覆盖日不补0，上方展示 {periodText} 真实阶段指标，不伪装全区间合计。
               </span>
             </div>
           )}
         </>
       ) : (
-        <div className="bd-funnel-compact-status" style={{ background: '#fafaf9', border: '1px solid #e7e5e4', borderRadius: 6, padding: '10px 12px', margin: '4px 0 8px' }}>
-          <span style={{ fontSize: 11.5, color: '#57534e', fontWeight: 600 }}>电商归因全链路状态</span>
-          <p style={{ margin: '2px 0 0', fontSize: 11, color: '#78716c', lineHeight: 1.4 }}>
+        <div className="bd-funnel-compact-status" style={{ background: '#fcfcfd', border: '0.5px solid var(--slate-5, #e0e1e6)', borderRadius: 6, padding: '10px 12px', margin: '4px 0 8px' }}>
+          <span style={{ fontSize: 12, color: 'var(--slate-12, #1c2024)', fontWeight: 600 }}>电商归因全链路状态</span>
+          <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--slate-11, #60646c)', lineHeight: 1.4 }}>
             所选统计区间内底表暂无有效电商归因回传；待相关数据录入后自动呈现。
           </p>
         </div>
       )}
 
       {/* 独立口径单列展示区域 */}
-      <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px dashed #e2e8f0', display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11 }}>
-          <span style={{ color: '#64748b' }}>
-            聚光监测进店UV（独立口径）：<strong style={{ color: '#1f2937' }}>{format(data.monitoredShopUv?.value ?? observed?.monitoredShopUv ?? null)}</strong>
+      <div style={{ marginTop: 10, paddingTop: 8, borderTop: '0.5px dashed var(--slate-6, #d9d9e0)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
+          <span style={{ color: 'var(--slate-11, #60646c)' }}>
+            聚光监测进店UV（独立口径）：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{format(data.monitoredShopUv?.value ?? observed?.monitoredShopUv ?? null)}</strong>
           </span>
           <span className="bd-caption">已观测（周趋势底表）</span>
         </div>
 
         {Boolean(monthSnapshot?.actual !== undefined && monthSnapshot?.actual !== null) && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11 }}>
-            <span style={{ color: '#64748b' }}>
-              10月15日报月快照进店参考：<strong style={{ color: '#1f2937' }}>{format(parseNumericValue(monthSnapshot?.actual))}</strong>
-              {Boolean(monthSnapshot?.target) && <span style={{ color: '#94a3b8' }}> / 目标 {format(parseNumericValue(monthSnapshot?.target))}</span>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
+            <span style={{ color: 'var(--slate-11, #60646c)' }}>
+              10月15日报月快照进店参考：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{format(parseNumericValue(monthSnapshot?.actual))}</strong>
+              {Boolean(monthSnapshot?.target) && <span style={{ color: 'var(--slate-10, #80838d)' }}> / 目标 {format(parseNumericValue(monthSnapshot?.target))}</span>}
             </span>
             <span className="bd-caption">月累计快照（独立口径不混拼）</span>
           </div>
@@ -555,10 +555,10 @@ function ChannelStructureOverview({ series }: { series: DailyPoint[] }) {
         <div>
           <h4>KFS 全渠道费用构成与占比（区间累计）</h4>
           <span className="bd-caption">
-            {`基于共同完整费用口径（${commonFrom} 至 ${commonThrough}，共 ${completeDays.length} 个完整投流日）累计计算 · 共同区间项目总投入 ¥${format(totalInvestment)}`}
+            {`基于共同完整费用口径（${commonFrom} 至 ${commonThrough}，共 ${completeDays.length} 个完整投流日）累计计算 / 共同区间项目总投入 ¥${format(totalInvestment)}`}
           </span>
           {partialDates.length > 0 && (
-            <div style={{ marginTop: 4, fontSize: 11, color: '#64748b' }}>
+            <div style={{ marginTop: 4, fontSize: 12, color: '#60646c' }}>
               {`注：${partialDatesText} 等日期达人/SEO等费用已登记，因投流广告尚未回填，不混入全渠道占比分母以保持同范围口径。`}
             </div>
           )}
@@ -625,7 +625,7 @@ function AspectSummaryCard({
           deadline: '本日报确认前',
           conclusion: isPending
             ? (view.core.creatorCost?.value !== null
-                ? `${view.day} 费用尚未齐备 · 达人已填报（¥${format(view.core.creatorCost.value)}），投流广告待回填；未齐备指标参考截至 ${view.businessThrough || '10-14'} 完整实绩，月累计广告消耗 ¥${format(view.progress.actualThroughData)}。`
+                ? `${view.day} 费用尚未齐备 / 达人已填报（¥${format(view.core.creatorCost.value)}），投流广告待回填；未齐备指标参考截至 ${view.businessThrough || '10-14'} 完整实绩，月累计广告消耗 ¥${format(view.progress.actualThroughData)}。`
                 : `${view.day} 当日投放费用待录入；截至 ${view.businessThrough || '10-14'} 月累计广告消耗 ¥${format(view.progress.actualThroughData)}，月累计结算 ¥${format(view.core.monthlySettlement?.value)}（进度 ${format((view.progress.settlementFraction ?? 0) * 100)}%）。`)
             : `当日平台广告消耗 ¥${format(view.core.adSpend.value)}，项目总投入 ¥${format(view.core.projectInvestment.value)}，政策后结算 ¥${format(view.core.settlement.value)}。`,
           reason: isPending
@@ -744,8 +744,8 @@ function AspectSummaryCard({
 
   const isTerracotta = aspectKey === 'rectification';
   const accentColor = isTerracotta ? DASHBOARD_PALETTE.anomaly : DASHBOARD_PALETTE.actual;
-  const badgeBg = isTerracotta ? '#faeae6' : '#eaf2f0';
-  const badgeColor = isTerracotta ? '#9e4a37' : '#235952';
+  const badgeBg = isTerracotta ? '#feebec' : '#e6f7ed';
+  const badgeColor = isTerracotta ? '#ce2c31' : '#0d3d38';
 
   return (
     <div
@@ -755,8 +755,7 @@ function AspectSummaryCard({
       data-mode={overview ? 'overview' : 'daily'}
       style={{
         background: '#ffffff',
-        border: '1px solid #e2e8f0',
-        borderLeft: `3px solid ${accentColor}`,
+        border: '0.5px solid var(--slate-6, #d9d9e0)',
         borderRadius: 8,
         padding: '10px 14px',
         margin: '8px 0 12px',
@@ -786,7 +785,7 @@ function AspectSummaryCard({
             className="bd-insight-badge"
             style={{
               display: 'inline-block',
-              fontSize: 11,
+              fontSize: 12,
               fontWeight: 600,
               padding: '2px 7px',
               borderRadius: 4,
@@ -804,7 +803,7 @@ function AspectSummaryCard({
               margin: 0,
               fontSize: 12,
               lineHeight: 1.6,
-              color: '#1f2937',
+              color: 'var(--slate-12, #1c2024)',
               fontWeight: overview ? 500 : 600,
             }}
           >
@@ -818,17 +817,17 @@ function AspectSummaryCard({
             display: 'flex',
             alignItems: 'center',
             gap: 12,
-            fontSize: 11,
-            color: '#64748b',
+            fontSize: 12,
+            color: 'var(--slate-11, #60646c)',
             flexShrink: 0,
           }}
         >
           <span className="bd-insight-owner">
-            责任人：<strong style={{ color: '#334155' }}>{summary.owner}</strong>
+            责任人：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{summary.owner}</strong>
           </span>
           {summary.deadline && (
             <span className="bd-insight-deadline">
-              时限：<strong style={{ color: '#334155' }}>{summary.deadline}</strong>
+              时限：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{summary.deadline}</strong>
             </span>
           )}
         </div>
@@ -839,13 +838,13 @@ function AspectSummaryCard({
         style={{
           marginTop: 8,
           paddingTop: 6,
-          borderTop: '1px dashed #edf2f7',
+          borderTop: '0.5px dashed var(--slate-4, #e8e8ec)',
         }}
       >
         <summary
           style={{
-            fontSize: 11,
-            color: '#64748b',
+            fontSize: 12,
+            color: 'var(--slate-11, #60646c)',
             cursor: 'pointer',
             outline: 'none',
           }}
@@ -858,9 +857,9 @@ function AspectSummaryCard({
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: 12,
-            fontSize: 11.5,
+            fontSize: 12,
             lineHeight: 1.6,
-            color: '#475569',
+            color: 'var(--slate-11, #60646c)',
           }}
         >
           {overview ? (
@@ -869,9 +868,9 @@ function AspectSummaryCard({
                 <span
                   style={{
                     display: 'block',
-                    fontSize: 10.5,
+                    fontSize: 12,
                     fontWeight: 600,
-                    color: '#8c9ba5',
+                    color: '#8b8d98',
                     marginBottom: 2,
                   }}
                 >
@@ -884,9 +883,9 @@ function AspectSummaryCard({
                   <span
                     style={{
                       display: 'block',
-                      fontSize: 10.5,
+                      fontSize: 12,
                       fontWeight: 600,
-                      color: '#8c9ba5',
+                      color: '#8b8d98',
                       marginBottom: 2,
                     }}
                   >
@@ -902,9 +901,9 @@ function AspectSummaryCard({
                 <span
                   style={{
                     display: 'block',
-                    fontSize: 10.5,
+                    fontSize: 12,
                     fontWeight: 600,
-                    color: '#8c9ba5',
+                    color: '#8b8d98',
                     marginBottom: 2,
                   }}
                 >
@@ -916,9 +915,9 @@ function AspectSummaryCard({
                 <span
                   style={{
                     display: 'block',
-                    fontSize: 10.5,
+                    fontSize: 12,
                     fontWeight: 600,
-                    color: '#8c9ba5',
+                    color: '#8b8d98',
                     marginBottom: 2,
                   }}
                 >
@@ -1113,7 +1112,7 @@ export function BusinessDailyBoard({
         <div className="bd-toolbar-compact bd-cockpit-toolbar">
           <div className="bd-cockpit-top-row">
             <div className="bd-toolbar-meta">
-            <span className="bd-meta-chip">{overview ? '数据总览 · 全盘效果' : '分日看板 · 执行底表'}</span>
+            <span className="bd-meta-chip">{overview ? '数据总览 / 全盘效果' : '分日看板 / 执行底表'}</span>
             <span className="bd-meta-text">
               {overview ? (
                 <>
@@ -1135,7 +1134,7 @@ export function BusinessDailyBoard({
             </span>
             {!overview && isTodayCostsPending && (
               <span className="bd-meta-status-chip">
-                当日投放待录入 · 接入 {latestObservedPoint?.date || view?.businessThrough} 实绩
+                当日投放待录入 / 接入 {latestObservedPoint?.date || view?.businessThrough} 实绩
               </span>
             )}
           </div>
@@ -1362,7 +1361,7 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodAdSpend)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + adPoints.length + ' 个有效观测日（' + (view?.from?.slice(5) || '10-01') + ' 至 ' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）· 日均 ¥' + format(periodAdSpend / (adPoints.length || 1))}
+                          {'覆盖 ' + adPoints.length + ' 个有效观测日（' + (view?.from?.slice(5) || '10-01') + ' 至 ' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）/ 日均 ¥' + format(periodAdSpend / (adPoints.length || 1))}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
@@ -1381,7 +1380,7 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodCreatorCost)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + creatorPoints.length + ' 个有效观测日 · 日均 ¥' + format(periodCreatorCost / (creatorPoints.length || 1))}
+                          {'覆盖 ' + creatorPoints.length + ' 个有效观测日 / 日均 ¥' + format(periodCreatorCost / (creatorPoints.length || 1))}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
@@ -1400,7 +1399,7 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodProjectInvestment)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + completeInvestmentPoints.length + ' 个完整投流日 · 日均 ¥' + format(periodProjectInvestment / (completeInvestmentPoints.length || 1))}
+                          {'覆盖 ' + completeInvestmentPoints.length + ' 个完整投流日 / 日均 ¥' + format(periodProjectInvestment / (completeInvestmentPoints.length || 1))}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
@@ -1419,7 +1418,7 @@ export function BusinessDailyBoard({
                         </div>
                         <div className="bd-kpi-val">{'¥' + format(periodSettlement)}</div>
                         <div className="bd-kpi-sub">
-                          {'覆盖 ' + completeSettlementPoints.length + ' 个完整投流日 · 月累计结算 ¥' + format(view.core.monthlySettlement?.value) + '（进度 ' + format((view.progress.settlementFraction ?? 0) * 100) + '%）'}
+                          {'覆盖 ' + completeSettlementPoints.length + ' 个完整投流日 / 月累计结算 ¥' + format(view.core.monthlySettlement?.value) + '（进度 ' + format((view.progress.settlementFraction ?? 0) * 100) + '%）'}
                         </div>
                         <div className="bd-kpi-bench">
                           <span>基准日参考</span>
@@ -1445,34 +1444,34 @@ export function BusinessDailyBoard({
                               flexWrap: 'wrap',
                               gap: 8,
                               padding: '8px 12px',
-                              background: '#f8fafc',
-                              border: '1px solid #e2e8f0',
+                              background: '#f9f9fb',
+                              border: '0.5px solid #d9d9e0',
                               borderBottom: 'none',
                               borderRadius: '8px 8px 0 0',
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                              <strong style={{ fontSize: 13, color: '#1e293b' }}>
+                              <strong style={{ fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>
                                 {view.core.creatorCost?.value !== null
-                                  ? `最近完整费用实绩 · ${latestObservedPoint.date.slice(5).replace('-', '月')}日（未齐备指标接入）`
-                                  : `最近费用实绩 · ${latestObservedPoint.date.slice(5).replace('-', '月')}日`}
+                                  ? `最近完整费用实绩 / ${latestObservedPoint.date.slice(5).replace('-', '月')}日（未齐备指标接入）`
+                                  : `最近费用实绩 / ${latestObservedPoint.date.slice(5).replace('-', '月')}日`}
                               </strong>
                               <span
                                 style={{
-                                  fontSize: 10.5,
+                                  fontSize: 12,
                                   fontWeight: 600,
                                   padding: '1px 6px',
                                   borderRadius: 4,
-                                  background: '#eaf2f0',
-                                  color: '#2c7168',
+                                  background: 'var(--teal-3, #e0f8f3)',
+                                  color: 'var(--teal-11, #008573)',
                                 }}
                               >
                                 {view.core.creatorCost?.value !== null ? '未齐备指标接入 14 实绩' : '最新有效实绩'}
                               </span>
                             </div>
-                            <span style={{ fontSize: 11, color: '#64748b' }}>
+                            <span style={{ fontSize: 12, color: '#60646c' }}>
                               {view.core.creatorCost?.value !== null
-                                ? `${day.slice(5)} 费用尚未齐备 · 达人等已填报，投流广告待回填，业务基准日保持 ${day}`
+                                ? `${day.slice(5)} 费用尚未齐备 / 达人等已填报，投流广告待回填，业务基准日保持 ${day}`
                                 : `${day.slice(5)} 分日费用待录入（月累计结算已达 ¥${format(view.core.monthlySettlement?.value)}），业务基准日保持 ${day}`}
                             </span>
                           </div>
@@ -1486,7 +1485,7 @@ export function BusinessDailyBoard({
                               <div className="bd-kpi-sub">
                                 信息流 ¥{format(latestObservedPoint.feed?.value)} + 搜索 ¥{format(latestObservedPoint.search?.value)}
                               </div>
-                              <span className="bd-state">未齐备指标 · 参考 {latestObservedPoint.date} 完整实绩</span>
+                              <span className="bd-state">未齐备指标 / 参考 {latestObservedPoint.date} 完整实绩</span>
                             </article>
 
                             <article className="bd-kpi-card-rich">
@@ -1505,7 +1504,7 @@ export function BusinessDailyBoard({
                                   : `星 ¥${format(latestObservedPoint.starCreator?.value ?? latestObservedPoint.star?.investment?.value ?? 0)} + 盟 ¥${format(latestObservedPoint.allianceCreator?.value ?? latestObservedPoint.alliance?.investment?.value ?? 0)}`}
                               </div>
                               <span className="bd-state">
-                                {view.core.creatorCost?.value !== null ? `周报Q4 · ${day} 达人已填报` : `周报Q4 · ${latestObservedPoint.date} 实绩`}
+                                {view.core.creatorCost?.value !== null ? `周报Q4 / ${day} 达人已填报` : `周报Q4 / ${latestObservedPoint.date} 实绩`}
                               </span>
                             </article>
 
@@ -1520,7 +1519,7 @@ export function BusinessDailyBoard({
                                   ? `${day.slice(5)} 部分已登记：¥${format(view.core.projectInvestment.partialValue)}（缺投流广告）`
                                   : '含KFSOP及杂费总投资'}
                               </div>
-                              <span className="bd-state">未齐备指标 · 参考 {latestObservedPoint.date} 完整实绩</span>
+                              <span className="bd-state">未齐备指标 / 参考 {latestObservedPoint.date} 完整实绩</span>
                             </article>
 
                             <article className="bd-kpi-card-rich">
@@ -1534,14 +1533,14 @@ export function BusinessDailyBoard({
                                   ? `${day.slice(5)} 部分已登记：¥${format(view.core.settlement.partialValue)}（缺投流广告）`
                                   : '政策后核算（星盟总结算）'}
                               </div>
-                              <span className="bd-state">未齐备指标 · 参考 {latestObservedPoint.date} 完整实绩</span>
+                              <span className="bd-state">未齐备指标 / 参考 {latestObservedPoint.date} 完整实绩</span>
                             </article>
                           </div>
                         </div>
                       ) : (
-                        <div className="bd-empty-cost-status" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, padding: '16px 20px', margin: '8px 0' }}>
-                          <strong style={{ display: 'block', fontSize: 13, color: '#334155', marginBottom: 4 }}>暂无历史分日费用实绩</strong>
-                          <p style={{ margin: 0, fontSize: 12, color: '#64748b', lineHeight: 1.6 }}>
+                        <div className="bd-empty-cost-status" style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 8, padding: '16px 20px', margin: '8px 0' }}>
+                          <strong style={{ display: 'block', fontSize: 14, color: 'var(--slate-12, #1c2024)', marginBottom: 4 }}>暂无历史分日费用实绩</strong>
+                          <p style={{ margin: 0, fontSize: 12, color: 'var(--slate-11, #60646c)', lineHeight: 1.6 }}>
                             原因：底表尚未录入任何有效分日费用记录。<br />
                             来源：周趋势底表 Q4。<br />
                             下一步：等待投放与媒介团队录入分日明细后自动呈现。
@@ -1551,10 +1550,10 @@ export function BusinessDailyBoard({
                     ) : (
                       <div className="bd-kpis">
                         {([
-                          ['平台广告消耗 · 当日', view.core.adSpend],
-                          ['达人合作费用 · 当日', view.core.creatorCost],
-                          ['项目总投入 · 当日', view.core.projectInvestment],
-                          ['政策后结算金额 · 当日', view.core.settlement],
+                          ['平台广告消耗 / 当日', view.core.adSpend],
+                          ['达人合作费用 / 当日', view.core.creatorCost],
+                          ['项目总投入 / 当日', view.core.projectInvestment],
+                          ['政策后结算金额 / 当日', view.core.settlement],
                         ] as [string, Cell][]).map(([name, value]) => (
                           <article key={name}>
                             <h4>{name}</h4>
@@ -1567,10 +1566,10 @@ export function BusinessDailyBoard({
 
                   {/* Alerts & Consolidated Status Banner */}
                   {isTodayCostsPending ? (
-                    <div className="bd-alerts-compact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', background: '#fafaf9', border: '1px solid #e7e5e4', borderRadius: 6, margin: '8px 0 10px', fontSize: 11.5, color: '#78716c' }}>
-                      <span>💡 <strong>{day} 费用尚未齐备 · 投流广告待回填</strong> · 达人等单项已登记，未齐备指标参考 {latestObservedPoint?.date} 完整实绩；所选基准日保持 {day}。</span>
+                    <div className="bd-alerts-compact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', background: '#fcfcfd', border: '0.5px solid var(--slate-5, #e0e1e6)', borderRadius: 6, margin: '8px 0 10px', fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+                      <span>💡 <strong>{day} 费用尚未齐备 / 投流广告待回填</strong> / 达人等单项已登记，未齐备指标参考 {latestObservedPoint?.date} 完整实绩；所选基准日保持 {day}。</span>
                       <details style={{ display: 'inline', marginLeft: 8 }}>
-                        <summary style={{ cursor: 'pointer', color: '#0284c7', fontSize: 11 }}>来源核对</summary>
+                        <summary style={{ cursor: 'pointer', color: 'var(--blue-11, #0d74ce)', fontSize: 12 }}>来源核对</summary>
                         <span className="bd-caption" style={{ display: 'block', marginTop: 4 }}>数据源：周趋势底表 Q4 (loIsK8)</span>
                       </details>
                     </div>
@@ -1623,13 +1622,13 @@ export function BusinessDailyBoard({
 
                       {/* 3. 星盟电商转化漏斗 */}
                       <section className="bd-panel" data-section="funnel">
-                        <h3>星盟电商漏斗 · {view.funnel.scope}</h3>
+                        <h3>星盟电商漏斗 / {view.funnel.scope}</h3>
                         <p className="bd-caption">
                           {view.funnel.aggregation}。缺少同范围归因证据时，阶段不计算转化率。
                         </p>
                         <div className="bd-two-col">
-                          <Funnel title="小红星 · 淘宝星河" data={view.funnel.star} monthSnapshot={starMonthSnapshot} />
-                          <Funnel title="小红盟 · 京准通" data={view.funnel.alliance} monthSnapshot={allianceMonthSnapshot} />
+                          <Funnel title="小红星 / 淘宝星河" data={view.funnel.star} monthSnapshot={starMonthSnapshot} />
+                          <Funnel title="小红盟 / 京准通" data={view.funnel.alliance} monthSnapshot={allianceMonthSnapshot} />
                         </div>
                         {table('星盟月累计 · 电商与聚光分别核对') && (
                           <details style={{ marginTop: 12 }}>
@@ -1651,7 +1650,7 @@ export function BusinessDailyBoard({
                       <div className="bd-two-col bd-core-overview">
                         {view.highlights?.search && (
                           <section className="bd-panel" data-section="search">
-                            <h3>搜索分析 · 核心概览</h3>
+                            <h3>搜索分析 / 核心概览</h3>
                             <AspectSummaryCard aspectKey="search" view={view} overview={true} />
                             <SearchVisuals data={view.highlights.search} hideCoreWords={true} hideTopKeywords={true} />
                             <p className="bd-caption" style={{ marginTop: 8 }}>
@@ -1661,7 +1660,7 @@ export function BusinessDailyBoard({
                         )}
                         {view.highlights?.feed && (
                           <section className="bd-panel" data-section="feed">
-                            <h3>信息流分析 · 核心概览</h3>
+                            <h3>信息流分析 / 核心概览</h3>
                             <AspectSummaryCard aspectKey="feed" view={view} overview={true} />
                             <FeedVisuals data={view.highlights.feed} hideAudienceRanks={true} />
                           </section>
@@ -1740,7 +1739,7 @@ export function BusinessDailyBoard({
                         )}
                         {view.highlights?.maintenance && (
                           <section className="bd-panel" data-section="comments">
-                            <h3>评论维护 · 计划、形式与心智</h3>
+                            <h3>评论维护 / 计划、形式与心智</h3>
                             <AspectSummaryCard aspectKey="maintenance" view={view} overview={true} />
                             <MaintenanceVisuals data={view.highlights.maintenance} />
                           </section>
@@ -1780,7 +1779,7 @@ export function BusinessDailyBoard({
                         </div>
                         <AspectSummaryCard aspectKey="spend" view={view} overview={false} />
                         {view?.platformNative && (
-                          <div className="bd-platform-reconcile-chip" style={{ margin: '8px 0', padding: '8px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 13, color: '#334155' }}>
+                          <div className="bd-platform-reconcile-chip" style={{ margin: '8px 0', padding: '8px 12px', background: '#f9f9fb', border: '0.5px solid #d9d9e0', borderRadius: 6, fontSize: 14, color: '#1c2024' }}>
                             <strong style={{ color: DASHBOARD_PALETTE.actual }}>平台原生观测对账：</strong>
                             {view.platformNative.status === 'missing_weekly' ? (
                               <span>{view.platformNative.day} 聚光原生投放 ¥{format(view.platformNative.totalFee)}（信息流 ¥{format(view.platformNative.feedFee)} + 搜索 ¥{format(view.platformNative.searchFee)}）。周底表广告投放尚未回填，保持独立来源对账，不计入周表成本总口径。</span>
@@ -1818,8 +1817,8 @@ export function BusinessDailyBoard({
                               </div>
                             ))}
                         </div>
-                        <details className="bd-history-details" style={{ margin: '14px 0', border: '1px solid #e2e8f0', borderRadius: 8, padding: '10px 14px', background: '#fafaf9' }}>
-                          <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 13, color: '#475569' }}>
+                        <details className="bd-history-details" style={{ margin: '14px 0', border: '0.5px solid #d9d9e0', borderRadius: 8, padding: '10px 14px', background: '#fcfcfd' }}>
+                          <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#60646c' }}>
                             📈 查看月度累计FS走势与历史排期走势 (可选折叠)
                           </summary>
                           <div style={{ marginTop: 12 }}>
@@ -1840,7 +1839,7 @@ export function BusinessDailyBoard({
                           </div>
                         </details>
                         <div className="bd-monthly">
-                          日报月预算 {format(view.core.monthlyBudget.value)} 元 · 月累计政策后结算 {format(view.core.monthlySettlement.value)} 元{' '}
+                          日报月预算 {format(view.core.monthlyBudget.value)} 元 / 月累计政策后结算 {format(view.core.monthlySettlement.value)} 元{' '}
                           <Source value={view.core.monthlySettlement.source} />
                         </div>
                         {table('日 / 周 / 月费用对账') && (
@@ -1853,7 +1852,7 @@ export function BusinessDailyBoard({
                       <details className="bd-table-details" style={{ marginTop: 8 }} open>
                         <summary>
                           {view?.platformNative?.totalFee
-                            ? `展开平台原生投放分日核对（聚光独立来源 · ${view.platformNative.day.slice(5)} ¥${format(view.platformNative.totalFee)} · ${view.platformNative.statusLabel || (view.platformNative.status === 'missing_weekly' ? '待回填' : view.platformNative.status === 'difference' ? '金额有差异' : '金额一致')}）`
+                            ? `展开平台原生投放分日核对（聚光独立来源 / ${view.platformNative.day.slice(5)} ¥${format(view.platformNative.totalFee)} / ${view.platformNative.statusLabel || (view.platformNative.status === 'missing_weekly' ? '待回填' : view.platformNative.status === 'difference' ? '金额有差异' : '金额一致')}）`
                             : '展开平台原生投放分日核对（聚光独立来源）'}
                         </summary>
                         <DataTable table={table('平台原生投放分日核对 · 聚光')!} />
@@ -1878,7 +1877,7 @@ export function BusinessDailyBoard({
                       {/* 1. Symmetrical Core Overview Pairing: Search vs Feed */}
                       <div className="bd-two-col bd-core-overview">
                         <section className="bd-panel" data-section="search">
-                          <h3>搜索分析 · 核心概览</h3>
+                          <h3>搜索分析 / 核心概览</h3>
                           <AspectSummaryCard aspectKey="search" view={view} overview={false} />
                           {view.highlights && <SearchVisuals data={view.highlights.search} hideCoreWords={true} hideTopKeywords={true} />}
                           <details style={{ marginTop: 12 }}>
@@ -1887,7 +1886,7 @@ export function BusinessDailyBoard({
                           </details>
                         </section>
                         <section className="bd-panel" data-section="feed">
-                          <h3>信息流分析 · 核心概览</h3>
+                          <h3>信息流分析 / 核心概览</h3>
                           <AspectSummaryCard aspectKey="feed" view={view} overview={false} />
                           {view.highlights && <FeedVisuals data={view.highlights.feed} hideAudienceRanks={true} />}
                           <details style={{ marginTop: 12 }}>
@@ -1961,7 +1960,7 @@ export function BusinessDailyBoard({
                         <h3>评论区质量巡查与整改进度</h3>
                         <AspectSummaryCard aspectKey="rectification" view={view} overview={false} />
                         {view.highlights && <RectificationVisuals data={view.highlights.rectification} />}
-                        <h4>本月高消耗笔记 · 优先核对</h4>
+                        <h4>本月高消耗笔记 / 优先核对</h4>
                         <p className="bd-caption">
                           按当月消耗排序。源表整改登记、实际可见和本次采集分别记录，未检查不默认为合格。
                         </p>
@@ -1987,7 +1986,7 @@ export function BusinessDailyBoard({
                           </div>
                         </section>
                         <section className="bd-panel" data-section="comments">
-                          <h3>评论维护 · 计划、形式与心智</h3>
+                          <h3>评论维护 / 计划、形式与心智</h3>
                           <AspectSummaryCard aspectKey="maintenance" view={view} overview={false} />
                           {view.highlights && <MaintenanceVisuals data={view.highlights.maintenance} />}
                           <div className="bd-panel-bottom-details" style={{ marginTop: 'auto', paddingTop: 10 }}>
@@ -2080,7 +2079,7 @@ export function BusinessDailyBoard({
                     {view.sourceVersions.map(s => (
                       <div key={s.sourceKey}>
                         <Source value={s} />
-                        <span className="bd-caption"> · 采集 {s.capturedAt}</span>
+                        <span className="bd-caption"> / 采集 {s.capturedAt}</span>
                       </div>
                     ))}
                   </details>

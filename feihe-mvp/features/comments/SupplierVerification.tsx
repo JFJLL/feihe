@@ -216,11 +216,11 @@ export function SupplierVerification({
                 />
               </label>
               {uploadFileName && (
-                <span style={{ fontSize: '12.5px', color: '#6d28d9', fontWeight: 600 }}>
+                <span style={{ fontSize: 14, color: '#5753c6', fontWeight: 600 }}>
                   已选：{uploadFileName}
                 </span>
               )}
-              <span style={{ fontSize: '13px', color: '#475569' }}>
+              <span style={{ fontSize: '14px', color: '#60646c' }}>
                 待检池：<strong>{summary.total}</strong> 条（待核验 <strong>{summary.pendingCount}</strong> 条）
               </span>
             </div>
@@ -234,7 +234,7 @@ export function SupplierVerification({
                 await loadSupplierList();
                 await onDone();
               }}
-              style={{ background: '#7c3aed', borderColor: '#6d28d9', minWidth: '140px' }}
+              style={{ background: '#5753c6', borderColor: '#5753c6', minWidth: '140px' }}
             >
               {actionLoading ? '核验比对中…' : '核验全部待检评论'}
             </button>
@@ -257,27 +257,27 @@ export function SupplierVerification({
         >
           <div style={{ padding: '10px 0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-              <span style={{ fontSize: '28px', fontWeight: 700, color: '#0f172a' }}>
+              <span style={{ fontSize: 22, fontWeight: 700, color: '#1c2024' }}>
                 {summary.total > 0 ? `${visibleRate}%` : '—'}
               </span>
-              <span style={{ fontSize: '13px', color: '#64748b' }}>
+              <span style={{ fontSize: '14px', color: 'var(--slate-11, #60646c)' }}>
                 已外显 <strong>{visibleCount}</strong> / 总交付 <strong>{summary.total}</strong> 条
               </span>
             </div>
             <ProgressBar value={visibleCount} max={summary.total || 100} theme="green" />
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginTop: '16px', textAlign: 'center' }}>
-              <div style={{ background: '#f0fdf4', padding: '10px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '11.5px', color: '#15803d' }}>原文一致</div>
-                <strong style={{ fontSize: '15px', color: '#166534' }}>{summary.exactCount}</strong>
+              <div style={{ background: '#e6f7ed', padding: '10px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '12px', color: '#208368' }}>原文一致</div>
+                <strong style={{ fontSize: '16px', color: '#208368' }}>{summary.exactCount}</strong>
               </div>
-              <div style={{ background: '#f0f9ff', padding: '10px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '11.5px', color: '#0369a1' }}>改写外显</div>
-                <strong style={{ fontSize: '15px', color: '#075985' }}>{summary.modifiedCount}</strong>
+              <div style={{ background: '#e6f4fe', padding: '10px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '12px', color: '#0d74ce' }}>改写外显</div>
+                <strong style={{ fontSize: '16px', color: '#113264' }}>{summary.modifiedCount}</strong>
               </div>
-              <div style={{ background: '#fef2f2', padding: '10px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '11.5px', color: '#b91c1c' }}>未外显</div>
-                <strong style={{ fontSize: '15px', color: '#991b1b' }}>{summary.missingCount}</strong>
+              <div style={{ background: '#feebec', padding: '10px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '12px', color: '#ce2c31' }}>未外显</div>
+                <strong style={{ fontSize: '16px', color: '#641723' }}>{summary.missingCount}</strong>
               </div>
             </div>
           </div>
@@ -298,19 +298,19 @@ export function SupplierVerification({
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     padding: '10px 14px',
-                    background: '#f8fafc',
+                    background: '#f9f9fb',
                     borderRadius: '8px',
-                    border: '1px solid #e2e8f0',
+                    border: '0.5px solid var(--slate-6, #d9d9e0)',
                   }}
                 >
                   <StatusBadge status={x.visibility.replace('当前外显-', '')} />
-                  <span style={{ fontSize: '12.5px', color: '#475569' }}>
-                    均长 <strong>{x.avgLength}</strong> 字 · 细节词率 <strong>{x.detailRate}%</strong> · 自然断句 <strong>{x.commaRate}%</strong>
+                  <span style={{ fontSize: 14, color: '#60646c' }}>
+                    均长 <strong>{x.avgLength}</strong> 字 / 细节词率 <strong>{x.detailRate}%</strong> / 自然断句 <strong>{x.commaRate}%</strong>
                   </span>
                 </div>
               ))
             ) : (
-              <div style={{ fontSize: '12.5px', color: '#64748b', padding: '12px 0' }}>
+              <div style={{ fontSize: 14, color: 'var(--slate-11, #60646c)', padding: '12px 0' }}>
                 暂无足量外显特征统计样本。
               </div>
             )}
@@ -326,7 +326,7 @@ export function SupplierVerification({
         extra={
           <Link
             className="btn-link"
-            style={{ fontSize: '13px' }}
+            style={{ fontSize: '14px' }}
             href={'/api/export?type=supplier&projectId=' + encodeURIComponent(projectId)}
           >
             导出核验清单 ↗
@@ -354,14 +354,14 @@ export function SupplierVerification({
             style={{ minWidth: 150 }}
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '12.5px', color: '#64748b' }}>核验时间：</span>
+            <span style={{ fontSize: 14, color: 'var(--slate-11, #60646c)' }}>核验时间：</span>
             <CustomDatePicker
               aria-label="核验开始时间"
               value={from}
               onChange={(e) => { setFrom(e.target.value); setPage(1); }}
               style={{ width: '130px' }}
             />
-            <span style={{ fontSize: '12px', color: '#94a3b8' }}>至</span>
+            <span style={{ fontSize: '12px', color: '#60646c' }}>至</span>
             <CustomDatePicker
               aria-label="核验结束时间"
               value={to}
@@ -398,7 +398,7 @@ export function SupplierVerification({
                         <button
                           type="button"
                           className="text-link"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600, textAlign: 'left', color: '#0284c7' }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600, textAlign: 'left', color: '#0d74ce' }}
                           onClick={() => openNote(row.noteId)}
                         >
                           {row.noteId.slice(0, 14)}… 查看明细
@@ -420,28 +420,28 @@ export function SupplierVerification({
                           target="_blank"
                           rel="noreferrer"
                           className="text-link"
-                          style={{ fontSize: '11.5px', color: '#64748b' }}
+                          style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}
                         >
                           原笔记 ↗
                         </a>
                       )}
-                      <span style={{ fontSize: '12px', color: '#64748b' }}>{row.creator || '未知达人'}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>{row.creator || '未知达人'}</span>
                     </div>
                   </td>
                   <td style={{ maxWidth: '300px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <span className="section-mini-tag tag-blue" style={{ fontSize: '10px', padding: '1px 6px', width: 'fit-content' }}>计划交付</span>
-                      <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: '#0f172a' }}>
+                      <span className="section-mini-tag tag-blue" style={{ fontSize: '12px', padding: '1px 6px', width: 'fit-content' }}>计划交付</span>
+                      <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.5, color: '#1c2024' }}>
                         {row.plannedContent}
                       </p>
                     </div>
                   </td>
                   <td style={{ maxWidth: '300px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      <span className="section-mini-tag" style={{ fontSize: '10px', padding: '1px 6px', width: 'fit-content', background: row.matchedContent ? '#dcfce7' : '#f1f5f9', color: row.matchedContent ? '#15803d' : '#94a3b8' }}>
+                      <span className="section-mini-tag" style={{ fontSize: '12px', padding: '1px 6px', width: 'fit-content', background: row.matchedContent ? '#e6f7ed' : '#f0f0f3', color: row.matchedContent ? '#208368' : '#60646c' }}>
                         {row.matchedContent ? '实际抓取外显' : '未匹配到评论'}
                       </span>
-                      <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.5, color: row.matchedContent ? '#15803d' : '#94a3b8' }}>
+                      <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.5, color: row.matchedContent ? '#208368' : '#60646c' }}>
                         {row.matchedContent || '—'}
                       </p>
                     </div>
@@ -450,7 +450,7 @@ export function SupplierVerification({
                     <StatusBadge status={row.visibility} />
                   </td>
                   <td>
-                    <span style={{ fontSize: '12px', color: '#64748b' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
                       {row.verifiedAt ? cnTime(row.verifiedAt) : '未核验'}
                     </span>
                   </td>

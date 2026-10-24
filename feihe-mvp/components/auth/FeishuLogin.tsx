@@ -203,7 +203,7 @@ export function FeishuLogin() {
             <div className="feishu-dropdown-menu" role="menu">
               <div className="feishu-dropdown-header">
                 <div className="feishu-dropdown-header-title">飞书企业身份</div>
-                <div className="feishu-dropdown-header-info">{user.enterpriseName} · {user.name}</div>
+                <div className="feishu-dropdown-header-info">{user.enterpriseName} / {user.name}</div>
                 <div className="feishu-dropdown-header-sub">ID: {user.openId.slice(0, 10)}...</div>
               </div>
               <button
@@ -234,8 +234,8 @@ export function FeishuLogin() {
             <svg className="feishu-login-icon" viewBox="0 0 24 24" fill="none">
               <path
                 d="M3 13.5L12 4.5L21 13.5L18 20.5H6L3 13.5Z"
-                fill="#3370ff"
-                stroke="#3370ff"
+                fill="#0090ff"
+                stroke="#0090ff"
                 strokeWidth="1.5"
                 strokeLinejoin="round"
               />
@@ -287,8 +287,8 @@ export function FeishuLogin() {
           <svg className="feishu-login-icon" viewBox="0 0 24 24" fill="none">
             <path
               d="M3 13.5L12 4.5L21 13.5L18 20.5H6L3 13.5Z"
-              fill="#3370ff"
-              stroke="#3370ff"
+              fill="#0090ff"
+              stroke="#0090ff"
               strokeWidth="1.5"
               strokeLinejoin="round"
             />

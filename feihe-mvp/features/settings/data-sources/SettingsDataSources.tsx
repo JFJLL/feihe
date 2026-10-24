@@ -373,7 +373,7 @@ export function SettingsDataSources({
                 <button
                   type="button"
                   className="primary"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '13px' }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: 14 }}
                   onClick={() => {
                     confirmedSourceId.current = ''; savedSnapshot.current = ''; setSaveFeedback('');
                     invalidateInspect(); setMappingContext(null);
@@ -397,7 +397,7 @@ export function SettingsDataSources({
                 <button
                   type="button"
                   onClick={closeEditor}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '0.5px solid #cdced6', background: '#fff', cursor: 'pointer' }}
                 >
                   取消
                 </button>
@@ -405,7 +405,7 @@ export function SettingsDataSources({
                   type="button"
                   disabled={busy === 'source' || inspecting || !mappingContext || mappingErrors.length > 0 || !source.name || !source.spreadsheet || !source.sheetId}
                   onClick={() => saveSource(false)}
-                  style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 600 }}
+                  style={{ padding: '8px 16px', borderRadius: '8px', border: '0.5px solid #cdced6', background: '#fff', color: '#1c2024', cursor: 'pointer', fontWeight: 600 }}
                 >
                   仅保存配置
                 </button>
@@ -451,9 +451,9 @@ export function SettingsDataSources({
                     value={String(source.syncFrequency || 'manual')}
                     onChange={(val) => setSource({ ...source, syncFrequency: val })}
                     options={[
-                      { value: 'manual', label: '手动同步 (已就绪)', color: '#16a34a' },
-                      { value: 'hourly', label: '每小时自动 (调度待启用)', color: '#d97706', disabled: true },
-                      { value: 'daily', label: '每日自动 (调度待启用)', color: '#64748b', disabled: true },
+                      { value: 'manual', label: '手动同步 (已就绪)', color: '#29a383' },
+                      { value: 'hourly', label: '每小时自动 (调度待启用)', color: '#ffc53d', disabled: true },
+                      { value: 'daily', label: '每日自动 (调度待启用)', color: '#60646c', disabled: true },
                     ]}
                     style={{ width: '100%' }}
                   />
@@ -474,7 +474,7 @@ export function SettingsDataSources({
                       type="button"
                       disabled={inspecting || !source.spreadsheet}
                       onClick={() => handleInspectLink()}
-                      style={{ padding: '0 16px', borderRadius: 6, border: '1px solid #0284c7', background: '#e0f2fe', color: '#0369a1', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: 13, fontWeight: 600 }}
+                      style={{ padding: '0 16px', borderRadius: 6, border: '0.5px solid #0d74ce', background: '#e6f4fe', color: '#0d74ce', cursor: 'pointer', whiteSpace: 'nowrap', fontSize: 14, fontWeight: 600 }}
                     >
                       {inspecting ? '正在检测…' : '智能检测工作表 ↗'}
                     </button>
@@ -503,7 +503,7 @@ export function SettingsDataSources({
                       value={String(source.sheetId || '')}
                       placeholder="点击上方智能检测自动选择"
                       onChange={(e) => setSource({ ...source, sheetId: e.target.value })}
-                      style={{ height: 38, padding: '0 12px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 13 }}
+                      style={{ height: 38, padding: '0 12px', borderRadius: 6, border: '0.5px solid #cdced6', fontSize: 14 }}
                     />
                   )}
                 </label>
@@ -540,37 +540,37 @@ export function SettingsDataSources({
           <div className="management-list" style={{ marginTop: '14px' }}>
             {sources.length ? (
               sources.map((item) => (
-                <div key={item.id} className="source-list-item" style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr) auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.03)' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#eff6ff', color: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
+                <div key={item.id} className="source-list-item" style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr) auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: '#ffffff', border: '0.5px solid #d9d9e0', borderRadius: '10px', boxShadow: '0 1px 3px rgba(28, 32, 36, 0.03)' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#e6f4fe', color: '#0d74ce', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
                     飞
                   </div>
                   <div className="source-list-details" style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0, overflowWrap: 'anywhere' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <strong style={{ fontSize: '14px', color: '#0f172a' }}>{item.name}</strong>
-                      <span className="section-mini-tag tag-blue" style={{ fontSize: '11px' }}>
+                      <strong style={{ fontSize: '14px', color: '#1c2024' }}>{item.name}</strong>
+                      <span className="section-mini-tag tag-blue" style={{ fontSize: 12 }}>
                         {item.kind === 'general' ? '通用数据集' : item.kind === 'owned' ? '发布进度' : item.kind === 'supplier' ? '供应商交付' : item.kind || '未标注用途'} ·{' '}
                       </span>
-                      <span style={{ fontSize: '11px', color: '#64748b', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
+                      <span style={{ fontSize: 12, color: '#60646c', background: '#f0f0f3', padding: '2px 6px', borderRadius: '4px' }}>
                         {item.syncFrequency === 'hourly' ? '每小时自动(待启用)' : item.syncFrequency === 'daily' ? '每日自动(待启用)' : '手动同步'}
                       </span>
                     </div>
-                    <div style={{ fontSize: '12px', color: '#64748b', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                      <span>工作表：<code style={{ color: '#0369a1' }}>{item.sheetId || '未填写 Sheet ID'}</code></span>
+                    <div style={{ fontSize: '12px', color: '#60646c', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                      <span>工作表：<code style={{ color: '#0d74ce' }}>{item.sheetId || '未填写 Sheet ID'}</code></span>
                       <span>范围：<code>{item.range || '全表'}</code></span>
                       <span>最近读取：<strong>{item.lastSyncedAt ? (String(item.lastRowCount) + ' 行') : '—'}</strong></span>
                     </div>
                     {(item.lastError || clientSyncErrors[item.id]) && (
-                      <div style={{ fontSize: '11.5px', color: '#e11d48' }}>
+                      <div style={{ fontSize: 12, color: '#ce2c31' }}>
                         ⚠ 配置已保存，同步未成功：{item.lastError || clientSyncErrors[item.id]}
                       </div>
                     )}
                   </div>
                   <div className="source-list-status" style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: 600, color: !item.lastError && !clientSyncErrors[item.id] && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#16a34a' : '#ea580c' }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: !item.lastError && !clientSyncErrors[item.id] && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#16a34a' : '#ea580c' }} />
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '12px', fontWeight: 600, color: !item.lastError && !clientSyncErrors[item.id] && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#29a383' : '#ffc53d' }}>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: !item.lastError && !clientSyncErrors[item.id] && (item.status?.includes('正常') || item.status?.includes('已连接')) ? '#29a383' : '#ffc53d' }} />
                       {item.lastError || clientSyncErrors[item.id] ? '同步失败' : item.lastSyncedAt ? '同步成功' : '配置已保存 · 待首次同步'}
                     </span>
-                    <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+                    <div style={{ fontSize: 12, color: '#60646c', marginTop: '2px' }}>
                       {item.lastSyncedAt ? cnTime(item.lastSyncedAt) : '暂未同步'}
                     </div>
                   </div>
@@ -579,7 +579,7 @@ export function SettingsDataSources({
                       type="button"
                       disabled={Boolean(busy)}
                       onClick={() => handleEditExistingSource(item)}
-                      style={{ padding: '6px 10px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', color: '#1e293b', cursor: 'pointer', fontWeight: 500 }}
+                      style={{ padding: '6px 10px', fontSize: 14, borderRadius: '6px', border: '0.5px solid #cdced6', background: '#fff', color: '#1c2024', cursor: 'pointer', fontWeight: 500 }}
                     >
                       ✏ 编辑/映射
                     </button>
@@ -587,7 +587,7 @@ export function SettingsDataSources({
                       type="button"
                       disabled={Boolean(busy) || !item.spreadsheet || !item.sheetId}
                       onClick={() => syncSource(item)}
-                      style={{ padding: '6px 12px', fontSize: '12.5px', borderRadius: '6px', border: '1px solid #0284c7', background: '#f0f9ff', color: '#0284c7', cursor: 'pointer', fontWeight: 600 }}
+                      style={{ padding: '6px 12px', fontSize: 14, borderRadius: '6px', border: '0.5px solid #0d74ce', background: '#e6f4fe', color: '#0d74ce', cursor: 'pointer', fontWeight: 600 }}
                     >
                       {busy === item.id ? '同步中…' : '立即同步'}
                     </button>
@@ -595,7 +595,7 @@ export function SettingsDataSources({
                       type="button"
                       disabled={Boolean(busy)}
                       onClick={() => removeSource(item)}
-                      style={{ padding: '6px 10px', fontSize: '12px', borderRadius: '6px', border: '1px solid #cbd5e1', background: '#fff', color: '#ef4444', cursor: 'pointer' }}
+                      style={{ padding: '6px 10px', fontSize: '12px', borderRadius: '6px', border: '0.5px solid #cdced6', background: '#fff', color: '#e5484d', cursor: 'pointer' }}
                     >
                       移除
                     </button>

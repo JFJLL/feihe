@@ -103,8 +103,10 @@ try {
   assert.ok(!badDirections.includes('https://') && !badDirections.includes('超'.repeat(41)), 'invalid raw classification never reaches display');
   assert.ok(badDirections.includes('有效方向样本贡献') && badDirections.includes('100.0%'));
   assert.ok(badDirections.includes('overflow-wrap:anywhere') && badDirections.includes('overflow-x:auto'), 'long labels wrap inside a horizontally scrollable table');
+  const { ProjectProvider } = await vite.ssrLoadModule('/components/project-shell/ProjectContext.tsx');
+  const withProject = (element, projectId = 'test') => React.createElement(ProjectProvider, { projectId }, element);
   const { CompetitorAnalysis } = await vite.ssrLoadModule('/features/growth/CompetitorAnalysis.tsx');
-  const monthHtml = competitor => renderToStaticMarkup(React.createElement(CompetitorAnalysis, {data:{analytics:{brands:[]},feishu:{search:[],competitor}}}));
+  const monthHtml = competitor => renderToStaticMarkup(withProject(React.createElement(CompetitorAnalysis, {data:{analytics:{brands:[]},feishu:{search:[],competitor}}}), 'test'));
   const july = {month:'07月',brand:'月报测试品牌',sheetId:'same-source',value:100};
   const august = {...july,month:'08月',value:150};
   assert.ok(monthHtml([july,august]).includes('<td>50.0%</td>'), 'real NN月 rows calculate previous-month growth');
@@ -118,10 +120,10 @@ try {
     [{...july,value:null},august],
     [{...july,month:'2025-12'},{...august,month:'01月'}],
   ]) assert.ok(!monthHtml(records).includes('<td>50.0%</td>'), 'missing, duplicate, unmatched or unusable baselines cannot produce growth');
-  const empty = renderToStaticMarkup(React.createElement(CompetitorAnalysis, {data:{analytics:{brands:[]},feishu:{search:[],competitor:[]}}}));
+  const empty = renderToStaticMarkup(withProject(React.createElement(CompetitorAnalysis, {data:{analytics:{brands:[]},feishu:{search:[],competitor:[]}}}), 'test'));
   assert.ok(empty.includes('暂无品牌样本'));
   assert.ok(!empty.includes('双端搜索聚合'));
-  const rendered = renderToStaticMarkup(React.createElement(CompetitorAnalysis, {data:{analytics:{brands},feishu:{search:[{date:'2026-09-02',lingxi:null,spotlight:0},{date:'2026-09-01',lingxi:100,spotlight:100}],competitor:[]}}}));
+  const rendered = renderToStaticMarkup(withProject(React.createElement(CompetitorAnalysis, {data:{analytics:{brands},feishu:{search:[{date:'2026-09-02',lingxi:null,spotlight:0},{date:'2026-09-01',lingxi:100,spotlight:100}],competitor:[]}}}), 'test'));
   assert.ok(rendered.includes('-100.0%'));
   assert.ok(!rendered.includes('NaN'));
   assert.equal((rendered.match(/data-brand="启萃"/g) || []).length, 1, 'SQL-normalized own brand renders exactly one card');
@@ -134,7 +136,7 @@ try {
   assert.ok(singleBrand.includes('笔记样本构成') && singleBrand.includes('已记录互动贡献'));
   const zeroBrand = renderToStaticMarkup(React.createElement(BrandLandscape, {brands:[{brand:'zero',notes:0,interactions:0},{brand:'missing',notes:0,interactions:null}]}));
   assert.ok(zeroBrand.includes('暂无可计算的互动贡献'));
-  assert.ok(!zeroBrand.includes('<svg'), 'zero denominator produces no fabricated chart');
+  assert.ok(!zeroBrand.replace(/<svg[^>]*class="empty-state-svg"[\s\S]*?<\/svg>/g, '').includes('<svg'), 'zero denominator produces no fabricated chart');
   assert.ok(zeroBrand.includes('未提供') && zeroBrand.includes('zero：0互动'));
   const { KeywordRadar, keywordMatches } = await vite.ssrLoadModule('/features/growth/KeywordRadar.tsx');
   assert.equal(keywordMatches({title:'启萃'}, '  '), false);

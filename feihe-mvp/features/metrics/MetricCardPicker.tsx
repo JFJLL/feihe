@@ -57,7 +57,7 @@ export function MetricCardPicker({ projectId, metricId, initialCard, query = {},
     <div className="integration-project-form metric-picker-fields">
       {error && <p role="alert">{error}</p>}
       {!index ? <LoadingState text="正在读取可引用指标…" /> : !index.metrics.length ? <p>尚无共享指标。新建一次后，多张卡片即可共同引用。</p> : <>
-        <label>选择指标<CustomSelect ariaLabel="选择指标" value={metric?.id || ''} options={index.metrics.map(item => ({ value: item.id, label: item.name + ' · v' + item.version + ' · ' + item.datasetName }))} onChange={id => { setSelected(id); setTitle(''); setGroupBy(''); setPolicy('latest'); setTarget(''); }} /></label>
+        <label>选择指标<CustomSelect ariaLabel="选择指标" value={metric?.id || ''} options={index.metrics.map(item => ({ value: item.id, label: item.name + ' / v' + item.version + ' / ' + item.datasetName }))} onChange={id => { setSelected(id); setTitle(''); setGroupBy(''); setPolicy('latest'); setTarget(''); }} /></label>
         <label>卡片标题<input aria-label="卡片标题" value={title || metric?.name || ''} onChange={e => setTitle(e.target.value)} /></label>
         <label>展示呈现形式<CustomSelect ariaLabel="展示呈现形式" value={type} onChange={value => setType(value as DashboardCardConfig['type'])} options={CARD_PRESENTATIONS.map(item => ({ value: item.type, label: item.label, disabled: item.requiresDate && !config?.dateField }))} /></label>
         {type === 'time_trend' && <p>按项目时区汇总每日结果；沿用同一指标口径，缺失日期不会补成零。未绑定日期的指标请先到指标页设置。</p>}
@@ -69,7 +69,7 @@ export function MetricCardPicker({ projectId, metricId, initialCard, query = {},
         {rangePolicy === 'independent' && <div className="card-edit-fields"><label>卡片开始日期<CustomDatePicker aria-label="卡片开始日期" value={from} onChange={e => setFrom(e.target.value)} /></label><label>卡片结束日期<CustomDatePicker aria-label="卡片结束日期" value={to} onChange={e => setTo(e.target.value)} /></label></div>}
         <label>指标版本<CustomSelect ariaLabel="指标版本" value={policy} onChange={setPolicy} options={[{ value: 'latest', label: '跟随最新版本（推荐）' }, ...(metric?.versions || []).map(version => ({ value: String(version.version), label: '固定 v' + version.version }))]} /></label>
         <p>计算来源、单位与缺失规则由指标定义统一维护；当前来源：{metric?.datasetName}。</p>
-        {currentPreview?.error ? <p role="alert">{currentPreview.error}</p> : currentPreview?.metric ? <p role="status">预览：{currentPreview.metric.formattedValue} · 指标 v{currentPreview.metric.definition?.version}{!['ok', 'zero'].includes(currentPreview.metric.status) && ' · ' + currentPreview.metric.statusLabel}</p> : <p>等待有效配置试算…</p>}
+        {currentPreview?.error ? <p role="alert">{currentPreview.error}</p> : currentPreview?.metric ? <p role="status">预览：{currentPreview.metric.formattedValue} / 指标 v{currentPreview.metric.definition?.version}{!['ok', 'zero'].includes(currentPreview.metric.status) && ' / ' + currentPreview.metric.statusLabel}</p> : <p>等待有效配置试算…</p>}
         {currentPreview?.metric?.trend && <div className="metric-trend-preview">{currentPreview.metric.trend.map(point => <p key={point.date}>{point.date}：{point.formattedValue}</p>)}</div>}
       </>}
       <div className="data-actions"><button className="secondary" onClick={onNew}>新建指标</button><button className="secondary" onClick={() => onAdvanced(currentPreview?.metric?.effectiveConfig ? { ...currentPreview.metric.effectiveConfig, id: initialCard?.id, title: card.title, type: card.type } as DashboardCardConfig : undefined)}>高级：独立卡片</button></div>

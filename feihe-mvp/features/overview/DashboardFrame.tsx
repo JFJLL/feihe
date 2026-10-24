@@ -23,9 +23,10 @@ export function DashboardFrame({
 }: DashboardFrameProps) {
   const effectiveSubtitle = subtitle || (
     project?.departmentName
-      ? `${project.departmentName} · ${preset.defaultSubtitle}`
+      ? `${project.departmentName} ${preset.defaultSubtitle}`
       : preset.defaultSubtitle
   );
+  const displaySubtitle = effectiveSubtitle ? effectiveSubtitle.replace(/\s*·\s*/g, ' / ') : '';
 
   const displayStatus = project?.status === 'in_progress' || project?.status === 'active'
     ? '进行中'
@@ -41,7 +42,6 @@ export function DashboardFrame({
       <header className="dashboard-template-header ui-page-header">
         <div className="dashboard-template-header-main ui-page-header-main">
           <div className="dashboard-template-title-row ui-page-header-title-row">
-            <span className="dashboard-template-eyebrow dashboard-template-eyebrow-pill ui-page-header-eyebrow">{preset.eyebrow}</span>
             <h1 className="dashboard-template-title ui-page-header-title">{project?.name || '项目总观'}</h1>
             <div className="dashboard-template-badges">
               {displayStatus && (
@@ -50,13 +50,10 @@ export function DashboardFrame({
                   {displayStatus}
                 </span>
               )}
-              {project?.brand && (
-                <span className="dashboard-template-badge dashboard-template-brand-badge">
-                  {project.brand}
-                </span>
-              )}
             </div>
-            <span className="dashboard-template-subtitle dashboard-template-subtitle-inline ui-page-header-subtitle" title={effectiveSubtitle}>{effectiveSubtitle}</span>
+            {displaySubtitle && (
+              <span className="dashboard-template-subtitle dashboard-template-subtitle-inline ui-page-header-subtitle" title={displaySubtitle}>{displaySubtitle}</span>
+            )}
           </div>
         </div>
         <div className="dashboard-template-header-controls">

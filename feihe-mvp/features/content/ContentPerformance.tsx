@@ -60,14 +60,14 @@ function DistributionBars({
             <div key={String(row[labelKey] || index) + '-' + index} onClick={() => onItemClick && onItemClick(row)} style={{ cursor: onItemClick ? 'pointer' : 'default' }} title={onItemClick ? '点击查看该分类下的笔记' : undefined}>
               <span title={String(row[labelKey] || '')}>{cleanLabelText(row[labelKey], '其他')}</span>
               <i>
-                <b style={{ width: `${pctWidth}%`, background: isObserved ? undefined : '#cbd5e1' }} />
+                <b style={{ width: `${pctWidth}%`, background: isObserved ? undefined : '#cdced6' }} />
               </i>
               <div style={{ display: 'flex', gap: 2, flexDirection: 'column', alignItems: 'flex-end', whiteSpace: 'nowrap' }}>
-                <strong style={{ color: isObserved ? '#0f172a' : '#94a3b8', fontWeight: isObserved ? 600 : 400 }}>
+                <strong style={{ color: isObserved ? '#1c2024' : '#60646c', fontWeight: isObserved ? 600 : 400 }}>
                   {isObserved ? `${compact(val)}${valueUnit ? ` ${valueUnit}` : ''}` : '—'}
                 </strong>
                 {secText && (
-                  <em style={{ color: '#64748b', fontSize: '11px', fontStyle: 'normal' }}>
+                  <em style={{ color: 'var(--slate-11, #60646c)', fontSize: '12px', fontStyle: 'normal' }}>
                     {secText}
                   </em>
                 )}
@@ -111,7 +111,7 @@ function TopNotes({
             </div>
             <strong>{String(note.title || note.id)}</strong>
             <p>
-              {String(note.author || '未知作者')} · {displayTag(note.brand || note.productScope, '品牌待补充')}
+              {String(note.author || '未知作者')} / {displayTag(note.brand || note.productScope, '品牌待补充')}
             </p>
             <dl>
               <div>
@@ -154,7 +154,7 @@ export function ContentPerformance({
       return p === clean || clean.includes(p) || (n.title || "").includes(clean);
     });
     openCategoryNotes({
-      title: "投放管线 · " + clean,
+      title: "投放管线 / " + clean,
       subtitle: "该管线共归属 " + matched.length + " 篇笔记，展示前 50 篇（按互动量降序）",
       tag: "投放管线",
       notes: matched.length ? matched : (data.notes || []).slice(0, 30),
@@ -169,7 +169,7 @@ export function ContentPerformance({
       return (n.category1 === categoryName) || (contentDirectionLabel(n.category1) === normTarget);
     });
     openCategoryNotes({
-      title: '内容切角 / 场景 · ' + normTarget,
+      title: '内容切角 / 场景 / ' + normTarget,
       subtitle: '该分类下共关联 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '内容切角',
       notes: matched,
@@ -185,7 +185,7 @@ export function ContentPerformance({
       return l === cleanLabel || l.includes(cleanLabel) || cleanLabel.includes(l);
     });
     openCategoryNotes({
-      title: '达人层级 · ' + cleanLabel,
+      title: '达人层级 / ' + cleanLabel,
       subtitle: '该层级共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '达人层级',
       notes: matched,
@@ -198,7 +198,7 @@ export function ContentPerformance({
     const clean = locName.trim();
     const matched = (data.notes || []).filter(n => (n.province || '').trim() === clean || (n.city || '').trim() === clean);
     openCategoryNotes({
-      title: '达人地域 · ' + clean,
+      title: '达人地域 / ' + clean,
       subtitle: '该地域共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '达人地域',
       notes: matched,
@@ -210,7 +210,7 @@ export function ContentPerformance({
     if (!openCategoryNotes) return;
     const normScene = contentDirectionLabel(scene);
     openCategoryNotes({
-      title: '方向×达人层级 · ' + normScene + ' / ' + level,
+      title: '方向×达人层级 / ' + normScene + ' / ' + level,
       subtitle: '该交叉维度下共关联 ' + matchedNotes.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '细分场景',
       notes: matchedNotes,
@@ -227,7 +227,7 @@ export function ContentPerformance({
       return c === clean || contentDirectionLabel(c) === normClean || c.includes(clean);
     });
     openCategoryNotes({
-      title: '内容场景 · ' + clean,
+      title: '内容场景 / ' + clean,
       subtitle: '场景下共关联 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '场景树状图',
       notes: matched,
@@ -240,7 +240,7 @@ export function ContentPerformance({
     const clean = formatName.trim();
     const matched = (data.notes || []).filter(n => (n.noteType || '待补充').trim() === clean);
     openCategoryNotes({
-      title: '内容形式 · ' + clean,
+      title: '内容形式 / ' + clean,
       subtitle: '该形式共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '内容形式',
       notes: matched,
@@ -259,7 +259,7 @@ export function ContentPerformance({
       return s === clean;
     });
     openCategoryNotes({
-      title: '内容来源 · ' + clean,
+      title: '内容来源 / ' + clean,
       subtitle: '该来源下共收录 ' + matched.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '内容来源',
       notes: matched,
@@ -431,7 +431,7 @@ export function ContentPerformance({
   const treeMapItems = [...sceneMap.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8)
-    .map(([label, value], i) => ({ label, value, color: ['#1e6091', '#0d9488', '#7c3aed', '#f59e0b', '#dc2626', '#0891b2', '#65a30d', '#db2777'][i % 8] }));
+    .map(([label, value], i) => ({ label, value, color: ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31', '#0090ff', '#29a383', '#ce2c31'][i % 8] }));
 
   // 痛点词云（从 topics 数据）
   const topicSummary = aggregateTopics(data.analytics.topics || []);
@@ -450,10 +450,10 @@ export function ContentPerformance({
   // 消费者反馈分类（评论情感分布）
   const hasSentiment = Boolean(m.sentimentAvailable && (m.positiveCount !== null || m.negativeCount !== null || m.questionCount !== null));
   const feedbackCategories = hasSentiment ? [
-    { label: '正向赞誉', value: num(m.positiveCount), color: '#16a34a' },
-    { label: '求助/购买问询', value: num(m.questionCount), color: '#3b82f6' },
-    { label: '中性讨论', value: Math.max(0, num(m.commentTotal) - num(m.positiveCount) - num(m.negativeCount) - num(m.questionCount)), color: '#64748b' },
-    { label: '负向敏感', value: num(m.negativeCount), color: '#dc2626' },
+    { label: '正向赞誉', value: num(m.positiveCount), color: '#29a383' },
+    { label: '求助/购买问询', value: num(m.questionCount), color: '#0090ff' },
+    { label: '中性讨论', value: Math.max(0, num(m.commentTotal) - num(m.positiveCount) - num(m.negativeCount) - num(m.questionCount)), color: 'var(--slate-11, #60646c)' },
+    { label: '负向敏感', value: num(m.negativeCount), color: '#ce2c31' },
   ].filter(c => c.value > 0) : [];
 
   return (
@@ -555,10 +555,10 @@ export function ContentPerformance({
                   <b style={{ width: `${100 - idx * 15}%` }} />
                 </i>
                 <div style={{ display: 'flex', gap: 2, flexDirection: 'column', alignItems: 'flex-end', whiteSpace: 'nowrap' }}>
-                  <strong style={{ color: '#0f172a', fontWeight: 600 }}>
+                  <strong style={{ color: '#1c2024', fontWeight: 600 }}>
                     {item.isCurrency ? '¥' + compact(item.count) : item.unit ? `${item.count}${item.unit}` : compact(item.count)}
                   </strong>
-                  <em style={{ color: '#64748b', fontSize: '11px', fontStyle: 'normal' }}>
+                  <em style={{ color: 'var(--slate-11, #60646c)', fontSize: '12px', fontStyle: 'normal' }}>
                     {String(item.desc)}
                   </em>
                 </div>
@@ -608,7 +608,7 @@ export function ContentPerformance({
           title="达人层级效率矩阵"
           desc="头部、腰部、初级达人与 KOC 采买效率与 CPE 表现。"
         >
-          <div style={{ overflowX: 'auto', background: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+          <div style={{ overflowX: 'auto', background: '#ffffff', borderRadius: '10px', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
             <table className="ops-table" style={{ whiteSpace: 'nowrap' }}>
               <thead>
                 <tr>
@@ -622,18 +622,18 @@ export function ContentPerformance({
               <tbody>
                 {creatorLevelRows.map((row, index) => (
                   <tr key={row.name + '-' + index} onClick={() => handleTierClick(String(row.name))} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? ("点击查看「" + row.name + "」层级笔记") : undefined}>
-                    <td><div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><strong style={{ color: openCategoryNotes ? '#0284c7' : 'inherit' }}>{String(row.name)}</strong>{openCategoryNotes && <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#eff6ff', color: '#1d4ed8', border: '1px solid #dbeafe', whiteSpace: 'nowrap' }}>查看 ↗</span>}</div></td>
+                    <td><div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><strong style={{ color: openCategoryNotes ? '#0d74ce' : 'inherit' }}>{String(row.name)}</strong>{openCategoryNotes && <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#e6f4fe', color: '#0d74ce', border: '0.5px solid #e6f4fe', whiteSpace: 'nowrap' }}>查看 ↗</span>}</div></td>
                     <td>{num(row.count)}</td>
                     <td>
                       {row.avgRead !== null && row.avgRead !== undefined ? (
                         <span>
                           {compact(row.avgRead)}
                           {row.readSamples !== undefined && row.readSamples > 0 && row.readSamples < row.count && (
-                            <small style={{ color: '#94a3b8', fontSize: '11px', marginLeft: 4 }}>({row.readSamples}篇)</small>
+                            <small style={{ color: '#60646c', fontSize: '12px', marginLeft: 4 }}>({row.readSamples}篇)</small>
                           )}
                         </span>
                       ) : (
-                        <span style={{ color: '#94a3b8' }}>—</span>
+                        <span style={{ color: '#60646c' }}>—</span>
                       )}
                     </td>
                     <td>
@@ -641,15 +641,15 @@ export function ContentPerformance({
                         <span>
                           {compact(row.avgInteraction)}
                           {row.interSamples !== undefined && row.interSamples > 0 && row.interSamples < row.count && (
-                            <small style={{ color: '#94a3b8', fontSize: '11px', marginLeft: 4 }}>({row.interSamples}篇)</small>
+                            <small style={{ color: '#60646c', fontSize: '12px', marginLeft: 4 }}>({row.interSamples}篇)</small>
                           )}
                         </span>
                       ) : (
-                        <span style={{ color: '#94a3b8' }}>—</span>
+                        <span style={{ color: '#60646c' }}>—</span>
                       )}
                     </td>
                     <td>
-                      <span style={{ fontWeight: 600, color: num(row.avgCpe) ? '#0f172a' : '#94a3b8' }}>
+                      <span style={{ fontWeight: 600, color: num(row.avgCpe) ? '#1c2024' : '#60646c' }}>
                         {num(row.avgCpe) ? '¥' + num(row.avgCpe).toFixed(2) : '—'}
                       </span>
                     </td>
@@ -692,26 +692,26 @@ export function ContentPerformance({
                   const budget = num(p.budget);
                   return (
                     <div key={p.id || idx} onClick={() => handlePipelineClick(p.name)} style={{ padding: '6px 8px', borderRadius: 8, cursor: openCategoryNotes ? 'pointer' : 'default', transition: 'background 0.15s ease' }} title={openCategoryNotes ? ('点击查看「' + p.name + '」管线笔记') : undefined}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: 5 }}>
-                        <strong style={{ color: '#0f172a' }}>{p.name}</strong>
-                        <span style={{ color: '#1e293b', fontWeight: 600 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', marginBottom: 5 }}>
+                        <strong style={{ color: '#1c2024' }}>{p.name}</strong>
+                        <span style={{ color: '#1c2024', fontWeight: 600 }}>
                           {delivered.toLocaleString()}{' '}
-                          <small style={{ color: '#64748b', fontWeight: 400 }}>
+                          <small style={{ color: 'var(--slate-11, #60646c)', fontWeight: 400 }}>
                             / {target.toLocaleString()} 篇 ({progress.toFixed(1)}%)
                           </small>
                         </span>
                       </div>
-                      <div style={{ height: 8, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden', marginBottom: 4 }}>
+                      <div style={{ height: 8, background: '#f0f0f3', borderRadius: 999, overflow: 'hidden', marginBottom: 4 }}>
                         <div
                           style={{
                             width: `${progress}%`,
                             height: '100%',
-                            background: 'linear-gradient(90deg, #3b82f6, #60a5fa)',
+                            background: 'linear-gradient(90deg, #0090ff, #5eb1ef)',
                             borderRadius: 999,
                           }}
                         />
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px', color: '#64748b' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>
                         <span>已消耗 ¥{spent.toLocaleString()}</span>
                         <span>总预算 ¥{budget.toLocaleString()}</span>
                       </div>
@@ -779,8 +779,8 @@ export function ContentPerformance({
           )}
 
           {wordCloudWords.length > 0 && (
-            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f1f5f9' }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 6 }}>评论高频痛点词云</div>
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '0.5px solid #f0f0f3' }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#60646c', marginBottom: 6 }}>评论高频痛点词云</div>
               <WordCloudChart words={wordCloudWords} />
               <p className="metric-note">其他及未分类评论 {topicSummary.unclassified.toLocaleString()} 条，单独列示，不作为具体话题。</p>
             </div>
@@ -802,19 +802,19 @@ export function ContentPerformance({
           />
 
           {feedbackCategories.length > 0 && (
-            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f1f5f9' }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#475569', marginBottom: 8 }}>消费者反馈分类构成</div>
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '0.5px solid #f0f0f3' }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: '#60646c', marginBottom: 8 }}>消费者反馈分类构成</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {feedbackCategories.map((c, i) => {
                   const catTotal = feedbackCategories.reduce((s, x) => s + x.value, 0);
                   const sharePct = catTotal > 0 ? (c.value / catTotal * 100) : 0;
                   return (
                     <div key={i}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
-                        <span style={{ fontWeight: 600, color: '#334155' }}>{c.label}</span>
-                        <span style={{ color: '#64748b' }}>{c.value.toLocaleString()} 条 · {sharePct.toFixed(1)}%</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, marginBottom: 4 }}>
+                        <span style={{ fontWeight: 600, color: '#1c2024' }}>{c.label}</span>
+                        <span style={{ color: 'var(--slate-11, #60646c)' }}>{c.value.toLocaleString()} 条 / {sharePct.toFixed(1)}%</span>
                       </div>
-                      <div style={{ height: 10, background: '#f1f5f9', borderRadius: 999, overflow: 'hidden' }}>
+                      <div style={{ height: 10, background: '#f0f0f3', borderRadius: 999, overflow: 'hidden' }}>
                         <div style={{ width: `${sharePct}%`, height: '100%', background: c.color, borderRadius: 999, transition: 'width 0.3s ease' }} />
                       </div>
                     </div>
@@ -839,9 +839,9 @@ export function ContentPerformance({
               const h = (count / max) * 160;
               return (
                 <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: '#0f172a' }}>{count}</span>
-                  <div style={{ width: '100%', maxWidth: 40, height: h, background: 'linear-gradient(180deg, #3b82f6, #1e40af)', borderRadius: '4px 4px 0 0', minHeight: 4 }} />
-                  <span style={{ fontSize: 10.5, color: '#64748b', whiteSpace: 'nowrap' }}>{month}</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: '#1c2024' }}>{count}</span>
+                  <div style={{ width: '100%', maxWidth: 40, height: h, background: 'linear-gradient(180deg, #0090ff, #0d74ce)', borderRadius: '4px 4px 0 0', minHeight: 4 }} />
+                  <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', whiteSpace: 'nowrap' }}>{month}</span>
                 </div>
               );
             })}
@@ -854,7 +854,7 @@ export function ContentPerformance({
         const riskRows = (data.feishu?.contentRisk || []) as Array<{ riskType: string; reason: string; originalScript: string; replacementScript: string; tips: string }>;
         if (!riskRows.length) return null;
         const typeCounts = riskRows.reduce((acc, r) => { acc[r.riskType] = (acc[r.riskType] || 0) + 1; return acc; }, {} as Record<string, number>);
-        const colors = ['#dc2626', '#d97706', '#7c3aed', '#2563eb', '#0891b2', '#16a34a'];
+        const colors = ['#ce2c31', '#ffc53d', '#5753c6', '#0090ff', '#0090ff', '#29a383'];
         return (
           <DashboardSection
             eyebrow="CONTENT RISK"
@@ -863,15 +863,15 @@ export function ContentPerformance({
           >
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
               {Object.entries(typeCounts).map(([type, count], i) => (
-                <div key={type} style={{ padding: '14px 16px', background: `linear-gradient(135deg, ${colors[i % colors.length]}15, ${colors[i % colors.length]}08)`, borderRadius: 10, border: `1px solid ${colors[i % colors.length]}30` }}>
+                <div key={type} style={{ padding: '14px 16px', background: `linear-gradient(135deg, ${colors[i % colors.length]}15, ${colors[i % colors.length]}08)`, borderRadius: 10, border: `0.5px solid ${colors[i % colors.length]}30` }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: colors[i % colors.length] }}>{type}</span>
-                    <span style={{ fontSize: 20, fontWeight: 900, color: colors[i % colors.length] }}>{count}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: colors[i % colors.length] }}>{type}</span>
+                    <span style={{ fontSize: 22, fontWeight: 900, color: colors[i % colors.length] }}>{count}</span>
                   </div>
                   {riskRows.filter(r => r.riskType === type).slice(0, 2).map((r, j) => (
-                    <div key={j} style={{ marginBottom: 8, fontSize: 11.5 }}>
-                      <div style={{ color: '#64748b', marginBottom: 2 }}><strong style={{ color: '#dc2626' }}>风险：</strong>{r.reason?.substring(0, 50)}{r.reason?.length > 50 ? '...' : ''}</div>
-                      <div style={{ color: '#16a34a' }}><strong>替换：</strong>{r.replacementScript?.substring(0, 50)}{r.replacementScript?.length > 50 ? '...' : ''}</div>
+                    <div key={j} style={{ marginBottom: 8, fontSize: 12 }}>
+                      <div style={{ color: 'var(--slate-11, #60646c)', marginBottom: 2 }}><strong style={{ color: '#ce2c31' }}>风险：</strong>{r.reason?.substring(0, 50)}{r.reason?.length > 50 ? '...' : ''}</div>
+                      <div style={{ color: '#29a383' }}><strong>替换：</strong>{r.replacementScript?.substring(0, 50)}{r.replacementScript?.length > 50 ? '...' : ''}</div>
                     </div>
                   ))}
                 </div>

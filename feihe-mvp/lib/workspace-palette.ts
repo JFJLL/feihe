@@ -8,13 +8,13 @@
  */
 
 const DATA_TONES = {
-  blue: '#1e6091',
-  teal: '#0f807a',
-  green: '#3f815e',
-  purple: '#7864a5',
-  amber: '#a66f22',
-  coral: '#b85c55',
-  slate: '#64748b',
+  blue: '#0090ff',
+  teal: '#12a594',
+  green: '#29a383',
+  purple: '#5b5bd6',
+  amber: '#ffc53d',
+  coral: '#e5484d',
+  slate: '#8b8d98',
 } as const;
 
 export type DataTone = keyof typeof DATA_TONES;

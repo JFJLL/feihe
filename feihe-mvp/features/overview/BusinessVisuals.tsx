@@ -11,26 +11,26 @@ import type { BusinessHighlights, CostComparison, RankValue, SourceRef } from '.
  * 灰计划 #8c9ba5 (预算 / 计划 / 基准线)
  */
 export const DASHBOARD_PALETTE = {
-  actual: '#2c7168',
-  plan: '#8c9ba5',
-  settlement: '#8273a3',
-  investment: '#b88a45',
-  anomaly: '#bd7964',
+  actual: '#008573',
+  plan: '#8b8d98',
+  settlement: '#5b5bd6',
+  investment: '#ffc53d',
+  anomaly: '#e5484d',
 
   // 渠道映射
-  feed: '#2c7168',
-  search: '#8273a3',
-  creators: '#b88a45',
-  comments: '#bd7964',
-  seo: '#4d8b80',
-  other: '#8c9ba5',
+  feed: '#008573',
+  search: '#5b5bd6',
+  creators: '#ffc53d',
+  comments: '#e5484d',
+  seo: '#12a594',
+  other: '#8b8d98',
 
   // 中性与结构
-  bgPage: '#f6f5f2',
+  bgPage: '#f9f9fb',
   cardBg: '#ffffff',
-  textMain: '#1f2937',
-  textMuted: '#64748b',
-  border: '#e2e8f0',
+  textMain: '#1c2024',
+  textMuted: '#60646c',
+  border: '#d9d9e0',
 };
 
 const num = (n: number | null | undefined) => (n === null || n === undefined ? '—' : n.toLocaleString('zh-CN', { maximumFractionDigits: 2 }));
@@ -63,7 +63,7 @@ export function CostComparisonChart({
       <div className="bv-cost-chart bv-cost-empty">
         <div className="bv-chart-title">
           <h4>{title}</h4>
-          <span>CPUV · 元</span>
+          <span>CPUV / 元</span>
         </div>
         <p className="bd-caption bv-empty-cost-hint">当前业务日及月内基准暂未登记，待作者日报更新；无推算数据。</p>
       </div>
@@ -76,10 +76,10 @@ export function CostComparisonChart({
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           <h4>{title}</h4>
           {isReference && (
-            <span className="bv-ref-badge">最近月累计快照 · 截至 {isReference.date}</span>
+            <span className="bv-ref-badge">最近月累计快照 / 截至 {isReference.date}</span>
           )}
         </div>
-        <span>CPUV · 元，越低成本越低</span>
+        <span>CPUV / 元，越低成本越低</span>
       </div>
       {activeCosts.map(c => {
         const max = Math.max(c.actual ?? 0, c.high ?? 0, 1) * 1.18;
@@ -94,12 +94,12 @@ export function CostComparisonChart({
           ? DASHBOARD_PALETTE.settlement
           : DASHBOARD_PALETTE.actual;
         const textColor = warning
-          ? '#9e4a37'
+          ? '#ce2c31'
           : zero
-          ? '#64748b'
+          ? '#60646c'
           : isReference
-          ? '#645582'
-          : '#1f544d';
+          ? '#272962'
+          : '#0d3d38';
         return (
           <div key={c.channel} className="bv-cost-row">
             <svg
@@ -110,12 +110,12 @@ export function CostComparisonChart({
               <title>
                 {`${c.channel}实际${num(c.actual)}元；行业基准${num(c.low)}–${num(c.high)}元`}
               </title>
-              <text x="0" y="42" className="bv-svg-label" fill="#2d3748">{c.channel}</text>
-              <line x1="78" x2="378" y1="38" y2="38" stroke="#e2e8f0" strokeWidth="5" strokeLinecap="round" />
+              <text x="0" y="42" className="bv-svg-label" fill="#1c2024">{c.channel}</text>
+              <line x1="78" x2="378" y1="38" y2="38" stroke="#d9d9e0" strokeWidth="5" strokeLinecap="round" />
               {c.low !== null && c.high !== null && (
                 <>
-                  <rect x={x(c.low)} y="29" width={Math.max(3, x(c.high) - x(c.low))} height="18" rx="4" fill="#e8edf2" />
-                  <text x={(x(c.low) + x(c.high)) / 2} y="18" textAnchor="middle" className="bv-svg-muted" fill="#64748b">
+                  <rect x={x(c.low)} y="29" width={Math.max(3, x(c.high) - x(c.low))} height="18" rx="4" fill="#d9d9e0" />
+                  <text x={(x(c.low) + x(c.high)) / 2} y="18" textAnchor="middle" className="bv-svg-muted" fill="#60646c">
                     基准 {num(c.low)}–{num(c.high)}
                   </text>
                 </>
@@ -128,7 +128,7 @@ export function CostComparisonChart({
                     y="68"
                     textAnchor="middle"
                     fill={textColor}
-                    fontSize="13"
+                    fontSize="14"
                     fontWeight="600"
                   >
                     {zero ? '原值0（待确认）' : isReference ? `快照 ${num(c.actual)}` : `实际 ${num(c.actual)}`}
@@ -136,7 +136,7 @@ export function CostComparisonChart({
                   </text>
                 </>
               ) : (
-                <text x="224" y="67" textAnchor="middle" className="bv-svg-muted" fill="#94a3b8">实际值未登记</text>
+                <text x="224" y="67" textAnchor="middle" className="bv-svg-muted" fill="#60646c">实际值未登记</text>
               )}
             </svg>
           </div>
@@ -261,7 +261,7 @@ export function TodayBusinessActions({ items }: { items: BusinessHighlights['tod
             <strong>{item.title}</strong>
           </div>
           <p className="bv-action-body">{item.detail}</p>
-          <span className="bv-action-assignee">{item.owner} · {item.deadline}</span>
+          <span className="bv-action-assignee">{item.owner} / {item.deadline}</span>
         </article>
       ))}
     </div>
@@ -277,7 +277,7 @@ export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['sea
             <article key={w.word}>
               <div className="bv-word-head">
                 <h4>{w.word}</h4>
-                <span>SOC {pct(w.soc)} · 排名{w.rank ?? '—'}</span>
+                <span>SOC {pct(w.soc)} / 排名{w.rank ?? '—'}</span>
               </div>
               <strong className="bv-word-spend">{num(w.spend)}<small>元</small></strong>
               <p className="bd-caption">所绑定月份累计消耗</p>
@@ -341,7 +341,7 @@ export function SearchVisuals({
 
       {!hideTopKeywords && (
         <>
-          <HorizontalRanks rows={data.topKeywords} title="其他关键词 · 月累计消耗TOP10" />
+          <HorizontalRanks rows={data.topKeywords} title="其他关键词 / 月累计消耗TOP10" />
           <p className="bd-caption">排行使用全部关键词明细计算。指数为单次观测；无每日观测不生成趋势。</p>
           <p className="bd-caption">底表累计消耗；无每日观测不伪造趋势。</p>
         </>
@@ -432,14 +432,14 @@ export function FeedAudienceVisuals({
   return (
     <div className="bv-feed-audience-grid">
       <div className="bv-audience-col">
-        <HorizontalRanks rows={starGroups} title="小红星 · 人群包CPUV（低→高）" color="blue" zeroUnconfirmed={true} />
+        <HorizontalRanks rows={starGroups} title="小红星 / 人群包CPUV（低→高）" color="blue" zeroUnconfirmed={true} />
       </div>
       <div className="bv-audience-col">
-        <HorizontalRanks rows={allianceGroups} title="小红盟 · 人群包CPUV（低→高）" color="teal" zeroUnconfirmed={true} />
+        <HorizontalRanks rows={allianceGroups} title="小红盟 / 人群包CPUV（低→高）" color="teal" zeroUnconfirmed={true} />
       </div>
       <div className="bv-audience-col bv-audience-penetration-col">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-          <h4 style={{ margin: 0, fontSize: 13, color: '#23364d' }}>竞品人群渗透 · 快照对比</h4>
+          <h4 style={{ margin: 0, fontSize: 14, color: '#1c2024' }}>竞品人群渗透 / 快照对比</h4>
           {isCrowdRef && reference && (
             <span className="bv-ref-badge">截至 {reference.date}</span>
           )}
@@ -451,7 +451,7 @@ export function FeedAudienceVisuals({
               <div className="bv-progress-track">
                 <span style={{ width: a.value === null ? 0 : String(Math.min(1, a.value) * 100) + "%" }} />
               </div>
-              <p>{a.observedOn}观测 · {a.previousOn}登记{pct(a.previous)} · 人群体量{a.size}</p>
+              <p>{a.observedOn}观测 / {a.previousOn}登记{pct(a.previous)} / 人群体量{a.size}</p>
               <details><summary>人群定义</summary><p>{a.logic}</p></details>
             </article>
           ))}
@@ -466,13 +466,13 @@ export function FeedAudienceVisuals({
   );
 }
 
-function ActionLines({ actions, title = '当天动作 · 作者登记' }: { actions: string[]; title?: string }) {
+function ActionLines({ actions, title = '当天动作 / 作者登记' }: { actions: string[]; title?: string }) {
   const valid = actions
     .map(a => a.trim())
     .filter(a => a && !(/benchmark/i.test(a) || /^\s*(星|盟)?\s*cpuv[：:]\s*[\d.]+/i.test(a) || /^\s*回搜率[：:]\s*[\d.]+/i.test(a)));
   return valid.length ? (
     <details className="bv-actions-fold" style={{ marginTop: 12 }}>
-      <summary style={{ fontSize: 11, color: '#64748b', cursor: 'pointer' }}>{title}（{valid.length}条登记）</summary>
+      <summary style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', cursor: 'pointer' }}>{title}（{valid.length}条登记）</summary>
       <div className="bv-actions" style={{ marginTop: 8 }}>
         {valid.map((a, i) => (
           <p key={i}>{a}</p>
@@ -520,15 +520,15 @@ export function CreatorVisuals({
 
       <div className="bv-creator-legend-row">
         <div className="bv-creator-legend" style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <div className="bv-legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#64748b' }}>
+          <div className="bv-legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
             <i style={{ display: 'inline-block', width: 9, height: 9, borderRadius: 2, background: DASHBOARD_PALETTE.plan }} />
             计划
           </div>
-          <div className="bv-legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#64748b' }}>
+          <div className="bv-legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
             <i style={{ display: 'inline-block', width: 9, height: 9, borderRadius: 2, background: DASHBOARD_PALETTE.investment }} />
             已选
           </div>
-          <div className="bv-legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#64748b' }}>
+          <div className="bv-legend-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
             <i style={{ display: 'inline-block', width: 9, height: 9, borderRadius: 2, background: DASHBOARD_PALETTE.actual }} />
             已发
           </div>
@@ -542,7 +542,7 @@ export function CreatorVisuals({
         <div className="bv-level" key={r.label}>
           <div>
             <b>{r.label}</b>
-            <span>计划{num(r.plan)} · 已选{num(r.selected)} · 已发{num(r.published)}</span>
+            <span>计划{num(r.plan)} / 已选{num(r.selected)} / 已发{num(r.published)}</span>
           </div>
           <div className="bv-level-track" role="img" aria-label={`${r.label}计划${num(r.plan)}、已选${num(r.selected)}、已发${num(r.published)}`}>
             <i className="bv-level-plan" style={{ background: DASHBOARD_PALETTE.plan }} />
@@ -602,7 +602,7 @@ export function MaintenanceVisuals({
     <>
       {isRef && reference && (
         <div style={{ marginBottom: 10 }}>
-          <span className="bv-ref-badge">最近月累计快照 · 截至 {reference.date}</span>
+          <span className="bv-ref-badge">最近月累计快照 / 截至 {reference.date}</span>
         </div>
       )}
       <Progress label="维护笔记登记" actual={notesRegistered} target={notesPlan} unit="篇" color={DASHBOARD_PALETTE.settlement} />
@@ -619,7 +619,7 @@ export function MaintenanceVisuals({
           </>
         )}
       </div>
-      <HorizontalRanks rows={minds.map(m => ({ label: m.label, value: m.comments }))} title="核心心智 · 月累计评论登记" unit="条" color="purple" />
+      <HorizontalRanks rows={minds.map(m => ({ label: m.label, value: m.comments }))} title="核心心智 / 月累计评论登记" unit="条" color="purple" />
       <div className="bv-maint-bottom">
         <p className="bd-caption">心智方向覆盖笔记有交叉，不能相加当作唯一笔记数；登记量不等于平台可见、留存或本次抓取量。</p>
         <Evidence source={data.source || refMaint?.source} />
@@ -649,7 +649,7 @@ export function RectificationVisuals({
     <div className={`bv-rectification ${isSingle ? 'bv-rectification-single' : ''}`}>
       <div className="bv-rectification-card bv-rectification-base">
         <div className="bv-rectification-card-header">
-          <h4>当前底表 · {data.total}个唯一笔记ID</h4>
+          <h4>当前底表 / {data.total}个唯一笔记ID</h4>
         </div>
         <div className="bv-status-strip" role="img" aria-label={data.statuses.map(s => `${s.label}${s.value}`).join('，')}>
           {data.statuses.map((s, i) => (
@@ -681,7 +681,7 @@ export function RectificationVisuals({
       {report && (
         <div className="bv-rectification-card bv-rectification-report">
           <div className="bv-rectification-card-header">
-            <h4>日报登记 · 停投整改进度</h4>
+            <h4>日报登记 / 停投整改进度</h4>
             {isReportRef && reference && (
               <span className="bv-ref-badge">截至 {reference.date} 快照</span>
             )}
@@ -693,7 +693,7 @@ export function RectificationVisuals({
             unit="篇"
             color={DASHBOARD_PALETTE.actual}
           />
-          <p className="bv-small-warning" style={{ color: '#9e4a37' }}>剩余{num(report.remaining)}篇 · 截止：{report.deadline}</p>
+          <p className="bv-small-warning" style={{ color: '#ce2c31' }}>剩余{num(report.remaining)}篇 / 截止：{report.deadline}</p>
           <p className="bd-caption bv-rectification-bottom-note">
             日报排查{num(report.inspected)}篇，底表{data.total}个唯一ID；按各自统计范围保留差异。
           </p>

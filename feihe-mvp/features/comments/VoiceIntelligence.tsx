@@ -42,8 +42,8 @@ function DistributionBars({
                 gap: '10px',
                 padding: '6px 8px',
                 borderRadius: '6px',
-                background: isHovered ? '#f0f9ff' : 'transparent',
-                border: isHovered ? '1px solid #bae6fd' : '1px solid transparent',
+                background: isHovered ? '#e6f4fe' : 'transparent',
+                border: isHovered ? '0.5px solid #acd8fc' : '0.5px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
@@ -51,8 +51,8 @@ function DistributionBars({
               <span
                 style={{
                   width: '100px',
-                  fontSize: '12.5px',
-                  color: isHovered ? '#0369a1' : '#334155',
+                  fontSize: 14,
+                  color: isHovered ? '#0d74ce' : '#1c2024',
                   fontWeight: isHovered ? 600 : 400,
                   textOverflow: 'ellipsis',
                   overflow: 'hidden',
@@ -62,22 +62,22 @@ function DistributionBars({
               >
                 {String(row[labelKey] || '待补充')}
               </span>
-              <div style={{ flex: 1, height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ flex: 1, height: '8px', background: '#f0f0f3', borderRadius: '4px', overflow: 'hidden' }}>
                 <div
                   style={{
                     width: `${barWidth}%`,
                     height: '100%',
-                    background: isHovered ? '#0284c7' : '#3b82f6',
+                    background: isHovered ? '#0d74ce' : '#0090ff',
                     borderRadius: '4px',
                     transition: 'width 0.4s ease, background 0.15s ease',
                   }}
                 />
               </div>
               <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                <strong style={{ width: '45px', textAlign: 'right', fontSize: '13px', color: '#0f172a' }}>
+                <strong style={{ width: '45px', textAlign: 'right', fontSize: 14, color: '#1c2024' }}>
                   {compact(val)}
                 </strong>
-                <span style={{ fontSize: '11px', color: isHovered ? '#0284c7' : '#94a3b8', width: '40px', textAlign: 'right' }}>
+                <span style={{ fontSize: 12, color: isHovered ? '#0d74ce' : '#60646c', width: '40px', textAlign: 'right' }}>
                   {pctVal}%
                 </span>
               </div>
@@ -85,7 +85,7 @@ function DistributionBars({
           );
         })
       ) : (
-        <div style={{ padding: '20px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>{empty}</div>
+        <div style={{ padding: '20px', textAlign: 'center', color: '#60646c', fontSize: 14 }}>{empty}</div>
       )}
     </div>
   );
@@ -112,10 +112,10 @@ function SentimentDonut({
   const q = question ?? 0;
   const neg = negative ?? 0;
   const items = [
-    { label: '正向好评', count: pos, color: '#16a34a', pct: total ? (pos / total) * 100 : 0 },
-    { label: '中立讨论', count: neu, color: '#94a3b8', pct: total ? (neu / total) * 100 : 0 },
-    { label: '购买问询', count: q, color: '#ea580c', pct: total ? (q / total) * 100 : 0 },
-    { label: '负向风险', count: neg, color: '#dc2626', pct: total ? (neg / total) * 100 : 0 },
+    { label: '正向好评', count: pos, color: '#29a383', pct: total ? (pos / total) * 100 : 0 },
+    { label: '中立讨论', count: neu, color: '#60646c', pct: total ? (neu / total) * 100 : 0 },
+    { label: '购买问询', count: q, color: '#ffc53d', pct: total ? (q / total) * 100 : 0 },
+    { label: '负向风险', count: neg, color: '#ce2c31', pct: total ? (neg / total) * 100 : 0 },
   ];
   const size = 150;
   const baseStroke = 24;
@@ -138,7 +138,7 @@ function SentimentDonut({
     <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap', padding: '8px 0' }}>
       <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
-          <circle cx={center} cy={center} r={(size - baseStroke) / 2} fill="none" stroke="#f1f5f9" strokeWidth={baseStroke} />
+          <circle cx={center} cy={center} r={(size - baseStroke) / 2} fill="none" stroke="#f0f0f3" strokeWidth={baseStroke} />
           {slices.map((s, idx) => (
             <circle
               key={idx}
@@ -176,20 +176,20 @@ function SentimentDonut({
         >
           {activeItem ? (
             <>
-              <strong style={{ fontSize: '18px', color: activeItem.color, lineHeight: 1.1 }}>
+              <strong style={{ fontSize: 16, color: activeItem.color, lineHeight: 1.1 }}>
                 {activeItem.count}条
               </strong>
-              <span style={{ fontSize: '11px', fontWeight: 600, color: '#334155', marginTop: 3 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#1c2024', marginTop: 3 }}>
                 {activeItem.label}
               </span>
-              <span style={{ fontSize: '10.5px', color: '#64748b' }}>
+              <span style={{ fontSize: 12, color: '#60646c' }}>
                 {activeItem.pct.toFixed(1)}%
               </span>
             </>
           ) : (
             <>
-              <strong style={{ fontSize: '18px', color: '#0f172a' }}>{total ? pct(positiveRate) : '—'}</strong>
-              <span style={{ fontSize: '11px', color: '#64748b', marginTop: 2 }}>正向口碑</span>
+              <strong style={{ fontSize: 16, color: '#1c2024' }}>{total ? pct(positiveRate) : '—'}</strong>
+              <span style={{ fontSize: 12, color: '#60646c', marginTop: 2 }}>正向口碑</span>
             </>
           )}
         </div>
@@ -207,22 +207,22 @@ function SentimentDonut({
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                fontSize: '12.5px',
+                fontSize: 14,
                 padding: '5px 8px',
                 borderRadius: '6px',
-                background: isHovered ? '#f8fafc' : 'transparent',
-                border: isHovered ? `1px solid ${item.color}` : '1px solid transparent',
+                background: isHovered ? '#f9f9fb' : 'transparent',
+                border: isHovered ? `0.5px solid ${item.color}` : '0.5px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
             >
-              <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: isHovered ? '#0f172a' : '#475569', fontWeight: isHovered ? 600 : 400 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: isHovered ? '#1c2024' : '#60646c', fontWeight: isHovered ? 600 : 400 }}>
                 <i style={{ width: '8px', height: '8px', borderRadius: '50%', background: item.color, display: 'inline-block' }} />
                 {item.label}
               </span>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <strong style={{ color: '#0f172a' }}>{compact(item.count)}</strong>
-                <span style={{ color: isHovered ? item.color : '#64748b', fontSize: '11.5px', width: '45px', textAlign: 'right', fontWeight: isHovered ? 600 : 400 }}>
+                <strong style={{ color: '#1c2024' }}>{compact(item.count)}</strong>
+                <span style={{ color: isHovered ? item.color : '#60646c', fontSize: 12, width: '45px', textAlign: 'right', fontWeight: isHovered ? 600 : 400 }}>
                   {item.pct.toFixed(1)}%
                 </span>
               </div>
@@ -313,8 +313,8 @@ export function VoiceIntelligence({
           desc="仅显示真实抓取快照；不同日期的监测笔记范围可能不同，数值不是每日新增评论。"
         >
           {(data.analytics?.trend || []).length < 3 ? <div className="empty">真实历史快照不足，暂不展示趋势。积累至少 3 个观测日期后显示。</div> : <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="供应商交付登记日度趋势" series={[
-            {key:'total',label:'交付量',color:'#0284c7'}, {key:'positive',label:'正向',color:'#16a34a'},
-            {key:'negative',label:'负向',color:'#dc2626'}, {key:'question',label:'问询',color:'#ea580c'},
+            {key:'total',label:'交付量',color:'#0d74ce'}, {key:'positive',label:'正向',color:'#29a383'},
+            {key:'negative',label:'负向',color:'#ce2c31'}, {key:'question',label:'问询',color:'#ffc53d'},
           ]} />}
         </DashboardSection>
       </div>
@@ -340,33 +340,33 @@ export function VoiceIntelligence({
           desc="对高频好评、风险焦点与决策问询的策略性提炼。"
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px 14px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#16a34a', marginBottom: '4px' }}>
+            <div style={{ background: '#f9f9fb', border: '0.5px solid #d9d9e0', borderRadius: '10px', padding: '12px 14px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#29a383', marginBottom: '4px' }}>
                 ✓ 核心正向体验
               </div>
-              <div style={{ fontSize: '13px', color: '#334155', lineHeight: 1.5 }}>
+              <div style={{ fontSize: 14, color: '#1c2024', lineHeight: 1.5 }}>
                 {topPositive
                   ? '“' + String(topPositive.name) + '”是当前最集中的正向体验，累计共 ' + num(topPositive.count) + ' 条。'
                   : '暂无可用的正向主题样本，暂不生成结论。'}
               </div>
             </div>
 
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px 14px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#dc2626', marginBottom: '4px' }}>
+            <div style={{ background: '#f9f9fb', border: '0.5px solid #d9d9e0', borderRadius: '10px', padding: '12px 14px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#ce2c31', marginBottom: '4px' }}>
                 ⚠ 问题与风险焦点
               </div>
-              <div style={{ fontSize: '13px', color: '#334155', lineHeight: 1.5 }}>
+              <div style={{ fontSize: 14, color: '#1c2024', lineHeight: 1.5 }}>
                 {topNegative
                   ? '“' + String(topNegative.name) + '”为当前首要风险主题，共 ' + num(topNegative.count) + ' 条，需重点处置。'
                   : '暂无可用的负向主题样本，不能据此判断风险已消除。'}
               </div>
             </div>
 
-            <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px 14px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#ea580c', marginBottom: '4px' }}>
+            <div style={{ background: '#f9f9fb', border: '0.5px solid #d9d9e0', borderRadius: '10px', padding: '12px 14px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: '#ffc53d', marginBottom: '4px' }}>
                 💡 购买决策问询
               </div>
-              <div style={{ fontSize: '13px', color: '#334155', lineHeight: 1.5 }}>
+              <div style={{ fontSize: 14, color: '#1c2024', lineHeight: 1.5 }}>
                 问询占 {pct(m.questionRate)}，建议按产品适用、使用效果与价格服务分流承接，促成种草拔草。
               </div>
             </div>
@@ -376,11 +376,11 @@ export function VoiceIntelligence({
                 type="button"
                 className="btn-link"
                 style={{
-                  background: '#2563eb',
+                  background: '#0090ff',
                   color: '#ffffff',
                   padding: '10px 16px',
                   borderRadius: '8px',
-                  fontSize: '13px',
+                  fontSize: 14,
                   fontWeight: 600,
                   border: 'none',
                   cursor: 'pointer',
@@ -404,39 +404,39 @@ export function VoiceIntelligence({
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
           <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>整体闭环率</div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: '#0f172a', margin: '4px 0' }}>
+            <div style={{ fontSize: '12px', color: '#60646c' }}>整体闭环率</div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#1c2024', margin: '4px 0' }}>
               {num(actions.total) > 0 ? pct(num(actions.handled) / handledTotal) : '—'}
             </div>
-            <div style={{ fontSize: '11.5px', color: '#15803d', fontWeight: 600 }}>已处置完成比例</div>
+            <div style={{ fontSize: 12, color: '#208368', fontWeight: 600 }}>已处置完成比例</div>
           </div>
           <div className="pastel-card pastel-green" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>已闭环处理</div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: '#16a34a', margin: '4px 0' }}>
+            <div style={{ fontSize: '12px', color: '#60646c' }}>已闭环处理</div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#29a383', margin: '4px 0' }}>
               {num(actions.handled)}
             </div>
-            <div style={{ fontSize: '11.5px', color: '#64748b' }}>处理完成条数</div>
+            <div style={{ fontSize: 12, color: '#60646c' }}>处理完成条数</div>
           </div>
           <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>待达人回复</div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: '#2563eb', margin: '4px 0' }}>
+            <div style={{ fontSize: '12px', color: '#60646c' }}>待达人回复</div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#0090ff', margin: '4px 0' }}>
               {num(actions.replyPending)}
             </div>
-            <div style={{ fontSize: '11.5px', color: '#64748b' }}>引导达人介入</div>
+            <div style={{ fontSize: 12, color: '#60646c' }}>引导达人介入</div>
           </div>
           <div className="pastel-card pastel-amber" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>待删除</div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: '#dc2626', margin: '4px 0' }}>
+            <div style={{ fontSize: '12px', color: '#60646c' }}>待删除</div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#ce2c31', margin: '4px 0' }}>
               {num(actions.deletePending)}
             </div>
-            <div style={{ fontSize: '11.5px', color: '#64748b' }}>违规/黑产删除</div>
+            <div style={{ fontSize: 12, color: '#60646c' }}>违规/黑产删除</div>
           </div>
           <div className="pastel-card" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>已自然消失</div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: '#64748b', margin: '4px 0' }}>
+            <div style={{ fontSize: '12px', color: '#60646c' }}>已自然消失</div>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#60646c', margin: '4px 0' }}>
               {num(actions.disappeared)}
             </div>
-            <div style={{ fontSize: '11.5px', color: '#64748b' }}>博主自删或系统屏蔽</div>
+            <div style={{ fontSize: 12, color: '#60646c' }}>博主自删或系统屏蔽</div>
           </div>
         </div>
       </DashboardSection>

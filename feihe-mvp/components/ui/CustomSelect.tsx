@@ -310,7 +310,7 @@ export function CustomSelect({
           }}
         >
           {normalizedOptions.length === 0 ? (
-            <li className="custom-select-option" style={{ color: '#94a3b8', cursor: 'default' }}>
+            <li className="custom-select-option" style={{ color: '#60646c', cursor: 'default' }}>
               无可选项目
             </li>
           ) : (
@@ -348,7 +348,7 @@ export function CustomSelect({
                   )}
                   {opt.label}
                   {opt.badge && (
-                    <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 4, background: '#f1f5f9', color: '#64748b' }}>
+                    <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#f0f0f3', color: '#60646c' }}>
                       {opt.badge}
                     </span>
                   )}

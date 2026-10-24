@@ -94,7 +94,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
     const stackedSegments = [
       { key: 'kSpend', label: '达人采买 (K侧)', color: CAMPAIGN_PALETTE.primary },
       { key: 'fsSpend', label: '投流消耗 (FS含返点)', color: CAMPAIGN_PALETTE.purple },
-      { key: 'remaining', label: '预算余量', color: '#e2e8f0' },
+      { key: 'remaining', label: '预算余量', color: '#d9d9e0' },
     ];
 
     return {
@@ -454,12 +454,11 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
         <>
           {overviewMetrics.length > 0 && <MetricStrip items={overviewMetrics} />}
 
-          {/* ----------------- 第一层 (重 · 全口径预算与多阶段演进) ----------------- */}
+          {/* ----------------- 第一层 (全口径预算与多阶段演进) ----------------- */}
           <div className='kri-section'>
             <div className='kri-section-header'>
               <div className='kri-section-title-wrap'>
                 <span className='ca-chapter-num'>02</span>
-                <span className='kri-badge'>预算演进</span>
                 <h3 className='kri-section-title'>全口径预算统筹与多阶段投放演进</h3>
               </div>
               <span className='kri-section-desc'>黑山Q3、EX330与跑山女孩预算执行结构与双周演进</span>
@@ -619,7 +618,6 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
             <div className='kri-section-header'>
               <div className='kri-section-title-wrap'>
                 <span className='ca-chapter-num'>03</span>
-                <span className='kri-badge'>自然 / 投流</span>
                 <h3 className='kri-section-title'>关键交付指标与自然 / 投流对比</h3>
               </div>
               <span className='kri-section-desc'>各项指标保留原表归因口径，不视为同一人群逐级转化</span>
@@ -628,7 +626,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               {/* 2.1 全链路种草转化漏斗 */}
               {funnelData && (
                 <ChartPanel
-                  title='Q3种草投流 · 关键交付节点'
+                  title='Q3种草投流 关键交付节点'
                   subtitle='曝光、点击与互动为行为量；站外活跃UV为独立归因人数'
                 >
                   <CampaignFunnelChart stages={funnelData.stages} />
@@ -856,7 +854,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               >
                 <summary className='kri-summary'>
                   <span className='kri-summary-title'>
-                    📋 达人内容审核 · 高频问题归纳与质检红线标准 (点击展开/折叠 8项要点)
+                    📋 达人内容审核 高频问题归纳与质检红线标准 (点击展开/折叠 8项要点)
                   </span>
                   <span className='kri-summary-tag'>
                     {auditExpanded ? '收起质检卡' : '展开查看 8 大规范与典型案例'}

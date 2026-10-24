@@ -104,10 +104,12 @@ export function QueryPillBadge({ kind, label }: { kind: 'own' | 'category' | 'co
     competitor: { prefix: '竞品', cls: 'v2-query-competitor' },
   };
   const current = kindLabels[kind] || { prefix: '查询', cls: 'v2-query-default' };
-  // Avoid repeating prefix if label already starts with it (e.g. "本品: 启萃")
-  const cleanLabel = label.startsWith(current.prefix)
-    ? label.slice(current.prefix.length).replace(/^[:：\s]+/, '')
-    : label;
+  // Avoid repeating prefix if label already starts with it (e.g. "本品: 启萃" or "本品 · 启萃")
+  const cleanLabel = (
+    label.startsWith(current.prefix)
+      ? label.slice(current.prefix.length).replace(/^[:：\s·/]+/, '')
+      : label
+  ).replace(/\s*·\s*/g, ' / ');
   return (
     <span className={`v2-query-pill ${current.cls}`}>
       <span className="v2-query-prefix">{current.prefix}</span>
@@ -154,7 +156,7 @@ export function PaginationBar({
   return (
     <div className="v2-pagination">
       <div className="v2-pagination-info">
-        共 <strong className="v2-num">{total}</strong> 条记录 · 第 {currentPage + 1} / {totalPages} 页
+        共 <strong className="v2-num">{total}</strong> 条记录 / 第 {currentPage + 1} / {totalPages} 页
       </div>
       <div className="v2-pagination-actions">
         {onPageSizeChange && (
