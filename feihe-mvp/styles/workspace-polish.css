@@ -379,18 +379,6 @@ label:has(select),
   .settings-sources-section .source-list-details { grid-column: 1 / -1; }
   .settings-sources-section .source-list-status { grid-column: 2; grid-row: 1; white-space: normal !important; }
   .settings-sources-section .source-list-actions { grid-column: 1 / -1; flex-wrap: wrap; white-space: normal !important; }
-  .app-shell:has(.ops-workspace) > .sidebar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 10px 12px; height: auto; }
-  .app-shell:has(.ops-workspace) .sidebar .brand { grid-column: 1; grid-row: 1; padding: 0; gap: 8px; font-size: 14px; }
-  .app-shell:has(.ops-workspace) .sidebar .brand > span { width: 28px; height: 28px; font-size: 16px; }
-  .app-shell:has(.ops-workspace) .sidebar .brand small { display: none; }
-  .app-shell:has(.ops-workspace) .back-platform { grid-column: 2; grid-row: 1; margin: 0; padding: 5px 7px; font-size: 12px; }
-  .app-shell:has(.ops-workspace) .project-switcher { grid-column: 1 / -1; margin: 0; padding: 6px 10px; }
-  .app-shell:has(.ops-workspace) .project-switcher > small,
-  .app-shell:has(.ops-workspace) .project-subtext { display: none; }
-  .app-shell:has(.ops-workspace) .project-main-nav { grid-column: 1 / -1; margin: 0; gap: 4px; }
-  .app-shell:has(.ops-workspace) .project-main-nav a { font-size: 12px; padding: 7px 9px; gap: 6px; }
-  .app-shell:has(.ops-workspace) .project-main-nav .nav-num { display: none; }
-  .app-shell:has(.ops-workspace) > .main { padding-top: 14px; }
   .ops-workspace .ops-module-tabs { padding-bottom: 8px; scroll-snap-type: x proximity; }
   .ops-workspace .ops-module-tab { flex: 0 0 240px; scroll-snap-align: start; }
   .ops-workspace .ops-section-card { padding: 16px; }

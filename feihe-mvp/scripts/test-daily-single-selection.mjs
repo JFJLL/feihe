@@ -249,6 +249,8 @@ for (const pid of ["kailas", "meiling", "winner-wipes"]) {
   assert(html.includes("选择业务日期"), pid + " has single date input");
   assert(html.includes("前一日"), pid + " has prev day button");
   assert(html.includes("后一日"), pid + " has next day button");
+  assert(!html.includes('type="date"'), pid + " does NOT use native date input");
+  assert(html.includes("custom-date-picker-container"), pid + " uses CustomDatePicker");
 
   // NO range picker shortcuts
   assert(!html.includes("近7天"), pid + " does NOT have multi-day range shortcut 近7天");

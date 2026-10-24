@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useSyncExternalStore } from "react";
+import React, { useState, useMemo, useCallback, useSyncExternalStore, useRef, useEffect } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
+import { CustomDatePicker } from "../../components/ui/CustomDatePicker";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
 import { CustomSelect } from "../../components/ui/CustomSelect";
 import {
@@ -26,14 +27,19 @@ export interface CampaignDailyPageProps {
   dashboard: CampaignDashboard;
 }
 
-function formatDatasetDisplay(id: string, fallback: string): string {
+export function normalizeDatasetLabel(label: string): string {
+  if (!label) return "";
+  return label.replace(/\s*[·•・]\s*/g, " / ").trim();
+}
+
+export function formatDatasetDisplay(id: string, fallback: string): string {
   if (id === "meiling-daily-tm-seed") return "自采天猫种草";
   if (id === "meiling-daily-cid-jd" || id === "meiling-cid-daily-fallback") return "京东对投 CID";
   if (id === "meiling-daily-jd-seed") return "自采京东种草";
   if (id === "wipes-daily-delivery") return "日常种草";
   if (id === "wipes-daily-taosou" || id === "wipes-daily-taosearch") return "淘搜表现";
   if (id === "kailas-daily-fuga-creatives") return "凯乐石日常投放";
-  return fallback;
+  return normalizeDatasetLabel(fallback);
 }
 
 function subscribeToUrl(callback: () => void): () => void {
@@ -59,6 +65,8 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const name = dashboard?.name || "项目";
   const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
   const [quickPickerOpen, setQuickPickerOpen] = useState(false);
+  const quickToggleRef = useRef<HTMLButtonElement>(null);
+  const quickDropdownRef = useRef<HTMLDivElement>(null);
 
   // Reactive URL search store: guarantees SSR/hydration compatibility and listens to back/forward
   const urlSearch = useSyncExternalStore(subscribeToUrl, getUrlSearchSnapshot, getServerUrlSearchSnapshot);
@@ -101,6 +109,50 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
     selectedIndex >= 0
       ? `共 ${allAvailableDates.length} 个有效采集日 / 当前第 ${selectedIndex + 1}/${allAvailableDates.length} 日`
       : `共 ${allAvailableDates.length} 个有效采集日`;
+
+  // Close quick picker when clicking outside
+  useEffect(() => {
+    if (!quickPickerOpen) return;
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
+      if (
+        quickDropdownRef.current &&
+        !quickDropdownRef.current.contains(e.target as Node) &&
+        quickToggleRef.current &&
+        !quickToggleRef.current.contains(e.target as Node)
+      ) {
+        setQuickPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("touchstart", handlePointerDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("touchstart", handlePointerDown);
+    };
+  }, [quickPickerOpen]);
+
+  // Focus management when quick picker opens
+  useEffect(() => {
+    if (!quickPickerOpen) return;
+    const timer = setTimeout(() => {
+      if (!quickDropdownRef.current) return;
+      const targetBtn =
+        quickDropdownRef.current.querySelector<HTMLButtonElement>(".ca-quick-date-item.active") ||
+        quickDropdownRef.current.querySelector<HTMLButtonElement>(".ca-quick-date-item") ||
+        quickDropdownRef.current.querySelector<HTMLButtonElement>(".ca-quick-dates-close");
+      targetBtn?.focus();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [quickPickerOpen]);
+
+  const handleQuickDropdownKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      setQuickPickerOpen(false);
+      quickToggleRef.current?.focus();
+    }
+  };
 
   // URL state updater (pushes state and triggers context change event for reactive sync)
   const updateUrl = useCallback(
@@ -184,7 +236,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   // Honest empty state when no daily datasets exist (e.g. qicui or unconfigured projects)
   if (!datasets.length || !activeDataset || !activeDataset.rows.length) {
     return (
-      <div className="ca-page" role="main" aria-label={`${name} 分日看板`}>
+      <div className="ca-page ca-daily-page" role="main" aria-label={`${name} 分日看板`}>
         <header className="ca-header bd-toolbar-compact">
           <div className="ca-header-heading">
             <div className="ca-header-title-row">
@@ -208,7 +260,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   }
 
   return (
-    <div className="ca-page" role="main" aria-label={`${name} 分日看板`}>
+    <div className="ca-page ca-daily-page" role="main" aria-label={`${name} 分日看板`}>
       {/* 1. Header & Daily Toolbar Integrated Compact Console */}
       <header className="ca-header bd-toolbar-compact ca-daily-header-console">
         <div className="ca-header-heading">
@@ -268,26 +320,32 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
               ← 前一日
             </button>
             <div className="ca-date-input-wrap">
-              <input
-                type="date"
-                className="ca-date-input"
+              <CustomDatePicker
+                id="ca-daily-date-picker"
+                ariaLabel="选择业务日期"
+                title="选择或输入业务日期"
+                placeholder="选择或输入日期"
                 value={selectedDate || ""}
                 min={minAvailableDate}
                 max={maxAvailableDate}
-                onChange={(e) => updateUrl({ day: e.target.value })}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setQuickPickerOpen((prev) => !prev);
+                className="ca-daily-custom-date-picker"
+                onValueChange={(val) => {
+                  if (val && isValidIsoDate(val)) {
+                    updateUrl({ day: val });
+                  } else if (!val) {
+                    updateUrl({ day: "" });
+                  }
                 }}
-                aria-label="选择业务日期"
               />
               <button
+                ref={quickToggleRef}
                 type="button"
                 className={`ca-btn-quick-dates-toggle ${quickPickerOpen ? "active" : ""}`}
                 onClick={() => setQuickPickerOpen((prev) => !prev)}
                 title="展开全量有效业务日速选面板"
                 aria-label="快速选日"
                 aria-expanded={quickPickerOpen}
+                aria-controls="ca-quick-dates-dropdown"
               >
                 📅 快捷选日
               </button>
@@ -303,13 +361,23 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             </button>
 
             {quickPickerOpen && allAvailableDates.length > 0 && (
-              <div className="ca-quick-dates-dropdown" role="menu" aria-label="有效业务日速选面板">
+              <div
+                ref={quickDropdownRef}
+                id="ca-quick-dates-dropdown"
+                className="ca-quick-dates-dropdown"
+                role="menu"
+                aria-label="有效业务日速选面板"
+                onKeyDown={handleQuickDropdownKeyDown}
+              >
                 <div className="ca-quick-dates-header">
                   <span className="ca-quick-dates-title">有效采集日速选 ({allAvailableDates.length}日)</span>
                   <button
                     type="button"
                     className="ca-quick-dates-close"
-                    onClick={() => setQuickPickerOpen(false)}
+                    onClick={() => {
+                      setQuickPickerOpen(false);
+                      quickToggleRef.current?.focus();
+                    }}
                     aria-label="关闭"
                   >
                     ✕
@@ -326,6 +394,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                         onClick={() => {
                           updateUrl({ day: d });
                           setQuickPickerOpen(false);
+                          quickToggleRef.current?.focus();
                         }}
                       >
                         <span className="ca-quick-date-idx">{idx + 1}</span>

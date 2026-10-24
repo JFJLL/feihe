@@ -268,17 +268,16 @@ export function DataMap({
             <article className="platform-panel pastel-card reference-section section-blue" style={{ padding: '20px' }}>
               <div className="card-header-row" style={{ marginBottom: '16px' }}>
                 <div className="header-left">
-                  <span className="section-mini-tag tag-blue">AI GATEWAY</span>
-                  <h3 style={{ margin: 0 }}>Keystone 模型网关配置与状态</h3>
+                  <h3 style={{ margin: 0 }}>模型网关</h3>
                 </div>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: statusColor }}>
                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: statusColor }} />
-                  {statusText}
+                  {statusText.replace(/\s*·\s*/g, ' / ')}
                 </span>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, background: 'var(--slate-2, #f9f9fb)', padding: 14, borderRadius: 'var(--ws-radius-control, 8px)', border: '0.5px solid var(--slate-6, #d9d9e0)', fontSize: 12 }}>
                 <div>
-                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>Base URL</span>
+                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>服务地址</span>
                   <code style={{ color: 'var(--slate-12, #1c2024)', wordBreak: 'break-all' }}>{k.baseUrl}</code>
                 </div>
                 <div>
@@ -308,7 +307,7 @@ export function DataMap({
                   )}
                 </div>
                 <div>
-                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>可用模型令牌池</span>
+                  <span style={{ color: 'var(--slate-11, #60646c)', display: 'block', marginBottom: '3px' }}>可用模型</span>
                   {poolContent}
                 </div>
               </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect, useRef, useCallback } from 'react';
 import './campaign-analytics.css';
 
 /**
@@ -32,6 +32,58 @@ export const DEFAULT_SERIES_COLORS = [
   '#29a383',
   CAMPAIGN_PALETTE.slate,
 ];
+
+/**
+ * 测量容器实际像素宽度，驱动 SVG 与复杂排版 1:1 响应式渲染，
+ * 确保移动端（如 390px 视口，容器约 275px）字号不被按比例等比缩放至 12px 以下。
+ * 采用稳定 callback ref 模式：节点挂载/换节点时自动 attach 测宽与监听，节点卸载或空态时自动 disconnect。
+ * SSR 阶段返回 defaultWidth，保障服务端渲染与快照测试一致。
+ */
+export function useMeasuredWidth(defaultWidth = 600) {
+  const [containerWidth, setContainerWidth] = useState<number>(defaultWidth);
+  const roRef = useRef<ResizeObserver | null>(null);
+
+  const containerRef = useCallback((node: HTMLDivElement | null) => {
+    if (roRef.current) {
+      roRef.current.disconnect();
+      roRef.current = null;
+    }
+
+    if (!node) return;
+
+    const measure = () => {
+      if (typeof node.getBoundingClientRect === 'function') {
+        const rect = node.getBoundingClientRect();
+        const w = rect && typeof rect.width === 'number' ? rect.width : 0;
+        if (w > 0) setContainerWidth(Math.round(w));
+      }
+    };
+
+    measure();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const w = entry.contentRect ? entry.contentRect.width : 0;
+          if (w > 0) setContainerWidth(Math.round(w));
+        }
+      });
+      ro.observe(node);
+      roRef.current = ro;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (roRef.current) {
+        roRef.current.disconnect();
+        roRef.current = null;
+      }
+    };
+  }, []);
+
+  return { containerRef, containerWidth };
+}
 
 // ============================================================================
 // 导出类型契约
@@ -313,6 +365,7 @@ export function HorizontalBarChart({
   height?: number;
 }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const { containerRef, containerWidth } = useMeasuredWidth(620);
 
   if (!data || data.length === 0) {
     return (
@@ -337,11 +390,12 @@ export function HorizontalBarChart({
   }
 
   const maxVal = Math.max(1, ...validValues);
+  const isNarrow = containerWidth < 420;
+  const leftPad = isNarrow ? Math.max(72, Math.min(96, Math.round(containerWidth * 0.28))) : 130;
+  const rightPad = isNarrow ? 56 : 80;
   const topPad = 16;
   const bottomPad = 26;
-  const leftPad = 130;
-  const rightPad = 80;
-  const totalWidth = 620;
+  const totalWidth = Math.max(260, containerWidth);
 
   // 动态确保每行至少 34px，height 较小（如 190 配 9 行）依 rowcount 自适应扩展，彻底杜绝底部截切
   const minNeededHeight = data.length * 36 + topPad + bottomPad;
@@ -350,9 +404,10 @@ export function HorizontalBarChart({
   const barPlotWidth = totalWidth - leftPad - rightPad;
 
   const current = activeIdx !== null && activeIdx < data.length ? data[activeIdx] : null;
+  const tickRatios = isNarrow ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1];
 
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
       {/* 固定高度 Readout，未悬停保持占位，绝不推挤 SVG 造成页面跳动 */}
       <div className="ca-chart-readout" aria-live="polite">
         {current ? (
@@ -372,12 +427,13 @@ export function HorizontalBarChart({
       <svg
         viewBox={`0 0 ${totalWidth} ${totalHeight}`}
         className="ca-chart-svg"
+        style={{ minWidth: `${totalWidth}px`, width: '100%' }}
         role="graphics-document"
         aria-label={`横向对比图，共 ${data.length} 项`}
         onMouseLeave={() => setActiveIdx(null)}
       >
         <title>{`横向对比图，共 ${data.length} 项。悬停或键盘聚焦查看数值。`}</title>
-        {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
+        {tickRatios.map((ratio) => {
           const xPos = leftPad + ratio * barPlotWidth;
           const tickVal = maxVal * ratio;
           return (
@@ -417,6 +473,7 @@ export function HorizontalBarChart({
               key={item.id || item.label || idx}
               tabIndex={0}
               role="button"
+              onClick={() => setActiveIdx(idx)}
               aria-label={`${item.label}: ${hasVal ? (isZero ? '原值 0' : `${fmtNum(item.value)} ${unit}`) : '未录入'}`}
               onMouseEnter={() => setActiveIdx(idx)}
               onFocus={() => setActiveIdx(idx)}
@@ -449,7 +506,7 @@ export function HorizontalBarChart({
                 fontWeight={isSelected ? '600' : '400'}
                 fontSize="12"
               >
-                {item.label.length > 11 ? `${item.label.slice(0, 11)}…` : item.label}
+                {item.label.length > (isNarrow ? 6 : 11) ? `${item.label.slice(0, isNarrow ? 6 : 11)}…` : item.label}
                 <title>{item.label}</title>
               </text>
 
@@ -1319,6 +1376,7 @@ export function TargetBulletChart({
   data: ComparisonDatum[];
 }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const { containerRef, containerWidth } = useMeasuredWidth(640);
 
   if (!data || data.length === 0) {
     return (
@@ -1337,12 +1395,13 @@ export function TargetBulletChart({
 
   const maxRatioVal = Math.max(120, ...validRatios) * 1.12;
 
-  const leftPad = 140;
-  const rightPad = 90;
+  const isNarrow = containerWidth < 460;
+  const leftPad = isNarrow ? Math.max(76, Math.min(100, Math.round(containerWidth * 0.3))) : 140;
+  const rightPad = isNarrow ? 56 : 90;
   const topPad = 28;
   const bottomPad = 26;
   const rowHeight = 46;
-  const totalWidth = 640;
+  const totalWidth = Math.max(260, containerWidth);
   const minNeededHeight = data.length * rowHeight + topPad + bottomPad;
   const totalHeight = Math.max(160, minNeededHeight);
   const plotWidth = totalWidth - leftPad - rightPad;
@@ -1363,9 +1422,12 @@ export function TargetBulletChart({
       (!d.direction && !d.comparison)
   );
   const hasNeutral = data.some((d) => d.direction === 'neutral');
+  const ticks = isNarrow
+    ? [0, 100].filter((v) => v <= maxRatioVal)
+    : [0, 50, 100, 150].filter((v) => v <= maxRatioVal);
 
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <div className="ca-chart-legend" style={{ marginBottom: 10 }}>
         {hasHigher && (
           <>
@@ -1422,12 +1484,13 @@ export function TargetBulletChart({
       <svg
         viewBox={`0 0 ${totalWidth} ${totalHeight}`}
         className="ca-chart-svg"
+        style={{ minWidth: `${totalWidth}px`, width: '100%' }}
         role="graphics-document"
         aria-label={`目标靶心图，共 ${data.length} 项指标`}
         onMouseLeave={() => setActiveIdx(null)}
       >
         <title>{`归一化目标靶心图，100% 为目标达成线，多指标统一归一化刻度。`}</title>
-        {[0, 50, 100, 150].filter((v) => v <= maxRatioVal).map((pctVal) => {
+        {ticks.map((pctVal) => {
           const xPos = leftPad + (pctVal / maxRatioVal) * plotWidth;
           const isTarget100 = pctVal === 100;
           return (
@@ -1470,6 +1533,7 @@ export function TargetBulletChart({
               key={item.label || idx}
               tabIndex={0}
               role="button"
+              onClick={() => setActiveIdx(idx)}
               aria-label={`${item.label}: 实际 ${fmtNum(item.actual)}${item.unit || ''}，目标 ${fmtNum(item.target)}${item.unit || ''} [${ev.statusLabel}]`}
               onMouseEnter={() => setActiveIdx(idx)}
               onFocus={() => setActiveIdx(idx)}
@@ -1502,7 +1566,7 @@ export function TargetBulletChart({
                 fontWeight={isSelected ? '600' : '500'}
                 fontSize="12"
               >
-                {item.label.length > 10 ? `${item.label.slice(0, 10)}…` : item.label}
+                {item.label.length > (isNarrow ? 6 : 10) ? `${item.label.slice(0, isNarrow ? 6 : 10)}…` : item.label}
                 <title>{item.label}</title>
               </text>
               <text
@@ -1620,6 +1684,7 @@ export function ScatterChart({
   yLabel: string;
 }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const { containerRef, containerWidth } = useMeasuredWidth(600);
 
   if (!data || data.length === 0) {
     return (
@@ -1660,12 +1725,13 @@ export function ScatterChart({
   const minY = Math.max(0, minYRaw - padY);
   const maxY = maxYRaw + padY;
 
-  const leftPad = 60;
-  const rightPad = 28;
+  const isNarrow = containerWidth < 420;
+  const leftPad = isNarrow ? 48 : 60;
+  const rightPad = isNarrow ? 18 : 28;
   const topPad = 24;
-  const bottomPad = 42;
-  const totalWidth = 600;
-  const totalHeight = 280;
+  const bottomPad = isNarrow ? 38 : 42;
+  const totalWidth = Math.max(260, containerWidth);
+  const totalHeight = isNarrow ? 260 : 280;
   const plotW = totalWidth - leftPad - rightPad;
   const plotH = totalHeight - topPad - bottomPad;
 
@@ -1684,9 +1750,11 @@ export function ScatterChart({
   const avgY = yVals.reduce((a, b) => a + b, 0) / yVals.length;
 
   const current = activeIdx !== null && activeIdx < validPoints.length ? validPoints[activeIdx] : null;
+  const xTicks = isNarrow ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1];
+  const yTicks = [0, 0.33, 0.66, 1];
 
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
       <div className="ca-chart-readout" aria-live="polite">
         {current ? (
           <>
@@ -1703,12 +1771,13 @@ export function ScatterChart({
       <svg
         viewBox={`0 0 ${totalWidth} ${totalHeight}`}
         className="ca-chart-svg"
+        style={{ minWidth: `${totalWidth}px`, width: '100%' }}
         role="graphics-document"
         aria-label={`散点相关图，${validPoints.length} 个观测样本`}
         onMouseLeave={() => setActiveIdx(null)}
       >
         <title>{`散点相关图: 横轴 ${xLabel}，纵轴 ${yLabel}`}</title>
-        {[0, 0.25, 0.5, 0.75, 1].map((t) => {
+        {xTicks.map((t) => {
           const val = minX + t * (maxX - minX);
           const xPos = scaleX(val);
           return (
@@ -1734,7 +1803,7 @@ export function ScatterChart({
           );
         })}
 
-        {[0, 0.33, 0.66, 1].map((t) => {
+        {yTicks.map((t) => {
           const val = minY + t * (maxY - minY);
           const yPos = scaleY(val);
           return (
@@ -1780,7 +1849,7 @@ export function ScatterChart({
         />
         <text
           x={scaleX(avgX) + 4}
-          y={topPad + 28}
+          y={topPad + (isNarrow ? 16 : 28)}
           fill={CAMPAIGN_PALETTE.textSubtle}
           fontSize="12"
         >
@@ -1828,6 +1897,7 @@ export function ScatterChart({
               key={pt.label || idx}
               tabIndex={0}
               role="button"
+              onClick={() => setActiveIdx(idx)}
               aria-label={`${pt.label}: ${xLabel}=${fmtNum(pt.x)}, ${yLabel}=${fmtNum(pt.y)}`}
               onMouseEnter={() => setActiveIdx(idx)}
               onFocus={() => setActiveIdx(idx)}
@@ -1863,7 +1933,7 @@ export function ScatterChart({
               >
                 <title>{`${pt.detail || pt.label}\n${xLabel}: ${fmtNum(pt.x)}\n${yLabel}: ${fmtNum(pt.y)}`}</title>
               </circle>
-              {(validPoints.length <= 15 || isSelected) && (
+              {(validPoints.length <= (isNarrow ? 6 : 15) || isSelected) && (
                 <text
                   x={px}
                   y={py - r - 3}
@@ -2102,6 +2172,9 @@ export function ButterflyCostChart({
   leftColor = CAMPAIGN_PALETTE.primary,
   rightColor = CAMPAIGN_PALETTE.purple,
 }: ButterflyCostChartProps) {
+  const { containerRef, containerWidth } = useMeasuredWidth(600);
+  const isNarrow = containerWidth < 440;
+
   if (!data || data.length === 0) {
     return (
       <div className="ca-empty">
@@ -2125,7 +2198,7 @@ export function ButterflyCostChart({
   const minRight = validRight.length ? Math.min(...validRight.map((d) => d.rightVal)) : null;
 
   return (
-    <div className="ca-butterfly-chart">
+    <div ref={containerRef} className={`ca-butterfly-chart ${isNarrow ? 'ca-butterfly-narrow' : ''}`}>
       {/* 表头三栏 */}
       <div className="ca-butterfly-header">
         <div className="ca-butterfly-header-col ca-butterfly-header-left" style={{ color: leftColor }}>
@@ -2134,7 +2207,7 @@ export function ButterflyCostChart({
         </div>
         <div className="ca-butterfly-header-col ca-butterfly-header-center">
           <span>投放版位 / 任务组</span>
-          <span style={{ fontSize: 12, color: CAMPAIGN_PALETTE.textSubtle, fontWeight: 400 }}> (左右独立刻度)</span>
+          <span className="ca-butterfly-header-sub"> (左右独立刻度)</span>
         </div>
         <div className="ca-butterfly-header-col ca-butterfly-header-right" style={{ color: rightColor }}>
           <span>{rightLabel} ▶</span>

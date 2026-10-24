@@ -35,17 +35,31 @@
 
 色阶依据：[Radix Colors 使用规范](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale)。
 
-## 验收边界
+## 根因、修复与证据汇总
 
-浏览器扩展当前返回 `extension_not_connected`。本轮不能把旧截图作为新界面证据，也不能宣称已完成桌面、移动端或真实键盘交互验收。已请求重新连接 Kimi；连接后需检查总览、投流、内容、行业五项切换、设置保存与弹窗、日期输入、评论详情返回。
+| 页面 / 模块 | 根因 | 修复方案 | 真实浏览器验收证据 |
+| --- | --- | --- | --- |
+| 行业总览与指标 | section inline margin 28px 与 tab-content gap 28px 叠加；KPI 卡 subtext 长度不同导致数值行 Y 坐标错位 | 移除 inline margin，CSS 单点定义 gap 28px；badge 移入 metadata，固定 top 24px，统一缺值状态与 disclosure | 宏 gap 28px；6 卡数值行基准线统一为 y=377.33；截图 `C:/Users/liuhao_PC/AppData/Local/Temp/ui-v6-industry-desktop-after.png` |
+| 日期与日报诊断 | 业务日期仍用原生date输入；KPI到下方图表间距仅4px | 接入共享CustomDatePicker并补齐快捷面板焦点处理，间距16px | 输入 2026-10-18 浏览器 history 条目 +1、KPI 变为 22901.72，非法日期报错且 URL 不变，Escape 回焦；截图 `C:/Users/liuhao_PC/AppData/Local/Temp/ui-v6-daily-calendar.png` |
+| 评论与详情链路 | 评论详情切换存在条件 Hook 顺序问题；移动端侧边栏高度未按视口自适应 | 修复 Hook 调用顺序确保组件重入稳定；移动端侧边栏采用弹性收拢 | 详情进入与返回无 Hook 错误；移动端侧边栏高度由 280px 降至 86.5~88px，label 均可用；截图 `C:/Users/liuhao_PC/AppData/Local/Temp/ui-v6-comments-mobile-final.png` |
+| 项目设置与网关 | 装饰英文眉题「AI GATEWAY」占位；h3 标题冗长；Base URL/令牌池文案偏底层；statusText 含中点 | 移除英文眉题，h3 简化为「模型网关」；Base URL 改为「服务地址」，令牌池改为「可用模型」；输出端中点转斜杠 | 模型网关状态呈现「文本模型可用 / 生图配置已保留」；手机端返回与选择器无重叠，保存 CTA 与助手按钮无碰撞；截图 `C:/Users/liuhao_PC/AppData/Local/Temp/ui-v6-settings-mobile-final.png` |
+| 图表与移动溢出 | 宽网格导致移动端横向截断；热力图矩阵撑开整页宽度 | 引入响应式断点与最小宽度限制；热力图矩阵改为局部横向滚动 | 美菱图表移动端自适应正常（截图 `C:/Users/liuhao_PC/AppData/Local/Temp/ui-v6-meiling-chart-mobile-final.png`）；全棉时代 wipes 宽度 524→390px（截图 `C:/Users/liuhao_PC/AppData/Local/Temp/ui-v6-wipes-mobile-after.png`）；黄天鹅 ads 489→390px；overview 热力图 696→390px 矩阵局部横滑已回验 |
 
-自动验证结果：
+## 真实浏览器复验记录（2026-10-24）
 
-- 生产构建与全量 TypeScript 检查通过。
-- `verify:dashboards` 的 7 个脚本通过；另外 16 个针对看板、分日选择、数据适配、自定义控件及删除流程的脚本通过。
-- 新增 7 组图表边界、6 组日期控件、9 个删除确认场景。测试调用真实组件逻辑，删除请求使用模拟接口，不修改项目业务数据。
-- 本地 19 个页面地址返回 HTTP 200；这只验证路由响应，不代替页面截图与真实交互验收。
-- CSS 和内联样式静态检查对照官方 Radix 色板；保留图表绘制线、键盘焦点和复选框勾号的必要线宽。
-- 全仓 lint 仍有 79 个既有错误，逐文件与本轮前的 HEAD 比较，没有新增错误；主要涉及已有类型约束和 Effect 规则。本轮修复评论详情与美菱深度分析的条件 Hook，以及新增动态 `require` 引入的问题。
+上一阶段连接阻塞已解除，主代理通过 Chrome 恢复 Kimi 扩展，针对指定路径完成 1440px 桌面端与 390px 移动端真实浏览器验证（其他未测路径不声称穷尽）。所有操作基于本地已有数据，未执行 UI 保存、删除或外部同步。
 
-修复过时测试加载器时保留真实数据查询、750 条样本隔离、零值/缺失值、50 条明细上限、键盘操作与保存回读断言。UI 文案改为斜杠分隔后同步对应文本预期，没有删除业务断言。
+- **覆盖范围**：黄天鹅（overview/ads/content/daily/settings 4 面板/industry 5 tab）、美菱（ads）、凯乐石（content）、全棉时代（overview）、飞鹤启萃（comments 队列及详情）。
+- **交互与按键**：行业主 tab 支持 Home/Right/End 切换焦点与选中；设置 Profile 弹窗经真实鼠标操作验证，按 Escape 仅关闭 select 浮层并保留外层 dialog（此前误关排查为 Kimi synthetic click 未聚焦的测试方法问题，非代码缺陷）；月份选择器 Escape 正常回焦。
+- **图表生命周期**：Chrome 下通过临时 React.StrictMode 夹具验证 Butterfly 与 Scatter 经历「空 → 有 → 空」（2 次空状态 → 有图 → 2 次空状态，errors: []）；275px 窄屏散点图 viewBox 为 275，500px 恢复桌面规则；夹具已移除。
+
+## 外部变动与数据说明
+
+后端测试 `test-huang-tiane-backend` 调用 onboard 导致 `docs/new-projects-sources/huang-tiane/integration/snapshot-preview.json` 自动变动，已查明来源系测试产物而非人工编辑，本地保留并排除在本次 UI 代码提交之外。
+
+## 验证状态
+
+- **生产构建与类型**：`build` PASS，`typecheck` PASS（0 错误）。
+- **自动化测试**：主代理共 27 个脚本 PASS。包含 `verify:dashboards` 7 脚本、14 个既有聚焦脚本、6 个新增跟进脚本（`test-campaign-browser-followup`、`test-chart-mobile-readability`、`test-daily-browser-followup`、`test-industry-browser-followup`、`test-note-operations-ui-followup`、`test-shell-browser-followup`；新增脚本性质为静态/SSR/模拟 handler，真实浏览器由主代理单独验证）。
+- **样式审计**：CSS 规则与 inline 审计结果 `[]`。
+- **代码规范**：全仓 79 个既有 error、0 新增 error，新增测试 eslint 0 warning；不称“全部 lint 通过”。

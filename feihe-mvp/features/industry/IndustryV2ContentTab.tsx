@@ -7,6 +7,7 @@ import {
   PaginationBar,
   SafeExternalLink,
   EmptyStateBox,
+  cleanQueryLabel,
 } from './IndustryV2Widgets';
 
 export function IndustryV2ContentTab({
@@ -169,11 +170,11 @@ export function IndustryV2ContentTab({
             <div>
               <h3 className="v2-card-title">
                 {activeEvidenceFilter
-                  ? `关联证据笔记明细 「${activeEvidenceFilter.label}」(${displayedNotes.length} 篇)`
+                  ? `关联证据笔记明细 「${cleanQueryLabel(activeEvidenceFilter.label)}」(${displayedNotes.length} 篇)`
                   : `高热度样本笔记明细 (共 ${displayedNotes.length} 条)`}
               </h3>
               <p className="v2-card-subtitle">
-                真实源数据样本列表。点击标题安全在新标签页打开小红书原文。
+                点击标题在新标签页查看原文
               </p>
             </div>
             {activeEvidenceFilter && (
@@ -251,14 +252,15 @@ export function IndustryV2ContentTab({
                         </td>
                         <td>
                           <span className="v2-format-tag">
-                            {note.format === 'video' ? '🎬 视频' : '🖼️ 图文'}
+                            {note.format === 'video'
+                              ? '🎬 视频'
+                              : note.format === 'image'
+                              ? '🖼️ 图文'
+                              : '未知'}
                           </span>
                         </td>
-                        <td style={{ textAlign: 'right' }}>
+                        <td style={{ textAlign: 'right' }} className="v2-num">
                           <span className="v2-num">{formatMetricNumber(note.interactions)}</span>
-                          <div className="v2-metric-sub">
-                            平台互动 (engageNum: {note.interactions ?? '-'})
-                          </div>
                         </td>
                         <td style={{ textAlign: 'right' }} className="v2-num">
                           {formatMetricNumber(note.impressions)}

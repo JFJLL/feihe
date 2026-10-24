@@ -11,10 +11,10 @@
 .campaign-workspace-root .ca-metric-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
 }
 .campaign-workspace-root .ca-metric-strip > .ca-metric-item {
-  flex: 1 1 calc((100% - (var(--metric-columns, 4) - 1) * 12px) / var(--metric-columns, 4));
+  flex: 1 1 calc((100% - (var(--metric-columns, 4) - 1) * 16px) / var(--metric-columns, 4));
   box-sizing: border-box;
 }
 .campaign-workspace-root .ca-metric-label,
@@ -31,16 +31,40 @@
 .campaign-workspace-root .ca-panel.bd-panel { align-self: stretch; }
 
 @media (max-width: 1100px) {
-  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: calc((100% - 24px) / 3); }
+  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: calc((100% - 32px) / 3); }
 }
 @media (max-width: 640px) {
-  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: calc((100% - 12px) / 2); }
+  .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: calc((100% - 16px) / 2); }
+  .campaign-workspace-root .bd-kpi-head,
+  .campaign-workspace-root .ht-kpi-head,
+  .ca-metric-item .bd-kpi-head {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+  .campaign-workspace-root .ca-metric-label,
+  .ca-metric-item .ca-metric-label {
+    width: 100% !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+  }
 }
 @media (max-width: 360px) {
   .campaign-workspace-root .ca-metric-strip > .ca-metric-item { flex-basis: 100%; }
 }
 
 .ca-subnav-reload-btn {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+/* Header Project Status Badge: prevent 1 char per line squishing on mobile */
+.dashboard-template-status-badge,
+.dashboard-template-badges,
+.ui-page-header-badge {
   white-space: nowrap !important;
   flex-shrink: 0 !important;
 }
@@ -117,5 +141,111 @@
     min-width: 0;
     max-width: 100%;
     box-sizing: border-box;
+  }
+
+  /* 1. All Campaign Jumpbars: break into lines and horizontally scrollable */
+  .campaign-workspace-root .ca-section-jumpbar,
+  .ca-section-jumpbar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .campaign-workspace-root .ca-jumpbar-links,
+  .ca-jumpbar-links {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    gap: 6px !important;
+    padding-bottom: 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  .campaign-workspace-root .ca-jump-pill,
+  .ca-jump-pill {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* 2. Chapter Headers in all Campaigns (Wipes, Kailas, Meiling, Huang Tiane, etc.) */
+  .campaign-workspace-root .ca-chapter-header,
+  .ca-chapter-header,
+  .wri-section-header,
+  .wipes-section-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 10px 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .campaign-workspace-root .ca-chapter-title-group,
+  .ca-chapter-title-group,
+  .wri-section-title-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
+
+  .campaign-workspace-root .ca-chapter-heading,
+  .ca-chapter-heading {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+  }
+
+  .campaign-workspace-root .ca-chapter-title,
+  .ca-chapter-title,
+  .wri-section-title {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    margin: 0 !important;
+  }
+
+  .campaign-workspace-root .ca-chapter-desc,
+  .ca-chapter-desc,
+  .wri-section-desc {
+    font-size: 12px !important;
+    color: var(--ca-palette-muted, #60646c) !important;
+    line-height: 1.4 !important;
+    word-break: break-word !important;
+  }
+
+  .campaign-workspace-root .ca-chapter-meta,
+  .ca-chapter-meta {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .campaign-workspace-root .ca-chapter-period-tag,
+  .ca-chapter-period-tag {
+    white-space: normal !important;
+    word-break: break-all !important;
+    max-width: 100% !important;
   }
 }

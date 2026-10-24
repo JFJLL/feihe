@@ -81,20 +81,32 @@ export function KpiCard({
     <div className="v2-kpi-card" title={tooltip}>
       <div className="v2-kpi-top">
         <span className="v2-kpi-label">{label}</span>
-        {badge}
       </div>
       <div className="v2-kpi-value-row">
         <span className="v2-kpi-value">{value}</span>
         {unit && <span className="v2-kpi-unit">{unit}</span>}
       </div>
-      {(subtext || denominator) && (
+      {(badge || subtext || denominator) && (
         <div className="v2-kpi-subtext">
-          {subtext}
+          {badge && <div className="v2-kpi-badge-row">{badge}</div>}
+          {subtext && <div className="v2-kpi-desc">{subtext}</div>}
           {denominator && <span className="v2-kpi-denominator">（{denominator}）</span>}
         </div>
       )}
     </div>
   );
+}
+
+/**
+ * 清除查询词在用户界面展示时的分隔中点与冗余前缀分隔符（不改变源数据）
+ */
+export function cleanQueryLabel(label?: string | null): string {
+  if (!label) return '';
+  return label
+    .replace(/^[:：\s·・•/]+/, '')
+    .replace(/\s*[·・•]\s*/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function QueryPillBadge({ kind, label }: { kind: 'own' | 'category' | 'competitor'; label: string }) {
@@ -105,15 +117,21 @@ export function QueryPillBadge({ kind, label }: { kind: 'own' | 'category' | 'co
   };
   const current = kindLabels[kind] || { prefix: '查询', cls: 'v2-query-default' };
   // Avoid repeating prefix if label already starts with it (e.g. "本品: 启萃" or "本品 · 启萃")
-  const cleanLabel = (
-    label.startsWith(current.prefix)
-      ? label.slice(current.prefix.length).replace(/^[:：\s·/]+/, '')
-      : label
-  ).replace(/\s*·\s*/g, ' / ');
+  let cleanLabel = label;
+  if (current.prefix && cleanLabel.startsWith(current.prefix)) {
+    cleanLabel = cleanLabel.slice(current.prefix.length);
+  }
+  cleanLabel = cleanLabel
+    .replace(/^[:：\s·・•/]+/, '')
+    .replace(/\s*[·・•]\s*/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const titleClean = cleanQueryLabel(label);
   return (
-    <span className={`v2-query-pill ${current.cls}`}>
+    <span className={`v2-query-pill ${current.cls}`} title={titleClean || undefined}>
       <span className="v2-query-prefix">{current.prefix}</span>
-      <span className="v2-query-label">{cleanLabel || label}</span>
+      <span className="v2-query-label">{cleanLabel || titleClean || label}</span>
     </span>
   );
 }

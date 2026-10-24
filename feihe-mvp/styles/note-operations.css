@@ -161,6 +161,7 @@
   font-size: 16px;
   font-weight: 700;
   color:#1c2024;
+  white-space: nowrap;
 }
 
 .co-queue-tabs button span {
@@ -358,6 +359,10 @@
   font-size: 12px;
 }
 
+.note-operations .bd-kpis {
+  gap: 16px;
+}
+
 .note-operations .bd-kpis strong {
   font-size: 22px;
 }
@@ -379,4 +384,61 @@
   margin: 0 0 4px;
   font-size: 16px;
   color:#113264;
+}
+
+/* 5. Mobile Responsive Adjustments (<=640px) */
+@media (max-width: 640px) {
+  .co-queue-tabs {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .co-queue-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .co-queue-tabs button {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    white-space: nowrap;
+    border-radius: 8px;
+    gap: 0;
+  }
+
+  .co-queue-card-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+  }
+
+  .co-queue-tabs button strong {
+    font-size: 14px;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+
+  .co-queue-tabs button.active strong {
+    color: var(--teal-11, #008573);
+  }
+
+  .co-queue-tabs button.active {
+    background: var(--teal-3, #e0f8f3) !important;
+  }
+
+  /* 隐藏 mobile tab 冗余副标题描述，保留真实数据范围警示 */
+  .co-queue-tabs button > span {
+    display: none;
+  }
+
+  /* 消除 mobile 抢宽换行的 '当前视图' 徽标 */
+  .co-queue-active-badge {
+    display: none;
+  }
 }

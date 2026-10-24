@@ -11,6 +11,39 @@ const percent=(n:number|null|undefined)=>n===null || n===undefined ? '—':numbe
 const time=(v:string|null|undefined)=>v ? new Date(v).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'尚无记录';
 const sentiments:Record<Sentiment,string>={positive:'正向体验',negative:'负向体验',question:'问询',neutral:'中性',mixed:'混合/对比',uncertain:'未确定'};
 const reviewStates={unchecked:'未检查',needs_fix:'需整改',pending_review:'待复核',qualified:'检查样本合格'};
+
+export function cleanScopeHint(text?: string | null): string {
+  if (!text) return '';
+  return text.replace(/\s*[·・•]\s*/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+export const cleanMiddleDots = cleanScopeHint;
+
+export const jobStatusMap: Record<string, string> = {
+  queued: '排队中',
+  running: '采集中',
+  retry: '待重试',
+  partial: '部分采集',
+  success: '采集成功',
+  failed: '采集失败',
+};
+
+export function formatJobStatus(status: string | null | undefined): string {
+  if (!status) return '未开始';
+  return jobStatusMap[status] || status;
+}
+
+export const linkStateMap: Record<string, string> = {
+  unchecked: '未校验',
+  available: '可用',
+  unavailable: '已失效',
+  uncertain: '待核验',
+};
+
+export function formatLinkState(state: string | null | undefined): string {
+  if (!state) return '未校验';
+  return linkStateMap[state] || state;
+}
 type Delivery={status:string;content:string;commentDay:string|null;operator:string;form:string;replyRelation:string;screenshot:unknown;owner:string;direction:string;progress:string;source:SourceRef;evidence:string};
 type Detail={note:NoteArchive;analysisId:string|null;capture:ConversationCapture|null;metrics:{fetched:number;analyzed:number;coverage:number|null;roots:number}|null;judgments:CommentJudgment[];review:NoteReview;canWrite:boolean;deliveries:{items:Delivery[];total:number;offset:number;hasMore:boolean};attempts:{id:string;status:string;updated_at:string;error:string}[];history:{actor:string;created_at:string;data_json:string}[];corrections:{id:string;commentId:string;actor:string;at:string;reason:string;target:string;sentiment:Sentiment}[]};
 export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
@@ -75,7 +108,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
     {!current ? <p>读取本项目本地巡查队列…</p>:data && <>
       <div className="bd-kpis">{[['队列笔记',number(data.total)],['已检查样本',`${data.summary.checked} 篇`],['样本合格率',percent(data.summary.qualityRate)],['笔记检查覆盖率',percent(data.summary.checkedCoverage)]].map(([title,value])=><article key={title}><h4>{title}</h4><strong>{value}</strong></article>)}</div>
       <p className="bd-caption">合格率＝当前分析版本已人工复核为合格的笔记 / 已检查笔记。尚未检查保持未知；逐篇评论覆盖率另列。</p>
-      <div className="bd-alerts"><p>{data.ranking}</p><p>{data.sourceStatus.deliveries}</p><p>{data.sourceStatus.comments}</p></div>
+      <div className="bd-alerts"><p>{cleanScopeHint(data.ranking)}</p><p>{data.sourceStatus.deliveries}</p><p>{data.sourceStatus.comments}</p></div>
       <section className="bd-panel">
         <div className="bd-panel-head">
           <h3>{queue==='active' ? '本月在投巡查顺序':queue==='new' ? '本月新发档案':'历史档案'} / {data.total} 篇</h3>
@@ -131,12 +164,12 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
                             <span
                               className="co-partial-badge"
                               data-status={n.lastAttempt.status}
-                              title={`partial ${n.lastAttempt.error || ""}`.trim()}
+                              title={`${formatJobStatus(n.lastAttempt.status)} ${n.lastAttempt.error || ""}`.trim()}
                             >
                               部分覆盖 / {n.lastAttempt.error || '主评论数量未完整核对'}
                             </span>
                           ) : (
-                            <small className={n.lastAttempt.error ? 'co-error':''}>{n.lastAttempt.status} {n.lastAttempt.error}</small>
+                            <small className={n.lastAttempt.error ? 'co-error':''}>{formatJobStatus(n.lastAttempt.status)} {n.lastAttempt.error}</small>
                           )
                         )}
                       </td>
@@ -166,9 +199,9 @@ function NoteDetail({projectId,noteId,onBack,onRefresh}:{projectId:string;noteId
   const stats=useMemo(()=>{const sentiment=new Map<string,number>(),themes=new Map<string,number>();for(const j of detail?.judgments || []){const label=j.target+' / '+sentiments[j.sentiment];sentiment.set(label,(sentiment.get(label) || 0)+1);for(const topic of j.topics)themes.set(topic,(themes.get(topic) || 0)+1);}return {sentiment:[...sentiment],themes:[...themes],pending:detail?.judgments.filter(j=>j.needsReview).length || 0};},[detail]);
   const roots=detail?.capture?.comments.filter(c=>c.depth===1) || [];
   return <div className="business-daily note-operations" data-testid="note-operation-detail"><div className="bd-toolbar"><button onClick={onBack}>← 返回巡查队列</button><button onClick={()=>setRevision(r=>r+1)}>刷新档案与后台结果</button></div>{notice && <p role="status">{notice}</p>}{snapshot.key===key && snapshot.error && <p role="alert">{snapshot.error}</p>}{!detail ? <p>读取本地笔记档案…</p>:<>
-    <section className="bd-panel"><h2>{detail.note.title || detail.note.author || '已留存的笔记档案'}</h2><p>{detail.note.author} / {detail.note.tier || '层级未登记'} / 发布：{detail.note.publishedDay || '待确认'}</p><p className="bd-caption">稳定笔记ID：{noteId}</p><div className="co-link-row">{detail.note.links.slice(0,3).map((url,i)=><a key={url} href={url} target="_blank" rel="noreferrer">{i ? '备用原文入口':'保留的原文入口'} ↗</a>)}<span className="bd-caption">链接{detail.note.linkState==='unchecked' ? '未校验':detail.note.linkState} / {time(detail.note.linkCheckedAt)}</span>{detail.canWrite && <button disabled={busy} onClick={()=>action({action:'check_link'})}>校验原文入口</button>}</div><p className="bd-caption">原文入口失效时仍可读取本地档案；入口可用性以实际校验为准。</p><details><summary>已保存的笔记正文</summary><p className="co-text">{detail.note.content || '正文尚未采集。已保存的标题、作者、发布日期、投放与交付登记可继续查看。'}</p></details><details><summary>来源与保存时间</summary>{detail.note.sources.map((s,i)=><p className="bd-caption" key={i}><a href={s.url} target="_blank" rel="noreferrer">{s.sourceKey} / 第{s.row || '—'}行 ↗</a> / {time(s.capturedAt)} / {s.version}</p>)}</details></section>
+    <section className="bd-panel"><h2>{detail.note.title || detail.note.author || '已留存的笔记档案'}</h2><p>{detail.note.author} / {detail.note.tier || '层级未登记'} / 发布：{detail.note.publishedDay || '待确认'}</p><p className="bd-caption">稳定笔记ID：{noteId}</p><div className="co-link-row">{detail.note.links.slice(0,3).map((url,i)=><a key={url} href={url} target="_blank" rel="noreferrer">{i ? '备用原文入口':'保留的原文入口'} ↗</a>)}<span className="bd-caption">链接{formatLinkState(detail.note.linkState)} / {time(detail.note.linkCheckedAt)}</span>{detail.canWrite && <button disabled={busy} onClick={()=>action({action:'check_link'})}>校验原文入口</button>}</div><p className="bd-caption">原文入口失效时仍可读取本地档案；入口可用性以实际校验为准。</p><details><summary>已保存的笔记正文</summary><p className="co-text">{detail.note.content || '正文尚未采集。已保存的标题、作者、发布日期、投放与交付登记可继续查看。'}</p></details><details><summary>来源与保存时间</summary>{detail.note.sources.map((s,i)=><p className="bd-caption" key={i}><a href={s.url} target="_blank" rel="noreferrer">{s.sourceKey} / 第{s.row || '—'}行 ↗</a> / {time(s.capturedAt)} / {s.version}</p>)}</details></section>
     <div className="bd-kpis">{[['月累计投放消耗',number(detail.note.monthlySpend.value)+' 元'],['平台报告总数',detail.capture ? number(detail.capture.platformTotal)+(detail.capture.totalScope==='roots' ? ' 主评论':'（口径未确定）'):'尚未采集'],['已抓取 / 已分析',detail.metrics ? `${detail.metrics.fetched} / ${detail.metrics.analyzed}`:'— / —'],['供应商交付登记',number(detail.note.registeredDeliveries)+' 条']].map(([title,value])=><article key={title}><h4>{title}</h4><strong>{value}</strong></article>)}</div>
-    <div className="bd-alerts"><p>月消耗范围：{detail.note.spendMonth || '待明确'}。评论采集：{time(detail.capture?.capturedAt)}；人工巡查：{time(detail.review.inspectedAt)}。</p><p>采集覆盖：{percent(detail.metrics?.coverage)} / {detail.capture?.complete ? '主评论与已报告回复已核对':'完整覆盖尚未确认'}。平台前台可见与折叠仅采用明确观测证据，不能用交付量推算。</p>{detail.note.sourceAudit && <p>源表整改登记：{detail.note.sourceAudit} / {detail.note.sourceProblem || '具体问题未登记'}。本次巡查状态：{reviewStates[detail.review.state]}。</p>}{detail.capture?.issues.map((issue,i)=><p key={i}>{issue}</p>)}{detail.attempts[0] && <p>最近采集任务：{detail.attempts[0].status} / {time(detail.attempts[0].updated_at)} {detail.attempts[0].error}</p>}</div>
+    <div className="bd-alerts"><p>月消耗范围：{detail.note.spendMonth || '待明确'}。评论采集：{time(detail.capture?.capturedAt)}；人工巡查：{time(detail.review.inspectedAt)}。</p><p>采集覆盖：{percent(detail.metrics?.coverage)} / {detail.capture?.complete ? '主评论与已报告回复已核对':'完整覆盖尚未确认'}。平台前台可见与折叠仅采用明确观测证据，不能用交付量推算。</p>{detail.note.sourceAudit && <p>源表整改登记：{detail.note.sourceAudit} / {detail.note.sourceProblem || '具体问题未登记'}。本次巡查状态：{reviewStates[detail.review.state]}。</p>}{detail.capture?.issues.map((issue,i)=><p key={i}>{issue}</p>)}{detail.attempts[0] && <p>最近采集任务：{formatJobStatus(detail.attempts[0].status)} / {time(detail.attempts[0].updated_at)} {detail.attempts[0].error}</p>}</div>
     <div className="bd-two-col"><section className="bd-panel"><h3>整篇笔记的对话概况</h3><p className="bd-caption">按评论提及对象分别判断；话题为多标签。规则依据强度不代表统计概率。</p>{!detail.judgments.length ? <p>尚无实际采集的评论样本，情绪与话题保持未知。</p>:<><div className="co-distributions">{stats.sentiment.map(([label,n])=><p key={label}><span>{label}</span><strong>{n}条</strong></p>)}</div><div className="co-topic-tags">{stats.themes.map(([label,n])=><span key={label}>{label} {n}</span>)}</div><p className="bd-caption">低置信度待人工复核：{stats.pending}条。每条的依据、对话和纠正记录在下方。</p></>}{detail.canWrite && <button disabled={busy} onClick={()=>action({action:'collect',requestId:crypto.randomUUID()})}>采集并分析当前评论</button>}</section><section className="bd-panel"><h3>整改负责人及复核</h3><ReviewForm key={detail.analysisId+':'+detail.review.version} projectId={projectId} noteId={noteId} review={detail.review} analysisId={detail.analysisId} canWrite={detail.canWrite} busy={busy} onSave={review=>action({action:'review',review})} /><p className="bd-caption">源表结论只作登记参考；没有检查样本，或低置信度评论未复核时，不能标为合格。</p></section></div>
     <section className="bd-panel"><h3>主评论与回复 / {detail.metrics?.fetched ?? '尚未采集'} 条</h3>{roots.slice(0,visibleRoots).map(root=><article key={root.id} className="co-thread">{[root,...(detail.capture?.comments.filter(c=>c.parentId===root.id) || [])].map(c=>{const j=detail.judgments.find(v=>v.commentId===c.id);return <div key={c.id} className={'co-comment '+(c.depth===2 ? 'co-reply':'')}><div><strong>{c.author || '作者未提供'}</strong><span>{c.depth===2 ? '回复主评论':'主评论'} / {c.createdAt || '发表时间未知'}</span></div><p>{c.content || '正文缺失'}</p><small>{c.evidence}</small>{j && <><p className={j.needsReview ? 'co-error':'bd-caption'}>{j.target} / {sentiments[j.sentiment]} / 依据强度 {percent(j.confidence)} / {j.corrected ? '已人工纠正':j.needsReview ? '待人工复核':'规则判断'}</p><details><summary>判断依据与人工纠正</summary><p className="co-text">{j.reasons.join('\n')}</p>{detail.canWrite && <CorrectionForm judgment={j} busy={busy} onSave={body=>action({action:'correct',commentId:c.id,analysisId:detail.analysisId,...body})} />}</details></>}</div>;})}</article>)}{!roots.length && <p>尚无实际采集评论；供应商话术登记在下方单独查看。</p>}{visibleRoots<roots.length && <button onClick={()=>setVisibleRoots(n=>n+20)}>展开更多主评论及其回复</button>}</section>
     <section className="bd-panel"><h3>供应商话术与交付登记 / {detail.deliveries.total} 条</h3><p className="bd-caption">登记不能证明平台可见。主评论A/B回复A等源表盖楼标记保留，不能冒充平台真实评论ID与回复关系。</p><div className="bd-scroll"><table><thead><tr><th>登记 / 计划</th><th>话术与执行方向</th><th>评论时间 / 上评</th><th>形式与盖楼</th><th>证据</th></tr></thead><tbody>{detail.deliveries.items.map((d,i)=><tr key={i}><td>{d.status==='registered' ? '时间/人员已登记':'计划或待确认'}</td><td>{d.content}<small>{d.direction}</small></td><td>{d.commentDay || '未登记'}<small>{d.operator || '上评人员未登记'}</small></td><td>{d.form}<small>{d.replyRelation}</small></td><td><a href={d.source.url} target="_blank" rel="noreferrer">第{d.source.row}行 ↗</a><small>{d.screenshot ? '源表有截图附件登记':'未登记截图'}</small><small>{d.progress || '执行进度未登记'}</small></td></tr>)}</tbody></table></div><div className="co-pagination"><button disabled={!deliveryOffset} onClick={()=>setDeliveryOffset(n=>Math.max(0,n-20))}>上一页登记</button><button disabled={!detail.deliveries.hasMore} onClick={()=>setDeliveryOffset(n=>n+20)}>下一页登记</button></div></section>

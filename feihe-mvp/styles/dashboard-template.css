@@ -156,6 +156,67 @@
   flex-shrink: 0;
 }
 
+@media (max-width: 640px) {
+  .dashboard-template .dashboard-template-header,
+  .dashboard-template .ui-page-header,
+  .overview-colorful-page.reference-workspace .ui-page-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 8px 12px !important;
+    min-height: auto !important;
+    flex-wrap: wrap !important;
+  }
+
+  .dashboard-template .ui-page-header-main {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-template .dashboard-template-title-row,
+  .dashboard-template .ui-page-header-title-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  .dashboard-template .ui-page-header-title,
+  .overview-colorful-page.reference-workspace .ui-page-header-title {
+    font-size: 16px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dashboard-template-badges,
+  .dashboard-template-status-badge {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dashboard-template .dashboard-template-subtitle-inline,
+  .dashboard-template .ui-page-header-subtitle {
+    display: none !important;
+  }
+
+  .dashboard-template-header-controls {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+}
+
 /* --- 2. Segmented Mode Switcher (~36px) in Header Controls --- */
 .dashboard-template .ops-module-tabs,
 .overview-colorful-page .ops-module-tabs {

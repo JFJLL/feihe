@@ -8,6 +8,7 @@ import {
   KpiCard,
   QueryPillBadge,
   EmptyStateBox,
+  cleanQueryLabel,
 } from './IndustryV2Widgets';
 
 export function IndustryV2OverviewTab({
@@ -25,37 +26,67 @@ export function IndustryV2OverviewTab({
     ? Math.max(1, ...trend.map((t) => t.notes || 0))
     : 1;
 
+  const hasNoteChange = summary.noteChange !== null && summary.noteChange !== undefined;
+  const isSamplingIncomplete = Boolean(
+    summary.changeReason && /未完整|采样未全|采样不完整/.test(summary.changeReason)
+  );
+  const missingStatus = isSamplingIncomplete ? '采样不完整' : '环比暂不可用';
+
+  const noteChangeContent = hasNoteChange ? (
+    <div className="v2-kpi-change-wrap">
+      <span
+        className={`v2-kpi-diff ${
+          summary.noteChange! >= 0 ? 'v2-diff-up' : 'v2-diff-down'
+        }`}
+        title={summary.changeReason || undefined}
+      >
+        {summary.noteChange! >= 0 ? `+${summary.noteChange}` : summary.noteChange}
+      </span>
+      {summary.changeReason && (
+        <details className="v2-kpi-disclosure">
+          <summary className="v2-kpi-disclosure-summary" title={summary.changeReason}>
+            说明
+          </summary>
+          <div className="v2-kpi-disclosure-body" role="note">
+            {summary.changeReason}
+          </div>
+        </details>
+      )}
+    </div>
+  ) : (
+    <div className="v2-kpi-change-wrap">
+      <span
+        className="v2-kpi-diff v2-diff-muted"
+        title={summary.changeReason || missingStatus}
+      >
+        {missingStatus}
+      </span>
+      {summary.changeReason && (
+        <details className="v2-kpi-disclosure">
+          <summary className="v2-kpi-disclosure-summary" title={summary.changeReason}>
+            原因
+          </summary>
+          <div className="v2-kpi-disclosure-body" role="note">
+            {summary.changeReason}
+          </div>
+        </details>
+      )}
+    </div>
+  );
+
   return (
     <div className="v2-tab-content">
       {/* 6 Key Performance Indicators & Data source statement */}
-      <section className="v2-section" aria-label="核心指标总览" style={{ marginBottom: '28px' }}>
-        <div
-          className="v2-macro-card"
-          style={{
-            background: '#ffffff',
-            border: '0.5px solid #d9d9e0',
-            borderRadius: '12px',
-            padding: '24px',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
-          }}
-        >
+      <section className="v2-section" aria-label="核心指标总览">
+        <div className="v2-macro-card">
         <div className="v2-kpi-grid">
           <KpiCard
             label="样本笔记总量"
             value={formatMetricNumber(summary.notes)}
             unit="篇"
-            badge={
-              summary.noteChange !== null && summary.noteChange !== undefined ? (
-                <span
-                  className={`v2-kpi-diff ${
-                    summary.noteChange >= 0 ? 'v2-diff-up' : 'v2-diff-down'
-                  }`}
-                >
-                  {summary.noteChange >= 0 ? `+${summary.noteChange}` : summary.noteChange}
-                </span>
-              ) : null
-            }
-            subtext={summary.changeReason || '统计周期内样本去重总数'}
+            badge={noteChangeContent}
+            tooltip={summary.changeReason || '统计周期内样本去重总数'}
+            subtext="统计周期内样本去重总数"
           />
 
           <KpiCard
@@ -146,7 +177,7 @@ export function IndustryV2OverviewTab({
                         role="button"
                         tabIndex={0}
                         style={{ cursor: 'pointer' }}
-                        title={`点击筛选此查询词：${item.query.label}`}
+                        title={`点击筛选此查询词：${cleanQueryLabel(item.query.label)}`}
                       >
                         <td style={{ whiteSpace: 'nowrap' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -318,15 +349,19 @@ export function IndustryV2OverviewTab({
 
       {/* Limitations / Disclaimers */}
       {limitations && limitations.length > 0 && (
-        <section className="v2-section" aria-label="统计边界与免责声明">
-          <div className="v2-limitations-box">
-            <h4 className="v2-limitations-title">📌 统计边界与数据免责说明</h4>
-            <ul className="v2-limitations-list">
-              {limitations.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
+        <section className="v2-section" aria-label="统计边界与口径说明">
+          <details className="v2-limitations-box">
+            <summary className="v2-limitations-summary">
+              <span className="v2-limitations-summary-title">📌 统计口径 ({limitations.length})</span>
+            </summary>
+            <div className="v2-limitations-body">
+              <ul className="v2-limitations-list">
+                {limitations.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </details>
         </section>
       )}
     </div>

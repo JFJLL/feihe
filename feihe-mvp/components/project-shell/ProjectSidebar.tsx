@@ -61,7 +61,7 @@ export function ProjectSidebar({
 
       <div className="brand">
         <span aria-hidden="true"><svg viewBox="0 0 64 64" width="32" height="32" fill="none"><path d="M16 44V32m16 12V24m16 20V16" stroke="white" strokeWidth="7" strokeLinecap="round"/><path d="m15 22 15-10 9 2" stroke="#a1ded2" strokeWidth="4" strokeLinecap="round"/></svg></span>
-        <div>
+        <div className="brand-title">
           项目工作台
         </div>
       </div>
@@ -119,7 +119,7 @@ export function ProjectSidebar({
         })}
       </nav>
 
-      <div className="sidebar-foot">
+      <div className={`sidebar-foot ${connectionStatus.ok ? 'is-ok' : 'has-error'}`}>
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
