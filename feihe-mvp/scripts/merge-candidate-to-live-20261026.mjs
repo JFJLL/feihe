@@ -71,10 +71,81 @@ export function parseMergeCliArgs(argv = process.argv.slice(2)) {
   return { isDryRun, isApply, isApproved, customLiveDb, customCandidateDb, expectedConfigVersion };
 }
 
-export function backupLiveDbWithApi(srcDbPath, dstBackupPath) {
-  fs.mkdirSync(path.dirname(dstBackupPath), { recursive: true });
-  const fixedCode = 'import sqlite3, sys\nsrc = sqlite3.connect(f"file:{sys.argv[1]}?mode=ro", uri=True)\ndst = sqlite3.connect(sys.argv[2])\nsrc.backup(dst)\ndst.close()\nsrc.close()';
-  execFileSync('rtk', ['python', '-c', fixedCode, path.resolve(srcDbPath), path.resolve(dstBackupPath)]);
+export function resolvePythonBinary(customBin = null, platform = process.platform, env = process.env) {
+  if (customBin && typeof customBin === 'string' && customBin.trim().length > 0) {
+    return customBin.trim();
+  }
+  if (env.PYTHON_BIN && env.PYTHON_BIN.trim().length > 0) {
+    return env.PYTHON_BIN.trim();
+  }
+  if (env.PYTHON && env.PYTHON.trim().length > 0) {
+    return env.PYTHON.trim();
+  }
+  if (env.FEIHE_PYTHON && env.FEIHE_PYTHON.trim().length > 0) {
+    return env.FEIHE_PYTHON.trim();
+  }
+  return platform === 'win32' ? 'python' : 'python3';
+}
+
+export function backupLiveDbWithApi(srcDbPath, dstBackupPath, options = {}) {
+  const resolvedSrc = path.resolve(srcDbPath);
+  const resolvedDst = path.resolve(dstBackupPath);
+
+  const isSamePath = (options.platform || process.platform) === 'win32'
+    ? resolvedSrc.toLowerCase() === resolvedDst.toLowerCase()
+    : resolvedSrc === resolvedDst;
+
+  if (isSamePath) {
+    throw new Error(`SQLite online backup failed: source and destination paths cannot be the same ("${resolvedSrc}")`);
+  }
+
+  if (!fs.existsSync(resolvedSrc)) {
+    throw new Error(`SQLite online backup failed: source database does not exist at "${resolvedSrc}"`);
+  }
+
+  fs.mkdirSync(path.dirname(resolvedDst), { recursive: true });
+
+  const pythonBin = resolvePythonBinary(
+    options.pythonBin,
+    options.platform || process.platform,
+    options.env || process.env
+  );
+
+  const backupScript = [
+    'import sqlite3, pathlib, sys',
+    'src_uri = pathlib.Path(sys.argv[1]).resolve().as_uri() + "?mode=ro"',
+    'dst_path = str(pathlib.Path(sys.argv[2]).resolve())',
+    'src = sqlite3.connect(src_uri, uri=True)',
+    'dst = sqlite3.connect(dst_path)',
+    'try:',
+    '    src.backup(dst)',
+    '    cur = dst.cursor()',
+    '    cur.execute("PRAGMA integrity_check;")',
+    '    res = cur.fetchall()',
+    '    cur.close()',
+    '    if not res or res[0][0] != "ok":',
+    '        raise RuntimeError(f"Integrity check failed on backup database: {res}")',
+    'finally:',
+    '    dst.close()',
+    '    src.close()',
+  ].join('\n');
+
+  try {
+    execFileSync(pythonBin, ['-c', backupScript, resolvedSrc, resolvedDst], {
+      windowsHide: true,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: 120000,
+      env: options.env || process.env,
+    });
+  } catch (err) {
+    const stderr = err.stderr ? err.stderr.toString('utf-8').trim() : '';
+    const detail = stderr ? `: ${stderr}` : (err.message ? `: ${err.message}` : '');
+    throw new Error(`SQLite online backup failed from "${resolvedSrc}" to "${resolvedDst}" using "${pythonBin}"${detail}`);
+  }
+
+  if (!fs.existsSync(resolvedDst)) {
+    throw new Error(`SQLite online backup failed: destination backup file was not created at "${resolvedDst}"`);
+  }
 }
 
 export async function runMergeProcess(options = {}) {
