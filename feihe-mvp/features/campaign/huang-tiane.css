@@ -15,7 +15,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--dt-section-gap, 40px);
   color:var(--ht-text-dark);
 }
 
@@ -31,7 +31,7 @@
   border:0.5px solid #d9d9e0;
   border-radius: 10px;
   padding: 6px 14px;
-  margin: 0 0 10px 0;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -559,11 +559,12 @@
   gap: 20px;
   scroll-margin-top: 60px;
   background: #ffffff;
-  border:0.5px solid #d9d9e0;
+  border:0.5px solid var(--dt-section-border, #cdced6);
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
   margin-bottom: 0 !important;
+  box-sizing: border-box;
 }
 
 .ht-board > .ht-layer {
@@ -576,13 +577,17 @@
   flex-wrap: nowrap;
   gap: 8px 16px;
   justify-content: space-between;
-  padding: 0 0 12px 0;
-  margin-bottom: 14px;
-  background: transparent;
+  padding: 18px 24px;
+  margin: -24px -24px 0 -24px;
+  margin-bottom: 0;
+  background: var(--slate-2, #f9f9fb);
   border:none;
-  border-bottom:0.5px solid #f0f0f3;
-  border-radius: 0;
+  border-bottom:0.5px solid var(--slate-4, #e8e8ec);
+  border-top-left-radius: 11.5px;
+  border-top-right-radius: 11.5px;
   box-shadow: none;
+  box-sizing: border-box;
+  width: calc(100% + 48px);
 }
 
 .ht-layer-header-left {
@@ -600,8 +605,8 @@
   height: 24px;
   padding: 0 6px;
   border-radius: 6px;
-  background: var(--ht-primary);
-  color:#ffffff;
+  background: var(--teal-3, #e0f8f3) !important;
+  color: var(--teal-11, #008573) !important;
   font-family: monospace;
   font-size: 12px;
   font-weight: 700;
@@ -609,11 +614,12 @@
 }
 
 .ht-layer-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color:var(--ht-text-dark);
   margin: 0;
   white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .ht-layer-sub {
@@ -626,30 +632,98 @@
   flex-shrink: 0;
 }
 
+/* Collapsible details.ht-layer with safe padding and non-collapsing header */
+details.ht-layer {
+  padding: 0 !important;
+}
+
+details.ht-layer:not([open]) {
+  padding: 0 !important;
+  padding-bottom: 0 !important;
+  gap: 0 !important;
+}
+
+details.ht-layer[open] {
+  padding: 0 0 24px 0 !important;
+}
+
+details.ht-layer > summary.ht-layer-header,
+details.ht-secondary-details > summary.ht-layer-header {
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 18px 24px !important;
+  border-radius: 11.5px;
+  border-bottom: 0.5px solid transparent;
+  color: var(--ht-text-dark) !important;
+}
+
+details.ht-layer[open] > summary.ht-layer-header,
+details.ht-secondary-details[open] > summary.ht-layer-header {
+  border-radius: 11.5px 11.5px 0 0;
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec) !important;
+}
+
+details.ht-layer > :not(summary) {
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
 .ht-summary-header {
   cursor: pointer;
   list-style: none;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .ht-summary-header::-webkit-details-marker {
   display: none;
 }
 
-details.ht-layer:not([open]) .ht-layer-header {
-  margin-bottom: 0;
-  border-bottom:none;
-  padding-bottom: 0;
+.ht-summary-header::after {
+  content: "▾";
+  font-size: 14px;
+  color: var(--slate-11, #60646c);
+  flex-shrink: 0;
+  line-height: 1;
+  margin-left: auto;
 }
 
-.ht-layer-details[open] > .ht-summary-header {
-  margin-bottom: 14px;
+details.ht-layer-details[open] > .ht-summary-header::after,
+details.ht-layer[open] > .ht-summary-header::after {
+  transform: rotate(180deg);
+}
+
+.ht-summary-header:focus-visible {
+  outline: 2px solid var(--teal-11, #008573);
+  outline-offset: -2px;
 }
 
 .ht-layer-focused {
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 0 0 2px rgba(0, 133, 115, 0.28);
   transition: box-shadow 250ms ease-out;
+}
+
+/* Inner Panels inside ht-layer: slate1 background + slate4 light border */
+.ht-layer .ca-panel:not(.bd-panel) {
+  background: var(--slate-1, #fcfcfd);
+  border: 0.5px solid var(--slate-4, #e8e8ec);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.ht-layer .ca-panel:not(.bd-panel) .ca-panel-header {
+  background: transparent;
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec);
+}
+
+.ht-layer .ca-panel:not(.bd-panel) .ca-panel-title {
+  font-size: 16px;
 }
 
 /* Benchmark Comparison Tab & Cards */
@@ -929,9 +1003,9 @@ details.ht-layer:not([open]) .ht-layer-header {
   .ht-scope-tabs { flex-wrap: nowrap !important; }
   .ht-insight-grid { grid-template-columns: 1fr; }
 }
-.ht-secondary-details { padding: 12px 14px; background: #ffffff; border:0.5px solid var(--ht-border); border-radius: 8px; }
-.ht-secondary-details > summary { cursor: pointer; color:var(--ht-primary); font-size: 14px; font-weight: 600; padding: 5px 0; }
-.ht-secondary-details[open] > summary { margin-bottom: 14px; }
+.ht-secondary-details:not(.ht-layer) { padding: 12px 14px; background: #ffffff; border:0.5px solid var(--ht-border); border-radius: 8px; }
+.ht-secondary-details:not(.ht-layer) > summary { cursor: pointer; color:var(--ht-primary); font-size: 14px; font-weight: 600; padding: 5px 0; }
+.ht-secondary-details:not(.ht-layer)[open] > summary { margin-bottom: 14px; }
 .ht-benchmark-container { justify-content: space-between; }
 .ht-board .ht-benchmark-table th { white-space: normal; }
 @media (max-width: 640px) {
@@ -961,6 +1035,31 @@ details.ht-layer:not([open]) .ht-layer-header {
     gap: 8px 10px !important;
     width: 100% !important;
     min-width: 0 !important;
+    margin: -16px -12px 0 -12px !important;
+    width: calc(100% + 24px) !important;
+    padding: 12px 14px !important;
+  }
+  details.ht-layer {
+    padding: 0 !important;
+  }
+  details.ht-layer:not([open]) {
+    padding: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 0 !important;
+  }
+  details.ht-layer[open] {
+    padding: 0 0 16px 0 !important;
+  }
+  details.ht-layer > summary.ht-layer-header,
+  details.ht-secondary-details > summary.ht-layer-header {
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 12px 14px !important;
+  }
+  details.ht-layer > :not(summary) {
+    padding: 0 12px !important;
   }
   .ht-layer-header-left {
     min-width: 0 !important;
@@ -980,6 +1079,7 @@ details.ht-layer:not([open]) .ht-layer-header {
     flex: 1 !important;
     min-width: 0 !important;
     line-height: 1.35 !important;
+    font-size: 16px !important;
   }
   .ht-layer-sub {
     flex: 1 1 100% !important;

@@ -363,12 +363,29 @@
 /* Macro Section Card for Daily Page */
 .ca-section-macro-card {
   background: #ffffff;
-  border:0.5px solid #d9d9e0;
+  border:0.5px solid var(--dt-section-border, #cdced6);
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
   margin-bottom: 0;
   box-sizing: border-box;
+}
+
+/* Inner Panels inside Daily Page: slate1 bg + slate4 border */
+.ca-daily-page .ca-panel:not(.bd-panel) {
+  background: var(--slate-1, #fcfcfd);
+  border: 0.5px solid var(--slate-4, #e8e8ec);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.ca-daily-page .ca-panel:not(.bd-panel) .ca-panel-header {
+  background: transparent;
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec);
+}
+
+.ca-daily-page .ca-panel:not(.bd-panel) .ca-panel-title {
+  font-size: 16px;
 }
 
 /* Spacing between KPI Metric Strip and subsequent Efficiency/Distribution Panels strictly 16px (Scoped to daily page) */
@@ -591,16 +608,75 @@
 /* Daily Details Panel Macro Section Card */
 .ca-daily-details-panel {
   background: #ffffff;
-  border:0.5px solid #d9d9e0;
+  border:0.5px solid var(--dt-section-border, #cdced6);
   border-radius: 12px;
-  padding: 24px;
+  padding: 0;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
-  margin-top: 28px;
+  margin-top: calc(var(--dt-section-gap, 40px) - 12px);
+  box-sizing: border-box;
+}
+
+.ca-daily-details-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  padding: 18px 24px;
+  background: var(--slate-2, #f9f9fb);
+  border-radius: 11.5px;
+  border-bottom: 0.5px solid transparent;
+}
+
+.ca-daily-details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.ca-daily-details-summary::after {
+  content: "▾";
+  font-size: 14px;
+  color: var(--slate-11, #60646c);
+  margin-left: auto;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ca-daily-details-panel[open] > .ca-daily-details-summary {
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec);
+  border-radius: 11.5px 11.5px 0 0;
+}
+
+.ca-daily-details-panel[open] > .ca-daily-details-summary::after {
+  transform: rotate(180deg);
+}
+
+.ca-daily-details-summary:focus-visible {
+  outline: 2px solid var(--teal-11, #008573);
+  outline-offset: -2px;
+}
+
+.ca-daily-details-panel > :not(summary) {
+  padding: 24px;
   box-sizing: border-box;
 }
 
 /* Mobile 390px+ Responsive Adaptation: 2-row layout to prevent button squeeze */
 @media (max-width: 640px) {
+  .ca-section-macro-card {
+    padding: 16px 12px;
+  }
+  .ca-daily-details-summary {
+    padding: 12px 14px;
+  }
+  .ca-daily-details-panel > :not(summary) {
+    padding: 16px 12px;
+  }
+  .ca-daily-details-panel {
+    margin-top: calc(var(--dt-section-gap, 28px) - 12px);
+  }
+
   .ca-filter-section {
     width: 100%;
   }

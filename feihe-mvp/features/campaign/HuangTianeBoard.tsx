@@ -501,56 +501,56 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
         hint: `预算 ${formatCurrency(model.brandBudgetVal)} / 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
         badge: '品牌FS种草线',
-        status: 'accent',
+        category: 'brand',
       },
       {
         label: '种草I/TI人群 / CPTI',
         value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
         hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 / CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
         badge: '品牌FS种草线',
-        status: 'success',
+        category: 'brand',
       },
       {
         label: '红猫CID全域消耗',
         value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
         hint: `标准投 ${formatCurrency(model.cidStandardSpend)} / 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
         badge: '红猫CID引流线',
-        status: 'accent',
+        category: 'cid',
       },
       {
         label: '红猫CID成交GMV / ROI',
         value: model.cidTotalGmv !== null ? formatCurrency(model.cidTotalGmv) : '—',
         hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} / 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
         badge: '红猫CID引流线',
-        status: 'accent',
+        category: 'cid',
       },
       {
         label: '闭环商销累计消耗',
         value: model.commerceSpend !== null ? formatCurrency(model.commerceSpend) : '—',
         hint: `统计周期：${model.commercePeriod}`,
         badge: '闭环商销成交线',
-        status: 'warning',
+        category: 'commerce',
       },
       {
         label: '商销成交GMV / 订单',
         value: model.commerceGmv !== null ? formatCurrency(model.commerceGmv) : '—',
         hint: `订单 ${formatNum(model.commerceOrders, 0)} 单 / 加购 ${formatNum(model.commerceCart, 0)} 次`,
         badge: '闭环商销成交线',
-        status: 'accent',
+        category: 'commerce',
       },
       {
         label: '达人选号定档 / 发布率',
         value: `${model.creatorsPublished} / ${model.creatorsCount} 位`,
         hint: `已发布 ${formatPercent(model.creatorsPublishRate, 1)} / 素材收集 ${model.creatorsAssetCollected} 篇`,
         badge: '达人与KOS矩阵',
-        status: 'success',
+        category: 'creators',
       },
       {
         label: 'KOS笔记矩阵发布量',
         value: `${model.kosCount} 篇`,
         hint: '以KOS执行表登记为准，不推定已投流或已成交',
         badge: '达人与KOS矩阵',
-        status: 'default',
+        category: 'creators',
       },
     ];
   }, [model]);
@@ -752,7 +752,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">01</span>
               <h3 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h3>
             </div>
-            <span className="ht-layer-sub">8项核心全域KPI与蛋品大盘对照</span>
           </div>
 
           <MetricStrip items={topMetricItems} />
@@ -977,7 +976,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">04</span>
               <h3 className="ht-layer-title">内容标签、搜索词与素材表现</h3>
             </div>
-            <span className="ht-layer-sub">12大笔记标签、10大搜索词类与商销Top素材 / 点击折叠</span>
+            <span className="ht-layer-sub">12大笔记标签、10大搜索词类与商销Top素材</span>
           </summary>
           <div className="ht-grid-2">
             <ChartPanel
@@ -1033,7 +1032,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">05</span>
               <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与达人/KOS明细</h3>
             </div>
-            <span className="ht-layer-sub">性别×年龄二维消耗交叉矩阵 / 达人选号与KOS矩阵全貌</span>
           </div>
 
           <div className="ht-grid-2">
@@ -1077,7 +1075,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-chapter-num">05-附</span>
               <h3 className="ht-layer-title">达人执行、内容方向与KOS明细</h3>
             </div>
-            <span className="ht-layer-sub">31位达人选号漏斗与65篇KOS发布底表 / 点击折叠</span>
+            <span className="ht-layer-sub">31位达人选号漏斗与65篇KOS发布底表</span>
           </summary>
           <div className="ht-grid-2">
             <ChartPanel
@@ -1297,28 +1295,28 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               value: model.brandSpend !== null ? formatCurrency(model.brandSpend) : '—',
               hint: `预算 ${formatCurrency(model.brandBudgetVal)} / 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
               badge: '品牌FS种草线',
-              status: 'accent' as const,
+              category: 'brand' as const,
             },
             {
               label: '品牌FS总展现量 / CPM',
               value: `${formatNum(model.brandDaily.reduce((acc, r) => acc + (parseNum(r.impressions) || 0), 0) || parseNum(model.brandSummary?.impressions), 0)} 次`,
               hint: `千次展现成本 CPM ${formatCurrency(parseNum(model.brandSummary?.cpm))}`,
               badge: '曝光与渗透',
-              status: 'default' as const,
+              category: 'brand' as const,
             },
             {
               label: '加权点击率与成本 (CTR / CPC)',
               value: `CTR ${formatPercent(parseNum(model.brandSummary?.ctr))} / CPC ${formatCurrency(parseNum(model.brandSummary?.cpc))}`,
               hint: `累计产生点击 ${formatNum(model.brandDaily.reduce((acc, r) => acc + (parseNum(r.clicks) || 0), 0) || parseNum(model.brandSummary?.clicks), 0)} 次`,
               badge: '点击效能',
-              status: 'success' as const,
+              category: 'brand' as const,
             },
             {
               label: '种草人群资产规模 (I + TI)',
               value: `${formatNum(parseNum(model.brandSummary?.seed_total), 0)} 人`,
               hint: `TI心智 ${formatNum(parseNum(model.brandSummary?.seed_ti), 0)} 人 / CPTI ${formatCurrency(parseNum(model.brandSummary?.cpti))}`,
               badge: '5A人群资产',
-              status: 'success' as const,
+              category: 'brand' as const,
             },
           ]
         : adsScope === 'cid'
@@ -1328,28 +1326,28 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               value: model.cidTotalSpend !== null ? formatCurrency(model.cidTotalSpend) : '—',
               hint: `标准投 ${formatCurrency(model.cidStandardSpend)} / 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
               badge: '红猫引流线',
-              status: 'accent' as const,
+              category: 'cid' as const,
             },
             {
               label: '进店总访客 / CPUV成本',
               value: `${formatNum(model.cidTotalUv, 0)} UV`,
               hint: `综合访客成本 CPUV ${formatCurrency(model.cidTotalSpend && model.cidTotalUv ? model.cidTotalSpend / model.cidTotalUv : null)}`,
               badge: '进店引流',
-              status: 'default' as const,
+              category: 'cid' as const,
             },
             {
               label: '全域成交订单与GMV',
               value: `${formatNum(model.cidTotalOrders, 0)} 单 / ${formatCurrency(model.cidTotalGmv)}`,
               hint: `标准投 ${formatCurrency(model.cidStandardGmv)} / 简单投 ${formatCurrency(model.cidSimpleGmv)}`,
               badge: '成交规模',
-              status: 'success' as const,
+              category: 'cid' as const,
             },
             {
               label: '聚合引流成交 ROI',
               value: `${model.cidOverallRoi?.toFixed(2) ?? '—'} 倍`,
               hint: `标准投 ROI ${model.cidStandardRoi?.toFixed(2) ?? '—'} / 简单投 ROI ${model.cidSimpleRoi?.toFixed(2) ?? '—'}`,
               badge: '投资回报',
-              status: 'success' as const,
+              category: 'cid' as const,
             },
           ]
         : [
@@ -1358,28 +1356,28 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               value: model.commerceSpend !== null ? formatCurrency(model.commerceSpend) : '—',
               hint: `观察周期：${model.commercePeriod}`,
               badge: '闭环商销',
-              status: 'accent' as const,
+              category: 'commerce' as const,
             },
             {
               label: '商销全周期成交GMV',
               value: model.commerceGmv !== null ? formatCurrency(model.commerceGmv) : '—',
               hint: '底表对账汇总GMV ¥28,023.72',
               badge: '闭环成交',
-              status: 'success' as const,
+              category: 'commerce' as const,
             },
             {
               label: '商销整体成交 ROI',
               value: model.commerceRoi !== null ? `${model.commerceRoi.toFixed(2)} 倍` : '—',
               hint: '带货转化回报水平',
               badge: '经营效能',
-              status: 'warning' as const,
+              category: 'commerce' as const,
             },
             {
               label: '成交支付订单 / 加购量',
               value: `${formatNum(model.commerceOrders, 0)} 单`,
               hint: `商品加购量 ${formatNum(model.commerceCart, 0)} 次`,
               badge: '转化规模',
-              status: 'default' as const,
+              category: 'commerce' as const,
             },
           ]),
     ];
@@ -2098,28 +2096,28 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       value: `${model.creatorsCount} 位`,
       hint: '全量合作达人储备',
       badge: '达人矩阵',
-      status: 'default',
+      category: 'creators',
     },
     {
       label: '达人已发布上线',
       value: `${model.creatorsPublished} 篇 / ${formatPercent(model.creatorsPublishRate, 1)}`,
       hint: `已收集素材 ${model.creatorsAssetCollected} 篇`,
       badge: '履约进度',
-      status: 'success',
+      category: 'creators',
     },
     {
       label: 'KOS矩阵发布量',
       value: `${model.kosCount} 篇`,
       hint: '全部登记于 2026-10-19 发布',
       badge: 'KOS蓄水',
-      status: 'accent',
+      category: 'creators',
     },
     {
       label: '含平台费总报价',
       value: formatCurrency(model.creatorsTotalFeeWithPlatform, 0),
       hint: `达人裸价 ${formatCurrency(model.creatorsTotalFeeRaw, 0)}`,
       badge: '采买规模',
-      status: 'warning',
+      category: 'creators',
     },
   ];
 

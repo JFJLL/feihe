@@ -9,13 +9,20 @@
 
 :root,
 .dashboard-template {
-  --dt-bg-page: #f9f9fb;
+  --dt-bg-page: #f0f0f3;
   --dt-bg-card: #ffffff;
   --dt-border:#d9d9e0;
   --dt-border-light: #f0f0f3;
   --dt-text-main: #1c2024;
   --dt-text-muted: #60646c;
   --dt-text-light: #8b8d98;
+
+  /* Central Macro Section Hierarchy Tokens */
+  --dt-section-gap: 40px;
+  --dt-section-border: #cdced6;
+  --dt-macro-header-bg: #f9f9fb;
+  --dt-panel-bg: #fcfcfd;
+  --dt-panel-border: #e8e8ec;
 
   /* Primary Accent: Deep Teal */
   --dt-primary: var(--teal-11, #008573);
@@ -45,21 +52,21 @@
 /* Page wrapper & Shell Warm Neutral Scoping */
 .dashboard-template,
 .overview-colorful-page {
-  background-color:var(--dt-bg-page, #f9f9fb);
+  background-color:var(--dt-bg-page, #f0f0f3);
   color:var(--dt-text-main, #1c2024);
   min-height: 100vh;
 }
 
 .main:has(.dashboard-template),
 .main:has(.overview-colorful-page) {
-  background-color:#f9f9fb !important;
+  background-color:#f0f0f3 !important;
   padding-top: 12px !important;
 }
 
 .app-shell.theme-warm-neutral,
 .app-shell.theme-qicui,
 .app-shell[data-project-template] {
-  background-color:#f9f9fb;
+  background-color:#f0f0f3;
 }
 
 .app-shell.theme-warm-neutral .sidebar,
@@ -214,6 +221,15 @@
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
+  }
+
+  :root,
+  .dashboard-template {
+    --dt-section-gap: 28px;
+  }
+
+  .bd-kpi-head {
+    min-height: auto !important;
   }
 }
 
@@ -535,6 +551,7 @@ details.bd-aspect-details summary:hover {
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
   display: flex;
   flex-direction: column;
+  justify-content: flex-start !important;
   gap: 6px;
   min-width: 0;
   transition: box-shadow 250ms ease-out;
@@ -544,40 +561,89 @@ details.bd-aspect-details summary:hover {
   box-shadow: 0 4px 14px rgba(28, 32, 36, 0.05);
 }
 
-.bd-kpi-card-rich:nth-child(1) {
+/* Preserved legacy template fallback for non-MetricStrip cards */
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(1) {
   border-top:0.5px solid var(--slate-6, #d9d9e0) !important;
 }
-.bd-kpi-card-rich:nth-child(1) .bd-kpi-badge {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(1) .bd-kpi-badge {
   background: #f0f0f3 !important;
   color:var(--teal-11, #008573) !important;
   border:0.5px solid #b8eae0 !important;
 }
 
-.bd-kpi-card-rich:nth-child(2) {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(2) {
   border-top:0.5px solid var(--slate-6, #d9d9e0) !important;
 }
-.bd-kpi-card-rich:nth-child(2) .bd-kpi-badge {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(2) .bd-kpi-badge {
   background: #f0f0f3 !important;
   color:var(--iris-9, #0d74ce) !important;
   border:0.5px solid #dadcff !important;
 }
 
-.bd-kpi-card-rich:nth-child(3) {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(3) {
   border-top:0.5px solid var(--slate-6, #d9d9e0) !important;
 }
-.bd-kpi-card-rich:nth-child(3) .bd-kpi-badge {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(3) .bd-kpi-badge {
   background: #f9f9fb !important;
   color:var(--amber-9, #ab6400) !important;
   border:0.5px solid #ffee9c !important;
 }
 
-.bd-kpi-card-rich:nth-child(4) {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(4) {
   border-top:0.5px solid var(--slate-6, #d9d9e0) !important;
 }
-.bd-kpi-card-rich:nth-child(4) .bd-kpi-badge {
+.bd-kpi-card-rich:not(.ca-metric-item):nth-child(4) .bd-kpi-badge {
   background: #f9f9fb !important;
   color:var(--red-9, #ce2c31) !important;
   border:0.5px solid #ffcdce !important;
+}
+
+/* Category-driven metric cards & badges (strictly scoped to ca-metric-item with data-category) */
+.ca-metric-item[data-category="brand"] {
+  --metric-cat-bg: var(--teal-2, #f3fbf9);
+  --metric-category-badge-bg: var(--teal-3, #e0f8f3);
+  --metric-category-ink: var(--teal-11, #008573);
+  background: var(--metric-cat-bg) !important;
+}
+
+.ca-metric-item[data-category="cid"] {
+  --metric-cat-bg: var(--blue-2, #f4faff);
+  --metric-category-badge-bg: var(--blue-3, #e6f4fe);
+  --metric-category-ink: var(--blue-11, #0d74ce);
+  background: var(--metric-cat-bg) !important;
+}
+
+.ca-metric-item[data-category="commerce"] {
+  --metric-cat-bg: var(--iris-2, #f8f8ff);
+  --metric-category-badge-bg: var(--iris-3, #f0f1fe);
+  --metric-category-ink: var(--iris-11, #5753c6);
+  background: var(--metric-cat-bg) !important;
+}
+
+.ca-metric-item[data-category="creators"] {
+  --metric-cat-bg: var(--amber-2, #fefbe9);
+  --metric-category-badge-bg: var(--amber-3, #fff7c2);
+  --metric-category-ink: var(--amber-11, #ab6400);
+  background: var(--metric-cat-bg) !important;
+}
+
+/* Scoped badge styling: preserves unclassified cards' inline/custom status colors */
+.ca-metric-item[data-category] .ca-metric-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--metric-category-badge-bg) !important;
+  color: var(--metric-category-ink) !important;
+  border: 0.5px solid transparent !important;
+}
+
+.ca-metric-item[data-category] .bd-kpi-val,
+.ca-metric-item[data-category] .ca-metric-value {
+  color: var(--slate-12, #1c2024) !important;
 }
 
 .bd-kpi-val {
@@ -585,6 +651,7 @@ details.bd-aspect-details summary:hover {
   font-weight: 700;
   line-height: 1.2;
   color:var(--slate-12, #1c2024) !important;
+  margin: 0;
 }
 
 .bd-kpi-val small {
@@ -596,11 +663,17 @@ details.bd-aspect-details summary:hover {
 
 .bd-kpi-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   font-size: 12px;
   color:#60646c;
   font-weight: 500;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
+.bd-kpi-sub {
+  margin-top: auto !important;
 }
 
 /* Daily Single-Day KPI Cards */

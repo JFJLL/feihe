@@ -186,29 +186,71 @@
 /* --- Macro Section Cards (28px vertical spacing, 24px padding) --- */
 .ca-section-macro-card {
   background: #ffffff;
-  border:0.5px solid #d9d9e0;
+  border:0.5px solid var(--dt-section-border, #cdced6);
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
   margin-bottom: 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.ca-section-macro-card .ca-chapter-header {
+.ca-section-macro-card > .ca-chapter-header {
   border:none !important;
   border-top:none !important;
   border-radius: 0;
-  padding: 0 0 16px 0;
-  margin-top: 0;
-  margin-bottom: 16px;
-  background: transparent;
+  border-bottom:0.5px solid var(--slate-4, #e8e8ec) !important;
+  border-top-left-radius: 11.5px !important;
+  border-top-right-radius: 11.5px !important;
+  padding: 18px 24px;
+  margin-top: -24px !important;
+  margin-left: -24px !important;
+  margin-right: -24px !important;
+  margin-bottom: 0 !important;
+  background: var(--slate-2, #f9f9fb) !important;
   box-shadow: none;
-  border-bottom:0.5px solid #e0e1e6;
+  width: auto !important;
+  box-sizing: border-box;
+}
+
+.ca-section-macro-card .ca-chapter-title {
+  font-size: 22px;
+  font-weight: 700;
+  color:var(--slate-12, #1c2024);
+}
+
+.ca-section-macro-card .ca-chapter-num {
+  background: var(--teal-3, #e0f8f3) !important;
+  color: var(--teal-11, #008573) !important;
+}
+
+/* Inner panel styling inside macro card */
+.ca-section-macro-card .ca-panel {
+  background: var(--slate-1, #fcfcfd);
+  border: 0.5px solid var(--slate-4, #e8e8ec);
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.ca-section-macro-card .ca-panel .ca-panel-header {
+  background: transparent;
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec);
+}
+
+.ca-section-macro-card .ca-panel .ca-panel-title {
+  font-size: 16px;
+}
+
+/* Adjacent macro sections gap: 40px (parent ca-page gap is 12px, so add calc(--dt-section-gap - 12px)) */
+.ca-page > :is(.ca-section-macro-card, .ca-section-enrichment, .ca-details-collapse, .ca-daily-details-panel) + :is(.ca-section-macro-card, .ca-section-enrichment, .ca-details-collapse, .ca-daily-details-panel) {
+  margin-top: calc(var(--dt-section-gap, 40px) - 12px);
 }
 
 /* --- Tier 1: KPI Decision Band --- */
 .ca-section-kpi {
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 /* --- Tier 2: Core Charts Grid (16px micro gap) --- */
@@ -313,18 +355,19 @@
 
 .ca-details-collapse {
   background: #ffffff;
-  border:0.5px solid #e0e1e6;
-  border-radius: 8px;
+  border:0.5px solid var(--dt-section-border, #cdced6);
+  border-radius: 12px;
   overflow: hidden;
   margin-top: 0;
   margin-block: 0;
+  box-sizing: border-box;
 }
 
 .ca-details-summary {
-  padding: 10px 14px;
-  font-size: 12px;
+  padding: 18px 24px;
+  font-size: 14px;
   font-weight: 600;
-  color:#60646c;
+  color:var(--slate-12, #1c2024);
   cursor: pointer;
   background: #f9f9fb;
   user-select: none;
@@ -332,6 +375,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 0.5px solid transparent;
 }
 
 .ca-details-summary::-webkit-details-marker {
@@ -339,22 +383,32 @@
 }
 
 .ca-details-summary::after {
-  content: "▼";
-  font-size: 12px;
+  content: "▾";
+  font-size: 14px;
   color:#60646c;
-  transition: transform 250ms ease-out;
+  margin-left: auto;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
-.ca-details-collapse[open] .ca-details-summary::after {
+.ca-details-collapse[open] > .ca-details-summary {
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec);
+}
+
+.ca-details-collapse[open] > .ca-details-summary::after {
   transform: rotate(180deg);
 }
 
+.ca-details-summary:focus-visible {
+  outline: 2px solid var(--teal-11, #008573);
+  outline-offset: -2px;
+}
+
 .ca-details-body {
-  padding: 14px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-top:0.5px solid #e0e1e6;
 }
 
 .ca-footer-date {
@@ -362,4 +416,28 @@
   color:var(--ca-palette-subtle, #60646c);
   text-align: right;
   margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .ca-section-macro-card {
+    padding: 16px 12px;
+  }
+  .ca-section-macro-card > .ca-chapter-header {
+    margin-top: -16px !important;
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+    margin-bottom: 0 !important;
+    width: auto !important;
+    padding: 12px 14px;
+  }
+  .ca-section-macro-card .ca-chapter-title {
+    font-size: 16px !important;
+  }
+  .ca-details-summary {
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+  .ca-details-body {
+    padding: 16px 12px;
+  }
 }

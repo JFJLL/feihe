@@ -10,7 +10,7 @@
   --ca-palette-gold: var(--amber-9, #ffc53d);
   --ca-palette-terracotta: var(--red-9, #e5484d);
   --ca-palette-slate: var(--slate-9, #8b8d98);
-  --ca-palette-bg: var(--slate-2, #f9f9fb);
+  --ca-palette-bg: var(--slate-3, #f0f0f3);
   --ca-palette-panel: var(--dt-bg-card, #ffffff);
   --ca-palette-text: var(--slate-12, #1c2024);
   --ca-palette-muted: var(--slate-11, #60646c);
@@ -203,10 +203,10 @@
 .ca-panel {
   display: flex;
   flex-direction: column;
-  background: var(--ca-palette-panel);
-  border:0.5px solid var(--ca-palette-border);
+  background: var(--slate-1, #fcfcfd);
+  border:0.5px solid var(--slate-4, #e8e8ec);
   border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  box-shadow: none;
   overflow: hidden;
   min-width: 0;
 }
@@ -234,8 +234,8 @@
   justify-content: space-between;
   gap: 12px;
   padding: 12px 16px;
-  border-bottom:0.5px solid var(--ca-palette-border);
-  background: #ffffff;
+  border-bottom:0.5px solid var(--slate-4, #e8e8ec);
+  background: transparent;
 }
 
 .ca-panel-heading {
@@ -247,7 +247,7 @@
 
 .ca-panel-title {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color:var(--ca-palette-text);
   letter-spacing: -0.01em;
@@ -368,8 +368,65 @@
 .ca-metric-item {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-width: 0;
+}
+
+.ca-metric-item .bd-kpi-head,
+.ca-metric-head {
+  min-height: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Category-driven metric cards & badges (strictly scoped to ca-metric-item with data-category) */
+.ca-metric-item[data-category="brand"] {
+  --metric-cat-bg: var(--teal-2, #f3fbf9);
+  --metric-category-badge-bg: var(--teal-3, #e0f8f3);
+  --metric-category-ink: var(--teal-11, #008573);
+  background: var(--metric-cat-bg) !important;
+}
+
+.ca-metric-item[data-category="cid"] {
+  --metric-cat-bg: var(--blue-2, #f4faff);
+  --metric-category-badge-bg: var(--blue-3, #e6f4fe);
+  --metric-category-ink: var(--blue-11, #0d74ce);
+  background: var(--metric-cat-bg) !important;
+}
+
+.ca-metric-item[data-category="commerce"] {
+  --metric-cat-bg: var(--iris-2, #f8f8ff);
+  --metric-category-badge-bg: var(--iris-3, #f0f1fe);
+  --metric-category-ink: var(--iris-11, #5753c6);
+  background: var(--metric-cat-bg) !important;
+}
+
+.ca-metric-item[data-category="creators"] {
+  --metric-cat-bg: var(--amber-2, #fefbe9);
+  --metric-category-badge-bg: var(--amber-3, #fff7c2);
+  --metric-category-ink: var(--amber-11, #ab6400);
+  background: var(--metric-cat-bg) !important;
+}
+
+/* Scoped badge styling: preserves unclassified cards' inline/custom status colors */
+.ca-metric-item[data-category] .ca-metric-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--metric-category-badge-bg) !important;
+  color: var(--metric-category-ink) !important;
+  border: 0.5px solid transparent !important;
+}
+
+.ca-metric-item[data-category] .ca-metric-value,
+.ca-metric-item[data-category] .bd-kpi-val {
+  color: var(--slate-12, #1c2024) !important;
 }
 
 .ca-metric-label {
@@ -386,6 +443,7 @@
   display: flex;
   align-items: baseline;
   gap: 4px;
+  margin: 0;
 }
 
 .ca-metric-value {
@@ -410,6 +468,7 @@
 
 .ca-metric-note {
   margin: 4px 0 0;
+  margin-top: auto !important;
   font-size: 12px;
   color:var(--ca-palette-subtle);
   line-height: 1.35;
@@ -904,12 +963,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 16px;
-  background: #ffffff;
-  border:0.5px solid var(--ca-palette-border);
-  border-radius: 8px 8px 0 0;
-  margin-top: 14px;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  padding: 18px 24px;
+  background: var(--slate-2, #f9f9fb);
+  border:none;
+  border-bottom:0.5px solid var(--slate-4, #e8e8ec);
+  border-radius: 0;
+  margin-top: 0;
+  box-shadow: none;
 }
 
 .ca-chapter-title-group {
@@ -926,13 +986,13 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  background: linear-gradient(135deg, var(--teal-11, #008573) 0%, var(--teal-12, #0d3d38) 100%);
-  color:#ffffff;
-  font-size: 14px;
-  font-weight: 800;
+  background: var(--teal-3, #e0f8f3) !important;
+  color: var(--teal-11, #008573) !important;
+  font-size: 12px;
+  font-weight: 700;
   border-radius: 6px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  box-shadow: 0 1px 3px rgba(0, 133, 115, 0.25);
+  box-shadow: none;
   flex-shrink: 0;
 }
 
@@ -944,7 +1004,7 @@
 }
 
 .ca-chapter-title {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 700;
   color:#1c2024;
   margin: 0;

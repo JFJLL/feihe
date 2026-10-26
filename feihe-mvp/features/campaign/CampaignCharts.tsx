@@ -129,11 +129,18 @@ export interface MetricStripItem {
   meta?: string;
   hint?: string;
   badge?: string;
+  category?: 'brand' | 'cid' | 'commerce' | 'creators';
   status?: 'default' | 'accent' | 'warning' | 'danger' | 'success' | 'neutral';
   sparkline?: (number | null)[];
 }
 
-function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 20, strokeColor = '#12a594') {
+function renderMiniSparklineSvg(
+  points: (number | null)[],
+  width = 96,
+  height = 20,
+  strokeColor = '#12a594',
+  gradId?: string,
+) {
   const valid = points.filter((p): p is number => p !== null && Number.isFinite(p));
   if (valid.length < 2) return null;
   const min = Math.min(...valid);
@@ -168,7 +175,7 @@ function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 
   if (!d) return null;
 
   const areaD = `${d} L ${lastX.toFixed(1)} ${height} L ${firstX.toFixed(1)} ${height} Z`;
-  const gradId = `ca-spark-grad-${strokeColor.replace(/[^a-zA-Z0-9]/g, '')}`;
+  const resolvedGradId = gradId || `ca-spark-grad-${strokeColor.replace(/[^a-zA-Z0-9]/g, '')}`;
 
   return (
     <div style={{ width: '100%', height: `${height}px`, marginTop: '4px', opacity: 0.9 }} aria-hidden="true">
@@ -178,12 +185,12 @@ function renderMiniSparklineSvg(points: (number | null)[], width = 96, height = 
         preserveAspectRatio="none"
       >
         <defs>
-          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={resolvedGradId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={strokeColor} stopOpacity="0.25" />
             <stop offset="100%" stopColor={strokeColor} stopOpacity="0.02" />
           </linearGradient>
         </defs>
-        <path d={areaD} fill={`url(#${gradId})`} />
+        <path d={areaD} fill={`url(#${resolvedGradId})`} />
         <path
           d={d}
           fill="none"
@@ -202,6 +209,7 @@ export function MetricStrip({
 }: {
   items: Array<MetricStripItem>;
 }) {
+  const baseId = useId();
   if (!items || items.length === 0) return null;
 
   return (
@@ -260,22 +268,43 @@ export function MetricStrip({
           );
         };
 
+        const badgeBackground = it.category
+          ? 'var(--metric-category-badge-bg)'
+          : statusColor
+          ? `${statusColor}18`
+          : '#f0f0f3';
+
+        const badgeTextColor = it.category
+          ? 'var(--metric-category-ink)'
+          : statusColor || CAMPAIGN_PALETTE.textMuted;
+
+        const sparklineStroke = it.category
+          ? 'var(--metric-category-ink)'
+          : CAMPAIGN_PALETTE.primary;
+        const sparklineGradId = `ca-spark-grad-${baseId.replace(/[^a-zA-Z0-9_-]/g, '')}-${idx}`;
+
+        const progressBarBackground = it.category
+          ? 'var(--metric-category-ink)'
+          : statusColor || (progressPct !== null && progressPct >= 100 ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.gold);
+
         return (
           <article
             key={idx}
             className="ca-metric-item bd-kpi-card-rich"
+            data-category={it.category}
           >
             <div className="bd-kpi-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
               <span className="ca-metric-label" title={it.label}>{it.label}</span>
               {it.badge && (
                 <span
+                  className="ca-metric-badge"
                   style={{
                     fontSize: '12px',
                     fontWeight: 600,
                     padding: '1px 6px',
                     borderRadius: 999,
-                    background: statusColor ? `${statusColor}18` : '#f0f0f3',
-                    color: statusColor || CAMPAIGN_PALETTE.textMuted,
+                    background: badgeBackground,
+                    color: badgeTextColor,
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -292,14 +321,14 @@ export function MetricStrip({
               </span>
               {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
             </div>
-            {it.sparkline && renderMiniSparklineSvg(it.sparkline, 96, 20, CAMPAIGN_PALETTE.primary)}
+            {it.sparkline && renderMiniSparklineSvg(it.sparkline, 96, 20, sparklineStroke, sparklineGradId)}
             {progressPct !== null && (
               <div className="ca-metric-progress-track" title={`达成进度 ${progressPct.toFixed(1)}%`}>
                 <div
                   className="ca-metric-progress-bar"
                   style={{
                     width: `${Math.min(100, Math.max(0, progressPct))}%`,
-                    background: statusColor || (progressPct >= 100 ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.gold),
+                    background: progressBarBackground,
                   }}
                 />
               </div>
