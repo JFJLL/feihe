@@ -2,7 +2,7 @@
 
 ## 1. UI 审查已发现与修复项
 
-> 说明：本节记录主审已定位并在代码中落实的修复项，整体效果待主代理完成全部数据与浏览器验收，不作全盘通过的盲目承诺。
+> 说明：本次验收已完成，范围仅覆盖本轮日期工具栏与数据更新，不作全项目全盘无瑕疵的过度承诺。
 
 ### 1.1 扁平 DayNavigator 统一导航组件
 - **组件落地**：新建共享 `components/ui/DayNavigator.tsx` 与 `DayNavigator.css`，提供 `value`、`onChange`、`min`、`max`、`latestDate`、`ariaLabel`、`id`、`disabled` 标准接口。
@@ -15,7 +15,7 @@
 - **真实本地只读**：按钮文案调整为“重新加载”，title 明确标注“重新读取已同步数据”；底层仅触发本地 `fetchDashboard(projectId)`（GET 请求），不发起任何远程飞书同步。
 - **清除内联碎样式**：统一收归 `.ca-subnav-reload-btn`，无旋转动画，高度 36px。
 - **极窄屏（320px）防裁切适配**：
-  - 现象：在 320px 视口下，`tabsSlot`（数据总览/分日看板）横向挤压导致右侧操作按钮被裁剪移出视口（参考截图：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-wipes-320.png`）。
+  - 现象：在 320px 视口下，`tabsSlot`（数据总览/分日看板）横向挤压导致右侧操作按钮被裁剪移出视口（参考截图：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-wipes-320-final.png`）。
   - 修复：在 `campaign-shell.css` 中为 Campaign 祖先容器的 `.dashboard-template-header-controls` 增加响应式换行规则，在 `≤480px` 视口下让 actions 另起一行并右对齐展示完整 36px 按钮，杜绝溢出裁切。
 
 ### 1.3 分日看板单行工具栏与状态文本
@@ -38,7 +38,8 @@
 4. **电商业务流水**：实际业务流水截至 2026-10-22。
 5. **稳健玉米酒精湿巾投放流水**：分日记录截至 2026-10-25。
 6. **美菱五个分日渠道数据**：全渠道统一截至 2026-10-25。
-7. **凯乐石日流水记录**：分日记录截至 2026-10-12，严格保留实际采集记录，不人工捏造补全缺失日。
+7. **凯乐石日流水记录**：分日记录截至 2026-10-12，严格保留实际采集记录，不人工捏造补全缺失日；凯乐石仍待原表授权，暂不作全量结论。
+8. **启萃口径时差说明**：广告投放数据截至 2026-10-22，部分费用数据已登记至 2026-10-25，不同子口径存在统计时差，整项目验收不能宣称全盘无问题。
 
 ---
 
@@ -76,13 +77,14 @@
 
 ### 5.2 视口与排版巡检（主代理截图 Inspect 确认）
 - **桌面 1651px 视口**：
-  - 截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-huang-final.png`、`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-qicui-final.png`，布局完整无瑕疵。
+  - 截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-huang-final.png`、`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-qicui-final.png`，观察事实不见本轮工具栏裁切或重叠。
 - **移动端 390px 视口**：
-  - 启萃数据总览（Overview）与分日看板（Daily）排版自适应正常，无横向溢出。
-  - 截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-daily-mobile-calendar.png`。
+  - 启萃数据总览（Overview）排版自适应正常，无横向溢出（截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-qicui-overview-390-final.png`）。
+  - 启萃分日看板（Daily）排版自适应正常，无横向溢出（截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-qicui-daily-mobile-fixed.png`）。
+  - 分析范围与日历排版（截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-daily-mobile-calendar.png`）。
 - **极窄屏 320px 视口**：
   - 稳健玉米酒精湿巾（Wipes）整页自适应无溢出。
-  - Header 重新加载按钮经换行右对齐修复后，完整保留 36px 尺寸与 SVG 触控区（截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-wipes-320.png`，稍后完成复查）。
+  - Header 重新加载按钮经换行右对齐修复后，完整保留 36px 尺寸与 SVG 触控区（截图归档：`C:\Users\liuhao_PC\AppData\Local\Temp\ui-v8-wipes-320-final.png`）。
 
 ### 5.3 构建、回归测试与静态检查
 - **构建与类型检查**：`npm run build` 与 `npm run typecheck` 全数通过（exit code 0）。
@@ -101,4 +103,5 @@
 - **配置版本**：Config v9。
 - **入库规模**：
   - 关键词有效流水行：`100` 行。
-  - 评论口碑记录：`31,546` 条成功捕获。
+  - 源表物理行：`31,546` 行（含表头与空行），非纯有效评论记录。
+  - 实际业务口径构成：`28,251` 条登记记录、`20` 条计划、`1,089` 条笔记档案，属于不同统计口径，不直接加总。
