@@ -269,6 +269,8 @@ export function TodayBusinessActions({ items }: { items: BusinessHighlights['tod
 }
 
 export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['search'] }) {
+  const scopeCaption = data.tableScope || '来源快照，统计区间未标明';
+  const cpuvLabel = data.tableCpuvLabel || 'CPUV';
   return (
     <>
       <div className="bv-word-cards">
@@ -280,16 +282,16 @@ export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['sea
                 <span>SOC {pct(w.soc)} / 排名{w.rank ?? '—'}</span>
               </div>
               <strong className="bv-word-spend">{num(w.spend)}<small>元</small></strong>
-              <p className="bd-caption">所绑定月份累计消耗</p>
+              <p className="bd-caption">{scopeCaption}</p>
               <dl>
                 <div><dt>底表消费占比</dt><dd>{pct(w.share)}</dd></div>
                 <div><dt>源行CTR</dt><dd>{pct(w.ctr)}</dd></div>
-                <div><dt>星盟合并CPUV</dt><dd>{num(w.cpuv)}元</dd></div>
+                <div><dt>{cpuvLabel}</dt><dd>{num(w.cpuv)}元</dd></div>
                 <div><dt>搜索指数快照</dt><dd>{num(w.index)}</dd></div>
               </dl>
               {w.reportShare !== null && w.share !== null && Math.abs(w.reportShare - w.share) > 0.005 && (
                 <p className="bv-small-warning">
-                  日报费用占比{pct(w.reportShare)}，底表{pct(w.share)}；范围与更新时间待核对。
+                  日报费用占比{pct(w.reportShare)}，底表{pct(w.share)}；范围与更新时间不同（分属不同统计区间）。
                 </p>
               )}
             </article>
@@ -298,7 +300,7 @@ export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['sea
           <p className="bd-caption">该范围尚无占位词观测。</p>
         )}
       </div>
-      <Evidence source={data.tableSource} label="关键词底表为所绑定月份累计；SOC/排名为作者日报登记。" />
+      <Evidence source={data.tableSource} label={`关键词底表：${scopeCaption}；SOC/排名为作者日报登记。`} />
     </>
   );
 }

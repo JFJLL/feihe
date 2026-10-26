@@ -79,11 +79,17 @@ export function buildBusinessHighlights(view:DailyView):BusinessHighlights {
     ? '所选日及之前无SEO收录与占位登记'
     : (view.isNarrativeHistorical ? `展示截至 ${view.narrativeBusinessDay} 最近SEO登记` : undefined);
 
+  const keywordMain = view.tables.find(t => t.title === '关键词消耗排行');
+  const tableScope = keywordMain?.scope || core?.scope || '来源快照，统计区间未标明';
+  const tableCpuvLabel = keywordMain?.columns?.[5] || 'CPUV';
+
   return {
     search: {
       ...searchCost,
       source: search?.source,
-      tableSource: core?.source,
+      tableSource: core?.source || keywordMain?.source,
+      tableScope,
+      tableCpuvLabel,
       coreWords,
       topKeywords: (top?.rows || []).slice(0, 10).map(r => ({ label: String(r[2]), value: value(r[4]) })),
       sourceBusinessDay: view.narrativeBusinessDay || view.day,

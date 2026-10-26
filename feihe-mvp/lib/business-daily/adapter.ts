@@ -278,7 +278,19 @@ export function buildDailyView(
     if (s.role === 'keywords' && (!s.periodFrom || s.periodFrom.slice(0, 7) === day.slice(0, 7))) {
       const rows = s.rows.slice(1).filter(r => txt(r[2]) && !summary(r[2]));
       rows.sort((a, b) => (parseNumericValue(b[4]) ?? -1) - (parseNumericValue(a[4]) ?? -1));
-      tables.push(table(s, '关键词消耗排行', ['市场出价', '搜索指数（单次观测）', '关键词', '消费占比', '消耗/元', 'CP星盟UV', 'CTR（源比率）', 'CPC'], rows, '月累计底表；无逐日日期与星盟拆分，仅展示当前可核对样本'));
+      const header = s.rows[0] || [];
+      const cpuvRaw = txt(header[5]) ? txt(header[5]).trim() : '';
+      const cpuvNormalized = cpuvRaw.replace(/\s+/g, ' ');
+      const cpuvLabel = /cp星盟/i.test(cpuvNormalized) ? 'CP星盟UV' : (/cpuv/i.test(cpuvNormalized) ? 'CPUV' : (cpuvNormalized || 'CPUV'));
+      const columns = ['市场出价', '搜索指数（单次观测）', '关键词', '消费占比', '消耗/元', cpuvLabel, 'CTR（源比率）', 'CPC'];
+      const scopeText = s.scopeLabel
+        ? s.scopeLabel
+        : (s.periodFrom && s.periodTo
+            ? `${s.periodFrom} 至 ${s.periodTo}；月累计底表，无逐日日期与星盟拆分`
+            : (s.periodFrom
+                ? `${s.periodFrom} 起；无逐日日期与星盟拆分`
+                : '来源快照，统计区间未标明'));
+      tables.push(table(s, '关键词消耗排行', columns, rows, scopeText));
     }
     if (s.role === 'keyword_notes' && (!s.periodFrom || s.periodFrom.slice(0, 7) === day.slice(0, 7))) {
       let keyword = ''; const rows: unknown[][] = [];

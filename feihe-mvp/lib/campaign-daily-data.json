@@ -3,10 +3,10 @@
     {
       "id": "wipes-daily-delivery",
       "label": "稳健玉米湿巾投放日趋势 (By day)",
-      "period": "2026-09-16 ~ 2026-10-18",
+      "period": "2026-09-16 ~ 2026-10-25",
       "sourceId": "src-wipes-sheets-0QTVhE",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/Jo2cwK3c9ishJdkq40ycfNSMnTh?sheet=0QTVhE",
-      "note": "稳健玉米消毒湿巾全渠道投放日跟踪表（0QTVhE）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。10/18当日UV为0导致CPUV保持为null。",
+      "note": "稳健玉米消毒湿巾全渠道投放日跟踪表（0QTVhE）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。10/25当日UV为0导致CPUV保持为null。历史UV已按最新30日归因回填。",
       "metrics": [
         {
           "key": "spend",
@@ -80,310 +80,381 @@
           "spend": 3486.29,
           "impressions": 49365,
           "engagements": 98,
-          "uv": 113,
+          "uv": 120,
           "cpm": 70.62,
           "cpe": 35.57,
-          "cpuv": 30.85
+          "cpuv": 29.05
         },
         {
           "date": "2026-09-20",
           "spend": 4210.9,
           "impressions": 63565,
           "engagements": 93,
-          "uv": 235,
+          "uv": 255,
           "cpm": 66.25,
           "cpe": 45.28,
-          "cpuv": 17.92
+          "cpuv": 16.51
         },
         {
           "date": "2026-09-21",
           "spend": 4114.87,
           "impressions": 60496,
           "engagements": 213,
-          "uv": 225,
+          "uv": 255,
           "cpm": 68.02,
           "cpe": 19.32,
-          "cpuv": 18.29
+          "cpuv": 16.14
         },
         {
           "date": "2026-09-22",
           "spend": 4955.18,
           "impressions": 75556,
           "engagements": 165,
-          "uv": 554,
+          "uv": 651,
           "cpm": 65.58,
           "cpe": 30.03,
-          "cpuv": 8.94
+          "cpuv": 7.61
         },
         {
           "date": "2026-09-23",
           "spend": 4811.72,
           "impressions": 69865,
           "engagements": 86,
-          "uv": 411,
+          "uv": 498,
           "cpm": 68.87,
           "cpe": 55.95,
-          "cpuv": 11.71
+          "cpuv": 9.66
         },
         {
           "date": "2026-09-24",
           "spend": 4949.41,
           "impressions": 75884,
           "engagements": 89,
-          "uv": 508,
+          "uv": 680,
           "cpm": 65.22,
           "cpe": 55.61,
-          "cpuv": 9.74
+          "cpuv": 7.28
         },
         {
           "date": "2026-09-25",
           "spend": 3500.6,
           "impressions": 50849,
           "engagements": 19,
-          "uv": 516,
+          "uv": 738,
           "cpm": 68.84,
           "cpe": 184.24,
-          "cpuv": 6.78
+          "cpuv": 4.74
         },
         {
           "date": "2026-09-26",
           "spend": 3367.38,
           "impressions": 55003,
           "engagements": 190,
-          "uv": 938,
+          "uv": 1272,
           "cpm": 61.22,
           "cpe": 17.72,
-          "cpuv": 3.59
+          "cpuv": 2.65
         },
         {
           "date": "2026-09-27",
           "spend": 3341.39,
           "impressions": 55952,
           "engagements": 168,
-          "uv": 934,
+          "uv": 1276,
           "cpm": 59.72,
           "cpe": 19.89,
-          "cpuv": 3.58
+          "cpuv": 2.62
         },
         {
           "date": "2026-09-28",
           "spend": 3821.06,
           "impressions": 66344,
           "engagements": 394,
-          "uv": 699,
+          "uv": 968,
           "cpm": 57.59,
           "cpe": 9.7,
-          "cpuv": 5.47
+          "cpuv": 3.95
         },
         {
           "date": "2026-09-29",
           "spend": 3088.53,
           "impressions": 58516,
           "engagements": 290,
-          "uv": 1024,
+          "uv": 1384,
           "cpm": 52.78,
           "cpe": 10.65,
-          "cpuv": 3.02
+          "cpuv": 2.23
         },
         {
           "date": "2026-09-30",
           "spend": 3149.31,
           "impressions": 58532,
           "engagements": 208,
-          "uv": 2205,
+          "uv": 2793,
           "cpm": 53.8,
           "cpe": 15.14,
-          "cpuv": 1.43
+          "cpuv": 1.13
         },
         {
           "date": "2026-10-01",
           "spend": 3358.96,
           "impressions": 56233,
           "engagements": 328,
-          "uv": 2467,
+          "uv": 3270,
           "cpm": 59.73,
           "cpe": 10.24,
-          "cpuv": 1.36
+          "cpuv": 1.03
         },
         {
           "date": "2026-10-02",
           "spend": 3510.72,
           "impressions": 51397,
           "engagements": 535,
-          "uv": 875,
+          "uv": 1159,
           "cpm": 68.31,
           "cpe": 6.56,
-          "cpuv": 4.01
+          "cpuv": 3.03
         },
         {
           "date": "2026-10-03",
           "spend": 3507.04,
           "impressions": 38569,
           "engagements": 669,
-          "uv": 251,
+          "uv": 373,
           "cpm": 90.93,
           "cpe": 5.24,
-          "cpuv": 13.97
+          "cpuv": 9.4
         },
         {
           "date": "2026-10-04",
           "spend": 3510.39,
           "impressions": 41087,
           "engagements": 651,
-          "uv": 216,
+          "uv": 339,
           "cpm": 85.44,
           "cpe": 5.39,
-          "cpuv": 16.25
+          "cpuv": 10.36
         },
         {
           "date": "2026-10-05",
           "spend": 3285.65,
           "impressions": 46221,
           "engagements": 644,
-          "uv": 229,
+          "uv": 322,
           "cpm": 71.09,
           "cpe": 5.1,
-          "cpuv": 14.35
+          "cpuv": 10.2
         },
         {
           "date": "2026-10-06",
           "spend": 3515.31,
           "impressions": 43523,
           "engagements": 667,
-          "uv": 135,
+          "uv": 197,
           "cpm": 80.77,
           "cpe": 5.27,
-          "cpuv": 26.04
+          "cpuv": 17.84
         },
         {
           "date": "2026-10-07",
           "spend": 3505.78,
           "impressions": 36252,
           "engagements": 652,
-          "uv": 110,
+          "uv": 160,
           "cpm": 96.71,
           "cpe": 5.38,
-          "cpuv": 31.87
+          "cpuv": 21.91
         },
         {
           "date": "2026-10-08",
           "spend": 4956.58,
           "impressions": 50320,
           "engagements": 1107,
-          "uv": 205,
+          "uv": 303,
           "cpm": 98.5,
           "cpe": 4.48,
-          "cpuv": 24.18
+          "cpuv": 16.36
         },
         {
           "date": "2026-10-09",
-          "spend": 5012.0,
+          "spend": 5012,
           "impressions": 48957,
           "engagements": 1057,
-          "uv": 247,
+          "uv": 368,
           "cpm": 102.38,
           "cpe": 4.74,
-          "cpuv": 20.29
+          "cpuv": 13.62
         },
         {
           "date": "2026-10-10",
           "spend": 4850.8,
           "impressions": 44776,
           "engagements": 827,
-          "uv": 357,
+          "uv": 559,
           "cpm": 108.33,
           "cpe": 5.87,
-          "cpuv": 13.59
+          "cpuv": 8.68
         },
         {
           "date": "2026-10-11",
           "spend": 5731.66,
           "impressions": 59536,
           "engagements": 1221,
-          "uv": 1646,
+          "uv": 3212,
           "cpm": 96.27,
           "cpe": 4.69,
-          "cpuv": 3.48
+          "cpuv": 1.78
         },
         {
           "date": "2026-10-12",
           "spend": 6905.62,
           "impressions": 70613,
           "engagements": 465,
-          "uv": 1925,
+          "uv": 4324,
           "cpm": 97.8,
           "cpe": 14.85,
-          "cpuv": 3.59
+          "cpuv": 1.6
         },
         {
           "date": "2026-10-13",
           "spend": 9450.74,
           "impressions": 79586,
           "engagements": 628,
-          "uv": 1740,
+          "uv": 4480,
           "cpm": 118.75,
           "cpe": 15.05,
-          "cpuv": 5.43
+          "cpuv": 2.11
         },
         {
           "date": "2026-10-14",
           "spend": 7423.34,
           "impressions": 61975,
           "engagements": 594,
-          "uv": 1161,
+          "uv": 3490,
           "cpm": 119.78,
           "cpe": 12.5,
-          "cpuv": 6.39
+          "cpuv": 2.13
         },
         {
           "date": "2026-10-15",
           "spend": 10010.1,
           "impressions": 58042,
           "engagements": 1426,
-          "uv": 703,
+          "uv": 2300,
           "cpm": 172.46,
           "cpe": 7.02,
-          "cpuv": 14.24
+          "cpuv": 4.35
         },
         {
           "date": "2026-10-16",
           "spend": 11743.64,
           "impressions": 57200,
           "engagements": 1478,
-          "uv": 245,
+          "uv": 976,
           "cpm": 205.31,
           "cpe": 7.95,
-          "cpuv": 47.93
+          "cpuv": 12.03
         },
         {
           "date": "2026-10-17",
           "spend": 11691.96,
           "impressions": 69568,
           "engagements": 1470,
-          "uv": 171,
+          "uv": 1044,
           "cpm": 168.07,
           "cpe": 7.95,
-          "cpuv": 68.37
+          "cpuv": 11.2
         },
         {
           "date": "2026-10-18",
           "spend": 13122.8,
           "impressions": 81194,
-          "engagements": 1479,
-          "uv": 0,
+          "engagements": 1480,
+          "uv": 1360,
           "cpm": 161.62,
           "cpe": 8.87,
+          "cpuv": 9.65
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 13521.17,
+          "impressions": 70507,
+          "engagements": 1693,
+          "uv": 327,
+          "cpm": 191.77,
+          "cpe": 7.99,
+          "cpuv": 41.35
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 14864.5,
+          "impressions": 78303,
+          "engagements": 1765,
+          "uv": 196,
+          "cpm": 189.83,
+          "cpe": 8.42,
+          "cpuv": 75.84
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 10122.24,
+          "impressions": 58884,
+          "engagements": 1187,
+          "uv": 181,
+          "cpm": 171.9,
+          "cpe": 8.53,
+          "cpuv": 55.92
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 12081.61,
+          "impressions": 71899,
+          "engagements": 1285,
+          "uv": 248,
+          "cpm": 168.04,
+          "cpe": 9.4,
+          "cpuv": 48.72
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 10175.74,
+          "impressions": 68611,
+          "engagements": 1228,
+          "uv": 163,
+          "cpm": 148.31,
+          "cpe": 8.29,
+          "cpuv": 62.43
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 5035.06,
+          "impressions": 25433,
+          "engagements": 846,
+          "uv": 175,
+          "cpm": 197.97,
+          "cpe": 5.95,
+          "cpuv": 28.77
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 5003.89,
+          "impressions": 24835,
+          "engagements": 381,
+          "uv": 0,
+          "cpm": 201.49,
+          "cpe": 13.13,
           "cpuv": null
         }
-      ]
+      ],
+      "sourceSheetId": "0QTVhE"
     },
     {
       "id": "wipes-daily-taosou",
-      "label": "稳健淘搜指数与分渠道日消耗 (淘搜)",
-      "period": "2026-09-14 ~ 2026-10-18",
+      "label": "淘搜指数与分渠道投放",
+      "period": "2026-09-14 ~ 2026-10-25",
       "sourceId": "src-wipes-sheets-wY1HZO",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/Jo2cwK3c9ishJdkq40ycfNSMnTh?sheet=wY1HZO",
-      "note": "淘搜每日搜索指数及K/F/S/CID分渠道实际消耗，10/19及后续未来无投放空行已严格剔除（不计作实际0消耗）。",
+      "note": "稳健玉米湿巾淘搜指数全系列与分渠道投放（42天）。淘搜指数覆盖至2026-10-25，分渠道消耗仅F/S/CID更新至2026-10-23，10/24-10/25因渠道消耗缺失保持spend_total为null。O列日期独立关联进店UV与搜索进店UV。",
       "metrics": [
         {
           "key": "kw_total_index",
@@ -436,11 +507,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 7951.78,
-          "spend_f": 0.0,
-          "spend_s": 0.0,
-          "spend_cid": 0.0,
-          "spend_total": 7951.78
+          "spend_k": 7916.195,
+          "spend_f": 0,
+          "spend_s": 0,
+          "spend_cid": 0,
+          "spend_total": 7916.195,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
         },
         {
           "date": "2026-09-15",
@@ -451,11 +525,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 3925.56,
-          "spend_f": 0.0,
-          "spend_s": 0.0,
-          "spend_cid": 0.0,
-          "spend_total": 3925.56
+          "spend_k": 3907.995,
+          "spend_f": 0,
+          "spend_s": 0,
+          "spend_cid": 0,
+          "spend_total": 3907.995,
+          "search_uv": 45,
+          "shop_uv": 56,
+          "redstar_uv": null
         },
         {
           "date": "2026-09-16",
@@ -466,11 +543,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 10,
-          "spend_k": 1308.52,
+          "spend_k": 1302.665,
           "spend_f": 614.38,
-          "spend_s": 0.0,
-          "spend_cid": 0.0,
-          "spend_total": 1922.9
+          "spend_s": 0,
+          "spend_cid": 0,
+          "spend_total": 1917.045,
+          "search_uv": 4,
+          "shop_uv": 9,
+          "redstar_uv": 9
         },
         {
           "date": "2026-09-17",
@@ -481,11 +561,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 0,
-          "spend_k": 4126.87,
+          "spend_k": 4108.405,
           "spend_f": 803.24,
-          "spend_s": 0.0,
-          "spend_cid": 0.0,
-          "spend_total": 4930.11
+          "spend_s": 0,
+          "spend_cid": 0,
+          "spend_total": 4911.6449999999995,
+          "search_uv": 48,
+          "shop_uv": 57,
+          "redstar_uv": 13
         },
         {
           "date": "2026-09-18",
@@ -496,11 +579,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 1404.72,
-          "spend_s": 634.0,
-          "spend_cid": 0.0,
-          "spend_total": 2038.72
+          "spend_s": 634.31,
+          "spend_cid": 0,
+          "spend_total": 2039.03,
+          "search_uv": 44,
+          "shop_uv": 61,
+          "redstar_uv": 64
         },
         {
           "date": "2026-09-19",
@@ -511,11 +597,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 0,
-          "spend_k": 6955.3,
+          "spend_k": 6924.1655,
           "spend_f": 2304.48,
-          "spend_s": 634.0,
-          "spend_cid": 0.0,
-          "spend_total": 9893.78
+          "spend_s": 1181.81,
+          "spend_cid": 0,
+          "spend_total": 10410.4555,
+          "search_uv": 36,
+          "shop_uv": 60,
+          "redstar_uv": 105
         },
         {
           "date": "2026-09-20",
@@ -526,11 +615,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 2596.91,
+          "spend_k": 2585.289,
           "spend_f": 2523.57,
           "spend_s": 1687.33,
-          "spend_cid": 0.0,
-          "spend_total": 6807.81
+          "spend_cid": 0,
+          "spend_total": 6796.189,
+          "search_uv": 86,
+          "shop_uv": 121,
+          "redstar_uv": 219
         },
         {
           "date": "2026-09-21",
@@ -541,11 +633,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 10,
-          "spend_k": 7589.42,
+          "spend_k": 7555.457,
           "spend_f": 2109.76,
-          "spend_s": 2005.0,
-          "spend_cid": 0.0,
-          "spend_total": 11704.18
+          "spend_s": 2005.11,
+          "spend_cid": 0,
+          "spend_total": 11670.327000000001,
+          "search_uv": 46,
+          "shop_uv": 62,
+          "redstar_uv": 204
         },
         {
           "date": "2026-09-22",
@@ -556,11 +651,14 @@
           "kw_alcohol_wipes": 0,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 3623.6,
-          "spend_f": 1334.74,
+          "spend_k": 3607.38,
+          "spend_f": 2348.44,
           "spend_s": 2606.74,
-          "spend_cid": 0.0,
-          "spend_total": 7565.08
+          "spend_cid": 0,
+          "spend_total": 8562.56,
+          "search_uv": 58,
+          "shop_uv": 99,
+          "redstar_uv": 498
         },
         {
           "date": "2026-09-23",
@@ -571,11 +669,14 @@
           "kw_alcohol_wipes": 0,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 2415.73,
-          "spend_f": 1303.4,
-          "spend_s": 2453.38,
-          "spend_cid": 0.0,
-          "spend_total": 6172.51
+          "spend_k": 2404.92,
+          "spend_f": 2205.63,
+          "spend_s": 2606.09,
+          "spend_cid": 0,
+          "spend_total": 7216.64,
+          "search_uv": 137,
+          "shop_uv": 181,
+          "redstar_uv": 370
         },
         {
           "date": "2026-09-24",
@@ -586,11 +687,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 61171.35,
-          "spend_f": 1159.38,
+          "spend_k": 60683.14595,
+          "spend_f": 2333.01,
           "spend_s": 2616.4,
-          "spend_cid": 0.0,
-          "spend_total": 64947.13
+          "spend_cid": 0,
+          "spend_total": 65632.55595,
+          "search_uv": 65,
+          "shop_uv": 112,
+          "redstar_uv": 447
         },
         {
           "date": "2026-09-25",
@@ -601,11 +705,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 8052.44,
-          "spend_f": 715.94,
-          "spend_s": 1810.8,
-          "spend_cid": 0.0,
-          "spend_total": 10579.18
+          "spend_k": 8016.4,
+          "spend_f": 1689.35,
+          "spend_s": 1811.25,
+          "spend_cid": 0,
+          "spend_total": 11517,
+          "search_uv": 77,
+          "shop_uv": 144,
+          "redstar_uv": 444
         },
         {
           "date": "2026-09-26",
@@ -616,11 +723,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 10,
-          "spend_k": 8475.19,
-          "spend_f": 759.52,
-          "spend_s": 1497.93,
-          "spend_cid": 0.0,
-          "spend_total": 10732.64
+          "spend_k": 11122.755,
+          "spend_f": 1766.17,
+          "spend_s": 1601.21,
+          "spend_cid": 0,
+          "spend_total": 14490.134999999998,
+          "search_uv": 47,
+          "shop_uv": 123,
+          "redstar_uv": 851
         },
         {
           "date": "2026-09-27",
@@ -631,11 +741,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 1610.49,
+          "spend_k": 1603.28,
           "spend_f": 1706.96,
           "spend_s": 1634.43,
-          "spend_cid": 0.0,
-          "spend_total": 4951.88
+          "spend_cid": 0,
+          "spend_total": 4944.67,
+          "search_uv": 79,
+          "shop_uv": 171,
+          "redstar_uv": 831
         },
         {
           "date": "2026-09-28",
@@ -646,11 +759,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 10,
-          "spend_k": 2315.08,
+          "spend_k": 2304.715,
           "spend_f": 1895.07,
           "spend_s": 1925.99,
-          "spend_cid": 0.0,
-          "spend_total": 6136.14
+          "spend_cid": 0,
+          "spend_total": 6125.775,
+          "search_uv": 164,
+          "shop_uv": 285,
+          "redstar_uv": 591
         },
         {
           "date": "2026-09-29",
@@ -661,11 +777,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 0,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 1183.28,
           "spend_s": 1905.25,
-          "spend_cid": 0.0,
-          "spend_total": 3088.53
+          "spend_cid": 0,
+          "spend_total": 3088.5299999999997,
+          "search_uv": 151,
+          "shop_uv": 305,
+          "redstar_uv": 911
         },
         {
           "date": "2026-09-30",
@@ -676,11 +795,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 1308.52,
+          "spend_k": 1302.665,
           "spend_f": 1634.85,
           "spend_s": 1514.46,
-          "spend_cid": 0.0,
-          "spend_total": 4457.83
+          "spend_cid": 0,
+          "spend_total": 4451.975,
+          "search_uv": 103,
+          "shop_uv": 268,
+          "redstar_uv": 1940
         },
         {
           "date": "2026-10-01",
@@ -691,11 +813,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 10,
-          "spend_k": 7931.65,
+          "spend_k": 7896.154,
           "spend_f": 1857.12,
           "spend_s": 1501.84,
-          "spend_cid": 0.0,
-          "spend_total": 11290.61
+          "spend_cid": 0,
+          "spend_total": 11255.114000000001,
+          "search_uv": 117,
+          "shop_uv": 276,
+          "redstar_uv": 2175
         },
         {
           "date": "2026-10-02",
@@ -706,11 +831,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 3824.91,
+          "spend_k": 3807.79,
           "spend_f": 2100.88,
           "spend_s": 1409.84,
-          "spend_cid": 0.0,
-          "spend_total": 7335.63
+          "spend_cid": 0,
+          "spend_total": 7318.51,
+          "search_uv": 121,
+          "shop_uv": 310,
+          "redstar_uv": 785
         },
         {
           "date": "2026-10-03",
@@ -721,11 +849,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 2516.39,
+          "spend_k": 2505.125,
           "spend_f": 2612.34,
           "spend_s": 894.7,
-          "spend_cid": 0.0,
-          "spend_total": 6023.43
+          "spend_cid": 0,
+          "spend_total": 6012.165,
+          "search_uv": 155,
+          "shop_uv": 347,
+          "redstar_uv": 205
         },
         {
           "date": "2026-10-04",
@@ -736,11 +867,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 0,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 2607.54,
           "spend_s": 902.85,
-          "spend_cid": 0.0,
-          "spend_total": 3510.39
+          "spend_cid": 0,
+          "spend_total": 3510.39,
+          "search_uv": 85,
+          "shop_uv": 271,
+          "redstar_uv": 175
         },
         {
           "date": "2026-10-05",
@@ -751,11 +885,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 10494.34,
+          "spend_k": 10447.3733,
           "spend_f": 2266.68,
           "spend_s": 1018.97,
-          "spend_cid": 0.0,
-          "spend_total": 13779.99
+          "spend_cid": 0,
+          "spend_total": 13733.023299999999,
+          "search_uv": 79,
+          "shop_uv": 244,
+          "redstar_uv": 179
         },
         {
           "date": "2026-10-06",
@@ -766,11 +903,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 35,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 2627.26,
           "spend_s": 888.05,
-          "spend_cid": 0.0,
-          "spend_total": 3515.31
+          "spend_cid": 0,
+          "spend_total": 3515.3100000000004,
+          "search_uv": 157,
+          "shop_uv": 375,
+          "redstar_uv": 118
         },
         {
           "date": "2026-10-07",
@@ -781,11 +921,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 35,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 2770.91,
           "spend_s": 734.87,
-          "spend_cid": 0.0,
-          "spend_total": 3505.78
+          "spend_cid": 0,
+          "spend_total": 3505.7799999999997,
+          "search_uv": 188,
+          "shop_uv": 453,
+          "redstar_uv": 89
         },
         {
           "date": "2026-10-08",
@@ -796,11 +939,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 9059.0,
+          "spend_k": 9018.45,
           "spend_f": 3950.08,
           "spend_s": 1006.5,
-          "spend_cid": 0.0,
-          "spend_total": 14015.58
+          "spend_cid": 0,
+          "spend_total": 13975.03,
+          "search_uv": 219,
+          "shop_uv": 510,
+          "redstar_uv": 167
         },
         {
           "date": "2026-10-09",
@@ -811,11 +957,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 2375.47,
+          "spend_k": 2364.838,
           "spend_f": 4004.1,
           "spend_s": 1007.9,
-          "spend_cid": 0.0,
-          "spend_total": 7387.47
+          "spend_cid": 0,
+          "spend_total": 7376.838,
+          "search_uv": 285,
+          "shop_uv": 620,
+          "redstar_uv": 175
         },
         {
           "date": "2026-10-10",
@@ -826,11 +975,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 5848.08,
+          "spend_k": 5821.9105,
           "spend_f": 4043.46,
           "spend_s": 807.34,
-          "spend_cid": 0.0,
-          "spend_total": 10698.88
+          "spend_cid": 0,
+          "spend_total": 10672.710500000001,
+          "search_uv": 208,
+          "shop_uv": 540,
+          "redstar_uv": 256
         },
         {
           "date": "2026-10-11",
@@ -841,11 +993,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 17574.46,
+          "spend_k": 17495.793,
           "spend_f": 4706.66,
-          "spend_s": 1025.0,
-          "spend_cid": 0.0,
-          "spend_total": 23306.12
+          "spend_s": 1025,
+          "spend_cid": 0,
+          "spend_total": 23227.453,
+          "search_uv": 252,
+          "shop_uv": 580,
+          "redstar_uv": 963
         },
         {
           "date": "2026-10-12",
@@ -856,11 +1011,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 35,
           "kw_disinfect_wipes": 10,
-          "spend_k": 2516.39,
+          "spend_k": 2505.125,
           "spend_f": 5456.48,
           "spend_s": 1449.14,
-          "spend_cid": 0.0,
-          "spend_total": 9422.01
+          "spend_cid": 0,
+          "spend_total": 9410.744999999999,
+          "search_uv": 294,
+          "shop_uv": 724,
+          "redstar_uv": 1003
         },
         {
           "date": "2026-10-13",
@@ -871,11 +1029,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 8093.47,
           "spend_s": 1357.27,
-          "spend_cid": 0.0,
-          "spend_total": 9450.74
+          "spend_cid": 0,
+          "spend_total": 9450.74,
+          "search_uv": 247,
+          "shop_uv": 663,
+          "redstar_uv": 711
         },
         {
           "date": "2026-10-14",
@@ -886,11 +1047,14 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 6305.33,
           "spend_s": 1118.01,
-          "spend_cid": 0.0,
-          "spend_total": 7423.34
+          "spend_cid": 0,
+          "spend_total": 7423.34,
+          "search_uv": 239,
+          "shop_uv": 699,
+          "redstar_uv": 295
         },
         {
           "date": "2026-10-15",
@@ -901,11 +1065,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 8708.61,
           "spend_s": 1301.49,
-          "spend_cid": 0.0,
-          "spend_total": 10010.1
+          "spend_cid": 0,
+          "spend_total": 10010.1,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
         },
         {
           "date": "2026-10-16",
@@ -916,11 +1083,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 35,
           "kw_disinfect_wipes": 10,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 10416.07,
           "spend_s": 1327.57,
           "spend_cid": 729.56,
-          "spend_total": 12473.2
+          "spend_total": 12473.199999999999,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
         },
         {
           "date": "2026-10-17",
@@ -931,11 +1101,14 @@
           "kw_alcohol_wipes": 10,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 0,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 10112.54,
           "spend_s": 1579.42,
           "spend_cid": 724.7,
-          "spend_total": 12416.66
+          "spend_total": 12416.660000000002,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
         },
         {
           "date": "2026-10-18",
@@ -946,23 +1119,153 @@
           "kw_alcohol_wipes": 35,
           "kw_corn_alcohol_wipes": 10,
           "kw_disinfect_wipes": 0,
-          "spend_k": 0.0,
+          "spend_k": 0,
           "spend_f": 11311.96,
           "spend_s": 1810.84,
           "spend_cid": 720.89,
-          "spend_total": 13843.69
+          "spend_total": 13843.689999999999,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-19",
+          "kw_total_index": 280,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 0,
+          "spend_k": 0,
+          "spend_f": 11659.99,
+          "spend_s": 1861.18,
+          "spend_cid": 706.02,
+          "spend_total": 14227.19,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-20",
+          "kw_total_index": 505,
+          "kw_wipes": 225,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 35,
+          "kw_disinfect_wipes": 10,
+          "spend_k": 0,
+          "spend_f": 12750.05,
+          "spend_s": 2114.45,
+          "spend_cid": 1202.55,
+          "spend_total": 16067.05,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-21",
+          "kw_total_index": 480,
+          "kw_wipes": 225,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_k": 0,
+          "spend_f": 8334.58,
+          "spend_s": 1787.66,
+          "spend_cid": 2008.53,
+          "spend_total": 12130.77,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-22",
+          "kw_total_index": 455,
+          "kw_wipes": 225,
+          "kw_corn_wipes": 100,
+          "kw_alcohol": 100,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_k": 0,
+          "spend_f": 10074.15,
+          "spend_s": 2007.46,
+          "spend_cid": 2009.57,
+          "spend_total": 14091.18,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-23",
+          "kw_total_index": 225,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_k": 0,
+          "spend_f": 7871.58,
+          "spend_s": 2304.16,
+          "spend_cid": 941.36,
+          "spend_total": 11117.1,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-24",
+          "kw_total_index": 200,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 10,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_k": 0,
+          "spend_f": null,
+          "spend_s": null,
+          "spend_cid": null,
+          "spend_total": null,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
+        },
+        {
+          "date": "2026-10-25",
+          "kw_total_index": 225,
+          "kw_wipes": 100,
+          "kw_corn_wipes": 35,
+          "kw_alcohol": 35,
+          "kw_alcohol_wipes": 35,
+          "kw_corn_alcohol_wipes": 10,
+          "kw_disinfect_wipes": 10,
+          "spend_k": 0,
+          "spend_f": null,
+          "spend_s": null,
+          "spend_cid": null,
+          "spend_total": null,
+          "search_uv": null,
+          "shop_uv": null,
+          "redstar_uv": null
         }
-      ]
+      ],
+      "sourceSheetId": "wY1HZO"
     }
   ],
   "meiling": [
     {
       "id": "meiling-daily-cid-jd",
       "label": "美菱双11-京东对投CID日表现 (CID渠道)",
-      "period": "2026-10-16 ~ 2026-10-18",
+      "period": "2026-10-16 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-Trvrou",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
-      "note": "美菱双11京东对投CID子渠道日透视数据（明确仅限京东对投CID单一链路，不可当做美菱全案大盘）。小红盟站外UV为30日归因口径（各创意归因UV之和，非项目去重人数）。",
+      "note": "美菱双11京东对投CID日表现（透视表Trvrou）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
       "metrics": [
         {
           "key": "spend",
@@ -1029,57 +1332,163 @@
         {
           "date": "2026-10-16",
           "spend": 1011.17,
-          "impressions": 4607,
+          "impressions": 4640,
           "clicks": 397,
-          "ctr": 8.62,
+          "ctr": 8.56,
           "cpc": 2.55,
-          "cpm": 219.49,
+          "cpm": 217.92,
           "engagements": 7,
           "cpe": 144.45,
           "orders": 0,
-          "gmv": 0.0,
-          "roi": 0.0,
+          "gmv": 0,
+          "roi": 0,
           "uv": 30
         },
         {
           "date": "2026-10-17",
           "spend": 1008.04,
-          "impressions": 5193,
+          "impressions": 5218,
           "clicks": 498,
-          "ctr": 9.59,
+          "ctr": 9.54,
           "cpc": 2.02,
-          "cpm": 194.12,
+          "cpm": 193.19,
           "engagements": 7,
           "cpe": 144.01,
           "orders": 0,
-          "gmv": 0.0,
-          "roi": 0.0,
+          "gmv": 0,
+          "roi": 0,
           "uv": 85
         },
         {
           "date": "2026-10-18",
           "spend": 1363.31,
-          "impressions": 4798,
+          "impressions": 4821,
           "clicks": 453,
-          "ctr": 9.44,
+          "ctr": 9.4,
           "cpc": 3.01,
-          "cpm": 284.14,
+          "cpm": 282.79,
           "engagements": 4,
           "cpe": 340.83,
           "orders": 2,
           "gmv": 8076.81,
           "roi": 5.92,
           "uv": 101
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 600.01,
+          "impressions": 2712,
+          "clicks": 291,
+          "ctr": 10.73,
+          "cpc": 2.06,
+          "cpm": 221.24,
+          "engagements": 5,
+          "cpe": 120,
+          "orders": 2,
+          "gmv": 10452.9,
+          "roi": 17.42,
+          "uv": 83
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 3083.73,
+          "impressions": 44069,
+          "clicks": 4569,
+          "ctr": 10.37,
+          "cpc": 0.67,
+          "cpm": 69.98,
+          "engagements": 37,
+          "cpe": 83.34,
+          "orders": 6,
+          "gmv": 29106.74,
+          "roi": 9.44,
+          "uv": 94
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 1826.46,
+          "impressions": 29613,
+          "clicks": 3213,
+          "ctr": 10.85,
+          "cpc": 0.57,
+          "cpm": 61.68,
+          "engagements": 29,
+          "cpe": 62.98,
+          "orders": 3,
+          "gmv": 10898.08,
+          "roi": 5.97,
+          "uv": 64
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 538.29,
+          "impressions": 1541,
+          "clicks": 123,
+          "ctr": 7.98,
+          "cpc": 4.38,
+          "cpm": 349.31,
+          "engagements": 5,
+          "cpe": 107.66,
+          "orders": 1,
+          "gmv": 5746.4,
+          "roi": 10.68,
+          "uv": 52
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 318.37,
+          "impressions": 1227,
+          "clicks": 99,
+          "ctr": 8.07,
+          "cpc": 3.22,
+          "cpm": 259.47,
+          "engagements": 6,
+          "cpe": 53.06,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 70
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 644.68,
+          "impressions": 1234,
+          "clicks": 83,
+          "ctr": 6.73,
+          "cpc": 7.77,
+          "cpm": 522.43,
+          "engagements": 2,
+          "cpe": 322.34,
+          "orders": 1,
+          "gmv": 5438,
+          "roi": 8.44,
+          "uv": 53
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 693.16,
+          "impressions": 1936,
+          "clicks": 127,
+          "ctr": 6.56,
+          "cpc": 5.46,
+          "cpm": 358.04,
+          "engagements": 2,
+          "cpe": 346.58,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 56
         }
-      ]
+      ],
+      "sourceSheetId": "Trvrou"
     },
     {
       "id": "meiling-daily-tm-seed",
       "label": "美菱双11-自采天猫种草日流水 (TM种草)",
-      "period": "2026-09-30 ~ 2026-10-18",
+      "period": "2026-09-30 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-D9ddm3",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=D9ddm3",
-      "note": "美菱双11自采天猫种草底表（775条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=iautvs",
+      "note": "美菱双11自采天猫种草日流水（透视表iautvs）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。源CPUV若存在#NAME?按spend/uv重算。全量覆盖历史UV回填。",
       "metrics": [
         {
           "key": "spend",
@@ -1148,9 +1557,8 @@
           "cpm": 63.2,
           "engagements": 13,
           "cpe": 49.47,
-          "uv": 25,
-          "cpuv": 25.72,
-          "creatives_count": 4
+          "uv": 36,
+          "cpuv": 17.86
         },
         {
           "date": "2026-10-01",
@@ -1159,12 +1567,11 @@
           "clicks": 4606,
           "ctr": 15.25,
           "cpc": 0.26,
-          "cpm": 40.0,
+          "cpm": 40,
           "engagements": 49,
           "cpe": 24.66,
-          "uv": 129,
-          "cpuv": 9.37,
-          "creatives_count": 14
+          "uv": 194,
+          "cpuv": 6.23
         },
         {
           "date": "2026-10-02",
@@ -1176,9 +1583,8 @@
           "cpm": 33.79,
           "engagements": 54,
           "cpe": 26.08,
-          "uv": 146,
-          "cpuv": 9.65,
-          "creatives_count": 13
+          "uv": 211,
+          "cpuv": 6.67
         },
         {
           "date": "2026-10-03",
@@ -1190,9 +1596,8 @@
           "cpm": 32.08,
           "engagements": 60,
           "cpe": 30.25,
-          "uv": 200,
-          "cpuv": 9.08,
-          "creatives_count": 18
+          "uv": 289,
+          "cpuv": 6.28
         },
         {
           "date": "2026-10-04",
@@ -1204,9 +1609,8 @@
           "cpm": 37.13,
           "engagements": 68,
           "cpe": 29.73,
-          "uv": 78,
-          "cpuv": 25.92,
-          "creatives_count": 30
+          "uv": 121,
+          "cpuv": 16.71
         },
         {
           "date": "2026-10-05",
@@ -1218,9 +1622,8 @@
           "cpm": 38.32,
           "engagements": 104,
           "cpe": 29.57,
-          "uv": 121,
-          "cpuv": 25.41,
-          "creatives_count": 42
+          "uv": 188,
+          "cpuv": 16.36
         },
         {
           "date": "2026-10-06",
@@ -1232,9 +1635,8 @@
           "cpm": 41.72,
           "engagements": 105,
           "cpe": 28.7,
-          "uv": 71,
-          "cpuv": 42.45,
-          "creatives_count": 36
+          "uv": 113,
+          "cpuv": 26.67
         },
         {
           "date": "2026-10-07",
@@ -1246,9 +1648,8 @@
           "cpm": 41.04,
           "engagements": 137,
           "cpe": 22.06,
-          "uv": 88,
-          "cpuv": 34.34,
-          "creatives_count": 29
+          "uv": 142,
+          "cpuv": 21.28
         },
         {
           "date": "2026-10-08",
@@ -1260,9 +1661,8 @@
           "cpm": 38.23,
           "engagements": 98,
           "cpe": 33.32,
-          "uv": 100,
-          "cpuv": 32.65,
-          "creatives_count": 45
+          "uv": 179,
+          "cpuv": 18.24
         },
         {
           "date": "2026-10-09",
@@ -1274,9 +1674,8 @@
           "cpm": 43.78,
           "engagements": 119,
           "cpe": 28.79,
-          "uv": 147,
-          "cpuv": 23.31,
-          "creatives_count": 48
+          "uv": 232,
+          "cpuv": 14.77
         },
         {
           "date": "2026-10-10",
@@ -1288,9 +1687,8 @@
           "cpm": 47.15,
           "engagements": 106,
           "cpe": 31.62,
-          "uv": 175,
-          "cpuv": 19.15,
-          "creatives_count": 37
+          "uv": 279,
+          "cpuv": 12.01
         },
         {
           "date": "2026-10-11",
@@ -1302,9 +1700,8 @@
           "cpm": 48.09,
           "engagements": 130,
           "cpe": 29.27,
-          "uv": 161,
-          "cpuv": 23.63,
-          "creatives_count": 34
+          "uv": 309,
+          "cpuv": 12.31
         },
         {
           "date": "2026-10-12",
@@ -1316,23 +1713,21 @@
           "cpm": 51.15,
           "engagements": 87,
           "cpe": 41.83,
-          "uv": 235,
-          "cpuv": 15.49,
-          "creatives_count": 38
+          "uv": 415,
+          "cpuv": 8.77
         },
         {
           "date": "2026-10-13",
           "spend": 6098.36,
           "impressions": 117242,
           "clicks": 12899,
-          "ctr": 11.0,
+          "ctr": 11,
           "cpc": 0.47,
           "cpm": 52.02,
           "engagements": 407,
           "cpe": 14.98,
-          "uv": 208,
-          "cpuv": 29.32,
-          "creatives_count": 62
+          "uv": 411,
+          "cpuv": 14.84
         },
         {
           "date": "2026-10-14",
@@ -1344,9 +1739,8 @@
           "cpm": 59.01,
           "engagements": 500,
           "cpe": 12.97,
-          "uv": 409,
-          "cpuv": 15.86,
-          "creatives_count": 58
+          "uv": 924,
+          "cpuv": 7.02
         },
         {
           "date": "2026-10-15",
@@ -1358,9 +1752,8 @@
           "cpm": 83.1,
           "engagements": 810,
           "cpe": 15.68,
-          "uv": 1764,
-          "cpuv": 7.2,
-          "creatives_count": 78
+          "uv": 5253,
+          "cpuv": 2.42
         },
         {
           "date": "2026-10-16",
@@ -1372,9 +1765,8 @@
           "cpm": 89.94,
           "engagements": 571,
           "cpe": 17.78,
-          "uv": 831,
-          "cpuv": 12.22,
-          "creatives_count": 75
+          "uv": 3618,
+          "cpuv": 2.81
         },
         {
           "date": "2026-10-17",
@@ -1386,9 +1778,8 @@
           "cpm": 99.85,
           "engagements": 44,
           "cpe": 86.1,
-          "uv": 188,
-          "cpuv": 20.15,
-          "creatives_count": 38
+          "uv": 1334,
+          "cpuv": 2.84
         },
         {
           "date": "2026-10-18",
@@ -1400,19 +1791,110 @@
           "cpm": 81.64,
           "engagements": 710,
           "cpe": 8.5,
+          "uv": 1808,
+          "cpuv": 3.34
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 7034.18,
+          "impressions": 99337,
+          "clicks": 10634,
+          "ctr": 10.7,
+          "cpc": 0.66,
+          "cpm": 70.81,
+          "engagements": 199,
+          "cpe": 35.35,
+          "uv": 2350,
+          "cpuv": 2.99
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 5812.36,
+          "impressions": 72581,
+          "clicks": 8554,
+          "ctr": 11.79,
+          "cpc": 0.68,
+          "cpm": 80.08,
+          "engagements": 82,
+          "cpe": 70.88,
+          "uv": 342,
+          "cpuv": 17
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 9802.26,
+          "impressions": 128915,
+          "clicks": 14153,
+          "ctr": 10.98,
+          "cpc": 0.69,
+          "cpm": 76.04,
+          "engagements": 111,
+          "cpe": 88.31,
+          "uv": 456,
+          "cpuv": 21.5
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 10422.87,
+          "impressions": 138908,
+          "clicks": 15773,
+          "ctr": 11.35,
+          "cpc": 0.66,
+          "cpm": 75.03,
+          "engagements": 125,
+          "cpe": 83.38,
+          "uv": 367,
+          "cpuv": 28.4
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 10175.31,
+          "impressions": 144687,
+          "clicks": 15613,
+          "ctr": 10.79,
+          "cpc": 0.65,
+          "cpm": 70.33,
+          "engagements": 143,
+          "cpe": 71.16,
+          "uv": 195,
+          "cpuv": 52.18
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 11764.23,
+          "impressions": 163183,
+          "clicks": 17597,
+          "ctr": 10.78,
+          "cpc": 0.67,
+          "cpm": 72.09,
+          "engagements": 363,
+          "cpe": 32.41,
+          "uv": 129,
+          "cpuv": 91.2
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 12627.91,
+          "impressions": 173661,
+          "clicks": 18697,
+          "ctr": 10.77,
+          "cpc": 0.68,
+          "cpm": 72.72,
+          "engagements": 380,
+          "cpe": 33.23,
           "uv": 0,
-          "cpuv": null,
-          "creatives_count": 76
+          "cpuv": null
         }
-      ]
+      ],
+      "sourceSheetId": "iautvs"
     },
     {
       "id": "meiling-daily-jd-seed",
       "label": "美菱双11-自采京东种草日流水 (JD种草)",
-      "period": "2026-09-29 ~ 2026-10-18",
+      "period": "2026-09-29 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-BI2xBs",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=BI2xBs",
-      "note": "美菱双11自采京东种草底表（1209条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=B5TBE7",
+      "note": "美菱双11自采京东种草日流水（透视表B5TBE7）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
       "metrics": [
         {
           "key": "spend",
@@ -1482,8 +1964,7 @@
           "engagements": 11,
           "cpe": 0.7,
           "uv": 0,
-          "cpuv": null,
-          "creatives_count": 7
+          "cpuv": null
         },
         {
           "date": "2026-09-30",
@@ -1496,8 +1977,7 @@
           "engagements": 60,
           "cpe": 5.71,
           "uv": 0,
-          "cpuv": null,
-          "creatives_count": 14
+          "cpuv": null
         },
         {
           "date": "2026-10-01",
@@ -1510,8 +1990,7 @@
           "engagements": 30,
           "cpe": 45.39,
           "uv": 8,
-          "cpuv": 170.22,
-          "creatives_count": 14
+          "cpuv": 170.22
         },
         {
           "date": "2026-10-02",
@@ -1524,8 +2003,7 @@
           "engagements": 20,
           "cpe": 67.25,
           "uv": 11,
-          "cpuv": 122.27,
-          "creatives_count": 14
+          "cpuv": 122.27
         },
         {
           "date": "2026-10-03",
@@ -1538,8 +2016,7 @@
           "engagements": 24,
           "cpe": 62.1,
           "uv": 27,
-          "cpuv": 55.2,
-          "creatives_count": 29
+          "cpuv": 55.2
         },
         {
           "date": "2026-10-04",
@@ -1552,8 +2029,7 @@
           "engagements": 24,
           "cpe": 74.62,
           "uv": 35,
-          "cpuv": 51.16,
-          "creatives_count": 75
+          "cpuv": 51.16
         },
         {
           "date": "2026-10-05",
@@ -1566,8 +2042,7 @@
           "engagements": 25,
           "cpe": 81.31,
           "uv": 48,
-          "cpuv": 42.35,
-          "creatives_count": 81
+          "cpuv": 42.35
         },
         {
           "date": "2026-10-06",
@@ -1580,8 +2055,7 @@
           "engagements": 14,
           "cpe": 144.19,
           "uv": 46,
-          "cpuv": 43.88,
-          "creatives_count": 74
+          "cpuv": 43.88
         },
         {
           "date": "2026-10-07",
@@ -1594,8 +2068,7 @@
           "engagements": 21,
           "cpe": 95.72,
           "uv": 71,
-          "cpuv": 28.31,
-          "creatives_count": 54
+          "cpuv": 28.31
         },
         {
           "date": "2026-10-08",
@@ -1608,8 +2081,7 @@
           "engagements": 21,
           "cpe": 96.4,
           "uv": 64,
-          "cpuv": 31.63,
-          "creatives_count": 60
+          "cpuv": 31.63
         },
         {
           "date": "2026-10-09",
@@ -1622,8 +2094,7 @@
           "engagements": 58,
           "cpe": 86.62,
           "uv": 100,
-          "cpuv": 50.24,
-          "creatives_count": 62
+          "cpuv": 50.24
         },
         {
           "date": "2026-10-10",
@@ -1636,8 +2107,7 @@
           "engagements": 45,
           "cpe": 91.63,
           "uv": 93,
-          "cpuv": 44.34,
-          "creatives_count": 69
+          "cpuv": 44.34
         },
         {
           "date": "2026-10-11",
@@ -1650,8 +2120,7 @@
           "engagements": 58,
           "cpe": 86.32,
           "uv": 96,
-          "cpuv": 52.15,
-          "creatives_count": 68
+          "cpuv": 52.15
         },
         {
           "date": "2026-10-12",
@@ -1664,8 +2133,7 @@
           "engagements": 61,
           "cpe": 86.39,
           "uv": 93,
-          "cpuv": 56.66,
-          "creatives_count": 63
+          "cpuv": 56.66
         },
         {
           "date": "2026-10-13",
@@ -1678,8 +2146,7 @@
           "engagements": 53,
           "cpe": 79.45,
           "uv": 120,
-          "cpuv": 35.09,
-          "creatives_count": 63
+          "cpuv": 35.09
         },
         {
           "date": "2026-10-14",
@@ -1692,8 +2159,7 @@
           "engagements": 55,
           "cpe": 70.39,
           "uv": 152,
-          "cpuv": 25.47,
-          "creatives_count": 88
+          "cpuv": 25.47
         },
         {
           "date": "2026-10-15",
@@ -1702,12 +2168,11 @@
           "clicks": 11899,
           "ctr": 10.19,
           "cpc": 0.68,
-          "cpm": 69.0,
+          "cpm": 69,
           "engagements": 106,
           "cpe": 76.02,
           "uv": 164,
-          "cpuv": 49.13,
-          "creatives_count": 98
+          "cpuv": 49.13
         },
         {
           "date": "2026-10-16",
@@ -1720,8 +2185,7 @@
           "engagements": 59,
           "cpe": 173.8,
           "uv": 153,
-          "cpuv": 67.02,
-          "creatives_count": 94
+          "cpuv": 67.02
         },
         {
           "date": "2026-10-17",
@@ -1730,12 +2194,11 @@
           "clicks": 14937,
           "ctr": 10.2,
           "cpc": 0.58,
-          "cpm": 59.0,
+          "cpm": 59,
           "engagements": 85,
           "cpe": 101.69,
           "uv": 179,
-          "cpuv": 48.29,
-          "creatives_count": 90
+          "cpuv": 48.29
         },
         {
           "date": "2026-10-18",
@@ -1748,10 +2211,101 @@
           "engagements": 94,
           "cpe": 102.57,
           "uv": 202,
-          "cpuv": 47.73,
-          "creatives_count": 92
+          "cpuv": 47.73
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 9232.61,
+          "impressions": 153922,
+          "clicks": 16589,
+          "ctr": 10.78,
+          "cpc": 0.56,
+          "cpm": 59.98,
+          "engagements": 167,
+          "cpe": 55.29,
+          "uv": 309,
+          "cpuv": 29.88
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 10512.46,
+          "impressions": 178754,
+          "clicks": 17858,
+          "ctr": 9.99,
+          "cpc": 0.59,
+          "cpm": 58.81,
+          "engagements": 191,
+          "cpe": 55.04,
+          "uv": 274,
+          "cpuv": 38.37
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 17594.55,
+          "impressions": 246142,
+          "clicks": 25550,
+          "ctr": 10.38,
+          "cpc": 0.69,
+          "cpm": 71.48,
+          "engagements": 669,
+          "cpe": 26.3,
+          "uv": 262,
+          "cpuv": 67.15
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 25511.39,
+          "impressions": 273201,
+          "clicks": 26014,
+          "ctr": 9.52,
+          "cpc": 0.98,
+          "cpm": 93.38,
+          "engagements": 1572,
+          "cpe": 16.23,
+          "uv": 324,
+          "cpuv": 78.74
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 29070.66,
+          "impressions": 315461,
+          "clicks": 27490,
+          "ctr": 8.71,
+          "cpc": 1.06,
+          "cpm": 92.15,
+          "engagements": 1620,
+          "cpe": 17.94,
+          "uv": 439,
+          "cpuv": 66.22
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 29989.03,
+          "impressions": 283335,
+          "clicks": 25166,
+          "ctr": 8.88,
+          "cpc": 1.19,
+          "cpm": 105.84,
+          "engagements": 2076,
+          "cpe": 14.45,
+          "uv": 494,
+          "cpuv": 60.71
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 29998.46,
+          "impressions": 301115,
+          "clicks": 27327,
+          "ctr": 9.08,
+          "cpc": 1.1,
+          "cpm": 99.62,
+          "engagements": 2035,
+          "cpe": 14.74,
+          "uv": 582,
+          "cpuv": 51.54
         }
-      ]
+      ],
+      "sourceSheetId": "B5TBE7"
     }
   ],
   "kailas": [
@@ -1844,7 +2398,7 @@
           "cpc": 0.61,
           "cpm": 65.1,
           "engagements": 543,
-          "cpe": 7.0,
+          "cpe": 7,
           "seed_crowd": 2689,
           "deep_seed_crowd": 1335,
           "search_clicks": 62,

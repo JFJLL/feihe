@@ -67,8 +67,115 @@
 }
 
 .ca-subnav-reload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1c2024;
+  border: 0.5px solid #d9d9e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
   white-space: nowrap !important;
   flex-shrink: 0 !important;
+  cursor: pointer;
+}
+
+.ca-subnav-reload-btn:hover:not(:disabled) {
+  background: #f0f0f3;
+  border-color: #60646c;
+}
+
+.ca-subnav-reload-btn:focus-visible {
+  outline: 2px solid #008573;
+  outline-offset: 1px;
+}
+
+.ca-subnav-reload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f9f9fb;
+  border-color: #e8e8ec;
+  color: #8d8d95;
+}
+
+.ca-subnav-reload-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+/* ==========================================================================
+   Campaign Header Controls: Mobile Adaptation for Reload Action Button
+   Ensures that in mobile view (<= 480px / <= 640px), header controls wrap
+   and the reload button is right-aligned without getting clipped by tabsSlot.
+   Scoped to .dashboard-template:has(.campaign-workspace-root).
+   ========================================================================== */
+@media (max-width: 640px) {
+  .dashboard-template:has(.campaign-workspace-root) .dashboard-template-header-controls {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    row-gap: 8px !important;
+    column-gap: 8px !important;
+    justify-content: space-between !important;
+  }
+
+  .dashboard-template:has(.campaign-workspace-root) .dashboard-template-actions {
+    margin-left: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-template:has(.campaign-workspace-root) .dashboard-template-header-controls {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    row-gap: 8px !important;
+  }
+
+  .dashboard-template:has(.campaign-workspace-root) .dashboard-template-nav {
+    flex: 0 1 auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-template:has(.campaign-workspace-root) .dashboard-template-actions {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dashboard-template:has(.campaign-workspace-root) .ca-subnav-reload-btn {
+    height: 36px !important;
+    min-height: 36px !important;
+    min-width: 36px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+  }
 }
 
 /* Header Project Status Badge: prevent 1 char per line squishing on mobile */

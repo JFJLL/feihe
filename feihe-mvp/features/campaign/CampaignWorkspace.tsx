@@ -146,18 +146,24 @@ export function CampaignWorkspace({
       type="button"
       onClick={handleReload}
       disabled={loading}
-      className="ca-subnav-reload-btn button button-secondary"
-      title="重新请求最新复盘数据"
-      style={{
-        padding: '4px 12px',
-        borderRadius: 6,
-        fontSize: 14,
-        cursor: loading ? 'not-allowed' : 'pointer',
-        whiteSpace: 'nowrap',
-        flexShrink: 0,
-      }}
+      className="ca-subnav-reload-btn"
+      title="重新读取已同步数据"
+      aria-label="重新读取已同步数据"
     >
-      {loading ? '刷新中…' : '↻ 刷新'}
+      <svg
+        className="ca-subnav-reload-icon"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M1.5 8a6.5 6.5 0 1 0 1.9-4.6L1.5 5.5" />
+        <path d="M1.5 2v3.5H5" />
+      </svg>
+      <span>{loading ? '重新加载中…' : '重新加载'}</span>
     </button>
   );
 

@@ -5,7 +5,7 @@ import type { SourceRole } from '../business-daily/types';
 
 export type SyncSpec = {
   type: 'feishu_table' | 'feishu_document' | 'automation_platform' | 'competitor_ipscg'; sourceKey: string; sourceUrl: string;
-  role?: SourceRole; sheetId?: string; range?: string; reportDay?: string; periodFrom?: string; periodTo?: string; year?: number;
+  role?: SourceRole; sheetId?: string; range?: string; reportDay?: string; periodFrom?: string; periodTo?: string; year?: number; scopeLabel?: string;
   accountId?: string; platform?: 'juguang' | 'jzt' | 'taobao' | 'keyword' | 'lingxi'; entityIds?: string[]; dimension?: string;
   refreshDays?: number; attributionDelayDays?: number; primary?: boolean;
   taskId?: string; keywords?: string[]; from?: string; to?: string; maxPages?: number; pageSize?: number;
@@ -32,7 +32,7 @@ export function safeSyncError(error: unknown) {
   return text.replace(/(["']?[\w-]*(?:cookie|authorization|token|secret|password|api[_-]?key)[\w-]*["']?\s*[:=]\s*)(?:"[^"]*"|'[^']*'|[^\r\n,}]+)/gi, '$1[redacted]').replace(/https?:\/\/\S+/g, '[上游地址]').slice(0, 500);
 }
 export async function validateSyncSpec(projectId: string, spec: SyncSpec) {
-  const allowed = new Set(['type','sourceKey','sourceUrl','role','sheetId','range','reportDay','periodFrom','periodTo','year','accountId','platform','entityIds','dimension','refreshDays','attributionDelayDays','primary','taskId','keywords','from','to','maxPages','pageSize','overlapWindowDays','rateLimitMs','checkpoint']);
+  const allowed = new Set(['type','sourceKey','sourceUrl','role','sheetId','range','reportDay','periodFrom','periodTo','year','scopeLabel','accountId','platform','entityIds','dimension','refreshDays','attributionDelayDays','primary','taskId','keywords','from','to','maxPages','pageSize','overlapWindowDays','rateLimitMs','checkpoint']);
   if (Object.keys(spec).some(k => !allowed.has(k))) throw new DailyError('任务包含不支持的字段；凭据不能写入任务配置');
   const config = await businessConfig(projectId);
   const binding = config?.bindings.find(b => b.key === spec.sourceKey && b.url === spec.sourceUrl);
@@ -59,6 +59,7 @@ export async function validateSyncSpec(projectId: string, spec: SyncSpec) {
     if (spec.primary) throw new DailyError('平台归因范围须先与底表核验，当前采集作为核对来源');
   }
   if (spec.refreshDays !== undefined && (!Number.isInteger(spec.refreshDays) || spec.refreshDays < 1 || spec.refreshDays > 90)) throw new DailyError('近期回刷范围须为1至90日');
+  if (spec.scopeLabel !== undefined && (typeof spec.scopeLabel !== 'string' || spec.scopeLabel.length > 200)) throw new DailyError('统计区间说明无效（须为不超过200字的文本）');
     if ((spec as any).type === 'competitor_ipscg') {
     if (!spec.taskId || typeof spec.taskId !== 'string' || !/^[a-zA-Z0-9_-]{1,128}$/.test(spec.taskId)) throw new DailyError('竞品任务ID无效或未配置');
     if (!Array.isArray(spec.keywords) || !spec.keywords.length || spec.keywords.some(k => typeof k !== 'string' || !k.trim())) throw new DailyError('竞品监控必须配置非空关键词列表');

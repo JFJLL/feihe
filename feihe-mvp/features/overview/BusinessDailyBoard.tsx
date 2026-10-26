@@ -6,6 +6,7 @@ import { useCacheIdentity } from '../../components/project-shell/IdentityBoundar
 import { TimeSeriesChart } from '../../components/ui/TimeSeriesChart';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { CustomDatePicker } from '../../components/ui/CustomDatePicker';
+import { DayNavigator, isValidIsoDate } from '../../components/ui/DayNavigator';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { LoadingState } from '../../components/ui/LoadingState';
@@ -778,7 +779,7 @@ function AspectSummaryCard({
             alignItems: 'baseline',
             gap: 8,
             flex: 1,
-            minWidth: 260,
+            minWidth: 0,
           }}
         >
           <span
@@ -819,7 +820,9 @@ function AspectSummaryCard({
             gap: 12,
             fontSize: 12,
             color: 'var(--slate-11, #60646c)',
-            flexShrink: 0,
+            flexShrink: 1,
+            flexWrap: 'wrap',
+            minWidth: 0,
           }}
         >
           <span className="bd-insight-owner">
@@ -852,14 +855,15 @@ function AspectSummaryCard({
           {overview ? '展开差异原因与跟进策略' : '展开业务态势研判与差异原因'}
         </summary>
         <div
+          className="bd-aspect-details-grid"
           style={{
             marginTop: 8,
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: 12,
             fontSize: 12,
             lineHeight: 1.6,
             color: 'var(--slate-11, #60646c)',
+            minWidth: 0,
           }}
         >
           {overview ? (
@@ -944,17 +948,33 @@ export function BusinessDailyBoard({
 }) {
   const params = useSearchParams();
   const { currentProject } = useProject();
+  const initialUrlDayRef = useRef(Boolean(params.get('day')));
+  const currentProjectRef = useRef(projectId);
+  useEffect(() => {
+    if (currentProjectRef.current !== projectId) {
+      currentProjectRef.current = projectId;
+      initialUrlDayRef.current = Boolean(params.get('day'));
+    }
+  }, [projectId, params]);
 
   const [day, setDay] = useState(() => {
     const pDay = params.get('day');
-    if (pDay) return pDay;
-    return '2026-10-15';
+    return pDay && isValidIsoDate(pDay) ? pDay : '';
   });
-  const [mode, setMode] = useState(() => params.get('dataMode') || 'latest');
+  const [from, setFrom] = useState(() => {
+    const pFrom = params.get('from');
+    return pFrom && isValidIsoDate(pFrom) ? pFrom : '';
+  });
+  const [to, setTo] = useState(() => {
+    const pTo = params.get('to');
+    return pTo && isValidIsoDate(pTo) ? pTo : '';
+  });
+  const [mode, setMode] = useState(() => {
+    const pMode = params.get('dataMode');
+    return pMode === 'source_snapshot' || pMode === 'confirmed' ? pMode : 'latest';
+  });
   const [busy, setBusy] = useState(false);
   const [revision, setRevision] = useState(0);
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
   const [notice, setNotice] = useState('');
   const [configOpen, setConfigOpen] = useState(false);
 
@@ -963,7 +983,7 @@ export function BusinessDailyBoard({
 
   const queryParams = useMemo(() => ({
     projectId,
-    day,
+    ...(day ? { day } : {}),
     mode,
     summary: '1',
     ...(overview && from ? { from } : {}),
@@ -989,31 +1009,48 @@ export function BusinessDailyBoard({
   const pending = queryLoading && !view;
 
   useEffect(() => {
-    if (!params.get('day')) {
-      const viewRecord = view as (DailyView & { defaultDay?: string; latestReportDay?: string }) | null;
-      const target = viewRecord?.defaultDay || viewRecord?.latestReportDay;
-      if (target && target !== day) {
-        setTimeout(() => {
-          setDay(target);
-        }, 0);
-      }
+    if (!day && !initialUrlDayRef.current && view?.day && view.projectId === projectId) {
+      const timer = setTimeout(() => {
+        setDay(view.day);
+      }, 0);
+      return () => clearTimeout(timer);
     }
-  }, [view, params, day]);
+  }, [day, view?.day, view?.projectId, projectId]);
 
   useEffect(() => {
+    const targetDay = day || view?.day;
+    if (!targetDay) return;
     const url = new URL(window.location.href);
-    url.searchParams.set('day', day);
+    url.searchParams.set('day', targetDay);
     if (from) url.searchParams.set('from', from); else url.searchParams.delete('from');
     if (to) url.searchParams.set('to', to); else url.searchParams.delete('to');
     if (mode === 'latest') url.searchParams.delete('dataMode');
     else url.searchParams.set('dataMode', mode);
-    window.history.replaceState(window.history.state, '', url);
+    if (window.location.search !== url.search) {
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+    }
 
-    const ctx = { projectId, day, mode, from: from || undefined, to: to || undefined, tab: overview ? 'overview' : 'daily' };
+    const ctx = { projectId, day: targetDay, mode, from: from || undefined, to: to || undefined, tab: overview ? 'overview' : 'daily' };
     (window as unknown as { __ACTIVE_AGENT_CONTEXT__?: typeof ctx }).__ACTIVE_AGENT_CONTEXT__ = ctx;
     window.dispatchEvent(new CustomEvent('app:context-change', { detail: ctx }));
-  }, [day, mode, from, to, projectId, overview]);
+  }, [day, view?.day, mode, from, to, projectId, overview]);
 
+  useEffect(() => {
+    const handlePopState = () => {
+      if (typeof window === 'undefined') return;
+      const search = new URLSearchParams(window.location.search);
+      const popDay = search.get('day');
+      setDay(popDay && isValidIsoDate(popDay) ? popDay : '');
+      const popFrom = search.get('from');
+      setFrom(popFrom && isValidIsoDate(popFrom) ? popFrom : '');
+      const popTo = search.get('to');
+      setTo(popTo && isValidIsoDate(popTo) ? popTo : '');
+      const popMode = search.get('dataMode');
+      setMode(popMode === 'source_snapshot' || popMode === 'confirmed' ? popMode : 'latest');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     const handleSync = () => {
@@ -1035,7 +1072,7 @@ export function BusinessDailyBoard({
     try {
       await api('/api/business-daily', {
         method: 'POST',
-        body: JSON.stringify({ action: 'confirm', projectId, day, fingerprint: view.fingerprint }),
+        body: JSON.stringify({ action: 'confirm', projectId, day: displayDay, fingerprint: view.fingerprint }),
       });
       invalidateQueryCache({ projectId, endpoint: '/api/business-daily' });
       setMode('confirmed');
@@ -1048,8 +1085,9 @@ export function BusinessDailyBoard({
     }
   }
 
+  const displayDay = day || view?.day || '';
   const cumulative = cumulativeRows(view?.series || []);
-  const selected = view?.series.find(p => p.date === day);
+  const selected = view?.series.find(p => p.date === displayDay);
 
   const latestObservedPoint = useMemo(() => {
     return [...(view?.series || [])].reverse().find(p => p.adSpend?.value !== null);
@@ -1070,6 +1108,8 @@ export function BusinessDailyBoard({
   }, [view, isTodayCostsPending]);
 
   const table = (title: string) => view?.tables.find(t => t.title === title);
+  const keywordTable = table('关键词消耗排行');
+  const keywordScope = keywordTable?.scope || view?.highlights?.search?.scope || '';
   const monthAuditTable = table('星盟月累计 · 电商与聚光分别核对');
   const starMonthRow = monthAuditTable?.rows.find(r => String(r[1] || '').includes('红星'));
   const allianceMonthRow = monthAuditTable?.rows.find(r => String(r[1] || '').includes('红盟'));
@@ -1077,7 +1117,7 @@ export function BusinessDailyBoard({
   const allianceMonthSnapshot = allianceMonthRow ? { target: allianceMonthRow[9], actual: allianceMonthRow[12], monitored: allianceMonthRow[11] } : undefined;
   const detailQuery = {
     projectId,
-    day,
+    day: displayDay,
     mode,
     fingerprint: view?.fingerprint || '',
     ...(overview && from ? { from } : {}),
@@ -1108,26 +1148,197 @@ export function BusinessDailyBoard({
         className="business-daily"
         data-testid={overview ? 'business-data-overview' : 'business-daily-board'}
       >
-        {/* Compact, Unified Cockpit Toolbar */}
+        {/* Compact, Unified Cockpit Toolbar (Clean 2-Layer Layout) */}
         <div className="bd-toolbar-compact bd-cockpit-toolbar">
-          <div className="bd-cockpit-top-row">
-            <div className="bd-toolbar-meta">
-            <span className="bd-meta-chip">{overview ? '数据总览 / 全盘效果' : '分日看板 / 执行底表'}</span>
-            <span className="bd-meta-text">
+          {/* Layer 1: Left Filters + Right Actions */}
+          <div className="bd-cockpit-primary-row">
+            <div className="bd-cockpit-filter-group">
               {overview ? (
                 <>
-                  统计区间：<strong>{view?.from || from || day.slice(0, 7) + '-01'}</strong> 至 <strong>{view?.to || to || day}</strong>
+                  <div className="bd-quick-group" role="group" aria-label="快捷时间范围">
+                    <button
+                      type="button"
+                      className="bd-quick-btn"
+                      onClick={() => {
+                        if (displayDay) {
+                          setFrom(displayDay);
+                          setTo(displayDay);
+                        }
+                      }}
+                    >
+                      本日
+                    </button>
+                    <button
+                      type="button"
+                      className="bd-quick-btn"
+                      onClick={() => {
+                        if (displayDay) {
+                          const d = new Date(displayDay + 'T00:00:00Z');
+                          d.setUTCDate(d.getUTCDate() - 6);
+                          setFrom(d.toISOString().slice(0, 10));
+                          setTo(displayDay);
+                        }
+                      }}
+                    >
+                      近7天
+                    </button>
+                    <button
+                      type="button"
+                      className="bd-quick-btn"
+                      onClick={() => {
+                        if (displayDay) {
+                          setFrom(displayDay.slice(0, 7) + '-01');
+                          setTo(displayDay);
+                        }
+                      }}
+                    >
+                      本月
+                    </button>
+                  </div>
+                  <div className="bd-filter-item">
+                    <span className="bd-filter-label">从</span>
+                    <CustomDatePicker
+                      aria-label="统计开始"
+                      value={from || (displayDay ? displayDay.slice(0, 7) + '-01' : '')}
+                      max={to && isValidIsoDate(to) ? to : undefined}
+                      onChange={e => {
+                        const val = e.target.value;
+                        if (to && isValidIsoDate(to) && val > to) {
+                          setTo(val);
+                        }
+                        setFrom(val);
+                      }}
+                    />
+                  </div>
+                  <div className="bd-filter-item">
+                    <span className="bd-filter-label">至</span>
+                    <CustomDatePicker
+                      aria-label="统计结束"
+                      value={to || displayDay}
+                      min={from && isValidIsoDate(from) ? from : undefined}
+                      onChange={e => {
+                        const val = e.target.value;
+                        if (from && isValidIsoDate(from) && val < from) {
+                          setFrom(val);
+                        }
+                        setTo(val);
+                      }}
+                    />
+                  </div>
+                  <div className="bd-filter-item bd-filter-item-secondary">
+                    <span className="bd-filter-label bd-baseline-label">基准日</span>
+                    <CustomDatePicker
+                      aria-label="业务基准日"
+                      value={displayDay}
+                      onChange={e => {
+                        setDay(e.target.value);
+                        setNotice('');
+                      }}
+                    />
+                  </div>
                 </>
               ) : (
                 <>
-                  业务日期：<strong>{day}</strong>
+                  <DayNavigator
+                    id="bd-daily-day-navigator"
+                    value={displayDay}
+                    onChange={nextDay => {
+                      setDay(nextDay);
+                      setNotice('');
+                    }}
+                    latestDate={
+                      view?.defaultDay ||
+                      view?.latestReportDay ||
+                      view?.latestCompleteDay ||
+                      view?.businessThrough ||
+                      undefined
+                    }
+                    ariaLabel="业务日期"
+                  />
+                  <div className="bd-filter-item bd-version-filter-item">
+                    <span className="bd-filter-label">数据版本</span>
+                    <CustomSelect
+                      ariaLabel="数据版本"
+                      value={mode}
+                      onChange={v => setMode(v)}
+                      options={[
+                        { value: 'latest', label: '当前最新底表' },
+                        { value: 'source_snapshot', label: '来源日报快照' },
+                        { value: 'confirmed', label: '已确认历史日报' },
+                      ]}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="bd-cockpit-action-group bd-toolbar-controls">
+              <button
+                type="button"
+                className="bd-action-btn bd-reload-btn"
+                disabled={busy || queryLoading}
+                onClick={() => {
+                  invalidateQueryCache({ projectId, endpoint: '/api/business-daily' });
+                  setRevision(n => n + 1);
+                  void refreshDaily({ fresh: true });
+                }}
+                title="重新读取已同步数据"
+                aria-label="重新读取已同步数据"
+              >
+                <svg
+                  className="bd-reload-icon"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M1.75 8a6.25 6.25 0 1 0 1.83-4.42L1.75 5.5" />
+                  <path d="M1.75 2v3.5h3.5" />
+                </svg>
+                <span>{busy || queryLoading ? '加载中…' : '重新加载'}</span>
+              </button>
+              {canWrite && (
+                <button
+                  type="button"
+                  className="bd-action-btn"
+                  onClick={() => setConfigOpen(true)}
+                >
+                  配置业务来源与规则
+                </button>
+              )}
+              {canWrite && !overview && mode === 'latest' && (
+                <button
+                  type="button"
+                  className="bd-action-btn bd-btn-primary primary-btn"
+                  disabled={busy || queryLoading || !view || !view.sourceVersions.length}
+                  onClick={confirm}
+                >
+                  确认并保存日报
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Layer 2: Lightweight Metadata (Cutoff & Interval only) */}
+          <div className="bd-cockpit-meta-row">
+            <span className="bd-meta-text">
+              {overview ? (
+                <>
+                  统计区间：<strong>{view?.from || from || (displayDay ? displayDay.slice(0, 7) + '-01' : '')}</strong> 至 <strong>{view?.to || to || displayDay}</strong>
+                </>
+              ) : (
+                <>
+                  业务日期：<strong>{displayDay}</strong>
                 </>
               )}
             </span>
             <span className="bd-meta-cutoff">
               实际数据截至：<strong>{view?.businessThrough || '待采集'}</strong>
               {view?.latestRegisteredDay && view.latestRegisteredDay > (view?.businessThrough || '') && (
-                <span className="bd-meta-sub-cutoff" style={{ marginLeft: 6, opacity: 0.85, fontSize: 12 }}>
+                <span className="bd-meta-sub-cutoff">
                   （达人等部分费用已登记至 {view.latestRegisteredDay}）
                 </span>
               )}
@@ -1138,178 +1349,33 @@ export function BusinessDailyBoard({
               </span>
             )}
           </div>
-
-          <div className="bd-toolbar-controls">
-            {overview ? (
-              <>
-                <div className="bd-quick-group">
-                  <button
-                    type="button"
-                    className="bd-quick-btn"
-                    onClick={() => {
-                      setFrom(day);
-                      setTo(day);
-                    }}
-                  >
-                    本日
-                  </button>
-                  <button
-                    type="button"
-                    className="bd-quick-btn"
-                    onClick={() => {
-                      const d = new Date(day + 'T00:00:00Z');
-                      d.setUTCDate(d.getUTCDate() - 6);
-                      setFrom(d.toISOString().slice(0, 10));
-                      setTo(day);
-                    }}
-                  >
-                    近7天
-                  </button>
-                  <button
-                    type="button"
-                    className="bd-quick-btn"
-                    onClick={() => {
-                      setFrom(day.slice(0, 7) + '-01');
-                      setTo(day);
-                    }}
-                  >
-                    本月
-                  </button>
-                </div>
-                <label className="bd-date-input-capsule">
-                  <span className="bd-capsule-label">从</span>
-                  <CustomDatePicker
-                    aria-label="统计开始"
-                    value={from || day.slice(0, 7) + '-01'}
-                    onChange={e => setFrom(e.target.value)}
-                  />
-                </label>
-                <label className="bd-date-input-capsule">
-                  <span className="bd-capsule-label">至</span>
-                  <CustomDatePicker
-                    aria-label="统计结束"
-                    value={to || day}
-                    onChange={e => setTo(e.target.value)}
-                  />
-                </label>
-                <label className="bd-date-input-capsule">
-                  <span className="bd-capsule-label">基准日</span>
-                  <CustomDatePicker
-                    aria-label="业务基准日"
-                    value={day}
-                    onChange={e => {
-                      setDay(e.target.value);
-                      setNotice('');
-                    }}
-                  />
-                </label>
-              </>
-            ) : (
-              <div className="bd-daily-date-picker-wrap" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <div className="bd-date-step-pill-group">
-                  <button
-                    type="button"
-                    className="bd-quick-btn bd-step-btn"
-                    onClick={() => {
-                      const d = new Date(day + 'T00:00:00Z');
-                      d.setUTCDate(d.getUTCDate() - 1);
-                      setDay(d.toISOString().slice(0, 10));
-                      setNotice('');
-                    }}
-                    aria-label="前一天"
-                    title="切换至前一日"
-                  >
-                    ← 前一日
-                  </button>
-                  <label className="bd-date-capsule-body">
-                    <span className="bd-date-icon" aria-hidden="true">📅</span>
-                    <CustomDatePicker
-                      aria-label="业务日期"
-                      value={day}
-                      onChange={e => {
-                        setDay(e.target.value);
-                        setNotice('');
-                      }}
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    className="bd-quick-btn bd-step-btn"
-                    onClick={() => {
-                      const d = new Date(day + 'T00:00:00Z');
-                      d.setUTCDate(d.getUTCDate() + 1);
-                      setDay(d.toISOString().slice(0, 10));
-                      setNotice('');
-                    }}
-                    aria-label="后一天"
-                    title="切换至后一日"
-                  >
-                    后一日 →
-                  </button>
-                </div>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  数据版本
-                  <CustomSelect
-                    ariaLabel="数据版本"
-                    value={mode}
-                    onChange={v => setMode(v)}
-                    options={[
-                      { value: 'latest', label: '当前最新底表' },
-                      { value: 'source_snapshot', label: '来源日报快照' },
-                      { value: 'confirmed', label: '已确认历史日报' },
-                    ]}
-                  />
-                </label>
-              </div>
-            )}
-
-            <button disabled={busy} onClick={() => {
-              invalidateQueryCache({ projectId, endpoint: '/api/business-daily' });
-              setRevision(n => n + 1);
-              void refreshDaily({ fresh: true });
-            }}>
-              刷新
-            </button>
-            {canWrite && <button onClick={() => setConfigOpen(true)}>配置业务来源与规则</button>}
-            {canWrite && !overview && mode === 'latest' && (
-              <button
-                className="primary-btn"
-                disabled={busy || !view || !view.sourceVersions.length}
-                onClick={confirm}
-              >
-                确认并保存日报
-              </button>
-            )}
-          </div>
-          </div>
-
-          <div className="bd-cockpit-nav-row">
-            <nav
-              className="bd-section-nav"
-              aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
-            >
-              <span className="bd-section-nav-label">⚡ 快速定位:</span>
-              {(overview ? overviewNavItems : dailyNavItems).map(item => (
-                <a
-                  key={item.id}
-                  href={'#' + item.id}
-                  onClick={e => {
-                    if (typeof document !== 'undefined') {
-                      const target = document.getElementById(item.id);
-                      if (target) {
-                        e.preventDefault();
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        target.focus({ preventScroll: true });
-                      }
-                    }
-                  }}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-          </div>
         </div>
+
+        {/* Independent Planar Section Nav outside the Card */}
+        <nav
+          className="bd-planar-nav bd-section-nav"
+          aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
+        >
+          {(overview ? overviewNavItems : dailyNavItems).map(item => (
+            <a
+              key={item.id}
+              href={'#' + item.id}
+              className="bd-planar-nav-link"
+              onClick={e => {
+                if (typeof document !== 'undefined') {
+                  const target = document.getElementById(item.id);
+                  if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.focus({ preventScroll: true });
+                  }
+                }
+              }}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
         {notice && <p role="status" className="bd-notice-banner">{notice}</p>}
 
@@ -1654,7 +1720,7 @@ export function BusinessDailyBoard({
                             <AspectSummaryCard aspectKey="search" view={view} overview={true} />
                             <SearchVisuals data={view.highlights.search} hideCoreWords={true} hideTopKeywords={true} />
                             <p className="bd-caption" style={{ marginTop: 8 }}>
-                              搜索侧费用与关键词为 10 月底表累计，非单日数据。
+                              搜索侧费用为月累计；关键词口径为 {keywordScope || '来源底表'}，非单日数据。
                             </p>
                           </section>
                         )}
@@ -1672,9 +1738,9 @@ export function BusinessDailyBoard({
                         <section className="bd-panel" data-section="search">
                           <div className="bd-panel-head">
                             <div>
-                              <h3>搜索核心占位大词与高消耗词 TOP 10（底表累计）</h3>
+                              <h3>搜索核心占位大词与高消耗词 TOP 10</h3>
                               <p className="bd-caption" style={{ marginTop: 4 }}>
-                                核心占位词表现与高消耗关键词排行（底表累计）；无每日观测不伪造趋势。
+                                核心占位词表现与高消耗关键词排行{keywordScope ? `（${keywordScope}）` : ''}；无每日观测不伪造趋势。
                               </p>
                             </div>
                           </div>
@@ -1683,7 +1749,7 @@ export function BusinessDailyBoard({
                             <div className="bd-keywords-top-container" style={{ marginTop: 14 }}>
                               <HorizontalRanks
                                 rows={view.highlights.search.topKeywords}
-                                title="高消耗关键词排行（底表累计）"
+                                title="高消耗关键词排行"
                                 unit="元"
                                 color="purple"
                               />
@@ -1908,15 +1974,15 @@ export function BusinessDailyBoard({
                         <section className="bd-panel" data-section="search">
                           <div className="bd-panel-head">
                             <div>
-                              <h3>搜索核心占位大词与高消耗词 TOP 10（底表累计）</h3>
-                              <p className="bd-caption">核心占位词表现与高消耗关键词排行（底表累计）；无每日观测不伪造趋势。</p>
+                              <h3>搜索核心占位大词与高消耗词 TOP 10</h3>
+                              <p className="bd-caption">核心占位词表现与高消耗关键词排行{keywordScope ? `（${keywordScope}）` : ''}；无每日观测不伪造趋势。</p>
                             </div>
                           </div>
                           <SearchCoreWordsVisuals data={view.highlights.search} />
                           <div className="bd-keywords-top-container" style={{ marginTop: 14 }}>
                             <HorizontalRanks
                               rows={view.highlights.search.topKeywords}
-                              title="高消耗关键词排行（底表累计）"
+                              title="高消耗关键词排行"
                               unit="元"
                               color="purple"
                             />

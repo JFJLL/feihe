@@ -213,13 +213,13 @@
           "dimension": "大白鲸570",
           "stage": "已发布",
           "count": 3,
-          "ratio": 75.0
+          "ratio": 75
         },
         {
           "dimension": "大白鲸570",
           "stage": "定稿可上传",
           "count": 1,
-          "ratio": 25.0
+          "ratio": 25
         },
         {
           "dimension": "小确杏421",
@@ -249,7 +249,7 @@
           "dimension": "小确杏421",
           "stage": "可推进",
           "count": 6,
-          "ratio": 25.0
+          "ratio": 25
         },
         {
           "dimension": "小确杏502Pro-柳潇",
@@ -321,7 +321,7 @@
           "dimension": "小确杏502pro-雨珂",
           "stage": "已发布",
           "count": 3,
-          "ratio": 50.0
+          "ratio": 50
         },
         {
           "dimension": "小确杏502pro-雨珂",
@@ -441,7 +441,7 @@
           "dimension": "黑珍珠516",
           "stage": "已发布",
           "count": 3,
-          "ratio": 50.0
+          "ratio": 50
         },
         {
           "dimension": "黑珍珠516",
@@ -751,13 +751,13 @@
           "content_theme": "口碑沉淀",
           "format": "图文",
           "count": 2,
-          "ratio": 100.0
+          "ratio": 100
         },
         {
           "content_theme": "限时优惠",
           "format": "图文",
           "count": 2,
-          "ratio": 100.0
+          "ratio": 100
         }
       ]
     },
@@ -1276,7 +1276,7 @@
         {
           "row_number": 2,
           "account": "美菱-26年双11-自采-红猫种草（易美）",
-          "budget_planned": 250000.0,
+          "budget_planned": 250000,
           "actual_paid": null,
           "actual_required_spend": 1094327.99,
           "variance": null
@@ -1284,7 +1284,7 @@
         {
           "row_number": 3,
           "account": "美菱-26年双11-自采-CID红猫（易美）",
-          "budget_planned": 50000.0,
+          "budget_planned": 50000,
           "actual_paid": null,
           "actual_required_spend": null,
           "variance": null
@@ -1292,7 +1292,7 @@
         {
           "row_number": 4,
           "account": "美菱-26年双11-自采-红盟种草（易美）",
-          "budget_planned": 250000.0,
+          "budget_planned": 250000,
           "actual_paid": null,
           "actual_required_spend": 511713.93,
           "variance": null
@@ -1300,7 +1300,7 @@
         {
           "row_number": 5,
           "account": "美菱-26年双11-自采-CID红京（易美）",
-          "budget_planned": 250000.0,
+          "budget_planned": 250000,
           "actual_paid": null,
           "actual_required_spend": null,
           "variance": null
@@ -1308,7 +1308,7 @@
         {
           "row_number": 6,
           "account": "美菱-26年双11-代采-京东对投（易美）",
-          "budget_planned": 100000.0,
+          "budget_planned": 100000,
           "actual_paid": null,
           "actual_required_spend": 386111.11,
           "variance": null
@@ -1316,7 +1316,7 @@
         {
           "row_number": 7,
           "account": "美菱-26年双11-代采-CID京东对投（易美）",
-          "budget_planned": 200000.0,
+          "budget_planned": 200000,
           "actual_paid": null,
           "actual_required_spend": null,
           "variance": null
@@ -1324,7 +1324,7 @@
         {
           "row_number": 8,
           "account": "美菱-26年双11-代采-红猫种草（易美星伴）",
-          "budget_planned": 100000.0,
+          "budget_planned": 100000,
           "actual_paid": null,
           "actual_required_spend": 477497.26,
           "variance": null
@@ -1387,7 +1387,7 @@
           "row_number": 2,
           "series": "小确杏系列",
           "model": "BCD-520WFPU9CIZXG1",
-          "budget_wan": 65.0,
+          "budget_wan": 65,
           "posts_plan": 17,
           "screen_prog": 9,
           "pub_prog": 0,
@@ -1397,17 +1397,17 @@
           "row_number": 3,
           "series": "小确杏系列",
           "model": "BCD-511WSPU9CIZXG1",
-          "budget_wan": 30.0,
+          "budget_wan": 30,
           "posts_plan": 9,
           "screen_prog": 5,
           "pub_prog": 0,
-          "spend": 12628.0
+          "spend": 12628
         },
         {
           "row_number": 4,
           "series": "小确杏系列",
           "model": "BCD-502WFPU9CZXG1",
-          "budget_wan": 150.0,
+          "budget_wan": 150,
           "posts_plan": 45,
           "screen_prog": 36,
           "pub_prog": 13,
@@ -1417,7 +1417,7 @@
           "row_number": 5,
           "series": "小确杏系列",
           "model": "BCD-421WFPU9CZXG1",
-          "budget_wan": 75.0,
+          "budget_wan": 75,
           "posts_plan": 24,
           "screen_prog": 18,
           "pub_prog": 0,
@@ -1427,7 +1427,7 @@
           "row_number": 6,
           "series": "大白鲸系列",
           "model": "BCD-570WSPU9CDIZXG1",
-          "budget_wan": 15.0,
+          "budget_wan": 15,
           "posts_plan": 4,
           "screen_prog": 4,
           "pub_prog": 0,
@@ -1437,7 +1437,7 @@
           "row_number": 7,
           "series": "黑珍珠系列",
           "model": "BCD-516WFPU9BIZX",
-          "budget_wan": 20.0,
+          "budget_wan": 20,
           "posts_plan": 6,
           "screen_prog": 3,
           "pub_prog": 0,
@@ -1447,7 +1447,7 @@
           "row_number": 8,
           "series": "无忧嵌系列",
           "model": "BCD-513WFPU9CIZXG1",
-          "budget_wan": 25.0,
+          "budget_wan": 25,
           "posts_plan": 12,
           "screen_prog": 6,
           "pub_prog": 0,
@@ -1477,7 +1477,7 @@
           "row_number": 11,
           "series": "双11全渠道合计",
           "model": "全量产品型号",
-          "budget_wan": 380.0,
+          "budget_wan": 380,
           "posts_plan": 117,
           "screen_prog": 81,
           "pub_prog": 13,
@@ -1551,7 +1551,7 @@
       "rows": [
         {
           "platform": "京东渠道整体",
-          "budget_wan": 215.0,
+          "budget_wan": 215,
           "posts_plan": 66,
           "screen_prog": 42,
           "pub_prog": 13,
@@ -1563,7 +1563,7 @@
         },
         {
           "platform": "天猫渠道整体",
-          "budget_wan": 165.0,
+          "budget_wan": 165,
           "posts_plan": 51,
           "screen_prog": 39,
           "pub_prog": 0,
@@ -1575,7 +1575,7 @@
         },
         {
           "platform": "双平台总计",
-          "budget_wan": 380.0,
+          "budget_wan": 380,
           "posts_plan": 117,
           "screen_prog": 81,
           "pub_prog": 13,
@@ -2019,7 +2019,7 @@
           "tm_spend": 6098.36,
           "jd_spend": 4210.6,
           "spend_ratio_jd_vs_tm": 0.69,
-          "tm_ctr": 11.0,
+          "tm_ctr": 11,
           "jd_ctr": 10.17,
           "tm_cpc": 0.47,
           "jd_cpc": 0.53,
@@ -2358,7 +2358,7 @@
           "channel": "自采天猫种草",
           "period": "2026-10-05 ~ 2026-10-18",
           "spend": 1168.53,
-          "spend_cum_ratio": 100.0,
+          "spend_cum_ratio": 100,
           "impressions": 7461,
           "clicks": 241,
           "ctr": 3.23,
@@ -2375,7 +2375,7 @@
           "channel": "自采天猫种草",
           "period": "2026-10-01 ~ 2026-10-18",
           "spend": 15.22,
-          "spend_cum_ratio": 100.0,
+          "spend_cum_ratio": 100,
           "impressions": 863,
           "clicks": 29,
           "ctr": 3.36,
@@ -2392,7 +2392,7 @@
           "channel": "自采京东种草",
           "period": "2026-10-15 ~ 2026-10-17",
           "spend": 4.41,
-          "spend_cum_ratio": 100.0,
+          "spend_cum_ratio": 100,
           "impressions": 406,
           "clicks": 9,
           "ctr": 2.22,
@@ -2478,7 +2478,7 @@
           "procurement_mode": "自采",
           "channel": "京东自采",
           "k_spend": 220218.9,
-          "fs_spend": 371992.0,
+          "fs_spend": 371992,
           "total_spend": 592210.9,
           "k_share": 37.19,
           "fs_share": 62.81,
@@ -2489,9 +2489,9 @@
         {
           "procurement_mode": "自采",
           "channel": "天猫自采",
-          "k_spend": 192390.0,
-          "fs_spend": 411120.0,
-          "total_spend": 603510.0,
+          "k_spend": 192390,
+          "fs_spend": 411120,
+          "total_spend": 603510,
           "k_share": 31.88,
           "fs_share": 68.12,
           "gmv": 6559520.62,
@@ -2501,9 +2501,9 @@
         {
           "procurement_mode": "代采（对投）",
           "channel": "京东对投",
-          "k_spend": 167596.0,
-          "fs_spend": 409330.0,
-          "total_spend": 576926.0,
+          "k_spend": 167596,
+          "fs_spend": 409330,
+          "total_spend": 576926,
           "k_share": 29.05,
           "fs_share": 70.95,
           "gmv": 4292855.01,
@@ -2513,9 +2513,9 @@
         {
           "procurement_mode": "代采（星伴）",
           "channel": "天猫星伴",
-          "k_spend": 89980.0,
-          "fs_spend": 113182.0,
-          "total_spend": 203162.0,
+          "k_spend": 89980,
+          "fs_spend": 113182,
+          "total_spend": 203162,
           "k_share": 44.29,
           "fs_share": 55.71,
           "gmv": 2800449.08,
@@ -2526,7 +2526,7 @@
           "procurement_mode": "618全案合计",
           "channel": "全渠道已结案",
           "k_spend": 670184.9,
-          "fs_spend": 1305624.0,
+          "fs_spend": 1305624,
           "total_spend": 1975808.9,
           "k_share": 33.92,
           "fs_share": 66.08,
@@ -2744,10 +2744,10 @@
         },
         {
           "line_name": "UDS",
-          "spend": 0.0,
+          "spend": 0,
           "impressions": 0,
           "clicks": 0,
-          "ctr": 0.0,
+          "ctr": 0,
           "cpc": null,
           "engagements": 0,
           "cpe": null,
@@ -2765,7 +2765,7 @@
           "engagements": 2457,
           "cpe": 42.77,
           "uv": 7005,
-          "cpuv": 15.0,
+          "cpuv": 15,
           "status": "投放中"
         },
         {
@@ -3218,9 +3218,9 @@
           "candidate_kols": 515,
           "confirmed_kols": 79,
           "published_posts": 50,
-          "k_spend": 737011.0,
-          "fs_spend": 1488489.0,
-          "total_spend": 2225500.0,
+          "k_spend": 737011,
+          "fs_spend": 1488489,
+          "total_spend": 2225500,
           "gmv": 16959559.42,
           "fs_roi": 12.99,
           "overall_roi": 8.58,
@@ -3234,9 +3234,9 @@
           "confirmed_kols": 48,
           "published_posts": 45,
           "k_spend": 408961.5,
-          "fs_spend": 711365.0,
+          "fs_spend": 711365,
           "total_spend": 1120326.5,
-          "gmv": 10740000.0,
+          "gmv": 10740000,
           "fs_roi": null,
           "overall_roi": 9.59,
           "milestone": "GMV目标达成率103.56%，考核CPE≤10元完成8.6万互动"
@@ -3250,7 +3250,7 @@
           "published_posts": 13,
           "k_spend": 80334.41,
           "fs_spend": 424861.59,
-          "total_spend": 505196.0,
+          "total_spend": 505196,
           "gmv": 1994188.69,
           "fs_roi": 4.8,
           "overall_roi": null,
@@ -3263,10 +3263,10 @@
     {
       "id": "meiling-daily-cid-jd",
       "label": "美菱双11-京东对投CID日表现 (CID渠道)",
-      "period": "2026-10-16 ~ 2026-10-18",
+      "period": "2026-10-16 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-Trvrou",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
-      "note": "美菱双11京东对投CID子渠道日透视数据（明确仅限京东对投CID单一链路，不可当做美菱全案大盘）。小红盟站外UV为30日归因口径（各创意归因UV之和，非项目去重人数）。",
+      "note": "美菱双11京东对投CID日表现（透视表Trvrou）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
       "metrics": [
         {
           "key": "spend",
@@ -3333,57 +3333,163 @@
         {
           "date": "2026-10-16",
           "spend": 1011.17,
-          "impressions": 4607,
+          "impressions": 4640,
           "clicks": 397,
-          "ctr": 8.62,
+          "ctr": 8.56,
           "cpc": 2.55,
-          "cpm": 219.49,
+          "cpm": 217.92,
           "engagements": 7,
           "cpe": 144.45,
           "orders": 0,
-          "gmv": 0.0,
-          "roi": 0.0,
+          "gmv": 0,
+          "roi": 0,
           "uv": 30
         },
         {
           "date": "2026-10-17",
           "spend": 1008.04,
-          "impressions": 5193,
+          "impressions": 5218,
           "clicks": 498,
-          "ctr": 9.59,
+          "ctr": 9.54,
           "cpc": 2.02,
-          "cpm": 194.12,
+          "cpm": 193.19,
           "engagements": 7,
           "cpe": 144.01,
           "orders": 0,
-          "gmv": 0.0,
-          "roi": 0.0,
+          "gmv": 0,
+          "roi": 0,
           "uv": 85
         },
         {
           "date": "2026-10-18",
           "spend": 1363.31,
-          "impressions": 4798,
+          "impressions": 4821,
           "clicks": 453,
-          "ctr": 9.44,
+          "ctr": 9.4,
           "cpc": 3.01,
-          "cpm": 284.14,
+          "cpm": 282.79,
           "engagements": 4,
           "cpe": 340.83,
           "orders": 2,
           "gmv": 8076.81,
           "roi": 5.92,
           "uv": 101
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 600.01,
+          "impressions": 2712,
+          "clicks": 291,
+          "ctr": 10.73,
+          "cpc": 2.06,
+          "cpm": 221.24,
+          "engagements": 5,
+          "cpe": 120,
+          "orders": 2,
+          "gmv": 10452.9,
+          "roi": 17.42,
+          "uv": 83
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 3083.73,
+          "impressions": 44069,
+          "clicks": 4569,
+          "ctr": 10.37,
+          "cpc": 0.67,
+          "cpm": 69.98,
+          "engagements": 37,
+          "cpe": 83.34,
+          "orders": 6,
+          "gmv": 29106.74,
+          "roi": 9.44,
+          "uv": 94
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 1826.46,
+          "impressions": 29613,
+          "clicks": 3213,
+          "ctr": 10.85,
+          "cpc": 0.57,
+          "cpm": 61.68,
+          "engagements": 29,
+          "cpe": 62.98,
+          "orders": 3,
+          "gmv": 10898.08,
+          "roi": 5.97,
+          "uv": 64
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 538.29,
+          "impressions": 1541,
+          "clicks": 123,
+          "ctr": 7.98,
+          "cpc": 4.38,
+          "cpm": 349.31,
+          "engagements": 5,
+          "cpe": 107.66,
+          "orders": 1,
+          "gmv": 5746.4,
+          "roi": 10.68,
+          "uv": 52
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 318.37,
+          "impressions": 1227,
+          "clicks": 99,
+          "ctr": 8.07,
+          "cpc": 3.22,
+          "cpm": 259.47,
+          "engagements": 6,
+          "cpe": 53.06,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 70
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 644.68,
+          "impressions": 1234,
+          "clicks": 83,
+          "ctr": 6.73,
+          "cpc": 7.77,
+          "cpm": 522.43,
+          "engagements": 2,
+          "cpe": 322.34,
+          "orders": 1,
+          "gmv": 5438,
+          "roi": 8.44,
+          "uv": 53
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 693.16,
+          "impressions": 1936,
+          "clicks": 127,
+          "ctr": 6.56,
+          "cpc": 5.46,
+          "cpm": 358.04,
+          "engagements": 2,
+          "cpe": 346.58,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 56
         }
-      ]
+      ],
+      "sourceSheetId": "Trvrou"
     },
     {
       "id": "meiling-daily-tm-seed",
       "label": "美菱双11-自采天猫种草日流水 (TM种草)",
-      "period": "2026-09-30 ~ 2026-10-18",
+      "period": "2026-09-30 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-D9ddm3",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=D9ddm3",
-      "note": "美菱双11自采天猫种草底表（775条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=iautvs",
+      "note": "美菱双11自采天猫种草日流水（透视表iautvs）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。源CPUV若存在#NAME?按spend/uv重算。全量覆盖历史UV回填。",
       "metrics": [
         {
           "key": "spend",
@@ -3452,9 +3558,8 @@
           "cpm": 63.2,
           "engagements": 13,
           "cpe": 49.47,
-          "uv": 25,
-          "cpuv": 25.72,
-          "creatives_count": 4
+          "uv": 36,
+          "cpuv": 17.86
         },
         {
           "date": "2026-10-01",
@@ -3463,12 +3568,11 @@
           "clicks": 4606,
           "ctr": 15.25,
           "cpc": 0.26,
-          "cpm": 40.0,
+          "cpm": 40,
           "engagements": 49,
           "cpe": 24.66,
-          "uv": 129,
-          "cpuv": 9.37,
-          "creatives_count": 14
+          "uv": 194,
+          "cpuv": 6.23
         },
         {
           "date": "2026-10-02",
@@ -3480,9 +3584,8 @@
           "cpm": 33.79,
           "engagements": 54,
           "cpe": 26.08,
-          "uv": 146,
-          "cpuv": 9.65,
-          "creatives_count": 13
+          "uv": 211,
+          "cpuv": 6.67
         },
         {
           "date": "2026-10-03",
@@ -3494,9 +3597,8 @@
           "cpm": 32.08,
           "engagements": 60,
           "cpe": 30.25,
-          "uv": 200,
-          "cpuv": 9.08,
-          "creatives_count": 18
+          "uv": 289,
+          "cpuv": 6.28
         },
         {
           "date": "2026-10-04",
@@ -3508,9 +3610,8 @@
           "cpm": 37.13,
           "engagements": 68,
           "cpe": 29.73,
-          "uv": 78,
-          "cpuv": 25.92,
-          "creatives_count": 30
+          "uv": 121,
+          "cpuv": 16.71
         },
         {
           "date": "2026-10-05",
@@ -3522,9 +3623,8 @@
           "cpm": 38.32,
           "engagements": 104,
           "cpe": 29.57,
-          "uv": 121,
-          "cpuv": 25.41,
-          "creatives_count": 42
+          "uv": 188,
+          "cpuv": 16.36
         },
         {
           "date": "2026-10-06",
@@ -3536,9 +3636,8 @@
           "cpm": 41.72,
           "engagements": 105,
           "cpe": 28.7,
-          "uv": 71,
-          "cpuv": 42.45,
-          "creatives_count": 36
+          "uv": 113,
+          "cpuv": 26.67
         },
         {
           "date": "2026-10-07",
@@ -3550,9 +3649,8 @@
           "cpm": 41.04,
           "engagements": 137,
           "cpe": 22.06,
-          "uv": 88,
-          "cpuv": 34.34,
-          "creatives_count": 29
+          "uv": 142,
+          "cpuv": 21.28
         },
         {
           "date": "2026-10-08",
@@ -3564,9 +3662,8 @@
           "cpm": 38.23,
           "engagements": 98,
           "cpe": 33.32,
-          "uv": 100,
-          "cpuv": 32.65,
-          "creatives_count": 45
+          "uv": 179,
+          "cpuv": 18.24
         },
         {
           "date": "2026-10-09",
@@ -3578,9 +3675,8 @@
           "cpm": 43.78,
           "engagements": 119,
           "cpe": 28.79,
-          "uv": 147,
-          "cpuv": 23.31,
-          "creatives_count": 48
+          "uv": 232,
+          "cpuv": 14.77
         },
         {
           "date": "2026-10-10",
@@ -3592,9 +3688,8 @@
           "cpm": 47.15,
           "engagements": 106,
           "cpe": 31.62,
-          "uv": 175,
-          "cpuv": 19.15,
-          "creatives_count": 37
+          "uv": 279,
+          "cpuv": 12.01
         },
         {
           "date": "2026-10-11",
@@ -3606,9 +3701,8 @@
           "cpm": 48.09,
           "engagements": 130,
           "cpe": 29.27,
-          "uv": 161,
-          "cpuv": 23.63,
-          "creatives_count": 34
+          "uv": 309,
+          "cpuv": 12.31
         },
         {
           "date": "2026-10-12",
@@ -3620,23 +3714,21 @@
           "cpm": 51.15,
           "engagements": 87,
           "cpe": 41.83,
-          "uv": 235,
-          "cpuv": 15.49,
-          "creatives_count": 38
+          "uv": 415,
+          "cpuv": 8.77
         },
         {
           "date": "2026-10-13",
           "spend": 6098.36,
           "impressions": 117242,
           "clicks": 12899,
-          "ctr": 11.0,
+          "ctr": 11,
           "cpc": 0.47,
           "cpm": 52.02,
           "engagements": 407,
           "cpe": 14.98,
-          "uv": 208,
-          "cpuv": 29.32,
-          "creatives_count": 62
+          "uv": 411,
+          "cpuv": 14.84
         },
         {
           "date": "2026-10-14",
@@ -3648,9 +3740,8 @@
           "cpm": 59.01,
           "engagements": 500,
           "cpe": 12.97,
-          "uv": 409,
-          "cpuv": 15.86,
-          "creatives_count": 58
+          "uv": 924,
+          "cpuv": 7.02
         },
         {
           "date": "2026-10-15",
@@ -3662,9 +3753,8 @@
           "cpm": 83.1,
           "engagements": 810,
           "cpe": 15.68,
-          "uv": 1764,
-          "cpuv": 7.2,
-          "creatives_count": 78
+          "uv": 5253,
+          "cpuv": 2.42
         },
         {
           "date": "2026-10-16",
@@ -3676,9 +3766,8 @@
           "cpm": 89.94,
           "engagements": 571,
           "cpe": 17.78,
-          "uv": 831,
-          "cpuv": 12.22,
-          "creatives_count": 75
+          "uv": 3618,
+          "cpuv": 2.81
         },
         {
           "date": "2026-10-17",
@@ -3690,9 +3779,8 @@
           "cpm": 99.85,
           "engagements": 44,
           "cpe": 86.1,
-          "uv": 188,
-          "cpuv": 20.15,
-          "creatives_count": 38
+          "uv": 1334,
+          "cpuv": 2.84
         },
         {
           "date": "2026-10-18",
@@ -3704,19 +3792,110 @@
           "cpm": 81.64,
           "engagements": 710,
           "cpe": 8.5,
+          "uv": 1808,
+          "cpuv": 3.34
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 7034.18,
+          "impressions": 99337,
+          "clicks": 10634,
+          "ctr": 10.7,
+          "cpc": 0.66,
+          "cpm": 70.81,
+          "engagements": 199,
+          "cpe": 35.35,
+          "uv": 2350,
+          "cpuv": 2.99
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 5812.36,
+          "impressions": 72581,
+          "clicks": 8554,
+          "ctr": 11.79,
+          "cpc": 0.68,
+          "cpm": 80.08,
+          "engagements": 82,
+          "cpe": 70.88,
+          "uv": 342,
+          "cpuv": 17
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 9802.26,
+          "impressions": 128915,
+          "clicks": 14153,
+          "ctr": 10.98,
+          "cpc": 0.69,
+          "cpm": 76.04,
+          "engagements": 111,
+          "cpe": 88.31,
+          "uv": 456,
+          "cpuv": 21.5
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 10422.87,
+          "impressions": 138908,
+          "clicks": 15773,
+          "ctr": 11.35,
+          "cpc": 0.66,
+          "cpm": 75.03,
+          "engagements": 125,
+          "cpe": 83.38,
+          "uv": 367,
+          "cpuv": 28.4
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 10175.31,
+          "impressions": 144687,
+          "clicks": 15613,
+          "ctr": 10.79,
+          "cpc": 0.65,
+          "cpm": 70.33,
+          "engagements": 143,
+          "cpe": 71.16,
+          "uv": 195,
+          "cpuv": 52.18
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 11764.23,
+          "impressions": 163183,
+          "clicks": 17597,
+          "ctr": 10.78,
+          "cpc": 0.67,
+          "cpm": 72.09,
+          "engagements": 363,
+          "cpe": 32.41,
+          "uv": 129,
+          "cpuv": 91.2
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 12627.91,
+          "impressions": 173661,
+          "clicks": 18697,
+          "ctr": 10.77,
+          "cpc": 0.68,
+          "cpm": 72.72,
+          "engagements": 380,
+          "cpe": 33.23,
           "uv": 0,
-          "cpuv": null,
-          "creatives_count": 76
+          "cpuv": null
         }
-      ]
+      ],
+      "sourceSheetId": "iautvs"
     },
     {
       "id": "meiling-daily-jd-seed",
       "label": "美菱双11-自采京东种草日流水 (JD种草)",
-      "period": "2026-09-29 ~ 2026-10-18",
+      "period": "2026-09-29 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-BI2xBs",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=BI2xBs",
-      "note": "美菱双11自采京东种草底表（1209条全量投放创意记录按日聚合）。各创意归因UV之和，非项目去重人数。源底表无预设独立总计行，对账金额为各记录实际汇总。",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=B5TBE7",
+      "note": "美菱双11自采京东种草日流水（透视表B5TBE7）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
       "metrics": [
         {
           "key": "spend",
@@ -3786,8 +3965,7 @@
           "engagements": 11,
           "cpe": 0.7,
           "uv": 0,
-          "cpuv": null,
-          "creatives_count": 7
+          "cpuv": null
         },
         {
           "date": "2026-09-30",
@@ -3800,8 +3978,7 @@
           "engagements": 60,
           "cpe": 5.71,
           "uv": 0,
-          "cpuv": null,
-          "creatives_count": 14
+          "cpuv": null
         },
         {
           "date": "2026-10-01",
@@ -3814,8 +3991,7 @@
           "engagements": 30,
           "cpe": 45.39,
           "uv": 8,
-          "cpuv": 170.22,
-          "creatives_count": 14
+          "cpuv": 170.22
         },
         {
           "date": "2026-10-02",
@@ -3828,8 +4004,7 @@
           "engagements": 20,
           "cpe": 67.25,
           "uv": 11,
-          "cpuv": 122.27,
-          "creatives_count": 14
+          "cpuv": 122.27
         },
         {
           "date": "2026-10-03",
@@ -3842,8 +4017,7 @@
           "engagements": 24,
           "cpe": 62.1,
           "uv": 27,
-          "cpuv": 55.2,
-          "creatives_count": 29
+          "cpuv": 55.2
         },
         {
           "date": "2026-10-04",
@@ -3856,8 +4030,7 @@
           "engagements": 24,
           "cpe": 74.62,
           "uv": 35,
-          "cpuv": 51.16,
-          "creatives_count": 75
+          "cpuv": 51.16
         },
         {
           "date": "2026-10-05",
@@ -3870,8 +4043,7 @@
           "engagements": 25,
           "cpe": 81.31,
           "uv": 48,
-          "cpuv": 42.35,
-          "creatives_count": 81
+          "cpuv": 42.35
         },
         {
           "date": "2026-10-06",
@@ -3884,8 +4056,7 @@
           "engagements": 14,
           "cpe": 144.19,
           "uv": 46,
-          "cpuv": 43.88,
-          "creatives_count": 74
+          "cpuv": 43.88
         },
         {
           "date": "2026-10-07",
@@ -3898,8 +4069,7 @@
           "engagements": 21,
           "cpe": 95.72,
           "uv": 71,
-          "cpuv": 28.31,
-          "creatives_count": 54
+          "cpuv": 28.31
         },
         {
           "date": "2026-10-08",
@@ -3912,8 +4082,7 @@
           "engagements": 21,
           "cpe": 96.4,
           "uv": 64,
-          "cpuv": 31.63,
-          "creatives_count": 60
+          "cpuv": 31.63
         },
         {
           "date": "2026-10-09",
@@ -3926,8 +4095,7 @@
           "engagements": 58,
           "cpe": 86.62,
           "uv": 100,
-          "cpuv": 50.24,
-          "creatives_count": 62
+          "cpuv": 50.24
         },
         {
           "date": "2026-10-10",
@@ -3940,8 +4108,7 @@
           "engagements": 45,
           "cpe": 91.63,
           "uv": 93,
-          "cpuv": 44.34,
-          "creatives_count": 69
+          "cpuv": 44.34
         },
         {
           "date": "2026-10-11",
@@ -3954,8 +4121,7 @@
           "engagements": 58,
           "cpe": 86.32,
           "uv": 96,
-          "cpuv": 52.15,
-          "creatives_count": 68
+          "cpuv": 52.15
         },
         {
           "date": "2026-10-12",
@@ -3968,8 +4134,7 @@
           "engagements": 61,
           "cpe": 86.39,
           "uv": 93,
-          "cpuv": 56.66,
-          "creatives_count": 63
+          "cpuv": 56.66
         },
         {
           "date": "2026-10-13",
@@ -3982,8 +4147,7 @@
           "engagements": 53,
           "cpe": 79.45,
           "uv": 120,
-          "cpuv": 35.09,
-          "creatives_count": 63
+          "cpuv": 35.09
         },
         {
           "date": "2026-10-14",
@@ -3996,8 +4160,7 @@
           "engagements": 55,
           "cpe": 70.39,
           "uv": 152,
-          "cpuv": 25.47,
-          "creatives_count": 88
+          "cpuv": 25.47
         },
         {
           "date": "2026-10-15",
@@ -4006,12 +4169,11 @@
           "clicks": 11899,
           "ctr": 10.19,
           "cpc": 0.68,
-          "cpm": 69.0,
+          "cpm": 69,
           "engagements": 106,
           "cpe": 76.02,
           "uv": 164,
-          "cpuv": 49.13,
-          "creatives_count": 98
+          "cpuv": 49.13
         },
         {
           "date": "2026-10-16",
@@ -4024,8 +4186,7 @@
           "engagements": 59,
           "cpe": 173.8,
           "uv": 153,
-          "cpuv": 67.02,
-          "creatives_count": 94
+          "cpuv": 67.02
         },
         {
           "date": "2026-10-17",
@@ -4034,12 +4195,11 @@
           "clicks": 14937,
           "ctr": 10.2,
           "cpc": 0.58,
-          "cpm": 59.0,
+          "cpm": 59,
           "engagements": 85,
           "cpe": 101.69,
           "uv": 179,
-          "cpuv": 48.29,
-          "creatives_count": 90
+          "cpuv": 48.29
         },
         {
           "date": "2026-10-18",
@@ -4052,18 +4212,109 @@
           "engagements": 94,
           "cpe": 102.57,
           "uv": 202,
-          "cpuv": 47.73,
-          "creatives_count": 92
+          "cpuv": 47.73
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 9232.61,
+          "impressions": 153922,
+          "clicks": 16589,
+          "ctr": 10.78,
+          "cpc": 0.56,
+          "cpm": 59.98,
+          "engagements": 167,
+          "cpe": 55.29,
+          "uv": 309,
+          "cpuv": 29.88
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 10512.46,
+          "impressions": 178754,
+          "clicks": 17858,
+          "ctr": 9.99,
+          "cpc": 0.59,
+          "cpm": 58.81,
+          "engagements": 191,
+          "cpe": 55.04,
+          "uv": 274,
+          "cpuv": 38.37
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 17594.55,
+          "impressions": 246142,
+          "clicks": 25550,
+          "ctr": 10.38,
+          "cpc": 0.69,
+          "cpm": 71.48,
+          "engagements": 669,
+          "cpe": 26.3,
+          "uv": 262,
+          "cpuv": 67.15
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 25511.39,
+          "impressions": 273201,
+          "clicks": 26014,
+          "ctr": 9.52,
+          "cpc": 0.98,
+          "cpm": 93.38,
+          "engagements": 1572,
+          "cpe": 16.23,
+          "uv": 324,
+          "cpuv": 78.74
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 29070.66,
+          "impressions": 315461,
+          "clicks": 27490,
+          "ctr": 8.71,
+          "cpc": 1.06,
+          "cpm": 92.15,
+          "engagements": 1620,
+          "cpe": 17.94,
+          "uv": 439,
+          "cpuv": 66.22
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 29989.03,
+          "impressions": 283335,
+          "clicks": 25166,
+          "ctr": 8.88,
+          "cpc": 1.19,
+          "cpm": 105.84,
+          "engagements": 2076,
+          "cpe": 14.45,
+          "uv": 494,
+          "cpuv": 60.71
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 29998.46,
+          "impressions": 301115,
+          "clicks": 27327,
+          "ctr": 9.08,
+          "cpc": 1.1,
+          "cpm": 99.62,
+          "engagements": 2035,
+          "cpe": 14.74,
+          "uv": 582,
+          "cpuv": 51.54
         }
-      ]
+      ],
+      "sourceSheetId": "B5TBE7"
     },
     {
       "id": "meiling-daily-xingban-seed",
       "label": "代采星伴种草分日流水",
-      "period": "2026-10-15 ~ 2026-10-18",
+      "period": "2026-10-15 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-ACntPW",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=ACntPW",
-      "note": "由ACntPW数据源2979条明细按日聚合",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=7gf6nq",
+      "note": "美菱双11代采星伴种草分日流水（透视表7gf6nq）。小红星站外活跃UV为30日归因口径。",
       "metrics": {
         "totalSpend": 28371.46
       },
@@ -4075,6 +4326,7 @@
           "clicks": 489,
           "ctr": 3.48,
           "cpc": 4.46,
+          "cpm": 155.06,
           "engagements": 38,
           "cpe": 57.37,
           "uv": 0,
@@ -4087,10 +4339,11 @@
           "clicks": 1622,
           "ctr": 4.47,
           "cpc": 3.76,
+          "cpm": 168.29,
           "engagements": 64,
           "cpe": 95.33,
-          "uv": 546,
-          "cpuv": 11.17
+          "uv": 1578,
+          "cpuv": 3.87
         },
         {
           "date": "2026-10-17",
@@ -4099,10 +4352,11 @@
           "clicks": 2933,
           "ctr": 4.31,
           "cpc": 3.11,
+          "cpm": 134.27,
           "engagements": 85,
           "cpe": 107.38,
-          "uv": 529,
-          "cpuv": 17.25
+          "uv": 3033,
+          "cpuv": 3.01
         },
         {
           "date": "2026-10-18",
@@ -4111,20 +4365,113 @@
           "clicks": 4329,
           "ctr": 5.06,
           "cpc": 2.53,
+          "cpm": 128.09,
           "engagements": 95,
           "cpe": 115.4,
+          "uv": 2957,
+          "cpuv": 3.71
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 11771.95,
+          "impressions": 113266,
+          "clicks": 7080,
+          "ctr": 6.25,
+          "cpc": 1.66,
+          "cpm": 103.93,
+          "engagements": 216,
+          "cpe": 54.5,
+          "uv": 2739,
+          "cpuv": 4.3
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 17416.06,
+          "impressions": 178727,
+          "clicks": 12659,
+          "ctr": 7.08,
+          "cpc": 1.38,
+          "cpm": 97.45,
+          "engagements": 1069,
+          "cpe": 16.29,
+          "uv": 2689,
+          "cpuv": 6.48
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 19047.91,
+          "impressions": 184729,
+          "clicks": 13752,
+          "ctr": 7.44,
+          "cpc": 1.39,
+          "cpm": 103.11,
+          "engagements": 1197,
+          "cpe": 15.91,
+          "uv": 1798,
+          "cpuv": 10.59
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 20203.62,
+          "impressions": 209247,
+          "clicks": 16698,
+          "ctr": 7.98,
+          "cpc": 1.21,
+          "cpm": 96.55,
+          "engagements": 1566,
+          "cpe": 12.9,
+          "uv": 1720,
+          "cpuv": 11.75
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 21217.52,
+          "impressions": 234470,
+          "clicks": 18621,
+          "ctr": 7.94,
+          "cpc": 1.14,
+          "cpm": 90.49,
+          "engagements": 1589,
+          "cpe": 13.35,
+          "uv": 828,
+          "cpuv": 25.63
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 22001.81,
+          "impressions": 228080,
+          "clicks": 18606,
+          "ctr": 8.16,
+          "cpc": 1.18,
+          "cpm": 96.47,
+          "engagements": 1854,
+          "cpe": 11.87,
+          "uv": 498,
+          "cpuv": 44.18
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 22014.32,
+          "impressions": 234052,
+          "clicks": 21673,
+          "ctr": 9.26,
+          "cpc": 1.02,
+          "cpm": 94.06,
+          "engagements": 1738,
+          "cpe": 12.67,
           "uv": 0,
           "cpuv": null
         }
-      ]
+      ],
+      "sourceSheetId": "7gf6nq"
     },
     {
       "id": "meiling-daily-jd-toitou-seed",
       "label": "京东对投种草分日流水",
-      "period": "2026-10-15 ~ 2026-10-18",
+      "period": "2026-10-15 ~ 2026-10-25",
       "sourceId": "src-meiling-sheets-zF2qee",
-      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=zF2qee",
-      "note": "由zF2qee数据源13954条明细按日聚合",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=TLLRoo",
+      "note": "美菱双11京东对投种草分日流水（透视表TLLRoo）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
       "metrics": {
         "totalSpend": 15779.52
       },
@@ -4136,6 +4483,7 @@
           "clicks": 654,
           "ctr": 11.27,
           "cpc": 0.68,
+          "cpm": 76.47,
           "engagements": 8,
           "cpe": 55.49,
           "uv": 0,
@@ -4148,10 +4496,11 @@
           "clicks": 5007,
           "ctr": 9.37,
           "cpc": 0.71,
+          "cpm": 66.42,
           "engagements": 239,
           "cpe": 14.85,
-          "uv": 11,
-          "cpuv": 322.63
+          "uv": 24,
+          "cpuv": 147.87
         },
         {
           "date": "2026-10-17",
@@ -4160,10 +4509,11 @@
           "clicks": 7480,
           "ctr": 9.6,
           "cpc": 0.69,
+          "cpm": 66.49,
           "engagements": 102,
           "cpe": 50.79,
-          "uv": 13,
-          "cpuv": 398.5
+          "uv": 39,
+          "cpuv": 132.83
         },
         {
           "date": "2026-10-18",
@@ -4172,12 +4522,105 @@
           "clicks": 8466,
           "ctr": 9.51,
           "cpc": 0.78,
+          "cpm": 74.2,
           "engagements": 104,
           "cpe": 63.52,
-          "uv": 11,
-          "cpuv": 600.57
+          "uv": 66,
+          "cpuv": 100.1
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 8002.46,
+          "impressions": 105769,
+          "clicks": 10073,
+          "ctr": 9.52,
+          "cpc": 0.79,
+          "cpm": 75.66,
+          "engagements": 114,
+          "cpe": 70.2,
+          "uv": 62,
+          "cpuv": 129.07
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 10048.79,
+          "impressions": 133841,
+          "clicks": 13016,
+          "ctr": 9.72,
+          "cpc": 0.77,
+          "cpm": 75.08,
+          "engagements": 98,
+          "cpe": 102.54,
+          "uv": 49,
+          "cpuv": 205.08
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 9985.42,
+          "impressions": 133742,
+          "clicks": 13186,
+          "ctr": 9.86,
+          "cpc": 0.76,
+          "cpm": 74.66,
+          "engagements": 90,
+          "cpe": 110.95,
+          "uv": 49,
+          "cpuv": 203.78
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 9846.46,
+          "impressions": 146560,
+          "clicks": 13680,
+          "ctr": 9.33,
+          "cpc": 0.72,
+          "cpm": 67.18,
+          "engagements": 99,
+          "cpe": 99.46,
+          "uv": 38,
+          "cpuv": 259.12
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 7918.01,
+          "impressions": 110562,
+          "clicks": 9867,
+          "ctr": 8.92,
+          "cpc": 0.8,
+          "cpm": 71.62,
+          "engagements": 66,
+          "cpe": 119.97,
+          "uv": 61,
+          "cpuv": 129.8
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 8159.86,
+          "impressions": 117490,
+          "clicks": 9193,
+          "ctr": 7.82,
+          "cpc": 0.89,
+          "cpm": 69.45,
+          "engagements": 105,
+          "cpe": 77.71,
+          "uv": 39,
+          "cpuv": 209.23
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 6031.44,
+          "impressions": 83331,
+          "clicks": 6442,
+          "ctr": 7.73,
+          "cpc": 0.94,
+          "cpm": 72.38,
+          "engagements": 77,
+          "cpe": 78.33,
+          "uv": 25,
+          "cpuv": 241.26
         }
-      ]
+      ],
+      "sourceSheetId": "TLLRoo"
     }
   ]
 }

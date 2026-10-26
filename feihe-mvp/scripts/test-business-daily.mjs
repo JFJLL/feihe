@@ -10,7 +10,7 @@ const store = await vite.ssrLoadModule('/lib/business-daily/store.ts');
 const api = await vite.ssrLoadModule('/app/api/business-daily/route.ts');
 const { db } = await vite.ssrLoadModule('/lib/db.ts'); await store.ensureBusinessSchema();
 const req = (body, user = 'user-admin') => new Request('http://localhost/api', { method: 'POST', headers: { 'x-user-id': user, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-const get = (projectId, day, other = {}, user = 'user-admin') => api.GET(new Request('http://localhost/api?' + new URLSearchParams({ projectId, day, ...other }), { headers: { 'x-user-id': user } }));
+const get = (projectId, day, other = {}, user = 'user-admin') => api.GET(new Request('http://localhost/api?' + new URLSearchParams({ projectId, ...(day ? { day } : {}), ...other }), { headers: { 'x-user-id': user } }));
 const headers = Array(59).fill(null);
 for (const [i, name] of [[1,'时间'],[13,'FS总预算'],[16,'小红星'],[28,'小红盟'],[40,'K金额'],[43,'F金额'],[44,'S金额'],[45,'KFSOPZ总金额'],[46,'P(评论)'],[47,'seo投资'],[48,'杂费-'],[49,'投流总金额'],[51,'KFSOPZ总结算金额']]) headers[i] = name;
 function dailyRow(date, spend, { k = 10, empty = false, shop = 10 } = {}) {
@@ -95,4 +95,21 @@ test('project and role isolation: a second project has no inherited data or auth
   const page=await (await get('qicui','2026-10-02',{sourceKey:'week',offset:'2',limit:'1'})).json(); assert.equal(page.rows.length,1);assert.equal(page.total,6);assert.equal(page.hasMore,true);
   assert.equal((await get('qicui','2026-10-02',{sourceKey:'week',offset:'-1'})).status,400);
   const parsed=await (await get('qicui','2026-10-02',{sourceKey:'rect',offset:'2',limit:'1'})).json();assert.equal(parsed.rows[0][4],'https://example.test/note');
+});
+
+test('initial query resolution: omitting day picks true server latest report day vs explicit historical day preserved', async () => {
+  // 1. Omit day: server dynamically selects latest report day from bundle (2026-10-02) without hardcoding
+  const resDefault = await get('qicui', '');
+  assert.equal(resDefault.status, 200);
+  const jsonDefault = await resDefault.json();
+  assert.equal(jsonDefault.ok, true);
+  assert.equal(jsonDefault.view.day, '2026-10-02', 'API must dynamically select latest report day when day is omitted');
+  assert.equal(jsonDefault.view.series.length > 0, true);
+
+  // 2. Explicit historical day: query preserves requested day
+  const resHistorical = await get('qicui', '2026-10-01');
+  assert.equal(resHistorical.status, 200);
+  const jsonHistorical = await resHistorical.json();
+  assert.equal(jsonHistorical.ok, true);
+  assert.equal(jsonHistorical.view.day, '2026-10-01', 'API must honor explicit requested historical day');
 });

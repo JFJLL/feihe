@@ -3,35 +3,84 @@
  * 暖白底色 #f9f9fb, 主深青 var(--teal-11, #008573), 辅助紫 var(--iris-9, #0d74ce), 边框 #d9d9e0
  */
 
-/* Unified Console: docked header and toolbar */
-.ca-daily-header-console {
-  border-bottom:none;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  margin-bottom: 0;
-  padding: 10px 16px;
-}
-
-.ca-daily-toolbar.ca-daily-toolbar-docked {
-  border-top:0.5px solid #e8e8ec;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  margin-top: 0;
-  margin-bottom: 12px;
-  padding: 8px 16px;
-  background: #f9f9fb;
-}
-
+/* Unified Flat Toolbar */
 .ca-daily-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
-  padding: 12px 16px;
+  padding: 10px 16px;
   background: #ffffff;
   border:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 10px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.ca-daily-toolbar-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.ca-daily-toolbar .ca-dataset-picker-item {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+}
+
+.ca-daily-nav-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+/* Scoped DayNavigator inside ca-daily-toolbar to prevent global 218px width blowout */
+.ca-daily-toolbar .day-nav-custom-picker {
+  width: 154px !important;
+  min-width: 0 !important;
+  max-width: 154px !important;
+  flex: 0 0 154px !important;
+}
+
+.ca-daily-toolbar .day-nav-custom-picker .custom-date-trigger-wrap {
+  width: 100% !important;
+}
+
+.ca-daily-toolbar .day-nav-custom-picker .custom-date-input-field {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.ca-daily-status-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--slate-11, #60646c);
+}
+
+.ca-daily-meta-item {
+  color: var(--slate-11, #60646c);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ca-daily-meta-missing {
+  color: var(--ruby-11, #ce2c31);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .ca-filter-section {
@@ -81,254 +130,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.ca-date-single-box {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #ffffff;
-  padding: 3px 6px;
-  border:0.5px solid #d9d9e0;
-  border-radius: 8px;
-  position: relative;
-  box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04);
-}
-
-.ca-date-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 4px;
-}
-
-.ca-btn-date-step {
-  border:0.5px solid #d9d9e0;
-  background: #ffffff;
-  padding: 2px 8px;
-  height: 28px;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  color:#60646c;
-  cursor: pointer;
-  transition: all 250ms ease-out;
-}
-
-.ca-btn-date-step:hover:not(:disabled) {
-  background: #f0f0f3;
-  color:#1c2024;
-}
-
-.ca-btn-date-step:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.ca-date-input {
-  border:none;
-  background: transparent;
-  font-size: 12px;
-  color:#1c2024;
-  font-family: inherit;
-  outline: none;
-  padding: 2px 0;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.ca-date-input::-webkit-calendar-picker-indicator {
-  display: none;
-  -webkit-appearance: none;
-  opacity: 0;
-  width: 0;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-.ca-btn-quick-dates-toggle {
-  border:0.5px solid #d9d9e0;
-  background: #f9f9fb;
-  padding: 2px 7px;
-  height: 28px;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  color:#60646c;
-  cursor: pointer;
-  transition: all 250ms ease-out;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.ca-btn-quick-dates-toggle:hover,
-.ca-btn-quick-dates-toggle.active {
-  background: #f4fbf7;
-  color:#208368;
-  border-color:#8bceb6;
-}
-
-/* Integrated CustomDatePicker in Single Date Box */
-.ca-daily-custom-date-picker {
-  width: auto;
-  min-width: 125px;
-  max-width: 145px;
-}
-
-.ca-daily-custom-date-picker .custom-date-trigger-wrap {
-  width: 100%;
-}
-
-.ca-daily-custom-date-picker .custom-date-input-field {
-  min-height: 28px;
-  height: 28px;
-  min-width: 0;
-  width: 125px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1c2024;
-  padding: 2px 28px 2px 8px !important;
-  border-radius: 6px;
-  border: 0.5px solid #d9d9e0;
-  background: #ffffff;
-}
-
-.ca-daily-custom-date-picker .custom-date-icon-btn {
-  right: 4px;
-  width: 20px;
-  height: 20px;
-  color: #60646c;
-}
-
-.ca-daily-custom-date-picker .custom-date-svg {
-  width: 13px;
-  height: 13px;
-}
-
-/* Quick dates grid dropdown */
-.ca-quick-dates-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  z-index: 50;
-  background: #ffffff;
-  border:0.5px solid #d9d9e0;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  padding: 10px;
-  width: 320px;
-  max-height: 280px;
-  overflow-y: auto;
-}
-
-.ca-quick-dates-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 6px;
-  margin-bottom: 6px;
-  border-bottom:0.5px solid #d9d9e0;
-}
-
-.ca-quick-dates-title {
-  font-size: 12px;
-  font-weight: 600;
-  color:#60646c;
-}
-
-.ca-quick-dates-close {
-  border:none;
-  background: transparent;
-  font-size: 12px;
-  color:#60646c;
-  cursor: pointer;
-  padding: 1px 4px;
-  border-radius: 3px;
-}
-
-.ca-quick-dates-close:hover {
-  color:#1c2024;
-  background: #f0f0f3;
-}
-
-.ca-quick-dates-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-}
-
-.ca-quick-date-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 8px;
-  font-size: 12px;
-  border:0.5px solid #d9d9e0;
-  border-radius: 4px;
-  background: #f9f9fb;
-  color:#60646c;
-  cursor: pointer;
-  transition: all 250ms ease-out;
-}
-
-.ca-quick-date-item:hover {
-  background: #f4fbf7;
-  border-color:#8bceb6;
-  color:#208368;
-}
-
-.ca-quick-date-item.active {
-  background: var(--teal-11, #008573);
-  border-color:var(--teal-11, #008573);
-  color:#ffffff;
-  font-weight: 600;
-}
-
-.ca-quick-date-idx {
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-.ca-date-sep {
-  color:#60646c;
-  font-size: 12px;
-}
-
-.ca-btn-reset {
-  border:0.5px solid #d9d9e0;
-  background: #ffffff;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  color:#60646c;
-  cursor: pointer;
-  transition: all 250ms ease-out;
-}
-
-.ca-btn-reset:hover {
-  background: #f0f0f3;
-  color:#1c2024;
-}
-
-.ca-dataset-select {
-  border:0.5px solid #d9d9e0;
-  background: #ffffff;
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color:#1c2024;
-  outline: none;
-  cursor: pointer;
-}
 
 .ca-daily-empty-box {
   display: flex;
@@ -662,7 +463,7 @@
   box-sizing: border-box;
 }
 
-/* Mobile 390px+ Responsive Adaptation: 2-row layout to prevent button squeeze */
+/* Mobile Responsive Adaptations: down to 320px without overflow */
 @media (max-width: 640px) {
   .ca-section-macro-card {
     padding: 16px 12px;
@@ -677,55 +478,72 @@
     margin-top: calc(var(--dt-section-gap, 28px) - 12px);
   }
 
-  .ca-filter-section {
+  .ca-daily-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 10px 12px;
+  }
+
+  .ca-daily-toolbar-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
     width: 100%;
   }
 
-  .ca-date-single-box {
-    display: flex;
+  .ca-daily-toolbar .ca-dataset-picker-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+
+  .ca-daily-nav-wrap {
+    width: 100%;
     flex-wrap: wrap;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 6px;
-    gap: 8px;
-  }
-
-  .ca-date-single-box .ca-date-input-wrap {
-    order: 1;
-    width: 100%;
-    padding: 0;
-    display: flex;
-    gap: 8px;
-    align-items: center;
     justify-content: space-between;
   }
 
-  .ca-date-single-box .ca-date-input-wrap .ca-daily-custom-date-picker {
-    flex: 1;
-    min-width: 0;
-    max-width: none;
-  }
-
-  .ca-date-single-box .ca-date-input-wrap .ca-daily-custom-date-picker .custom-date-input-field {
+  .ca-daily-status-meta {
+    margin-left: 0;
     width: 100%;
+    justify-content: flex-start;
+    gap: 6px 12px;
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 480px) {
+  .ca-daily-toolbar .day-nav-custom-picker {
+    flex: 1 1 auto !important;
+    max-width: none !important;
+    width: auto !important;
+    min-width: 0 !important;
   }
 
-  .ca-date-single-box .ca-date-input-wrap .ca-btn-quick-dates-toggle {
-    flex-shrink: 0;
-    white-space: nowrap;
+  .ca-daily-toolbar .day-nav-step-btn span {
+    display: none !important;
   }
 
-  .ca-date-single-box .ca-btn-date-step {
-    order: 2;
-    flex: 1;
-    min-width: 0;
-    justify-content: center;
-    white-space: nowrap;
-    flex-shrink: 0;
+  .ca-daily-toolbar .day-nav-step-btn {
+    min-width: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
   }
 
-  .ca-quick-dates-dropdown {
-    width: calc(100% - 12px);
-    max-width: 320px;
+  .ca-daily-toolbar .day-nav-latest-btn {
+    width: 100% !important;
+  }
+
+  .ca-daily-toolbar .custom-date-input-field {
+    font-size: 14px !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
   }
 }

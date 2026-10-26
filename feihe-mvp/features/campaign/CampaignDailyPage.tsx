@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useSyncExternalStore, useRef, useEffect } from "react";
+import React, { useMemo, useCallback, useSyncExternalStore } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
-import { CustomDatePicker } from "../../components/ui/CustomDatePicker";
+import { DayNavigator } from "../../components/ui/DayNavigator";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
 import { CustomSelect } from "../../components/ui/CustomSelect";
 import {
@@ -14,8 +14,6 @@ import {
   getSingleDayKPIs,
   getSingleDayDistributions,
   getCrossDatasetDailyComparison,
-  subtractCalendarDays,
-  addCalendarDays,
   isValidIsoDate,
 } from "./daily-selection-model";
 import "./campaign-analytics.css";
@@ -64,9 +62,6 @@ function getServerUrlSearchSnapshot(): string {
 export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const name = dashboard?.name || "项目";
   const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
-  const [quickPickerOpen, setQuickPickerOpen] = useState(false);
-  const quickToggleRef = useRef<HTMLButtonElement>(null);
-  const quickDropdownRef = useRef<HTMLDivElement>(null);
 
   // Reactive URL search store: guarantees SSR/hydration compatibility and listens to back/forward
   const urlSearch = useSyncExternalStore(subscribeToUrl, getUrlSearchSnapshot, getServerUrlSearchSnapshot);
@@ -104,55 +99,6 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
   // Selected date: strictly adheres to URL if valid, otherwise falls back to latest observed day
   const selectedDate = urlDay !== null ? urlDay : maxAvailableDate;
-  const selectedIndex = allAvailableDates.indexOf(selectedDate);
-  const dayProgressLabel =
-    selectedIndex >= 0
-      ? `共 ${allAvailableDates.length} 个有效采集日 / 当前第 ${selectedIndex + 1}/${allAvailableDates.length} 日`
-      : `共 ${allAvailableDates.length} 个有效采集日`;
-
-  // Close quick picker when clicking outside
-  useEffect(() => {
-    if (!quickPickerOpen) return;
-    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
-      if (
-        quickDropdownRef.current &&
-        !quickDropdownRef.current.contains(e.target as Node) &&
-        quickToggleRef.current &&
-        !quickToggleRef.current.contains(e.target as Node)
-      ) {
-        setQuickPickerOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("touchstart", handlePointerDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("touchstart", handlePointerDown);
-    };
-  }, [quickPickerOpen]);
-
-  // Focus management when quick picker opens
-  useEffect(() => {
-    if (!quickPickerOpen) return;
-    const timer = setTimeout(() => {
-      if (!quickDropdownRef.current) return;
-      const targetBtn =
-        quickDropdownRef.current.querySelector<HTMLButtonElement>(".ca-quick-date-item.active") ||
-        quickDropdownRef.current.querySelector<HTMLButtonElement>(".ca-quick-date-item") ||
-        quickDropdownRef.current.querySelector<HTMLButtonElement>(".ca-quick-dates-close");
-      targetBtn?.focus();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [quickPickerOpen]);
-
-  const handleQuickDropdownKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Escape") {
-      e.preventDefault();
-      e.stopPropagation();
-      setQuickPickerOpen(false);
-      quickToggleRef.current?.focus();
-    }
-  };
 
   // URL state updater (pushes state and triggers context change event for reactive sync)
   const updateUrl = useCallback(
@@ -184,16 +130,6 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
     [dashboard]
   );
 
-  // Step date helpers
-  const handleStepDay = (step: -1 | 1) => {
-    const current = selectedDate || maxAvailableDate;
-    if (!current) return;
-    const next = step === -1 ? subtractCalendarDays(current, 1) : addCalendarDays(current, 1);
-    if (next) {
-      updateUrl({ day: next });
-    }
-  };
-
   // Active row on the selected date
   const selectedRow = useMemo(() => {
     if (!activeDataset?.rows || !selectedDate) return null;
@@ -220,36 +156,19 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
     return getCrossDatasetDailyComparison(datasets, selectedDate, dashboard?.projectId);
   }, [datasets, selectedDate, dashboard?.projectId]);
 
-  // Secondary switch for Winner Wipes delivery vs taosou
-  const isWipes = activeDataset?.id.startsWith("wipes-daily-");
-  const alternateWipesId =
-    activeDataset?.id === "wipes-daily-delivery"
-      ? "wipes-daily-taosou"
-      : activeDataset?.id === "wipes-daily-taosou"
-      ? "wipes-daily-delivery"
-      : null;
-  const alternateWipesLabel =
-    activeDataset?.id === "wipes-daily-delivery"
-      ? "切换到淘搜表现 →"
-      : "← 返回日常种草";
-
   // Honest empty state when no daily datasets exist (e.g. qicui or unconfigured projects)
   if (!datasets.length || !activeDataset || !activeDataset.rows.length) {
     return (
       <div className="ca-page ca-daily-page" role="main" aria-label={`${name} 分日看板`}>
-        <header className="ca-header bd-toolbar-compact">
-          <div className="ca-header-heading">
-            <div className="ca-header-title-row">
-              <h2 className="ca-header-title">分日看板</h2>
-            </div>
-            <p className="ca-header-subtitle">
-              项目暂无逐日分日流水记录
-            </p>
-          </div>
-        </header>
-
         <div className="ca-daily-empty-box">
-          <div className="ca-daily-empty-icon">📅</div>
+          <div className="ca-daily-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
           <h3 className="ca-daily-empty-title">当前项目暂无逐日分日流水记录</h3>
           <p className="ca-daily-empty-desc">
             所选项目暂无连续日级别流水数据。
@@ -261,18 +180,9 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
   return (
     <div className="ca-page ca-daily-page" role="main" aria-label={`${name} 分日看板`}>
-      {/* 1. Header & Daily Toolbar Integrated Compact Console */}
-      <header className="ca-header bd-toolbar-compact ca-daily-header-console">
-        <div className="ca-header-heading">
-          <div className="ca-header-title-row">
-            <h2 className="ca-header-title">分日看板</h2>
-            <span className="ca-header-subtitle">
-              {formatDatasetDisplay(activeDataset.id, activeDataset.label)} ({activeDataset.period})
-            </span>
-          </div>
-        </div>
-
-        <div className="ca-dataset-picker-wrap">
+      {/* 1. 扁平整合单行工具栏：数据集选择与日期导航在同一平整白色工具栏 */}
+      <header className="ca-header ca-daily-toolbar" role="toolbar" aria-label="分日分析工具栏">
+        <div className="ca-daily-toolbar-main">
           {datasets.length > 1 && (
             <div className="ca-dataset-picker-item">
               <span className="ca-filter-label">分析范围:</span>
@@ -290,152 +200,46 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             </div>
           )}
 
-          {isWipes && alternateWipesId && (
-            <button
-              type="button"
-              className="ca-btn-switch-dataset"
-              onClick={() => {
-                updateUrl({ dataset: alternateWipesId });
+          <div className="ca-daily-nav-wrap">
+            <span className="ca-filter-label">业务日期:</span>
+            <DayNavigator
+              id="ca-daily-date-picker"
+              ariaLabel="选择业务日期"
+              value={selectedDate || ""}
+              min={minAvailableDate}
+              max={maxAvailableDate}
+              latestDate={maxAvailableDate}
+              onChange={(val) => {
+                if (val && isValidIsoDate(val)) {
+                  updateUrl({ day: val });
+                } else if (!val) {
+                  updateUrl({ day: "" });
+                }
               }}
-              title="切换关联分日分析视角"
-            >
-              {alternateWipesLabel}
-            </button>
-          )}
-        </div>
-      </header>
-
-      {/* 2. 单日期控制工具栏 (全项目统一单日选择，支持前后日步进与最新日期) */}
-      <div className="ca-daily-toolbar ca-daily-toolbar-docked" role="toolbar" aria-label="分日分析工具栏">
-        <div className="ca-filter-section">
-          <span className="ca-filter-label">业务日期:</span>
-          <div className="ca-date-single-box">
-            <button
-              type="button"
-              className="ca-btn-date-step"
-              onClick={() => handleStepDay(-1)}
-              aria-label="前一日"
-              title="切换至前一日"
-            >
-              ← 前一日
-            </button>
-            <div className="ca-date-input-wrap">
-              <CustomDatePicker
-                id="ca-daily-date-picker"
-                ariaLabel="选择业务日期"
-                title="选择或输入业务日期"
-                placeholder="选择或输入日期"
-                value={selectedDate || ""}
-                min={minAvailableDate}
-                max={maxAvailableDate}
-                className="ca-daily-custom-date-picker"
-                onValueChange={(val) => {
-                  if (val && isValidIsoDate(val)) {
-                    updateUrl({ day: val });
-                  } else if (!val) {
-                    updateUrl({ day: "" });
-                  }
-                }}
-              />
-              <button
-                ref={quickToggleRef}
-                type="button"
-                className={`ca-btn-quick-dates-toggle ${quickPickerOpen ? "active" : ""}`}
-                onClick={() => setQuickPickerOpen((prev) => !prev)}
-                title="展开全量有效业务日速选面板"
-                aria-label="快速选日"
-                aria-expanded={quickPickerOpen}
-                aria-controls="ca-quick-dates-dropdown"
-              >
-                📅 快捷选日
-              </button>
-            </div>
-            <button
-              type="button"
-              className="ca-btn-date-step"
-              onClick={() => handleStepDay(1)}
-              aria-label="后一日"
-              title="切换至后一日"
-            >
-              后一日 →
-            </button>
-
-            {quickPickerOpen && allAvailableDates.length > 0 && (
-              <div
-                ref={quickDropdownRef}
-                id="ca-quick-dates-dropdown"
-                className="ca-quick-dates-dropdown"
-                role="menu"
-                aria-label="有效业务日速选面板"
-                onKeyDown={handleQuickDropdownKeyDown}
-              >
-                <div className="ca-quick-dates-header">
-                  <span className="ca-quick-dates-title">有效采集日速选 ({allAvailableDates.length}日)</span>
-                  <button
-                    type="button"
-                    className="ca-quick-dates-close"
-                    onClick={() => {
-                      setQuickPickerOpen(false);
-                      quickToggleRef.current?.focus();
-                    }}
-                    aria-label="关闭"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="ca-quick-dates-grid">
-                  {allAvailableDates.map((d, idx) => {
-                    const isSelected = d === selectedDate;
-                    return (
-                      <button
-                        key={d}
-                        type="button"
-                        className={`ca-quick-date-item ${isSelected ? "active" : ""}`}
-                        onClick={() => {
-                          updateUrl({ day: d });
-                          setQuickPickerOpen(false);
-                          quickToggleRef.current?.focus();
-                        }}
-                      >
-                        <span className="ca-quick-date-idx">{idx + 1}</span>
-                        <span className="ca-quick-date-val">{d}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            />
           </div>
-
-          {maxAvailableDate && selectedDate !== maxAvailableDate && (
-            <button
-              type="button"
-              className="ca-btn-reset"
-              onClick={() => updateUrl({ day: maxAvailableDate })}
-              title="切换至最新记录日"
-            >
-              最新日期 ({maxAvailableDate})
-            </button>
-          )}
         </div>
 
         <div className="ca-daily-status-meta">
-          {isDateMissing ? (
-            <span style={{ fontSize: 12, color: "#ce2c31", fontWeight: 600 }}>
-              ⚠️ 该日期暂无流水记录 / {dayProgressLabel}
-            </span>
-          ) : (
-            <span style={{ fontSize: 12, color: "#008573", fontWeight: 500 }}>
-              ● {dayProgressLabel} / 区间 {activeDataset.period}
-            </span>
+          {isDateMissing && (
+            <span className="ca-daily-meta-missing">该日期暂无流水记录</span>
           )}
+          <span className="ca-daily-meta-item">数据截至 {maxAvailableDate || "—"}</span>
+          <span className="ca-daily-meta-item">{allAvailableDates.length}个采集日</span>
         </div>
-      </div>
+      </header>
 
       {/* 3. 缺日明确诚实空态 (绝不静默替换为最新日期) */}
       {isDateMissing && (
-        <div className="ca-daily-empty-box" role="alert">
-          <div className="ca-daily-empty-icon">📅</div>
+        <div className="ca-daily-empty-box" role="alert" style={{ marginTop: 12 }}>
+          <div className="ca-daily-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </div>
           <h3 className="ca-daily-empty-title">所选日期 ({selectedDate}) 暂无流水记录</h3>
           <p className="ca-daily-empty-desc">
             当前数据集 ({formatDatasetDisplay(activeDataset.id, activeDataset.label)}) 在 {selectedDate} 未采集到有效流水数据。可用数据区间为 {activeDataset.period}。
@@ -581,7 +385,11 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
       <details className="ca-daily-details-panel">
         <summary className="ca-daily-details-summary">
           <div className="ca-daily-details-summary-title">
-            <span className="ca-daily-details-icon">📊</span>
+            <span className="ca-daily-details-icon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                <path d="M1 11h2v4H1zm4-4h2v8H5zm4-4h2v12H9zm4-2h2v14h-2z" />
+              </svg>
+            </span>
             <span>查看完整分日明细数据表</span>
             <span className="ca-daily-details-badge">共 {activeDataset.rows.length} 条流水记录</span>
           </div>

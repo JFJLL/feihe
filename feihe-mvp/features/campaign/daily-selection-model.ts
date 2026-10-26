@@ -66,7 +66,7 @@ export function computeDayOverDay(currVal: unknown, prevVal: unknown, unit = "")
       diff,
       pct: null,
       isComparable: true,
-      note: diff === 0 ? "前日为0 · 环比持平" : `${diff > 0 ? "+" : ""}${fmtNum(diff)}${unit} 较前日(基数0)`,
+      note: diff === 0 ? "前日为0，环比持平" : `${diff > 0 ? "+" : ""}${fmtNum(diff)}${unit} 较前日(基数0)`,
       trend: diff > 0 ? "up" : diff < 0 ? "down" : "flat",
     };
   }
@@ -446,7 +446,7 @@ export function getSingleDayDistributions(
       groups.push({
         id: "taosou-channel-dist",
         title: "当日渠道费用结构分布",
-        caption: `所选日渠道总支出 ¥${fmtNum(sumChannelSpend)} · 各渠道占比明细`,
+        caption: `所选日渠道总支出 ¥${fmtNum(sumChannelSpend)}，各渠道占比明细`,
         isComposition: true,
         items: channelItems,
       });
@@ -486,7 +486,7 @@ export function getSingleDayDistributions(
       groups.push({
         id: "taosou-kw-dist",
         title: "当日核心关键词淘搜指数贡献",
-        caption: `所选日关键词指数总和 ${fmtNum(sumKw, 0)} · 各词指数占比`,
+        caption: `所选日关键词指数总和 ${fmtNum(sumKw, 0)}，各词指数占比`,
         isComposition: true,
         items: kwItems,
       });

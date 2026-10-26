@@ -33,6 +33,7 @@ const nodeBuiltins: NodeBuiltins = await (async (): Promise<NodeBuiltins> => {
 })();
 
 let sqliteDb: MiniDb | null = null;
+let nativeDb: import('node:sqlite').DatabaseSync | null = null;
 
 function seedFromMiniflare(file: string): void {
   if (process.env.LOCAL_DB_NO_SEED === 'true') return;
@@ -71,6 +72,7 @@ function nodeDb(): MiniDb {
   seedFromMiniflare(file);
   nb.fs.mkdirSync(nb.path.dirname(file), { recursive: true });
   const native = new nb.sqlite.DatabaseSync(file);
+  nativeDb = native;
   try {
     native.exec('PRAGMA busy_timeout = 10000;');
     native.exec('PRAGMA journal_mode = WAL;');
@@ -117,6 +119,15 @@ export function db(): MiniDb {
   const w = workerEnvSync() as { DB?: MiniDb };
   if (w.DB) return w.DB;
   return nodeDb();
+}
+
+export function closeDatabase(): void {
+  if (nativeDb) {
+    nativeDb.close();
+    nativeDb = null;
+  }
+  sqliteDb = null;
+  schemaReady = null;
 }
 
 export async function ensureSchema() {

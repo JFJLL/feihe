@@ -2,7 +2,7 @@ export type CellState = 'observed' | 'missing' | 'not_collected' | 'formula_erro
 export type SourceRef = { sourceKey: string; url: string; version: string; capturedAt: string; captureId?: string; range?: string; row?: number; column?: number };
 export type Cell = { value: number | null; state: CellState; reason?: string; source?: SourceRef; partialValue?: number | null };
 export type SourceRole = 'weekly' | 'budget_plan' | 'platform_snapshot' | 'creator_snapshot' | 'keywords' | 'keyword_notes' | 'rectification' | 'execution' | 'seo_acceptance' | 'seo_plan' | 'platform_ads' | 'platform_commerce' | 'comment_register' | 'comment_statistics' | 'comment_plan';
-export type SourceTable = { key: string; role: SourceRole; url: string; version: string; capturedAt: string; captureId?: string; range: string; rows: unknown[][]; reportDay?: string; periodFrom?: string; periodTo?: string; complete: boolean; sheetId?: string };
+export type SourceTable = { key: string; role: SourceRole; url: string; version: string; capturedAt: string; captureId?: string; range: string; rows: unknown[][]; reportDay?: string; periodFrom?: string; periodTo?: string; complete: boolean; sheetId?: string; scopeLabel?: string };
 export type Narrative = { title: string; level: number; text: string; source: SourceRef };
 export type ReportDocument = { key: string; url: string; version: string; capturedAt: string; captureId?: string; year: number; content: string };
 export type SourceBundle = { tables: SourceTable[]; document?: ReportDocument };
@@ -56,6 +56,8 @@ export type BusinessHighlights = {
   search: {
     source?: SourceRef;
     tableSource?: SourceRef;
+    tableScope?: string;
+    tableCpuvLabel?: string;
     scope: string;
     costs: CostComparison[];
     returnRate: number | null;

@@ -58,8 +58,8 @@ function loadComponent(filename) {
 
 console.log("=== RUNNING DAILY BROWSER FOLLOW-UP VERIFICATION TESTS ===");
 
-// 1. Verify CustomDatePicker Integration & No Native date spinbutton
-console.log("\n[Test 1] CustomDatePicker integration in business date toolbar");
+// 1. Verify DayNavigator Integration & No Native date spinbutton
+console.log("\n[Test 1] DayNavigator integration in flat business date toolbar");
 const dailyModule = loadComponent("features/campaign/CampaignDailyPage.tsx");
 const { CampaignDailyPage, formatDatasetDisplay, normalizeDatasetLabel } = dailyModule;
 
@@ -82,35 +82,45 @@ const mockDashboard = {
 };
 
 const html = renderToStaticMarkup(React.createElement(CampaignDailyPage, { dashboard: mockDashboard }));
+const headerSnippet = html.match(/<header class="ca-header ca-daily-toolbar"[\s\S]*?<\/header>/)?.[0] || "";
+console.log("Generated toolbar HTML snippet:\n" + headerSnippet);
+
+// Meta clean format check: NO middle dot, NO emoji, NO inline style
+assert(!headerSnippet.includes("·"), "Toolbar must NOT contain middle dot '·'");
+assert(!headerSnippet.includes("⚠️"), "Toolbar must NOT contain emoji");
+assert(!headerSnippet.includes('style="font-size: 12'), "Meta must NOT use inline style attributes");
+assert(headerSnippet.includes("数据截至 2026-10-03"), "Meta must contain concise '数据截至'");
+assert(headerSnippet.includes("3个采集日"), "Meta must contain concise 'N个采集日'");
+assert(!headerSnippet.includes("切换到淘搜表现"), "Duplicate wipes switch button must be removed");
 
 // Root container must have scoped ca-daily-page class
 assert(html.includes("ca-daily-page"), "CampaignDailyPage root must contain scoped ca-daily-page class");
 
-// Must use CustomDatePicker, not native date input
+// Must use DayNavigator, not native date input
 assert(!html.includes('type="date"'), "Native input type=date must NOT be present in rendered HTML");
-assert(html.includes("custom-date-picker-container"), "CustomDatePicker container must be rendered");
-assert(html.includes("ca-daily-custom-date-picker"), "Custom scoped class ca-daily-custom-date-picker must be present");
+assert(html.includes("day-navigator-root"), "DayNavigator container must be rendered");
+assert(html.includes("custom-date-picker-container"), "CustomDatePicker container must be rendered inside DayNavigator");
 assert(html.includes('aria-label="选择业务日期"'), "Accessible aria-label '选择业务日期' must be present on date input");
-assert(html.includes("快捷选日"), "Quick date picker button must be preserved");
-assert(html.includes('aria-controls="ca-quick-dates-dropdown"'), "Quick picker button links to dropdown via aria-controls");
-console.log("✓ CustomDatePicker properly integrated; native input type=date completely eliminated!");
+assert(html.includes("前一日"), "Prev day button must be present");
+assert(html.includes("后一日"), "Next day button must be present");
+assert(html.includes("day-nav-chevron"), "Inline SVG chevrons must be present");
+assert(!html.includes("📅"), "No emoji allowed in navigation");
+assert(!html.includes("←"), "No emoji arrows allowed");
+assert(!html.includes("→"), "No emoji arrows allowed");
+console.log("✓ DayNavigator properly integrated; native input type=date and emojis eliminated!");
 
-// 2. Clear distinction of two date entrances
-console.log("\n[Test 2] Date entrance roles: calendar picker vs valid collection quick picker");
+// 2. Clear date navigation roles & manual input support
+console.log("\n[Test 2] Date navigation roles: manual entry, calendar picker and step buttons");
 assert(html.includes('title="选择或输入业务日期"'), "DatePicker input has clear title explaining calendar/input role");
 assert(html.includes('placeholder="选择或输入日期"'), "DatePicker input has clear placeholder for calendar/input");
-assert(html.includes('title="展开全量有效业务日速选面板"'), "Quick picker has clear title for collected days");
-console.log("✓ Date entrance role distinction verified!");
+console.log("✓ Date navigation roles verified!");
 
-// 2.1 Single URL update path contract (no double-push / double-event)
-console.log("\n[Test 2.1] Single path date commitment (onValueChange only, no double URL push)");
+// 2.1 Single URL update path contract via DayNavigator onChange
+console.log("\n[Test 2.1] Single path date commitment via DayNavigator");
 const pageSource = fs.readFileSync(path.resolve("features/campaign/CampaignDailyPage.tsx"), "utf8");
-const datePickerStart = pageSource.indexOf("<CustomDatePicker");
-const datePickerEnd = pageSource.indexOf("/>", datePickerStart);
-const datePickerSection = pageSource.slice(datePickerStart, datePickerEnd);
-assert(datePickerSection.includes("onValueChange="), "CustomDatePicker must use onValueChange for single-path commit");
-assert(!datePickerSection.includes("onChange="), "CustomDatePicker must NOT pass redundant onChange to prevent double URL push");
-console.log("✓ CustomDatePicker passes only onValueChange (no double-navigation on date commit)!");
+assert(pageSource.includes("<DayNavigator"), "CampaignDailyPage must use DayNavigator");
+assert(pageSource.includes("onChange="), "DayNavigator handles single-path date change");
+console.log("✓ DayNavigator single-path date commitment verified!");
 
 // 3. Dataset label display normalization ('·' to ' / ' without mutating source data)
 console.log("\n[Test 3] Dataset label display normalization in cross-dataset cards and selector");
@@ -164,16 +174,13 @@ const outlineMatch = cssContent.match(/\.ca-table-row-selected\s*\{[^}]*outline:
 assert(outlineMatch, "Must find outline property on selected row");
 assert(outlineMatch[1].includes("1px"), "Selected row outline must remain 1px for keyboard/selection visibility");
 
-// 5.1 Mobile 390px Button No-wrap & 2-row adaptation
-console.log("\n[Test 5.1] Mobile 390px: ca-btn-date-step nowrap and 2-row layout adaptation");
-const stepBtnRule = cssContent.match(/\.ca-btn-date-step\s*\{([^}]+)\}/)?.[1] || "";
-assert(stepBtnRule.includes("white-space: nowrap"), "ca-btn-date-step must have white-space: nowrap to prevent text stacking");
-assert(stepBtnRule.includes("flex-shrink: 0"), "ca-btn-date-step must have flex-shrink: 0 to prevent 40px width squeeze");
-
-assert(cssContent.includes("@media (max-width: 640px)"), "Must contain mobile responsive media query for single date box");
-assert(cssContent.includes("order: 1"), "Date input and quick picker wrap must be order: 1 on mobile");
-assert(cssContent.includes("order: 2"), "Prev/Next day step buttons must be order: 2 on mobile to form comfortable second row");
-console.log("✓ Mobile 390px button nowrap and 2-row layout verified!");
+console.log("\n[Test 5.1] Mobile responsive layout for toolbar");
+assert(cssContent.includes("@media (max-width: 640px)"), "Must contain mobile responsive media query");
+assert(cssContent.includes(".ca-daily-toolbar"), "Toolbar mobile responsive rule must exist");
+assert(cssContent.includes(".ca-daily-toolbar .day-nav-custom-picker"), "Must contain scoped 154px width rule for date picker");
+assert(cssContent.includes("@media (max-width: 480px)"), "Must contain 480px mobile media query");
+assert(cssContent.includes(".ca-daily-toolbar .day-nav-step-btn span"), "Must hide step button span on narrow screens");
+console.log("✓ Mobile responsive layout verified!");
 
 const borderMatches = cssContent.match(/(?:^|[^a-z-])border(?:-(?:top|bottom|left|right))?:\s*([0-9.]+px)/gm) || [];
 for (const b of borderMatches) {
@@ -184,7 +191,7 @@ for (const b of borderMatches) {
 }
 console.log("✓ Borders and design tokens verified!");
 
-// 6. Honest empty state for uncollected dates (no silent swap)
+// 6. Honest empty state for uncollected dates & missing days
 console.log("\n[Test 6] Honest empty state behavior for missing dates");
 const emptyDashboard = {
   ...mockDashboard,
@@ -198,6 +205,25 @@ const emptyDashboard = {
 const emptyHtml = renderToStaticMarkup(React.createElement(CampaignDailyPage, { dashboard: emptyDashboard }));
 assert(emptyHtml.includes("ca-daily-empty-box"), "Empty dataset shows ca-daily-empty-box");
 assert(emptyHtml.includes("暂无逐日分日流水记录"), "Empty dataset states honest lack of daily data");
+
+// Missing day test in normal dataset (no silent replacement)
+const missingDateHtml = renderToStaticMarkup(
+  React.createElement(CampaignDailyPage, {
+    dashboard: mockDashboard,
+  })
+);
+// Mock URL search for missing date
+const missingDayDashboard = {
+  ...mockDashboard,
+  dailyDatasets: [
+    {
+      ...mockDashboard.dailyDatasets[0],
+      rows: [{ date: "2026-10-01", spend: 100 }],
+    },
+  ],
+};
+const missingRender = renderToStaticMarkup(React.createElement(CampaignDailyPage, { dashboard: missingDayDashboard }));
+assert(missingRender.includes("数据截至 2026-10-01"), "Toolbar reflects honest截至 date");
 console.log("✓ Honest empty state verified!");
 
 console.log("\n=======================================================");

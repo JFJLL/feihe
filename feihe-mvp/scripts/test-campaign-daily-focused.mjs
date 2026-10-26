@@ -277,13 +277,13 @@ console.log("\n[Test 5] Development Verification: Accommodating enriched winner-
     const wipesJson = JSON.parse(fs.readFileSync(wipesEnrichedPath, "utf8"));
     const taosouEnriched = wipesJson.dailyDatasets && wipesJson.dailyDatasets.find(d => d.id === "wipes-daily-taosou");
     assert(taosouEnriched, "wipes-daily-taosou enriched dataset exists");
-    assert.equal(taosouEnriched.rows.length, 36, "Enriched taosou has 36 days");
+    assert.equal(taosouEnriched.rows.length, 42, "Enriched taosou has 42 days");
 
-    const rows36 = buildCalendarRows(taosouEnriched, taosouEnriched.rows[0].date, taosouEnriched.rows[taosouEnriched.rows.length - 1].date);
-    const configs36 = getDatasetChartConfigs(taosouEnriched, rows36);
+    const rows42 = buildCalendarRows(taosouEnriched, taosouEnriched.rows[0].date, taosouEnriched.rows[taosouEnriched.rows.length - 1].date);
+    const configs42 = getDatasetChartConfigs(taosouEnriched, rows42);
 
     // Must include the new search_uv + shop_uv flow chart
-    const uvFlowChart = configs36.find(c => c.id === "taosou-uv-flow");
+    const uvFlowChart = configs42.find(c => c.id === "taosou-uv-flow");
     assert(uvFlowChart, "Taosou must include search_uv + shop_uv flow chart");
     assert.equal(uvFlowChart.series.length, 2, "UV flow chart has 2 series");
     assert.equal(uvFlowChart.series[0].key, "search_uv");
@@ -293,8 +293,8 @@ console.log("\n[Test 5] Development Verification: Accommodating enriched winner-
     assert.equal(uvFlowChart.series[0].axis, "left");
     assert.equal(uvFlowChart.series[1].axis, "left");
     assert(!uvFlowChart.series.some(s => s.key === "redstar_uv"), "UV flow chart must NOT include redstar_uv (different attribution)");
-    assert.equal(configs36.length, 4, "Enriched taosou has 4 combination charts");
-    console.log("✓ Enriched 36-day taosou dataset verified with search_uv + shop_uv dual lines!");
+    assert.equal(configs42.length, 4, "Enriched taosou has 4 combination charts");
+    console.log("✓ Enriched 42-day taosou dataset verified with search_uv + shop_uv dual lines!");
   }
 }
 

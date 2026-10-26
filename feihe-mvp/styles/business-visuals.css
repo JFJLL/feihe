@@ -228,6 +228,44 @@
   margin: 10px 0;
 }
 
+@media (max-width: 640px) {
+  .bd-keywords-top-container .bv-ranks {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .bv-rank-row {
+    grid-template-columns: minmax(70px, 1.2fr) minmax(40px, 1fr) auto !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .bv-feed-audience-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bv-today {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .bv-word-cards {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  .bv-word-cards article {
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px 12px !important;
+  }
+  .bv-word-head h4 {
+    white-space: normal !important;
+    word-break: break-word !important;
+    min-width: 0 !important;
+  }
+}
+
 .bd-keywords-top-container .bv-ranks h4 {
   grid-column: 1 / -1;
   margin-bottom: 6px;
