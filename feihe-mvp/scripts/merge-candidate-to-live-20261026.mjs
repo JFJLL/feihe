@@ -530,7 +530,10 @@ export async function runMergeProcess(options = {}) {
     for (const ds of dsUpdates) {
       const currentDsRow = liveDb.prepare('SELECT id, name, spreadsheet, status, is_paused, sheet_id, mapping_json, updated_at FROM data_sources WHERE id=?').get(ds.id);
       const baselineDsRow = baselineDsMap.get(ds.id);
-      if (!currentDsRow || JSON.stringify(currentDsRow) !== JSON.stringify(baselineDsRow)) {
+      if (ds.status === 'retired' && !baselineDsRow && !currentDsRow) {
+        continue;
+      }
+      if (!currentDsRow || !baselineDsRow || JSON.stringify(currentDsRow) !== JSON.stringify(baselineDsRow)) {
         throw new Error(`Concurrent data source modification detected for ${ds.id}`);
       }
     }

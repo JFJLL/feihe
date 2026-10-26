@@ -283,3 +283,60 @@ test('runMergeProcess: successful merge applies verified delta atomically with b
 
   verifyDb.close();
 });
+
+test('runMergeProcess: successful merge applies when optional retired source does not exist in live DB', async () => {
+  const { livePath, candPath } = await setupSyntheticDatabases();
+
+  // Delete optional retired source to simulate production where it was never configured
+  const liveDb = new DatabaseSync(livePath);
+  liveDb.prepare("DELETE FROM data_sources WHERE id='src-huang-tiane-commerce-alt'").run();
+  liveDb.close();
+
+  const result = await runMergeProcess({
+    customLiveDb: livePath,
+    customCandidateDb: candPath,
+    isDryRun: false,
+    isApply: true,
+    isApproved: true,
+  });
+
+  assert.equal(result.status, 'success');
+  assert(result.liveBackupPath && fs.existsSync(result.liveBackupPath), 'backup was created');
+
+  const verifyDb = new DatabaseSync(livePath, { readOnly: true });
+  // Verify fake retired source was NOT created
+  const altSource = verifyDb.prepare("SELECT * FROM data_sources WHERE id='src-huang-tiane-commerce-alt'").get();
+  assert.equal(altSource, undefined, 'optional retired source should not be created if absent');
+
+  // Verify other canonical sources were updated correctly
+  const commSource = verifyDb.prepare("SELECT name FROM data_sources WHERE id='src-huang-tiane-commerce-canonical'").get();
+  assert.equal(commSource.name, '黄天鹅商销日报表');
+
+  verifyDb.close();
+});
+
+test('runMergeProcess: canonical missing source triggers rollback and aborts merge', async () => {
+  const { livePath, candPath } = await setupSyntheticDatabases();
+
+  // Delete a required canonical source
+  const liveDb = new DatabaseSync(livePath);
+  liveDb.prepare("DELETE FROM data_sources WHERE id='src-huang-tiane-commerce-canonical'").run();
+  liveDb.close();
+
+  await assert.rejects(
+    () => runMergeProcess({
+      customLiveDb: livePath,
+      customCandidateDb: candPath,
+      isDryRun: false,
+      isApply: true,
+      isApproved: true,
+    }),
+    /Concurrent data source modification detected for src-huang-tiane-commerce-canonical/
+  );
+
+  // Verify live DB remains rolled back and untouched
+  const verifyDb = new DatabaseSync(livePath, { readOnly: true });
+  const config = JSON.parse(verifyDb.prepare("SELECT config_json FROM business_project_config WHERE project_id='qicui'").get().config_json);
+  assert.equal(config.bindings.find(b => b.key === 'keywords')?.url, 'https://example.test/keywords-old');
+  verifyDb.close();
+});
