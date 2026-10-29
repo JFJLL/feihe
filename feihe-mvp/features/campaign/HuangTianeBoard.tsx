@@ -479,15 +479,19 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
   const model = useMemo(() => extractHuangTianeData(dashboard), [dashboard]);
 
   const { htMinDate, htMaxDate } = useMemo(() => {
-    const dates = (model.cidTotal || [])
+    const dates = [
+      ...(model.cidTotal || []),
+      ...(model.brandDaily || []),
+      ...(model.commerceDaily || []),
+    ]
       .map((r) => String(r.date || ''))
-      .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))
+      .filter((d) => isValidIsoDate(d))
       .sort();
     return {
       htMinDate: dates[0] || '2026-10-01',
       htMaxDate: dates[dates.length - 1] || '2026-10-25',
     };
-  }, [model.cidTotal]);
+  }, [model.cidTotal, model.brandDaily, model.commerceDaily]);
 
   const [htFrom, setHtFrom] = useState<string>(() => {
     if (typeof window !== 'undefined') {

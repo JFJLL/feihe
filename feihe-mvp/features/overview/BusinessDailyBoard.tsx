@@ -1163,6 +1163,7 @@ export function BusinessDailyBoard({
                         if (displayDay) {
                           setFrom(displayDay);
                           setTo(displayDay);
+                          setDay(displayDay);
                         }
                       }}
                     >
@@ -1177,6 +1178,7 @@ export function BusinessDailyBoard({
                           d.setUTCDate(d.getUTCDate() - 6);
                           setFrom(d.toISOString().slice(0, 10));
                           setTo(displayDay);
+                          setDay(displayDay);
                         }
                       }}
                     >
@@ -1189,6 +1191,7 @@ export function BusinessDailyBoard({
                         if (displayDay) {
                           setFrom(displayDay.slice(0, 7) + '-01');
                           setTo(displayDay);
+                          setDay(displayDay);
                         }
                       }}
                     >

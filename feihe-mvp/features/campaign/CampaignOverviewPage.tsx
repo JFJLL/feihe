@@ -199,6 +199,13 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return { ...range, minDate: minD, maxDate: maxD, rangeText: `${minD} ~ ${maxD} (共 ${rows.length} 个采集日)`, rows };
   }, [wipesDailyDataset, overviewFrom, overviewTo]);
 
+  const activeDailyInfo = useMemo(() => {
+    if (projectId === "kailas") return kailasDailyInfo;
+    if (projectId === "meiling") return meilingDailyInfo;
+    if (projectId === "winner-wipes") return wipesDailyInfo;
+    return null;
+  }, [projectId, kailasDailyInfo, meilingDailyInfo, wipesDailyInfo]);
+
   const kailasDailyMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string; badge?: string; status?: "default" | "accent" | "warning" | "danger" | "success"; sparkline?: (number | null)[] }> => {
     const totalPlanned = findKpi("kailas-budget-total");
     const totalSpend = findKpi("kailas-spend-total");
@@ -479,9 +486,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         ? [meilingExecutionTable, meilingFourLinesTable]
         : [meiling618KpiTable, findTable("meiling-kpi-unlocked-kpi-618")];
     } else if (projectId === "winner-wipes") {
-      list = activeSnapshot === "daily-1019"
-        ? [wipesBudgetAllocTable, wipesPlacementsTable]
-        : [findTable("wipes-kpi-comparison-table")];
+      list = [wipesBudgetAllocTable, wipesPlacementsTable, findTable("wipes-kpi-comparison-table")];
     } else {
       list = tables.slice(0, 2);
     }
@@ -617,7 +622,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             to={overviewTo}
             minDate={overviewMinDate}
             maxDate={overviewMaxDate}
-            totalValidDays={kailasDailyInfo?.rows.length || meilingDailyInfo?.rows.length || wipesDailyInfo?.rows.length || 0}
+            totalValidDays={activeDailyInfo?.rows.length ?? 0}
             onChange={handleRangeChange}
           />
         </div>
