@@ -243,7 +243,14 @@ function ProjectShellContent({
         <React.Fragment key={currentProject?.projectRole || 'pending'}>{content}</React.Fragment>
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>
-      {Boolean(currentProject) && !['data', 'reports'].includes(activeSection) && <FloatingAgent projectId={projectId} activeSection={activeSection} />}
+      {Boolean(currentProject) && !['data', 'reports'].includes(activeSection) && (
+        <FloatingAgent
+          projectId={projectId}
+          projectName={currentProject?.name}
+          projectBrand={currentProject?.brand}
+          activeSection={activeSection}
+        />
+      )}
     </div>
   );
 }

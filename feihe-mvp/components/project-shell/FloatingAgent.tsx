@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ProjectContext } from './ProjectContext';
 import { api } from '../../lib/hooks/use-project-data';
 import type { Plan, Spec } from '../../lib/types/project';
 import { useCacheIdentity } from './IdentityBoundary';
@@ -69,11 +70,27 @@ function timeLabel(iso: string) {
 
 export function FloatingAgent({
   projectId,
+  projectName,
+  projectBrand,
   activeSection = 'overview',
 }: {
   projectId: string;
+  projectName?: string;
+  projectBrand?: string;
   activeSection?: string;
 }) {
+  const projectCtx = useContext(ProjectContext);
+  const currentProject = projectCtx?.currentProject;
+
+  const resolvedBrand = projectBrand || currentProject?.brand;
+  const resolvedName = projectName || currentProject?.name;
+
+  const projectLabel = useMemo(() => {
+    if (resolvedName) return resolvedName;
+    return projectId === 'qicui' ? '启萃项目' : projectId;
+  }, [projectId, resolvedName]);
+
+  const assistantTitle = '智能分析助手';
   const identity = useCacheIdentity();
   const [open, setOpen] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
@@ -299,7 +316,7 @@ export function FloatingAgent({
 
       <div className={'floating-agent-mask' + (open ? ' show' : '')} onClick={() => setOpen(false)} />
       {open && (
-        <aside className="floating-agent-panel show" aria-label="项目智能助手">
+        <aside className="floating-agent-panel show" aria-label={assistantTitle}>
           <header className="floating-agent-head">
             {showHistory ? (
               <>
@@ -320,7 +337,7 @@ export function FloatingAgent({
                       <span className="floating-agent-status-badge online" title="模型接口：Keystone gpt-5.6-terra">● 已连接</span>
                     </div>
                     <div className="floating-agent-head-sub-row">
-                      <span>{projectId === 'qicui' ? '启萃项目' : projectId}</span>
+                      <span>{projectLabel}</span>
                       <span className="floating-agent-sub-divider">·</span>
                       <span className="floating-agent-day-tag">业务日：{currentDay}</span>
                     </div>
@@ -356,7 +373,7 @@ export function FloatingAgent({
                 {(!active || active.messages.length === 0) && (
                   <div className="floating-agent-welcome">
                     <div className="floating-agent-avatar">✦</div>
-                    <h4>Hi，我是启萃智能分析助手</h4>
+                    <h4>Hi，我是{assistantTitle}</h4>
                     <p>{projectId === 'qicui' ? '已接入当前项目真实业务底表、937篇档案与竞品采样库。可直接提问分日投放消耗、达人发布进度或口碑风险。' : '使用本项目已发布的看板指标生成可核对报告。当前未启用AI增强，不自动调用其他项目或行业外部接口。'}</p>
                     <div className="floating-agent-quick-head">
                       <span>快捷分析</span>

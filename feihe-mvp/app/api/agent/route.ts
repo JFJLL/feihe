@@ -169,7 +169,7 @@ async function handleChatAgent(
   const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
   const model = r.KEYSTONE_MODEL || process.env.KEYSTONE_MODEL || 'gpt-5.6-terra';
 
-  const systemInstructions = `你是飞鹤启萃营销与经营分析助手。请严格基于给定的真实业务底表与事实数据回答用户问题。
+  const systemInstructions = `你是智能分析助手。请严格基于给定的真实业务底表与事实数据回答用户问题。
 你必须遵守以下数据真实性与分析准则：
 1. 涉及广告投放消耗时，严格引用真实核算金额与数据出处（例如：业务日期为 2026-10-13 时，广告消耗为 275,326.74 元，数据来源 weekly-q4 飞书 Wiki row 19 col 50；若某日期如 2026-10-14 尚未采集或为缺失状态，必须如实说明缺失/未观测，绝不可捏造）；
 2. 严格区分底表自然评论与供应商交付，未分析情感保持为 null，不能当成 0 或误判为正向/无风险；
