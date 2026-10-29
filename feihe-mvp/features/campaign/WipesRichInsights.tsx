@@ -499,7 +499,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               {channelRows.map((c, i) => (
                 <div key={i} className="wipes-info-card">
                   <div className="wipes-info-title">
-                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#5b5bd6' : i === 1 ? '#008573' : i === 2 ? '#ffc53d' : '#e5484d' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#5b5bd6' : i === 1 ? '#006d5b' : i === 2 ? '#fff7c2' : '#ce2c31', color: i === 2 ? '#824900' : '#ffffff' }}>
                       {String(c.channel ?? '')}端
                     </span>
                     <span>{String(c.channelName ?? '')}</span>
@@ -549,7 +549,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               </div>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">手淘搜索主动回流</div>
-                <div className="wipes-info-stat" style={{ color: '#ffc53d' }}>
+                <div className="wipes-info-stat" style={{ color: '#824900' }}>
                   {fullFunnelTable?.rows?.[5]?.metricValue ? fmtComboNum(fullFunnelTable.rows[5].metricValue) : '4,844'} 人
                 </div>
                 <div className="wipes-info-desc">
@@ -915,7 +915,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">定档履约成单率</div>
-              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#ffc53d' }}>3位 100% 履约</div>
+              <div className="wipes-info-stat" style={{ fontSize: 20, color: '#824900' }}>3位 100% 履约</div>
               <div className="wipes-info-desc">硕士妈妈黄慧、刘慧教授说健康、沈主任有点忙，高质过审发布并贡献超万次互动</div>
             </div>
           </div>

@@ -364,6 +364,10 @@
   text-align: center;
 }
 
+.ca-cross-card-empty small {
+  font-size: 12px;
+}
+
 .ca-cross-card-metrics {
   display: flex;
   flex-direction: column;

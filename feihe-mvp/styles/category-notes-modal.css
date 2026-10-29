@@ -666,10 +666,10 @@
   gap: 4px;
 }
 
-.note-kpi-card.card-blue { border-top:3px solid #0090ff; }
-.note-kpi-card.card-purple { border-top:3px solid #5753c6; }
-.note-kpi-card.card-teal { border-top:3px solid #0d9b8a; }
-.note-kpi-card.card-amber { border-top:3px solid #e2a336; }
+.note-kpi-card.card-blue { border-color: #acd8fc; }
+.note-kpi-card.card-purple { border-color: #dadcff; }
+.note-kpi-card.card-teal { border-color: #b8eae0; }
+.note-kpi-card.card-amber { border-color: #fbe577; }
 
 .note-kpi-card .kpi-label {
   font-size: 12px;

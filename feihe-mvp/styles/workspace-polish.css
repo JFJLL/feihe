@@ -251,7 +251,7 @@ label:has(select),
 .ops-workspace .ops-metric-card {
   --metric-tint: #f9f9fb; --metric-line: #acd8fc; --metric-accent: #0090ff;
   background: linear-gradient(135deg, #ffffff 15%, var(--metric-tint));
-  border:0.5px solid var(--metric-line); border-top:3px solid var(--metric-accent);
+  border:0.5px solid var(--metric-line);
   border-radius: 12px; padding: 18px; gap: 7px;
 }
 .ops-workspace .ops-metric-card-teal { --metric-tint: #f9f9fb; --metric-line: #b8eae0; --metric-accent: #12a594; }
@@ -349,7 +349,7 @@ label:has(select),
 .ops-workspace :is(.goal-form-grid, .form-grid, .editor-grid) label { min-width: 0; }
 .ops-workspace .growth-sample-board .ops-table td:first-child { max-width: 280px; white-space: normal; overflow-wrap: anywhere; }
 .ops-workspace .growth-sample-board { min-width: 0; }
-.ops-workspace .growth-brand-card { border:0.5px solid #d5efff; border-top:3px solid #0090ff; border-radius: 12px; background: linear-gradient(140deg, #ffffff, #f9f9fb); padding: 16px; gap: 10px; }
+.ops-workspace .growth-brand-card { border:0.5px solid #d5efff; border-radius: 12px; background: linear-gradient(140deg, #ffffff, #f9f9fb); padding: 16px; gap: 10px; }
 .ops-workspace .growth-brand-card .ops-metric-card { background: transparent; border:0; box-shadow: none; padding: 0; }
 .ops-workspace .growth-brand-card > .reference-kpi-meta { margin: 0; padding-top: 7px; border-top:0.5px solid #e6f4fe; }
 .ops-workspace .growth-brand-card .ops-metric-card-label { font-size: 16px; color:#1c2024; }

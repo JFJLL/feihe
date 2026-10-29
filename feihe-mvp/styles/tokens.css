@@ -8,9 +8,9 @@
   --slate-6: #d9d9e0;
   --slate-7: #cdced6;
   --slate-8: #b9bbc6;
-  --slate-9: #8b8d98;
-  --slate-10: #80838d;
-  --slate-11: #60646c;
+  --slate-9: #5a5e67;
+  --slate-10: #5a5e67;
+  --slate-11: #5a5e67;
   --slate-12: #1c2024;
 
   --teal-1: #fafefd;
@@ -21,9 +21,9 @@
   --teal-6: #a1ded2;
   --teal-7: #83cdc1;
   --teal-8: #53b9ab;
-  --teal-9: #12a594;
-  --teal-10: #0d9b8a;
-  --teal-11: #008573;
+  --teal-9: #006d5b;
+  --teal-10: #006d5b;
+  --teal-11: #006d5b;
   --teal-12: #0d3d38;
 
   --iris-1: #fdfdff;
@@ -133,6 +133,8 @@
   --shadow-md: 0 4px 14px rgba(28, 32, 36, 0.05);
   --shadow-primary: 0 4px 14px rgba(0, 133, 115, 0.2);
   --transition-std: 250ms ease-out;
+
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 * {
@@ -147,7 +149,7 @@ body {
   margin: 0;
   color: var(--text-main);
   background: var(--bg-page);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 

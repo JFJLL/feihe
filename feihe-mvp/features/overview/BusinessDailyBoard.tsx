@@ -67,7 +67,7 @@ function GroupHeading({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <h3
+        <h2
           style={{
             fontSize: 14,
             fontWeight: 700,
@@ -92,7 +92,7 @@ function GroupHeading({
             </span>
           )}
           {title}
-        </h3>
+        </h2>
         {subtitle && (
           <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>{subtitle}</span>
         )}
@@ -1222,17 +1222,7 @@ export function BusinessDailyBoard({
                           setFrom(val);
                         }
                         setTo(val);
-                      }}
-                    />
-                  </div>
-                  <div className="bd-filter-item bd-filter-item-secondary">
-                    <span className="bd-filter-label bd-baseline-label">基准日</span>
-                    <CustomDatePicker
-                      aria-label="业务基准日"
-                      value={displayDay}
-                      onChange={e => {
-                        setDay(e.target.value);
-                        setNotice('');
+                        setDay(val);
                       }}
                     />
                   </div>
@@ -1324,6 +1314,7 @@ export function BusinessDailyBoard({
 
           {/* Layer 2: Lightweight Metadata (Cutoff & Interval only) */}
           <div className="bd-cockpit-meta-row">
+            <div className="bd-meta-left">
             <span className="bd-meta-text">
               {overview ? (
                 <>
@@ -1349,33 +1340,33 @@ export function BusinessDailyBoard({
               </span>
             )}
           </div>
-        </div>
 
-        {/* Independent Planar Section Nav outside the Card */}
-        <nav
-          className="bd-planar-nav bd-section-nav"
-          aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
-        >
-          {(overview ? overviewNavItems : dailyNavItems).map(item => (
-            <a
-              key={item.id}
-              href={'#' + item.id}
-              className="bd-planar-nav-link"
-              onClick={e => {
-                if (typeof document !== 'undefined') {
-                  const target = document.getElementById(item.id);
-                  if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    target.focus({ preventScroll: true });
+          <nav
+            className="bd-planar-nav bd-section-nav"
+            aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
+          >
+            {(overview ? overviewNavItems : dailyNavItems).map(item => (
+              <a
+                key={item.id}
+                href={'#' + item.id}
+                className="bd-planar-nav-link"
+                onClick={e => {
+                  if (typeof document !== 'undefined') {
+                    const target = document.getElementById(item.id);
+                    if (target) {
+                      e.preventDefault();
+                      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      target.focus({ preventScroll: true });
+                    }
                   }
-                }
-              }}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        </div>
 
         {notice && <p role="status" className="bd-notice-banner">{notice}</p>}
 

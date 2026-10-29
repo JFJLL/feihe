@@ -41,7 +41,7 @@
   box-shadow: 0 1px 4px rgba(28, 32, 36, 0.04);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1180px) {
   .ht-command-bar {
     flex-wrap: nowrap !important;
   }
@@ -54,6 +54,18 @@
   flex-wrap: nowrap;
   flex: 1;
   min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ht-command-bar-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ht-command-bar + .ht-layer {
+  margin-top: -20px;
 }
 
 .ht-jumpbar-nav-row {
@@ -782,9 +794,11 @@ details.ht-layer[open] > .ht-summary-header::after {
 }
 
 .ht-benchmark-val {
-  font-size: 16px;
+  font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 700;
   color:var(--ht-text-dark);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .ht-benchmark-card.highlight .ht-benchmark-val {
@@ -1092,7 +1106,7 @@ details.ht-layer[open] > .ht-summary-header::after {
 }
 .ht-aips-packages { display: flex; flex-direction: column; gap: 8px; font-size: 12px; }
 .ht-aips-packages > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px 12px; padding: 10px 0; border-bottom:0.5px solid #f0f0f3; }
-.ht-aips-packages span, .ht-aips-packages small { color:var(--ht-text-muted); }
+.ht-aips-packages span, .ht-aips-packages small { color:var(--ht-text-muted); font-size: 12px; }
 
 /* ==========================================================================
    Enterprise BI v5 Diverse Visualizations for Ads & Content

@@ -500,7 +500,6 @@
 .growth-kpis article, .linkage-kpis article {
   background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
   border:0.5px solid #acd8fc;
-  border-top:3px solid #0090ff;
   border-radius: var(--radius-lg);
   padding: 18px 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
@@ -1626,13 +1625,7 @@
 }
 
 .report-blueprint article::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: #0588f0;
+  display: none;
 }
 
 .report-blueprint article b {
@@ -3514,8 +3507,8 @@ label.upload input[type="file"] {
   padding: 10px 12px;
   background: #ffffff;
   border:0.5px solid #d9d9e0;
-  border-left-width: 4px;
-  border-radius: 0 8px 8px 0;
+  border-left-width: 0.5px;
+  border-radius: 8px;
 }
 .item-title-row {
   display: flex;
@@ -4218,7 +4211,7 @@ button.primary:disabled {
   background: #f9f9fb !important;
   border:0.5px solid #d9d9e0 !important;
   padding: 12px 14px !important;
-  border-left-width: 4px !important;
+  border-left-width: 0.5px !important;
 }
 .learning-item-box strong {
   font-size: 14px !important;

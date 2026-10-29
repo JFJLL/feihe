@@ -58,6 +58,7 @@ export type CampaignComboChartProps = {
   title: string;
   height?: number; // default: 280
   xLabel?: string;
+  onRowClick?: (row: Record<string, unknown>, index: number) => void;
 };
 
 // ============================================================================
@@ -239,6 +240,7 @@ export function CampaignComboChart({
   title,
   height = 280,
   xLabel,
+  onRowClick,
 }: CampaignComboChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(640);
@@ -795,9 +797,15 @@ export function CampaignComboChart({
                 onMouseEnter={() => setHoverIndex(i)}
                 onFocus={() => setHoverIndex(i)}
                 onBlur={() => setHoverIndex(null)}
-                onClick={() => setSelectedIndex(i)}
+               onClick={() => {
+                 setSelectedIndex(i);
+                 onRowClick?.(rows[i], i);
+               }}
                 onKeyDown={(e) => {
-                  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                 if (e.key === 'Enter' || e.key === ' ') {
+                   e.preventDefault();
+                   onRowClick?.(rows[i], i);
+                 } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
                     e.preventDefault();
                     const next = Math.min(rowCount - 1, i + 1);
                     setHoverIndex(next);
@@ -817,7 +825,7 @@ export function CampaignComboChart({
                     setSelectedIndex(rowCount - 1);
                   }
                 }}
-                style={{ cursor: 'pointer', outline: 'none' }}
+                style={{ cursor: onRowClick ? 'pointer' : 'default', outline: 'none' }}
               />
             );
           })}

@@ -18,37 +18,6 @@
   white-space: nowrap;
 }
 
-.ca-snapshot-pills {
-  display: inline-flex;
-  background: #e8e8ec;
-  padding: 2px;
-  border-radius: 8px;
-  gap: 2px;
-}
-
-.ca-snapshot-btn {
-  border:none;
-  background: transparent;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color:#60646c;
-  cursor: pointer;
-  transition: all 250ms ease-out;
-}
-
-.ca-snapshot-btn:hover {
-  color:#1c2024;
-}
-
-.ca-snapshot-btn.active {
-  background: #ffffff;
-  color:var(--ca-palette-primary, var(--teal-11, #008573));
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
 /* --- Sticky Console & Integrated Jumpbar --- */
 .ca-sticky-console,
 .ca-header {
@@ -59,7 +28,7 @@
   backdrop-filter: blur(10px);
   border:0.5px solid var(--ca-palette-border-warm, #d9d9e0);
   border-radius: 8px;
-  padding: 8px 14px !important;
+  padding: 10px 16px !important;
   min-height: 44px;
   margin: 0 0 10px;
   display: flex;
@@ -85,6 +54,49 @@
   flex-wrap: nowrap;
   flex: 1;
   min-width: 0;
+}
+
+.ca-console-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ca-view-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--slate-2, #f9f9fb);
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  border-radius: 6px;
+  padding: 2px;
+  height: 28px;
+  box-sizing: border-box;
+}
+
+.ca-view-switch-btn {
+  height: 24px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--slate-11, #5a5e67);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 150ms ease;
+  white-space: nowrap;
+}
+
+.ca-view-switch-btn:hover {
+  color: var(--slate-12, #1c2024);
+}
+
+.ca-view-switch-btn.active {
+  background: #ffffff;
+  color: var(--teal-11, #006d5b);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .ca-console-brand,
@@ -237,6 +249,13 @@
 .ca-section-macro-card .ca-panel .ca-panel-header {
   background: transparent;
   border-bottom: 0.5px solid var(--slate-4, #e8e8ec);
+  padding: 12px 16px 10px !important;
+  margin-bottom: 0 !important;
+}
+
+.ca-section-macro-card .ca-panel .ca-panel-body,
+.ca-section-macro-card .ca-panel > .ca-panel-body {
+  padding: 14px 16px 16px !important;
 }
 
 .ca-section-macro-card .ca-panel .ca-panel-title {

@@ -429,4 +429,17 @@
   .bv-seo-summary {
     grid-template-columns: 1fr !important;
   }
+  .bv-feed-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .bv-feed-kpis strong {
+    font-size: clamp(16px, 4vw, 20px) !important;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 380px) {
+  .bv-feed-kpis {
+    grid-template-columns: 1fr !important;
+  }
 }

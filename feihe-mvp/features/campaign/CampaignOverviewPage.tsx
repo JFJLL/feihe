@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import type {
   CampaignDashboard,
@@ -22,6 +22,8 @@ import "./CampaignOverviewPage.css";
 import { CampaignComboChart } from "./CampaignComboChart";
 import { CampaignEnrichmentPanels } from "./CampaignEnrichmentPanels";
 import { buildCalendarRows } from "./campaign-daily-model";
+import { OverviewDateRangeBar } from "../../components/ui/OverviewDateRangeBar";
+import { isValidIsoDate } from "../../components/ui/custom-date-picker-utils";
 import {
   safeNum,
   strictSum,
@@ -90,29 +92,112 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return dailyDatasets.find((d) => d.id === "wipes-daily-delivery") || dailyDatasets[0];
   }, [dailyDatasets]);
 
+  const activeDailyDataset = useMemo(() => {
+    if (projectId === "kailas") return kailasDailyDataset;
+    if (projectId === "meiling") return meilingDailyDataset;
+    if (projectId === "winner-wipes") return wipesDailyDataset;
+    return dailyDatasets[0];
+  }, [projectId, kailasDailyDataset, meilingDailyDataset, wipesDailyDataset, dailyDatasets]);
+
+  const { overviewMinDate, overviewMaxDate } = useMemo(() => {
+    const range = computeDateRange(activeDailyDataset?.rows);
+    return {
+      overviewMinDate: range?.minDate || "",
+      overviewMaxDate: range?.maxDate || "",
+    };
+  }, [activeDailyDataset]);
+
+  const [overviewFrom, setOverviewFrom] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search);
+      const f = p.get("from");
+      if (f && isValidIsoDate(f)) return f;
+    }
+    return "";
+  });
+
+  const [overviewTo, setOverviewTo] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search);
+      const t = p.get("to") || p.get("day");
+      if (t && isValidIsoDate(t)) return t;
+    }
+    return "";
+  });
+
+  useEffect(() => {
+    if (!overviewFrom && overviewMinDate) setOverviewFrom(overviewMinDate);
+    if (!overviewTo && overviewMaxDate) setOverviewTo(overviewMaxDate);
+  }, [overviewMinDate, overviewMaxDate]);
+
+  const handleRangeChange = useCallback((newFrom: string, newTo: string) => {
+    setOverviewFrom(newFrom);
+    setOverviewTo(newTo);
+    if (typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search);
+      if (newFrom) p.set("from", newFrom); else p.delete("from");
+      if (newTo) p.set("to", newTo); else p.delete("to");
+      window.history.replaceState(null, "", window.location.pathname + "?" + p.toString());
+    }
+  }, []);
+
+  const handleDateClick = useCallback((day: string) => {
+    if (typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search);
+      p.set("tab", "daily");
+      p.set("day", day);
+      window.history.pushState({ tab: "daily", day }, "", window.location.pathname + "?" + p.toString());
+      window.dispatchEvent(new Event("popstate"));
+    }
+  }, []);
+
   const kailasDailyInfo = useMemo(() => {
     if (!kailasDailyDataset) return null;
     const range = computeDateRange(kailasDailyDataset.rows);
     if (!range) return null;
-    const rows = buildCalendarRows(kailasDailyDataset, range.minDate, range.maxDate);
-    return { ...range, rows };
-  }, [kailasDailyDataset]);
+    const minD = overviewFrom || range.minDate;
+    const maxD = overviewTo || range.maxDate;
+    const allRows = buildCalendarRows(kailasDailyDataset, range.minDate, range.maxDate);
+    const rows = allRows.filter((r) => {
+      const d = String(r.date || "");
+      if (overviewFrom && d < overviewFrom) return false;
+      if (overviewTo && d > overviewTo) return false;
+      return true;
+    });
+    return { ...range, minDate: minD, maxDate: maxD, rangeText: `${minD} ~ ${maxD} (共 ${rows.length} 个采集日)`, rows };
+  }, [kailasDailyDataset, overviewFrom, overviewTo]);
 
   const meilingDailyInfo = useMemo(() => {
     if (!meilingDailyDataset) return null;
     const range = computeDateRange(meilingDailyDataset.rows);
     if (!range) return null;
-    const rows = buildCalendarRows(meilingDailyDataset, range.minDate, range.maxDate);
-    return { ...range, rows };
-  }, [meilingDailyDataset]);
+    const minD = overviewFrom || range.minDate;
+    const maxD = overviewTo || range.maxDate;
+    const allRows = buildCalendarRows(meilingDailyDataset, range.minDate, range.maxDate);
+    const rows = allRows.filter((r) => {
+      const d = String(r.date || "");
+      if (overviewFrom && d < overviewFrom) return false;
+      if (overviewTo && d > overviewTo) return false;
+      return true;
+    });
+    return { ...range, minDate: minD, maxDate: maxD, rangeText: `${minD} ~ ${maxD} (共 ${rows.length} 个采集日)`, rows };
+  }, [meilingDailyDataset, overviewFrom, overviewTo]);
 
   const wipesDailyInfo = useMemo(() => {
     if (!wipesDailyDataset) return null;
     const range = computeDateRange(wipesDailyDataset.rows);
     if (!range) return null;
-    const rows = buildCalendarRows(wipesDailyDataset, range.minDate, range.maxDate);
-    return { ...range, rows };
-  }, [wipesDailyDataset]);
+    const minD = overviewFrom || range.minDate;
+    const maxD = overviewTo || range.maxDate;
+    const allRows = buildCalendarRows(wipesDailyDataset, range.minDate, range.maxDate);
+    const rows = allRows.filter((r) => {
+      const d = String(r.date || "");
+      if (overviewFrom && d < overviewFrom) return false;
+      if (overviewTo && d > overviewTo) return false;
+      return true;
+    });
+    return { ...range, minDate: minD, maxDate: maxD, rangeText: `${minD} ~ ${maxD} (共 ${rows.length} 个采集日)`, rows };
+  }, [wipesDailyDataset, overviewFrom, overviewTo]);
 
   const kailasDailyMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string; badge?: string; status?: "default" | "accent" | "warning" | "danger" | "success"; sparkline?: (number | null)[] }> => {
     const totalPlanned = findKpi("kailas-budget-total");
@@ -464,12 +549,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return `当前项目业务周期: ${activeHeaderPeriod}。核心数据基于最新入账记录动态呈现，缺值保持留白。`;
   }, [projectId, activeSnapshot, kailasBudgetLinesComparison, kailasFsPlacementsData, meilingFourLinesData, wipesPlacementsData, wipesDailyTargetBullets, findKpi, activeHeaderPeriod]);
 
-  const activeDailyDataset = useMemo(() => {
-    if (projectId === "kailas" && activeSnapshot === "daily-1018") return kailasDailyDataset;
-    if (projectId === "meiling" && activeSnapshot === "double11-1018") return meilingDailyDataset;
-    if (projectId === "winner-wipes" && activeSnapshot === "daily-1019") return wipesDailyDataset;
-    return undefined;
-  }, [projectId, activeSnapshot, kailasDailyDataset, meilingDailyDataset, wipesDailyDataset]);
   const activeMetrics = useMemo(() => {
     if (projectId === "kailas") return activeSnapshot === "daily-1018" ? kailasDailyMetrics : kailasQ3Metrics;
     if (projectId === "meiling") return activeSnapshot === "double11-1018" ? meilingDouble11Metrics : meiling618Metrics;
@@ -489,15 +568,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
   return (
     <div className="ca-page" role="main" aria-label={name + " 营销战役总览"}>
-      {/* 1. 一体式吸顶控制台 (章节快速定位 + 统计周期 + 业务快照切换器) */}
+      {/* 1. 一体式吸顶控制台 (章节快速定位 + 统一日期范围控制条) */}
       <header className="ca-header ca-sticky-console bd-toolbar-compact">
         <div className="ca-console-left">
-          <div className="ca-console-brand">
-            <h2 className="ca-header-title">数据总览</h2>
-          </div>
-
           <nav className="ca-section-jumpbar" aria-label="页内吸顶快速定位导航">
-            <span className="ca-jumpbar-label">📊 章节导航</span>
             <div className="ca-jumpbar-links">
               <a
                 href="#ca-sec-kpi"
@@ -535,84 +609,17 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
               )}
             </div>
           </nav>
-
-          <span className="ca-header-subtitle ca-header-period-pill" title={activeHeaderPeriod}>
-            📅 {activeHeaderPeriod}
-          </span>
         </div>
 
-        <div className="ca-overview-selector-wrap">
-          <span className="ca-overview-selector-label">业务快照:</span>
-          <div className="ca-snapshot-pills" role="radiogroup" aria-label="选择业务分析快照">
-            {projectId === "kailas" && (
-              <>
-                <button
-                  type="button"
-                  className={"ca-snapshot-btn " + (activeSnapshot === "daily-1018" ? "active" : "")}
-                  onClick={() => setActiveSnapshot("daily-1018")}
-                  role="radio"
-                  aria-checked={activeSnapshot === "daily-1018"}
-                >
-                  10.18 日报 (现金预算)
-                </button>
-                <button
-                  type="button"
-                  className={"ca-snapshot-btn " + (activeSnapshot === "q3-summary" ? "active" : "")}
-                  onClick={() => setActiveSnapshot("q3-summary")}
-                  role="radio"
-                  aria-checked={activeSnapshot === "q3-summary"}
-                >
-                  Q3 双周会小结 (含返点)
-                </button>
-              </>
-            )}
-
-            {projectId === "meiling" && (
-              <>
-                <button
-                  type="button"
-                  className={"ca-snapshot-btn " + (activeSnapshot === "double11-1018" ? "active" : "")}
-                  onClick={() => setActiveSnapshot("double11-1018")}
-                  role="radio"
-                  aria-checked={activeSnapshot === "double11-1018"}
-                >
-                  双11最新预算与四线 (截至10.18)
-                </button>
-                <button
-                  type="button"
-                  className={"ca-snapshot-btn " + (activeSnapshot === "history-618" ? "active" : "")}
-                  onClick={() => setActiveSnapshot("history-618")}
-                  role="radio"
-                  aria-checked={activeSnapshot === "history-618"}
-                >
-                  618 历史复盘 (参考)
-                </button>
-              </>
-            )}
-
-            {projectId === "winner-wipes" && (
-              <>
-                <button
-                  type="button"
-                  className={"ca-snapshot-btn " + (activeSnapshot === "daily-1019" ? "active" : "")}
-                  onClick={() => setActiveSnapshot("daily-1019")}
-                  role="radio"
-                  aria-checked={activeSnapshot === "daily-1019"}
-                >
-                  日常种草与计划预算 (10.19日报)
-                </button>
-                <button
-                  type="button"
-                  className={"ca-snapshot-btn " + (activeSnapshot === "kpi-sheet" ? "active" : "")}
-                  onClick={() => setActiveSnapshot("kpi-sheet")}
-                  role="radio"
-                  aria-checked={activeSnapshot === "kpi-sheet"}
-                >
-                  KPI目标对照
-                </button>
-              </>
-            )}
-          </div>
+        <div className="ca-console-right">
+          <OverviewDateRangeBar
+            from={overviewFrom}
+            to={overviewTo}
+            minDate={overviewMinDate}
+            maxDate={overviewMaxDate}
+            totalValidDays={kailasDailyInfo?.rows.length || meilingDailyInfo?.rows.length || wipesDailyInfo?.rows.length || 0}
+            onChange={handleRangeChange}
+          />
         </div>
       </header>
 
@@ -626,8 +633,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
           <section id="ca-sec-insight" className="ca-insight" aria-label="战役业务解读">
             <div className="ca-insight-header">
               <div className="ca-insight-badge-group">
-                <span className="ca-insight-icon">💡</span>
-                <h4 className="ca-insight-title">战役分析与核心观察</h4>
+                <span className="ca-insight-tag">核心观察</span>
+                <h3 className="ca-insight-title">战役分析与核心观察</h3>
               </div>
             </div>
             <p className="ca-insight-text">{dynamicInsight}</p>
@@ -637,11 +644,11 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             <span className="ca-quick-links-label">专项直达:</span>
             <div className="ca-quick-links-group">
               <Link href={"/projects/" + projectId + "/ads"} className="ca-nav-link">
-                <span>📊 投流分析看板</span>
+                <span>投流分析看板</span>
                 <span>→</span>
               </Link>
               <Link href={"/projects/" + projectId + "/content"} className="ca-nav-link">
-                <span>✍️ 内容与达人管理</span>
+                <span>内容与达人管理</span>
                 <span>→</span>
               </Link>
             </div>
@@ -660,6 +667,42 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             </div>
           </div>
           <div className="ca-chapter-meta">
+            {projectId === "kailas" && (
+              <div className="ca-view-switch" role="group" aria-label="数据视角切换">
+                <button
+                  type="button"
+                  className={`ca-view-switch-btn ${activeSnapshot === "daily-1018" ? "active" : ""}`}
+                  onClick={() => setActiveSnapshot("daily-1018")}
+                >
+                  当前战役大盘
+                </button>
+                <button
+                  type="button"
+                  className={`ca-view-switch-btn ${activeSnapshot === "q3-summary" ? "active" : ""}`}
+                  onClick={() => setActiveSnapshot("q3-summary")}
+                >
+                  Q3阶段复盘
+                </button>
+              </div>
+            )}
+            {projectId === "meiling" && (
+              <div className="ca-view-switch" role="group" aria-label="数据视角切换">
+                <button
+                  type="button"
+                  className={`ca-view-switch-btn ${activeSnapshot === "double11-1018" ? "active" : ""}`}
+                  onClick={() => setActiveSnapshot("double11-1018")}
+                >
+                  双11大促执行
+                </button>
+                <button
+                  type="button"
+                  className={`ca-view-switch-btn ${activeSnapshot === "history-618" ? "active" : ""}`}
+                  onClick={() => setActiveSnapshot("history-618")}
+                >
+                  618历史复盘
+                </button>
+              </div>
+            )}
             <span className="ca-chapter-period-tag">统计周期：{activeHeaderPeriod}</span>
           </div>
         </div>
@@ -721,6 +764,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     xKey="date"
                     title="投放日流水消耗与展现走势"
                     height={220}
+                    onRowClick={(row) => handleDateClick(String(row.date || ''))}
                   />
                 </ChartPanel>
             )}
@@ -847,6 +891,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     xKey="date"
                     title="分日消耗与展现走势"
                     height={220}
+                    onRowClick={(row) => handleDateClick(String(row.date || ''))}
                   />
                 </ChartPanel>
             )}
@@ -865,7 +910,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         )}
 
         {/* ---------------- 稳健酒精湿巾 WINNER-WIPES ---------------- */}
-        {projectId === "winner-wipes" && activeSnapshot === "daily-1019" && (
+        {projectId === "winner-wipes" && (
           <>
             <ChartPanel
               title="日报计划预算分配结构"
@@ -920,14 +965,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     xKey="date"
                     title="投放日流水消耗与展现走势"
                     height={220}
+                    onRowClick={(row) => handleDateClick(String(row.date || ''))}
                   />
                 </ChartPanel>
             )}
-          </>
-        )}
-
-        {projectId === "winner-wipes" && activeSnapshot === "kpi-sheet" && (
-          <>
             <ChartPanel
               title="日常种草核心考核达成 (全量 7 项)"
               subtitle="飞书底表快照 / 目标值 vs 实际完成"
@@ -940,29 +981,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
               subtitle="飞书底表快照 / 目标值 vs 实际完成"
             >
               <TargetBulletChart data={wipesDocTargetBullets} />
-            </ChartPanel>
-
-            <ChartPanel
-              title="日报计划预算分配结构"
-              subtitle="10.19 日报规划预算分配 (元)"
-            >
-              <DonutChart data={wipesBudgetDonutData} unit="元" centerLabel="计划预算合计" />
-            </ChartPanel>
-
-            <ChartPanel
-              title="分版位互动成本 (CPE) 与访客成本 (CPUV)"
-              subtitle="10.19 日报口径 / 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
-            >
-              <CampaignComboChart
-                rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
-                ]}
-                xKey="name"
-                title="分版位 CPE 与 CPUV"
-                height={220}
-              />
             </ChartPanel>
           </>
         )}

@@ -265,6 +265,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
           )}
 
           {/* 当日分布与结构面板 (无虚假小时曲线，聚焦单日结构与跨数据集横向对照) */}
+        <h2 className="sr-only">当日核心指标与分布</h2>
         <div className="ca-daily-grid">
           {/* 5.1 单日分布与结构组 */}
           {distributions.map((dist) => (

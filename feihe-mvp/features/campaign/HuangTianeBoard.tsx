@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import type { CampaignDashboard } from '../../lib/campaign-types';
 import { CustomSelect } from '../../components/ui/CustomSelect';
+import { OverviewDateRangeBar } from '../../components/ui/OverviewDateRangeBar';
+import { isValidIsoDate } from '../../components/ui/custom-date-picker-utils';
 import {
   ChartPanel,
   MetricStrip,
@@ -475,6 +477,60 @@ export interface HuangTianeBoardProps {
 
 export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeBoardProps) {
   const model = useMemo(() => extractHuangTianeData(dashboard), [dashboard]);
+
+  const { htMinDate, htMaxDate } = useMemo(() => {
+    const dates = (model.cidTotal || [])
+      .map((r) => String(r.date || ''))
+      .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))
+      .sort();
+    return {
+      htMinDate: dates[0] || '2026-10-01',
+      htMaxDate: dates[dates.length - 1] || '2026-10-25',
+    };
+  }, [model.cidTotal]);
+
+  const [htFrom, setHtFrom] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const f = p.get('from');
+      if (f && isValidIsoDate(f)) return f;
+    }
+    return '';
+  });
+
+  const [htTo, setHtTo] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const t = p.get('to') || p.get('day');
+      if (t && isValidIsoDate(t)) return t;
+    }
+    return '';
+  });
+
+  useEffect(() => {
+    if (!htFrom && htMinDate) setHtFrom(htMinDate);
+    if (!htTo && htMaxDate) setHtTo(htMaxDate);
+  }, [htMinDate, htMaxDate]);
+
+  const handleHtRangeChange = (newFrom: string, newTo: string) => {
+    setHtFrom(newFrom);
+    setHtTo(newTo);
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      if (newFrom) p.set('from', newFrom); else p.delete('from');
+      if (newTo) p.set('to', newTo); else p.delete('to');
+      window.history.replaceState(null, '', window.location.pathname + '?' + p.toString());
+    }
+  };
+
+  const filteredCidTotal = useMemo(() => {
+    return (model.cidTotal || []).filter((r) => {
+      const d = String(r.date || '');
+      if (htFrom && d < htFrom) return false;
+      if (htTo && d > htTo) return false;
+      return true;
+    });
+  }, [model.cidTotal, htFrom, htTo]);
   const [adsScope, setAdsScope] = useState<'brand' | 'cid' | 'commerce'>('brand');
   const [focusedChapter, setFocusedChapter] = useState<string | null>(null);
   const [creatorTableOpen, setCreatorTableOpen] = useState<boolean>(false);
@@ -696,12 +752,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         {/* 吸顶章节导航与周期控制台 (一体化指挥舱) */}
         <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="黄天鹅全域章节导航与周期控制台">
           <div className="ht-command-bar-left">
-            <div className="ht-command-bar-brand">
-            <h2 className="ht-header-title">黄天鹅 战役全域经营洞察</h2>
-              <span className="ht-header-badge">全域经营与受众洞察</span>
-            </div>
             <div className="ht-jumpbar-nav-row">
-            <span className="ht-jumpbar-label">📊 章节导航</span>
             <div className="ht-jumpbar-links">
               {([
                 { id: 'ht-sec-top-kpi', num: '01', label: '全域总览' },
@@ -739,9 +790,15 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             </div>
             </div>
           </div>
-          <div className="ht-header-meta">
-            <span className="ht-period-pill">品牌/CID {model.brandPeriod}</span>
-            <span className="ht-period-pill">商销 {model.commercePeriod}</span>
+          <div className="ht-command-bar-right">
+            <OverviewDateRangeBar
+              from={htFrom}
+              to={htTo}
+              minDate={htMinDate}
+              maxDate={htMaxDate}
+              totalValidDays={filteredCidTotal.length}
+              onChange={handleHtRangeChange}
+            />
           </div>
         </div>
 
@@ -920,12 +977,12 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               title="红猫CID 日消耗与成交GMV走势"
               subtitle={
                 model.cidTotalSpend !== null && model.cidTotalGmv !== null
-                  ? `累计消耗 ${formatCurrency(model.cidTotalSpend)}，成交GMV ${formatCurrency(model.cidTotalGmv)}${model.cidOverallRoi !== null ? `，综合ROI ${model.cidOverallRoi.toFixed(2)}倍` : ''}`
+                  ? `统计区间: ${htFrom || htMinDate} ~ ${htTo || htMaxDate} (共 ${filteredCidTotal.length} 个数据日) / 累计消耗 ${formatCurrency(model.cidTotalSpend)}，成交GMV ${formatCurrency(model.cidTotalGmv)}${model.cidOverallRoi !== null ? `，综合ROI ${model.cidOverallRoi.toFixed(2)}倍` : ''}`
                   : undefined
               }
             >
               <CampaignComboChart
-                rows={model.cidTotal}
+                rows={filteredCidTotal}
                 series={cidDailySeries}
                 xKey="date"
                 title="红猫CID日消耗与成交GMV走势"

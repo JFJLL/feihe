@@ -125,7 +125,7 @@
 .dashboard-template .ui-page-header-title,
 .overview-colorful-page.reference-workspace .ui-page-header-title {
   color:var(--slate-12, #1c2024) !important;
-  font-size: 16px !important;
+  font-size: 20px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   margin: 0 !important;
@@ -584,8 +584,8 @@ details.bd-aspect-details summary:hover {
   border-top:0.5px solid var(--slate-6, #d9d9e0) !important;
 }
 .bd-kpi-card-rich:not(.ca-metric-item):nth-child(3) .bd-kpi-badge {
-  background: #f9f9fb !important;
-  color:var(--amber-9, #ab6400) !important;
+  background: #fff7c2 !important;
+  color: #824900 !important;
   border:0.5px solid #ffee9c !important;
 }
 
@@ -836,7 +836,7 @@ details.bd-aspect-details summary:hover {
 
 .dashboard-template-status-badge {
   background: #f4fbf7 !important;
-  color:#208368 !important;
+  color:#166e56 !important;
   border:0.5px solid #acdec8 !important;
 }
 

@@ -551,20 +551,29 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <div style={{ padding: '16px', background: 'linear-gradient(135deg, #f9f9fb 0%, #f0f0f3 100%)', borderRadius: 12, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--slate-11, #60646c)', marginBottom: 12, letterSpacing: '0.5px' }}>互动质量洞察</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
-              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #0090ff' }}>
-                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>点赞占比</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{interactionQuality.find(i => i.label === '点赞')?.pct.toFixed(1) || 0}%</div>
-                <div style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>浅层互动，反映内容吸引力</div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#0090ff', display: 'inline-block' }} />
+                  点赞占比
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)', fontVariantNumeric: 'tabular-nums' }}>{interactionQuality.find(i => i.label === '点赞')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #5a5e67)' }}>浅层互动，反映内容吸引力</div>
               </div>
-              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #ffc53d' }}>
-                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>收藏占比</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{interactionQuality.find(i => i.label === '收藏')?.pct.toFixed(1) || 0}%</div>
-                <div style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>深度互动，反映内容价值密度</div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#ffc53d', display: 'inline-block' }} />
+                  收藏占比
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)', fontVariantNumeric: 'tabular-nums' }}>{interactionQuality.find(i => i.label === '收藏')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #5a5e67)' }}>深度互动，反映内容价值密度</div>
               </div>
-              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, borderLeft: '3px solid #5b5bd6' }}>
-                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600 }}>分享占比</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)' }}>{interactionQuality.find(i => i.label === '分享')?.pct.toFixed(1) || 0}%</div>
-                <div style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>采集评论单独查看，不计入此构成</div>
+              <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#5b5bd6', display: 'inline-block' }} />
+                  分享占比
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)', fontVariantNumeric: 'tabular-nums' }}>{interactionQuality.find(i => i.label === '分享')?.pct.toFixed(1) || 0}%</div>
+                <div style={{ fontSize: 12, color: 'var(--slate-11, #5a5e67)' }}>采集评论单独查看，不计入此构成</div>
               </div>
             </div>
           </div>

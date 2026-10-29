@@ -5,16 +5,16 @@
  */
 
 :root {
-  --ca-palette-primary: var(--teal-9, #12a594);
+  --ca-palette-primary: var(--teal-11, #006d5b);
   --ca-palette-purple: var(--iris-9, #0d74ce);
-  --ca-palette-gold: var(--amber-9, #ffc53d);
-  --ca-palette-terracotta: var(--red-9, #e5484d);
-  --ca-palette-slate: var(--slate-9, #8b8d98);
+  --ca-palette-gold: #824900;
+  --ca-palette-terracotta: #ce2c31;
+  --ca-palette-slate: #5a5e67;
   --ca-palette-bg: var(--slate-3, #f0f0f3);
   --ca-palette-panel: var(--dt-bg-card, #ffffff);
   --ca-palette-text: var(--slate-12, #1c2024);
-  --ca-palette-muted: var(--slate-11, #60646c);
-  --ca-palette-subtle: var(--slate-9, #8b8d98);
+  --ca-palette-muted: var(--slate-11, #5a5e67);
+  --ca-palette-subtle: #5a5e67;
   --ca-palette-border:var(--slate-6, #d9d9e0);
   --ca-palette-border-warm: var(--slate-6, #d9d9e0);
   --ca-palette-grid: var(--slate-4, #e8e8ec);
@@ -38,7 +38,7 @@
   box-sizing: border-box;
   background-color:var(--ca-palette-bg);
   color:var(--ca-palette-text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-sans, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
   line-height: 1.5;
 }
 
