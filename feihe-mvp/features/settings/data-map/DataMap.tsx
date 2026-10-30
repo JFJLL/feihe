@@ -152,16 +152,17 @@ export function DataMap({
     <article
       className="platform-panel"
       style={{
-        background: 'var(--ws-surface, #ffffff)',
-        border: '0.5px solid var(--slate-6, #d9d9e0)',
+        background: '#ffffff',
+        border: '1px solid #e2e8f0',
         borderRadius: 12,
-        padding: 24,
+        padding: '22px 24px',
+        boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
         display: 'flex',
         flexDirection: 'column',
         gap: 16,
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: 16, marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h2 style={{ margin: '0 0 4px', fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
             数据来源、业务指标与映射关系
@@ -326,7 +327,7 @@ export function DataMap({
               );
             })()}
 
-            <article className="platform-panel" style={{ background: 'var(--ws-surface, #ffffff)', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 'var(--ws-radius-card, 12px)', padding: 20 }}>
+            <article className="platform-panel" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: 20 }}>
               <div className="card-header-row" style={{ marginBottom: '14px' }}>
                 <div className="header-left">
                   <h3 style={{ margin: 0 }}>数据地图建设进度</h3>
@@ -524,7 +525,7 @@ function MapList({
           </button>
         )}
       </div>
-      <div className="ops-table-wrap" style={{ marginTop: '14px', background: 'var(--ws-surface, #ffffff)', borderRadius: 'var(--ws-radius-control, 8px)', border: '0.5px solid var(--slate-6, #d9d9e0)', overflowX: 'auto' }}>
+      <div className="ops-table-wrap" style={{ marginTop: '14px', background: 'var(--ws-surface, #ffffff)', border: '1px solid #e2e8f0', borderRadius: '10px', overflowX: 'auto' }}>
         <table className="ops-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>

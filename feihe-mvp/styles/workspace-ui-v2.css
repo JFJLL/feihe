@@ -1182,3 +1182,20 @@
 .settings-subnav-label {
   font-size: 14px;
 }
+
+/* Settings workspace emerald primary button override */
+[data-workspace-ui='v2'] .settings-workspace .primary,
+[data-workspace-ui='v2'] .settings-workspace .primary-btn,
+[data-workspace-ui='v2'] .settings-workspace button.primary {
+  background: #0d6e52 !important;
+  border-color: #0d6e52 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(13, 110, 82, 0.12) !important;
+}
+[data-workspace-ui='v2'] .settings-workspace .primary:hover:not(:disabled),
+[data-workspace-ui='v2'] .settings-workspace .primary-btn:hover:not(:disabled),
+[data-workspace-ui='v2'] .settings-workspace button.primary:hover:not(:disabled) {
+  background: #09543e !important;
+  border-color: #09543e !important;
+  box-shadow: 0 2px 6px rgba(13, 110, 82, 0.18) !important;
+}

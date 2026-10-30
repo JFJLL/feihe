@@ -628,6 +628,7 @@ export function applyMeilingSnapshot(
 
   return {
     ...dashboard,
+    period: periodLabel,
     sources: newSources,
     kpis: newKpis,
     tables: newTables,

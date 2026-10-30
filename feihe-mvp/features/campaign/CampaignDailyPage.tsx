@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback, useSyncExternalStore } from "react";
+import React, { useMemo, useCallback, useSyncExternalStore, useState } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { DayNavigator } from "../../components/ui/DayNavigator";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
@@ -9,14 +9,18 @@ import { CustomSelect } from "../../components/ui/CustomSelect";
 import {
   resolveDailyDatasets,
   fmtNum,
+  fmtPct,
   CAMPAIGN_PALETTE,
+  buildCalendarRows,
 } from "./campaign-daily-model";
 import {
   getSingleDayKPIs,
   getSingleDayDistributions,
   getCrossDatasetDailyComparison,
   isValidIsoDate,
+  buildDailyRichContext,
 } from "./daily-selection-model";
+import { CampaignDailyDiagnostics } from "./CampaignDailyDiagnostics";
 import "./campaign-analytics.css";
 import "./campaign-combo.css";
 import "./campaign-daily.css";
@@ -63,6 +67,7 @@ function getServerUrlSearchSnapshot(): string {
 export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const name = dashboard?.name || "项目";
   const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
+  const [feishuTab, setFeishuTab] = useState<"keywords" | "audiences" | "actions">("keywords");
 
   // Reactive URL search store: guarantees SSR/hydration compatibility and listens to back/forward
   const urlSearch = useSyncExternalStore(subscribeToUrl, getUrlSearchSnapshot, getServerUrlSearchSnapshot);
@@ -138,6 +143,18 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   }, [activeDataset, selectedDate]);
 
   const isDateMissing = !selectedRow;
+
+  // Rich Analytical computed context (Benchmarks, Executive Diagnosis, Efficiency benchmarks, Traffic funnel, Feishu drilldowns)
+  const richContext = useMemo(() => {
+    if (!dashboard || !activeDataset || !selectedDate) return null;
+    return buildDailyRichContext(dashboard, activeDataset, selectedDate);
+  }, [dashboard, activeDataset, selectedDate]);
+
+  // Calendar rows for diagnostic module (safely handles gaps and cumulative pacing)
+  const diagCalendarRows = useMemo(() => {
+    if (!activeDataset || !minAvailableDate || !maxAvailableDate) return [];
+    return buildCalendarRows(activeDataset, minAvailableDate, maxAvailableDate);
+  }, [activeDataset, minAvailableDate, maxAvailableDate]);
 
   // Selected Day Core KPIs with Day-over-Day comparisons
   const summaryMetrics = useMemo(() => {
@@ -338,6 +355,53 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
         </div>
       )}
 
+      {/* 2. 本日投流智能研判条 (Daily Executive Diagnosis Banner) */}
+      {!isDateMissing && richContext && (
+        <section
+          className={`ca-daily-diagnosis-banner ca-daily-diag-banner tone-${richContext.diagnosis.statusTone}`}
+          aria-label="本日投流智能研判"
+        >
+          <div className="ca-diag-header">
+            <div className="ca-diag-tag-group">
+              <span className={`ca-diag-status-pill ca-diag-${richContext.diagnosis.statusTone}`}>
+                {richContext.diagnosis.statusLabel}
+              </span>
+              <span className="ca-diag-pos-text">{richContext.diagnosis.positionText}</span>
+            </div>
+            <div className="ca-diag-quick-chips">
+              <span className="ca-diag-chip">
+                <span className="ca-diag-chip-lbl">7日均线对标:</span>
+                <strong>
+                  {richContext.benchmarks.vs7dMaPct !== null
+                    ? `${richContext.benchmarks.vs7dMaPct > 0 ? "+" : ""}${richContext.benchmarks.vs7dMaPct}%`
+                    : "—"}
+                </strong>
+              </span>
+              <span className="ca-diag-chip">
+                <span className="ca-diag-chip-lbl">周期峰值日:</span>
+                <strong>{richContext.benchmarks.peakDate || "—"}</strong>
+              </span>
+              <span className="ca-diag-chip">
+                <span className="ca-diag-chip-lbl">本日消耗占比:</span>
+                <strong>
+                  {richContext.benchmarks.spendSharePct !== null
+                    ? `${richContext.benchmarks.spendSharePct}%`
+                    : "—"}
+                </strong>
+              </span>
+            </div>
+          </div>
+          <div className="ca-diag-bullets">
+            {richContext.diagnosis.bullets.map((b, idx) => (
+              <div key={idx} className="ca-diag-bullet-item">
+                <span className="ca-diag-bullet-dot" aria-hidden="true" />
+                <span className="ca-diag-bullet-text">{b}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* 4. 当日核心指标与分布大卡片 (Macro Section Card, 28px间距) */}
       {!isDateMissing && (
         <div className="ca-section-macro-card">
@@ -350,6 +414,32 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
         <div className="ca-daily-grid">
           {/* 5.0 所选业务日周期走势对照 */}
           <div className="ca-daily-panel ca-daily-panel-span-2">
+            {richContext && (
+              <div className="ca-trend-summary-ribbon" role="region" aria-label="周期走势核心统计">
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">全期累计消耗</span>
+                  <strong className="ca-ribbon-val">¥{fmtNum(richContext.benchmarks.periodTotalSpend)}</strong>
+                </div>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">全期日均消耗</span>
+                  <strong className="ca-ribbon-val">¥{fmtNum(richContext.benchmarks.periodAvgSpend)}</strong>
+                </div>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">全周期峰值日</span>
+                  <strong className="ca-ribbon-val">
+                    {richContext.benchmarks.peakDate || "—"}{" "}
+                    <small>({richContext.benchmarks.peakValue !== null ? `¥${fmtNum(richContext.benchmarks.peakValue)}` : "—"})</small>
+                  </strong>
+                </div>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">本日消耗占比</span>
+                  <strong className="ca-ribbon-val">
+                    {richContext.benchmarks.spendSharePct !== null ? `${richContext.benchmarks.spendSharePct}%` : "—"}
+                  </strong>
+                </div>
+              </div>
+            )}
+
             <ChartPanel
               title="所选业务日周期走势对照"
               subtitle={`统计周期: ${activeDataset.period} / 当前选定: ${selectedDate} (点击图表柱状图可快速切换业务日)`}
@@ -372,8 +462,147 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             </ChartPanel>
           </div>
 
-          {/* 5.1 单日分布与结构组 */}
-          {distributions.map((dist) => (
+          {/* 5.1 当日效率与成本基准对标 (Left Card) */}
+          {richContext && richContext.efficiencyBenchmarks.length > 0 && (
+            <div className="ca-daily-panel">
+              <ChartPanel
+                title="当日效率与成本基准对标"
+                subtitle={`选定业务日 (${selectedDate}) 核心效率 vs 全周期平均水平`}
+                actions={
+                  <span style={{ fontSize: 12, color: "#60646c" }}>
+                    {richContext.efficiencyBenchmarks.length} 项关键效能指标
+                  </span>
+                }
+              >
+                <div className="ca-eff-benchmark-list">
+                  {richContext.efficiencyBenchmarks.map((item) => (
+                    <div key={item.key} className="ca-eff-item">
+                      <div className="ca-eff-row-header">
+                        <div className="ca-eff-name-group">
+                          <strong className="ca-eff-name">{item.label}</strong>
+                          <span className={`ca-eff-status-pill ca-eff-${item.status}`}>
+                            {item.statusLabel}
+                          </span>
+                        </div>
+                        <div className="ca-eff-nums">
+                          <span className="ca-eff-today">
+                            本日: <strong>{fmtNum(item.selectedVal, 2)}{item.unit}</strong>
+                          </span>
+                          <span className="ca-eff-avg">
+                            周期均值: {fmtNum(item.periodAvgVal, 2)}{item.unit}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="ca-eff-track-wrap">
+                        <div className="ca-eff-track">
+                          <div
+                            className={`ca-eff-fill ca-eff-fill-${item.status}`}
+                            style={{
+                              width: `${Math.min(100, Math.max(8, item.periodAvgVal && item.selectedVal ? (item.selectedVal / (item.periodAvgVal * 1.5)) * 100 : 50))}%`,
+                            }}
+                          />
+                          <div className="ca-eff-benchmark-marker" title="周期均值基准线" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ChartPanel>
+            </div>
+          )}
+
+          {/* 5.2 当日流量漏斗与跨渠道分流全景 (Right Card) */}
+          {richContext && richContext.trafficFunnel.length > 0 && (
+            <div className="ca-daily-panel">
+              <ChartPanel
+                title="当日流量转化漏斗与规模结构"
+                subtitle={`业务日: ${selectedDate} / 展现曝光 → 互动沉淀 → 进店访客`}
+                actions={
+                  <span style={{ fontSize: 12, color: "#60646c" }}>
+                    {richContext.trafficFunnel.length} 级链路转化
+                  </span>
+                }
+              >
+                <div className="ca-funnel-container">
+                  <div className="ca-funnel-steps-grid">
+                    {richContext.trafficFunnel.map((step, idx) => (
+                      <div key={step.key} className="ca-funnel-step-card">
+                        <div className="ca-funnel-step-top">
+                          <span className="ca-funnel-step-idx">0{idx + 1}</span>
+                          <span className="ca-funnel-step-name">{step.label}</span>
+                        </div>
+                        <strong className="ca-funnel-step-val">{step.formattedValue}</strong>
+                        {step.conversionLabel && (
+                          <span className="ca-funnel-step-rate">{step.conversionLabel}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 水平比例对照进度条 (Scale progress bars with relative proportions) */}
+                  <div className="ca-dist-list">
+                    {richContext.trafficFunnel.map((step) => {
+                      const maxVal = Math.max(...richContext.trafficFunnel.map((s) => s.value || 0), 1);
+                      const logMax = Math.log10(maxVal + 10);
+                      const logVal = Math.log10((step.value || 0) + 10);
+                      const pct = step.value ? Math.min(100, Math.max(8, Math.round((logVal / logMax) * 100))) : 0;
+                      const stepColor =
+                        step.key === "imp"
+                          ? CAMPAIGN_PALETTE.slate
+                          : step.key === "clicks"
+                          ? CAMPAIGN_PALETTE.primary
+                          : step.key === "engagements" || step.key === "eng"
+                          ? CAMPAIGN_PALETTE.purple
+                          : step.key === "uv"
+                          ? "#0284c7"
+                          : CAMPAIGN_PALETTE.gold;
+                      return (
+                        <div key={step.key} className="ca-dist-item">
+                          <div className="ca-dist-item-header">
+                            <span className="ca-dist-label">{step.label}</span>
+                            <div className="ca-dist-val-group">
+                              <strong className="ca-dist-value">{step.formattedValue}</strong>
+                              {step.conversionLabel && (
+                                <span className="ca-dist-share">{step.conversionLabel}</span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="ca-dist-bar-track">
+                            <div
+                              className="ca-dist-bar-fill"
+                              style={{ width: `${pct}%`, background: stepColor }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {richContext.feishuDrilldowns.channelSplits && richContext.feishuDrilldowns.channelSplits.length > 0 && (
+                    <div className="ca-channel-split-section">
+                      <span className="ca-sub-heading">当日渠道支出结构 (K/F/S/CID)</span>
+                      <div className="ca-channel-split-bars">
+                        {richContext.feishuDrilldowns.channelSplits.map((c) => (
+                          <div key={c.label} className="ca-channel-bar-item">
+                            <div className="ca-channel-bar-info">
+                              <span className="ca-channel-lbl">{c.label}</span>
+                              <span className="ca-channel-amt">¥{fmtNum(c.spend)} ({c.sharePct}%)</span>
+                            </div>
+                            <div className="ca-dist-bar-track">
+                              <div className="ca-dist-bar-fill" style={{ width: `${c.sharePct}%`, background: c.color }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </ChartPanel>
+            </div>
+          )}
+
+          {/* 5.3 兜底分布与结构 (仅在无富分析研判上下文时呈现，避免数据重复展现) */}
+          {!richContext && distributions.map((dist) => (
             <div key={dist.id} className="ca-daily-panel">
               <ChartPanel
                 title={dist.title}
@@ -483,8 +712,245 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
               </ChartPanel>
             </div>
           )}
+
+          {/* 5.3 飞书源数据联动透视：高贡献素材 × 搜索词与人群 × 日报动作 */}
+          {richContext && (
+            <div className="ca-daily-panel ca-daily-panel-span-2">
+              <div className="ca-feishu-enrichment-card">
+                <div className="ca-feishu-card-header">
+                  <div className="ca-feishu-header-title-wrap">
+                    <span className="ca-feishu-badge">飞书源表深度联动</span>
+                    <h3 className="ca-feishu-card-title">多维下钻透视：高贡献素材 × 搜索词与人群 × 日报动作</h3>
+                  </div>
+                  <span className="ca-feishu-header-meta">
+                    提取自飞书多维底表 · 与所选业务日 ({selectedDate}) 实时联动
+                  </span>
+                </div>
+
+                <div className="ca-feishu-dual-grid">
+                  {/* Left: Top Performing Notes / Creatives */}
+                  <div className="ca-feishu-subpanel">
+                    <div className="ca-feishu-subpanel-head">
+                      <div className="ca-feishu-subpanel-title-group">
+                        <span className="ca-feishu-subpanel-tag">素材排行</span>
+                        <strong className="ca-feishu-subpanel-title">
+                          高贡献创意素材榜 (Top {richContext.feishuDrilldowns.topNotes.length})
+                        </strong>
+                      </div>
+                      <span className="ca-feishu-subpanel-caption">按消耗/产出规模排序</span>
+                    </div>
+                    <div className="ca-feishu-notes-list">
+                      {richContext.feishuDrilldowns.topNotes.length === 0 ? (
+                        <div className="ca-feishu-empty-hint">当前项目飞书底表暂无达人素材明细</div>
+                      ) : (
+                        richContext.feishuDrilldowns.topNotes.map((note, idx) => (
+                          <div key={note.id || idx} className="ca-feishu-note-row">
+                            <span className={`ca-feishu-note-rank ca-rank-${idx + 1}`}>#{idx + 1}</span>
+                            <div className="ca-feishu-note-main">
+                              <div className="ca-feishu-note-meta">
+                                <span className="ca-feishu-note-creator">{note.creator}</span>
+                                <span className="ca-feishu-note-channel">{note.channelOrTier}</span>
+                              </div>
+                              <div className="ca-feishu-note-title" title={note.title}>{note.title}</div>
+                              <div className="ca-feishu-note-metrics">
+                                {note.spend !== null && (
+                                  <span className="ca-fn-m">消耗: <strong>¥{fmtNum(note.spend)}</strong></span>
+                                )}
+                                {note.gmv !== null && (
+                                  <span className="ca-fn-m">GMV: <strong>¥{fmtNum(note.gmv)}</strong></span>
+                                )}
+                                {note.roi !== null && (
+                                  <span className="ca-fn-m">ROI: <strong>{fmtNum(note.roi, 2)}倍</strong></span>
+                                )}
+                                {note.clicks !== null && (
+                                  <span className="ca-fn-m">点击: <strong>{fmtNum(note.clicks, 0)}</strong></span>
+                                )}
+                                {note.impressions !== null && (
+                                  <span className="ca-fn-m">展现: <strong>{fmtNum(note.impressions, 0)}</strong></span>
+                                )}
+                                {note.uv !== null && (
+                                  <span className="ca-fn-m">UV: <strong>{fmtNum(note.uv, 0)}</strong></span>
+                                )}
+                                {note.cpc !== null && (
+                                  <span className="ca-fn-m">CPC: <strong>¥{fmtNum(note.cpc, 2)}</strong></span>
+                                )}
+                                {note.cpe !== null && (
+                                  <span className="ca-fn-m">CPE: <strong>¥{fmtNum(note.cpe, 2)}</strong></span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right: Tabbed Keywords / Audiences / Actions */}
+                  <div className="ca-feishu-subpanel">
+                    <div className="ca-feishu-subpanel-head">
+                      <div className="ca-feishu-tabs" role="tablist">
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={feishuTab === "keywords"}
+                          className={`ca-feishu-tab-btn ${feishuTab === "keywords" ? "active" : ""}`}
+                          onClick={() => setFeishuTab("keywords")}
+                        >
+                          搜索词与淘搜
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={feishuTab === "audiences"}
+                          className={`ca-feishu-tab-btn ${feishuTab === "audiences" ? "active" : ""}`}
+                          onClick={() => setFeishuTab("audiences")}
+                        >
+                          定向人群包
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={feishuTab === "actions"}
+                          className={`ca-feishu-tab-btn ${feishuTab === "actions" ? "active" : ""}`}
+                          onClick={() => setFeishuTab("actions")}
+                        >
+                          业务日报动作
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="ca-feishu-tab-content">
+                      {feishuTab === "keywords" && (
+                        <div className="ca-feishu-kw-view">
+                          {richContext.feishuDrilldowns.taosouDailyKeywords && richContext.feishuDrilldowns.taosouDailyKeywords.length > 0 && (
+                            <div className="ca-taosou-day-kw-box">
+                              <div className="ca-taosou-day-kw-title">
+                                <span>所选日核心关键词淘搜指数贡献 ({selectedDate})</span>
+                              </div>
+                              <div className="ca-dist-list">
+                                {richContext.feishuDrilldowns.taosouDailyKeywords.map((kw) => (
+                                  <div key={kw.keyword} className="ca-dist-item">
+                                    <div className="ca-dist-item-header">
+                                      <span className="ca-dist-label">{kw.keyword}</span>
+                                      <div className="ca-dist-val-group">
+                                        <strong className="ca-dist-value">{fmtNum(kw.index, 0)} 点</strong>
+                                        {kw.sharePct !== undefined && <span className="ca-dist-share">{kw.sharePct}%</span>}
+                                      </div>
+                                    </div>
+                                    {kw.sharePct !== undefined && (
+                                      <div className="ca-dist-bar-track">
+                                        <div className="ca-dist-bar-fill" style={{ width: `${kw.sharePct}%`, background: CAMPAIGN_PALETTE.primary }} />
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="ca-general-kw-list">
+                            <span className="ca-sub-heading">搜索词分类转化表现</span>
+                            {richContext.feishuDrilldowns.searchKeywords.length === 0 ? (
+                              <div className="ca-feishu-empty-hint">暂无独立搜索词底表记录</div>
+                            ) : (
+                              richContext.feishuDrilldowns.searchKeywords.map((k) => (
+                                <div key={k.keyword} className="ca-kw-row">
+                                  <div className="ca-kw-info">
+                                    <strong className="ca-kw-text">{k.keyword}</strong>
+                                    {k.category && <span className="ca-kw-cat">{k.category}</span>}
+                                  </div>
+                                  <div className="ca-kw-stats">
+                                    {k.spend !== null && <span>消耗: <strong>¥{fmtNum(k.spend)}</strong></span>}
+                                    {k.cpc !== null && <span>CPC: <strong>¥{fmtNum(k.cpc, 2)}</strong></span>}
+                                    {k.ctr !== null && <span>CTR: <strong>{k.ctr}%</strong></span>}
+                                    {k.uv !== null && <span>UV: <strong>{fmtNum(k.uv, 0)}</strong></span>}
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {feishuTab === "audiences" && (
+                        <div className="ca-feishu-aud-list">
+                          {richContext.feishuDrilldowns.audiencePackages.length === 0 ? (
+                            <div className="ca-feishu-empty-hint">当前项目飞书底表暂无独立人群包记录</div>
+                          ) : (
+                            richContext.feishuDrilldowns.audiencePackages.map((aud) => (
+                              <div key={aud.name} className="ca-aud-row">
+                                <div className="ca-aud-name-wrap">
+                                  <strong className="ca-aud-name">{aud.name}</strong>
+                                </div>
+                                <div className="ca-aud-stats">
+                                  {aud.spend !== null && <span>消耗: <strong>¥{fmtNum(aud.spend)}</strong></span>}
+                                  {aud.cpe !== null && <span>CPE: <strong>¥{fmtNum(aud.cpe, 2)}</strong></span>}
+                                  {aud.cpuv !== null && <span>CPUV: <strong>¥{fmtNum(aud.cpuv, 2)}</strong></span>}
+                                  {aud.clicks !== null && <span>点击: <strong>{fmtNum(aud.clicks, 0)}</strong></span>}
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+
+                      {feishuTab === "actions" && (
+                        <div className="ca-feishu-actions-list">
+                          {richContext.feishuDrilldowns.actionItems.length === 0 ? (
+                            <div className="ca-feishu-empty-hint">暂无记录的日报行动项</div>
+                          ) : (
+                            richContext.feishuDrilldowns.actionItems.map((act) => (
+                              <div key={act.id} className="ca-act-item">
+                                <div className="ca-act-bullet" />
+                                <div className="ca-act-body">
+                                  <div className="ca-act-header">
+                                    <span className="ca-act-title">{act.title}</span>
+                                    {act.owner && <span className="ca-act-owner">{act.owner}</span>}
+                                  </div>
+                                  <div className="ca-act-footer">
+                                    <span className="ca-act-status">{act.status || "日报跟进"}</span>
+                                    {act.badge && <span className="ca-act-badge">{act.badge}</span>}
+                                  </div>
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         </div>
+      )}
+
+      {/* 5.5 全周期累计与高级诊断分析 (热力图 · 累计趋势 · 周度节奏) */}
+      {!isDateMissing && diagCalendarRows.length > 0 && (
+        <details className="ca-daily-details-panel ca-daily-diagnostics-details">
+          <summary className="ca-daily-details-summary">
+            <div className="ca-daily-details-summary-title">
+              <span className="ca-daily-details-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+                  <path d="M2 2v12h12V2H2zm10 10H4V4h8v8z" />
+                </svg>
+              </span>
+              <span>全周期累计与高级诊断分析 (热力图 · 累计消耗趋势 · 周度节奏)</span>
+              <span className="ca-daily-details-badge">高级诊断</span>
+            </div>
+            <span className="ca-daily-details-hint">点击展开全期分析</span>
+          </summary>
+          <div style={{ padding: "16px 20px" }}>
+            <CampaignDailyDiagnostics
+              dataset={activeDataset}
+              calendarRows={diagCalendarRows}
+              startDate={minAvailableDate}
+              endDate={maxAvailableDate}
+            />
+          </div>
+        </details>
       )}
 
       {/* 6. 真实数据全量明细表格 (默认收起在 details 内部，所选日高亮突出) */}

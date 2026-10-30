@@ -105,29 +105,34 @@ export function SettingsSubNav({
       ? 'reports'
       : 'profile');
 
-  if (mode === 'primary') {
-    return (
-      <div className="settings-subnav-primary settings-subnav-track" style={style}>
-        {topTabs.map((t) => {
-          const isActive = currentActive === t.id;
-          return (
-            <AppLink
-              key={t.id}
-              href={t.href}
-              aria-current={isActive ? 'page' : undefined}
-              className={`settings-subnav-item${isActive ? ' active' : ''}`}
-            >
-              <span className="settings-subnav-label">{t.title}</span>
-            </AppLink>
-          );
-        })}
-      </div>
-    );
+  if (mode === 'aux') {
+    return null;
   }
 
-  if (mode === 'aux') {
-    return (
-      <nav className="settings-subnav-aux settings-aux-nav-track" style={style} aria-label="项目辅助导航">
+  const trackContent = (
+    <div
+      className="settings-subnav-primary settings-subnav-track settings-subnav-unified"
+      style={style}
+    >
+      {topTabs.map((t) => {
+        const isActive = currentActive === t.id;
+        return (
+          <AppLink
+            key={t.id}
+            href={t.href}
+            aria-current={isActive ? 'page' : undefined}
+            className={`settings-subnav-item${isActive ? ' active' : ''}`}
+          >
+            <span className="settings-subnav-label">{t.title}</span>
+          </AppLink>
+        );
+      })}
+      <div className="settings-subnav-divider" aria-hidden="true" />
+      <div
+        className="settings-subnav-aux-group"
+        role="group"
+        aria-label="项目辅助导航"
+      >
         {auxTabs.map((t) => {
           const isActive = currentActive === t.id;
           return (
@@ -137,46 +142,25 @@ export function SettingsSubNav({
               aria-current={isActive ? 'page' : undefined}
               className={`settings-subnav-item settings-subnav-aux-item settings-aux-nav-link${isActive ? ' active' : ''}`}
             >
-              <span>{t.title}</span>
+              <span className="settings-subnav-label">{t.title}</span>
             </AppLink>
           );
         })}
-      </nav>
-    );
+      </div>
+    </div>
+  );
+
+  if (mode === 'primary') {
+    return trackContent;
   }
 
   return (
-    <nav className="settings-secondary-nav settings-nav-wrapper" style={{ margin: 0, ...style }} aria-label="项目设置导航">
-      <div className="settings-subnav-primary settings-subnav-track">
-        {topTabs.map((t) => {
-          const isActive = currentActive === t.id;
-          return (
-            <AppLink
-              key={t.id}
-              href={t.href}
-              aria-current={isActive ? 'page' : undefined}
-              className={`settings-subnav-item${isActive ? ' active' : ''}`}
-            >
-              <span className="settings-subnav-label">{t.title}</span>
-            </AppLink>
-          );
-        })}
-      </div>
-      <div className="settings-subnav-aux settings-aux-nav-track" aria-label="项目辅助导航">
-        {auxTabs.map((t) => {
-          const isActive = currentActive === t.id;
-          return (
-            <AppLink
-              key={t.id}
-              href={t.href}
-              aria-current={isActive ? 'page' : undefined}
-              className={`settings-subnav-item settings-subnav-aux-item settings-aux-nav-link${isActive ? ' active' : ''}`}
-            >
-              <span>{t.title}</span>
-            </AppLink>
-          );
-        })}
-      </div>
+    <nav
+      className="settings-secondary-nav settings-nav-wrapper settings-subnav-unified-nav"
+      style={{ margin: 0, ...style }}
+      aria-label="项目设置导航"
+    >
+      {trackContent}
     </nav>
   );
 }

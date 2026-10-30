@@ -374,11 +374,16 @@
 
 .ca-metric-item .bd-kpi-head,
 .ca-metric-head {
-  min-height: 40px;
+  min-height: 22px;
+  align-items: center;
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
   box-sizing: border-box;
+}
+
+/* Two-line KPI head fallback (min-height: 40px) */
+.ca-metric-item .bd-kpi-head.is-two-line {
+  min-height: 40px;
 }
 
 /* Category-driven metric cards & badges (strictly scoped to ca-metric-item with data-category) */
@@ -1088,11 +1093,10 @@
 .ca-section-enrichment .ca-metric-strip {
   display: grid;
   grid-template-columns: repeat(var(--metric-columns, 4), minmax(0, 1fr));
-  gap: 8px;
-  background: #f9f9fb;
-  border:0.5px solid #e8e8ec;
-  border-radius: 8px;
-  padding: 8px 10px;
+  gap: 14px;
+  background: transparent;
+  border: none;
+  padding: 0;
   margin: 6px 0 14px 0;
 }
 
@@ -1103,15 +1107,15 @@
 .wipes-rich-container .ca-metric-item,
 .campaign-enrichment-stack .ca-metric-item,
 .ca-section-enrichment .ca-metric-item {
-  background: #ffffff !important;
   border:0.5px solid var(--ca-palette-border) !important;
   border-radius: 8px !important;
-  padding: 8px 12px !important;
-  min-height: 56px;
-  max-height: 72px;
+  padding: 14px 16px !important;
+  min-height: 96px;
+  max-height: none;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 6px;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03) !important;
   position: relative;
 }
@@ -1123,14 +1127,8 @@
 .wipes-rich-container .ca-metric-item::before,
 .campaign-enrichment-stack .ca-metric-item::before,
 .ca-section-enrichment .ca-metric-item::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 10px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--ca-palette-primary, var(--teal-11, #008573));
+  content: none !important;
+  display: none !important;
 }
 
 .mri-group .ca-metric-label,
@@ -1144,7 +1142,7 @@
   font-weight: 500;
   color:#60646c;
   margin-bottom: 2px;
-  padding-left: 10px;
+  padding-left: 0 !important;
 }
 
 .mri-group .ca-metric-value,
@@ -1154,7 +1152,7 @@
 .wipes-rich-container .ca-metric-value,
 .campaign-enrichment-stack .ca-metric-value,
 .ca-section-enrichment .ca-metric-value {
-  font-size: 16px !important;
+  font-size: 22px !important;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -1166,7 +1164,7 @@
 .wipes-rich-container .ca-metric-missing,
 .campaign-enrichment-stack .ca-metric-missing,
 .ca-section-enrichment .ca-metric-missing {
-  font-size: 16px !important;
+  font-size: 22px !important;
 }
 
 .mri-group .ca-metric-unit,
@@ -1189,6 +1187,9 @@
   font-size: 12px !important;
   margin-top: 2px;
   color:#60646c;
+  display: block;
+  visibility: visible;
+  overflow: visible;
 }
 
 .mri-group .ca-metric-progress-track,
@@ -1200,6 +1201,24 @@
 .ca-section-enrichment .ca-metric-progress-track {
   height: 2.5px !important;
   margin-top: 3px;
+}
+
+/* 2-Column Grid Helpers: MetricStrip and odd trailing panels span full width */
+.mri-grid > .ca-metric-strip,
+.kri-grid-2 > .ca-metric-strip,
+.ca-grid > .ca-metric-strip,
+.wipes-rich-grid-2 > .ca-metric-strip {
+  grid-column: 1 / -1;
+}
+
+.mri-grid > .ca-panel:last-child:nth-child(odd),
+.kri-grid-2 > .ca-panel:last-child:nth-child(odd),
+.ca-grid > .ca-panel:last-child:nth-child(odd),
+.wipes-rich-grid-2 > .ca-panel:last-child:nth-child(odd),
+.mri-grid > .ca-panel-wide,
+.kri-grid-2 > .ca-panel-wide,
+.ca-grid > .ca-panel-wide {
+  grid-column: 1 / -1;
 }
 
 /* ==========================================================================

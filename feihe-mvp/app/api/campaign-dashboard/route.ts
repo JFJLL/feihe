@@ -6,6 +6,12 @@ import {
   mergeCampaignEnrichment,
   mergeById,
 } from "@/lib/campaign-enrichment-server";
+import {
+  triggerCampaignLiveSync,
+  isSnapshotStale,
+  getFreshCampaignEnrichment,
+  getFreshCampaignDailyDatasets,
+} from "@/lib/campaign-live-sync";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +35,18 @@ export async function GET(request: Request) {
     return jsonError("该项目非轻量营销看板(campaign_review)模板", 400);
   }
 
+  // On-demand sync via ?fresh=1 or ?sync=1
+  const shouldForceSync =
+    url.searchParams.get("fresh") === "1" || url.searchParams.get("sync") === "1";
+  if (shouldForceSync && access.context!.canWrite) {
+    try {
+      console.log(`[campaign-dashboard] On-demand live sync requested for ${projectId}...`);
+      await triggerCampaignLiveSync(projectId, true);
+    } catch (syncErr) {
+      console.warn(`[campaign-dashboard] On-demand sync failed:`, syncErr);
+    }
+  }
+
   // 3. Read snapshot from project_settings (server DB read, NOT directly from static constants)
   try {
     const snapshot = await getCampaignDashboardSnapshot(projectId);
@@ -36,9 +54,22 @@ export async function GET(request: Request) {
       return jsonError("尚未接入资料", 404);
     }
 
+    // Background non-blocking auto-sync if snapshot is older than 30 minutes
+    if (isSnapshotStale(snapshot.updatedAt, 30) && !shouldForceSync) {
+      console.log(
+        `[campaign-dashboard] Snapshot for ${projectId} is stale (last updated: ${snapshot.updatedAt}), triggering non-blocking background auto-sync...`
+      );
+      triggerCampaignLiveSync(projectId).catch((err) => {
+        console.error(`[campaign-dashboard] Background auto-sync error for ${projectId}:`, err);
+      });
+    }
+
     // 4. Attach only this project's daily datasets (strict project isolation, server-only)
     // Retain snapshot.dailyDatasets and merge with server daily datasets using mergeById
-    const serverDailyDatasets = getCampaignDailyDatasetsByProject(projectId) || [];
+    const serverDailyDatasets =
+      getFreshCampaignDailyDatasets(projectId) ||
+      getCampaignDailyDatasetsByProject(projectId) ||
+      [];
     const mergedDailyDatasets = mergeById(snapshot.dailyDatasets || [], serverDailyDatasets);
     const baseDashboard = {
       ...snapshot,
@@ -47,7 +78,9 @@ export async function GET(request: Request) {
 
     // 5. Merge project enrichment (tables, sources, dailyDatasets)
     // Server-only whitelist read; id-overwrite; no DB writes; strict isolation
-    const enrichment = getCampaignEnrichment(projectId);
+    const enrichment =
+      getFreshCampaignEnrichment(projectId) ||
+      getCampaignEnrichment(projectId);
     const finalDashboard = mergeCampaignEnrichment(baseDashboard, enrichment);
 
     return Response.json({

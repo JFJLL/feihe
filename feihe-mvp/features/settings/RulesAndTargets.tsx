@@ -272,9 +272,9 @@ export function RulesAndTargets({
         id="project-totals"
         style={{
           background: 'var(--bg-card, #ffffff)',
-          border: '0.5px solid var(--slate-6, #d9d9e0)',
+          border: '1px solid #e2e8f0',
           borderRadius: '12px',
-          padding: '24px',
+          padding: '22px 24px',
           boxShadow: '0 1px 3px rgba(28, 32, 36, 0.04)',
           display: 'flex',
           flexDirection: 'column',
@@ -407,7 +407,7 @@ export function RulesAndTargets({
               const deliveryPct = target > 0 ? Math.min(100, Math.round((delivered / target) * 100)) : null;
               const spendPct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : null;
               return (
-                <article key={p.id} style={{ background: 'var(--bg-card, #ffffff)', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
+                <article key={p.id} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '14px', boxShadow: '0 1px 2px rgba(15, 23, 42, 0.02)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '0.5px solid var(--slate-6, #d9d9e0)', paddingBottom: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <strong style={{ fontSize: '14px', color: 'var(--slate-12, #1c2024)', fontWeight: 600 }}>{p.name}</strong>
@@ -498,9 +498,9 @@ export function RulesAndTargets({
         className="panel"
         style={{
           background: 'var(--bg-card, #ffffff)',
-          border: '0.5px solid var(--slate-6, #d9d9e0)',
+          border: '1px solid #e2e8f0',
           borderRadius: '12px',
-          padding: '24px',
+          padding: '22px 24px',
           boxShadow: '0 1px 3px rgba(28, 32, 36, 0.04)',
         }}
       >
@@ -594,9 +594,9 @@ export function RulesAndTargets({
         className="panel"
         style={{
           background: 'var(--bg-card, #ffffff)',
-          border: '0.5px solid var(--slate-6, #d9d9e0)',
+          border: '1px solid #e2e8f0',
           borderRadius: '12px',
-          padding: '24px',
+          padding: '22px 24px',
           boxShadow: '0 1px 3px rgba(28, 32, 36, 0.04)',
           display: 'flex',
           flexDirection: 'column',
@@ -678,7 +678,7 @@ export function RulesAndTargets({
           </div>
         </div>
 
-        <div style={{ background: 'var(--slate-2, #f9f9fb)', borderRadius: '8px', padding: '16px', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
+        <div style={{ background: '#f8fafc', borderRadius: '10px', padding: '16px', border: '1px solid #e2e8f0' }}>
           <h4 style={{ margin: '0 0 8px', fontSize: '14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>审查动作说明</h4>
           <ul className="insight-list" style={{ margin: 0, padding: 0 }}>
             <li style={{ fontSize: '12px' }}>

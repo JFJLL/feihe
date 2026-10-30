@@ -3,7 +3,7 @@
   "name": "黄天鹅",
   "subtitle": "可生食鸡蛋种草与电商引流",
   "reportPeriod": "2026年10月 (10.01 ~ 10.19)",
-  "updatedAt": "2026-10-20T15:24:19.931Z",
+  "updatedAt": "2026-10-30T05:55:52.222Z",
   "templateId": "campaign_review",
   "sources": [
     {
@@ -26,10 +26,10 @@
     },
     {
       "id": "src-huang-tiane-cid-fs",
-      "name": "黄天鹅红猫CID 26年10月项目报表-fs 副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/KpHrwJt1picaxBkWB9NcaLlsnih",
+      "name": "黄天鹅红猫CID 26年10月项目报表-fs",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "status": "ready",
-      "detail": "红猫CID与FS报表（20个子表，包含标准投、简单投及两类投放合计流水）",
+      "detail": "红猫CID与FS报表（20个子表，包含标准投、简单投及两类投放合计流水；内部真实维护源）",
       "fetchedAt": "2026-10-20T06:31:52.920Z",
       "provenance": "feishu"
     },
@@ -44,19 +44,10 @@
     },
     {
       "id": "src-huang-tiane-commerce-canonical",
-      "name": "黄天鹅商销日报主表",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/CqyPwlUTNiiD0lkXlZJcuyIYnCc",
+      "name": "黄天鹅商销日报表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c",
       "status": "ready",
-      "detail": "商销日报主表（8个子表，全渠道销售与GMV以此为准；历史UV缺失保持null）",
-      "fetchedAt": "2026-10-20T06:34:37.915Z",
-      "provenance": "feishu"
-    },
-    {
-      "id": "src-huang-tiane-commerce-alt",
-      "name": "黄天鹅商销日报副本",
-      "url": "https://yimeichuanbo.feishu.cn/wiki/T2eowqaUOi74Q9kPvQLcu8sSn9c",
-      "status": "ready",
-      "detail": "商销日报副本（8个子表，与主表为同业务副本，仅统计主表）",
+      "detail": "商销日报表（8个子表，全渠道销售与GMV以此为准；历史UV缺失保持null；内部真实维护源）",
       "fetchedAt": "2026-10-20T06:34:37.915Z",
       "provenance": "feishu"
     }
@@ -9054,7 +9045,7 @@
     ]
   },
   "warnings": [
-    "商销两份表为同一业务副本，仅统计主表。",
+    "商销日报仅统计内部真实维护主表（副本已停用，不重复累计）。",
     "日报写3181，飞书原表31.81，本页采用原表。"
   ],
   "dailyDatasets": [

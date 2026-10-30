@@ -78,7 +78,7 @@ export function ReportsWorkspace({ projectId }: { projectId: string }) {
   const metricsSpec = spec && 'kind' in spec && spec.kind === 'project_metrics_report' ? spec as ProjectReportSpec : null;
   const canGenerate = currentProject?.canWrite && !currentProject.isArchived;
   const businessActive = data.businessAvailable && includeBusiness;
-  return <div className="stack" data-testid="project-reports">
+  return <div className="stack ops-workspace reference-workspace reports-workspace" data-workspace-ui="v2" data-testid="project-reports">
     <PageHeader variant="light" title="项目报告" subtitle={(currentProject?.name || '当前项目') + ' / 使用已发布看板的同一指标，历史快照保留原口径'}><Link className="secondary" href={'/projects/' + encodeURIComponent(projectId)}>返回项目看板</Link></PageHeader>
     <SettingsSubNav activeTab="reports" />
     {canGenerate && <section className="platform-panel data-panel" aria-label="报告生成范围">

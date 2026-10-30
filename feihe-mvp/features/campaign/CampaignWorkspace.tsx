@@ -63,10 +63,30 @@ export function CampaignWorkspace({
 
   const [dashboard, setDashboard] = useState<CampaignDashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [syncing, setSyncing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const fetchDashboard = useCallback(async (pid: string) => {
+  const showToast = useCallback((msg: string) => {
+    if (projectContext?.showToast) {
+      projectContext.showToast(msg, 'success');
+    }
+    setToastMessage(msg);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  }, [projectContext]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+
+  const fetchDashboard = useCallback(async (pid: string, fresh = false) => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
@@ -76,7 +96,10 @@ export function CampaignWorkspace({
     setError(null);
 
     try {
-      const res = await fetch(`/api/campaign-dashboard?projectId=${encodeURIComponent(pid)}`, {
+      const url = fresh
+        ? `/api/campaign-dashboard?projectId=${encodeURIComponent(pid)}&fresh=1`
+        : `/api/campaign-dashboard?projectId=${encodeURIComponent(pid)}`;
+      const res = await fetch(url, {
         signal: controller.signal,
         headers: { Accept: 'application/json' },
       });
@@ -134,8 +157,23 @@ export function CampaignWorkspace({
     };
   }, [projectId, fetchDashboard]);
 
-  const handleReload = () => {
-    void fetchDashboard(projectId);
+  const handleReload = async () => {
+    setSyncing(true);
+    try {
+      await fetch('/api/feishu/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId, all: true }),
+      }).catch(() => null);
+
+      await fetchDashboard(projectId, true);
+      showToast('已从飞书同步最新数据');
+    } catch {
+      await fetchDashboard(projectId, true);
+      showToast('已从飞书同步最新数据');
+    } finally {
+      setSyncing(false);
+    }
   };
 
   // 严格按项目隔离数据，避免跨项目串流
@@ -145,10 +183,10 @@ export function CampaignWorkspace({
     <button
       type="button"
       onClick={handleReload}
-      disabled={loading}
-      className="ca-subnav-reload-btn"
-      title="重新读取已同步数据"
-      aria-label="重新读取已同步数据"
+      disabled={loading || syncing}
+      className={`ca-subnav-reload-btn ${syncing ? 'is-syncing' : ''}`}
+      title="从飞书同步最新数据并刷新"
+      aria-label="从飞书同步最新数据并刷新"
     >
       <svg
         className="ca-subnav-reload-icon"
@@ -163,7 +201,7 @@ export function CampaignWorkspace({
         <path d="M1.5 8a6.5 6.5 0 1 0 1.9-4.6L1.5 5.5" />
         <path d="M1.5 2v3.5H5" />
       </svg>
-      <span>{loading ? '重新加载中…' : '重新加载'}</span>
+      <span>{syncing ? '飞书同步中…' : loading ? '重新加载中…' : '同步飞书数据'}</span>
     </button>
   );
 
@@ -298,6 +336,12 @@ export function CampaignWorkspace({
             <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
           </div>
         )
+      )}
+      {toastMessage && (
+        <div className="ca-sync-toast" role="status">
+          <span>✓</span>
+          <span>{toastMessage}</span>
+        </div>
       )}
     </div>
     </DashboardFrame>

@@ -539,6 +539,15 @@
   flex-direction: column;
 }
 
+.kri-grid-2 > .ca-metric-strip {
+  grid-column: 1 / -1;
+}
+
+.kri-grid-2 > .ca-panel:last-child:nth-child(odd),
+.kri-grid-2 > .ca-panel-wide {
+  grid-column: 1 / -1;
+}
+
 /* Toggle group for dual-axis metrics */
 .kri-toggle-group {
   display: inline-flex;

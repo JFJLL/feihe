@@ -1,4 +1,5 @@
 import type { CampaignDailyDataset } from "../../lib/campaign-daily";
+import type { CampaignDashboard } from "../../lib/campaign-types";
 import { safeNum, fmtNum, fmtPct, CAMPAIGN_PALETTE, VERIFIED_KEYWORD_LABELS } from "./campaign-daily-model";
 
 export interface DayOverDayResult {
@@ -760,5 +761,858 @@ export function getCrossDatasetDailyComparison(
     hasMultiple,
     scopeNotice,
     rows,
+  };
+}
+
+export interface PeriodBenchmarks {
+  periodTotalSpend: number | null;
+  periodAvgSpend: number | null;
+  peakDate: string | null;
+  peakValue: number | null;
+  rankInPeriod: number;
+  totalDays: number;
+  spendSharePct: number | null;
+  ma7Spend: number | null;
+  vs7dMaPct: number | null;
+  selectedSpend: number | null;
+  dayIndex: number;
+}
+
+function getRowSpend(row: Record<string, unknown> | null | undefined): number | null {
+  if (!row) return null;
+  const s = safeNum(row.spend_total) ?? safeNum(row.spend);
+  return s;
+}
+
+export function computePeriodBenchmarks(
+  dataset: CampaignDailyDataset,
+  selectedDate: string
+): PeriodBenchmarks {
+  const rows = dataset?.rows || [];
+  if (!rows.length || !selectedDate) {
+    return {
+      periodTotalSpend: null,
+      periodAvgSpend: null,
+      peakDate: null,
+      peakValue: null,
+      rankInPeriod: 1,
+      totalDays: 0,
+      spendSharePct: null,
+      ma7Spend: null,
+      vs7dMaPct: null,
+      selectedSpend: null,
+      dayIndex: 1,
+    };
+  }
+
+  const sorted = [...rows].filter((r) => r.date).sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  const totalDays = sorted.length;
+  const selectedIndex = sorted.findIndex((r) => r.date === selectedDate);
+  const dayIndex = selectedIndex >= 0 ? selectedIndex + 1 : totalDays;
+
+  let totalSpend = 0;
+  let validSpendDays = 0;
+  let peakDate: string | null = null;
+  let peakValue = -Infinity;
+
+  const spendList: Array<{ date: string; spend: number }> = [];
+
+  for (const r of sorted) {
+    const s = getRowSpend(r as unknown as Record<string, unknown>);
+    if (s !== null) {
+      totalSpend += s;
+      validSpendDays++;
+      spendList.push({ date: r.date, spend: s });
+      if (s > peakValue) {
+        peakValue = s;
+        peakDate = r.date;
+      }
+    }
+  }
+
+  const periodTotalSpend = validSpendDays > 0 ? totalSpend : null;
+  const periodAvgSpend = validSpendDays > 0 ? totalSpend / validSpendDays : null;
+  const actualPeakValue = peakDate !== null && peakValue !== -Infinity ? peakValue : null;
+
+  const selectedRow = rows.find((r) => r.date === selectedDate);
+  const selectedSpend = getRowSpend(selectedRow as unknown as Record<string, unknown>);
+
+  let rankInPeriod = totalDays;
+  if (selectedSpend !== null && spendList.length > 0) {
+    const sortedSpends = [...spendList].sort((a, b) => b.spend - a.spend);
+    const rIdx = sortedSpends.findIndex((item) => item.date === selectedDate);
+    rankInPeriod = rIdx >= 0 ? rIdx + 1 : totalDays;
+  }
+
+  const spendSharePct =
+    periodTotalSpend !== null && periodTotalSpend > 0 && selectedSpend !== null
+      ? Math.round((selectedSpend / periodTotalSpend) * 1000) / 10
+      : null;
+
+  const priorRows = sorted.filter((r) => r.date <= selectedDate);
+  const last7 = priorRows.slice(-7);
+  let ma7Sum = 0;
+  let ma7Count = 0;
+  for (const r of last7) {
+    const s = getRowSpend(r as unknown as Record<string, unknown>);
+    if (s !== null) {
+      ma7Sum += s;
+      ma7Count++;
+    }
+  }
+  const ma7Spend = ma7Count > 0 ? ma7Sum / ma7Count : null;
+  const vs7dMaPct =
+    ma7Spend !== null && ma7Spend > 0 && selectedSpend !== null
+      ? Math.round(((selectedSpend - ma7Spend) / ma7Spend) * 1000) / 10
+      : null;
+
+  return {
+    periodTotalSpend,
+    periodAvgSpend,
+    peakDate,
+    peakValue: actualPeakValue,
+    rankInPeriod,
+    totalDays,
+    spendSharePct,
+    ma7Spend,
+    vs7dMaPct,
+    selectedSpend,
+    dayIndex,
+  };
+}
+
+export interface DailyDiagnosis {
+  statusTone: "optimal" | "steady" | "warning" | "watch";
+  statusLabel: string;
+  positionText: string;
+  bullets: string[];
+}
+
+export function computeDailyDiagnosis(
+  dataset: CampaignDailyDataset,
+  selectedDate: string,
+  benchmarks: PeriodBenchmarks
+): DailyDiagnosis {
+  const rows = dataset?.rows || [];
+  const selectedRow = rows.find((r) => r.date === selectedDate);
+  if (!selectedRow) {
+    return {
+      statusTone: "watch",
+      statusLabel: "暂无流水记录",
+      positionText: `所选日期 ${selectedDate} 未采集到有效流水数据`,
+      bullets: [
+        `该日期暂无连续监控记录，请切换至最新有效业务日期 (${dataset?.period || "—"})。`,
+        `全周期有效采集记录共 ${benchmarks.totalDays} 天，暂缺当日细分指标。`,
+        `建议核对业务排期或飞书底表数据抓取时间戳。`,
+      ],
+    };
+  }
+
+  const prevDate = subtractCalendarDays(selectedDate, 1);
+  const prevRow = rows.find((r) => r.date === prevDate);
+  const prevSpend = getRowSpend(prevRow as unknown as Record<string, unknown>);
+  const dodSpend = computeDayOverDay(benchmarks.selectedSpend, prevSpend, "元");
+
+  const isTaosou = dataset.id.includes("taosou");
+  const isCid = dataset.id.includes("cid");
+
+  let tone: "optimal" | "steady" | "warning" | "watch" = "steady";
+  let label = "常规放量日";
+
+  const isPeak = benchmarks.peakDate === selectedDate;
+  const isTopTier = benchmarks.rankInPeriod <= Math.max(1, Math.ceil(benchmarks.totalDays * 0.15));
+
+  const cpc = safeNum(selectedRow.cpc);
+  const cpe = safeNum(selectedRow.cpe);
+  const gmv = safeNum(selectedRow.gmv);
+  const roi = benchmarks.selectedSpend && gmv && benchmarks.selectedSpend > 0 ? gmv / benchmarks.selectedSpend : null;
+
+  if (isPeak) {
+    tone = "optimal";
+    label = "全周期峰值冲刺日";
+  } else if (isTopTier) {
+    tone = "optimal";
+    label = "高效放量日";
+  } else if (benchmarks.vs7dMaPct !== null && benchmarks.vs7dMaPct > 30) {
+    tone = "watch";
+    label = "放量提速日";
+  } else if (benchmarks.vs7dMaPct !== null && benchmarks.vs7dMaPct < -30) {
+    tone = "steady";
+    label = "平稳蓄水日";
+  } else {
+    tone = "steady";
+    label = "常规稳定日";
+  }
+
+  const positionText = `周期第 ${benchmarks.dayIndex} / ${benchmarks.totalDays} 天 · 消耗居全周期第 #${benchmarks.rankInPeriod} 位 · 占全周期 ${benchmarks.spendSharePct ?? 0}%`;
+
+  const bullets: string[] = [];
+
+  const dodStr = dodSpend.isComparable
+    ? `${dodSpend.pct !== null ? (dodSpend.pct > 0 ? `+${fmtPct(dodSpend.pct)}` : fmtPct(dodSpend.pct)) : (dodSpend.diff ?? 0) >= 0 ? `+¥${fmtNum(dodSpend.diff)}` : `-¥${fmtNum(Math.abs(dodSpend.diff || 0))}`} 较前日`
+    : dodSpend.note;
+  const maStr = benchmarks.vs7dMaPct !== null
+    ? `${benchmarks.vs7dMaPct > 0 ? "+" : ""}${fmtPct(benchmarks.vs7dMaPct)} 较7日均线`
+    : `均线基准 ¥${fmtNum(benchmarks.ma7Spend)}`;
+  bullets.push(`本日广告消耗 ¥${fmtNum(benchmarks.selectedSpend)} · ${dodStr} · ${maStr}`);
+
+  if (isTaosou) {
+    const kw = safeNum(selectedRow.kw_total_index);
+    const sf = safeNum(selectedRow.spend_f);
+    const sk = safeNum(selectedRow.spend_k);
+    bullets.push(`淘搜总指数 ${kw !== null ? fmtNum(kw, 0) : "—"} 点 · 信息流(F)支出 ¥${fmtNum(sf)} · 达人(K)支出 ¥${fmtNum(sk)}`);
+  } else if (isCid || gmv !== null) {
+    const clk = safeNum(selectedRow.clicks);
+    const ord = safeNum(selectedRow.orders);
+    bullets.push(`成交 GMV ¥${fmtNum(gmv)} · 订单量 ${ord !== null ? fmtNum(ord, 0) : "—"} 单 · 点击量 ${clk !== null ? fmtNum(clk, 0) : "—"} 次`);
+  } else {
+    const imp = safeNum(selectedRow.impressions);
+    const clk = safeNum(selectedRow.clicks);
+    const eng = safeNum(selectedRow.engagements);
+    const uv = safeNum(selectedRow.uv);
+    bullets.push(`展现规模 ${imp !== null ? fmtNum(imp, 0) : "—"} 次 · 点击 ${clk !== null ? fmtNum(clk, 0) : "—"} 次 · 互动 ${eng !== null ? fmtNum(eng, 0) : (uv !== null ? `${fmtNum(uv, 0)} UV` : "—")}`);
+  }
+
+  if (isCid && roi !== null) {
+    bullets.push(`综合 ROI ${fmtNum(roi, 2)} 倍 · 点击成本 CPC ¥${fmtNum(cpc, 2)} · 转化链路稳定`);
+  } else if (cpc !== null || cpe !== null) {
+    const effPieces: string[] = [];
+    if (cpc !== null) effPieces.push(`点击成本 CPC ¥${fmtNum(cpc, 2)}`);
+    if (cpe !== null) effPieces.push(`互动成本 CPE ¥${fmtNum(cpe, 2)}`);
+    const cpuv = safeNum(selectedRow.cpuv);
+    if (cpuv !== null) effPieces.push(`进店成本 CPUV ¥${fmtNum(cpuv, 2)}`);
+    bullets.push(`${effPieces.join(" · ")} · 核心转化单价处于稳健控制区间`);
+  } else {
+    bullets.push(`全链路指标稳定跟踪 · 飞书多维数据实时回传校准`);
+  }
+
+  return {
+    statusTone: tone,
+    statusLabel: label,
+    positionText,
+    bullets,
+  };
+}
+
+export interface DailyEfficiencyBenchmarkItem {
+  key: string;
+  label: string;
+  unit: string;
+  selectedVal: number | null;
+  periodAvgVal: number | null;
+  diffPct: number | null;
+  status: "better" | "worse" | "equal" | "neutral";
+  statusLabel: string;
+  betterDirection: "higher" | "lower";
+}
+
+export function computeDailyEfficiencyBenchmarks(
+  dataset: CampaignDailyDataset,
+  selectedDate: string
+): DailyEfficiencyBenchmarkItem[] {
+  const rows = dataset?.rows || [];
+  const selectedRow = rows.find((r) => r.date === selectedDate);
+  if (!selectedRow || !rows.length) return [];
+
+  const isTaosou = dataset.id.includes("taosou");
+  const isCid = dataset.id.includes("cid");
+
+  const metricsToTest: Array<{
+    key: string;
+    label: string;
+    unit: string;
+    betterDirection: "higher" | "lower";
+    computeWeightedAvg: (rowsList: Array<Record<string, unknown>>) => number | null;
+  }> = [];
+
+  if (isTaosou) {
+    return [];
+  }
+
+  metricsToTest.push({
+    key: "cpc",
+    label: "点击成本 (CPC)",
+    unit: "元",
+    betterDirection: "lower",
+    computeWeightedAvg: (rs) => {
+      let sumSpend = 0, sumClicks = 0;
+      for (const r of rs) {
+        const s = safeNum(r.spend);
+        const c = safeNum(r.clicks);
+        if (s !== null && c !== null && c > 0) {
+          sumSpend += s;
+          sumClicks += c;
+        }
+      }
+      return sumClicks > 0 ? sumSpend / sumClicks : null;
+    },
+  });
+
+  metricsToTest.push({
+    key: "cpm",
+    label: "千次曝光成本 (CPM)",
+    unit: "元",
+    betterDirection: "lower",
+    computeWeightedAvg: (rs) => {
+      let sumSpend = 0, sumImp = 0;
+      for (const r of rs) {
+        const s = safeNum(r.spend);
+        const i = safeNum(r.impressions);
+        if (s !== null && i !== null && i > 0) {
+          sumSpend += s;
+          sumImp += i;
+        }
+      }
+      return sumImp > 0 ? (sumSpend / sumImp) * 1000 : null;
+    },
+  });
+
+  if (selectedRow.cpe !== undefined || rows.some((r) => r.cpe !== undefined)) {
+    metricsToTest.push({
+      key: "cpe",
+      label: "互动成本 (CPE)",
+      unit: "元",
+      betterDirection: "lower",
+      computeWeightedAvg: (rs) => {
+        let sumSpend = 0, sumEng = 0;
+        for (const r of rs) {
+          const s = safeNum(r.spend);
+          const e = safeNum(r.engagements);
+          if (s !== null && e !== null && e > 0) {
+            sumSpend += s;
+            sumEng += e;
+          }
+        }
+        return sumEng > 0 ? sumSpend / sumEng : null;
+      },
+    });
+  }
+
+  if (selectedRow.cpuv !== undefined || rows.some((r) => r.cpuv !== undefined)) {
+    metricsToTest.push({
+      key: "cpuv",
+      label: "进店成本 (CPUV)",
+      unit: "元",
+      betterDirection: "lower",
+      computeWeightedAvg: (rs) => {
+        let sumSpend = 0, sumUv = 0;
+        for (const r of rs) {
+          const s = safeNum(r.spend);
+          const u = safeNum(r.uv);
+          if (s !== null && u !== null && u > 0) {
+            sumSpend += s;
+            sumUv += u;
+          }
+        }
+        return sumUv > 0 ? sumSpend / sumUv : null;
+      },
+    });
+  }
+
+  if (selectedRow.ctr !== undefined || rows.some((r) => r.ctr !== undefined)) {
+    metricsToTest.push({
+      key: "ctr",
+      label: "点击率 (CTR)",
+      unit: "%",
+      betterDirection: "higher",
+      computeWeightedAvg: (rs) => {
+        let sumClicks = 0, sumImp = 0;
+        for (const r of rs) {
+          const c = safeNum(r.clicks);
+          const i = safeNum(r.impressions);
+          if (c !== null && i !== null && i > 0) {
+            sumClicks += c;
+            sumImp += i;
+          }
+        }
+        return sumImp > 0 ? (sumClicks / sumImp) * 100 : null;
+      },
+    });
+  }
+
+  if (isCid || selectedRow.gmv !== undefined || rows.some((r) => r.gmv !== undefined)) {
+    metricsToTest.push({
+      key: "roi",
+      label: "综合 ROI",
+      unit: "倍",
+      betterDirection: "higher",
+      computeWeightedAvg: (rs) => {
+        let sumGmv = 0, sumSpend = 0;
+        for (const r of rs) {
+          const g = safeNum(r.gmv);
+          const s = safeNum(r.spend);
+          if (g !== null && s !== null && s > 0) {
+            sumGmv += g;
+            sumSpend += s;
+          }
+        }
+        return sumSpend > 0 ? sumGmv / sumSpend : null;
+      },
+    });
+  }
+
+  const results: DailyEfficiencyBenchmarkItem[] = [];
+  for (const m of metricsToTest) {
+    let selVal = safeNum(selectedRow[m.key]);
+    if (m.key === "roi") {
+      const s = safeNum(selectedRow.spend);
+      const g = safeNum(selectedRow.gmv);
+      if (s !== null && g !== null && s > 0) selVal = g / s;
+    }
+    const avgVal = m.computeWeightedAvg(rows as unknown as Array<Record<string, unknown>>);
+
+    if (selVal === null && avgVal === null) continue;
+
+    let diffPct: number | null = null;
+    let status: "better" | "worse" | "equal" | "neutral" = "neutral";
+    let statusLabel = "基准持平";
+
+    if (selVal !== null && avgVal !== null && avgVal > 0) {
+      diffPct = Math.round(((selVal - avgVal) / avgVal) * 1000) / 10;
+      if (m.betterDirection === "lower") {
+        if (diffPct < -1) {
+          status = "better";
+          statusLabel = `优于周期均值 ${fmtPct(Math.abs(diffPct))}`;
+        } else if (diffPct > 1) {
+          status = "worse";
+          statusLabel = `高于周期均值 ${fmtPct(diffPct)}`;
+        } else {
+          status = "equal";
+          statusLabel = "持平周期均值";
+        }
+      } else {
+        if (diffPct > 1) {
+          status = "better";
+          statusLabel = `优于周期均值 ${fmtPct(diffPct)}`;
+        } else if (diffPct < -1) {
+          status = "worse";
+          statusLabel = `低于周期均值 ${fmtPct(Math.abs(diffPct))}`;
+        } else {
+          status = "equal";
+          statusLabel = "持平周期均值";
+        }
+      }
+    } else if (selVal !== null && avgVal === null) {
+      statusLabel = "周期均值暂缺";
+    }
+
+    results.push({
+      key: m.key,
+      label: m.label,
+      unit: m.unit,
+      selectedVal: selVal !== null ? Math.round(selVal * 100) / 100 : null,
+      periodAvgVal: avgVal !== null ? Math.round(avgVal * 100) / 100 : null,
+      diffPct,
+      status,
+      statusLabel,
+      betterDirection: m.betterDirection,
+    });
+  }
+
+  return results;
+}
+
+export interface DailyFunnelStep {
+  key: string;
+  label: string;
+  value: number | null;
+  formattedValue: string;
+  unit: string;
+  conversionRate?: number | null;
+  conversionLabel?: string;
+}
+
+export function computeDailyTrafficFunnel(
+  dataset: CampaignDailyDataset,
+  selectedDate: string
+): DailyFunnelStep[] {
+  const rows = dataset?.rows || [];
+  const row = rows.find((r) => r.date === selectedDate);
+  if (!row) return [];
+
+  const steps: DailyFunnelStep[] = [];
+  const imp = safeNum(row.impressions);
+  const clk = safeNum(row.clicks);
+  const eng = safeNum(row.engagements);
+  const uv = safeNum(row.uv) ?? safeNum(row.externalUv) ?? safeNum(row.search_uv);
+  const ord = safeNum(row.orders);
+  const gmv = safeNum(row.gmv);
+
+  if (imp !== null) {
+    steps.push({
+      key: "imp",
+      label: "展现曝光",
+      value: imp,
+      formattedValue: `${fmtNum(imp, 0)} 次`,
+      unit: "次",
+    });
+  }
+
+  if (clk !== null) {
+    const ctrRate = imp && imp > 0 ? Math.round((clk / imp) * 10000) / 100 : null;
+    steps.push({
+      key: "clicks",
+      label: "点击转化",
+      value: clk,
+      formattedValue: `${fmtNum(clk, 0)} 次`,
+      unit: "次",
+      conversionRate: ctrRate,
+      conversionLabel: ctrRate !== null ? `CTR ${fmtPct(ctrRate)}` : undefined,
+    });
+  }
+
+  if (eng !== null) {
+    const engRate = clk && clk > 0 ? Math.round((eng / clk) * 10000) / 100 : null;
+    steps.push({
+      key: "engagements",
+      label: "互动沉淀",
+      value: eng,
+      formattedValue: `${fmtNum(eng, 0)} 次`,
+      unit: "次",
+      conversionRate: engRate,
+      conversionLabel: engRate !== null ? `点击互动率 ${fmtPct(engRate)}` : undefined,
+    });
+  }
+
+  if (uv !== null) {
+    const base = clk && clk > 0 ? clk : imp && imp > 0 ? imp : null;
+    const uvRate = base && base > 0 ? Math.round((uv / base) * 10000) / 100 : null;
+    steps.push({
+      key: "uv",
+      label: "进店访客 (UV)",
+      value: uv,
+      formattedValue: `${fmtNum(uv, 0)} 人`,
+      unit: "人",
+      conversionRate: uvRate,
+      conversionLabel: uvRate !== null ? (clk && clk > 0 ? `点击进店率 ${fmtPct(uvRate)}` : `曝光进店率 ${fmtPct(uvRate)}`) : undefined,
+    });
+  }
+
+  if (ord !== null || gmv !== null) {
+    const baseUv = uv && uv > 0 ? uv : clk && clk > 0 ? clk : null;
+    const ordRate = ord !== null && baseUv && baseUv > 0 ? Math.round((ord / baseUv) * 10000) / 100 : null;
+    steps.push({
+      key: "orders",
+      label: ord !== null ? "成交订单" : "成交 GMV",
+      value: ord !== null ? ord : gmv,
+      formattedValue: ord !== null ? `${fmtNum(ord, 0)} 单` : `¥${fmtNum(gmv)}`,
+      unit: ord !== null ? "单" : "元",
+      conversionRate: ordRate,
+      conversionLabel: ordRate !== null ? `进店成交率 ${fmtPct(ordRate)}` : undefined,
+    });
+  }
+
+  return steps;
+}
+
+export interface TopCreativeItem {
+  id: string;
+  title: string;
+  creator: string;
+  channelOrTier: string;
+  spend: number | null;
+  impressions: number | null;
+  engagements: number | null;
+  clicks: number | null;
+  uv: number | null;
+  gmv: number | null;
+  orders?: number | null;
+  cpc: number | null;
+  cpe: number | null;
+  cpuv: number | null;
+  roi: number | null;
+  ctr: number | null;
+}
+
+export interface SearchKeywordItem {
+  keyword: string;
+  category?: string;
+  spend: number | null;
+  index?: number | null;
+  clicks?: number | null;
+  impressions?: number | null;
+  cpc?: number | null;
+  ctr?: number | null;
+  uv?: number | null;
+  sharePct?: number | null;
+}
+
+export interface AudiencePackageItem {
+  name: string;
+  spend: number | null;
+  impressions?: number | null;
+  clicks?: number | null;
+  uv?: number | null;
+  cpe?: number | null;
+  cpuv?: number | null;
+  cpm?: number | null;
+  ctr?: number | null;
+}
+
+export interface DailyFeishuDrilldowns {
+  topNotes: TopCreativeItem[];
+  searchKeywords: SearchKeywordItem[];
+  audiencePackages: AudiencePackageItem[];
+  actionItems: Array<{ id: string; title: string; owner?: string; status?: string; badge?: string }>;
+  taosouDailyKeywords?: SearchKeywordItem[];
+  channelSplits?: Array<{ label: string; spend: number; sharePct: number; color?: string }>;
+}
+
+export function extractFeishuDrilldowns(
+  dashboard: CampaignDashboard,
+  selectedDate: string,
+  activeDataset?: CampaignDailyDataset | null
+): DailyFeishuDrilldowns {
+  const tables = dashboard?.tables || [];
+  const topNotes: TopCreativeItem[] = [];
+  const searchKeywords: SearchKeywordItem[] = [];
+  const audiencePackages: AudiencePackageItem[] = [];
+  const actionItems: Array<{ id: string; title: string; owner?: string; status?: string; badge?: string }> = [];
+  let taosouDailyKeywords: SearchKeywordItem[] | undefined;
+  let channelSplits: Array<{ label: string; spend: number; sharePct: number; color?: string }> | undefined;
+
+  if (dashboard?.actions?.items?.length) {
+    dashboard.actions.items.forEach((it, idx) => {
+      if (typeof it === "string") {
+        actionItems.push({
+          id: `act-${idx}`,
+          title: it,
+          status: "日报计划",
+          badge: "跟进中",
+        });
+      } else if (it && typeof it === "object") {
+        actionItems.push({
+          id: it.id || `act-${idx}`,
+          title: it.title || it.text || it.description || "未命名事项",
+          owner: it.owner || "运营",
+          status: it.status || "日报计划",
+          badge: it.priority ? `P-${it.priority}` : "日报任务",
+        });
+      }
+    });
+  }
+
+  const allDaily = dashboard?.dailyDatasets || [];
+  const taosouDs = allDaily.find((d) => d.id.includes("taosou")) || (activeDataset?.id.includes("taosou") ? activeDataset : null);
+  if (taosouDs?.rows?.length) {
+    const dayRow = taosouDs.rows.find((r) => r.date === selectedDate);
+    if (dayRow) {
+      const kwKeys = [
+        { key: "kw_wipes", label: VERIFIED_KEYWORD_LABELS.kw_wipes || "稳健酒精湿巾" },
+        { key: "kw_corn_wipes", label: VERIFIED_KEYWORD_LABELS.kw_corn_wipes || "稳健玉米酒精湿巾" },
+        { key: "kw_alcohol", label: VERIFIED_KEYWORD_LABELS.kw_alcohol || "稳健酒精" },
+        { key: "kw_alcohol_wipes", label: VERIFIED_KEYWORD_LABELS.kw_alcohol_wipes || "酒精湿巾稳健" },
+        { key: "kw_corn_alcohol_wipes", label: VERIFIED_KEYWORD_LABELS.kw_corn_alcohol_wipes || "玉米酒精湿巾" },
+        { key: "kw_disinfect_wipes", label: VERIFIED_KEYWORD_LABELS.kw_disinfect_wipes || "稳健消毒湿巾" },
+      ];
+      const list: SearchKeywordItem[] = [];
+      let sumKw = 0;
+      for (const k of kwKeys) {
+        const v = safeNum(dayRow[k.key]);
+        if (v !== null) {
+          sumKw += v;
+          list.push({
+            keyword: k.label,
+            category: "淘系搜索关键词",
+            index: v,
+            spend: null,
+          });
+        }
+      }
+      if (sumKw > 0) {
+        for (const item of list) {
+          item.sharePct = Math.round(((item.index || 0) / sumKw) * 1000) / 10;
+        }
+      }
+      list.sort((a, b) => (b.index || 0) - (a.index || 0));
+      if (list.length > 0) {
+        taosouDailyKeywords = list;
+      }
+
+      const chs = [
+        { key: "spend_f", label: "信息流(F端)", color: CAMPAIGN_PALETTE.primary },
+        { key: "spend_s", label: "搜索推广(S端)", color: CAMPAIGN_PALETTE.purple },
+        { key: "spend_k", label: "达人投放(K端)", color: CAMPAIGN_PALETTE.gold },
+        { key: "spend_cid", label: "CID引流端", color: CAMPAIGN_PALETTE.terracotta },
+      ];
+      let sumCh = 0;
+      const chList: Array<{ label: string; spend: number; sharePct: number; color?: string }> = [];
+      for (const c of chs) {
+        const val = safeNum(dayRow[c.key]);
+        if (val !== null && val > 0) {
+          sumCh += val;
+          chList.push({ label: c.label, spend: val, sharePct: 0, color: c.color });
+        }
+      }
+      if (sumCh > 0) {
+        for (const c of chList) {
+          c.sharePct = Math.round((c.spend / sumCh) * 1000) / 10;
+        }
+        channelSplits = chList;
+      }
+    }
+  }
+
+  const noteTables = tables.filter((t) => {
+    const id = t.id.toLowerCase();
+    return (
+      id.includes("creative") ||
+      id.includes("note") ||
+      id.includes("kol") ||
+      id.includes("material") ||
+      id.includes("creator") ||
+      id.includes("pareto")
+    );
+  });
+
+  const notePool: TopCreativeItem[] = [];
+  for (const t of noteTables) {
+    for (let i = 0; i < t.rows.length; i++) {
+      const r = t.rows[i];
+      if (!r || (r as Record<string, unknown>).isSummary) continue;
+      const kol = String(r.kolName || r.kol_name || r.creator || r.account_name || r.material_name || r.creativeName || "").trim();
+      const title = String(r.material_name || r.creativeName || r.noteTitle || r.contentType || kol || `素材 #${i + 1}`).trim();
+      const channel = String(r.channel || r.tier || r.account_tier || r.kolTier || r.coopFormat || "精选合作").trim();
+      const spend = safeNum(r.spend ?? r.fsSpend ?? r.costSpend ?? r.kCost ?? r.totalSpendKfs ?? r.taskSpend);
+      const imp = safeNum(r.impressions ?? r.pgyImp ?? r.fsImp);
+      const clk = safeNum(r.clicks ?? r.fsClick);
+      const eng = safeNum(r.engagements ?? r.pgyEng ?? r.fsEng);
+      const uv = safeNum(r.uv ?? r.externalUv ?? r.fsUv);
+      const gmv = safeNum(r.gmv);
+      const orders = safeNum(r.orders);
+      const roi = safeNum(r.roi);
+      const cpc = safeNum(r.cpc ?? r.fsCpc);
+      const cpe = safeNum(r.cpe ?? r.fsCpe ?? r.pgyCpe);
+      const cpuv = safeNum(r.cpuv);
+      const ctr = safeNum(r.ctr ?? r.fsCtr);
+
+      if (spend !== null || imp !== null || clk !== null || gmv !== null) {
+        notePool.push({
+          id: String(r.noteId || r.note_id || r.id || `${t.id}-${i}`),
+          title,
+          creator: kol || "合作达人",
+          channelOrTier: channel,
+          spend,
+          impressions: imp,
+          clicks: clk,
+          engagements: eng,
+          uv,
+          gmv,
+          orders,
+          roi,
+          cpc,
+          cpe,
+          cpuv,
+          ctr,
+        });
+      }
+    }
+  }
+
+  const seenIds = new Set<string>();
+  const uniqueNotes: TopCreativeItem[] = [];
+  notePool.sort((a, b) => {
+    const sA = a.spend ?? (a.gmv ? a.gmv * 0.3 : 0);
+    const sB = b.spend ?? (b.gmv ? b.gmv * 0.3 : 0);
+    return sB - sA;
+  });
+  for (const n of notePool) {
+    const key = `${n.creator}-${n.title}`;
+    if (!seenIds.has(key)) {
+      seenIds.add(key);
+      uniqueNotes.push(n);
+      if (uniqueNotes.length >= 6) break;
+    }
+  }
+  topNotes.push(...uniqueNotes);
+
+  const kwTables = tables.filter((t) => {
+    const id = t.id.toLowerCase();
+    return id.includes("keyword") || id.includes("search");
+  });
+  for (const t of kwTables) {
+    for (const r of t.rows) {
+      if (!r || (r as Record<string, unknown>).isSummary) continue;
+      const kw = String(r.keyword || r.category || r.category_name || r.word || "").trim();
+      if (!kw) continue;
+      const spend = safeNum(r.spend);
+      const clk = safeNum(r.clicks);
+      const imp = safeNum(r.impressions);
+      const cpc = safeNum(r.cpc);
+      const ctr = safeNum(r.ctr);
+      const uv = safeNum(r.uv ?? r.externalUv);
+      searchKeywords.push({
+        keyword: kw,
+        category: String(r.category || t.title.slice(0, 10)),
+        spend,
+        clicks: clk,
+        impressions: imp,
+        cpc,
+        ctr,
+        uv,
+      });
+    }
+  }
+  searchKeywords.sort((a, b) => (b.spend ?? 0) - (a.spend ?? 0));
+
+  const audTables = tables.filter((t) => {
+    const id = t.id.toLowerCase();
+    return id.includes("audience") || id.includes("targeting");
+  });
+  for (const t of audTables) {
+    for (const r of t.rows) {
+      if (!r || (r as Record<string, unknown>).isSummary) continue;
+      const name = String(r.packageName || r.audience || r.package_name || r.crowd_name || "").trim();
+      if (!name) continue;
+      audiencePackages.push({
+        name,
+        spend: safeNum(r.spend),
+        impressions: safeNum(r.impressions),
+        clicks: safeNum(r.clicks),
+        uv: safeNum(r.uv),
+        cpe: safeNum(r.cpe),
+        cpuv: safeNum(r.cpuv),
+        cpm: safeNum(r.cpm),
+        ctr: safeNum(r.ctr),
+      });
+    }
+  }
+  audiencePackages.sort((a, b) => (b.spend ?? 0) - (a.spend ?? 0));
+
+  return {
+    topNotes,
+    searchKeywords: searchKeywords.slice(0, 10),
+    audiencePackages: audiencePackages.slice(0, 8),
+    actionItems: actionItems.slice(0, 8),
+    taosouDailyKeywords,
+    channelSplits,
+  };
+}
+
+export interface DailyRichContext {
+  benchmarks: PeriodBenchmarks;
+  diagnosis: DailyDiagnosis;
+  efficiencyBenchmarks: DailyEfficiencyBenchmarkItem[];
+  trafficFunnel: DailyFunnelStep[];
+  feishuDrilldowns: DailyFeishuDrilldowns;
+}
+
+export function buildDailyRichContext(
+  dashboard: CampaignDashboard,
+  activeDataset: CampaignDailyDataset,
+  selectedDate: string
+): DailyRichContext {
+  const benchmarks = computePeriodBenchmarks(activeDataset, selectedDate);
+  const diagnosis = computeDailyDiagnosis(activeDataset, selectedDate, benchmarks);
+  const efficiencyBenchmarks = computeDailyEfficiencyBenchmarks(activeDataset, selectedDate);
+  const trafficFunnel = computeDailyTrafficFunnel(activeDataset, selectedDate);
+  const feishuDrilldowns = extractFeishuDrilldowns(dashboard, selectedDate, activeDataset);
+
+  return {
+    benchmarks,
+    diagnosis,
+    efficiencyBenchmarks,
+    trafficFunnel,
+    feishuDrilldowns,
   };
 }

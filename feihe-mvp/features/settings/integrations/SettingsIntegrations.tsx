@@ -173,8 +173,8 @@ export function SettingsIntegrations({
   return (
     <div className="stack" style={{ gap: 0 }}>
       {loadError && <ErrorState error={`${loadError}；下方显示上次读取的状态。`} onRetry={load} />}
-      <article className="platform-panel" style={{ background: 'var(--ws-surface, #ffffff)', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 'var(--ws-radius-card, 12px)', padding: '24px' }}>
-          <div className="list-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+      <article className="platform-panel" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '22px 24px', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)' }}>
+          <div className="list-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: 16, marginBottom: 18, flexWrap: 'wrap', gap: '12px' }}>
             <div>
               <h2 style={{ margin: '2px 0 4px', fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>当前项目的工具与接口</h2>
               <p style={{ margin: 0, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>抓取任务会优先使用这里启用的接口配置；凭证由安全环境托管。</p>
@@ -345,7 +345,7 @@ export function SettingsIntegrations({
           <div className="integration-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '14px' }}>
             {integrations.length ? (
               integrations.map((item) => (
-                <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: 'var(--ws-surface, #ffffff)', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 'var(--ws-radius-control, 8px)' }}>
+                <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', alignItems: 'center', gap: '14px', padding: '14px 18px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                       <strong style={{ fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>{item.name}</strong>

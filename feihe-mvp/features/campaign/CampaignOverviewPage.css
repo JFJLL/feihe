@@ -244,6 +244,9 @@
   border: 0.5px solid var(--slate-4, #e8e8ec);
   border-radius: 8px;
   box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .ca-section-macro-card .ca-panel .ca-panel-header {
@@ -256,6 +259,27 @@
 .ca-section-macro-card .ca-panel .ca-panel-body,
 .ca-section-macro-card .ca-panel > .ca-panel-body {
   padding: 14px 16px 16px !important;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.ca-section-macro-card .ca-panel .ca-budget-chart {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-height: 220px;
+}
+
+.ca-section-macro-card .ca-panel .ca-budget-rows {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 16px;
+  min-height: 170px;
 }
 
 .ca-section-macro-card .ca-panel .ca-panel-title {

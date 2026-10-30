@@ -15,7 +15,8 @@ export function useProjectTab(defaultTab: string, allowedTabs: string[], aliases
     const mapped = raw && aliases?.[raw] ? aliases[raw] : raw;
     return mapped && allowedTabs.includes(mapped) ? mapped : defaultTab;
   }, [aliases, allowedTabs, defaultTab]);
-  const activeTab = resolveTab(new URLSearchParams(search).get('tab'));
+  const parsed = new URLSearchParams(search);
+  const activeTab = resolveTab(parsed.get('tab') || parsed.get('view'));
   const setTab = useCallback((nextTab: string) => {
     const params = new URLSearchParams(window.location.search);
     params.set('tab', resolveTab(nextTab));

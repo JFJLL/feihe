@@ -10,7 +10,13 @@
 .settings-workspace-stack {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 18px;
+}
+
+.settings-workspace .ui-page-header,
+[data-workspace-ui='v2'].settings-workspace .ui-page-header,
+.settings-workspace-stack > .ui-page-header {
+  margin: 0 !important;
 }
 
 .settings-nav-wrapper {
@@ -261,4 +267,102 @@ body:has(.settings-sticky-action-bar) .main {
   body:has(.settings-sticky-action-bar) .main {
     padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px));
   }
+}
+
+/* Unified single-track subnav */
+.settings-subnav-unified {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-subnav-divider {
+  width: 1px;
+  height: 16px;
+  background: #cbd5e1;
+  margin: 0 4px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.settings-subnav-aux-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.settings-subnav-unified .settings-subnav-item,
+.settings-subnav-unified .settings-subnav-aux-item,
+.settings-subnav-unified .settings-aux-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 6px 12px !important;
+  border-radius: 7px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #475569 !important;
+  border: none !important;
+  background: transparent !important;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+  box-shadow: none !important;
+}
+
+.settings-subnav-unified .settings-subnav-item:hover,
+.settings-subnav-unified .settings-subnav-aux-item:hover,
+.settings-subnav-unified .settings-aux-nav-link:hover {
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: #0f172a !important;
+}
+
+.settings-subnav-unified .settings-subnav-item.active,
+.settings-subnav-unified .settings-subnav-item[aria-current="page"],
+.settings-subnav-unified .settings-subnav-aux-item.active,
+.settings-subnav-unified .settings-subnav-aux-item[aria-current="page"],
+.settings-subnav-unified .settings-aux-nav-link.active,
+.settings-subnav-unified .settings-aux-nav-link[aria-current="page"] {
+  background: #0d6e52 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 2px rgba(13, 110, 82, 0.2) !important;
+}
+
+/* Emerald Primary Buttons & Focus Rings in Settings Workspace */
+.settings-workspace .primary,
+.settings-workspace .primary-btn,
+.settings-workspace button.primary,
+[data-workspace-ui='v2'] .settings-workspace .primary,
+[data-workspace-ui='v2'] .settings-workspace button.primary {
+  background: #0d6e52 !important;
+  border-color: #0d6e52 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(13, 110, 82, 0.12) !important;
+}
+
+.settings-workspace .primary:hover:not(:disabled),
+.settings-workspace .primary-btn:hover:not(:disabled),
+.settings-workspace button.primary:hover:not(:disabled),
+[data-workspace-ui='v2'] .settings-workspace .primary:hover:not(:disabled),
+[data-workspace-ui='v2'] .settings-workspace button.primary:hover:not(:disabled) {
+  background: #09543e !important;
+  border-color: #09543e !important;
+  box-shadow: 0 2px 6px rgba(13, 110, 82, 0.18) !important;
+}
+
+.settings-workspace input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):focus,
+.settings-workspace select:focus,
+.settings-workspace textarea:focus {
+  border-color: #0d6e52 !important;
+  box-shadow: 0 0 0 3px rgba(13, 110, 82, 0.14) !important;
 }

@@ -166,14 +166,15 @@ export function CampaignSourcesPanel({
   }
 
   return (
-    <div className="campaign-sources-panel" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div className="campaign-sources-panel" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {/* 顶部概览说明条 */}
       <div
         style={{
-          background: '#f9f9fb',
-          border: '0.5px solid #d9d9e0',
-          borderRadius: 8,
-          padding: '16px 20px',
+          background: '#ffffff',
+          border: '1px solid #e2e8f0',
+          borderRadius: 12,
+          padding: '20px 24px',
+          boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -289,8 +290,8 @@ export function CampaignSourcesPanel({
                 <div
                   key={src.id}
                   style={{
-                    border: '0.5px solid #d9d9e0',
-                    borderRadius: 8,
+                    border: '1px solid #e2e8f0',
+                    borderRadius: 10,
                     padding: 16,
                     background: '#ffffff',
                     display: 'flex',
@@ -379,10 +380,10 @@ export function CampaignSourcesPanel({
               专供「首页分日看板」绘制真实时序走势，与大盘累计 KPI 严格隔离
             </span>
           </div>
-          <div style={{ overflowX: 'auto', border: '0.5px solid #d9d9e0', borderRadius: 8, background: '#ffffff' }}>
+          <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: 10, background: '#ffffff' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, textAlign: 'left' }}>
               <thead>
-                <tr style={{ background: '#f9f9fb', borderBottom: '0.5px solid #d9d9e0', color: '#60646c' }}>
+                <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#60646c' }}>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>数据集名称</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>覆盖周期</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>记录天数</th>

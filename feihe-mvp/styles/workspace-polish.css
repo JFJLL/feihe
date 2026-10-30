@@ -436,3 +436,16 @@ button.floating-agent-btn:hover,
   border-radius: 0 !important;
   font-variant-numeric: tabular-nums;
 }
+
+/* Settings workspace emerald primary button override */
+.settings-workspace .primary,
+.settings-workspace .primary-btn {
+  background: #0d6e52 !important;
+  border-color: #0d6e52 !important;
+  color: #ffffff !important;
+}
+.settings-workspace .primary:hover:not(:disabled),
+.settings-workspace .primary-btn:hover:not(:disabled) {
+  background: #09543e !important;
+  border-color: #09543e !important;
+}

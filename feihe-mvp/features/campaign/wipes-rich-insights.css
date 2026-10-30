@@ -67,6 +67,15 @@
   flex-direction: column;
 }
 
+.wipes-rich-grid-2 > .ca-metric-strip {
+  grid-column: 1 / -1;
+}
+
+.wipes-rich-grid-2 > .ca-panel:last-child:nth-child(odd),
+.wipes-rich-grid-2 > .ca-panel-wide {
+  grid-column: 1 / -1;
+}
+
 .wipes-secondary-section {
   background: #ffffff;
   border:0.5px solid #d9d9e0;

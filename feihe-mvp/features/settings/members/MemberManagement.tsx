@@ -184,8 +184,8 @@ export function MemberManagement({
 
       {/* Member Table Panel */}
       {!loading && !error && (
-        <article style={{ background: 'var(--ws-surface, #ffffff)', padding: 24, borderRadius: 'var(--ws-radius-card, 12px)', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
+        <article style={{ background: '#ffffff', padding: '22px 24px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(15, 23, 42, 0.04)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: 16, marginBottom: 18, flexWrap: 'wrap', gap: 12 }}>
             <div>
               <h3 style={{ margin: '4px 0 2px', fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>项目成员与权限列表</h3>
               <p style={{ margin: 0, fontSize: 12, color: 'var(--slate-11, #60646c)' }}>不同成员按角色隔离飞书应用凭证、写操作与删除权限。</p>
@@ -231,7 +231,7 @@ export function MemberManagement({
                     setSelectedRole('editor');
                     setShowAddModal(true);
                   }}
-                  style={{ padding: '7px 14px', fontSize: 12, fontWeight: 600, borderRadius: 'var(--ws-radius-control, 8px)', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  style={{ padding: '7px 16px', fontSize: 12, fontWeight: 600, borderRadius: '8px', background: '#0d6e52', borderColor: '#0d6e52', color: '#ffffff', display: 'inline-flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}
                 >
                   <span>＋</span> 添加成员
                 </button>
@@ -242,10 +242,10 @@ export function MemberManagement({
           {members.length === 0 ? (
             <EmptyState title="当前项目暂无成员" text="点击上方「添加已有成员」邀请团队成员协作。" />
           ) : (
-            <div style={{ overflowX: 'auto', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 'var(--ws-radius-control, 8px)' }}>
+            <div style={{ overflowX: 'auto', border: '1px solid #e2e8f0', borderRadius: '10px', background: '#ffffff' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ background: 'var(--slate-2, #f9f9fb)', borderBottom: '0.5px solid var(--slate-6, #d9d9e0)', color: 'var(--slate-11, #60646c)' }}>
+                  <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
                     <th style={{ padding: '10px 14px', fontWeight: 600 }}>成员姓名</th>
                     <th style={{ padding: '10px 14px', fontWeight: 600 }}>系统账号 / 邮箱</th>
                     <th style={{ padding: '10px 14px', fontWeight: 600 }}>项目角色</th>
@@ -260,7 +260,7 @@ export function MemberManagement({
                     const protectedMember = m.userId === ownerId || (m.role === 'project_admin' && adminCount <= 1);
 
                     return (
-                      <tr key={m.userId} style={{ borderBottom: '0.5px solid var(--slate-4, #e8e8ec)' }}>
+                      <tr key={m.userId} style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={{ padding: '12px 14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
                           {m.name}
                           {isSelf && (

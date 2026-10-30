@@ -136,6 +136,7 @@ export interface CampaignDashboard {
   name: string;
   subtitle?: string;
   reportPeriod: string;
+  period?: string;
   updatedAt: string;
   templateId?: CampaignTemplateId | string;
   provenance?: CampaignProvenanceType | CampaignProvenance;

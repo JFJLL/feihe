@@ -277,7 +277,7 @@ console.log("\n[Test 5] Development Verification: Accommodating enriched winner-
     const wipesJson = JSON.parse(fs.readFileSync(wipesEnrichedPath, "utf8"));
     const taosouEnriched = wipesJson.dailyDatasets && wipesJson.dailyDatasets.find(d => d.id === "wipes-daily-taosou");
     assert(taosouEnriched, "wipes-daily-taosou enriched dataset exists");
-    assert.equal(taosouEnriched.rows.length, 42, "Enriched taosou has 42 days");
+    assert(taosouEnriched.rows.length >= 42, "Enriched taosou has at least 42 days");
 
     const rows42 = buildCalendarRows(taosouEnriched, taosouEnriched.rows[0].date, taosouEnriched.rows[taosouEnriched.rows.length - 1].date);
     const configs42 = getDatasetChartConfigs(taosouEnriched, rows42);
@@ -301,6 +301,15 @@ console.log("\n[Test 5] Development Verification: Accommodating enriched winner-
 console.log("\n[Test 6] SSR Rendering: CampaignDailyPage full component render");
 const dailyModule = loadComponent("features/campaign/CampaignDailyPage.tsx");
 const { CampaignDailyPage } = dailyModule;
+const singleModel = loadComponent("features/campaign/daily-selection-model.ts");
+const {
+  computePeriodBenchmarks,
+  computeDailyDiagnosis,
+  computeDailyEfficiencyBenchmarks,
+  computeDailyTrafficFunnel,
+  extractFeishuDrilldowns,
+  buildDailyRichContext,
+} = singleModel;
 
 for (const pid of ["kailas", "meiling", "winner-wipes"]) {
   const res = await fetch("http://localhost:5173/api/campaign-dashboard?projectId=" + pid);
@@ -313,6 +322,9 @@ for (const pid of ["kailas", "meiling", "winner-wipes"]) {
   assert(html.includes("ca-daily-grid"), pid + " has ca-daily-grid");
   assert(html.includes("ca-metric-strip"), pid + " has metric strip");
   assert(html.includes("ca-daily-details-panel"), pid + " has collapsible details table");
+  assert(html.includes("ca-daily-diagnosis-banner"), pid + " has daily executive diagnosis banner");
+  assert(html.includes("ca-trend-summary-ribbon"), pid + " has trend summary ribbon");
+  assert(html.includes("ca-feishu-enrichment-card"), pid + " has feishu enrichment card");
 
   // Verify metric pill selector is completely removed
   assert(!html.includes("ca-metric-pills"), pid + " does NOT have old metric pill selector");
@@ -343,6 +355,33 @@ for (const pid of ["kailas", "meiling", "winner-wipes"]) {
   assert(!html.includes("系统秉持诚实数据原则"), "Empty state has removed self-congratulatory boilerplate");
   assert(!html.includes("NaN"), "Empty state has no NaN");
   console.log("✓ Qicui clean empty state verified!");
+}
+
+console.log("\n[Test 7] Rich Analytical Model & Feishu Association Verification");
+{
+  const resWipes = await fetch("http://localhost:5173/api/campaign-dashboard?projectId=winner-wipes");
+  const wipesDash = (await resWipes.json()).dashboard;
+  const taosouDs = wipesDash.dailyDatasets.find((d) => d.id === "wipes-daily-taosou");
+  assert(taosouDs, "wipes-daily-taosou dataset exists");
+
+  const richCtx = buildDailyRichContext(wipesDash, taosouDs, "2026-10-04");
+  assert(richCtx.benchmarks.periodTotalSpend > 0, "Benchmarks compute valid period spend");
+  assert(richCtx.benchmarks.rankInPeriod >= 1, "Benchmarks compute rank in period");
+  assert(richCtx.diagnosis.statusLabel, "Diagnosis has headline label");
+  assert.equal(richCtx.diagnosis.bullets.length, 3, "Diagnosis has exactly 3 data-backed bullet points");
+  assert(richCtx.feishuDrilldowns.topNotes.length > 0, "Feishu drilldowns extract top notes/creatives");
+  assert(richCtx.feishuDrilldowns.taosouDailyKeywords.length === 6, "Extracts exactly 6 Taobao keyword indices on 2026-10-04");
+  assert(richCtx.feishuDrilldowns.channelSplits.length > 0, "Extracts K/F/S/CID channel split on 2026-10-04");
+  console.log("✓ Winner Wipes rich context & 6 keyword indices verified!");
+
+  const resKailas = await fetch("http://localhost:5173/api/campaign-dashboard?projectId=kailas");
+  const kailasDash = (await resKailas.json()).dashboard;
+  const kailasDs = kailasDash.dailyDatasets[0];
+  const kailasCtx = buildDailyRichContext(kailasDash, kailasDs, "2026-10-04");
+  assert(kailasCtx.efficiencyBenchmarks.length > 0, "Kailas computes efficiency benchmarks vs period average");
+  assert(kailasCtx.trafficFunnel.length >= 3, "Kailas computes multi-step traffic funnel");
+  assert(kailasCtx.feishuDrilldowns.topNotes.length > 0, "Kailas extracts top notes from Pareto/scatter tables");
+  console.log("✓ Kailas rich context & efficiency benchmarks verified!");
 }
 
 console.log("\n=== ALL FOCUSED MODEL & SSR TESTS PASSED SUCCESSFULLY! ===");

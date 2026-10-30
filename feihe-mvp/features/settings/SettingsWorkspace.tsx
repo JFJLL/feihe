@@ -154,14 +154,13 @@ export function SettingsWorkspace({
       <PageHeader variant="light" title="项目设置">
         <SettingsSubNav activeTab={activeTab} mode="primary" />
       </PageHeader>
-      <SettingsSubNav activeTab={activeTab} mode="aux" />
 
       {(visited.has('profile') || visited.has('members')) && (
         <div
           id="workspace-tabpanel-profile"
           aria-label="项目资料"
           tabIndex={0}
-          style={{ display: activeTab === 'profile' ? 'flex' : 'none', flexDirection: 'column', gap: '28px' }}
+          style={{ display: activeTab === 'profile' ? 'flex' : 'none', flexDirection: 'column', gap: '18px' }}
         >
           <ProjectProfile
             key={projectId}

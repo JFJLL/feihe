@@ -540,7 +540,7 @@ export function SettingsDataSources({
           <div className="management-list" style={{ marginTop: '14px' }}>
             {sources.length ? (
               sources.map((item) => (
-                <div key={item.id} className="source-list-item" style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr) auto auto', alignItems: 'center', gap: '14px', padding: '14px 16px', background: '#ffffff', border: '0.5px solid #d9d9e0', borderRadius: '10px', boxShadow: '0 1px 3px rgba(28, 32, 36, 0.03)' }}>
+                <div key={item.id} className="source-list-item" style={{ display: 'grid', gridTemplateColumns: 'auto minmax(0, 1fr) auto auto', alignItems: 'center', gap: '14px', padding: '14px 18px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', boxShadow: '0 1px 2px rgba(15, 23, 42, 0.02)' }}>
                   <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#e6f4fe', color: '#0d74ce', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px' }}>
                     飞
                   </div>

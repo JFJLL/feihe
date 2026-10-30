@@ -1,19 +1,19 @@
 {
-  "timestamp": "2026-10-19T09:14:13.736Z",
-  "db_path": "D:\\download\\pic-vec\\feihe\\feihe-mvp\\data\\local.db",
-  "backup_file": "D:\\download\\pic-vec\\feihe\\.verification\\campaign\\local.db.pre-access-update-2026-10-19T09-14-12-998Z.db",
+  "timestamp": "2026-10-30T06:32:05.507Z",
+  "db_path": "D:\\download\\pic-vec\\feihe\\.codex_work\\impeccable-ui-v1\\feihe-mvp\\data\\local.db",
+  "backup_file": "D:\\download\\pic-vec\\feihe\\.codex_work\\impeccable-ui-v1\\.verification\\campaign\\local.db.pre-access-update-2026-10-30T06-32-04-008Z.db",
   "target_projects": [
-    "kailas",
-    "meiling"
+    "winner-wipes",
+    "kailas"
   ],
-  "qicui_hash_before": "a3098236e09ce98c20d174c200ebd4ca35ca0d9511809fac04283d5a407209f8",
-  "qicui_hash_after": "a3098236e09ce98c20d174c200ebd4ca35ca0d9511809fac04283d5a407209f8",
+  "qicui_hash_before": "db9d22ddb249c633cffd01f945fc49428d61e726c5e347e3fb5c80332af01850",
+  "qicui_hash_after": "db9d22ddb249c633cffd01f945fc49428d61e726c5e347e3fb5c80332af01850",
   "qicui_intact": true,
-  "wipes_hash_before": "b518f39679875d8447c3848c1b3c0559940211d6e897a8cfcd4f31e5e1d305a5",
-  "wipes_hash_after": "b518f39679875d8447c3848c1b3c0559940211d6e897a8cfcd4f31e5e1d305a5",
-  "wipes_intact": true,
+  "wipes_hash_before": "e356c42096ecdee4617a617585f89d6023f2d1a9fa371859e8ce50d32ffc80a7",
+  "wipes_hash_after": "2d0b95cdb42b59606f95cb8410475f9031b0e81b577deb52f5e586c63248d975",
+  "wipes_intact": false,
   "manual_data_retained": true,
-  "projects_total": 4,
+  "projects_total": 5,
   "projects": [
     {
       "id": "qicui",
@@ -38,9 +38,15 @@
       "name": "酒精湿巾",
       "owner_id": "user-editor",
       "template_id": "campaign_review"
+    },
+    {
+      "id": "huang-tiane",
+      "name": "黄天鹅",
+      "owner_id": "user-editor",
+      "template_id": "campaign_review"
     }
   ],
-  "sources_total": 19,
+  "sources_total": 25,
   "unlocked_sources_verified": [
     {
       "id": "src-kailas-node-LT1MwikWci8LTDk0UL7coXfrnVb",
@@ -56,9 +62,9 @@
     {
       "id": "src-meiling-node-RQffw002Aik9aNkW9PScJ05knre",
       "projectId": "meiling",
-      "name": "美菱冰箱kpi管理表 副本",
+      "name": "美菱冰箱kpi管理表",
       "type": "feishu_sheet",
-      "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre",
       "sheet_id": "4SGaOf",
       "status": "元数据已核验",
       "probe_status": "accessible",
@@ -67,9 +73,9 @@
     {
       "id": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
       "projectId": "meiling",
-      "name": "美菱冰箱618复盘数据 副本",
+      "name": "美菱冰箱618复盘数据",
       "type": "feishu_sheet",
-      "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh",
       "sheet_id": "4a19cf",
       "status": "元数据已核验",
       "probe_status": "accessible",
@@ -78,9 +84,9 @@
     {
       "id": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
       "projectId": "meiling",
-      "name": "美菱冰箱双11日报表  副本",
+      "name": "美菱冰箱双11日报表",
       "type": "feishu_sheet",
-      "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "spreadsheet": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
       "sheet_id": "smsJa2",
       "status": "元数据已核验",
       "probe_status": "accessible",
@@ -90,20 +96,20 @@
   "snapshots": {
     "kailas": {
       "reportPeriod": "10.16–10.18 日报（截图未注明年份）",
-      "updatedAt": "2026-10-19T09:14:12.934Z",
+      "updatedAt": "2026-10-30T06:32:03.995Z",
       "sourcesCount": 8,
       "kpisCount": 12,
       "tablesCount": 7,
       "actionsCount": 4,
       "hasManualReport": true
     },
-    "meiling": {
+    "winner-wipes": {
       "reportPeriod": "10.19 日报（原文未注明年份）",
-      "updatedAt": "2026-10-19T09:14:12.997Z",
-      "sourcesCount": 6,
-      "kpisCount": 41,
-      "tablesCount": 14,
-      "actionsCount": 5,
+      "updatedAt": "2026-10-30T06:32:04.007Z",
+      "sourcesCount": 5,
+      "kpisCount": 24,
+      "tablesCount": 6,
+      "actionsCount": 4,
       "hasManualReport": true
     }
   }

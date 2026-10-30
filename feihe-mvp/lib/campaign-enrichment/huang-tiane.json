@@ -256,7 +256,7 @@
     {
       "id": "huang-brand-summary",
       "title": "品牌线10月汇总（源表）",
-      "period": "2026-10-01 ~ 2026-10-25",
+      "period": "2026-10-01 ~ 2026-10-29",
       "sourceId": "src-huang-tiane-brand-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/F42ksAyO8hKRGNt2plhccnSWnNh?sheet=637ef8",
       "columns": [
@@ -358,25 +358,25 @@
       ],
       "rows": [
         {
-          "spend": 433159.14,
-          "impressions": 8845331,
-          "clicks": 1056067,
-          "ctr": 11.94,
-          "cpc": 0.41,
-          "cpm": 48.97,
-          "plays_5s": 348052,
-          "ctr_5s": 3.93,
-          "cpc_5s": 1.24,
-          "engagements": 15552,
-          "cpe": 27.85,
-          "seed_i": 451542,
-          "cpi": 0.96,
-          "seed_ti": 114858,
-          "cpti": 3.77,
-          "seed_total": 566400,
-          "cp_total": 0.76,
-          "uv": 2536,
-          "cpuv": 170.8,
+          "spend": 537443.9,
+          "impressions": 11001598,
+          "clicks": 1268904,
+          "ctr": 11.53,
+          "cpc": 0.42,
+          "cpm": 48.85,
+          "plays_5s": 428273,
+          "ctr_5s": 3.89,
+          "cpc_5s": 1.25,
+          "engagements": 21265,
+          "cpe": 25.27,
+          "seed_i": 571592,
+          "cpi": 0.94,
+          "seed_ti": 152834,
+          "cpti": 3.52,
+          "seed_total": 724426,
+          "cp_total": 0.74,
+          "uv": 4748,
+          "cpuv": 113.19,
           "isSummary": true
         }
       ],
@@ -386,7 +386,7 @@
     {
       "id": "huang-brand-budget",
       "title": "品牌线10月预算与消耗",
-      "period": "截至2026-10-25",
+      "period": "截至2026-10-29",
       "sourceId": "src-huang-tiane-brand-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/F42ksAyO8hKRGNt2plhccnSWnNh",
       "columns": [
@@ -414,9 +414,9 @@
       "rows": [
         {
           "budget": 565475.09,
-          "spend": 433159.14,
+          "spend": 537443.9,
           "reportedProgress": null,
-          "calculatedProgress": 76.6009,
+          "calculatedProgress": 95.0429,
           "isSummary": true
         }
       ],
@@ -426,7 +426,7 @@
     {
       "id": "huang-commerce-summary",
       "title": "商销全期底表汇总",
-      "period": "2026-07-27 ~ 2026-10-22",
+      "period": "2026-07-27 ~ 2026-10-29",
       "sourceId": "src-huang-tiane-commerce-canonical",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c?sheet=Dz6eHe",
       "columns": [
@@ -473,14 +473,14 @@
       ],
       "rows": [
         {
-          "spend": 25545.57,
-          "impressions": 376868,
-          "clicks": 19437,
+          "spend": 27117.94,
+          "impressions": 421075,
+          "clicks": 22302,
           "engagements": null,
-          "uv": 4877,
-          "cart": 694,
-          "orders": 588,
-          "gmv": 29745.54,
+          "uv": 5626,
+          "cart": 760,
+          "orders": 690,
+          "gmv": 32403.52,
           "isSummary": true
         }
       ],
@@ -10069,7 +10069,7 @@
     {
       "id": "huang-brand-daily",
       "label": "品牌线FS",
-      "period": "2026-10-01 ~ 2026-10-25",
+      "period": "2026-10-01 ~ 2026-10-29",
       "sourceId": "src-huang-tiane-brand-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/sheets/F42ksAyO8hKRGNt2plhccnSWnNh",
       "note": "I/TI按源表定义展示，不作为连续转化漏斗。",
@@ -10190,8 +10190,8 @@
           "cpti": 2.67,
           "seed_total": 8651,
           "cp_total": 0.58,
-          "uv": 77,
-          "cpuv": 65.35
+          "uv": 86,
+          "cpuv": 58.51
         },
         {
           "date": "2026-10-02",
@@ -10212,8 +10212,8 @@
           "cpti": 2.71,
           "seed_total": 8784,
           "cp_total": 0.57,
-          "uv": 62,
-          "cpuv": 80.94
+          "uv": 73,
+          "cpuv": 68.74
         },
         {
           "date": "2026-10-03",
@@ -10234,8 +10234,8 @@
           "cpti": 2.7,
           "seed_total": 8876,
           "cp_total": 0.57,
-          "uv": 65,
-          "cpuv": 77.44
+          "uv": 75,
+          "cpuv": 67.11
         },
         {
           "date": "2026-10-04",
@@ -10256,8 +10256,8 @@
           "cpti": 2.71,
           "seed_total": 8793,
           "cp_total": 0.57,
-          "uv": 108,
-          "cpuv": 46.75
+          "uv": 124,
+          "cpuv": 40.71
         },
         {
           "date": "2026-10-05",
@@ -10278,8 +10278,8 @@
           "cpti": 2.82,
           "seed_total": 8620,
           "cp_total": 0.58,
-          "uv": 82,
-          "cpuv": 61.27
+          "uv": 98,
+          "cpuv": 51.27
         },
         {
           "date": "2026-10-06",
@@ -10300,8 +10300,8 @@
           "cpti": 2.68,
           "seed_total": 8990,
           "cp_total": 0.56,
-          "uv": 48,
-          "cpuv": 105.06
+          "uv": 59,
+          "cpuv": 85.47
         },
         {
           "date": "2026-10-07",
@@ -10322,8 +10322,8 @@
           "cpti": 2.86,
           "seed_total": 12218,
           "cp_total": 0.59,
-          "uv": 62,
-          "cpuv": 115.67
+          "uv": 81,
+          "cpuv": 88.54
         },
         {
           "date": "2026-10-08",
@@ -10344,8 +10344,8 @@
           "cpti": 3.49,
           "seed_total": 15543,
           "cp_total": 0.65,
-          "uv": 128,
-          "cpuv": 78.33
+          "uv": 156,
+          "cpuv": 64.27
         },
         {
           "date": "2026-10-09",
@@ -10366,8 +10366,8 @@
           "cpti": 3.08,
           "seed_total": 14703,
           "cp_total": 0.59,
-          "uv": 66,
-          "cpuv": 130.43
+          "uv": 90,
+          "cpuv": 95.65
         },
         {
           "date": "2026-10-10",
@@ -10388,8 +10388,8 @@
           "cpti": 3.08,
           "seed_total": 14137,
           "cp_total": 0.57,
-          "uv": 59,
-          "cpuv": 137.31
+          "uv": 78,
+          "cpuv": 103.86
         },
         {
           "date": "2026-10-11",
@@ -10410,8 +10410,8 @@
           "cpti": 3.13,
           "seed_total": 14940,
           "cp_total": 0.63,
-          "uv": 112,
-          "cpuv": 84.68
+          "uv": 137,
+          "cpuv": 69.23
         },
         {
           "date": "2026-10-12",
@@ -10432,8 +10432,8 @@
           "cpti": 3.04,
           "seed_total": 13958,
           "cp_total": 0.56,
-          "uv": 57,
-          "cpuv": 138.21
+          "uv": 68,
+          "cpuv": 115.85
         },
         {
           "date": "2026-10-13",
@@ -10454,8 +10454,8 @@
           "cpti": 2.81,
           "seed_total": 13086,
           "cp_total": 0.52,
-          "uv": 36,
-          "cpuv": 187.96
+          "uv": 50,
+          "cpuv": 135.33
         },
         {
           "date": "2026-10-14",
@@ -10476,8 +10476,8 @@
           "cpti": 3.33,
           "seed_total": 13938,
           "cp_total": 0.6,
-          "uv": 45,
-          "cpuv": 185.3
+          "uv": 57,
+          "cpuv": 146.29
         },
         {
           "date": "2026-10-15",
@@ -10498,8 +10498,8 @@
           "cpti": 2.91,
           "seed_total": 12685,
           "cp_total": 0.52,
-          "uv": 70,
-          "cpuv": 94.3
+          "uv": 84,
+          "cpuv": 78.58
         },
         {
           "date": "2026-10-16",
@@ -10520,8 +10520,8 @@
           "cpti": 3.94,
           "seed_total": 15218,
           "cp_total": 0.71,
-          "uv": 58,
-          "cpuv": 186.65
+          "uv": 76,
+          "cpuv": 142.44
         },
         {
           "date": "2026-10-17",
@@ -10542,8 +10542,8 @@
           "cpti": 4.23,
           "seed_total": 20565,
           "cp_total": 0.79,
-          "uv": 128,
-          "cpuv": 126.69
+          "uv": 180,
+          "cpuv": 90.09
         },
         {
           "date": "2026-10-18",
@@ -10564,8 +10564,8 @@
           "cpti": 4.5,
           "seed_total": 27577,
           "cp_total": 0.83,
-          "uv": 139,
-          "cpuv": 164.76
+          "uv": 193,
+          "cpuv": 118.66
         },
         {
           "date": "2026-10-19",
@@ -10580,14 +10580,14 @@
           "cpc_5s": 0.98,
           "engagements": 1102,
           "cpe": 22.89,
-          "seed_i": 23566,
+          "seed_i": 23582,
           "cpi": 1.07,
-          "seed_ti": 6070,
-          "cpti": 4.16,
-          "seed_total": 29636,
+          "seed_ti": 6081,
+          "cpti": 4.15,
+          "seed_total": 29663,
           "cp_total": 0.85,
-          "uv": 208,
-          "cpuv": 121.28
+          "uv": 300,
+          "cpuv": 84.09
         },
         {
           "date": "2026-10-20",
@@ -10602,14 +10602,14 @@
           "cpc_5s": 0.96,
           "engagements": 930,
           "cpe": 20.44,
-          "seed_i": 19115,
+          "seed_i": 19146,
           "cpi": 0.99,
-          "seed_ti": 5161,
-          "cpti": 3.68,
-          "seed_total": 24276,
+          "seed_ti": 5179,
+          "cpti": 3.67,
+          "seed_total": 24325,
           "cp_total": 0.78,
-          "uv": 173,
-          "cpuv": 109.88
+          "uv": 262,
+          "cpuv": 72.55
         },
         {
           "date": "2026-10-21",
@@ -10624,14 +10624,14 @@
           "cpc_5s": 1.14,
           "engagements": 1548,
           "cpe": 24.27,
-          "seed_i": 30069,
+          "seed_i": 30154,
           "cpi": 1.25,
-          "seed_ti": 8204,
-          "cpti": 4.58,
-          "seed_total": 38273,
+          "seed_ti": 8266,
+          "cpti": 4.54,
+          "seed_total": 38420,
           "cp_total": 0.98,
-          "uv": 228,
-          "cpuv": 164.76
+          "uv": 397,
+          "cpuv": 94.62
         },
         {
           "date": "2026-10-22",
@@ -10646,14 +10646,14 @@
           "cpc_5s": 1.31,
           "engagements": 1863,
           "cpe": 25.75,
-          "seed_i": 41732,
+          "seed_i": 41883,
           "cpi": 1.15,
-          "seed_ti": 11296,
-          "cpti": 4.25,
-          "seed_total": 53028,
+          "seed_ti": 11389,
+          "cpti": 4.21,
+          "seed_total": 53272,
           "cp_total": 0.9,
-          "uv": 218,
-          "cpuv": 220.06
+          "uv": 396,
+          "cpuv": 121.14
         },
         {
           "date": "2026-10-23",
@@ -10668,14 +10668,14 @@
           "cpc_5s": 1.38,
           "engagements": 1851,
           "cpe": 27.06,
-          "seed_i": 45097,
-          "cpi": 1.11,
-          "seed_ti": 11756,
-          "cpti": 4.26,
-          "seed_total": 56853,
-          "cp_total": 0.88,
-          "uv": 189,
-          "cpuv": 265
+          "seed_i": 45332,
+          "cpi": 1.1,
+          "seed_ti": 11911,
+          "cpti": 4.2,
+          "seed_total": 57243,
+          "cp_total": 0.87,
+          "uv": 420,
+          "cpuv": 119.25
         },
         {
           "date": "2026-10-24",
@@ -10690,14 +10690,14 @@
           "cpc_5s": 1.36,
           "engagements": 1892,
           "cpe": 26.47,
-          "seed_i": 48900,
+          "seed_i": 49110,
           "cpi": 1.02,
-          "seed_ti": 13095,
-          "cpti": 3.82,
-          "seed_total": 61995,
-          "cp_total": 0.81,
-          "uv": 118,
-          "cpuv": 424.46
+          "seed_ti": 13240,
+          "cpti": 3.78,
+          "seed_total": 62350,
+          "cp_total": 0.8,
+          "uv": 335,
+          "cpuv": 149.51
         },
         {
           "date": "2026-10-25",
@@ -10712,12 +10712,100 @@
           "cpc_5s": 1.41,
           "engagements": 1862,
           "cpe": 26.91,
-          "seed_i": 48185,
-          "cpi": 1.04,
-          "seed_ti": 12872,
-          "cpti": 3.89,
-          "seed_total": 61057,
+          "seed_i": 48422,
+          "cpi": 1.03,
+          "seed_ti": 13025,
+          "cpti": 3.85,
+          "seed_total": 61447,
           "cp_total": 0.82,
+          "uv": 262,
+          "cpuv": 191.21
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 50114.03,
+          "impressions": 950192,
+          "clicks": 98423,
+          "ctr": 10.36,
+          "cpc": 0.51,
+          "cpm": 52.74,
+          "plays_5s": 37200,
+          "ctr_5s": 3.91,
+          "cpc_5s": 1.35,
+          "engagements": 2009,
+          "cpe": 24.94,
+          "seed_i": 46925,
+          "cpi": 1.07,
+          "seed_ti": 13568,
+          "cpti": 3.69,
+          "seed_total": 60493,
+          "cp_total": 0.83,
+          "uv": 346,
+          "cpuv": 144.84
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 20112.08,
+          "impressions": 452863,
+          "clicks": 41981,
+          "ctr": 9.27,
+          "cpc": 0.48,
+          "cpm": 44.41,
+          "plays_5s": 15308,
+          "ctr_5s": 3.38,
+          "cpc_5s": 1.31,
+          "engagements": 1399,
+          "cpe": 14.38,
+          "seed_i": 27585,
+          "cpi": 0.73,
+          "seed_ti": 9117,
+          "cpti": 2.21,
+          "seed_total": 36702,
+          "cp_total": 0.55,
+          "uv": 175,
+          "cpuv": 114.93
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 18008.87,
+          "impressions": 402046,
+          "clicks": 38994,
+          "ctr": 9.7,
+          "cpc": 0.46,
+          "cpm": 44.79,
+          "plays_5s": 13783,
+          "ctr_5s": 3.43,
+          "cpc_5s": 1.31,
+          "engagements": 1255,
+          "cpe": 14.35,
+          "seed_i": 25267,
+          "cpi": 0.71,
+          "seed_ti": 8481,
+          "cpti": 2.12,
+          "seed_total": 33748,
+          "cp_total": 0.53,
+          "uv": 90,
+          "cpuv": 200.1
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 16049.78,
+          "impressions": 351166,
+          "clicks": 33439,
+          "ctr": 9.52,
+          "cpc": 0.48,
+          "cpm": 45.7,
+          "plays_5s": 13930,
+          "ctr_5s": 3.97,
+          "cpc_5s": 1.15,
+          "engagements": 1050,
+          "cpe": 15.29,
+          "seed_i": 19308,
+          "cpi": 0.83,
+          "seed_ti": 6173,
+          "cpti": 2.6,
+          "seed_total": 25481,
+          "cp_total": 0.63,
           "uv": 0,
           "cpuv": null
         }
@@ -10727,7 +10815,7 @@
     {
       "id": "huang-commerce-daily",
       "label": "商销投放",
-      "period": "2026-07-27 ~ 2026-10-22",
+      "period": "2026-07-27 ~ 2026-10-29",
       "sourceId": "src-huang-tiane-commerce-canonical",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c",
       "note": "跨7-10月累计；按转化时间的7日归因指标。历史UV百分值类型异常保留null，非真实0；来源透视#REF!由原始底表重建。",
@@ -12578,6 +12666,146 @@
           "ctr": 8.2467,
           "cpm": 95.6436,
           "cpe": null
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 85.65,
+          "impressions": 3252,
+          "clicks": 273,
+          "engagements": null,
+          "uv": 73,
+          "cart": 6,
+          "orders": 8,
+          "gmv": 267.3,
+          "roi": 3.1208,
+          "cpuv": 1.1733,
+          "cost_per_cart": 14.275,
+          "cost_per_order": 10.7063,
+          "aov": 33.4125,
+          "cpc": 0.3137,
+          "ctr": 8.3948,
+          "cpm": 26.3376,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 257.95,
+          "impressions": 3220,
+          "clicks": 254,
+          "engagements": null,
+          "uv": 80,
+          "cart": 7,
+          "orders": 13,
+          "gmv": 1184.11,
+          "roi": 4.5905,
+          "cpuv": 3.2244,
+          "cost_per_cart": 36.85,
+          "cost_per_order": 19.8423,
+          "aov": 91.0854,
+          "cpc": 1.0156,
+          "ctr": 7.8882,
+          "cpm": 80.1087,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 43.49,
+          "impressions": 962,
+          "clicks": 80,
+          "engagements": null,
+          "uv": 26,
+          "cart": 2,
+          "orders": 6,
+          "gmv": 62.4,
+          "roi": 1.4348,
+          "cpuv": 1.6727,
+          "cost_per_cart": 21.745,
+          "cost_per_order": 7.2483,
+          "aov": 10.4,
+          "cpc": 0.5436,
+          "ctr": 8.316,
+          "cpm": 45.2079,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 217.13,
+          "impressions": 4195,
+          "clicks": 349,
+          "engagements": null,
+          "uv": 104,
+          "cart": 11,
+          "orders": 16,
+          "gmv": 183.3,
+          "roi": 0.8442,
+          "cpuv": 2.0878,
+          "cost_per_cart": 19.7391,
+          "cost_per_order": 13.5706,
+          "aov": 11.4563,
+          "cpc": 0.6221,
+          "ctr": 8.3194,
+          "cpm": 51.7592,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 202.63,
+          "impressions": 9453,
+          "clicks": 567,
+          "engagements": null,
+          "uv": 131,
+          "cart": 19,
+          "orders": 10,
+          "gmv": 152.06,
+          "roi": 0.7504,
+          "cpuv": 1.5468,
+          "cost_per_cart": 10.6647,
+          "cost_per_order": 20.263,
+          "aov": 15.206,
+          "cpc": 0.3574,
+          "ctr": 5.9981,
+          "cpm": 21.4355,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 512.04,
+          "impressions": 13107,
+          "clicks": 712,
+          "engagements": null,
+          "uv": 195,
+          "cart": 16,
+          "orders": 33,
+          "gmv": 481.41,
+          "roi": 0.9402,
+          "cpuv": 2.6258,
+          "cost_per_cart": 32.0025,
+          "cost_per_order": 15.5164,
+          "aov": 14.5882,
+          "cpc": 0.7192,
+          "ctr": 5.4322,
+          "cpm": 39.0661,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 253.48,
+          "impressions": 10018,
+          "clicks": 630,
+          "engagements": null,
+          "uv": 140,
+          "cart": 5,
+          "orders": 16,
+          "gmv": 327.4,
+          "roi": 1.2916,
+          "cpuv": 1.8106,
+          "cost_per_cart": 50.696,
+          "cost_per_order": 15.8425,
+          "aov": 20.4625,
+          "cpc": 0.4023,
+          "ctr": 6.2887,
+          "cpm": 25.3025,
+          "cpe": null
         }
       ],
       "sourceSheetId": "Dz6eHe"
@@ -12585,7 +12813,7 @@
     {
       "id": "huang-cid-standard-daily",
       "label": "红猫CID · 标准投",
-      "period": "2026-10-01 ~ 2026-10-25",
+      "period": "2026-10-01 ~ 2026-10-28",
       "sourceId": "src-huang-tiane-cid-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "标准投与简单投各自独立统计；进店量不可跨账号去重。",
@@ -12645,92 +12873,92 @@
         {
           "date": "2026-10-01",
           "spend": 1420.89,
-          "ctr": 2.67,
-          "cpc": 3.93,
-          "cpm": 104.72,
+          "ctr": 2.63,
+          "cpc": 3.91,
+          "cpm": 103.02,
           "orders": 56,
           "gmv": 1847.44,
           "roi": 1.3,
-          "uv": 118,
-          "cpuv": 12.04,
+          "uv": 158,
+          "cpuv": 8.99,
           "aov": 32.99
         },
         {
           "date": "2026-10-02",
           "spend": 682.12,
-          "ctr": 3.46,
+          "ctr": 3.39,
           "cpc": 2.21,
-          "cpm": 76.36,
+          "cpm": 74.74,
           "orders": 57,
           "gmv": 1901.79,
           "roi": 2.79,
-          "uv": 131,
-          "cpuv": 5.21,
+          "uv": 153,
+          "cpuv": 4.46,
           "aov": 33.36
         },
         {
           "date": "2026-10-03",
           "spend": 565.9,
-          "ctr": 4.38,
+          "ctr": 4.24,
           "cpc": 1.64,
-          "cpm": 71.89,
+          "cpm": 69.61,
           "orders": 53,
           "gmv": 2848.28,
           "roi": 5.03,
-          "uv": 118,
-          "cpuv": 4.8,
+          "uv": 142,
+          "cpuv": 3.99,
           "aov": 53.74
         },
         {
           "date": "2026-10-04",
           "spend": 837.07,
-          "ctr": 3.52,
+          "ctr": 3.45,
           "cpc": 2.51,
-          "cpm": 88.43,
+          "cpm": 86.65,
           "orders": 63,
           "gmv": 2204.43,
           "roi": 2.63,
-          "uv": 110,
-          "cpuv": 7.61,
+          "uv": 134,
+          "cpuv": 6.25,
           "aov": 34.99
         },
         {
           "date": "2026-10-05",
           "spend": 953.39,
-          "ctr": 4.01,
+          "ctr": 3.95,
           "cpc": 1.85,
-          "cpm": 74.14,
+          "cpm": 72.99,
           "orders": 69,
           "gmv": 2235.66,
           "roi": 2.34,
-          "uv": 121,
-          "cpuv": 7.88,
+          "uv": 135,
+          "cpuv": 7.06,
           "aov": 32.4
         },
         {
           "date": "2026-10-06",
           "spend": 1262.75,
-          "ctr": 5.53,
+          "ctr": 5.48,
           "cpc": 1.19,
-          "cpm": 65.62,
+          "cpm": 65.01,
           "orders": 61,
           "gmv": 1545.3,
           "roi": 1.22,
-          "uv": 129,
-          "cpuv": 9.79,
+          "uv": 152,
+          "cpuv": 8.31,
           "aov": 25.33
         },
         {
           "date": "2026-10-07",
           "spend": 1287.62,
-          "ctr": 3.31,
-          "cpc": 3.27,
-          "cpm": 108.28,
+          "ctr": 3.27,
+          "cpc": 3.26,
+          "cpm": 106.51,
           "orders": 75,
           "gmv": 3453.28,
           "roi": 2.68,
-          "uv": 161,
-          "cpuv": 8,
+          "uv": 189,
+          "cpuv": 6.81,
           "aov": 46.04
         },
         {
@@ -12833,8 +13061,8 @@
           "orders": 238,
           "gmv": 51681.7,
           "roi": 43.08,
-          "uv": 309,
-          "cpuv": 3.88,
+          "uv": 310,
+          "cpuv": 3.87,
           "aov": 217.15
         },
         {
@@ -12872,8 +13100,8 @@
           "orders": 141,
           "gmv": 15223.09,
           "roi": 1.56,
-          "uv": 337,
-          "cpuv": 29,
+          "uv": 338,
+          "cpuv": 28.91,
           "aov": 107.97
         },
         {
@@ -12966,6 +13194,45 @@
           "uv": 664,
           "cpuv": 20.88,
           "aov": 101
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 11960.35,
+          "ctr": 8.69,
+          "cpc": 1.47,
+          "cpm": 127.39,
+          "orders": 206,
+          "gmv": 11744.29,
+          "roi": 0.98,
+          "uv": 578,
+          "cpuv": 20.69,
+          "aov": 57.01
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 13998.55,
+          "ctr": 8.5,
+          "cpc": 1.62,
+          "cpm": 137.98,
+          "orders": 210,
+          "gmv": 13815.37,
+          "roi": 0.99,
+          "uv": 553,
+          "cpuv": 25.31,
+          "aov": 65.79
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 3424.92,
+          "ctr": 12.12,
+          "cpc": 0.71,
+          "cpm": 86.43,
+          "orders": 180,
+          "gmv": 11887.89,
+          "roi": 3.47,
+          "uv": 463,
+          "cpuv": 7.4,
+          "aov": 66.04
         }
       ],
       "sourceSheetId": "Nm3Sev"
@@ -12973,7 +13240,7 @@
     {
       "id": "huang-cid-simple-daily",
       "label": "红猫CID · 简单投",
-      "period": "2026-10-01 ~ 2026-10-25",
+      "period": "2026-10-01 ~ 2026-10-28",
       "sourceId": "src-huang-tiane-cid-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "标准投与简单投各自独立统计；进店量不可跨账号去重。",
@@ -13130,8 +13397,8 @@
           "orders": 150,
           "gmv": 6908.57,
           "roi": 2.76,
-          "uv": 293,
-          "cpuv": 8.55,
+          "uv": 294,
+          "cpuv": 8.52,
           "aov": 46.06
         },
         {
@@ -13195,8 +13462,8 @@
           "orders": 83,
           "gmv": 2653.17,
           "roi": 1.17,
-          "uv": 285,
-          "cpuv": 7.97,
+          "uv": 286,
+          "cpuv": 7.94,
           "aov": 31.97
         },
         {
@@ -13354,6 +13621,45 @@
           "uv": 527,
           "cpuv": 7.97,
           "aov": 87.53
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 6088.27,
+          "ctr": 10.53,
+          "cpc": 0.67,
+          "cpm": 70.3,
+          "orders": 162,
+          "gmv": 12317.74,
+          "roi": 2.02,
+          "uv": 474,
+          "cpuv": 12.84,
+          "aov": 76.04
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 6093.85,
+          "ctr": 12.86,
+          "cpc": 0.47,
+          "cpm": 60.69,
+          "orders": 178,
+          "gmv": 12346.12,
+          "roi": 2.03,
+          "uv": 507,
+          "cpuv": 12.02,
+          "aov": 69.36
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 2859.66,
+          "ctr": 12.02,
+          "cpc": 0.53,
+          "cpm": 64.17,
+          "orders": 180,
+          "gmv": 13294.37,
+          "roi": 4.65,
+          "uv": 470,
+          "cpuv": 6.08,
+          "aov": 73.86
         }
       ],
       "sourceSheetId": "Nm3Sev"
@@ -13361,7 +13667,7 @@
     {
       "id": "huang-cid-total-daily",
       "label": "红猫CID · 两类投放合计",
-      "period": "2026-10-01 ~ 2026-10-25",
+      "period": "2026-10-01 ~ 2026-10-28",
       "sourceId": "src-huang-tiane-cid-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "按日期对齐标准投与简单投，规模相加，ROI按GMV/消耗重算；进店量为账号叠加非去重，未平均CTR/CPC。",
@@ -13408,9 +13714,9 @@
           "spend": 2008.37,
           "orders": 145,
           "gmv": 4133.89,
-          "uv": 328,
+          "uv": 368,
           "roi": 2.0583,
-          "cpuv": 6.1231,
+          "cpuv": 5.4575,
           "aov": 28.5096
         },
         {
@@ -13418,9 +13724,9 @@
           "spend": 1523.31,
           "orders": 128,
           "gmv": 4142.68,
-          "uv": 293,
+          "uv": 315,
           "roi": 2.7195,
-          "cpuv": 5.199,
+          "cpuv": 4.8359,
           "aov": 32.3647
         },
         {
@@ -13428,9 +13734,9 @@
           "spend": 1397.34,
           "orders": 125,
           "gmv": 5061.68,
-          "uv": 302,
+          "uv": 326,
           "roi": 3.6224,
-          "cpuv": 4.627,
+          "cpuv": 4.2863,
           "aov": 40.4934
         },
         {
@@ -13438,9 +13744,9 @@
           "spend": 1814.73,
           "orders": 169,
           "gmv": 5175.63,
-          "uv": 312,
+          "uv": 336,
           "roi": 2.852,
-          "cpuv": 5.8164,
+          "cpuv": 5.401,
           "aov": 30.625
         },
         {
@@ -13448,9 +13754,9 @@
           "spend": 1653.28,
           "orders": 166,
           "gmv": 5183.06,
-          "uv": 314,
+          "uv": 328,
           "roi": 3.135,
-          "cpuv": 5.2652,
+          "cpuv": 5.0405,
           "aov": 31.2233
         },
         {
@@ -13458,9 +13764,9 @@
           "spend": 2016.29,
           "orders": 161,
           "gmv": 4643.28,
-          "uv": 343,
+          "uv": 366,
           "roi": 2.3029,
-          "cpuv": 5.8784,
+          "cpuv": 5.509,
           "aov": 28.8402
         },
         {
@@ -13468,9 +13774,9 @@
           "spend": 2023.08,
           "orders": 231,
           "gmv": 9208.12,
-          "uv": 418,
+          "uv": 446,
           "roi": 4.5515,
-          "cpuv": 4.8399,
+          "cpuv": 4.5361,
           "aov": 39.862
         },
         {
@@ -13478,9 +13784,9 @@
           "spend": 3641.01,
           "orders": 265,
           "gmv": 12898.07,
-          "uv": 495,
+          "uv": 496,
           "roi": 3.5424,
-          "cpuv": 7.3556,
+          "cpuv": 7.3407,
           "aov": 48.672
         },
         {
@@ -13528,9 +13834,9 @@
           "spend": 4087.65,
           "orders": 166,
           "gmv": 5700.3,
-          "uv": 493,
+          "uv": 494,
           "roi": 1.3945,
-          "cpuv": 8.2914,
+          "cpuv": 8.2746,
           "aov": 34.3392
         },
         {
@@ -13548,9 +13854,9 @@
           "spend": 2764.25,
           "orders": 447,
           "gmv": 99311.57,
-          "uv": 682,
+          "uv": 683,
           "roi": 35.9271,
-          "cpuv": 4.0532,
+          "cpuv": 4.0472,
           "aov": 222.1735
         },
         {
@@ -13578,9 +13884,9 @@
           "spend": 15963.19,
           "orders": 287,
           "gmv": 28680.85,
-          "uv": 778,
+          "uv": 779,
           "roi": 1.7967,
-          "cpuv": 20.5182,
+          "cpuv": 20.4919,
           "aov": 99.9333
         },
         {
@@ -13652,9 +13958,40 @@
           "roi": 3.2454,
           "cpuv": 15.1658,
           "aov": 95.4735
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 18048.62,
+          "orders": 368,
+          "gmv": 24062.03,
+          "uv": 1052,
+          "roi": 1.3332,
+          "cpuv": 17.1565,
+          "aov": 65.386
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 20092.4,
+          "orders": 388,
+          "gmv": 26161.49,
+          "uv": 1060,
+          "roi": 1.3021,
+          "cpuv": 18.9551,
+          "aov": 67.4265
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 6284.58,
+          "orders": 360,
+          "gmv": 25182.26,
+          "uv": 933,
+          "roi": 4.007,
+          "cpuv": 6.7359,
+          "aov": 69.9507
         }
       ],
       "sourceSheetId": "Nm3Sev"
     }
-  ]
+  ],
+  "extractedAt": "2026-10-30T07:29:13.543Z"
 }
