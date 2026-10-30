@@ -19,6 +19,10 @@
   color:var(--ht-text-dark);
 }
 
+.campaign-workspace-root .ht-board {
+  gap: 16px !important;
+}
+
 /* Sticky Command Bar (Merged Header & Section Jumpbar) */
 .ht-command-bar,
 .ht-section-jumpbar {
@@ -65,7 +69,7 @@
 }
 
 .ht-command-bar + .ht-layer {
-  margin-top: -20px;
+  margin-top: 0 !important;
 }
 
 .ht-jumpbar-nav-row {

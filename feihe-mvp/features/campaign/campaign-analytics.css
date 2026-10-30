@@ -360,6 +360,7 @@
 .ca-metric-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch !important;
   gap: 14px;
   width: 100%;
   margin-bottom: 4px;
@@ -369,6 +370,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-self: stretch !important;
+  height: auto !important;
   min-width: 0;
 }
 
@@ -489,6 +492,8 @@
 }
 
 .ca-metric-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: inherit;
   font-weight: 700;
   color:inherit;
@@ -533,6 +538,81 @@
   height: 100%;
   border-radius: 2px;
   transition: none;
+}
+
+/* Consistent 36px bottom visual slot for 100% equal-height KPI cards */
+.ca-metric-visual-slot {
+  height: 36px;
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+
+/* Bullet Pacing Progress Track inside Metric Card & General Cards */
+.ca-bullet-track,
+.bullet-track {
+  height: 12px;
+  background: #E6E4DD;
+  border-radius: 999px;
+  position: relative;
+  overflow: visible;
+  width: 100%;
+}
+
+.ca-eff-bench-item .bullet-track,
+.ca-eff-bench-item .ca-bullet-track,
+.ca-eff-bench-item .ca-eff-track,
+.ca-budget-row .ca-bullet-track {
+  margin: 24px 0 6px !important;
+}
+
+.ca-bullet-fill,
+.bullet-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ca-bullet-marker,
+.bullet-time-marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2.5px;
+  background: #1C1917;
+  border-radius: 2px;
+  z-index: 2;
+  transform: translateX(-50%);
+}
+
+.bullet-time-label,
+.ca-bullet-marker-label,
+.ca-eff-bench-marker-label {
+  position: absolute !important;
+  top: -21px !important;
+  transform: translateX(-50%) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  font-family: var(--font-mono) !important;
+  font-variant-numeric: tabular-nums !important;
+  font-feature-settings: "tnum" 1 !important;
+  color: #1C1917 !important;
+  background: #ffffff !important;
+  padding: 1px 6px !important;
+  border-radius: 4px !important;
+  border: 1px solid #D4D0C8 !important;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.06) !important;
+  white-space: nowrap !important;
+  z-index: 4 !important;
+}
+
+.bullet-item {
+  background: #FAF9F5;
+  border: 1px solid #E6E4DD;
+  border-radius: 10px;
+  padding: 12px 16px;
 }
 
 /* Trend Micro Pills */
@@ -936,14 +1016,28 @@
 }
 .ca-budget-chart { display: flex; flex-direction: column; gap: 16px; flex: 1; min-width: 0; }
 .ca-budget-rows { display: flex; flex-direction: column; justify-content: space-evenly; gap: 24px; flex: 1; }
+.ca-budget-row {
+  background: #FAF9F5;
+  border: 1px solid #E6E4DD;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.ca-budget-row:hover {
+  border-color: #D4D0C8;
+  box-shadow: 0 2px 8px -2px rgba(28, 25, 23, 0.05);
+}
 .ca-budget-row-heading, .ca-budget-row-detail { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; }
 .ca-budget-row-heading { font-size: 14px; align-items: baseline; }
 .ca-budget-row-heading strong { overflow-wrap: anywhere; }
 .ca-budget-row-detail { font-size: 12px; color:var(--ca-palette-muted, #60646c); }
-.ca-budget-track { position: relative; height: 16px; margin: 10px 0; background: #f9f9fb; border-radius: 4px; }
-.ca-budget-target-fill { position: absolute; inset: 0 auto 0 0; background: #e6f4fe; border-radius: 4px; }
-.ca-budget-actual { position: absolute; left: 0; top: 3px; height: 10px; border-radius: 3px; }
-.ca-budget-target-mark { position: absolute; top: -3px; height: 22px; border-left:2px dashed #60646c; box-shadow: 0 0 4px rgba(96, 100, 108, 0.35); }
+.ca-budget-track { position: relative; height: 14px; margin: 8px 0; background: #E6E4DD; border-radius: 999px; overflow: visible; }
+.ca-budget-target-fill { position: absolute; inset: 0 auto 0 0; background: rgba(46, 111, 142, 0.15); border-radius: 999px; }
+.ca-budget-actual { position: absolute; left: 0; top: 0; height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+.ca-budget-target-mark { position: absolute; top: -4px; bottom: -4px; height: auto; width: 3px; background: #1C1917; border: none; border-radius: 2px; z-index: 2; transform: translateX(-50%); box-shadow: 0 0 2px rgba(28, 25, 23, 0.4); }
 .ca-budget-pct-pill { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .ca-budget-pct-normal { background: #dff6f0 !important; color: #006858 !important; }
 .ca-budget-pct-overrun { background: #fee2e2 !important; color: #b42318 !important; }
@@ -1040,7 +1134,8 @@
   font-size: 12px;
   font-weight: 700;
   border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   box-shadow: none;
   flex-shrink: 0;
 }
@@ -1268,7 +1363,8 @@
 .ca-arena-primary-num {
   font-size: 22px;
   font-weight: 800;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 
@@ -1336,7 +1432,8 @@
   font-size: 12px;
   font-weight: 700;
   color:#ffffff;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .ca-arena-track-divider {
@@ -1425,7 +1522,8 @@
 
 .ca-arena-val {
   font-size: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   color:var(--ca-palette-text, #1c2024);
   white-space: nowrap;
 }
@@ -1577,7 +1675,8 @@
 
 .ca-butterfly-val {
   font-size: 14px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   color:var(--ca-palette-text, #1c2024);
   white-space: nowrap;
 }
@@ -1641,7 +1740,8 @@
 .ca-butterfly-badge-sub {
   font-size: 12px;
   color:var(--ca-palette-muted, #60646c);
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .ca-butterfly-na {
@@ -1682,7 +1782,8 @@
   font-size: 12px;
   font-weight: 700;
   color:var(--ca-palette-primary, var(--teal-11, #008573));
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }
 
 .ca-scorecard-segments {
@@ -1793,7 +1894,8 @@
 }
 
 .ca-scorecard-cell-val {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 12px;
   color:var(--ca-palette-text, #1c2024);
 }
@@ -1855,7 +1957,8 @@
   color:#ffffff;
   font-size: 12px;
   font-weight: 800;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
 
@@ -1919,7 +2022,8 @@
 
 .ca-lollipop-val {
   font-size: 14px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   color:var(--ca-palette-text, #1c2024);
   min-width: 60px;
   text-align: right;

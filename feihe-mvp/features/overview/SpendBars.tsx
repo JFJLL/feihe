@@ -81,11 +81,11 @@ export function SpendBars({
         </div>
         <div className="spend-bars-legend">
           <span className="spend-legend-item">
-            <i className="spend-legend-dot" style={{ background: '#0d7a68' }} />
+            <i className="spend-legend-dot" style={{ background: '#0F5E52' }} />
             <span>信息流 (F)</span>
           </span>
           <span className="spend-legend-item">
-            <i className="spend-legend-dot" style={{ background: '#2563eb' }} />
+            <i className="spend-legend-dot" style={{ background: '#2E6F8E' }} />
             <span>搜索 (S)</span>
           </span>
           <span className="spend-legend-item">
@@ -248,7 +248,7 @@ export function SpendBars({
                                 className="spend-segment-search"
                                 style={{
                                   height: `${searchPct}%`,
-                                  background: '#2563eb',
+                                  background: '#2E6F8E',
                                   borderBottom: '1px solid rgba(255, 255, 255, 0.9)',
                                   width: '100%',
                                 }}
@@ -258,7 +258,7 @@ export function SpendBars({
                                 className="spend-segment-feed"
                                 style={{
                                   height: `${feedPct}%`,
-                                  background: '#0d7a68',
+                                  background: '#0F5E52',
                                   width: '100%',
                                   flex: 1,
                                 }}
@@ -267,7 +267,7 @@ export function SpendBars({
                             </div>
                           );
                         }
-                        const singleColor = hasSearch ? '#2563eb' : '#0d7a68';
+                        const singleColor = hasSearch ? '#2E6F8E' : '#0F5E52';
                         return (
                           <div
                             className="spend-bar-body observed"

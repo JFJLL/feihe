@@ -5,6 +5,72 @@
    OVERVIEW WORKSPACE V2 - TEXTURED GRADIENT HEADER & EXQUISITE MODULE CARDS
    ========================================================================= */
 
+/* Uniform 16px vertical gap for Business Daily */
+.dashboard-template:has(.business-daily) .dashboard-template-header {
+  margin-bottom: 16px !important;
+}
+.business-daily {
+  display: flex;
+  flex-direction: column;
+  gap: 16px !important;
+  margin: 6px 0 16px 0;
+  color: #1c2024;
+  min-width: 0;
+}
+.business-daily > .bd-cockpit-toolbar {
+  margin-bottom: 0 !important;
+}
+.business-daily > .bd-section-block {
+  margin-bottom: 0 !important;
+}
+.business-daily > .bd-section-block + .bd-section-block {
+  margin-top: 0 !important;
+}
+
+/* Reload button styles matching CampaignWorkspace */
+.ca-subnav-reload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1c2024;
+  border: 0.5px solid #d9d9e0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.ca-subnav-reload-btn:hover:not(:disabled) {
+  background: #f0f0f3;
+  border-color: #60646c;
+}
+.ca-subnav-reload-btn:focus-visible {
+  outline: 2px solid #008573;
+  outline-offset: 1px;
+}
+.ca-subnav-reload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f9f9fb;
+  border-color: #e8e8ec;
+  color: #8d8d95;
+}
+.ca-subnav-reload-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
 /* Page layout wrapper */
 .main:has(.overview-colorful-page) {
   padding-top: 12px !important;
@@ -201,6 +267,213 @@
   margin-bottom: 0;
   box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04);
   box-sizing: border-box;
+  width: 100%;
+}
+
+/* Overview Mode Single-Row Sticky Console (.ca-sticky-console) */
+.business-daily .bd-cockpit-toolbar.ca-sticky-console,
+.business-daily .bd-overview-console {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(10px);
+  border: 0.5px solid var(--slate-6, #d9d9e0) !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  min-height: 44px !important;
+  margin-bottom: 0 !important;
+  box-shadow: 0 1px 4px rgba(28, 32, 36, 0.05) !important;
+  flex-wrap: nowrap !important;
+}
+
+@media (max-width: 900px) {
+  .business-daily .bd-cockpit-toolbar.ca-sticky-console,
+  .business-daily .bd-overview-console {
+    flex-wrap: wrap !important;
+  }
+}
+
+.bd-cockpit-single-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.bd-console-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.bd-console-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Section jump bar links & pills matching CampaignWorkspace */
+.ca-section-jumpbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  flex-wrap: nowrap;
+}
+
+.ca-jumpbar-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.ca-jump-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #60646c;
+  text-decoration: none;
+  background: #f0f0f3;
+  border: 0.5px solid #e0e1e6;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.ca-jump-pill:hover {
+  background: #ffffff;
+  color: var(--teal-11, #008573);
+  border-color: #b8eae0;
+  box-shadow: 0 1px 3px rgba(0, 133, 115, 0.1);
+}
+
+.ca-jump-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--teal-11, #008573);
+  background: rgba(0, 133, 115, 0.1);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
+/* Section Macro Cards matching .ca-section-macro-card */
+.business-daily .bd-section-block,
+.bd-section-block {
+  background: #ffffff !important;
+  border: 0.5px solid var(--dt-section-border, #cdced6) !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  scroll-margin-top: 76px;
+}
+
+.business-daily .bd-section-block > .bd-section-head,
+.business-daily .bd-section-block > .bd-section-header,
+.business-daily .bd-section-block > .ca-chapter-header,
+.bd-section-block > .bd-section-header,
+.bd-section-block > .ca-chapter-header {
+  background: var(--slate-2, #f9f9fb) !important;
+  border: none !important;
+  border-bottom: 0.5px solid var(--slate-4, #e8e8ec) !important;
+  border-radius: 11.5px 11.5px 0 0 !important;
+  padding: 18px 24px !important;
+  margin: -24px -24px 4px -24px !important;
+  box-shadow: none !important;
+  width: auto !important;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bd-section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bd-section-num,
+.bd-section-block .ca-chapter-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 800;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--teal-3, #e0f8f3) !important;
+  color: var(--teal-11, #008573) !important;
+  flex-shrink: 0;
+}
+
+.bd-section-title,
+.bd-section-block .ca-chapter-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--slate-12, #1c2024);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.bd-section-subtitle {
+  font-size: 13px;
+  color: var(--slate-11, #60646c);
+  font-weight: 400;
+}
+
+.bd-section-period-pill {
+  font-size: 12px;
+  color: var(--slate-11, #60646c);
+  background: #ffffff;
+  border: 0.5px solid var(--slate-5, #e0e1e6);
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bd-section-period-pill strong {
+  color: var(--teal-11, #006858);
+}
+
+.bd-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   width: 100%;
 }
 
@@ -636,22 +909,28 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
+  align-items: stretch !important;
   width: 100%;
   box-sizing: border-box;
   min-width: 0;
 }
 
+.business-daily .bd-kpi-card-rich,
 .bd-kpi-card-rich {
   border-radius: 10px;
   padding: 14px 16px;
   box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04);
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
   gap: 8px;
   min-width: 0;
-  height: 100%;
-  justify-content: flex-start;
+  height: 100% !important;
+  min-height: 168px;
   box-sizing: border-box;
+  background: #ffffff;
+  border: 0.5px solid var(--slate-6, #d9d9e0);
+  border-top: 3px solid var(--kpi-accent, #0F5E52);
   transition: transform 250ms ease-out, box-shadow 250ms ease-out;
 }
 
@@ -660,60 +939,68 @@
   box-shadow: 0 4px 10px rgba(28, 32, 36, 0.07);
 }
 
-/* Card 1: 平台广告消耗 (F+S) · 青蓝 (Cyan/Blue) */
+/* Card 1: 平台广告消耗 · Pine (#0F5E52) */
+.bd-kpi-card-rich[data-tone="pine"],
 .bd-kpi-card-rich:nth-child(1) {
-  background: linear-gradient(145deg, #ffffff 45%, #f9f9fb 100%);
-  border:0.5px solid #d9d9e0;
+  --kpi-accent: #0F5E52;
 }
+.bd-kpi-card-rich[data-tone="pine"] .bd-kpi-badge,
 .bd-kpi-card-rich:nth-child(1) .bd-kpi-badge {
-  background: #e6f4fe;
-  color:#0b5cad;
-  border:0.5px solid #acd8fc;
+  background: #e6f4f1;
+  color: #0F5E52;
+  border: 0.5px solid #a3d9cf;
 }
+.bd-kpi-card-rich[data-tone="pine"] .bd-kpi-val,
 .bd-kpi-card-rich:nth-child(1) .bd-kpi-val {
-  color:#0b5cad;
+  color: #0F5E52;
 }
 
-/* Card 2: 达人合作费用 (K达人采买) · 紫 (Purple) */
+/* Card 2: 达人合作费用 · Mineral Blue (#2E6F8E) */
+.bd-kpi-card-rich[data-tone="mineral"],
 .bd-kpi-card-rich:nth-child(2) {
-  background: linear-gradient(145deg, #ffffff 45%, #f9f9fb 100%);
-  border:0.5px solid #d9d9e0;
+  --kpi-accent: #2E6F8E;
 }
+.bd-kpi-card-rich[data-tone="mineral"] .bd-kpi-badge,
 .bd-kpi-card-rich:nth-child(2) .bd-kpi-badge {
-  background: #e8e8ec;
-  color:#5151cd;
-  border:0.5px solid #c2e5ff;
+  background: #eaf2f7;
+  color: #2E6F8E;
+  border: 0.5px solid #b2d2e3;
 }
+.bd-kpi-card-rich[data-tone="mineral"] .bd-kpi-val,
 .bd-kpi-card-rich:nth-child(2) .bd-kpi-val {
-  color:#5151cd;
+  color: #2E6F8E;
 }
 
-/* Card 3: 项目总投入 (全口径投放) · 青绿 (Teal/Emerald) */
+/* Card 3: 项目总投入 · Harvest Ochre (#C87D20) */
+.bd-kpi-card-rich[data-tone="ochre"],
 .bd-kpi-card-rich:nth-child(3) {
-  background: linear-gradient(145deg, #ffffff 45%, #f9f9fb 100%);
-  border:0.5px solid #d9d9e0;
+  --kpi-accent: #C87D20;
 }
+.bd-kpi-card-rich[data-tone="ochre"] .bd-kpi-badge,
 .bd-kpi-card-rich:nth-child(3) .bd-kpi-badge {
-  background: #ccf3ea;
-  color:#006858;
-  border:0.5px solid #b8eae0;
+  background: #fbf5eb;
+  color: #C87D20;
+  border: 0.5px solid #f0d5a8;
 }
+.bd-kpi-card-rich[data-tone="ochre"] .bd-kpi-val,
 .bd-kpi-card-rich:nth-child(3) .bd-kpi-val {
-  color:#006858;
+  color: #C87D20;
 }
 
-/* Card 4: 政策后结算金额 (折让后核算) · 暖橙 (Orange/Amber) */
+/* Card 4: 政策后结算金额 · Terracotta (#D95D39) */
+.bd-kpi-card-rich[data-tone="terracotta"],
 .bd-kpi-card-rich:nth-child(4) {
-  background: linear-gradient(145deg, #ffffff 45%, #f9f9fb 100%);
-  border:0.5px solid #d9d9e0;
+  --kpi-accent: #D95D39;
 }
+.bd-kpi-card-rich[data-tone="terracotta"] .bd-kpi-badge,
 .bd-kpi-card-rich:nth-child(4) .bd-kpi-badge {
-  background: #fff7c2;
-  color:#ce2c31;
-  border:0.5px solid #ffee9c;
+  background: #fdf0ec;
+  color: #D95D39;
+  border: 0.5px solid #f6c0b3;
 }
+.bd-kpi-card-rich[data-tone="terracotta"] .bd-kpi-val,
 .bd-kpi-card-rich:nth-child(4) .bd-kpi-val {
-  color:#ce2c31;
+  color: #D95D39;
 }
 
 .bd-kpi-head {
@@ -733,9 +1020,17 @@
 }
 
 .bd-kpi-val {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: 22px;
   font-weight: 700;
   line-height: 1.2;
+}
+
+.business-daily .bd-kpi-card-rich .bd-kpi-val.num,
+.business-daily .bd-kpi-card-rich .num {
+  font-family: var(--font-mono) !important;
+  font-variant-numeric: tabular-nums !important;
 }
 
 .bd-kpi-val small {

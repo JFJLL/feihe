@@ -367,3 +367,14 @@
     gap: 8px;
   }
 }
+
+/* MarkLine Mean Baseline */
+.ca-combo-markline line {
+  pointer-events: none;
+}
+.ca-combo-markline text {
+  font-family: var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}

@@ -526,6 +526,7 @@ details.bd-aspect-details summary:hover {
 .bd-kpi-grid-rich {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch !important;
   gap: 12px;
 }
 
@@ -554,6 +555,8 @@ details.bd-aspect-details summary:hover {
   display: flex;
   flex-direction: column;
   justify-content: flex-start !important;
+  align-self: stretch !important;
+  height: auto !important;
   gap: 6px;
   min-width: 0;
   transition: box-shadow 250ms ease-out;

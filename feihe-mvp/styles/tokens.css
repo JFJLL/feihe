@@ -135,9 +135,45 @@
   --shadow-primary: 0 4px 14px rgba(0, 133, 115, 0.2);
   --transition-std: 250ms ease-out;
 
+  /* Botanical & Editorial Multi-Accent Palette (去单调纯绿与蓝紫塑料感) */
+  --bg-canvas: #F6F5F0;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #FAF9F5;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #8A847C;
+
+  --border-subtle: #E6E4DD;
+  --border-focus: #D4D0C8;
+  --border-brand: rgba(15, 94, 82, 0.25);
+
+  --brand-primary: #0F5E52;       /* Botanical Pine */
+  --brand-primary-soft: #EBF5F3;
+  --accent-secondary: #D95D39;    /* Terracotta Orange */
+  --accent-secondary-soft: #FDF0EC;
+  --accent-tertiary: #2E6F8E;     /* Mineral Teal Blue */
+  --accent-tertiary-soft: #EEF6FA;
+  --accent-quaternary: #C87D20;   /* Harvest Ochre Gold */
+  --accent-quaternary-soft: #FDF6EB;
+  --accent-sage: #5B8266;         /* Sage Moss Green */
+
+  --status-success: #15803D;
+  --status-success-bg: #ECFDF3;
+  --status-success-border: #BBF7D0;
+
+  --status-warn: #B45309;
+  --status-warn-bg: #FFFBEB;
+  --status-warn-border: #FDE68A;
+
+  --status-danger: #C2410C;
+  --status-danger-bg: #FFF1F0;
+  --status-danger-border: #FECACA;
+
   --font-sans: "HarmonyOS Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-display: "HarmonyOS Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-mono: 'JetBrains Mono', 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
 * {
@@ -159,5 +195,35 @@ body {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+/* Number Tabular & Mono Display */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Semantic Badge Tags */
+.semantic-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.semantic-tag.tag-ok, .tag-ok {
+  background: #ECFDF3; color: #15803D; border: 1px solid #BBF7D0;
+}
+.semantic-tag.tag-warn, .tag-warn {
+  background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A;
+}
+.semantic-tag.tag-danger, .tag-danger {
+  background: #FFF1F0; color: #C2410C; border: 1px solid #FECACA;
 }
 

@@ -43,61 +43,113 @@ function GroupHeading({
   title,
   subtitle,
   badge,
+  period,
 }: {
-  id: string;
+  id?: string;
   title: string;
   subtitle?: string;
   badge?: string;
+  period?: string;
 }) {
   return (
-    <div
+    <header
       id={id}
       tabIndex={-1}
-      className="bd-group-heading"
-      style={{
-        display: 'flex',
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-        gap: 12,
-        flexWrap: 'wrap',
-        margin: '12px 0 6px',
-        padding: '4px 0 2px',
-        borderBottom: '2px solid #f0f0f3',
-        outline: 'none',
-      }}
+      className="bd-section-header ca-chapter-header"
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <h2
-          style={{
-            fontSize: 14,
-            fontWeight: 700,
-            color: 'var(--slate-12, #1c2024)',
-            margin: 0,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-          }}
-        >
-          {badge && (
-            <span
-              className="bd-group-index"
-              style={{
-                fontFamily: 'monospace',
-                fontSize: 13,
-                fontWeight: 600,
-                color: '#525866',
-                marginRight: 2,
-              }}
-            >
-              {badge}
-            </span>
-          )}
-          {title}
-        </h2>
-        {subtitle && (
-          <span style={{ fontSize: 12, color: 'var(--slate-11, #525866)' }}>{subtitle}</span>
-        )}
+      <div className="bd-section-title-wrap">
+        {badge && <span className="bd-section-num ca-chapter-num">{badge}</span>}
+        <h2 className="bd-section-title ca-chapter-title">{title}</h2>
+        {subtitle && <span className="bd-section-subtitle">{subtitle}</span>}
       </div>
+      {period && (
+        <div className="bd-section-period-pill">
+          <span>{period}</span>
+        </div>
+      )}
+    </header>
+  );
+}
+
+function renderKpiSparklineSvg(
+  points: (number | null | undefined)[],
+  strokeColor: string,
+  gradId: string,
+  width = 110,
+  height = 24
+) {
+  const valid = points.map(p => (typeof p === 'number' && Number.isFinite(p) ? p : null));
+  const numericOnly = valid.filter((p): p is number => p !== null);
+  if (numericOnly.length < 2) return null;
+
+  const min = Math.min(...numericOnly);
+  const max = Math.max(...numericOnly);
+  const range = max === min ? 1 : max - min;
+  const padX = 4;
+  const padY = 4;
+  const innerW = width - padX * 2;
+  const innerH = height - padY * 2;
+  const step = innerW / Math.max(1, valid.length - 1);
+
+  let d = '';
+  let firstX = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let inLine = false;
+
+  valid.forEach((val, i) => {
+    if (val === null) {
+      inLine = false;
+      return;
+    }
+    const x = padX + i * step;
+    const y = padY + innerH - ((val - min) / range) * innerH;
+    if (!inLine) {
+      d += `M ${x.toFixed(1)} ${y.toFixed(1)}`;
+      firstX = x;
+      inLine = true;
+    } else {
+      d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+    lastX = x;
+    lastY = y;
+  });
+
+  if (!d) return null;
+
+  const areaD = `${d} L ${lastX.toFixed(1)} ${height} L ${firstX.toFixed(1)} ${height} Z`;
+
+  return (
+    <div className="bd-kpi-sparkline" style={{ width: '100%', height: `${height}px`, margin: '6px 0 4px' }} aria-hidden="true">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        style={{ width: '100%', height: '100%', overflow: 'visible' }}
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={strokeColor} stopOpacity="0.32" />
+            <stop offset="100%" stopColor={strokeColor} stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+        <path d={areaD} fill={`url(#${gradId})`} />
+        <path
+          d={d}
+          fill="none"
+          stroke={strokeColor}
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle
+          cx={lastX.toFixed(1)}
+          cy={lastY.toFixed(1)}
+          r="3"
+          fill={strokeColor}
+          stroke="#ffffff"
+          strokeWidth="1.5"
+        />
+      </svg>
     </div>
   );
 }
@@ -1142,6 +1194,12 @@ export function BusinessDailyBoard({
   const effectiveFrom = from || view?.from || '';
   const effectiveTo = to || view?.to || displayDay || '';
 
+  const sparklineSeries = useMemo(() => (view?.series || []).slice(-14), [view?.series]);
+  const adSparkline = useMemo(() => sparklineSeries.map(p => p.adSpend?.value ?? null), [sparklineSeries]);
+  const creatorSparkline = useMemo(() => sparklineSeries.map(p => p.creatorCost?.value ?? null), [sparklineSeries]);
+  const investmentSparkline = useMemo(() => sparklineSeries.map(p => p.projectInvestment?.value ?? null), [sparklineSeries]);
+  const settlementSparkline = useMemo(() => sparklineSeries.map(p => p.settlement?.value ?? null), [sparklineSeries]);
+
   const { isTodayActive, isLast7Active, isMonthActive } = useMemo(() => {
     if (!displayDay) return { isTodayActive: false, isLast7Active: false, isMonthActive: false };
     const todayActive = effectiveFrom === displayDay && effectiveTo === displayDay;
@@ -1168,17 +1226,45 @@ export function BusinessDailyBoard({
         className="business-daily"
         data-testid={overview ? 'business-data-overview' : 'business-daily-board'}
       >
-        {/* Compact, Unified Cockpit Toolbar (Clean 2-Layer Layout) */}
-        <div className="bd-toolbar-compact bd-cockpit-toolbar">
-          {/* Layer 1: Left Filters + Right Actions */}
-          <div className="bd-cockpit-primary-row">
-            <div className="bd-cockpit-filter-group">
-              {overview ? (
-                <>
-                  <div className="bd-quick-group" role="group" aria-label="快捷时间范围">
+        {/* Compact, Unified Cockpit Toolbar (Matching .ca-sticky-console) */}
+        {overview ? (
+          <div className="bd-toolbar-compact bd-cockpit-toolbar ca-sticky-console bd-overview-console">
+            <div className="bd-cockpit-single-row bd-cockpit-primary-row">
+              {/* Left side: The 4 section jump pills */}
+              <div className="bd-console-left">
+                <nav className="bd-planar-nav ca-section-jumpbar" aria-label="数据总览板块快速定位">
+                  <div className="ca-jumpbar-links">
+                    {overviewNavItems.map((item, idx) => (
+                      <a
+                        key={item.id}
+                        href={'#' + item.id}
+                        className="bd-planar-nav-link ca-jump-pill"
+                        onClick={e => {
+                          if (typeof document !== 'undefined') {
+                            const target = document.getElementById(item.id);
+                            if (target) {
+                              e.preventDefault();
+                              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              target.focus({ preventScroll: true });
+                            }
+                          }
+                        }}
+                      >
+                        <span className="ca-jump-num">0{idx + 1}</span>
+                        <span>{item.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </nav>
+              </div>
+
+              {/* Right side: Unified single-layer Date Range capsule */}
+              <div className="bd-console-right">
+                <div className="bd-cockpit-filter-group bd-date-range-unified">
+                  <div className="bd-quick-group ca-overview-quick-pills" role="group" aria-label="快捷时间范围">
                     <button
                       type="button"
-                      className={`bd-quick-btn ${isTodayActive ? 'is-active' : ''}`}
+                      className={`bd-quick-btn ca-overview-quick-btn ${isTodayActive ? 'is-active active' : ''}`}
                       onClick={() => {
                         if (displayDay) {
                           setFrom(displayDay);
@@ -1191,7 +1277,7 @@ export function BusinessDailyBoard({
                     </button>
                     <button
                       type="button"
-                      className={`bd-quick-btn ${isLast7Active ? 'is-active' : ''}`}
+                      className={`bd-quick-btn ca-overview-quick-btn ${isLast7Active ? 'is-active active' : ''}`}
                       onClick={() => {
                         if (displayDay) {
                           const d = new Date(displayDay + 'T00:00:00Z');
@@ -1206,7 +1292,7 @@ export function BusinessDailyBoard({
                     </button>
                     <button
                       type="button"
-                      className={`bd-quick-btn ${isMonthActive ? 'is-active' : ''}`}
+                      className={`bd-quick-btn ca-overview-quick-btn ${isMonthActive ? 'is-active active' : ''}`}
                       onClick={() => {
                         if (displayDay) {
                           setFrom(displayDay.slice(0, 7) + '-01');
@@ -1250,149 +1336,132 @@ export function BusinessDailyBoard({
                         }}
                       />
                     </div>
-                    <span className="bd-range-days-chip">共 {view?.series?.length || 0} 天</span>
+                    <span className="bd-range-days-chip ca-overview-days-badge">共 {view?.series?.length || 0} 天</span>
                   </div>
-                </>
-              ) : (
-                <>
-                  <DayNavigator
-                    id="bd-daily-day-navigator"
-                    value={displayDay}
-                    onChange={nextDay => {
-                      setDay(nextDay);
-                      setNotice('');
-                    }}
-                    latestDate={
-                      view?.defaultDay ||
-                      view?.latestReportDay ||
-                      view?.latestCompleteDay ||
-                      view?.businessThrough ||
-                      undefined
-                    }
-                    ariaLabel="业务日期"
-                  />
-                  <div className="bd-filter-item bd-version-filter-item">
-                    <span className="bd-filter-label">数据版本</span>
-                    <CustomSelect
-                      ariaLabel="数据版本"
-                      value={mode}
-                      onChange={v => setMode(v)}
-                      options={[
-                        { value: 'latest', label: '当前最新底表' },
-                        { value: 'source_snapshot', label: '来源日报快照' },
-                        { value: 'confirmed', label: '已确认历史日报' },
-                      ]}
-                    />
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="bd-cockpit-action-group bd-toolbar-controls">
-              <button
-                type="button"
-                className="bd-action-btn bd-reload-btn"
-                disabled={busy || queryLoading}
-                onClick={() => {
-                  invalidateQueryCache({ projectId, endpoint: '/api/business-daily' });
-                  setRevision(n => n + 1);
-                  void refreshDaily({ fresh: true });
-                }}
-                title="重新读取已同步数据"
-                aria-label="重新读取已同步数据"
-              >
-                <svg
-                  className="bd-reload-icon"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M1.75 8a6.25 6.25 0 1 0 1.83-4.42L1.75 5.5" />
-                  <path d="M1.75 2v3.5h3.5" />
-                </svg>
-                <span>{busy || queryLoading ? '加载中…' : '重新加载'}</span>
-              </button>
-              {canWrite && (
-                <button
-                  type="button"
-                  className="bd-action-btn"
-                  onClick={() => setConfigOpen(true)}
-                >
-                  配置业务来源与规则
-                </button>
-              )}
-              {canWrite && !overview && mode === 'latest' && (
-                <button
-                  type="button"
-                  className="bd-action-btn bd-btn-primary primary-btn"
-                  disabled={busy || queryLoading || !view || !view.sourceVersions.length}
-                  onClick={confirm}
-                >
-                  确认并保存日报
-                </button>
-              )}
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* Layer 2: Lightweight Metadata (Cutoff & Interval only) */}
-          <div className="bd-cockpit-meta-row">
-            <div className="bd-meta-left">
-            <span className="bd-meta-text">
-              {overview ? (
-                <>
-                  统计区间：<strong>{view?.from || from || (displayDay ? displayDay.slice(0, 7) + '-01' : '')}</strong> 至 <strong>{view?.to || to || displayDay}</strong>
-                </>
-              ) : (
-                <>
-                  业务日期：<strong>{displayDay}</strong>
-                </>
-              )}
-            </span>
-            <span className="bd-meta-cutoff">
-              实际数据截至：<strong>{view?.businessThrough || '待采集'}</strong>
-              {view?.latestRegisteredDay && view.latestRegisteredDay > (view?.businessThrough || '') && (
-                <span className="bd-meta-sub-cutoff">
-                  （达人等部分费用已登记至 {view.latestRegisteredDay}）
-                </span>
-              )}
-            </span>
-            {!overview && isTodayCostsPending && (
-              <span className="bd-meta-status-chip">
-                当日投放待录入 / 接入 {latestObservedPoint?.date || view?.businessThrough} 实绩
-              </span>
-            )}
-          </div>
-
-          <nav
-            className="bd-planar-nav bd-section-nav"
-            aria-label={overview ? '数据总览板块导航' : '业务分日板块导航'}
-          >
-            {(overview ? overviewNavItems : dailyNavItems).map(item => (
-              <a
-                key={item.id}
-                href={'#' + item.id}
-                className="bd-planar-nav-link"
-                onClick={e => {
-                  if (typeof document !== 'undefined') {
-                    const target = document.getElementById(item.id);
-                    if (target) {
-                      e.preventDefault();
-                      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      target.focus({ preventScroll: true });
-                    }
+        ) : (
+          <div className="bd-toolbar-compact bd-cockpit-toolbar bd-daily-console">
+            <div className="bd-cockpit-primary-row">
+              <div className="bd-cockpit-filter-group">
+                <DayNavigator
+                  id="bd-daily-day-navigator"
+                  value={displayDay}
+                  onChange={nextDay => {
+                    setDay(nextDay);
+                    setNotice('');
+                  }}
+                  latestDate={
+                    view?.defaultDay ||
+                    view?.latestReportDay ||
+                    view?.latestCompleteDay ||
+                    view?.businessThrough ||
+                    undefined
                   }
-                }}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-        </div>
+                  ariaLabel="业务日期"
+                />
+                <div className="bd-filter-item bd-version-filter-item">
+                  <span className="bd-filter-label">数据版本</span>
+                  <CustomSelect
+                    ariaLabel="数据版本"
+                    value={mode}
+                    onChange={v => setMode(v)}
+                    options={[
+                      { value: 'latest', label: '当前最新底表' },
+                      { value: 'source_snapshot', label: '来源日报快照' },
+                      { value: 'confirmed', label: '已确认历史日报' },
+                    ]}
+                  />
+                </div>
+              </div>
+
+              <div className="bd-cockpit-action-group bd-toolbar-controls">
+                <nav className="bd-planar-nav" aria-label="业务分日板块导航">
+                  {dailyNavItems.map((item, idx) => (
+                    <a
+                      key={item.id}
+                      href={'#' + item.id}
+                      className="bd-planar-nav-link ca-jump-pill"
+                      onClick={e => {
+                        if (typeof document !== 'undefined') {
+                          const target = document.getElementById(item.id);
+                          if (target) {
+                            e.preventDefault();
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            target.focus({ preventScroll: true });
+                          }
+                        }
+                      }}
+                    >
+                      <span className="ca-jump-num">0{idx + 1}</span>
+                      <span>{item.label}</span>
+                    </a>
+                  ))}
+                </nav>
+                <button
+                  type="button"
+                  className="bd-action-btn bd-reload-btn"
+                  disabled={busy || queryLoading}
+                  onClick={() => {
+                    invalidateQueryCache({ projectId, endpoint: '/api/business-daily' });
+                    setRevision(n => n + 1);
+                    void refreshDaily({ fresh: true });
+                  }}
+                  title="重新读取已同步数据"
+                  aria-label="重新读取已同步数据"
+                >
+                  <svg
+                    className="bd-reload-icon"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M1.75 8a6.25 6.25 0 1 0 1.83-4.42L1.75 5.5" />
+                    <path d="M1.75 2v3.5h3.5" />
+                  </svg>
+                  <span>{busy || queryLoading ? '加载中…' : '重新加载'}</span>
+                </button>
+                {canWrite && mode === 'latest' && (
+                  <button
+                    type="button"
+                    className="bd-action-btn bd-btn-primary primary-btn"
+                    disabled={busy || queryLoading || !view || !view.sourceVersions.length}
+                    onClick={confirm}
+                  >
+                    确认并保存日报
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="bd-cockpit-meta-row">
+              <div className="bd-meta-left">
+                <span className="bd-meta-text">
+                  业务日期：<strong>{displayDay}</strong>
+                </span>
+                <span className="bd-meta-cutoff">
+                  实际数据截至：<strong>{view?.businessThrough || '待采集'}</strong>
+                  {view?.latestRegisteredDay && view.latestRegisteredDay > (view?.businessThrough || '') && (
+                    <span className="bd-meta-sub-cutoff">
+                      （达人等部分费用已登记至 {view.latestRegisteredDay}）
+                    </span>
+                  )}
+                </span>
+                {isTodayCostsPending && (
+                  <span className="bd-meta-status-chip">
+                    当日投放待录入 / 接入 {latestObservedPoint?.date || view?.businessThrough} 实绩
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {notice && <p role="status" className="bd-notice-banner">{notice}</p>}
 
@@ -1437,12 +1506,13 @@ export function BusinessDailyBoard({
                   {/* KPI Cards: Overview Period vs. Single-Day distinction */}
                   {overview ? (
                     <div className="bd-kpi-grid-rich">
-                      <article className="bd-kpi-card-rich">
+                      <article className="bd-kpi-card-rich" data-tone="pine" style={{ '--kpi-accent': '#0F5E52' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
                           <span>平台广告消耗</span>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val">{'¥' + format(periodAdSpend)}</div>
+                        <div className="bd-kpi-val num">{'¥' + format(periodAdSpend)}</div>
+                        {renderKpiSparklineSvg(adSparkline, '#0F5E52', 'spark-kpi-ad')}
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + adPoints.length + ' 个有效观测日（' + (view?.from?.slice(5) || '10-01') + ' 至 ' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）/ 日均 ¥' + format(periodAdSpend / (adPoints.length || 1))}
                         </div>
@@ -1456,12 +1526,13 @@ export function BusinessDailyBoard({
                         </div>
                       </article>
 
-                      <article className="bd-kpi-card-rich">
+                      <article className="bd-kpi-card-rich" data-tone="mineral" style={{ '--kpi-accent': '#2E6F8E' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
                           <span>达人合作费用</span>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val">{'¥' + format(periodCreatorCost)}</div>
+                        <div className="bd-kpi-val num">{'¥' + format(periodCreatorCost)}</div>
+                        {renderKpiSparklineSvg(creatorSparkline, '#2E6F8E', 'spark-kpi-creator')}
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + creatorPoints.length + ' 个有效观测日 / 日均 ¥' + format(periodCreatorCost / (creatorPoints.length || 1))}
                         </div>
@@ -1475,12 +1546,13 @@ export function BusinessDailyBoard({
                         </div>
                       </article>
 
-                      <article className="bd-kpi-card-rich">
+                      <article className="bd-kpi-card-rich" data-tone="ochre" style={{ '--kpi-accent': '#C87D20' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
                           <span>项目总投入</span>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val">{'¥' + format(periodProjectInvestment)}</div>
+                        <div className="bd-kpi-val num">{'¥' + format(periodProjectInvestment)}</div>
+                        {renderKpiSparklineSvg(investmentSparkline, '#C87D20', 'spark-kpi-investment')}
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + completeInvestmentPoints.length + ' 个完整投流日 / 日均 ¥' + format(periodProjectInvestment / (completeInvestmentPoints.length || 1))}
                         </div>
@@ -1494,12 +1566,13 @@ export function BusinessDailyBoard({
                         </div>
                       </article>
 
-                      <article className="bd-kpi-card-rich">
+                      <article className="bd-kpi-card-rich" data-tone="terracotta" style={{ '--kpi-accent': '#D95D39' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
                           <span>政策后结算金额</span>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val">{'¥' + format(periodSettlement)}</div>
+                        <div className="bd-kpi-val num">{'¥' + format(periodSettlement)}</div>
+                        {renderKpiSparklineSvg(settlementSparkline, '#D95D39', 'spark-kpi-settlement')}
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + completeSettlementPoints.length + ' 个完整投流日 / 月累计结算 ¥' + format(view.core.monthlySettlement?.value) + '（进度 ' + format((view.progress.settlementFraction ?? 0) * 100) + '%）'}
                         </div>

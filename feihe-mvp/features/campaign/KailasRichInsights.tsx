@@ -452,8 +452,6 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
       {/* ======================= SECTION: OVERVIEW (5 Layers Deep Mining) ======================= */}
       {section === 'overview' && (
         <>
-          {overviewMetrics.length > 0 && <MetricStrip items={overviewMetrics} />}
-
           {/* ----------------- 第一层 (全口径预算与多阶段演进) ----------------- */}
           <div className='kri-section'>
             <div className='kri-section-header'>
@@ -463,6 +461,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               </div>
               <span className='kri-section-desc'>黑山Q3、EX330与跑山女孩预算执行结构与双周演进</span>
             </div>
+            {overviewMetrics.length > 0 && <MetricStrip items={overviewMetrics} />}
             <div className='kri-grid-2'>
               {/* 1.1 子项目全口径预算规划 vs 实际消耗 */}
               {budgetData && (
@@ -536,7 +535,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                         unit: '元',
                         axis: 'left',
                         kind: 'bar',
-                        color: CAMPAIGN_PALETTE.primary,
+                        color: CAMPAIGN_PALETTE.purple,
                       },
                       {
                         key: 'cpc',
@@ -544,7 +543,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                         unit: '元',
                         axis: 'right',
                         kind: 'line',
-                        color: CAMPAIGN_PALETTE.gold,
+                        color: CAMPAIGN_PALETTE.terracotta,
                       },
                     ]}
                     height={250}
@@ -657,7 +656,14 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
             </div>
           </div>
 
-          <details className="kri-section kri-secondary"><summary>笔记投流杠杆、Pareto 集中度与四象限散点诊断</summary>
+          <details className="kri-section kri-secondary">
+            <summary className="kri-summary-header">
+              <span className="kri-summary-left">
+                <span className="ca-chapter-num">04</span>
+                <span>笔记投流杠杆、Pareto 集中度与四象限散点诊断</span>
+              </span>
+            </summary>
+            <div className="kri-details-body">
             <div className='kri-grid-2'>
               {/* 3.1 119篇笔记四象限散点图 */}
               {scatterData && (
@@ -744,9 +750,17 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 </ChartPanel>
               )}
             </div>
+            </div>
           </details>
 
-          <details className="kri-section kri-secondary"><summary>搜索词类与精准人群定向引擎</summary>
+          <details className="kri-section kri-secondary">
+            <summary className="kri-summary-header">
+              <span className="kri-summary-left">
+                <span className="ca-chapter-num">05</span>
+                <span>搜索词类与精准人群定向引擎</span>
+              </span>
+            </summary>
+            <div className="kri-details-body">
             <div className='kri-grid-2'>
               {/* 4.1 搜索推广大类关键词投放效果多指标分析 */}
               {kwData && (
@@ -773,7 +787,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                         unit: '%',
                         axis: 'right',
                         kind: 'line',
-                        color: CAMPAIGN_PALETTE.purple,
+                        color: CAMPAIGN_PALETTE.terracotta,
                       },
                     ]}
                     height={250}
@@ -798,7 +812,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                         unit: '元',
                         axis: 'left',
                         kind: 'bar',
-                        color: CAMPAIGN_PALETTE.primary,
+                        color: CAMPAIGN_PALETTE.purple,
                       },
                       {
                         key: 'cpc',
@@ -814,9 +828,17 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 </ChartPanel>
               )}
             </div>
+            </div>
           </details>
 
-          <details className="kri-section kri-secondary"><summary>达人候选池规模、内容方向热力矩阵与审稿质检</summary>
+          <details className="kri-section kri-secondary">
+            <summary className="kri-summary-header">
+              <span className="kri-summary-left">
+                <span className="ca-chapter-num">06</span>
+                <span>达人候选池规模、内容方向热力矩阵与审稿质检</span>
+              </span>
+            </summary>
+            <div className="kri-details-body">
             <div className='kri-grid-2'>
               {/* 5.1 初筛与复筛候选达人独立池状态分布 */}
               {poolData && (
@@ -882,13 +904,22 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 </div>
               </details>
             </div>
+            </div>
           </details>
         </>
       )}
 
       {/* ======================= SECTION: ADS ======================= */}
       {section === 'ads' && (
-        <>
+        <div className='kri-section'>
+          <div className='kri-section-header'>
+            <div className='kri-section-title-wrap'>
+              <span className='ca-chapter-num'>01</span>
+              <h3 className='kri-section-title'>搜索与人群精准定向深度分析</h3>
+            </div>
+            <span className='kri-section-desc'>搜索推广词类消耗、点击率与核心定向人群转化表现</span>
+          </div>
+
           {adsMetrics.length > 0 && <MetricStrip items={adsMetrics} />}
 
           <div className='kri-grid-2'>
@@ -917,7 +948,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                       unit: '%',
                       axis: 'right',
                       kind: 'line',
-                      color: CAMPAIGN_PALETTE.purple,
+                        color: CAMPAIGN_PALETTE.terracotta,
                     },
                   ]}
                   height={260}
@@ -942,7 +973,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                       unit: '元',
                       axis: 'left',
                       kind: 'bar',
-                      color: CAMPAIGN_PALETTE.primary,
+                        color: CAMPAIGN_PALETTE.purple,
                     },
                     {
                       key: 'cpc',
@@ -958,12 +989,20 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               </ChartPanel>
             )}
           </div>
-        </>
+        </div>
       )}
 
       {/* ======================= SECTION: CONTENT ======================= */}
       {section === 'content' && (
-        <>
+        <div className='kri-section'>
+          <div className='kri-section-header'>
+            <div className='kri-section-title-wrap'>
+              <span className='ca-chapter-num'>01</span>
+              <h3 className='kri-section-title'>达人池与内容方向合作深度分析</h3>
+            </div>
+            <span className='kri-section-desc'>达人初筛复筛独立池分布与各内容方向篇数及采买结构</span>
+          </div>
+
           {contentMetrics.length > 0 && <MetricStrip items={contentMetrics} />}
 
           <div className='kri-grid-2'>
@@ -1010,7 +1049,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               </ChartPanel>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

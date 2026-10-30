@@ -591,6 +591,46 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return `当前项目业务周期: ${activeHeaderPeriod}。核心数据基于最新入账记录动态呈现，缺值保持留白。${rangeInsight}`;
   }, [projectId, activeSnapshot, kailasBudgetLinesComparison, kailasFsPlacementsData, meilingFourLinesData, wipesPlacementsData, wipesDailyTargetBullets, findKpi, activeHeaderPeriod, rangeSpend, rangePeriodNote]);
 
+  const { executiveSignals, executiveSemanticTag } = useMemo(() => {
+    let signals: Array<{ label: string; value: string; status: 'ok' | 'warn' | 'danger'; desc?: string }> = [];
+    let tag: { text: string; type: 'scale' | 'warn' | 'tempo' } = { text: "放量", type: "scale" };
+
+    if (projectId === "kailas") {
+      signals = [
+        { label: "预算进度", value: "执行平稳", status: "ok", desc: "现金预算整体处于合理管控线内" },
+        { label: "版位效率", value: "最低 ¥0.94/UV", status: "ok", desc: "FS版位引流成本受控" },
+        { label: "数据覆盖", value: "T-1 全量日流水", status: "ok", desc: "10月创意日流水对账核实" },
+        { label: "风控健康", value: "无超支预警", status: "ok", desc: "未见异常超预算支出" },
+      ];
+      tag = { text: "放量", type: "scale" };
+    } else if (projectId === "meiling") {
+      signals = [
+        { label: "预算打款", value: "双11攻坚中", status: "warn", desc: "7大投放账户应消耗持续推进" },
+        { label: "四线转化", value: "最高 ROI 4.80", status: "ok", desc: "自采与代采四线独立归因" },
+        { label: "数据覆盖", value: "19天同周期可比", status: "ok", desc: "京东与天猫重叠可比分日对账" },
+        { label: "样机流转", value: "完成率 73.8%", status: "ok", desc: "84台样机流转脱敏核实" },
+      ];
+      tag = { text: "节奏", type: "tempo" };
+    } else if (projectId === "winner-wipes") {
+      signals = [
+        { label: "日常进度", value: "日均 ¥1.42万", status: "ok", desc: "日均预算跑率吻合全案目标" },
+        { label: "版位效率", value: "最优 ¥4.83/UV", status: "ok", desc: "视频内流转化效率领跑" },
+        { label: "爆文达成", value: "爆文率 33.3%", status: "ok", desc: "超越 30% 考核基准" },
+        { label: "跨端对账", value: "星河&CID双轨", status: "ok", desc: "35天淘系与10位CID达人对账" },
+      ];
+      tag = { text: "预警", type: "warn" };
+    } else {
+      signals = [
+        { label: "预算状态", value: "正常受控", status: "ok" },
+        { label: "转化效率", value: "基线达标", status: "ok" },
+        { label: "数据覆盖", value: "100% 入账", status: "ok" },
+      ];
+      tag = { text: "放量", type: "scale" };
+    }
+
+    return { executiveSignals: signals, executiveSemanticTag: tag };
+  }, [projectId]);
+
   const activeMetrics = useMemo(() => {
     if (projectId === "kailas") return activeSnapshot === "daily-1018" ? kailasDailyMetrics : kailasQ3Metrics;
     if (projectId === "meiling") return activeSnapshot === "double11-1018" ? meilingDouble11Metrics : meiling618Metrics;
@@ -680,8 +720,22 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 <span className="ca-insight-tag">核心观察</span>
                 <h2 className="ca-insight-title">战役分析与核心观察</h2>
               </div>
+              <div className="ca-signal-pills" role="status" aria-label="战役全局健康信号">
+                {executiveSignals.map((sig, idx) => (
+                  <span key={idx} className="ca-signal-pill" title={sig.desc}>
+                    <span className={`dot-indicator dot-${sig.status}`} />
+                    <span className="ca-signal-name">{sig.label}</span>
+                    <span className="ca-signal-val">{sig.value}</span>
+                  </span>
+                ))}
+              </div>
             </div>
-            <p className="ca-insight-text">{dynamicInsight}</p>
+            <div className="ca-insight-body-wrap">
+              <span className={`ca-semantic-tag ${executiveSemanticTag.type}`}>
+                {executiveSemanticTag.text}
+              </span>
+              <p className="ca-insight-text">{dynamicInsight}</p>
+            </div>
           </section>
 
           <div className="ca-quick-links-bar">
@@ -795,7 +849,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     rows={kailasDailyInfo.rows}
                     series={[
                       { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.terracotta },
                     ]}
                     xKey="date"
                     title="投放日流水消耗与展现走势"
@@ -950,7 +1004,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     rows={meilingDailyInfo.rows}
                     series={[
                       { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
                     ]}
                     xKey="date"
                     title="分日消耗与展现走势"
@@ -990,8 +1044,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
               <CampaignComboChart
                 rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
                 series={[
-                  { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
+                  { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
+                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
                 ]}
                 xKey="name"
                 title="分版位 CPE 与 CPUV"
@@ -1052,7 +1106,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     rows={wipesDailyInfo.rows}
                     series={[
                       { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.terracotta },
                     ]}
                     xKey="date"
                     title="投放日流水消耗与展现走势"
@@ -1088,7 +1142,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       {activeDetailTables.length > 0 && (
         <details id="ca-sec-details" className="ca-details-collapse">
           <summary className="ca-details-summary">
-            <span>查看关联业务明细数据 (当前看板对应 {activeDetailTables.length + (activeDailyDataset ? 1 : 0)} 项数据源，点击展开)</span>
+            <span className="ca-summary-left">
+              <span className="ca-chapter-num">07</span>
+              <span>查看关联业务明细数据 (当前看板对应 {activeDetailTables.length + (activeDailyDataset ? 1 : 0)} 项数据源，点击展开)</span>
+            </span>
           </summary>
           <div className="ca-details-body">
             {activeDetailTables.map((t) => (

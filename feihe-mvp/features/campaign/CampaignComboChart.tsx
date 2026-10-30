@@ -13,28 +13,29 @@ import './campaign-combo.css';
  *   Slate: #8c9ba5 (Baseline / grid line / reference)
  */
 export const CAMPAIGN_PALETTE = {
-  primary: '#008573',
-  purple: '#5b5bd6',
-  gold: '#ffc53d',
-  terracotta: '#e5484d',
+  primary: '#0F5E52',    // #008573 Botanical Pine
+  purple: '#2E6F8E',     // #5b5bd6 Mineral Steel Blue
+  gold: '#C87D20',       // #ffc53d Harvest Ochre Gold
+  terracotta: '#D95D39', // #e5484d Editorial Terracotta
   slate: '#8b8d98',
-  warmBg: '#f9f9fb',
+  warmBg: '#FAF9F5',
   panelBg: '#ffffff',
-  textMain: '#1c2024',
-  textMuted: '#60646c',
-  textSubtle: '#8b8d98',
-  border: '#d9d9e0',
-  borderWarm: '#d9d9e0',
-  gridLine: '#f0f0f3',
+  textMain: '#1C1917',
+  textMuted: '#57534E',
+  textSubtle: '#8A847C',
+  border: '#E6E4DD',
+  borderWarm: '#E6E4DD',
+  gridLine: '#F0EDE6',
 } as const;
 
 export const DEFAULT_SERIES_COLORS = [
-  CAMPAIGN_PALETTE.primary,
-  CAMPAIGN_PALETTE.purple,
-  CAMPAIGN_PALETTE.gold,
-  CAMPAIGN_PALETTE.terracotta,
-  '#12a594',
-  '#5753c6',
+  '#0F5E52', // Botanical Pine
+  '#D95D39', // Terracotta Orange
+  '#2E6F8E', // Mineral Teal
+  '#C87D20', // Harvest Ochre Gold
+  '#5B8266', // Sage Moss Green
+  '#8C6239', // Warm Bronze
+  '#B91C1C', // Deep Crimson
   CAMPAIGN_PALETTE.slate,
 ];
 
@@ -288,10 +289,26 @@ export function CampaignComboChart({
     ? rows.filter((r) => r && r[xKey] !== undefined && r[xKey] !== null)
     : [];
 
-  const styledSeries = (series || []).map((s, idx) => ({
-    ...s,
-    color: s.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length],
-  }));
+  const hasMultipleSeries = (series || []).length > 1;
+  const isMonochromeGreen =
+    hasMultipleSeries &&
+    (series || []).every(
+      (s) => !s.color || s.color === '#0F5E52' || s.color === '#008573' || s.color === '#12a594' || s.color === '#2c7168'
+    );
+
+  const styledSeries = (series || []).map((s, idx) => {
+    let color = s.color;
+    if (!color) {
+      color = DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
+    } else if (isMonochromeGreen && idx > 0) {
+      // Use Terracotta or Mineral Blue for secondary line/bar series when otherwise monochrome green
+      color = idx === 1 ? '#D95D39' : idx === 2 ? '#2E6F8E' : idx === 3 ? '#C87D20' : '#5B8266';
+    }
+    return {
+      ...s,
+      color,
+    };
+  });
 
   // Check all numeric values across all series
   const allNumericValues = validRows
@@ -327,6 +344,17 @@ export function CampaignComboChart({
   const rightValues = validRows
     .flatMap((r) => rightSeries.map((s) => r[s.key]))
     .filter(isFiniteNumber);
+
+  // Primary series mean calculation for dashed horizontal markLine
+  const primarySeries = styledSeries.find((s) => !hiddenSeries.has(s.key)) || styledSeries[0];
+  const primaryVals = primarySeries
+    ? validRows
+        .map((r) => r[primarySeries.key])
+        .filter((v): v is number => isFiniteNumber(v))
+    : [];
+  const primaryMean = primaryVals.length > 0
+    ? primaryVals.reduce((acc, v) => acc + v, 0) / primaryVals.length
+    : null;
 
   const leftScale = computeAxisScale(leftValues, hasLeftBar);
   const rightScale = hasRightAxis
@@ -501,6 +529,37 @@ export function CampaignComboChart({
               strokeWidth="1.2"
             />
           )}
+
+          {/* Mean Benchmark MarkLine (均值基准线) */}
+          {primaryMean !== null && isFiniteNumber(primaryMean) && primarySeries && (() => {
+            const meanY = getY(primarySeries.axis, primaryMean);
+            if (meanY < topPad || meanY > topPad + plotHeight) return null;
+            const meanText = `均值: ${fmtAxisTick(primaryMean, primarySeries.axis === 'left' ? leftScale.step : rightScale.step)}${primarySeries.unit ? ` ${primarySeries.unit}` : ''}`;
+            return (
+              <g className="ca-combo-markline" data-markline="mean">
+                <line
+                  x1={leftPad}
+                  x2={totalWidth - rightPad}
+                  y1={meanY}
+                  y2={meanY}
+                  stroke="#8A847C"
+                  strokeWidth="1.2"
+                  strokeDasharray="4 4"
+                  strokeOpacity={0.8}
+                />
+                <text
+                  x={totalWidth - rightPad - 4}
+                  y={meanY - 4}
+                  textAnchor="end"
+                  fill="#57534E"
+                  fontSize="11"
+                  fontWeight="600"
+                >
+                  {meanText}
+                </text>
+              </g>
+            );
+          })()}
 
           {/* Left Y-Axis Label and Ticks */}
           <g data-axis="left">

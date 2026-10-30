@@ -6,9 +6,8 @@
 .wipes-rich-container {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  margin-top: 16px;
-  margin-bottom: 28px;
+  gap: 16px !important;
+  margin: 0 !important;
 }
 
 /* Header & Notice */

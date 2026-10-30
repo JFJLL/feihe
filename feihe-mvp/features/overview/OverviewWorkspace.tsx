@@ -29,6 +29,7 @@ import { BusinessComponentBoard } from './BusinessComponentBoard';
 import { BusinessDailyBoard } from './BusinessDailyBoard';
 import { resolveDashboardPreset } from './dashboard-template';
 import { DashboardFrame } from './DashboardFrame';
+import '../campaign/campaign-shell.css';
 
 const amount = (value: unknown) => finiteMetric(value)?.toLocaleString('zh-CN', { maximumFractionDigits: 2 }) ?? '—';
 const formatDateZh = (val: string | null | undefined) => {
@@ -282,6 +283,52 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     if (next) setSelected(String(next.date));
   }
 
+  const [syncing, setSyncing] = useState(false);
+
+  const handleSyncFeishu = async () => {
+    setSyncing(true);
+    try {
+      await fetch('/api/feishu/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId, all: true }),
+      }).catch(() => null);
+      if (refreshWorkspace) await refreshWorkspace();
+      if (onRefresh) await onRefresh({ fresh: true });
+      window.dispatchEvent(new CustomEvent('app:datasets-changed', { detail: { projectId } }));
+    } catch {
+      if (onRefresh) await onRefresh({ fresh: true });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const feishuSyncBtn = (
+    <button
+      type="button"
+      onClick={handleSyncFeishu}
+      disabled={syncing}
+      className={`ca-subnav-reload-btn ${syncing ? 'is-syncing' : ''}`}
+      title="从飞书同步最新数据并刷新"
+      aria-label="从飞书同步最新数据并刷新"
+    >
+      <svg
+        className="ca-subnav-reload-icon"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M1.5 8a6.5 6.5 0 1 0 1.9-4.6L1.5 5.5" />
+        <path d="M1.5 2v3.5H5" />
+      </svg>
+      <span>{syncing ? '飞书同步中…' : '同步飞书数据'}</span>
+    </button>
+  );
+
   const preset = resolveDashboardPreset(project?.templateId);
   const isGeneral = preset.kind === 'general';
   const isCommentQc = preset.kind === 'comment_qc';
@@ -313,7 +360,11 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       preset={preset}
       project={project}
       subtitle={headerSubtitle}
-      actions={canWrite && (isGeneral || isAd || isCommentQc) ? <SyncButton projectId={projectId} onRefresh={onRefresh} /> : undefined}
+      actions={
+        canWrite && (isGeneral || isAd || isCommentQc)
+          ? <SyncButton projectId={projectId} onRefresh={onRefresh} />
+          : feishuSyncBtn
+      }
       tabsSlot={tabsSlot}
     >
 

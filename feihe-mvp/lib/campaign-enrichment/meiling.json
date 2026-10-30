@@ -1,6 +1,6 @@
 {
   "projectId": "meiling",
-  "extractedAt": "2026-10-30T07:29:13.543Z",
+  "extractedAt": "2026-10-30T09:51:53.214Z",
   "sources": [
     {
       "id": "meiling-base",
@@ -3333,17 +3333,17 @@
         {
           "tier": "尾部",
           "stage": "达人修改中",
-          "kol_count": 1,
-          "avg_settlement_price": 6500,
-          "total_settlement_price": 6500,
+          "kol_count": 2,
+          "avg_settlement_price": 6750,
+          "total_settlement_price": 13500,
           "video_ratio": 100
         },
         {
           "tier": "尾部",
           "stage": "品牌审核中",
-          "kol_count": 3,
-          "avg_settlement_price": 8500,
-          "total_settlement_price": 25500,
+          "kol_count": 2,
+          "avg_settlement_price": 9250,
+          "total_settlement_price": 18500,
           "video_ratio": 100
         },
         {

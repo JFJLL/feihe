@@ -197,7 +197,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [accountTable]);
 
   const accountComboSeries: ComboSeries[] = [
-    { key: 'budget_planned', label: '规划打款', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.primary, unit: '元' },
+    { key: 'budget_planned', label: '规划打款', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.purple, unit: '元' },
     { key: 'actual_required_spend', label: '实际应消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.terracotta, unit: '元' },
   ];
 
@@ -287,7 +287,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [materialParetoTable]);
 
   const materialParetoComboSeries: ComboSeries[] = [
-    { key: 'spend', label: '素材消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.primary, unit: '元' },
+    { key: 'spend', label: '素材消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.purple, unit: '元' },
     { key: 'cum_ratio', label: '累计消耗占比', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.gold, unit: '%' },
   ];
 
@@ -1326,6 +1326,16 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
       {/* 2. ADS SECTION (投放与渠道深度指标)                                  */}
       {/* ==================================================================== */}
       {section === 'ads' && (
+        <section className="mri-group">
+          <div className="mri-group-header">
+            <div className="mri-group-title-wrap">
+              <span className="ca-chapter-num">01</span>
+              <h3 className="mri-group-title">投放与渠道深度指标大盘</h3>
+            </div>
+            <p className="mri-group-desc">
+              平台级规划目标、7大账户打款消耗对照、双平台分日可比趋势与历史618复盘对照
+            </p>
+          </div>
         <div className="mri-grid">
           <ChartPanel
             title="双11平台级目标规划与回传GMV源数"
@@ -1406,13 +1416,23 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
 
           </ChartPanel>
         </div>
+        </section>
       )}
 
       {/* ==================================================================== */}
       {/* 3. CONTENT SECTION (内容、素材与达人深度指标)                        */}
       {/* ==================================================================== */}
       {section === 'content' && (
-        <>
+        <section className="mri-group">
+          <div className="mri-group-header">
+            <div className="mri-group-title-wrap">
+              <span className="ca-chapter-num">01</span>
+              <h3 className="mri-group-title">内容、素材与达人深度指标大盘</h3>
+            </div>
+            <p className="mri-group-desc">
+              全量商业素材Pareto集中度、339条搜索词库分类、样机流转与达人审核交叉透视
+            </p>
+          </div>
           <MetricStrip items={materialMetrics} />
           <div className="mri-grid">
 
@@ -1489,7 +1509,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
 
           </ChartPanel>
         </div>
-        </>
+        </section>
       )}
     </div>
   );

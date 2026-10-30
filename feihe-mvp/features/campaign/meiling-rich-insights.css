@@ -6,10 +6,10 @@
 .mri-root {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 16px !important;
   width: 100%;
   box-sizing: border-box;
-  margin: 16px 0;
+  margin: 0 !important;
 }
 
 .mri-group {

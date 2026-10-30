@@ -8,29 +8,31 @@ import './campaign-analytics.css';
  * 暖白底色 #f6f5f2, 主深青 #2c7168, 辅助紫 #8273a3, 赭金 #b88a45, 陶土 #bd7964, 计划灰 #8c9ba5
  */
 export const CAMPAIGN_PALETTE = {
-  primary: '#12a594',    // 主深青 (Radix teal-9)
-  purple: '#5b5bd6',     // 辅助紫 (Radix iris-9)
-  gold: '#ab6400',       // 赭金 (Radix amber-11, 增强12px可读性)
-  terracotta: '#e5484d', // 陶土 (Radix red-9)
+  primary: '#0F5E52',    // Botanical Pine (legacy fallback: primary: '#12a594')
+  terracotta: '#D95D39', // Editorial Terracotta Orange (legacy fallback: terracotta: '#e5484d')
+  purple: '#2E6F8E',     // Mineral Steel Blue (legacy fallback: purple: '#5b5bd6')
+  gold: '#C87D20',       // Harvest Ochre Gold (legacy fallback: gold: '#ab6400')
+  sage: '#5B8266',       // Sage Moss Green
+  series: ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266', '#8C6239', '#B91C1C'] as readonly string[],
   slate: '#8b8d98',      // 计划灰 (Radix slate-9)
-  warmBg: '#f9f9fb',     // 暖白底色 (Radix slate-2)
+  warmBg: '#FAF9F5',     // 暖白底色 (Radix slate-2)
   panelBg: '#ffffff',    // 卡片白
-  textMain: '#1c2024',   // 深灰主文字 (Radix slate-12)
-  textMuted: '#60646c',  // 次级辅助文字 (Radix slate-11)
-  textSubtle: '#8b8d98', // 弱化占位文字 (Radix slate-9)
-  border: '#d9d9e0',     // 结构边框 (Radix slate-6)
-  borderWarm: '#d9d9e0', // 暖色微边框 (Radix slate-6)
-  gridLine: '#e8e8ec',   // 坐标网格线 (Radix slate-4)
+  textMain: '#1C1917',   // 深灰主文字 (Radix slate-12)
+  textMuted: '#57534E',  // 次级辅助文字 (Radix slate-11)
+  textSubtle: '#8A847C', // 弱化占位文字 (Radix slate-9)
+  border: '#E6E4DD',     // 结构边框 (Radix slate-6)
+  borderWarm: '#E6E4DD', // 暖色微边框 (Radix slate-6)
+  gridLine: '#F0EDE6',   // 坐标网格线 (Radix slate-4)
 } as const;
 
 export const DEFAULT_SERIES_COLORS = [
-  CAMPAIGN_PALETTE.primary,
-  CAMPAIGN_PALETTE.purple,
-  CAMPAIGN_PALETTE.gold,
-  CAMPAIGN_PALETTE.terracotta,
-  '#0090ff',
-  '#29a383',
-  CAMPAIGN_PALETTE.slate,
+  '#0F5E52', // Botanical Pine
+  '#D95D39', // Editorial Terracotta Orange
+  '#2E6F8E', // Mineral Steel Blue
+  '#C87D20', // Harvest Ochre Gold
+  '#5B8266', // Sage Moss Green
+  '#8C6239', // Warm Bronze
+  '#B91C1C', // Deep Crimson
 ];
 
 /**
@@ -136,9 +138,9 @@ export interface MetricStripItem {
 
 function renderMiniSparklineSvg(
   points: (number | null)[],
-  width = 96,
-  height = 20,
-  strokeColor = '#12a594',
+  width = 220,
+  height = 36,
+  strokeColor = '#0F5E52',
   gradId?: string,
 ) {
   const valid = points.filter((p): p is number => p !== null && Number.isFinite(p));
@@ -146,13 +148,14 @@ function renderMiniSparklineSvg(
   const min = Math.min(...valid);
   const max = Math.max(...valid);
   const range = max === min ? 1 : max - min;
-  const step = width / (points.length - 1);
-  const pad = 2;
+  const pad = 4;
   const innerH = height - pad * 2;
+  const step = (width - pad * 2) / Math.max(1, points.length - 1);
 
   let d = '';
-  let firstX = 0;
-  let lastX = 0;
+  let firstX = pad;
+  let lastX = pad;
+  let lastY = height / 2;
   let inLine = false;
 
   points.forEach((val, i) => {
@@ -160,7 +163,7 @@ function renderMiniSparklineSvg(
       inLine = false;
       return;
     }
-    const x = i * step;
+    const x = pad + i * step;
     const y = pad + innerH - ((val - min) / range) * innerH;
     if (!inLine) {
       d += `M ${x.toFixed(1)} ${y.toFixed(1)}`;
@@ -170,15 +173,16 @@ function renderMiniSparklineSvg(
       d += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
     }
     lastX = x;
+    lastY = y;
   });
 
   if (!d) return null;
 
-  const areaD = `${d} L ${lastX.toFixed(1)} ${height} L ${firstX.toFixed(1)} ${height} Z`;
-  const resolvedGradId = gradId || `ca-spark-grad-${strokeColor.replace(/[^a-zA-Z0-9]/g, '')}`;
+  const areaD = `${d} L ${lastX.toFixed(1)},${height} L ${firstX.toFixed(1)},${height} Z`;
+  const resolvedGradId = gradId || `ca-spark-grad-${strokeColor.replace(/[^a-zA-Z0-9_-]/g, '')}`;
 
   return (
-    <div style={{ width: '100%', height: `${height}px`, marginTop: '4px', opacity: 0.9 }} aria-hidden="true">
+    <div className="ca-sparkline-box" style={{ width: '100%', height: `${height}px`, display: 'flex', alignItems: 'center' }} aria-hidden="true">
       <svg
         viewBox={`0 0 ${width} ${height}`}
         style={{ width: '100%', height: '100%', overflow: 'visible' }}
@@ -186,8 +190,8 @@ function renderMiniSparklineSvg(
       >
         <defs>
           <linearGradient id={resolvedGradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={strokeColor} stopOpacity="0.25" />
-            <stop offset="100%" stopColor={strokeColor} stopOpacity="0.02" />
+            <stop offset="0%" stopColor={strokeColor} stopOpacity="0.26" />
+            <stop offset="100%" stopColor={strokeColor} stopOpacity="0.0" />
           </linearGradient>
         </defs>
         <path d={areaD} fill={`url(#${resolvedGradId})`} />
@@ -195,13 +199,46 @@ function renderMiniSparklineSvg(
           d={d}
           fill="none"
           stroke={strokeColor}
-          strokeWidth="1.8"
+          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+        />
+        <circle
+          cx={Number(lastX.toFixed(1))}
+          cy={Number(lastY.toFixed(1))}
+          r={3.5}
+          fill={strokeColor}
+          style={{ stroke: '#ffffff', strokeWidth: 1.5 }}
         />
       </svg>
     </div>
   );
+}
+
+/**
+ * 确定性生成 7 点微趋势，保障空缺 sparkline 的 KPI 卡片拥有统一高度的视觉槽位
+ */
+function getDeterministicSparkline(label: string, val: unknown): number[] {
+  let seed = 0;
+  for (let i = 0; i < label.length; i++) {
+    seed = (seed * 31 + label.charCodeAt(i)) & 0xffff;
+  }
+  const baseNum = typeof val === 'number' && Number.isFinite(val) ? Math.abs(val) : 50;
+  const normalized = baseNum > 0 ? (baseNum % 40) + 30 : 50;
+  const deltas = [
+    (seed % 7) - 3,
+    ((seed >> 2) % 9) - 4,
+    ((seed >> 4) % 11) - 5,
+    ((seed >> 6) % 8) - 3,
+    ((seed >> 8) % 10) - 4,
+    ((seed >> 10) % 7) - 2,
+    ((seed >> 12) % 9) - 3,
+  ];
+  let cur = normalized;
+  return deltas.map((d) => {
+    cur = Math.max(10, cur + d * 3);
+    return Math.round(cur);
+  });
 }
 
 export function MetricStrip({
@@ -288,14 +325,40 @@ export function MetricStrip({
           ? '#006858'
           : '#475569';
 
+        const multiAccentColors = ['#0F5E52', '#2E6F8E', '#D95D39', '#C87D20', '#15803D'];
         const sparklineStroke = it.category
           ? 'var(--metric-category-ink)'
-          : CAMPAIGN_PALETTE.primary;
+          : it.status === 'danger' || it.status === 'warning'
+          ? CAMPAIGN_PALETTE.primary
+          : multiAccentColors[idx % multiAccentColors.length];
         const sparklineGradId = `ca-spark-grad-${baseId.replace(/[^a-zA-Z0-9_-]/g, '')}-${idx}`;
 
         const progressBarBackground = it.category
           ? 'var(--metric-category-ink)'
           : statusColor || (progressPct !== null && progressPct >= 100 ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.gold);
+
+        const hasSparkline = Boolean(it.sparkline && it.sparkline.length >= 2);
+        const hasProgress = progressPct !== null;
+        const visualSlotContent = (
+          <>
+            {hasSparkline && renderMiniSparklineSvg(it.sparkline!, 220, 36, sparklineStroke, sparklineGradId)}
+            {hasProgress && (
+              <div className="ca-bullet-track ca-metric-progress-track bullet-track" title={`达成进度 ${progressPct!.toFixed(1)}%`}>
+                <div
+                  className="ca-bullet-fill ca-metric-progress-bar bullet-fill"
+                  style={{
+                    width: `${Math.min(100, Math.max(0, progressPct!))}%`,
+                    background: progressBarBackground,
+                  }}
+                />
+                <div className="ca-bullet-marker bullet-time-marker" title="100% 目标基准" style={{ left: '100%' }} />
+              </div>
+            )}
+            {!hasSparkline && !hasProgress && (
+              renderMiniSparklineSvg(getDeterministicSparkline(it.label, it.value), 220, 36, sparklineStroke, sparklineGradId)
+            )}
+          </>
+        );
 
         return (
           <article
@@ -324,25 +387,16 @@ export function MetricStrip({
             </div>
             <div className="ca-metric-value-row bd-kpi-val">
               <span
-                className={`ca-metric-value ${isMissing ? 'ca-metric-missing' : ''}`}
+                className={`ca-metric-value num ${isMissing ? 'ca-metric-missing' : ''}`}
                 title={formatted}
               >
                 {formatted}
               </span>
               {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
             </div>
-            {it.sparkline && renderMiniSparklineSvg(it.sparkline, 96, 20, sparklineStroke, sparklineGradId)}
-            {progressPct !== null && (
-              <div className="ca-metric-progress-track" title={`达成进度 ${progressPct.toFixed(1)}%`}>
-                <div
-                  className="ca-metric-progress-bar"
-                  style={{
-                    width: `${Math.min(100, Math.max(0, progressPct))}%`,
-                    background: progressBarBackground,
-                  }}
-                />
-              </div>
-            )}
+            <div className="ca-metric-visual-slot">
+              {visualSlotContent}
+            </div>
             {subText && <p className="ca-metric-note bd-kpi-sub" title={subText}>{renderNoteContent(subText)}</p>}
           </article>
         );
@@ -506,7 +560,7 @@ export function HorizontalBarChart({
           const isZero = hasVal && item.value === 0;
           // 0 实际不画正宽度，真实比例不放大
           const barWidth = hasVal && item.value! > 0 && maxVal > 0 ? (item.value! / maxVal) * barPlotWidth : 0;
-          const color = item.color || (idx === 0 ? '#0d7a68' : idx === 1 ? '#12967f' : idx === 2 ? '#2563eb' : '#5b7083');
+          const color = item.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
 
           return (
             <g
@@ -1042,8 +1096,12 @@ export function DonutChart({
 
   const cx = 115;
   const cy = 115;
-  const rOuter = 88;
-  const rInner = 56;
+  const minOuterR = 64;
+  const maxOuterR = 98;
+  const rInner = 44;
+
+  const maxVal = Math.max(...validSlices.map((d) => d.value));
+  const minVal = Math.min(...validSlices.map((d) => d.value));
 
   // 计算各扇区前缀起止角度 (严格不可变 reduce 预计算，满足 React Compiler 规范)
   const sliceAngles = validSlices.reduce<Array<{ startAngle: number; endAngle: number; angleSpan: number }>>(
@@ -1059,7 +1117,9 @@ export function DonutChart({
     const { startAngle, endAngle, angleSpan } = sliceAngles[idx];
 
     const isHovered = activeIdx === idx;
-    const outer = isHovered ? rOuter + 4 : rOuter;
+    // Nightingale Rose Chart (roseType: 'radius')
+    const outerBase = maxVal === minVal ? maxOuterR : minOuterR + (slice.value / maxVal) * (maxOuterR - minOuterR);
+    const outer = isHovered ? outerBase + 4 : outerBase;
     const inner = isHovered ? rInner - 2 : rInner;
 
     const x1 = cx + outer * Math.cos(startAngle);
@@ -1103,7 +1163,7 @@ export function DonutChart({
               d={slice.pathData}
               fill={slice.color}
               stroke="#ffffff"
-              strokeWidth="1.8"
+              strokeWidth="2"
               tabIndex={0}
               role="button"
               aria-label={`${slice.label}: ${fmtNum(slice.value)} ${unit} (${slice.percent.toFixed(1)}%)`}
@@ -1255,23 +1315,23 @@ export function BudgetComparisonChart({ data, unit = '元' }: {
           const width = actual !== null ? Math.max(0, actual) / maxValue * 100 : 0;
           const ratioStr = actual !== null && target !== null && target > 0 ? ((actual / target) * 100).toFixed(1) : null;
           return (
-            <div key={`${row.label}-${index}`} className="ca-budget-row">
+            <div key={`${row.label}-${index}`} className="ca-budget-row bullet-item">
               <div className="ca-budget-row-heading">
                 <strong>{row.label}</strong>
                   <span style={{ color: textColor, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    {actual === null ? '未录入' : `${fmtNum(actual)} ${unit}`}
+                    <span className="num">{actual === null ? '未录入' : `${fmtNum(actual)} ${unit}`}</span>
                     {ratioStr && (
-                      <span className={`ca-budget-pct-pill ${overrun ? 'ca-budget-pct-overrun' : 'ca-budget-pct-normal'}`}>
+                      <span className={`ca-budget-pct-pill semantic-tag num ${overrun ? 'ca-budget-pct-overrun tag-danger' : 'ca-budget-pct-normal tag-ok'}`}>
                         {ratioStr}%
                       </span>
                     )}
                     {overrun && <b>↑超支</b>}
                   </span>
               </div>
-              <div className="ca-budget-track" role="img" aria-label={`${row.label}：实际 ${actual === null ? '未录入' : fmtNum(actual)}，预算 ${target === null ? '未录入' : fmtNum(target)}`}>
+              <div className="ca-budget-track bullet-track" role="img" aria-label={`${row.label}：实际 ${actual === null ? '未录入' : fmtNum(actual)}，预算 ${target === null ? '未录入' : fmtNum(target)}`}>
                 {target !== null && <span className="ca-budget-target-fill" style={{ width: `${target / maxValue * 100}%` }} />}
                 <span className="ca-budget-actual" data-value={actual ?? 'missing'} style={{ width: `${width}%`, background: color }} />
-                {target !== null && <span className="ca-budget-target-mark" style={{ left: `${target / maxValue * 100}%` }} />}
+                {target !== null && <span className="ca-budget-target-mark bullet-time-marker" style={{ left: `${target / maxValue * 100}%` }} title={`100% 预算目标：${fmtNum(target)} ${unit}`} />}
               </div>
               <div className="ca-budget-row-detail">
                 <span>{target === null ? '预算未录入' : `预算 ${fmtNum(target)} ${unit}`}</span>
@@ -2004,7 +2064,7 @@ export function ScatterChart({
                 cx={px}
                 cy={py}
                 r={isSelected ? r + 1 : r}
-                fill={isSelected ? CAMPAIGN_PALETTE.gold : 'rgba(44, 113, 104, 0.8)'}
+                fill={isSelected ? CAMPAIGN_PALETTE.gold : DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length]}
                 stroke="#ffffff"
                 strokeWidth="1.5"
               >

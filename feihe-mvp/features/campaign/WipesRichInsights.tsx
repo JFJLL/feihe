@@ -363,9 +363,6 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           </div>
         </div>
 
-        {/* Global Key Metrics Strip */}
-        <MetricStrip items={metricStripItems} />
-
         {/* =========================================================================
             第一层（双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵）
            ========================================================================= */}
@@ -377,6 +374,9 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
             <span className="wri-section-desc">源表最新底表核算（日常种草7项 + 医生专家4项考核）</span>
           </div>
+
+        {/* Global Key Metrics Strip */}
+        <MetricStrip items={metricStripItems} />
 
         {/* Core Row 1: KPI 与 预算双轨结构 (并排成对) */}
         <div className="wipes-rich-grid-2">
@@ -1103,6 +1103,15 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           </div>
         </div>
 
+        <div className="wri-section wipes-section-wrap">
+          <div className="wri-section-header wipes-section-header">
+            <div className="wri-section-title-wrap">
+              <span className="ca-chapter-num">01</span>
+              <h3 className="wri-section-title wipes-section-title">搜索关键词Pareto贡献度与四大词类效果大盘</h3>
+            </div>
+            <span className="wri-section-desc">搜索关键词消耗分布、成本效率与31个定向人群包表现</span>
+          </div>
+
         {/* Chart 1: True Pareto Chart */}
         <ChartPanel
           title="核心搜索关键词消耗与累计贡献 Pareto 分析 (Top 12)"
@@ -1221,6 +1230,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </tbody>
           </table>
         </ChartPanel>
+        </div>
       </div>
     );
   }
@@ -1293,6 +1303,15 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           </div>
         </div>
 
+        <div className="wri-section wipes-section-wrap">
+          <div className="wri-section-header wipes-section-header">
+            <div className="wri-section-title-wrap">
+              <span className="ca-chapter-num">01</span>
+              <h3 className="wri-section-title wipes-section-title">CID跨端引流追踪与达人合作层级大盘</h3>
+            </div>
+            <span className="wri-section-desc">CID直投转化、4大达人层级投放产出与5大内容方向对比</span>
+          </div>
+
         {/* Chart 1: CID 10 Creators */}
         <ChartPanel
           title="CID组件跨端直连：10位创作者消耗、点击与转化跟踪"
@@ -1353,6 +1372,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             height={280}
           />
         </ChartPanel>
+        </div>
       </div>
     );
   }

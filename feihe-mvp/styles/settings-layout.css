@@ -10,7 +10,12 @@
 .settings-workspace-stack {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px !important;
+  background: transparent !important;
+}
+
+#workspace-tabpanel-profile {
+  gap: 16px !important;
 }
 
 .settings-workspace .ui-page-header,

@@ -26,6 +26,25 @@ import "./campaign-combo.css";
 import "./campaign-daily.css";
 import "./CampaignDailyPage.css";
 
+/**
+ * Multi-Tone Editorial & Botanical Accents (5-color palette from ai_studio_code.html)
+ */
+export const AI_STUDIO_PALETTE = {
+  pine: "#0F5E52",        // Pine
+  terracotta: "#D95D39",  // Terracotta
+  mineralBlue: "#2E6F8E", // Mineral Blue
+  harvestOchre: "#C87D20",// Harvest Ochre
+  sage: "#5B8266",        // Sage
+} as const;
+
+export const AI_STUDIO_COLOR_ARRAY = [
+  AI_STUDIO_PALETTE.pine,
+  AI_STUDIO_PALETTE.terracotta,
+  AI_STUDIO_PALETTE.mineralBlue,
+  AI_STUDIO_PALETTE.harvestOchre,
+  AI_STUDIO_PALETTE.sage,
+];
+
 export interface CampaignDailyPageProps {
   dashboard: CampaignDashboard;
 }
@@ -224,21 +243,21 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
     if (isTaosou) {
       return [
-        { key: "spend_total", label: "全渠道日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-        { key: "kw_total_index", label: "淘搜总指数", unit: "指数", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+        { key: "spend_total", label: "全渠道日消耗", unit: "元", axis: "left", kind: "bar", color: AI_STUDIO_PALETTE.pine },
+        { key: "kw_total_index", label: "淘搜总指数", unit: "指数", axis: "right", kind: "line", color: AI_STUDIO_PALETTE.mineralBlue },
       ];
     }
 
     if (isCid) {
       return [
-        { key: "spend", label: "日广告消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-        { key: "gmv", label: "成交GMV", unit: "元", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
+        { key: "spend", label: "日广告消耗", unit: "元", axis: "left", kind: "bar", color: AI_STUDIO_PALETTE.pine },
+        { key: "gmv", label: "成交GMV", unit: "元", axis: "right", kind: "line", color: AI_STUDIO_PALETTE.terracotta },
       ];
     }
 
     return [
-      { key: "spend", label: "日广告消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+      { key: "spend", label: "日广告消耗", unit: "元", axis: "left", kind: "bar", color: AI_STUDIO_PALETTE.pine },
+      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: AI_STUDIO_PALETTE.mineralBlue },
     ];
   }, [activeDataset]);
 
@@ -475,37 +494,62 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                 }
               >
                 <div className="ca-eff-benchmark-list">
-                  {richContext.efficiencyBenchmarks.map((item) => (
-                    <div key={item.key} className="ca-eff-item">
-                      <div className="ca-eff-row-header">
-                        <div className="ca-eff-name-group">
-                          <strong className="ca-eff-name">{item.label}</strong>
-                          <span className={`ca-eff-status-pill ca-eff-${item.status}`}>
-                            {item.statusLabel}
-                          </span>
+                  {richContext.efficiencyBenchmarks.map((item) => {
+                    const markerPct = 66.6;
+                    const fillPct = Math.min(
+                      100,
+                      Math.max(
+                        4,
+                        item.periodAvgVal && item.selectedVal
+                          ? Math.round((item.selectedVal / (item.periodAvgVal * 1.5)) * 100)
+                          : 50
+                      )
+                    );
+                    const avgLabel =
+                      item.unit === "元"
+                        ? `均值 ¥${fmtNum(item.periodAvgVal, 2)}`
+                        : `均值 ${fmtNum(item.periodAvgVal, 2)}${item.unit}`;
+
+                    return (
+                      <div key={item.key} className="ca-eff-item ca-eff-bench-item bullet-item">
+                        <div className="ca-eff-row-header">
+                          <div className="ca-eff-name-group">
+                            <strong className="ca-eff-name">{item.label}</strong>
+                            <span className={`ca-eff-status-pill ca-eff-${item.status}`}>
+                              {item.statusLabel}
+                            </span>
+                          </div>
+                          <div className="ca-eff-nums num">
+                            <span className="ca-eff-today">
+                              本日: <strong>{fmtNum(item.selectedVal, 2)}{item.unit}</strong>
+                            </span>
+                            <span className="ca-eff-avg">
+                              周期均值: {fmtNum(item.periodAvgVal, 2)}{item.unit}
+                            </span>
+                          </div>
                         </div>
-                        <div className="ca-eff-nums">
-                          <span className="ca-eff-today">
-                            本日: <strong>{fmtNum(item.selectedVal, 2)}{item.unit}</strong>
-                          </span>
-                          <span className="ca-eff-avg">
-                            周期均值: {fmtNum(item.periodAvgVal, 2)}{item.unit}
-                          </span>
+                        <div className="ca-eff-track-wrap">
+                          <div className="ca-eff-track bullet-track">
+                            <div
+                              className={`ca-eff-fill ca-eff-fill-${item.status}`}
+                              style={{ width: `${fillPct}%` }}
+                            />
+                            {item.periodAvgVal !== null && item.periodAvgVal !== undefined && (
+                              <div
+                                className="ca-eff-benchmark-marker ca-eff-bench-marker bullet-time-marker"
+                                style={{ left: `${markerPct}%` }}
+                                title={`周期均值基准线: ${avgLabel}`}
+                              >
+                                <span className="ca-eff-bench-marker-label bullet-time-label">
+                                  {avgLabel}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <div className="ca-eff-track-wrap">
-                        <div className="ca-eff-track">
-                          <div
-                            className={`ca-eff-fill ca-eff-fill-${item.status}`}
-                            style={{
-                              width: `${Math.min(100, Math.max(8, item.periodAvgVal && item.selectedVal ? (item.selectedVal / (item.periodAvgVal * 1.5)) * 100 : 50))}%`,
-                            }}
-                          />
-                          <div className="ca-eff-benchmark-marker" title="周期均值基准线" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </ChartPanel>
             </div>
@@ -541,27 +585,27 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
 
                   {/* 水平比例对照进度条 (Scale progress bars with relative proportions) */}
                   <div className="ca-dist-list">
-                    {richContext.trafficFunnel.map((step) => {
+                    {richContext.trafficFunnel.map((step, sIdx) => {
                       const maxVal = Math.max(...richContext.trafficFunnel.map((s) => s.value || 0), 1);
                       const logMax = Math.log10(maxVal + 10);
                       const logVal = Math.log10((step.value || 0) + 10);
                       const pct = step.value ? Math.min(100, Math.max(8, Math.round((logVal / logMax) * 100))) : 0;
+                      const funnelPalette: Record<string, string> = {
+                        imp: AI_STUDIO_PALETTE.sage,
+                        clicks: AI_STUDIO_PALETTE.pine,
+                        engagements: AI_STUDIO_PALETTE.harvestOchre,
+                        eng: AI_STUDIO_PALETTE.harvestOchre,
+                        uv: AI_STUDIO_PALETTE.mineralBlue,
+                      };
                       const stepColor =
-                        step.key === "imp"
-                          ? CAMPAIGN_PALETTE.slate
-                          : step.key === "clicks"
-                          ? CAMPAIGN_PALETTE.primary
-                          : step.key === "engagements" || step.key === "eng"
-                          ? CAMPAIGN_PALETTE.purple
-                          : step.key === "uv"
-                          ? "#0284c7"
-                          : CAMPAIGN_PALETTE.gold;
+                        funnelPalette[step.key] ||
+                        AI_STUDIO_COLOR_ARRAY[sIdx % AI_STUDIO_COLOR_ARRAY.length];
                       return (
                         <div key={step.key} className="ca-dist-item">
                           <div className="ca-dist-item-header">
                             <span className="ca-dist-label">{step.label}</span>
                             <div className="ca-dist-val-group">
-                              <strong className="ca-dist-value">{step.formattedValue}</strong>
+                              <strong className="ca-dist-value num">{step.formattedValue}</strong>
                               {step.conversionLabel && (
                                 <span className="ca-dist-share">{step.conversionLabel}</span>
                               )}
@@ -582,14 +626,14 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                     <div className="ca-channel-split-section">
                       <span className="ca-sub-heading">当日渠道支出结构 (K/F/S/CID)</span>
                       <div className="ca-channel-split-bars">
-                        {richContext.feishuDrilldowns.channelSplits.map((c) => (
+                        {richContext.feishuDrilldowns.channelSplits.map((c, cIdx) => (
                           <div key={c.label} className="ca-channel-bar-item">
                             <div className="ca-channel-bar-info">
                               <span className="ca-channel-lbl">{c.label}</span>
-                              <span className="ca-channel-amt">¥{fmtNum(c.spend)} ({c.sharePct}%)</span>
+                              <span className="ca-channel-amt num">¥{fmtNum(c.spend)} ({c.sharePct}%)</span>
                             </div>
                             <div className="ca-dist-bar-track">
-                              <div className="ca-dist-bar-fill" style={{ width: `${c.sharePct}%`, background: c.color }} />
+                              <div className="ca-dist-bar-fill" style={{ width: `${c.sharePct}%`, background: c.color || AI_STUDIO_COLOR_ARRAY[cIdx % AI_STUDIO_COLOR_ARRAY.length] }} />
                             </div>
                           </div>
                         ))}
@@ -828,18 +872,18 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                                 <span>所选日核心关键词淘搜指数贡献 ({selectedDate})</span>
                               </div>
                               <div className="ca-dist-list">
-                                {richContext.feishuDrilldowns.taosouDailyKeywords.map((kw) => (
+                                {richContext.feishuDrilldowns.taosouDailyKeywords.map((kw, kwIdx) => (
                                   <div key={kw.keyword} className="ca-dist-item">
                                     <div className="ca-dist-item-header">
                                       <span className="ca-dist-label">{kw.keyword}</span>
                                       <div className="ca-dist-val-group">
-                                        <strong className="ca-dist-value">{fmtNum(kw.index, 0)} 点</strong>
+                                        <strong className="ca-dist-value num">{fmtNum(kw.index, 0)} 点</strong>
                                         {kw.sharePct !== undefined && <span className="ca-dist-share">{kw.sharePct}%</span>}
                                       </div>
                                     </div>
                                     {kw.sharePct !== undefined && (
                                       <div className="ca-dist-bar-track">
-                                        <div className="ca-dist-bar-fill" style={{ width: `${kw.sharePct}%`, background: CAMPAIGN_PALETTE.primary }} />
+                                        <div className="ca-dist-bar-fill" style={{ width: `${kw.sharePct}%`, background: AI_STUDIO_COLOR_ARRAY[kwIdx % AI_STUDIO_COLOR_ARRAY.length] }} />
                                       </div>
                                     )}
                                   </div>

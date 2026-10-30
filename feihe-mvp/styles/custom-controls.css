@@ -114,7 +114,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /* Details > Summary non-native indicator */
-details > summary {
+details:not(.ca-details-collapse, .ca-daily-details-panel, .ht-layer, .kri-secondary, .kri-details) > summary:not(.ca-details-summary, .ca-daily-details-summary, .ht-summary-header, .kri-summary) {
   list-style: none;
   position: relative;
   padding-right: 24px;
@@ -122,11 +122,11 @@ details > summary {
   transition: color 250ms ease-out;
 }
 
-details > summary::-webkit-details-marker {
+details:not(.ca-details-collapse, .ca-daily-details-panel, .ht-layer, .kri-secondary, .kri-details) > summary:not(.ca-details-summary, .ca-daily-details-summary, .ht-summary-header, .kri-summary)::-webkit-details-marker {
   display: none;
 }
 
-details > summary::after {
+details:not(.ca-details-collapse, .ca-daily-details-panel, .ht-layer, .kri-secondary, .kri-details) > summary:not(.ca-details-summary, .ca-daily-details-summary, .ht-summary-header, .kri-summary)::after {
   content: "";
   position: absolute;
   right: 6px;
@@ -140,7 +140,7 @@ details > summary::after {
   pointer-events: none;
 }
 
-details[open] > summary::after {
+details:not(.ca-details-collapse, .ca-daily-details-panel, .ht-layer, .kri-secondary, .kri-details)[open] > summary:not(.ca-details-summary, .ca-daily-details-summary, .ht-summary-header, .kri-summary)::after {
   transform: translateY(-30%) rotate(-135deg);
   border-color:var(--teal-11, #008573);
 }

@@ -760,23 +760,23 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     const cidDailySeries: ComboSeries[] = [
       { key: 'spend', label: '日消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
       { key: 'gmv', label: '成交GMV', unit: '元', axis: 'left', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-      { key: 'roi', label: '日成交ROI', unit: '倍', axis: 'right', kind: 'point', color: CAMPAIGN_PALETTE.gold },
+      { key: 'roi', label: '日成交ROI', unit: '倍', axis: 'right', kind: 'point', color: CAMPAIGN_PALETTE.terracotta },
     ];
 
     const commerceMonthlySeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'gmv', label: '成交GMV', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
+      { key: 'gmv', label: '成交GMV', unit: '元', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
       { key: 'roi', label: '阶段ROI', unit: '倍', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.gold },
     ];
 
     const commerceCartOrdersSeries: ComboSeries[] = [
-      { key: 'cart', label: '加购量', unit: '次', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
-      { key: 'orders', label: '支付订单', unit: '单', axis: 'left', kind: 'line', color: CAMPAIGN_PALETTE.purple },
-      { key: 'spend', label: '消耗', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.gold },
+      { key: 'cart', label: '加购量', unit: '次', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
+      { key: 'orders', label: '支付订单', unit: '单', axis: 'left', kind: 'line', color: CAMPAIGN_PALETTE.primary },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.terracotta },
     ];
 
     const creatorTierSeries: ComboSeries[] = [
-      { key: 'count', label: '达人人数', unit: '位', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.primary },
+      { key: 'count', label: '达人人数', unit: '位', axis: 'left', kind: 'bar', color: CAMPAIGN_PALETTE.purple },
       { key: 'totalFee', label: '含平台费报价', unit: '元', axis: 'right', kind: 'line', color: CAMPAIGN_PALETTE.gold },
     ];
 

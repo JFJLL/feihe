@@ -2,7 +2,7 @@
    Keep the existing dashboard modules; use the reference's navy, white cards,
    compact typography, pastel status accents and month/quarter hierarchy. */
 .ops-workspace, .reference-workspace { --primary-blue:#0090ff; --ref-blue:#0090ff; gap:16px; color:#1c2024; background:transparent; }
-.main:has(.ops-workspace), .main:has(.reference-workspace) { padding-top:20px; }
+.main:has(.ops-workspace), .main:has(.reference-workspace) { padding-top: 12px !important; background-color: #f0f0f3 !important; }
 .ops-workspace .ui-page-header, .reference-workspace .ui-page-header {
   background:linear-gradient(135deg,#1c2024 0%,#113264 50%,#0090ff 100%);
   color:#ffffff; border-radius:12px; padding:22px 24px; margin:0;
