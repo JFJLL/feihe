@@ -514,23 +514,23 @@
 }
 
 .growth-kpis article:nth-child(2), .linkage-kpis article:nth-child(2) {
-  background: linear-gradient(145deg, #ffffff 0%, #f4fbf7 100%);
+  background: #ffffff;
   border-color:#acdec8;
-  border-top-color:#26997b;
+  border-top:1px solid #26997b;
 }
 .growth-kpis article:nth-child(3), .linkage-kpis article:nth-child(3) {
-  background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+  background: #ffffff;
   border-color:#dadcff;
-  border-top-color:#5753c6;
+  border-top:1px solid #5753c6;
 }
 .growth-kpis article:nth-child(4), .linkage-kpis article:nth-child(4) {
-  background: linear-gradient(145deg, #ffffff 0%, #fcfcfd 100%);
+  background: #ffffff;
   border-color:#fbe577;
-  border-top-color:#e2a336;
+  border-top:1px solid #e2a336;
 }
 
 .growth-kpis article.pending, .linkage-kpis article.pending {
-  border-top-color:#e2a336;
+  border-top:1px solid #e2a336;
 }
 
 .growth-kpis small, .linkage-kpis small {
@@ -3004,36 +3004,44 @@ label.upload input[type="file"] {
 }
 
 .pastel-blue {
-  background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+  background: #ffffff;
   border-color:#acd8fc;
+  border-top:1px solid #0d74ce;
 }
 .pastel-green {
-  background: linear-gradient(145deg, #ffffff 0%, #f4fbf7 100%);
+  background: #ffffff;
   border-color:#acdec8;
+  border-top:1px solid #29a383;
 }
 .pastel-amber {
-  background: linear-gradient(145deg, #ffffff 0%, #fcfcfd 100%);
+  background: #ffffff;
   border-color:#fbe577;
+  border-top:1px solid #e2a336;
 }
 .pastel-purple {
-  background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+  background: #ffffff;
   border-color:#dadcff;
+  border-top:1px solid #5b5bd6;
 }
 .pastel-rose {
-  background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+  background: #ffffff;
   border-color:#ffcdce;
+  border-top:1px solid #e5484d;
 }
 .pastel-teal {
-  background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+  background: #ffffff;
   border-color:#b8eae0;
+  border-top:1px solid #0d9b8a;
 }
 .pastel-indigo {
-  background: linear-gradient(145deg, #ffffff 0%, #f0f0f3 100%);
+  background: #ffffff;
   border-color:#c2e5ff;
+  border-top:1px solid #113264;
 }
 .pastel-orange {
-  background: linear-gradient(145deg, #ffffff 0%, #f9f9fb 100%);
+  background: #ffffff;
   border-color:#ffee9c;
+  border-top:1px solid #ab6400;
 }
 
 /* 渐显动效 */
@@ -4242,3 +4250,53 @@ button.primary:disabled {
 
 
 .note-radar-cover { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Authoritative deep pine brand mark & compact unobtrusive agent button */
+.brand > span,
+.brand-mark,
+.sidebar .brand > span {
+  background: #12352c !important;
+  color: #f4f7f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 2px 6px rgba(18, 53, 44, 0.18) !important;
+}
+
+button.floating-agent-btn,
+.floating-agent-btn {
+  position: fixed !important;
+  bottom: 14px !important;
+  right: 16px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 999px !important;
+  background: #12352c !important;
+  color: #f4f7f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.14) !important;
+}
+
+button.floating-agent-btn:hover,
+.floating-agent-btn:hover {
+  background: #0f2e26 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.2) !important;
+}
+
+.nav-index,
+.ws-nav-num,
+.project-main-nav a .nav-num,
+.project-main-nav a.active .nav-num,
+.project-main-nav a:hover .nav-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #475569 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  min-width: 18px;
+  border-radius: 0 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebar-foot span {
+  color: #0b5cad !important;
+}

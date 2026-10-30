@@ -338,7 +338,7 @@ export function CampaignComboChart({
   const totalHeight = Math.max(200, height);
   const leftPad = 56;
   const rightPad = hasRightAxis ? 56 : 18;
-  const topPad = 26;
+  const topPad = 32;
   const bottomPad = 36;
   const plotWidth = Math.max(10, totalWidth - leftPad - rightPad);
   const plotHeight = Math.max(10, totalHeight - topPad - bottomPad);
@@ -389,7 +389,7 @@ export function CampaignComboChart({
     return /^\d{4}[-/]\d{1,2}[-/]\d{1,2}$/.test(v) || /^\d{1,2}[-/]\d{1,2}$/.test(v);
   });
 
-  const tickSpacingRequired = isDateLike ? 46 : 64;
+  const tickSpacingRequired = isDateLike ? 48 : 88;
   const maxPossibleTicks = Math.max(2, Math.floor(plotWidth / tickSpacingRequired));
 
   // Determine which ticks are visible, guaranteeing no collision on end ticks
@@ -461,12 +461,16 @@ export function CampaignComboChart({
             {`多指标组合图，共 ${rowCount} 项数据${xLabel ? `，横轴：${xLabel}` : ""}。左轴[${leftUnit || "数值"}]，${hasRightAxis ? `右轴[${rightUnit || "数值"}]` : "无右轴"}。`}
           </desc>
           <defs>
-            {styledSeries.map((s) => (
+            {styledSeries.flatMap((s) => [
               <linearGradient key={`grad-${s.key}`} id={`cc-grad-${s.key}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={s.color} stopOpacity="1" />
-                <stop offset="100%" stopColor={s.color} stopOpacity="0.85" />
-              </linearGradient>
-            ))}
+                <stop offset="0%" stopColor={s.color} stopOpacity="0.96" />
+                <stop offset="100%" stopColor={s.color} stopOpacity="0.72" />
+              </linearGradient>,
+              <linearGradient key={`area-${s.key}`} id={`cc-area-${s.key}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={s.color} stopOpacity="0.18" />
+                <stop offset="100%" stopColor={s.color} stopOpacity="0.01" />
+              </linearGradient>,
+            ])}
           </defs>
 
           {/* Horizontal Gridlines */}
@@ -502,7 +506,7 @@ export function CampaignComboChart({
           <g data-axis="left">
             <text
               x={leftPad}
-              y={topPad - 10}
+              y={14}
               textAnchor="start"
               fill={CAMPAIGN_PALETTE.textMuted}
               fontSize="12"
@@ -533,7 +537,7 @@ export function CampaignComboChart({
             <g data-axis="right">
               <text
                 x={totalWidth - rightPad}
-                y={topPad - 10}
+                y={14}
                 textAnchor="end"
                 fill={CAMPAIGN_PALETTE.textMuted}
                 fontSize="12"
@@ -561,21 +565,21 @@ export function CampaignComboChart({
           )}
 
           {/* 1. Grouped Bars (Proportional height, zero baseline indicator) */}
-          {validRows.map((row, rowIdx) => {
+          {validRows.flatMap((row, rowIdx) => {
             const cx = getCenterX(rowIdx);
             const clusterStart = cx - clusterW / 2;
 
-            return barSeriesList.map((s, bIdx) => {
+            return barSeriesList.flatMap((s, bIdx) => {
               const val = row[s.key];
               const bx = clusterStart + bIdx * (singleBarW + barGap);
               const y0 = getY(s.axis, 0);
 
               if (val === null || val === undefined || !isFiniteNumber(val)) {
-                return null;
+                return [];
               }
 
               if (val === 0) {
-                return (
+                return [
                   <line
                     key={`bar-zero-${s.key}-${rowIdx}`}
                     x1={bx}
@@ -592,14 +596,15 @@ export function CampaignComboChart({
                     data-row-key={String(row[xKey])}
                     data-value="0"
                     data-is-zero="true"
-                  />
-                );
+                  />,
+                ];
               }
 
               if (val > 0) {
                 const by = getY(s.axis, val);
                 const bh = y0 - by; // Direct proportional height!
-                return (
+                const rx = singleBarW >= 6 ? Math.min(4, singleBarW / 2) : Math.min(2, singleBarW / 2);
+                const barEls = [
                   <rect
                     key={`bar-${s.key}-${rowIdx}`}
                     x={bx}
@@ -607,7 +612,7 @@ export function CampaignComboChart({
                     width={singleBarW}
                     height={bh}
                     fill={`url(#cc-grad-${s.key})`}
-                    rx={Math.min(2, singleBarW / 2)}
+                    rx={rx}
                     opacity={activeIndex === rowIdx ? 1 : 0.85}
                     data-metric-type="bar"
                     data-series-key={s.key}
@@ -616,14 +621,31 @@ export function CampaignComboChart({
                     data-row-key={String(row[xKey])}
                     data-value={String(val)}
                     data-is-zero="false"
-                  />
-                );
+                  />,
+                ];
+                if (singleBarW >= 6 && bh >= 4) {
+                  barEls.push(
+                    <line
+                      key={`bar-cap-${s.key}-${rowIdx}`}
+                      x1={bx + 1}
+                      x2={bx + singleBarW - 1}
+                      y1={by + 1}
+                      y2={by + 1}
+                      stroke="#ffffff"
+                      strokeOpacity={0.45}
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      pointerEvents="none"
+                    />
+                  );
+                }
+                return barEls;
               }
 
               // val < 0
               const by = y0;
               const bh = getY(s.axis, val) - y0; // Direct proportional height!
-              return (
+              return [
                 <rect
                   key={`bar-neg-${s.key}-${rowIdx}`}
                   x={bx}
@@ -640,8 +662,8 @@ export function CampaignComboChart({
                   data-row-key={String(row[xKey])}
                   data-value={String(val)}
                   data-is-zero="false"
-                />
-              );
+                />,
+              ];
             });
           })}
 
@@ -661,11 +683,18 @@ export function CampaignComboChart({
 
               return (
                 <g key={`line-group-${s.key}`} data-series-key={s.key} data-axis={s.axis}>
-                  {segments.map((seg, sIdx) => {
+                  {segments.flatMap((seg, sIdx) => {
                     if (seg.length > 1) {
-                      return (
+                      const areaD = `${buildPath(seg)} L ${seg[seg.length - 1].x.toFixed(1)},${(topPad + plotHeight).toFixed(1)} L ${seg[0].x.toFixed(1)},${(topPad + plotHeight).toFixed(1)} Z`;
+                      return [
                         <path
-                          key={`seg-${sIdx}`}
+                          key={`seg-area-${sIdx}`}
+                          d={areaD}
+                          fill={`url(#cc-area-${s.key})`}
+                          pointerEvents="none"
+                        />,
+                        <path
+                          key={`seg-line-${sIdx}`}
                           d={buildPath(seg)}
                           fill="none"
                           stroke={s.color}
@@ -675,25 +704,28 @@ export function CampaignComboChart({
                           data-metric-type="line"
                           data-series-key={s.key}
                           data-axis={s.axis}
-                        />
-                      );
+                        />,
+                      ];
                     }
-                    return null;
+                    return [];
                   })}
 
                   {/* Individual data points along the line */}
                   {pts.map((pt, pIdx) => {
                     if (!pt) return null;
                     const isActive = activeIndex === pt.rowIndex;
+                    const isDense = rowCount > 14;
+                    const r = isActive ? 4.5 : (isDense ? 1.75 : 3);
+                    const sw = isActive ? 2 : (isDense ? 0.8 : 1.2);
                     return (
                       <circle
                         key={`line-pt-${pIdx}`}
                         cx={pt.x}
                         cy={pt.y}
-                        r={isActive ? 4.5 : 3}
+                        r={r}
                         fill={s.color}
                         stroke="#ffffff"
-                        strokeWidth={isActive ? 2 : 1.2}
+                        strokeWidth={sw}
                         data-metric-type="line-point"
                         data-series-key={s.key}
                         data-axis={s.axis}
@@ -713,14 +745,23 @@ export function CampaignComboChart({
             .filter((s) => s.kind === 'point' && !hiddenSeries.has(s.key))
             .map((s) => (
               <g key={`point-group-${s.key}`} data-series-key={s.key} data-axis={s.axis}>
-                {validRows.map((r, i) => {
+                {validRows.flatMap((r, i) => {
                   const val = r[s.key];
-                  if (!isFiniteNumber(val)) return null;
+                  if (!isFiniteNumber(val)) return [];
                   const cx = getCenterX(i);
                   const cy = getY(s.axis, val);
                   const isActive = activeIndex === i;
 
-                  return (
+                  return [
+                    <circle
+                      key={`pt-halo-${i}`}
+                      cx={cx}
+                      cy={cy}
+                      r={isActive ? 8 : 6.5}
+                      fill={s.color}
+                      fillOpacity={isActive ? 0.22 : 0.12}
+                      pointerEvents="none"
+                    />,
                     <circle
                       key={`pt-${i}`}
                       cx={cx}
@@ -737,8 +778,8 @@ export function CampaignComboChart({
                       data-value={String(val)}
                     >
                       <title>{`${r[xKey]} ${s.label}: ${fmtComboNum(val)} ${s.unit}`}</title>
-                    </circle>
-                  );
+                    </circle>,
+                  ];
                 })}
               </g>
             ))}

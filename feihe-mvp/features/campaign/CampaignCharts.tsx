@@ -270,13 +270,23 @@ export function MetricStrip({
 
         const badgeBackground = it.category
           ? 'var(--metric-category-badge-bg)'
-          : statusColor
-          ? `${statusColor}18`
-          : '#f0f0f3';
+          : it.status === 'danger'
+          ? '#fee4e2'
+          : it.status === 'warning'
+          ? '#fef3c7'
+          : it.status === 'accent' || it.status === 'success'
+          ? '#dff6f0'
+          : '#eceef2';
 
         const badgeTextColor = it.category
           ? 'var(--metric-category-ink)'
-          : statusColor || CAMPAIGN_PALETTE.textMuted;
+          : it.status === 'danger'
+          ? '#b42318'
+          : it.status === 'warning'
+          ? '#854d0e'
+          : it.status === 'accent' || it.status === 'success'
+          ? '#006858'
+          : '#475569';
 
         const sparklineStroke = it.category
           ? 'var(--metric-category-ink)'
@@ -495,7 +505,7 @@ export function HorizontalBarChart({
           const isZero = hasVal && item.value === 0;
           // 0 实际不画正宽度，真实比例不放大
           const barWidth = hasVal && item.value! > 0 && maxVal > 0 ? (item.value! / maxVal) * barPlotWidth : 0;
-          const color = item.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
+          const color = item.color || (idx === 0 ? '#0d7a68' : idx === 1 ? '#12967f' : idx === 2 ? '#2563eb' : '#5b7083');
 
           return (
             <g
@@ -565,12 +575,20 @@ export function HorizontalBarChart({
                   <>
                     <rect
                       x={leftPad}
-                      y={y + 5}
+                      y={y + 6}
+                      width={barPlotWidth}
+                      height={16}
+                      rx={4}
+                      fill="#eff1f5"
+                    />
+                    <rect
+                      x={leftPad}
+                      y={y + 6}
                       width={barWidth}
-                      height={18}
-                      rx={3}
+                      height={16}
+                      rx={4}
                       fill={color}
-                      opacity={isSelected ? 1 : 0.88}
+                      opacity={isSelected ? 1 : 0.9}
                     />
                     <text
                       x={Math.min(totalWidth - 36, leftPad + barWidth + 8)}
@@ -654,6 +672,14 @@ export function CampaignFunnelChart({
         // 使用对数平滑宽度，避免曝光(百万级)与订单(百/千级)同屏时末端退化为不可见细线
         const ratio = val !== null && val > 0 && maxLog > 0 ? Math.log10(val + 1) / maxLog : 0;
         const barColor = st.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
+        const contrastPairs = [
+          { text: '#006858', bg: '#dff6f0' },
+          { text: '#0b5cad', bg: '#e0f2fe' },
+          { text: '#4338ca', bg: '#e8e9fe' },
+          { text: '#854d0e', bg: '#fef3c7' },
+          { text: '#b42318', bg: '#fee2e2' },
+        ];
+        const contrast = contrastPairs[idx % contrastPairs.length];
         return (
           <div
             key={st.stage || idx}
@@ -673,13 +699,13 @@ export function CampaignFunnelChart({
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 18,
-                    height: 18,
+                    width: 20,
+                    height: 20,
                     borderRadius: 999,
                     fontSize: 12,
                     fontWeight: 700,
-                    background: `${barColor}1f`,
-                    color: barColor,
+                    background: contrast.bg,
+                    color: contrast.text,
                   }}
                 >
                   {idx + 1}
@@ -729,10 +755,11 @@ export function CampaignFunnelChart({
                   style={{
                     fontSize: 12,
                     fontWeight: 600,
-                    padding: '1px 7px',
+                    padding: '3px 9px',
+                    lineHeight: 1.35,
                     borderRadius: 999,
-                    background: `${barColor}15`,
-                    color: barColor,
+                    background: contrast.bg,
+                    color: contrast.text,
                   }}
                 >
                   {st.costLabel}
@@ -792,18 +819,18 @@ export function MatrixHeatmapChart({
   }
 
   return (
-    <div className="ca-table-wrap ca-matrix-wrap" style={{ overflowX: 'auto' }}>
-      <table className="ca-table" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 3, fontSize: 12 }}>
+    <div className="ca-table-wrap ca-matrix-wrap" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      <table className="ca-table" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 2, fontSize: 12 }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left', padding: '6px 8px', background: '#f9f9fb', borderRadius: 4 }}>{rowHeaderTitle}</th>
+            <th style={{ textAlign: 'left', padding: '5px 6px', background: '#f9f9fb', borderRadius: 4 }}>{rowHeaderTitle}</th>
             {cols.map((col) => (
-              <th key={col} style={{ textAlign: 'center', padding: '6px 8px', background: '#f9f9fb', borderRadius: 4, whiteSpace: 'nowrap' }}>
+              <th key={col} style={{ textAlign: 'center', padding: '5px 6px', background: '#f9f9fb', borderRadius: 4, whiteSpace: 'nowrap' }}>
                 {col}
               </th>
             ))}
             {showRowTotals && (
-              <th style={{ textAlign: 'right', padding: '6px 8px', background: '#f0f0f3', borderRadius: 4, whiteSpace: 'nowrap' }}>
+              <th style={{ textAlign: 'right', padding: '5px 6px', background: '#f0f0f3', borderRadius: 4, whiteSpace: 'nowrap' }}>
                 行合计
               </th>
             )}
@@ -816,25 +843,31 @@ export function MatrixHeatmapChart({
             const rowSum = complete ? (rowValues as number[]).reduce((sum, value) => sum + value, 0) : null;
             return (
               <tr key={r}>
-                <td style={{ fontWeight: 600, padding: '6px 8px', color: CAMPAIGN_PALETTE.textMain, background: '#f9f9fb', whiteSpace: 'nowrap' }}>
+                <td style={{ fontWeight: 600, padding: '5px 6px', color: CAMPAIGN_PALETTE.textMain, background: '#f9f9fb', whiteSpace: 'nowrap' }}>
                   {r}
                 </td>
                 {cols.map((c) => {
                   const cell = cellMap.get(`${r}__${c}`);
                   const val = cell && typeof cell.value === 'number' && Number.isFinite(cell.value) ? cell.value : null;
                   const intensity = val !== null && val > 0 && maxVal > 0 ? Math.min(1, Math.max(0.08, val / maxVal)) : 0;
-                  const bg =
-                    intensity > 0
-                      ? `rgba(44, 113, 104, ${(0.08 + intensity * 0.72).toFixed(2)})`
-                      : '#f9f9fb';
-                  const fg = intensity > 0.55 ? '#ffffff' : CAMPAIGN_PALETTE.textMain;
+                  let bg = '#f9f9fb';
+                  let fg = '#1c2024';
+                  if (intensity > 0.42) {
+                    const alpha = (0.68 + intensity * 0.28).toFixed(2);
+                    bg = `rgba(11, 93, 78, ${alpha})`;
+                    fg = '#ffffff';
+                  } else if (intensity > 0) {
+                    const alpha = Math.min(0.22, 0.08 + intensity * 0.25).toFixed(2);
+                    bg = `rgba(11, 93, 78, ${alpha})`;
+                    fg = '#1c2024';
+                  }
                   return (
                     <td
                       key={c}
                       title={cell?.subtext || `${r} × ${c}: ${val !== null ? fmtNum(val) + unit : '—'}`}
                       style={{
                         textAlign: 'center',
-                        padding: '6px 8px',
+                        padding: '5px 6px',
                         borderRadius: 5,
                         background: bg,
                         color: fg,
@@ -843,13 +876,13 @@ export function MatrixHeatmapChart({
                     >
                       <div>{val === null ? '—' : cell?.displayValue ?? `${fmtNum(val)}${unit}`}</div>
                       {cell?.subtext && (
-                        <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 400 }}>{cell.subtext}</div>
+                        <div style={{ fontSize: 12, opacity: 0.88, fontWeight: 400, lineHeight: 1.25 }}>{cell.subtext}</div>
                       )}
                     </td>
                   );
                 })}
                 {showRowTotals && (
-                  <td style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 700, background: '#f9f9fb', borderRadius: 4, whiteSpace: 'nowrap' }}>
+                  <td style={{ textAlign: 'right', padding: '5px 6px', fontWeight: 700, background: '#f9f9fb', borderRadius: 4, whiteSpace: 'nowrap' }}>
                     {rowSum !== null ? `${fmtNum(rowSum)}${unit}` : '—'}
                   </td>
                 )}
@@ -1217,13 +1250,14 @@ export function BudgetComparisonChart({ data, unit = '元' }: {
           const target = finite(row.target) && row.target >= 0 ? row.target : null;
           const overrun = actual !== null && target !== null && actual > target;
           const color = overrun ? CAMPAIGN_PALETTE.terracotta : CAMPAIGN_PALETTE.primary;
+          const textColor = overrun ? '#b42318' : '#006858';
           const width = actual !== null ? Math.max(0, actual) / maxValue * 100 : 0;
-            const ratioStr = actual !== null && target !== null && target > 0 ? ((actual / target) * 100).toFixed(1) : null;
+          const ratioStr = actual !== null && target !== null && target > 0 ? ((actual / target) * 100).toFixed(1) : null;
           return (
             <div key={`${row.label}-${index}`} className="ca-budget-row">
               <div className="ca-budget-row-heading">
                 <strong>{row.label}</strong>
-                  <span style={{ color, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ color: textColor, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                     {actual === null ? '未录入' : `${fmtNum(actual)} ${unit}`}
                     {ratioStr && (
                       <span className={`ca-budget-pct-pill ${overrun ? 'ca-budget-pct-overrun' : 'ca-budget-pct-normal'}`}>
@@ -1778,6 +1812,17 @@ export function ScatterChart({
   const avgX = xVals.reduce((a, b) => a + b, 0) / xVals.length;
   const avgY = yVals.reduce((a, b) => a + b, 0) / yVals.length;
 
+  // Top 4 points by normalized x+y magnitude
+  const topPointIndices = new Set(
+    [...validPoints.keys()]
+      .sort((a, b) => {
+        const scoreA = (validPoints[a].x / (maxX || 1)) + (validPoints[a].y / (maxY || 1));
+        const scoreB = (validPoints[b].x / (maxX || 1)) + (validPoints[b].y / (maxY || 1));
+        return scoreB - scoreA;
+      })
+      .slice(0, 4)
+  );
+
   const current = activeIdx !== null && activeIdx < validPoints.length ? validPoints[activeIdx] : null;
   const xTicks = isNarrow ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1];
   const yTicks = [0, 0.33, 0.66, 1];
@@ -1962,15 +2007,16 @@ export function ScatterChart({
               >
                 <title>{`${pt.detail || pt.label}\n${xLabel}: ${fmtNum(pt.x)}\n${yLabel}: ${fmtNum(pt.y)}`}</title>
               </circle>
-              {(validPoints.length <= (isNarrow ? 6 : 15) || isSelected) && (
+              {(isSelected || topPointIndices.has(idx)) && (
                 <text
                   x={px}
-                  y={py - r - 3}
+                  y={py + (idx % 2 === 0 ? -(r + 9) : (r + 13))}
                   textAnchor="middle"
-                  fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMuted}
+                  fill={isSelected ? CAMPAIGN_PALETTE.primary : CAMPAIGN_PALETTE.textMain}
                   fontSize="12"
-                  fontWeight={isSelected ? '600' : '400'}
+                  fontWeight={isSelected ? '700' : '500'}
                   pointerEvents="none"
+                  style={{ paintOrder: 'stroke', stroke: '#ffffff', strokeWidth: 3, strokeLinejoin: 'round' }}
                 >
                   {pt.label}
                 </text>

@@ -5,10 +5,10 @@
  */
 
 :root {
-  --ca-palette-primary: var(--teal-11, #006d5b);
+  --ca-palette-primary: var(--teal-9, #12a594);
   --ca-palette-purple: var(--iris-9, #0d74ce);
-  --ca-palette-gold: #824900;
-  --ca-palette-terracotta: #ce2c31;
+  --ca-palette-gold: var(--amber-9, #ffc53d);
+  --ca-palette-terracotta: var(--red-9, #e5484d);
   --ca-palette-slate: #5a5e67;
   --ca-palette-bg: var(--slate-3, #f0f0f3);
   --ca-palette-panel: var(--dt-bg-card, #ffffff);
@@ -424,6 +424,13 @@
   border: 0.5px solid transparent !important;
 }
 
+/* High-contrast WCAG AA overrides for rendered category badges */
+.ca-metric-badge { color: #0b5d4e; }
+.ca-metric-item[data-category="brand"] .ca-metric-badge { color: #006858 !important; }
+.ca-metric-item[data-category="cid"] .ca-metric-badge { color: #0b5cad !important; }
+.ca-metric-item[data-category="commerce"] .ca-metric-badge { color: #4338ca !important; }
+.ca-metric-item[data-category="creators"] .ca-metric-badge { color: #854d0e !important; }
+
 .ca-metric-item[data-category] .ca-metric-value,
 .ca-metric-item[data-category] .bd-kpi-val {
   color: var(--slate-12, #1c2024) !important;
@@ -506,13 +513,13 @@
 }
 
 .ca-trend-up {
-  background: rgba(0, 133, 115, 0.12);
-  color:var(--teal-11, #008573);
+  background: #dff6f0 !important;
+  color: #006858 !important;
 }
 
 .ca-trend-down {
-  background: rgba(229, 72, 77, 0.14);
-  color:var(--red-9, #ce2c31);
+  background: #fee4e2 !important;
+  color: #b42318 !important;
 }
 
 /* ==========================================================================
@@ -773,23 +780,23 @@
 .ca-badge-achieved {
   display: inline-flex;
   align-items: center;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
-  background: rgba(0, 133, 115, 0.12);
-  color:var(--ca-palette-primary);
+  background: #dff6f0;
+  color: #006858;
 }
 
 .ca-badge-overrun {
   display: inline-flex;
   align-items: center;
-  padding: 1px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 600;
-  background: rgba(229, 72, 77, 0.14);
-  color:var(--ca-palette-terracotta);
+  background: #fee2e2;
+  color: #b42318;
 }
 
 .ca-badge-neutral {
@@ -895,9 +902,9 @@
 .ca-budget-target-fill { position: absolute; inset: 0 auto 0 0; background: #e6f4fe; border-radius: 4px; }
 .ca-budget-actual { position: absolute; left: 0; top: 3px; height: 10px; border-radius: 3px; }
 .ca-budget-target-mark { position: absolute; top: -3px; height: 22px; border-left:2px dashed #60646c; box-shadow: 0 0 4px rgba(96, 100, 108, 0.35); }
-.ca-budget-pct-pill { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: 4px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.ca-budget-pct-normal { background: rgba(0, 133, 115, 0.1); color:var(--ca-palette-primary); }
-.ca-budget-pct-overrun { background: rgba(229, 72, 77, 0.14); color:var(--ca-palette-terracotta); }
+.ca-budget-pct-pill { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 4px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ca-budget-pct-normal { background: #dff6f0 !important; color: #006858 !important; }
+.ca-budget-pct-overrun { background: #fee2e2 !important; color: #b42318 !important; }
 
 /* ==========================================================================
    Executive Strip: Top diagnostic insight + Fast-track workstation buttons
@@ -917,11 +924,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #ffffff;
-  border:0.5px solid var(--ca-palette-border);
-  border-radius: 8px;
-  padding: 10px 16px;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 .ca-executive-strip .ca-quick-links-bar {
@@ -930,11 +937,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #ffffff;
-  border:0.5px solid var(--ca-palette-border);
-  border-radius: 8px;
-  padding: 8px 14px;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 @media (max-width: 980px) {

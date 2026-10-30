@@ -263,6 +263,7 @@
   border-collapse: collapse;
   font-size: 14px;
   text-align: left;
+  font-variant-numeric: tabular-nums;
 }
 
 .category-notes-table th {
@@ -307,10 +308,10 @@
   font-weight: 800;
 }
 
-.rank-1 { background: #ffee9c; color:#ab6400; border:0.5px solid #fbe577; }
-.rank-2 { background: #f0f0f3; color:#60646c; border:0.5px solid #d9d9e0; }
-.rank-3 { background: #fff7c2; color:#ce2c31; border:0.5px solid #ffee9c; }
-.rank-normal { color:#60646c; font-weight: 600; }
+.rank-1 { background: #ffee9c; color:#874800; border:0.5px solid #fbe577; }
+.rank-2 { background: #f0f0f3; color:#505561; border:0.5px solid #d9d9e0; }
+.rank-3 { background: #fff7c2; color:#b82429; border:0.5px solid #ffee9c; }
+.rank-normal { color:#505561; font-weight: 600; }
 
 .note-cover-thumb-wrap {
   width: 52px;

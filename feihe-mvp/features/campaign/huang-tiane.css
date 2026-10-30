@@ -991,6 +991,10 @@ details.ht-layer[open] > .ht-summary-header::after {
   table-layout: auto !important;
 }
 
+.ht-board .ht-audience-matrix .ca-matrix-wrap table.ca-table {
+  min-width: 100% !important;
+}
+
 .ht-board .ht-audience-matrix .ca-matrix-wrap th:first-child { width: 62px; }
 .ht-supply-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
 .ht-supply-head > strong { font-size: 22px; color:var(--ht-primary); }

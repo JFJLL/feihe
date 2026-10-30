@@ -41,7 +41,7 @@ const colors = ['#0090ff', '#29a383', '#5b5bd6', '#ffc53d', '#12a594', '#8b8d98'
 function Section({ tag, title, tone = 'blue', hint, children, componentId }: {
   tag: string; title: string; tone?: string; hint?: string; children: ReactNode; componentId?: string;
 }) {
-  return <section data-business-component={componentId} className="pastel-card reference-section" style={{ background: '#ffffff', border: '0.5px solid #d9d9e0', borderRadius: 12, padding: 24, boxShadow: '0 1px 3px rgba(28, 32, 36, 0.04)' }}>
+  return <section data-business-component={componentId} className="pastel-card reference-section" style={{ background: '#ffffff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 12, padding: 24, boxShadow: '0 1px 3px rgba(28, 32, 36, 0.04)' }}>
     <div className="card-header-row"><div className="header-left"><span className={`section-mini-tag tag-${tone}`}>{tag}</span><h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>{title}</h3></div>{hint && <span className="header-tag">{hint}</span>}</div>{children}
   </section>;
 }
@@ -350,11 +350,11 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     ) : undefined} /> : (
       <>
     <BusinessDailyBoard key={`${projectId}:${tab}`} projectId={projectId} overview={tab === 'overview'} canWrite={canWrite} />
-    {Boolean((dashboard.notes || []).length) && (<details className="bd-panel"><summary>其他已配置的项目组件</summary>
+    {Boolean((dashboard.notes || []).length) && (<details className="bd-panel"><summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>其他已配置的项目组件</summary>
     <FeishuSources data={dashboard.feishu} projectId={projectId} />
     {tab === 'overview' && <BusinessComponentBoard projectId={projectId} view="overview" canManage={Boolean(project?.canManage && !project.isArchived)} period={date}>
       <section data-business-component="decision" className="pastel-card health-overview-card">
-        <div className="health-card-head"><span className="section-mini-tag tag-blue">决策层 / 今日指标与待办</span><span className="health-date-hint">投放 {date || '待同步'} / 笔记 {latestNoteDate || '待同步'}</span></div>
+        <div className="health-card-head"><span className="section-mini-tag tag-blue">决策层 / 今日指标与待办</span><h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--slate-12, #1c2024)' }}>决策概览与健康度</h2><span className="health-date-hint" style={{ color: 'var(--slate-11, #525866)' }}>投放 {date || '待同步'} / 笔记 {latestNoteDate || '待同步'}</span></div>
         <div className="health-main-row">
           <div className="health-score-dial"><div className="score-number">{amount(daily?.achieve_pct)}<small>%</small></div><div className="score-label">当日计划达成率</div><div className="score-badge">实际消耗 / 已填计划</div></div>
           <div className="health-indicators-grid">{[
@@ -362,9 +362,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
             { title: '信息流 CTR', value: `${amount(daily?.feed_ctr)}%`, desc: '点击合计 / 展现合计', tone: 'teal' },
             { title: '搜索 CTR', value: `${amount(daily?.search_ctr)}%`, desc: '搜索广告实际点击效率', tone: 'purple' },
             { title: '待处置风险', value: `${pending} 条`, desc: `待回复 ${num(m.actions?.replyPending)} / 待删除 ${num(m.actions?.deletePending)}`, tone: pending ? 'amber' : 'green' },
-          ].map(item => <div key={item.title} className={`health-indicator-card pastel-${item.tone}`}><div className="indicator-top"><strong>{item.title}</strong></div><div className="indicator-val">{item.value}</div><div className="indicator-desc">{item.desc}</div></div>)}</div>
+          ].map(item => <div key={item.title} className={`health-indicator-card pastel-${item.tone}`}><div className="indicator-top"><strong style={{ color: 'var(--slate-12, #1c2024)' }}>{item.title}</strong></div><div className="indicator-val" style={{ color: 'var(--slate-12, #1c2024)' }}>{item.value}</div><div className="indicator-desc" style={{ color: 'var(--slate-11, #525866)' }}>{item.desc}</div></div>)}</div>
         </div>
-        <div className="health-exec-summary"><div className="exec-title"><strong>Executive Summary / 关键数据摘要</strong></div><ul className="exec-summary-list">{summary.map(item => <li className="exec-item" key={item.tag}><span className={`exec-tag ${item.tag === '行动' ? 'tag-warn' : 'tag-blue'}`}>{item.tag}</span><span>{item.text}</span></li>)}</ul></div>
+        <div className="health-exec-summary"><div className="exec-title"><h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>Executive Summary / 关键数据摘要</h3></div><ul className="exec-summary-list">{summary.map(item => <li className="exec-item" key={item.tag}><span className={`exec-tag ${item.tag === '行动' ? 'tag-warn' : 'tag-blue'}`}>{item.tag}</span><span>{item.text}</span></li>)}</ul></div>
       </section>
 
       <Section componentId="budget" tag="预算节奏" title="预算消耗节奏对比" tone="amber" hint="当月进度与季度全盘">

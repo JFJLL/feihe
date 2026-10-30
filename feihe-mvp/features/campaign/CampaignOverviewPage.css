@@ -291,13 +291,39 @@
   margin-block: 0;
 }
 
+.ca-executive-strip {
+  border-top: 1px solid #e8e8ec;
+  padding-top: 14px;
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 980px) {
+  .ca-executive-strip {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.ca-executive-strip .ca-insight,
+.ca-executive-strip .ca-quick-links-bar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .ca-insight {
-  background: #ffffff;
-  border:0.5px solid #d9d9e0;
-  border-radius: 8px;
-  padding: 14px 18px;
-  margin: 14px 0 10px;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
 }
 
 .ca-insight-header {
@@ -335,13 +361,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: #ffffff;
-  border:0.5px solid #e0e1e6;
-  border-radius: 8px;
-  margin-top: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
   font-size: 12px;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  box-shadow: none;
 }
 
 .ca-quick-links-group {
@@ -459,4 +485,33 @@
   .ca-details-body {
     padding: 16px 12px;
   }
+}
+
+/* Wipes Rich Insights Polish & Anti-Clutter */
+.wipes-info-card {
+  background: var(--slate-1, #f4f6f8) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 12px 14px !important;
+  box-shadow: none !important;
+}
+
+.wipes-info-stat {
+  white-space: normal !important;
+  line-height: 1.35 !important;
+  font-size: 18px !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+
+.wipes-rich-tag[style*="#ffc53d"],
+.wipes-rich-tag[style*="#fef3c7"] {
+  background: #fef3c7 !important;
+  color: #7c2d12 !important;
+}
+
+/* 4-card grids inside half-width panels wrap into 2x2 to prevent number wrapping */
+.ca-panel .wipes-rich-grid-4,
+.wipes-rich-grid-2 .wipes-rich-grid-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }

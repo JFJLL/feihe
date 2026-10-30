@@ -80,12 +80,13 @@ function GroupHeading({
         >
           {badge && (
             <span
+              className="bd-group-index"
               style={{
-                fontFamily: 'monospace', fontSize: 12, fontWeight: 700,
-                padding: '1px 5px',
-                borderRadius: 3,
-                background: 'var(--teal-3, #e0f8f3)',
-                color: 'var(--teal-11, #008573)',
+                fontFamily: 'monospace',
+                fontSize: 13,
+                fontWeight: 600,
+                color: '#525866',
+                marginRight: 2,
               }}
             >
               {badge}
@@ -94,7 +95,7 @@ function GroupHeading({
           {title}
         </h2>
         {subtitle && (
-          <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>{subtitle}</span>
+          <span style={{ fontSize: 12, color: 'var(--slate-11, #525866)' }}>{subtitle}</span>
         )}
       </div>
     </div>
@@ -429,7 +430,7 @@ function Funnel({
       ];
 
   return (
-    <article className="bd-funnel" style={{ background: '#ffffff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 8, padding: 14 }}>
+    <article className="bd-funnel" style={{ background: '#f4f6f8', border: 'none', borderRadius: 8, padding: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
         <h4 style={{ margin: 0, fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>{title}</h4>
         <span
@@ -438,8 +439,8 @@ function Funnel({
             fontWeight: 600,
             padding: '1px 6px',
             borderRadius: 4,
-            background: isComplete ? 'var(--teal-3, #e0f8f3)' : hasObserved ? 'var(--amber-3, #fff7c2)' : 'var(--slate-3, #f0f0f3)',
-            color: isComplete ? 'var(--teal-11, #008573)' : hasObserved ? 'var(--amber-11, #ab6400)' : 'var(--slate-11, #60646c)',
+            background: isComplete ? 'var(--teal-3, #e0f8f3)' : hasObserved ? 'var(--amber-3, #fff7c2)' : 'var(--slate-3, #e8e8ec)',
+            color: isComplete ? 'var(--teal-11, #006858)' : hasObserved ? 'var(--amber-11, #854d0e)' : 'var(--slate-11, #525866)',
           }}
         >
           {isComplete
@@ -454,28 +455,28 @@ function Funnel({
         <>
       <div className="bd-funnel-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 }}>
           {steps.map(([name, val, sub]) => (
-          <div key={name} style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-4, #e8e8ec)', borderRadius: 6, padding: '8px 10px' }}>
-            <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>{name}</span>
+          <div key={name} style={{ background: '#ffffff', border: 'none', borderRadius: 6, padding: '8px 10px', boxShadow: '0 1px 2px rgba(28, 32, 36, 0.03)' }}>
+            <span style={{ fontSize: 12, color: 'var(--slate-11, #525866)' }}>{name}</span>
               <strong style={{ display: 'block', fontSize: 16, margin: '4px 0 2px', color: 'var(--slate-12, #1c2024)' }}>
                 {format(val)}
               </strong>
-              <small style={{ fontSize: 12, color: 'var(--slate-10, #80838d)' }}>{sub}</small>
+              <small style={{ fontSize: 12, color: 'var(--slate-10, #525866)' }}>{sub}</small>
           </div>
         ))}
       </div>
 
           {!isComplete && (
-            <div style={{ marginTop: 8, padding: '6px 10px', background: '#fcfcfd', border: '0.5px solid var(--slate-5, #e0e1e6)', borderRadius: 5 }}>
-              <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
+            <div style={{ marginTop: 8, padding: '6px 10px', background: '#ffffff', border: 'none', borderRadius: 5 }}>
+              <span style={{ fontSize: 12, color: 'var(--slate-11, #525866)' }}>
                 {title.includes('星') ? '10月14日–15日' : '10月13日–15日'}底表暂未回传；未覆盖日不补0，上方展示 {periodText} 真实阶段指标，不伪装全区间合计。
               </span>
             </div>
           )}
         </>
       ) : (
-        <div className="bd-funnel-compact-status" style={{ background: '#fcfcfd', border: '0.5px solid var(--slate-5, #e0e1e6)', borderRadius: 6, padding: '10px 12px', margin: '4px 0 8px' }}>
+        <div className="bd-funnel-compact-status" style={{ background: '#f4f6f8', border: 'none', borderRadius: 6, padding: '10px 12px', margin: '4px 0 8px' }}>
           <span style={{ fontSize: 12, color: 'var(--slate-12, #1c2024)', fontWeight: 600 }}>电商归因全链路状态</span>
-          <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--slate-11, #60646c)', lineHeight: 1.4 }}>
+          <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--slate-11, #525866)', lineHeight: 1.4 }}>
             所选统计区间内底表暂无有效电商归因回传；待相关数据录入后自动呈现。
           </p>
         </div>
@@ -484,7 +485,7 @@ function Funnel({
       {/* 独立口径单列展示区域 */}
       <div style={{ marginTop: 10, paddingTop: 8, borderTop: '0.5px dashed var(--slate-6, #d9d9e0)', display: 'flex', flexDirection: 'column', gap: 6 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
-          <span style={{ color: 'var(--slate-11, #60646c)' }}>
+          <span style={{ color: 'var(--slate-11, #525866)' }}>
             聚光监测进店UV（独立口径）：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{format(data.monitoredShopUv?.value ?? observed?.monitoredShopUv ?? null)}</strong>
           </span>
           <span className="bd-caption">已观测（周趋势底表）</span>
@@ -492,9 +493,9 @@ function Funnel({
 
         {Boolean(monthSnapshot?.actual !== undefined && monthSnapshot?.actual !== null) && (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
-            <span style={{ color: 'var(--slate-11, #60646c)' }}>
+            <span style={{ color: 'var(--slate-11, #525866)' }}>
               10月15日报月快照进店参考：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{format(parseNumericValue(monthSnapshot?.actual))}</strong>
-              {Boolean(monthSnapshot?.target) && <span style={{ color: 'var(--slate-10, #80838d)' }}> / 目标 {format(parseNumericValue(monthSnapshot?.target))}</span>}
+              {Boolean(monthSnapshot?.target) && <span style={{ color: 'var(--slate-10, #525866)' }}> / 目标 {format(parseNumericValue(monthSnapshot?.target))}</span>}
             </span>
             <span className="bd-caption">月累计快照（独立口径不混拼）</span>
           </div>
@@ -874,7 +875,7 @@ function AspectSummaryCard({
                     display: 'block',
                     fontSize: 12,
                     fontWeight: 600,
-                    color: '#8b8d98',
+                    color: '#525866',
                     marginBottom: 2,
                   }}
                 >
@@ -889,7 +890,7 @@ function AspectSummaryCard({
                       display: 'block',
                       fontSize: 12,
                       fontWeight: 600,
-                      color: '#8b8d98',
+                      color: '#525866',
                       marginBottom: 2,
                     }}
                   >
@@ -907,7 +908,7 @@ function AspectSummaryCard({
                     display: 'block',
                     fontSize: 12,
                     fontWeight: 600,
-                    color: '#8b8d98',
+                    color: '#525866',
                     marginBottom: 2,
                   }}
                 >
@@ -921,7 +922,7 @@ function AspectSummaryCard({
                     display: 'block',
                     fontSize: 12,
                     fontWeight: 600,
-                    color: '#8b8d98',
+                    color: '#525866',
                     marginBottom: 2,
                   }}
                 >
@@ -1138,6 +1139,25 @@ export function BusinessDailyBoard({
   const latestCreatorPoint = creatorPoints.at(-1);
   const latestCompletePoint = completeInvestmentPoints.at(-1);
 
+  const effectiveFrom = from || view?.from || '';
+  const effectiveTo = to || view?.to || displayDay || '';
+
+  const { isTodayActive, isLast7Active, isMonthActive } = useMemo(() => {
+    if (!displayDay) return { isTodayActive: false, isLast7Active: false, isMonthActive: false };
+    const todayActive = effectiveFrom === displayDay && effectiveTo === displayDay;
+    const d = new Date(displayDay + 'T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() - 6);
+    const last7From = d.toISOString().slice(0, 10);
+    const last7Active = !todayActive && effectiveFrom === last7From && effectiveTo === displayDay;
+    const monthFrom = displayDay.slice(0, 7) + '-01';
+    const monthActive = !todayActive && effectiveFrom === monthFrom && effectiveTo === displayDay;
+    return {
+      isTodayActive: todayActive,
+      isLast7Active: last7Active,
+      isMonthActive: monthActive,
+    };
+  }, [displayDay, effectiveFrom, effectiveTo]);
+
   return (
     <DailyDetailsContext.Provider value={detailQuery}>
       <div
@@ -1158,7 +1178,7 @@ export function BusinessDailyBoard({
                   <div className="bd-quick-group" role="group" aria-label="快捷时间范围">
                     <button
                       type="button"
-                      className="bd-quick-btn"
+                      className={`bd-quick-btn ${isTodayActive ? 'is-active' : ''}`}
                       onClick={() => {
                         if (displayDay) {
                           setFrom(displayDay);
@@ -1171,7 +1191,7 @@ export function BusinessDailyBoard({
                     </button>
                     <button
                       type="button"
-                      className="bd-quick-btn"
+                      className={`bd-quick-btn ${isLast7Active ? 'is-active' : ''}`}
                       onClick={() => {
                         if (displayDay) {
                           const d = new Date(displayDay + 'T00:00:00Z');
@@ -1186,7 +1206,7 @@ export function BusinessDailyBoard({
                     </button>
                     <button
                       type="button"
-                      className="bd-quick-btn"
+                      className={`bd-quick-btn ${isMonthActive ? 'is-active' : ''}`}
                       onClick={() => {
                         if (displayDay) {
                           setFrom(displayDay.slice(0, 7) + '-01');
@@ -1229,6 +1249,7 @@ export function BusinessDailyBoard({
                       }}
                     />
                   </div>
+                  <span className="bd-range-days-chip">共 {view?.series?.length || 0} 天</span>
                 </>
               ) : (
                 <>
@@ -1523,7 +1544,7 @@ export function BusinessDailyBoard({
                                   padding: '1px 6px',
                                   borderRadius: 4,
                                   background: 'var(--teal-3, #e0f8f3)',
-                                  color: 'var(--teal-11, #008573)',
+                                  color: 'var(--teal-11, #006858)',
                                 }}
                               >
                                 {view.core.creatorCost?.value !== null ? '未齐备指标接入 14 实绩' : '最新有效实绩'}
@@ -1629,7 +1650,7 @@ export function BusinessDailyBoard({
                     <div className="bd-alerts-compact" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', background: '#fcfcfd', border: '0.5px solid var(--slate-5, #e0e1e6)', borderRadius: 6, margin: '8px 0 10px', fontSize: 12, color: 'var(--slate-11, #60646c)' }}>
                       <span>💡 <strong>{day} 费用尚未齐备 / 投流广告待回填</strong> / 达人等单项已登记，未齐备指标参考 {latestObservedPoint?.date} 完整实绩；所选基准日保持 {day}。</span>
                       <details style={{ display: 'inline', marginLeft: 8 }}>
-                        <summary style={{ cursor: 'pointer', color: 'var(--blue-11, #0d74ce)', fontSize: 12 }}>来源核对</summary>
+                        <summary style={{ cursor: 'pointer', color: 'var(--blue-11, #0b5cad)', fontSize: 12 }}>来源核对</summary>
                         <span className="bd-caption" style={{ display: 'block', marginTop: 4 }}>数据源：周趋势底表 Q4 (loIsK8)</span>
                       </details>
                     </div>
@@ -1827,19 +1848,61 @@ export function BusinessDailyBoard({
                             <h3>当日渠道费用结构与对账明细 ({day})</h3>
                             <p className="bd-caption">选定单日FS实际与排期明细对照；整体KFSOPZ进度另列。</p>
                           </div>
-                          <div className="bd-progress">
-                            <span>月时间进度 {format(view.progress.timeFraction * 100)}%</span>
-                            <span>
-                              FS业务排期 {format(view.progress.scheduleFraction === null ? null : view.progress.scheduleFraction * 100)}%
-                            </span>
-                            <span>
-                              日报月累计结算进度 {format(view.progress.settlementFraction === null ? null : view.progress.settlementFraction * 100)}%
-                            </span>
+                          <div className="bd-progress-pills" role="group" aria-label="月度进度概览">
+                            <div className="bd-progress-pill">
+                              <div className="bd-progress-pill-label">
+                                <span>月时间进度</span>
+                                <strong>{format(view.progress.timeFraction * 100)}%</strong>
+                              </div>
+                              <div className="bd-progress-pill-track">
+                                <span
+                                  className="bd-progress-pill-fill"
+                                  style={{
+                                    width: `${Math.min(100, Math.max(0, view.progress.timeFraction * 100))}%`,
+                                    background: '#0b5cad',
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="bd-progress-pill">
+                              <div className="bd-progress-pill-label">
+                                <span>FS业务排期</span>
+                                <strong>
+                                  {view.progress.scheduleFraction === null ? '—' : `${format(view.progress.scheduleFraction * 100)}%`}
+                                </strong>
+                              </div>
+                              <div className="bd-progress-pill-track">
+                                <span
+                                  className="bd-progress-pill-fill"
+                                  style={{
+                                    width: `${view.progress.scheduleFraction !== null ? Math.min(100, Math.max(0, view.progress.scheduleFraction * 100)) : 0}%`,
+                                    background: '#006858',
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="bd-progress-pill">
+                              <div className="bd-progress-pill-label">
+                                <span>日报月累计结算进度</span>
+                                <strong>
+                                  {view.progress.settlementFraction === null ? '—' : `${format(view.progress.settlementFraction * 100)}%`}
+                                </strong>
+                              </div>
+                              <div className="bd-progress-pill-track">
+                                <span
+                                  className="bd-progress-pill-fill"
+                                  style={{
+                                    width: `${view.progress.settlementFraction !== null ? Math.min(100, Math.max(0, view.progress.settlementFraction * 100)) : 0}%`,
+                                    background: '#4338ca',
+                                  }}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <AspectSummaryCard aspectKey="spend" view={view} overview={false} />
                         {view?.platformNative && (
-                          <div className="bd-platform-reconcile-chip" style={{ margin: '8px 0', padding: '8px 12px', background: '#f9f9fb', border: '0.5px solid #d9d9e0', borderRadius: 6, fontSize: 14, color: '#1c2024' }}>
+                          <div className="bd-platform-reconcile-chip" style={{ margin: '8px 0', padding: '8px 12px', background: '#f4f6f8', border: 'none', borderRadius: 6, fontSize: 14, color: '#1c2024' }}>
                             <strong style={{ color: DASHBOARD_PALETTE.actual }}>平台原生观测对账：</strong>
                             {view.platformNative.status === 'missing_weekly' ? (
                               <span>{view.platformNative.day} 聚光原生投放 ¥{format(view.platformNative.totalFee)}（信息流 ¥{format(view.platformNative.feedFee)} + 搜索 ¥{format(view.platformNative.searchFee)}）。周底表广告投放尚未回填，保持独立来源对账，不计入周表成本总口径。</span>
@@ -1852,30 +1915,63 @@ export function BusinessDailyBoard({
                         )}
                         <div className="bd-costs">
                           {selected &&
-                            ([
-                              ['K达人', selected.creatorCost, latestObservedPoint?.creatorCost],
-                              ['F信息流', selected.feed, latestObservedPoint?.feed],
-                              ['S搜索', selected.search, latestObservedPoint?.search],
-                              ['SEO', selected.seo, latestObservedPoint?.seo],
-                              ['评论', selected.comments, latestObservedPoint?.comments],
-                              ['杂费', selected.other, latestObservedPoint?.other],
-                            ] as [string, Cell, Cell | undefined][]).map(([name, value, refVal]) => (
-                              <div key={name}>
-                                <span>{name}</span>
-                                {value.value !== null ? (
-                                  <Value value={value} />
-                                ) : (
-                                  <div>
-                                    <strong style={{ color: DASHBOARD_PALETTE.plan }}>—<small>元</small></strong>
-                                    {refVal?.value !== null && refVal?.value !== undefined && (
-                                      <small className="bd-state" style={{ color: DASHBOARD_PALETTE.settlement }}>
-                                        {latestObservedPoint?.date?.slice(5)}: ¥{format(refVal.value)}
-                                      </small>
-                                    )}
+                            (() => {
+                              const channelItems: [string, Cell, Cell | undefined, string][] = [
+                                ['K达人', selected.creatorCost, latestObservedPoint?.creatorCost, '#b88a45'],
+                                ['F信息流', selected.feed, latestObservedPoint?.feed, '#006858'],
+                                ['S搜索', selected.search, latestObservedPoint?.search, '#4338ca'],
+                                ['SEO', selected.seo, latestObservedPoint?.seo, '#12a594'],
+                                ['评论', selected.comments, latestObservedPoint?.comments, '#e5484d'],
+                                ['杂费', selected.other, latestObservedPoint?.other, '#525866'],
+                              ];
+                              const dayTotal = channelItems.reduce((acc, item) => acc + (item[1].value || 0), 0);
+                              const refTotal = channelItems.reduce((acc, item) => acc + (item[2]?.value || 0), 0);
+
+                              return channelItems.map(([name, value, refVal, color]) => {
+                                const valNum = value.value;
+                                const refNum = refVal?.value;
+                                const pct = valNum !== null && dayTotal > 0
+                                  ? (valNum / dayTotal) * 100
+                                  : refNum !== null && refNum !== undefined && refTotal > 0
+                                  ? (refNum / refTotal) * 100
+                                  : 0;
+
+                                return (
+                                  <div key={name} className="bd-cost-item">
+                                    <div className="bd-cost-item-head">
+                                      <span className="bd-cost-name">{name}</span>
+                                      {pct > 0 && (
+                                        <span className="bd-cost-pct">{pct.toFixed(1)}%</span>
+                                      )}
+                                    </div>
+                                    <div className="bd-cost-item-val">
+                                      {valNum !== null ? (
+                                        <Value value={value} />
+                                      ) : (
+                                        <div>
+                                          <strong style={{ color: '#525866' }}>—<small>元</small></strong>
+                                          {refNum !== null && refNum !== undefined && (
+                                            <small className="bd-state" style={{ color: '#525866', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                                              <span>{latestObservedPoint?.date?.slice(5)}:</span>
+                                              <span style={{ color: '#006858', fontWeight: 600 }}>¥{format(refNum)}</span>
+                                            </small>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div className="bd-cost-bar-track">
+                                      <span
+                                        className="bd-cost-bar-fill"
+                                        style={{
+                                          width: `${Math.min(100, Math.max(0, pct))}%`,
+                                          background: color,
+                                        }}
+                                      />
+                                    </div>
                                   </div>
-                                )}
-                              </div>
-                            ))}
+                                );
+                              });
+                            })()}
                         </div>
                         <details className="bd-history-details" style={{ margin: '14px 0', border: '0.5px solid #d9d9e0', borderRadius: 8, padding: '10px 14px', background: '#fcfcfd' }}>
                           <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#60646c' }}>

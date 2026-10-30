@@ -4,6 +4,7 @@ import React, { useMemo, useCallback, useSyncExternalStore } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { DayNavigator } from "../../components/ui/DayNavigator";
 import { MetricStrip, ChartPanel } from "./CampaignCharts";
+import { CampaignComboChart, type ComboSeries } from "./CampaignComboChart";
 import { CustomSelect } from "../../components/ui/CustomSelect";
 import {
   resolveDailyDatasets,
@@ -141,8 +142,81 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   // Selected Day Core KPIs with Day-over-Day comparisons
   const summaryMetrics = useMemo(() => {
     if (!activeDataset || !selectedDate) return [];
-    return getSingleDayKPIs(activeDataset, selectedDate);
+    const baseMetrics = getSingleDayKPIs(activeDataset, selectedDate);
+    if (!activeDataset.rows || activeDataset.rows.length === 0) return baseMetrics;
+
+    const sortedRows = [...activeDataset.rows]
+      .filter((r) => r.date && String(r.date) <= selectedDate)
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    const recentObserved = sortedRows.slice(-7);
+
+    return baseMetrics.map((m, idx) => {
+      let key = "spend";
+      if (m.label.includes("消耗") || m.label.includes("花费") || m.label.includes("支出")) {
+        key = activeDataset.id.includes("taosou") ? "spend_total" : "spend";
+      } else if (m.label.includes("展现")) {
+        key = "impressions";
+      } else if (m.label.includes("点击")) {
+        key = "clicks";
+      } else if (m.label.includes("GMV") || m.label.includes("成交")) {
+        key = "gmv";
+      } else if (m.label.includes("指数")) {
+        key = "kw_total_index";
+      } else if (m.label.includes("UV") || m.label.includes("访客") || m.label.includes("进店")) {
+        key = "uv";
+      } else if (m.label.includes("订单")) {
+        key = "orders";
+      } else if (m.label.includes("信息流")) {
+        key = "spend_f";
+      } else if (m.label.includes("搜索推广")) {
+        key = "spend_s";
+      } else if (m.label.includes("达人")) {
+        key = "spend_k";
+      } else if (m.label.includes("互动")) {
+        key = "engagements";
+      } else {
+        key = idx === 0 ? "spend" : idx === 1 ? "impressions" : "clicks";
+      }
+
+      const spark = recentObserved.map((r) => {
+        const v = (r as Record<string, unknown>)[key] ?? (r as Record<string, unknown>).spend ?? (r as Record<string, unknown>).spend_total ?? null;
+        if (v === null || v === undefined) return null;
+        const n = typeof v === "number" ? v : parseFloat(String(v).replace(/[^0-9.-]/g, ""));
+        return Number.isFinite(n) ? n : null;
+      });
+
+      const hasValid = spark.some((v) => v !== null && v > 0);
+      return {
+        ...m,
+        sparkline: hasValid ? spark : undefined,
+      };
+    });
   }, [activeDataset, selectedDate]);
+
+  const trendComboSeries: ComboSeries[] = useMemo(() => {
+    if (!activeDataset) return [];
+    const isTaosou = activeDataset.id.includes("taosou");
+    const isCid = activeDataset.id.includes("cid");
+
+    if (isTaosou) {
+      return [
+        { key: "spend_total", label: "全渠道日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+        { key: "kw_total_index", label: "淘搜总指数", unit: "指数", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+      ];
+    }
+
+    if (isCid) {
+      return [
+        { key: "spend", label: "日广告消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+        { key: "gmv", label: "成交GMV", unit: "元", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
+      ];
+    }
+
+    return [
+      { key: "spend", label: "日广告消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+      { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+    ];
+  }, [activeDataset]);
 
   // Selected Day Distributions (Channel, Keywords, Crowd, Efficiency)
   const distributions = useMemo(() => {
@@ -267,6 +341,30 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
           {/* 当日分布与结构面板 (无虚假小时曲线，聚焦单日结构与跨数据集横向对照) */}
         <h2 className="sr-only">当日核心指标与分布</h2>
         <div className="ca-daily-grid">
+          {/* 5.0 所选业务日周期走势对照 */}
+          <div className="ca-daily-panel ca-daily-panel-span-2">
+            <ChartPanel
+              title="所选业务日周期走势对照"
+              subtitle={`统计周期: ${activeDataset.period} / 当前选定: ${selectedDate} (点击图表柱状图可快速切换业务日)`}
+              actions={
+                <span style={{ fontSize: 12, color: "#60646c" }}>
+                  覆盖 {allAvailableDates.length} 个采集日
+                </span>
+              }
+            >
+              <CampaignComboChart
+                rows={activeDataset.rows as unknown as Record<string, unknown>[]}
+                series={trendComboSeries}
+                xKey="date"
+                title="所选业务日周期走势"
+                height={230}
+                onRowClick={(row) => {
+                  if (row.date) updateUrl({ day: String(row.date) });
+                }}
+              />
+            </ChartPanel>
+          </div>
+
           {/* 5.1 单日分布与结构组 */}
           {distributions.map((dist) => (
             <div key={dist.id} className="ca-daily-panel">

@@ -9,8 +9,8 @@
   --slate-7: #cdced6;
   --slate-8: #b9bbc6;
   --slate-9: #5a5e67;
-  --slate-10: #5a5e67;
-  --slate-11: #5a5e67;
+  --slate-10: #505561;
+  --slate-11: #505561;
   --slate-12: #1c2024;
 
   --teal-1: #fafefd;
@@ -23,7 +23,7 @@
   --teal-8: #53b9ab;
   --teal-9: #006d5b;
   --teal-10: #006d5b;
-  --teal-11: #006d5b;
+  --teal-11: #006857;
   --teal-12: #0d3d38;
 
   --iris-1: #fdfdff;
@@ -62,7 +62,7 @@
   --amber-8: #e2a336;
   --amber-9: #ffc53d;
   --amber-10: #ffba18;
-  --amber-11: #ab6400;
+  --amber-11: #8a4800;
   --amber-12: #4f3422;
 
   --red-1: #fffcfc;
@@ -109,6 +109,7 @@
   --sidebar-active-text: var(--teal-11);
   --text-main: var(--slate-12);
   --text-muted: var(--slate-11);
+  --color-text-muted: var(--slate-11);
   --text-light: var(--slate-11);
   --border-line: var(--slate-6);
   --border-light: var(--slate-3);
@@ -134,7 +135,9 @@
   --shadow-primary: 0 4px 14px rgba(0, 133, 115, 0.2);
   --transition-std: 250ms ease-out;
 
-  --font-sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "HarmonyOS Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "HarmonyOS Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 * {

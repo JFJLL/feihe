@@ -1,5 +1,5 @@
 'use client';
-import { useId, useState } from 'react';
+import { useId, useState, useRef, useEffect } from 'react';
 import { EmptyState } from './EmptyState';
 
 type Row = { date: string; [key: string]: string | number | null };
@@ -23,15 +23,41 @@ function segments(points: (Point | null)[]) {
 export function TimeSeriesChart({ rows, series, title, unit = '条', height = 240, valueFormatter }: { rows: Row[]; series: { key: string; label: string; color: string }[]; title: string; unit?: string; height?: number; valueFormatter?: (value: number) => string }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(760);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.width > 0) setContainerWidth(Math.round(rect.width));
+    };
+    measure();
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const cw = entry.contentRect.width;
+          if (cw > 0) setContainerWidth(Math.round(cw));
+        }
+      });
+      ro.observe(el);
+      return () => ro.disconnect();
+    }
+  }, []);
+
   const chartId = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const data = [...rows].filter(r=>r.date).sort((a,b)=>a.date.localeCompare(b.date));
   if (!data.length) return <EmptyState title="暂无可绘制的数据" text="同步或抓取真实数据后显示；缺失记录不会补成零。" />;
   const selectedIndex = data.findIndex(r=>r.date===selected);
   const activeIndex = hoverIdx !== null && hoverIdx < data.length ? hoverIdx : selectedIndex >= 0 ? selectedIndex : data.length - 1;
   const current = data[activeIndex] || data[data.length-1];
-  const w=760,h=height,left=56,right=20,top=20,bottom=40;
+  const w = Math.max(320, containerWidth);
+  const h = height;
+  const left = 56, right = 20, top = 20, bottom = 40;
   const rawMax = Math.max(valueFormatter ? 0.000000001 : 1,...data.flatMap(r=>series.map(s=>typeof r[s.key]==='number' && Number.isFinite(r[s.key]) ? Number(r[s.key]):0)));
-  const max = unit==='条' ? Math.ceil(rawMax / 4) * 4 : rawMax;
+  const expanded = rawMax * 1.12;
+  const max = unit==='条' ? Math.ceil(expanded / 4) * 4 : expanded;
   const x=(i:number)=>data.length===1?w/2:left+i*(w-left-right)/(data.length-1);
   const y=(v:number)=>h-bottom-v/max*(h-top-bottom);
   const fmt=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)?valueFormatter ? valueFormatter(v) : v.toLocaleString('zh-CN',{maximumFractionDigits:2}):'未提供';
@@ -40,7 +66,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
   const step = Math.max(1, Math.floor((data.length - 1) / 4));
   const dateTicks = data.filter((_, i) => i === 0 || i === data.length - 1 || (i % step === 0 && (data.length - 1 - i) >= Math.floor(step * 0.75)));
 
-  return <div className="data-trend">
+  return <div className="data-trend" ref={containerRef}>
     <div className="data-trend-readout" aria-live="polite">
       <strong>{current.date}</strong>
       {series.map(s=><span key={s.key}><i style={{background:s.color}} />{s.label} <b>{fmt(current[s.key])}</b>{typeof current[s.key]==='number'?` ${unit}`:''}</span>)}
@@ -49,8 +75,8 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
       <title>{`${title}，${data.length} 个日期。悬停或使用下方日期选择查看数值；缺失样本断开显示。`}</title>
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={series[0]?.color || '#0d74ce'} stopOpacity="0.10" />
-          <stop offset="100%" stopColor={series[0]?.color || '#0d74ce'} stopOpacity="0.00" />
+          <stop offset="0%" stopColor={series[0]?.color || '#0d74ce'} stopOpacity="0.20" />
+          <stop offset="100%" stopColor={series[0]?.color || '#0d74ce'} stopOpacity="0.01" />
         </linearGradient>
       </defs>
       {[0,.25,.5,.75,1].map(t=><g key={t}><line x1={left} x2={w-right} y1={y(max*t)} y2={y(max*t)} stroke="#d9d9e0" strokeDasharray="3 3"/><text x={left-8} y={y(max*t)+4} textAnchor="end" fill="#60646c" fontSize="12">{fmtY(max*t)}</text></g>)}
@@ -74,7 +100,7 @@ export function TimeSeriesChart({ rows, series, title, unit = '条', height = 24
         }));
         if (!runs.length) return null;
         return <g key={s.key}>
-          {runs.map((points, index) => <path key={index} d={buildPath(points)} fill="none" stroke={s.color} strokeWidth="1.8" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />)}
+          {runs.map((points, index) => <path key={index} d={buildPath(points)} fill="none" stroke={s.color} strokeWidth="2.2" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />)}
           {data.map((r,i)=>{
             const val = r[s.key];
             if (typeof val !== 'number' || !Number.isFinite(val)) return null;

@@ -392,7 +392,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: 12 }}>
           {!actions.some(p => p.month === month && includes(p.brand)) && <p className="metric-note">该月份与品牌没有动作记录。</p>}
           {actions.filter(p => p.month === month && includes(p.brand)).map((act, i) => (
-            <div key={i} style={{ padding: '12px 14px', background: '#ffffff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 8, borderLeft: `4px solid ${brandColor(act.brand)}` }}>
+            <div key={i} style={{ padding: '12px 14px', background: '#ffffff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 8, borderLeft: `1px solid ${brandColor(act.brand)}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                 <span style={{ fontSize: 12, fontWeight: 700, padding: '2px 6px', borderRadius: 4, background: '#f0f0f3', color: '#1c2024' }}>{act.type}</span>
                 <span style={{ fontSize: 12, fontWeight: 600, color: brandColor(act.brand) }}>{name(act.brand)}</span>

@@ -272,13 +272,13 @@ label:has(select),
 .project-nav a:nth-child(5).active, .project-nav [data-nav="settings"].active { border-left-color:#0d74ce !important; background: linear-gradient(90deg, #f0f0f3, #ffffff) !important; color:#113264 !important; }
 
 /* 各板块卡片多样化微渐变与呼吸感 */
-.pastel-card.pastel-blue { background: linear-gradient(135deg, #ffffff 40%, #e6f4fe 100%) !important; border:0.5px solid #acd8fc !important; border-top:3px solid #0d74ce !important; }
-.pastel-card.pastel-teal { background: linear-gradient(135deg, #ffffff 40%, #f9f9fb 100%) !important; border:0.5px solid #b8eae0 !important; border-top:3px solid #0d9b8a !important; }
-.pastel-card.pastel-green { background: linear-gradient(135deg, #ffffff 40%, #f4fbf7 100%) !important; border:0.5px solid #acdec8 !important; border-top:3px solid #29a383 !important; }
-.pastel-card.pastel-purple { background: linear-gradient(135deg, #ffffff 40%, #f9f9fb 100%) !important; border:0.5px solid #dadcff !important; border-top:3px solid #5b5bd6 !important; }
-.pastel-card.pastel-yellow { background: linear-gradient(135deg, #ffffff 40%, #fcfcfd 100%) !important; border:0.5px solid #fbe577 !important; border-top:3px solid #e2a336 !important; }
-.pastel-card.pastel-red { background: linear-gradient(135deg, #ffffff 40%, #f9f9fb 100%) !important; border:0.5px solid #ffcdce !important; border-top:3px solid #e5484d !important; }
-.pastel-card.pastel-orange { background: linear-gradient(135deg, #ffffff 40%, #f9f9fb 100%) !important; border:0.5px solid #ffee9c !important; border-top:3px solid #ab6400 !important; }
+.pastel-card.pastel-blue { background: #ffffff !important; border:0.5px solid #acd8fc !important; border-top:1px solid #0d74ce !important; }
+.pastel-card.pastel-teal { background: #ffffff !important; border:0.5px solid #b8eae0 !important; border-top:1px solid #0d9b8a !important; }
+.pastel-card.pastel-green { background: #ffffff !important; border:0.5px solid #acdec8 !important; border-top:1px solid #29a383 !important; }
+.pastel-card.pastel-purple { background: #ffffff !important; border:0.5px solid #dadcff !important; border-top:1px solid #5b5bd6 !important; }
+.pastel-card.pastel-yellow { background: #ffffff !important; border:0.5px solid #fbe577 !important; border-top:1px solid #e2a336 !important; }
+.pastel-card.pastel-red { background: #ffffff !important; border:0.5px solid #ffcdce !important; border-top:1px solid #e5484d !important; }
+.pastel-card.pastel-orange { background: #ffffff !important; border:0.5px solid #ffee9c !important; border-top:1px solid #ab6400 !important; }
 
 /* 胶囊标签色彩库 */
 .section-mini-tag.tag-orange { background: #f9f9fb !important; color:#ce2c31 !important; border:0.5px solid #fff7c2 !important; }
@@ -393,4 +393,46 @@ label:has(select),
 }
 @media (prefers-reduced-motion: reduce) {
   .ops-workspace *, .ops-workspace *::before, .ops-workspace *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* Authoritative deep pine brand mark & compact unobtrusive agent button */
+.brand > span,
+.brand-mark {
+  background: #12352c !important;
+  color: #f4f7f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 2px 6px rgba(18, 53, 44, 0.18) !important;
+}
+
+button.floating-agent-btn,
+.floating-agent-btn {
+  position: fixed !important;
+  bottom: 14px !important;
+  right: 16px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  border-radius: 999px !important;
+  background: #12352c !important;
+  color: #f4f7f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.14) !important;
+}
+
+button.floating-agent-btn:hover,
+.floating-agent-btn:hover {
+  background: #0f2e26 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.2) !important;
+}
+
+.nav-index,
+.ws-nav-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #475569 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  min-width: 18px;
+  border-radius: 0 !important;
+  font-variant-numeric: tabular-nums;
 }

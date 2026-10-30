@@ -81,8 +81,12 @@ export function SpendBars({
         </div>
         <div className="spend-bars-legend">
           <span className="spend-legend-item">
-            <i className="spend-legend-dot observed" style={{ background: DASHBOARD_PALETTE.actual }} />
-            <span>已观测消耗</span>
+            <i className="spend-legend-dot" style={{ background: '#0d7a68' }} />
+            <span>信息流 (F)</span>
+          </span>
+          <span className="spend-legend-item">
+            <i className="spend-legend-dot" style={{ background: '#2563eb' }} />
+            <span>搜索 (S)</span>
           </span>
           <span className="spend-legend-item">
             <i className="spend-legend-dot missing" style={{ background: DASHBOARD_PALETTE.plan }} />
@@ -192,18 +196,85 @@ export function SpendBars({
                     </div>
                   )}
 
-                  {/* Value above bar */}
-                  <div className="spend-bar-val-badge">
-                    {hasSpend ? compactSpend(spendVal) : <span className="spend-missing-chip">—</span>}
-                  </div>
-
-                  {/* The bar graphic */}
-                  <div className="spend-bar-body-wrapper">
-                    {hasSpend ? (
+                  {/* The bar graphic with rising value badge */}
+                  <div
+                    className="spend-bar-body-wrapper"
+                    style={{
+                      position: 'relative',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {/* Plan marker on the column */}
+                    {p.plan.value !== null && p.plan.value > 0 && (
                       <div
-                        className="spend-bar-body observed"
-                        style={{ height: barHeightPct + '%', background: DASHBOARD_PALETTE.actual }}
+                        className="spend-bar-plan-marker"
+                        style={{
+                          bottom: `${Math.min(100, Math.max(0, (p.plan.value / scaleMax) * 100))}%`,
+                        }}
+                        title={`当日计划：${formatNum(p.plan.value)} 元`}
+                        aria-hidden="true"
                       />
+                    )}
+
+                    <div className="spend-bar-val-badge">
+                      {hasSpend ? compactSpend(spendVal) : <span className="spend-missing-chip">—</span>}
+                    </div>
+
+                    {hasSpend ? (
+                      (() => {
+                        const hasFeed = p.feed.value !== null && p.feed.value > 0;
+                        const hasSearch = p.search.value !== null && p.search.value > 0;
+                        if (hasFeed && hasSearch) {
+                          const feedVal = p.feed.value!;
+                          const searchVal = p.search.value!;
+                          const totalVal = feedVal + searchVal;
+                          const feedPct = (feedVal / totalVal) * 100;
+                          const searchPct = (searchVal / totalVal) * 100;
+                          return (
+                            <div
+                              className="spend-bar-body observed"
+                              style={{
+                                height: barHeightPct + '%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                overflow: 'hidden',
+                                padding: 0,
+                              }}
+                            >
+                              <div
+                                className="spend-segment-search"
+                                style={{
+                                  height: `${searchPct}%`,
+                                  background: '#2563eb',
+                                  borderBottom: '1px solid rgba(255, 255, 255, 0.9)',
+                                  width: '100%',
+                                }}
+                                title={`搜索 (S): ${formatNum(searchVal)} 元`}
+                              />
+                              <div
+                                className="spend-segment-feed"
+                                style={{
+                                  height: `${feedPct}%`,
+                                  background: '#0d7a68',
+                                  width: '100%',
+                                  flex: 1,
+                                }}
+                                title={`信息流 (F): ${formatNum(feedVal)} 元`}
+                              />
+                            </div>
+                          );
+                        }
+                        const singleColor = hasSearch ? '#2563eb' : '#0d7a68';
+                        return (
+                          <div
+                            className="spend-bar-body observed"
+                            style={{ height: barHeightPct + '%', background: singleColor }}
+                          />
+                        );
+                      })()
                     ) : (
                       <div className="spend-bar-body missing" title="未采集或缺失，不作为0计算">
                         <span className="spend-missing-mark">无数据</span>

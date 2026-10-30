@@ -11,25 +11,25 @@ import type { BusinessHighlights, CostComparison, RankValue, SourceRef } from '.
  * 灰计划 #8c9ba5 (预算 / 计划 / 基准线)
  */
 export const DASHBOARD_PALETTE = {
-  actual: '#008573',
-  plan: '#8b8d98',
-  settlement: '#5b5bd6',
+  actual: '#006858',
+  plan: '#525866',
+  settlement: '#4338ca',
   investment: '#ffc53d',
   anomaly: '#e5484d',
 
   // 渠道映射
-  feed: '#008573',
-  search: '#5b5bd6',
+  feed: '#006858',
+  search: '#4338ca',
   creators: '#ffc53d',
   comments: '#e5484d',
   seo: '#12a594',
-  other: '#8b8d98',
+  other: '#525866',
 
   // 中性与结构
   bgPage: '#f9f9fb',
   cardBg: '#ffffff',
   textMain: '#1c2024',
-  textMuted: '#60646c',
+  textMuted: '#525866',
   border: '#d9d9e0',
 };
 
@@ -96,10 +96,10 @@ export function CostComparisonChart({
         const textColor = warning
           ? '#ce2c31'
           : zero
-          ? '#60646c'
+          ? '#525866'
           : isReference
           ? '#272962'
-          : '#0d3d38';
+          : '#006858';
         return (
           <div key={c.channel} className="bv-cost-row">
             <svg
@@ -115,7 +115,7 @@ export function CostComparisonChart({
               {c.low !== null && c.high !== null && (
                 <>
                   <rect x={x(c.low)} y="29" width={Math.max(3, x(c.high) - x(c.low))} height="18" rx="4" fill="#d9d9e0" />
-                  <text x={(x(c.low) + x(c.high)) / 2} y="18" textAnchor="middle" className="bv-svg-muted" fill="#60646c">
+                  <text x={(x(c.low) + x(c.high)) / 2} y="18" textAnchor="middle" className="bv-svg-muted" fill="#525866">
                     基准 {num(c.low)}–{num(c.high)}
                   </text>
                 </>
@@ -136,7 +136,7 @@ export function CostComparisonChart({
                   </text>
                 </>
               ) : (
-                <text x="224" y="67" textAnchor="middle" className="bv-svg-muted" fill="#60646c">实际值未登记</text>
+                <text x="224" y="67" textAnchor="middle" className="bv-svg-muted" fill="#525866">实际值未登记</text>
               )}
             </svg>
           </div>
@@ -389,7 +389,7 @@ export function FeedVisuals({
                 <span className="bv-ref-chip">快照 {reference.date.slice(5)}</span>
               )}
             </div>
-            <strong>{num(c.actual)}<small>元</small></strong>
+            <strong style={{ fontSize: 'clamp(16px, 4vw, 22px)', overflowWrap: 'anywhere' }}>{num(c.actual)}<small>元</small></strong>
           </article>
         ))}
         <article>
@@ -399,7 +399,7 @@ export function FeedVisuals({
               <span className="bv-ref-chip">快照 {reference.date.slice(5)}</span>
             )}
           </div>
-          <strong>{pct(activeReturnRate)}</strong>
+          <strong style={{ fontSize: 'clamp(16px, 4vw, 22px)', overflowWrap: 'anywhere' }}>{pct(activeReturnRate)}</strong>
         </article>
       </div>
 

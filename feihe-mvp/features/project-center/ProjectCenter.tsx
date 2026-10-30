@@ -123,7 +123,7 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
   if (accessFailure) return <AccessState status={accessFailure.status} message={accessFailure.message} />;
   return <div className="platform-shell">
     <header className="platform-top"><Link className="platform-brand" href="/"><b>协同</b><span>项目数据与报告协作</span></Link>
-      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} style={{ marginLeft: 8, fontSize: 12, color: 'var(--blue-11, #0d74ce)', background: 'var(--blue-3, #e6f4fe)', padding: '2px 6px', borderRadius: 4 }}>本地开发</span>}</div>
+      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} style={{ marginLeft: 8, fontSize: 12, color: '#0b5cad', background: 'var(--blue-3, #e6f4fe)', padding: '2px 6px', borderRadius: 4 }}>本地开发</span>}</div>
     </header>
     <main className="platform-main integration-center">
       <section className="integration-page-heading"><div><h1>项目中心</h1><p>查看负责的工作，或为团队建立自己的数据工作台。</p></div><div className="integration-actions">

@@ -417,7 +417,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               <div className="wipes-info-title">
                 <span>客户打款账本进度</span>
               </div>
-              <div className="wipes-info-stat">
+                <div className="wipes-info-stat" style={{ fontSize: 18, whiteSpace: 'normal', lineHeight: 1.35, wordBreak: 'break-word' }}>
                 ¥{fmtComboNum(clientTotal?.spent)} / ¥{fmtComboNum(clientTotal?.budget)}
               </div>
               <div className="wipes-info-desc">
@@ -430,7 +430,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               <div className="wipes-info-title">
                 <span>实际可消耗账本进度</span>
               </div>
-              <div className="wipes-info-stat">
+                <div className="wipes-info-stat" style={{ fontSize: 18, whiteSpace: 'normal', lineHeight: 1.35, wordBreak: 'break-word' }}>
                 ¥{fmtComboNum(usableTotal?.spent)} / ¥{fmtComboNum(usableTotal?.budget)}
               </div>
               <div className="wipes-info-desc">
@@ -531,7 +531,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             <div className="wipes-funnel-stat-grid">
               <div className="wipes-info-card">
                 <div className="wipes-info-title">阿里星河站外活跃 UV</div>
-                <div className="wipes-info-stat" style={{ color: '#008573' }}>
+                <div className="wipes-info-stat" style={{ color: '#006858' }}>
                   {fullFunnelTable?.rows?.[3]?.metricValue ? fmtComboNum(fullFunnelTable.rows[3].metricValue) : '21,085'} 人
                 </div>
                 <div className="wipes-info-desc">
@@ -558,7 +558,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               </div>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">任务单品直接购买</div>
-                <div className="wipes-info-stat" style={{ color: '#e5484d' }}>
+                <div className="wipes-info-stat" style={{ color: '#b42318' }}>
                   ¥{fullFunnelTable?.rows?.[6]?.metricValue ? fmtComboNum(fullFunnelTable.rows[6].metricValue) : '8,741.81'}
                 </div>
                 <div className="wipes-info-desc">
@@ -637,7 +637,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                   <span className="wipes-rich-tag" style={{ background: '#008573' }}>唯一出单博主</span>
                   <span>宸妈妈 (素人KOC)</span>
                 </div>
-                <div className="wipes-info-stat" style={{ color: '#008573' }}>1单 / ¥25.55</div>
+                <div className="wipes-info-stat" style={{ color: '#006858' }}>1单 / ¥25.55</div>
                 <div className="wipes-info-desc">
                   <p><strong>• 消耗支出：</strong>¥632.74 (CID投流)</p>
                   <p><strong>• 组件点击：</strong>21次 (全案最高点击)</p>
@@ -700,7 +700,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             {catRows.map((cat, i) => (
               <div key={i} className="wipes-info-card">
                 <div className="wipes-info-title">
-                  <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#ffc53d' : '#e5484d' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#fef3c7' : '#b42318', color: i === 2 ? '#7c2d12' : '#ffffff' }}>
                     {String(cat.category || '')}
                   </span>
                 </div>
@@ -859,7 +859,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">4. 最终定档合作</div>
-              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#008573' }}>116 篇</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#006858' }}>116 篇</div>
               <div className="wipes-info-desc">全案留存率 31.35% (100%履约交付)</div>
             </div>
           </div>
@@ -905,7 +905,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           <div className="wipes-rich-grid-3">
             <div className="wipes-info-card">
               <div className="wipes-info-title">三甲医院等级构成</div>
-              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#008573' }}>三甲占比 95%</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#006858' }}>三甲占比 95%</div>
               <div className="wipes-info-desc">三甲综合 55%（湘雅二院、暨大附一、浙立同德）+ 三甲妇幼儿童专科 40%（深圳儿童医院、罗湖妇幼）</div>
             </div>
             <div className="wipes-info-card">
@@ -967,7 +967,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           <div className="wipes-rich-grid-2">
             <div className="wipes-info-card">
               <div className="wipes-info-title">
-                <span className="wipes-rich-tag" style={{ background: '#e5484d' }}>典型卡审点 1</span>
+                <span className="wipes-rich-tag" style={{ background: '#b42318' }}>典型卡审点 1</span>
                 <span>疾病临床症状违规</span>
               </div>
               <div className="wipes-info-desc">
@@ -979,7 +979,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
             <div className="wipes-info-card">
               <div className="wipes-info-title">
-                <span className="wipes-rich-tag" style={{ background: '#ffc53d' }}>典型卡审点 2</span>
+                  <span className="wipes-rich-tag" style={{ background: '#fef3c7', color: '#7c2d12' }}>典型卡审点 2</span>
                 <span>绝对化/未报备认证违规</span>
               </div>
               <div className="wipes-info-desc">
@@ -1010,9 +1010,9 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
                   <tr key={i}>
                     <td>{String(r.blockerDate || '')}</td>
                     <td><strong>{String(r.creator || '')}</strong></td>
-                    <td><span className="wipes-rich-tag" style={{ background: '#e5484d' }}>{String(r.riskCategory || '')}</span></td>
+                    <td><span className="wipes-rich-tag" style={{ background: '#b42318' }}>{String(r.riskCategory || '')}</span></td>
                     <td style={{ fontSize: 12 }}>{String(r.blockerReason || '')}</td>
-                    <td style={{ fontSize: 12, color: '#008573' }}>{String(r.modifyProgress || '')}</td>
+                    <td style={{ fontSize: 12, color: '#006858' }}>{String(r.modifyProgress || '')}</td>
                     <td>{String(r.resolvedDate || '')}</td>
                     <td>{String(r.feedPriority || '')}</td>
                     <td><strong>{String(r.turnaroundHours || '')}</strong></td>
@@ -1126,7 +1126,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             {catRows.map((cat, i) => (
               <div key={i} className="wipes-info-card">
                 <div className="wipes-info-title">
-                  <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#ffc53d' : '#e5484d' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#fef3c7' : '#b42318', color: i === 2 ? '#7c2d12' : '#ffffff' }}>
                     {String(cat.category ?? '')}
                   </span>
                 </div>

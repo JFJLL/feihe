@@ -478,7 +478,7 @@ export interface HuangTianeBoardProps {
 export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeBoardProps) {
   const model = useMemo(() => extractHuangTianeData(dashboard), [dashboard]);
 
-  const { htMinDate, htMaxDate } = useMemo(() => {
+  const { htMinDate, htMaxDate, htPickerMinDate } = useMemo(() => {
     const dates = [
       ...(model.cidTotal || []),
       ...(model.brandDaily || []),
@@ -488,7 +488,8 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       .filter((d) => isValidIsoDate(d))
       .sort();
     return {
-      htMinDate: dates[0] || '2026-10-01',
+      htPickerMinDate: dates[0] || '2026-07-27',
+      htMinDate: '2026-10-01',
       htMaxDate: dates[dates.length - 1] || '2026-10-25',
     };
   }, [model.cidTotal, model.brandDaily, model.commerceDaily]);
@@ -499,7 +500,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       const f = p.get('from');
       if (f && isValidIsoDate(f)) return f;
     }
-    return '';
+    return '2026-10-01';
   });
 
   const [htTo, setHtTo] = useState<string>(() => {
@@ -527,6 +528,15 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     }
   };
 
+  const filteredBrandDaily = useMemo(() => {
+    return (model.brandDaily || []).filter((r) => {
+      const d = String(r.date || '');
+      if (htFrom && d < htFrom) return false;
+      if (htTo && d > htTo) return false;
+      return true;
+    });
+  }, [model.brandDaily, htFrom, htTo]);
+
   const filteredCidTotal = useMemo(() => {
     return (model.cidTotal || []).filter((r) => {
       const d = String(r.date || '');
@@ -535,6 +545,15 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       return true;
     });
   }, [model.cidTotal, htFrom, htTo]);
+
+  const filteredCommerceDaily = useMemo(() => {
+    return (model.commerceDaily || []).filter((r) => {
+      const d = String(r.date || '');
+      if (htFrom && d < htFrom) return false;
+      if (htTo && d > htTo) return false;
+      return true;
+    });
+  }, [model.commerceDaily, htFrom, htTo]);
   const [adsScope, setAdsScope] = useState<'brand' | 'cid' | 'commerce'>('brand');
   const [focusedChapter, setFocusedChapter] = useState<string | null>(null);
   const [creatorTableOpen, setCreatorTableOpen] = useState<boolean>(false);
@@ -555,6 +574,10 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
   };
 
   const topMetricItems: MetricStripItem[] = useMemo(() => {
+    const brandSparkline = filteredBrandDaily.map((r) => parseNum(r.spend));
+    const cidSparkline = filteredCidTotal.map((r) => parseNum(r.spend));
+    const commerceSparkline = filteredCommerceDaily.map((r) => parseNum(r.spend));
+
     return [
       {
         label: '品牌FS消耗 / 预算进度',
@@ -562,6 +585,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         hint: `预算 ${formatCurrency(model.brandBudgetVal)} / 进度 ${formatPercent(model.brandBudgetProgress, 1)}`,
         badge: '品牌FS种草线',
         category: 'brand',
+        sparkline: brandSparkline.some((v) => v !== null && v > 0) ? brandSparkline : undefined,
       },
       {
         label: '种草I/TI人群 / CPTI',
@@ -576,6 +600,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         hint: `标准投 ${formatCurrency(model.cidStandardSpend)} / 简单投 ${formatCurrency(model.cidSimpleSpend)}`,
         badge: '红猫CID引流线',
         category: 'cid',
+        sparkline: cidSparkline.some((v) => v !== null && v > 0) ? cidSparkline : undefined,
       },
       {
         label: '红猫CID成交GMV / ROI',
@@ -590,6 +615,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         hint: `统计周期：${model.commercePeriod}`,
         badge: '闭环商销成交线',
         category: 'commerce',
+        sparkline: commerceSparkline.some((v) => v !== null && v > 0) ? commerceSparkline : undefined,
       },
       {
         label: '商销成交GMV / 订单',
@@ -613,7 +639,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         category: 'creators',
       },
     ];
-  }, [model]);
+  }, [model, filteredBrandDaily, filteredCidTotal, filteredCommerceDaily]);
 
   if (section === 'overview') {
     const budgetData: ComparisonDatum[] = model.brandBudgetVal !== null && model.brandSpend !== null
@@ -706,6 +732,9 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       value: parseNum(r.spend),
       detail: `互动 ${formatNum(parseNum(r.engagements), 0)} 次 / CPE ${formatCurrency(parseNum(r.cpe))}`,
     }));
+    const heatmapGenders = model.genderAgeMatrix.genders.filter((g) => g !== '未知');
+
+
 
     // Gender x Age Heatmap Cells
     const heatmapCells: MatrixHeatmapCell[] = model.genderAgeMatrix.cells.map((c) => ({
@@ -713,7 +742,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       col: c.gender,
       value: c.spend,
       displayValue: formatCurrency(c.spend, 0),
-      subtext: `互动 ${formatNum(c.engagements, 0)}次 / CPE ${formatCurrency(c.cpe)}`,
+      subtext: `${formatNum(c.engagements, 0)}次 · CPE ${formatCurrency(c.cpe)}`,
     }));
 
     // Gender Donut
@@ -760,10 +789,10 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             <div className="ht-jumpbar-links">
               {([
                 { id: 'ht-sec-top-kpi', num: '01', label: '全域总览' },
-                { id: 'ht-sec-content-audience', num: '02', label: '内容与人群' },
-                { id: 'ht-sec-funnels', num: '03', label: '三线转化漏斗' },
-                { id: 'ht-sec-tags-keywords', num: '04', label: '标签与词包' },
-                { id: 'ht-sec-audiences-keywords', num: '05', label: '热力与达人矩阵' },
+                  { id: 'ht-sec-content-audience', num: '02', label: '内容人群' },
+                  { id: 'ht-sec-funnels', num: '03', label: '转化漏斗' },
+                  { id: 'ht-sec-tags-keywords', num: '04', label: '标签词包' },
+                  { id: 'ht-sec-audiences-keywords', num: '05', label: '热力达人' },
               ] as const).map((chap) => {
                 const isFocused = focusedChapter === chap.num;
                 return (
@@ -776,7 +805,6 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                       setFocusedChapter((prev) => (prev === chap.num ? null : chap.num));
                     }}
                   >
-                    <span className="ht-jump-num">{chap.num}</span>
                     <span>{chap.label}</span>
                   </a>
                 );
@@ -798,9 +826,9 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             <OverviewDateRangeBar
               from={htFrom}
               to={htTo}
-              minDate={htMinDate}
+              minDate={htPickerMinDate}
               maxDate={htMaxDate}
-              totalValidDays={filteredCidTotal.length}
+              totalValidDays={filteredCommerceDaily.length || 25}
               onChange={handleHtRangeChange}
             />
           </div>
@@ -810,8 +838,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <section id="ht-sec-top-kpi" className={`ht-layer ${focusedChapter === '01' ? 'ht-layer-focused' : ''}`}>
           <div className="ht-layer-header">
             <div className="ht-layer-header-left">
-              <span className="ht-chapter-num">01</span>
-              <h3 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h3>
+              <h2 className="ht-layer-title">全域三线经营总览与蛋品行业基准对标</h2>
             </div>
           </div>
 
@@ -934,8 +961,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <section id="ht-sec-funnels" className={`ht-layer ${focusedChapter === '03' ? 'ht-layer-focused' : ''}`}>
           <div className="ht-layer-header">
             <div className="ht-layer-header-left">
-              <span className="ht-chapter-num">03</span>
-              <h3 className="ht-layer-title">三条业务线 关键节点与趋势</h3>
+              <h2 className="ht-layer-title">三条业务线 关键节点与趋势</h2>
             </div>
             <span className="ht-layer-sub">三线独立核算，不跨平台拼接转化链路</span>
           </div>
@@ -1020,7 +1046,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               }
             >
               <CampaignComboChart
-                rows={model.commerceDaily}
+                  rows={filteredCommerceDaily}
                 series={commerceCartOrdersSeries}
                 xKey="date"
                 title="商销加购与订单走势"
@@ -1034,8 +1060,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <details id="ht-sec-tags-keywords" open className={`ht-layer ht-secondary-details ht-layer-details ${focusedChapter === '04' ? 'ht-layer-focused' : ''}`}>
           <summary className="ht-layer-header ht-summary-header">
             <div className="ht-layer-header-left">
-              <span className="ht-chapter-num">04</span>
-              <h3 className="ht-layer-title">内容标签、搜索词与素材表现</h3>
+                <h2 className="ht-layer-title">内容标签、搜索词与素材表现</h2>
             </div>
             <span className="ht-layer-sub">12大笔记标签、10大搜索词类与商销Top素材</span>
           </summary>
@@ -1090,8 +1115,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <section id="ht-sec-audiences-keywords" className={`ht-layer ${focusedChapter === '05' ? 'ht-layer-focused' : ''}`}>
           <div className="ht-layer-header">
             <div className="ht-layer-header-left">
-              <span className="ht-chapter-num">05</span>
-              <h3 className="ht-layer-title">受众人口学 24 维热力矩阵与达人/KOS明细</h3>
+                <h2 className="ht-layer-title">受众人口学 24 维热力矩阵与达人/KOS明细</h2>
             </div>
           </div>
 
@@ -1103,7 +1127,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             >
               <MatrixHeatmapChart
                 rows={model.genderAgeMatrix.ageGroups}
-                cols={model.genderAgeMatrix.genders}
+                cols={heatmapGenders}
                 cells={heatmapCells}
                 unit="元"
                 rowHeaderTitle="年龄 / 性别"
@@ -1133,8 +1157,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
         <details id="ht-sec-creators-detail" open className="ht-layer ht-secondary-details ht-layer-details">
           <summary className="ht-layer-header ht-summary-header">
             <div className="ht-layer-header-left">
-              <span className="ht-chapter-num">05-附</span>
-              <h3 className="ht-layer-title">达人执行、内容方向与KOS明细</h3>
+                <h2 className="ht-layer-title">达人执行、内容方向与KOS明细</h2>
             </div>
             <span className="ht-layer-sub">31位达人选号漏斗与65篇KOS发布底表</span>
           </summary>

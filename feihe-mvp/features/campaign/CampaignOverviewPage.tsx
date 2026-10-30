@@ -66,6 +66,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return "default";
   });
 
+  const [selectedDailyDatasetId, setSelectedDailyDatasetId] = useState<string>("");
+
   const findTable = useCallback((id: string) => tables.find((t) => t.id === id), [tables]);
   const findKpi = useCallback((id: string) => kpis.find((k) => k.id === id), [kpis]);
 
@@ -93,11 +95,15 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   }, [dailyDatasets]);
 
   const activeDailyDataset = useMemo(() => {
+    if (selectedDailyDatasetId) {
+      const match = dailyDatasets.find((d) => d.id === selectedDailyDatasetId);
+      if (match) return match;
+    }
     if (projectId === "kailas") return kailasDailyDataset;
     if (projectId === "meiling") return meilingDailyDataset;
     if (projectId === "winner-wipes") return wipesDailyDataset;
     return dailyDatasets[0];
-  }, [projectId, kailasDailyDataset, meilingDailyDataset, wipesDailyDataset, dailyDatasets]);
+  }, [selectedDailyDatasetId, projectId, kailasDailyDataset, meilingDailyDataset, wipesDailyDataset, dailyDatasets]);
 
   const { overviewMinDate, overviewMaxDate } = useMemo(() => {
     const range = computeDateRange(activeDailyDataset?.rows);
@@ -206,19 +212,41 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return null;
   }, [projectId, kailasDailyInfo, meilingDailyInfo, wipesDailyInfo]);
 
+  const rangeSpend = useMemo(() => {
+    if (!activeDailyInfo?.rows) return null;
+    const vals = activeDailyInfo.rows.map((r) => safeNum(r.spend ?? (r as any).spend_total));
+    const validVals = vals.filter((v): v is number => v !== null);
+    if (!validVals.length) return null;
+    return strictSum(validVals);
+  }, [activeDailyInfo]);
+
+  const dailySparkline = useMemo(() => {
+    if (!activeDailyInfo?.rows) return [];
+    return activeDailyInfo.rows.map((r) => safeNum(r.spend ?? (r as any).spend_total));
+  }, [activeDailyInfo]);
+
+  const observedDaysCount = activeDailyInfo?.rows?.length ?? 0;
+  const rangePeriodNote = overviewFrom && overviewTo
+    ? `${overviewFrom.slice(5)} ~ ${overviewTo.slice(5)}（${observedDaysCount}个有效日）`
+    : "";
+
   const kailasDailyMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string; badge?: string; status?: "default" | "accent" | "warning" | "danger" | "success"; sparkline?: (number | null)[] }> => {
     const totalPlanned = findKpi("kailas-budget-total");
     const totalSpend = findKpi("kailas-spend-total");
     const progress = findKpi("kailas-budget-progress");
     const remaining = findKpi("kailas-budget-remaining");
 
+    const spendNote = rangeSpend !== null && rangePeriodNote
+      ? `区间日流水累计 ¥${Math.round(rangeSpend).toLocaleString()} / ${rangePeriodNote}`
+      : totalSpend?.note;
+
     return [
       { label: totalPlanned?.label || "规划总预算", value: totalPlanned?.value ?? null, unit: totalPlanned?.unit || "元", note: totalPlanned?.period, badge: "现金口径", status: "default" },
-      { label: totalSpend?.label || "累计总消耗", value: totalSpend?.value ?? null, unit: totalSpend?.unit || "元", note: totalSpend?.note, badge: "累计快照", status: "accent" },
+      { label: totalSpend?.label || "累计总消耗", value: totalSpend?.value ?? null, unit: totalSpend?.unit || "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline },
       { label: progress?.label || "预算执行进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.note, badge: Number(progress?.value) > 100 ? "超支预警" : "执行中", status: Number(progress?.value) > 100 ? "danger" : "accent" },
       { label: remaining?.label || "预算差额", value: remaining?.value ?? null, unit: remaining?.unit || "元", note: remaining?.note, badge: Number(remaining?.value) < 0 ? "超额支出" : "剩余可用", status: Number(remaining?.value) < 0 ? "warning" : "default" },
     ];
-  }, [findKpi]);
+  }, [findKpi, rangeSpend, rangePeriodNote, dailySparkline]);
 
   const kailasQ3Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
     const q3SpendKpi = findKpi("kailas-unlocked-kpi-budget");
@@ -301,13 +329,17 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     const nonSummaryRows = (meilingFourLinesTable?.rows || []).filter((r) => !isSummaryRow(String(r.name || "")));
     const fourLinesGmv = strictSum(nonSummaryRows.map((r) => safeNum(r.gmv)));
 
+    const spendNote = rangeSpend !== null && rangePeriodNote
+      ? `区间日流水累计 ¥${Math.round(rangeSpend).toLocaleString()} / ${rangePeriodNote}`
+      : spendKpi?.period;
+
     return [
       { label: "双11调整后总预算", value: budgetVal, unit: "元", note: "10.18快照调整预算口径", badge: "调整预算", status: "default" },
-      { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendKpi?.period, badge: "累计快照", status: "accent" },
+      { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline },
       { label: progressKpi?.label || "大促消耗进度", value: progressKpi?.value !== null && progressKpi?.value !== undefined ? String(progressKpi.value) + "%" : null, note: "截至10.18累计", badge: "推进中", status: "warning" },
       { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value !== null && publishedKpi?.value !== undefined ? `${publishedKpi.label}: ${publishedKpi.value}${publishedKpi.unit || "篇"}` : undefined, badge: "四线独立归因", status: "success" },
     ];
-  }, [meilingExecutionTable, meilingFourLinesTable, findKpi]);
+  }, [meilingExecutionTable, meilingFourLinesTable, findKpi, rangeSpend, rangePeriodNote, dailySparkline]);
 
   const meiling618Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
     const gmvKpi = findKpi("meiling-unlocked-kpi-618-gmv");
@@ -391,13 +423,17 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     const cpuvT2 = findKpi("wipes-cum-cpuv-t2");
     const newCust = findKpi("wipes-cum-new-cust");
 
+    const spendNote = rangeSpend !== null && rangePeriodNote
+      ? `区间日流水累计 ¥${Math.round(rangeSpend).toLocaleString()} / ${rangePeriodNote}`
+      : cumSpend?.period;
+
     return [
-      { label: cumSpend?.label || "日常种草累计消耗", value: cumSpend?.value ?? null, unit: cumSpend?.unit || "元", note: cumSpend?.period, badge: "累计快照", status: "accent" },
+      { label: cumSpend?.label || "日常种草累计消耗", value: cumSpend?.value ?? null, unit: cumSpend?.unit || "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline },
       { label: progress?.label || "日常种草进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.target !== null && progress?.target !== undefined ? "目标: " + String(progress.target) + "%" : undefined, badge: "节奏跟踪", status: "default" },
       { label: cpuvT2?.label || "CPUV(T-2)", value: cpuvT2?.value !== null && cpuvT2?.value !== undefined ? "¥" + String(cpuvT2.value) : null, note: cpuvT2?.period, badge: "访客成本", status: "success" },
       { label: newCust?.label || "新客占比", value: newCust?.value !== null && newCust?.value !== undefined ? String(newCust.value) + "%" : null, note: newCust?.period, badge: "拉新健康度", status: "accent" },
     ];
-  }, [findKpi]);
+  }, [findKpi, rangeSpend, rangePeriodNote, dailySparkline]);
 
   const wipesSheetMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
     const exposure = findKpi("wipes-online-daily-exposure");
@@ -456,23 +492,19 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   }, [kpis]);
 
   const activeHeaderPeriod = useMemo(() => {
+    let base = reportPeriod;
     if (projectId === "meiling") {
-      if (activeSnapshot === "double11-1018") return meilingExecutionTable?.period || "双11大促执行期（截至10月18日累计）";
-      if (activeSnapshot === "history-618") return meiling618KpiTable?.period || "2026年618大促（已结案）";
+      base = meilingExecutionTable?.period || "双11大促执行期（截至10月18日累计）";
+    } else if (projectId === "kailas") {
+      base = kailasBudgetLinesTable?.period || "10.16–10.18 日报";
+    } else if (projectId === "winner-wipes") {
+      base = wipesBudgetAllocTable?.period || "10.19 日报";
     }
-    if (projectId === "kailas") {
-      if (activeSnapshot === "daily-1018") return kailasBudgetLinesTable?.period || "10.16–10.18 日报";
-      if (activeSnapshot === "q3-summary") return kailasQ3BudgetTable?.period || "7.16-9.27 Q3";
+    if (overviewFrom && overviewTo) {
+      return `${base}（选定区间: ${overviewFrom} ~ ${overviewTo}）`;
     }
-    if (projectId === "winner-wipes") {
-      if (activeSnapshot === "daily-1019") return wipesBudgetAllocTable?.period || "10.19 日报";
-      if (activeSnapshot === "kpi-sheet") {
-        const t = findTable("wipes-kpi-comparison-table");
-        return t?.period || "飞书底表快照";
-      }
-    }
-    return reportPeriod;
-  }, [projectId, activeSnapshot, meilingExecutionTable, meiling618KpiTable, kailasBudgetLinesTable, kailasQ3BudgetTable, wipesBudgetAllocTable, findTable, reportPeriod]);
+    return base;
+  }, [projectId, meilingExecutionTable, kailasBudgetLinesTable, wipesBudgetAllocTable, reportPeriod, overviewFrom, overviewTo]);
 
   // 严格按当前图表关联提取底层明细表，职责分离，不全量平铺
   const activeDetailTables = useMemo((): CampaignTable[] => {
@@ -494,6 +526,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   }, [projectId, activeSnapshot, kailasBudgetLinesTable, kailasFsPlacementsTable, kailasQ3BudgetTable, meilingExecutionTable, meilingFourLinesTable, meiling618KpiTable, wipesBudgetAllocTable, wipesPlacementsTable, findTable, tables]);
 
   const dynamicInsight = useMemo(() => {
+    const rangeInsight = rangeSpend !== null && rangePeriodNote
+      ? `选定日流水区间(${rangePeriodNote})累计消耗 ¥${Math.round(rangeSpend).toLocaleString()}元。`
+      : "";
+
     if (projectId === "kailas") {
       if (activeSnapshot === "daily-1018") {
         const overRuns = kailasBudgetLinesComparison.filter(
@@ -510,7 +546,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         if (lowestCpuv?.cpuv !== null && lowestCpuv?.cpuv !== undefined) {
           parts.push(`版位中${lowestCpuv.name}转化成本最低(${lowestCpuv.cpuv}元/UV)`);
         }
-        return `10.16–10.18 日报现金口径：${parts.join("，")}。FS版位排除汇总，UGC版位独立核算。`;
+        return `10.16–10.18 日报现金口径：${parts.join("，")}。FS版位排除汇总，UGC版位独立核算。${rangeInsight}`;
       }
       const q3Spend = findKpi("kailas-unlocked-kpi-budget");
       return `Q3双周会小结口径 (含返点)：规划预算 ${q3Spend?.target?.toLocaleString() || "—"}元，实际消耗 ${q3Spend?.value?.toLocaleString() || "—"}元。`;
@@ -520,7 +556,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       if (activeSnapshot === "double11-1018") {
         const validGmvRows = meilingFourLinesData.filter((r) => r.gmv !== null);
         const bestGmv = validGmvRows.length > 0 ? [...validGmvRows].sort((a, b) => (b.gmv || 0) - (a.gmv || 0))[0] : null;
-        return `双11大促执行（截至10月18日累计）：各渠道按调整预算执行；四线转化中${bestGmv ? `${bestGmv.name}产出最高(${bestGmv.gmv?.toLocaleString()}元，ROI: ${bestGmv.roi ?? "—"})` : "各链路独立核算"}。`;
+        return `双11大促执行（截至10月18日累计）：各渠道按调整预算执行；四线转化中${bestGmv ? `${bestGmv.name}产出最高(${bestGmv.gmv?.toLocaleString()}元，ROI: ${bestGmv.roi ?? "—"})` : "各链路独立核算"}。${rangeInsight}`;
       }
       const roi618 = findKpi("meiling-unlocked-kpi-618-roi");
       return `618大促已结案归档：全案ROI为 ${roi618?.value || "—"}（目标 ${roi618?.target || "—"}），供大促策略历史参考。`;
@@ -530,7 +566,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       if (activeSnapshot === "daily-1019") {
         const validCpuv = wipesPlacementsData.filter((r) => r.cpuv !== null);
         const bestPlacement = validCpuv.length > 0 ? [...validCpuv].sort((a, b) => (a.cpuv || 0) - (b.cpuv || 0))[0] : null;
-        return `稳健酒精湿巾10.19日报口径：${bestPlacement ? `${bestPlacement.name}成本最低(${bestPlacement.cpuv}元/UV)` : "各版位分化核算"}。视频真实消耗入账。`;
+        return `稳健酒精湿巾10.19日报口径：${bestPlacement ? `${bestPlacement.name}成本最低(${bestPlacement.cpuv}元/UV)` : "各版位分化核算"}。${rangeInsight}视频真实消耗入账。`;
       }
       const validTargets = wipesDailyTargetBullets.filter((d) => d.actual !== null && d.target !== null);
       const unknownCount = wipesDailyTargetBullets.length - validTargets.length;
@@ -551,8 +587,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       return `飞书底表快照考核（未注明确切截止日期）：${statusDesc}，详见标靶图。`;
     }
 
-    return `当前项目业务周期: ${activeHeaderPeriod}。核心数据基于最新入账记录动态呈现，缺值保持留白。`;
-  }, [projectId, activeSnapshot, kailasBudgetLinesComparison, kailasFsPlacementsData, meilingFourLinesData, wipesPlacementsData, wipesDailyTargetBullets, findKpi, activeHeaderPeriod]);
+    return `当前项目业务周期: ${activeHeaderPeriod}。核心数据基于最新入账记录动态呈现，缺值保持留白。${rangeInsight}`;
+  }, [projectId, activeSnapshot, kailasBudgetLinesComparison, kailasFsPlacementsData, meilingFourLinesData, wipesPlacementsData, wipesDailyTargetBullets, findKpi, activeHeaderPeriod, rangeSpend, rangePeriodNote]);
 
   const activeMetrics = useMemo(() => {
     if (projectId === "kailas") return activeSnapshot === "daily-1018" ? kailasDailyMetrics : kailasQ3Metrics;
@@ -583,7 +619,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 className="ca-jump-pill"
                 onClick={(e) => handleAnchorClick(e, "ca-sec-kpi")}
               >
-                <span className="ca-jump-num">01</span>
                 <span>核心指标</span>
               </a>
               <a
@@ -591,7 +626,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 className="ca-jump-pill"
                 onClick={(e) => handleAnchorClick(e, "ca-sec-charts")}
               >
-                <span className="ca-jump-num">02</span>
                 <span>预算与版位</span>
               </a>
               <a
@@ -599,7 +633,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 className="ca-jump-pill"
                 onClick={(e) => handleAnchorClick(e, "ca-sec-enrichment")}
               >
-                <span className="ca-jump-num">03</span>
                 <span>深度拆解</span>
               </a>
               {activeDetailTables.length > 0 && (
@@ -608,7 +641,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                   className="ca-jump-pill"
                   onClick={(e) => handleAnchorClick(e, "ca-sec-details")}
                 >
-                  <span className="ca-jump-num">04</span>
                   <span>底层明细</span>
                 </a>
               )}
@@ -639,7 +671,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             <div className="ca-insight-header">
               <div className="ca-insight-badge-group">
                 <span className="ca-insight-tag">核心观察</span>
-                <h3 className="ca-insight-title">战役分析与核心观察</h3>
+                <h2 className="ca-insight-title">战役分析与核心观察</h2>
               </div>
             </div>
             <p className="ca-insight-text">{dynamicInsight}</p>
@@ -667,47 +699,11 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
           <div className="ca-chapter-title-group">
             <span className="ca-chapter-badge">01</span>
             <div className="ca-chapter-heading">
-              <h3 className="ca-chapter-title">核心预算执行与版位效率大盘</h3>
+              <h2 className="ca-chapter-title">核心预算执行与版位效率大盘</h2>
               <span className="ca-chapter-desc">核心渠道预算达成、版位投放效率与分日流水宏观大盘</span>
             </div>
           </div>
           <div className="ca-chapter-meta">
-            {projectId === "kailas" && (
-              <div className="ca-view-switch" role="group" aria-label="数据视角切换">
-                <button
-                  type="button"
-                  className={`ca-view-switch-btn ${activeSnapshot === "daily-1018" ? "active" : ""}`}
-                  onClick={() => setActiveSnapshot("daily-1018")}
-                >
-                  当前战役大盘
-                </button>
-                <button
-                  type="button"
-                  className={`ca-view-switch-btn ${activeSnapshot === "q3-summary" ? "active" : ""}`}
-                  onClick={() => setActiveSnapshot("q3-summary")}
-                >
-                  Q3阶段复盘
-                </button>
-              </div>
-            )}
-            {projectId === "meiling" && (
-              <div className="ca-view-switch" role="group" aria-label="数据视角切换">
-                <button
-                  type="button"
-                  className={`ca-view-switch-btn ${activeSnapshot === "double11-1018" ? "active" : ""}`}
-                  onClick={() => setActiveSnapshot("double11-1018")}
-                >
-                  双11大促执行
-                </button>
-                <button
-                  type="button"
-                  className={`ca-view-switch-btn ${activeSnapshot === "history-618" ? "active" : ""}`}
-                  onClick={() => setActiveSnapshot("history-618")}
-                >
-                  618历史复盘
-                </button>
-              </div>
-            )}
             <span className="ca-chapter-period-tag">统计周期：{activeHeaderPeriod}</span>
           </div>
         </div>
@@ -757,8 +753,36 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             {kailasDailyInfo && (
                 <ChartPanel
-                  title={`${kailasDailyDataset?.label || "FUGA大坡王10月投放日流水走势"} (独立日流水)`}
+                  title={`${activeDailyDataset?.label || "FUGA大坡王10月投放日流水走势"} (独立日流水)`}
                   subtitle={`独立日流水 / ${kailasDailyInfo.rangeText} / 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                  actions={
+                    dailyDatasets.length > 1 ? (
+                      <div className="ca-dataset-mini-switcher" role="group" aria-label="切换分日数据集" style={{ display: "inline-flex", gap: 4 }}>
+                        {dailyDatasets.map((ds) => {
+                          const isCurrent = activeDailyDataset?.id === ds.id;
+                          return (
+                            <button
+                              key={ds.id}
+                              type="button"
+                              onClick={() => setSelectedDailyDatasetId(ds.id)}
+                              style={{
+                                fontSize: 11,
+                                padding: "2px 7px",
+                                borderRadius: 4,
+                                border: isCurrent ? "1px solid var(--teal-11, #008573)" : "1px solid #d9d9e0",
+                                background: isCurrent ? "var(--teal-3, #e0f8f3)" : "#ffffff",
+                                color: isCurrent ? "var(--teal-11, #008573)" : "#60646c",
+                                fontWeight: isCurrent ? 600 : 400,
+                                cursor: "pointer",
+                              }}
+                            >
+                              {ds.label.split(/[（(]/)[0]}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : undefined
+                  }
                 >
                   <CampaignComboChart
                     rows={kailasDailyInfo.rows}
@@ -884,8 +908,36 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             {meilingDailyInfo && (
                 <ChartPanel
-                  title={`${meilingDailyDataset?.label || "天猫种草分日流水走势"} (独立日流水)`}
+                  title={`${activeDailyDataset?.label || "天猫种草分日流水走势"} (独立日流水)`}
                   subtitle={`独立日流水 / ${meilingDailyInfo.rangeText} / 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                  actions={
+                    dailyDatasets.length > 1 ? (
+                      <div className="ca-dataset-mini-switcher" role="group" aria-label="切换分日数据集" style={{ display: "inline-flex", gap: 4 }}>
+                        {dailyDatasets.map((ds) => {
+                          const isCurrent = activeDailyDataset?.id === ds.id;
+                          return (
+                            <button
+                              key={ds.id}
+                              type="button"
+                              onClick={() => setSelectedDailyDatasetId(ds.id)}
+                              style={{
+                                fontSize: 11,
+                                padding: "2px 7px",
+                                borderRadius: 4,
+                                border: isCurrent ? "1px solid var(--teal-11, #008573)" : "1px solid #d9d9e0",
+                                background: isCurrent ? "var(--teal-3, #e0f8f3)" : "#ffffff",
+                                color: isCurrent ? "var(--teal-11, #008573)" : "#60646c",
+                                fontWeight: isCurrent ? 600 : 400,
+                                cursor: "pointer",
+                              }}
+                            >
+                              {ds.label.split(/[（(]/)[0]}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : undefined
+                  }
                 >
                   <CampaignComboChart
                     rows={meilingDailyInfo.rows}
@@ -958,8 +1010,36 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
             {wipesDailyInfo && (
                 <ChartPanel
-                  title={`${wipesDailyDataset?.label || "玉米湿巾投放日趋势"} (独立日流水)`}
+                  title={`${activeDailyDataset?.label || "玉米湿巾投放日趋势"} (独立日流水)`}
                   subtitle={`独立日流水 / ${wipesDailyInfo.rangeText} / 左轴 日消耗 (元) vs 右轴 展现量 (次)`}
+                  actions={
+                    dailyDatasets.length > 1 ? (
+                      <div className="ca-dataset-mini-switcher" role="group" aria-label="切换分日数据集" style={{ display: "inline-flex", gap: 4 }}>
+                        {dailyDatasets.map((ds) => {
+                          const isCurrent = activeDailyDataset?.id === ds.id;
+                          return (
+                            <button
+                              key={ds.id}
+                              type="button"
+                              onClick={() => setSelectedDailyDatasetId(ds.id)}
+                              style={{
+                                fontSize: 11,
+                                padding: "2px 7px",
+                                borderRadius: 4,
+                                border: isCurrent ? "1px solid var(--teal-11, #008573)" : "1px solid #d9d9e0",
+                                background: isCurrent ? "var(--teal-3, #e0f8f3)" : "#ffffff",
+                                color: isCurrent ? "var(--teal-11, #008573)" : "#60646c",
+                                fontWeight: isCurrent ? 600 : 400,
+                                cursor: "pointer",
+                              }}
+                            >
+                              {ds.label.split(/[（(]/)[0]}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : undefined
+                  }
                 >
                   <CampaignComboChart
                     rows={wipesDailyInfo.rows}

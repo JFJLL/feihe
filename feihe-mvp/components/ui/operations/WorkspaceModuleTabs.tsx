@@ -8,6 +8,34 @@ export type ModuleTab = {
   icon: string;
 };
 
+function renderTabIcon(t: ModuleTab) {
+  if (t.id === 'overview' || t.icon === '📊') {
+    return (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <line x1="18" y1="20" x2="18" y2="10" />
+        <line x1="12" y1="20" x2="12" y2="4" />
+        <line x1="6" y1="20" x2="6" y2="14" />
+      </svg>
+    );
+  }
+  if (t.id === 'daily' || t.icon === '📅') {
+    return (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+      </svg>
+    );
+  }
+  if (!t.icon) return null;
+  return (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="3" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function WorkspaceModuleTabs({
   tabs,
   activeTab,
@@ -106,7 +134,7 @@ export function WorkspaceModuleTabs({
             }}
             onKeyDown={(e) => handleKeyDown(e, idx)}
           >
-            <span className="ops-module-tab-icon" aria-hidden="true">{t.icon}</span>
+            <span className="ops-module-tab-icon" aria-hidden="true">{renderTabIcon(t)}</span>
             <div className="ops-module-tab-body">
               <div className="ops-module-tab-title">
                 <strong>{t.title}</strong>

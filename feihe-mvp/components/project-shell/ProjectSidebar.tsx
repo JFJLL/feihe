@@ -123,7 +123,7 @@ export function ProjectSidebar({
         <i className={connectionStatus.ok ? 'ok-dot' : 'err-dot'} /> {connectionStatus.text}
         <br />
         <small>
-          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')}{(isDevLocal || workspace?.metadata?.isDevLocal) && <span style={{ marginLeft: 6, fontSize: 12, color: 'var(--blue-11, #0d74ce)', background: 'var(--blue-3, #e6f4fe)', padding: '1px 6px', borderRadius: 4 }}>本地开发</span>} <span style={{ margin: '0 4px', opacity: 0.35 }}>/</span>{' '}
+          {workspace?.metadata?.currentUser?.displayName || (signedIn ? userName : '身份待验证')}{(isDevLocal || workspace?.metadata?.isDevLocal) && <span style={{ marginLeft: 6, fontSize: 12, color: '#0b5cad', background: 'var(--blue-3, #e6f4fe)', padding: '1px 6px', borderRadius: 4 }}>本地开发</span>} <span style={{ margin: '0 4px', opacity: 0.35 }}>/</span>{' '}
           {currentProject?.updatedAt ? cnTime(currentProject.updatedAt) : '就绪'}
         </small>
       </div>

@@ -53,11 +53,9 @@
   min-height: 34px;
   box-sizing: border-box;
   padding: 6px 10px;
-  background: rgba(249, 249, 251, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border:0.5px solid var(--ca-combo-border);
-  border-radius: 8px;
+  background: #f4f6f8;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 6px;
   font-size: 12px;
   margin-bottom: 8px;
   flex-wrap: wrap;
@@ -67,8 +65,9 @@
 .ca-combo-readout-main {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px 12px;
   flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .ca-combo-readout-date {
