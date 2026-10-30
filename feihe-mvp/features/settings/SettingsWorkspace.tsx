@@ -152,8 +152,9 @@ export function SettingsWorkspace({
   return (
     <div className="stack ops-workspace reference-workspace settings-workspace settings-workspace-stack" data-workspace-ui="v2">
       <PageHeader variant="light" title="项目设置">
-        <SettingsSubNav activeTab={activeTab} />
+        <SettingsSubNav activeTab={activeTab} mode="primary" />
       </PageHeader>
+      <SettingsSubNav activeTab={activeTab} mode="aux" />
 
       {(visited.has('profile') || visited.has('members')) && (
         <div

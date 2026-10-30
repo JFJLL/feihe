@@ -14,8 +14,13 @@
 .day-navigator-controls {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: transparent;
+  gap: 2px;
+  height: 36px;
+  padding: 2px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   box-sizing: border-box;
 }
 
@@ -24,50 +29,50 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  height: 36px;
-  min-height: 36px;
+  height: 30px;
+  min-height: 30px;
   padding: 0 10px;
   box-sizing: border-box;
-  background: #ffffff;
+  background: transparent;
   color: #1c2024;
-  border: 0.5px solid #d9d9e0;
+  border: none !important;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   flex-shrink: 0;
   cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 .day-nav-step-btn:hover:not(:disabled) {
-  background: #f0f0f3;
-  border-color: #60646c;
+  background: #f1f5f9;
+  color: #1c2024;
 }
 
 .day-nav-step-btn:focus-visible {
-  outline: 2px solid #008573;
+  outline: 2px solid #0d6e52;
   outline-offset: 1px;
 }
 
 .day-nav-step-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-  background: #f9f9fb;
-  border-color: #e8e8ec;
+  background: transparent;
   color: #8d8d95;
 }
 
 .day-nav-chevron {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
   display: inline-block;
 }
 
 .day-nav-custom-picker {
   width: auto;
-  min-width: 130px;
-  max-width: 150px;
+  min-width: 0;
+  flex: 0 0 auto;
 }
 
 .day-nav-custom-picker .custom-date-trigger-wrap {
@@ -75,30 +80,38 @@
 }
 
 .day-nav-custom-picker .custom-date-input-field {
-  height: 36px;
-  min-height: 36px;
-  min-width: 0;
-  width: 100%;
-  padding: 4px 32px 4px 10px !important;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1c2024;
-  background: #ffffff;
-  border: 0.5px solid #d9d9e0;
-  border-radius: 6px;
-  box-sizing: border-box;
+  height: 30px !important;
+  min-height: 30px !important;
+  min-width: 0 !important;
+  width: 132px !important;
+  border: none !important;
+  border-left: 1px solid #e2e8f0 !important;
+  border-right: 1px solid #e2e8f0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 26px 0 10px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #1c2024 !important;
+  font-variant-numeric: tabular-nums !important;
+  box-sizing: border-box !important;
 }
 
 .day-nav-custom-picker .custom-date-icon-btn {
-  right: 6px;
-  width: 22px;
-  height: 22px;
+  right: 5px !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
   color: #60646c;
 }
 
 .day-nav-custom-picker .custom-date-svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
 }
 
 .day-nav-latest-btn {
@@ -111,22 +124,25 @@
   padding: 0 12px;
   box-sizing: border-box;
   background: #ffffff;
-  color: #008573;
-  border: 0.5px solid #008573;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  color: #0d6e52;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
 .day-nav-latest-btn:hover:not(:disabled) {
   background: #e0f8f3;
+  border-color: #0d6e52;
 }
 
 .day-nav-latest-btn:focus-visible {
-  outline: 2px solid #008573;
+  outline: 2px solid #0d6e52;
   outline-offset: 1px;
 }
 
@@ -170,9 +186,9 @@
   }
 
   .day-nav-step-btn {
-    min-width: 36px !important;
-    width: 36px !important;
-    height: 36px !important;
+    min-width: 32px !important;
+    width: 32px !important;
+    height: 30px !important;
     padding: 0 !important;
     justify-content: center !important;
     flex-shrink: 0 !important;
@@ -193,7 +209,7 @@
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    font-size: 14px !important;
+    font-size: 13px !important;
     white-space: nowrap !important;
     font-variant-numeric: tabular-nums !important;
   }

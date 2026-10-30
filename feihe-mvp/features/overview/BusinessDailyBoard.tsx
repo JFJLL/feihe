@@ -1218,38 +1218,40 @@ export function BusinessDailyBoard({
                       本月
                     </button>
                   </div>
-                  <div className="bd-filter-item">
-                    <span className="bd-filter-label">从</span>
-                    <CustomDatePicker
-                      aria-label="统计开始"
-                      value={from || (displayDay ? displayDay.slice(0, 7) + '-01' : '')}
-                      max={to && isValidIsoDate(to) ? to : undefined}
-                      onChange={e => {
-                        const val = e.target.value;
-                        if (to && isValidIsoDate(to) && val > to) {
-                          setTo(val);
-                        }
-                        setFrom(val);
-                      }}
-                    />
-                  </div>
-                  <div className="bd-filter-item">
-                    <span className="bd-filter-label">至</span>
-                    <CustomDatePicker
-                      aria-label="统计结束"
-                      value={to || displayDay}
-                      min={from && isValidIsoDate(from) ? from : undefined}
-                      onChange={e => {
-                        const val = e.target.value;
-                        if (from && isValidIsoDate(from) && val < from) {
+                  <div className="bd-date-range-capsule">
+                    <div className="bd-filter-item">
+                      <span className="bd-filter-label">从</span>
+                      <CustomDatePicker
+                        aria-label="统计开始"
+                        value={from || (displayDay ? displayDay.slice(0, 7) + '-01' : '')}
+                        max={to && isValidIsoDate(to) ? to : undefined}
+                        onChange={e => {
+                          const val = e.target.value;
+                          if (to && isValidIsoDate(to) && val > to) {
+                            setTo(val);
+                          }
                           setFrom(val);
-                        }
-                        setTo(val);
-                        setDay(val);
-                      }}
-                    />
+                        }}
+                      />
+                    </div>
+                    <div className="bd-filter-item bd-filter-item-to">
+                      <span className="bd-filter-label">至</span>
+                      <CustomDatePicker
+                        aria-label="统计结束"
+                        value={to || displayDay}
+                        min={from && isValidIsoDate(from) ? from : undefined}
+                        onChange={e => {
+                          const val = e.target.value;
+                          if (from && isValidIsoDate(from) && val < from) {
+                            setFrom(val);
+                          }
+                          setTo(val);
+                          setDay(val);
+                        }}
+                      />
+                    </div>
+                    <span className="bd-range-days-chip">共 {view?.series?.length || 0} 天</span>
                   </div>
-                  <span className="bd-range-days-chip">共 {view?.series?.length || 0} 天</span>
                 </>
               ) : (
                 <>

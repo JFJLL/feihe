@@ -134,23 +134,35 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
       {/* Portfolio KPI Strip */}
       <section className="portfolio-kpi-strip" aria-label="项目组合概览">
         <div className="portfolio-kpi-card">
-          <span className="portfolio-kpi-label">授权项目总数</span>
+          <div className="portfolio-kpi-head">
+            <span className="portfolio-kpi-label">授权项目总数</span>
+            <span className="portfolio-kpi-badge">总览</span>
+          </div>
           <strong className="portfolio-kpi-val">{kpiStats.total}</strong>
           <small className="portfolio-kpi-hint">涵盖全部可见战役与分析看板</small>
         </div>
         <div className="portfolio-kpi-card">
-          <span className="portfolio-kpi-label">进行中项目</span>
-          <strong className="portfolio-kpi-val active-val">{kpiStats.active}</strong>
+          <div className="portfolio-kpi-head">
+            <span className="portfolio-kpi-label">进行中项目</span>
+            <span className="portfolio-kpi-badge">进行中</span>
+          </div>
+          <strong className="portfolio-kpi-val">{kpiStats.active}</strong>
           <small className="portfolio-kpi-hint">日常持续追踪与数据同步</small>
         </div>
         <div className="portfolio-kpi-card">
-          <span className="portfolio-kpi-label">战役复盘项目</span>
-          <strong className="portfolio-kpi-val campaign-val">{kpiStats.campaign}</strong>
+          <div className="portfolio-kpi-head">
+            <span className="portfolio-kpi-label">战役复盘项目</span>
+            <span className="portfolio-kpi-badge">战役复盘</span>
+          </div>
+          <strong className="portfolio-kpi-val">{kpiStats.campaign}</strong>
           <small className="portfolio-kpi-hint">重点战役与多源归因评估</small>
         </div>
         <div className="portfolio-kpi-card">
-          <span className="portfolio-kpi-label">已配置数据源</span>
-          <strong className="portfolio-kpi-val source-val">{kpiStats.connected}</strong>
+          <div className="portfolio-kpi-head">
+            <span className="portfolio-kpi-label">已配置数据源</span>
+            <span className="portfolio-kpi-badge">已配置</span>
+          </div>
+          <strong className="portfolio-kpi-val">{kpiStats.connected}</strong>
           <small className="portfolio-kpi-hint">已绑定数据源配置</small>
         </div>
       </section>

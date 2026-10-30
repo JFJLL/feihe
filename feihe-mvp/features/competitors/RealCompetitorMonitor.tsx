@@ -268,21 +268,30 @@ export function RealCompetitorMonitor({
 
       <div className="comp-metric-grid">
         <div className="comp-card">
-          <div className="comp-card-label">总入库监测样本</div>
+          <div className="comp-card-head">
+            <span className="comp-card-label">总入库监测样本</span>
+            <span className="comp-card-badge">样本库</span>
+          </div>
           <div className="comp-card-val">{summary?.totalNotes ?? 0} <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>篇</span></div>
           <div className="comp-card-sub">
             上游评估总数约 {summary?.upstreamTotalCount ? summary.upstreamTotalCount.toLocaleString() : '32,000+'} 条 / 当前为经验证抽样
           </div>
         </div>
         <div className="comp-card">
-          <div className="comp-card-label">累计互动量 (转评赞藏)</div>
+          <div className="comp-card-head">
+            <span className="comp-card-label">累计互动量 (转评赞藏)</span>
+            <span className="comp-card-badge">互动量</span>
+          </div>
           <div className="comp-card-val">{summary?.totalInteractions ?? 0} <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>次</span></div>
           <div className="comp-card-sub">
             来自真实采集字段统计 / 无广告金额别称
           </div>
         </div>
         <div className="comp-card">
-          <div className="comp-card-label">商业内容占比</div>
+          <div className="comp-card-head">
+            <span className="comp-card-label">商业内容占比</span>
+            <span className="comp-card-badge">商业占比</span>
+          </div>
           <div className="comp-card-val">
             {summary?.commercialRatio ? summary.commercialRatio.toFixed(1) + '%' : '0.0%'}
           </div>
@@ -291,8 +300,11 @@ export function RealCompetitorMonitor({
           </div>
         </div>
         <div className="comp-card">
-          <div className="comp-card-label">消费者问题与反馈</div>
-          <div className="comp-card-val" style={{ color: '#ce2c31' }}>
+          <div className="comp-card-head">
+            <span className="comp-card-label">消费者问题与反馈</span>
+            <span className="comp-card-badge">口碑线索</span>
+          </div>
+          <div className="comp-card-val">
             {summary?.consumerIssuesCount ?? 0} <span style={{ fontSize: '0.875rem', fontWeight: 400 }}>条线索</span>
           </div>
           <div className="comp-card-sub">

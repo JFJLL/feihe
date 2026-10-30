@@ -66,18 +66,42 @@
   flex-wrap: wrap;
 }
 
-.co-toolbar-month-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color:#60646c;
+.co-toolbar-month-label,
+.note-operations .bd-controls label.co-toolbar-month-label,
+.business-daily .bd-controls label.co-toolbar-month-label {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 36px;
+  padding: 0 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   margin: 0;
+  box-sizing: border-box;
 }
 
 .co-toolbar-month-label span {
   white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-11, #60646c);
+}
+
+.co-toolbar-month-label .custom-date-input-field {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  min-width: 0 !important;
+  width: 100px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  padding: 0 24px 0 4px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--slate-12, #1c2024);
 }
 
 .co-btn-settings {
@@ -365,6 +389,81 @@
 
 .note-operations .bd-kpis strong {
   font-size: 22px;
+}
+
+/* 4-Tone Semantic KPI Cards for CommentsWorkspace / Note Operations */
+.co-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 10px 0;
+}
+
+.note-operations .bd-kpis > article,
+.co-summary-grid > article,
+.note-operations .ops-metric-card {
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: transform 250ms ease-out, box-shadow 250ms ease-out;
+}
+
+.note-operations .bd-kpis > article:hover,
+.co-summary-grid > article:hover,
+.note-operations .ops-metric-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(28, 32, 36, 0.07);
+}
+
+/* Card 1: Teal Tint / Accent */
+.note-operations .bd-kpis > article:nth-child(1),
+.co-summary-grid > article:nth-child(1),
+.note-operations .ops-metric-card:nth-child(1) {
+  background: linear-gradient(180deg, #f0fbf8 0%, #ffffff 85%) !important;
+  border: 0.5px solid #d9d9e0 !important;
+}
+.note-operations .bd-kpis > article:nth-child(1) strong,
+.co-summary-grid > article:nth-child(1) strong {
+  color: #1c2024 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Card 2: Blue Tint / Accent */
+.note-operations .bd-kpis > article:nth-child(2),
+.co-summary-grid > article:nth-child(2),
+.note-operations .ops-metric-card:nth-child(2) {
+  background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 85%) !important;
+  border: 0.5px solid #d9d9e0 !important;
+}
+.note-operations .bd-kpis > article:nth-child(2) strong,
+.co-summary-grid > article:nth-child(2) strong {
+  color: #1c2024 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Card 3: Amber Tint / Accent */
+.note-operations .bd-kpis > article:nth-child(3),
+.co-summary-grid > article:nth-child(3),
+.note-operations .ops-metric-card:nth-child(3) {
+  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 85%) !important;
+  border: 0.5px solid #d9d9e0 !important;
+}
+.note-operations .bd-kpis > article:nth-child(3) strong,
+.co-summary-grid > article:nth-child(3) strong {
+  color: #1c2024 !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Card 4: Purple / Indigo Tint / Accent */
+.note-operations .bd-kpis > article:nth-child(4),
+.co-summary-grid > article:nth-child(4),
+.note-operations .ops-metric-card:nth-child(4) {
+  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 85%) !important;
+  border: 0.5px solid #d9d9e0 !important;
+}
+.note-operations .bd-kpis > article:nth-child(4) strong,
+.co-summary-grid > article:nth-child(4) strong {
+  color: #1c2024 !important;
+  font-variant-numeric: tabular-nums;
 }
 
 .note-operations .bd-panel td {

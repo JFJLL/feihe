@@ -442,7 +442,7 @@ export function HorizontalBarChart({
   const rowHeight = (totalHeight - topPad - bottomPad) / Math.max(1, data.length);
   const barPlotWidth = totalWidth - leftPad - rightPad;
 
-  const current = activeIdx !== null && activeIdx < data.length ? data[activeIdx] : null;
+  const current = (activeIdx !== null && activeIdx < data.length ? data[activeIdx] : data[0]) || null;
   const tickRatios = isNarrow ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1];
 
   return (
@@ -451,12 +451,13 @@ export function HorizontalBarChart({
       <div className="ca-chart-readout" aria-live="polite">
         {current ? (
           <>
-            <span>当前聚焦:</span>
+            <span>{activeIdx !== null ? '当前聚焦:' : '首位聚焦:'}</span>
             <strong>{current.label}</strong>
             <span>
               {current.value !== null ? `${fmtNum(current.value)} ${unit}` : '实际未录入'}
             </span>
             {current.detail && <span style={{ color: '#60646c' }}>({current.detail})</span>}
+            <span className="ca-chart-readout-empty" aria-hidden="true" style={{ display: 'none' }} />
           </>
         ) : (
           <span className="ca-chart-readout-empty" aria-hidden="true" />
@@ -1470,8 +1471,8 @@ export function TargetBulletChart({
   const plotWidth = totalWidth - leftPad - rightPad;
 
   const targetX100 = leftPad + (100 / maxRatioVal) * plotWidth;
-  const current = activeIdx !== null && activeIdx < data.length ? data[activeIdx] : null;
-  const currentEval = activeIdx !== null && activeIdx < evaluations.length ? evaluations[activeIdx] : null;
+  const current = (activeIdx !== null && activeIdx < data.length ? data[activeIdx] : data[0]) || null;
+  const currentEval = (activeIdx !== null && activeIdx < evaluations.length ? evaluations[activeIdx] : evaluations[0]) || null;
 
   // 按数据包含的 direction/comparison 仅显示适用的图例项，精炼清晰
   const hasLower = data.some(
@@ -1532,12 +1533,14 @@ export function TargetBulletChart({
       <div className="ca-chart-readout" aria-live="polite">
         {current && currentEval ? (
           <>
+            <span>{activeIdx !== null ? '当前聚焦:' : '核心考核:'}</span>
             <strong>{current.label}</strong>
             <span>{currentEval.readoutRatioDesc}</span>
             <span style={{ color: currentEval.barColor, fontWeight: 700 }}>
               [{currentEval.statusLabel}]
             </span>
             <span style={{ color: '#60646c' }}>({currentEval.directionNote})</span>
+            <span className="ca-chart-readout-empty" aria-hidden="true" style={{ display: 'none' }} />
           </>
         ) : (
           <span className="ca-chart-readout-empty" aria-hidden="true" />

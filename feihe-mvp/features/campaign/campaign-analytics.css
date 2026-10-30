@@ -387,6 +387,7 @@
   --metric-category-badge-bg: var(--teal-3, #e0f8f3);
   --metric-category-ink: var(--teal-11, #008573);
   background: var(--metric-cat-bg) !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
 }
 
 .ca-metric-item[data-category="cid"] {
@@ -394,6 +395,7 @@
   --metric-category-badge-bg: var(--blue-3, #e6f4fe);
   --metric-category-ink: var(--blue-11, #0d74ce);
   background: var(--metric-cat-bg) !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
 }
 
 .ca-metric-item[data-category="commerce"] {
@@ -401,6 +403,7 @@
   --metric-category-badge-bg: var(--iris-3, #f0f1fe);
   --metric-category-ink: var(--iris-11, #5753c6);
   background: var(--metric-cat-bg) !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
 }
 
 .ca-metric-item[data-category="creators"] {
@@ -408,13 +411,14 @@
   --metric-category-badge-bg: var(--amber-3, #fff7c2);
   --metric-category-ink: var(--amber-11, #ab6400);
   background: var(--metric-cat-bg) !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
 }
 
 /* Scoped badge styling: preserves unclassified cards' inline/custom status colors */
 .ca-metric-item[data-category] .ca-metric-badge {
   display: inline-flex;
   align-items: center;
-  padding: 1px 6px;
+  padding: 2px 8px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
@@ -434,6 +438,32 @@
 .ca-metric-item[data-category] .ca-metric-value,
 .ca-metric-item[data-category] .bd-kpi-val {
   color: var(--slate-12, #1c2024) !important;
+}
+
+/* Unclassified metric items: subtle 4-tone tints for rich atmosphere */
+.ca-metric-item:not([data-category]):nth-child(1) {
+  background: #f3fbf9 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+.ca-metric-item:not([data-category]):nth-child(2) {
+  background: #f4faff !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+.ca-metric-item:not([data-category]):nth-child(3) {
+  background: #fefbe9 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+.ca-metric-item:not([data-category]):nth-child(4) {
+  background: #f8f8ff !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+.ca-metric-item:not([data-category]):nth-child(5) {
+  background: #f3fbf9 !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+.ca-metric-item:not([data-category]):nth-child(6) {
+  background: #f4faff !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
 }
 
 .ca-metric-label {
@@ -699,13 +729,14 @@
   gap: 12px;
   min-height: 34px;
   box-sizing: border-box;
-  padding: 6px 10px;
-  background: #f9f9fb;
-  border:0.5px solid var(--ca-palette-border);
+  padding: 6px 12px;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  border:0.5px solid var(--ca-palette-border, #d9d9e0);
   border-radius: 6px;
   font-size: 12px;
   margin-bottom: 8px;
   flex-wrap: wrap;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .ca-chart-readout strong {
@@ -714,6 +745,12 @@
 
 .ca-chart-readout-empty {
   color:var(--ca-palette-subtle);
+  font-size: 12px;
+}
+
+.ca-chart-readout-empty:empty::before {
+  content: '悬停或按 Tab 键聚焦图表项查看即时详情';
+  color: var(--ca-palette-subtle, #8d8d95);
   font-size: 12px;
 }
 

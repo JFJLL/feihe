@@ -1750,11 +1750,11 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               <span className="ht-header-badge">渠道独立视图</span>
             </div>
             <div className="ht-jumpbar-nav-row">
-            <span className="ht-jumpbar-label">📊 渠道导航</span>
+            <span className="ht-jumpbar-label">渠道导航</span>
             <div className="ht-jumpbar-links">
-              <a href="#ht-sec-ads-channels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-channels')}>📊 渠道走势</a>
-              <a href="#ht-sec-ads-audiences" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-audiences')}>👥 人群地域</a>
-              <a href="#ht-sec-ads-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-benchmarks')}>⚖️ 行业基准</a>
+              <a href="#ht-sec-ads-channels" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-channels')}>渠道走势</a>
+              <a href="#ht-sec-ads-audiences" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-audiences')}>人群地域</a>
+              <a href="#ht-sec-ads-benchmarks" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-ads-benchmarks')}>行业基准</a>
             </div>
             </div>
             <div className="ht-scope-tabs-row">
@@ -1766,7 +1766,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 className={`ht-scope-tab-btn ${adsScope === 'brand' ? 'active' : ''}`}
                 onClick={() => setAdsScope('brand')}
               >
-                🎯 品牌FS ({model.brandDaily.length}日)
+                品牌FS ({model.brandDaily.length}日)
               </button>
               <button
                 type="button"
@@ -1775,7 +1775,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 className={`ht-scope-tab-btn ${adsScope === 'cid' ? 'active' : ''}`}
                 onClick={() => setAdsScope('cid')}
               >
-                🛒 红猫CID (两类对照)
+                红猫CID (两类对照)
               </button>
               <button
                 type="button"
@@ -1784,7 +1784,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 className={`ht-scope-tab-btn ${adsScope === 'commerce' ? 'active' : ''}`}
                 onClick={() => setAdsScope('commerce')}
               >
-                📦 闭环商销 ({model.commerceDaily.length}日)
+                闭环商销 ({model.commerceDaily.length}日)
               </button>
             </div>
             </div>
@@ -2216,11 +2216,11 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
             <span className="ht-header-badge">达人{model.creatorsCount}篇 + KOS{model.kosCount}篇</span>
           </div>
           <div className="ht-jumpbar-nav-row">
-          <span className="ht-jumpbar-label">📊 章节导航</span>
+          <span className="ht-jumpbar-label">章节导航</span>
           <div className="ht-jumpbar-links">
-            <a href="#ht-sec-content-status" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-status')}>🎯 执行阶段</a>
-            <a href="#ht-sec-content-funnel" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-funnel')}>📅 排期与发布</a>
-            <a href="#ht-sec-content-pricing" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-pricing')}>💰 采买报价</a>
+            <a href="#ht-sec-content-status" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-status')}>执行阶段</a>
+            <a href="#ht-sec-content-funnel" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-funnel')}>排期与发布</a>
+            <a href="#ht-sec-content-pricing" className="ht-jump-pill" onClick={(e) => handleAnchorClick(e, 'ht-sec-content-pricing')}>采买报价</a>
           </div>
         </div>
         </div>

@@ -143,7 +143,13 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const summaryMetrics = useMemo(() => {
     if (!activeDataset || !selectedDate) return [];
     const baseMetrics = getSingleDayKPIs(activeDataset, selectedDate);
-    if (!activeDataset.rows || activeDataset.rows.length === 0) return baseMetrics;
+    const rotatingCategories = ['brand', 'cid', 'commerce', 'creators', 'brand', 'cid'] as const;
+    if (!activeDataset.rows || activeDataset.rows.length === 0) {
+      return baseMetrics.map((m, idx) => ({
+        ...m,
+        category: rotatingCategories[idx % 6],
+      }));
+    }
 
     const sortedRows = [...activeDataset.rows]
       .filter((r) => r.date && String(r.date) <= selectedDate)
@@ -188,6 +194,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
       const hasValid = spark.some((v) => v !== null && v > 0);
       return {
         ...m,
+        category: rotatingCategories[idx % 6],
         sparkline: hasValid ? spark : undefined,
       };
     });

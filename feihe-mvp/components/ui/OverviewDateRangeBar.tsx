@@ -43,6 +43,14 @@ export function OverviewDateRangeBar({
   const toId = `ca-overview-to-${reactId}`;
 
   const isFullPeriod = Boolean(minDate && maxDate && from === minDate && to === maxDate);
+  const effectiveAnchorTo = to && isValidIsoDate(to) ? to : (maxDate || '');
+  const expected7dFrom = effectiveAnchorTo ? shiftIsoDays(effectiveAnchorTo, -6) : null;
+  const clamped7dFrom = expected7dFrom && minDate && expected7dFrom < minDate ? minDate : expected7dFrom;
+  const is7d = Boolean(!isFullPeriod && effectiveAnchorTo && from === clamped7dFrom && to === effectiveAnchorTo);
+
+  const expectedMonthFrom = effectiveAnchorTo ? effectiveAnchorTo.slice(0, 7) + '-01' : null;
+  const clampedMonthFrom = expectedMonthFrom && minDate && expectedMonthFrom < minDate ? minDate : expectedMonthFrom;
+  const isMonth = Boolean(!isFullPeriod && !is7d && effectiveAnchorTo && from === clampedMonthFrom && to === effectiveAnchorTo);
 
   const handleQuickSelect = useCallback((kind: '7d' | 'month' | 'all') => {
     if (disabled) return;
@@ -107,7 +115,7 @@ export function OverviewDateRangeBar({
       <div className="ca-overview-quick-pills" role="group" aria-label="快捷区间">
         <button
           type="button"
-          className="ca-overview-quick-btn"
+          className={`ca-overview-quick-btn ${is7d ? 'active' : ''}`}
           disabled={disabled}
           onClick={() => handleQuickSelect('7d')}
         >
@@ -115,7 +123,7 @@ export function OverviewDateRangeBar({
         </button>
         <button
           type="button"
-          className="ca-overview-quick-btn"
+          className={`ca-overview-quick-btn ${isMonth ? 'active' : ''}`}
           disabled={disabled}
           onClick={() => handleQuickSelect('month')}
         >

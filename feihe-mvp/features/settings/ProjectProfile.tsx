@@ -41,7 +41,7 @@ export function ProjectProfile({ project, projectId, onDone, toast }: {
             className="primary"
             disabled={!hydrated}
             onClick={() => setEditing(true)}
-            style={{ padding: '6px 16px', fontSize: '14px', borderRadius: '8px' }}
+            style={{ padding: '6px 16px', fontSize: '14px', borderRadius: '8px', background: '#0d6e52', borderColor: '#0d6e52', color: '#ffffff' }}
           >
             编辑项目资料
           </button>
@@ -49,11 +49,11 @@ export function ProjectProfile({ project, projectId, onDone, toast }: {
       </div>
 
       {project.logoUrl && (
-        <div className="project-profile-logo-row" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', padding: '10px 16px', background: 'var(--slate-2, #f9f9fb)', borderRadius: '8px', border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
-          <img src={project.logoUrl} alt="项目 Logo" style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover', border: '0.5px solid var(--slate-6, #d9d9e0)' }} />
+        <div className="project-profile-logo-row" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px', padding: '12px 16px', background: 'linear-gradient(180deg, #f0fbf8 0%, #ffffff 100%)', borderRadius: '8px', border: '0.5px solid #b8eae0' }}>
+          <img src={project.logoUrl} alt="项目 Logo" style={{ width: '44px', height: '44px', borderRadius: '8px', objectFit: 'cover', border: '0.5px solid #cbd5e1' }} />
           <div>
             <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>{project.name}</div>
-            <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>项目标识 Logo</span>
+            <span style={{ fontSize: '12px', color: '#64748b' }}>项目标识 Logo</span>
           </div>
         </div>
       )}
@@ -72,45 +72,69 @@ export function ProjectProfile({ project, projectId, onDone, toast }: {
           { label: '项目负责人', value: project.ownerName || '待设置' },
           { label: '业务状态', value: project.status },
           { label: '业务模板', value: project.templateName || '通用数据工作台' },
-        ].map((item, idx) => (
-          <div
-            key={idx}
-            style={{
-              background: 'var(--slate-2, #f9f9fb)',
-              borderRadius: '8px',
-              border: '0.5px solid var(--slate-6, #d9d9e0)',
-              padding: '12px 16px',
-            }}
-          >
-            <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', marginBottom: '4px' }}>{item.label}</div>
-            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)', wordBreak: 'break-all' }}>{item.value}</div>
-          </div>
-        ))}
+        ].map((item, idx) => {
+          const isName = item.label === '项目名称';
+          const isStatus = item.label === '业务状态';
+          return (
+            <div
+              key={idx}
+              style={{
+                background: isName ? 'linear-gradient(180deg, #f0fbf8 0%, #ffffff 100%)' : '#ffffff',
+                borderRadius: '8px',
+                border: isName ? '0.5px solid #b8eae0' : '0.5px solid #e2e8f0',
+                padding: '12px 16px',
+                boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)',
+              }}
+            >
+              <div style={{ fontSize: '12px', fontWeight: 500, color: '#64748b', marginBottom: '6px' }}>{item.label}</div>
+              {isStatus ? (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    background: item.value === '进行中' ? '#dff6f0' : '#f1f5f9',
+                    color: item.value === '进行中' ? '#006858' : '#475569',
+                    border: item.value === '进行中' ? '0.5px solid #b8eae0' : '0.5px solid #cbd5e1',
+                  }}
+                >
+                  {item.value}
+                </span>
+              ) : (
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', wordBreak: 'break-all' }}>{item.value}</div>
+              )}
+            </div>
+          );
+        })}
 
         <div
           style={{
             gridColumn: 'span 1',
-            background: 'var(--slate-2, #f9f9fb)',
+            background: '#ffffff',
             borderRadius: '8px',
-            border: '0.5px solid var(--slate-6, #d9d9e0)',
+            border: '0.5px solid #e2e8f0',
             padding: '12px 16px',
+            boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)',
           }}
         >
-          <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', marginBottom: '4px' }}>品牌 / SPU / 品类</div>
-          <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)', wordBreak: 'break-all' }}>{brandProductText}</div>
+          <div style={{ fontSize: '12px', fontWeight: 500, color: '#64748b', marginBottom: '6px' }}>品牌 / SPU / 品类</div>
+          <div style={{ fontSize: '14px', fontWeight: 600, color: '#0f172a', wordBreak: 'break-all' }}>{brandProductText}</div>
         </div>
 
         <div
           style={{
             gridColumn: 'span 2',
-            background: 'var(--slate-2, #f9f9fb)',
+            background: '#ffffff',
             borderRadius: '8px',
-            border: '0.5px solid var(--slate-6, #d9d9e0)',
+            border: '0.5px solid #e2e8f0',
             padding: '12px 16px',
+            boxShadow: '0 1px 2px rgba(15, 23, 42, 0.03)',
           }}
         >
-          <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)', marginBottom: '4px' }}>项目说明</div>
-          <div style={{ fontSize: '14px', color: 'var(--slate-12, #1c2024)', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{project.description || '未填写'}</div>
+          <div style={{ fontSize: '12px', fontWeight: 500, color: '#64748b', marginBottom: '6px' }}>项目说明</div>
+          <div style={{ fontSize: '14px', color: '#0f172a', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{project.description || '未填写'}</div>
         </div>
       </div>
 

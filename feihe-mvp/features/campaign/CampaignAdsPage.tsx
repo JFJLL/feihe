@@ -5,6 +5,7 @@ import { StyledSelect } from "../../components/ui/StyledSelect";
 import type { CampaignDashboard, CampaignTable } from "../../lib/campaign-types";
 import {
   MetricStrip,
+  type MetricStripItem,
   ChartPanel,
   DonutChart,
   ScatterChart,
@@ -118,72 +119,77 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
       .filter((d) => d.target !== null);
   }, [activeTable, activeKey]);
 
-  const stripItems = useMemo(() => {
+  const stripItems = useMemo((): MetricStripItem[] => {
+    let rawItems: MetricStripItem[];
     if (projectId === "meiling" && activeKey === "four-lines") {
       const fsTotal = strictSum(records.map((r) => r.fsSpend ?? r.spend));
       const kTotal = strictSum(records.map((r) => r.kSpend));
       const gmvTotal = strictSum(records.map((r) => r.gmv));
       const bestRoi = records.filter((r) => r.roi !== null).sort((a, b) => (b.roi || 0) - (a.roi || 0))[0];
-      return [
-        { label: "四线 FS 消耗合计", value: fsTotal !== null ? fsTotal.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "投流广告支出总和" },
-        { label: "四线 K 费用合计", value: kTotal !== null ? kTotal.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "达人发文合作支出" },
-        { label: "任务组 GMV 合计", value: gmvTotal !== null ? gmvTotal.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "各任务组独立产出累加" },
-        { label: "最高 ROI 任务组", value: bestRoi?.roi != null ? bestRoi.roi.toFixed(2) : "—", note: bestRoi?.name },
+      rawItems = [
+        { label: "四线 FS 消耗合计", value: fsTotal !== null ? fsTotal.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "投流广告支出总和", badge: "FS投流" },
+        { label: "四线 K 费用合计", value: kTotal !== null ? kTotal.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "达人发文合作支出", badge: "达人合作" },
+        { label: "任务组 GMV 合计", value: gmvTotal !== null ? gmvTotal.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "各任务组独立产出累加", badge: "成交产出" },
+        { label: "最高 ROI 任务组", value: bestRoi?.roi != null ? bestRoi.roi.toFixed(2) : "—", note: bestRoi?.name, badge: "最佳ROI" },
       ];
-    }
-    if (projectId === "meiling" && activeKey === "cid-daily") {
+    } else if (projectId === "meiling" && activeKey === "cid-daily") {
       const sumRow = activeTable?.rows?.find((r) => isSummaryRow(String(r.date || "")));
       const sumSpend = safeNum(sumRow?.spend);
       const sumGmv = safeNum(sumRow?.gmv);
       const sumOrders = safeNum(sumRow?.orders);
       const sumRoi = safeNum(sumRow?.roi);
-      return [
-        { label: "CID 3日广告消耗", value: sumSpend !== null ? sumSpend.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "纯广告支出" },
-        { label: "CID 3日累计 GMV", value: sumGmv !== null ? sumGmv.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "30日归因成交GMV" },
-        { label: "CID 3日累计 ROI", value: sumRoi !== null ? sumRoi.toFixed(2) : "—", note: "产出/广告消耗" },
-        { label: "CID 累计成交订单", value: sumOrders !== null ? sumOrders.toLocaleString("zh-CN") : "—", unit: "单", note: "店铺成交总单量" },
+      rawItems = [
+        { label: "CID 3日广告消耗", value: sumSpend !== null ? sumSpend.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "纯广告支出", badge: "广告支出" },
+        { label: "CID 3日累计 GMV", value: sumGmv !== null ? sumGmv.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: "30日归因成交GMV", badge: "成交总额" },
+        { label: "CID 3日累计 ROI", value: sumRoi !== null ? sumRoi.toFixed(2) : "—", note: "产出/广告消耗", badge: "产出回报" },
+        { label: "CID 累计成交订单", value: sumOrders !== null ? sumOrders.toLocaleString("zh-CN") : "—", unit: "单", note: "店铺成交总单量", badge: "订单规模" },
       ];
-    }
-    if (targetBulletData.length > 0) {
+    } else if (targetBulletData.length > 0) {
       const validTargets = targetBulletData.filter((d) => d.actual !== null && d.target !== null);
       const achieved = validTargets.filter((d) => (d.direction === "lower" ? (d.actual ?? 0) <= (d.target ?? 0) : (d.actual ?? 0) >= (d.target ?? 0))).length;
-      return [
-        { label: "考核指标总数", value: targetBulletData.length, unit: "项", note: activeTable?.period || reportPeriod },
-        { label: "达成指标项", value: achieved, unit: "项", note: `达成率 ${validTargets.length > 0 ? ((achieved / validTargets.length) * 100).toFixed(1) : 0}%` },
-        { label: "待改进指标项", value: validTargets.length - achieved, unit: "项", note: "未达预期标准" },
-        { label: "首项考核指标", value: targetBulletData[0]?.actual != null ? `${targetBulletData[0].actual}${targetBulletData[0].unit || ""}` : "—", note: `${targetBulletData[0]?.label || ""} (目标 ${targetBulletData[0]?.target}${targetBulletData[0]?.unit || ""})` },
+      rawItems = [
+        { label: "考核指标总数", value: targetBulletData.length, unit: "项", note: activeTable?.period || reportPeriod, badge: "指标规划" },
+        { label: "达成指标项", value: achieved, unit: "项", note: `达成率 ${validTargets.length > 0 ? ((achieved / validTargets.length) * 100).toFixed(1) : 0}%`, badge: "达标进度" },
+        { label: "待改进指标项", value: validTargets.length - achieved, unit: "项", note: "未达预期标准", badge: "待优化项" },
+        { label: "首项考核指标", value: targetBulletData[0]?.actual != null ? `${targetBulletData[0].actual}${targetBulletData[0].unit || ""}` : "—", note: `${targetBulletData[0]?.label || ""} (目标 ${targetBulletData[0]?.target}${targetBulletData[0]?.unit || ""})`, badge: "核心标靶" },
       ];
-    }
-    if (projectId === "kailas") {
+    } else if (projectId === "kailas") {
       const budgetKpi = kpis.find((k) => k.id === "kailas-budget-total");
       const spendKpi = kpis.find((k) => k.id === "kailas-spend-total");
       const maxSpend = records.slice().sort((a, b) => (b.spend || 0) - (a.spend || 0))[0];
-      return [
-        { label: "规划总现金预算", value: budgetKpi?.value?.toLocaleString("zh-CN") ?? "—", unit: "元", note: "日常现金预算目标" },
-        { label: "累计总消耗", value: spendKpi?.value?.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) ?? "—", unit: "元", note: "含效果广告与种草" },
-        { label: "最高消耗版位", value: maxSpend?.name || "—", note: maxSpend?.spend ? `${maxSpend.spend.toLocaleString("zh-CN")} 元` : undefined },
-        { label: `${maxSpend?.name || "主力版位"} CPC`, value: maxSpend?.cpc != null ? maxSpend.cpc.toFixed(2) : "—", unit: "元", note: `${maxSpend?.name || ""}版位成本` },
+      rawItems = [
+        { label: "规划总现金预算", value: budgetKpi?.value?.toLocaleString("zh-CN") ?? "—", unit: "元", note: "日常现金预算目标", badge: "预算规划" },
+        { label: "累计总消耗", value: spendKpi?.value?.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) ?? "—", unit: "元", note: "含效果广告与种草", badge: "累计消耗" },
+        { label: "最高消耗版位", value: maxSpend?.name || "—", note: maxSpend?.spend ? `${maxSpend.spend.toLocaleString("zh-CN")} 元` : undefined, badge: "主力版位" },
+        { label: `${maxSpend?.name || "主力版位"} CPC`, value: maxSpend?.cpc != null ? maxSpend.cpc.toFixed(2) : "—", unit: "元", note: `${maxSpend?.name || ""}版位成本`, badge: "点击单价" },
       ];
-    }
-    if (projectId === "winner-wipes") {
+    } else if (projectId === "winner-wipes") {
       const cumSpend = kpis.find((k) => k.id === "wipes-cum-spend");
       const cidSpend = kpis.find((k) => k.id === "wipes-cid-spend");
       const cidRoi = kpis.find((k) => k.id === "wipes-cid-roi");
       const maxSpend = records.slice().sort((a, b) => (b.spend || 0) - (a.spend || 0))[0];
-      return [
-        { label: "日常种草累计消耗", value: cumSpend?.value?.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) ?? "—", unit: "元", note: "周期累计执行金额" },
-        { label: "最高消耗投放版位", value: maxSpend?.name || "—", note: maxSpend?.spend ? `${maxSpend.spend.toLocaleString("zh-CN", { maximumFractionDigits: 2 })} 元` : undefined },
-        { label: "CID 引流累计消耗", value: cidSpend?.value?.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) ?? "—", unit: "元", note: "跨平台引流记录" },
-        { label: "CID 产出比 ROI", value: cidRoi?.value != null ? cidRoi.value.toFixed(2) : "—", note: "产出/广告消耗" },
+      rawItems = [
+        { label: "日常种草累计消耗", value: cumSpend?.value?.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) ?? "—", unit: "元", note: "周期累计执行金额", badge: "种草预算" },
+        { label: "最高消耗投放版位", value: maxSpend?.name || "—", note: maxSpend?.spend ? `${maxSpend.spend.toLocaleString("zh-CN", { maximumFractionDigits: 2 })} 元` : undefined, badge: "核心版位" },
+        { label: "CID 引流累计消耗", value: cidSpend?.value?.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) ?? "—", unit: "元", note: "跨平台引流记录", badge: "引流支出" },
+        { label: "CID 产出比 ROI", value: cidRoi?.value != null ? cidRoi.value.toFixed(2) : "—", note: "产出/广告消耗", badge: "引流ROI" },
+      ];
+    } else {
+      const totalSpend = strictSum(records.map((r) => r.spend));
+      rawItems = [
+        { label: "当前视图总消耗", value: totalSpend !== null ? totalSpend.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: activeTable?.period || reportPeriod, badge: "消耗总览" },
+        { label: "有效数据行", value: records.length, unit: "项", note: "排除汇总项", badge: "数据条目" },
+        { label: "首项产出比", value: records[0]?.roi != null ? records[0].roi.toFixed(2) : "—", note: records[0]?.name, badge: "产出效率" },
+        { label: "首项点击成本", value: records[0]?.cpc != null ? records[0].cpc.toFixed(2) : "—", unit: "元", note: records[0]?.name, badge: "单位成本" },
       ];
     }
-    const totalSpend = strictSum(records.map((r) => r.spend));
-    return [
-      { label: "当前视图总消耗", value: totalSpend !== null ? totalSpend.toLocaleString("zh-CN", { maximumFractionDigits: 2 }) : "—", unit: "元", note: activeTable?.period || reportPeriod },
-      { label: "有效数据行", value: records.length, unit: "项", note: "排除汇总项" },
-      { label: "首项产出比", value: records[0]?.roi != null ? records[0].roi.toFixed(2) : "—", note: records[0]?.name },
-      { label: "首项点击成本", value: records[0]?.cpc != null ? records[0].cpc.toFixed(2) : "—", unit: "元", note: records[0]?.name },
-    ];
+
+    const defaultBadges = ["品牌", "引流", "商销", "达人"] as const;
+    return rawItems.map((item, idx) => ({
+      ...item,
+      badge: item.badge || defaultBadges[idx % 4],
+      category: (["brand", "cid", "commerce", "creators"] as const)[idx % 4],
+    }));
   }, [records, projectId, activeKey, activeTable, kpis, reportPeriod, targetBulletData]);
 
   const scatterPoints = useMemo(() => {
@@ -266,7 +272,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
           <div className="ca-chapter-title-group">
             <span className="ca-chapter-badge">01</span>
             <div className="ca-chapter-heading">
-              <h3 className="ca-chapter-title">核心渠道与版位效能矩阵</h3>
+              <h2 className="ca-chapter-title">核心渠道与版位效能矩阵</h2>
               <span className="ca-chapter-desc">核心广告消耗结构、多维单位转化成本及四象限效率诊断</span>
             </div>
           </div>

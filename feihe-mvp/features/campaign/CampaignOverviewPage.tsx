@@ -9,6 +9,7 @@ import type {
 } from "../../lib/campaign-types";
 import {
   MetricStrip,
+  type MetricStripItem,
   ChartPanel,
   DonutChart,
   BudgetComparisonChart,
@@ -230,7 +231,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     ? `${overviewFrom.slice(5)} ~ ${overviewTo.slice(5)}（${observedDaysCount}个有效日）`
     : "";
 
-  const kailasDailyMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string; badge?: string; status?: "default" | "accent" | "warning" | "danger" | "success"; sparkline?: (number | null)[] }> => {
+  const kailasDailyMetrics = useMemo((): Array<MetricStripItem> => {
     const totalPlanned = findKpi("kailas-budget-total");
     const totalSpend = findKpi("kailas-spend-total");
     const progress = findKpi("kailas-budget-progress");
@@ -241,24 +242,24 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       : totalSpend?.note;
 
     return [
-      { label: totalPlanned?.label || "规划总预算", value: totalPlanned?.value ?? null, unit: totalPlanned?.unit || "元", note: totalPlanned?.period, badge: "现金口径", status: "default" },
-      { label: totalSpend?.label || "累计总消耗", value: totalSpend?.value ?? null, unit: totalSpend?.unit || "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline },
-      { label: progress?.label || "预算执行进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.note, badge: Number(progress?.value) > 100 ? "超支预警" : "执行中", status: Number(progress?.value) > 100 ? "danger" : "accent" },
-      { label: remaining?.label || "预算差额", value: remaining?.value ?? null, unit: remaining?.unit || "元", note: remaining?.note, badge: Number(remaining?.value) < 0 ? "超额支出" : "剩余可用", status: Number(remaining?.value) < 0 ? "warning" : "default" },
+      { label: totalPlanned?.label || "规划总预算", value: totalPlanned?.value ?? null, unit: totalPlanned?.unit || "元", note: totalPlanned?.period, badge: "现金口径", status: "default", category: "brand" },
+      { label: totalSpend?.label || "累计总消耗", value: totalSpend?.value ?? null, unit: totalSpend?.unit || "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline, category: "cid" },
+      { label: progress?.label || "预算执行进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.note, badge: Number(progress?.value) > 100 ? "超支预警" : "执行中", status: Number(progress?.value) > 100 ? "danger" : "accent", category: "commerce" },
+      { label: remaining?.label || "预算差额", value: remaining?.value ?? null, unit: remaining?.unit || "元", note: remaining?.note, badge: Number(remaining?.value) < 0 ? "超额支出" : "剩余可用", status: Number(remaining?.value) < 0 ? "warning" : "default", category: "creators" },
     ];
   }, [findKpi, rangeSpend, rangePeriodNote, dailySparkline]);
 
-  const kailasQ3Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
+  const kailasQ3Metrics = useMemo((): Array<MetricStripItem> => {
     const q3SpendKpi = findKpi("kailas-unlocked-kpi-budget");
     const ctrKpi = findKpi("kailas-unlocked-kpi-ctr");
     const cpcKpi = findKpi("kailas-unlocked-kpi-cpc");
     const publishKpi = findKpi("kailas-unlocked-kpi-publish");
 
     return [
-      { label: q3SpendKpi?.label || "Q3阶段总消耗", value: q3SpendKpi?.value ?? null, unit: q3SpendKpi?.unit || "元", note: q3SpendKpi?.period },
-      { label: ctrKpi?.label || "CTR", value: ctrKpi?.value !== null && ctrKpi?.value !== undefined ? String(ctrKpi.value) + "%" : null, note: ctrKpi?.target !== null && ctrKpi?.target !== undefined ? "目标: ≥" + String(ctrKpi.target) + "%" : undefined },
-      { label: cpcKpi?.label || "CPC", value: cpcKpi?.value !== null && cpcKpi?.value !== undefined ? "¥" + String(cpcKpi.value) : null, note: cpcKpi?.target !== null && cpcKpi?.target !== undefined ? "目标: <¥" + String(cpcKpi.target) : undefined },
-      { label: publishKpi?.label || "笔记发布量", value: publishKpi?.value ?? null, unit: publishKpi?.unit || "篇", note: publishKpi?.target !== null && publishKpi?.target !== undefined ? "目标: " + String(publishKpi.target) + "篇" : undefined },
+      { label: q3SpendKpi?.label || "Q3阶段总消耗", value: q3SpendKpi?.value ?? null, unit: q3SpendKpi?.unit || "元", note: q3SpendKpi?.period, badge: "Q3消耗", category: "brand" },
+      { label: ctrKpi?.label || "CTR", value: ctrKpi?.value !== null && ctrKpi?.value !== undefined ? String(ctrKpi.value) + "%" : null, note: ctrKpi?.target !== null && ctrKpi?.target !== undefined ? "目标: ≥" + String(ctrKpi.target) + "%" : undefined, badge: "点击率", category: "cid" },
+      { label: cpcKpi?.label || "CPC", value: cpcKpi?.value !== null && cpcKpi?.value !== undefined ? "¥" + String(cpcKpi.value) : null, note: cpcKpi?.target !== null && cpcKpi?.target !== undefined ? "目标: <¥" + String(cpcKpi.target) : undefined, badge: "点击成本", category: "commerce" },
+      { label: publishKpi?.label || "笔记发布量", value: publishKpi?.value ?? null, unit: publishKpi?.unit || "篇", note: publishKpi?.target !== null && publishKpi?.target !== undefined ? "目标: " + String(publishKpi.target) + "篇" : undefined, badge: "达人执行", category: "creators" },
     ];
   }, [findKpi]);
 
@@ -315,7 +316,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   const meilingFourLinesTable = findTable("meiling-four-lines");
   const meiling618KpiTable = findTable("meiling-unlocked-618-kpi");
 
-  const meilingDouble11Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string; badge?: string; status?: "default" | "accent" | "warning" | "danger" | "success"; sparkline?: (number | null)[] }> => {
+  const meilingDouble11Metrics = useMemo((): Array<MetricStripItem> => {
     const spendKpi = findKpi("meiling-unlocked-kpi-d11-actual-spend");
     const progressKpi = findKpi("meiling-unlocked-kpi-d11-progress");
     const publishedKpi = findKpi("meiling-online-published-count");
@@ -334,24 +335,24 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       : spendKpi?.period;
 
     return [
-      { label: "双11调整后总预算", value: budgetVal, unit: "元", note: "10.18快照调整预算口径", badge: "调整预算", status: "default" },
-      { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline },
-      { label: progressKpi?.label || "大促消耗进度", value: progressKpi?.value !== null && progressKpi?.value !== undefined ? String(progressKpi.value) + "%" : null, note: "截至10.18累计", badge: "推进中", status: "warning" },
-      { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value !== null && publishedKpi?.value !== undefined ? `${publishedKpi.label}: ${publishedKpi.value}${publishedKpi.unit || "篇"}` : undefined, badge: "四线独立归因", status: "success" },
+      { label: "双11调整后总预算", value: budgetVal, unit: "元", note: "10.18快照调整预算口径", badge: "调整预算", status: "default", category: "brand" },
+      { label: spendKpi?.label || "截至10.18消耗", value: actualVal, unit: "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline, category: "cid" },
+      { label: progressKpi?.label || "大促消耗进度", value: progressKpi?.value !== null && progressKpi?.value !== undefined ? String(progressKpi.value) + "%" : null, note: "截至10.18累计", badge: "推进中", status: "warning", category: "commerce" },
+      { label: "四线产出 GMV 总额", value: fourLinesGmv, unit: "元", note: publishedKpi?.value !== null && publishedKpi?.value !== undefined ? `${publishedKpi.label}: ${publishedKpi.value}${publishedKpi.unit || "篇"}` : undefined, badge: "四线独立归因", status: "success", category: "creators" },
     ];
   }, [meilingExecutionTable, meilingFourLinesTable, findKpi, rangeSpend, rangePeriodNote, dailySparkline]);
 
-  const meiling618Metrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
+  const meiling618Metrics = useMemo((): Array<MetricStripItem> => {
     const gmvKpi = findKpi("meiling-unlocked-kpi-618-gmv");
     const roiKpi = findKpi("meiling-unlocked-kpi-618-roi");
     const ctrKpi = findKpi("meiling-kpi-unlocked-618-self-ctr");
     const viralKpi = findKpi("meiling-kpi-unlocked-618-self-viralRate");
 
     return [
-      { label: gmvKpi?.label || "618全渠道总GMV", value: gmvKpi?.value ?? null, unit: gmvKpi?.unit || "元", note: gmvKpi?.period },
-      { label: roiKpi?.label || "618全案ROI", value: roiKpi?.value ?? null, note: roiKpi?.target !== null && roiKpi?.target !== undefined ? "目标: ≥" + String(roiKpi.target) : undefined },
-      { label: ctrKpi?.label || "自采点击率(CTR)", value: ctrKpi?.value !== null && ctrKpi?.value !== undefined ? String(ctrKpi.value) + "%" : null, note: ctrKpi?.target !== null && ctrKpi?.target !== undefined ? "目标: ≥" + String(ctrKpi.target) + "%" : undefined },
-      { label: viralKpi?.label || "自采爆文率", value: viralKpi?.value !== null && viralKpi?.value !== undefined ? String(viralKpi.value) + "%" : null, note: viralKpi?.target !== null && viralKpi?.target !== undefined ? "目标: ≥" + String(viralKpi.target) + "%" : undefined },
+      { label: gmvKpi?.label || "618全渠道总GMV", value: gmvKpi?.value ?? null, unit: gmvKpi?.unit || "元", note: gmvKpi?.period, badge: "大促GMV", category: "brand" },
+      { label: roiKpi?.label || "618全案ROI", value: roiKpi?.value ?? null, note: roiKpi?.target !== null && roiKpi?.target !== undefined ? "目标: ≥" + String(roiKpi.target) : undefined, badge: "全案ROI", category: "cid" },
+      { label: ctrKpi?.label || "自采点击率(CTR)", value: ctrKpi?.value !== null && ctrKpi?.value !== undefined ? String(ctrKpi.value) + "%" : null, note: ctrKpi?.target !== null && ctrKpi?.target !== undefined ? "目标: ≥" + String(ctrKpi.target) + "%" : undefined, badge: "自采CTR", category: "commerce" },
+      { label: viralKpi?.label || "自采爆文率", value: viralKpi?.value !== null && viralKpi?.value !== undefined ? String(viralKpi.value) + "%" : null, note: viralKpi?.target !== null && viralKpi?.target !== undefined ? "目标: ≥" + String(viralKpi.target) + "%" : undefined, badge: "自采爆文率", category: "creators" },
     ];
   }, [findKpi]);
 
@@ -417,7 +418,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   const wipesBudgetAllocTable = findTable("wipes-budget-allocation");
   const wipesPlacementsTable = findTable("wipes-current-placements");
 
-  const wipesDailyMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string; badge?: string; status?: "default" | "accent" | "warning" | "danger" | "success"; sparkline?: (number | null)[] }> => {
+  const wipesDailyMetrics = useMemo((): Array<MetricStripItem> => {
     const cumSpend = findKpi("wipes-cum-spend");
     const progress = findKpi("wipes-cum-progress");
     const cpuvT2 = findKpi("wipes-cum-cpuv-t2");
@@ -428,24 +429,24 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       : cumSpend?.period;
 
     return [
-      { label: cumSpend?.label || "日常种草累计消耗", value: cumSpend?.value ?? null, unit: cumSpend?.unit || "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline },
-      { label: progress?.label || "日常种草进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.target !== null && progress?.target !== undefined ? "目标: " + String(progress.target) + "%" : undefined, badge: "节奏跟踪", status: "default" },
-      { label: cpuvT2?.label || "CPUV(T-2)", value: cpuvT2?.value !== null && cpuvT2?.value !== undefined ? "¥" + String(cpuvT2.value) : null, note: cpuvT2?.period, badge: "访客成本", status: "success" },
-      { label: newCust?.label || "新客占比", value: newCust?.value !== null && newCust?.value !== undefined ? String(newCust.value) + "%" : null, note: newCust?.period, badge: "拉新健康度", status: "accent" },
+      { label: cumSpend?.label || "日常种草累计消耗", value: cumSpend?.value ?? null, unit: cumSpend?.unit || "元", note: spendNote, badge: "累计快照", status: "accent", sparkline: dailySparkline, category: "brand" },
+      { label: progress?.label || "日常种草进度", value: progress?.value !== null && progress?.value !== undefined ? String(progress.value) + "%" : null, note: progress?.target !== null && progress?.target !== undefined ? "目标: " + String(progress.target) + "%" : undefined, badge: "节奏跟踪", status: "default", category: "cid" },
+      { label: cpuvT2?.label || "CPUV(T-2)", value: cpuvT2?.value !== null && cpuvT2?.value !== undefined ? "¥" + String(cpuvT2.value) : null, note: cpuvT2?.period, badge: "访客成本", status: "success", category: "commerce" },
+      { label: newCust?.label || "新客占比", value: newCust?.value !== null && newCust?.value !== undefined ? String(newCust.value) + "%" : null, note: newCust?.period, badge: "拉新健康度", status: "accent", category: "creators" },
     ];
   }, [findKpi, rangeSpend, rangePeriodNote, dailySparkline]);
 
-  const wipesSheetMetrics = useMemo((): Array<{ label: string; value: string | number | null; unit?: string; note?: string }> => {
+  const wipesSheetMetrics = useMemo((): Array<MetricStripItem> => {
     const exposure = findKpi("wipes-online-daily-exposure");
     const cpuvFs = findKpi("wipes-online-daily-cpuv");
     const hitRate = findKpi("wipes-online-daily-hit-rate");
     const taoSearch = findKpi("wipes-online-daily-tao-search");
 
     return [
-      { label: exposure?.label || "曝光量(KFS)", value: exposure?.value ?? null, unit: exposure?.unit || "次", note: exposure?.target !== null && exposure?.target !== undefined ? "目标: " + String(exposure.target) + "次" : undefined },
-      { label: cpuvFs?.label || "CPUV(FS)", value: cpuvFs?.value !== null && cpuvFs?.value !== undefined ? "¥" + String(cpuvFs.value) : null, note: cpuvFs?.target !== null && cpuvFs?.target !== undefined ? "目标: ≤¥" + String(cpuvFs.target) : undefined },
-      { label: hitRate?.label || "爆文率(KFS)", value: hitRate?.value !== null && hitRate?.value !== undefined ? String(hitRate.value) + "%" : null, note: hitRate?.target !== null && hitRate?.target !== undefined ? "目标: ≥" + String(hitRate.target) + "%" : undefined },
-      { label: taoSearch?.label || "淘搜指数加总", value: taoSearch?.value ?? null, note: taoSearch?.target !== null && taoSearch?.target !== undefined ? "目标: " + String(taoSearch.target) : undefined },
+      { label: exposure?.label || "曝光量(KFS)", value: exposure?.value ?? null, unit: exposure?.unit || "次", note: exposure?.target !== null && exposure?.target !== undefined ? "目标: " + String(exposure.target) + "次" : undefined, badge: "曝光规模", category: "brand" },
+      { label: cpuvFs?.label || "CPUV(FS)", value: cpuvFs?.value !== null && cpuvFs?.value !== undefined ? "¥" + String(cpuvFs.value) : null, note: cpuvFs?.target !== null && cpuvFs?.target !== undefined ? "目标: ≤¥" + String(cpuvFs.target) : undefined, badge: "访客成本", category: "cid" },
+      { label: hitRate?.label || "爆文率(KFS)", value: hitRate?.value !== null && hitRate?.value !== undefined ? String(hitRate.value) + "%" : null, note: hitRate?.target !== null && hitRate?.target !== undefined ? "目标: ≥" + String(hitRate.target) + "%" : undefined, badge: "内容效果", category: "commerce" },
+      { label: taoSearch?.label || "淘搜指数加总", value: taoSearch?.value ?? null, note: taoSearch?.target !== null && taoSearch?.target !== undefined ? "目标: " + String(taoSearch.target) : undefined, badge: "搜索热度", category: "creators" },
     ];
   }, [findKpi]);
 
@@ -594,7 +595,13 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     if (projectId === "kailas") return activeSnapshot === "daily-1018" ? kailasDailyMetrics : kailasQ3Metrics;
     if (projectId === "meiling") return activeSnapshot === "double11-1018" ? meilingDouble11Metrics : meiling618Metrics;
     if (projectId === "winner-wipes") return activeSnapshot === "daily-1019" ? wipesDailyMetrics : wipesSheetMetrics;
-    return kpis.slice(0, 4).map((k) => ({ label: k.label, value: k.value, unit: k.unit, note: k.period }));
+    return kpis.slice(0, 4).map((k, idx) => ({
+      label: k.label,
+      value: k.value,
+      unit: k.unit,
+      note: k.period,
+      category: (["brand", "cid", "commerce", "creators"] as const)[idx % 4],
+    }));
   }, [projectId, activeSnapshot, kailasDailyMetrics, kailasQ3Metrics, meilingDouble11Metrics, meiling618Metrics, wipesDailyMetrics, wipesSheetMetrics, kpis]);
 
   const handleAnchorClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, id: string) => {

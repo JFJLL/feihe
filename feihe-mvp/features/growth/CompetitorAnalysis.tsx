@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Dashboard, Note } from '../../lib/types/project';
 import { GrowthMetricCard as MetricCard, GrowthReadout } from './GrowthReadout';
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
@@ -70,14 +70,125 @@ export function CompetitorAnalysis({
     spotlight: numeric(r.spotlight),
   }));
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const container = document.querySelector('.growth-analysis');
+    if (!container) return;
+    const cleanEmojis = (root: Node) => {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      let currentNode = walker.nextNode();
+      while (currentNode) {
+        if (currentNode.nodeValue && /[📊⚙️📦🔄]/.test(currentNode.nodeValue)) {
+          currentNode.nodeValue = currentNode.nodeValue.replace(/[📊⚙️📦🔄]\s*/g, '');
+        }
+        currentNode = walker.nextNode();
+      }
+    };
+    cleanEmojis(container);
+    const observer = new MutationObserver(() => cleanEmojis(container));
+    observer.observe(container, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, []);
+
   return <div className="stack animate-fade-in growth-analysis">
+    <style>{`
+      .comp-metric-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 16px !important;
+      }
+      @media (max-width: 1024px) {
+        .comp-metric-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+      }
+      @media (max-width: 600px) {
+        .comp-metric-grid {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      .comp-card {
+        border-radius: 10px !important;
+        padding: 14px 16px !important;
+        box-shadow: 0 1px 3px rgba(28, 32, 36, 0.04) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        min-width: 0 !important;
+        transition: transform 250ms ease-out, box-shadow 250ms ease-out !important;
+      }
+      .comp-card:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 10px rgba(28, 32, 36, 0.07) !important;
+      }
+      .comp-card-head {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+      }
+      .comp-card-badge {
+        font-size: 12px !important;
+        padding: 2px 6px !important;
+        border-radius: 4px !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+      }
+      /* Card 1: 总入库监测样本 (青绿 Teal) */
+      .comp-card:nth-child(1) {
+        background: linear-gradient(180deg, #f0fbf8 0%, #ffffff 85%) !important;
+        border: 0.5px solid #d9d9e0 !important;
+      }
+      .comp-card:nth-child(1) .comp-card-badge {
+        background: #dff6f0 !important;
+        color: #006858 !important;
+        border: 0.5px solid #b8eae0 !important;
+      }
+      /* Card 2: 累计互动量 (青蓝 Blue) */
+      .comp-card:nth-child(2) {
+        background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 85%) !important;
+        border: 0.5px solid #d9d9e0 !important;
+      }
+      .comp-card:nth-child(2) .comp-card-badge {
+        background: #e0f2fe !important;
+        color: #0b5cad !important;
+        border: 0.5px solid #dadcff !important;
+      }
+      /* Card 3: 商业内容占比 (暖橙 Amber) */
+      .comp-card:nth-child(3) {
+        background: linear-gradient(180deg, #fffbeb 0%, #ffffff 85%) !important;
+        border: 0.5px solid #d9d9e0 !important;
+      }
+      .comp-card:nth-child(3) .comp-card-badge {
+        background: #fef3c7 !important;
+        color: #854d0e !important;
+        border: 0.5px solid #ffee9c !important;
+      }
+      /* Card 4: 消费者问题与反馈 (紫/红 Indigo/Rose) */
+      .comp-card:nth-child(4) {
+        background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 85%) !important;
+        border: 0.5px solid #d9d9e0 !important;
+      }
+      .comp-card:nth-child(4) .comp-card-badge {
+        background: #ede9fe !important;
+        color: #4338ca !important;
+        border: 0.5px solid #dadcff !important;
+      }
+      .comp-card .comp-card-val {
+        color: #1c2024 !important;
+        font-variant-numeric: tabular-nums !important;
+      }
+      .comp-empty-icon {
+        display: none !important;
+      }
+    `}</style>
     {/* 第四批核心：真实竞品监测主视图 (本地归一化库与有界调度，项目专属看板) */}
     <RealCompetitorMonitor projectId={projectId || 'qicui'} openNote={openNote} openCategoryNotes={openCategoryNotes} />
 
     {/* 历史月报与静态快照归档（2026-08 旧样本参考，非实时监控，默认折叠收纳） */}
     <details className="comp-legacy-archive">
       <summary>
-        <span>📦 历史月报归档与静态快照 (2026-08 旧样本参考，非实时监控)</span>
+        <span>历史月报归档与静态快照 (2026-08 旧样本参考，非实时监控)</span>
         <span style={{ fontSize: '0.75rem', color: 'var(--slate-11, #60646c)' }}>点击展开/收起历史飞书月报</span>
       </summary>
       <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -332,6 +443,6 @@ export function CompetitorAnalysis({
       </div>
     </details>
 
-    {onSwitchTab && <div className="workspace-header-actions"><button onClick={() => onSwitchTab('radar')}>查看关键词机会</button><button onClick={() => onSwitchTab('inspiration')}>进入灵感选题</button></div>}
+    {onSwitchTab && <div className="workspace-header-actions"><button type="button" className="comp-btn" onClick={() => onSwitchTab('radar')}>查看关键词机会</button><button type="button" className="comp-btn" onClick={() => onSwitchTab('inspiration')}>进入灵感选题</button></div>}
   </div>;
 }

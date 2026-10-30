@@ -17,6 +17,11 @@
   flex: 1 1 calc((100% - (var(--metric-columns, 4) - 1) * 16px) / var(--metric-columns, 4));
   box-sizing: border-box;
   justify-content: flex-start;
+  border-radius: 8px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.campaign-workspace-root .ca-metric-strip > .ca-metric-item:hover {
+  transform: translateY(-1px);
 }
 .campaign-workspace-root .ca-metric-item .bd-kpi-head {
   min-height: 40px;

@@ -57,12 +57,12 @@
 .ops-section-card-extra { font-size:12px; }
 .ops-metric-grid { gap:14px; }
 .ops-metric-card { padding:16px 18px; gap:5px; border-radius:10px; box-shadow:0 1px 3px #1c202408; background:#ffffff; }
-.ops-metric-card-blue { border-top:3px solid #5eb1ef; }
-.ops-metric-card-teal { border-top:3px solid #53b9ab; }
-.ops-metric-card-green { border-top:3px solid #8bceb6; }
-.ops-metric-card-purple, .ops-metric-card-indigo { border-top:3px solid #9b9ef0; }
-.ops-metric-card-yellow { border-top:3px solid #e9c162; }
-.ops-metric-card-red { border-top:3px solid #eb8e90; }
+.ops-metric-card-blue { border-top:1px solid #5eb1ef; }
+.ops-metric-card-teal { border-top:1px solid #53b9ab; }
+.ops-metric-card-green { border-top:1px solid #8bceb6; }
+.ops-metric-card-purple, .ops-metric-card-indigo { border-top:1px solid #9b9ef0; }
+.ops-metric-card-yellow { border-top:1px solid #e9c162; }
+.ops-metric-card-red { border-top:1px solid #eb8e90; }
 .ops-metric-card-label { font-size:12px; font-weight:600; color:#60646c; }
 .ops-metric-card-value { font-size:22px; line-height:1.2; font-weight:800; color:#1c2024; }
 .ops-metric-card-unit { font-size:12px; }

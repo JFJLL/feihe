@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import type { CampaignDashboard, CampaignTable } from "../../lib/campaign-types";
 import {
   MetricStrip,
+  type MetricStripItem,
   ChartPanel,
   HorizontalBarChart,
   DonutChart,
@@ -164,44 +165,53 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
       }));
   }, [kpis]);
 
-  const stripItems = useMemo(() => {
+  const stripItems = useMemo((): MetricStripItem[] => {
+    let rawItems: MetricStripItem[];
     if (projectId === "meiling") {
       const rate = meilingTotal !== null && meilingTotal > 0 && meilingPublished !== null
         ? ((meilingPublished / meilingTotal) * 100).toFixed(1)
         : "—";
-      return [
-        { label: "确认合作达人总数", value: meilingTotal ?? "—", unit: "位", note: "基准确认达人总数" },
-        { label: "已发布上线", value: meilingPublished ?? "—", unit: "位", note: `同口径占比 ${rate}%` },
-        { label: "待品牌审核", value: meilingBrandReview ?? "—", unit: "位", note: "等待品牌终审环节" },
-        { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod },
+      rawItems = [
+        { label: "确认合作达人总数", value: meilingTotal ?? "—", unit: "位", note: "基准确认达人总数", badge: "合作达人" },
+        { label: "已发布上线", value: meilingPublished ?? "—", unit: "位", note: `同口径占比 ${rate}%`, badge: "已上线" },
+        { label: "待品牌审核", value: meilingBrandReview ?? "—", unit: "位", note: "等待品牌终审环节", badge: "待审核" },
+        { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod, badge: "动作清单" },
       ];
-    }
-    if (projectId === "kailas") {
+    } else if (projectId === "kailas") {
       const actual = kailasKpi?.value !== undefined ? kailasKpi.value : null;
       const target = kailasKpi?.target !== undefined ? kailasKpi.target : null;
       const pending = target !== null && actual !== null ? Math.max(0, target - actual) : null;
       const rate = target !== null && target > 0 && actual !== null ? ((actual / target) * 100).toFixed(1) : "—";
-      return [
-        { label: "规划发布目标", value: target ?? "—", unit: "篇", note: "Q3 阶段双周会计划" },
-        { label: "实际已发布", value: actual ?? "—", unit: "篇", note: `截至9.27 达成率 ${rate}%` },
-        { label: "待推进上线", value: pending ?? "—", unit: "篇", note: "剩余排期执行" },
-        { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod },
+      rawItems = [
+        { label: "规划发布目标", value: target ?? "—", unit: "篇", note: "Q3 阶段双周会计划", badge: "发布目标" },
+        { label: "实际已发布", value: actual ?? "—", unit: "篇", note: `截至9.27 达成率 ${rate}%`, badge: "实际发布" },
+        { label: "待推进上线", value: pending ?? "—", unit: "篇", note: "剩余排期执行", badge: "待推进" },
+        { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod, badge: "动作清单" },
       ];
-    }
-    if (projectId === "winner-wipes") {
+    } else if (projectId === "winner-wipes") {
       const { total, kol, koc } = wipesCounts;
-      return [
-        { label: "全量已发布篇数", value: total ?? "—", unit: "篇", note: "周报统计发布总量" },
-        { label: "KOL 达人发布", value: kol ?? "—", unit: "篇", note: "核心种草达人" },
-        { label: "KOC 达人发布", value: koc ?? "—", unit: "篇", note: "长尾矩阵达人" },
-        { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod },
+      rawItems = [
+        { label: "全量已发布篇数", value: total ?? "—", unit: "篇", note: "周报统计发布总量", badge: "全量发布" },
+        { label: "KOL 达人发布", value: kol ?? "—", unit: "篇", note: "核心种草达人", badge: "KOL矩阵" },
+        { label: "KOC 达人发布", value: koc ?? "—", unit: "篇", note: "长尾矩阵达人", badge: "KOC矩阵" },
+        { label: "日报记录动作", value: actions?.items?.length || 0, unit: "项", note: reportPeriod, badge: "动作清单" },
+      ];
+    } else {
+      rawItems = [
+        { label: "执行表格数", value: tables.length, unit: "张", note: "关联数据源", badge: "数据源" },
+        { label: "待办动作数", value: actions?.items?.length || 0, unit: "项", note: reportPeriod, badge: "动作清单" },
+        { label: "业务监测点", value: kpis.length, unit: "项", note: "核心考核指标", badge: "监测节点" },
+        { label: "统计周期天数", value: reportPeriod ? 1 : 0, unit: "期", note: reportPeriod, badge: "执行周期" },
       ];
     }
-    return [
-      { label: "执行表格数", value: tables.length, unit: "张", note: "关联数据源" },
-      { label: "待办动作数", value: actions?.items?.length || 0, unit: "项", note: reportPeriod },
-    ];
-  }, [projectId, meilingTotal, meilingPublished, meilingBrandReview, actions, kailasKpi, wipesCounts, tables, reportPeriod]);
+
+    const defaultBadges = ["品牌", "引流", "商销", "达人"] as const;
+    return rawItems.map((item, idx) => ({
+      ...item,
+      badge: item.badge || defaultBadges[idx % 4],
+      category: (["brand", "cid", "commerce", "creators"] as const)[idx % 4],
+    }));
+  }, [projectId, meilingTotal, meilingPublished, meilingBrandReview, actions, kailasKpi, wipesCounts, tables, reportPeriod, kpis]);
 
   const activeTable = useMemo((): CampaignTable | undefined => {
     if (projectId === "meiling") return distTab === "platform" ? meilingSpilloverTable : meilingProductTable;
@@ -239,7 +249,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           <div className="ca-chapter-title-group">
             <span className="ca-chapter-badge">01</span>
             <div className="ca-chapter-heading">
-              <h3 className="ca-chapter-title">达人执行漏斗与发布结构</h3>
+              <h2 className="ca-chapter-title">达人执行漏斗与发布结构</h2>
               <span className="ca-chapter-desc">达人履约流转节点、内容矩阵配比与发布目标达成跟踪</span>
             </div>
           </div>
