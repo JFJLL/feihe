@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './campaign-combo.css';
 
 /**
@@ -55,6 +55,7 @@ export type ComboSeries = {
 export type CampaignComboChartProps = {
   rows: Record<string, unknown>[];
   series: ComboSeries[];
+  alternativeRightSeries?: ComboSeries[];
   xKey?: string; // default: 'date'
   title: string;
   height?: number; // default: 280
@@ -215,6 +216,28 @@ function buildPath(points: Point[]): string {
   return points.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
 }
 
+function buildSmoothPath(points: Point[]): string {
+  if (points.length <= 1) return points.map(p => `M ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  if (points.length === 2) return `M ${points[0].x.toFixed(1)},${points[0].y.toFixed(1)} L ${points[1].x.toFixed(1)},${points[1].y.toFixed(1)}`;
+
+  let d = `M ${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i === 0 ? 0 : i - 1];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2 < points.length ? i + 2 : i + 1];
+
+    const tension = 0.2;
+    const cp1x = p1.x + (p2.x - p0.x) * tension;
+    const cp1y = p1.y + (p2.y - p0.y) * tension;
+    const cp2x = p2.x - (p3.x - p1.x) * tension;
+    const cp2y = p2.y - (p3.y - p1.y) * tension;
+
+    d += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+  }
+  return d;
+}
+
 function getLineSegments(pts: (Point | null)[]): Point[][] {
   const segments: Point[][] = [];
   let cur: Point[] = [];
@@ -237,6 +260,7 @@ function getLineSegments(pts: (Point | null)[]): Point[][] {
 export function CampaignComboChart({
   rows,
   series,
+  alternativeRightSeries,
   xKey = 'date',
   title,
   height = 280,
@@ -248,6 +272,30 @@ export function CampaignComboChart({
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hiddenSeries, setHiddenSeries] = useState<Set<string>>(() => new Set());
+  const [activeRightKey, setActiveRightKey] = useState<string | null>(null);
+
+  const rightCandidates = useMemo(() => {
+    const list: ComboSeries[] = [];
+    const origRight = (series || []).filter((s) => s.axis === 'right');
+    list.push(...origRight);
+    if (alternativeRightSeries?.length) {
+      for (const alt of alternativeRightSeries) {
+        if (!list.some((s) => s.key === alt.key)) {
+          list.push({ ...alt, axis: 'right' });
+        }
+      }
+    }
+    return list;
+  }, [series, alternativeRightSeries]);
+
+  const effectiveSeries = useMemo(() => {
+    const lefts = (series || []).filter((s) => s.axis === 'left');
+    if (!rightCandidates.length) return lefts;
+    const chosenRight = activeRightKey
+      ? rightCandidates.find((s) => s.key === activeRightKey) || rightCandidates[0]
+      : rightCandidates[0];
+    return [...lefts, chosenRight];
+  }, [series, rightCandidates, activeRightKey]);
 
   const toggleSeries = (key: string) => {
     setHiddenSeries((prev) => {
@@ -296,7 +344,7 @@ export function CampaignComboChart({
       (s) => !s.color || s.color === '#0F5E52' || s.color === '#008573' || s.color === '#12a594' || s.color === '#2c7168'
     );
 
-  const styledSeries = (series || []).map((s, idx) => {
+  const styledSeries = effectiveSeries.map((s, idx) => {
     let color = s.color;
     if (!color) {
       color = DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
@@ -446,6 +494,23 @@ export function CampaignComboChart({
 
   return (
     <div className="ca-combo-wrap" ref={containerRef} data-testid="campaign-combo-chart">
+      {/* Segmented tabs for right-axis switching if alternatives exist */}
+      {rightCandidates.length > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 6 }}>
+          <div className="segmented-tabs" role="tablist" aria-label="切换右轴线指标">
+            {rightCandidates.map((opt) => (
+              <button
+                key={opt.key}
+                type="button"
+                className={`seg-btn ${styledSeries.some((s) => s.key === opt.key && s.axis === 'right') ? 'active' : ''}`}
+                onClick={() => setActiveRightKey(opt.key)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       {/* Readout: Always renders same series column layout for current/latest date */}
       <div className="ca-combo-readout" data-testid="combo-readout" aria-live="polite">
         <div className="ca-combo-readout-main">
@@ -542,10 +607,10 @@ export function CampaignComboChart({
                   x2={totalWidth - rightPad}
                   y1={meanY}
                   y2={meanY}
-                  stroke="#8A847C"
-                  strokeWidth="1.2"
+                  stroke={CAMPAIGN_PALETTE.gold}
+                  strokeWidth="1.5"
                   strokeDasharray="4 4"
-                  strokeOpacity={0.8}
+                  strokeOpacity={0.9}
                 />
                 <text
                   x={totalWidth - rightPad - 4}
@@ -744,7 +809,7 @@ export function CampaignComboChart({
                 <g key={`line-group-${s.key}`} data-series-key={s.key} data-axis={s.axis}>
                   {segments.flatMap((seg, sIdx) => {
                     if (seg.length > 1) {
-                      const areaD = `${buildPath(seg)} L ${seg[seg.length - 1].x.toFixed(1)},${(topPad + plotHeight).toFixed(1)} L ${seg[0].x.toFixed(1)},${(topPad + plotHeight).toFixed(1)} Z`;
+                      const areaD = `${buildSmoothPath(seg)} L ${seg[seg.length - 1].x.toFixed(1)},${(topPad + plotHeight).toFixed(1)} L ${seg[0].x.toFixed(1)},${(topPad + plotHeight).toFixed(1)} Z`;
                       return [
                         <path
                           key={`seg-area-${sIdx}`}
@@ -754,7 +819,7 @@ export function CampaignComboChart({
                         />,
                         <path
                           key={`seg-line-${sIdx}`}
-                          d={buildPath(seg)}
+                          d={buildSmoothPath(seg)}
                           fill="none"
                           stroke={s.color}
                           strokeWidth="2.2"

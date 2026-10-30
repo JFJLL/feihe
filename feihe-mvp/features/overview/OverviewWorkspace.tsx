@@ -1,7 +1,7 @@
 'use client';
 
 import { contentDirectionLabel } from '../../lib/dashboard-display';
-import { useState, type ReactNode } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from '../../components/ui/AppLink';
 import type { Dashboard, Ops, Project } from '../../lib/types/project';
@@ -38,6 +38,122 @@ const formatDateZh = (val: string | null | undefined) => {
   return match ? `${Number(match[2])}月${Number(match[3])}日` : String(val);
 };
 const colors = ['#0090ff', '#29a383', '#5b5bd6', '#ffc53d', '#12a594', '#8b8d98'];
+
+export function PaletteSwitcher() {
+  const [palette, setPalette] = useState<'botanical' | 'terracotta' | 'nordic'>('botanical');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem('feihe_palette');
+    const cur = (saved || document.documentElement.getAttribute('data-palette') || 'botanical') as 'botanical' | 'terracotta' | 'nordic';
+    if (cur && ['botanical', 'terracotta', 'nordic'].includes(cur)) {
+      setPalette(cur);
+      document.documentElement.setAttribute('data-palette', cur);
+    }
+  }, []);
+
+  const handleChange = (val: string) => {
+    const next = val as 'botanical' | 'terracotta' | 'nordic';
+    setPalette(next);
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-palette', next);
+    }
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('feihe_palette', next);
+    }
+  };
+
+  return (
+    <div className="control-pill palette-pill" title="切换浅色配色方案">
+      <span className="swatch-dot" aria-hidden="true" />
+      <span className="palette-label">浅色色板</span>
+      <select
+        className="palette-select"
+        value={palette}
+        onChange={e => handleChange(e.target.value)}
+        aria-label="选择浅色配色方案"
+      >
+        <option value="botanical">🌿 旷野松石</option>
+        <option value="terracotta">📰 财经社论</option>
+        <option value="nordic">🏔️ 北欧矿石</option>
+      </select>
+    </div>
+  );
+}
+
+export function ProjectContextRibbon({
+  projectName = '飞鹤启萃评论与声量',
+  coreSpu = '臻稚卓蓓 / 启萃',
+  category = '婴幼儿奶粉',
+  period = '2026-10-01 ~ 2026-10-21',
+  modeText = '单项目聚焦：飞鹤启萃评论与声量',
+}: {
+  projectName?: string;
+  coreSpu?: string;
+  category?: string;
+  period?: string;
+  modeText?: string;
+}) {
+  return (
+    <div className="project-context-bar" data-testid="project-context-bar">
+      <div className="context-left">
+        <div className="context-item">
+          <span className="context-icon" style={{ color: 'var(--brand-primary, #0F5E52)' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+          </span>
+          <span>当前聚焦项目：<b>{projectName}</b></span>
+        </div>
+        <div className="context-divider" aria-hidden="true" />
+        <div className="context-item">
+          <span className="context-icon" style={{ color: 'var(--accent-secondary, #D95D39)' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+          </span>
+          <span>核心 SPU：<b>{coreSpu}</b></span>
+        </div>
+        <div className="context-divider" aria-hidden="true" />
+        <div className="context-item">
+          <span className="context-icon" style={{ color: 'var(--accent-tertiary, #2E6F8E)' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+              <line x1="7" y1="7" x2="7.01" y2="7" />
+            </svg>
+          </span>
+          <span>所属类目：<b>{category}</b></span>
+        </div>
+        <div className="context-divider" aria-hidden="true" />
+        <div className="context-item">
+          <span className="context-icon" style={{ color: 'var(--accent-quaternary, #C87D20)' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </span>
+          <span>数据观测周期：<b className="num">{period}</b></span>
+        </div>
+      </div>
+      <div className="context-right">
+        <span className="semantic-tag tag-ok">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 4 }} aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="22" y1="12" x2="18" y2="12" />
+            <line x1="6" y1="12" x2="2" y2="12" />
+            <line x1="12" y1="6" x2="12" y2="2" />
+            <line x1="12" y1="22" x2="12" y2="18" />
+          </svg>
+          {modeText}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function Section({ tag, title, tone = 'blue', hint, children, componentId }: {
   tag: string; title: string; tone?: string; hint?: string; children: ReactNode; componentId?: string;
@@ -361,9 +477,12 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       project={project}
       subtitle={headerSubtitle}
       actions={
-        canWrite && (isGeneral || isAd || isCommentQc)
-          ? <SyncButton projectId={projectId} onRefresh={onRefresh} />
-          : feishuSyncBtn
+        <div className="overview-header-actions-group" style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+          <PaletteSwitcher />
+          {canWrite && (isGeneral || isAd || isCommentQc)
+            ? <SyncButton projectId={projectId} onRefresh={onRefresh} />
+            : feishuSyncBtn}
+        </div>
       }
       tabsSlot={tabsSlot}
     >

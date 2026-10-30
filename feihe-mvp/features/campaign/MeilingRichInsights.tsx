@@ -65,6 +65,36 @@ export function renderInCellBar(val: number | null | undefined, maxVal: number, 
   );
 }
 
+export function renderDualProgressBar(
+  val1: number | null | undefined,
+  val2: number | null | undefined,
+  maxVal: number,
+  label1 = '初筛',
+  label2 = '发布',
+  color1 = '#0F5E52',
+  color2 = '#D95D39'
+) {
+  if ((val1 === null || val1 === undefined) && (val2 === null || val2 === undefined)) {
+    return '—';
+  }
+  const p1 = maxVal > 0 && val1 ? Math.min(100, Math.max(0, (val1 / maxVal) * 100)) : 0;
+  const p2 = maxVal > 0 && val2 ? Math.min(100, Math.max(0, (val2 / maxVal) * 100)) : 0;
+  return (
+    <div className="mri-dual-bar-wrap">
+      <div className="mri-dual-bar-labels">
+        <span style={{ color: color1 }}>{label1} {formatNum(val1, 0)}</span>
+        <span style={{ color: color2 }}>{label2} {formatNum(val2, 0)}</span>
+      </div>
+      <div className="mri-dual-bar-track">
+        <div className="mri-dual-bar-fill-1" style={{ width: `${p1}%`, background: color1 }} />
+        <div className="mri-dual-bar-fill-2" style={{ width: `${p2}%`, background: color2 }} />
+      </div>
+    </div>
+  );
+}
+
+const MEILING_SERIES_COLORS = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266'];
+
 export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRichInsightsProps) {
   const isHistory618 = snapshot === 'history-618';
 
@@ -163,9 +193,9 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [modelPlanTable]);
 
   const modelPlanComboSeries: ComboSeries[] = [
-    { key: 'budget_wan', label: '规划预算', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.primary, unit: '万元' },
-    { key: 'posts_plan', label: '规划篇数', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.purple, unit: '篇' },
-    { key: 'screen_prog', label: '初筛篇数', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.gold, unit: '篇' },
+    { key: 'budget_wan', label: '规划预算', kind: 'bar', axis: 'left', color: '#0F5E52', unit: '万元' },
+    { key: 'posts_plan', label: '规划篇数', kind: 'line', axis: 'right', color: '#2E6F8E', unit: '篇' },
+    { key: 'screen_prog', label: '初筛篇数', kind: 'line', axis: 'right', color: '#D95D39', unit: '篇' },
   ];
 
   // B. Account Pacing Dual Bar Calculations
@@ -197,8 +227,8 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [accountTable]);
 
   const accountComboSeries: ComboSeries[] = [
-    { key: 'budget_planned', label: '规划打款', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.purple, unit: '元' },
-    { key: 'actual_required_spend', label: '实际应消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.terracotta, unit: '元' },
+    { key: 'budget_planned', label: '规划打款', kind: 'bar', axis: 'left', color: '#0F5E52', unit: '元' },
+    { key: 'actual_required_spend', label: '实际应消耗', kind: 'bar', axis: 'left', color: '#D95D39', unit: '元' },
   ];
 
   // C. Comparable Daily Dynamic Calculations
@@ -241,9 +271,9 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [comparableDailyTable]);
 
   const comparableComboSeries: ComboSeries[] = [
-    { key: 'tm_spend', label: '天猫自采消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.purple, unit: '元' },
-    { key: 'jd_spend', label: '京东自采消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.primary, unit: '元' },
-    { key: 'ratio', label: '京东/天猫消耗比', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.gold, unit: 'x' },
+    { key: 'tm_spend', label: '天猫自采消耗', kind: 'bar', axis: 'left', color: '#D95D39', unit: '元' },
+    { key: 'jd_spend', label: '京东自采消耗', kind: 'bar', axis: 'left', color: '#2E6F8E', unit: '元' },
+    { key: 'ratio', label: '京东/天猫消耗比', kind: 'line', axis: 'right', color: '#C87D20', unit: 'x' },
   ];
 
   // D. True Material Pareto Dynamic Calculations
@@ -287,8 +317,8 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [materialParetoTable]);
 
   const materialParetoComboSeries: ComboSeries[] = [
-    { key: 'spend', label: '素材消耗', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.purple, unit: '元' },
-    { key: 'cum_ratio', label: '累计消耗占比', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.gold, unit: '%' },
+    { key: 'spend', label: '素材消耗', kind: 'bar', axis: 'left', color: '#0F5E52', unit: '元' },
+    { key: 'cum_ratio', label: '累计消耗占比', kind: 'line', axis: 'right', color: '#C87D20', unit: '%' },
   ];
 
   // E. 618 Settled Review Dynamic Calculations
@@ -324,10 +354,10 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   }, [review618Table]);
 
   const review618ComboSeries: ComboSeries[] = [
-    { key: 'k_spend', label: '达人KOL费用', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.purple, unit: '元' },
-    { key: 'fs_spend', label: '信息流投流费用', kind: 'bar', axis: 'left', color: CAMPAIGN_PALETTE.primary, unit: '元' },
-    { key: 'fs_roi', label: '纯FS ROI', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.gold, unit: '' },
-    { key: 'overall_roi', label: '全案ROI', kind: 'line', axis: 'right', color: CAMPAIGN_PALETTE.terracotta, unit: '' },
+    { key: 'k_spend', label: '达人KOL费用', kind: 'bar', axis: 'left', color: '#0F5E52', unit: '元' },
+    { key: 'fs_spend', label: '信息流投流费用', kind: 'bar', axis: 'left', color: '#2E6F8E', unit: '元' },
+    { key: 'fs_roi', label: '纯FS ROI', kind: 'line', axis: 'right', color: '#D95D39', unit: '' },
+    { key: 'overall_roi', label: '全案ROI', kind: 'line', axis: 'right', color: '#C87D20', unit: '' },
   ];
 
   // F. Keywords Distribution Dynamic Calculations
@@ -347,7 +377,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
     const donutData: ChartDatum[] = Array.from(catMap.entries()).map(([k, v]) => ({
       label: k,
       value: v,
-      color: colors[idx++ % colors.length],
+      color: MEILING_SERIES_COLORS[idx++ % MEILING_SERIES_COLORS.length],
       detail: `${v} 条有效词 (${total > 0 ? ((v / total) * 100).toFixed(1) : 0}%)`,
     }));
 
@@ -372,7 +402,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
   // G. Sample Machine Distribution Dynamic Calculations
   const { sampleMachineBarData, sampleMachineTotals } = useMemo(() => {
     const rows = sampleMachineTable?.rows || [];
-    const colors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.slate, '#12a594', '#5753c6'];
+    const colors = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266', '#8A847C'];
     const totalMachines = rows.reduce((s, r) => s + (parseNum(r.count) || 0), 0);
 
     const barData: ChartDatum[] = rows.map((r, i) => {

@@ -134,6 +134,8 @@ export interface MetricStripItem {
   category?: 'brand' | 'cid' | 'commerce' | 'creators';
   status?: 'default' | 'accent' | 'warning' | 'danger' | 'success' | 'neutral';
   sparkline?: (number | null)[];
+  accentColor?: string;
+  delta?: { value: string; isUp: boolean };
 }
 
 function renderMiniSparklineSvg(
@@ -328,7 +330,9 @@ export function MetricStrip({
         const multiAccentColors = ['#0F5E52', '#2E6F8E', '#D95D39', '#C87D20', '#15803D'];
         const sparklineStroke = it.category
           ? 'var(--metric-category-ink)'
-          : it.status === 'danger' || it.status === 'warning'
+          : it.accentColor
+          ? it.accentColor
+          : it.sparkline
           ? CAMPAIGN_PALETTE.primary
           : multiAccentColors[idx % multiAccentColors.length];
         const sparklineGradId = `ca-spark-grad-${baseId.replace(/[^a-zA-Z0-9_-]/g, '')}-${idx}`;
@@ -360,14 +364,68 @@ export function MetricStrip({
           </>
         );
 
+        // 6-icon badging cycling through Pine, Terracotta, Mineral Blue, Harvest Gold, Forest, Alert Red
+        const iconThemes = [
+          { bg: '#EBF5F3', color: '#0F5E52' }, // Pine
+          { bg: '#FDF0EC', color: '#D95D39' }, // Terracotta
+          { bg: '#EEF6FA', color: '#2E6F8E' }, // Mineral Blue
+          { bg: '#FDF6EB', color: '#C87D20' }, // Harvest Gold
+          { bg: '#ECFDF3', color: '#15803D' }, // Forest
+          { bg: '#FFF1F0', color: '#C2410C' }, // Alert Red
+        ];
+        const currentIconTheme = iconThemes[idx % iconThemes.length];
+
+        const kpiIcons = [
+          <svg key="i1" width="13" height="13" viewBox="0 0 24 24" style={{ fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }}><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>,
+          <svg key="i2" width="13" height="13" viewBox="0 0 24 24" style={{ fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+          <svg key="i3" width="13" height="13" viewBox="0 0 24 24" style={{ fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
+          <svg key="i4" width="13" height="13" viewBox="0 0 24 24" style={{ fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }}><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>,
+          <svg key="i5" width="13" height="13" viewBox="0 0 24 24" style={{ fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>,
+          <svg key="i6" width="13" height="13" viewBox="0 0 24 24" style={{ fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+        ];
+
+        // Auto delta detection from note if not explicitly provided
+        let derivedDelta = it.delta;
+        if (!derivedDelta && subText) {
+          const dm = subText.match(/(?:环比|同比|较前|较上)\s*([+-]?\s*[\d.]+%?)/);
+          if (dm) {
+            const dval = dm[1].replace(/\s+/g, '');
+            derivedDelta = { value: dval, isUp: dval.startsWith('+') || !dval.startsWith('-') };
+          }
+        }
+
         return (
           <article
             key={idx}
             className="ca-metric-item bd-kpi-card-rich"
             data-category={it.category}
+            style={{
+              background: it.status === 'danger'
+                ? 'linear-gradient(180deg, #FFF1F0 0%, #FFFFFF 45%)'
+                : '#FFFFFF',
+            }}
           >
             <div className="bd-kpi-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
-              <span className="ca-metric-label" title={it.label}>{it.label}</span>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, minWidth: 0, flex: 1 }}>
+                <span
+                  className="kpi-icon"
+                  style={{
+                    width: 26,
+                    height: 26,
+                    borderRadius: 6,
+                    background: currentIconTheme.bg,
+                    color: currentIconTheme.color,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                  aria-hidden="true"
+                >
+                  {kpiIcons[idx % kpiIcons.length]}
+                </span>
+                <span className="ca-metric-label" title={it.label}>{it.label}</span>
+              </div>
               {it.badge && (
                 <span
                   className="ca-metric-badge"
@@ -379,25 +437,38 @@ export function MetricStrip({
                     background: badgeBackground,
                     color: badgeTextColor,
                     whiteSpace: 'nowrap',
+                    border: it.status === 'danger'
+                      ? `1px solid ${CAMPAIGN_PALETTE.terracotta}`
+                      : it.status === 'warning'
+                      ? `1px solid ${CAMPAIGN_PALETTE.gold}`
+                      : undefined,
                   }}
                 >
                   {it.badge}
                 </span>
               )}
             </div>
-            <div className="ca-metric-value-row bd-kpi-val">
-              <span
-                className={`ca-metric-value num ${isMissing ? 'ca-metric-missing' : ''}`}
-                title={formatted}
-              >
-                {formatted}
-              </span>
-              {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
+            <div className="ca-metric-value-row bd-kpi-val" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', width: '100%' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'baseline', gap: 4 }}>
+                <span
+                  className={`ca-metric-value num ${isMissing ? 'ca-metric-missing' : ''}`}
+                  style={{ fontSize: 24, fontWeight: 800 }}
+                  title={formatted}
+                >
+                  {formatted}
+                </span>
+                {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
+              </div>
+              {derivedDelta && (
+                <span className={`delta-pill semantic-tag num ${derivedDelta.isUp ? 'tag-ok' : 'tag-warn'}`}>
+                  {derivedDelta.isUp ? '↑ ' : '↓ '}{derivedDelta.value}
+                </span>
+              )}
             </div>
+            {subText && <p className="ca-metric-note bd-kpi-sub" title={subText}>{renderNoteContent(subText)}</p>}
             <div className="ca-metric-visual-slot">
               {visualSlotContent}
             </div>
-            {subText && <p className="ca-metric-note bd-kpi-sub" title={subText}>{renderNoteContent(subText)}</p>}
           </article>
         );
       })}
@@ -1310,7 +1381,8 @@ export function BudgetComparisonChart({ data, unit = '元' }: {
           const actual = finite(row.actual) ? row.actual : null;
           const target = finite(row.target) && row.target >= 0 ? row.target : null;
           const overrun = actual !== null && target !== null && actual > target;
-          const color = overrun ? CAMPAIGN_PALETTE.terracotta : CAMPAIGN_PALETTE.primary;
+          const bulletColors = [CAMPAIGN_PALETTE.primary, CAMPAIGN_PALETTE.purple, CAMPAIGN_PALETTE.gold, CAMPAIGN_PALETTE.sage];
+          const color = overrun ? CAMPAIGN_PALETTE.terracotta : bulletColors[index % bulletColors.length];
           const textColor = overrun ? '#b42318' : '#006858';
           const width = actual !== null ? Math.max(0, actual) / maxValue * 100 : 0;
           const ratioStr = actual !== null && target !== null && target > 0 ? ((actual / target) * 100).toFixed(1) : null;
@@ -2798,6 +2870,475 @@ export function LollipopRankChart({
           </div>
         );
       })}
+    </div>
+  );
+}
+
+// ============================================================================
+// 9. HealthArcGauge 240° 带圆角动画环形仪表
+// ============================================================================
+
+export function HealthArcGauge({
+  score,
+  label = '综合评分 (满分100)',
+  size = 145,
+}: {
+  score: number;
+  label?: string;
+  size?: number;
+}) {
+  const clamped = Math.min(100, Math.max(0, score));
+  const radius = 48;
+  const strokeW = 8;
+  const totalArc = 240;
+  const arcLength = (totalArc / 360) * (2 * Math.PI * radius);
+  const totalCircumference = 2 * Math.PI * radius;
+  const fillLength = (clamped / 100) * arcLength;
+  const dashOffset = arcLength - fillLength;
+
+  const color = clamped >= 80 ? '#15803D' : clamped >= 70 ? '#C87D20' : '#C2410C';
+
+  const cx = 75;
+  const cy = 70;
+  const startAngle = (150 * Math.PI) / 180;
+  const endAngle = (390 * Math.PI) / 180;
+  const x1 = cx + radius * Math.cos(startAngle);
+  const y1 = cy + radius * Math.sin(startAngle);
+  const x2 = cx + radius * Math.cos(endAngle);
+  const y2 = cy + radius * Math.sin(endAngle);
+  const trackPath = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${radius} ${radius} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+
+  return (
+    <div className="health-gauge-box" style={{ width: size, height: size - 10 }}>
+      <svg
+        viewBox="0 0 150 140"
+        style={{ width: '100%', height: '100%', overflow: 'visible' }}
+        aria-label="健康度评分仪表盘"
+      >
+        <path
+          d={trackPath}
+          fill="none"
+          stroke="#E6E3DC"
+          strokeWidth={strokeW}
+          strokeLinecap="round"
+        />
+        <path
+          d={trackPath}
+          fill="none"
+          stroke={color}
+          strokeWidth={strokeW}
+          strokeLinecap="round"
+          strokeDasharray={`${arcLength} ${totalCircumference}`}
+          strokeDashoffset={dashOffset}
+          style={{ transition: 'stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1)' }}
+        />
+        <text
+          x={cx}
+          y={cy + 7}
+          textAnchor="middle"
+          fill="#1C1917"
+          fontSize="28"
+          fontWeight="800"
+          className="num"
+        >
+          {clamped}
+        </text>
+      </svg>
+      <div style={{ fontSize: '11px', color: '#8A847C', marginTop: '-14px', textAlign: 'center', whiteSpace: 'nowrap' }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// 10. ExecutiveBulletCard 双轨/单轨子弹图组件
+// ============================================================================
+
+export function ExecutiveBulletCard({
+  title,
+  actualSpend,
+  totalBudget,
+  spendRate,
+  timeRate,
+  timeLabel,
+  diffText,
+  isOverrun,
+  trackVariant = 1,
+  icon = '🎯',
+}: {
+  title: string;
+  actualSpend: number;
+  totalBudget: number;
+  spendRate: number;
+  timeRate: number;
+  timeLabel?: string;
+  diffText?: string;
+  isOverrun?: boolean;
+  trackVariant?: 1 | 2;
+  icon?: string;
+}) {
+  const derivedDiff = diffText || (spendRate >= timeRate
+    ? `超前 +${(spendRate - timeRate).toFixed(1)}pp`
+    : `滞后 -${(timeRate - spendRate).toFixed(1)}pp`);
+  const tagClass = isOverrun || spendRate > 100
+    ? 'tag-danger'
+    : spendRate >= timeRate
+    ? 'tag-ok'
+    : 'tag-warn';
+  const displayTimeLabel = timeLabel || `时间 ${timeRate.toFixed(1)}%`;
+
+  return (
+    <div className="bullet-item">
+      <div className="bullet-head">
+        <span className="bullet-title">
+          <span style={{ fontSize: 13 }}>{icon}</span>
+          <span>{title}</span>
+        </span>
+        <span className={`semantic-tag ${tagClass} num`}>{derivedDiff}</span>
+      </div>
+      <div className="bullet-stats">
+        <span>实际消耗：<b className="num" style={{ color: 'var(--text-primary, #1C1917)' }}>¥{fmtNum(actualSpend, 2)}</b></span>
+        <span>预算目标：<b className="num">¥{fmtNum(totalBudget, 0)}</b> (<b className="num" style={{ color: 'var(--brand-primary, #0F5E52)' }}>{spendRate.toFixed(1)}%</b>)</span>
+      </div>
+      <div className="bullet-track">
+        <div
+          className={`bullet-fill track-${trackVariant}`}
+          style={{ width: `${Math.min(100, Math.max(0, spendRate))}%` }}
+        />
+        <div className="bullet-time-marker" style={{ left: `${Math.min(100, Math.max(0, timeRate))}%` }}>
+          <span className="bullet-time-label">{displayTimeLabel}</span>
+        </div>
+      </div>
+      <div className="bullet-foot">
+        <span>预算进度：{spendRate.toFixed(1)}%</span>
+        <span>时间进度基准：{timeRate.toFixed(1)}%</span>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// 11. PlacementCpmStrip 版位千次曝光成本与进店成本指标条
+// ============================================================================
+
+export function PlacementCpmStrip({
+  items,
+}: {
+  items: Array<{ name: string; spend?: number | null; cpm?: number | null; cpuv?: number | null; color?: string }>;
+}) {
+  const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#15803D'];
+  return (
+    <div className="placement-cpm-strip">
+      {items.map((it, idx) => {
+        const c = it.color || pal[idx % pal.length];
+        const sVal = typeof it.spend === 'number' && Number.isFinite(it.spend) ? it.spend : 0;
+        const spendDisplay = sVal >= 10000 ? `${(sVal / 10000).toFixed(1)}w` : `${Math.round(sVal)}`;
+        return (
+          <div key={idx} className="cpm-card">
+            <div className="cpm-card-title">{it.name}</div>
+            <div className="cpm-card-val" style={{ color: c }}>
+              CPM ¥{it.cpm !== null && it.cpm !== undefined && Number.isFinite(it.cpm) ? fmtNum(it.cpm, 2) : '—'}
+            </div>
+            <div className="cpm-card-sub">
+              CPUV ¥{it.cpuv !== null && it.cpuv !== undefined && Number.isFinite(it.cpuv) ? fmtNum(it.cpuv, 2) : '—'} · 消耗 ¥{spendDisplay}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================================================
+// 12. NightingaleRoseChart 南丁格尔玫瑰图
+// ============================================================================
+
+export interface NightingaleRoseDatum {
+  name: string;
+  value: number;
+  color?: string;
+  cpm?: number;
+  cpuv?: number;
+}
+
+export function NightingaleRoseChart({
+  data,
+  height = 230,
+}: {
+  data: NightingaleRoseDatum[];
+  height?: number;
+}) {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266', '#8C6239'];
+  const validData = (data || []).filter((d) => d && typeof d.value === 'number' && d.value > 0);
+
+  if (validData.length === 0) {
+    return <div className="ca-empty">暂无版位构成数据</div>;
+  }
+
+  const total = validData.reduce((acc, d) => acc + d.value, 0);
+  const maxVal = Math.max(...validData.map((d) => d.value));
+
+  const cx = 110;
+  const cy = 110;
+  const r0 = 24;
+  const maxR = 90;
+  const n = validData.length;
+  const angleSlice = (2 * Math.PI) / n;
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height, width: '100%', gap: 12 }}>
+      <svg
+        viewBox="0 0 220 220"
+        style={{ width: 220, height: 220, overflow: 'visible', flexShrink: 0 }}
+        aria-label="南丁格尔玫瑰图"
+      >
+        <defs>
+          <filter id="roseGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#1C1917" floodOpacity="0.18" />
+          </filter>
+        </defs>
+        {validData.map((d, i) => {
+          const a0 = -Math.PI / 2 + i * angleSlice + 0.03;
+          const a1 = -Math.PI / 2 + (i + 1) * angleSlice - 0.03;
+          const r = r0 + (Math.sqrt(d.value) / Math.sqrt(maxVal)) * (maxR - r0);
+          const color = d.color || pal[i % pal.length];
+          const isHov = activeIdx === i;
+
+          const p0x = cx + r0 * Math.cos(a0);
+          const p0y = cy + r0 * Math.sin(a0);
+          const p1x = cx + r * Math.cos(a0);
+          const p1y = cy + r * Math.sin(a0);
+          const p2x = cx + r * Math.cos(a1);
+          const p2y = cy + r * Math.sin(a1);
+          const p3x = cx + r0 * Math.cos(a1);
+          const p3y = cy + r0 * Math.sin(a1);
+
+          const pathD = `M ${p0x.toFixed(2)} ${p0y.toFixed(2)} L ${p1x.toFixed(2)} ${p1y.toFixed(2)} A ${r.toFixed(2)} ${r.toFixed(2)} 0 0 1 ${p2x.toFixed(2)} ${p2y.toFixed(2)} L ${p3x.toFixed(2)} ${p3y.toFixed(2)} A ${r0} ${r0} 0 0 0 ${p0x.toFixed(2)} ${p0y.toFixed(2)} Z`;
+
+          return (
+            <path
+              key={i}
+              d={pathD}
+              fill={color}
+              fillOpacity={isHov ? 0.95 : 0.82}
+              stroke="#FFFFFF"
+              strokeWidth={1.5}
+              style={{
+                cursor: 'pointer',
+                transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
+                transformOrigin: `${cx}px ${cy}px`,
+                transform: isHov ? 'scale(1.04)' : 'scale(1)',
+                filter: isHov ? 'url(#roseGlow)' : 'none',
+              }}
+              onMouseEnter={() => setActiveIdx(i)}
+              onMouseLeave={() => setActiveIdx(null)}
+            >
+              <title>{`${d.name}: ¥${d.value.toLocaleString()} (${((d.value / total) * 100).toFixed(1)}%)`}</title>
+            </path>
+          );
+        })}
+        <circle cx={cx} cy={cy} r={r0 - 2} fill="#FFFFFF" stroke="#E6E3DC" strokeWidth={1} />
+        <text x={cx} y={cy + 4} textAnchor="middle" fontSize="10" fontWeight="700" fill="#8A847C">
+          构成比
+        </text>
+      </svg>
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12 }}>
+        {validData.map((d, i) => {
+          const color = d.color || pal[i % pal.length];
+          const pct = ((d.value / total) * 100).toFixed(1);
+          const isHov = activeIdx === i;
+          return (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '4px 8px',
+                borderRadius: 6,
+                background: isHov ? 'var(--bg-subtle, #FAF9F5)' : 'transparent',
+                border: isHov ? '1px solid var(--border-subtle, #E6E3DC)' : '1px solid transparent',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              onMouseEnter={() => setActiveIdx(i)}
+              onMouseLeave={() => setActiveIdx(null)}
+            >
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ width: 8, height: 8, borderRadius: 2, background: color, flexShrink: 0 }} />
+                <span style={{ fontWeight: 600, color: '#1C1917', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {d.name}
+                </span>
+              </div>
+              <span className="num" style={{ color: '#57534E', fontWeight: 600, flexShrink: 0 }}>
+                {pct}%
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// 13. CapabilityRadarChart 六维综合效能雷达图
+// ============================================================================
+
+export interface RadarDimension {
+  name: string;
+  max: number;
+}
+export interface RadarSeries {
+  name: string;
+  values: number[];
+  color: string;
+}
+
+export function CapabilityRadarChart({
+  dimensions,
+  series,
+  height = 230,
+}: {
+  dimensions?: RadarDimension[];
+  series: RadarSeries[];
+  height?: number;
+}) {
+  const [activeSeries, setActiveSeries] = useState<string | null>(null);
+
+  const dims = dimensions || [
+    { name: '消耗规模', max: 100 },
+    { name: 'CPM效率', max: 100 },
+    { name: 'CPUV效率', max: 100 },
+    { name: 'CTR点击率', max: 100 },
+    { name: '外溢UV量', max: 100 },
+    { name: 'ROI转化力', max: 100 },
+  ];
+
+  const cx = 140;
+  const cy = 100;
+  const maxR = 74;
+  const n = dims.length;
+
+  const getVertex = (r: number, i: number) => {
+    const angle = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+    return {
+      x: cx + r * Math.cos(angle),
+      y: cy + r * Math.sin(angle),
+    };
+  };
+
+  const rings = [0.25, 0.5, 0.75, 1.0];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height, width: '100%', alignItems: 'center' }}>
+      <svg
+        viewBox="0 0 280 200"
+        style={{ width: '100%', height: 185, overflow: 'visible' }}
+        aria-label="版位六维综合效能雷达"
+      >
+        {/* Concentric Web Rings */}
+        {rings.map((ratio, rIdx) => {
+          const r = maxR * ratio;
+          const pts = dims.map((_, i) => getVertex(r, i));
+          const pathD = pts.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
+          return (
+            <path
+              key={rIdx}
+              d={pathD}
+              fill="none"
+              stroke="#E6E3DC"
+              strokeWidth={1}
+              strokeDasharray={ratio < 1 ? '2 2' : undefined}
+            />
+          );
+        })}
+
+        {/* Radial Axis Lines and Labels */}
+        {dims.map((d, i) => {
+          const vOuter = getVertex(maxR, i);
+          const vLabel = getVertex(maxR + 15, i);
+          return (
+            <g key={i}>
+              <line x1={cx} y1={cy} x2={vOuter.x} y2={vOuter.y} stroke="#E6E3DC" strokeWidth={1} />
+              <text
+                x={vLabel.x}
+                y={vLabel.y + 3.5}
+                textAnchor="middle"
+                fontSize="10"
+                fontWeight="600"
+                fill="#57534E"
+              >
+                {d.name}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Polygons for each series */}
+        {series.map((s) => {
+          const pts = dims.map((dim, i) => {
+            const raw = s.values[i] ?? 50;
+            const ratio = Math.min(1, Math.max(0, raw / dim.max));
+            return getVertex(maxR * ratio, i);
+          });
+          const pathD = pts.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
+          const isMuted = activeSeries !== null && activeSeries !== s.name;
+          return (
+            <g
+              key={s.name}
+              opacity={isMuted ? 0.25 : 1}
+              style={{ transition: 'opacity 0.2s ease' }}
+              onMouseEnter={() => setActiveSeries(s.name)}
+              onMouseLeave={() => setActiveSeries(null)}
+            >
+              <path
+                d={pathD}
+                fill={s.color}
+                fillOpacity={0.24}
+                stroke={s.color}
+                strokeWidth={2}
+              />
+              {pts.map((p, pIdx) => (
+                <circle
+                  key={pIdx}
+                  cx={p.x}
+                  cy={p.y}
+                  r={3}
+                  fill={s.color}
+                  stroke="#FFFFFF"
+                  strokeWidth={1.5}
+                />
+              ))}
+            </g>
+          );
+        })}
+      </svg>
+      {/* Legend below */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 14, marginTop: 2, flexWrap: 'wrap' }}>
+        {series.map((s) => (
+          <span
+            key={s.name}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              fontSize: 11,
+              fontWeight: 600,
+              color: '#57534E',
+              cursor: 'pointer',
+              opacity: activeSeries !== null && activeSeries !== s.name ? 0.35 : 1,
+            }}
+            onMouseEnter={() => setActiveSeries(s.name)}
+            onMouseLeave={() => setActiveSeries(null)}
+          >
+            <span style={{ width: 8, height: 8, borderRadius: 2, background: s.color }} />
+            <span>{s.name}</span>
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

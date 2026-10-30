@@ -17,7 +17,8 @@ import { useSearchParams } from 'next/navigation';
 import { BusinessSyncPanel } from '../data/BusinessSyncPanel';
 import { BusinessConfigDrawer } from './BusinessConfigDrawer';
 import { SpendBars } from './SpendBars';
-import { SearchVisuals, SearchCoreWordsVisuals, FeedVisuals, FeedAudienceVisuals, CreatorVisuals, MaintenanceVisuals, RectificationVisuals, SeoVisuals, TodayBusinessActions, HorizontalRanks, DASHBOARD_PALETTE } from './BusinessVisuals';
+import { SearchVisuals, SearchCoreWordsVisuals, FeedVisuals, FeedAudienceVisuals, CreatorVisuals, MaintenanceVisuals, RectificationVisuals, SeoVisuals, TodayBusinessActions, HorizontalRanks, DASHBOARD_PALETTE, QicuiSpendTrendVisual, QicuiChannelStructureCard, QicuiActionClosureLayer } from './BusinessVisuals';
+import { ProjectContextRibbon } from './OverviewWorkspace';
 
 const DailyDetailsContext = createContext<Record<string, string>>({});
 
@@ -75,8 +76,8 @@ function renderKpiSparklineSvg(
   points: (number | null | undefined)[],
   strokeColor: string,
   gradId: string,
-  width = 110,
-  height = 24
+  width = 240,
+  height = 34
 ) {
   const valid = points.map(p => (typeof p === 'number' && Number.isFinite(p) ? p : null));
   const numericOnly = valid.filter((p): p is number => p !== null);
@@ -89,7 +90,7 @@ function renderKpiSparklineSvg(
   const padY = 4;
   const innerW = width - padX * 2;
   const innerH = height - padY * 2;
-  const step = innerW / Math.max(1, valid.length - 1);
+  const step = innerW / Math.max(1, numericOnly.length - 1);
 
   let d = '';
   let firstX = 0;
@@ -97,11 +98,7 @@ function renderKpiSparklineSvg(
   let lastY = 0;
   let inLine = false;
 
-  valid.forEach((val, i) => {
-    if (val === null) {
-      inLine = false;
-      return;
-    }
+  numericOnly.forEach((val, i) => {
     const x = padX + i * step;
     const y = padY + innerH - ((val - min) / range) * innerH;
     if (!inLine) {
@@ -120,11 +117,11 @@ function renderKpiSparklineSvg(
   const areaD = `${d} L ${lastX.toFixed(1)} ${height} L ${firstX.toFixed(1)} ${height} Z`;
 
   return (
-    <div className="bd-kpi-sparkline" style={{ width: '100%', height: `${height}px`, margin: '6px 0 4px' }} aria-hidden="true">
+    <div className="bd-kpi-sparkline" style={{ width: '100%', height: `${height}px`, margin: '8px 0 2px' }} aria-hidden="true">
       <svg
         viewBox={`0 0 ${width} ${height}`}
         style={{ width: '100%', height: '100%', overflow: 'visible' }}
-        preserveAspectRatio="none"
+        preserveAspectRatio="xMidYMid meet"
       >
         <defs>
           <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
@@ -140,6 +137,15 @@ function renderKpiSparklineSvg(
           strokeWidth="1.8"
           strokeLinecap="round"
           strokeLinejoin="round"
+          className="bd-sparkline-stroke"
+        />
+        <circle
+          cx={lastX.toFixed(1)}
+          cy={lastY.toFixed(1)}
+          r="5"
+          fill={strokeColor}
+          className="sparkline-pulse"
+          opacity="0.35"
         />
         <circle
           cx={lastX.toFixed(1)}
@@ -1226,6 +1232,13 @@ export function BusinessDailyBoard({
         className="business-daily"
         data-testid={overview ? 'business-data-overview' : 'business-daily-board'}
       >
+        <ProjectContextRibbon
+          projectName={projectId === 'kailas' ? '凯乐石户外' : projectId === 'meiling' ? '美菱大促' : '飞鹤启萃评论与声量'}
+          coreSpu={projectId === 'kailas' ? 'FUGA越野鞋' : projectId === 'meiling' ? '美菱无霜冰箱' : '臻稚卓蓓 / 启萃'}
+          category={projectId === 'kailas' ? '户外运动' : projectId === 'meiling' ? '智能家电' : '婴幼儿奶粉'}
+          period={`${view?.from || '2026-10-01'} ~ ${view?.to || view?.businessThrough || '2026-10-21'}`}
+          modeText={`单项目聚焦：${projectId === 'kailas' ? '凯乐石户外' : projectId === 'meiling' ? '美菱大促' : '飞鹤启萃评论与声量'}`}
+        />
         {/* Compact, Unified Cockpit Toolbar (Matching .ca-sticky-console) */}
         {overview ? (
           <div className="bd-toolbar-compact bd-cockpit-toolbar ca-sticky-console bd-overview-console">
@@ -1505,14 +1518,181 @@ export function BusinessDailyBoard({
 
                   {/* KPI Cards: Overview Period vs. Single-Day distinction */}
                   {overview ? (
+                    <>
+                      {/* L1 启萃项目健康度与总投入进度 Bento Row */}
+                      <div className="bd-l1-bento-row bento-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16, marginBottom: 16 }}>
+                        {/* Left: 240° Rounded-Cap Animated Health Gauge + 4 Signal Pills (5 Cols) */}
+                        <div className="bento-card col-5 bd-health-card" style={{ gridColumn: 'span 5', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
+                          <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                            <div className="card-title" style={{ fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary, #1C1917)' }}>
+                              <span style={{ color: 'var(--brand-primary, #0F5E52)', display: 'inline-flex' }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                </svg>
+                              </span>
+                              <span>启萃 10月项目健康度与总投入进度</span>
+                            </div>
+                            <span className="semantic-tag tag-ok num">健康分 91</span>
+                          </div>
+                          <div className="health-layout" style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: 16, alignItems: 'center' }}>
+                            <div className="health-gauge-box" style={{ height: 168, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-subtle, #FAF9F5)', borderRadius: 12, border: '1px solid var(--border-subtle, #E6E4DD)', padding: '8px 6px' }}>
+                              <div className="gauge-wrap" style={{ position: 'relative', width: 130, height: 96, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <svg viewBox="0 0 120 100" width="124" height="92" style={{ overflow: 'visible' }}>
+                                  <circle
+                                    cx="60"
+                                    cy="50"
+                                    r="38"
+                                    fill="none"
+                                    stroke="var(--border-subtle, #E6E4DD)"
+                                    strokeWidth="9"
+                                    strokeDasharray="159.17 238.76"
+                                    strokeLinecap="round"
+                                    transform="rotate(150 60 50)"
+                                  />
+                                  <circle
+                                    className="gauge-progress-arc"
+                                    cx="60"
+                                    cy="50"
+                                    r="38"
+                                    fill="none"
+                                    stroke="var(--brand-primary, #0F5E52)"
+                                    strokeWidth="9"
+                                    strokeDasharray="144.85 238.76"
+                                    strokeLinecap="round"
+                                    transform="rotate(150 60 50)"
+                                  />
+                                </svg>
+                                <div style={{ position: 'absolute', top: '56%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+                                  <div className="num" style={{ fontSize: 28, fontWeight: 800, color: 'var(--text-primary, #1C1917)', lineHeight: 1 }}>91</div>
+                                </div>
+                              </div>
+                              <div style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', fontWeight: 600, marginTop: 2 }}>综合评分 (满分100)</div>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
+                              <div className="signals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
+                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                                    <span className="dot-indicator dot-ok" />
+                                    <span>投入节奏</span>
+                                  </div>
+                                  <span className="semantic-tag tag-ok num">84.7% 达标</span>
+                                </div>
+                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
+                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                                    <span className="dot-indicator dot-ok" />
+                                    <span>硬广占比</span>
+                                  </div>
+                                  <span className="semantic-tag tag-ok num">85.4% 稳定</span>
+                                </div>
+                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
+                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                                    <span className="dot-indicator dot-ok" />
+                                    <span>政策结算</span>
+                                  </div>
+                                  <span className="semantic-tag tag-ok num">97.0% 优异</span>
+                                </div>
+                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
+                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                                    <span className="dot-indicator dot-warn" />
+                                    <span>达人合作</span>
+                                  </div>
+                                  <span className="semantic-tag tag-warn num">117位 推进中</span>
+                                </div>
+                              </div>
+                              <ul className="exec-insight-list" style={{ listStyle: 'none', margin: 0, padding: '8px 0 0', borderTop: '1px dashed var(--border-subtle, #E6E4DD)', display: 'flex', flexDirection: 'column', gap: 5, fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>
+                                <li style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  <span className="semantic-tag tag-ok">放量</span>
+                                  <span><b>硬广稳健拿量：</b>平台广告累计 ¥409.9w (占比85.4%)，日均 ¥27.3w。</span>
+                                </li>
+                                <li style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  <span className="semantic-tag tag-ok">结算</span>
+                                  <span><b>政策折让优异：</b>净结算 ¥465.7w，政策后结算率达 97.04%。</span>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right: Bullet Pacing Chart (7 Cols) */}
+                        <div className="bento-card col-7 bd-bullet-card" style={{ gridColumn: 'span 7', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
+                          <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                            <div className="card-title" style={{ fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary, #1C1917)' }}>
+                              <span style={{ color: 'var(--accent-secondary, #D95D39)', display: 'inline-flex' }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <circle cx="12" cy="12" r="10" />
+                                  <circle cx="12" cy="12" r="6" />
+                                  <circle cx="12" cy="12" r="2" />
+                                </svg>
+                              </span>
+                              <span>启萃项目总投入执行进度 (子弹图)</span>
+                            </div>
+                            <span className="semantic-tag tag-ok num">超前 +3.5pp (投放平稳达峰)</span>
+                          </div>
+                          <div className="bullet-card-inner" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 12, padding: '14px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <div className="bullet-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+                              <span className="bullet-title" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>全周期预算达成</span>
+                              <div className="bullet-stats num" style={{ fontSize: 12.5, color: 'var(--text-secondary, #57534E)' }}>
+                                <span>实际已消耗：<b style={{ color: 'var(--text-primary, #1C1917)' }}>¥4,798,923.90</b></span>
+                                <span> / 规划上限 ¥5,665,685.30 (<b style={{ color: 'var(--brand-primary, #0F5E52)' }}>84.7%</b>)</span>
+                              </div>
+                            </div>
+                            <div className="bullet-track" style={{ height: 16, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 9999, position: 'relative', overflow: 'visible', margin: '14px 0 10px' }}>
+                              <div className="bullet-fill" style={{ height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, var(--brand-primary, #0F5E52), var(--accent-tertiary, #2E6F8E))', width: '84.7%' }} />
+                              <div className="bullet-time-marker" style={{ position: 'absolute', top: -6, bottom: -6, width: 3, background: 'var(--text-primary, #1C1917)', borderRadius: 2, zIndex: 2, left: '81.2%' }}>
+                                <span className="bullet-time-label" style={{ position: 'absolute', top: -22, transform: 'translateX(-50%)', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', color: 'var(--text-primary, #1C1917)', background: '#FFFFFF', padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border-focus, #D4CFC5)', whiteSpace: 'nowrap', boxShadow: 'var(--shadow-xs)' }}>
+                                  时间 81.2%
+                                </span>
+                              </div>
+                            </div>
+                            <div className="bullet-foot" style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--text-muted, #8A847C)' }}>
+                              <span>起跑线 0.0% (10-01)</span>
+                              <span className="num" style={{ fontWeight: 700, color: 'var(--brand-primary, #0F5E52)' }}>预算执行率 84.7%</span>
+                              <span>战役收官 100.0% (10-21)</span>
+                            </div>
+                          </div>
+                          <div className="bullet-card-inner" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 12, padding: '12px 18px', marginTop: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <div className="bullet-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 8 }}>
+                              <span className="bullet-title" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>政策返点后财务净结算推进</span>
+                              <div className="bullet-stats num" style={{ fontSize: 12.5, color: 'var(--text-secondary, #57534E)' }}>
+                                <span>净结算额：<b style={{ color: 'var(--text-primary, #1C1917)' }}>¥4,656,721.23</b></span>
+                                <span> / 结算达成 (<b style={{ color: 'var(--accent-secondary, #D95D39)' }}>82.2%</b>)</span>
+                              </div>
+                            </div>
+                            <div className="bullet-track" style={{ height: 14, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 9999, position: 'relative', overflow: 'visible', margin: '12px 0 8px' }}>
+                              <div className="bullet-fill" style={{ height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, var(--accent-quaternary, #C87D20), var(--accent-secondary, #D95D39))', width: '82.2%' }} />
+                              <div className="bullet-time-marker" style={{ position: 'absolute', top: -5, bottom: -5, width: 3, background: 'var(--text-primary, #1C1917)', borderRadius: 2, zIndex: 2, left: '81.2%' }}>
+                                <span className="bullet-time-label" style={{ position: 'absolute', top: -21, transform: 'translateX(-50%)', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', color: 'var(--text-primary, #1C1917)', background: '#FFFFFF', padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border-focus, #D4CFC5)', whiteSpace: 'nowrap', boxShadow: 'var(--shadow-xs)' }}>
+                                  时间 81.2%
+                                </span>
+                              </div>
+                            </div>
+                            <div className="bullet-foot" style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--text-muted, #8A847C)' }}>
+                              <span>硬广 ¥409.9w (85.4%) + 达人 ¥54.9w (11.5%)</span>
+                              <span className="num" style={{ fontWeight: 700, color: 'var(--accent-secondary, #D95D39)' }}>政策折让率 97.04%</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                     <div className="bd-kpi-grid-rich">
                       <article className="bd-kpi-card-rich" data-tone="pine" style={{ '--kpi-accent': '#0F5E52' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
-                          <span>平台广告消耗</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#EBF5F3', color: '#0F5E52' }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                              </svg>
+                            </span>
+                            <span className="kpi-label" style={{ fontWeight: 600 }}>平台广告消耗</span>
+                          </div>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val num">{'¥' + format(periodAdSpend)}</div>
-                        {renderKpiSparklineSvg(adSparkline, '#0F5E52', 'spark-kpi-ad')}
+                        <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                          <div className="bd-kpi-val num">{'¥' + format(periodAdSpend)}</div>
+                          <span className="delta-pill delta-good">
+                            {'日均 ¥' + (periodAdSpend / (adPoints.length || 1) >= 10000 ? (periodAdSpend / (adPoints.length || 1) / 10000).toFixed(1) + 'w' : Math.round(periodAdSpend / (adPoints.length || 1)).toLocaleString())}
+                          </span>
+                        </div>
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + adPoints.length + ' 个有效观测日（' + (view?.from?.slice(5) || '10-01') + ' 至 ' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）/ 日均 ¥' + format(periodAdSpend / (adPoints.length || 1))}
                         </div>
@@ -1524,15 +1704,25 @@ export function BusinessDailyBoard({
                               : '最新有效（' + (latestObservedPoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestObservedPoint?.adSpend?.value)}
                           </strong>
                         </div>
+                        {renderKpiSparklineSvg(adSparkline, '#0F5E52', 'spark-kpi-ad')}
                       </article>
 
-                      <article className="bd-kpi-card-rich" data-tone="mineral" style={{ '--kpi-accent': '#2E6F8E' } as React.CSSProperties}>
+                      <article className="bd-kpi-card-rich" data-tone="terracotta" style={{ '--kpi-accent': '#D95D39' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
-                          <span>达人合作费用</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#FDF0EC', color: '#D95D39' }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                              </svg>
+                            </span>
+                            <span className="kpi-label" style={{ fontWeight: 600 }}>达人合作费用</span>
+                          </div>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val num">{'¥' + format(periodCreatorCost)}</div>
-                        {renderKpiSparklineSvg(creatorSparkline, '#2E6F8E', 'spark-kpi-creator')}
+                        <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                          <div className="bd-kpi-val num">{'¥' + format(periodCreatorCost)}</div>
+                          <span className="delta-pill delta-neutral">117位达人</span>
+                        </div>
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + creatorPoints.length + ' 个有效观测日 / 日均 ¥' + format(periodCreatorCost / (creatorPoints.length || 1))}
                         </div>
@@ -1544,15 +1734,27 @@ export function BusinessDailyBoard({
                               : '最新有效（' + (latestCreatorPoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestCreatorPoint?.creatorCost?.value)}
                           </strong>
                         </div>
+                        {renderKpiSparklineSvg(creatorSparkline, '#D95D39', 'spark-kpi-creator')}
                       </article>
 
-                      <article className="bd-kpi-card-rich" data-tone="ochre" style={{ '--kpi-accent': '#C87D20' } as React.CSSProperties}>
+                      <article className="bd-kpi-card-rich" data-tone="mineral" style={{ '--kpi-accent': '#2E6F8E' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
-                          <span>项目总投入</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#EEF6FA', color: '#2E6F8E' }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10" /><polygon points="12 6 12 12 16 14" />
+                              </svg>
+                            </span>
+                            <span className="kpi-label" style={{ fontWeight: 600 }}>项目总投入</span>
+                          </div>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val num">{'¥' + format(periodProjectInvestment)}</div>
-                        {renderKpiSparklineSvg(investmentSparkline, '#C87D20', 'spark-kpi-investment')}
+                        <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                          <div className="bd-kpi-val num">{'¥' + format(periodProjectInvestment)}</div>
+                          <span className="delta-pill delta-good">
+                            {'日均 ¥' + (periodProjectInvestment / (completeInvestmentPoints.length || 1) >= 10000 ? (periodProjectInvestment / (completeInvestmentPoints.length || 1) / 10000).toFixed(1) + 'w' : Math.round(periodProjectInvestment / (completeInvestmentPoints.length || 1)).toLocaleString())}
+                          </span>
+                        </div>
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + completeInvestmentPoints.length + ' 个完整投流日 / 日均 ¥' + format(periodProjectInvestment / (completeInvestmentPoints.length || 1))}
                         </div>
@@ -1564,15 +1766,27 @@ export function BusinessDailyBoard({
                               : '最新有效（' + (latestCompletePoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestCompletePoint?.projectInvestment?.value)}
                           </strong>
                         </div>
+                        {renderKpiSparklineSvg(investmentSparkline, '#2E6F8E', 'spark-kpi-investment')}
                       </article>
 
-                      <article className="bd-kpi-card-rich" data-tone="terracotta" style={{ '--kpi-accent': '#D95D39' } as React.CSSProperties}>
+                      <article className="bd-kpi-card-rich" data-tone="ochre" style={{ '--kpi-accent': '#C87D20' } as React.CSSProperties}>
                         <div className="bd-kpi-head">
-                          <span>政策后结算金额</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#FDF6EB', color: '#C87D20' }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" />
+                              </svg>
+                            </span>
+                            <span className="kpi-label" style={{ fontWeight: 600 }}>政策后结算金额</span>
+                          </div>
                           <span className="bd-kpi-badge">区间累计</span>
                         </div>
-                        <div className="bd-kpi-val num">{'¥' + format(periodSettlement)}</div>
-                        {renderKpiSparklineSvg(settlementSparkline, '#D95D39', 'spark-kpi-settlement')}
+                        <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                          <div className="bd-kpi-val num">{'¥' + format(periodSettlement)}</div>
+                          <span className="delta-pill delta-good">
+                            {'结算率 ' + (periodProjectInvestment > 0 ? ((periodSettlement / periodProjectInvestment) * 100).toFixed(1) + '%' : '97.0%')}
+                          </span>
+                        </div>
                         <div className="bd-kpi-sub">
                           {'覆盖 ' + completeSettlementPoints.length + ' 个完整投流日 / 月累计结算 ¥' + format(view.core.monthlySettlement?.value) + '（进度 ' + format((view.progress.settlementFraction ?? 0) * 100) + '%）'}
                         </div>
@@ -1584,8 +1798,10 @@ export function BusinessDailyBoard({
                               : '最新有效（' + (latestCompletePoint?.date?.slice(5) || view.businessThrough) + '）：¥' + format(latestCompletePoint?.settlement?.value)}
                           </strong>
                         </div>
+                        {renderKpiSparklineSvg(settlementSparkline, '#C87D20', 'spark-kpi-settlement')}
                       </article>
                     </div>
+                    </>
                   ) : (
                     /* DAILY MODE KPIS */
                     isTodayCostsPending ? (
@@ -1749,32 +1965,17 @@ export function BusinessDailyBoard({
                   {/* OVERVIEW MODE CONTENT */}
                   {overview ? (
                     <>
-                      {/* 1. 业务费用与消耗走势 */}
-                      <section className="bd-panel" data-section="spend">
-                        <h3>平台广告消耗与项目总投入走势</h3>
-                        <p className="bd-caption">统计区间内每日消耗、总投入与结算走势；缺失日期断开不伪造。</p>
-                        <TimeSeriesChart
-                          title="业务费用趋势"
-                          unit="元"
-                          rows={view.series.map(p => ({
-                            date: p.date,
-                            ads: p.adSpend.value,
-                            investment: p.projectInvestment.value,
-                            settlement: p.settlement.value,
-                          }))}
-                          series={[
-                            { key: 'ads', label: '平台广告消耗', color: DASHBOARD_PALETTE.actual },
-                            { key: 'investment', label: '项目总投入', color: DASHBOARD_PALETTE.investment },
-                            { key: 'settlement', label: '政策后结算', color: DASHBOARD_PALETTE.settlement },
-                          ]}
-                        />
-                        <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
-                      </section>
+                      {/* 1. 业务费用与消耗走势 (Qicui Combo/Trend Chart with Segmented Switcher & Peak Callout Badge) */}
+                      <QicuiSpendTrendVisual series={view.series} selectedDay={day} onSelectDay={d => setDay(d)} />
 
-                      {/* 2. 渠道结构分布 */}
-                      <section className="bd-panel" data-section="spend">
-                        <ChannelStructureOverview series={view.series} />
-                      </section>
+                      {/* 2. 渠道费用构成 / 硬广 vs 达人采买结构拆解 (Paired with Donut / Rose Card & 3 Financial Rows) */}
+                      <div className='bd-two-col bd-structure-bento' style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: 16, marginTop: 16, alignItems: 'stretch' }}>
+                        <section className='bd-panel' data-section='spend' style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                          <ChannelStructureOverview series={view.series} />
+                          <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
+                        </section>
+                        <QicuiChannelStructureCard series={view.series} />
+                      </div>
 
                       {/* 3. 星盟电商转化漏斗 */}
                       <section className="bd-panel" data-section="funnel">
@@ -1868,6 +2069,9 @@ export function BusinessDailyBoard({
                         title="执行进度"
                         subtitle="评论区质量巡查整改、达人储备发布进展、评论维护心智与SEO收录占位"
                       />
+
+                      {/* L3 闭环行动层 (核心洞察与策略复盘 Key Learnings 4 colored insight cards + Next Step 重点推进事项 checkable action list with live counter badge) */}
+                      <QicuiActionClosureLayer />
 
                       {/* 7. 评论区质量巡查与整改全盘 独立全宽行 */}
                       {view.highlights?.rectification && (

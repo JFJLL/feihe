@@ -15,6 +15,7 @@ import {
 import { CampaignEnrichmentPanels } from "./CampaignEnrichmentPanels";
 import "./campaign-analytics.css";
 import "./CampaignOverviewPage.css";
+import "./campaign-content.css";
 
 export interface CampaignContentPageProps {
   dashboard: CampaignDashboard;
@@ -38,6 +39,89 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
   const { projectId, tables, kpis, actions, reportPeriod, updatedAt } = dashboard;
   const [distTab, setDistTab] = useState<"platform" | "product">("platform");
   const [showTable, setShowTable] = useState<boolean>(false);
+  const [actionFilter, setActionFilter] = useState<"all" | "growth" | "cost">("all");
+  const [doneActions, setDoneActions] = useState<Record<string, boolean>>({});
+
+  const tagClassMap: Record<string, string> = {
+    "策略调优": "tag-ok",
+    "渠道放量": "tag-ok",
+    "成本压降": "tag-warn",
+    "止损观察": "tag-danger",
+    "大促节点": "tag-warn",
+  };
+
+  const normalizedActions = useMemo(() => {
+    const rawItems = actions?.items || [];
+    return rawItems.map((raw, idx) => {
+      const title = typeof raw === "string" ? raw : raw.title || "";
+      const desc = typeof raw === "object" ? raw.description || "" : "";
+      const rawObj = typeof raw === "object" ? (raw as Record<string, unknown>) : null;
+      const rawTag = rawObj && typeof rawObj.tag === "string" ? rawObj.tag : "";
+      const rawDate = rawObj && typeof rawObj.date === "string" ? rawObj.date : "";
+
+      let tag = rawTag;
+      let category: "growth" | "cost" | "other" = "other";
+      let day = "19";
+      const month = "OCT";
+
+      if (/按CPUV|暂停放大|高跑量/i.test(title)) {
+        tag = tag || "策略调优";
+        category = "cost";
+        day = "19";
+      } else if (/京东对投|星伴|放量/i.test(title)) {
+        tag = tag || "渠道放量";
+        category = "growth";
+        day = "19";
+      } else if (/品类|攻略词|调低/i.test(title)) {
+        tag = tag || "成本压降";
+        category = "cost";
+        day = "18";
+      } else if (/高消耗|低ROI|止损|观察/i.test(title)) {
+        tag = tag || "止损观察";
+        category = "cost";
+        day = "18";
+      } else if (/天猫|大促|节点|铺量/i.test(title)) {
+        tag = tag || "大促节点";
+        category = "growth";
+        day = "17";
+      } else {
+        if (/放量|大促|节点|铺量|渠道/.test(title + desc)) {
+          tag = tag || "渠道放量";
+          category = "growth";
+        } else if (/成本|出价|压降|调低/.test(title + desc)) {
+          tag = tag || "成本压降";
+          category = "cost";
+        } else if (/暂停|止损|低ROI|预警/.test(title + desc)) {
+          tag = tag || "止损观察";
+          category = "cost";
+        } else {
+          tag = tag || "策略调优";
+          category = "other";
+        }
+        if (rawDate) {
+          const match = rawDate.match(/(\d{1,2})$/);
+          if (match) day = match[1];
+        } else {
+          day = String(Math.max(1, 19 - idx));
+        }
+      }
+
+      if (category === "other") {
+        if (tag === "渠道放量" || tag === "大促节点") category = "growth";
+        else if (tag === "成本压降" || tag === "止损观察" || tag === "策略调优") category = "cost";
+      }
+
+      const tagClass = tagClassMap[tag] || "tag-neutral";
+      const id = (rawObj && typeof rawObj.id === "string" ? rawObj.id : null) || `act-${idx}`;
+      return { id, title, description: desc, tag, tagClass, month, day, category };
+    });
+  }, [actions]);
+
+  const filteredActions = useMemo(() => {
+    if (actionFilter === "growth") return normalizedActions.filter((a) => a.category === "growth");
+    if (actionFilter === "cost") return normalizedActions.filter((a) => a.category === "cost");
+    return normalizedActions;
+  }, [normalizedActions, actionFilter]);
 
   const meilingStatusTable = useMemo(() => tables.find((t) => t.id === "meiling-online-execution-status"), [tables]);
   const meilingSpilloverTable = useMemo(() => tables.find((t) => t.id === "meiling-online-spillover-distribution"), [tables]);
@@ -323,23 +407,65 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
       <div className="ca-panel ca-section-macro-card">
         <div className="ca-panel-header">
           <div className="ca-panel-heading">
-            <h3 className="ca-panel-title">日报动作记录</h3>
+            <h3 className="ca-panel-title">
+              <i className="fa-solid fa-clock-rotate-left" style={{ color: "#D95D39", marginRight: 8 }}></i>
+              美菱无霜冰箱 · 投流操盘调优动作日志 (Action Log)
+            </h3>
             <p className="ca-panel-subtitle">
-              记录周期：{reportPeriod} / 摘录自业务日报规划事项（非任务流实时工单）
+              记录周期：{reportPeriod} / 摘录自业务日报规划事项（支持分类切换与勾选完成归档）
             </p>
           </div>
-          <span className="ca-header-badge">共 {actions?.items?.length || 0} 项</span>
+          <div className="segmented-tabs" id="meilingFilterTabs" role="tablist">
+            <button
+              type="button"
+              className={`seg-btn ${actionFilter === "all" ? "active" : ""}`}
+              onClick={() => setActionFilter("all")}
+            >
+              全部动作 ({normalizedActions.length})
+            </button>
+            <button
+              type="button"
+              className={`seg-btn ${actionFilter === "growth" ? "active" : ""}`}
+              onClick={() => setActionFilter("growth")}
+            >
+              放量与大促节点
+            </button>
+            <button
+              type="button"
+              className={`seg-btn ${actionFilter === "cost" ? "active" : ""}`}
+              onClick={() => setActionFilter("cost")}
+            >
+              压降成本与止损
+            </button>
+          </div>
         </div>
         <div className="ca-panel-body">
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            {(actions?.items || []).map((raw, idx) => {
-              const title = typeof raw === "string" ? raw : raw.title || "";
-              const desc = typeof raw === "object" ? raw.description || "" : "";
+          <div className="timeline-list" id="meilingTimelineList">
+            {filteredActions.map((act) => {
+              const isDone = Boolean(doneActions[act.id]);
               return (
-                <div key={idx} style={{ display: "flex", flexDirection: "column", padding: "8px 12px", background: "#f9f9fb", border: "0.5px solid var(--ca-palette-border)", borderRadius: "6px", gap: "2px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ca-palette-text)" }}>{title}</span>
-                  {desc && <span style={{ fontSize: "12px", color: "var(--ca-palette-muted)", lineHeight: 1.4 }}>{desc}</span>}
-                </div>
+                <label key={act.id} className={`timeline-item ${isDone ? "done" : ""}`}>
+                  <input
+                    type="checkbox"
+                    className="tl-check"
+                    checked={isDone}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setDoneActions((prev) => ({ ...prev, [act.id]: checked }));
+                    }}
+                  />
+                  <div className="tl-date-box">
+                    <div className="d-month">{act.month}</div>
+                    <div className="d-day num">{act.day}</div>
+                  </div>
+                  <div className="tl-content">
+                    <div className="tl-head">
+                      <span className="tl-title">{act.title}</span>
+                      <span className={`semantic-tag ${act.tagClass}`}>{act.tag}</span>
+                    </div>
+                    {act.description && <div className="tl-desc">{act.description}</div>}
+                  </div>
+                </label>
               );
             })}
           </div>

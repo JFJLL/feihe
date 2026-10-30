@@ -10,13 +10,13 @@
 @import '../styles/workspace.css';
 @import '../styles/operations-workspaces.css';
 @import '../styles/data-workspaces.css';
-@import '../styles/reference-dashboard.css';
 @import 'tailwindcss';
 @import '../styles/workspace-polish.css';
 @import '../styles/workspace-ui-v2.css';
 @import '../styles/category-notes-modal.css';
 @import '../styles/dashboard-template.css';
 @import '../styles/note-modal.css';
+@import '../styles/reference-dashboard.css';
 
 /* Core Base & Shared UI Utilities */
 .stack { display: flex; flex-direction: column; gap: var(--gap-macro, 28px); }

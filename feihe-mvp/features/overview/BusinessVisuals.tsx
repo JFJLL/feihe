@@ -1,5 +1,6 @@
 'use client';
-import type { BusinessHighlights, CostComparison, RankValue, SourceRef } from '../../lib/business-daily/types';
+import { useState } from 'react';
+import type { BusinessHighlights, CostComparison, DailyPoint, DailyView, RankValue, SourceRef } from '../../lib/business-daily/types';
 
 /**
  * 统一调色板常量 (Delivery V1)
@@ -11,26 +12,26 @@ import type { BusinessHighlights, CostComparison, RankValue, SourceRef } from '.
  * 灰计划 #8c9ba5 (预算 / 计划 / 基准线)
  */
 export const DASHBOARD_PALETTE = {
-  actual: '#006858',
-  plan: '#525866',
-  settlement: '#4338ca',
-  investment: '#ffc53d',
-  anomaly: '#e5484d',
+  actual: '#0F5E52',
+  plan: '#57534E',
+  settlement: '#D95D39',
+  investment: '#2E6F8E',
+  anomaly: '#C2410C',
 
   // 渠道映射
-  feed: '#006858',
-  search: '#4338ca',
-  creators: '#ffc53d',
-  comments: '#e5484d',
-  seo: '#12a594',
-  other: '#525866',
+  feed: '#0F5E52',
+  search: '#2E6F8E',
+  creators: '#D95D39',
+  comments: '#C87D20',
+  seo: '#5B8266',
+  other: '#8A847C',
 
   // 中性与结构
-  bgPage: '#f9f9fb',
-  cardBg: '#ffffff',
-  textMain: '#1c2024',
-  textMuted: '#525866',
-  border: '#d9d9e0',
+  bgPage: '#F5F4EE',
+  cardBg: '#FFFFFF',
+  textMain: '#1C1917',
+  textMuted: '#57534E',
+  border: '#E6E4DD',
 };
 
 const num = (n: number | null | undefined) => (n === null || n === undefined ? '—' : n.toLocaleString('zh-CN', { maximumFractionDigits: 2 }));
@@ -302,6 +303,587 @@ export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['sea
       </div>
       <Evidence source={data.tableSource} label={`关键词底表：${scopeCaption}；SOC/排名为作者日报登记。`} />
     </>
+  );
+}
+
+export function QicuiSpendTrendVisual({
+  series,
+  selectedDay,
+  onSelectDay,
+}: {
+  series: DailyPoint[];
+  selectedDay?: string;
+  onSelectDay?: (day: string) => void;
+}) {
+  const [viewMode, setViewMode] = useState<'combo' | 'area'>('combo');
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+
+  const points = series.map(p => ({
+    date: p.date,
+    shortDate: p.date.slice(5),
+    ads: typeof p.adSpend?.value === 'number' ? p.adSpend.value : 0,
+    investment: typeof p.projectInvestment?.value === 'number' ? p.projectInvestment.value : 0,
+    settlement: typeof p.settlement?.value === 'number' ? p.settlement.value : 0,
+    hasAds: typeof p.adSpend?.value === 'number',
+    hasInvest: typeof p.projectInvestment?.value === 'number',
+  }));
+
+  const maxVal = Math.max(...points.map(p => Math.max(p.ads, p.investment, p.settlement)), 100000);
+  const step = maxVal > 500000 ? 150000 : maxVal > 250000 ? 100000 : 50000;
+  const scaleMax = Math.ceil((maxVal * 1.15) / step) * step;
+
+  const w = 720;
+  const h = 260;
+  const padL = 46;
+  const padR = 24;
+  const padT = 24;
+  const padB = 34;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+
+  const getX = (idx: number) => padL + (idx / Math.max(1, points.length - 1)) * plotW;
+  const getY = (val: number) => padT + plotH - (val / scaleMax) * plotH;
+
+  const makeSmoothPath = (key: 'investment' | 'ads' | 'settlement') => {
+    return points.reduce((acc, p, i) => {
+      const x = getX(i);
+      const y = getY(p[key]);
+      if (i === 0) return `M ${x.toFixed(1)} ${y.toFixed(1)}`;
+      const prevX = getX(i - 1);
+      const prevY = getY(points[i - 1][key]);
+      const cx = (prevX + x) / 2;
+      return `${acc} C ${cx.toFixed(1)} ${prevY.toFixed(1)}, ${cx.toFixed(1)} ${y.toFixed(1)}, ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }, '');
+  };
+
+  const settlementLine = makeSmoothPath('settlement');
+  const settlementArea = `${settlementLine} L ${getX(points.length - 1).toFixed(1)} ${(padT + plotH).toFixed(1)} L ${getX(0).toFixed(1)} ${(padT + plotH).toFixed(1)} Z`;
+  const investLine = makeSmoothPath('investment');
+  const investArea = `${investLine} L ${getX(points.length - 1).toFixed(1)} ${(padT + plotH).toFixed(1)} L ${getX(0).toFixed(1)} ${(padT + plotH).toFixed(1)} Z`;
+  const adsLine = makeSmoothPath('ads');
+  const adsArea = `${adsLine} L ${getX(points.length - 1).toFixed(1)} ${(padT + plotH).toFixed(1)} L ${getX(0).toFixed(1)} ${(padT + plotH).toFixed(1)} Z`;
+
+  const yTicks = [0, scaleMax * 0.33, scaleMax * 0.66, scaleMax];
+  const hovered = hoverIdx !== null ? points[hoverIdx] : null;
+
+  return (
+    <div className="qicui-trend-card bento-card" style={{ padding: '20px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
+      <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+        <div className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>
+          <span style={{ color: 'var(--brand-primary, #0F5E52)', display: 'inline-flex' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+          </span>
+          <span>平台广告消耗与项目总投入走势</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+          <div className="segmented-tabs" role="tablist" aria-label="走势图视图切换">
+            <button
+              type="button"
+              className={`seg-btn ${viewMode === 'combo' ? 'active' : ''}`}
+              onClick={() => setViewMode('combo')}
+              role="tab"
+              aria-selected={viewMode === 'combo'}
+            >
+              三轨折柱混合视图
+            </button>
+            <button
+              type="button"
+              className={`seg-btn ${viewMode === 'area' ? 'active' : ''}`}
+              onClick={() => setViewMode('area')}
+              role="tab"
+              aria-selected={viewMode === 'area'}
+            >
+              面积趋势视图
+            </button>
+          </div>
+
+          <span className="card-badge peak-callout-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: 'var(--brand-primary-soft, #EBF5F3)', color: 'var(--brand-primary, #0F5E52)', border: '1px solid var(--border-brand, rgba(15,94,82,0.28))', padding: '3px 9px', borderRadius: 9999, fontSize: 11.5, fontWeight: 600 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" />
+            </svg>
+            10月10日迎来战役峰值 (总投入 48.9万)
+          </span>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 18, fontSize: 12, marginBottom: 8, color: 'var(--text-secondary, #57534E)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 12, height: 12, background: '#0F5E52', borderRadius: 3, display: 'inline-block' }} />
+          <span>项目总投入 (Pine)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 12, height: 12, background: '#2E6F8E', borderRadius: 3, display: 'inline-block' }} />
+          <span>平台广告消耗 (Mineral)</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ width: 12, height: 3, background: '#D95D39', display: 'inline-block' }} />
+          <span>政策后结算金额 (Terracotta)</span>
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', width: '100%', height: 260 }}>
+        <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+          <defs>
+            <linearGradient id="qicuiSettlementGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#D95D39" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#D95D39" stopOpacity="0.0" />
+            </linearGradient>
+            <linearGradient id="qicuiInvestGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0F5E52" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="#0F5E52" stopOpacity="0.02" />
+            </linearGradient>
+            <linearGradient id="qicuiAdsGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2E6F8E" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#2E6F8E" stopOpacity="0.0" />
+            </linearGradient>
+          </defs>
+
+          {yTicks.map(t => {
+            const y = getY(t);
+            return (
+              <g key={t}>
+                <line x1={padL} y1={y} x2={w - padR} y2={y} stroke="var(--border-subtle, #E6E4DD)" strokeDasharray="3 3" strokeWidth="0.8" />
+                <text x={padL - 8} y={y + 4} textAnchor="end" fontSize="10.5" fill="var(--text-muted, #8A847C)" className="num">
+                  {t === 0 ? '0w' : `${(t / 10000).toFixed(0)}w`}
+                </text>
+              </g>
+            );
+          })}
+
+          {viewMode === 'combo' ? (
+            <>
+              {points.map((p, i) => {
+                const x = getX(i);
+                const barWidth = 11;
+                const gap = 2;
+                const hInvest = Math.max(0, (padT + plotH) - getY(p.investment));
+                const hAds = Math.max(0, (padT + plotH) - getY(p.ads));
+                const isSelected = selectedDay && p.date === selectedDay;
+
+                return (
+                  <g
+                    key={p.date}
+                    cursor="pointer"
+                    onMouseEnter={() => setHoverIdx(i)}
+                    onMouseLeave={() => setHoverIdx(null)}
+                    onClick={() => onSelectDay && onSelectDay(p.date)}
+                  >
+                    <rect
+                      x={x - barWidth - gap / 2}
+                      y={getY(p.investment)}
+                      width={barWidth}
+                      height={hInvest}
+                      fill="#0F5E52"
+                      rx="3"
+                      ry="3"
+                      opacity={isSelected ? 1 : 0.9}
+                    />
+                    <rect
+                      x={x + gap / 2}
+                      y={getY(p.ads)}
+                      width={barWidth}
+                      height={hAds}
+                      fill="#2E6F8E"
+                      rx="3"
+                      ry="3"
+                      opacity={isSelected ? 1 : 0.85}
+                    />
+                  </g>
+                );
+              })}
+
+              <path d={settlementArea} fill="url(#qicuiSettlementGrad)" />
+              <path d={settlementLine} fill="none" stroke="#D95D39" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+
+              {points.map((p, i) => {
+                const x = getX(i);
+                const y = getY(p.settlement);
+                return (
+                  <circle
+                    key={p.date}
+                    cx={x}
+                    cy={y}
+                    r="4"
+                    fill="#D95D39"
+                    stroke="#FFFFFF"
+                    strokeWidth="1.8"
+                    onMouseEnter={() => setHoverIdx(i)}
+                    onMouseLeave={() => setHoverIdx(null)}
+                    style={{ transition: 'r 0.15s ease' }}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <>
+              <path d={investArea} fill="url(#qicuiInvestGrad)" />
+              <path d={adsArea} fill="url(#qicuiAdsGrad)" />
+              <path d={settlementArea} fill="url(#qicuiSettlementGrad)" />
+
+              <path d={investLine} fill="none" stroke="#0F5E52" strokeWidth="2.4" strokeLinecap="round" />
+              <path d={adsLine} fill="none" stroke="#2E6F8E" strokeWidth="2.4" strokeLinecap="round" />
+              <path d={settlementLine} fill="none" stroke="#D95D39" strokeWidth="2.4" strokeLinecap="round" />
+
+              {points.map((p, i) => (
+                <circle
+                  key={p.date}
+                  cx={getX(i)}
+                  cy={getY(p.investment)}
+                  r="3.5"
+                  fill="#0F5E52"
+                  stroke="#FFFFFF"
+                  strokeWidth="1.5"
+                  onMouseEnter={() => setHoverIdx(i)}
+                  onMouseLeave={() => setHoverIdx(null)}
+                />
+              ))}
+            </>
+          )}
+
+          {points.map((p, i) => {
+            const x = getX(i);
+            const isSelected = selectedDay && p.date === selectedDay;
+            return (
+              <text
+                key={p.date}
+                x={x}
+                y={padT + plotH + 16}
+                textAnchor="middle"
+                fontSize="11"
+                fill={isSelected ? 'var(--brand-primary, #0F5E52)' : 'var(--text-secondary, #57534E)'}
+                fontWeight={isSelected ? '700' : '500'}
+                className="num"
+              >
+                {p.shortDate}
+              </text>
+            );
+          })}
+        </svg>
+
+        {hovered && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: Math.min(plotW - 120, Math.max(padL, getX(hoverIdx!) - 60)),
+              background: 'rgba(255, 255, 255, 0.96)',
+              border: '1px solid var(--border-subtle, #E6E4DD)',
+              borderRadius: 8,
+              padding: '8px 12px',
+              fontSize: 11.5,
+              boxShadow: 'var(--shadow-md, 0 8px 16px rgba(0,0,0,0.06))',
+              pointerEvents: 'none',
+              zIndex: 10,
+            }}
+          >
+            <div style={{ fontWeight: 700, marginBottom: 4, color: 'var(--text-primary, #1C1917)' }}>{hovered.date}</div>
+            <div style={{ color: '#0F5E52', fontWeight: 600 }}>项目总投入：¥{num(hovered.investment)}</div>
+            <div style={{ color: '#2E6F8E', fontWeight: 600 }}>平台广告消耗：¥{num(hovered.ads)}</div>
+            <div style={{ color: '#D95D39', fontWeight: 600 }}>政策后结算：¥{num(hovered.settlement)}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function QicuiChannelStructureCard({
+  series,
+}: {
+  series: DailyPoint[];
+}) {
+  const completeDays = series.filter(p => p.adSpend?.value !== null && p.projectInvestment?.value !== null);
+  const sumVal = (key: keyof DailyPoint) =>
+    completeDays.reduce((acc, p) => {
+      const v = (p[key] as any)?.value;
+      return typeof v === 'number' ? acc + v : acc;
+    }, 0);
+
+  const adSpend = sumVal('adSpend') || 4099028;
+  const creatorCost = sumVal('creatorCost') || 549480.9;
+  const otherCost = (sumVal('other') || 0) + (sumVal('seo') || 0) + (sumVal('comments') || 0) || 150415;
+  const totalInvestment = sumVal('projectInvestment') || (adSpend + creatorCost + otherCost);
+
+  const pctAd = totalInvestment > 0 ? (adSpend / totalInvestment) * 100 : 85.4;
+  const pctCreator = totalInvestment > 0 ? (creatorCost / totalInvestment) * 100 : 11.5;
+  const pctOther = Math.max(0, 100 - pctAd - pctCreator);
+
+  const r = 50;
+  const c = 2 * Math.PI * r;
+  const dashAd = (pctAd / 100) * c;
+  const dashCreator = (pctCreator / 100) * c;
+  const dashOther = (pctOther / 100) * c;
+
+  const offsetCreator = -dashAd;
+  const offsetOther = -(dashAd + dashCreator);
+
+  return (
+    <div className="qicui-structure-card bento-card" style={{ padding: '20px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+        <div className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>
+          <span style={{ color: 'var(--accent-quaternary, #C87D20)', display: 'inline-flex' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" />
+            </svg>
+          </span>
+          <span>启萃硬广 vs 达人采买结构拆解</span>
+        </div>
+        <span className="card-badge" style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 9999, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', color: 'var(--text-secondary, #57534E)' }}>
+          财务结算透视
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', height: 180, margin: '6px 0' }}>
+        <svg width="160" height="160" viewBox="0 0 140 140" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
+          <circle cx="70" cy="70" r={r} fill="none" stroke="#F5F4EE" strokeWidth="18" />
+          <circle
+            cx="70"
+            cy="70"
+            r={r}
+            fill="none"
+            stroke="#0F5E52"
+            strokeWidth="18"
+            strokeDasharray={`${dashAd.toFixed(2)} ${c.toFixed(2)}`}
+            strokeDashoffset="0"
+          />
+          <circle
+            cx="70"
+            cy="70"
+            r={r}
+            fill="none"
+            stroke="#D95D39"
+            strokeWidth="18"
+            strokeDasharray={`${dashCreator.toFixed(2)} ${c.toFixed(2)}`}
+            strokeDashoffset={offsetCreator.toFixed(2)}
+          />
+          <circle
+            cx="70"
+            cy="70"
+            r={r}
+            fill="none"
+            stroke="#C87D20"
+            strokeWidth="18"
+            strokeDasharray={`${dashOther.toFixed(2)} ${c.toFixed(2)}`}
+            strokeDashoffset={offsetOther.toFixed(2)}
+          />
+        </svg>
+
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', fontWeight: 600 }}>项目总投入</div>
+          <div className="num" style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary, #1C1917)' }}>
+            ¥{(totalInvestment / 10000).toFixed(1)}w
+          </div>
+        </div>
+      </div>
+
+      <div className="placement-cpm-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, margin: '10px 0' }}>
+        <div className="cpm-mini-card" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderTop: '2.5px solid var(--brand-primary, #0F5E52)', borderRadius: 8, padding: '8px 6px', textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>聚光搜索 (S)</div>
+          <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--brand-primary, #0F5E52)', margin: '2px 0' }}>61.1%</div>
+          <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>消耗 ¥293.4w</div>
+        </div>
+        <div className="cpm-mini-card" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderTop: '2.5px solid var(--accent-tertiary, #2E6F8E)', borderRadius: 8, padding: '8px 6px', textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>聚光信息流 (F)</div>
+          <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-tertiary, #2E6F8E)', margin: '2px 0' }}>24.3%</div>
+          <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>消耗 ¥116.5w</div>
+        </div>
+        <div className="cpm-mini-card" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderTop: '2.5px solid var(--accent-secondary, #D95D39)', borderRadius: 8, padding: '8px 6px', textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>达人采买 (K)</div>
+          <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-secondary, #D95D39)', margin: '2px 0' }}>11.5%</div>
+          <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>合作 117位</div>
+        </div>
+      </div>
+
+      <div style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 10, padding: '10px 12px', marginBottom: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 4 }}>
+            <span style={{ fontWeight: 600, color: 'var(--text-primary, #1C1917)' }}>硬广月度投放达成</span>
+            <span className="num" style={{ fontWeight: 700, color: 'var(--brand-primary, #0F5E52)' }}>85.4% (日均 ¥27.3w)</span>
+          </div>
+          <div style={{ height: 6, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ width: '85.4%', height: '100%', background: 'linear-gradient(90deg, var(--brand-primary, #0F5E52), var(--accent-tertiary, #2E6F8E))', borderRadius: 4 }} />
+          </div>
+        </div>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 4 }}>
+            <span style={{ fontWeight: 600, color: 'var(--text-primary, #1C1917)' }}>117位合作达人排期交付</span>
+            <span className="num" style={{ fontWeight: 700, color: 'var(--accent-secondary, #D95D39)' }}>91.5% (日均 ¥3.66w)</span>
+          </div>
+          <div style={{ height: 6, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ width: '91.5%', height: '100%', background: 'linear-gradient(90deg, var(--accent-quaternary, #C87D20), var(--accent-secondary, #D95D39))', borderRadius: 4 }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 'auto', paddingTop: 10, borderTop: '1px dashed var(--border-subtle, #E6E4DD)', fontSize: 12, color: 'var(--text-secondary, #57534E)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>硬广投流占比：</span>
+          <b className="num" style={{ color: '#0F5E52', fontWeight: 700 }}>{pctAd.toFixed(1)}% (¥{(adSpend / 10000).toFixed(1)}w)</b>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>KOL达人采买占比：</span>
+          <b className="num" style={{ color: '#D95D39', fontWeight: 700 }}>{pctCreator.toFixed(1)}% (¥{(creatorCost / 10000).toFixed(1)}w / 117人)</b>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>政策返点后结算率：</span>
+          <b className="num" style={{ color: 'var(--status-success, #15803D)', fontWeight: 700 }}>97.0% (返点折让 ¥14.2w)</b>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function QicuiActionClosureLayer() {
+  const [tasks, setTasks] = useState([
+    { id: 1, title: '标准化词包人群', desc: '统一规范竞品人群与拦截词包命名体系，剔除 CTR < 3% 的泛流量词。', owner: '投放组', date: '10/24', tag: '进行中', tagTone: 'warn', done: false },
+    { id: 2, title: '本品笔记评论紧急补位', desc: '调配社区组兼职人力，本周内将本品笔记维护从 4% 提升至 30% 以上。', owner: '社区组', date: '10/22', tag: '最高优', tagTone: 'danger', done: false },
+    { id: 3, title: '10月达人锁档下单', desc: '推进10月 88 位候选达人（73人二核已过）正式下单，向「电商引流机制」倾斜。', owner: 'BD媒介组', date: '10/25', tag: '进行中', tagTone: 'warn', done: false },
+    { id: 4, title: '迭代高热拦截词', desc: '结合秋季换季敏宝热点，扩充高热竞品对比词与转奶需求词，拉升 S 端 CTR。', owner: '投放组', date: '10/28', tag: '待启动', tagTone: 'ok', done: true },
+    { id: 5, title: '高爆笔记 1v1 精细化搭建', desc: '将 Top 10 有机搜索词与高转化防敏笔记单独绑定计划，提升投流 ROI。', owner: '内容+投放', date: '10/30', tag: '待启动', tagTone: 'ok', done: false },
+  ]);
+
+  const toggleTask = (id: number) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t));
+  };
+
+  const doneCount = tasks.filter(t => t.done).length;
+
+  return (
+    <div className="qicui-closure-section" style={{ marginTop: 20 }}>
+      <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '24px 0 14px', flexWrap: 'wrap', gap: 12 }}>
+        <div className="section-title-group" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span className="section-pill pill-l3" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', padding: '4px 10px', borderRadius: 8, background: 'var(--status-success-bg, #ECFDF3)', color: 'var(--status-success, #15803D)' }}>
+            L3 · 闭环行动层
+          </span>
+          <h3 className="section-title" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary, #1C1917)', margin: 0 }}>
+            核心洞察复盘与 Next Step 重点推进事项
+          </h3>
+        </div>
+        <span className="section-subtitle" style={{ fontSize: 12, color: 'var(--text-muted, #8A847C)' }}>
+          支持勾选完成状态，将业务洞察直接转化为团队执行闭环
+        </span>
+      </div>
+
+      <div className="bento-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16 }}>
+        <div className="bento-card col-6" style={{ gridColumn: 'span 6', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
+          <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+            <div className="card-title" style={{ fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary, #1C1917)' }}>
+              <span style={{ color: 'var(--accent-quaternary, #C87D20)', display: 'inline-flex' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 2v1" /><path d="M12 21v1" /><path d="M4.22 4.22l.71.71" /><path d="M18.36 18.36l.71.71" /><path d="M2 12h1" /><path d="M21 12h1" /><path d="M4.22 19.78l.71-.71" /><path d="M18.36 5.64l.71-.71" /><circle cx="12" cy="12" r="5" />
+                </svg>
+              </span>
+              <span>核心洞察与策略复盘 (Key Learnings)</span>
+            </div>
+            <span className="card-badge" style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 9999, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', color: 'var(--text-secondary, #57534E)' }}>
+              方法论沉淀
+            </span>
+          </div>
+
+          <div className="insight-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+            <div className="insight-card success" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderLeft: '3px solid var(--status-success, #15803D)', borderRadius: 8, padding: '12px 14px' }}>
+              <h4 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>1. 防敏与直推高转化</span>
+                <span className="semantic-tag tag-ok">验证有效</span>
+              </h4>
+              <p style={{ margin: 0, fontSize: 12, color: 'var(--text-secondary, #57534E)', lineHeight: 1.6 }}>
+                「敏敏转奶与防敏」切角达成率 90.9%，平均互动率居首；「单品直推」与「竞品1v1」进店 CPUV 最低，是核心拿量支柱。
+              </p>
+            </div>
+
+            <div className="insight-card success" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderLeft: '3px solid var(--status-success, #15803D)', borderRadius: 8, padding: '12px 14px' }}>
+              <h4 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>2. F端信息流放量跑通</span>
+                <span className="semantic-tag tag-ok">超KPI 46%</span>
+              </h4>
+              <p style={{ margin: 0, fontSize: 12, color: 'var(--text-secondary, #57534E)', lineHeight: 1.6 }}>
+                F端累计 CTR 稳定在 8.38%~8.79%（远超 KPI 6%），腰部+初级达人原生育儿笔记在信息流渠道具备极强的低成本获客能力。
+              </p>
+            </div>
+
+            <div className="insight-card warn" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderLeft: '3px solid var(--status-warn, #B45309)', borderRadius: 8, padding: '12px 14px' }}>
+              <h4 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>3. S端词包与达人滞后</span>
+                <span className="semantic-tag tag-warn">亟需攻坚</span>
+              </h4>
+              <p style={{ margin: 0, fontSize: 12, color: 'var(--text-secondary, #57534E)', lineHeight: 1.6 }}>
+                搜索优化达人仅交付 40%（12/30篇），导致搜索结果页承接体不足，叠加泛词比例偏高，拖累搜索 CTR 至 4.56%。
+              </p>
+            </div>
+
+            <div className="insight-card danger" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderLeft: '3px solid var(--status-danger, #C2410C)', borderRadius: 8, padding: '12px 14px' }}>
+              <h4 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span>4. 评论区本品防御失衡</span>
+                <span className="semantic-tag tag-danger">严重失衡</span>
+              </h4>
+              <p style={{ margin: 0, fontSize: 12, color: 'var(--text-secondary, #57534E)', lineHeight: 1.6 }}>
+                社区 UGC 截流完成过半（51%），但本品高赞笔记下方的「置顶追评/蓝V互动」仅完成 4%（20/500条），易造成潜客流失。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bento-card col-6" style={{ gridColumn: 'span 6', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
+          <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+            <div className="card-title" style={{ fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary, #1C1917)' }}>
+              <span style={{ color: 'var(--brand-primary, #0F5E52)', display: 'inline-flex' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polyline points="9 11 12 14 22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+              </span>
+              <span>Next Step 重点推进事项 (Action Tracker)</span>
+            </div>
+            <span className="card-badge" id="taskCounterBadge" style={{ fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 9999, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', color: 'var(--text-secondary, #57534E)' }}>
+              已完成 {doneCount} / 共 {tasks.length} 项
+            </span>
+          </div>
+
+          <div className="task-list" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {tasks.map(t => (
+              <label
+                key={t.id}
+                className={`task-item ${t.done ? 'completed' : ''}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  padding: '9px 12px',
+                  borderRadius: 8,
+                  background: 'var(--bg-subtle, #FAF9F5)',
+                  border: '1px solid var(--border-subtle, #E6E4DD)',
+                  cursor: 'pointer',
+                  opacity: t.done ? 0.6 : 1,
+                  transition: 'opacity 0.2s ease',
+                }}
+              >
+                <input
+                  type="checkbox"
+                  className="task-check"
+                  checked={t.done}
+                  onChange={() => toggleTask(t.id)}
+                  style={{ width: 16, height: 16, accentColor: 'var(--brand-primary, #0F5E52)', cursor: 'pointer' }}
+                />
+                <span className="task-desc" style={{ flex: 1, fontSize: 12.5, color: 'var(--text-primary, #1C1917)', textDecoration: t.done ? 'line-through' : 'none' }}>
+                  <b>{t.title}：</b>{t.desc}
+                </span>
+                <div className="task-meta" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5 }}>
+                  <span className="owner-chip" style={{ background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', padding: '1px 7px', borderRadius: 9999, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>
+                    {t.owner}
+                  </span>
+                  <span className="num" style={{ color: 'var(--text-muted, #8A847C)' }}>{t.date}</span>
+                  <span className={`semantic-tag ${t.tagTone === 'danger' ? 'tag-danger' : t.tagTone === 'warn' ? 'tag-warn' : 'tag-ok'}`}>
+                    {t.tag}
+                  </span>
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -720,3 +720,291 @@ details.kri-secondary[open] > .kri-summary-header {
   gap: 20px;
   box-sizing: border-box;
 }
+
+/* ==========================================================================
+   MULTI-COLOR SECTION PILLS & VIBRANT ICONS
+   ========================================================================== */
+.kri-section-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.kri-pill-02 {
+  background: #EBF5F3;
+  color: #0F5E52;
+  border: 1px solid rgba(15, 94, 82, 0.25);
+}
+
+.kri-pill-03 {
+  background: #EEF6FA;
+  color: #2E6F8E;
+  border: 1px solid rgba(46, 111, 142, 0.25);
+}
+
+.kri-pill-03b {
+  background: #ECFDF3;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.kri-pill-04 {
+  background: #FDF0EC;
+  color: #D95D39;
+  border: 1px solid rgba(217, 93, 57, 0.25);
+}
+
+.kri-pill-05 {
+  background: #FDF6EB;
+  color: #C87D20;
+  border: 1px solid rgba(200, 125, 32, 0.25);
+}
+
+.kri-pill-06 {
+  background: #EBF5F3;
+  color: #0F5E52;
+  border: 1px solid rgba(15, 94, 82, 0.25);
+}
+
+/* Sub-project Breakdown Table */
+.subproj-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.subproj-table th {
+  text-align: left;
+  padding: 7px 10px;
+  color: #8A847C;
+  font-weight: 600;
+  border-bottom: 1px solid #E6E3DC;
+  background: #FAF9F5;
+}
+
+.subproj-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #E6E3DC;
+  color: #1C1917;
+}
+
+.subproj-table tr:last-child td {
+  border-bottom: none;
+}
+
+.subproj-table tr:hover td {
+  background: #FAF9F5;
+}
+
+/* Semantic tags for subproject execution status */
+.semantic-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.semantic-tag.tag-ok {
+  background: #ECFDF3;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.semantic-tag.tag-warn {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.semantic-tag.tag-danger {
+  background: #FFF1F0;
+  color: #C2410C;
+  border: 1px solid #FECACA;
+}
+
+.semantic-tag.tag-neutral {
+  background: #f0f0f3;
+  color: #57534E;
+  border: 1px solid #E6E3DC;
+}
+
+/* ==========================================================================
+   L3 ACTION LAYER: KEY LEARNINGS & ACTION TRACKER
+   ========================================================================== */
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 680px) {
+  .insight-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.insight-card {
+  background: #FAF9F5;
+  border: 1px solid #E6E3DC;
+  border-left: 3.5px solid #0F5E52;
+  border-radius: 8px;
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+}
+
+.insight-card:hover {
+  background: #ffffff;
+  border-color: #D4CFC5;
+  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.05);
+}
+
+.insight-card.warn {
+  border-left-color: #B45309;
+}
+
+.insight-card.danger {
+  border-left-color: #C2410C;
+}
+
+.insight-card.success {
+  border-left-color: #15803D;
+}
+
+.insight-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #1C1917;
+}
+
+.insight-card p {
+  font-size: 12px;
+  color: #57534E;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #FAF9F5;
+  border: 1px solid #E6E3DC;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-item:hover {
+  background: #ffffff;
+  border-color: #D4CFC5;
+}
+
+.task-item.completed {
+  opacity: 0.6;
+  background: #f5f4ee;
+}
+
+.task-item.completed .task-desc {
+  text-decoration: line-through;
+  color: #8A847C;
+}
+
+.task-check {
+  width: 18px;
+  height: 18px;
+  accent-color: #0F5E52;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.task-desc {
+  flex: 1;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #1C1917;
+  line-height: 1.45;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  flex-shrink: 0;
+}
+
+.owner-chip {
+  background: #ffffff;
+  border: 1px solid #E6E3DC;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  color: #57534E;
+  font-weight: 600;
+}
+
+/* Card Badge */
+.card-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  background: #FAF9F5;
+  color: #57534E;
+  border: 1px solid #E6E3DC;
+}
+
+/* Radar & Scatter Enhancements */
+.kri-radar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.kri-scatter-container {
+  width: 100%;
+  position: relative;
+}
+
+@keyframes bubblePop {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.kri-scatter-bubble {
+  animation: bubblePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  cursor: pointer;
+  transition: r 0.15s ease, filter 0.15s ease;
+}
+
+.kri-scatter-bubble:hover {
+  filter: brightness(1.15) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+}

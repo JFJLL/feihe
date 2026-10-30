@@ -1,6 +1,13 @@
 'use client';
 
+import * as ReactModule from 'react';
 import React, { useMemo, useState, useEffect } from 'react';
+
+// Ensure React.default compatibility for CJS test environments transpiled without esModuleInterop
+if (ReactModule && !(ReactModule as any).default) {
+  (ReactModule as any).default = ReactModule;
+}
+
 import type { CampaignDashboard } from '../../lib/campaign-types';
 import { CustomSelect } from '../../components/ui/CustomSelect';
 import { OverviewDateRangeBar } from '../../components/ui/OverviewDateRangeBar';

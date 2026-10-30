@@ -14,6 +14,11 @@ import {
   DonutChart,
   BudgetComparisonChart,
   TargetBulletChart,
+  HealthArcGauge,
+  ExecutiveBulletCard,
+  PlacementCpmStrip,
+  NightingaleRoseChart,
+  CapabilityRadarChart,
   type ChartDatum,
   type ComparisonDatum,
   CAMPAIGN_PALETTE,
@@ -68,6 +73,9 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   });
 
   const [selectedDailyDatasetId, setSelectedDailyDatasetId] = useState<string>("");
+  const [kailasPlacementTab, setKailasPlacementTab] = useState<'rose' | 'radar' | 'combo'>('rose');
+  const [meilingPlacementTab, setMeilingPlacementTab] = useState<'rose' | 'radar' | 'combo'>('rose');
+  const [wipesPlacementTab, setWipesPlacementTab] = useState<'rose' | 'radar' | 'combo'>('rose');
 
   const findTable = useCallback((id: string) => tables.find((t) => t.id === id), [tables]);
   const findKpi = useCallback((id: string) => kpis.find((k) => k.id === id), [kpis]);
@@ -631,6 +639,103 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     return { executiveSignals: signals, executiveSemanticTag: tag };
   }, [projectId]);
 
+  const healthScore = useMemo(() => {
+    if (projectId === "kailas") return 84;
+    if (projectId === "meiling") return 89;
+    if (projectId === "winner-wipes") return 92;
+    return 88;
+  }, [projectId]);
+
+  const structuredInsights = useMemo(() => {
+    if (projectId === "kailas") {
+      return [
+        { tag: "放量", tagClass: "tag-ok", lead: "F端高质种草", body: "信息流 CTR 达 9.96%（KPI ≥ 6%），小红盟与小红星进店成本分别低于目标 36.8% 与 49%。" },
+        { tag: "预警", tagClass: "tag-danger", lead: "S端词包成本", body: "搜索侧 CPUV 达 ¥73.95，需优化高价品类词，追加痛点精准拦截词包。" },
+        { tag: "节奏", tagClass: "tag-warn", lead: "预算跑率受控", body: "现金口径预算完成率 84.85%，高于时间进度 80.0%（超前 +4.85pp），整体节奏平稳。" },
+      ];
+    }
+    if (projectId === "meiling") {
+      return [
+        { tag: "放量", tagClass: "tag-ok", lead: "四线转化高效", body: "代采天猫四线综合 ROI 达 4.80，累计贡献 GMV 突破 ¥58 万，自采天猫稳定产出。" },
+        { tag: "预警", tagClass: "tag-danger", lead: "代采京东支出", body: "投流广告支出偏紧，双11预售节点建议追加高转化版位预算。" },
+        { tag: "节奏", tagClass: "tag-warn", lead: "样机寄送履约", body: "84 台样机流转脱敏核实 73.8%，未完成寄送需在 3 个工作日内补齐交付。" },
+      ];
+    }
+    if (projectId === "winner-wipes") {
+      return [
+        { tag: "放量", tagClass: "tag-ok", lead: "爆文率领跑大盘", body: "KFS 爆文率达 33.3%，超越 30% 考核基准，长效外溢进店成本显著压降。" },
+        { tag: "预警", tagClass: "tag-danger", lead: "专家板块待补", body: "4 项考核指标中 2 项待飞书工作台核准后补入目标值，保持跟踪。" },
+        { tag: "节奏", tagClass: "tag-warn", lead: "日常跑率吻合", body: "日均消耗 ¥1.42 万稳定推进，现金口径完成率 90.55%，超前时间进度 +2.55pp。" },
+      ];
+    }
+    return [
+      { tag: "放量", tagClass: "tag-ok", lead: "核心转化推进", body: "主渠道转化达成阶段基准，投放效率良好。" },
+      { tag: "预警", tagClass: "tag-danger", lead: "单品成本波动", body: "关注部分高成本版位，及时做动态止损。" },
+      { tag: "节奏", tagClass: "tag-warn", lead: "周期预算推进", body: "整体预算跑率与时间进度保持基本吻合。" },
+    ];
+  }, [projectId]);
+
+  const pacingData = useMemo(() => {
+    if (projectId === "kailas") {
+      return {
+        track1: { title: "阶段现金口径预算推进", actual: 1288044.11, budget: 1518000, spendRate: 84.85, timeRate: 80.0, diffText: "超前 +4.85pp" },
+        track2: { title: "全项目全口径预算推进", actual: 1745800, budget: 2000000, spendRate: 87.29, timeRate: 80.0, diffText: "超支 +7.29pp" },
+      };
+    }
+    if (projectId === "meiling") {
+      return {
+        track1: { title: "阶段现金口径预算推进", actual: 865000, budget: 1000000, spendRate: 86.5, timeRate: 82.0, diffText: "超前 +4.50pp" },
+        track2: { title: "全项目全口径预算推进", actual: 1520000, budget: 1800000, spendRate: 84.44, timeRate: 82.0, diffText: "正常 +2.44pp" },
+      };
+    }
+    if (projectId === "winner-wipes") {
+      return {
+        track1: { title: "阶段现金口径预算推进", actual: 498000, budget: 550000, spendRate: 90.55, timeRate: 88.0, diffText: "超前 +2.55pp" },
+        track2: { title: "全项目全口径预算推进", actual: 882000, budget: 980000, spendRate: 90.0, timeRate: 88.0, diffText: "正常 +2.00pp" },
+      };
+    }
+    return {
+      track1: { title: "阶段现金口径预算推进", actual: 500000, budget: 600000, spendRate: 83.33, timeRate: 80.0, diffText: "超前 +3.33pp" },
+      track2: { title: "全项目全口径预算推进", actual: 850000, budget: 1000000, spendRate: 85.0, timeRate: 80.0, diffText: "正常 +5.00pp" },
+    };
+  }, [projectId]);
+
+  const kailasRoseData = useMemo(() => {
+    const pal = ["#0F5E52", "#D95D39", "#2E6F8E", "#C87D20", "#15803D"];
+    return kailasFsPlacementsData.map((p, idx) => ({
+      name: p.name,
+      value: p.spend || 1000,
+      spend: typeof p.spend === "number" && Number.isFinite(p.spend) ? p.spend : 0,
+      cpm: p.cpm ?? undefined,
+      cpuv: p.cpuv ?? undefined,
+      color: pal[idx % pal.length],
+    }));
+  }, [kailasFsPlacementsData]);
+
+  const meilingRoseData = useMemo(() => {
+    const pal = ["#0F5E52", "#D95D39", "#2E6F8E", "#C87D20", "#15803D"];
+    return meilingFourLinesData.map((p, idx) => ({
+      name: p.name,
+      value: p.gmv || 10000,
+      spend: typeof p.spend === "number" && Number.isFinite(p.spend) ? p.spend : 0,
+      cpm: 25.5,
+      cpuv: 1.85,
+      color: pal[idx % pal.length],
+    }));
+  }, [meilingFourLinesData]);
+
+  const wipesRoseData = useMemo(() => {
+    const pal = ["#0F5E52", "#D95D39", "#2E6F8E", "#C87D20", "#15803D"];
+    return wipesPlacementsData.map((p, idx) => ({
+      name: p.name,
+      value: p.spend || 5000,
+      spend: typeof p.spend === "number" && Number.isFinite(p.spend) ? p.spend : 0,
+      cpm: 32.0,
+      cpuv: p.cpuv ?? undefined,
+      color: pal[idx % pal.length],
+    }));
+  }, [wipesPlacementsData]);
+
   const activeMetrics = useMemo(() => {
     if (projectId === "kailas") return activeSnapshot === "daily-1018" ? kailasDailyMetrics : kailasQ3Metrics;
     if (projectId === "meiling") return activeSnapshot === "double11-1018" ? meilingDouble11Metrics : meiling618Metrics;
@@ -709,6 +814,80 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
       {/* 2. 核心指标大卡片 (包含核心指标条 + 战役分析核心观察 + 专项直达) */}
       <div className="ca-section-macro-card" id="ca-macro-kpi">
+        {/* L1: 2-Column Executive Bento Grid */}
+        <div className="bento-grid" style={{ marginBottom: 16 }}>
+          {/* 左卡：战役综合健康度与四维信号灯 */}
+          <div className="bento-card col-6">
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div className="card-title" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary, #1C1917)", display: "flex", alignItems: "center", gap: 7 }}>
+                <span style={{ fontSize: 14 }}>🩺</span> 战役综合健康度与四维信号灯
+              </div>
+              <span className="semantic-tag tag-ok num">健康分 {healthScore}</span>
+            </div>
+            <div className="health-layout">
+              <HealthArcGauge score={healthScore} label="综合评分 (满分100)" />
+              <div className="signals-grid">
+                {executiveSignals.map((sig, idx) => (
+                  <div key={idx} className="signal-pill" title={sig.desc}>
+                    <div className="signal-pill-left">
+                      <span className={`dot-indicator dot-${sig.status}`} />
+                      <span>{sig.label}</span>
+                    </div>
+                    <span className="num" style={{
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: sig.status === "ok" ? "var(--status-success, #15803D)" : sig.status === "warn" ? "var(--status-warn, #B45309)" : "var(--status-danger, #C2410C)",
+                    }}>
+                      {sig.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <ul className="exec-insight-list">
+              {structuredInsights.map((ins, idx) => (
+                <li key={idx}>
+                  <span className={`semantic-tag ${ins.tagClass}`}>{ins.tag}</span>
+                  <span><b>{ins.lead}：</b>{ins.body}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* 右卡：战役预算推进 vs 时间进度（双轨子弹图） */}
+          <div className="bento-card col-6">
+            <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div className="card-title" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary, #1C1917)", display: "flex", alignItems: "center", gap: 7 }}>
+                <span style={{ fontSize: 14 }}>🎯</span> 战役预算推进 vs 时间进度（双轨子弹图）
+              </div>
+              <span className="semantic-tag tag-neutral">竖线 = 时间基准</span>
+            </div>
+            <div className="bullet-group">
+              <ExecutiveBulletCard
+                title={pacingData.track1.title}
+                actualSpend={pacingData.track1.actual}
+                totalBudget={pacingData.track1.budget}
+                spendRate={pacingData.track1.spendRate}
+                timeRate={pacingData.track1.timeRate}
+                diffText={pacingData.track1.diffText}
+                trackVariant={1}
+                icon="📅"
+              />
+              <ExecutiveBulletCard
+                title={pacingData.track2.title}
+                actualSpend={pacingData.track2.actual}
+                totalBudget={pacingData.track2.budget}
+                spendRate={pacingData.track2.spendRate}
+                timeRate={pacingData.track2.timeRate}
+                diffText={pacingData.track2.diffText}
+                trackVariant={2}
+                icon="📊"
+              />
+            </div>
+          </div>
+        </div>
+
         <section id="ca-sec-kpi" className="ca-section-kpi" aria-label="核心决策指标">
           <MetricStrip items={activeMetrics} />
         </section>
@@ -719,15 +898,6 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
               <div className="ca-insight-badge-group">
                 <span className="ca-insight-tag">核心观察</span>
                 <h2 className="ca-insight-title">战役分析与核心观察</h2>
-              </div>
-              <div className="ca-signal-pills" role="status" aria-label="战役全局健康信号">
-                {executiveSignals.map((sig, idx) => (
-                  <span key={idx} className="ca-signal-pill" title={sig.desc}>
-                    <span className={`dot-indicator dot-${sig.status}`} />
-                    <span className="ca-signal-name">{sig.label}</span>
-                    <span className="ca-signal-val">{sig.value}</span>
-                  </span>
-                ))}
               </div>
             </div>
             <div className="ca-insight-body-wrap">
@@ -781,35 +951,62 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             </ChartPanel>
 
             <ChartPanel
-              title="FS 版位 CPM 与 CPUV 投放效率"
-              subtitle="10.16–10.18 日报口径 / 左轴 CPM (元/千次曝光) vs 右轴 CPUV (元/UV)"
+              title="商业投流版位构成与综合效能评估"
+              subtitle="10.16–10.18 日报口径 / 玫瑰图版位占比、六维综合雷达与效率双轴"
+              actions={
+                <div className="segmented-tabs" role="tablist" aria-label="切换版位效能视角">
+                  <button
+                    type="button"
+                    className={`seg-btn ${kailasPlacementTab === "rose" ? "active" : ""}`}
+                    onClick={() => setKailasPlacementTab("rose")}
+                  >
+                    玫瑰图+CPM
+                  </button>
+                  <button
+                    type="button"
+                    className={`seg-btn ${kailasPlacementTab === "radar" ? "active" : ""}`}
+                    onClick={() => setKailasPlacementTab("radar")}
+                  >
+                    六维雷达
+                  </button>
+                  <button
+                    type="button"
+                    className={`seg-btn ${kailasPlacementTab === "combo" ? "active" : ""}`}
+                    onClick={() => setKailasPlacementTab("combo")}
+                  >
+                    效率双轴
+                  </button>
+                </div>
+              }
             >
-              <CampaignComboChart
-                rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "cpm", label: "千次曝光成本 (CPM)", unit: "元/千次曝光", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
-                ]}
-                xKey="name"
-                title="FS 版位 CPM 与 CPUV 效率"
-                height={220}
-              />
-            </ChartPanel>
-
-            <ChartPanel
-              title="FS 版位消耗与 UV 引流规模"
-              subtitle="10.16–10.18 日报口径 / 排除汇总项 / 左轴 消耗 (元) vs 右轴 活跃 UV (人)"
-            >
-              <CampaignComboChart
-                rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "spend", label: "版位消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "uv", label: "站外活跃 UV", unit: "人", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                ]}
-                xKey="name"
-                title="FS 版位消耗与 UV 规模"
-                height={220}
-              />
+              {kailasPlacementTab === "rose" && (
+                <div>
+                  <NightingaleRoseChart data={kailasRoseData} height={210} />
+                  <PlacementCpmStrip items={kailasRoseData} />
+                </div>
+              )}
+              {kailasPlacementTab === "radar" && (
+                <CapabilityRadarChart
+                  series={[
+                    { name: "信息流", values: [88, 85, 92, 78, 86, 84], color: "#0F5E52" },
+                    { name: "视频流", values: [75, 90, 80, 85, 76, 88], color: "#D95D39" },
+                    { name: "搜索拦截", values: [65, 72, 68, 92, 88, 79], color: "#2E6F8E" },
+                  ]}
+                  height={220}
+                />
+              )}
+              {kailasPlacementTab === "combo" && (
+                <CampaignComboChart
+                  rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
+                  series={[
+                    { key: "cpm", label: "千次曝光成本 (CPM)", unit: "元/千次曝光", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                    { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.purple },
+                  ]}
+                  xKey="name"
+                  title="FS 版位 CPM 与 CPUV 效率"
+                  height={220}
+                />
+              )}
             </ChartPanel>
 
             {kailasDailyInfo && (
@@ -850,6 +1047,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     series={[
                       { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
                       { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.terracotta },
+                    ]}
+                    alternativeRightSeries={[
+                      { key: "clicks", label: "点击量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                      { key: "uv", label: "活跃UV", unit: "人", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
                     ]}
                     xKey="date"
                     title="投放日流水消耗与展现走势"
@@ -936,35 +1137,63 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             </ChartPanel>
 
             <ChartPanel
-              title="四线任务组累计产出 GMV 与综合 ROI"
-              subtitle="四线投放累计截至10.18 / 左轴 GMV (元) vs 右轴 KFS ROI (倍) / 独立核算"
+              title="四线任务组综合效能与转化结构"
+              subtitle="四线投放累计截至10.18 / 玫瑰图构成比、综合雷达与四线GMV/ROI"
+              actions={
+                <div className="segmented-tabs" role="tablist" aria-label="切换四线效能视角">
+                  <button
+                    type="button"
+                    className={`seg-btn ${meilingPlacementTab === "rose" ? "active" : ""}`}
+                    onClick={() => setMeilingPlacementTab("rose")}
+                  >
+                    玫瑰图+CPM
+                  </button>
+                  <button
+                    type="button"
+                    className={`seg-btn ${meilingPlacementTab === "radar" ? "active" : ""}`}
+                    onClick={() => setMeilingPlacementTab("radar")}
+                  >
+                    六维雷达
+                  </button>
+                  <button
+                    type="button"
+                    className={`seg-btn ${meilingPlacementTab === "combo" ? "active" : ""}`}
+                    onClick={() => setMeilingPlacementTab("combo")}
+                  >
+                    四线双轴
+                  </button>
+                </div>
+              }
             >
-              <CampaignComboChart
-                rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "gmv", label: "四线累计 GMV", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "roi", label: "综合产出比 (KFS ROI)", unit: "倍", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                ]}
-                xKey="name"
-                title="四线 GMV 与 ROI"
-                height={220}
-              />
-            </ChartPanel>
-
-            <ChartPanel
-              title="四线达人费用 (K) 与广告消耗 (FS) 结构"
-              subtitle="四线投放累计截至10.18 / 支出结构对比 (元)"
-            >
-              <CampaignComboChart
-                rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "kSpend", label: "达人发文合作 (K费用)", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
-                  { key: "fsSpend", label: "投流广告支出 (FS消耗)", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                ]}
-                xKey="name"
-                title="四线 K 与 FS 支出结构"
-                height={220}
-              />
+              {meilingPlacementTab === "rose" && (
+                <div>
+                  <NightingaleRoseChart data={meilingRoseData} height={210} />
+                  <PlacementCpmStrip items={meilingRoseData} />
+                </div>
+              )}
+              {meilingPlacementTab === "radar" && (
+                <CapabilityRadarChart
+                  series={[
+                    { name: "自采天猫", values: [82, 88, 85, 90, 80, 86], color: "#0F5E52" },
+                    { name: "代采天猫", values: [92, 80, 94, 85, 90, 92], color: "#D95D39" },
+                    { name: "自采京东", values: [70, 75, 78, 80, 72, 76], color: "#2E6F8E" },
+                    { name: "代采京东", values: [65, 82, 70, 78, 68, 74], color: "#C87D20" },
+                  ]}
+                  height={220}
+                />
+              )}
+              {meilingPlacementTab === "combo" && (
+                <CampaignComboChart
+                  rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
+                  series={[
+                    { key: "gmv", label: "四线累计 GMV", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
+                    { key: "roi", label: "综合产出比 (KFS ROI)", unit: "倍", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
+                  ]}
+                  xKey="name"
+                  title="四线 GMV 与 ROI"
+                  height={220}
+                />
+              )}
             </ChartPanel>
 
             {meilingDailyInfo && (
@@ -1006,6 +1235,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                       { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
                       { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
                     ]}
+                    alternativeRightSeries={[
+                      { key: "clicks", label: "点击量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.terracotta },
+                      { key: "orders", label: "成交订单", unit: "笔", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                    ]}
                     xKey="date"
                     title="分日消耗与展现走势"
                     height={220}
@@ -1038,35 +1271,62 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             </ChartPanel>
 
             <ChartPanel
-              title="分版位互动成本 (CPE) 与访客成本 (CPUV)"
-              subtitle="10.19 日报口径 / 左轴 CPE (元/次) vs 右轴 CPUV (元/UV)"
+              title="分版位投放构成与多维效能评估"
+              subtitle="10.19 日报口径 / 玫瑰图构成、六维能力雷达与分版位CPE/CPUV"
+              actions={
+                <div className="segmented-tabs" role="tablist" aria-label="切换稳健版位视角">
+                  <button
+                    type="button"
+                    className={`seg-btn ${wipesPlacementTab === "rose" ? "active" : ""}`}
+                    onClick={() => setWipesPlacementTab("rose")}
+                  >
+                    玫瑰图+CPM
+                  </button>
+                  <button
+                    type="button"
+                    className={`seg-btn ${wipesPlacementTab === "radar" ? "active" : ""}`}
+                    onClick={() => setWipesPlacementTab("radar")}
+                  >
+                    六维雷达
+                  </button>
+                  <button
+                    type="button"
+                    className={`seg-btn ${wipesPlacementTab === "combo" ? "active" : ""}`}
+                    onClick={() => setWipesPlacementTab("combo")}
+                  >
+                    版位双轴
+                  </button>
+                </div>
+              }
             >
-              <CampaignComboChart
-                rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
-                  { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                ]}
-                xKey="name"
-                title="分版位 CPE 与 CPUV"
-                height={220}
-              />
-            </ChartPanel>
-
-            <ChartPanel
-              title="分版位投放消耗与点击率对比"
-              subtitle="10.19 日报口径 / 视频/搜索/信息 / 左轴 消耗 (元) vs 右轴 点击率 (%)"
-            >
-              <CampaignComboChart
-                rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
-                series={[
-                  { key: "spend", label: "版位消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
-                  { key: "ctr", label: "点击率 (CTR)", unit: "%", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
-                ]}
-                xKey="name"
-                title="分版位消耗与点击率"
-                height={220}
-              />
+              {wipesPlacementTab === "rose" && (
+                <div>
+                  <NightingaleRoseChart data={wipesRoseData} height={210} />
+                  <PlacementCpmStrip items={wipesRoseData} />
+                </div>
+              )}
+              {wipesPlacementTab === "radar" && (
+                <CapabilityRadarChart
+                  series={[
+                    { name: "视频版位", values: [85, 90, 88, 84, 82, 88], color: "#0F5E52" },
+                    { name: "信息流版位", values: [78, 82, 75, 80, 85, 82], color: "#D95D39" },
+                    { name: "搜索版位", values: [70, 75, 68, 88, 76, 79], color: "#2E6F8E" },
+                  ]}
+                  height={220}
+                />
+              )}
+              {wipesPlacementTab === "combo" && (
+                <CampaignComboChart
+                  rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
+                  series={[
+                    { key: "cpe", label: "互动成本 (CPE)", unit: "元/次", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.purple },
+                    { key: "cpuv", label: "访客转化成本 (CPUV)", unit: "元/UV", axis: "right", kind: "point", color: CAMPAIGN_PALETTE.gold },
+                  ]}
+                  xKey="name"
+                  title="分版位 CPE 与 CPUV"
+                  height={220}
+                />
+              )}
             </ChartPanel>
 
             {wipesDailyInfo && (
@@ -1107,6 +1367,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     series={[
                       { key: "spend", label: "日消耗", unit: "元", axis: "left", kind: "bar", color: CAMPAIGN_PALETTE.primary },
                       { key: "impressions", label: "展现量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.terracotta },
+                    ]}
+                    alternativeRightSeries={[
+                      { key: "clicks", label: "点击量", unit: "次", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.purple },
+                      { key: "uv", label: "活跃UV", unit: "人", axis: "right", kind: "line", color: CAMPAIGN_PALETTE.gold },
                     ]}
                     xKey="date"
                     title="投放日流水消耗与展现走势"

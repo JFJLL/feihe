@@ -160,3 +160,177 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   MEILING ACTION TIMELINE & SEGMENTED TABS
+   ========================================================================== */
+.segmented-tabs {
+  display: inline-flex;
+  background: #f4f4f6;
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid #e0e1e6;
+  gap: 3px;
+}
+
+.seg-btn {
+  border: none;
+  background: transparent;
+  color: #57534e;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+  line-height: 1.3;
+}
+
+.seg-btn:hover {
+  color: #1c1917;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.seg-btn.active {
+  background: #ffffff;
+  color: #0F5E52;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 16px;
+  background: #faf9f7;
+  border: 1px solid #e6e3dc;
+  border-left: 3.5px solid #0F5E52;
+  border-radius: 8px;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.timeline-item:hover {
+  border-color: #d4cfc5;
+  border-left-color: #D95D39;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.05);
+}
+
+.timeline-item.done {
+  opacity: 0.62;
+  background: #f5f4ee;
+  border-left-color: #8A847C;
+}
+
+.timeline-item.done .tl-title {
+  text-decoration: line-through;
+  color: #8A847C;
+}
+
+.tl-check {
+  margin-top: 5px;
+  width: 18px;
+  height: 18px;
+  accent-color: #0F5E52;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tl-date-box {
+  background: #ffffff;
+  border: 1px solid #e6e3dc;
+  border-radius: 6px;
+  padding: 4px 8px;
+  text-align: center;
+  min-width: 54px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.tl-date-box .d-month {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8A847C;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tl-date-box .d-day {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0F5E52;
+  line-height: 1.15;
+}
+
+.tl-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tl-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.tl-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1c1917;
+  transition: color 0.15s ease;
+}
+
+.tl-desc {
+  font-size: 12px;
+  color: #57534e;
+  line-height: 1.5;
+}
+
+/* Semantic tags matching botanical design tokens */
+.semantic-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.semantic-tag.tag-ok {
+  background: #ECFDF3;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.semantic-tag.tag-warn {
+  background: #FFFBEB;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.semantic-tag.tag-danger {
+  background: #FFF1F0;
+  color: #C2410C;
+  border: 1px solid #FECACA;
+}
+
+.semantic-tag.tag-neutral {
+  background: #f0f0f3;
+  color: #57534e;
+  border: 1px solid #e0e1e6;
+}

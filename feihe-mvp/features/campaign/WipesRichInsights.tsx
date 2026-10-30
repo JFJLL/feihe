@@ -162,10 +162,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     });
 
     const budgetComboSeries: ComboSeries[] = [
-      { key: 'clientBudget', label: '客户预算', unit: '元', axis: 'left', kind: 'bar', color: '#ffc53d' },
-      { key: 'clientSpent', label: '客户已用', unit: '元', axis: 'left', kind: 'bar', color: '#e5484d' },
-      { key: 'usableBudget', label: '可消耗预算', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
-      { key: 'usableSpent', label: '实际可消耗已用', unit: '元', axis: 'left', kind: 'bar', color: '#12a594' },
+      { key: 'clientBudget', label: '客户预算', unit: '元', axis: 'left', kind: 'bar', color: '#0F5E52' },
+      { key: 'clientSpent', label: '客户已用', unit: '元', axis: 'left', kind: 'bar', color: '#2E6F8E' },
+      { key: 'usableBudget', label: '可消耗预算', unit: '元', axis: 'left', kind: 'bar', color: '#C87D20' },
+      { key: 'usableSpent', label: '实际可消耗已用', unit: '元', axis: 'left', kind: 'bar', color: '#D95D39' },
     ];
 
     const metricStripItems: MetricStripItem[] = [
@@ -256,8 +256,8 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       };
     });
     const tierStackedSegments: StackedBarSegment[] = [
-      { key: 'kSpend', label: '达人采买费 (K端)', color: '#5b5bd6' },
-      { key: 'fsSpend', label: '投流加热费 (FS端)', color: '#008573' },
+      { key: 'kSpend', label: '达人采买费 (K端)', color: '#0F5E52' },
+      { key: 'fsSpend', label: '投流加热费 (FS端)', color: '#D95D39' },
     ];
 
     // Direction x Audience Matrix Heatmap (derived dynamically from wipes-direction-audience-matrix)
@@ -314,9 +314,9 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       },
     ];
     const noteTrafficSegments: StackedBarSegment[] = [
-      { key: 'natural', label: '自然流量 (蒲公英沉淀)', color: '#008573' },
-      { key: 'promo', label: '商业推广 (聚光+信息流)', color: '#5b5bd6' },
-      { key: 'heating', label: '加热流 (官方粉推)', color: '#ffc53d' },
+      { key: 'natural', label: '自然流量 (蒲公英沉淀)', color: '#0F5E52' },
+      { key: 'promo', label: '商业推广 (聚光+信息流)', color: '#2E6F8E' },
+      { key: 'heating', label: '加热流 (官方粉推)', color: '#C87D20' },
     ];
 
     // Creator funnel elimination reasons (dynamically derived from source table)

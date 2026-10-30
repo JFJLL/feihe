@@ -93,11 +93,17 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--teal-11, #008573), var(--teal-12, #0d3d38));
+  background: linear-gradient(135deg, var(--brand-primary, #0F5E52) 0%, var(--accent-secondary, #D95D39) 100%);
   color:white;
   font-size: 16px;
   font-weight: 800;
-  box-shadow: 0 4px 12px rgba(0, 133, 115, 0.25);
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.16);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.brand:hover > span {
+  transform: rotate(-4deg) scale(1.05);
+  box-shadow: 0 6px 16px rgba(217, 93, 57, 0.24);
 }
 
 .brand small {
@@ -195,31 +201,55 @@
   background: #f0f0f3;
   padding: 1px 6px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 700;
   transition: all 250ms ease-out;
 }
 
+.project-main-nav a:nth-child(1) .nav-num {
+  background: var(--brand-primary-soft, #EBF5F3);
+  color: var(--brand-primary, #0F5E52);
+}
+.project-main-nav a:nth-child(2) .nav-num {
+  background: var(--accent-secondary-soft, #FDF0EC);
+  color: var(--accent-secondary, #D95D39);
+}
+.project-main-nav a:nth-child(3) .nav-num {
+  background: var(--accent-tertiary-soft, #EEF6FA);
+  color: var(--accent-tertiary, #2E6F8E);
+}
+.project-main-nav a:nth-child(4) .nav-num {
+  background: var(--accent-quaternary-soft, #FDF6EB);
+  color: var(--accent-quaternary, #C87D20);
+}
+.project-main-nav a:nth-child(5) .nav-num,
+.project-main-nav a:nth-child(6) .nav-num {
+  background: #EEF5F0;
+  color: #4A7C59;
+}
+
 .project-main-nav a:hover {
-  color:var(--teal-11, #008573);
-  background: #e0f8f3;
-  border-color:#ccf3ea;
+  color: var(--brand-primary, #0F5E52);
+  background: var(--brand-primary-soft, #EBF5F3);
+  border-color: var(--border-brand, rgba(15, 94, 82, 0.25));
+  transform: translateX(3px);
 }
 .project-main-nav a:hover .nav-num {
-  background: #ccf3ea;
-  color:var(--teal-12, #0d3d38);
+  background: var(--brand-primary, #0F5E52);
+  color: #ffffff;
 }
 
 .project-main-nav a.active {
-  color:var(--teal-12, #0d3d38);
-  background: linear-gradient(135deg, #e0f8f3 0%, #e0f8f3 100%);
-  border:0.5px solid #ccf3ea;
+  color: var(--brand-primary, #0F5E52);
+  background: linear-gradient(90deg, var(--brand-primary-soft, #EBF5F3) 0%, #FFFFFF 100%);
+  border: 1px solid var(--border-brand, rgba(15, 94, 82, 0.28));
+  border-left: 3.5px solid var(--brand-primary, #0F5E52);
   font-weight: 700;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  box-shadow: 0 4px 12px -2px rgba(15, 94, 82, 0.08);
 }
 
 .project-main-nav a.active .nav-num {
-  color:var(--teal-12, #0d3d38);
-  background: #e0f8f3;
+  color: #ffffff;
+  background: var(--brand-primary, #0F5E52);
 }
 
 /* Sidebar Collapsed State Rules */

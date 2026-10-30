@@ -168,8 +168,8 @@ export function SpendTrendChart({
       {/* Legend */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 12, marginBottom: 8, justifyContent: 'flex-end' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 2, background: '#0d74ce', display: 'inline-block' }} />
-          <span style={{ color: '#0d74ce', fontWeight: 600 }}>实际消耗</span>
+          <span style={{ width: 14, height: 2, background: '#0F5E52', display: 'inline-block' }} />
+          <span style={{ color: '#0F5E52', fontWeight: 600 }}>实际消耗</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ width: 14, height: 2, borderTop: '2px dashed #60646c', display: 'inline-block' }} />
@@ -184,8 +184,8 @@ export function SpendTrendChart({
       >
         <defs>
           <linearGradient id="spend-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0d74ce" stopOpacity={0.24} />
-            <stop offset="100%" stopColor="#0d74ce" stopOpacity={0.01} />
+            <stop offset="0%" stopColor="#0F5E52" stopOpacity={0.24} />
+            <stop offset="100%" stopColor="#0F5E52" stopOpacity={0.01} />
           </linearGradient>
         </defs>
 
@@ -208,7 +208,7 @@ export function SpendTrendChart({
         {/* Areas and paths */}
         <path d={actualArea} fill="url(#spend-grad)" />
         <path d={planPath} fill="none" stroke="#60646c" strokeWidth="2" strokeDasharray="5 4" />
-        <path d={actualPath} fill="none" stroke="#0d74ce" strokeWidth="2.5" strokeLinecap="round" />
+        <path d={actualPath} fill="none" stroke="#0F5E52" strokeWidth="2.5" strokeLinecap="round" />
 
         {/* X Ticks */}
         {xIndices.map((i) => {

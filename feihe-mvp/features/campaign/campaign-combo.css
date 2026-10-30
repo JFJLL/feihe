@@ -378,3 +378,36 @@
   letter-spacing: -0.01em;
   pointer-events: none;
 }
+
+/* Segmented Tabs in Combo Chart */
+.ca-combo-wrap .segmented-tabs {
+  display: inline-flex;
+  background: var(--bg-subtle, #FAF9F5);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle, #E6E3DC);
+  gap: 2px;
+}
+
+.ca-combo-wrap .seg-btn {
+  border: none;
+  background: transparent;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary, #57534E);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.ca-combo-wrap .seg-btn:hover {
+  color: var(--text-primary, #1C1917);
+}
+
+.ca-combo-wrap .seg-btn.active {
+  background: #FFFFFF;
+  color: var(--brand-primary, #0F5E52);
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.08);
+}

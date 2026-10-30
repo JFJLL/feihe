@@ -1840,3 +1840,18 @@ details.ht-layer[open] > .ht-summary-header::after {
 .ht-inline-bar-fill.primary {
   background: var(--ht-primary);
 }
+
+/* Multi-color Palette Tokens & Card Hover Elevation */
+.ht-layer {
+  transition: box-shadow 0.2s ease;
+}
+
+.ht-layer:hover {
+  box-shadow: 0 4px 14px rgba(28, 32, 36, 0.05);
+}
+
+.ht-icon-pine { color: #0F5E52; }
+.ht-icon-terracotta { color: #D95D39; }
+.ht-icon-blue { color: #2E6F8E; }
+.ht-icon-gold { color: #C87D20; }
+.ht-icon-sage { color: #5B8266; }

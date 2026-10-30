@@ -46,6 +46,8 @@ function resolveSection(
   return 'overview';
 }
 
+type PaletteKey = 'botanical' | 'terracotta' | 'nordic';
+
 export function CampaignWorkspace({
   projectId,
   section,
@@ -60,6 +62,24 @@ export function CampaignWorkspace({
     ? projectContext.currentProject
     : projectContext?.projects?.find((p) => p.id === projectId);
   const preset = resolveDashboardPreset('content_marketing');
+  const [currentPalette, setCurrentPalette] = useState<PaletteKey>('botanical');
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const existing = document.documentElement.getAttribute('data-palette') as PaletteKey | null;
+      if (existing === 'botanical' || existing === 'terracotta' || existing === 'nordic') {
+        setCurrentPalette(existing);
+      }
+    }
+  }, []);
+
+  const handlePaletteChange = (val: PaletteKey) => {
+    setCurrentPalette(val);
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-palette', val);
+      window.dispatchEvent(new CustomEvent('palettechange', { detail: { palette: val } }));
+    }
+  };
 
   const [dashboard, setDashboard] = useState<CampaignDashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -205,6 +225,31 @@ export function CampaignWorkspace({
     </button>
   );
 
+  const paletteSwitcher = (
+    <div className="ca-palette-switcher-pill" title="切换浅色主题色板">
+      <span style={{ fontSize: 13 }} aria-hidden="true">🎨</span>
+      <label htmlFor="palette-selector-input" className="sr-only">选择浅色色板</label>
+      <select
+        id="palette-selector-input"
+        className="ca-palette-select"
+        value={currentPalette}
+        onChange={(e) => handlePaletteChange(e.target.value as PaletteKey)}
+        aria-label="选择浅色色板"
+      >
+        <option value="botanical">🌿 旷野松石 (松石绿 + 赤陶橘)</option>
+        <option value="terracotta">📰 财经社论 (丹砂红 + 矿石蓝)</option>
+        <option value="nordic">🏔️ 北欧矿石 (深海青 + 鼠尾草)</option>
+      </select>
+    </div>
+  );
+
+  const frameActions = (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+      {paletteSwitcher}
+      {refreshAction}
+    </div>
+  );
+
   const tabsSlot = currentSection === 'overview' ? (
     <WorkspaceModuleTabs
       tabs={[
@@ -219,7 +264,7 @@ export function CampaignWorkspace({
 
   if (loading && !activeDashboard) {
     return (
-      <DashboardFrame preset={preset} project={project} actions={refreshAction} tabsSlot={tabsSlot}>
+      <DashboardFrame preset={preset} project={project} actions={frameActions} tabsSlot={tabsSlot}>
         <div className={`campaign-workspace-root ${className}`}>
           <LoadingState text="正在准备战役全盘数据…" />
         </div>
@@ -229,7 +274,7 @@ export function CampaignWorkspace({
 
   if (error && !activeDashboard) {
     return (
-      <DashboardFrame preset={preset} project={project} actions={refreshAction} tabsSlot={tabsSlot}>
+      <DashboardFrame preset={preset} project={project} actions={frameActions} tabsSlot={tabsSlot}>
         <div className={`campaign-workspace-root ${className}`}>
           <ErrorState error={error} onRetry={handleReload} />
         </div>
@@ -239,7 +284,7 @@ export function CampaignWorkspace({
 
   if (!activeDashboard) {
     return (
-      <DashboardFrame preset={preset} project={project} actions={refreshAction} tabsSlot={tabsSlot}>
+      <DashboardFrame preset={preset} project={project} actions={frameActions} tabsSlot={tabsSlot}>
         <div className={`campaign-workspace-root ${className}`}>
           <ErrorState error="暂无当前项目的复盘数据" onRetry={handleReload} />
         </div>
@@ -251,7 +296,7 @@ export function CampaignWorkspace({
     <DashboardFrame
       preset={preset}
       project={project}
-      actions={refreshAction}
+      actions={frameActions}
       tabsSlot={tabsSlot}
     >
       <div className={`campaign-workspace-root ${className}`}>
@@ -286,6 +331,67 @@ export function CampaignWorkspace({
           </button>
         </div>
       )}
+
+      {/* 当前项目档案横幅 (Project Context Ribbon) */}
+      {activeDashboard && (() => {
+        let spu = '核心主推品';
+        let category = '消费品与品牌营销';
+        let mode = '双轨全域归因 · KFS真实入账';
+        let projDisplayName = activeDashboard.name || project?.name || '营销战役';
+
+        if (projectId === 'kailas') {
+          projDisplayName = '凯乐石户外 · 跑鞋秋季战役';
+          spu = '凯乐石 FUGA 大坡王越野跑鞋';
+          category = '户外运动 / 越野跑鞋';
+          mode = '双轨全域归因 · KFS真实入账';
+        } else if (projectId === 'meiling') {
+          projDisplayName = '美菱家电 · 双11大促战役';
+          spu = '美菱 603 无霜冰箱';
+          category = '大家电 / 冰箱保鲜';
+          mode = '双11大促全域攻坚 · 四线独立归因';
+        } else if (projectId === 'winner-wipes') {
+          projDisplayName = '稳健医疗 · 日常种草战役';
+          spu = '全棉时代成人医用级酒精消毒湿巾';
+          category = '个人护理 / 卫生湿巾';
+          mode = '日常种草控盘 · 星河&CID对账';
+        } else if (projectId === 'huang-tiane') {
+          projDisplayName = '黄天鹅蛋品 · 全域营销复盘';
+          spu = '黄天鹅可生食鸡蛋';
+          category = '生鲜食品 / 禽蛋蛋品';
+          mode = '全域三线核算 · 真实入账';
+        }
+
+        const period = activeDashboard.reportPeriod || '观测周期中';
+
+        return (
+          <div className="project-context-bar" role="region" aria-label="当前项目档案元数据">
+            <div className="context-left">
+              <div className="context-item">
+                <span className="context-icon-badge" style={{ background: 'var(--brand-primary-soft, #EBF5F3)', color: 'var(--brand-primary, #0F5E52)' }}>💼</span>
+                <span>当前聚焦项目：<b>{projDisplayName}</b></span>
+              </div>
+              <div className="context-item">
+                <span className="context-icon-badge" style={{ background: 'var(--accent-secondary-soft, #FDF0EC)', color: 'var(--accent-secondary, #D95D39)' }}>🏷️</span>
+                <span>核心 SPU：<b>{spu}</b></span>
+              </div>
+              <div className="context-item">
+                <span className="context-icon-badge" style={{ background: 'var(--accent-tertiary-soft, #EEF6FA)', color: 'var(--accent-tertiary, #2E6F8E)' }}>📂</span>
+                <span>所属类目：<b>{category}</b></span>
+              </div>
+              <div className="context-item">
+                <span className="context-icon-badge" style={{ background: 'var(--accent-quaternary-soft, #FDF6EB)', color: 'var(--accent-quaternary, #C87D20)' }}>📅</span>
+                <span>数据观测周期：<b>{period}</b></span>
+              </div>
+            </div>
+            <div className="context-right">
+              <span className="semantic-tag tag-ok">
+                <span>🎯</span>
+                <span>{mode}</span>
+              </span>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* 黄天鹅专属看板：分发 overview / ads / content 到 HuangTianeBoard，daily 保持共享分日看板 */}
       {projectId === 'huang-tiane' && (

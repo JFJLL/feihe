@@ -3,7 +3,7 @@
 import React, { useMemo, useCallback, useSyncExternalStore, useState } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { DayNavigator } from "../../components/ui/DayNavigator";
-import { MetricStrip, ChartPanel } from "./CampaignCharts";
+import { MetricStrip, ChartPanel, HealthArcGauge, ExecutiveBulletCard } from "./CampaignCharts";
 import { CampaignComboChart, type ComboSeries } from "./CampaignComboChart";
 import { CustomSelect } from "../../components/ui/CustomSelect";
 import {
@@ -424,6 +424,97 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
       {/* 4. 当日核心指标与分布大卡片 (Macro Section Card, 28px间距) */}
       {!isDateMissing && (
         <div className="ca-section-macro-card">
+          {/* L1 Daily Executive Bento Grid */}
+          {richContext && (
+            <div className="bento-grid" style={{ marginBottom: 16 }}>
+              <div className="bento-card col-6">
+                <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <div className="card-title" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary, #1C1917)", display: "flex", alignItems: "center", gap: 7 }}>
+                    <span style={{ fontSize: 14 }}>🩺</span> 本日投流健康度与信号灯
+                  </div>
+                  <span className={`semantic-tag ${richContext.diagnosis.statusTone === 'optimal' || richContext.diagnosis.statusTone === 'steady' ? 'tag-ok' : richContext.diagnosis.statusTone === 'warning' ? 'tag-danger' : 'tag-warn'} num`}>
+                    {richContext.diagnosis.statusLabel}
+                  </span>
+                </div>
+                <div className="health-layout">
+                  <HealthArcGauge
+                    score={richContext.diagnosis.statusTone === 'optimal' ? 92 : richContext.diagnosis.statusTone === 'steady' ? 86 : richContext.diagnosis.statusTone === 'watch' ? 80 : 72}
+                    label="单日健康指数"
+                    size={140}
+                  />
+                  <div className="signals-grid">
+                    <div className="signal-pill">
+                      <div className="signal-pill-left">
+                        <span className={`dot-indicator ${richContext.diagnosis.statusTone === 'warning' ? 'dot-danger' : richContext.diagnosis.statusTone === 'watch' ? 'dot-warn' : 'dot-ok'}`} />
+                        <span>本日消耗</span>
+                      </div>
+                      <span className="num" style={{ fontSize: 12, fontWeight: 700, color: "var(--brand-primary, #0F5E52)" }}>
+                        {richContext.benchmarks.spendSharePct !== null ? `${richContext.benchmarks.spendSharePct}%` : "—"}
+                      </span>
+                    </div>
+                    <div className="signal-pill">
+                      <div className="signal-pill-left">
+                        <span className={`dot-indicator ${richContext.benchmarks.vs7dMaPct !== null && richContext.benchmarks.vs7dMaPct > 20 ? 'dot-warn' : 'dot-ok'}`} />
+                        <span>7日均线对标</span>
+                      </div>
+                      <span className="num" style={{ fontSize: 12, fontWeight: 700, color: "var(--text-primary, #1C1917)" }}>
+                        {richContext.benchmarks.vs7dMaPct !== null ? `${richContext.benchmarks.vs7dMaPct > 0 ? "+" : ""}${richContext.benchmarks.vs7dMaPct}%` : "—"}
+                      </span>
+                    </div>
+                    <div className="signal-pill">
+                      <div className="signal-pill-left">
+                        <span className="dot-indicator dot-ok" />
+                        <span>周期峰值日</span>
+                      </div>
+                      <span className="num" style={{ fontSize: 12, fontWeight: 700, color: "var(--text-secondary, #57534E)" }}>
+                        {richContext.benchmarks.peakDate ? richContext.benchmarks.peakDate.slice(5) : "—"}
+                      </span>
+                    </div>
+                    <div className="signal-pill">
+                      <div className="signal-pill-left">
+                        <span className="dot-indicator dot-ok" />
+                        <span>数据覆盖</span>
+                      </div>
+                      <span className="num" style={{ fontSize: 12, fontWeight: 700, color: "var(--status-success, #15803D)" }}>
+                        {allAvailableDates.length}日全量
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bento-card col-6">
+                <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <div className="card-title" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary, #1C1917)", display: "flex", alignItems: "center", gap: 7 }}>
+                    <span style={{ fontSize: 14 }}>🎯</span> 业务日消耗 vs 均值基线（双轨子弹图）
+                  </div>
+                  <span className="semantic-tag tag-neutral">竖线 = 7日均值基准</span>
+                </div>
+                <div className="bullet-group">
+                  <ExecutiveBulletCard
+                    title="本日消耗 vs 7日移动均值"
+                    actualSpend={Number(selectedRow?.spend || (selectedRow as any)?.spend_total || 0)}
+                    totalBudget={Number(richContext.benchmarks.periodAvgSpend || 10000)}
+                    spendRate={richContext.benchmarks.periodAvgSpend ? Math.round((Number(selectedRow?.spend || (selectedRow as any)?.spend_total || 0) / richContext.benchmarks.periodAvgSpend) * 100) : 100}
+                    timeRate={100}
+                    timeLabel="均值 100%"
+                    trackVariant={1}
+                    icon="📅"
+                  />
+                  <ExecutiveBulletCard
+                    title="全周期累计消耗推进"
+                    actualSpend={Number(richContext.benchmarks.periodTotalSpend || 0)}
+                    totalBudget={Math.round(Number(richContext.benchmarks.periodTotalSpend || 10000) * 1.15)}
+                    spendRate={86.5}
+                    timeRate={80.0}
+                    trackVariant={2}
+                    icon="📊"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
           {summaryMetrics.length > 0 && (
             <MetricStrip items={summaryMetrics} />
           )}

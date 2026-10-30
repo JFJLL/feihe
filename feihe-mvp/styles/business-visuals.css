@@ -503,3 +503,139 @@
   pointer-events: none;
   z-index: 1;
 }
+
+/* =========================================================================
+   QICUI INTERACTIVE CHARTS & CLOSURE ACTION LAYER (EDITORIAL LIGHT)
+   ========================================================================= */
+
+.segmented-tabs {
+  display: inline-flex;
+  background: var(--bg-subtle, #FAF9F5);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle, #E6E4DD);
+  gap: 3px;
+}
+
+.seg-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #57534E);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.seg-btn:hover {
+  color: var(--text-primary, #1C1917);
+}
+
+.seg-btn.active {
+  background: #FFFFFF;
+  color: var(--brand-primary, #0F5E52);
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.05);
+}
+
+.peak-callout-badge {
+  font-family: var(--font-sans, inherit);
+  letter-spacing: -0.01em;
+}
+
+/* L3: Closed-Loop Key Learnings & Action Kanban */
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 680px) {
+  .insight-grid { grid-template-columns: 1fr; }
+}
+
+.insight-card {
+  background: var(--bg-subtle, #FAF9F5);
+  border: 1px solid var(--border-subtle, #E6E4DD);
+  border-left: 3px solid var(--brand-primary, #0F5E52);
+  border-radius: 8px;
+  padding: 12px 14px;
+  transition: all 0.15s ease;
+}
+.insight-card:hover {
+  background: #FFFFFF;
+  border-color: var(--border-focus, #D4CFC5);
+  box-shadow: 0 2px 6px rgba(28, 25, 23, 0.04);
+}
+.insight-card.success { border-left-color: var(--status-success, #15803D); }
+.insight-card.warn { border-left-color: var(--status-warn, #B45309); }
+.insight-card.danger { border-left-color: var(--status-danger, #C2410C); }
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--bg-subtle, #FAF9F5);
+  border: 1px solid var(--border-subtle, #E6E4DD);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.task-item:hover {
+  background: #FFFFFF;
+  border-color: var(--border-focus, #D4CFC5);
+  box-shadow: 0 1px 4px rgba(28, 25, 23, 0.03);
+}
+.task-item.completed {
+  opacity: 0.55;
+  background: #FAFAFA;
+}
+.task-item.completed .task-desc {
+  text-decoration: line-through;
+  color: var(--text-muted, #8A847C);
+}
+
+.task-check {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-primary, #0F5E52);
+  cursor: pointer;
+}
+
+.task-desc {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--text-primary, #1C1917);
+  line-height: 1.45;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  flex-shrink: 0;
+}
+
+.owner-chip {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle, #E6E4DD);
+  padding: 1px 7px;
+  border-radius: 9999px;
+  color: var(--text-secondary, #57534E);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .bd-structure-bento {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -21,11 +21,12 @@
   padding: 24px;
   background: #ffffff;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
-  transition: box-shadow 250ms ease-out;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .mri-group:hover {
-  box-shadow: 0 3px 10px rgba(28, 32, 36, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(28, 25, 23, 0.08);
 }
 
 .mri-group-header {
@@ -353,3 +354,52 @@
 .mri-scatter-wrap {
   padding: 8px 4px;
 }
+
+/* ==========================================================================
+   DUAL-PROGRESS BARS & VIBRANT ACCENTS
+   ========================================================================== */
+.mri-dual-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  min-width: 110px;
+}
+
+.mri-dual-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mri-dual-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #f0f0f3;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.mri-dual-bar-fill-1 {
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+  transition: width 0.3s ease;
+}
+
+.mri-dual-bar-fill-2 {
+  height: 100%;
+  border-radius: 0 3px 3px 0;
+  opacity: 0.9;
+  transition: width 0.3s ease;
+}
+
+/* Colored Card Header Icons */
+.mri-icon-pine { color: #0F5E52; }
+.mri-icon-terracotta { color: #D95D39; }
+.mri-icon-blue { color: #2E6F8E; }
+.mri-icon-gold { color: #C87D20; }
+.mri-icon-sage { color: #5B8266; }
