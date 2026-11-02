@@ -3,7 +3,7 @@
     {
       "id": "wipes-daily-delivery",
       "label": "稳健玉米湿巾投放日趋势 (By day)",
-      "period": "2026-09-16 ~ 2026-10-28",
+      "period": "2026-09-16 ~ 2026-10-31",
       "sourceId": "src-wipes-sheets-0QTVhE",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/Jo2cwK3c9ishJdkq40ycfNSMnTh?sheet=0QTVhE",
       "note": "稳健玉米消毒湿巾全渠道投放日跟踪表（0QTVhE）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。10/25当日UV为0导致CPUV保持为null。历史UV已按最新30日归因回填。",
@@ -474,6 +474,36 @@
           "cpm": 186.93,
           "cpe": 376.31,
           "cpuv": 4.6
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 3010.47,
+          "impressions": 18775,
+          "engagements": 7,
+          "uv": 796,
+          "cpm": 160.34,
+          "cpe": 430.07,
+          "cpuv": 3.78
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 3000.3,
+          "impressions": 17612,
+          "engagements": 8,
+          "uv": 666,
+          "cpm": 170.36,
+          "cpe": 375.04,
+          "cpuv": 4.5
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 5249.89,
+          "impressions": 21193,
+          "engagements": 399,
+          "uv": 157,
+          "cpm": 247.72,
+          "cpe": 13.16,
+          "cpuv": 33.44
         }
       ],
       "sourceSheetId": "0QTVhE"

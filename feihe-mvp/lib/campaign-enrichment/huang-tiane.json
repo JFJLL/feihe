@@ -426,7 +426,7 @@
     {
       "id": "huang-commerce-summary",
       "title": "商销全期底表汇总",
-      "period": "2026-07-27 ~ 2026-10-29",
+      "period": "2026-07-27 ~ 2026-11-01",
       "sourceId": "src-huang-tiane-commerce-canonical",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c?sheet=Dz6eHe",
       "columns": [
@@ -473,14 +473,14 @@
       ],
       "rows": [
         {
-          "spend": 27117.94,
-          "impressions": 421075,
-          "clicks": 22302,
+          "spend": 27801.02,
+          "impressions": 444267,
+          "clicks": 23746,
           "engagements": null,
-          "uv": 5626,
-          "cart": 760,
-          "orders": 690,
-          "gmv": 32403.52,
+          "uv": 6017,
+          "cart": 792,
+          "orders": 729,
+          "gmv": 33246.48,
           "isSummary": true
         }
       ],
@@ -10815,7 +10815,7 @@
     {
       "id": "huang-commerce-daily",
       "label": "商销投放",
-      "period": "2026-07-27 ~ 2026-10-29",
+      "period": "2026-07-27 ~ 2026-11-01",
       "sourceId": "src-huang-tiane-commerce-canonical",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/FqHUwqtu8iM1P7kD5IXcdr2Rn7c",
       "note": "跨7-10月累计；按转化时间的7日归因指标。历史UV百分值类型异常保留null，非真实0；来源透视#REF!由原始底表重建。",
@@ -12806,6 +12806,66 @@
           "ctr": 6.2887,
           "cpm": 25.3025,
           "cpe": null
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 218.49,
+          "impressions": 7619,
+          "clicks": 475,
+          "engagements": null,
+          "uv": 110,
+          "cart": 9,
+          "orders": 12,
+          "gmv": 488.06,
+          "roi": 2.2338,
+          "cpuv": 1.9863,
+          "cost_per_cart": 24.2767,
+          "cost_per_order": 18.2075,
+          "aov": 40.6717,
+          "cpc": 0.46,
+          "ctr": 6.2344,
+          "cpm": 28.677,
+          "cpe": null
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 168.8,
+          "impressions": 6834,
+          "clicks": 421,
+          "engagements": null,
+          "uv": 118,
+          "cart": 8,
+          "orders": 10,
+          "gmv": 111,
+          "roi": 0.6576,
+          "cpuv": 1.4305,
+          "cost_per_cart": 21.1,
+          "cost_per_order": 16.88,
+          "aov": 11.1,
+          "cpc": 0.401,
+          "ctr": 6.1604,
+          "cpm": 24.7,
+          "cpe": null
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 295.79,
+          "impressions": 8739,
+          "clicks": 548,
+          "engagements": null,
+          "uv": 163,
+          "cart": 15,
+          "orders": 17,
+          "gmv": 243.9,
+          "roi": 0.8246,
+          "cpuv": 1.8147,
+          "cost_per_cart": 19.7193,
+          "cost_per_order": 17.3994,
+          "aov": 14.3471,
+          "cpc": 0.5398,
+          "ctr": 6.2707,
+          "cpm": 33.8471,
+          "cpe": null
         }
       ],
       "sourceSheetId": "Dz6eHe"
@@ -12813,7 +12873,7 @@
     {
       "id": "huang-cid-standard-daily",
       "label": "红猫CID · 标准投",
-      "period": "2026-10-01 ~ 2026-10-28",
+      "period": "2026-10-01 ~ 2026-11-01",
       "sourceId": "src-huang-tiane-cid-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "标准投与简单投各自独立统计；进店量不可跨账号去重。",
@@ -13233,6 +13293,58 @@
           "uv": 463,
           "cpuv": 7.4,
           "aov": 66.04
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 3735.63,
+          "ctr": 13.49,
+          "cpc": 0.49,
+          "cpm": 66.48,
+          "orders": 199,
+          "gmv": 22709,
+          "roi": 6.08,
+          "uv": 490,
+          "cpuv": 7.62,
+          "aov": 114.12
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 5171.35,
+          "ctr": 10.71,
+          "cpc": 0.84,
+          "cpm": 89.99,
+          "orders": 176,
+          "gmv": 10812.92,
+          "roi": 2.09,
+          "uv": 485,
+          "cpuv": 10.66,
+          "aov": 61.44
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 9226.91,
+          "ctr": 6.78,
+          "cpc": 1.89,
+          "cpm": 127.86,
+          "orders": 185,
+          "gmv": 16866.14,
+          "roi": 1.83,
+          "uv": 528,
+          "cpuv": 17.48,
+          "aov": 91.17
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 9449.05,
+          "ctr": 9.75,
+          "cpc": 0.91,
+          "cpm": 89.13,
+          "orders": 210,
+          "gmv": 10792.13,
+          "roi": 1.14,
+          "uv": 560,
+          "cpuv": 16.87,
+          "aov": 51.39
         }
       ],
       "sourceSheetId": "Nm3Sev"
@@ -13240,7 +13352,7 @@
     {
       "id": "huang-cid-simple-daily",
       "label": "红猫CID · 简单投",
-      "period": "2026-10-01 ~ 2026-10-28",
+      "period": "2026-10-01 ~ 2026-11-01",
       "sourceId": "src-huang-tiane-cid-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "标准投与简单投各自独立统计；进店量不可跨账号去重。",
@@ -13660,6 +13772,58 @@
           "uv": 470,
           "cpuv": 6.08,
           "aov": 73.86
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 3450.81,
+          "ctr": 12.56,
+          "cpc": 0.57,
+          "cpm": 71.97,
+          "orders": 203,
+          "gmv": 12069.5,
+          "roi": 3.5,
+          "uv": 501,
+          "cpuv": 6.89,
+          "aov": 59.46
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 4431.38,
+          "ctr": 11.56,
+          "cpc": 0.55,
+          "cpm": 64.15,
+          "orders": 182,
+          "gmv": 15135.83,
+          "roi": 3.42,
+          "uv": 458,
+          "cpuv": 9.68,
+          "aov": 83.16
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 8953.88,
+          "ctr": 10.58,
+          "cpc": 0.71,
+          "cpm": 75.16,
+          "orders": 173,
+          "gmv": 18726.74,
+          "roi": 2.09,
+          "uv": 448,
+          "cpuv": 19.99,
+          "aov": 108.25
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 8890.3,
+          "ctr": 12.44,
+          "cpc": 0.44,
+          "cpm": 54.24,
+          "orders": 181,
+          "gmv": 12235.72,
+          "roi": 1.38,
+          "uv": 605,
+          "cpuv": 14.69,
+          "aov": 67.6
         }
       ],
       "sourceSheetId": "Nm3Sev"
@@ -13667,7 +13831,7 @@
     {
       "id": "huang-cid-total-daily",
       "label": "红猫CID · 两类投放合计",
-      "period": "2026-10-01 ~ 2026-10-28",
+      "period": "2026-10-01 ~ 2026-11-01",
       "sourceId": "src-huang-tiane-cid-fs",
       "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DcFqwVVr8i6qgMkzWhhc4Zdnnqb",
       "note": "按日期对齐标准投与简单投，规模相加，ROI按GMV/消耗重算；进店量为账号叠加非去重，未平均CTR/CPC。",
@@ -13988,10 +14152,50 @@
           "roi": 4.007,
           "cpuv": 6.7359,
           "aov": 69.9507
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 7186.44,
+          "orders": 402,
+          "gmv": 34778.5,
+          "uv": 991,
+          "roi": 4.8395,
+          "cpuv": 7.2517,
+          "aov": 86.5137
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 9602.73,
+          "orders": 358,
+          "gmv": 25948.75,
+          "uv": 943,
+          "roi": 2.7022,
+          "cpuv": 10.1832,
+          "aov": 72.4825
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 18180.79,
+          "orders": 358,
+          "gmv": 35592.88,
+          "uv": 976,
+          "roi": 1.9577,
+          "cpuv": 18.6279,
+          "aov": 99.4215
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 18339.35,
+          "orders": 391,
+          "gmv": 23027.85,
+          "uv": 1165,
+          "roi": 1.2557,
+          "cpuv": 15.7419,
+          "aov": 58.8948
         }
       ],
       "sourceSheetId": "Nm3Sev"
     }
   ],
-  "extractedAt": "2026-11-02T04:27:58.619Z"
+  "extractedAt": "2026-11-02T06:42:18.226Z"
 }
