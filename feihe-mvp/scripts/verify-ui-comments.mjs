@@ -1,8 +1,12 @@
 import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const { chromium } = require('D:/download/pic-vec/feihe/feihe-mvp/node_modules/@playwright/test');
 import path from 'path';
 import fs from 'fs';
+
+const require = createRequire(import.meta.url);
+const playwrightPath = fs.existsSync(path.resolve('node_modules/@playwright/test'))
+  ? path.resolve('node_modules/@playwright/test')
+  : 'D:/download/pic-vec/feihe/feihe-mvp/node_modules/@playwright/test';
+const { chromium } = require(playwrightPath);
 
 async function main() {
   console.log('Starting Playwright UI Verification...');
@@ -24,7 +28,7 @@ async function main() {
   const gaugeScore = await page.locator('.health-gauge-box text.num').textContent();
   console.log('   -> Gauge score rendered:', gaugeScore);
   
-  const shot1Path = 'C:/Users/liuhao_PC/AppData/Local/Temp/verify_comment1_qicui_gauge.png';
+  const shot1Path = 'C:/Users/liuhao_PC/AppData/Local/Temp/verify_comment1_qicui_gauge_v2.png';
   await gaugeCard.screenshot({ path: shot1Path });
   console.log('   -> Saved screenshot 1 to', shot1Path);
 
@@ -53,11 +57,10 @@ async function main() {
   await page.goto('http://127.0.0.1:5173/projects/qicui?day=2026-10-16', { waitUntil: 'networkidle' });
   await page.waitForSelector('.bd-funnel, .bd-kpi-card-rich, .bento-card');
   
-  console.log('   -> Scrolling down to 星盟电商漏斗 and 搜索成本与同月基准...');
-  await page.evaluate(() => {
-    window.scrollTo({ top: 950, behavior: 'instant' });
-  });
-  await page.waitForTimeout(350);
+  console.log('   -> Scrolling down to KFS 全渠道费用构成与占比...');
+  const channelSection = page.locator('text=KFS 全渠道费用构成与占比').first();
+  await channelSection.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1000);
   
   const lazyStates = await page.evaluate(() => {
     const elements = Array.from(document.querySelectorAll('[data-chart-lazy]'));
@@ -69,7 +72,7 @@ async function main() {
   });
   console.log('   -> Lazy animation chart counts:', lazyStates);
 
-  const shot3Path = 'C:/Users/liuhao_PC/AppData/Local/Temp/verify_lazy_scroll_qicui.png';
+  const shot3Path = 'C:/Users/liuhao_PC/AppData/Local/Temp/verify_lazy_scroll_qicui_v2.png';
   await page.screenshot({ path: shot3Path });
   console.log('   -> Saved screenshot 3 to', shot3Path);
 

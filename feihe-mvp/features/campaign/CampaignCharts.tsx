@@ -2946,17 +2946,17 @@ export function HealthArcGauge({
   }, [clamped]);
 
   const strokeColor = clamped >= 80 ? 'var(--brand-primary, #0F5E52)' : clamped >= 70 ? '#C87D20' : '#C2410C';
-  const trackPath = 'M 31.89 84.00 A 44 44 0 1 1 108.11 84.00';
+  const trackPath = 'M 31.63 73.00 A 42 42 0 1 1 104.37 73.00';
 
   return (
     <div
       ref={gaugeRef}
       className="health-gauge-box"
-      style={{ width: size, height: '100%', minHeight: 140, boxSizing: 'border-box' }}
+      style={{ width: 132, height: 142, padding: '10px 8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
       aria-label={`健康度评分仪表盘 ${clamped}`}
     >
       <svg
-        viewBox="0 0 140 112"
+        viewBox="0 0 136 104"
         style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}
         aria-hidden="true"
       >
@@ -2964,7 +2964,7 @@ export function HealthArcGauge({
           d={trackPath}
           fill="none"
           stroke="var(--border-subtle, #E6E3DC)"
-          strokeWidth="10"
+          strokeWidth="9.5"
           strokeLinecap="round"
           pathLength={100}
         />
@@ -2972,7 +2972,7 @@ export function HealthArcGauge({
           d={trackPath}
           fill="none"
           stroke={strokeColor}
-          strokeWidth="10"
+          strokeWidth="9.5"
           strokeLinecap="round"
           pathLength={100}
           strokeDasharray="100"
@@ -2980,21 +2980,22 @@ export function HealthArcGauge({
           style={{ transition: 'stroke-dashoffset 1.05s cubic-bezier(0.22, 1, 0.36, 1)' }}
         />
         <text
-          x="70"
-          y="62"
+          x="68"
+          y="52"
           textAnchor="middle"
           dominantBaseline="central"
+          dy="0.04em"
           className="num"
           fill="var(--text-primary, #1C1917)"
-          fontSize="30"
+          fontSize="29"
           fontWeight="800"
           style={{ fontFamily: 'var(--font-mono)' }}
         >
           {displayScore}
         </text>
         <text
-          x="70"
-          y="102"
+          x="68"
+          y="94"
           textAnchor="middle"
           fill="var(--text-muted, #8A847C)"
           fontSize="11.5"

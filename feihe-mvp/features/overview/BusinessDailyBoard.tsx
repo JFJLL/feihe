@@ -1728,37 +1728,37 @@ export function BusinessDailyBoard({
                             </div>
                             <span className="semantic-tag tag-ok num">健康分 91</span>
                           </div>
-                          <div className="health-layout" style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: 16, alignItems: 'center' }}>
+                          <div className="health-layout" style={{ display: 'grid', gridTemplateColumns: '132px minmax(0, 1fr)', gap: 12, alignItems: 'center' }}>
                             <HealthArcGauge score={91} label="综合评分 (满分100)" />
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
-                              <div className="signals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
-                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                              <div className="signals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 6 }}>
+                              <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '6px 8px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', minWidth: 0 }}>
+                                <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
                                     <span className="dot-indicator dot-ok" />
                                     <span>投入节奏</span>
                                   </div>
-                                  <span className="semantic-tag tag-ok num">84.7% 达标</span>
+                                <span className="semantic-tag tag-ok num" style={{ fontSize: 10.5, padding: '1px 6px' }}>84.7% 达标</span>
                                 </div>
-                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
-                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                              <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '6px 8px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', minWidth: 0 }}>
+                                <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
                                     <span className="dot-indicator dot-ok" />
                                     <span>硬广占比</span>
                                   </div>
-                                  <span className="semantic-tag tag-ok num">85.4% 稳定</span>
+                                <span className="semantic-tag tag-ok num" style={{ fontSize: 10.5, padding: '1px 6px' }}>85.4% 稳定</span>
                                 </div>
-                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
-                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                              <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '6px 8px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', minWidth: 0 }}>
+                                <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
                                     <span className="dot-indicator dot-ok" />
                                     <span>政策结算</span>
                                   </div>
-                                  <span className="semantic-tag tag-ok num">97.0% 优异</span>
+                                <span className="semantic-tag tag-ok num" style={{ fontSize: 10.5, padding: '1px 6px' }}>97.0% 优异</span>
                                 </div>
-                                <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
-                                  <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
+                              <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '6px 8px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', minWidth: 0 }}>
+                                <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
                                     <span className="dot-indicator dot-warn" />
                                     <span>达人合作</span>
                                   </div>
-                                  <span className="semantic-tag tag-warn num">117位 推进中</span>
+                                <span className="semantic-tag tag-warn num" style={{ fontSize: 10.5, padding: '1px 6px' }}>117位 推进中</span>
                                 </div>
                               </div>
                               <ul className="exec-insight-list" style={{ listStyle: 'none', margin: 0, padding: '8px 0 0', borderTop: '1px dashed var(--border-subtle, #E6E4DD)', display: 'flex', flexDirection: 'column', gap: 5, fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>

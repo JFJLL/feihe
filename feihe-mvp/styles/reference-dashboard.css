@@ -1073,7 +1073,6 @@ html body .ca-metric-item.is-alert {
 .bv-progress-track > span,
 .bv-level-track > i,
 .funnel-taper-bar > div,
-.bd-channel-segmented-bar > span,
 .distribution-bars i b,
 .ca-budget-actual,
 .ca-budget-target-fill,
@@ -1093,6 +1092,11 @@ html body .ca-metric-item.is-alert {
   transform-origin: left center;
   transform-box: fill-box;
   animation: echartBarSweep 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bd-channel-segmented-bar {
+  transform-origin: left center;
+  animation: echartBarSweep 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .ca-butterfly-bar.ca-bar-left,
@@ -1232,7 +1236,7 @@ svg[aria-label^="散点相关图"] circle:hover,
 [data-chart-lazy="pending"] :is(
   .bullet-fill, .ca-bullet-fill, .funnel-taper-bar > div, .benchmark-band,
   .bv-rank-bar > span, .bv-rank-track > span, .bv-progress-track > span,
-  .bd-channel-segmented-bar > span, .rank-fill, .prog-bar-fill, .distribution-bars i b,
+  .bd-channel-segmented-bar, .rank-fill, .prog-bar-fill, .distribution-bars i b,
   .kri-funnel-bar-fill, .kri-stack-seg, .ca-budget-actual, .ca-budget-target-fill,
   .ca-butterfly-bar, .ca-arena-bar-fill, .co-spend-bar-fill, .campaign-progress-bar-fill
 ) {
@@ -1301,13 +1305,18 @@ svg[aria-label^="散点相关图"] circle:hover,
 [data-chart-lazy="active"] :is(
   .bullet-fill, .ca-bullet-fill, .funnel-taper-bar > div, .benchmark-band,
   .bv-rank-bar > span, .bv-rank-track > span, .bv-progress-track > span,
-  .bd-channel-segmented-bar > span, .rank-fill, .prog-bar-fill, .distribution-bars i b,
+  .rank-fill, .prog-bar-fill, .distribution-bars i b,
   .kri-funnel-bar-fill, .kri-stack-seg, .ca-budget-actual, .ca-budget-target-fill,
   .ca-arena-bar-fill, .co-spend-bar-fill, .campaign-progress-bar-fill
 ) {
   transform-origin: left center;
   transform-box: fill-box;
   animation: echartBarSweep 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-chart-lazy="active"] .bd-channel-segmented-bar {
+  transform-origin: left center;
+  animation: echartBarSweep 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 [data-chart-lazy="active"] :is(.benchmark-dot, .bullet-time-marker, .bullet-marker) {
