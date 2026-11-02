@@ -677,23 +677,23 @@ export function KfsStackedAreaChart({
     <div style={{ position: 'relative', width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 12, marginBottom: 6, justifyContent: 'flex-end' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 10, background: '#0d74ce', borderRadius: 2, display: 'inline-block' }} />
-          <span style={{ color: '#113264', fontWeight: 600 }}>信息流 F</span>
+          <span style={{ width: 14, height: 10, background: '#0F5E52', borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ color: '#0F5E52', fontWeight: 600 }}>信息流 F</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ width: 14, height: 10, background: '#5753c6', borderRadius: 2, display: 'inline-block' }} />
-          <span style={{ color: '#272962', fontWeight: 600 }}>搜索 S</span>
+          <span style={{ width: 14, height: 10, background: '#2E6F8E', borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ color: '#2E6F8E', fontWeight: 600 }}>搜索 S</span>
         </div>
       </div>
       <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', maxHeight: 240, display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
         <defs>
           <linearGradient id="kfs-feed-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0d74ce" stopOpacity={0.7} />
-            <stop offset="100%" stopColor="#0d74ce" stopOpacity={0.15} />
+            <stop offset="0%" stopColor="#0F5E52" stopOpacity={0.7} />
+            <stop offset="100%" stopColor="#0F5E52" stopOpacity={0.15} />
           </linearGradient>
           <linearGradient id="kfs-search-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#5753c6" stopOpacity={0.65} />
-            <stop offset="100%" stopColor="#5753c6" stopOpacity={0.1} />
+            <stop offset="0%" stopColor="#2E6F8E" stopOpacity={0.65} />
+            <stop offset="100%" stopColor="#2E6F8E" stopOpacity={0.1} />
           </linearGradient>
         </defs>
         {yTicks.map((val, i) => {
@@ -708,16 +708,16 @@ export function KfsStackedAreaChart({
         <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
         <path d={feedArea} fill="url(#kfs-feed-grad)" />
         <path d={searchArea} fill="url(#kfs-search-grad)" />
-        <path d={smoothPath(searchTopPoints)} fill="none" stroke="#5753c6" strokeWidth="2" strokeLinecap="round" />
-        <path d={smoothPath(feedPoints)} fill="none" stroke="#0d74ce" strokeWidth="2" strokeLinecap="round" />
+        <path d={smoothPath(searchTopPoints)} fill="none" stroke="#2E6F8E" strokeWidth="2" strokeLinecap="round" />
+        <path d={smoothPath(feedPoints)} fill="none" stroke="#0F5E52" strokeWidth="2" strokeLinecap="round" />
         {xIndices.map(i => (
           <text key={i} x={getX(i)} y={height - 10} textAnchor="middle" fontSize="12" fill="#60646c">{data[i].date.slice(5)}</text>
         ))}
         {hoverIdx !== null && (
           <g>
             <line x1={getX(hoverIdx)} y1={padT} x2={getX(hoverIdx)} y2={padT + plotH} stroke="#60646c" strokeWidth="1" strokeDasharray="3 3" />
-            <circle cx={getX(hoverIdx)} cy={getY(hovered?.feed_spend || 0)} r="4" fill="#0d74ce" stroke="#fff" strokeWidth="1.5" />
-            <circle cx={getX(hoverIdx)} cy={getY((hovered?.feed_spend || 0) + (hovered?.search_spend || 0))} r="4" fill="#5753c6" stroke="#fff" strokeWidth="1.5" />
+            <circle cx={getX(hoverIdx)} cy={getY(hovered?.feed_spend || 0)} r="4" fill="#0F5E52" stroke="#fff" strokeWidth="1.5" />
+            <circle cx={getX(hoverIdx)} cy={getY((hovered?.feed_spend || 0) + (hovered?.search_spend || 0))} r="4" fill="#2E6F8E" stroke="#fff" strokeWidth="1.5" />
           </g>
         )}
         {data.map((_, i) => (

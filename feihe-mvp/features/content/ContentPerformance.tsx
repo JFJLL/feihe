@@ -12,6 +12,9 @@ import { MatrixHeatmap, WordCloudChart, TreeMapChart } from '../overview/Advance
 import { DashboardSection } from '../../components/ui/operations/DashboardSection';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { compact, num, pct } from '../../lib/hooks/use-project-data';
+import { cleanCreatorTier } from './ScenePerformanceBoard';
+
+export { cleanCreatorTier };
 
 function cleanLabelText(value: unknown, fallback = '其他') {
   const text = String(value || '').trim();
@@ -179,9 +182,9 @@ export function ContentPerformance({
 
   const handleTierClick = (tierLabel: string) => {
     if (!openCategoryNotes) return;
-    const cleanLabel = tierLabel.trim();
+    const cleanLabel = cleanCreatorTier(tierLabel);
     const matched = (data.notes || []).filter(n => {
-      const l = (n.creatorLevel || '未标注').trim();
+      const l = cleanCreatorTier(n.creatorLevel);
       return l === cleanLabel || l.includes(cleanLabel) || cleanLabel.includes(l);
     });
     openCategoryNotes({
@@ -209,8 +212,9 @@ export function ContentPerformance({
   const handleSceneRowClick = (scene: string, level: string, matchedNotes: Note[]) => {
     if (!openCategoryNotes) return;
     const normScene = contentDirectionLabel(scene);
+    const cleanLevel = cleanCreatorTier(level);
     openCategoryNotes({
-      title: '方向×达人层级 / ' + normScene + ' / ' + level,
+      title: '方向×达人层级 / ' + normScene + ' / ' + cleanLevel,
       subtitle: '该交叉维度下共关联 ' + matchedNotes.length + ' 篇笔记，展示前 50 篇（按互动量降序）',
       tag: '细分场景',
       notes: matchedNotes,
@@ -368,7 +372,7 @@ export function ContentPerformance({
         costSamples: number;
       }>();
       for (const n of data.notes) {
-        const lvl = String(n.creatorLevel || '未分层');
+        const lvl = cleanCreatorTier(n.creatorLevel);
         const cur = map.get(lvl) || {
           name: lvl,
           count: 0,
@@ -405,15 +409,50 @@ export function ContentPerformance({
         interSamples: l.interSamples,
       })).sort((a, b) => b.count - a.count);
     }
-    return (data.analytics.creatorLevels || []).map(r => ({
-      name: String(r.name || '未分层'),
-      count: num(r.count),
-      readSamples: num(r.avgRead) > 0 ? num(r.count) : 0,
-      interSamples: num(r.avgInteraction) > 0 ? num(r.count) : 0,
-      avgRead: num(r.avgRead) > 0 ? num(r.avgRead) : null,
-      avgInteraction: num(r.avgInteraction) > 0 ? num(r.avgInteraction) : null,
-      avgCpe: num(r.avgCpe) > 0 ? num(r.avgCpe) : null,
-    }));
+    const fallbackMap = new Map<string, {
+      name: string;
+      count: number;
+      readSamples: number;
+      interSamples: number;
+      totalRead: number;
+      totalInter: number;
+      avgCpe: number | null;
+    }>();
+    for (const r of data.analytics.creatorLevels || []) {
+      const lvl = cleanCreatorTier(String(r.name || ''));
+      const cnt = num(r.count);
+      const cur = fallbackMap.get(lvl) || {
+        name: lvl,
+        count: 0,
+        readSamples: 0,
+        interSamples: 0,
+        totalRead: 0,
+        totalInter: 0,
+        avgCpe: null,
+      };
+      cur.count += cnt;
+      if (num(r.avgRead) > 0) {
+        cur.readSamples += cnt;
+        cur.totalRead += num(r.avgRead) * cnt;
+      }
+      if (num(r.avgInteraction) > 0) {
+        cur.interSamples += cnt;
+        cur.totalInter += num(r.avgInteraction) * cnt;
+      }
+      if (num(r.avgCpe) > 0 && cur.avgCpe === null) {
+        cur.avgCpe = num(r.avgCpe);
+      }
+      fallbackMap.set(lvl, cur);
+    }
+    return [...fallbackMap.values()].map(l => ({
+      name: l.name,
+      count: l.count,
+      readSamples: l.readSamples,
+      interSamples: l.interSamples,
+      avgRead: l.readSamples > 0 ? Math.round(l.totalRead / l.readSamples) : null,
+      avgInteraction: l.interSamples > 0 ? Math.round(l.totalInter / l.interSamples) : null,
+      avgCpe: l.avgCpe,
+    })).sort((a, b) => b.count - a.count);
   }, [data.notes, data.analytics.creatorLevels]);
 
   // ===== 第二、三阶段看板数据 =====
@@ -431,7 +470,7 @@ export function ContentPerformance({
   const treeMapItems = [...sceneMap.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8)
-    .map(([label, value], i) => ({ label, value, color: ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31', '#0090ff', '#29a383', '#ce2c31'][i % 8] }));
+    .map(([label, value], i) => ({ label, value, color: ['#0F5E52', '#2E6F8E', '#D95D39', '#C87D20', '#5B8266', '#3A7D6C', '#8C5A3C', '#4A7C59'][i % 8] }));
 
   // 痛点词云（从 topics 数据）
   const topicSummary = aggregateTopics(data.analytics.topics || []);
@@ -450,14 +489,20 @@ export function ContentPerformance({
   // 消费者反馈分类（评论情感分布）
   const hasSentiment = Boolean(m.sentimentAvailable && (m.positiveCount !== null || m.negativeCount !== null || m.questionCount !== null));
   const feedbackCategories = hasSentiment ? [
-    { label: '正向赞誉', value: num(m.positiveCount), color: '#29a383' },
-    { label: '求助/购买问询', value: num(m.questionCount), color: '#0090ff' },
+    { label: '正向赞誉', value: num(m.positiveCount), color: '#0F5E52' },
+    { label: '求助/购买问询', value: num(m.questionCount), color: '#2E6F8E' },
     { label: '中性讨论', value: Math.max(0, num(m.commentTotal) - num(m.positiveCount) - num(m.negativeCount) - num(m.questionCount)), color: 'var(--slate-11, #60646c)' },
-    { label: '负向敏感', value: num(m.negativeCount), color: '#ce2c31' },
+    { label: '负向敏感', value: num(m.negativeCount), color: '#D95D39' },
   ].filter(c => c.value > 0) : [];
 
   return (
     <div className="stack animate-fade-in">
+      <style>{`
+        @keyframes contentBarGrow {
+          from { transform: scaleY(0); opacity: 0.4; }
+          to { transform: scaleY(1); opacity: 1; }
+        }
+      `}</style>
       {/* 顶部指标卡 */}
       <section className="ops-metric-grid">
         <MetricCard
@@ -496,7 +541,7 @@ export function ContentPerformance({
 
       {/* 资产来源、数据缺口、形式贡献与达人效率大盘（双行严格对齐等高） */}
       <ContentAnalyticsBoard
-        analytics={data.analytics}
+        analytics={{ ...data.analytics, creatorLevels: creatorLevelRows }}
         creatorLevels={creatorLevelRows}
         onSourceClick={handleSourceClick}
         onFormatClick={handleFormatClick}
@@ -621,8 +666,8 @@ export function ContentPerformance({
               </thead>
               <tbody>
                 {creatorLevelRows.map((row, index) => (
-                  <tr key={row.name + '-' + index} onClick={() => handleTierClick(String(row.name))} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? ("点击查看「" + row.name + "」层级笔记") : undefined}>
-                    <td><div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><strong style={{ color: openCategoryNotes ? '#0d74ce' : 'inherit' }}>{String(row.name)}</strong>{openCategoryNotes && <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#e6f4fe', color: '#0d74ce', border: '0.5px solid #e6f4fe', whiteSpace: 'nowrap' }}>查看 ↗</span>}</div></td>
+                  <tr key={row.name + '-' + index} onClick={() => handleTierClick(cleanCreatorTier(row.name))} style={{ cursor: openCategoryNotes ? 'pointer' : 'default' }} title={openCategoryNotes ? ("点击查看「" + cleanCreatorTier(row.name) + "」层级笔记") : undefined}>
+                    <td><div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><strong style={{ color: openCategoryNotes ? '#0F5E52' : 'inherit' }}>{cleanCreatorTier(row.name)}</strong>{openCategoryNotes && <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', border: '0.5px solid #C6E2DC', whiteSpace: 'nowrap' }}>查看 ↗</span>}</div></td>
                     <td>{num(row.count)}</td>
                     <td>
                       {row.avgRead !== null && row.avgRead !== undefined ? (
@@ -706,7 +751,7 @@ export function ContentPerformance({
                           style={{
                             width: `${progress}%`,
                             height: '100%',
-                            background: 'linear-gradient(90deg, #0090ff, #5eb1ef)',
+                            background: 'linear-gradient(90deg, #0F5E52, #5B8266)',
                             borderRadius: 999,
                           }}
                         />
@@ -840,7 +885,18 @@ export function ContentPerformance({
               return (
                 <div key={month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                   <span style={{ fontSize: 12, fontWeight: 700, color: '#1c2024' }}>{count}</span>
-                  <div style={{ width: '100%', maxWidth: 40, height: h, background: 'linear-gradient(180deg, #0090ff, #0d74ce)', borderRadius: '4px 4px 0 0', minHeight: 4 }} />
+                  <div
+                    style={{
+                      width: '100%',
+                      maxWidth: 40,
+                      height: h,
+                      background: 'linear-gradient(180deg, var(--brand-primary, #0F5E52), rgba(15, 94, 82, 0.35))',
+                      borderRadius: '6px 6px 0 0',
+                      minHeight: 4,
+                      transformOrigin: 'bottom',
+                      animation: 'contentBarGrow 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+                    }}
+                  />
                   <span style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', whiteSpace: 'nowrap' }}>{month}</span>
                 </div>
               );
@@ -854,7 +910,7 @@ export function ContentPerformance({
         const riskRows = (data.feishu?.contentRisk || []) as Array<{ riskType: string; reason: string; originalScript: string; replacementScript: string; tips: string }>;
         if (!riskRows.length) return null;
         const typeCounts = riskRows.reduce((acc, r) => { acc[r.riskType] = (acc[r.riskType] || 0) + 1; return acc; }, {} as Record<string, number>);
-        const colors = ['#ce2c31', '#ffc53d', '#5753c6', '#0090ff', '#0090ff', '#29a383'];
+        const colors = ['#D95D39', '#C87D20', '#2E6F8E', '#0F5E52', '#5B8266', '#8C5A3C'];
         return (
           <DashboardSection
             eyebrow="CONTENT RISK"
@@ -870,8 +926,8 @@ export function ContentPerformance({
                   </div>
                   {riskRows.filter(r => r.riskType === type).slice(0, 2).map((r, j) => (
                     <div key={j} style={{ marginBottom: 8, fontSize: 12 }}>
-                      <div style={{ color: 'var(--slate-11, #60646c)', marginBottom: 2 }}><strong style={{ color: '#ce2c31' }}>风险：</strong>{r.reason?.substring(0, 50)}{r.reason?.length > 50 ? '...' : ''}</div>
-                      <div style={{ color: '#29a383' }}><strong>替换：</strong>{r.replacementScript?.substring(0, 50)}{r.replacementScript?.length > 50 ? '...' : ''}</div>
+                      <div style={{ color: 'var(--slate-11, #60646c)', marginBottom: 2 }}><strong style={{ color: '#D95D39' }}>风险：</strong>{r.reason?.substring(0, 50)}{r.reason?.length > 50 ? '...' : ''}</div>
+                      <div style={{ color: '#0F5E52' }}><strong>替换：</strong>{r.replacementScript?.substring(0, 50)}{r.replacementScript?.length > 50 ? '...' : ''}</div>
                     </div>
                   ))}
                 </div>

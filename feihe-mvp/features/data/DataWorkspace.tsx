@@ -122,6 +122,7 @@ export function DataWorkspace({ projectId }: { projectId: string }) {
 
   return <div className="stack ops-workspace reference-workspace data-workspace" data-workspace-ui="v2">
     <PageHeader variant="light" title="数据工作台" subtitle="从原表接入，到可核对的项目数据。飞书记录仍在原表编辑。">
+      <Link className="secondary settings-back-exit-btn" href={'/projects/' + encodeURIComponent(projectId) + '/settings?tab=profile'}>← 返回项目设置</Link>
       <button className="secondary" onClick={() => { setRevision(value => value + 1); void refreshState({ fresh: true }); void refreshDetail({ fresh: true }); }}>刷新数据状态</button>
     </PageHeader>
     <SettingsSubNav activeTab="data" />

@@ -395,8 +395,8 @@ function AdsKeywordsView({ table }: { table?: CampaignTable }) {
             rows={parsedRows}
             xKey="category"
             series={[
-              { key: 'cpuv', label: '原表CPUV', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
-              { key: 'cpc', label: 'CPC', unit: '元', axis: 'right', kind: 'line', color: '#008573' },
+              { key: 'cpuv', label: '原表CPUV', unit: '元', axis: 'left', kind: 'bar', color: '#2E6F8E' },
+              { key: 'cpc', label: 'CPC', unit: '元', axis: 'right', kind: 'line', color: '#0F5E52' },
             ]}
           />
           <div className="ca-kdd-caption">
@@ -547,8 +547,8 @@ function ContentDualView({
             rows={groupedContentTypeRows}
             xKey="contentType"
             series={[
-              { key: 'kCost', label: 'K端合作金额', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
-              { key: 'fsSpend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#e5484d' },
+              { key: 'kCost', label: 'K端合作金额', unit: '元', axis: 'left', kind: 'bar', color: '#2E6F8E' },
+              { key: 'fsSpend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#D95D39' },
             ]}
           />
           <div className="ca-kdd-caption">

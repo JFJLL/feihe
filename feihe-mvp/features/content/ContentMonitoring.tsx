@@ -11,6 +11,9 @@ import { DataTableShell } from '../../components/ui/operations/DataTableShell';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { api, compact, cnTime, pct } from '../../lib/hooks/use-project-data';
 import { emptyNotesSummary, type NoteListItem, type NotesListResponse } from './content-view-model';
+import { cleanCreatorTier } from './ScenePerformanceBoard';
+
+export { cleanCreatorTier };
 
 export function ContentMonitoring({
   projectId,
@@ -161,22 +164,22 @@ export function ContentMonitoring({
           <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>封面图覆盖率</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{coverRate}%</div>
-            <div style={{ fontSize: '12px', color: '#208368' }}>已入库 {summary.coverCount} / {summary.total} 篇</div>
+            <div style={{ fontSize: '12px', color: '#0F5E52' }}>已入库 {summary.coverCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>内容方向归类率</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{categoryRate}%</div>
-            <div style={{ fontSize: '12px', color: '#0d74ce' }}>已完成分类 {summary.categoryCount} / {summary.total} 篇</div>
+            <div style={{ fontSize: '12px', color: '#2E6F8E' }}>已完成分类 {summary.categoryCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>阅读 / 互动完整率</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{perfRate}%</div>
-            <div style={{ fontSize: '12px', color: '#008573' }}>指标有效 {summary.performanceMetricCount} / {summary.total} 篇</div>
+            <div style={{ fontSize: '12px', color: '#5B8266' }}>指标有效 {summary.performanceMetricCount} / {summary.total} 篇</div>
           </div>
           <div style={{ background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: '10px', padding: '14px' }}>
             <div style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>原文链接填写率</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '4px 0' }}>{linkRate}%</div>
-            <div style={{ fontSize: '12px', color: '#5b5bd6' }}>已填原文 {summary.linkCount} / {summary.total} 篇</div>
+            <div style={{ fontSize: '12px', color: '#C87D20' }}>已填原文 {summary.linkCount} / {summary.total} 篇</div>
           </div>
         </div>
       </DashboardSection>

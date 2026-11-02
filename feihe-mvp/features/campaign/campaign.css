@@ -363,7 +363,7 @@
 }
 
 .campaign-progress-bar-fill.neutral {
-  background: #0090ff;
+  background: var(--accent-tertiary, #2E6F8E);
 }
 
 /* --- Status Badges --- */
@@ -481,7 +481,7 @@
 
 .campaign-channel-bar-inner {
   height: 100%;
-  background: #0090ff;
+  background: var(--brand-primary, #0F5E52);
   border-radius: 9999px;
   transition: none;
 }
@@ -625,8 +625,8 @@
 
 .campaign-filter-pill.active {
   color:#ffffff;
-  background: #0090ff;
-  border-color:#0d74ce;
+  background: #0F5E52;
+  border-color:#0F5E52;
 }
 
 /* --- Actions Tab --- */
@@ -660,7 +660,7 @@
   width: 8px;
   height: 8px;
   border-radius: 9999px;
-  background: #0090ff;
+  background: #0F5E52;
   margin-top: 6px;
   flex-shrink: 0;
 }
@@ -920,14 +920,14 @@
 }
 
 .campaign-btn-primary {
-  background: #0090ff;
+  background: #0F5E52;
   color:#ffffff;
-  border:0.5px solid #0090ff;
+  border:0.5px solid #0F5E52;
 }
 
 .campaign-btn-primary:hover {
-  background: #0090ff;
-  border-color:#0d74ce;
+  background: #0d4d43;
+  border-color:#0d4d43;
 }
 
 .campaign-btn-secondary {

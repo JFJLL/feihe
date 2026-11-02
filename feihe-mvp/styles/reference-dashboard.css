@@ -1,10 +1,10 @@
 /* Visual source: 飞鹤Q3日报看板（优化版v2.1-含月进度）.html.
    Keep the existing dashboard modules; use the reference's navy, white cards,
    compact typography, pastel status accents and month/quarter hierarchy. */
-.ops-workspace, .reference-workspace { --primary-blue:#0090ff; --ref-blue:#0090ff; gap:16px; color:#1c2024; background:transparent; }
+.ops-workspace, .reference-workspace { --primary-blue:var(--brand-primary, #0F5E52); --ref-blue:var(--accent-tertiary, #2E6F8E); gap:16px; color:#1c2024; background:transparent; }
 .main:has(.ops-workspace), .main:has(.reference-workspace) { padding-top: 12px !important; background-color: #f0f0f3 !important; }
 .ops-workspace .ui-page-header, .reference-workspace .ui-page-header {
-  background:linear-gradient(135deg,#1c2024 0%,#113264 50%,#0090ff 100%);
+  background:linear-gradient(135deg,#1c2024 0%,#0F5E52 50%,#2E6F8E 100%);
   color:#ffffff; border-radius:12px; padding:22px 24px; margin:0;
   box-shadow:0 2px 12px #1c202414; gap:20px; align-items:center;
 }
@@ -27,7 +27,7 @@
 .ui-page-header .sync-feedback-error { border-color:#f4a9aa; background:#f9f9fb; color:#ce2c31; }
 .sync-feedback-arrow { position:absolute; top:-5px; right:28px; width:8px; height:8px; background:inherit; border-left:0.5px solid inherit; border-top:0.5px solid inherit; transform:rotate(45deg); }
 .sync-feedback-content { display:flex; align-items:center; gap:8px; }
-.sync-feedback-dot { width:7px; height:7px; border-radius:50%; background:#0090ff; animation:pulse 1.5s infinite; flex-shrink:0; }
+.sync-feedback-dot { width:7px; height:7px; border-radius:50%; background:var(--brand-primary, #0F5E52); animation:pulse 1.5s infinite; flex-shrink:0; }
 .data-trend { position:relative; }
 .data-trend-tooltip { position:absolute; top:14px; transform:translateX(-50%); background:rgba(28, 32, 36,0.92); color:#ffffff; padding:7px 12px; border-radius:6px; font-size:12px; pointer-events:none; z-index:50; box-shadow:0 4px 14px rgba(0, 0, 0,0.18); white-space:nowrap; backdrop-filter:blur(4px); }
 .data-trend-tooltip-date { font-weight:700; margin-bottom:4px; color:#d9d9e0; font-size:12px; }
@@ -36,9 +36,9 @@
 .data-trend-tooltip-row strong { margin-left:auto; color:#ffffff; font-weight:600; padding-left:8px; }
 .data-trend-picker { display:none !important; }
 .ops-module-tabs { gap:12px; margin:0; }
-.ops-module-tab { min-width:0; padding:13px 18px; border:0.5px solid #d5efff; border-radius:10px; box-shadow:0 1px 3px #1c202406; }
-.ops-module-tab.active { background:#f0f0f3; border-color:#5eb1ef; box-shadow:inset 0 3px 0 #0090ff; }
-.ops-module-tab:hover { border-color:#5eb1ef; box-shadow:0 2px 6px #1c20240a; }
+.ops-module-tab { min-width:0; padding:13px 18px; border:0.5px solid var(--border-subtle, #E6E3DC); border-radius:10px; box-shadow:0 1px 3px #1c202406; }
+.ops-module-tab.active { background:#f0f0f3; border-color:var(--border-brand, rgba(15, 94, 82, 0.28)); box-shadow:var(--shadow-sm); }
+.ops-module-tab:hover { border-color:var(--border-focus, #D4CFC5); box-shadow:0 2px 6px #1c20240a; }
 .ops-module-tab-title strong { font-size:14px; }
 .ops-module-tab-desc { font-size:12px; line-height:1.6; }
 .ops-module-tab-badge { font-size:12px; padding:1px 6px; white-space:nowrap; }
@@ -72,8 +72,8 @@
 .ops-workspace .ops-table th, .reference-workspace .ops-table th { padding:10px 12px; font-size:12px; background:#f0f0f3; color:#60646c; font-weight:700; }
 .ops-workspace .ops-table td, .reference-workspace .ops-table td { padding:11px 12px; border-bottom:0.5px solid #e8e8ec; }
 .ops-workspace .ops-table tbody tr:hover { background:#f9f9fb; }
-.ops-workspace .primary-btn, .reference-workspace .primary-btn { border:0.5px solid #0090ff; background:#0090ff; color:#ffffff; border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; min-height:36px; }
-.ops-workspace .btn-link, .ops-workspace .subtle-btn { background:#ffffff; border:0.5px solid #d5efff; color:#0d74ce; font-size:12px; border-radius:7px; min-height:34px; }
+.ops-workspace .primary-btn, .reference-workspace .primary-btn { border:0.5px solid var(--brand-primary, #0F5E52); background:var(--brand-primary, #0F5E52); color:#ffffff; border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; min-height:36px; }
+.ops-workspace .btn-link, .ops-workspace .subtle-btn { background:#ffffff; border:0.5px solid var(--border-subtle, #E6E3DC); color:var(--accent-tertiary, #2E6F8E); font-size:12px; border-radius:7px; min-height:34px; }
 .ops-workspace input, .ops-workspace select, .reference-workspace input, .reference-workspace select { font-size:12px; border-radius:6px; }
 .ops-workspace button:disabled, .reference-workspace button:disabled { opacity:.55; cursor:not-allowed; }
 .overview-block-content { display:flex; flex-direction:column; gap:18px; }
@@ -98,14 +98,14 @@
 .reference-workspace .card-header-row h3 { font-size:14px; }
 .reference-workspace .header-tag { font-size:12px; padding:3px 8px; }
 .reference-workspace .budget-sub-card { border:0.5px solid #d9d9e0; background:#ffffff; border-radius:10px; padding:16px; }
-.reference-workspace .sub-card-title { color:#0d74ce; font-size:14px; margin-bottom:16px; }
-.reference-workspace .budget-sub-card.pastel-purple .sub-card-title { color:#5753c6; }
+.reference-workspace .sub-card-title { color:var(--brand-primary, #0F5E52); font-size:14px; margin-bottom:16px; }
+.reference-workspace .budget-sub-card.pastel-purple .sub-card-title { color:var(--accent-secondary, #D95D39); }
 .reference-workspace .bar-labels { font-size:12px; margin-bottom:6px; }
 .reference-workspace .progress-track-bg { height:18px; background:#f0f0f3; border-radius:10px; }
 .reference-workspace .progress-fill-bar { border-radius:10px; min-width:0; }
-.reference-workspace .bar-blue { background:#0090ff; }
+.reference-workspace .bar-blue { background:var(--accent-tertiary, #2E6F8E); }
 .reference-workspace .bar-gray { background:#8b8d98; }
-.reference-workspace .bar-purple { background:#5b5bd6; }
+.reference-workspace .bar-purple { background:var(--accent-secondary, #D95D39); }
 .progress-detail { display:block; margin-top:6px; font-size:12px; color:#60646c; }
 .reference-workspace .budget-diff-box { background:#ffee9c; border:0; padding:10px; display:flex; align-items:center; justify-content:center; gap:12px; }
 .reference-workspace .diff-val { font-size:22px; color:#ab6400; }
@@ -950,4 +950,278 @@ html body .ca-metric-strip .ca-metric-item[data-status="danger"],
 html body .ca-metric-item.is-alert {
   background: linear-gradient(180deg, var(--status-danger-bg, #FFF1F0) 0%, #FFFFFF 48%) !important;
   border-color: var(--status-danger-border, #FECACA) !important;
+}
+
+/* ==========================================================================
+   GLOBAL PASTEL CARD & ACCENT UNIFICATION (Eliminate Spliced Top Bars)
+   ========================================================================== */
+.pastel-card,
+.pastel-blue,
+.pastel-purple,
+.pastel-green,
+.pastel-amber,
+.pastel-teal,
+.pastel-red,
+.pastel-orange,
+.pastel-yellow,
+.pastel-rose,
+.pastel-indigo,
+.pastel-card.pastel-blue,
+.pastel-card.pastel-purple,
+.pastel-card.pastel-green,
+.pastel-card.pastel-amber,
+.pastel-card.pastel-teal,
+.pastel-card.pastel-red,
+.pastel-card.pastel-orange,
+.pastel-card.pastel-yellow,
+.pastel-card.pastel-rose,
+.pastel-card.pastel-indigo {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-top: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.bar-blue,
+.dot-blue,
+.ops-progress-blue {
+  background: var(--accent-tertiary, #2E6F8E) !important;
+}
+
+.bar-purple,
+.dot-purple {
+  background: var(--accent-secondary, #D95D39) !important;
+}
+
+/* ==========================================================================
+   ECHARTS 5-GRADE FLUID CHART ANIMATIONS ACROSS ALL MODULES
+   ========================================================================== */
+
+/* 1. Vertical Bar Rise Animation (@keyframes echartBarRise) */
+@keyframes echartBarRise {
+  0% {
+    transform: scaleY(0);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.ca-combo-bar,
+.ca-combo-svg rect[data-metric-type="bar"],
+.qicui-trend-card svg g > rect,
+.ca-bar-col-fill,
+.bv-bar-col,
+.spend-bar-col,
+.spend-bar-body.observed,
+.kri-bar-fill,
+.mri-bar-fill,
+.wri-bar-fill {
+  transform-origin: bottom;
+  transform-box: fill-box;
+  animation: echartBarRise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+
+.ca-combo-bar:hover,
+.ca-combo-svg rect[data-metric-type="bar"]:hover,
+.qicui-trend-card svg g > rect:hover,
+.ca-bar-col-fill:hover,
+.bv-bar-col:hover,
+.spend-bar-col:hover,
+.spend-bar-body.observed:hover,
+.kri-bar-fill:hover,
+.mri-bar-fill:hover,
+.wri-bar-fill:hover {
+  filter: brightness(1.08);
+}
+
+/* Staggered nth-child delays for vertical bars */
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(1) { animation-delay: 0.04s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(2) { animation-delay: 0.08s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(3) { animation-delay: 0.12s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(4) { animation-delay: 0.16s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(5) { animation-delay: 0.20s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(6) { animation-delay: 0.24s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(7) { animation-delay: 0.28s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(8) { animation-delay: 0.32s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(9) { animation-delay: 0.36s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(10) { animation-delay: 0.40s; }
+:is(.ca-combo-bar, .ca-combo-svg rect[data-metric-type="bar"], .qicui-trend-card svg g, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-column, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill):nth-child(n+11) { animation-delay: 0.44s; }
+
+/* 2. Horizontal Bar / Bullet / Funnel / Benchmark Fill Sweep (@keyframes echartBarSweep) */
+@keyframes echartBarSweep {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.35;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.bullet-fill,
+.ca-bullet-fill,
+.prog-bar-fill,
+.rank-fill,
+.bv-rank-bar > span,
+.bv-rank-track > span,
+.bv-progress-track > span,
+.bv-level-track > i,
+.funnel-taper-bar > div,
+.bd-channel-segmented-bar > span,
+.distribution-bars i b,
+.ca-budget-actual,
+.ca-budget-target-fill,
+.ca-butterfly-bar.ca-bar-right,
+.ca-arena-bar-track:not(.ca-arena-track-reverse) .ca-arena-bar-fill,
+.ca-scorecard-mini-fill,
+.ca-scorecard-seg-item,
+.ca-lollipop-stem,
+.mri-cell-bar-fill,
+.mri-dual-bar-fill-1,
+.mri-dual-bar-fill-2,
+.co-spend-bar-fill,
+.campaign-progress-bar-fill,
+.campaign-channel-bar-inner,
+.ops-progress-bar,
+.progress-fill-bar {
+  transform-origin: left center;
+  transform-box: fill-box;
+  animation: echartBarSweep 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ca-butterfly-bar.ca-bar-left,
+.ca-arena-track-reverse .ca-arena-bar-fill {
+  transform-origin: right center;
+  transform-box: fill-box;
+  animation: echartBarSweep 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 3. SVG Trend Line & Area Draw Animation (@keyframes echartLineDraw & @keyframes echartAreaFade) */
+@keyframes echartLineDraw {
+  0% {
+    stroke-dasharray: 1600;
+    stroke-dashoffset: 1600;
+  }
+  100% {
+    stroke-dasharray: 1600;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes echartAreaFade {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ca-combo-svg path[data-metric-type="line"],
+.ca-combo-svg path[stroke]:not([fill^="url(#"]),
+.trend-wrap svg path[stroke]:not([fill^="url(#"]),
+.trend-wrap svg polyline,
+.data-trend svg path[stroke]:not([fill^="url(#"]),
+.data-trend svg polyline,
+.bv-trend-svg path[stroke]:not([fill^="url(#"]),
+.bv-trend-svg polyline,
+.qicui-trend-card svg path[stroke]:not([fill^="url(#"]),
+.bd-sparkline-stroke,
+.echart-line-path {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+  animation: echartLineDraw 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ca-combo-svg path[fill^="url(#"],
+.qicui-trend-card svg path[fill^="url(#"],
+.trend-wrap svg path[fill^="url(#"],
+.data-trend svg path[fill^="url(#"],
+.bv-trend-svg path[fill^="url(#"],
+.echart-area-path {
+  animation: echartAreaFade 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+/* 4. Donut / Rose / Gauge Arc & Radar Polygon Entrance (@keyframes echartArcReveal) */
+@keyframes echartArcReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.84);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gauge-progress-arc,
+.health-gauge-box svg path:nth-of-type(2),
+.ca-rose-slice,
+svg[aria-label="南丁格尔玫瑰图"] path,
+svg[aria-label^="环形分布图"] path,
+.ca-radar-poly,
+.bv-donut-svg circle,
+.qicui-structure-card svg circle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: echartArcReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, filter 0.2s ease;
+}
+
+.ca-rose-slice:hover,
+svg[aria-label="南丁格尔玫瑰图"] path:hover,
+svg[aria-label^="环形分布图"] path:hover,
+.ca-radar-poly:hover,
+.bv-donut-svg circle:hover {
+  transform: scale(1.04);
+}
+
+/* 5. Scatter Bubble & Data Point Pop-in (@keyframes echartPointPop) */
+@keyframes echartPointPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  75% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ca-combo-svg circle,
+svg[aria-label^="散点相关图"] circle,
+.kri-scatter-bubble,
+.qicui-trend-card svg circle,
+.trend-wrap svg circle,
+.data-trend svg circle,
+.bv-trend-svg circle,
+.ca-lollipop-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: echartPointPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.ca-combo-svg circle:hover,
+svg[aria-label^="散点相关图"] circle:hover,
+.kri-scatter-bubble:hover,
+.qicui-trend-card svg circle:hover,
+.trend-wrap svg circle:hover,
+.data-trend svg circle:hover,
+.bv-trend-svg circle:hover,
+.ca-lollipop-dot:hover {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 6px rgba(15, 94, 82, 0.32));
 }

@@ -634,6 +634,133 @@
   font-size: 11px;
 }
 
+/* --------------------------------------------------------------------------
+   Modern 4-Step Tapered Conversion Funnel (ModernEcommerceFunnelCard)
+   -------------------------------------------------------------------------- */
+.funnel-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .funnel-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 440px) {
+  .funnel-steps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.funnel-step-card {
+  background: #FAF9F5;
+  border: 1px solid #E6E3DC;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: all 0.15s ease;
+}
+.funnel-step-card:hover {
+  background: #FFFFFF;
+  border-color: #D4CFC5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.05);
+}
+.funnel-taper-bar {
+  height: 6px;
+  background: #E6E3DC;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.funnel-step-num {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text-primary, #1C1917);
+  margin: 4px 0;
+  font-family: var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.funnel-conv-badge {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #EBF5F3;
+  color: #0F5E52;
+}
+
+.funnel-step-card small {
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Normalized Range Bullet Benchmark Chart (.benchmark-row)
+   -------------------------------------------------------------------------- */
+.benchmark-row {
+  background: #FAF9F5;
+  border: 1px solid #E6E3DC;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: all 0.15s ease;
+}
+.benchmark-row + .benchmark-row {
+  margin-top: 10px;
+}
+.benchmark-row:hover {
+  background: #FFFFFF;
+  border-color: #D4CFC5;
+  box-shadow: 0 2px 8px rgba(28, 25, 23, 0.04);
+}
+.benchmark-track {
+  position: relative;
+  height: 12px;
+  background: #E6E3DC;
+  border-radius: 999px;
+  margin: 10px 0 4px;
+}
+.benchmark-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(87, 83, 78, 0.28);
+  border-left: 1.5px dashed #57534E;
+  border-right: 1.5px dashed #57534E;
+  border-radius: 3px;
+}
+.benchmark-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0F5E52;
+  border: 2.5px solid #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+  transition: left 0.4s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Dual-Anchor Baseline + Lift Bar (.dual-bar-track)
+   -------------------------------------------------------------------------- */
+.dual-bar-track {
+  height: 12px;
+  background: #E6E3DC;
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  margin: 10px 0;
+}
+
 @media (max-width: 900px) {
   .bd-structure-bento {
     grid-template-columns: 1fr !important;

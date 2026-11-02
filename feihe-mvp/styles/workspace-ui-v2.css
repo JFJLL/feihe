@@ -25,7 +25,7 @@
   --ws-interactive-hover: var(--teal-12, #0d3d38);
   --ws-interactive-soft: var(--teal-3, #e0f8f3);
 
-  --ws-data-blue: #0090ff;
+  --ws-data-blue: var(--accent-tertiary, #2E6F8E);
   --ws-data-teal: #12a594;
   --ws-data-green: #12a594;
   --ws-data-purple: #0d74ce;
@@ -39,7 +39,7 @@
   --ws-state-warn-soft: #fefbe9;
   --ws-state-danger: #e5484d;
   --ws-state-danger-soft: #feebec;
-  --ws-state-info: #0090ff;
+  --ws-state-info: var(--brand-primary, #0F5E52);
   --ws-state-info-soft: #f0f0f3;
   --ws-state-neutral: #60646c;
   --ws-state-neutral-soft: #f0f0f3;
@@ -607,11 +607,11 @@
 /* Pastel cards used by overview-derived markup: flatten to quiet tinted surfaces.
    workspace-polish.css sets these with !important, so the v2 override must match. */
 [data-workspace-ui='v2'] .pastel-card {
-  background: var(--ws-surface) !important;
-  background-image: none !important;
-  border:0.5px solid #d9d9e0 !important;
-  border-radius: var(--ws-radius-card);
-  box-shadow: var(--ws-shadow-card);
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-top: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 [data-workspace-ui='v2'] .pastel-card.pastel-blue,
 [data-workspace-ui='v2'] .pastel-card.pastel-teal,
@@ -621,9 +621,11 @@
 [data-workspace-ui='v2'] .pastel-card.pastel-red,
 [data-workspace-ui='v2'] .pastel-card.pastel-amber,
 [data-workspace-ui='v2'] .pastel-card.pastel-orange {
-  background: var(--ws-surface) !important;
-  background-image: none !important;
-  border:0.5px solid #d9d9e0 !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-top: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 /* ---------- Filterbar & Module Tabs Polish ---------- */

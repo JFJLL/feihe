@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useProject } from '../../components/project-shell/ProjectContext';
+import { AppLink } from '../../components/ui/AppLink';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
@@ -114,6 +115,7 @@ export function MetricWorkspace({ projectId }: { projectId: string }) {
   }
   return <div className="stack ops-workspace reference-workspace data-workspace" data-workspace-ui="v2">
     <PageHeader variant="light" title="项目指标" subtitle="定义一次来源与计算口径，让看板和报告引用同一个指标。">
+      <AppLink className="secondary settings-back-exit-btn" href={`/projects/${encodeURIComponent(projectId)}/settings?tab=profile`}>← 返回项目设置</AppLink>
       {state?.canManage && <button className="primary" disabled={!state.datasets.length} onClick={() => start()}>新建指标</button>}
     </PageHeader>
     <SettingsSubNav activeTab="metrics" />

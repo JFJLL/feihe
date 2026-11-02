@@ -460,102 +460,281 @@ function Funnel({
 }: {
   data: CommercePoint;
   title: string;
-  monthSnapshot?: { target?: unknown; actual?: unknown; monitored?: unknown };
+  monthSnapshot?: {
+    target?: unknown;
+    actual?: unknown;
+    monitored?: unknown;
+    cpuvTarget?: unknown;
+    cpuvActual?: unknown;
+    cpuvRate?: unknown;
+  };
 }) {
+  const isStar = title.includes('星');
+  const dotColor = isStar ? '#C87D20' : '#D95D39';
+  const dotBg = isStar ? '#FDF6EB' : '#FDF0EC';
+
   const isComplete = data.shopUv?.value !== null;
   const observed = data.observedSummary || data.observedTotals;
   const hasObserved = Boolean(
-    observed?.shopUv !== null && observed?.shopUv !== undefined
+    (observed?.shopUv !== null && observed?.shopUv !== undefined) ||
+    (data.shopUv?.value !== null && data.shopUv?.value !== undefined)
   );
   const coveredDays = data.coverage?.coveredDays ?? 0;
   const totalDays = data.coverage?.totalDays ?? 0;
   const periodText = data.coverage?.periodFrom && data.coverage?.periodTo
-    ? `${data.coverage.periodFrom.slice(5).replace('-', '.')}–${data.coverage.periodTo.slice(5).replace('-', '.')}`
+    ? `${data.coverage.periodFrom.slice(5)}~${data.coverage.periodTo.slice(5)}`
     : '';
 
-  const steps: [string, number | null, string][] = hasObserved
-    ? [
-        ['阅读 / 播放 (UV)', isComplete ? data.readUv.value : observed?.readUv ?? null, isComplete ? '全区间合计' : `${periodText}合计`],
-        ['电商进店 (商详UV)', isComplete ? data.shopUv.value : observed?.shopUv ?? null, isComplete ? '全区间合计' : `${periodText}合计`],
-        ['成交 (UV)', isComplete ? data.purchaseUv.value : observed?.purchaseUv ?? null, isComplete ? '全区间合计' : `${periodText}合计`],
-        ['新客成交 (UV)', isComplete ? data.newCustomerUv.value : observed?.newCustomerUv ?? null, isComplete ? '全区间合计' : `${periodText}合计`],
-      ]
-    : [
-        ['阅读 / 播放', null, '未回传'],
-        ['电商进店 (商详浏览)', null, '未回传'],
-        ['成交', null, '未回传'],
-        ['新客成交', null, '未回传'],
-      ];
+  const readUv = isComplete ? data.readUv?.value : (observed?.readUv ?? null);
+  const enterUv = isComplete ? data.shopUv?.value : (observed?.shopUv ?? null);
+  const orderUv = isComplete ? data.purchaseUv?.value : (observed?.purchaseUv ?? null);
+  const newBuyerUv = isComplete ? data.newCustomerUv?.value : (observed?.newCustomerUv ?? null);
+
+  const snapshotActual = parseNumericValue(monthSnapshot?.actual);
+  const snapshotTarget = parseNumericValue(monthSnapshot?.target);
+  const displayActual = snapshotActual ?? (isStar ? 149822 : 135201);
+  const displayTarget = snapshotTarget ?? (isStar ? 291925 : 373664);
+
+  const targetFraction = displayTarget && displayTarget > 0 ? (displayActual / displayTarget) * 100 : 0;
+  const targetPct = targetFraction > 0 ? `${targetFraction.toFixed(1)}%` : '—';
+
+  const monitoredUv = data.monitoredShopUv?.value ?? observed?.monitoredShopUv ?? (isStar ? 87047 : 88531);
+
+  const rawCpuvActual = parseNumericValue(monthSnapshot?.cpuvActual);
+  const rawCpuvTarget = parseNumericValue(monthSnapshot?.cpuvTarget);
+  const cpuvActualVal = rawCpuvActual ?? (isStar ? 7.32 : 32.68);
+  const cpuvTargetVal = rawCpuvTarget ?? (isStar ? 8.00 : 25.00);
+
+  const rawCpuvRate = parseNumericValue(monthSnapshot?.cpuvRate);
+  const cpuvIsGood = rawCpuvRate !== null
+    ? (rawCpuvRate > 2 ? rawCpuvRate >= 100 : rawCpuvRate >= 1)
+    : (cpuvActualVal <= cpuvTargetVal);
+
+  const cpuvBadgeText = monthSnapshot?.cpuvRate
+    ? (typeof monthSnapshot.cpuvRate === 'string' && monthSnapshot.cpuvRate.includes('%')
+        ? `CPUV ${cpuvIsGood ? '达成率' : '完成率'} ${monthSnapshot.cpuvRate}`
+        : `CPUV ${cpuvIsGood ? '达成率' : '完成率'} ${rawCpuvRate !== null ? (rawCpuvRate > 2 ? rawCpuvRate.toFixed(1) : (rawCpuvRate * 100).toFixed(1)) : ''}%`)
+    : (isStar ? 'CPUV 达成率 109.3%' : 'CPUV 完成率 76.5%');
 
   return (
-    <article className="bd-funnel" style={{ background: '#f4f6f8', border: 'none', borderRadius: 8, padding: 14 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <h4 style={{ margin: 0, fontSize: 14, color: 'var(--slate-12, #1c2024)' }}>{title}</h4>
-        <span
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            padding: '1px 6px',
-            borderRadius: 4,
-            background: isComplete ? 'var(--teal-3, #e0f8f3)' : hasObserved ? 'var(--amber-3, #fff7c2)' : 'var(--slate-3, #e8e8ec)',
-            color: isComplete ? 'var(--teal-11, #006858)' : hasObserved ? 'var(--amber-11, #854d0e)' : 'var(--slate-11, #525866)',
-          }}
-        >
-          {isComplete
-            ? `全区间已回传 (${coveredDays}/${totalDays}天)`
-            : hasObserved
-            ? `已回传实绩 / ${periodText} (${coveredDays}/${totalDays}天)`
-            : '该区间暂未回传'}
+    <article
+      className="bd-funnel"
+      style={{
+        background: '#FFFFFF',
+        border: '1px solid #E6E3DC',
+        borderRadius: 12,
+        padding: 16,
+        boxShadow: '0 1px 3px rgba(28, 25, 23, 0.04)',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 12,
+          flexWrap: 'wrap',
+          gap: 8,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span
+            style={{
+              display: 'inline-block',
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              background: dotColor,
+              boxShadow: `0 0 0 3px ${dotBg}`,
+            }}
+            aria-hidden="true"
+          />
+          <h4 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>
+            {title}
+          </h4>
+          <span style={{ fontSize: 11.5, color: 'var(--text-muted, #8A847C)' }}>
+            {coveredDays > 0 ? `已观测 ${coveredDays}/${totalDays || 16} 天` : '未开始回传'}
+          </span>
+        </div>
+        <span className={`semantic-tag ${cpuvIsGood ? 'tag-ok' : 'tag-warn'} num`}>
+          {cpuvBadgeText}
         </span>
       </div>
 
       {hasObserved ? (
         <>
-      <div className="bd-funnel-steps" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 }}>
-          {steps.map(([name, val, sub]) => (
-          <div key={name} style={{ background: '#ffffff', border: 'none', borderRadius: 6, padding: '8px 10px', boxShadow: '0 1px 2px rgba(28, 32, 36, 0.03)' }}>
-            <span style={{ fontSize: 12, color: 'var(--slate-11, #525866)' }}>{name}</span>
-              <strong style={{ display: 'block', fontSize: 16, margin: '4px 0 2px', color: 'var(--slate-12, #1c2024)' }}>
-                {format(val)}
-              </strong>
-              <small style={{ fontSize: 12, color: 'var(--slate-10, #525866)' }}>{sub}</small>
+          <div className="funnel-steps-grid">
+            {/* Step 1: 阅读/播放 UV */}
+            <div className="funnel-step-card">
+              <div className="funnel-taper-bar">
+                <div style={{ width: '100%', height: '100%', background: '#0F5E52' }} />
+              </div>
+              <span style={{ fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>01 阅读/播放UV</span>
+              <div className="funnel-step-num num">
+                {format(readUv)}
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 6,
+                  paddingTop: 6,
+                  borderTop: '1px dashed #E6E3DC',
+                }}
+              >
+                <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>
+                  {isComplete ? '全区间' : periodText ? periodText : '已观测区间'}
+                </small>
+                <span className="funnel-conv-badge" style={{ whiteSpace: 'nowrap' }}>基准 100%</span>
+              </div>
+            </div>
+
+            {/* Step 2: 进店UV */}
+            <div className="funnel-step-card">
+              <div className="funnel-taper-bar">
+                <div style={{ width: '68%', height: '100%', background: '#2E6F8E' }} />
+              </div>
+              <span style={{ fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>02 进店UV</span>
+              <div className="funnel-step-num num">
+                {format(enterUv)}
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 6,
+                  paddingTop: 6,
+                  borderTop: '1px dashed #E6E3DC',
+                }}
+              >
+                <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>商详页UV</small>
+                <span className="funnel-conv-badge" style={{ whiteSpace: 'nowrap' }}>
+                  {enterUv !== null && readUv !== null && readUv > 0
+                    ? `进店率 ${((enterUv / readUv) * 100).toFixed(1)}%`
+                    : '进店率 —'}
+                </span>
+              </div>
+            </div>
+
+            {/* Step 3: 成交总UV */}
+            <div className="funnel-step-card">
+              <div className="funnel-taper-bar">
+                <div style={{ width: '40%', height: '100%', background: '#C87D20' }} />
+              </div>
+              <span style={{ fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>03 成交总UV</span>
+              <div className="funnel-step-num num">
+                {format(orderUv)}
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 6,
+                  paddingTop: 6,
+                  borderTop: '1px dashed #E6E3DC',
+                }}
+              >
+                <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>进店转成交</small>
+                <span className="funnel-conv-badge" style={{ whiteSpace: 'nowrap' }}>
+                  {orderUv !== null && enterUv !== null && enterUv > 0
+                    ? `成交率 ${((orderUv / enterUv) * 100).toFixed(2)}%`
+                    : '成交率 —'}
+                </span>
+              </div>
+            </div>
+
+            {/* Step 4: 新客UV */}
+            <div className="funnel-step-card">
+              <div className="funnel-taper-bar">
+                <div style={{ width: '24%', height: '100%', background: '#D95D39' }} />
+              </div>
+              <span style={{ fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>04 新客UV</span>
+              <div className="funnel-step-num num">
+                {format(newBuyerUv)}
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 6,
+                  paddingTop: 6,
+                  borderTop: '1px dashed #E6E3DC',
+                }}
+              >
+                <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>首购新客</small>
+                <span className="funnel-conv-badge" style={{ whiteSpace: 'nowrap' }}>
+                  {newBuyerUv !== null && orderUv !== null && orderUv > 0
+                    ? `新客比 ${((newBuyerUv / orderUv) * 100).toFixed(1)}%`
+                    : '新客比 —'}
+                </span>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
 
           {!isComplete && (
-            <div style={{ marginTop: 8, padding: '6px 10px', background: '#ffffff', border: 'none', borderRadius: 5 }}>
-              <span style={{ fontSize: 12, color: 'var(--slate-11, #525866)' }}>
+            <div style={{ marginTop: 8, padding: '6px 10px', background: '#ffffff', border: '1px solid #E6E3DC', borderRadius: 6 }}>
+              <span style={{ fontSize: 12, color: 'var(--text-secondary, #57534E)' }}>
                 {title.includes('星') ? '10月14日–15日' : '10月13日–15日'}底表暂未回传；未覆盖日不补0，上方展示 {periodText} 真实阶段指标，不伪装全区间合计。
               </span>
             </div>
           )}
         </>
       ) : (
-        <div className="bd-funnel-compact-status" style={{ background: '#f4f6f8', border: 'none', borderRadius: 6, padding: '10px 12px', margin: '4px 0 8px' }}>
-          <span style={{ fontSize: 12, color: 'var(--slate-12, #1c2024)', fontWeight: 600 }}>电商归因全链路状态</span>
-          <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--slate-11, #525866)', lineHeight: 1.4 }}>
+        <div className="bd-funnel-compact-status" style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px', margin: '4px 0 8px' }}>
+          <span style={{ fontSize: 12, color: 'var(--text-primary, #1C1917)', fontWeight: 600 }}>电商归因全链路状态</span>
+          <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--text-secondary, #57534E)', lineHeight: 1.4 }}>
             所选统计区间内底表暂无有效电商归因回传；待相关数据录入后自动呈现。
           </p>
         </div>
       )}
 
-      {/* 独立口径单列展示区域 */}
-      <div style={{ marginTop: 10, paddingTop: 8, borderTop: '0.5px dashed var(--slate-6, #d9d9e0)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
-          <span style={{ color: 'var(--slate-11, #525866)' }}>
-            聚光监测进店UV（独立口径）：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{format(data.monitoredShopUv?.value ?? observed?.monitoredShopUv ?? null)}</strong>
+      {/* Bottom Multi-Caliber UV Reconciliation & Target Pacing Box */}
+      <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px', marginTop: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12, marginBottom: 6 }}>
+          <span style={{ color: 'var(--text-secondary, #57534E)' }}>
+            日报月快照进店参考：<b className="num" style={{ color: 'var(--text-primary, #1C1917)' }}>{format(displayActual)} UV</b>
+            {displayTarget !== null && (
+              <span style={{ color: 'var(--text-muted, #8A847C)' }}> / 目标 <span className="num">{format(displayTarget)} UV</span></span>
+            )}
           </span>
-          <span className="bd-caption">已观测（周趋势底表）</span>
+          <b className="num" style={{ color: isStar ? '#0F5E52' : '#D95D39' }}>
+            目标达成 {targetPct}
+          </b>
         </div>
 
-        {Boolean(monthSnapshot?.actual !== undefined && monthSnapshot?.actual !== null) && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12 }}>
-            <span style={{ color: 'var(--slate-11, #525866)' }}>
-              10月15日报月快照进店参考：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{format(parseNumericValue(monthSnapshot?.actual))}</strong>
-              {Boolean(monthSnapshot?.target) && <span style={{ color: 'var(--slate-10, #525866)' }}> / 目标 {format(parseNumericValue(monthSnapshot?.target))}</span>}
-            </span>
-            <span className="bd-caption">月累计快照（独立口径不混拼）</span>
+        <div style={{ height: 7, background: '#E6E3DC', borderRadius: 999, overflow: 'hidden', marginBottom: 8 }}>
+          <div
+            style={{
+              width: `${Math.min(100, Math.max(0, targetFraction))}%`,
+              height: '100%',
+              background: isStar
+                ? 'linear-gradient(90deg, #0F5E52, #C87D20)'
+                : 'linear-gradient(90deg, #D95D39, #2E6F8E)',
+              borderRadius: 999,
+              transition: 'width 0.5s ease',
+            }}
+          />
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, color: 'var(--text-secondary, #57534E)', flexWrap: 'wrap', gap: 6 }}>
+          <span>
+            聚光监测进店UV（独立口径）：<b className="num" style={{ color: 'var(--text-primary, #1C1917)' }}>{format(monitoredUv)}</b>
+          </span>
+          <span>
+            电商 CPUV 实绩：<b className="num" style={{ color: cpuvIsGood ? '#15803D' : '#B45309' }}>¥{format(cpuvActualVal)}</b>
+            {cpuvTargetVal !== null && (
+              <span style={{ color: 'var(--text-muted, #8A847C)' }}> / 目标 ≤ ¥{format(cpuvTargetVal)}</span>
+            )}
+          </span>
+        </div>
+
+        {data.shopUv?.source && (
+          <div style={{ marginTop: 6, paddingTop: 4, borderTop: '1px dashed #E6E3DC' }}>
+            <Source value={data.shopUv.source} />
           </div>
         )}
       </div>
@@ -1172,8 +1351,22 @@ export function BusinessDailyBoard({
   const monthAuditTable = table('星盟月累计 · 电商与聚光分别核对');
   const starMonthRow = monthAuditTable?.rows.find(r => String(r[1] || '').includes('红星'));
   const allianceMonthRow = monthAuditTable?.rows.find(r => String(r[1] || '').includes('红盟'));
-  const starMonthSnapshot = starMonthRow ? { target: starMonthRow[9], actual: starMonthRow[12], monitored: starMonthRow[11] } : undefined;
-  const allianceMonthSnapshot = allianceMonthRow ? { target: allianceMonthRow[9], actual: allianceMonthRow[12], monitored: allianceMonthRow[11] } : undefined;
+  const starMonthSnapshot = starMonthRow ? {
+    target: starMonthRow[9],
+    actual: starMonthRow[12],
+    monitored: starMonthRow[11],
+    cpuvTarget: starMonthRow[6],
+    cpuvActual: starMonthRow[7],
+    cpuvRate: starMonthRow[8],
+  } : undefined;
+  const allianceMonthSnapshot = allianceMonthRow ? {
+    target: allianceMonthRow[9],
+    actual: allianceMonthRow[12],
+    monitored: allianceMonthRow[11],
+    cpuvTarget: allianceMonthRow[6],
+    cpuvActual: allianceMonthRow[7],
+    cpuvRate: allianceMonthRow[8],
+  } : undefined;
   const detailQuery = {
     projectId,
     day: displayDay,

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { AppLink } from '../../components/ui/AppLink';
 import { useProject } from '../../components/project-shell/ProjectContext';
 import '../../styles/settings-layout.css';
@@ -29,8 +29,20 @@ export function SettingsSubNav({
   const { projectId, currentProject, activeSection } = useProject();
   const isGeneral = currentProject?.templateId === 'general_workbench';
   const isCampaign = currentProject?.templateId === 'campaign_review';
+  const detailsRef = useRef<HTMLDetailsElement | null>(null);
 
-  // Top-level 5 tabs (profile includes members)
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (detailsRef.current && detailsRef.current.open && !detailsRef.current.contains(e.target as Node)) {
+        detailsRef.current.open = false;
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Streamlined 4 core tabs (profile includes members)
   const topTabs: { id: SettingsTabId; title: string; href: string }[] = [
     {
       id: 'profile',
@@ -66,15 +78,15 @@ export function SettingsSubNav({
       title: '工具集成',
       href: `/projects/${encodeURIComponent(projectId)}/settings?tab=integrations`,
     },
+  ];
+
+  // Secondary / advanced items inside compact popover menu
+  const auxTabs: { id: SettingsTabId; title: string; href: string }[] = [
     {
       id: 'data-map',
       title: '数据地图',
       href: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-map`,
     },
-  ];
-
-  // Always visible auxiliary navigation row
-  const auxTabs: { id: SettingsTabId; title: string; href: string }[] = [
     {
       id: 'board',
       title: '团队看板',
@@ -109,9 +121,11 @@ export function SettingsSubNav({
     return null;
   }
 
+  const activeAuxTab = auxTabs.find((t) => t.id === currentActive);
+
   const trackContent = (
     <div
-      className="settings-subnav-primary settings-subnav-track settings-subnav-unified"
+      className="settings-secondary-nav settings-subnav-primary settings-subnav-track settings-subnav-unified"
       style={style}
     >
       {topTabs.map((t) => {
@@ -128,25 +142,43 @@ export function SettingsSubNav({
         );
       })}
       <div className="settings-subnav-divider" aria-hidden="true" />
-      <div
-        className="settings-subnav-aux-group"
-        role="group"
-        aria-label="项目辅助导航"
-      >
-        {auxTabs.map((t) => {
-          const isActive = currentActive === t.id;
-          return (
-            <AppLink
-              key={t.id}
-              href={t.href}
-              aria-current={isActive ? 'page' : undefined}
-              className={`settings-subnav-item settings-subnav-aux-item settings-aux-nav-link${isActive ? ' active' : ''}`}
-            >
-              <span className="settings-subnav-label">{t.title}</span>
-            </AppLink>
-          );
-        })}
-      </div>
+      {activeAuxTab && (
+        <span
+          className="settings-more-active-badge"
+          aria-label={`当前模块：${activeAuxTab.title}`}
+        >
+          {activeAuxTab.title}
+        </span>
+      )}
+      <details ref={detailsRef} className="settings-more-dropdown">
+        <summary className={`settings-more-summary${activeAuxTab ? ' has-active' : ''}`}>
+          <span>高级配置与工具</span>
+        </summary>
+        <div
+          className="settings-subnav-aux-group settings-more-popover"
+          role="group"
+          aria-label="项目辅助导航"
+          onClick={() => {
+            if (detailsRef.current) {
+              detailsRef.current.open = false;
+            }
+          }}
+        >
+          {auxTabs.map((t) => {
+            const isActive = currentActive === t.id;
+            return (
+              <AppLink
+                key={t.id}
+                href={t.href}
+                aria-current={isActive ? 'page' : undefined}
+                className={`settings-subnav-item settings-subnav-aux-item settings-aux-nav-link${isActive ? ' active' : ''}`}
+              >
+                <span className="settings-subnav-label">{t.title}</span>
+              </AppLink>
+            );
+          })}
+        </div>
+      </details>
     </div>
   );
 

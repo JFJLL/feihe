@@ -35,7 +35,7 @@ export function FeishuSources({data,projectId}:{data?:FeishuData;projectId:strin
   return <details className="source-map"><summary>数据来源与多工作表溯源明细 {data?.reports.some(r=>r.status==='error')&&<b className="source-error"> / 部分读取失败</b>}<span>{data?.checkedAt?`最近核对 ${cnTime(data.checkedAt)}`:'尚未在线核对 / 点击同步最新数据'}</span></summary>
     <div style={{ margin: '8px 0 12px', fontSize: 14, color: '#60646c', lineHeight: 1.6 }}>
       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '4px' }}>
-        <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#0d74ce' }} />
+        <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#0F5E52' }} />
         <strong style={{ color: '#1c2024' }}>飞书多文档·多Sheet溯源机制：</strong>
         <span>当前项目数据分别接入飞书4大专项文档及14张子工作表，每条数据支持追溯至文档名、Sheet名称、唯一Sheet ID及行范围。</span>
       </div>
@@ -52,7 +52,7 @@ export function FeishuSources({data,projectId}:{data?:FeishuData;projectId:strin
           <small style={{ color: 'var(--slate-11, #60646c)' }}>Wiki: <code>{d.wiki}</code></small>
         </td>
         <td>
-          <a href={`https://yimeichuanbo.feishu.cn/wiki/${d.wiki}?sheet=${s.id}`} target="_blank" rel="noreferrer" style={{ fontWeight: 600, color: '#0d74ce' }}>
+          <a href={`https://yimeichuanbo.feishu.cn/wiki/${d.wiki}?sheet=${s.id}`} target="_blank" rel="noreferrer" style={{ fontWeight: 600, color: '#0F5E52' }}>
             {r?.sheetName||s.name} ↗
           </a>
           <br/>
@@ -93,8 +93,179 @@ export function FeishuSources({data,projectId}:{data?:FeishuData;projectId:strin
 
 export function PlanningLibrary({data}:{data?:FeishuData}) {
   const [query,setQuery]=useState('');
-  const rows=(data?.planning||[]).filter(r=>Object.values(r).some(v=>v.includes(query)));
-  return <section className="ops-section-card"><div className="ops-section-card-head"><div><span className="section-mini-tag tag-purple">内容规划</span><h3>人群切角与场景库</h3><p>来自飞书「内容切角们」「启萃场景库」，供选题参考。</p></div><input aria-label="搜索场景与人群" placeholder="搜索人群、场景、痛点" value={query} onChange={e=>setQuery(e.target.value)}/></div>
-    <div className="planning-grid">{rows.map((r,i)=><article className="planning-item" key={i}><small>{r.audience||'人群未填写'} / {r.stage}</small><h4>{r.scene}</h4><p>{r.detail}</p><span>{r.format}</span></article>)}</div>{!rows.length&&<p>{data?.planning.length?'没有匹配的场景':'同步最新数据后显示规划内容。'}</p>}
-  </section>;
+  const [activeAudience, setActiveAudience] = useState('all');
+  const [expanded, setExpanded] = useState(false);
+
+  const allRows = data?.planning || [];
+  const audienceCounts = new Map<string, number>();
+  for (const r of allRows) {
+    const aud = (r.audience || '人群未填写').trim();
+    audienceCounts.set(aud, (audienceCounts.get(aud) || 0) + 1);
+  }
+  const audienceGroups = [...audienceCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+  const rows = allRows.filter(r => {
+    const aud = (r.audience || '人群未填写').trim();
+    const matchAudience = activeAudience === 'all' || aud === activeAudience;
+    const q = query.trim().toLowerCase();
+    const matchQuery = !q || Object.values(r).some(v => String(v || '').toLowerCase().includes(q));
+    return matchAudience && matchQuery;
+  });
+
+  const visibleRows = expanded ? rows : rows.slice(0, 12);
+
+  return (
+    <section className="ops-section-card">
+      <style>{`
+        .planning-bento-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 14px;
+          margin-top: 14px;
+        }
+        @media (max-width: 960px) {
+          .planning-bento-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        @media (max-width: 640px) {
+          .planning-bento-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        .planning-bento-card {
+          background: #FAF9F5 !important;
+          border: 1px solid #E6E3DC !important;
+          border-radius: 12px !important;
+          padding: 14px 16px !important;
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 8px !important;
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease !important;
+        }
+        .planning-bento-card:hover {
+          transform: translateY(-2px) !important;
+          box-shadow: 0 8px 20px rgba(15, 94, 82, 0.08) !important;
+          border-color: #C6E2DC !important;
+        }
+        .planning-audience-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 5px 12px;
+          border-radius: 999px;
+          font-size: 12px;
+          font-weight: 600;
+          border: 1px solid #E6E3DC;
+          background: #FAF9F5;
+          color: #4A4D4B;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          white-space: nowrap;
+        }
+        .planning-audience-pill:hover {
+          border-color: #0F5E52;
+          color: #0F5E52;
+          background: #EBF5F3;
+        }
+        .planning-audience-pill.active {
+          background: #0F5E52;
+          color: #FFFFFF;
+          border-color: #0F5E52;
+        }
+      `}</style>
+      <div className="ops-section-card-head" style={{ flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <span className="section-mini-tag" style={{ background: '#EBF5F3', color: '#0F5E52', border: '0.5px solid #C6E2DC' }}>内容规划</span>
+          <h3>人群切角与场景库</h3>
+          <p>来自飞书「内容切角们」「启萃场景库」，供选题参考。</p>
+        </div>
+        <input
+          aria-label="搜索场景与人群"
+          placeholder="搜索人群、场景、痛点"
+          value={query}
+          onChange={e => {
+            setQuery(e.target.value);
+            setExpanded(false);
+          }}
+        />
+      </div>
+
+      {allRows.length > 0 && (
+        <div className="segmented-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12, marginBottom: 4 }}>
+          <button
+            type="button"
+            className={`planning-audience-pill ${activeAudience === 'all' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveAudience('all');
+              setExpanded(false);
+            }}
+          >
+            全部 ({allRows.length})
+          </button>
+          {audienceGroups.map(([aud, count]) => (
+            <button
+              key={aud}
+              type="button"
+              className={`planning-audience-pill ${activeAudience === aud ? 'active' : ''}`}
+              onClick={() => {
+                setActiveAudience(activeAudience === aud ? 'all' : aud);
+                setExpanded(false);
+              }}
+            >
+              {aud} ({count})
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="planning-grid planning-bento-grid">
+        {visibleRows.map((r, i) => (
+          <article className="planning-item planning-bento-card" key={i}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+              <small style={{ background: '#EBF5F3', color: '#0F5E52', padding: '2px 8px', borderRadius: 999, fontWeight: 600, fontSize: 12 }}>
+                {r.audience || '人群未填写'}
+              </small>
+              {r.stage && (
+                <small style={{ color: '#60646c', fontSize: 12 }}>
+                  {r.stage}
+                </small>
+              )}
+            </div>
+            <h4 style={{ margin: '2px 0 0', fontSize: 15, fontWeight: 700, color: '#1c2024' }}>{r.scene}</h4>
+            <p style={{ margin: 0, fontSize: 13, color: '#4A4D4B', lineHeight: 1.55, flex: 1 }}>{r.detail}</p>
+            {r.format && (
+              <span style={{ alignSelf: 'flex-start', fontSize: 12, color: '#2E6F8E', background: '#F0F6F9', padding: '2px 8px', borderRadius: 6, fontWeight: 500 }}>
+                {r.format}
+              </span>
+            )}
+          </article>
+        ))}
+      </div>
+
+      {rows.length > 12 && (
+        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
+          <button
+            type="button"
+            onClick={() => setExpanded(prev => !prev)}
+            style={{
+              padding: '8px 20px',
+              borderRadius: 999,
+              border: '1px solid #E6E3DC',
+              background: '#FAF9F5',
+              color: '#0F5E52',
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            {expanded ? '收起场景规划库 ▴' : `展开全部 ${rows.length} 张场景规划卡片 ▾`}
+          </button>
+        </div>
+      )}
+
+      {!rows.length && <p>{data?.planning.length ? '没有匹配的场景' : '同步最新数据后显示规划内容。'}</p>}
+    </section>
+  );
 }

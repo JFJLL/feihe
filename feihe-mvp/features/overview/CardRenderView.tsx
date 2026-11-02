@@ -88,7 +88,7 @@ export function CardRenderView({
             type="button"
             onClick={onEdit}
             title="编辑卡片"
-            style={{ padding: '2px 8px', fontSize: 12, borderRadius: 4, border: '0.5px solid #acd8fc', background: '#e6f4fe', color: '#0090ff', cursor: 'pointer' }}
+            style={{ padding: '2px 8px', fontSize: 12, borderRadius: 4, border: '0.5px solid #E6E3DC', background: '#EBF5F3', color: '#0F5E52', cursor: 'pointer' }}
           >
             ✏
           </button>
@@ -136,7 +136,7 @@ export function CardRenderView({
                 style={{
                   width: `${Math.min(100, Math.max(0, progressValue ?? 0))}%`,
                   height: '100%',
-                  background: progressValue !== null && progressValue >= 100 ? '#29a383' : '#0090ff',
+                  background: progressValue !== null && progressValue >= 100 ? '#15803D' : '#0F5E52',
                   borderRadius: 3,
                 }}
               />
@@ -148,7 +148,7 @@ export function CardRenderView({
           </div>
         )}
         {card.type === 'time_trend' && metric?.trend && <div className="shared-metric-trend">
-          <TimeSeriesChart rows={metric.trend.map(point => ({ date: point.date, value: point.value }))} series={[{ key: 'value', label: metric.definition?.name || card.title, color: '#0090ff' }]} title={card.title + '时间趋势'} unit="" valueFormatter={value => format(value)} />
+          <TimeSeriesChart rows={metric.trend.map(point => ({ date: point.date, value: point.value }))} series={[{ key: 'value', label: metric.definition?.name || card.title, color: '#0F5E52' }]} title={card.title + '时间趋势'} unit="" valueFormatter={value => format(value)} />
           <details><summary>查看每日数值与样本</summary><div className="data-table-scroll" tabIndex={0}><table aria-label={card.title + '每日结果'}><thead><tr><th>日期</th><th>指标结果</th><th>样本</th></tr></thead><tbody>{metric.trend.map(point => <tr key={point.date}><td>{point.date}</td><td>{point.formattedValue}</td><td>{point.pairedValidCount !== undefined ? ratioSampleLabel(point, effective.missingPolicy === 'zero') : point.sampleSize + ' 行'}{!['ok', 'zero'].includes(point.status) && ' / ' + point.statusLabel}</td></tr>)}</tbody></table></div></details>
         </div>}
         {card.type === 'detail_table' && metric?.detail && projectId && <MetricDetailTable key={JSON.stringify({ definition: metric.definition, data: metric.datasetVersion, query, card })} projectId={projectId} card={card} query={query} initial={metric.detail} datasetVersion={metric.datasetVersion} definitionVersion={metric.definition?.version} />}

@@ -6,6 +6,21 @@ import { CustomSelect } from '../../components/ui/CustomSelect';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { scenePerformance } from './scene-performance';
 
+export function cleanCreatorTier(raw?: string | null): string {
+  const text = String(raw ?? '').trim();
+  if (!text || text === '未标注' || text === '未分层') return '未分层';
+  if (
+    /^R\s*~$/i.test(text) ||
+    /^R[\s\x00-\x1f\x7f~\uFFFD_-]*$/i.test(text) ||
+    /[~\uFFFD\x00-\x1f\x7f]/.test(text) ||
+    /https?:\/\//i.test(text) ||
+    text.length > 24
+  ) {
+    return '其他特邀达人';
+  }
+  return text;
+}
+
 export function ScenePerformanceBoard({
   notes,
   onRowClick,
@@ -14,7 +29,11 @@ export function ScenePerformanceBoard({
   onRowClick?: (scene: string, level: string, matchedNotes: Note[]) => void;
 }) {
   const [scene, setScene] = useState('');
-  const rows = scenePerformance(notes);
+  const cleanedNotes = notes.map(n => ({
+    ...n,
+    creatorLevel: cleanCreatorTier(n.creatorLevel),
+  }));
+  const rows = scenePerformance(cleanedNotes);
   const scenes = [...new Set(rows.map(r => r.scene))];
   const filtered = rows.filter(r => !scene || r.scene === scene);
   const show = (v: number | null) => v === null ? '—' : v.toLocaleString('zh-CN', { maximumFractionDigits: 2 });
@@ -22,13 +41,14 @@ export function ScenePerformanceBoard({
   const handleRowClick = (r: { scene: string; level: string }) => {
     if (!onRowClick) return;
     const normScene = contentDirectionLabel(r.scene);
+    const cleanLvl = cleanCreatorTier(r.level);
     const matched = notes.filter(n => {
       const noteScene = contentDirectionLabel(n.category1);
       const matchScene = (n.category1 === r.scene) || (noteScene === normScene);
-      const matchLevel = (n.creatorLevel || '未标注').trim() === r.level.trim();
+      const matchLevel = cleanCreatorTier(n.creatorLevel) === cleanLvl;
       return matchScene && matchLevel;
     });
-    onRowClick(r.scene, r.level, matched);
+    onRowClick(r.scene, cleanLvl, matched);
   };
 
   return <>
@@ -45,8 +65,8 @@ export function ScenePerformanceBoard({
           >
             <td>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontWeight: 600, color: onRowClick ? '#0d74ce' : 'inherit' }}>{contentDirectionLabel(r.scene)} / {r.level}</span>
-                {onRowClick && <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#e6f4fe', color: '#0d74ce', border: '0.5px solid #e6f4fe', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>}
+                <span style={{ fontWeight: 600, color: onRowClick ? '#0F5E52' : 'inherit' }}>{contentDirectionLabel(r.scene)} / {cleanCreatorTier(r.level)}</span>
+                {onRowClick && <span style={{ fontSize: 12, padding: '1px 5px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', border: '0.5px solid #C6E2DC', whiteSpace: 'nowrap' }}>查看笔记 ↗</span>}
               </div>
             </td>
             <td>{r.count}</td>

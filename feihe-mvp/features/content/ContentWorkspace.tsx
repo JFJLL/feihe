@@ -115,6 +115,7 @@ export function ContentWorkspace({
         aria-labelledby={`workspace-tab-${tab}`}
         tabIndex={0}
         className="overview-block-content"
+        style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
       >
         {tab === 'analysis' && (
           <ContentPerformance

@@ -202,14 +202,14 @@ label:has(select),
 .custom-select-option.is-active.is-selected {
   background: #acd8fc;
   color:#0d74ce;
-  outline: 1px solid #0090ff;
+  outline: 1px solid var(--accent-tertiary, #2E6F8E);
   outline-offset: -1px;
 }
 
 /* Shared with the overview: navy headings, soft colour cues and quiet surfaces.
    Keep selectors scoped to workspaces so project centre and login stay independent. */
 .ops-workspace {
-  --primary-blue: #0090ff;
+  --primary-blue: var(--brand-primary, #0F5E52);
   --primary-hover: #113264;
   --workspace-border:#d5efff;
   --workspace-muted: #60646c;
@@ -242,21 +242,21 @@ label:has(select),
 .ops-module-tab.active .ops-module-tab-icon { background: #ffffff; border-color:#acd8fc; }
 .ops-workspace .ops-module-tab.active {
   background: linear-gradient(130deg, #f9f9fb, #f0f0f3);
-  border-color:#8ec8f6; box-shadow: inset 0 3px 0 #0090ff, 0 3px 9px #0090ff0a;
+  border-color:var(--border-brand, rgba(15, 94, 82, 0.28)); box-shadow: var(--shadow-sm);
 }
 .ops-workspace .ops-module-tab-desc { white-space: normal; font-size: 12px; line-height: 1.6; }
 .ops-workspace .ops-module-tab-title { flex-wrap: wrap; }
 .ops-workspace .ops-module-tab-title strong { font-size: 14px; }
 .ops-workspace .ops-module-tab-badge { background: #f0f0f3; color:#0d74ce; padding: 2px 7px; }
 .ops-workspace .ops-metric-card {
-  --metric-tint: #f9f9fb; --metric-line: #acd8fc; --metric-accent: #0090ff;
+  --metric-tint: #f9f9fb; --metric-line: #acd8fc; --metric-accent: var(--accent-tertiary, #2E6F8E);
   background: linear-gradient(135deg, #ffffff 15%, var(--metric-tint));
   border:0.5px solid var(--metric-line);
   border-radius: 12px; padding: 18px; gap: 7px;
 }
 .ops-workspace .ops-metric-card-teal { --metric-tint: #f9f9fb; --metric-line: #b8eae0; --metric-accent: #12a594; }
  .ops-workspace .ops-metric-card-green { --metric-tint: #f4fbf7; --metric-line: #acdec8; --metric-accent: #29a383; }
- .ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: #f9f9fb; --metric-line: #dadcff; --metric-accent: #5b5bd6; }
+ .ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: #f9f9fb; --metric-line: #dadcff; --metric-accent: var(--accent-secondary, #D95D39); }
 .ops-workspace .ops-metric-card-yellow { --metric-tint: #fcfcfd; --metric-line: #fbe577; --metric-accent: #e2a336; }
 .ops-workspace .ops-metric-card-red { --metric-tint: #f9f9fb; --metric-line: #ffcdce; --metric-accent: #e5484d; }
 .ops-workspace .ops-metric-card-cyan { --metric-tint: #f9f9fb; --metric-line: #b8eae0; --metric-accent: #12a594; }
@@ -272,13 +272,28 @@ label:has(select),
 .project-nav a:nth-child(5).active, .project-nav [data-nav="settings"].active { border-left-color:#0d74ce !important; background: linear-gradient(90deg, #f0f0f3, #ffffff) !important; color:#113264 !important; }
 
 /* 各板块卡片多样化微渐变与呼吸感 */
-.pastel-card.pastel-blue { background: #ffffff !important; border:0.5px solid #acd8fc !important; border-top:1px solid #0d74ce !important; }
-.pastel-card.pastel-teal { background: #ffffff !important; border:0.5px solid #b8eae0 !important; border-top:1px solid #0d9b8a !important; }
-.pastel-card.pastel-green { background: #ffffff !important; border:0.5px solid #acdec8 !important; border-top:1px solid #29a383 !important; }
-.pastel-card.pastel-purple { background: #ffffff !important; border:0.5px solid #dadcff !important; border-top:1px solid #5b5bd6 !important; }
-.pastel-card.pastel-yellow { background: #ffffff !important; border:0.5px solid #fbe577 !important; border-top:1px solid #e2a336 !important; }
-.pastel-card.pastel-red { background: #ffffff !important; border:0.5px solid #ffcdce !important; border-top:1px solid #e5484d !important; }
-.pastel-card.pastel-orange { background: #ffffff !important; border:0.5px solid #ffee9c !important; border-top:1px solid #ab6400 !important; }
+.pastel-card,
+.pastel-blue,
+.pastel-purple,
+.pastel-green,
+.pastel-amber,
+.pastel-teal,
+.pastel-red,
+.pastel-orange,
+.pastel-yellow,
+.pastel-card.pastel-blue,
+.pastel-card.pastel-teal,
+.pastel-card.pastel-green,
+.pastel-card.pastel-purple,
+.pastel-card.pastel-yellow,
+.pastel-card.pastel-red,
+.pastel-card.pastel-orange {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-top: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
 
 /* 胶囊标签色彩库 */
 .section-mini-tag.tag-orange { background: #f9f9fb !important; color:#ce2c31 !important; border:0.5px solid #fff7c2 !important; }
@@ -297,13 +312,13 @@ label:has(select),
 }
 .ops-workspace .ops-metric-card .stat-value { margin: 7px 0 3px; font-size: 22px; line-height: 1.25; overflow-wrap: anywhere; }
 .ops-workspace .ops-metric-card .stat-value small { font-size: 12px; font-weight: 500; color:#60646c; }
-.ops-workspace .ops-metric-card[role="button"]:hover { box-shadow: 0 6px 16px #0090ff13; }
-.ops-workspace .ops-metric-card[role="button"]:active { box-shadow: 0 2px 8px #0090ff13; }
+.ops-workspace .ops-metric-card[role="button"]:hover { box-shadow: 0 6px 16px rgba(15, 94, 82, 0.12); }
+.ops-workspace .ops-metric-card[role="button"]:active { box-shadow: 0 2px 8px rgba(15, 94, 82, 0.12); }
 .ops-workspace .ops-metric-card[role="button"] .ops-metric-card-label::after { content: ' ↗'; color:#0d74ce; }
 .ops-workspace :is(.primary, .primary-btn, .subtle-btn, .ops-toolbar button) {
   min-height: 38px; border-radius: 9px; font-size: 14px;
 }
-.ops-workspace .primary { background: #0090ff; border-color:#0d74ce; box-shadow: 0 2px 5px #0090ff18; }
+.ops-workspace .primary { background: var(--brand-primary, #0F5E52); border-color:var(--brand-primary, #0F5E52); box-shadow: var(--shadow-xs); }
 .ops-workspace .primary:hover:not(:disabled) { background: #113264; }
 .ops-workspace :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]), select, textarea) {
   min-height: 38px; border:0.5px solid #c2e5ff; border-radius: 9px;

@@ -144,15 +144,15 @@ export function CompetitorAnalysis({
         color: #006858 !important;
         border: 0.5px solid #b8eae0 !important;
       }
-      /* Card 2: 累计互动量 (青蓝 Blue) */
+      /* Card 2: 累计互动量 (矿物蓝 Mineral Teal) */
       .comp-card:nth-child(2) {
-        background: linear-gradient(180deg, #f0f7ff 0%, #ffffff 85%) !important;
+        background: linear-gradient(180deg, #f0f7f6 0%, #ffffff 85%) !important;
         border: 0.5px solid #d9d9e0 !important;
       }
       .comp-card:nth-child(2) .comp-card-badge {
-        background: #e0f2fe !important;
-        color: #0b5cad !important;
-        border: 0.5px solid #dadcff !important;
+        background: #ebf5f3 !important;
+        color: #0F5E52 !important;
+        border: 0.5px solid #c6e2dc !important;
       }
       /* Card 3: 商业内容占比 (暖橙 Amber) */
       .comp-card:nth-child(3) {
@@ -164,15 +164,15 @@ export function CompetitorAnalysis({
         color: #854d0e !important;
         border: 0.5px solid #ffee9c !important;
       }
-      /* Card 4: 消费者问题与反馈 (紫/红 Indigo/Rose) */
+      /* Card 4: 消费者问题与反馈 (赤陶 Terracotta) */
       .comp-card:nth-child(4) {
-        background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 85%) !important;
+        background: linear-gradient(180deg, #fdf5f0 0%, #ffffff 85%) !important;
         border: 0.5px solid #d9d9e0 !important;
       }
       .comp-card:nth-child(4) .comp-card-badge {
-        background: #ede9fe !important;
-        color: #4338ca !important;
-        border: 0.5px solid #dadcff !important;
+        background: #fbeae2 !important;
+        color: #D95D39 !important;
+        border: 0.5px solid #f6cfbf !important;
       }
       .comp-card .comp-card-val {
         color: #1c2024 !important;
@@ -291,18 +291,18 @@ export function CompetitorAnalysis({
             unit="指数"
             height={265}
             series={[
-              { key: 'lingxi', label: '灵犀搜索指数', color: '#0d74ce' },
-              { key: 'spotlight', label: '聚光搜索指数', color: '#5b5bd6' },
+              { key: 'lingxi', label: '灵犀搜索指数', color: '#0F5E52' },
+              { key: 'spotlight', label: '聚光搜索指数', color: '#D95D39' },
             ]}
           />
           <div style={{ marginTop: 14, paddingTop: 14, borderTop: '0.5px solid #f0f0f3', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
             <div style={{ padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
               <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>灵犀搜索峰值</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: '#0d74ce', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.lingxi || 0)))}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#0F5E52', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.lingxi || 0)))}</div>
             </div>
             <div style={{ padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
               <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>聚光搜索峰值</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: '#5b5bd6', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.spotlight || 0)))}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#D95D39', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.spotlight || 0)))}</div>
             </div>
             <div style={{ padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
               <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>近30天监测样本</div>
@@ -324,11 +324,11 @@ export function CompetitorAnalysis({
         }
         const totalIssues = issues.length;
         const brandColors: Record<string, string> = {
-          '飞鹤': '#0d74ce',
-          '金领冠': '#ffc53d',
-          '合生元': '#008573',
-          'A2': '#5753c6',
-          '爱他美': '#ce2c31',
+          '飞鹤': '#0F5E52',
+          '金领冠': '#C87D20',
+          '合生元': '#5B8266',
+          'A2': '#D95D39',
+          '爱他美': '#2E6F8E',
           '未标注': '#60646c',
         };
         const sortedBrands = [...counts.entries()].sort((a, b) => b[1] - a[1]);
@@ -350,7 +350,7 @@ export function CompetitorAnalysis({
                     {sortedBrands.map(([brand, count]) => {
                       const pctVal = ((count / totalIssues) * 100).toFixed(1);
                       const barPct = ((count / maxBrand) * 100).toFixed(1);
-                      const color = brandColors[brand] || '#0d74ce';
+                      const color = brandColors[brand] || '#0F5E52';
                       return (
                         <div key={brand} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 75px', alignItems: 'center', gap: 12 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -395,7 +395,7 @@ export function CompetitorAnalysis({
                           {category}
                         </span>
                         <div style={{ background: '#f0f0f3', borderRadius: 5, height: 9, overflow: 'hidden' }}>
-                          <div style={{ height: '100%', borderRadius: 5, width: barPct + '%', background: '#0d74ce', transition: 'width 0.4s ease' }} />
+                          <div style={{ height: '100%', borderRadius: 5, width: barPct + '%', background: '#0F5E52', transition: 'width 0.4s ease' }} />
                         </div>
                         <div style={{ textAlign: 'right', fontSize: 12, color: '#60646c', whiteSpace: 'nowrap' }}>
                           <strong style={{ color: '#1c2024' }}>{count}</strong> 条 ({pctVal}%)
@@ -408,7 +408,7 @@ export function CompetitorAnalysis({
             </div>
 
             <details style={{ background: '#ffffff', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 10, padding: '10px 16px' }}>
-              <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#0d74ce', padding: '4px 0' }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#0F5E52', padding: '4px 0' }}>
                 查看全部 {issues.length} 条来源讨论明细
               </summary>
               <div className="ops-table-wrap" style={{ maxHeight: 360, overflowY: 'auto', marginTop: 10 }}>

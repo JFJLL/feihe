@@ -82,68 +82,90 @@ export function CostComparisonChart({
         </div>
         <span>CPUV / 元，越低成本越低</span>
       </div>
-      {activeCosts.map(c => {
-        const max = Math.max(c.actual ?? 0, c.high ?? 0, 1) * 1.18;
-        const x = (n: number) => 78 + (n / max) * 300;
-        const warning = c.actual !== null && c.high !== null && c.actual > c.high;
-        const zero = c.actual === 0;
-        const dotColor = warning
-          ? DASHBOARD_PALETTE.anomaly
-          : zero
-          ? DASHBOARD_PALETTE.plan
-          : isReference
-          ? DASHBOARD_PALETTE.settlement
-          : DASHBOARD_PALETTE.actual;
-        const textColor = warning
-          ? '#ce2c31'
-          : zero
-          ? '#525866'
-          : isReference
-          ? '#272962'
-          : '#006858';
-        return (
-          <div key={c.channel} className="bv-cost-row">
-            <svg
-              viewBox="0 0 420 83"
-              role="img"
-              aria-label={`${c.channel}实际${num(c.actual)}元，行业区间${num(c.low)}至${num(c.high)}元`}
-            >
-              <title>
-                {`${c.channel}实际${num(c.actual)}元；行业基准${num(c.low)}–${num(c.high)}元`}
-              </title>
-              <text x="0" y="42" className="bv-svg-label" fill="#1c2024">{c.channel}</text>
-              <line x1="78" x2="378" y1="38" y2="38" stroke="#d9d9e0" strokeWidth="5" strokeLinecap="round" />
-              {c.low !== null && c.high !== null && (
-                <>
-                  <rect x={x(c.low)} y="29" width={Math.max(3, x(c.high) - x(c.low))} height="18" rx="4" fill="#d9d9e0" />
-                  <text x={(x(c.low) + x(c.high)) / 2} y="18" textAnchor="middle" className="bv-svg-muted" fill="#525866">
-                    基准 {num(c.low)}–{num(c.high)}
-                  </text>
-                </>
-              )}
-              {c.actual !== null ? (
-                <>
-                  <circle cx={x(c.actual)} cy="38" r="6" fill={dotColor} />
-                  <text
-                    x={x(c.actual)}
-                    y="68"
-                    textAnchor="middle"
-                    fill={textColor}
-                    fontSize="14"
-                    fontWeight="600"
-                  >
-                    {zero ? '原值0（待确认）' : isReference ? `快照 ${num(c.actual)}` : `实际 ${num(c.actual)}`}
-                    {warning ? ' ↑' : ''}
-                  </text>
-                </>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
+        {activeCosts.map(c => {
+          const maxScale = Math.max(c.actual ?? 0, c.high ?? 0, 1) * 1.2;
+          const leftPct = c.low !== null ? (c.low / maxScale) * 100 : 0;
+          const widthPct = c.low !== null && c.high !== null ? Math.max(6, ((c.high - c.low) / maxScale) * 100) : 0;
+          const actualPct = c.actual !== null ? Math.min(96, Math.max(4, (c.actual / maxScale) * 100)) : 0;
+
+          const mid = (c.low !== null && c.high !== null) ? (c.low + c.high) / 2 : null;
+          let tagBadge: React.ReactNode = null;
+          let dotColor = '#0F5E52';
+
+          if (c.actual !== null && mid !== null && c.low !== null && c.high !== null) {
+            if (c.actual < c.low) {
+              const savedPct = (((mid - c.actual) / mid) * 100).toFixed(1);
+              tagBadge = <span className="semantic-tag tag-ok">较基准中位省 {savedPct}%</span>;
+              dotColor = '#0F5E52';
+            } else if (c.actual <= c.high) {
+              const isNearHigh = c.actual > c.low + (c.high - c.low) * 0.75;
+              tagBadge = isNearHigh ? (
+                <span className="semantic-tag tag-warn">贴近上限</span>
               ) : (
-                <text x="224" y="67" textAnchor="middle" className="bv-svg-muted" fill="#525866">实际值未登记</text>
-              )}
-            </svg>
-          </div>
-        );
-      })}
-      <p className="bd-caption">
+                <span className="semantic-tag tag-ok">处于基准区间</span>
+              );
+              dotColor = isNearHigh ? '#C87D20' : '#2E6F8E';
+            } else {
+              tagBadge = <span className="semantic-tag tag-danger">高于基准上限</span>;
+              dotColor = '#C2410C';
+            }
+          } else if (c.actual === 0) {
+            tagBadge = <span className="semantic-tag tag-neutral">原值0·待确认</span>;
+            dotColor = '#8A847C';
+          } else if (c.actual === null) {
+            tagBadge = <span className="semantic-tag tag-neutral">实际值未登记</span>;
+          }
+
+          return (
+            <div key={c.channel} className="benchmark-row">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12.5, flexWrap: 'wrap', gap: 8 }}>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary, #1C1917)' }}>
+                  {c.channel}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }} className="num">
+                  {c.low !== null && c.high !== null ? (
+                    <span style={{ color: 'var(--text-muted, #8A847C)', fontSize: 11.5 }}>
+                      行业基准: ¥{num(c.low)}–¥{num(c.high)}
+                    </span>
+                  ) : (
+                    <span style={{ color: 'var(--text-muted, #8A847C)', fontSize: 11.5 }}>基准待更新</span>
+                  )}
+                  <b style={{ color: dotColor, fontSize: 14 }}>
+                    {c.actual !== null ? (isReference ? `快照 ¥${num(c.actual)}` : `实际 ¥${num(c.actual)}`) : '实际值未登记'}
+                  </b>
+                  {tagBadge}
+                </div>
+              </div>
+
+              <div
+                className="benchmark-track"
+                role="img"
+                aria-label={`${c.channel}实际${num(c.actual)}元，行业区间${num(c.low)}至${num(c.high)}元`}
+              >
+                {c.low !== null && c.high !== null && (
+                  <div
+                    className="benchmark-band"
+                    style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
+                    title={`行业基准：¥${num(c.low)}–¥${num(c.high)}`}
+                  />
+                )}
+                {c.actual !== null && (
+                  <div
+                    className="benchmark-dot"
+                    style={{
+                      left: `${actualPct}%`,
+                      background: dotColor,
+                    }}
+                    title={`${isReference ? '快照' : '实际'}：¥${num(c.actual)}`}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="bd-caption" style={{ marginTop: 10 }}>
         {isReference
           ? `灰色带为行业基准区间，圆点为最近月累计快照（截至 ${isReference.date}），当前日尚未更新。`
           : '灰色带为行业区间，圆点为本项目月累计。按各渠道独立刻度核对。'}
@@ -1022,24 +1044,90 @@ export function FeedAudienceVisuals({
         <HorizontalRanks rows={allianceGroups} title="小红盟 / 人群包CPUV（低→高）" color="teal" zeroUnconfirmed={true} />
       </div>
       <div className="bv-audience-col bv-audience-penetration-col">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-          <h4 style={{ margin: 0, fontSize: 14, color: '#1c2024' }}>竞品人群渗透 / 快照对比</h4>
-          {isCrowdRef && reference && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+          <h4 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>
+            竞品人群渗透 / 快照对比
+          </h4>
+          {isCrowdRef && reference ? (
             <span className="bv-ref-badge">截至 {reference.date}</span>
+          ) : (
+            <span className="semantic-tag tag-ok">存量抢夺显著</span>
           )}
         </div>
-        <div className="bv-audience">
-          {audience.map(a => (
-            <article key={a.name}>
-              <div><b>{a.name}</b><strong>{pct(a.value)}</strong></div>
-              <div className="bv-progress-track">
-                <span style={{ width: a.value === null ? 0 : String(Math.min(1, a.value) * 100) + "%" }} />
-              </div>
-              <p>{a.observedOn}观测 / {a.previousOn}登记{pct(a.previous)} / 人群体量{a.size}</p>
-              <details><summary>人群定义</summary><p>{a.logic}</p></details>
-            </article>
-          ))}
+        <div className="bv-audience" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {audience.map(a => {
+            const curPct = a.value !== null ? a.value * 100 : 0;
+            const basePct = a.previous !== null ? a.previous * 100 : 0;
+            const liftPp = curPct - basePct;
+
+            return (
+              <article
+                key={a.name}
+                style={{
+                  background: 'var(--bg-subtle, #FAF9F5)',
+                  border: '1px solid var(--border-subtle, #E6E3DC)',
+                  borderRadius: 10,
+                  padding: '12px 14px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                  <div>
+                    <div style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text-primary, #1C1917)' }}>
+                      {a.name}
+                    </div>
+                    <div className="num" style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', marginTop: 2 }}>
+                      {a.previousOn} 基线 {basePct.toFixed(2)}% → {a.observedOn} 观测 {curPct.toFixed(2)}%
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <span className="num" style={{ fontSize: 20, fontWeight: 800, color: '#0F5E52' }}>
+                      {curPct.toFixed(2)}%
+                    </span>
+                    {liftPp > 0 && (
+                      <span className="semantic-tag tag-ok num" style={{ marginLeft: 6 }}>
+                        ↑ +{liftPp.toFixed(2)}pp
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div
+                  className="dual-bar-track"
+                  role="img"
+                  aria-label={`${a.name}基线${basePct.toFixed(2)}%，当前${curPct.toFixed(2)}%，净增${liftPp.toFixed(2)}pp`}
+                >
+                  <div
+                    style={{ width: `${Math.min(100, basePct)}%`, height: '100%', background: '#0F5E52' }}
+                    title={`${a.previousOn} 基线 ${basePct.toFixed(2)}%`}
+                  />
+                  <div
+                    style={{ width: `${Math.max(0, Math.min(100 - basePct, liftPp))}%`, height: '100%', background: '#D95D39' }}
+                    title={`战役净增 +${liftPp.toFixed(2)}pp`}
+                  />
+                </div>
+
+                {a.size && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--text-secondary, #57534E)', marginTop: 4 }}>
+                    <span>目标人群池体量：<b className="num">{a.size}</b></span>
+                  </div>
+                )}
+
+                {a.logic && (
+                  <details style={{ marginTop: 6, fontSize: 11.5 }}>
+                    <summary style={{ cursor: 'pointer', color: 'var(--text-muted, #8A847C)' }}>人群定义</summary>
+                    <p style={{ margin: '4px 0 0', color: 'var(--text-secondary, #57534E)', lineHeight: 1.5 }}>{a.logic}</p>
+                  </details>
+                )}
+              </article>
+            );
+          })}
         </div>
+
+        <div style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', display: 'flex', justifyContent: 'space-between', paddingTop: 10, marginTop: 10, borderTop: '1px dashed var(--border-subtle, #E6E3DC)' }}>
+          <span>■ 深松石绿 = 初始渗透基线</span>
+          <span>■ 赤陶暖橘 = 战役净增渗透率</span>
+        </div>
+
         <p className="bd-caption" style={{ marginTop: 8 }}>
           {isCrowdRef && reference
             ? "人群包与渗透率来自截至 " + reference.date + " 最近月累计快照，当前日未更新；无每日观测不推算。"

@@ -19,7 +19,7 @@ function ProgressRow({ label, done, total, tone = 'blue', detail }: {
         <span style={{ fontSize: 14, fontWeight: 600, color: '#1c2024' }}>{label}</span>
         <span style={{ fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
           <strong style={{ color: '#1c2024', fontSize: 14 }}>{done}</strong> / {total}
-          <span style={{ marginLeft: 8, color: tone === 'green' ? '#29a383' : tone === 'red' ? '#ce2c31' : '#0090ff', fontWeight: 700 }}>{rate}%</span>
+          <span style={{ marginLeft: 8, color: tone === 'green' ? '#0F5E52' : tone === 'red' ? '#D95D39' : '#2E6F8E', fontWeight: 700 }}>{rate}%</span>
         </span>
       </div>
       <ProgressBar value={done} max={total || 1} theme={tone} />
@@ -191,20 +191,20 @@ export function ExecutionOverview({
               const completeRate = stats.total > 0 ? pct(stats.completed / stats.total) : '—';
               const settleRate = stats.total > 0 ? pct(stats.settled / stats.total) : '0%';
               return (
-                <div key={month} style={{ padding: '16px 18px', background: 'linear-gradient(135deg, #e6f4fe 0%, #e6f4fe 100%)', borderRadius: 12, border: '0.5px solid #acd8fc' }}>
+                <div key={month} style={{ padding: '16px 18px', background: 'linear-gradient(135deg, #EBF5F3 0%, #FAF9F5 100%)', borderRadius: 12, border: '0.5px solid #C6E2DC' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                     <span style={{ fontSize: 16, fontWeight: 800, color: '#113264' }}>{month}执行统计</span>
-                    <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 20, background: '#0d74ce', color: '#fff', fontWeight: 700 }}>完成率 {completeRate}</span>
+                    <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 20, background: '#0F5E52', color: '#fff', fontWeight: 700 }}>完成率 {completeRate}</span>
                   </div>
-                  <div style={{ fontSize: 22, fontWeight: 900, color: '#0d74ce', marginBottom: 4 }}>{stats.total.toLocaleString()}<span style={{ fontSize: 14, fontWeight: 500, color: '#0d74ce', marginLeft: 6 }}>条</span></div>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: '#0F5E52', marginBottom: 4 }}>{stats.total.toLocaleString()}<span style={{ fontSize: 14, fontWeight: 500, color: '#0F5E52', marginLeft: 6 }}>条</span></div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
                       <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>达人评论</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: '#0d74ce' }}>{stats.darent.toLocaleString()}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#0F5E52' }}>{stats.darent.toLocaleString()}</div>
                     </div>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
                       <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>素人评论</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, color: '#5753c6' }}>{stats.amateur.toLocaleString()}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#D95D39' }}>{stats.amateur.toLocaleString()}</div>
                     </div>
                     <div style={{ background: '#fff', padding: '8px 10px', borderRadius: 8 }}>
                       <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>纯文案</div>
@@ -239,9 +239,9 @@ export function ExecutionOverview({
               title="日执行量趋势"
               unit="条"
               series={[
-                { key: 'total', label: '总执行', color: '#0d74ce' },
-                { key: 'darent', label: '达人评论', color: '#0090ff' },
-                { key: 'amateur', label: '素人评论', color: '#5753c6' },
+                { key: 'total', label: '总执行', color: '#0F5E52' },
+                { key: 'darent', label: '达人评论', color: '#2E6F8E' },
+                { key: 'amateur', label: '素人评论', color: '#D95D39' },
               ]}
             />
           </DashboardSection>
@@ -293,9 +293,9 @@ export function ExecutionOverview({
               <div style={{ fontSize: 12, color: '#ab6400' }}>内部审核不通过需修改</div>
             </div>
             <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-              <div style={{ fontSize: 12, color: '#0d74ce' }}>7月异常记录数</div>
-              <div style={{ fontSize: 22, fontWeight: 800, color: '#0090ff', margin: '4px 0' }}>{brokenCount + modifiedCount}</div>
-              <div style={{ fontSize: 12, color: '#0d74ce' }}>两张异常表的记录合计，未去重，不计算跨月异常率</div>
+              <div style={{ fontSize: 12, color: '#2E6F8E' }}>7月异常记录数</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#D95D39', margin: '4px 0' }}>{brokenCount + modifiedCount}</div>
+              <div style={{ fontSize: 12, color: '#2E6F8E' }}>两张异常表的记录合计，未去重，不计算跨月异常率</div>
             </div>
             <div className="pastel-card pastel-teal" style={{ padding: '14px 16px' }}>
               <div style={{ fontSize: 12, color: '#0d3d38' }}>修改原因分布</div>
@@ -390,9 +390,9 @@ export function ExecutionOverview({
             <div style={{ fontSize: 12, color: '#ab6400' }}>执行团队改写后成功外显</div>
           </div>
           <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
-            <div style={{ fontSize: 12, color: '#0d74ce' }}>待核验评论</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#0090ff', margin: '4px 0' }}>{num(supplier.pendingCount)}</div>
-            <div style={{ fontSize: 12, color: '#0d74ce' }}>新导入等待下一轮核验比对</div>
+            <div style={{ fontSize: 12, color: '#2E6F8E' }}>待核验评论</div>
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#0F5E52', margin: '4px 0' }}>{num(supplier.pendingCount)}</div>
+            <div style={{ fontSize: 12, color: '#2E6F8E' }}>新导入等待下一轮核验比对</div>
           </div>
           <div className="pastel-card pastel-teal" style={{ padding: '14px 16px' }}>
             <div style={{ fontSize: 12, color: '#0d3d38' }}>进行中任务</div>
@@ -426,7 +426,7 @@ export function ExecutionOverview({
               title="评论监测日度趋势"
               unit="条"
               series={[
-                { key: 'total', label: '总评论', color: '#0d74ce' },
+                { key: 'total', label: '总评论', color: '#0F5E52' },
                 { key: 'positive', label: '正向', color: '#29a383' },
                 { key: 'negative', label: '负向', color: '#ce2c31' },
               ]}
@@ -443,8 +443,8 @@ export function ExecutionOverview({
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div style={{ background: '#e6f4fe', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
-                <div style={{ fontSize: 12, color: '#0d74ce' }}>已完成任务</div>
+              <div style={{ background: '#EBF5F3', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
+                <div style={{ fontSize: 12, color: '#0F5E52' }}>已完成任务</div>
                 <strong style={{ fontSize: 22, color: '#113264' }}>{completedJobs.length}</strong>
               </div>
               <div style={{ background: '#fff7c2', padding: '12px', borderRadius: 8, textAlign: 'center' }}>
@@ -462,8 +462,8 @@ export function ExecutionOverview({
                       padding: '2px 8px',
                       borderRadius: 4,
                       fontWeight: 600,
-                      background: job.status === 'completed' ? '#e6f7ed' : job.status === 'running' ? '#e6f4fe' : '#feebec',
-                      color: job.status === 'completed' ? '#208368' : job.status === 'running' ? '#0d74ce' : '#ce2c31',
+                      background: job.status === 'completed' ? '#EBF5F3' : job.status === 'running' ? '#F0F6F9' : '#feebec',
+                      color: job.status === 'completed' ? '#0F5E52' : job.status === 'running' ? '#2E6F8E' : '#D95D39',
                     }}>{job.status === 'completed' ? '已完成' : job.status === 'running' ? '进行中' : job.status}</span>
                   </div>
                 ))}

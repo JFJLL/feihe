@@ -9,7 +9,7 @@
   --v2-teal-light: #e0f8f3;
   --v2-teal-hover: #0d3d38;
   --v2-teal-border:#a1ded2;
-  --v2-violet: #5b5bd6;
+  --v2-violet: var(--accent-secondary, #D95D39);
   --v2-amber-gold: #ffc53d;
   --v2-warm-bg: #f9f9fb;
   --v2-card-bg: #ffffff;
@@ -20,7 +20,7 @@
   --v2-text-dim: #60646c;
   --v2-amber: #ab6400;
   --v2-amber-bg: #fcfcfd;
-  --v2-blue: #0090ff;
+  --v2-blue: var(--accent-tertiary, #2E6F8E);
   --v2-blue-bg: #f9f9fb;
   --v2-red: #ce2c31;
   --v2-red-bg: #f9f9fb;
@@ -429,7 +429,7 @@
   border-radius: 4px;
 }
 .v2-query-own { background: #e0f8f3; color:#0d3d38; border:0.5px solid #a1ded2; }
-.v2-query-category { background: #e6f4fe; color:#0d74ce; border:0.5px solid #acd8fc; }
+.v2-query-category { background: #EBF5F3; color:#0F5E52; border:0.5px solid #C6E2DC; }
 .v2-query-competitor { background: #ffee9c; color:#ab6400; border:0.5px solid #fbe577; }
 .v2-query-default { background: #f0f0f3; color:#60646c; border:0.5px solid #d9d9e0; }
 
@@ -983,8 +983,8 @@
   gap: 4px;
 }
 .v2-tag-comm { font-size: 12px; padding: 1px 4px; border-radius: 3px; background: #ffee9c; color:#ab6400; }
-.v2-tag-nat { font-size: 12px; padding: 1px 4px; border-radius: 3px; background: #e6f4fe; color:#0d74ce; }
-.v2-tag-promo { font-size: 12px; padding: 1px 4px; border-radius: 3px; background: #f0f0f3; color:#5753c6; }
+.v2-tag-nat { font-size: 12px; padding: 1px 4px; border-radius: 3px; background: #EBF5F3; color:#0F5E52; }
+.v2-tag-promo { font-size: 12px; padding: 1px 4px; border-radius: 3px; background: #FAF9F5; color:#D95D39; }
 
 .v2-price-tag {
   display: inline-flex;
@@ -1107,7 +1107,7 @@
   border-radius: 4px;
 }
 .priority-high { background: #e8e8ec; color:#ce2c31; }
-.priority-medium { background: #e6f4fe; color:#0d74ce; }
+.priority-medium { background: #EBF5F3; color:#0F5E52; }
 
 .v2-action-title {
   font-size: 16px;

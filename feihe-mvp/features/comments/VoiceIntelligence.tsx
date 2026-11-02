@@ -42,8 +42,8 @@ function DistributionBars({
                 gap: '10px',
                 padding: '6px 8px',
                 borderRadius: '6px',
-                background: isHovered ? '#e6f4fe' : 'transparent',
-                border: isHovered ? '0.5px solid #acd8fc' : '0.5px solid transparent',
+                background: isHovered ? '#EBF5F3' : 'transparent',
+                border: isHovered ? '0.5px solid #C6E2DC' : '0.5px solid transparent',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
@@ -52,7 +52,7 @@ function DistributionBars({
                 style={{
                   width: '100px',
                   fontSize: 14,
-                  color: isHovered ? '#0d74ce' : '#1c2024',
+                  color: isHovered ? '#0F5E52' : '#1c2024',
                   fontWeight: isHovered ? 600 : 400,
                   textOverflow: 'ellipsis',
                   overflow: 'hidden',
@@ -67,7 +67,7 @@ function DistributionBars({
                   style={{
                     width: `${barWidth}%`,
                     height: '100%',
-                    background: isHovered ? '#0d74ce' : '#0090ff',
+                    background: isHovered ? '#0F5E52' : '#2E6F8E',
                     borderRadius: '4px',
                     transition: 'width 0.4s ease, background 0.15s ease',
                   }}
@@ -77,7 +77,7 @@ function DistributionBars({
                 <strong style={{ width: '45px', textAlign: 'right', fontSize: 14, color: '#1c2024' }}>
                   {compact(val)}
                 </strong>
-                <span style={{ fontSize: 12, color: isHovered ? '#0d74ce' : '#60646c', width: '40px', textAlign: 'right' }}>
+                <span style={{ fontSize: 12, color: isHovered ? '#0F5E52' : '#60646c', width: '40px', textAlign: 'right' }}>
                   {pctVal}%
                 </span>
               </div>
@@ -313,8 +313,8 @@ export function VoiceIntelligence({
           desc="仅显示真实抓取快照；不同日期的监测笔记范围可能不同，数值不是每日新增评论。"
         >
           {(data.analytics?.trend || []).length < 3 ? <div className="empty">真实历史快照不足，暂不展示趋势。积累至少 3 个观测日期后显示。</div> : <TimeSeriesChart rows={(data.analytics?.trend || []).map(r=>({...r,date:String(r.date)}))} title="供应商交付登记日度趋势" series={[
-            {key:'total',label:'交付量',color:'#0d74ce'}, {key:'positive',label:'正向',color:'#29a383'},
-            {key:'negative',label:'负向',color:'#ce2c31'}, {key:'question',label:'问询',color:'#ffc53d'},
+            {key:'total',label:'交付量',color:'#0F5E52'}, {key:'positive',label:'正向',color:'#5B8266'},
+            {key:'negative',label:'负向',color:'#D95D39'}, {key:'question',label:'问询',color:'#C87D20'},
           ]} />}
         </DashboardSection>
       </div>
@@ -376,7 +376,7 @@ export function VoiceIntelligence({
                 type="button"
                 className="btn-link"
                 style={{
-                  background: '#0090ff',
+                  background: '#0F5E52',
                   color: '#ffffff',
                   padding: '10px 16px',
                   borderRadius: '8px',
@@ -419,7 +419,7 @@ export function VoiceIntelligence({
           </div>
           <div className="pastel-card pastel-blue" style={{ padding: '14px 16px' }}>
             <div style={{ fontSize: '12px', color: '#60646c' }}>待达人回复</div>
-            <div style={{ fontSize: '22px', fontWeight: 800, color: '#0090ff', margin: '4px 0' }}>
+            <div style={{ fontSize: '22px', fontWeight: 800, color: '#2E6F8E', margin: '4px 0' }}>
               {num(actions.replyPending)}
             </div>
             <div style={{ fontSize: 12, color: '#60646c' }}>引导达人介入</div>

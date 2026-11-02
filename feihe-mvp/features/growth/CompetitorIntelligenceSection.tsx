@@ -13,7 +13,7 @@ import { HorizontalBarList } from '../overview/OverviewCharts';
 
 function DataTable({ headers, rows, heat = false }: { headers: string[]; rows: ReactNode[][]; heat?: boolean }) {
   const peak = Math.max(1, ...rows.flatMap(row => row.slice(1, -1).map(cell => numeric(cell) || 0)));
-  return rows.length ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr>{headers.map(h => <th key={h}>{h}</th>)}</tr></thead><tbody>{rows.map((row, i) => <tr key={i}>{row.map((cell, j) => <td key={j} style={heat && j > 0 && j < row.length - 1 && (numeric(cell) || 0) > 0 ? { background: `rgba(14, 165, 233, ${0.08 + 0.3 * Number(numeric(cell)) / peak})`, fontWeight: 600 } : undefined}>{cell}</td>)}</tr>)}</tbody></table></div> : <EmptyState title="暂无匹配记录" text="该月份或品牌没有来源记录；不会补成 0。" />;
+  return rows.length ? <div className="ops-table-wrap"><table className="ops-table"><thead><tr>{headers.map(h => <th key={h}>{h}</th>)}</tr></thead><tbody>{rows.map((row, i) => <tr key={i}>{row.map((cell, j) => <td key={j} style={heat && j > 0 && j < row.length - 1 && (numeric(cell) || 0) > 0 ? { background: `rgba(15, 94, 82, ${0.08 + 0.3 * Number(numeric(cell)) / peak})`, fontWeight: 600 } : undefined}>{cell}</td>)}</tr>)}</tbody></table></div> : <EmptyState title="暂无匹配记录" text="该月份或品牌没有来源记录；不会补成 0。" />;
 }
 
 function MixBar({ label, items }: { label: string; items: { label: string; value: unknown; color: string }[] }) {
@@ -50,7 +50,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
   const filtered = activeBrand === 'all' ? brands : brands.filter(b => b.id === activeBrand);
   const includes = (brand: string | null) => activeBrand === 'all' || brand === activeBrand;
   const name = (brand: string) => brands.find(b => b.id === brand)?.name || brand;
-  const brandColor = (brandId: string) => brands.find(b => b.id === brandId)?.color || '#0d74ce';
+  const brandColor = (brandId: string) => brands.find(b => b.id === brandId)?.color || '#0F5E52';
   const rows = performance.filter(p => p.month === month && includes(p.brand));
   const allMonthRows = performance.filter(p => p.month === month);
   const maxSpend = Math.max(1, ...allMonthRows.map(p => p.spend || 0));
@@ -132,7 +132,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
           const row = allMonthRows.find(p => p.brand === b.id);
           const isSelected = activeBrand === b.id;
           const spendPct = row && maxSpend ? (row.spend / maxSpend) * 100 : 0;
-          return <div key={b.id} onClick={() => setActiveBrand(activeBrand === b.id ? 'all' : b.id)} style={{ cursor: 'pointer', padding: '10px 12px', background: isSelected ? '#e6f4fe' : '#ffffff', border: isSelected ? `2px solid ${b.color}` : '0.5px solid #d9d9e0', borderRadius: 8, transition: 'all 0.15s ease', boxShadow: isSelected ? '0 4px 10px rgba(13, 116, 206, 0.15)' : 'none', position: 'relative', overflow: 'hidden' }}>
+          return <div key={b.id} onClick={() => setActiveBrand(activeBrand === b.id ? 'all' : b.id)} style={{ cursor: 'pointer', padding: '10px 12px', background: isSelected ? '#EBF5F3' : '#ffffff', border: isSelected ? `2px solid ${b.color}` : '0.5px solid #d9d9e0', borderRadius: 8, transition: 'all 0.15s ease', boxShadow: isSelected ? '0 4px 10px rgba(15, 94, 82, 0.15)' : 'none', position: 'relative', overflow: 'hidden' }}>
             <div style={{ height: 3, background: b.color, position: 'absolute', top: 0, left: 0, right: 0 }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
               <strong style={{ fontSize: 14, color: '#1c2024' }}>{b.name}</strong>
@@ -163,16 +163,16 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
       <DashboardSection title="飞鹤小红书传播全链路漏斗" desc="大盘曝光 → 笔记阅读 → 转评赞互动 → 千赞爆文；呈现飞鹤本品在小红书的逐层心智沉淀与转化率。">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: 12 }}>
           {[
-            { stage: '01 曝光 Exposure', val: feiheData.exposure, sub: '大盘曝光沉淀', pct: 100, rate: null, color: '#0d74ce' },
-            { stage: '02 阅读 Reads', val: feiheData.reads, sub: '笔记阅读点击', pct: feiheData.exposure ? (feiheData.reads / feiheData.exposure) * 100 : 16.07, rate: percent(feiheData.reported?.ctr || (feiheData.reads && feiheData.exposure ? feiheData.reads / feiheData.exposure : null)), color: '#008573' },
-            { stage: '03 互动 Interactions', val: feiheData.interactions, sub: '转评赞藏互动', pct: feiheData.reads ? (feiheData.interactions / feiheData.reads) * 100 : 6.22, rate: percent(feiheData.reported?.engagementRate || (feiheData.interactions && feiheData.reads ? feiheData.interactions / feiheData.reads : null)), color: '#5b5bd6' },
-            { stage: '04 爆文 Viral', val: feiheData.viral, sub: '千赞高热爆文', pct: feiheData.notes ? (feiheData.viral / feiheData.notes) * 100 : 20.77, rate: percent(feiheData.reported?.viralRate || (feiheData.viral && feiheData.notes ? feiheData.viral / feiheData.notes : null)), color: '#29a383' },
+            { stage: '01 曝光 Exposure', val: feiheData.exposure, sub: '大盘曝光沉淀', pct: 100, rate: null, color: '#0F5E52' },
+            { stage: '02 阅读 Reads', val: feiheData.reads, sub: '笔记阅读点击', pct: feiheData.exposure ? (feiheData.reads / feiheData.exposure) * 100 : 16.07, rate: percent(feiheData.reported?.ctr || (feiheData.reads && feiheData.exposure ? feiheData.reads / feiheData.exposure : null)), color: '#2E6F8E' },
+            { stage: '03 互动 Interactions', val: feiheData.interactions, sub: '转评赞藏互动', pct: feiheData.reads ? (feiheData.interactions / feiheData.reads) * 100 : 6.22, rate: percent(feiheData.reported?.engagementRate || (feiheData.interactions && feiheData.reads ? feiheData.interactions / feiheData.reads : null)), color: '#D95D39' },
+            { stage: '04 爆文 Viral', val: feiheData.viral, sub: '千赞高热爆文', pct: feiheData.notes ? (feiheData.viral / feiheData.notes) * 100 : 20.77, rate: percent(feiheData.reported?.viralRate || (feiheData.viral && feiheData.notes ? feiheData.viral / feiheData.notes : null)), color: '#5B8266' },
           ].map(step => (
             <div key={step.stage} style={{ padding: '14px 16px', background: '#f9f9fb', border: '0.5px solid var(--slate-6, #d9d9e0)', borderRadius: 10 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: step.color }}>{step.stage}</div>
               <div style={{ fontSize: 22, fontWeight: 800, color: '#1c2024', margin: '4px 0' }}>{compactMetric(step.val)}</div>
               <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>{step.sub}</div>
-              {step.rate && <div style={{ fontSize: 12, color: '#0d74ce', fontWeight: 600, marginTop: 4 }}>转化率: {step.rate}</div>}
+              {step.rate && <div style={{ fontSize: 12, color: '#0F5E52', fontWeight: 600, marginTop: 4 }}>转化率: {step.rate}</div>}
               <div style={{ height: 4, background: '#d9d9e0', borderRadius: 2, overflow: 'hidden', marginTop: 8 }}>
                 <div style={{ width: `${step.val && step.pct ? Math.min(100, Math.max(0, step.pct)) : 0}%`, height: '100%', background: step.color }} />
               </div>
@@ -248,7 +248,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <span style={{ fontSize: 14, fontWeight: 700, color: '#1c2024' }}>¥{compactMetric(spend)}</span>
-                        <span style={{ fontSize: 12, padding: '2px 6px', borderRadius: 4, background: '#e6f4fe', color: '#0d74ce', fontWeight: 600 }}>
+                        <span style={{ fontSize: 12, padding: '2px 6px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 600 }}>
                           篇均 {avgInter} / CPE ¥{cpe}
                         </span>
                       </div>
@@ -325,8 +325,8 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
 
     <DashboardSection title="月报样本趋势" desc="仅展示已载入月份；品牌覆盖发生变化会影响合计，不能解读为同样本增速。空值不补零。">
       <div className="workspace-two-col">
-        <TimeSeriesChart rows={observedMonths} title="月报笔记趋势" unit="篇" series={[{key: 'notes', label: '商业笔记', color: '#0d74ce'}]} />
-        <TimeSeriesChart rows={observedMonths} title="月报互动趋势" unit="次" series={[{key: 'interactions', label: '互动', color: '#5b5bd6'}]} />
+        <TimeSeriesChart rows={observedMonths} title="月报笔记趋势" unit="篇" series={[{key: 'notes', label: '商业笔记', color: '#0F5E52'}]} />
+        <TimeSeriesChart rows={observedMonths} title="月报互动趋势" unit="次" series={[{key: 'interactions', label: '互动', color: '#D95D39'}]} />
       </div>
     </DashboardSection>
     <div className="workspace-two-col">
@@ -335,10 +335,10 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
           {filtered.map(b => {
             const p = creatorMix.find(r => r.brand === b.id && r.month === month);
             return <MixBar key={b.id} label={b.name} items={[
-              { label: '明星/知名', value: completeSum([p?.star, p?.known]), color: '#5b5bd6' },
-              { label: '头部', value: p?.head, color: '#0d74ce' },
-              { label: '腰部', value: p?.waist, color: '#008573' },
-              { label: '初级', value: p?.junior, color: '#ffc53d' },
+              { label: '明星/知名', value: completeSum([p?.star, p?.known]), color: '#D95D39' },
+              { label: '头部', value: p?.head, color: '#0F5E52' },
+              { label: '腰部', value: p?.waist, color: '#2E6F8E' },
+              { label: '初级', value: p?.junior, color: '#C87D20' },
               { label: '素人', value: p?.amateur, color: '#60646c' },
             ]} />;
           })}
@@ -348,7 +348,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
         <div className="stack" style={{ marginBottom: 20 }}>
           {filtered.map(b => {
             const p = formatMix.find(r => r.brand === b.id && r.month === month);
-            return <MixBar key={b.id} label={b.name} items={[{label:'图文',value:p?.image,color:'#0d74ce'},{label:'视频',value:p?.video,color:'#5b5bd6'}]} />;
+            return <MixBar key={b.id} label={b.name} items={[{label:'图文',value:p?.image,color:'#0F5E52'},{label:'视频',value:p?.video,color:'#D95D39'}]} />;
           })}
         </div>
       </DashboardSection>
@@ -364,8 +364,8 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
       {comparisonGroups && comparisonGroups.length > 0 && (
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
           {comparisonGroups.map(grp => (
-            <button key={grp.id} type="button" onClick={() => setActiveBattle(grp.id)} style={{ padding: '8px 14px', borderRadius: 8, border: activeBattle === grp.id ? '2px solid #0d74ce' : '0.5px solid #cdced6', background: activeBattle === grp.id ? '#e6f4fe' : '#ffffff', cursor: 'pointer', textAlign: 'left' }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: activeBattle === grp.id ? '#0d74ce' : '#1c2024' }}>{grp.title}</div>
+            <button key={grp.id} type="button" onClick={() => setActiveBattle(grp.id)} style={{ padding: '8px 14px', borderRadius: 8, border: activeBattle === grp.id ? '2px solid #0F5E52' : '0.5px solid #cdced6', background: activeBattle === grp.id ? '#EBF5F3' : '#ffffff', cursor: 'pointer', textAlign: 'left' }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: activeBattle === grp.id ? '#0F5E52' : '#1c2024' }}>{grp.title}</div>
               <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', marginTop: 2 }}>{grp.note}</div>
             </button>
           ))}
@@ -380,7 +380,7 @@ export function CompetitorIntelligenceSection({ intelligence }: { intelligence?:
             </div>
             <div className="stack" style={{ gap: 6, fontSize: 14, lineHeight: 1.6 }}>
               <div><span style={{ color: 'var(--slate-11, #60646c)' }}>人群：</span><strong style={{ color: '#1c2024' }}>{item.audience}</strong></div>
-              <div><span style={{ color: 'var(--slate-11, #60646c)' }}>卖点：</span><span style={{ color: '#0d74ce', fontWeight: 600 }}>{item.proposition}</span></div>
+              <div><span style={{ color: 'var(--slate-11, #60646c)' }}>卖点：</span><span style={{ color: '#0F5E52', fontWeight: 600 }}>{item.proposition}</span></div>
               <div><span style={{ color: 'var(--slate-11, #60646c)' }}>场景：</span><span style={{ color: '#60646c' }}>{item.scenarios}</span></div>
             </div>
           </div>

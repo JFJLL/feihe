@@ -65,21 +65,38 @@ export function CampaignWorkspace({
   const [currentPalette, setCurrentPalette] = useState<PaletteKey>('botanical');
 
   useEffect(() => {
-    if (typeof document !== 'undefined') {
-      const existing = document.documentElement.getAttribute('data-palette') as PaletteKey | null;
-      if (existing === 'botanical' || existing === 'terracotta' || existing === 'nordic') {
-        setCurrentPalette(existing);
-      }
-    }
-  }, []);
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    const applyPalette = (raw: string | null | undefined) => {
+      const savedPalette: PaletteKey =
+        raw === 'botanical' || raw === 'terracotta' || raw === 'nordic' ? raw : 'botanical';
+      document.documentElement.setAttribute('data-palette', savedPalette);
+      setCurrentPalette(savedPalette);
+    };
 
-  const handlePaletteChange = (val: PaletteKey) => {
-    setCurrentPalette(val);
-    if (typeof document !== 'undefined') {
-      document.documentElement.setAttribute('data-palette', val);
-      window.dispatchEvent(new CustomEvent('palettechange', { detail: { palette: val } }));
-    }
-  };
+    const savedPalette =
+      window.localStorage.getItem('feihe_ui_palette') ||
+      document.documentElement.getAttribute('data-palette') ||
+      'botanical';
+    applyPalette(savedPalette);
+
+    const onPaletteChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      const next = typeof detail === 'string' ? detail : detail?.palette;
+      if (next) applyPalette(next);
+    };
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'feihe_ui_palette') {
+        applyPalette(e.newValue || 'botanical');
+      }
+    };
+
+    window.addEventListener('palettechange', onPaletteChange);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('palettechange', onPaletteChange);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
 
   const [dashboard, setDashboard] = useState<CampaignDashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -225,27 +242,8 @@ export function CampaignWorkspace({
     </button>
   );
 
-  const paletteSwitcher = (
-    <div className="ca-palette-switcher-pill" title="切换浅色主题色板">
-      <span style={{ fontSize: 13 }} aria-hidden="true">🎨</span>
-      <label htmlFor="palette-selector-input" className="sr-only">选择浅色色板</label>
-      <select
-        id="palette-selector-input"
-        className="ca-palette-select"
-        value={currentPalette}
-        onChange={(e) => handlePaletteChange(e.target.value as PaletteKey)}
-        aria-label="选择浅色色板"
-      >
-        <option value="botanical">🌿 旷野松石 (松石绿 + 赤陶橘)</option>
-        <option value="terracotta">📰 财经社论 (丹砂红 + 矿石蓝)</option>
-        <option value="nordic">🏔️ 北欧矿石 (深海青 + 鼠尾草)</option>
-      </select>
-    </div>
-  );
-
   const frameActions = (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-      {paletteSwitcher}
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }} data-active-palette={currentPalette}>
       {refreshAction}
     </div>
   );

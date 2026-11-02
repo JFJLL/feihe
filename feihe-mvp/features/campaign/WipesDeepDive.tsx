@@ -88,8 +88,8 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
     const top8Audiences = audienceDetailRows.slice(0, 8);
 
     const audienceSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
-      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#e5484d' },
+      { key: 'spend', label: '消耗', unit: '元', axis: 'left', kind: 'bar', color: '#2E6F8E' },
+      { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#D95D39' },
     ];
 
     // Alternative: Keywords Top 8 (filter out total row, sort with nulls last)
@@ -313,8 +313,8 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
       }));
 
     const tierSeries: ComboSeries[] = [
-      { key: 'kFee', label: '达人采买费', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
-      { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
+      { key: 'kFee', label: '达人采买费', unit: '元', axis: 'left', kind: 'bar', color: '#2E6F8E' },
+      { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#0F5E52' },
       { key: 'noteCount', label: '笔记篇数', unit: '篇', axis: 'right', kind: 'line', color: '#ffc53d' },
     ];
 

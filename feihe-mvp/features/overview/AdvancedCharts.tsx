@@ -19,64 +19,117 @@ export function EffectScatterChart({
 }) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const w = 680;
-  const padL = 60, padR = 20, padT = 20, padB = 44;
+  const padL = 60, padR = 20, padT = 20, padB = 50;
   const plotW = w - padL - padR;
   const plotH = height - padT - padB;
 
   if (!points.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无散点数据</div>;
 
-  const xMax = Math.max(...points.map(p => p.x), 1) * 1.1;
-  const yMax = Math.max(...points.map(p => p.y), 1) * 1.1;
+  // 对数坐标转换：Math.log10(Math.max(1, v + 1)) 消除 262w 极端异常值对普通笔记的压缩
+  const toLog = (v: number) => Math.log10(Math.max(1, v + 1));
+
+  const rawXMax = Math.max(...points.map(p => p.x), 1000);
+  const rawYMax = Math.max(...points.map(p => p.y), 100);
   const sizeMax = Math.max(...points.map(p => p.size), 1);
 
-  const getX = (v: number) => padL + (v / xMax) * plotW;
-  const getY = (v: number) => padT + plotH - (v / yMax) * plotH;
-  const getR = (s: number) => 4 + (s / sizeMax) * 14;
+  const logXMax = toLog(Math.max(rawXMax, 3000000));
+  const logYMax = toLog(Math.max(rawYMax, 100000));
 
-  const xTicks = [0, 0.25, 0.5, 0.75, 1].map(t => xMax * t);
-  const yTicks = [0, 0.25, 0.5, 0.75, 1].map(t => yMax * t);
-  const fmt = (v: number) => v >= 10000 ? (v / 10000).toFixed(1) + 'w' : v >= 1000 ? (v / 1000).toFixed(1) + 'k' : Math.round(v).toString();
+  const getX = (v: number) => padL + (toLog(v) / logXMax) * plotW;
+  const getY = (v: number) => padT + plotH - (toLog(v) / logYMax) * plotH;
+  const getR = (s: number) => 4 + (Math.sqrt(Math.max(0, s)) / Math.sqrt(sizeMax)) * 12;
+
+  const xTicksConfig = [
+    { val: 0, label: '0' },
+    { val: 100, label: '100' },
+    { val: 1000, label: '1k' },
+    { val: 10000, label: '1w' },
+    { val: 100000, label: '10w' },
+    { val: 1000000, label: '100w' },
+    { val: 3000000, label: '300w' },
+  ].filter(t => toLog(t.val) <= logXMax);
+
+  const yTicksConfig = [
+    { val: 0, label: '0' },
+    { val: 10, label: '10' },
+    { val: 100, label: '100' },
+    { val: 1000, label: '1k' },
+    { val: 10000, label: '1w' },
+    { val: 50000, label: '5w' },
+    { val: 100000, label: '10w' },
+  ].filter(t => toLog(t.val) <= logYMax);
+
+  // 四象限中位线计算
+  const sortedX = [...points.map(p => p.x)].sort((a, b) => a - b);
+  const sortedY = [...points.map(p => p.y)].sort((a, b) => a - b);
+  const medX = sortedX.length > 0 ? sortedX[Math.floor(sortedX.length / 2)] : 0;
+  const medY = sortedY.length > 0 ? sortedY[Math.floor(sortedY.length / 2)] : 0;
+  const medXCoord = getX(medX);
+  const medYCoord = getY(medY);
 
   const hovered = hoverIdx !== null ? points[hoverIdx] : null;
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <svg viewBox={`0 0 ${w} ${height}`} style={{ width: '100%', height: 'auto', display: 'block' }} onMouseLeave={() => setHoverIdx(null)}>
-        {yTicks.map((v, i) => (
+        {yTicksConfig.map((t, i) => (
           <g key={`y${i}`}>
-            <line x1={padL} y1={getY(v)} x2={w - padR} y2={getY(v)} stroke="#d9d9e0" strokeDasharray="3 3" />
-            <text x={padL - 8} y={getY(v) + 4} textAnchor="end" fontSize="12" fill="#60646c">{fmt(v)}</text>
+            <line x1={padL} y1={getY(t.val)} x2={w - padR} y2={getY(t.val)} stroke="#E6E3DC" strokeDasharray="3 3" strokeWidth="0.8" />
+            <text x={padL - 8} y={getY(t.val) + 4} textAnchor="end" fontSize="11" fill="#8A847C" className="num">{t.label}</text>
           </g>
         ))}
-        {xTicks.map((v, i) => (
+        {xTicksConfig.map((t, i) => (
           <g key={`x${i}`}>
-            <line x1={getX(v)} y1={padT} x2={getX(v)} y2={padT + plotH} stroke="#f0f0f3" />
-            <text x={getX(v)} y={height - 12} textAnchor="middle" fontSize="12" fill="#60646c">{fmt(v)}</text>
+            <line x1={getX(t.val)} y1={padT} x2={getX(t.val)} y2={padT + plotH} stroke="#F0EFE9" strokeWidth="0.8" />
+            <text x={getX(t.val)} y={padT + plotH + 16} textAnchor="middle" fontSize="11" fill="#8A847C" className="num">{t.label}</text>
           </g>
         ))}
-        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#cdced6" />
-        <text x={w / 2} y={height - 1} textAnchor="middle" fontSize="12" fill="#60646c" fontWeight={600}>{xLabel}</text>
-        <text x={14} y={padT + plotH / 2} textAnchor="middle" fontSize="12" fill="#60646c" fontWeight={600} transform={`rotate(-90, 14, ${padT + plotH / 2})`}>{yLabel}</text>
-        {points.map((p, i) => (
-          <circle
-            key={p.id || i}
-            cx={getX(p.x)}
-            cy={getY(p.y)}
-            r={getR(p.size)}
-            fill={p.color}
-            fillOpacity={hoverIdx === null || hoverIdx === i ? 0.65 : 0.25}
-            stroke={p.color}
-            strokeWidth={hoverIdx === i ? 2.5 : 1}
-            style={{ cursor: 'pointer', transition: 'all 0.2s ease' }}
-            onMouseEnter={() => setHoverIdx(i)} onClick={() => onPointClick && onPointClick(p)} />
-        ))}
+
+        {/* 四象限中位基准虚线 */}
+        <g opacity="0.6">
+          <line x1={medXCoord} y1={padT} x2={medXCoord} y2={padT + plotH} stroke="#C87D20" strokeDasharray="4 4" strokeWidth="1.2" />
+          <text x={medXCoord + 4} y={padT + 12} fontSize="10" fill="#C87D20" fontWeight="600" className="num">X中位: {medX.toLocaleString()}</text>
+          <line x1={padL} y1={medYCoord} x2={w - padR} y2={medYCoord} stroke="#C87D20" strokeDasharray="4 4" strokeWidth="1.2" />
+          <text x={w - padR - 4} y={medYCoord - 4} textAnchor="end" fontSize="10" fill="#C87D20" fontWeight="600" className="num">Y中位: {medY.toLocaleString()}</text>
+        </g>
+
+        <line x1={padL} y1={padT + plotH} x2={w - padR} y2={padT + plotH} stroke="#D4CFC5" />
+        <text x={w / 2} y={height - 4} textAnchor="middle" fontSize="12" fill="#57534E" fontWeight={700}>{xLabel} (对数刻度 Log10)</text>
+        <text x={14} y={padT + plotH / 2} textAnchor="middle" fontSize="12" fill="#57534E" fontWeight={700} transform={`rotate(-90, 14, ${padT + plotH / 2})`}>{yLabel} (对数刻度 Log10)</text>
+
+        {points.map((p, i) => {
+          const cx = getX(p.x);
+          const cy = getY(p.y);
+          const r = getR(p.size);
+          const isHovered = hoverIdx === i;
+          return (
+            <circle
+              key={p.id || i}
+              cx={cx}
+              cy={cy}
+              r={isHovered ? r + 3 : r}
+              fill={p.color}
+              fillOpacity={hoverIdx === null ? 0.68 : isHovered ? 0.95 : 0.22}
+              stroke={isHovered ? '#1C1917' : '#FFFFFF'}
+              strokeWidth={isHovered ? 2.2 : 1}
+              style={{
+                cursor: 'pointer',
+                transition: 'all 0.18s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={() => setHoverIdx(i)}
+              onClick={() => onPointClick && onPointClick(p)}
+            />
+          );
+        })}
       </svg>
       {hovered && (
-        <div style={{ position: 'absolute', left: 8, right: 8, top: 20, background: 'rgba(28, 32, 36,0.94)', color: '#fff', padding: '8px 12px', borderRadius: 8, fontSize: 12, pointerEvents: 'none', zIndex: 10, whiteSpace: 'normal', boxShadow: '0 4px 14px rgba(0,0,0,0.18)' }}>
-          <div style={{ fontWeight: 700, marginBottom: 3 }}>{hovered.label}</div>
-          <div>{xLabel}：{fmt(hovered.x)}</div>
-          <div>{yLabel}：{fmt(hovered.y)}</div>
-          <div>评论数：{hovered.size}</div>
+        <div style={{ position: 'absolute', left: 8, right: 8, top: 16, background: 'rgba(28, 25, 23, 0.92)', color: '#FFFFFF', padding: '8px 14px', borderRadius: 8, fontSize: 12, pointerEvents: 'none', zIndex: 10, whiteSpace: 'normal', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ fontWeight: 700, maxWidth: '60%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{hovered.label}</div>
+          <div style={{ display: 'flex', gap: 14 }} className="num">
+            <span>{xLabel}：<b>{hovered.x.toLocaleString()}</b></span>
+            <span>{yLabel}：<b>{hovered.y.toLocaleString()}</b></span>
+            <span>评论数：<b>{hovered.size}</b></span>
+          </div>
         </div>
       )}
     </div>
@@ -86,7 +139,7 @@ export function EffectScatterChart({
 // ======================== Histogram Chart (笔记效果分布) ========================
 export function DistributionHistogram({
   bins,
-  color = '#0d74ce',
+  color = '#0F5E52',
   height = 280,
   unit = '篇',
   onBinClick,
@@ -179,9 +232,9 @@ export function EfficiencyRadarChart({
           const p = point(i, radius);
           return <line key={i} x1={center} y1={center} x2={p.x} y2={p.y} stroke="#d9d9e0" strokeWidth={1} />;
         })}
-        <path d={path} fill="#0090ff" fillOpacity={0.2} stroke="#0090ff" strokeWidth={2} />
+        <path d={path} fill="#0F5E52" fillOpacity={0.2} stroke="#0F5E52" strokeWidth={2} />
         {dataPoints.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={4} fill="#0090ff" stroke="#fff" strokeWidth={1.5} />
+          <circle key={i} cx={p.x} cy={p.y} r={4} fill="#0F5E52" stroke="#fff" strokeWidth={1.5} />
         ))}
         {metrics.map((m, i) => {
           const p = point(i, radius + 22);
@@ -216,7 +269,7 @@ export function ConversionFunnelChart({
   if (!stages.length) return <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60646c', fontSize: 14 }}>暂无漏斗数据</div>;
 
   const max = stages[0].value || 1;
-  const colors = ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31', '#60646c'];
+  const colors = ['#0F5E52', '#2E6F8E', '#C87D20', '#D95D39', '#5B8266', '#8A847C'];
   const stageH = Math.min(52, (height - 20) / stages.length);
   const totalDrop = stages.length > 1 ? ((stages[0].value - stages[stages.length - 1].value) / stages[0].value * 100).toFixed(1) : '0';
 
@@ -286,7 +339,7 @@ export function MatrixHeatmap({
   rows,
   cols,
   data,
-  colorScale = ['#e6f4fe', '#0090ff', '#113264'],
+  colorScale = ['#EBF5F3', '#0F5E52', '#083831'],
   height = 300,
   onCellClick,
 }: {
@@ -397,7 +450,7 @@ export function BoxPlotChart({
   const groupW = plotW / groups.length;
   const boxW = Math.min(40, groupW * 0.5);
 
-  const colors = ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31'];
+  const colors = ['#0F5E52', '#2E6F8E', '#D95D39', '#C87D20', '#5B8266'];
 
   return (
     <div>
@@ -439,7 +492,7 @@ export function BoxPlotChart({
         const hasOutlier = focusMain && s.max > plotMax;
         return (
           <g key={i} tabIndex={0} role="button" aria-label={`${g.label}，${g.values.length} 篇，中位数 ${s.median} ${unit}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => { setActive(i); if (onGroupClick) onGroupClick(g, i); }} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); if (onGroupClick) onGroupClick(g, i); } }} style={{ cursor: 'pointer' }}>
-            <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#e6f4fe' : 'transparent'} />
+            <rect x={padL + i * groupW} y={padT} width={groupW} height={plotH + padB} fill={active === i ? '#EBF5F3' : 'transparent'} />
             <line x1={cx} y1={getY(s.min)} x2={cx} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(s.min)} x2={cx + boxW / 3} y2={getY(s.min)} stroke={color} strokeWidth={1.5} />
             <line x1={cx - boxW / 3} y1={getY(clampedUpper)} x2={cx + boxW / 3} y2={getY(clampedUpper)} stroke={color} strokeWidth={1.5} />
@@ -516,7 +569,7 @@ export function TreeMapChart({
 
   const w = 680;
   const total = items.reduce((s, it) => s + it.value, 0) || 1;
-  const colors = ['#0d74ce', '#008573', '#5753c6', '#ffc53d', '#ce2c31', '#0090ff', '#29a383', '#ce2c31'];
+  const colors = ['#0F5E52', '#2E6F8E', '#D95D39', '#C87D20', '#5B8266', '#8A847C'];
 
   // Simple horizontal split layout
   const rects = items.map((it, i) => {

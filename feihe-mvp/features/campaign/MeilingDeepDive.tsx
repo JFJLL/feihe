@@ -440,8 +440,8 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
       }));
 
     const platComboSeries: ComboSeries[] = [
-      { key: 'confirmed', label: '二核确认达人', unit: '位', axis: 'left', kind: 'bar', color: '#12a594' },
-      { key: 'published', label: '实际已发布', unit: '位', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+      { key: 'confirmed', label: '二核确认达人', unit: '位', axis: 'left', kind: 'bar', color: '#0F5E52' },
+      { key: 'published', label: '实际已发布', unit: '位', axis: 'left', kind: 'bar', color: '#2E6F8E' },
     ];
 
     return (
@@ -623,15 +623,15 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
 
               <div className="mdd-matrix-legend">
                 <span className="mdd-legend-item">
-                  <span className="mdd-legend-swatch" style={{ background: '#12a594' }} /> 图文
+                  <span className="mdd-legend-swatch" style={{ background: '#0F5E52' }} /> 图文
                 </span>
                 <span className="mdd-legend-item">
-                  <span className="mdd-legend-swatch" style={{ background: '#5b5bd6' }} /> 视频
+                  <span className="mdd-legend-swatch" style={{ background: '#2E6F8E' }} /> 视频
                 </span>
               </div>
 
               <p className="mdd-note">
-                横条长度反映该内容主题下的形式配比。图文以深青色标识，视频以紫色标识。
+                横条长度反映该内容主题下的形式配比。图文以深青色标识，视频以矿石青标识。
               </p>
             </div>
           </ChartPanel>

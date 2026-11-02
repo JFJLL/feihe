@@ -113,7 +113,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     const xingheSeries: ComboSeries[] = [
       { key: 'fs_spend', label: 'FS投流消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
       { key: 'task_item_gmv', label: '任务单品直接GMV', unit: '元', axis: 'left', kind: 'bar', color: '#ffc53d' },
-      { key: 'shop_total_gmv', label: '全店成交GMV (参考大盘)', unit: '元', axis: 'left', kind: 'line', color: '#5b5bd6' },
+      { key: 'shop_total_gmv', label: '全店成交GMV (参考大盘)', unit: '元', axis: 'left', kind: 'line', color: '#2E6F8E' },
       { key: 'note_in_uv', label: '笔记进店UV', unit: '人', axis: 'right', kind: 'point', color: '#e5484d' },
       { key: 'search_in_uv', label: '手淘搜索进店UV', unit: '人', axis: 'right', kind: 'line', color: '#12a594' },
     ];
@@ -137,7 +137,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     const channelDonutData: ChartDatum[] = channelRows.map((c, i) => ({
       label: `${String(c.channel ?? '')}端 ${String(c.channelName ?? '')}`,
       value: parseFiniteNum(c.spend),
-      color: i === 0 ? '#5b5bd6' : i === 1 ? '#008573' : i === 2 ? '#ffc53d' : '#e5484d',
+      color: i === 0 ? '#2E6F8E' : i === 1 ? '#008573' : i === 2 ? '#ffc53d' : '#e5484d',
       detail: `支出 ¥${fmtComboNum(c.spend)} / 占比 ${String(c.share ?? '--')}`,
     }));
 
@@ -178,7 +178,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     ];
 
     // In-platform funnel stages (仅统计小红书端内真实串联链路：曝光 → 点击 → 互动，严禁跨端混算)
-    const funnelColors = ['#008573', '#12a594', '#5b5bd6'];
+    const funnelColors = ['#008573', '#12a594', '#2E6F8E'];
     const inPlatformFunnelStages: FunnelStageDatum[] = (fullFunnelTable?.rows || [])
       .filter((r) => String(r.platform || '').includes('小红书'))
       .map((r, idx) => ({
@@ -320,7 +320,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     ];
 
     // Creator funnel elimination reasons (dynamically derived from source table)
-    const elimColors = ['#e5484d', '#ffc53d', '#5b5bd6', '#12a594', '#60646c', '#60646c', '#cdced6'];
+    const elimColors = ['#e5484d', '#ffc53d', '#2E6F8E', '#12a594', '#60646c', '#60646c', '#cdced6'];
     const rawElim = (
       (creatorFunnelTable as unknown as { auxiliary?: { eliminationBreakdown?: Array<{ reasonCategory: string; count: number; share?: string }> } })
         ?.auxiliary?.eliminationBreakdown || []
@@ -333,7 +333,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     }));
 
     // CID Clicks Data (derived dynamically from wipes-cid-full-attribution-table)
-    const cidColors = ['#008573', '#5b5bd6', '#ffc53d', '#e5484d', '#12a594', '#60646c', '#60646c', '#cdced6', '#12a594', '#5b5bd6'];
+    const cidColors = ['#008573', '#2E6F8E', '#ffc53d', '#e5484d', '#12a594', '#60646c', '#60646c', '#cdced6', '#12a594', '#2E6F8E'];
     const cidClicksData: ChartDatum[] = (cidTable?.rows || [])
       .filter((r) => String(r.creator) !== '总计')
       .map((r, idx) => {
@@ -499,7 +499,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               {channelRows.map((c, i) => (
                 <div key={i} className="wipes-info-card">
                   <div className="wipes-info-title">
-                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#5b5bd6' : i === 1 ? '#006d5b' : i === 2 ? '#fff7c2' : '#ce2c31', color: i === 2 ? '#824900' : '#ffffff' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#2E6F8E' : i === 1 ? '#006d5b' : i === 2 ? '#fff7c2' : '#ce2c31', color: i === 2 ? '#824900' : '#ffffff' }}>
                       {String(c.channel ?? '')}端
                     </span>
                     <span>{String(c.channelName ?? '')}</span>
@@ -540,7 +540,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
               </div>
               <div className="wipes-info-card">
                 <div className="wipes-info-title">手淘笔记直接进店</div>
-                <div className="wipes-info-stat" style={{ color: '#5b5bd6' }}>
+                <div className="wipes-info-stat" style={{ color: '#2E6F8E' }}>
                   {fullFunnelTable?.rows?.[4]?.metricValue ? fmtComboNum(fullFunnelTable.rows[4].metricValue) : '12,197'} 人
                 </div>
                 <div className="wipes-info-desc">
@@ -700,7 +700,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             {catRows.map((cat, i) => (
               <div key={i} className="wipes-info-card">
                 <div className="wipes-info-title">
-                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#fef3c7' : '#b42318', color: i === 2 ? '#7c2d12' : '#ffffff' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#2E6F8E' : i === 2 ? '#fef3c7' : '#b42318', color: i === 2 ? '#7c2d12' : '#ffffff' }}>
                     {String(cat.category || '')}
                   </span>
                 </div>
@@ -910,7 +910,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </div>
             <div className="wipes-info-card">
               <div className="wipes-info-title">授权范围与期限管控</div>
-              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#5b5bd6' }}>站内原生流 3个月</div>
+              <div className="wipes-info-stat" style={{ fontSize: 22, color: '#2E6F8E' }}>站内原生流 3个月</div>
               <div className="wipes-info-desc">100%严格限定小红书站内信息流投放，严禁二剪、严禁转出站外直发，全面规避肖像侵权风险</div>
             </div>
             <div className="wipes-info-card">
@@ -1085,7 +1085,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
       : audienceRows.filter((r) => (r.uv || 0) > 0);
 
     const audienceSeries: ComboSeries[] = [
-      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#5b5bd6' },
+      { key: 'spend', label: '消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#2E6F8E' },
       { key: 'cpuv', label: '访客成本 (CPUV)', unit: '元/人', axis: 'right', kind: 'point', color: '#e5484d' },
     ];
 
@@ -1135,7 +1135,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             {catRows.map((cat, i) => (
               <div key={i} className="wipes-info-card">
                 <div className="wipes-info-title">
-                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#5b5bd6' : i === 2 ? '#fef3c7' : '#b42318', color: i === 2 ? '#7c2d12' : '#ffffff' }}>
+                    <span className="wipes-rich-tag" style={{ background: i === 0 ? '#008573' : i === 1 ? '#2E6F8E' : i === 2 ? '#fef3c7' : '#b42318', color: i === 2 ? '#7c2d12' : '#ffffff' }}>
                     {String(cat.category ?? '')}
                   </span>
                 </div>
@@ -1255,7 +1255,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
     const cidSeries: ComboSeries[] = [
       { key: 'spend', label: 'CID消耗', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
-      { key: 'component_clicks', label: '组件点击量', unit: '次', axis: 'right', kind: 'bar', color: '#5b5bd6' },
+      { key: 'component_clicks', label: '组件点击量', unit: '次', axis: 'right', kind: 'bar', color: '#2E6F8E' },
     ];
 
     const tierChartRows = (tierTable?.rows || [])
@@ -1273,7 +1273,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
     const tierSeries: ComboSeries[] = [
       { key: 'kFee', label: 'K端达人费', unit: '元', axis: 'left', kind: 'bar', color: '#ffc53d' },
       { key: 'fsSpend', label: 'FS投流费', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
-      { key: 'engagements', label: '总互动量', unit: '次', axis: 'right', kind: 'line', color: '#5b5bd6' },
+      { key: 'engagements', label: '总互动量', unit: '次', axis: 'right', kind: 'line', color: '#2E6F8E' },
     ];
 
     const directionChartRows = (directionTable?.rows || [])
@@ -1288,7 +1288,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
     const directionSeries: ComboSeries[] = [
       { key: 'totalSpend', label: '总消耗金额', unit: '元', axis: 'left', kind: 'bar', color: '#008573' },
-      { key: 'fsUv', label: 'FS站外活跃UV', unit: '人', axis: 'right', kind: 'bar', color: '#5b5bd6' },
+      { key: 'fsUv', label: 'FS站外活跃UV', unit: '人', axis: 'right', kind: 'bar', color: '#2E6F8E' },
     ];
 
     return (

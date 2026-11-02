@@ -37,14 +37,17 @@ const formatDateZh = (val: string | null | undefined) => {
   const match = String(val).match(/(\d{4}-)?(\d{1,2})-(\d{1,2})/);
   return match ? `${Number(match[2])}月${Number(match[3])}日` : String(val);
 };
-const colors = ['#0090ff', '#29a383', '#5b5bd6', '#ffc53d', '#12a594', '#8b8d98'];
+const colors = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266', '#8A847C'];
+
+import { cleanCreatorTier } from '../content/ScenePerformanceBoard';
+const sanitizeCreatorLevel = (raw: unknown): string => cleanCreatorTier(String(raw || ''));
 
 export function PaletteSwitcher() {
   const [palette, setPalette] = useState<'botanical' | 'terracotta' | 'nordic'>('botanical');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const saved = localStorage.getItem('feihe_palette');
+    const saved = localStorage.getItem('feihe_ui_palette') || localStorage.getItem('feihe_palette');
     const cur = (saved || document.documentElement.getAttribute('data-palette') || 'botanical') as 'botanical' | 'terracotta' | 'nordic';
     if (cur && ['botanical', 'terracotta', 'nordic'].includes(cur)) {
       setPalette(cur);
@@ -59,6 +62,7 @@ export function PaletteSwitcher() {
       document.documentElement.setAttribute('data-palette', next);
     }
     if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('feihe_ui_palette', next);
       localStorage.setItem('feihe_palette', next);
     }
   };
@@ -180,6 +184,14 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const currentMemberRole = project?.projectRole || '';
   const canWrite = Boolean(project?.canWrite);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem('feihe_ui_palette') || localStorage.getItem('feihe_palette') || 'botanical';
+    if (['botanical', 'terracotta', 'nordic'].includes(saved)) {
+      document.documentElement.setAttribute('data-palette', saved);
+    }
+  }, []);
+
   const handleNoteInspect = (noteId: string) => {
     const targetNote = (dashboard.notes || []).find(n => String(n.id) === String(noteId));
     if (targetNote) {
@@ -213,7 +225,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const handleTierClick = (tierLabel: string) => {
     const cleanLabel = tierLabel.trim();
     const matched = (dashboard.notes || []).filter(n => {
-      const l = (n.creatorLevel || '未标注').trim();
+      const l = sanitizeCreatorLevel(n.creatorLevel);
       return l === cleanLabel || l.includes(cleanLabel) || cleanLabel.includes(l);
     });
     openCategoryNotes({
@@ -289,11 +301,11 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const pending = num(m.actions?.replyPending) + num(m.actions?.deletePending);
   const creatorRows = dashboard.analytics.creatorLevels || [];
   const creatorTotal = creatorRows.reduce((sum, r) => sum + num(r.count), 0);
-  const tierItems = creatorRows.map((r, i) => ({ label: contentDirectionLabel(r.name), count: num(r.count), pct: creatorTotal ? num(r.count) / creatorTotal * 100 : 0, color: colors[i % colors.length] }));
+  const tierItems = creatorRows.map((r, i) => ({ label: sanitizeCreatorLevel(contentDirectionLabel(r.name)), count: num(r.count), pct: creatorTotal ? num(r.count) / creatorTotal * 100 : 0, color: colors[i % colors.length] }));
   // 达人层级采买金额分布（从笔记库聚合）
   const tierSpendMap = new Map<string, { spend: number; count: number }>();
   for (const note of dashboard.notes || []) {
-    const level = note.creatorLevel || '未标注';
+    const level = cleanCreatorTier(note.creatorLevel);
     const price = num(note.notePrice);
     const existing = tierSpendMap.get(level) || { spend: 0, count: 0 };
     existing.spend += price;
@@ -330,7 +342,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
     .map(level => {
       const levelNotes = (dashboard.notes || []).filter(n => (n.creatorLevel || '') === level.name);
       const interactions = levelNotes.map(n => finiteMetric(n.interactionCount)).filter((v): v is number => v !== null && v >= 0);
-      return { label: String(level.name), values: interactions };
+      return { label: sanitizeCreatorLevel(level.name), values: interactions };
     })
     .filter(g => g.values.length > 0);
   // 爆文TOP20
@@ -343,7 +355,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   // 达人效率排行榜
   const creatorEfficiency = (dashboard.analytics.creatorLevels || [])
     .map(row => ({
-      name: String(row.name),
+      name: sanitizeCreatorLevel(row.name),
       count: num(row.count),
       avgRead: num(row.avgRead),
       avgInteraction: num(row.avgInteraction),
@@ -356,9 +368,9 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   // 互动质量分析（点赞/收藏/分享/分享占比）
   const totalInteraction = num(m.likeCount) + num(m.favoriteCount) + num(m.shareCount);
   const interactionQuality = [
-    { label: '点赞', value: num(m.likeCount), pct: totalInteraction ? num(m.likeCount) / totalInteraction * 100 : 0, color: '#0090ff', icon: '♥' },
-    { label: '收藏', value: num(m.favoriteCount), pct: totalInteraction ? num(m.favoriteCount) / totalInteraction * 100 : 0, color: '#ffc53d', icon: '★' },
-    { label: '分享', value: num(m.shareCount), pct: totalInteraction ? num(m.shareCount) / totalInteraction * 100 : 0, color: '#29a383', icon: '↗' },
+    { label: '点赞', value: num(m.likeCount), pct: totalInteraction ? num(m.likeCount) / totalInteraction * 100 : 0, color: '#0F5E52', icon: '♥' },
+    { label: '收藏', value: num(m.favoriteCount), pct: totalInteraction ? num(m.favoriteCount) / totalInteraction * 100 : 0, color: '#C87D20', icon: '★' },
+    { label: '分享', value: num(m.shareCount), pct: totalInteraction ? num(m.shareCount) / totalInteraction * 100 : 0, color: '#2E6F8E', icon: '↗' },
   ].filter(i => i.value > 0);
   const recent: Array<Record<string, string | number | null> & { date: string }> = quarterRows.slice(-30).map(r => ({ ...r, date: String(r.date) }));
   const previous = quarterRows.at(-2);
@@ -478,7 +490,6 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
       subtitle={headerSubtitle}
       actions={
         <div className="overview-header-actions-group" style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-          <PaletteSwitcher />
           {canWrite && (isGeneral || isAd || isCommentQc)
             ? <SyncButton projectId={projectId} onRefresh={onRefresh} />
             : feishuSyncBtn}
@@ -514,8 +525,8 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
           <MetricCard label="搜索消耗" value={amount(searchSpend)} unit="元" />
           <MetricCard label="计划达成率" value={amount(daily?.achieve_pct)} unit="%" />
         </section>
-        <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#0090ff' }, { key: 'feed_spend', label: '信息流消耗', color: '#29a383' }, { key: 'search_spend', label: '搜索消耗', color: '#5b5bd6' }]} /></Section>
-        <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#29a383' }, { key: 'search_ctr', label: '搜索CTR', color: '#5b5bd6' }]} /></Section>
+        <Section tag="投放" title="广告消耗趋势"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'actual_spend', label: '广告消耗', color: '#0F5E52' }, { key: 'feed_spend', label: '信息流消耗', color: '#2E6F8E' }, { key: 'search_spend', label: '搜索消耗', color: '#D95D39' }]} /></Section>
+        <Section tag="效率" title="投放点击效率"><TimeSeriesChart title="投放趋势" rows={quarterRows.map(r => ({ ...r, date: String(r.date) }))} series={[{ key: 'feed_ctr', label: '信息流CTR', color: '#0F5E52' }, { key: 'search_ctr', label: '搜索CTR', color: '#D95D39' }]} /></Section>
       </div>
     ) : undefined} /> : (
       <>
@@ -628,7 +639,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               <span>{dominantReadBands.length ? <>已记录阅读量最多的区间：<strong style={{ color: 'var(--slate-12, #1c2024)' }}>{dominantReadBands.join('、')}</strong>{dominantReadBands.length > 1 ? '（并列）' : ''}</> : '尚无可统计的阅读量'}</span>
             </div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#0090ff" height={280} onBinClick={handleHistogramBinClick} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
+              {readValues.length > 0 ? <DistributionHistogram bins={histBins} color="#0F5E52" height={280} onBinClick={handleHistogramBinClick} /> : <EmptyState title="暂无分布数据" text="同步笔记阅读量后生成分布直方图。" />}
             </div>
           </div>
         </div>
@@ -723,7 +734,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 550, overflowY: 'auto' }}>
               <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                 <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#0090ff', display: 'inline-block' }} />
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#0F5E52', display: 'inline-block' }} />
                   点赞占比
                 </div>
                 <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)', fontVariantNumeric: 'tabular-nums' }}>{interactionQuality.find(i => i.label === '点赞')?.pct.toFixed(1) || 0}%</div>
@@ -731,7 +742,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               </div>
               <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                 <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#ffc53d', display: 'inline-block' }} />
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#C87D20', display: 'inline-block' }} />
                   收藏占比
                 </div>
                 <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)', fontVariantNumeric: 'tabular-nums' }}>{interactionQuality.find(i => i.label === '收藏')?.pct.toFixed(1) || 0}%</div>
@@ -739,7 +750,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               </div>
               <div style={{ padding: '10px 12px', background: '#fff', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                 <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#5b5bd6', display: 'inline-block' }} />
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#2E6F8E', display: 'inline-block' }} />
                   分享占比
                 </div>
                 <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--slate-12, #1c2024)', fontVariantNumeric: 'tabular-nums' }}>{interactionQuality.find(i => i.label === '分享')?.pct.toFixed(1) || 0}%</div>
@@ -815,7 +826,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
               return (
                 <div key={item.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: item.tone === 'teal' ? '#12a594' : item.tone === 'purple' ? '#5b5bd6' : item.tone === 'amber' ? '#ffc53d' : '#e5484d' }} />
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: item.tone === 'teal' ? '#0F5E52' : item.tone === 'purple' ? '#2E6F8E' : item.tone === 'amber' ? '#C87D20' : '#D95D39' }} />
                     <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>{item.label}</span>
                     {item.benchmark !== null && <span style={{ fontSize: 12, color: meetsBench ? 'var(--jade-11, #208368)' : 'var(--red-11, #ce2c31)', background: meetsBench ? 'var(--jade-3, #e6f7ed)' : 'var(--red-3, #feebec)', padding: '2px 6px', borderRadius: 4 }}>基准 {item.benchmark}{item.unit}</span>}
                   </div>
