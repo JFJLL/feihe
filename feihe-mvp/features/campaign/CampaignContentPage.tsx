@@ -371,12 +371,146 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           </div>
         )}
 
-        {/* 凯乐石专属: 单一全宽发布进度图 (不硬凑第二图) */}
+        {/* 凯乐石专属: 左右双栏 (6:6 Bento 对称布局) */}
         {projectId === "kailas" && (
-          <div className="ca-grid-wide">
+          <div className="ca-grid">
             <ChartPanel title="Q3 笔记全量发布进度" subtitle="Q3 阶段双周会小结（截至9.27）规划目标对照">
-              <div style={{ maxWidth: 680, width: "100%", margin: "0 auto" }}>
-                <TargetBulletChart data={kailasBulletData} />
+              <TargetBulletChart data={kailasBulletData} />
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: 10,
+                  marginTop: 14,
+                  paddingTop: 12,
+                  borderTop: "1px dashed var(--border-subtle, #E6E3DC)",
+                }}
+              >
+                <div
+                  style={{
+                    background: "var(--bg-subtle, #FAF9F5)",
+                    border: "1px solid var(--border-subtle, #E6E3DC)",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                  }}
+                >
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>已发布实绩</span>
+                  <strong className="num" style={{ fontSize: 18, fontWeight: 800, color: "var(--brand-primary, #0F5E52)" }}>
+                    59 <small style={{ fontSize: 11, fontWeight: 500, color: "#8A847C" }}>/ 70篇</small>
+                  </strong>
+                  <span style={{ fontSize: 10.5, color: "var(--text-muted, #8A847C)" }}>截至9.27双周会小结</span>
+                </div>
+                <div
+                  style={{
+                    background: "var(--bg-subtle, #FAF9F5)",
+                    border: "1px solid var(--border-subtle, #E6E3DC)",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                  }}
+                >
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>目标达成率</span>
+                  <strong className="num" style={{ fontSize: 18, fontWeight: 800, color: "var(--accent-quaternary, #C87D20)" }}>
+                    84.3%
+                  </strong>
+                  <span style={{ fontSize: 10.5, color: "var(--text-muted, #8A847C)" }}>待发布储备 11 篇</span>
+                </div>
+                <div
+                  style={{
+                    background: "var(--bg-subtle, #FAF9F5)",
+                    border: "1px solid var(--border-subtle, #E6E3DC)",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                  }}
+                >
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>合作总金额</span>
+                  <strong className="num" style={{ fontSize: 18, fontWeight: 800, color: "#1C1917" }}>
+                    ¥540,500
+                  </strong>
+                  <span style={{ fontSize: 10.5, color: "var(--text-muted, #8A847C)" }}>篇均采买 ¥7,721</span>
+                </div>
+              </div>
+            </ChartPanel>
+
+            <ChartPanel title="达人选号流转漏斗与方向配比" subtitle="初筛池、复筛池、执行表登记与三大内容方向构成">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+                <div style={{ background: "var(--bg-subtle, #FAF9F5)", border: "1px solid var(--border-subtle, #E6E3DC)", borderRadius: 8, padding: 10, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ height: 4, background: "var(--border-subtle, #E6E3DC)", borderRadius: 999, marginBottom: 8, overflow: "hidden" }}>
+                    <div style={{ width: "100%", height: "100%", background: "var(--brand-primary, #0F5E52)" }} />
+                  </div>
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>01 初筛候选池</span>
+                  <div className="num" style={{ fontSize: 18, fontWeight: 800, color: "var(--text-primary, #1C1917)", margin: "3px 0" }}>1,530<small style={{ fontSize: 10.5, fontWeight: 500, color: "var(--text-muted, #8A847C)", marginLeft: 2 }}>位</small></div>
+                  <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", marginTop: 4 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 5px", borderRadius: 4, background: "rgba(15, 94, 82, 0.1)", color: "var(--brand-primary, #0F5E52)" }}>独立海选池</span>
+                  </div>
+                </div>
+
+                <div style={{ background: "var(--bg-subtle, #FAF9F5)", border: "1px solid var(--border-subtle, #E6E3DC)", borderRadius: 8, padding: 10, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ height: 4, background: "var(--border-subtle, #E6E3DC)", borderRadius: 999, marginBottom: 8, overflow: "hidden" }}>
+                    <div style={{ width: "68%", height: "100%", background: "var(--accent-tertiary, #2A6F97)" }} />
+                  </div>
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>02 复筛评估池</span>
+                  <div className="num" style={{ fontSize: 18, fontWeight: 800, color: "var(--text-primary, #1C1917)", margin: "3px 0" }}>615<small style={{ fontSize: 10.5, fontWeight: 500, color: "var(--text-muted, #8A847C)", marginLeft: 2 }}>位</small></div>
+                  <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", marginTop: 4 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 5px", borderRadius: 4, background: "rgba(42, 111, 151, 0.1)", color: "var(--accent-tertiary, #2A6F97)" }}>评估池 40.2%</span>
+                  </div>
+                </div>
+
+                <div style={{ background: "var(--bg-subtle, #FAF9F5)", border: "1px solid var(--border-subtle, #E6E3DC)", borderRadius: 8, padding: 10, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ height: 4, background: "var(--border-subtle, #E6E3DC)", borderRadius: 999, marginBottom: 8, overflow: "hidden" }}>
+                    <div style={{ width: "42%", height: "100%", background: "var(--accent-quaternary, #C87D20)" }} />
+                  </div>
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>03 签约合作登记</span>
+                  <div className="num" style={{ fontSize: 18, fontWeight: 800, color: "var(--text-primary, #1C1917)", margin: "3px 0" }}>70<small style={{ fontSize: 10.5, fontWeight: 500, color: "var(--text-muted, #8A847C)", marginLeft: 2 }}>篇</small></div>
+                  <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", marginTop: 4 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 5px", borderRadius: 4, background: "rgba(200, 125, 32, 0.12)", color: "var(--accent-quaternary, #C87D20)" }}>录用比 11.4%</span>
+                  </div>
+                </div>
+
+                <div style={{ background: "var(--bg-subtle, #FAF9F5)", border: "1px solid var(--border-subtle, #E6E3DC)", borderRadius: 8, padding: 10, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ height: 4, background: "var(--border-subtle, #E6E3DC)", borderRadius: 999, marginBottom: 8, overflow: "hidden" }}>
+                    <div style={{ width: "30%", height: "100%", background: "var(--accent-secondary, #D95D39)" }} />
+                  </div>
+                  <span style={{ fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>04 已发布上线</span>
+                  <div className="num" style={{ fontSize: 18, fontWeight: 800, color: "var(--text-primary, #1C1917)", margin: "3px 0" }}>59<small style={{ fontSize: 10.5, fontWeight: 500, color: "var(--text-muted, #8A847C)", marginLeft: 2 }}>篇</small></div>
+                  <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", marginTop: 4 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 5px", borderRadius: 4, background: "rgba(217, 93, 57, 0.12)", color: "var(--accent-secondary, #D95D39)" }}>履约率 84.3%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 12, background: "var(--bg-subtle, #FAF9F5)", border: "1px solid var(--border-subtle, #E6E3DC)", borderRadius: 10, padding: "10px 14px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, fontWeight: 600, color: "var(--text-primary, #1C1917)", marginBottom: 8 }}>
+                  <span>三大内容方向签约配比（共 70 篇 / ¥54.05w）</span>
+                  <span style={{ fontSize: 11, fontWeight: 500, color: "var(--text-secondary, #6B655B)" }}>履约发布 59 篇</span>
+                </div>
+                <div style={{ height: 8, borderRadius: 999, overflow: "hidden", display: "flex", background: "var(--border-subtle, #E6E3DC)", marginBottom: 8 }}>
+                  <div style={{ width: "45.7%", background: "var(--brand-primary, #0F5E52)" }} title="时尚穿搭 45.7% (32篇)" />
+                  <div style={{ width: "32.9%", background: "var(--accent-tertiary, #2A6F97)" }} title="跑山专业 32.9% (23篇)" />
+                  <div style={{ width: "21.4%", background: "var(--accent-quaternary, #C87D20)" }} title="街头采访 21.4% (15篇)" />
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, fontSize: 11, color: "var(--text-secondary, #6B655B)" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--brand-primary, #0F5E52)", flexShrink: 0 }} />
+                    <span>时尚穿搭 <b>32篇</b> (45.7%) · ¥24.7w</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-tertiary, #2A6F97)", flexShrink: 0 }} />
+                    <span>跑山专业 <b>23篇</b> (32.9%) · ¥17.8w</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-quaternary, #C87D20)", flexShrink: 0 }} />
+                    <span>街头采访 <b>15篇</b> (21.4%) · ¥11.55w</span>
+                  </div>
+                </div>
               </div>
             </ChartPanel>
           </div>
@@ -404,12 +538,13 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
       </div>
 
       {/* 日报动作记录 (展示原文日期与规划事项，不伪装实时任务执行状态) */}
+      {normalizedActions.length > 0 && (
       <div className="ca-panel ca-section-macro-card">
         <div className="ca-panel-header">
           <div className="ca-panel-heading">
             <h3 className="ca-panel-title">
               <i className="fa-solid fa-clock-rotate-left" style={{ color: "#D95D39", marginRight: 8 }}></i>
-              美菱无霜冰箱 · 投流操盘调优动作日志 (Action Log)
+              {projectId === "meiling" ? "美菱无霜冰箱 · 投流操盘调优动作日志 (Action Log)" : "投流与内容操盘调优动作日志 (Action Log)"}
             </h3>
             <p className="ca-panel-subtitle">
               记录周期：{reportPeriod} / 摘录自业务日报规划事项（支持分类切换与勾选完成归档）
@@ -471,6 +606,7 @@ export function CampaignContentPage({ dashboard }: CampaignContentPageProps) {
           </div>
         </div>
       </div>
+      )}
 
       <div className="ca-panel ca-section-macro-card">
         <div className="ca-panel-header">

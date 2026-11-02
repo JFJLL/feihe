@@ -144,7 +144,7 @@ export function KailasDeepDive({ dashboard, section }: KailasDeepDiveProps) {
       <section className="ca-kdd-root">
         <div className="ca-kdd-header">
           <div className="ca-kdd-header-left">
-            <span className="ca-kdd-chapter-badge">01</span>
+            <span className="ca-kdd-chapter-badge">02</span>
             <div>
               <h3 className="ca-kdd-title">商业笔记与搜索词深度下钻</h3>
               <span className="ca-kdd-subtitle">达人投放散点分布、Top8笔记效能与搜索词类CPUV透视</span>

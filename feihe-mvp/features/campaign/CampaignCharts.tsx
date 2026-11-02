@@ -1126,6 +1126,89 @@ export function StackedHorizontalBarChart({
 }
 
 // ============================================================================
+/**
+ * 纯 SVG 圆角扇区/环形路径生成器
+ * 支持 4 个顶点的真实圆角平滑过渡 (Q 二次贝塞尔曲线与圆弧 A)
+ */
+export function buildRoundedSectorPath(
+  cx: number,
+  cy: number,
+  rInner: number,
+  rOuter: number,
+  a0: number,
+  a1: number,
+  cornerRadius = 5
+): string {
+  const span = a1 - a0;
+  if (span <= 0 || rOuter <= rInner) return '';
+
+  if (span >= Math.PI * 2 - 0.001) {
+    return `M ${cx} ${cy - rOuter} A ${rOuter} ${rOuter} 0 1 1 ${cx} ${cy + rOuter} A ${rOuter} ${rOuter} 0 1 1 ${cx} ${cy - rOuter} M ${cx} ${cy - rInner} A ${rInner} ${rInner} 0 1 0 ${cx} ${cy + rInner} A ${rInner} ${rInner} 0 1 0 ${cx} ${cy - rInner} Z`;
+  }
+
+  const rcOuter = Math.max(0, Math.min(cornerRadius, (rOuter - rInner) * 0.35, span * rOuter * 0.28));
+  const rcInner = Math.max(0, Math.min(3, (rOuter - rInner) * 0.25, span * rInner * 0.28));
+
+  if (rcOuter < 0.5 && rcInner < 0.5) {
+    const p0x = cx + rInner * Math.cos(a0);
+    const p0y = cy + rInner * Math.sin(a0);
+    const p1x = cx + rOuter * Math.cos(a0);
+    const p1y = cy + rOuter * Math.sin(a0);
+    const p2x = cx + rOuter * Math.cos(a1);
+    const p2y = cy + rOuter * Math.sin(a1);
+    const p3x = cx + rInner * Math.cos(a1);
+    const p3y = cy + rInner * Math.sin(a1);
+    const isLargeArc = span > Math.PI ? 1 : 0;
+    return `M ${p0x.toFixed(2)} ${p0y.toFixed(2)} L ${p1x.toFixed(2)} ${p1y.toFixed(2)} A ${rOuter.toFixed(2)} ${rOuter.toFixed(2)} 0 ${isLargeArc} 1 ${p2x.toFixed(2)} ${p2y.toFixed(2)} L ${p3x.toFixed(2)} ${p3y.toFixed(2)} A ${rInner.toFixed(2)} ${rInner.toFixed(2)} 0 ${isLargeArc} 0 ${p0x.toFixed(2)} ${p0y.toFixed(2)} Z`;
+  }
+
+  const daOuter = rcOuter / rOuter;
+  const daInner = rcInner / rInner;
+
+  const pStartRadialX = cx + (rInner + rcInner) * Math.cos(a0);
+  const pStartRadialY = cy + (rInner + rcInner) * Math.sin(a0);
+  const pEndRadial0X = cx + (rOuter - rcOuter) * Math.cos(a0);
+  const pEndRadial0Y = cy + (rOuter - rcOuter) * Math.sin(a0);
+  const vOut0X = cx + rOuter * Math.cos(a0);
+  const vOut0Y = cy + rOuter * Math.sin(a0);
+  const pArcOut0X = cx + rOuter * Math.cos(a0 + daOuter);
+  const pArcOut0Y = cy + rOuter * Math.sin(a0 + daOuter);
+  const pArcOut1X = cx + rOuter * Math.cos(a1 - daOuter);
+  const pArcOut1Y = cy + rOuter * Math.sin(a1 - daOuter);
+  const vOut1X = cx + rOuter * Math.cos(a1);
+  const vOut1Y = cy + rOuter * Math.sin(a1);
+  const pEndRadial1X = cx + (rOuter - rcOuter) * Math.cos(a1);
+  const pEndRadial1Y = cy + (rOuter - rcOuter) * Math.sin(a1);
+  const pStartRadial1X = cx + (rInner + rcInner) * Math.cos(a1);
+  const pStartRadial1Y = cy + (rInner + rcInner) * Math.sin(a1);
+  const vIn1X = cx + rInner * Math.cos(a1);
+  const vIn1Y = cy + rInner * Math.sin(a1);
+  const pArcIn1X = cx + rInner * Math.cos(a1 - daInner);
+  const pArcIn1Y = cy + rInner * Math.sin(a1 - daInner);
+  const pArcIn0X = cx + rInner * Math.cos(a0 + daInner);
+  const pArcIn0Y = cy + rInner * Math.sin(a0 + daInner);
+  const vIn0X = cx + rInner * Math.cos(a0);
+  const vIn0Y = cy + rInner * Math.sin(a0);
+
+  const outerArcAngle = a1 - daOuter - (a0 + daOuter);
+  const isLargeArcOuter = outerArcAngle > Math.PI ? 1 : 0;
+  const innerArcAngle = a1 - daInner - (a0 + daInner);
+  const isLargeArcInner = innerArcAngle > Math.PI ? 1 : 0;
+
+  return [
+    `M ${pStartRadialX.toFixed(2)} ${pStartRadialY.toFixed(2)}`,
+    `L ${pEndRadial0X.toFixed(2)} ${pEndRadial0Y.toFixed(2)}`,
+    `Q ${vOut0X.toFixed(2)} ${vOut0Y.toFixed(2)} ${pArcOut0X.toFixed(2)} ${pArcOut0Y.toFixed(2)}`,
+    `A ${rOuter.toFixed(2)} ${rOuter.toFixed(2)} 0 ${isLargeArcOuter} 1 ${pArcOut1X.toFixed(2)} ${pArcOut1Y.toFixed(2)}`,
+    `Q ${vOut1X.toFixed(2)} ${vOut1Y.toFixed(2)} ${pEndRadial1X.toFixed(2)} ${pEndRadial1Y.toFixed(2)}`,
+    `L ${pStartRadial1X.toFixed(2)} ${pStartRadial1Y.toFixed(2)}`,
+    `Q ${vIn1X.toFixed(2)} ${vIn1Y.toFixed(2)} ${pArcIn1X.toFixed(2)} ${pArcIn1Y.toFixed(2)}`,
+    `A ${rInner.toFixed(2)} ${rInner.toFixed(2)} 0 ${isLargeArcInner} 0 ${pArcIn0X.toFixed(2)} ${pArcIn0Y.toFixed(2)}`,
+    `Q ${vIn0X.toFixed(2)} ${vIn0Y.toFixed(2)} ${pStartRadialX.toFixed(2)} ${pStartRadialY.toFixed(2)}`,
+    'Z',
+  ].join(' ');
+}
+
 // 4. DonutChart 环形分布图 (原生 SVG 路径, 中心联动, 缺值与零值不失真)
 // ============================================================================
 
@@ -1167,17 +1250,20 @@ export function DonutChart({
 
   const cx = 115;
   const cy = 115;
-  const minOuterR = 64;
-  const maxOuterR = 98;
-  const rInner = 44;
+  const maxOuterR = 96;
+  const rInner = 46;
 
   const maxVal = Math.max(...validSlices.map((d) => d.value));
   const minVal = Math.min(...validSlices.map((d) => d.value));
 
+  // 优化扇区角度与半径：当 validSlices.length > 1 时，用最小角度保底
+  const weights = validSlices.map((s) => Math.max(0.10, (s.value / total) * Math.PI * 2));
+  const weightSum = weights.reduce((a, b) => a + b, 0);
+
   // 计算各扇区前缀起止角度 (严格不可变 reduce 预计算，满足 React Compiler 规范)
   const sliceAngles = validSlices.reduce<Array<{ startAngle: number; endAngle: number; angleSpan: number }>>(
-    (acc, slice) => {
-      const span = (slice.value / total) * Math.PI * 2;
+    (acc, slice, idx) => {
+      const span = validSlices.length > 1 ? (weights[idx] / weightSum) * Math.PI * 2 : Math.PI * 2 - 0.0001;
       const prevEnd = acc.length > 0 ? acc[acc.length - 1].endAngle : -Math.PI / 2;
       return [...acc, { startAngle: prevEnd, endAngle: prevEnd + span, angleSpan: span }];
     },
@@ -1188,23 +1274,17 @@ export function DonutChart({
     const { startAngle, endAngle, angleSpan } = sliceAngles[idx];
 
     const isHovered = activeIdx === idx;
-    // Nightingale Rose Chart (roseType: 'radius')
-    const outerBase = maxVal === minVal ? maxOuterR : minOuterR + (slice.value / maxVal) * (maxOuterR - minOuterR);
+    // 温和阻尼外半径：1% 小扇区也清晰可见、有圆润花瓣层次
+    const outerBase = maxVal === minVal ? maxOuterR : 74 + Math.pow(slice.value / maxVal, 0.28) * (maxOuterR - 74);
     const outer = isHovered ? outerBase + 4 : outerBase;
     const inner = isHovered ? rInner - 2 : rInner;
 
-    const x1 = cx + outer * Math.cos(startAngle);
-    const y1 = cy + outer * Math.sin(startAngle);
-    const x2 = cx + outer * Math.cos(endAngle);
-    const y2 = cy + outer * Math.sin(endAngle);
-
-    const x3 = cx + inner * Math.cos(endAngle);
-    const y3 = cy + inner * Math.sin(endAngle);
-    const x4 = cx + inner * Math.cos(startAngle);
-    const y4 = cy + inner * Math.sin(startAngle);
-
-    const largeArc = angleSpan > Math.PI ? 1 : 0;
-    const pathData = `M ${x1} ${y1} A ${outer} ${outer} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${inner} ${inner} 0 ${largeArc} 0 ${x4} ${y4} Z`;
+    const gapAngle = validSlices.length > 1 ? 0.024 : 0;
+    const a0 = validSlices.length > 1 ? startAngle + gapAngle : startAngle;
+    const a1 = validSlices.length > 1 ? endAngle - gapAngle : endAngle;
+    const pathData = validSlices.length === 1
+      ? buildRoundedSectorPath(cx, cy, inner, outer, 0, Math.PI * 2, 5)
+      : buildRoundedSectorPath(cx, cy, inner, outer, a0, a1, 5);
     const color = slice.color || DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length];
 
     return {
@@ -1315,10 +1395,12 @@ export function DonutChart({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '4px 8px',
-                borderRadius: 4,
-                background: isSelected ? 'rgba(44, 113, 104, 0.08)' : 'transparent',
+                padding: '6px 10px',
+                borderRadius: 8,
+                background: isSelected ? 'rgba(44, 113, 104, 0.08)' : '#FAF9F5',
+                border: `1px solid ${isSelected ? 'var(--brand-primary, #0F5E52)' : '#E6E3DC'}`,
                 outline: 'none',
+                transition: 'all 0.15s ease',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
@@ -1594,12 +1676,12 @@ export function TargetBulletChart({
   const isNarrow = containerWidth < 460;
   const leftPad = isNarrow ? Math.max(76, Math.min(100, Math.round(containerWidth * 0.3))) : 140;
   const rightPad = isNarrow ? 56 : 90;
-  const topPad = 28;
-  const bottomPad = 26;
-  const rowHeight = 46;
+  const topPad = 20;
+  const bottomPad = 24;
+  const rowHeight = 42;
   const totalWidth = Math.max(260, containerWidth);
   const minNeededHeight = data.length * rowHeight + topPad + bottomPad;
-  const totalHeight = Math.max(160, minNeededHeight);
+  const totalHeight = Math.max(92, minNeededHeight);
   const plotWidth = totalWidth - leftPad - rightPad;
 
   const targetX100 = leftPad + (100 / maxRatioVal) * plotWidth;
@@ -1924,43 +2006,71 @@ export function ScatterChart({
   const maxY = maxYRaw + padY;
 
   const isNarrow = containerWidth < 420;
-  const leftPad = isNarrow ? 48 : 60;
+  const leftPad = isNarrow ? 52 : 64;
   const rightPad = isNarrow ? 18 : 28;
-  const topPad = 24;
-  const bottomPad = isNarrow ? 38 : 42;
+  const topPad = 32;
+  const bottomPad = isNarrow ? 42 : 46;
   const totalWidth = Math.max(260, containerWidth);
   const totalHeight = isNarrow ? 260 : 280;
   const plotW = totalWidth - leftPad - rightPad;
   const plotH = totalHeight - topPad - bottomPad;
 
-  const scaleX = (v: number) => leftPad + ((v - minX) / (maxX - minX || 1)) * plotW;
-  const scaleY = (v: number) => totalHeight - bottomPad - ((v - minY) / (maxY - minY || 1)) * plotH;
+  const normX = (v: number) => Math.max(0, Math.min(1, (v - minXRaw) / (maxXRaw - minXRaw || 1)));
+  const normY = (v: number) => Math.max(0, Math.min(1, (v - minYRaw) / (maxYRaw - minYRaw || 1)));
+  const usePower = validPoints.length > 6;
+  const mapX = (v: number) => (usePower ? Math.pow(normX(v), 0.38) : (v - minX) / (maxX - minX || 1));
+  const mapY = (v: number) => (usePower ? Math.pow(normY(v), 0.42) : (v - minY) / (maxY - minY || 1));
+
+  const innerPad = 14;
+  const scaleX = (v: number) => leftPad + innerPad + mapX(v) * (plotW - innerPad * 2);
+  const scaleY = (v: number) => totalHeight - bottomPad - innerPad - mapY(v) * (plotH - innerPad * 2);
 
   const sizes = validPoints.map((p) => p.size).filter((s): s is number => typeof s === 'number' && s > 0);
   const minSize = sizes.length ? Math.min(...sizes) : 1;
   const maxSize = sizes.length ? Math.max(...sizes) : 1;
   const getRadius = (s: number | null) => {
+    if (validPoints.length > 25) {
+      if (s === null || minSize === maxSize) return 5;
+      return 3.5 + ((s - minSize) / (maxSize - minSize || 1)) * 6.5;
+    }
     if (s === null || minSize === maxSize) return 7;
-    return 5 + ((s - minSize) / (maxSize - minSize)) * 11;
+    return 5 + ((s - minSize) / (maxSize - minSize || 1)) * 11;
   };
 
   const avgX = xVals.reduce((a, b) => a + b, 0) / xVals.length;
   const avgY = yVals.reduce((a, b) => a + b, 0) / yVals.length;
 
-  // Top 4 points by normalized x+y magnitude
-  const topPointIndices = new Set(
-    [...validPoints.keys()]
-      .sort((a, b) => {
-        const scoreA = (validPoints[a].x / (maxX || 1)) + (validPoints[a].y / (maxY || 1));
-        const scoreB = (validPoints[b].x / (maxX || 1)) + (validPoints[b].y / (maxY || 1));
-        return scoreB - scoreA;
-      })
-      .slice(0, 4)
-  );
+  // Top 4 points by normalized x+y magnitude with anti-collision filtering
+  const candidates = [...validPoints.keys()].sort((a, b) => {
+    const scoreA = (validPoints[a].x / (maxXRaw || 1)) + (validPoints[a].y / (maxYRaw || 1));
+    const scoreB = (validPoints[b].x / (maxXRaw || 1)) + (validPoints[b].y / (maxYRaw || 1));
+    return scoreB - scoreA;
+  });
+  const selectedLabelIndices: number[] = [];
+  for (const idx of candidates) {
+    if (selectedLabelIndices.length >= 4) break;
+    const px = scaleX(validPoints[idx].x);
+    const py = scaleY(validPoints[idx].y);
+    const collides = selectedLabelIndices.some((prevIdx) => {
+      const prevPx = scaleX(validPoints[prevIdx].x);
+      const prevPy = scaleY(validPoints[prevIdx].y);
+      return Math.abs(px - prevPx) <= 55 && Math.abs(py - prevPy) <= 20;
+    });
+    if (!collides) {
+      selectedLabelIndices.push(idx);
+    }
+  }
+  const topPointIndices = new Set(selectedLabelIndices);
 
   const current = activeIdx !== null && activeIdx < validPoints.length ? validPoints[activeIdx] : null;
   const xTicks = isNarrow ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1];
   const yTicks = [0, 0.33, 0.66, 1];
+
+  const formatTick = (val: number) => {
+    if (val >= 10000) return `${(val / 10000).toFixed(1)}w`;
+    if (val >= 1000) return fmtNum(val, 0);
+    return fmtNum(val, 1);
+  };
 
   return (
     <div ref={containerRef} style={{ position: 'relative', width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
@@ -1987,7 +2097,7 @@ export function ScatterChart({
       >
         <title>{`散点相关图: 横轴 ${xLabel}，纵轴 ${yLabel}`}</title>
         {xTicks.map((t) => {
-          const val = minX + t * (maxX - minX);
+          const val = usePower ? minXRaw + Math.pow(t, 1 / 0.38) * (maxXRaw - minXRaw) : minX + t * (maxX - minX);
           const xPos = scaleX(val);
           return (
             <g key={`x-${t}`}>
@@ -2006,14 +2116,14 @@ export function ScatterChart({
                 fill={CAMPAIGN_PALETTE.textMuted}
                 fontSize="12"
               >
-                {fmtNum(val, 1)}
+                {formatTick(val)}
               </text>
             </g>
           );
         })}
 
         {yTicks.map((t) => {
-          const val = minY + t * (maxY - minY);
+          const val = usePower ? minYRaw + Math.pow(t, 1 / 0.42) * (maxYRaw - minYRaw) : minY + t * (maxY - minY);
           const yPos = scaleY(val);
           return (
             <g key={`y-${t}`}>
@@ -2032,7 +2142,7 @@ export function ScatterChart({
                 fill={CAMPAIGN_PALETTE.textMuted}
                 fontSize="12"
               >
-                {fmtNum(val, 1)}
+                {formatTick(val)}
               </text>
             </g>
           );
@@ -2085,8 +2195,8 @@ export function ScatterChart({
           {xLabel} →
         </text>
         <text
-          x={leftPad - 8}
-          y={topPad - 8}
+          x={10}
+          y={15}
           textAnchor="start"
           fill={CAMPAIGN_PALETTE.textMain}
           fontWeight="600"
@@ -2137,8 +2247,9 @@ export function ScatterChart({
                 cy={py}
                 r={isSelected ? r + 1 : r}
                 fill={isSelected ? CAMPAIGN_PALETTE.gold : DEFAULT_SERIES_COLORS[idx % DEFAULT_SERIES_COLORS.length]}
+                fillOpacity={isSelected ? 0.95 : (validPoints.length > 25 ? 0.72 : 0.85)}
                 stroke="#ffffff"
-                strokeWidth="1.5"
+                strokeWidth={validPoints.length > 25 ? "1.2" : "1.5"}
               >
                 <title>{`${pt.detail || pt.label}\n${xLabel}: ${fmtNum(pt.x)}\n${yLabel}: ${fmtNum(pt.y)}`}</title>
               </circle>
@@ -2160,6 +2271,27 @@ export function ScatterChart({
           );
         })}
       </svg>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--border-subtle, #E6E3DC)', fontSize: 12, color: 'var(--text-secondary, #57534E)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#0F5E52', display: 'inline-block' }} />
+            低成本高量
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#D95D39', display: 'inline-block' }} />
+            重点放量
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#2E6F8E', display: 'inline-block' }} />
+            长尾分布
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            <span style={{ width: 10, borderTop: '1.5px dashed #8A847C', display: 'inline-block' }} />
+            均值基准线
+          </span>
+        </div>
+        <span style={{ fontSize: 11.5, color: 'var(--text-muted, #8A847C)' }}>气泡面积代表样本规模，虚线标记均值中枢。</span>
+      </div>
     </div>
   );
 }
@@ -3086,7 +3218,10 @@ export function PlacementCpmStrip({
 }) {
   const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#15803D'];
   return (
-    <div className="placement-cpm-strip">
+    <div
+      className="placement-cpm-strip"
+      style={{ gridTemplateColumns: `repeat(${Math.min(4, Math.max(1, items.length))}, minmax(0, 1fr))` }}
+    >
       {items.map((it, idx) => {
         const c = it.color || pal[idx % pal.length];
         const sVal = typeof it.spend === 'number' && Number.isFinite(it.spend) ? it.spend : 0;
@@ -3134,21 +3269,47 @@ export function NightingaleRoseChart({
     return <div className="ca-empty">暂无版位构成数据</div>;
   }
 
-  const total = validData.reduce((acc, d) => acc + d.value, 0);
-  const maxVal = Math.max(...validData.map((d) => d.value));
+  // 扇区排序：按 value 从大到小排序
+  const sortedData = [...validData].sort((a, b) => b.value - a.value);
+  const total = sortedData.reduce((acc, d) => acc + d.value, 0);
+  const maxVal = Math.max(...sortedData.map((d) => d.value));
+  const minVal = Math.min(...sortedData.map((d) => d.value));
 
-  const cx = 110;
-  const cy = 110;
-  const r0 = 24;
-  const maxR = 90;
-  const n = validData.length;
-  const angleSlice = (2 * Math.PI) / n;
+  const cx = 105;
+  const cy = 105;
+  const rInner = 30;
+  const rMinOuter = 50;
+  const rMaxOuter = 92;
+
+  // 使用带保底权重的阻尼比例分配角度
+  const weights = sortedData.map((d) => Math.max(0.15, Math.pow(d.value / total, 0.58)));
+  const weightSum = weights.reduce((a, b) => a + b, 0);
+
+  const gapAngle = sortedData.length > 1 ? 0.032 : 0;
+  let currentAngle = -Math.PI / 2;
+  const sectors = sortedData.map((d, i) => {
+    const span = (weights[i] / weightSum) * (2 * Math.PI);
+    const a0 = currentAngle + gapAngle;
+    const a1 = currentAngle + span - gapAngle;
+    currentAngle += span;
+    const valRatio = maxVal === minVal ? 1 : Math.pow(d.value / maxVal, 0.45);
+    const rankRatio = sortedData.length > 1 ? 1 - (i / (sortedData.length - 1)) * 0.65 : 1;
+    const ratio = valRatio * 0.55 + rankRatio * 0.45;
+    const baseR = rMinOuter + ratio * (rMaxOuter - rMinOuter);
+    return { d, a0, a1, baseR, span, index: i };
+  });
+
+  const hoveredItem = activeIdx !== null && activeIdx < sortedData.length ? sortedData[activeIdx] : null;
+  const centerTitle = hoveredItem ? hoveredItem.name : '构成比';
+  const centerPct = hoveredItem
+    ? `${((hoveredItem.value / total) * 100).toFixed(1)}%`
+    : `${((maxVal / total) * 100).toFixed(1)}%`;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height, width: '100%', gap: 12 }}>
       <svg
-        viewBox="0 0 220 220"
-        style={{ width: 220, height: 220, overflow: 'visible', flexShrink: 0 }}
+        viewBox="0 0 210 210"
+        style={{ width: 210, height: 210, overflow: 'visible', flexShrink: 0 }}
         aria-label="南丁格尔玫瑰图"
       >
         <defs>
@@ -3156,37 +3317,29 @@ export function NightingaleRoseChart({
             <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#1C1917" floodOpacity="0.18" />
           </filter>
         </defs>
-        {validData.map((d, i) => {
-          const a0 = -Math.PI / 2 + i * angleSlice + 0.03;
-          const a1 = -Math.PI / 2 + (i + 1) * angleSlice - 0.03;
-          const r = r0 + (Math.sqrt(d.value) / Math.sqrt(maxVal)) * (maxR - r0);
-          const color = d.color || pal[i % pal.length];
+        {sectors.map((sec, i) => {
+          const { d, a0, a1, baseR } = sec;
           const isHov = activeIdx === i;
+          const r = isHov ? baseR + 3 : baseR;
+          const color = d.color || pal[i % pal.length];
 
-          const p0x = cx + r0 * Math.cos(a0);
-          const p0y = cy + r0 * Math.sin(a0);
-          const p1x = cx + r * Math.cos(a0);
-          const p1y = cy + r * Math.sin(a0);
-          const p2x = cx + r * Math.cos(a1);
-          const p2y = cy + r * Math.sin(a1);
-          const p3x = cx + r0 * Math.cos(a1);
-          const p3y = cy + r0 * Math.sin(a1);
-
-          const pathD = `M ${p0x.toFixed(2)} ${p0y.toFixed(2)} L ${p1x.toFixed(2)} ${p1y.toFixed(2)} A ${r.toFixed(2)} ${r.toFixed(2)} 0 0 1 ${p2x.toFixed(2)} ${p2y.toFixed(2)} L ${p3x.toFixed(2)} ${p3y.toFixed(2)} A ${r0} ${r0} 0 0 0 ${p0x.toFixed(2)} ${p0y.toFixed(2)} Z`;
+          const pathD = sortedData.length === 1
+            ? buildRoundedSectorPath(cx, cy, rInner, r, 0, Math.PI * 2, 6)
+            : buildRoundedSectorPath(cx, cy, rInner, r, a0, a1, 6);
 
           return (
             <path
               key={i}
               d={pathD}
               fill={color}
-              fillOpacity={isHov ? 0.95 : 0.82}
+              fillOpacity={isHov ? 0.95 : 0.85}
               stroke="#FFFFFF"
-              strokeWidth={1.5}
+              strokeWidth={2.5}
+              strokeLinejoin="round"
+              fillRule={sortedData.length === 1 ? 'evenodd' : undefined}
               style={{
                 cursor: 'pointer',
                 transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
-                transformOrigin: `${cx}px ${cy}px`,
-                transform: isHov ? 'scale(1.04)' : 'scale(1)',
                 filter: isHov ? 'url(#roseGlow)' : 'none',
               }}
               onMouseEnter={() => setActiveIdx(i)}
@@ -3196,16 +3349,34 @@ export function NightingaleRoseChart({
             </path>
           );
         })}
-        <circle cx={cx} cy={cy} r={r0 - 2} fill="#FFFFFF" stroke="#E6E3DC" strokeWidth={1} />
-        <text x={cx} y={cy + 4} textAnchor="middle" fontSize="10" fontWeight="700" fill="#8A847C">
-          构成比
+        <circle cx={cx} cy={cy} r={28} fill="#FFFFFF" stroke="#E6E3DC" strokeWidth={1} />
+        <text
+          x={cx}
+          y={cy - 4}
+          textAnchor="middle"
+          fontSize="10"
+          fill="#8A847C"
+        >
+          {centerTitle.length > 5 ? `${centerTitle.slice(0, 4)}…` : centerTitle}
+        </text>
+        <text
+          x={cx}
+          y={cy + 11}
+          textAnchor="middle"
+          fontSize="12"
+          fontWeight="800"
+          fontFamily="var(--font-mono)"
+          fill="#1C1917"
+        >
+          {centerPct}
         </text>
       </svg>
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12 }}>
-        {validData.map((d, i) => {
+        {sortedData.map((d, i) => {
           const color = d.color || pal[i % pal.length];
           const pct = ((d.value / total) * 100).toFixed(1);
           const isHov = activeIdx === i;
+          const spendDisplay = d.value >= 10000 ? `¥${(d.value / 10000).toFixed(1)}w` : `¥${Math.round(d.value).toLocaleString()}`;
           return (
             <div
               key={i}
@@ -3213,10 +3384,10 @@ export function NightingaleRoseChart({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '4px 8px',
-                borderRadius: 6,
-                background: isHov ? 'var(--bg-subtle, #FAF9F5)' : 'transparent',
-                border: isHov ? '1px solid var(--border-subtle, #E6E3DC)' : '1px solid transparent',
+                padding: '6px 10px',
+                borderRadius: 8,
+                background: isHov ? '#FFFFFF' : 'var(--bg-subtle, #FAF9F5)',
+                border: isHov ? `1px solid ${color}` : '1px solid var(--border-subtle, #E6E3DC)',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease',
               }}
@@ -3224,14 +3395,15 @@ export function NightingaleRoseChart({
               onMouseLeave={() => setActiveIdx(null)}
             >
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ width: 8, height: 8, borderRadius: 2, background: color, flexShrink: 0 }} />
+                <span style={{ width: 10, height: 10, borderRadius: 3, background: color, flexShrink: 0 }} />
                 <span style={{ fontWeight: 600, color: '#1C1917', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {d.name}
                 </span>
               </div>
-              <span className="num" style={{ color: '#57534E', fontWeight: 600, flexShrink: 0 }}>
-                {pct}%
-              </span>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                <span style={{ fontSize: 11, color: '#8A847C' }}>{spendDisplay}</span>
+                <span style={{ fontWeight: 700, color, fontFamily: 'var(--font-mono)' }}>{pct}%</span>
+              </div>
             </div>
           );
         })}

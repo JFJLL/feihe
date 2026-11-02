@@ -3833,9 +3833,9 @@ button.primary:disabled {
   border-radius: 12px;
 }
 .blue-pill {
-  background: #e6f4fe;
-  color:#0d74ce;
-  border:0.5px solid #acd8fc;
+  background: var(--accent-tertiary-soft, #EEF6FA);
+  color: var(--accent-tertiary, #2E6F8E);
+  border: 0.5px solid rgba(46, 111, 142, 0.25);
 }
 .green-pill {
   background: #e6f7ed;

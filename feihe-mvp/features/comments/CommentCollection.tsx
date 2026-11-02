@@ -280,8 +280,8 @@ export function CommentCollection({
         <WorkspaceToolbar
           extra={
             selectedIds.length > 0 && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#e6f4fe', padding: '4px 12px', borderRadius: '8px' }}>
-                <span style={{ fontSize: 14, color: '#0d74ce', fontWeight: 600 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--brand-primary-soft, #EBF5F3)', padding: '4px 12px', borderRadius: '8px' }}>
+                <span style={{ fontSize: 14, color: 'var(--brand-primary, #0F5E52)', fontWeight: 600 }}>
                   已勾选 {selectedIds.length} 篇
                 </span>
                 <button
@@ -355,7 +355,7 @@ export function CommentCollection({
               {items.map((note) => {
                 const isSelected = selectedIds.includes(note.id);
                 return (
-                  <tr key={note.id} style={{ background: isSelected ? '#e6f4fe' : undefined }}>
+                  <tr key={note.id} style={{ background: isSelected ? 'var(--brand-primary-soft, #EBF5F3)' : undefined }}>
                     <td>
                       <input
                         type="checkbox"
@@ -392,7 +392,7 @@ export function CommentCollection({
                           <span
                             className="ops-table-note-title"
                             title={note.title || note.id}
-                            style={{ cursor: 'pointer', color: '#0d74ce' }}
+                            style={{ cursor: 'pointer', color: 'var(--brand-primary, #0F5E52)' }}
                             onClick={() => openNote(note.id)}
                           >
                             {note.title || '未命名笔记'}

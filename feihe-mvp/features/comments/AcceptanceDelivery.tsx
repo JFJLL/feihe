@@ -393,7 +393,7 @@ export function AcceptanceDelivery({
                           <span
                             className="ops-table-note-title"
                             title={note.title || note.id}
-                            style={{ cursor: 'pointer', color: '#0d74ce' }}
+                            style={{ cursor: 'pointer', color: 'var(--brand-primary, #0F5E52)' }}
                             onClick={() => openNote(note.id)}
                           >
                             {note.title || '未命名笔记'}
@@ -514,7 +514,7 @@ export function AcceptanceDelivery({
                               <span
                                 className="ops-table-note-title"
                                 title={note.title || note.id}
-                                style={{ cursor: 'pointer', color: '#0d74ce' }}
+                                style={{ cursor: 'pointer', color: 'var(--brand-primary, #0F5E52)' }}
                                 onClick={() => openNote(note.id)}
                               >
                                 {note.title || '未命名笔记'}
@@ -542,7 +542,7 @@ export function AcceptanceDelivery({
                             <button
                               type="button"
                               className="text-link"
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#0d74ce', fontWeight: 600 }}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--brand-primary, #0F5E52)', fontWeight: 600 }}
                               onClick={() => openNote(note.id)}
                             >
                               查看明细 →

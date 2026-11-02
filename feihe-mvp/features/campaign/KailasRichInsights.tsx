@@ -310,8 +310,9 @@ function KailasQuadrantScatterChart({
   const plotW = width - padLeft - padRight;
   const plotH = height - padTop - padBottom;
 
-  const toX = (val: number) => padLeft + (val / stats.xMax) * plotW;
-  const toY = (val: number) => padTop + plotH - (val / stats.yMax) * plotH;
+  const innerPad = 14;
+  const toX = (val: number) => padLeft + innerPad + Math.pow(Math.max(0, Math.min(1, val / stats.xMax)), 0.40) * (plotW - innerPad * 2);
+  const toY = (val: number) => padTop + plotH - innerPad - Math.pow(Math.max(0, Math.min(1, val / stats.yMax)), 0.40) * (plotH - innerPad * 2);
 
   const meanX = toX(stats.xMean);
   const meanY = toY(stats.yMean);
@@ -369,8 +370,8 @@ function KailasQuadrantScatterChart({
         <line x1={padLeft} y1={padTop} x2={padLeft} y2={padTop + plotH} stroke="#E6E3DC" strokeWidth={1} />
 
         {[0, 0.25, 0.5, 0.75, 1.0].map((r, i) => {
-          const val = r * stats.xMax;
-          const x = padLeft + r * plotW;
+          const val = Math.pow(r, 1 / 0.40) * stats.xMax;
+          const x = padLeft + innerPad + r * (plotW - innerPad * 2);
           return (
             <g key={i}>
               <line x1={x} y1={padTop + plotH} x2={x} y2={padTop + plotH + 4} stroke="#E6E3DC" />
@@ -382,8 +383,8 @@ function KailasQuadrantScatterChart({
         })}
 
         {[0, 0.25, 0.5, 0.75, 1.0].map((r, i) => {
-          const val = r * stats.yMax;
-          const y = padTop + plotH - r * plotH;
+          const val = Math.pow(r, 1 / 0.40) * stats.yMax;
+          const y = padTop + plotH - innerPad - r * (plotH - innerPad * 2);
           return (
             <g key={i}>
               <line x1={padLeft - 4} y1={y} x2={padLeft} y2={y} stroke="#E6E3DC" />
@@ -397,7 +398,7 @@ function KailasQuadrantScatterChart({
         {categorizedNotes.map((note, idx) => {
           const cxVal = toX(note.x);
           const cyVal = toY(note.y);
-          const r = Math.max(5, Math.min(18, Math.sqrt(note.size) / 6));
+          const r = Math.max(4, Math.min(11, Math.sqrt(note.size) / 9));
           const isHov = hoveredIdx === idx;
           return (
             <circle
@@ -1528,7 +1529,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
         <div className='kri-section'>
           <div className='kri-section-header'>
             <div className='kri-section-title-wrap'>
-              <span className='ca-chapter-num'>01</span>
+              <span className='ca-chapter-num'>03</span>
               <h3 className='kri-section-title'>搜索与人群精准定向深度分析</h3>
             </div>
             <span className='kri-section-desc'>搜索推广词类消耗、点击率与核心定向人群转化表现</span>
@@ -1611,7 +1612,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
         <div className='kri-section'>
           <div className='kri-section-header'>
             <div className='kri-section-title-wrap'>
-              <span className='ca-chapter-num'>01</span>
+              <span className='ca-chapter-num'>02</span>
               <h3 className='kri-section-title'>达人池与内容方向合作深度分析</h3>
             </div>
             <span className='kri-section-desc'>达人初筛复筛独立池分布与各内容方向篇数及采买结构</span>

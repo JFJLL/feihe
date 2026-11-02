@@ -124,7 +124,7 @@ export function WipesDeepDive({ dashboard, section }: WipesDeepDiveProps) {
       <div className="wipes-dive-root">
         <div className="wipes-dive-header">
           <div className="wipes-dive-header-left">
-            <span className="wipes-dive-chapter-badge">01</span>
+            <span className="wipes-dive-chapter-badge">02</span>
             <div>
               <h3 className="wipes-dive-title">搜索与人群</h3>
               <span className="wipes-dive-subtitle">四词类大盘消耗与CPUV结构、定向人群包Top8投放效能</span>

@@ -1,6 +1,6 @@
 {
   "projectId": "meiling",
-  "extractedAt": "2026-11-02T06:42:18.226Z",
+  "extractedAt": "2026-11-02T07:47:28.896Z",
   "sources": [
     {
       "id": "meiling-base",
@@ -3340,7 +3340,7 @@
         },
         {
           "tier": "尾部",
-          "stage": "达人拍摄中",
+          "stage": "品牌审核中",
           "kol_count": 1,
           "avg_settlement_price": 6000,
           "total_settlement_price": 6000,

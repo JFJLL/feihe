@@ -299,7 +299,7 @@
   flex-direction: column;
   gap: 7px;
   font-size: 12px;
-  color:#0d74ce;
+  color:var(--accent-tertiary, #2E6F8E);
 }
 
 .co-review-form label:has(textarea) {
@@ -320,7 +320,7 @@
 }
 
 .co-thread {
-  border:0.5px solid #d5efff;
+  border:1px solid var(--border-subtle, #E6E3DC);
   border-radius: 10px;
   margin: 14px 0;
   overflow: hidden;
@@ -349,7 +349,7 @@
 }
 
 .co-reply {
-  border-top:0.5px solid #e6f4fe;
+  border-top:1px solid var(--border-subtle, #E6E3DC);
   background: #f9f9fb;
   margin-left: 30px;
   border:0.5px solid #d9d9e0;
@@ -377,7 +377,7 @@
 
 .co-topic-tags span {
   background: #f0f0f3;
-  color:#0d74ce;
+  background:var(--brand-primary-soft, #EBF5F3); color:var(--brand-primary, #0F5E52);
   border-radius: 6px;
   padding: 5px 9px;
   font-size: 12px;

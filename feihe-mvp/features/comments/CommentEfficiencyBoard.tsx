@@ -20,7 +20,7 @@ export function CommentEfficiencyBoard({
   onSelectAction: (action: string) => void;
 }) {
   const actions = [
-    { action: 'reply', label: '需回复', amount: summary.replyPending, color: '#0d74ce' },
+    { action: 'reply', label: '需回复', amount: summary.replyPending, color: 'var(--brand-primary, #0F5E52)' },
     { action: 'delete', label: '需删除', amount: summary.deletePending, color: '#ce2c31' },
     { action: 'supplement', label: '需补充', amount: summary.supplementPending, color: '#ab6400' },
     { action: 'observe', label: '保留观察', amount: summary.observePending, color: '#60646c' },

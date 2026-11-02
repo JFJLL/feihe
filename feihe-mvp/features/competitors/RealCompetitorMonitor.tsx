@@ -198,7 +198,7 @@ export function RealCompetitorMonitor({
         </div>
         <div className="comp-status-actions">
           {syncMessage && (
-            <span style={{ fontSize: '0.75rem', color: '#0d74ce', marginRight: '0.5rem' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--brand-primary, #0F5E52)', marginRight: '0.5rem' }}>
               {syncMessage}
             </span>
           )}
@@ -348,7 +348,7 @@ export function RealCompetitorMonitor({
                       key={b.brand}
                       style={{
                         cursor: 'pointer',
-                        backgroundColor: isSelected ? '#e6f4fe' : undefined,
+                        backgroundColor: isSelected ? 'var(--brand-primary-soft, #EBF5F3)' : undefined,
                         transition: 'background-color 0.2s',
                       }}
                       onClick={() => handleBrandFilter(b.brand)}
@@ -362,7 +362,7 @@ export function RealCompetitorMonitor({
                             border: 'none',
                             padding: 0,
                             fontWeight: 700,
-                            color: '#0d74ce',
+                            color: 'var(--brand-primary, #0F5E52)',
                             cursor: 'pointer',
                             fontSize: 'inherit',
                             textAlign: 'left',
@@ -382,11 +382,11 @@ export function RealCompetitorMonitor({
                           type="button"
                           style={{
                             background: 'none',
-                            border: '0.5px solid #acd8fc',
+                            border: '0.5px solid var(--border-subtle, #E6E3DC)',
                             padding: '2px 8px',
                             borderRadius: '4px',
-                            color: '#0d74ce',
-                            backgroundColor: isSelected ? '#e6f4fe' : '#e6f4fe',
+                            color: 'var(--brand-primary, #0F5E52)',
+                            backgroundColor: isSelected ? 'var(--brand-primary-soft, #EBF5F3)' : 'var(--bg-subtle, #FAF9F5)',
                             fontWeight: 600,
                             cursor: 'pointer',
                             fontSize: 'inherit',
@@ -467,7 +467,7 @@ export function RealCompetitorMonitor({
                               background: 'none',
                               border: 'none',
                               padding: 0,
-                              color: '#0d74ce',
+                              color: 'var(--brand-primary, #0F5E52)',
                               fontWeight: 600,
                               cursor: 'pointer',
                               textAlign: 'left',
@@ -486,9 +486,9 @@ export function RealCompetitorMonitor({
                           style={{
                             flexShrink: 0,
                             fontSize: '0.75rem',
-                            background: '#e6f4fe',
-                            border: '0.5px solid #acd8fc',
-                            color: '#0d74ce',
+                            background: 'var(--brand-primary-soft, #EBF5F3)',
+                            border: '0.5px solid rgba(15, 94, 82, 0.25)',
+                            color: 'var(--brand-primary, #0F5E52)',
                             padding: '1px 6px',
                             borderRadius: '4px',
                             cursor: 'pointer',
@@ -520,7 +520,7 @@ export function RealCompetitorMonitor({
           <span className="comp-tag">粉丝数未提供</span>
         </div>
         <details style={{ margin: '0 0 0.75rem 0', fontSize: 14, color: 'var(--slate-11, #60646c)' }}>
-          <summary style={{ cursor: 'pointer', color: '#0d74ce' }}>口径说明</summary>
+          <summary style={{ cursor: 'pointer', color: 'var(--brand-primary, #0F5E52)' }}>口径说明</summary>
           上游采集接口原始记录中未提供达人粉丝数字段，系统严格按事实标注为粉丝数未提供，不凭空推测或伪造层级。
         </details>
         <div style={{
@@ -533,7 +533,7 @@ export function RealCompetitorMonitor({
             <div style={{ fontSize: 22, fontWeight: 700, color: '#1c2024', margin: '0.2rem 0' }}>
               {summary?.totalNotes ?? 0} 篇
             </div>
-            <div style={{ fontSize: 12, color: '#0d74ce' }}>占比 100%</div>
+            <div style={{ fontSize: 12, color: 'var(--brand-primary, #0F5E52)' }}>占比 100%</div>
           </div>
         </div>
       </div>
@@ -600,12 +600,12 @@ export function RealCompetitorMonitor({
               </StyledSelect>
             </div>
             {brandFilter && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', background: '#e6f4fe', color: '#0d74ce', padding: '2px 8px', borderRadius: '4px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', background: 'var(--brand-primary-soft, #EBF5F3)', color: 'var(--brand-primary, #0F5E52)', padding: '2px 8px', borderRadius: '4px' }}>
                 <span>已筛选: <strong>{brandFilter === 'unknown' ? '待识别品牌' : brandFilter}</strong></span>
                 <button
                   type="button"
                   onClick={() => { setBrandFilter(''); setPage(1); }}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0d74ce', fontWeight: 700, padding: 0 }}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--brand-primary, #0F5E52)', fontWeight: 700, padding: 0 }}
                   aria-label="清除品牌筛选"
                 >
                   ×
@@ -642,7 +642,7 @@ export function RealCompetitorMonitor({
                           padding: 0,
                           textAlign: 'left',
                           fontWeight: 600,
-                          color: '#0d74ce',
+                          color: 'var(--brand-primary, #0F5E52)',
                           cursor: 'pointer',
                           fontSize: '0.875rem',
                           marginBottom: '0.2rem',
@@ -658,7 +658,7 @@ export function RealCompetitorMonitor({
                           href={n.noteUrl}
                           target="_blank"
                           rel="noreferrer"
-                          style={{ fontSize: '0.75rem', color: '#0d74ce', textDecoration: 'none' }}
+                          style={{ fontSize: '0.75rem', color: 'var(--accent-tertiary, #2E6F8E)', textDecoration: 'none' }}
                         >
                           打开小红书原文 ↗
                         </a>

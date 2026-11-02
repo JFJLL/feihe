@@ -1106,7 +1106,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         <div className="wri-section wipes-section-wrap">
           <div className="wri-section-header wipes-section-header">
             <div className="wri-section-title-wrap">
-              <span className="ca-chapter-num">01</span>
+              <span className="ca-chapter-num">03</span>
               <h3 className="wri-section-title wipes-section-title">搜索关键词Pareto贡献度与四大词类效果大盘</h3>
             </div>
             <span className="wri-section-desc">搜索关键词消耗分布、成本效率与31个定向人群包表现</span>
@@ -1306,7 +1306,7 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         <div className="wri-section wipes-section-wrap">
           <div className="wri-section-header wipes-section-header">
             <div className="wri-section-title-wrap">
-              <span className="ca-chapter-num">01</span>
+              <span className="ca-chapter-num">02</span>
               <h3 className="wri-section-title wipes-section-title">CID跨端引流追踪与达人合作层级大盘</h3>
             </div>
             <span className="wri-section-desc">CID直投转化、4大达人层级投放产出与5大内容方向对比</span>

@@ -283,6 +283,20 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
 
       <div className="ca-grid">
         {targetBulletData.length > 0 ? (
+          targetBulletData.length <= 3 ? (
+            <>
+              <ChartPanel title="KPI 目标达成对比" subtitle={`业务周期：${displayPeriod}`}>
+                <TargetBulletChart data={targetBulletData} />
+              </ChartPanel>
+              <ChartPanel title="各渠道/版位消耗分布" subtitle={`业务周期：${displayPeriod}`}>
+                <DonutChart
+                  data={records.filter((r) => r.spend !== null).map((r) => ({ id: r.id, label: r.name, value: r.spend }))}
+                  unit="元"
+                  centerLabel="消耗构成"
+                />
+              </ChartPanel>
+            </>
+          ) : (
           <>
             <ChartPanel title="KPI 目标达成对比 (第一组)" subtitle={`业务周期：${displayPeriod}`}>
               <TargetBulletChart data={targetBulletData.slice(0, halfBullet)} />
@@ -291,6 +305,7 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
               <TargetBulletChart data={targetBulletData.slice(halfBullet)} />
             </ChartPanel>
           </>
+          )
         ) : kailasBudgetComparisonData.length > 0 ? (
           <>
             <ChartPanel title="预算规划与实际消耗对比" subtitle={`业务周期：${displayPeriod}`}>

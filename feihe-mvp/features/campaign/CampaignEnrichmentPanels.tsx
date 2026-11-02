@@ -70,8 +70,8 @@ export function CampaignEnrichmentPanels({
     }
     return (
       <div className="campaign-enrichment-stack">
-        <KailasRichInsights dashboard={dashboard} section={section} snapshot={activeSnapshot} />
         <KailasDeepDive dashboard={dashboard} section={section} />
+        <KailasRichInsights dashboard={dashboard} section={section} snapshot={activeSnapshot} />
       </div>
     );
   }

@@ -19,7 +19,7 @@ label select {
   background-repeat: no-repeat !important;
   background-position: right 10px center !important;
   background-size: 16px 16px !important;
-  border:0.5px solid #d9d9e0 !important;
+  border:0.5px solid var(--border-subtle, #E6E3DC) !important;
   border-radius: 8px !important;
   padding: 6px 32px 6px 12px !important;
   min-height: 36px !important;
@@ -35,7 +35,7 @@ select:hover,
 .reference-date-controls select:hover,
 label select:hover {
   border-color:#60646c !important;
-  background-color:#f9f9fb !important;
+  background-color:var(--bg-subtle, #FAF9F5) !important;
   box-shadow: 0 2px 5px rgba(28, 32, 36, 0.08) !important;
 }
 
@@ -54,7 +54,7 @@ label select:focus {
 
 select:disabled,
 .ops-workspace select:disabled {
-  background-color:#f0f0f3 !important;
+  background-color:var(--bg-subtle, #FAF9F5) !important;
   color:#60646c !important;
   cursor: not-allowed !important;
   opacity: 0.7 !important;
@@ -126,7 +126,7 @@ label:has(select),
   padding: 6px 12px;
   min-height: 34px;
   background: #ffffff;
-  border:0.5px solid #d9d9e0;
+  border:0.5px solid var(--border-subtle, #E6E3DC);
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -137,7 +137,7 @@ label:has(select),
 }
 .custom-select-trigger:hover {
   border-color:#60646c;
-  background: #f9f9fb;
+  background: var(--bg-subtle, #FAF9F5);
   box-shadow: 0 2px 5px rgba(28, 32, 36, 0.08);
 }
 .custom-select-container.is-open .custom-select-trigger,
@@ -162,7 +162,7 @@ label:has(select),
   max-height: 260px;
   overflow-y: auto;
   background: #ffffff;
-  border:0.5px solid #d9d9e0;
+  border:0.5px solid var(--border-subtle, #E6E3DC);
   border-radius: 10px;
   box-shadow: 0 10px 25px -5px rgba(28, 32, 36, 0.15), 0 8px 10px -6px rgba(28, 32, 36, 0.1);
   padding: 5px;
@@ -185,7 +185,7 @@ label:has(select),
   transition: background 0.1s ease;
 }
 .custom-select-option:hover {
-  background: #f0f0f3;
+  background: var(--bg-subtle, #FAF9F5);
   color:#1c2024;
 }
 .custom-select-option.is-selected {
@@ -194,7 +194,7 @@ label:has(select),
   font-weight: 600;
 }
 .custom-select-option.is-active:not(.is-selected) {
-  background: #f0f0f3;
+  background: var(--bg-subtle, #FAF9F5);
   color:#1c2024;
   outline: 1px dashed #8b8d98;
   outline-offset: -1px;
@@ -230,46 +230,46 @@ label:has(select),
 .ops-workspace .panel-title h2 { margin: 7px 0 0; font-size: 16px; line-height: 1.6; }
 .ops-workspace .panel-title small {
   display: inline-flex; padding: 3px 9px; border-radius: 20px;
-  color:#0d74ce; background: #f0f0f3; font-size: 12px; letter-spacing: .02em;
+  color:#0d74ce; background: var(--bg-subtle, #FAF9F5); font-size: 12px; letter-spacing: .02em;
 }
 .ops-workspace .section-mini-tag { border:0; font-size: 12px; line-height: 1.5; padding: 3px 10px; }
 .ops-workspace .ops-module-tabs { gap: 12px; }
 .ops-workspace .ops-module-tab { padding: 16px; border-radius: 12px; gap: 12px; }
 .ops-module-tab-icon {
   display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px;
-  background: #f0f0f3; border:0.5px solid #e6f4fe; border-radius: 10px; font-size: 16px;
+  background: var(--bg-subtle, #FAF9F5); border:0.5px solid #e6f4fe; border-radius: 10px; font-size: 16px;
 }
 .ops-module-tab.active .ops-module-tab-icon { background: #ffffff; border-color:#acd8fc; }
 .ops-workspace .ops-module-tab.active {
-  background: linear-gradient(130deg, #f9f9fb, #f0f0f3);
+  background: linear-gradient(130deg, var(--bg-subtle, #FAF9F5), var(--bg-subtle, #FAF9F5));
   border-color:var(--border-brand, rgba(15, 94, 82, 0.28)); box-shadow: var(--shadow-sm);
 }
 .ops-workspace .ops-module-tab-desc { white-space: normal; font-size: 12px; line-height: 1.6; }
 .ops-workspace .ops-module-tab-title { flex-wrap: wrap; }
 .ops-workspace .ops-module-tab-title strong { font-size: 14px; }
-.ops-workspace .ops-module-tab-badge { background: #f0f0f3; color:#0d74ce; padding: 2px 7px; }
+.ops-workspace .ops-module-tab-badge { background: var(--bg-subtle, #FAF9F5); color:#0d74ce; padding: 2px 7px; }
 .ops-workspace .ops-metric-card {
-  --metric-tint: #f9f9fb; --metric-line: #acd8fc; --metric-accent: var(--accent-tertiary, #2E6F8E);
+  --metric-tint: var(--bg-subtle, #FAF9F5); --metric-line: #acd8fc; --metric-accent: var(--accent-tertiary, #2E6F8E);
   background: linear-gradient(135deg, #ffffff 15%, var(--metric-tint));
   border:0.5px solid var(--metric-line);
   border-radius: 12px; padding: 18px; gap: 7px;
 }
-.ops-workspace .ops-metric-card-teal { --metric-tint: #f9f9fb; --metric-line: #b8eae0; --metric-accent: #12a594; }
+.ops-workspace .ops-metric-card-teal { --metric-tint: var(--bg-subtle, #FAF9F5); --metric-line: #b8eae0; --metric-accent: #12a594; }
  .ops-workspace .ops-metric-card-green { --metric-tint: #f4fbf7; --metric-line: #acdec8; --metric-accent: #29a383; }
- .ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: #f9f9fb; --metric-line: #dadcff; --metric-accent: var(--accent-secondary, #D95D39); }
+ .ops-workspace :is(.ops-metric-card-purple, .ops-metric-card-indigo) { --metric-tint: var(--bg-subtle, #FAF9F5); --metric-line: #dadcff; --metric-accent: var(--accent-secondary, #D95D39); }
 .ops-workspace .ops-metric-card-yellow { --metric-tint: #fcfcfd; --metric-line: #fbe577; --metric-accent: #e2a336; }
-.ops-workspace .ops-metric-card-red { --metric-tint: #f9f9fb; --metric-line: #ffcdce; --metric-accent: #e5484d; }
-.ops-workspace .ops-metric-card-cyan { --metric-tint: #f9f9fb; --metric-line: #b8eae0; --metric-accent: #12a594; }
+.ops-workspace .ops-metric-card-red { --metric-tint: var(--bg-subtle, #FAF9F5); --metric-line: #ffcdce; --metric-accent: #e5484d; }
+.ops-workspace .ops-metric-card-cyan { --metric-tint: var(--bg-subtle, #FAF9F5); --metric-line: #b8eae0; --metric-accent: #12a594; }
 
 /* ==========================================================================
    Project-Wide Rich & Harmonious Multi-Module Palette (Beyond All-Blue)
    ========================================================================== */
 /* 侧边导航 5 大板块专属色彩识别 */
 .project-nav a:nth-child(1).active, .project-nav [data-nav="overview"].active { border-left-color:#ab6400 !important; background: linear-gradient(90deg, #fcfcfd, #ffffff) !important; color:#ab6400 !important; }
-.project-nav a:nth-child(2).active, .project-nav [data-nav="growth"].active { border-left-color:#5753c6 !important; background: linear-gradient(90deg, #f9f9fb, #ffffff) !important; color:#5151cd !important; }
-.project-nav a:nth-child(3).active, .project-nav [data-nav="content"].active { border-left-color:#e2a336 !important; background: linear-gradient(90deg, #f9f9fb, #ffffff) !important; color:#ce2c31 !important; }
+.project-nav a:nth-child(2).active, .project-nav [data-nav="growth"].active { border-left-color:#5753c6 !important; background: linear-gradient(90deg, var(--bg-subtle, #FAF9F5), #ffffff) !important; color:#5151cd !important; }
+.project-nav a:nth-child(3).active, .project-nav [data-nav="content"].active { border-left-color:#e2a336 !important; background: linear-gradient(90deg, var(--bg-subtle, #FAF9F5), #ffffff) !important; color:#ce2c31 !important; }
 .project-nav a:nth-child(4).active, .project-nav [data-nav="comments"].active { border-left-color:#208368 !important; background: linear-gradient(90deg, #f4fbf7, #ffffff) !important; color:#208368 !important; }
-.project-nav a:nth-child(5).active, .project-nav [data-nav="settings"].active { border-left-color:#0d74ce !important; background: linear-gradient(90deg, #f0f0f3, #ffffff) !important; color:#113264 !important; }
+.project-nav a:nth-child(5).active, .project-nav [data-nav="settings"].active { border-left-color:#0d74ce !important; background: linear-gradient(90deg, var(--bg-subtle, #FAF9F5), #ffffff) !important; color:#113264 !important; }
 
 /* 各板块卡片多样化微渐变与呼吸感 */
 .pastel-card,
@@ -296,11 +296,11 @@ label:has(select),
 }
 
 /* 胶囊标签色彩库 */
-.section-mini-tag.tag-orange { background: #f9f9fb !important; color:#ce2c31 !important; border:0.5px solid #fff7c2 !important; }
+.section-mini-tag.tag-orange { background: var(--bg-subtle, #FAF9F5) !important; color:#ce2c31 !important; border:0.5px solid #fff7c2 !important; }
 .section-mini-tag.tag-emerald { background: #e6f7ed !important; color:#208368 !important; border:0.5px solid #d6f1e3 !important; }
-.section-mini-tag.tag-rose { background: #f9f9fb !important; color:#ce2c31 !important; border:0.5px solid #f0f0f3 !important; }
+.section-mini-tag.tag-rose { background: var(--bg-subtle, #FAF9F5) !important; color:#ce2c31 !important; border:0.5px solid var(--border-subtle, #E6E3DC) !important; }
 .section-mini-tag.tag-amber { background: #fcfcfd !important; color:#ab6400 !important; border:0.5px solid #ffee9c !important; }
-.section-mini-tag.tag-indigo { background: #f0f0f3 !important; color:#113264 !important; border:0.5px solid #d5efff !important; }
+.section-mini-tag.tag-indigo { background: var(--bg-subtle, #FAF9F5) !important; color:#113264 !important; border:0.5px solid #d5efff !important; }
 
 /* 提升各面板立体光影与留白 */
 .ops-workspace .panel, .ops-workspace .pastel-card, .ops-workspace .ops-section-card {
@@ -327,19 +327,19 @@ label:has(select),
 }
 .ops-workspace textarea { line-height: 1.7; resize: vertical; }
 .ops-workspace :is(input[type="checkbox"], input[type="radio"]) { accent-color:#0d74ce; }
-.ops-workspace :is(input[readonly], textarea[readonly], input:disabled, select:disabled) { background: #f0f0f3; color:#60646c; }
+.ops-workspace :is(input[readonly], textarea[readonly], input:disabled, select:disabled) { background: var(--bg-subtle, #FAF9F5); color:#60646c; }
 .ops-workspace :is(button, a, input, select, textarea, summary, [role="button"]):focus-visible {
   outline: 3px solid #5eb1ef; outline-offset: 3px;
 }
-.ops-workspace .ops-toolbar { padding: 12px; background: #f9f9fb; border:0.5px solid #e6f4fe; border-radius: 10px; }
+.ops-workspace .ops-toolbar { padding: 12px; background: var(--bg-subtle, #FAF9F5); border:0.5px solid #e6f4fe; border-radius: 10px; }
 .ops-workspace .ops-toolbar-filters { flex: 1 1 300px; min-width: 0; }
 .ops-workspace .ops-toolbar-actions { flex-wrap: wrap; }
 .ops-workspace :is(.ops-table-wrap, .data-table-shell) { border-color:#d5efff; border-radius: 12px; }
 .ops-workspace .ops-table { font-size: 12px; font-variant-numeric: tabular-nums; }
-.ops-workspace .ops-table th { background: #f0f0f3; color:#60646c; padding: 12px; font-size: 12px; }
-.ops-workspace .ops-table td { padding: 12px; border-bottom-color:#f0f0f3; }
+.ops-workspace .ops-table th { background: var(--bg-subtle, #FAF9F5); color:#60646c; padding: 12px; font-size: 12px; }
+.ops-workspace .ops-table td { padding: 12px; border-bottom-color:var(--border-subtle, #E6E3DC); }
 .ops-workspace .ops-table tbody tr:nth-child(even) { background-color:#fcfcfd; }
-.ops-workspace .ops-table tbody tr:hover { background-color:#f9f9fb; }
+.ops-workspace .ops-table tbody tr:hover { background-color:var(--bg-subtle, #FAF9F5); }
 .ops-workspace .ops-table tbody tr:last-child td { border-bottom:0; }
 .ops-workspace .data-trend { padding: 10px 12px 6px; border:0.5px solid #e6f4fe; background: linear-gradient(#fcfcfd, #ffffff); border-radius: 12px; }
 .ops-workspace .data-trend-readout { font-size: 12px; gap: 8px 14px; padding: 0 2px 8px; }
@@ -347,10 +347,10 @@ label:has(select),
 .ops-workspace .data-trend-picker select { min-height: 32px; padding: 4px 8px; font-size: 12px; }
 .ops-workspace .ops-progress-track { background: #e8e8ec; height: 8px; border-radius: 8px; }
 .ops-workspace .ops-progress-bar { border-radius: inherit; }
-.ops-workspace .source-map { background: #f0f0f3; border:0.5px solid #d5efff; border-radius: 10px; padding: 11px 14px; }
+.ops-workspace .source-map { background: var(--bg-subtle, #FAF9F5); border:0.5px solid #d5efff; border-radius: 10px; padding: 11px 14px; }
 .ops-workspace .source-map summary { line-height: 1.8; }
 .ops-workspace .source-map[open] { background: #ffffff; }
-.ops-workspace :is(.section-tabs, .reference-subtabs) { gap: 6px; padding: 5px; background: #f0f0f3; border-radius: 10px; }
+.ops-workspace :is(.section-tabs, .reference-subtabs) { gap: 6px; padding: 5px; background: var(--bg-subtle, #FAF9F5); border-radius: 10px; }
 .ops-workspace .section-tabs button { border:0.5px solid transparent; border-radius: 8px; color:#60646c; background: transparent; padding: 10px 14px; }
 .ops-workspace .section-tabs button.active { border-color:#d5efff; background: #ffffff; color:#113264; box-shadow: 0 2px 6px #11326409; }
 .ops-workspace .section-tabs button small { color:#60646c; }
@@ -360,11 +360,11 @@ label:has(select),
 .ops-workspace :is(.platform-panel, .side-form-panel) > p,
 .ops-workspace :is(.platform-panel, .side-form-panel) .list-head p { font-size: 12px; line-height: 1.7; color:#60646c; }
 .ops-workspace :is(.editor-actions, .management-list, .integration-list) button:not(.danger-link):not(.primary) { min-height: 34px; padding: 7px 11px; border:0.5px solid #d5efff; background: #ffffff; border-radius: 8px; color:#0d74ce; font-size: 12px; }
-.ops-workspace :is(.management-list, .integration-list) > div { border-color:#e6f4fe; border-radius: 10px; background: #f9f9fb; }
+.ops-workspace :is(.management-list, .integration-list) > div { border-color:#e6f4fe; border-radius: 10px; background: var(--bg-subtle, #FAF9F5); }
 .ops-workspace :is(.goal-form-grid, .form-grid, .editor-grid) label { min-width: 0; }
 .ops-workspace .growth-sample-board .ops-table td:first-child { max-width: 280px; white-space: normal; overflow-wrap: anywhere; }
 .ops-workspace .growth-sample-board { min-width: 0; }
-.ops-workspace .growth-brand-card { border:0.5px solid #d5efff; border-radius: 12px; background: linear-gradient(140deg, #ffffff, #f9f9fb); padding: 16px; gap: 10px; }
+.ops-workspace .growth-brand-card { border:0.5px solid #d5efff; border-radius: 12px; background: linear-gradient(140deg, #ffffff, var(--bg-subtle, #FAF9F5)); padding: 16px; gap: 10px; }
 .ops-workspace .growth-brand-card .ops-metric-card { background: transparent; border:0; box-shadow: none; padding: 0; }
 .ops-workspace .growth-brand-card > .reference-kpi-meta { margin: 0; padding-top: 7px; border-top:0.5px solid #e6f4fe; }
 .ops-workspace .growth-brand-card .ops-metric-card-label { font-size: 16px; color:#1c2024; }
@@ -372,11 +372,11 @@ label:has(select),
 .ops-workspace .intel-stack > .reference-section > div > h2 { font-size: 16px; margin: 7px 0; font-weight: 700; }
 .ops-workspace .intel-stack > .reference-section > div > small { font-size: 12px; color:#0d74ce; }
 .ops-workspace .intel-stack > .reference-section > div > p { font-size: 12px; color:#60646c; line-height: 1.7; }
-.ops-workspace .map-tabs { display: flex; flex-wrap: wrap; width: fit-content; max-width: 100%; gap: 6px; padding: 5px; border-radius: 10px; background: #f0f0f3; }
+.ops-workspace .map-tabs { display: flex; flex-wrap: wrap; width: fit-content; max-width: 100%; gap: 6px; padding: 5px; border-radius: 10px; background: var(--bg-subtle, #FAF9F5); }
 .ops-workspace .map-tabs button { background: transparent; border:0.5px solid transparent; min-height: 34px; border-radius: 8px; padding: 7px 12px; color:#60646c; font-size: 12px; }
 .ops-workspace .map-tabs button.active { color:#113264; background: #ffffff; border-color:#d5efff; box-shadow: 0 2px 6px #11326409; }
 .ops-workspace .map-tr { font-size: 12px; }
-.ops-workspace .map-th { background: #f0f0f3; color:#60646c; }
+.ops-workspace .map-th { background: var(--bg-subtle, #FAF9F5); color:#60646c; }
 .ops-workspace :is(.map-list, .capability-grid) button { min-height: 34px; border-radius: 8px; font-size: 12px; }
 .ops-workspace .intel-card-head h2 { font-size: 16px; }
 .ops-workspace .intel-card-head p { font-size: 12px; line-height: 1.7; }

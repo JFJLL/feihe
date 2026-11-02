@@ -271,8 +271,8 @@ export function SupplierVerification({
                 <div style={{ fontSize: '12px', color: '#208368' }}>原文一致</div>
                 <strong style={{ fontSize: '16px', color: '#208368' }}>{summary.exactCount}</strong>
               </div>
-              <div style={{ background: '#e6f4fe', padding: '10px', borderRadius: '8px' }}>
-                <div style={{ fontSize: '12px', color: '#0d74ce' }}>改写外显</div>
+              <div style={{ background: 'var(--brand-primary-soft, #EBF5F3)', padding: '10px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--brand-primary, #0F5E52)' }}>改写外显</div>
                 <strong style={{ fontSize: '16px', color: '#113264' }}>{summary.modifiedCount}</strong>
               </div>
               <div style={{ background: '#feebec', padding: '10px', borderRadius: '8px' }}>
@@ -398,7 +398,7 @@ export function SupplierVerification({
                         <button
                           type="button"
                           className="text-link"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600, textAlign: 'left', color: '#0d74ce' }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600, textAlign: 'left', color: 'var(--brand-primary, #0F5E52)' }}
                           onClick={() => openNote(row.noteId)}
                         >
                           {row.noteId.slice(0, 14)}… 查看明细

@@ -807,7 +807,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="ca-chapter-num">02</span>
+                <span className="ca-chapter-num">03</span>
                 <h3 className="mri-group-title">经营决策与多线预算总览</h3>
               </div>
               <p className="mri-group-desc">
@@ -909,7 +909,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="ca-chapter-num">03</span>
+                <span className="ca-chapter-num">04</span>
                 <h3 className="mri-group-title">全链路转化漏斗与投放效率诊断</h3>
               </div>
               <p className="mri-group-desc">
@@ -1011,7 +1011,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
             <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="ca-chapter-num">04</span>
+                <span className="ca-chapter-num">05</span>
                 <h3 className="mri-group-title">受众人口学画像与搜索定向引擎</h3>
               </div>
               <p className="mri-group-desc">
@@ -1070,7 +1070,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           <section className="mri-group">
             <div className="mri-group-header">
               <div className="mri-group-title-wrap">
-                <span className="ca-chapter-num">05</span>
+                <span className="ca-chapter-num">06</span>
                 <h3 className="mri-group-title">达人内容合作矩阵与样机流转</h3>
               </div>
               <p className="mri-group-desc">
@@ -1359,7 +1359,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
         <section className="mri-group">
           <div className="mri-group-header">
             <div className="mri-group-title-wrap">
-              <span className="ca-chapter-num">01</span>
+              <span className="ca-chapter-num">03</span>
               <h3 className="mri-group-title">投放与渠道深度指标大盘</h3>
             </div>
             <p className="mri-group-desc">
@@ -1456,7 +1456,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
         <section className="mri-group">
           <div className="mri-group-header">
             <div className="mri-group-title-wrap">
-              <span className="ca-chapter-num">01</span>
+              <span className="ca-chapter-num">02</span>
               <h3 className="mri-group-title">内容、素材与达人深度指标大盘</h3>
             </div>
             <p className="mri-group-desc">

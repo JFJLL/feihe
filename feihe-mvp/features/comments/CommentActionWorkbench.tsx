@@ -595,7 +595,7 @@ export function CommentActionWorkbench({
                             item.action === 'delete'
                               ? '#ce2c31'
                               : item.action === 'reply'
-                              ? '#0d74ce'
+                              ? 'var(--brand-primary, #0F5E52)'
                               : item.action === 'supplement'
                               ? '#ffc53d'
                               : '#1c2024',
@@ -658,7 +658,7 @@ export function CommentActionWorkbench({
                         <button
                           type="button"
                           className="text-link"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '12px', color: '#0d74ce', textAlign: 'left' }}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '12px', color: 'var(--brand-primary, #0F5E52)', textAlign: 'left' }}
                           onClick={() => openNote(item.noteId!)}
                         >
                           笔记明细 →
@@ -680,7 +680,7 @@ export function CommentActionWorkbench({
                             <button
                               type="button"
                               className="primary"
-                              style={{ fontSize: '12px', padding: '4px 10px', background: '#0d74ce' }}
+                              style={{ fontSize: '12px', padding: '4px 10px', background: 'var(--brand-primary, #0F5E52)' }}
                               onClick={() => handleResolve(item, '已回复')}
                             >
                               标记已回复

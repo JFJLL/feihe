@@ -771,6 +771,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 className="ca-jump-pill"
                 onClick={(e) => handleAnchorClick(e, "ca-sec-kpi")}
               >
+               <span className="ca-jump-num">01</span>
                 <span>核心指标</span>
               </a>
               <a
@@ -778,6 +779,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 className="ca-jump-pill"
                 onClick={(e) => handleAnchorClick(e, "ca-sec-charts")}
               >
+               <span className="ca-jump-num">02</span>
                 <span>预算与版位</span>
               </a>
               <a
@@ -785,6 +787,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 className="ca-jump-pill"
                 onClick={(e) => handleAnchorClick(e, "ca-sec-enrichment")}
               >
+               <span className="ca-jump-num">03</span>
                 <span>深度拆解</span>
               </a>
               {activeDetailTables.length > 0 && (
@@ -793,6 +796,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                   className="ca-jump-pill"
                   onClick={(e) => handleAnchorClick(e, "ca-sec-details")}
                 >
+                 <span className="ca-jump-num">04</span>
                   <span>底层明细</span>
                 </a>
               )}
@@ -981,7 +985,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             >
               {kailasPlacementTab === "rose" && (
                 <div>
-                  <NightingaleRoseChart data={kailasRoseData} height={210} />
+                 <NightingaleRoseChart data={kailasRoseData} height={220} />
                   <PlacementCpmStrip items={kailasRoseData} />
                 </div>
               )}
@@ -1167,7 +1171,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             >
               {meilingPlacementTab === "rose" && (
                 <div>
-                  <NightingaleRoseChart data={meilingRoseData} height={210} />
+                 <NightingaleRoseChart data={meilingRoseData} height={220} />
                   <PlacementCpmStrip items={meilingRoseData} />
                 </div>
               )}
@@ -1301,7 +1305,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
             >
               {wipesPlacementTab === "rose" && (
                 <div>
-                  <NightingaleRoseChart data={wipesRoseData} height={210} />
+                 <NightingaleRoseChart data={wipesRoseData} height={220} />
                   <PlacementCpmStrip items={wipesRoseData} />
                 </div>
               )}

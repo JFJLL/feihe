@@ -132,7 +132,7 @@ export function MeilingDeepDive({ dashboard, section }: MeilingDeepDiveProps) {
       <div className="mdd-root">
         <div className="mdd-header">
           <div className="mdd-header-left">
-            <span className="mdd-chapter-badge">01</span>
+            <span className="mdd-chapter-badge">02</span>
             <div>
               <h3 className="mdd-title">商业笔记素材投放效率</h3>
               <span className="mdd-subtitle">商单素材投流规模、归因UV成本与全量笔记效率明细</span>
