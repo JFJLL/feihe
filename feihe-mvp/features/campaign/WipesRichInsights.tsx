@@ -18,6 +18,8 @@ import {
   type StackedBarSegment,
   type ChartDatum,
   type MetricStripItem,
+  MultiDimensionComparisonDeck,
+  type ComparisonDeckItem,
 } from './CampaignCharts';
 import './wipes-rich-insights.css';
 
@@ -354,25 +356,18 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
 
     return (
       <div className="wipes-rich-container">
-        <div className="wipes-rich-header">
-          <div className="wipes-rich-header-title">
-            <span>稳健玉米消毒湿巾专项：全渠道投流与跨端转化数据看板</span>
-          </div>
-          <div className="wipes-rich-notice">
-            *全店GMV包含自然流量与跨渠道成交，不作广告直接ROI；站外活跃UV为小红星30天后验归因
-          </div>
-        </div>
-
         {/* =========================================================================
-            第一层（双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵）
+            第一层（双轨预算账本、全渠道花费与 11 项 KPI 考核矩阵）
            ========================================================================= */}
         <div className="wri-section wipes-section-wrap">
           <div className="wri-section-header wipes-section-header">
             <div className="wri-section-title-wrap">
-              <span className="ca-chapter-num">02</span>
-              <h3 className="wri-section-title wipes-section-title">双轨预算账本、全渠道花费与 11 项 KPI 达成矩阵</h3>
+              <span className="ca-chapter-num">03</span>
+              <h3 className="wri-section-title wipes-section-title">双轨预算账本、全渠道花费与 11 项 KPI 考核矩阵</h3>
             </div>
-            <span className="wri-section-desc">源表最新底表核算（日常种草7项 + 医生专家4项考核）</span>
+            <span className="wri-section-desc">
+              源表最新底表核算（日常种草7项 + 医生专家4项考核） · 全店GMV包含自然流量与跨渠道成交，不作直接ROI；站外活跃UV为小红星30天后验归因
+            </span>
           </div>
 
         {/* Global Key Metrics Strip */}
@@ -831,13 +826,13 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           </div>
         </details>
 
-        {/* 次级分析折叠 2：达人选号淘汰漏斗与三甲医生专家矩阵 */}
+        {/* 次级分析折叠 2：达人选号淘汰漏斗 */}
         <details className="wipes-details-box wipes-secondary-section">
           <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
             <span className="ca-chapter-num">05</span>
-            <span>展开查看次级分析：达人选号全流程淘汰漏斗与三甲医生专家背书候选池</span>
+            <span>展开查看次级分析：达人选号全流程淘汰漏斗与合作推进明细</span>
           </summary>
-          <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
+          <div style={{ marginTop: '14px' }}>
             {/* Panel 13: Creator Selection Funnel */}
         <ChartPanel
           title="达人选号全流程淘汰漏斗与未合作原因分布"
@@ -899,6 +894,16 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             </table>
           </details>
         </ChartPanel>
+          </div>
+        </details>
+
+        {/* 次级分析折叠 3：三甲医生专家背书候选池 */}
+        <details className="wipes-details-box wipes-secondary-section">
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="ca-chapter-num">06</span>
+            <span>展开查看次级分析：三甲医院医生专家背书候选池与授权边界质检</span>
+          </summary>
+          <div style={{ marginTop: '14px' }}>
             {/* Panel 14: Doctor Hospital Pool */}
         <ChartPanel
           title="三甲医院医生专家背书候选池与授权边界质检"
@@ -955,10 +960,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           </div>
         </details>
 
-        {/* 次级分析折叠 3：商业投放笔记卡审质检跟踪 */}
+        {/* 次级分析折叠 4：商业投放笔记卡审质检跟踪 */}
         <details className="wipes-details-box wipes-secondary-section">
           <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span className="ca-chapter-num">06</span>
+            <span className="ca-chapter-num">07</span>
             <span>展开查看次级分析：商业投放笔记卡审合规质检与过审响应跟踪（9大高频问题规范）</span>
           </summary>
           <div style={{ marginTop: '14px' }}>
@@ -1202,36 +1207,51 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
           title="广告投放版位（视频内流 vs 搜索推广 vs 信息流推广）对比"
           subtitle="视频内流转化效率最优(CPUV ¥4.83)，搜索推广曝光成本最低(CPM ¥42.83)，信息流定向精准"
         >
-          <table className="wipes-summary-table">
-            <thead>
-              <tr>
-                <th>版位类型</th>
-                <th>消耗金额</th>
-                <th>展现量</th>
-                <th>点击量</th>
-                <th>互动量</th>
-                <th>归因活跃UV</th>
-                <th>CPM (元)</th>
-                <th>CTR (%)</th>
-                <th>CPUV (元)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {placementRows.map((p, i) => (
-                <tr key={i}>
-                  <td><strong>{String(p.placement ?? '')}</strong></td>
-                  <td>¥{fmtComboNum(p.spend)}</td>
-                  <td>{fmtComboNum(p.impressions)}</td>
-                  <td>{fmtComboNum(p.clicks)}</td>
-                  <td>{fmtComboNum(p.interactions)}</td>
-                  <td>{fmtComboNum(p.uv)}</td>
-                  <td>¥{String(p.cpm ?? '--')}</td>
-                  <td>{String(p.ctr ?? '--')}%</td>
-                  <td><span className="wipes-kpi-badge surpassed">¥{String(p.cpuv ?? '--')}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {(() => {
+            const totPlacementSpend = placementRows.reduce((acc, r) => acc + (Number(r.spend) || 0), 0) || 1;
+            const totPlacementUv = placementRows.reduce((acc, r) => acc + (Number(r.uv) || 0), 0) || 1;
+
+            const summaryItems = [
+              { label: '版位总消耗', value: `¥${fmtComboNum(totPlacementSpend)}` },
+              { label: '全版位归因总UV', value: `${fmtComboNum(totPlacementUv)}` },
+            ];
+
+            const deckItems: ComparisonDeckItem[] = placementRows.map((p, i) => {
+              const sp = Number(p.spend) || 0;
+              const uv = Number(p.uv) || 0;
+              const spPct = (sp / totPlacementSpend) * 100;
+              const uvPct = (uv / totPlacementUv) * 100;
+
+              return {
+                id: String(i),
+                badge: `0${i + 1}`,
+                title: String(p.placement ?? '—'),
+                statusText: i === 0 ? '转化最优' : i === 1 ? '曝光最优' : '定向精准',
+                statusTone: 'ok',
+                highlightBadge: `CPUV ¥${p.cpuv ?? '--'}`,
+                metrics: [
+                  { label: '消耗金额', value: `¥${fmtComboNum(p.spend)}` },
+                  { label: '展现 / 点击', value: `${fmtComboNum(p.impressions)} / ${fmtComboNum(p.clicks)}` },
+                  { label: '互动 / 归因UV', value: `${fmtComboNum(p.interactions)} / ${fmtComboNum(p.uv)}` },
+                  { label: 'CPM / CTR', value: `¥${p.cpm ?? '--'} / ${p.ctr ?? '--'}%` },
+                ],
+                bars: [
+                  {
+                    label: '消耗占比',
+                    rightLabel: `${spPct.toFixed(1)}%`,
+                    segments: [{ pct: spPct, color: '#0F5E52', title: `消耗: ¥${fmtComboNum(p.spend)}` }],
+                  },
+                  {
+                    label: '归因UV贡献',
+                    rightLabel: `${uvPct.toFixed(1)}%`,
+                    segments: [{ pct: uvPct, color: '#2E6F8E', title: `归因UV: ${fmtComboNum(p.uv)}` }],
+                  },
+                ],
+              };
+            });
+
+            return <MultiDimensionComparisonDeck summaryItems={summaryItems} items={deckItems} />;
+          })()}
         </ChartPanel>
         </div>
       </div>

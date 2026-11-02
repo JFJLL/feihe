@@ -3863,3 +3863,275 @@ export function CapabilityRadarChart({
     </div>
   );
 }
+
+export interface ComparisonDeckItem {
+  id?: string;
+  badge?: string;
+  title: string;
+  subtitle?: string;
+  statusText?: string;
+  statusTone?: 'ok' | 'warn' | 'danger' | 'neutral';
+  highlightBadge?: string;
+  metrics: Array<{ label: string; value: string; color?: string }>;
+  bars?: Array<{
+    label: string;
+    rightLabel?: string;
+    segments: Array<{ pct: number; color: string; title?: string }>;
+  }>;
+  footerNote?: string;
+}
+
+export function MultiDimensionComparisonDeck({
+  summaryItems,
+  items,
+}: {
+  summaryItems?: Array<{ label: string; value: string }>;
+  items: ComparisonDeckItem[];
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 10 }}>
+      {summaryItems && summaryItems.length > 0 && (
+        <div
+          className="ca-chart-readout"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 8,
+            marginBottom: 2,
+          }}
+        >
+          {summaryItems.map((s, idx) => (
+            <span key={idx}>
+              {s.label}：<strong>{s.value}</strong>
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, justifyContent: 'space-between' }}>
+        {items.map((item, idx) => {
+          const tone = item.statusTone || 'neutral';
+          const toneStyle =
+            tone === 'ok'
+              ? { background: '#E8F5E9', color: '#0F5E52', border: '1px solid #A5D6A7' }
+              : tone === 'warn'
+              ? { background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }
+              : tone === 'danger'
+              ? { background: '#FBE8E2', color: '#D95D39', border: '1px solid #F3C3B5' }
+              : { background: 'rgba(0,0,0,0.05)', color: '#57534E', border: '1px solid var(--border-subtle, #E6E3DC)' };
+
+          const badgeText = item.badge ?? (idx < 9 ? `0${idx + 1}` : `${idx + 1}`);
+
+          return (
+            <div
+              key={item.id ?? idx}
+              className="mri-evo-card"
+              style={{
+                background: 'var(--bg-subtle, #FAF9F5)',
+                border: '1px solid var(--border-subtle, #E6E3DC)',
+                borderRadius: 10,
+                padding: '10px 14px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 7,
+              }}
+            >
+              {/* Header row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                  {badgeText && (
+                    <span
+                      className="ca-chapter-num"
+                      style={{ width: 22, height: 22, fontSize: 11, borderRadius: 5, flexShrink: 0 }}
+                    >
+                      {badgeText}
+                    </span>
+                  )}
+                  <strong style={{ fontSize: 13, color: '#1C2024', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {item.title}
+                  </strong>
+                  {item.subtitle && (
+                    <span
+                      style={{
+                        fontSize: 11,
+                        padding: '1px 7px',
+                        borderRadius: 4,
+                        background: 'rgba(0,0,0,0.05)',
+                        color: '#57534E',
+                        fontFamily: 'var(--font-mono, monospace)',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                      }}
+                    >
+                      {item.subtitle}
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                  {item.statusText && (
+                    <span
+                      style={{
+                        padding: '2px 8px',
+                        borderRadius: 4,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap',
+                        ...toneStyle,
+                      }}
+                    >
+                      {item.statusText}
+                    </span>
+                  )}
+                  {item.highlightBadge && (
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono, monospace)',
+                        fontWeight: 700,
+                        fontSize: 11,
+                        color: '#1C2024',
+                        background: '#FFFFFF',
+                        padding: '2px 8px',
+                        borderRadius: 4,
+                        border: '0.5px solid var(--border-subtle, #E6E3DC)',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {item.highlightBadge}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Metrics grid */}
+              {item.metrics.length > 0 && (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(${Math.min(4, Math.max(1, item.metrics.length))}, minmax(0, 1fr))`,
+                    gap: 8,
+                  }}
+                >
+                  {item.metrics.map((m, mIdx) => (
+                    <div
+                      key={mIdx}
+                      style={{
+                        background: '#FFFFFF',
+                        border: '1px solid var(--border-subtle, #E6E3DC)',
+                        borderRadius: 6,
+                        padding: '5px 8px',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                      }}
+                    >
+                      <span style={{ fontSize: 10, color: '#78716C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {m.label}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 11.5,
+                          fontWeight: 700,
+                          color: m.color || '#1C2024',
+                          fontFamily: 'var(--font-mono, monospace)',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {m.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Bars grid */}
+              {item.bars && item.bars.length > 0 && (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(${item.bars.length}, minmax(0, 1fr))`,
+                    gap: 10,
+                  }}
+                >
+                  {item.bars.map((b, bIdx) => (
+                    <div key={bIdx} style={{ display: 'flex', flexDirection: 'column', gap: 4, overflow: 'hidden' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          fontSize: 10,
+                          color: '#78716C',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.label}</span>
+                        {b.rightLabel && (
+                          <span style={{ fontFamily: 'var(--font-mono, monospace)', flexShrink: 0, marginLeft: 4 }}>
+                            {b.rightLabel}
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          height: 6,
+                          background: 'rgba(0,0,0,0.06)',
+                          borderRadius: 3,
+                          overflow: 'hidden',
+                          display: 'flex',
+                          width: '100%',
+                        }}
+                      >
+                        {b.segments.map((seg, sIdx) => (
+                          <div
+                            key={sIdx}
+                            style={{
+                              width: `${Math.min(100, Math.max(0, seg.pct))}%`,
+                              background: seg.color,
+                              height: '100%',
+                            }}
+                            title={seg.title}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Footer note */}
+              {item.footerNote && (
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: '#44403C',
+                    background: 'rgba(255,255,255,0.7)',
+                    border: '0.5px solid var(--border-subtle, #E6E3DC)',
+                    padding: '5px 8px',
+                    borderRadius: 6,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <span>🎯</span>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.footerNote}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

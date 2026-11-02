@@ -18,6 +18,8 @@ import {
   type MatrixHeatmapCell,
   type StackedBarRow,
   type StackedBarSegment,
+  MultiDimensionComparisonDeck,
+  type ComparisonDeckItem,
 } from './CampaignCharts';
 import { CampaignComboChart, type ComboSeries } from './CampaignComboChart';
 import './meiling-rich-insights.css';
@@ -673,352 +675,85 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
     const sumCand = rows.reduce((acc, r) => acc + (parseNum(r.candidate_kols) || 0), 0);
     const sumConf = rows.reduce((acc, r) => acc + (parseNum(r.confirmed_kols) || 0), 0);
 
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 10 }}>
-        <div
-          className="ca-chart-readout"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 8,
-            marginBottom: 2,
-          }}
-        >
-          <span>
-            跨期总投入合计：<strong>¥{formatMoneyWan(sumSpend)}</strong>
-          </span>
-          <span>
-            跨期累计实现GMV：<strong>¥{formatMoneyWan(sumGmv)}</strong>
-          </span>
-          <span>
-            达人合作累计：<strong>候选 {sumCand}位 / 确认 {sumConf}位</strong>
-          </span>
-        </div>
+    const summaryItems = [
+      { label: '跨期总投入合计', value: `¥${formatMoneyWan(sumSpend)}` },
+      { label: '跨期累计实现GMV', value: `¥${formatMoneyWan(sumGmv)}` },
+      { label: '达人合作累计', value: `候选 ${sumCand}位 / 确认 ${sumConf}位` },
+    ];
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, justifyContent: 'space-between' }}>
-          {rows.map((r, i) => {
-            const kSp = parseNum(r.k_spend) || 0;
-            const fsSp = parseNum(r.fs_spend) || 0;
-            const totSp = parseNum(r.total_spend) || (kSp + fsSp);
-            const gmvVal = parseNum(r.gmv) || 0;
-            const kPct = Math.min(100, Math.max(0, (kSp / maxSpend) * 100));
-            const fsPct = Math.min(100 - kPct, Math.max(0, (fsSp / maxSpend) * 100));
-            const totPct = Math.min(100, Math.max(0, (totSp / maxSpend) * 100));
-            const gmvPct = Math.min(100, Math.max(0, (gmvVal / maxGmv) * 100));
+    const items: ComparisonDeckItem[] = rows.map((r, i) => {
+      const kSp = parseNum(r.k_spend) || 0;
+      const fsSp = parseNum(r.fs_spend) || 0;
+      const totSp = parseNum(r.total_spend) || (kSp + fsSp);
+      const gmvVal = parseNum(r.gmv) || 0;
+      const kPct = Math.min(100, Math.max(0, (kSp / maxSpend) * 100));
+      const fsPct = Math.min(100 - kPct, Math.max(0, (fsSp / maxSpend) * 100));
+      const totPct = Math.min(100, Math.max(0, (totSp / maxSpend) * 100));
+      const gmvPct = Math.min(100, Math.max(0, (gmvVal / maxGmv) * 100));
 
-            const isSettled = String(r.status) === '已结案';
-            const roiBadgeText =
+      const isSettled = String(r.status) === '已结案';
+      const roiBadgeText =
+        r.overall_roi !== null && r.overall_roi !== undefined
+          ? `全案 ROI ${Number(r.overall_roi).toFixed(2)}`
+          : r.fs_roi !== null && r.fs_roi !== undefined
+          ? `纯FS ROI ${Number(r.fs_roi).toFixed(2)}`
+          : '—';
+
+      return {
+        id: String(i),
+        badge: `0${i + 1}`,
+        title: String(r.campaign || '—'),
+        subtitle: String(r.period || '—'),
+        statusText: String(r.status || (isSettled ? '已结案' : '进行中')),
+        statusTone: isSettled ? 'ok' : 'danger',
+        highlightBadge: roiBadgeText,
+        metrics: [
+          {
+            label: '达人选号漏斗',
+            value: `${(r.candidate_kols as any) ?? '—'}/${(r.confirmed_kols as any) ?? '—'}位 (${(r.published_posts as any) ?? '—'}篇)`,
+          },
+          {
+            label: 'K+FS总投入',
+            value: `¥${formatMoneyWan(totSp)}`,
+          },
+          {
+            label: '实现GMV',
+            value: `¥${formatMoneyWan(gmvVal)}`,
+            color: '#D95D39',
+          },
+          {
+            label: 'ROI效能',
+            value:
               r.overall_roi !== null && r.overall_roi !== undefined
-                ? `全案 ROI ${Number(r.overall_roi).toFixed(2)}`
+                ? `全案 ${Number(r.overall_roi).toFixed(2)}x`
                 : r.fs_roi !== null && r.fs_roi !== undefined
-                ? `纯FS ROI ${Number(r.fs_roi).toFixed(2)}`
-                : '—';
+                ? `纯FS ${Number(r.fs_roi).toFixed(2)}x`
+                : '—',
+            color: '#0F5E52',
+          },
+        ],
+        bars: [
+          {
+            label: `投入结构：K达人 ¥${formatMoneyWan(kSp)} + FS投流 ¥${formatMoneyWan(fsSp)}`,
+            rightLabel: `占跨期峰值 ${totPct.toFixed(1)}%`,
+            segments: [
+              { pct: kPct, color: '#0F5E52', title: `K端达人: ¥${formatMoneyWan(kSp)}` },
+              { pct: fsPct, color: '#2E6F8E', title: `FS投流: ¥${formatMoneyWan(fsSp)}` },
+            ],
+          },
+          {
+            label: `GMV实现：¥${formatMoneyWan(gmvVal)}`,
+            rightLabel: `占跨期峰值 ${gmvPct.toFixed(1)}%`,
+            segments: [
+              { pct: gmvPct, color: '#D95D39', title: `实现GMV: ¥${formatMoneyWan(gmvVal)}` },
+            ],
+          },
+        ],
+        footerNote: r.milestone ? `核心里程碑：${String(r.milestone)}` : undefined,
+      };
+    });
 
-            return (
-              <div
-                key={i}
-                className="mri-evo-card"
-                style={{
-                  background: 'var(--bg-subtle, #F3F0E6)',
-                  border: '1px solid var(--border-subtle, #DBD5C8)',
-                  borderRadius: 10,
-                  padding: '11px 14px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 8,
-                }}
-              >
-                {/* Row 1: Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                    <span
-                      className="ca-chapter-num"
-                      style={{ width: 22, height: 22, fontSize: 11, borderRadius: 5 }}
-                    >
-                      0{i + 1}
-                    </span>
-                    <strong style={{ fontSize: 13, color: '#1C2024' }}>{String(r.campaign || '—')}</strong>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        padding: '1px 7px',
-                        borderRadius: 4,
-                        background: 'rgba(0,0,0,0.05)',
-                        color: '#57534E',
-                        fontFamily: 'var(--font-mono, monospace)',
-                      }}
-                    >
-                      {String(r.period || '—')}
-                    </span>
-                  </div>
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                    <span
-                      className={`mri-tag ${isSettled ? 'core' : 'steady'}`}
-                      style={{
-                        padding: '2px 8px',
-                        borderRadius: 4,
-                        fontSize: 11,
-                        fontWeight: 600,
-                        background: isSettled ? '#E8F5E9' : '#FBE8E2',
-                        color: isSettled ? '#0F5E52' : '#D95D39',
-                        border: isSettled ? '1px solid #A5D6A7' : '1px solid #F3C3B5',
-                      }}
-                    >
-                      {String(r.status || (isSettled ? '已结案' : '进行中'))}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono, monospace)',
-                        fontWeight: 700,
-                        fontSize: 11,
-                        color: '#1C2024',
-                        background: '#FFFFFF',
-                        padding: '2px 8px',
-                        borderRadius: 4,
-                        border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      }}
-                    >
-                      {roiBadgeText}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Row 2: 4-Column Compact Metrics Grid */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-                    gap: 8,
-                  }}
-                >
-                  <div
-                    style={{
-                      background: '#FFFFFF',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 8px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>达人选号漏斗</span>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: '#1C2024',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {(r.candidate_kols as any) ?? '—'}/{(r.confirmed_kols as any) ?? '—'}位 ({(r.published_posts as any) ?? '—'}篇)
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      background: '#FFFFFF',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 8px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>K+FS总投入</span>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: '#1C2024',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      ¥{formatMoneyWan(totSp)}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      background: '#FFFFFF',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 8px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>实现GMV</span>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: '#D95D39',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      ¥{formatMoneyWan(gmvVal)}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      background: '#FFFFFF',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 8px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>ROI效能</span>
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: '#0F5E52',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {r.overall_roi !== null && r.overall_roi !== undefined
-                        ? `全案 ${Number(r.overall_roi).toFixed(2)}x`
-                        : r.fs_roi !== null && r.fs_roi !== undefined
-                        ? `纯FS ${Number(r.fs_roi).toFixed(2)}x`
-                        : '—'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Row 3: Dual Proportional Visual Bars (Side-by-side 2-column grid) */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-                    gap: 10,
-                  }}
-                >
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, overflow: 'hidden' }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: 10,
-                        color: '#78716C',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        投入结构：<strong style={{ color: '#0F5E52' }}>K达人 ¥{formatMoneyWan(kSp)}</strong> + <strong style={{ color: '#2E6F8E' }}>FS投流 ¥{formatMoneyWan(fsSp)}</strong>
-                      </span>
-                      <span style={{ fontFamily: 'var(--font-mono, monospace)', flexShrink: 0, marginLeft: 4 }}>
-                        占跨期峰值 {totPct.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        height: 7,
-                        background: 'rgba(0,0,0,0.06)',
-                        borderRadius: 4,
-                        overflow: 'hidden',
-                        display: 'flex',
-                        width: '100%',
-                      }}
-                    >
-                      <div style={{ width: `${kPct}%`, background: '#0F5E52', height: '100%' }} title={`K端达人: ¥${formatMoneyWan(kSp)}`} />
-                      <div style={{ width: `${fsPct}%`, background: '#2E6F8E', height: '100%' }} title={`FS投流: ¥${formatMoneyWan(fsSp)}`} />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, overflow: 'hidden' }}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: 10,
-                        color: '#78716C',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        GMV实现：<strong style={{ color: '#D95D39' }}>¥{formatMoneyWan(gmvVal)}</strong>
-                      </span>
-                      <span style={{ fontFamily: 'var(--font-mono, monospace)', flexShrink: 0, marginLeft: 4 }}>
-                        占跨期峰值 {gmvPct.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        height: 7,
-                        background: 'rgba(0,0,0,0.06)',
-                        borderRadius: 4,
-                        overflow: 'hidden',
-                        width: '100%',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: `${gmvPct}%`,
-                          background: '#D95D39',
-                          height: '100%',
-                          borderRadius: 4,
-                        }}
-                        title={`实现GMV: ¥${formatMoneyWan(gmvVal)}`}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Row 4: Milestone Footer */}
-                <div
-                  style={{
-                    fontSize: 11,
-                    color: '#44403C',
-                    background: 'rgba(255,255,255,0.7)',
-                    border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                    padding: '5px 8px',
-                    borderRadius: 6,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6,
-                  }}
-                >
-                  <span>🎯</span>
-                  <span><strong>核心里程碑：</strong>{String(r.milestone || '—')}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
+    return <MultiDimensionComparisonDeck summaryItems={summaryItems} items={items} />;
   };
 
   // --------------------------------------------------------------------------
@@ -1032,7 +767,7 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
         <section className="mri-group">
           <div className="mri-group-header">
             <div className="mri-group-title-wrap">
-              <span className="ca-chapter-num">02</span>
+              <span className="ca-chapter-num">03</span>
               <h3 className="mri-group-title">2026年618大促全案采买结构与ROI复盘</h3>
             </div>
             <p className="mri-group-desc">
@@ -1190,93 +925,6 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
                   xKey="line"
                   height={310}
                 />
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-                    gap: 8,
-                    marginTop: 10,
-                  }}
-                >
-                  <div
-                    style={{
-                      background: 'var(--bg-subtle, #F3F0E6)',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 10px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>10线累计消耗</span>
-                    <span
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: '#0F5E52',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      ¥{formatMoneyWan(multiLineTotals.sumSpend)}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      background: 'var(--bg-subtle, #F3F0E6)',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 10px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>累计回传进店</span>
-                    <span
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: '#2E6F8E',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {formatNum(multiLineTotals.sumUv, 0)} UV
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      background: 'var(--bg-subtle, #F3F0E6)',
-                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
-                      borderRadius: 6,
-                      padding: '6px 10px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 2,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: '#78716C' }}>综合进店CPUV</span>
-                    <span
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: '#1C2024',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      ¥{multiLineTotals.sumUv > 0 ? (multiLineTotals.sumSpend / multiLineTotals.sumUv).toFixed(2) : '—'}
-                    </span>
-                  </div>
-                </div>
 
               </ChartPanel>
 

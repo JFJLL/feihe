@@ -78,6 +78,21 @@ export function fmtComboNum(val: unknown, maxDigits = 2): string {
   return num.toLocaleString('zh-CN', { maximumFractionDigits: maxDigits });
 }
 
+export function formatCompact(val: number | null | undefined): string {
+  if (val === null || val === undefined || !Number.isFinite(val)) return '—';
+  const abs = Math.abs(val);
+  if (abs >= 100000000) {
+    return (val / 100000000).toFixed(2) + '亿';
+  }
+  if (abs >= 10000) {
+    return (val / 10000).toFixed(1) + '万';
+  }
+  if (abs >= 1000) {
+    return Number(val.toFixed(1)).toLocaleString('zh-CN');
+  }
+  return Number(val.toFixed(2)).toString();
+}
+
 export function fmtXAxisTick(val: unknown): string {
   if (val === null || val === undefined) return '';
   const str = String(val).trim();
@@ -308,6 +323,69 @@ export function CampaignComboChart({
       return next;
     });
   };
+
+  // Auto summary strip computations
+  const autoSummary = useMemo(() => {
+    if (!rows || rows.length < 2 || !series || series.length < 1) return null;
+
+    const s0 = series[0];
+    const s1 = series[1];
+
+    let s0Sum = 0;
+    let s0Count = 0;
+    let peakIdx = 0;
+    let peakVal = -Infinity;
+
+    rows.forEach((r, idx) => {
+      const v = Number(r[s0.key]);
+      if (Number.isFinite(v)) {
+        s0Sum += v;
+        s0Count++;
+        if (v > peakVal) {
+          peakVal = v;
+          peakIdx = idx;
+        }
+      }
+    });
+
+    const s0Avg = s0Count > 0 ? s0Sum / s0Count : 0;
+    const peakRow = rows[peakIdx] || {};
+    const peakRaw = peakRow[xKey];
+    const peakLabel = fmtXAxisTick(peakRaw) || String(peakRaw ?? '节点');
+    const isRatio0 = s0.unit === '%' || s0.unit === '倍' || s0.unit === 'x';
+
+    let s1Summary: { avg: number; max: number } | null = null;
+    if (s1) {
+      let s1Sum = 0;
+      let s1Count = 0;
+      let s1Max = -Infinity;
+      rows.forEach((r) => {
+        const v = Number(r[s1.key]);
+        if (Number.isFinite(v)) {
+          s1Sum += v;
+          s1Count++;
+          if (v > s1Max) s1Max = v;
+        }
+      });
+      if (s1Count > 0) {
+        s1Summary = {
+          avg: s1Sum / s1Count,
+          max: s1Max === -Infinity ? 0 : s1Max,
+        };
+      }
+    }
+
+    return {
+      s0,
+      s0Sum,
+      s0Avg,
+      isRatio0,
+      peakLabel,
+      peakVal: peakVal === -Infinity ? 0 : peakVal,
+      s1,
+      s1Summary,
+    };
+  }, [rows, series, xKey]);
 
   // Measure actual container width via ResizeObserver so SVG text is 1:1 crisp
   useEffect(() => {
@@ -1122,6 +1200,118 @@ export function CampaignComboChart({
           </div>
         );})}
       </div>
+
+      {/* Universal Automatic 3-Column Summary Strip */}
+      {autoSummary && (
+        <div
+          className="cc-auto-summary-strip"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gap: 8,
+            marginTop: 10,
+            paddingTop: 10,
+            borderTop: '1px dashed var(--border-subtle, #E6E3DC)',
+          }}
+        >
+          {/* Card 1 */}
+          <div
+            style={{
+              background: 'var(--bg-subtle, #FAF9F5)',
+              border: '1px solid var(--border-subtle, #E6E3DC)',
+              borderRadius: 6,
+              padding: '6px 10px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <span style={{ fontSize: 10, color: '#78716C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {autoSummary.s0.label}合计 / 均值
+            </span>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: autoSummary.s0.color || '#0F5E52',
+                fontFamily: 'var(--font-mono, monospace)',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {autoSummary.isRatio0
+                ? `均值: ${formatCompact(autoSummary.s0Avg)}${autoSummary.s0.unit || ''}`
+                : `合计: ${formatCompact(autoSummary.s0Sum)}${autoSummary.s0.unit || ''} (均值 ${formatCompact(autoSummary.s0Avg)})`}
+            </span>
+          </div>
+
+          {/* Card 2 */}
+          <div
+            style={{
+              background: 'var(--bg-subtle, #FAF9F5)',
+              border: '1px solid var(--border-subtle, #E6E3DC)',
+              borderRadius: 6,
+              padding: '6px 10px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <span style={{ fontSize: 10, color: '#78716C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              峰值样本节点
+            </span>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: '#1C2024',
+                fontFamily: 'var(--font-mono, monospace)',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {`${autoSummary.peakLabel} · ${formatCompact(autoSummary.peakVal)}${autoSummary.s0.unit || ''}`}
+            </span>
+          </div>
+
+          {/* Card 3 */}
+          <div
+            style={{
+              background: 'var(--bg-subtle, #FAF9F5)',
+              border: '1px solid var(--border-subtle, #E6E3DC)',
+              borderRadius: 6,
+              padding: '6px 10px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <span style={{ fontSize: 10, color: '#78716C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {autoSummary.s1 ? `${autoSummary.s1.label}表现` : '有效观测样本'}
+            </span>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                color: autoSummary.s1 ? (autoSummary.s1.color || '#2E6F8E') : '#1C2024',
+                fontFamily: 'var(--font-mono, monospace)',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {autoSummary.s1 && autoSummary.s1Summary
+                ? `均值 ${formatCompact(autoSummary.s1Summary.avg)}${autoSummary.s1.unit || ''} · 峰值 ${formatCompact(autoSummary.s1Summary.max)}${autoSummary.s1.unit || ''}`
+                : `共 ${rows.length} 组数据`}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

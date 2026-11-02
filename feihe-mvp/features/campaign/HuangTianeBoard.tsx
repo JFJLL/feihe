@@ -26,6 +26,8 @@ import {
   type MetricStripItem,
   type FunnelStageDatum,
   type MatrixHeatmapCell,
+  MultiDimensionComparisonDeck,
+  type ComparisonDeckItem,
 } from './CampaignCharts';
 import { CampaignComboChart, type ComboSeries } from './CampaignComboChart';
 import {
@@ -1194,28 +1196,51 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 title="定档达人 内容方向与食谱场景"
                 subtitle="基于达人执行底表真实统计 / 场景代入与溏心蛋教程为两大主力方向"
               >
-                <div className="ht-table-wrap">
-                  <table className="ht-table">
-                    <thead>
-                      <tr>
-                        <th>食谱方向 / 场景</th>
-                        <th>计划定档</th>
-                        <th>已发布上线</th>
-                        <th>上线率</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {model.creatorDirectionBreakdown.slice(0, 6).map((d) => (
-                        <tr key={d.direction}>
-                          <td style={{ fontWeight: 600 }}>{d.direction}</td>
-                          <td>{d.total} 位</td>
-                          <td>{d.published} 篇</td>
-                          <td>{d.total > 0 ? ((d.published / d.total) * 100).toFixed(1) + '%' : '—'}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                {(() => {
+                  const dirSlice = model.creatorDirectionBreakdown.slice(0, 5);
+                  const totalPlanned = dirSlice.reduce((acc, d) => acc + d.total, 0);
+                  const totalPublished = dirSlice.reduce((acc, d) => acc + d.published, 0);
+
+                  const summaryItems = [
+                    { label: 'TOP5方向计划定档', value: `${totalPlanned} 位` },
+                    {
+                      label: 'TOP5方向已发布上线',
+                      value: `${totalPublished} 篇 (上线率 ${totalPlanned > 0 ? ((totalPublished / totalPlanned) * 100).toFixed(1) : '0.0'}%)`,
+                    },
+                  ];
+
+                  const deckItems: ComparisonDeckItem[] = dirSlice.map((d, idx) => {
+                    const rate = d.total > 0 ? ((d.published / d.total) * 100).toFixed(1) : '0.0';
+                    const pubPct = d.total > 0 ? (d.published / d.total) * 100 : 0;
+                    const isAllDone = d.total > 0 && d.published >= d.total;
+
+                    return {
+                      id: d.direction,
+                      badge: `0${idx + 1}`,
+                      title: d.direction,
+                      statusText: isAllDone ? '全量已上线' : d.published > 0 ? '发布推进中' : '筹备待发',
+                      statusTone: isAllDone ? 'ok' : d.published > 0 ? 'warn' : 'neutral',
+                      highlightBadge: `上线率 ${rate}%`,
+                      metrics: [
+                        { label: '计划定档', value: `${d.total} 位` },
+                        { label: '已发布上线', value: `${d.published} 篇`, color: '#0F5E52' },
+                        { label: '待发布储备', value: `${Math.max(0, d.total - d.published)} 篇`, color: '#D95D39' },
+                      ],
+                      bars: [
+                        {
+                          label: '上线完成进度',
+                          rightLabel: `${d.published}/${d.total} 篇 (${rate}%)`,
+                          segments: [
+                            { pct: pubPct, color: '#0F5E52', title: `已上线: ${d.published} 篇` },
+                            { pct: Math.max(0, 100 - pubPct), color: '#E6E3DC', title: `待发布: ${Math.max(0, d.total - d.published)} 篇` },
+                          ],
+                        },
+                      ],
+                    };
+                  });
+
+                  return <MultiDimensionComparisonDeck summaryItems={summaryItems} items={deckItems} />;
+                })()}
               </ChartPanel>
             </div>
           </div>

@@ -248,19 +248,20 @@
    EDITORIAL LIGHT PALETTE SYSTEM (Botanical / Terracotta / Nordic)
    ========================================================================== */
 :root, [data-palette="botanical"] {
-  --bg-canvas: #EFECE4;
-  --bg-macro: #F7F5EE;
+  --bg-canvas: #F5F4EE;
+  --bg-macro: #FAF9F5;
   --bg-surface: #FFFFFF;
-  --bg-subtle: #F3F0E6;
-  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-subtle: #FAF9F5;
+  --bg-hover: #F0EFE9;
+  --bg-glass: rgba(255, 255, 255, 0.90);
 
   --text-primary: #1C1917;
   --text-secondary: #57534E;
   --text-muted: #8A847C;
 
-  --border-macro: #D5CFC2;
-  --border-subtle: #DBD5C8;
-  --border-focus: #C4BDB0;
+  --border-macro: #E6E3DC;
+  --border-subtle: #E6E3DC;
+  --border-focus: #D4CFC5;
   --border-brand: rgba(15, 94, 82, 0.28);
 
   /* 核心业务色板：深松石绿 + 赤陶暖橘 + 矿石钢青 + 琥珀麦金 */
@@ -309,12 +310,12 @@
 
 /* 浅色色板 2：财经社论 (丹砂红 + 矿石蓝) */
 [data-palette="terracotta"] {
-  --bg-canvas: #F1ECE4;
-  --bg-macro: #F8F5F0;
+  --bg-canvas: #F7F3EE;
+  --bg-macro: #FBF9F6;
   --bg-surface: #FFFFFF;
-  --bg-subtle: #F4EFE8;
-  --border-macro: #D8CFC2;
-  --border-subtle: #DFD7CB;
+  --bg-subtle: #FBF9F6;
+  --border-macro: #E8E1D7;
+  --border-subtle: #E8E1D7;
   --border-focus: #D5CBBF;
   --border-brand: rgba(200, 75, 49, 0.25);
 
@@ -352,12 +353,12 @@
 
 /* 浅色色板 3：北欧矿石 (深海青 + 鼠尾草) */
 [data-palette="nordic"] {
-  --bg-canvas: #EAEFF1;
-  --bg-macro: #F4F7F8;
+  --bg-canvas: #F2F5F6;
+  --bg-macro: #F8FAFA;
   --bg-surface: #FFFFFF;
-  --bg-subtle: #EEF2F4;
-  --border-macro: #CBD5DA;
-  --border-subtle: #D5DFE4;
+  --bg-subtle: #F8FAFA;
+  --border-macro: #DCE3E6;
+  --border-subtle: #DCE3E6;
   --border-focus: #C6D1D6;
   --border-brand: rgba(27, 73, 101, 0.25);
 
@@ -1381,6 +1382,35 @@ svg[aria-label^="散点相关图"] circle:hover,
 /* ==========================================================================
    SEAMLESS GLOBAL CANVAS, 4-TIER VISUAL HIERARCHY & UNIFORM 16PX GAPS
    ========================================================================== */
+:root,
+[data-palette="botanical"],
+html[data-palette="botanical"] {
+  --bg-canvas: #F5F4EE;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #FAF9F5;
+  --bg-hover: #F0EFE9;
+  --border-subtle: #E6E3DC;
+  --border-focus: #D4CFC5;
+}
+
+[data-palette="terracotta"],
+html[data-palette="terracotta"] {
+  --bg-canvas: #F7F3EE;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #FBF9F6;
+  --border-subtle: #E8E1D7;
+  --border-focus: #D5CBBF;
+}
+
+[data-palette="nordic"],
+html[data-palette="nordic"] {
+  --bg-canvas: #F2F5F6;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F8FAFA;
+  --border-subtle: #DCE3E6;
+  --border-focus: #C6D1D6;
+}
+
 html,
 html body,
 html body .app-shell,
@@ -1397,7 +1427,7 @@ html body .main:has([data-workspace-ui="v2"]),
 html body .dashboard-template,
 html body .overview-colorful-page,
 html body .campaign-dashboard-root {
-  background-color: var(--bg-canvas, #EFECE4) !important;
+  background-color: var(--bg-canvas, #F5F4EE) !important;
   color: var(--text-primary, #1C1917);
 }
 
@@ -1414,15 +1444,45 @@ html body [data-workspace-ui="v2"] {
 /* 2. 左侧工作台导航栏 (.sidebar) 与顶部页面头栏 (.ui-page-header / .dashboard-template-header / .v2-header) */
 html body .sidebar {
   background: #FFFFFF !important;
-  border-right: 1px solid var(--border-subtle, #DBD5C8) !important;
+  border-right: 1px solid var(--border-subtle, #E6E3DC) !important;
 }
 
-html body .sidebar .project-switcher,
+html body .sidebar .project-switcher {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF9F5 100%) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.04) !important;
+  padding: 10px 12px !important;
+}
+
+html body .sidebar .project-switcher .custom-select-trigger {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.03) !important;
+}
+
 html body .sidebar .back-platform,
+html body .sidebar .sidebar-toggle-btn {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  color: var(--text-secondary, #57534E) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.03) !important;
+}
+
+html body .sidebar .back-platform:hover,
+html body .sidebar .sidebar-toggle-btn:hover {
+  background: var(--brand-primary-soft, #EBF5F3) !important;
+  color: var(--brand-primary, #0F5E52) !important;
+  border-color: var(--border-brand, rgba(15, 94, 82, 0.25)) !important;
+}
+
+html body .sidebar .sidebar-foot,
 html body .sidebar .sidebar-footer {
-  background: var(--bg-subtle, #F3F0E6) !important;
-  border: 1px solid var(--border-subtle, #DBD5C8) !important;
-  border-radius: 10px !important;
+  background: #FAF9F5 !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 12px !important;
 }
 
 html body .sidebar .project-main-nav a.active,
@@ -1449,7 +1509,7 @@ html body .overview-colorful-page.reference-workspace .ui-page-header,
 html body [data-workspace-ui="v2"] .ui-page-header,
 html body .v2-header {
   background: linear-gradient(180deg, var(--brand-primary-soft, #EBF5F3) 0%, #FFFFFF 78%) !important;
-  border: 1px solid var(--border-subtle, #DBD5C8) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
   border-radius: 16px !important;
   padding: 16px 22px !important;
   box-shadow: var(--shadow-sm) !important;
@@ -1463,7 +1523,7 @@ html body .ht-section-jumpbar {
   background: rgba(255, 255, 255, 0.92) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid var(--border-subtle, #DBD5C8) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
   border-radius: 12px !important;
   box-shadow: var(--shadow-sm) !important;
 }
@@ -1471,8 +1531,8 @@ html body .ht-section-jumpbar {
 html body .ca-jump-pill,
 html body .bd-jump-pill,
 html body .ht-jump-pill {
-  background: var(--bg-subtle, #F3F0E6) !important;
-  border: 1px solid var(--border-subtle, #DBD5C8) !important;
+  background: var(--bg-subtle, #FAF9F5) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
   color: var(--text-secondary, #57534E) !important;
   border-radius: 6px !important;
 }
@@ -1488,55 +1548,126 @@ html body .bd-jump-num {
 }
 
 /* Tier 1: Macro Section Cards (大卡片) */
-html body .ca-section-macro-card,
+html body .ca-section-macro-card:not(.ca-panel),
 html body .bd-section-block,
 html body .mri-group,
 html body .kri-section:not(details),
 html body .wri-section:not(details),
 html body .wipes-section-wrap:not(details),
-html body .ht-layer:not(details),
-html body .v2-macro-card,
-html body .ops-section-card,
-html body .reference-section {
-  background: var(--bg-macro, #F7F5EE) !important;
-  border: 1px solid var(--border-macro, #D5CFC2) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 4px 14px -4px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04) !important;
+html body .ht-layer:not(details) {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+html body .mri-group:hover,
+html body .ca-section-macro-card:not(.ca-panel):hover {
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* Tier 2: Macro Card Header Band */
+html body .ca-chapter-header,
 html body .ca-section-macro-card > .ca-chapter-header,
+html body .bd-section-header,
 html body .bd-section-block > .bd-section-header,
 html body .bd-section-block > .ca-chapter-header,
-html body .kri-section-header,
 html body .mri-group-header,
-html body .wri-section-header,
-html body .wipes-section-header,
-html body .ht-layer-header {
-  background: linear-gradient(180deg, rgba(235, 231, 220, 0.65) 0%, var(--bg-macro, #F7F5EE) 100%) !important;
-  border-bottom: 1px solid var(--border-macro, #D5CFC2) !important;
+html body .kri-section-header:not(summary),
+html body .wri-section-header:not(summary),
+html body .wipes-section-header:not(summary),
+html body .ht-layer-header:not(summary) {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 8px 0 10px 0 !important;
+  margin: 4px 0 0 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
 }
 
+/* Unified 26x26 Solid Brand Badge on All Chapter Headers */
 html body .ca-chapter-badge,
 html body .ca-chapter-num,
 html body .bd-section-num,
-html body .ht-layer-num {
+html body .ht-layer-num,
+html body .kri-section-pill,
+html body .kri-badge,
+html body .mri-group-badge,
+html body .wri-badge {
   width: 26px !important;
   height: 26px !important;
   min-width: 26px !important;
-  padding: 0 !important;
+  padding: 0 6px !important;
   border-radius: 6px !important;
   background: var(--brand-primary, #0F5E52) !important;
   color: #FFFFFF !important;
-  font-family: var(--font-mono, 'JetBrains Mono', 'DIN Alternate', monospace) !important;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
   font-size: 12.5px !important;
   font-weight: 800 !important;
-  display: inline-grid !important;
-  place-items: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border: none !important;
+  box-shadow: 0 2px 5px rgba(15, 94, 82, 0.18) !important;
 }
 
-/* Tier 3: Inner Bento Cards / Chart Panels / KPI Cards (小卡片) */
+/* Unified 18px Bold Chapter Title Across All Sections & Projects (Fixes Comment 6) */
+html body .ca-chapter-title,
+html body .ca-section-macro-card .ca-chapter-title,
+html body .bd-section-title,
+html body .mri-group-title,
+html body .kri-section-title,
+html body .wri-section-title,
+html body .wipes-section-title,
+html body .ht-layer-title {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary, #1C1917) !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Unified 12.5px Muted Subtitle */
+html body .ca-chapter-desc,
+html body .bd-section-subtitle,
+html body .mri-group-desc,
+html body .kri-section-desc,
+html body .wri-section-desc,
+html body .ht-layer-desc {
+  font-size: 12.5px !important;
+  color: var(--text-muted, #8A847C) !important;
+  font-weight: 400 !important;
+  margin: 0 !important;
+}
+
+/* Style .ca-executive-strip as a Crisp #FFFFFF Bento Card */
+html body .ca-executive-strip {
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  box-shadow: var(--shadow-sm) !important;
+  margin: 0 !important;
+}
+
+/* Tier 3: Inner Bento Cards / Chart Panels / Single Section Panels / KPI Cards (小卡片) */
+html body .ca-panel.ca-section-macro-card,
+html body .ops-section-card,
+html body .reference-section,
+html body .v2-macro-card,
 html body .ca-section-macro-card .ca-panel,
 html body .ca-panel,
 html body .bd-panel,
@@ -1558,7 +1689,7 @@ html body .ops-metric-card,
 html body .rm-kpi-card,
 html body .rm-cluster-card {
   background: #FFFFFF !important;
-  border: 1px solid var(--border-subtle, #DBD5C8) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
   border-radius: 14px !important;
   box-shadow: 0 2px 8px -2px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -1601,8 +1732,8 @@ html body .kri-table th,
 html body .mri-audit-table th,
 html body .wipes-summary-table th,
 html body .ht-table th {
-  background-color: var(--bg-subtle, #F3F0E6) !important;
-  border-color: var(--border-subtle, #DBD5C8) !important;
+  background-color: var(--bg-subtle, #FAF9F5) !important;
+  border-color: var(--border-subtle, #E6E3DC) !important;
 }
 
 /* Strict 16px Uniform Card Spacing Across All 5 Projects */
@@ -1661,9 +1792,10 @@ html body details.ca-details-collapse,
 html body details.kri-section.kri-secondary,
 html body details.ca-daily-details-panel,
 html body details.ht-layer {
-  border: 1px solid var(--border-macro, #D5CFC2) !important;
-  background: var(--bg-macro, #F7F5EE) !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
   border-radius: 14px !important;
+  box-shadow: var(--shadow-xs) !important;
   min-height: 58px !important;
   padding: 0 !important;
   box-sizing: border-box !important;
@@ -1714,7 +1846,7 @@ html body .bd-kpi-card-rich[data-category],
 html body .ops-metric-card {
   --metric-cat-bg: #FFFFFF !important;
   background: #FFFFFF !important;
-  border: 1px solid var(--border-subtle, #DBD5C8) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
   border-radius: 14px !important;
   box-shadow: 0 2px 8px -2px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04) !important;
 }
@@ -1751,4 +1883,55 @@ html body .bd-kpi-card-rich:nth-child(4n+4) .bd-kpi-tag {
   border-color: rgba(217, 93, 57, 0.22) !important;
 }
 
-html body .rm-kpi-card, html body .rm-cluster-card { background: #FFFFFF !important; border: 1px solid var(--border-subtle, #DBD5C8) !important; border-radius: 14px !important; box-shadow: 0 2px 8px -2px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04) !important; }
+html body .rm-kpi-card, html body .rm-cluster-card { background: #FFFFFF !important; border: 1px solid var(--border-subtle, #E6E3DC) !important; border-radius: 14px !important; box-shadow: 0 2px 8px -2px rgba(28, 25, 23, 0.06), 0 1px 3px rgba(28, 25, 23, 0.04) !important; }
+
+:root,
+html,
+html body {
+  --teal-2: #FFFFFF !important;
+  --blue-2: #FFFFFF !important;
+  --iris-2: #FFFFFF !important;
+  --amber-2: #FFFFFF !important;
+}
+
+html body .ca-section-macro-card .ca-chapter-num,
+html body .ca-section-macro-card .ca-chapter-badge,
+html body .bd-section-block .ca-chapter-num,
+html body .bd-section-block .bd-section-num,
+html body .mri-group .ca-chapter-num,
+html body .kri-section .ca-chapter-num,
+html body .wri-section .ca-chapter-num {
+  background: var(--brand-primary, #0F5E52) !important;
+  color: #FFFFFF !important;
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  border-radius: 6px !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+html body .ca-section-macro-card .ca-metric-strip .ca-metric-item[data-category],
+html body .mri-group .ca-metric-strip .ca-metric-item[data-category],
+html body .kri-section .ca-metric-strip .ca-metric-item[data-category],
+html body .wri-section .ca-metric-strip .ca-metric-item[data-category],
+html body .wipes-section-wrap .ca-metric-strip .ca-metric-item[data-category],
+html body .ht-layer .ca-metric-strip .ca-metric-item[data-category] {
+  --metric-cat-bg: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+html body .ca-metric-strip .ca-metric-item:not([data-category]):nth-child(n),
+html body .ca-metric-strip .ca-metric-item[data-category]:nth-child(n) {
+  --metric-cat-bg: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+}

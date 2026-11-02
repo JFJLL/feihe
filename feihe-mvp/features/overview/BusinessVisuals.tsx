@@ -774,21 +774,7 @@ export function QicuiActionClosureLayer() {
   const doneCount = tasks.filter(t => t.done).length;
 
   return (
-    <div className="qicui-closure-section" style={{ marginTop: 20 }}>
-      <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', margin: '24px 0 14px', flexWrap: 'wrap', gap: 12 }}>
-        <div className="section-title-group" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span className="section-pill pill-l3" style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', padding: '4px 10px', borderRadius: 8, background: 'var(--status-success-bg, #ECFDF3)', color: 'var(--status-success, #15803D)' }}>
-            L3 · 闭环行动层
-          </span>
-          <h3 className="section-title" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary, #1C1917)', margin: 0 }}>
-            核心洞察复盘与 Next Step 重点推进事项
-          </h3>
-        </div>
-        <span className="section-subtitle" style={{ fontSize: 12, color: 'var(--text-muted, #8A847C)' }}>
-          支持勾选完成状态，将业务洞察直接转化为团队执行闭环
-        </span>
-      </div>
-
+    <div className="qicui-closure-section" style={{ margin: 0 }}>
       <div className="bento-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16 }}>
         <div className="bento-card col-6" style={{ gridColumn: 'span 6', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
           <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>

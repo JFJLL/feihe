@@ -946,7 +946,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           <div className='kri-section'>
             <div className='kri-section-header'>
               <div className='kri-section-title-wrap'>
-                <span className='kri-section-pill kri-pill-02'>02 · 预算与演进</span>
+                <span className='ca-chapter-num'>03</span>
                 <h3 className='kri-section-title'>全口径预算统筹与多阶段投放演进</h3>
               </div>
               <span className='kri-section-desc'>黑山Q3、EX330与跑山女孩预算执行结构与双周演进</span>
@@ -1139,7 +1139,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           <div className='kri-section'>
             <div className='kri-section-header'>
               <div className='kri-section-title-wrap'>
-                <span className='kri-section-pill kri-pill-03'>03 · 漏斗与双端归因</span>
+                <span className='ca-chapter-num'>04</span>
                 <h3 className='kri-section-title'>KFS全域流量转化漏斗与双端归因</h3>
               </div>
               <span className='kri-section-desc'>各项指标保留原表归因口径，拆解自然沉淀与商业投流协同效能</span>
@@ -1169,7 +1169,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           <div className='kri-section'>
             <div className='kri-section-header'>
               <div className='kri-section-title-wrap'>
-                <span className='kri-section-pill kri-pill-03b'>03B · 闭环行动层</span>
+                <span className='ca-chapter-num'>05</span>
                 <h3 className='kri-section-title'>阶段性策略复盘洞察 (Key Learnings) 与 Next Step 行动追踪</h3>
               </div>
               <span className='kri-section-desc'>支持按业务维度筛选行动待办，勾选即时同步完成归档状态</span>
@@ -1278,7 +1278,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           <details className="kri-section kri-secondary">
             <summary className="kri-summary-header">
               <span className="kri-summary-left">
-                <span className="kri-section-pill kri-pill-04">04 · 投流杠杆与诊断</span>
+                <span className="ca-chapter-num">06</span>
                 <span>笔记投流杠杆、Pareto 集中度与四象限散点诊断</span>
               </span>
             </summary>
@@ -1371,7 +1371,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           <details className="kri-section kri-secondary">
             <summary className="kri-summary-header">
               <span className="kri-summary-left">
-                <span className="kri-section-pill kri-pill-05">05 · 搜索与人群定向</span>
+                <span className="ca-chapter-num">07</span>
                 <span>搜索词类与精准人群定向引擎</span>
               </span>
             </summary>
@@ -1449,7 +1449,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
           <details className="kri-section kri-secondary">
             <summary className="kri-summary-header">
               <span className="kri-summary-left">
-                <span className="kri-section-pill kri-pill-06">06 · 达人池与审稿质检</span>
+                <span className="ca-chapter-num">08</span>
                 <span>达人候选池规模、内容方向热力矩阵与审稿质检</span>
               </span>
             </summary>

@@ -22,6 +22,8 @@ import {
   type ChartDatum,
   type ComparisonDatum,
   CAMPAIGN_PALETTE,
+  MultiDimensionComparisonDeck,
+  type ComparisonDeckItem,
 } from "./CampaignCharts";
 import "./campaign-analytics.css";
 import "./CampaignOverviewPage.css";
@@ -818,6 +820,16 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
 
       {/* 2. 核心指标大卡片 (包含核心指标条 + 战役分析核心观察 + 专项直达) */}
       <div className="ca-section-macro-card" id="ca-macro-kpi">
+        <div className="ca-chapter-header">
+          <div className="ca-chapter-title-group">
+            <span className="ca-chapter-num">01</span>
+            <div className="ca-chapter-heading">
+              <h2 className="ca-chapter-title">核心经营指标与战役健康度</h2>
+              <span className="ca-chapter-desc">项目综合健康分、双轨预算时间进度、核心财务指标与战役核心观察</span>
+            </div>
+          </div>
+        </div>
+
         {/* L1: 2-Column Executive Bento Grid */}
         <div className="bento-grid" style={{ marginBottom: 16 }}>
           {/* 左卡：战役综合健康度与四维信号灯 */}
@@ -932,7 +944,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       <div className="ca-section-macro-card" id="ca-macro-charts">
         <div className="ca-chapter-header">
           <div className="ca-chapter-title-group">
-            <span className="ca-chapter-badge">01</span>
+            <span className="ca-chapter-badge ca-chapter-num">02</span>
             <div className="ca-chapter-heading">
               <h2 className="ca-chapter-title">核心预算执行与版位效率大盘</h2>
               <span className="ca-chapter-desc">核心渠道预算达成、版位投放效率与分日流水宏观大盘</span>
@@ -1089,28 +1101,55 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                 title="Q3 阶段细分指标达成与进度明细"
                 subtitle="7.16-9.27 Q3双周会小结内嵌表 / 考核目标与实际完成对照"
               >
-                <div className="ca-table-wrap">
-                  <table className="ca-table">
-                    <thead>
-                      <tr>
-                        {kailasQ3PerfTable.columns.map((c) => (
-                          <th key={c.key} style={{ textAlign: c.align || "left" }}>{c.title}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {kailasQ3PerfTable.rows.map((r, idx) => (
-                        <tr key={idx}>
-                          {kailasQ3PerfTable.columns.map((c) => (
-                            <td key={c.key} style={{ textAlign: c.align || "left" }}>
-                              {r[c.key] !== null && r[c.key] !== undefined ? String(r[c.key]) : "—"}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                {(() => {
+                  const rows = kailasQ3PerfTable.rows;
+                  const totalRow = rows[0] || {};
+                  const totSpend = Number(totalRow.spend) || rows.reduce((acc, r) => acc + (Number(r.spend) || 0), 0) || 1;
+                  const totImp = Number(totalRow.imp) || rows.reduce((acc, r) => acc + (Number(r.imp) || 0), 0) || 1;
+
+                  const summaryItems = [
+                    { label: 'Q3总消耗(含返点)', value: totalRow.spend != null ? `¥${Number(totalRow.spend).toLocaleString()}` : '—' },
+                    { label: '全域累计曝光', value: totalRow.imp != null ? `${Number(totalRow.imp).toLocaleString()} 次` : '—' },
+                    { label: '整体互动量', value: totalRow.inter != null ? `${Number(totalRow.inter).toLocaleString()} 次` : '—' },
+                  ];
+
+                  const deckItems: ComparisonDeckItem[] = rows.map((r, idx) => {
+                    const sp = Number(r.spend) || 0;
+                    const imp = Number(r.imp) || 0;
+                    const spPct = (sp / totSpend) * 100;
+                    const impPct = (imp / totImp) * 100;
+
+                    return {
+                      id: String(idx),
+                      badge: `0${idx + 1}`,
+                      title: String(r.label || '—'),
+                      statusText: idx === 0 ? '全域汇总' : idx === 1 ? '内容自然端' : '商业投流端',
+                      statusTone: idx === 0 ? 'ok' : idx === 1 ? 'neutral' : 'warn',
+                      highlightBadge: r.ctr != null ? `CTR ${r.ctr}%` : undefined,
+                      metrics: [
+                        { label: '阶段消耗', value: r.spend != null ? `¥${Number(r.spend).toLocaleString()}` : '—', color: '#0F5E52' },
+                        { label: '曝光 / 阅读', value: `${r.imp != null ? Number(r.imp).toLocaleString() : '—'} / ${r.read != null ? Number(r.read).toLocaleString() : '—'}` },
+                        { label: '互动量', value: r.inter != null ? Number(r.inter).toLocaleString() : '—', color: '#2E6F8E' },
+                        { label: 'CPC / CPE', value: `¥${r.cpc ?? '—'} / ¥${r.cpe ?? '—'}` },
+                      ],
+                      bars: [
+                        {
+                          label: '消耗占大盘',
+                          rightLabel: `${spPct.toFixed(1)}%`,
+                          segments: [{ pct: spPct, color: idx === 1 ? '#0F5E52' : '#2E6F8E', title: `消耗: ¥${Number(r.spend).toLocaleString()}` }],
+                        },
+                        {
+                          label: '曝光占大盘',
+                          rightLabel: `${impPct.toFixed(1)}%`,
+                          segments: [{ pct: impPct, color: '#D95D39', title: `曝光: ${Number(r.imp).toLocaleString()}` }],
+                        },
+                      ],
+                      footerNote: r.cpm != null || r.cpuv != null ? `投流效率指标：CPM ¥${r.cpm ?? '—'} · CPUV ¥${r.cpuv ?? '—'} · CPTI ¥${r.cpti ?? '—'}` : undefined,
+                    };
+                  });
+
+                  return <MultiDimensionComparisonDeck summaryItems={summaryItems} items={deckItems} />;
+                })()}
               </ChartPanel>
             )}
 
@@ -1417,7 +1456,9 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
         <details id="ca-sec-details" className="ca-details-collapse">
           <summary className="ca-details-summary">
             <span className="ca-summary-left">
-              <span className="ca-chapter-num">07</span>
+              <span className="ca-chapter-num">
+                {projectId === "kailas" ? "09" : projectId === "meiling" ? (activeSnapshot === "history-618" ? "04" : "07") : "08"}
+              </span>
               <span>查看关联业务明细数据 (当前看板对应 {activeDetailTables.length + (activeDailyDataset ? 1 : 0)} 项数据源，点击展开)</span>
             </span>
           </summary>
