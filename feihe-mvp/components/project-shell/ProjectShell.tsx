@@ -25,6 +25,7 @@ import { ReportsWorkspace } from '../../features/reports/ReportsWorkspace';
 import { AdsPlaceholder } from '../../features/overview/AdsPlaceholder';
 import { IndustryWorkspace } from '../../features/industry/IndustryWorkspace';
 import { getProjectThemeTag } from '../../features/overview/dashboard-template';
+import { ScrollChartAnimator } from '../ui/ScrollChartAnimator';
 
 function ProjectShellContent({
   userName,
@@ -240,6 +241,7 @@ function ProjectShellContent({
     <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
       <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
       <main className="main">
+        <ScrollChartAnimator />
         <React.Fragment key={currentProject?.projectRole || 'pending'}>{content}</React.Fragment>
         <FeedbackToastContainer toasts={toasts} onClose={removeToast} />
       </main>

@@ -2888,65 +2888,121 @@ export function HealthArcGauge({
   size?: number;
 }) {
   const clamped = Math.min(100, Math.max(0, score));
-  const radius = 48;
-  const strokeW = 8;
-  const totalArc = 240;
-  const arcLength = (totalArc / 360) * (2 * Math.PI * radius);
-  const totalCircumference = 2 * Math.PI * radius;
-  const fillLength = (clamped / 100) * arcLength;
-  const dashOffset = arcLength - fillLength;
+  const [displayScore, setDisplayScore] = useState(0);
+  const [animatedProgress, setAnimatedProgress] = useState(0);
+  const gaugeRef = useRef<HTMLDivElement>(null);
 
-  const color = clamped >= 80 ? '#15803D' : clamped >= 70 ? '#C87D20' : '#C2410C';
+  useEffect(() => {
+    const el = gaugeRef.current;
+    if (!el) return;
+    let rafId: number;
+    let timerId: ReturnType<typeof setTimeout>;
 
-  const cx = 75;
-  const cy = 70;
-  const startAngle = (150 * Math.PI) / 180;
-  const endAngle = (390 * Math.PI) / 180;
-  const x1 = cx + radius * Math.cos(startAngle);
-  const y1 = cy + radius * Math.sin(startAngle);
-  const x2 = cx + radius * Math.cos(endAngle);
-  const y2 = cy + radius * Math.sin(endAngle);
-  const trackPath = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${radius} ${radius} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+    const startAnimation = () => {
+      const startTime = performance.now();
+      const duration = 1000;
+      const animate = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        // cubic ease-out
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setDisplayScore(Math.round(eased * clamped));
+        setAnimatedProgress(Number((eased * clamped).toFixed(2)));
+        if (progress < 1) {
+          rafId = requestAnimationFrame(animate);
+        } else {
+          setDisplayScore(clamped);
+          setAnimatedProgress(clamped);
+        }
+      };
+      rafId = requestAnimationFrame(animate);
+    };
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              timerId = setTimeout(startAnimation, 50);
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(el);
+      return () => {
+        observer.disconnect();
+        clearTimeout(timerId);
+        cancelAnimationFrame(rafId);
+      };
+    } else {
+      timerId = setTimeout(startAnimation, 50);
+      return () => {
+        clearTimeout(timerId);
+        cancelAnimationFrame(rafId);
+      };
+    }
+  }, [clamped]);
+
+  const strokeColor = clamped >= 80 ? 'var(--brand-primary, #0F5E52)' : clamped >= 70 ? '#C87D20' : '#C2410C';
+  const trackPath = 'M 31.89 84.00 A 44 44 0 1 1 108.11 84.00';
 
   return (
-    <div className="health-gauge-box" style={{ width: size, height: size - 10 }}>
+    <div
+      ref={gaugeRef}
+      className="health-gauge-box"
+      style={{ width: size, height: '100%', minHeight: 140, boxSizing: 'border-box' }}
+      aria-label={`健康度评分仪表盘 ${clamped}`}
+    >
       <svg
-        viewBox="0 0 150 140"
-        style={{ width: '100%', height: '100%', overflow: 'visible' }}
-        aria-label="健康度评分仪表盘"
+        viewBox="0 0 140 112"
+        style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}
+        aria-hidden="true"
       >
         <path
           d={trackPath}
           fill="none"
-          stroke="#E6E3DC"
-          strokeWidth={strokeW}
+          stroke="var(--border-subtle, #E6E3DC)"
+          strokeWidth="10"
           strokeLinecap="round"
+          pathLength={100}
         />
         <path
           d={trackPath}
           fill="none"
-          stroke={color}
-          strokeWidth={strokeW}
+          stroke={strokeColor}
+          strokeWidth="10"
           strokeLinecap="round"
-          strokeDasharray={`${arcLength} ${totalCircumference}`}
-          strokeDashoffset={dashOffset}
-          style={{ transition: 'stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1)' }}
+          pathLength={100}
+          strokeDasharray="100"
+          strokeDashoffset={100 - animatedProgress}
+          style={{ transition: 'stroke-dashoffset 1.05s cubic-bezier(0.22, 1, 0.36, 1)' }}
         />
         <text
-          x={cx}
-          y={cy + 7}
+          x="70"
+          y="62"
           textAnchor="middle"
-          fill="#1C1917"
-          fontSize="28"
-          fontWeight="800"
+          dominantBaseline="central"
           className="num"
+          fill="var(--text-primary, #1C1917)"
+          fontSize="30"
+          fontWeight="800"
+          style={{ fontFamily: 'var(--font-mono)' }}
         >
-          {clamped}
+          {displayScore}
+        </text>
+        <text
+          x="70"
+          y="102"
+          textAnchor="middle"
+          fill="var(--text-muted, #8A847C)"
+          fontSize="11.5"
+          fontWeight="600"
+        >
+          {label}
         </text>
       </svg>
-      <div style={{ fontSize: '11px', color: '#8A847C', marginTop: '-14px', textAlign: 'center', whiteSpace: 'nowrap' }}>
-        {label}
-      </div>
     </div>
   );
 }

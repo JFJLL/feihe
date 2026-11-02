@@ -1162,8 +1162,6 @@ html body .ca-metric-item.is-alert {
   }
 }
 
-.gauge-progress-arc,
-.health-gauge-box svg path:nth-of-type(2),
 .ca-rose-slice,
 svg[aria-label="南丁格尔玫瑰图"] path,
 svg[aria-label^="环形分布图"] path,
@@ -1224,4 +1222,140 @@ svg[aria-label^="散点相关图"] circle:hover,
 .ca-lollipop-dot:hover {
   transform: scale(1.18);
   filter: drop-shadow(0 0 6px rgba(15, 94, 82, 0.32));
+}
+
+/* ============================================================================
+   6. Viewport-Triggered Lazy Chart Animations ([data-chart-lazy])
+   ============================================================================ */
+
+/* Initial Pending Zero-State (Before Entering Viewport) */
+[data-chart-lazy="pending"] :is(
+  .bullet-fill, .ca-bullet-fill, .funnel-taper-bar > div, .benchmark-band,
+  .bv-rank-bar > span, .bv-rank-track > span, .bv-progress-track > span,
+  .bd-channel-segmented-bar > span, .rank-fill, .prog-bar-fill, .distribution-bars i b,
+  .kri-funnel-bar-fill, .kri-stack-seg, .ca-budget-actual, .ca-budget-target-fill,
+  .ca-butterfly-bar, .ca-arena-bar-fill, .co-spend-bar-fill, .campaign-progress-bar-fill
+) {
+  transform: scaleX(0) !important;
+  transform-origin: left center !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-chart-lazy="pending"] :is(.benchmark-dot, .bullet-time-marker, .bullet-marker) {
+  opacity: 0 !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-chart-lazy="pending"] :is(
+  .ca-combo-bar, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-body.observed,
+  .qicui-trend-card svg rect, .ca-combo-svg rect, .trend-wrap svg rect,
+  svg[aria-label] rect, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill
+) {
+  transform: scaleY(0) !important;
+  transform-origin: bottom !important;
+  transform-box: fill-box !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-chart-lazy="pending"] :is(
+  .ca-combo-svg path[fill="none"], .ca-combo-svg path[data-metric-type="line"],
+  .qicui-trend-card svg path[fill="none"], .trend-wrap svg path[fill="none"],
+  .trend-wrap svg polyline, .data-trend svg polyline, .bd-sparkline-stroke,
+  .ca-sparkline-box svg path:last-of-type, .echart-line-path
+) {
+  stroke-dasharray: 1800 !important;
+  stroke-dashoffset: 1800 !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-chart-lazy="pending"] :is(
+  .ca-combo-svg path[fill^="url(#"], .qicui-trend-card svg path[fill^="url(#"],
+  .trend-wrap svg path[fill^="url(#"], .ca-rose-slice, svg[aria-label="南丁格尔玫瑰图"] path,
+  .ca-radar-poly, .qicui-structure-card svg circle, .bv-donut-svg circle
+) {
+  opacity: 0 !important;
+  transform: scale(0.82) !important;
+  transform-origin: center !important;
+  transform-box: fill-box !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-chart-lazy="pending"] :is(
+  .ca-combo-svg circle, .qicui-trend-card svg circle, .chart-inner-panel svg circle,
+  .trend-wrap svg circle, .data-trend svg circle, .kri-scatter-bubble
+) {
+  opacity: 0 !important;
+  transform: scale(0) !important;
+  transform-origin: center !important;
+  transform-box: fill-box !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Active Entrance Animations (When Scrolled Into Viewport) */
+[data-chart-lazy="active"] :is(
+  .bullet-fill, .ca-bullet-fill, .funnel-taper-bar > div, .benchmark-band,
+  .bv-rank-bar > span, .bv-rank-track > span, .bv-progress-track > span,
+  .bd-channel-segmented-bar > span, .rank-fill, .prog-bar-fill, .distribution-bars i b,
+  .kri-funnel-bar-fill, .kri-stack-seg, .ca-budget-actual, .ca-budget-target-fill,
+  .ca-arena-bar-fill, .co-spend-bar-fill, .campaign-progress-bar-fill
+) {
+  transform-origin: left center;
+  transform-box: fill-box;
+  animation: echartBarSweep 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-chart-lazy="active"] :is(.benchmark-dot, .bullet-time-marker, .bullet-marker) {
+  opacity: 1;
+  transition: opacity 0.55s ease 0.25s, left 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-chart-lazy="active"] :is(
+  .ca-combo-bar, .ca-bar-col-fill, .bv-bar-col, .spend-bar-col, .spend-bar-body.observed,
+  .qicui-trend-card svg rect, .ca-combo-svg rect, .trend-wrap svg rect,
+  svg[aria-label] rect, .kri-bar-fill, .mri-bar-fill, .wri-bar-fill
+) {
+  transform-origin: bottom;
+  transform-box: fill-box;
+  animation: echartBarRise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-chart-lazy="active"] :is(
+  .ca-combo-svg path[fill="none"], .ca-combo-svg path[data-metric-type="line"],
+  .qicui-trend-card svg path[fill="none"], .trend-wrap svg path[fill="none"],
+  .trend-wrap svg polyline, .data-trend svg polyline, .bd-sparkline-stroke,
+  .ca-sparkline-box svg path:last-of-type, .echart-line-path
+) {
+  stroke-dasharray: 1800;
+  animation: echartLineDraw 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-chart-lazy="active"] :is(
+  .ca-combo-svg path[fill^="url(#"], .qicui-trend-card svg path[fill^="url(#"],
+  .trend-wrap svg path[fill^="url(#"], .echart-area-path
+) {
+  animation: echartAreaFade 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+[data-chart-lazy="active"] :is(
+  .ca-rose-slice, svg[aria-label="南丁格尔玫瑰图"] path, .ca-radar-poly,
+  .qicui-structure-card svg circle, .bv-donut-svg circle
+) {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: echartArcReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-chart-lazy="active"] :is(
+  .ca-combo-svg circle, .qicui-trend-card svg circle, .chart-inner-panel svg circle,
+  .trend-wrap svg circle, .data-trend svg circle, .kri-scatter-bubble
+) {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: echartPointPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
 }

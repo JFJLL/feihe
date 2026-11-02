@@ -19,6 +19,7 @@ import { BusinessConfigDrawer } from './BusinessConfigDrawer';
 import { SpendBars } from './SpendBars';
 import { SearchVisuals, SearchCoreWordsVisuals, FeedVisuals, FeedAudienceVisuals, CreatorVisuals, MaintenanceVisuals, RectificationVisuals, SeoVisuals, TodayBusinessActions, HorizontalRanks, DASHBOARD_PALETTE, QicuiSpendTrendVisual, QicuiChannelStructureCard, QicuiActionClosureLayer } from './BusinessVisuals';
 import { ProjectContextRibbon } from './OverviewWorkspace';
+import { HealthArcGauge } from '../campaign/CampaignCharts';
 
 const DailyDetailsContext = createContext<Record<string, string>>({});
 
@@ -1728,39 +1729,7 @@ export function BusinessDailyBoard({
                             <span className="semantic-tag tag-ok num">健康分 91</span>
                           </div>
                           <div className="health-layout" style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: 16, alignItems: 'center' }}>
-                            <div className="health-gauge-box" style={{ height: 168, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-subtle, #FAF9F5)', borderRadius: 12, border: '1px solid var(--border-subtle, #E6E4DD)', padding: '8px 6px' }}>
-                              <div className="gauge-wrap" style={{ position: 'relative', width: 130, height: 96, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <svg viewBox="0 0 120 100" width="124" height="92" style={{ overflow: 'visible' }}>
-                                  <circle
-                                    cx="60"
-                                    cy="50"
-                                    r="38"
-                                    fill="none"
-                                    stroke="var(--border-subtle, #E6E4DD)"
-                                    strokeWidth="9"
-                                    strokeDasharray="159.17 238.76"
-                                    strokeLinecap="round"
-                                    transform="rotate(150 60 50)"
-                                  />
-                                  <circle
-                                    className="gauge-progress-arc"
-                                    cx="60"
-                                    cy="50"
-                                    r="38"
-                                    fill="none"
-                                    stroke="var(--brand-primary, #0F5E52)"
-                                    strokeWidth="9"
-                                    strokeDasharray="144.85 238.76"
-                                    strokeLinecap="round"
-                                    transform="rotate(150 60 50)"
-                                  />
-                                </svg>
-                                <div style={{ position: 'absolute', top: '56%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                                  <div className="num" style={{ fontSize: 28, fontWeight: 800, color: 'var(--text-primary, #1C1917)', lineHeight: 1 }}>91</div>
-                                </div>
-                              </div>
-                              <div style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', fontWeight: 600, marginTop: 2 }}>综合评分 (满分100)</div>
-                            </div>
+                            <HealthArcGauge score={91} label="综合评分 (满分100)" />
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
                               <div className="signals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
                                 <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, padding: '8px 10px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)' }}>

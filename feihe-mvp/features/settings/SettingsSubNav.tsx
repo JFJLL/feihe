@@ -81,26 +81,30 @@ export function SettingsSubNav({
   ];
 
   // Secondary / advanced items inside compact popover menu
-  const auxTabs: { id: SettingsTabId; title: string; href: string }[] = [
+  const auxTabs: { id: SettingsTabId; title: string; href: string; hint: string }[] = [
     {
       id: 'data-map',
       title: '数据地图',
       href: `/projects/${encodeURIComponent(projectId)}/settings?tab=data-map`,
+      hint: '内嵌视图',
     },
     {
       id: 'board',
       title: '团队看板',
       href: `/projects/${encodeURIComponent(projectId)}/settings?tab=board`,
+      hint: '内嵌视图',
     },
     {
       id: 'metrics',
       title: '项目指标',
       href: `/projects/${encodeURIComponent(projectId)}/metrics`,
+      hint: '独立页 ↗',
     },
     {
       id: 'reports',
       title: '项目报告',
       href: `/projects/${encodeURIComponent(projectId)}/reports`,
+      hint: '独立页 ↗',
     },
   ];
 
@@ -174,6 +178,7 @@ export function SettingsSubNav({
                 className={`settings-subnav-item settings-subnav-aux-item settings-aux-nav-link${isActive ? ' active' : ''}`}
               >
                 <span className="settings-subnav-label">{t.title}</span>
+                <span className="settings-aux-hint" style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', background: 'var(--bg-subtle, #FAF9F5)', padding: '2px 6px', borderRadius: 4, fontWeight: 500 }}>{t.hint}</span>
               </AppLink>
             );
           })}

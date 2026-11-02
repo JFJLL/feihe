@@ -42,6 +42,22 @@
 [data-workspace-ui='v2'].settings-workspace .ui-page-header,
 .settings-workspace-stack > .ui-page-header {
   margin: 0 !important;
+  position: relative !important;
+  z-index: 200 !important;
+  overflow: visible !important;
+}
+
+.settings-workspace-stack > *:not(.ui-page-header) {
+  position: relative;
+  z-index: 1;
+}
+
+.settings-nav-wrapper,
+.settings-subnav-primary,
+.settings-subnav-track,
+.settings-subnav-unified,
+.ui-page-header-actions {
+  overflow: visible !important;
 }
 
 .settings-nav-wrapper {
@@ -455,13 +471,13 @@ body:has(.settings-sticky-action-bar) .main {
   position: absolute;
   right: 0;
   top: calc(100% + 6px);
-  z-index: 60;
-  min-width: 168px;
-  padding: 6px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.14), 0 4px 10px -3px rgba(15, 23, 42, 0.06);
+  z-index: 9999 !important;
+  min-width: 196px !important;
+  padding: 8px !important;
+  background: #ffffff !important;
+  border: 1px solid #d4cfc5 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 18px 38px -6px rgba(28, 25, 23, 0.18), 0 6px 14px -3px rgba(28, 25, 23, 0.08) !important;
   display: flex !important;
   flex-direction: column;
   align-items: stretch;
@@ -469,14 +485,20 @@ body:has(.settings-sticky-action-bar) .main {
 }
 
 .settings-more-popover .settings-subnav-item {
-  width: 100%;
-  justify-content: flex-start;
-  padding: 8px 12px !important;
-  border-radius: 7px !important;
+  display: flex !important;
+  width: 100% !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 9px 12px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #1c1917 !important;
+  border-radius: 8px !important;
 }
 
 .settings-more-popover .settings-subnav-item:hover {
-  background: #f1f5f9 !important;
+  background: var(--brand-primary-soft, #ebf5f3) !important;
+  color: var(--brand-primary, #0f5e52) !important;
 }
 
 /* Prominent "← 返回项目设置" Exit Button */
