@@ -22,6 +22,7 @@
   background: #ffffff;
   box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin: 0 !important;
 }
 
 .mri-group:hover {
@@ -158,7 +159,7 @@
 }
 
 .mri-details-toggle {
-  margin-top: 8px;
+  margin: 0 !important;
   border-top:0.5px dashed #d9d9e0;
   padding-top: 8px;
 }

@@ -28,9 +28,7 @@ export function ScrollChartAnimator() {
             if (entry.isIntersecting) {
               const el = entry.target as HTMLElement;
               obs.unobserve(el);
-              setTimeout(() => {
-                el.setAttribute('data-chart-lazy', 'active');
-              }, 60);
+              el.setAttribute('data-chart-lazy', 'active');
             }
           });
         },
@@ -42,11 +40,17 @@ export function ScrollChartAnimator() {
 
       const elements = document.querySelectorAll<HTMLElement>(CHART_SELECTOR);
       elements.forEach((el) => {
-        if (!el.hasAttribute('data-chart-lazy')) {
-          el.setAttribute('data-chart-lazy', 'pending');
-        }
-        if (el.getAttribute('data-chart-lazy') === 'pending') {
-          observer?.observe(el);
+        const rect = el.getBoundingClientRect();
+        const inView = rect.top < (window.innerHeight || 900) + 120 && rect.bottom > -50;
+        if (inView) {
+          el.setAttribute('data-chart-lazy', 'active');
+        } else {
+          if (!el.hasAttribute('data-chart-lazy')) {
+            el.setAttribute('data-chart-lazy', 'pending');
+          }
+          if (el.getAttribute('data-chart-lazy') === 'pending') {
+            observer?.observe(el);
+          }
         }
       });
     };
@@ -54,16 +58,24 @@ export function ScrollChartAnimator() {
     // Run initial scan
     initObserver();
 
+    const handleScroll = () => {
+      const pendingElements = document.querySelectorAll<HTMLElement>('[data-chart-lazy="pending"]');
+      pendingElements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < (window.innerHeight || 900) + 120) {
+          el.setAttribute('data-chart-lazy', 'active');
+        }
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
     // Replay on collapsible <details> toggling open
     const handleToggle = (e: Event) => {
       const target = e.target as HTMLElement;
       if (target && target.tagName === 'DETAILS' && (target as HTMLDetailsElement).open) {
         const nestedCharts = target.querySelectorAll<HTMLElement>(CHART_SELECTOR);
         nestedCharts.forEach((chart) => {
-          chart.setAttribute('data-chart-lazy', 'pending');
-          setTimeout(() => {
-            chart.setAttribute('data-chart-lazy', 'active');
-          }, 50);
+          chart.setAttribute('data-chart-lazy', 'active');
         });
       }
     };
@@ -76,8 +88,14 @@ export function ScrollChartAnimator() {
         const unobserved = document.querySelectorAll<HTMLElement>(CHART_SELECTOR);
         unobserved.forEach((el) => {
           if (!el.hasAttribute('data-chart-lazy')) {
-            el.setAttribute('data-chart-lazy', 'pending');
-            observer?.observe(el);
+            const rect = el.getBoundingClientRect();
+            const inView = rect.top < (window.innerHeight || 900) + 120 && rect.bottom > -50;
+            if (inView) {
+              el.setAttribute('data-chart-lazy', 'active');
+            } else {
+              el.setAttribute('data-chart-lazy', 'pending');
+              observer?.observe(el);
+            }
           }
         });
       });
@@ -92,9 +110,11 @@ export function ScrollChartAnimator() {
       observer?.disconnect();
       mutationObserver?.disconnect();
       if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('toggle', handleToggle, true);
     };
   }, [pathname, searchParams]);
 
   return null;
 }
+

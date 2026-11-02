@@ -3,7 +3,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: auto;
+  flex-shrink: 0;
   background: transparent;
   border: none;
   padding: 0;
@@ -16,6 +18,8 @@
   align-items: center;
   gap: 2px;
   height: 36px;
+  width: auto !important;
+  flex-shrink: 0;
   padding: 2px;
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -69,10 +73,12 @@
   display: inline-block;
 }
 
+.day-navigator-controls .day-nav-custom-picker,
 .day-nav-custom-picker {
-  width: auto;
-  min-width: 0;
-  flex: 0 0 auto;
+  width: 136px !important;
+  min-width: 136px !important;
+  max-width: 136px !important;
+  flex: 0 0 136px !important;
 }
 
 .day-nav-custom-picker .custom-date-trigger-wrap {

@@ -996,10 +996,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     { name: "视频流", values: [75, 90, 80, 85, 76, 88], color: "#D95D39" },
                     { name: "搜索拦截", values: [65, 72, 68, 92, 88, 79], color: "#2E6F8E" },
                   ]}
-                  height={220}
                 />
               )}
               {kailasPlacementTab === "combo" && (
+                <div>
                 <CampaignComboChart
                   rows={kailasFsPlacementsData as unknown as Record<string, unknown>[]}
                   series={[
@@ -1010,6 +1010,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                   title="FS 版位 CPM 与 CPUV 效率"
                   height={220}
                 />
+                  <PlacementCpmStrip items={kailasRoseData} />
+                </div>
               )}
             </ChartPanel>
 
@@ -1183,10 +1185,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     { name: "自采京东", values: [70, 75, 78, 80, 72, 76], color: "#2E6F8E" },
                     { name: "代采京东", values: [65, 82, 70, 78, 68, 74], color: "#C87D20" },
                   ]}
-                  height={220}
                 />
               )}
               {meilingPlacementTab === "combo" && (
+                <div>
                 <CampaignComboChart
                   rows={meilingFourLinesData as unknown as Record<string, unknown>[]}
                   series={[
@@ -1197,6 +1199,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                   title="四线 GMV 与 ROI"
                   height={220}
                 />
+                  <PlacementCpmStrip items={meilingRoseData} />
+                </div>
               )}
             </ChartPanel>
 
@@ -1316,10 +1320,10 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                     { name: "信息流版位", values: [78, 82, 75, 80, 85, 82], color: "#D95D39" },
                     { name: "搜索版位", values: [70, 75, 68, 88, 76, 79], color: "#2E6F8E" },
                   ]}
-                  height={220}
                 />
               )}
               {wipesPlacementTab === "combo" && (
+                <div>
                 <CampaignComboChart
                   rows={wipesPlacementsData as unknown as Record<string, unknown>[]}
                   series={[
@@ -1330,6 +1334,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
                   title="分版位 CPE 与 CPUV"
                   height={220}
                 />
+                  <PlacementCpmStrip items={wipesRoseData} />
+                </div>
               )}
             </ChartPanel>
 

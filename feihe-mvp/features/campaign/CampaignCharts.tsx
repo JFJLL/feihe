@@ -3020,38 +3020,47 @@ export function HealthArcGauge({
   size?: number;
 }) {
   const clamped = Math.min(100, Math.max(0, score));
-  const [displayScore, setDisplayScore] = useState(0);
-  const [animatedProgress, setAnimatedProgress] = useState(0);
+  const [displayScore, setDisplayScore] = useState(clamped);
+  const [animatedProgress, setAnimatedProgress] = useState(clamped);
   const gaugeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = gaugeRef.current;
-    if (!el) return;
+    const fallbackTimer = setTimeout(() => {
+      setDisplayScore(clamped);
+      setAnimatedProgress(clamped);
+    }, 700);
+
     let rafId: number;
     let timerId: ReturnType<typeof setTimeout>;
 
-    const startAnimation = () => {
-      const startTime = performance.now();
-      const duration = 1000;
-      const animate = (now: number) => {
-        const elapsed = now - startTime;
-        const progress = Math.min(1, elapsed / duration);
-        // cubic ease-out
-        const eased = 1 - Math.pow(1 - progress, 3);
-        setDisplayScore(Math.round(eased * clamped));
-        setAnimatedProgress(Number((eased * clamped).toFixed(2)));
-        if (progress < 1) {
-          rafId = requestAnimationFrame(animate);
-        } else {
-          setDisplayScore(clamped);
-          setAnimatedProgress(clamped);
-        }
+    if (typeof document !== 'undefined' && !document.hidden) {
+      const startAnimation = () => {
+        const startVal = Math.round(clamped * 0.35);
+        setDisplayScore(startVal);
+        setAnimatedProgress(startVal);
+        const startTime = performance.now();
+        const duration = 650;
+        const animate = (now: number) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(1, elapsed / duration);
+          // cubic ease-out
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = startVal + (clamped - startVal) * eased;
+          setDisplayScore(Math.round(current));
+          setAnimatedProgress(Number(current.toFixed(2)));
+          if (progress < 1) {
+            rafId = requestAnimationFrame(animate);
+          } else {
+            setDisplayScore(clamped);
+            setAnimatedProgress(clamped);
+          }
+        };
+        rafId = requestAnimationFrame(animate);
       };
-      rafId = requestAnimationFrame(animate);
-    };
 
-    if (typeof IntersectionObserver !== 'undefined') {
-      const observer = new IntersectionObserver(
+      const el = gaugeRef.current;
+      if (el && typeof IntersectionObserver !== 'undefined') {
+        const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -3066,13 +3075,22 @@ export function HealthArcGauge({
       return () => {
         observer.disconnect();
         clearTimeout(timerId);
+        clearTimeout(fallbackTimer);
         cancelAnimationFrame(rafId);
       };
     } else {
       timerId = setTimeout(startAnimation, 50);
       return () => {
         clearTimeout(timerId);
+        clearTimeout(fallbackTimer);
         cancelAnimationFrame(rafId);
+      };
+    }
+    } else {
+      setDisplayScore(clamped);
+      setAnimatedProgress(clamped);
+      return () => {
+        clearTimeout(fallbackTimer);
       };
     }
   }, [clamped]);
@@ -3429,7 +3447,7 @@ export interface RadarSeries {
 export function CapabilityRadarChart({
   dimensions,
   series,
-  height = 230,
+  height,
 }: {
   dimensions?: RadarDimension[];
   series: RadarSeries[];
@@ -3446,9 +3464,33 @@ export function CapabilityRadarChart({
     { name: 'ROI转化力', max: 100 },
   ];
 
-  const cx = 140;
-  const cy = 100;
-  const maxR = 74;
+  const seriesMetrics = series.map((s) => {
+    const vals = dims.map((_, i) => s.values[i] ?? 0);
+    const avg = Number((vals.reduce((a, b) => a + b, 0) / dims.length).toFixed(1));
+    let bestIdx = 0;
+    let weakIdx = 0;
+    vals.forEach((v, idx) => {
+      if (v > vals[bestIdx]) bestIdx = idx;
+      if (v < vals[weakIdx]) weakIdx = idx;
+    });
+    return {
+      ...s,
+      avg,
+      bestDim: { name: dims[bestIdx].name, val: vals[bestIdx] },
+      weakDim: { name: dims[weakIdx].name, val: vals[weakIdx] },
+    };
+  });
+
+  const topSeries = seriesMetrics.reduce(
+    (prev, curr) => (curr.avg > prev.avg ? curr : prev),
+    seriesMetrics[0] || { name: '', values: [], color: '', avg: 0, bestDim: { name: '', val: 0 }, weakDim: { name: '', val: 0 } }
+  );
+
+  const focused = seriesMetrics.find((s) => s.name === activeSeries) || topSeries;
+
+  const cx = 150;
+  const cy = 115;
+  const maxR = 82;
   const n = dims.length;
 
   const getVertex = (r: number, i: number) => {
@@ -3456,117 +3498,367 @@ export function CapabilityRadarChart({
     return {
       x: cx + r * Math.cos(angle),
       y: cy + r * Math.sin(angle),
+      angle,
     };
   };
 
   const rings = [0.25, 0.5, 0.75, 1.0];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height, width: '100%', alignItems: 'center' }}>
-      <svg
-        viewBox="0 0 280 200"
-        style={{ width: '100%', height: 185, overflow: 'visible' }}
-        aria-label="版位六维综合效能雷达"
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        minHeight: height,
+        boxSizing: 'border-box',
+      }}
+    >
+      {/* 1. Top Interactive Readout Banner */}
+      <div
+        className="ca-chart-readout"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 8,
+          marginBottom: 10,
+        }}
       >
-        {/* Concentric Web Rings */}
-        {rings.map((ratio, rIdx) => {
-          const r = maxR * ratio;
-          const pts = dims.map((_, i) => getVertex(r, i));
-          const pathD = pts.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
-          return (
-            <path
-              key={rIdx}
-              d={pathD}
-              fill="none"
-              stroke="#E6E3DC"
-              strokeWidth={1}
-              strokeDasharray={ratio < 1 ? '2 2' : undefined}
-            />
-          );
-        })}
-
-        {/* Radial Axis Lines and Labels */}
-        {dims.map((d, i) => {
-          const vOuter = getVertex(maxR, i);
-          const vLabel = getVertex(maxR + 15, i);
-          return (
-            <g key={i}>
-              <line x1={cx} y1={cy} x2={vOuter.x} y2={vOuter.y} stroke="#E6E3DC" strokeWidth={1} />
-              <text
-                x={vLabel.x}
-                y={vLabel.y + 3.5}
-                textAnchor="middle"
-                fontSize="10"
-                fontWeight="600"
-                fill="#57534E"
-              >
-                {d.name}
-              </text>
-            </g>
-          );
-        })}
-
-        {/* Polygons for each series */}
-        {series.map((s) => {
-          const pts = dims.map((dim, i) => {
-            const raw = s.values[i] ?? 50;
-            const ratio = Math.min(1, Math.max(0, raw / dim.max));
-            return getVertex(maxR * ratio, i);
-          });
-          const pathD = pts.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
-          const isMuted = activeSeries !== null && activeSeries !== s.name;
-          return (
-            <g
-              key={s.name}
-              opacity={isMuted ? 0.25 : 1}
-              style={{ transition: 'opacity 0.2s ease' }}
-              onMouseEnter={() => setActiveSeries(s.name)}
-              onMouseLeave={() => setActiveSeries(null)}
-            >
-              <path
-                d={pathD}
-                fill={s.color}
-                fillOpacity={0.24}
-                stroke={s.color}
-                strokeWidth={2}
-              />
-              {pts.map((p, pIdx) => (
-                <circle
-                  key={pIdx}
-                  cx={p.x}
-                  cy={p.y}
-                  r={3}
-                  fill={s.color}
-                  stroke="#FFFFFF"
-                  strokeWidth={1.5}
-                />
-              ))}
-            </g>
-          );
-        })}
-      </svg>
-      {/* Legend below */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 14, marginTop: 2, flexWrap: 'wrap' }}>
-        {series.map((s) => (
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
           <span
-            key={s.name}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 5,
-              fontSize: 11,
-              fontWeight: 600,
-              color: '#57534E',
-              cursor: 'pointer',
-              opacity: activeSeries !== null && activeSeries !== s.name ? 0.35 : 1,
+              display: 'inline-block',
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              background: focused.color,
             }}
-            onMouseEnter={() => setActiveSeries(s.name)}
-            onMouseLeave={() => setActiveSeries(null)}
-          >
-            <span style={{ width: 8, height: 8, borderRadius: 2, background: s.color }} />
-            <span>{s.name}</span>
+          />
+          <span>
+            当前聚焦：<strong>{focused.name}</strong> · 综合评分{' '}
+            <strong style={{ fontFamily: 'var(--font-mono, monospace)' }}>{focused.avg}/100</strong> | 优势项：
+            <strong>{focused.bestDim.name} {focused.bestDim.val}分</strong> | 待提效：
+            <strong>{focused.weakDim.name} {focused.weakDim.val}分</strong>
           </span>
-        ))}
+        </div>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          {seriesMetrics.map((s) => {
+            const isSel = s.name === focused.name;
+            return (
+              <button
+                key={s.name}
+                type="button"
+                onClick={() => setActiveSeries(activeSeries === s.name ? null : s.name)}
+                onMouseEnter={() => setActiveSeries(s.name)}
+                onMouseLeave={() => setActiveSeries(null)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 5,
+                  padding: '3px 8px',
+                  borderRadius: 14,
+                  fontSize: 11,
+                  fontWeight: isSel ? 700 : 500,
+                  border: isSel ? `1.5px solid ${s.color}` : '1px solid var(--border-subtle, #DBD5C8)',
+                  background: isSel ? '#FFFFFF' : 'transparent',
+                  color: isSel ? '#1C2024' : '#57534E',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: s.color }} />
+                <span>{s.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. Main Split Layout */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(220px, 1.15fr) minmax(180px, 1fr)',
+          gap: 12,
+          alignItems: 'center',
+        }}
+      >
+        {/* Left Radar SVG */}
+        <div style={{ width: '100%', position: 'relative' }}>
+          <svg
+            viewBox="0 0 300 230"
+            style={{ width: '100%', height: 220, overflow: 'visible' }}
+            aria-label="版位六维综合效能雷达"
+          >
+            {rings.map((ratio, rIdx) => {
+              const r = maxR * ratio;
+              const pts = dims.map((_, i) => getVertex(r, i));
+              const pathD = pts.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
+              return (
+                <g key={rIdx}>
+                  <path
+                    d={pathD}
+                    fill={rIdx % 2 === 1 ? 'rgba(243, 240, 230, 0.45)' : 'none'}
+                    stroke="#DBD5C8"
+                    strokeWidth={0.8}
+                    strokeDasharray={ratio < 1 ? '2 2' : undefined}
+                  />
+                  <text
+                    x={cx + 3}
+                    y={cy - r + 3}
+                    fontSize="8.5"
+                    fill="#8C887B"
+                    fontFamily="var(--font-mono, monospace)"
+                    textAnchor="start"
+                  >
+                    {Math.round(ratio * 100)}
+                  </text>
+                </g>
+              );
+            })}
+
+            {dims.map((d, i) => {
+              const vOuter = getVertex(maxR, i);
+              const vLabel = getVertex(maxR + 18, i);
+              const angle = vLabel.angle;
+              const focusedVal = focused.values[i] ?? 0;
+              let textAnchor: 'start' | 'middle' | 'end' = 'middle';
+              let dx = 0;
+              let dy = 3.5;
+              if (Math.abs(Math.sin(angle)) > 0.85) {
+                textAnchor = 'middle';
+                dy = Math.sin(angle) < 0 ? -2 : 11;
+              } else if (Math.cos(angle) > 0.2) {
+                textAnchor = 'start';
+                dx = 3;
+              } else if (Math.cos(angle) < -0.2) {
+                textAnchor = 'end';
+                dx = -3;
+              }
+
+              return (
+                <g key={i}>
+                  <line x1={cx} y1={cy} x2={vOuter.x} y2={vOuter.y} stroke="#DBD5C8" strokeWidth={0.8} />
+                  <text
+                    x={vLabel.x + dx}
+                    y={vLabel.y + dy}
+                    textAnchor={textAnchor}
+                    fontSize="10"
+                    fill="#57534E"
+                  >
+                    <tspan fill="#57534E">{d.name} </tspan>
+                    <tspan fill={focused.color} fontWeight="700" fontFamily="var(--font-mono, monospace)">
+                      {focusedVal}
+                    </tspan>
+                  </text>
+                </g>
+              );
+            })}
+
+            {seriesMetrics.map((s) => {
+              const isFocused = s.name === focused.name;
+              const isMuted = activeSeries !== null && activeSeries !== s.name;
+              const pts = dims.map((dim, i) => {
+                const raw = s.values[i] ?? 50;
+                const ratio = Math.min(1, Math.max(0, raw / dim.max));
+                return getVertex(maxR * ratio, i);
+              });
+              const pathD = pts.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
+
+              return (
+                <g
+                  key={s.name}
+                  className="ca-radar-poly"
+                  opacity={isMuted ? 0.2 : 1}
+                  style={{ transition: 'all 0.2s ease', cursor: 'pointer' }}
+                  onMouseEnter={() => setActiveSeries(s.name)}
+                  onMouseLeave={() => setActiveSeries(null)}
+                >
+                  <path
+                    d={pathD}
+                    fill={s.color}
+                    fillOpacity={isFocused ? 0.28 : 0.14}
+                    stroke={s.color}
+                    strokeWidth={isFocused ? 2.5 : 1.6}
+                  />
+                  {pts.map((p, pIdx) => (
+                    <circle
+                      key={pIdx}
+                      cx={p.x}
+                      cy={p.y}
+                      r={isFocused ? 4 : 3}
+                      fill={s.color}
+                      stroke="#FFFFFF"
+                      strokeWidth={1.5}
+                    />
+                  ))}
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+
+        {/* Right Channel Score Ranking Cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+          {seriesMetrics.map((s) => {
+            const isFocused = s.name === focused.name;
+            return (
+              <div
+                key={s.name}
+                className="radar-series-card"
+                onClick={() => setActiveSeries(activeSeries === s.name ? null : s.name)}
+                onMouseEnter={() => setActiveSeries(s.name)}
+                onMouseLeave={() => setActiveSeries(null)}
+                style={{
+                  background: 'var(--bg-subtle, #F3F0E6)',
+                  border: isFocused ? `1.5px solid ${s.color}` : '1px solid var(--border-subtle, #DBD5C8)',
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  boxShadow: isFocused ? `0 2px 8px ${s.color}22` : 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 5,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: s.color }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#1C2024' }}>{s.name}</span>
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontWeight: 700,
+                      fontSize: 12,
+                      color: s.color,
+                      background: '#FFFFFF',
+                      padding: '1px 6px',
+                      borderRadius: 4,
+                      border: '0.5px solid var(--border-subtle, #DBD5C8)',
+                    }}
+                  >
+                    综合 {s.avg}分
+                  </span>
+                </div>
+                <div
+                  style={{
+                    height: 6,
+                    background: 'rgba(0,0,0,0.06)',
+                    borderRadius: 3,
+                    overflow: 'hidden',
+                    width: '100%',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      width: `${s.avg}%`,
+                      background: s.color,
+                      borderRadius: 3,
+                      transition: 'width 0.3s ease',
+                    }}
+                  />
+                </div>
+                <div style={{ fontSize: 11, color: '#57534E', display: 'flex', justifyContent: 'space-between' }}>
+                  <span>最优: {s.bestDim.name} {s.bestDim.val}分</span>
+                  <span>短板: {s.weakDim.name} {s.weakDim.val}分</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 3. Bottom 6-Dimension Concrete Score Matrix */}
+      <div
+        className="radar-dim-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+          gap: 8,
+          marginTop: 10,
+          paddingTop: 10,
+          borderTop: '1px dashed var(--border-subtle, #DBD5C8)',
+        }}
+      >
+        {dims.map((d, dimIdx) => {
+          let leader = series[0] || { name: '—', values: [], color: '' };
+          let maxVal = leader.values[dimIdx] ?? -Infinity;
+          series.forEach((s) => {
+            const v = s.values[dimIdx] ?? 0;
+            if (v > maxVal) {
+              maxVal = v;
+              leader = s;
+            }
+          });
+
+          return (
+            <div
+              key={d.name}
+              className="radar-dim-card"
+              style={{
+                background: 'var(--bg-subtle, #F3F0E6)',
+                border: '1px solid var(--border-subtle, #DBD5C8)',
+                borderRadius: 8,
+                padding: '7px 9px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 5,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#1C2024' }}>{d.name}</span>
+                <span
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 600,
+                    color: leader.color,
+                    background: '#FFFFFF',
+                    padding: '1px 5px',
+                    borderRadius: 4,
+                    border: '0.5px solid var(--border-subtle, #DBD5C8)',
+                    fontFamily: 'var(--font-mono, monospace)',
+                  }}
+                >
+                  TOP: {leader.name.slice(0, 4)} {maxVal}
+                </span>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  flexWrap: 'wrap',
+                  fontSize: 11,
+                  fontFamily: 'var(--font-mono, monospace)',
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
+                {series.map((s) => (
+                  <span
+                    key={s.name}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      color: s.name === focused.name ? '#1C2024' : '#57534E',
+                      fontWeight: s.name === focused.name ? 700 : 500,
+                    }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.color }} />
+                    <span>
+                      {s.name.slice(0, 4)} {s.values[dimIdx] ?? '—'}
+                    </span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

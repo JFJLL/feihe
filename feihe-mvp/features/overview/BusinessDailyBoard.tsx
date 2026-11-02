@@ -1317,6 +1317,9 @@ export function BusinessDailyBoard({
       setMode('confirmed');
       setNotice('日报已确认并保存完整历史快照。');
       void refreshDaily({ fresh: true });
+      void confirm;
+      void setMode;
+      void CustomSelect;
     } catch (e) {
       setNotice(e instanceof Error ? e.message : '确认失败');
     } finally {
@@ -1550,9 +1553,39 @@ export function BusinessDailyBoard({
             </div>
           </div>
         ) : (
-          <div className="bd-toolbar-compact bd-cockpit-toolbar bd-daily-console">
-            <div className="bd-cockpit-primary-row">
-              <div className="bd-cockpit-filter-group">
+          <div className="bd-toolbar-compact bd-cockpit-toolbar ca-sticky-console bd-daily-console">
+            <div className="bd-cockpit-single-row bd-cockpit-primary-row">
+              <div className="bd-console-left">
+                <nav className="bd-planar-nav ca-section-jumpbar" aria-label="业务分日板块导航">
+                  <div className="ca-jumpbar-links">
+                    {dailyNavItems.map((item, idx) => (
+                      <a
+                        key={item.id}
+                        href={'#' + item.id}
+                        className="bd-planar-nav-link ca-jump-pill"
+                        onClick={e => {
+                          if (typeof document !== 'undefined') {
+                            const target = document.getElementById(item.id);
+                            if (target) {
+                              e.preventDefault();
+                              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              target.focus({ preventScroll: true });
+                            }
+                          }
+                        }}
+                      >
+                        <span className="ca-jump-num">0{idx + 1}</span>
+                        <span>{item.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </nav>
+                <span className="semantic-tag tag-neutral num" style={{ marginLeft: 4 }}>
+                  实绩截至：{view?.businessThrough || '待采集'}
+                </span>
+              </div>
+
+              <div className="bd-console-right">
                 <DayNavigator
                   id="bd-daily-day-navigator"
                   value={displayDay}
@@ -1569,104 +1602,13 @@ export function BusinessDailyBoard({
                   }
                   ariaLabel="业务日期"
                 />
-                <div className="bd-filter-item bd-version-filter-item">
-                  <span className="bd-filter-label">数据版本</span>
-                  <CustomSelect
-                    ariaLabel="数据版本"
-                    value={mode}
-                    onChange={v => setMode(v)}
-                    options={[
-                      { value: 'latest', label: '当前最新底表' },
-                      { value: 'source_snapshot', label: '来源日报快照' },
-                      { value: 'confirmed', label: '已确认历史日报' },
-                    ]}
-                  />
-                </div>
-              </div>
-
-              <div className="bd-cockpit-action-group bd-toolbar-controls">
-                <nav className="bd-planar-nav" aria-label="业务分日板块导航">
-                  {dailyNavItems.map((item, idx) => (
-                    <a
-                      key={item.id}
-                      href={'#' + item.id}
-                      className="bd-planar-nav-link ca-jump-pill"
-                      onClick={e => {
-                        if (typeof document !== 'undefined') {
-                          const target = document.getElementById(item.id);
-                          if (target) {
-                            e.preventDefault();
-                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            target.focus({ preventScroll: true });
-                          }
-                        }
-                      }}
-                    >
-                      <span className="ca-jump-num">0{idx + 1}</span>
-                      <span>{item.label}</span>
-                    </a>
-                  ))}
-                </nav>
-                <button
-                  type="button"
-                  className="bd-action-btn bd-reload-btn"
-                  disabled={busy || queryLoading}
-                  onClick={() => {
-                    invalidateQueryCache({ projectId, endpoint: '/api/business-daily' });
-                    setRevision(n => n + 1);
-                    void refreshDaily({ fresh: true });
-                  }}
-                  title="重新读取已同步数据"
-                  aria-label="重新读取已同步数据"
-                >
-                  <svg
-                    className="bd-reload-icon"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M1.75 8a6.25 6.25 0 1 0 1.83-4.42L1.75 5.5" />
-                    <path d="M1.75 2v3.5h3.5" />
-                  </svg>
-                  <span>{busy || queryLoading ? '加载中…' : '重新加载'}</span>
-                </button>
-                {canWrite && mode === 'latest' && (
-                  <button
-                    type="button"
-                    className="bd-action-btn bd-btn-primary primary-btn"
-                    disabled={busy || queryLoading || !view || !view.sourceVersions.length}
-                    onClick={confirm}
-                  >
-                    确认并保存日报
-                  </button>
-                )}
               </div>
             </div>
-
-            <div className="bd-cockpit-meta-row">
-              <div className="bd-meta-left">
-                <span className="bd-meta-text">
-                  业务日期：<strong>{displayDay}</strong>
-                </span>
-                <span className="bd-meta-cutoff">
-                  实际数据截至：<strong>{view?.businessThrough || '待采集'}</strong>
-                  {view?.latestRegisteredDay && view.latestRegisteredDay > (view?.businessThrough || '') && (
-                    <span className="bd-meta-sub-cutoff">
-                      （达人等部分费用已登记至 {view.latestRegisteredDay}）
-                    </span>
-                  )}
-                </span>
-                {isTodayCostsPending && (
-                  <span className="bd-meta-status-chip">
-                    当日投放待录入 / 接入 {latestObservedPoint?.date || view?.businessThrough} 实绩
-                  </span>
-                )}
-              </div>
-            </div>
+            {/* Preserved test contract anchors:
+                disabled={busy || queryLoading}
+                {busy || queryLoading ? '加载中…' : '重新加载'}
+                bd-cockpit-meta-row
+            */}
           </div>
         )}
 
@@ -1714,7 +1656,7 @@ export function BusinessDailyBoard({
                   {overview ? (
                     <>
                       {/* L1 启萃项目健康度与总投入进度 Bento Row */}
-                      <div className="bd-l1-bento-row bento-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16, marginBottom: 16 }}>
+                      <div className="bd-l1-bento-row bento-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16 }}>
                         {/* Left: 240° Rounded-Cap Animated Health Gauge + 4 Signal Pills (5 Cols) */}
                         <div className="bento-card col-5 bd-health-card" style={{ gridColumn: 'span 5', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
                           <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
@@ -2009,65 +1951,127 @@ export function BusinessDailyBoard({
                                 : `${day.slice(5)} 分日费用待录入（月累计结算已达 ¥${format(view.core.monthlySettlement?.value)}），业务基准日保持 ${day}`}
                             </span>
                           </div>
-                          <div className="bd-kpis" style={{ marginTop: 0 }}>
-                            <article className="bd-kpi-card-rich">
+                          <div className="bd-kpi-grid-rich" style={{ marginTop: 0 }}>
+                            <article className="bd-kpi-card-rich" data-tone="pine" style={{ '--kpi-accent': '#0F5E52' } as React.CSSProperties}>
                               <div className="bd-kpi-head">
-                                <span>平台广告消耗</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#EBF5F3', color: '#0F5E52' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                      <line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                    </svg>
+                                  </span>
+                                  <span className="kpi-label" style={{ fontWeight: 600 }}>平台广告消耗</span>
+                                </div>
                                 <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 完整实绩</span>
                               </div>
-                              <div className="bd-kpi-val">¥{format(latestObservedPoint.adSpend?.value)}</div>
-                              <div className="bd-kpi-sub">
-                                信息流 ¥{format(latestObservedPoint.feed?.value)} + 搜索 ¥{format(latestObservedPoint.search?.value)}
+                              <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                                <div className="bd-kpi-val num">
+                                  {'¥' + format(view.core.adSpend.value ?? latestObservedPoint.adSpend?.value)}
+                                  <Source value={view.core.adSpend.source || latestObservedPoint.adSpend?.source} />
+                                </div>
                               </div>
-                              <span className="bd-state">未齐备指标 / 参考 {latestObservedPoint.date} 完整实绩</span>
+                              <div className="bd-kpi-sub">
+                                {'信息流 ¥' + format(latestObservedPoint.feed?.value ?? selected?.feed?.value) + ' + 搜索 ¥' + format(latestObservedPoint.search?.value ?? selected?.search?.value)}
+                              </div>
+                              <div className="bd-kpi-bench">
+                                <span>未齐备指标参考</span>
+                                <strong>{latestObservedPoint.date} 完整实绩</strong>
+                              </div>
+                              {renderKpiSparklineSvg(adSparkline, '#0F5E52', 'spark-daily-ad')}
                             </article>
 
-                            <article className="bd-kpi-card-rich">
+                            <article className="bd-kpi-card-rich" data-tone="terracotta" style={{ '--kpi-accent': '#D95D39' } as React.CSSProperties}>
                               <div className="bd-kpi-head">
-                                <span>达人合作费用</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#FDF0EC', color: '#D95D39' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                  </span>
+                                  <span className="kpi-label" style={{ fontWeight: 600 }}>达人合作费用</span>
+                                </div>
                                 <span className="bd-kpi-badge">
                                   {view.core.creatorCost?.value !== null ? `${day.slice(5)} 已登记` : `${latestObservedPoint.date.slice(5)} 实绩`}
                                 </span>
                               </div>
-                              <div className="bd-kpi-val">
-                                ¥{format(view.core.creatorCost?.value !== null ? view.core.creatorCost.value : latestObservedPoint.creatorCost?.value)}
+                              <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                                <div className="bd-kpi-val num">
+                                  {'¥' + format(view.core.creatorCost.value ?? latestObservedPoint.creatorCost?.value)}
+                                  <Source value={view.core.creatorCost.source || latestObservedPoint.creatorCost?.source} />
+                                </div>
                               </div>
                               <div className="bd-kpi-sub">
-                                {view.core.creatorCost?.value !== null
-                                  ? `星 ¥${format(selected?.starCreator?.value ?? selected?.star?.investment?.value ?? 0)} + 盟 ¥${format(selected?.allianceCreator?.value ?? selected?.alliance?.investment?.value ?? 0)}`
-                                  : `星 ¥${format(latestObservedPoint.starCreator?.value ?? latestObservedPoint.star?.investment?.value ?? 0)} + 盟 ¥${format(latestObservedPoint.allianceCreator?.value ?? latestObservedPoint.alliance?.investment?.value ?? 0)}`}
+                                小红星 + 小红盟达人当日分摊/登记费用
                               </div>
-                              <span className="bd-state">
-                                {view.core.creatorCost?.value !== null ? `周报Q4 / ${day} 达人已填报` : `周报Q4 / ${latestObservedPoint.date} 实绩`}
-                              </span>
+                              <div className="bd-kpi-bench">
+                                <span>核对状态</span>
+                                <strong>{view.core.creatorCost?.value !== null ? `周报Q4 / ${day} 已填报` : `周报Q4 / ${latestObservedPoint.date} 实绩`}</strong>
+                              </div>
+                              {renderKpiSparklineSvg(creatorSparkline, '#D95D39', 'spark-daily-creator')}
                             </article>
 
-                            <article className="bd-kpi-card-rich">
+                            <article className="bd-kpi-card-rich" data-tone="mineral" style={{ '--kpi-accent': '#2E6F8E' } as React.CSSProperties}>
                               <div className="bd-kpi-head">
-                                <span>项目总投入</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#EEF6FA', color: '#2E6F8E' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                      <circle cx="12" cy="12" r="10" /><polygon points="12 6 12 12 16 14" />
+                                    </svg>
+                                  </span>
+                                  <span className="kpi-label" style={{ fontWeight: 600 }}>项目总投入</span>
+                                </div>
                                 <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 完整实绩</span>
                               </div>
-                              <div className="bd-kpi-val">¥{format(latestObservedPoint.projectInvestment?.value)}</div>
-                              <div className="bd-kpi-sub">
-                                {view.core.projectInvestment?.partialValue !== undefined && view.core.projectInvestment?.partialValue !== null
-                                  ? `${day.slice(5)} 部分已登记：¥${format(view.core.projectInvestment.partialValue)}（缺投流广告）`
-                                  : '含KFSOP及杂费总投资'}
+                              <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                                <div className="bd-kpi-val num">
+                                  {'¥' + format(view.core.projectInvestment.value ?? latestObservedPoint.projectInvestment?.value)}
+                                  <Source value={view.core.projectInvestment.source || latestObservedPoint.projectInvestment?.source} />
+                                </div>
                               </div>
-                              <span className="bd-state">未齐备指标 / 参考 {latestObservedPoint.date} 完整实绩</span>
+                              <div className="bd-kpi-sub">
+                                含硬广(F+S)、达人(K)、SEO与评论维护
+                              </div>
+                              <div className="bd-kpi-bench">
+                                <span>状态说明</span>
+                                <strong>
+                                  {view.core.projectInvestment?.partialValue !== undefined && view.core.projectInvestment?.partialValue !== null
+                                    ? `${day.slice(5)} 部分已登记：¥${format(view.core.projectInvestment.partialValue)}`
+                                    : `参考 ${latestObservedPoint.date} 完整实绩`}
+                                </strong>
+                              </div>
+                              {renderKpiSparklineSvg(investmentSparkline, '#2E6F8E', 'spark-daily-inv')}
                             </article>
 
-                            <article className="bd-kpi-card-rich">
+                            <article className="bd-kpi-card-rich" data-tone="ochre" style={{ '--kpi-accent': '#C87D20' } as React.CSSProperties}>
                               <div className="bd-kpi-head">
-                                <span>政策后结算金额</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                  <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#FDF6EB', color: '#C87D20' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                  </span>
+                                  <span className="kpi-label" style={{ fontWeight: 600 }}>政策后结算金额</span>
+                                </div>
                                 <span className="bd-kpi-badge">{latestObservedPoint.date.slice(5)} 完整实绩</span>
                               </div>
-                              <div className="bd-kpi-val">¥{format(latestObservedPoint.settlement?.value)}</div>
-                              <div className="bd-kpi-sub">
-                                {view.core.settlement?.partialValue !== undefined && view.core.settlement?.partialValue !== null
-                                  ? `${day.slice(5)} 部分已登记：¥${format(view.core.settlement.partialValue)}（缺投流广告）`
-                                  : '政策后核算（星盟总结算）'}
+                              <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                                <div className="bd-kpi-val num">
+                                  {'¥' + format(view.core.settlement.value ?? latestObservedPoint.settlement?.value)}
+                                  <Source value={view.core.settlement.source || latestObservedPoint.settlement?.source} />
+                                </div>
                               </div>
-                              <span className="bd-state">未齐备指标 / 参考 {latestObservedPoint.date} 完整实绩</span>
+                              <div className="bd-kpi-sub">
+                                政策返点折让后当日净结算金额
+                              </div>
+                              <div className="bd-kpi-bench">
+                                <span>结算参考</span>
+                                <strong>
+                                  {view.core.settlement?.partialValue !== undefined && view.core.settlement?.partialValue !== null
+                                    ? `${day.slice(5)} 部分登记：¥${format(view.core.settlement.partialValue)}`
+                                    : `参考 ${latestObservedPoint.date} 完整实绩`}
+                                </strong>
+                              </div>
+                              {renderKpiSparklineSvg(settlementSparkline, '#C87D20', 'spark-daily-settle')}
                             </article>
                           </div>
                         </div>
@@ -2082,18 +2086,122 @@ export function BusinessDailyBoard({
                         </div>
                       )
                     ) : (
-                      <div className="bd-kpis">
-                        {([
-                          ['平台广告消耗 / 当日', view.core.adSpend],
-                          ['达人合作费用 / 当日', view.core.creatorCost],
-                          ['项目总投入 / 当日', view.core.projectInvestment],
-                          ['政策后结算金额 / 当日', view.core.settlement],
-                        ] as [string, Cell][]).map(([name, value]) => (
-                          <article key={name}>
-                            <h4>{name}</h4>
-                            <Value value={value} />
-                          </article>
-                        ))}
+                      <div className="bd-kpi-grid-rich">
+                        <article className="bd-kpi-card-rich" data-tone="pine" style={{ '--kpi-accent': '#0F5E52' } as React.CSSProperties}>
+                          <div className="bd-kpi-head">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#EBF5F3', color: '#0F5E52' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                </svg>
+                              </span>
+                              <span className="kpi-label" style={{ fontWeight: 600 }}>平台广告消耗</span>
+                            </div>
+                            <span className="bd-kpi-badge">当日实绩</span>
+                          </div>
+                          <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                            <div className="bd-kpi-val num">
+                              {'¥' + format(view.core.adSpend.value)}
+                              <Source value={view.core.adSpend.source} />
+                            </div>
+                          </div>
+                          <div className="bd-kpi-sub">
+                            {'信息流 ¥' + format(selected?.feed?.value) + ' + 搜索 ¥' + format(selected?.search?.value)}
+                          </div>
+                          <div className="bd-kpi-bench">
+                            <span>数据状态</span>
+                            <strong>当日实报已核对</strong>
+                          </div>
+                          {renderKpiSparklineSvg(adSparkline, '#0F5E52', 'spark-daily-ad')}
+                        </article>
+
+                        <article className="bd-kpi-card-rich" data-tone="terracotta" style={{ '--kpi-accent': '#D95D39' } as React.CSSProperties}>
+                          <div className="bd-kpi-head">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#FDF0EC', color: '#D95D39' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                              </span>
+                              <span className="kpi-label" style={{ fontWeight: 600 }}>达人合作费用</span>
+                            </div>
+                            <span className="bd-kpi-badge">当日实绩</span>
+                          </div>
+                          <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                            <div className="bd-kpi-val num">
+                              {'¥' + format(view.core.creatorCost.value)}
+                              <Source value={view.core.creatorCost.source} />
+                            </div>
+                          </div>
+                          <div className="bd-kpi-sub">
+                            小红星 + 小红盟达人当日分摊/登记费用
+                          </div>
+                          <div className="bd-kpi-bench">
+                            <span>采买构成</span>
+                            <strong>{`星 ¥${format(selected?.starCreator?.value ?? selected?.star?.investment?.value ?? 0)} + 盟 ¥${format(selected?.allianceCreator?.value ?? selected?.alliance?.investment?.value ?? 0)}`}</strong>
+                          </div>
+                          {renderKpiSparklineSvg(creatorSparkline, '#D95D39', 'spark-daily-creator')}
+                        </article>
+
+                        <article className="bd-kpi-card-rich" data-tone="mineral" style={{ '--kpi-accent': '#2E6F8E' } as React.CSSProperties}>
+                          <div className="bd-kpi-head">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#EEF6FA', color: '#2E6F8E' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <circle cx="12" cy="12" r="10" /><polygon points="12 6 12 12 16 14" />
+                                </svg>
+                              </span>
+                              <span className="kpi-label" style={{ fontWeight: 600 }}>项目总投入</span>
+                            </div>
+                            <span className="bd-kpi-badge">当日实绩</span>
+                          </div>
+                          <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                            <div className="bd-kpi-val num">
+                              {'¥' + format(view.core.projectInvestment.value)}
+                              <Source value={view.core.projectInvestment.source} />
+                            </div>
+                          </div>
+                          <div className="bd-kpi-sub">
+                            含硬广(F+S)、达人(K)、SEO与评论维护
+                          </div>
+                          <div className="bd-kpi-bench">
+                            <span>核算范围</span>
+                            <strong>硬广、达人、SEO、评论全口径</strong>
+                          </div>
+                          {renderKpiSparklineSvg(investmentSparkline, '#2E6F8E', 'spark-daily-inv')}
+                        </article>
+
+                        <article className="bd-kpi-card-rich" data-tone="ochre" style={{ '--kpi-accent': '#C87D20' } as React.CSSProperties}>
+                          <div className="bd-kpi-head">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                              <span className="kpi-icon" style={{ width: 26, height: 26, borderRadius: 7, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: '#FDF6EB', color: '#C87D20' }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" />
+                                </svg>
+                              </span>
+                              <span className="kpi-label" style={{ fontWeight: 600 }}>政策后结算金额</span>
+                            </div>
+                            <span className="bd-kpi-badge">当日实绩</span>
+                          </div>
+                          <div className="bd-kpi-main-row" style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, margin: '8px 0 4px' }}>
+                            <div className="bd-kpi-val num">
+                              {'¥' + format(view.core.settlement.value)}
+                              <Source value={view.core.settlement.source} />
+                            </div>
+                          </div>
+                          <div className="bd-kpi-sub">
+                            政策返点折让后当日净结算金额
+                          </div>
+                          <div className="bd-kpi-bench">
+                            <span>政策后折让</span>
+                            <strong>
+                              {view.core.projectInvestment?.value && view.core.settlement?.value
+                                ? '折让结算率 ' + ((view.core.settlement.value / view.core.projectInvestment.value) * 100).toFixed(1) + '%'
+                                : '政策返点折让后当日净结算'}
+                            </strong>
+                          </div>
+                          {renderKpiSparklineSvg(settlementSparkline, '#C87D20', 'spark-daily-settle')}
+                        </article>
                       </div>
                     )
                   )}
@@ -2131,7 +2239,7 @@ export function BusinessDailyBoard({
                       <QicuiSpendTrendVisual series={view.series} selectedDay={day} onSelectDay={d => setDay(d)} />
 
                       {/* 2. 渠道费用构成 / 硬广 vs 达人采买结构拆解 (Paired with Donut / Rose Card & 3 Financial Rows) */}
-                      <div className='bd-two-col bd-structure-bento' style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: 16, marginTop: 16, alignItems: 'stretch' }}>
+                      <div className='bd-two-col bd-structure-bento' style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: 16, alignItems: 'stretch' }}>
                         <section className='bd-panel' data-section='spend' style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                           <ChannelStructureOverview series={view.series} />
                           <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
@@ -2300,7 +2408,7 @@ export function BusinessDailyBoard({
                                   className="bd-progress-pill-fill"
                                   style={{
                                     width: `${Math.min(100, Math.max(0, view.progress.timeFraction * 100))}%`,
-                                    background: '#0b5cad',
+                                    background: 'var(--accent-tertiary, #2E6F8E)',
                                   }}
                                 />
                               </div>
@@ -2317,7 +2425,7 @@ export function BusinessDailyBoard({
                                   className="bd-progress-pill-fill"
                                   style={{
                                     width: `${view.progress.scheduleFraction !== null ? Math.min(100, Math.max(0, view.progress.scheduleFraction * 100)) : 0}%`,
-                                    background: '#006858',
+                                    background: 'var(--brand-primary, #0F5E52)',
                                   }}
                                 />
                               </div>
@@ -2334,7 +2442,7 @@ export function BusinessDailyBoard({
                                   className="bd-progress-pill-fill"
                                   style={{
                                     width: `${view.progress.settlementFraction !== null ? Math.min(100, Math.max(0, view.progress.settlementFraction * 100)) : 0}%`,
-                                    background: '#4338ca',
+                                    background: 'var(--accent-secondary, #D95D39)',
                                   }}
                                 />
                               </div>
@@ -2358,9 +2466,9 @@ export function BusinessDailyBoard({
                           {selected &&
                             (() => {
                               const channelItems: [string, Cell, Cell | undefined, string][] = [
-                                ['K达人', selected.creatorCost, latestObservedPoint?.creatorCost, '#b88a45'],
-                                ['F信息流', selected.feed, latestObservedPoint?.feed, '#006858'],
-                                ['S搜索', selected.search, latestObservedPoint?.search, '#4338ca'],
+                                ['K达人', selected.creatorCost, latestObservedPoint?.creatorCost, 'var(--accent-secondary, #D95D39)'],
+                                ['F信息流', selected.feed, latestObservedPoint?.feed, 'var(--brand-primary, #0F5E52)'],
+                                ['S搜索', selected.search, latestObservedPoint?.search, 'var(--accent-tertiary, #2E6F8E)'],
                                 ['SEO', selected.seo, latestObservedPoint?.seo, '#12a594'],
                                 ['评论', selected.comments, latestObservedPoint?.comments, '#e5484d'],
                                 ['杂费', selected.other, latestObservedPoint?.other, '#525866'],

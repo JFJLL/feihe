@@ -402,6 +402,10 @@
 .business-daily > .bd-section-block + .bd-section-block {
   margin-top: 0 !important;
 }
+.business-daily > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
 
 /* Reload button styles matching CampaignWorkspace */
 .ca-subnav-reload-btn {
@@ -1046,6 +1050,13 @@
   min-height: 36px;
   padding: 0 10px;
   font-size: 13px;
+}
+
+.bd-cockpit-toolbar .day-nav-custom-picker {
+  width: 136px !important;
+  min-width: 136px !important;
+  max-width: 136px !important;
+  flex: 0 0 136px !important;
 }
 
 .bd-cockpit-toolbar .day-nav-custom-picker .custom-date-input-field {

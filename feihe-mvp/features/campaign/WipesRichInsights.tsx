@@ -725,9 +725,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </div>
 
         {/* 次级分析折叠 1：定向人群包、达人层级与场景热力矩阵 */}
-        <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0' }}>
-            展开查看次级分析：定向人群包散点、4大达人层级费用与场景热力矩阵
+        <details className="wipes-details-box wipes-secondary-section">
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="ca-chapter-num">04</span>
+            <span>展开查看次级分析：定向人群包散点、4大达人层级费用与场景热力矩阵</span>
           </summary>
           <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
             {/* Panel 9: 31 Audience Packages Scatter */}
@@ -831,9 +832,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </details>
 
         {/* 次级分析折叠 2：达人选号淘汰漏斗与三甲医生专家矩阵 */}
-        <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0' }}>
-            展开查看次级分析：达人选号全流程淘汰漏斗与三甲医生专家背书候选池
+        <details className="wipes-details-box wipes-secondary-section">
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="ca-chapter-num">05</span>
+            <span>展开查看次级分析：达人选号全流程淘汰漏斗与三甲医生专家背书候选池</span>
           </summary>
           <div className="wipes-rich-grid-2" style={{ marginTop: '14px' }}>
             {/* Panel 13: Creator Selection Funnel */}
@@ -954,9 +956,10 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
         </details>
 
         {/* 次级分析折叠 3：商业投放笔记卡审质检跟踪 */}
-        <details className="wipes-details-box wipes-secondary-section" style={{ marginTop: '16px' }}>
-          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0' }}>
-            展开查看次级分析：商业投放笔记卡审合规质检与过审响应跟踪（9大高频问题规范）
+        <details className="wipes-details-box wipes-secondary-section">
+          <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 14, color: '#1c2024', padding: '6px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="ca-chapter-num">06</span>
+            <span>展开查看次级分析：商业投放笔记卡审合规质检与过审响应跟踪（9大高频问题规范）</span>
           </summary>
           <div style={{ marginTop: '14px' }}>
             {/* Panel 15: Review Blockers Quality Assurance */}
