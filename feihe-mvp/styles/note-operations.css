@@ -145,8 +145,8 @@
 .co-queue-tabs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 4px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
 .co-queue-tabs button {
@@ -154,24 +154,25 @@
   flex-direction: column;
   text-align: left;
   gap: 6px;
-  padding: 14px 16px;
-  background: #ffffff;
-  border:0.5px solid #d9d9e0;
-  border-radius: 10px;
+  padding: 16px 20px;
+  background: var(--bg-surface, #FFFFFF);
+  border: 1px solid var(--border-subtle, #E8E1D7);
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 250ms ease-out;
-  box-shadow: 0 1px 2px rgba(28, 32, 36, 0.03);
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.04);
+  position: relative;
 }
 
 .co-queue-tabs button:hover:not(.active) {
-  background: #f9f9fb;
-  border-color:#d9d9e0;
+  background: var(--bg-subtle, #FAF9F5);
+  border-color: var(--border-focus, #D5CBBF);
 }
 
 .co-queue-tabs button.active {
-  border-color:var(--teal-11, #008573) !important;
-  background: linear-gradient(180deg, #f0f0f3 0%, #ffffff 100%) !important;
-  box-shadow: 0 2px 6px rgba(0, 133, 115, 0.14) !important;
+  border-color: var(--brand-primary, #C84B31) !important;
+  background: var(--bg-surface, #FFFFFF) !important;
+  box-shadow: 0 4px 12px rgba(200, 75, 49, 0.10) !important;
 }
 
 .co-queue-card-head {
@@ -182,26 +183,82 @@
 }
 
 .co-queue-tabs button strong {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  color:#1c2024;
+  color: var(--text-primary, #1C1917);
   white-space: nowrap;
 }
 
+.co-queue-tabs button.active strong {
+  color: var(--brand-primary, #C84B31);
+}
+
 .co-queue-tabs button span {
-  color:#60646c;
+  color: var(--text-secondary, #57534E);
   font-size: 12px;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .co-queue-active-badge {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--teal-11, #008573);
-  color:#ffffff;
+  border-radius: 9999px;
+  background: var(--brand-primary, #C84B31);
+  color: #FFFFFF;
 }
+
+/* 2b. KPI Stat Deck */
+.co-kpi-deck,
+.note-operations .bd-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.co-kpi-deck article,
+.note-operations .bd-kpis article {
+  background: var(--bg-surface, #FFFFFF) !important;
+  border: 1px solid var(--border-subtle, #E8E1D7) !important;
+  border-radius: 12px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 1px 3px rgba(28, 25, 23, 0.04) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  min-height: 86px;
+  transition: all 0.2s ease;
+}
+
+.co-kpi-deck article:hover,
+.note-operations .bd-kpis article:hover {
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.06) !important;
+  border-color: var(--border-focus, #D5CBBF) !important;
+}
+
+.co-kpi-deck h4,
+.note-operations .bd-kpis h4 {
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: var(--text-secondary, #57534E) !important;
+  margin: 0 0 8px 0 !important;
+}
+
+.co-kpi-deck strong,
+.note-operations .bd-kpis strong {
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1C1917) !important;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.co-kpi-card.kpi-total strong { color: var(--brand-primary, #C84B31) !important; }
+.co-kpi-card.kpi-checked strong { color: var(--accent-secondary, #26547C) !important; }
+.co-kpi-card.kpi-rate strong { color: var(--status-success, #15803D) !important; }
+.co-kpi-card.kpi-coverage strong { color: var(--accent-quaternary, #B87333) !important; }
 
 /* 3. In-cell Spend Bar & Table Polish */
 .co-queue-table {

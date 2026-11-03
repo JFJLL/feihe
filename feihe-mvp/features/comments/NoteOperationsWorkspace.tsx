@@ -121,7 +121,7 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
     </div>
     {current?.error && <div role="alert" className="bd-alerts"><p>{current.error}</p></div>}
     {!current ? <p>读取本项目本地巡查队列…</p>:data && <>
-      <div className="bd-kpis">{[['队列笔记',number(data.total)],['已检查样本',`${data.summary.checked} 篇`],['样本合格率',percent(data.summary.qualityRate)],['笔记检查覆盖率',percent(data.summary.checkedCoverage)]].map(([title,value])=><article key={title}><h4>{title}</h4><strong>{value}</strong></article>)}</div>
+      <div className="bd-kpis co-kpi-deck">{[['队列笔记',number(data.total),'kpi-total'],['已检查样本',`${data.summary.checked} 篇`,'kpi-checked'],['样本合格率',percent(data.summary.qualityRate),'kpi-rate'],['笔记检查覆盖率',percent(data.summary.checkedCoverage),'kpi-coverage']].map(([title,value,cls])=><article key={title} className={`co-kpi-card ${cls}`}><h4>{title}</h4><strong>{value}</strong></article>)}</div>
       <p className="bd-caption">合格率＝当前分析版本已人工复核为合格的笔记 / 已检查笔记。尚未检查保持未知；逐篇评论覆盖率另列。</p>
       <div className="bd-alerts"><p>{cleanScopeHint(data.ranking)}</p><p>{data.sourceStatus.deliveries}</p><p>{data.sourceStatus.comments}</p></div>
       <section className="bd-panel">

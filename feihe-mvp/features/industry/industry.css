@@ -385,38 +385,75 @@
   align-items: center;
   gap: 8px;
   overflow-x: auto;
-  padding: 4px 0;
+  padding: 6px 0;
   -webkit-overflow-scrolling: touch;
 }
 
 .v2-filter-label {
-  font-size: 14px;
-  color:var(--v2-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary, #57534E);
   white-space: nowrap;
 }
 
 .v2-filter-pill {
-  background: var(--bg-subtle, #FAF9F5);
-  border:0.5px solid var(--v2-border);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 14px;
-  color:#60646c;
+  background: var(--bg-surface, #FFFFFF);
+  border: 1px solid var(--border-subtle, #E8E1D7);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-secondary, #57534E);
   cursor: pointer;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 250ms ease-out;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.04);
 }
-.v2-filter-pill:hover {
-  border-color:var(--v2-teal);
+.v2-filter-pill:hover:not(.active) {
+  background: var(--bg-subtle, #FAF9F5);
+  border-color: var(--border-focus, #D5CBBF);
+  color: var(--text-primary, #1C1917);
 }
 .v2-filter-pill.active {
-  background: var(--v2-teal-light);
-  border-color:var(--v2-teal);
-  color:var(--v2-teal-dark);
+  background: var(--brand-primary, #C84B31);
+  border-color: var(--brand-primary, #C84B31);
+  color: #FFFFFF !important;
   font-weight: 600;
+  box-shadow: 0 2px 6px rgba(200, 75, 49, 0.18);
+}
+
+/* Eliminate nested inner-box conflict inside filter pills */
+.v2-filter-pill .v2-query-pill {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.v2-filter-pill .v2-query-prefix {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.06);
+  color: inherit;
+}
+
+.v2-filter-pill.active .v2-query-prefix {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+.v2-filter-pill .v2-query-label {
+  font-size: 13px;
+  color: inherit;
 }
 
 /* Query Pill Badges */
@@ -598,7 +635,7 @@
 }
 .v2-diff-up { background: var(--v2-green-bg); color:var(--v2-green); border:0.5px solid #acdec8; }
 .v2-diff-down { background: var(--v2-red-bg); color:var(--v2-red); border:0.5px solid #ffcdce; }
-.v2-diff-muted { background: var(--slate-3, var(--bg-subtle, #FAF9F5)); color:var(--v2-text-muted); border:0.5px solid var(--v2-border, var(--border-subtle, #E6E3DC)); }
+.v2-diff-muted { background: var(--slate-3, #f0f0f3); color:var(--v2-text-muted); border:0.5px solid var(--v2-border, var(--border-subtle, #E6E3DC)); }
 
 .v2-kpi-subtext {
   margin-top: auto;
