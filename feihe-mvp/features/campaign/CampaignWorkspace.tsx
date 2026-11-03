@@ -222,8 +222,8 @@ export function CampaignWorkspace({
       onClick={handleReload}
       disabled={loading || syncing}
       className={`ca-subnav-reload-btn ${syncing ? 'is-syncing' : ''}`}
-      title="从飞书同步最新数据并刷新"
-      aria-label="从飞书同步最新数据并刷新"
+      title="同步飞书与腾讯文档等全部外部数据源并刷新"
+      aria-label="同步飞书与腾讯文档等全部外部数据源并刷新"
     >
       <svg
         className="ca-subnav-reload-icon"
@@ -238,7 +238,7 @@ export function CampaignWorkspace({
         <path d="M1.5 8a6.5 6.5 0 1 0 1.9-4.6L1.5 5.5" />
         <path d="M1.5 2v3.5H5" />
       </svg>
-      <span>{syncing ? '飞书同步中…' : loading ? '重新加载中…' : '同步飞书数据'}</span>
+      <span>{syncing ? '数据同步中…' : loading ? '重新加载中…' : '同步最新数据'}</span>
     </button>
   );
 

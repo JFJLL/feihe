@@ -37,7 +37,6 @@ const dailyNavItems = [
   { id: 'view-daily-focus-spend', label: '当日重点与费用进度' },
   { id: 'view-daily-ad', label: '投流执行' },
   { id: 'view-daily-execution', label: '内容与评论/SEO执行' },
-  { id: 'view-daily-source', label: '原文与来源' },
 ];
 
 function GroupHeading({
@@ -162,77 +161,28 @@ function renderKpiSparklineSvg(
 }
 
 function Source({ value }: { value?: SourceRef }) {
-  const { projectId } = useProject();
-  const [rows, setRows] = useState<unknown[][] | null>(null);
-  const [columns, setColumns] = useState<string[]>([]);
-  const [error, setError] = useState('');
-
-  async function load() {
-    if (!value || rows) return;
-    try {
-      const result = await api<{ rows: unknown[][]; columns: string[] }>(
-        '/api/business-daily?' +
-          new URLSearchParams({
-            projectId,
-            sourceKey: value.sourceKey,
-            ...(value.captureId ? { captureId: value.captureId } : {}),
-            offset: String(Math.max(0, (value.row || 1) - 1)),
-            limit: '3',
-          })
-      );
-      setRows(result.rows);
-      setColumns(result.columns);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : '明细读取失败');
-    }
-  }
-
-  return value ? (
-    <details className="bd-source">
-      <summary>查看来源与口径</summary>
-      <a href={value.url} target="_blank" rel="noreferrer">原始业务来源 ↗</a>
-      <span>
-        版本 {value.version}
-        {value.row ? (' / 第' + value.row + '行' + (value.column ? '第' + value.column + '列' : '')) : ''} / {value.sourceKey}
-      </span>
-      {value.range && (
-        <>
-          <button onClick={load}>查看保存的来源行</button>
-          {error ? (
-            <p role="alert">{error}</p>
-          ) : rows ? (
-            <div className="bd-scroll">
-              <table>
-                <thead>
-                  <tr>{columns.map((c, i) => <th key={i}>{c}</th>)}</tr>
-                </thead>
-                <tbody>
-                  {rows.map((r, i) => (
-                    <tr key={i}>{r.map((v, j) => <td key={j}>{String(v ?? '—')}</td>)}</tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : null}
-        </>
-      )}
-    </details>
-  ) : (
-    <span className="bd-source">来源待接入</span>
-  );
+  return null;
 }
 
 function Value({ value, unit = '元' }: { value: Cell; unit?: string }) {
+  const hasValue = value.value !== null && value.value !== undefined;
   return (
     <>
       <strong>
-        {format(value.value)} <small>{unit}</small>
+        {hasValue ? (
+          <>
+            {format(value.value)} <small>{unit}</small>
+          </>
+        ) : (
+          <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500 }}>当日未录入</span>
+        )}
       </strong>
-      <small className={'bd-state bd-' + value.state}>
-        {value.state === 'observed' && value.value === 0 ? '真实零' : cellLabels[value.state]}
-        {value.reason ? ' / ' + value.reason : ''}
-      </small>
-      <Source value={value.source} />
+      {value.state && value.state !== 'observed' && (
+        <small className={'bd-state bd-' + value.state}>
+          {cellLabels[value.state]}
+          {value.reason ? ' / ' + value.reason : ''}
+        </small>
+      )}
     </>
   );
 }
@@ -2739,29 +2689,10 @@ export function BusinessDailyBoard({
                         {table('板块负责人') && <DataTable table={table('板块负责人')!} />}
                         <NarrativeBlock title="核心todo" view={view} />
                         <NarrativeBlock title="核心亮点" view={view} />
-                        <p className="bd-caption">
-                          模块负责人按日报登记；具体整改负责人以笔记档案为准。竞品文字为作者观察，交叉验证尚未完成。
-                        </p>
+
                       </section>
 
-                      {/* Daily Group 4: 原文与来源 */}
-                      <GroupHeading
-                        id="view-daily-source"
-                        badge="04"
-                        title="原文与来源"
-                        subtitle="完整日报作者文字、案例档案、业务同步与来源版本"
-                      />
 
-                      <details className="bd-panel">
-                        <summary>查看完整日报文字、案例与来源（{view.narrative.length} 节）</summary>
-                        {view.narrative.map((n, i) => (
-                          <div className="bd-narrative" key={i}>
-                            <h4>{n.title}</h4>
-                            <p>{n.text}</p>
-                            <Source value={n.source} />
-                          </div>
-                        ))}
-                      </details>
                     </>
                   )}
 

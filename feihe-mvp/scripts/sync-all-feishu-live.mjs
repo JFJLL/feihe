@@ -754,6 +754,17 @@ export async function syncAllFeishuLive(options = {}) {
   fs.writeFileSync(huangEnrichPath, JSON.stringify(huangEnrich, null, 2), 'utf8');
   console.log(`  -> Wrote ${huangEnrichPath}`);
 
+  // E0. Kailas live sync via Tencent Docs OpenAPI
+  const kailasTencentScript = path.resolve(REPO_ROOT, 'scripts/sync_kailas_tencent.py');
+  if (fs.existsSync(kailasTencentScript)) {
+    try {
+      console.log(`  -> Executing Tencent Docs sync for Kailas...`);
+      execSync(`python "${kailasTencentScript}"`, { cwd: REPO_ROOT, stdio: 'inherit', timeout: 60000 });
+    } catch (err) {
+      console.warn(`[WARN] Tencent Docs sync failed: ${err.message}`);
+    }
+  }
+
   // E. lib/campaign-enrichment/kailas.json
   const kailasEnrichPath = path.resolve(ROOT_DIR, 'lib/campaign-enrichment/kailas.json');
   const kailasEnrich = JSON.parse(fs.readFileSync(kailasEnrichPath, 'utf8'));

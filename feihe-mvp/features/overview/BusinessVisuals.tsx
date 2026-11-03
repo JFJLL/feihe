@@ -38,11 +38,7 @@ const num = (n: number | null | undefined) => (n === null || n === undefined ? '
 const pct = (n: number | null | undefined) => (n === null || n === undefined ? '—' : num(n * 100) + '%');
 
 function Evidence({ source, label = '日报登记' }: { source?: SourceRef; label?: string }) {
-  return (
-    <p className="bd-caption bv-evidence">
-      {label} {source && <a href={source.url} target="_blank" rel="noreferrer">查看来源 ↗</a>}
-    </p>
-  );
+  return null;
 }
 
 export function CostComparisonChart({
@@ -295,36 +291,32 @@ export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['sea
   const scopeCaption = data.tableScope || '来源快照，统计区间未标明';
   const cpuvLabel = data.tableCpuvLabel || 'CPUV';
   return (
-    <>
-      <div className="bv-word-cards">
-        {data.coreWords.length ? (
-          data.coreWords.map(w => (
-            <article key={w.word}>
-              <div className="bv-word-head">
-                <h4>{w.word}</h4>
-                <span>SOC {pct(w.soc)} / 排名{w.rank ?? '—'}</span>
-              </div>
-              <strong className="bv-word-spend">{num(w.spend)}<small>元</small></strong>
-              <p className="bd-caption">{scopeCaption}</p>
-              <dl>
-                <div><dt>底表消费占比</dt><dd>{pct(w.share)}</dd></div>
-                <div><dt>源行CTR</dt><dd>{pct(w.ctr)}</dd></div>
-                <div><dt>{cpuvLabel}</dt><dd>{num(w.cpuv)}元</dd></div>
-                <div><dt>搜索指数快照</dt><dd>{num(w.index)}</dd></div>
-              </dl>
-              {w.reportShare !== null && w.share !== null && Math.abs(w.reportShare - w.share) > 0.005 && (
-                <p className="bv-small-warning">
-                  日报费用占比{pct(w.reportShare)}，底表{pct(w.share)}；范围与更新时间不同（分属不同统计区间）。
-                </p>
-              )}
-            </article>
-          ))
-        ) : (
-          <p className="bd-caption">该范围尚无占位词观测。</p>
-        )}
-      </div>
-      <Evidence source={data.tableSource} label={`关键词底表：${scopeCaption}；SOC/排名为作者日报登记。`} />
-    </>
+    <div className="bv-word-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', margin: '8px 0 14px' }}>
+      {data.coreWords.length ? (
+        data.coreWords.map(w => (
+          <article key={w.word} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column' }}>
+            <div className="bv-word-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>{w.word}</h4>
+              <span style={{ fontSize: '11px', fontWeight: 600, color: '#2563eb', background: '#eff6ff', padding: '2px 8px', borderRadius: '12px' }}>
+                SOC {pct(w.soc)} · 排名{w.rank ?? '—'}
+              </span>
+            </div>
+            <strong className="bv-word-spend" style={{ fontSize: '24px', fontWeight: 700, color: '#0f172a', margin: '6px 0 2px' }}>
+              {num(w.spend)}<small style={{ fontSize: '12px', fontWeight: 500, marginLeft: '2px' }}>元</small>
+            </strong>
+            <p className="bd-caption" style={{ color: '#94a3b8', fontSize: '11px', margin: '0 0 12px' }}>{scopeCaption}</p>
+            <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', background: '#f8fafc', padding: '10px 12px', borderRadius: '10px', margin: 0 }}>
+              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>底表消费占比</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{pct(w.share)}</dd></div>
+              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>源行CTR</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{pct(w.ctr)}</dd></div>
+              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>{cpuvLabel}</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{num(w.cpuv)}元</dd></div>
+              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>搜索指数快照</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{num(w.index)}</dd></div>
+            </dl>
+          </article>
+        ))
+      ) : (
+        <p className="bd-caption">该范围尚无占位词观测。</p>
+      )}
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback, useSyncExternalStore, useState } from "react";
+import React, { useMemo, useCallback, useSyncExternalStore, useState, useEffect } from "react";
 import type { CampaignDashboard } from "../../lib/campaign-types";
 import { DayNavigator } from "../../components/ui/DayNavigator";
 import { MetricStrip, ChartPanel, HealthArcGauge, ExecutiveBulletCard } from "./CampaignCharts";
@@ -86,7 +86,7 @@ function getServerUrlSearchSnapshot(): string {
 export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
   const name = dashboard?.name || "项目";
   const datasets = useMemo(() => (dashboard ? resolveDailyDatasets(dashboard) : []), [dashboard]);
-  const [feishuTab, setFeishuTab] = useState<"keywords" | "audiences" | "actions">("keywords");
+
 
   // Reactive URL search store: guarantees SSR/hydration compatibility and listens to back/forward
   const urlSearch = useSyncExternalStore(subscribeToUrl, getUrlSearchSnapshot, getServerUrlSearchSnapshot);
@@ -168,6 +168,29 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
     if (!dashboard || !activeDataset || !selectedDate) return null;
     return buildDailyRichContext(dashboard, activeDataset, selectedDate);
   }, [dashboard, activeDataset, selectedDate]);
+
+  const availableFeishuTabs = useMemo(() => {
+    const list: Array<{ id: "keywords" | "audiences" | "actions"; label: string }> = [];
+    const d = richContext?.feishuDrilldowns;
+    if (d?.taosouDailyKeywords?.length || d?.searchKeywords?.length) {
+      list.push({ id: "keywords", label: "搜索词与淘搜" });
+    }
+    if (d?.audiencePackages?.length) {
+      list.push({ id: "audiences", label: "定向人群包" });
+    }
+    if (d?.actionItems?.length) {
+      list.push({ id: "actions", label: "业务日报动作" });
+    }
+    return list;
+  }, [richContext?.feishuDrilldowns]);
+
+  const [feishuTab, setFeishuTab] = useState<"keywords" | "audiences" | "actions">("keywords");
+
+  useEffect(() => {
+    if (availableFeishuTabs.length > 0 && !availableFeishuTabs.some(t => t.id === feishuTab)) {
+      setFeishuTab(availableFeishuTabs[0].id);
+    }
+  }, [availableFeishuTabs, feishuTab]);
 
   // Calendar rows for diagnostic module (safely handles gaps and cumulative pacing)
   const diagCalendarRows = useMemo(() => {
@@ -872,7 +895,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                           高贡献创意素材榜 (Top {richContext.feishuDrilldowns.topNotes.length})
                         </strong>
                       </div>
-                      <span className="ca-feishu-subpanel-caption">按消耗/产出规模排序</span>
+                      <span className="ca-feishu-subpanel-caption">按全周期累计规模排序</span>
                     </div>
                     <div className="ca-feishu-notes-list">
                       {richContext.feishuDrilldowns.topNotes.length === 0 ? (
@@ -924,33 +947,18 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                   <div className="ca-feishu-subpanel">
                     <div className="ca-feishu-subpanel-head">
                       <div className="ca-feishu-tabs" role="tablist">
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={feishuTab === "keywords"}
-                          className={`ca-feishu-tab-btn ${feishuTab === "keywords" ? "active" : ""}`}
-                          onClick={() => setFeishuTab("keywords")}
-                        >
-                          搜索词与淘搜
-                        </button>
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={feishuTab === "audiences"}
-                          className={`ca-feishu-tab-btn ${feishuTab === "audiences" ? "active" : ""}`}
-                          onClick={() => setFeishuTab("audiences")}
-                        >
-                          定向人群包
-                        </button>
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={feishuTab === "actions"}
-                          className={`ca-feishu-tab-btn ${feishuTab === "actions" ? "active" : ""}`}
-                          onClick={() => setFeishuTab("actions")}
-                        >
-                          业务日报动作
-                        </button>
+                        {availableFeishuTabs.map((t) => (
+                          <button
+                            key={t.id}
+                            type="button"
+                            role="tab"
+                            aria-selected={feishuTab === t.id}
+                            className={`ca-feishu-tab-btn ${feishuTab === t.id ? "active" : ""}`}
+                            onClick={() => setFeishuTab(t.id)}
+                          >
+                            {t.label}
+                          </button>
+                        ))}
                       </div>
                     </div>
 
@@ -1072,7 +1080,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                   <path d="M2 2v12h12V2H2zm10 10H4V4h8v8z" />
                 </svg>
               </span>
-              <span>全周期累计与高级诊断分析 (热力图 · 累计消耗趋势 · 周度节奏)</span>
+              <span>全周期累计与宏观走势诊断 (跨期趋势分析，默认折叠)</span>
               <span className="ca-daily-details-badge">高级诊断</span>
             </div>
             <span className="ca-daily-details-hint">点击展开全期分析</span>
