@@ -33,32 +33,32 @@ assert.equal(wipesDatasets.length, 2, "winner-wipes should have 2 datasets");
 
 const wipesDelivery = wipesDatasets.find((d) => d.id === "wipes-daily-delivery");
 assert(wipesDelivery, "wipes-daily-delivery dataset must exist");
-assert.equal(wipesDelivery.rows.length, 43, "wipes-daily-delivery should have 43 daily points");
+assert.equal(wipesDelivery.rows.length, 46, "wipes-daily-delivery should have 46 daily points");
 assert.equal(wipesDelivery.rows[0].date, "2026-09-16");
-assert.equal(wipesDelivery.rows[42].date, "2026-10-28");
-assert.ok(wipesDelivery.rows.find((r) => r.date === "2026-10-28"), "10/28 must exist in wipes delivery");
-assert.equal(wipesDelivery.rows.find((r) => r.date === "2026-10-29"), undefined, "10/29 unobserved date must not be invented");
-assert.equal(Math.round(wipesDelivery.rows.reduce((acc, r) => acc + r.spend, 0) * 100) / 100, 248780.55, "wipes delivery spend sum must match source total exactly");
+assert.equal(wipesDelivery.rows[45].date, "2026-10-31");
+assert.ok(wipesDelivery.rows.find((r) => r.date === "2026-10-31"), "10/31 must exist in wipes delivery");
+assert.equal(wipesDelivery.rows.find((r) => r.date === "2026-11-01"), undefined, "11/01 unobserved date must not be invented");
+assert.equal(Math.round(wipesDelivery.rows.reduce((acc, r) => acc + r.spend, 0) * 100) / 100, 260041.21, "wipes delivery spend sum must match source total exactly");
 
 const wipesTaosou = wipesDatasets.find((d) => d.id === "wipes-daily-taosou");
 assert(wipesTaosou, "wipes-daily-taosou dataset must exist");
-assert.equal(wipesTaosou.rows.length, 46, "wipes-daily-taosou should have 46 daily points");
+assert.equal(wipesTaosou.rows.length, 49, "wipes-daily-taosou should have 49 daily points");
 assert.equal(wipesTaosou.rows[0].date, "2026-09-14");
-assert.equal(wipesTaosou.rows[45].date, "2026-10-29");
+assert.equal(wipesTaosou.rows[48].date, "2026-11-01");
 const ts1025 = wipesTaosou.rows.find((r) => r.date === "2026-10-25");
 assert.equal(ts1025.spend_total, 6484.06, "10/25 taosou spend_total must be recorded as 6484.06");
 assert.equal(ts1025.spend_k, 0, "10/25 taosou spend_k must retain explicit 0");
 assert.equal(ts1025.kw_total_index, 225, "10/25 taosou kw_total_index must be 225");
 const ts1028 = wipesTaosou.rows.find((r) => r.date === "2026-10-28");
-assert.equal(ts1028.spend_total, null, "10/28 taosou spend_total must be null due to unrecorded F/S/CID");
+assert.equal(ts1028.spend_total, 3342.96, "10/28 taosou spend_total must match source");
 assert.equal(ts1028.spend_k, 0, "10/28 taosou spend_k must retain explicit 0");
 assert.equal(ts1028.kw_total_index, 200, "10/28 taosou kw_total_index must be 200");
 const ts1029 = wipesTaosou.rows.find((r) => r.date === "2026-10-29");
-assert.equal(ts1029.spend_total, null, "10/29 taosou spend_total must be null");
+assert.equal(ts1029.spend_total, 3371.12, "10/29 taosou spend_total must match source");
 assert.equal(ts1029.kw_total_index, 175, "10/29 taosou kw_total_index must be 175");
-assert.equal(wipesTaosou.rows.find((r) => r.date === "2026-10-30"), undefined, "10/30 unobserved date must not be invented");
+assert.equal(wipesTaosou.rows.find((r) => r.date === "2026-11-02"), undefined, "11/02 unobserved date must not be invented");
 const observedTaosouSpend = wipesTaosou.rows.map((r) => r.spend_total).filter((s) => s !== null).reduce((acc, s) => acc + s, 0);
-assert.equal(Math.round(observedTaosouSpend * 100) / 100, 446279.43, "wipes taosou observed spend sum must match source total");
+assert.equal(Math.round(observedTaosouSpend * 100) / 100, 468923.1, "wipes taosou observed spend sum must match source total");
 
 // Meiling
 const meilingDatasets = getCampaignDailyDatasetsByProject("meiling");
@@ -67,12 +67,12 @@ assert.equal(meilingDatasets.length, 3, "meiling should have 3 datasets");
 
 const meilingCid = meilingDatasets.find((d) => d.id === "meiling-daily-cid-jd");
 assert(meilingCid, "meiling-daily-cid-jd dataset must exist");
-assert.equal(meilingCid.rows.length, 14, "meiling CID should have 14 daily points");
+assert.equal(meilingCid.rows.length, 17, "meiling CID should have 17 daily points");
 assert.equal(meilingCid.rows[0].date, "2026-10-16");
-assert.equal(meilingCid.rows[13].date, "2026-10-29");
-assert.ok(meilingCid.rows.find((r) => r.date === "2026-10-29"), "10/29 must exist in meiling CID");
-assert.equal(meilingCid.rows.find((r) => r.date === "2026-10-30"), undefined, "10/30 unobserved date must not be invented");
-assert.equal(Math.round(meilingCid.rows.reduce((acc, r) => acc + r.spend, 0) * 100) / 100, 13229.88, "meiling CID spend sum must match source total");
+assert.equal(meilingCid.rows[16].date, "2026-11-01");
+assert.ok(meilingCid.rows.find((r) => r.date === "2026-11-01"), "11/01 must exist in meiling CID");
+assert.equal(meilingCid.rows.find((r) => r.date === "2026-11-02"), undefined, "11/02 unobserved date must not be invented");
+assert.equal(Math.round(meilingCid.rows.reduce((acc, r) => acc + r.spend, 0) * 100) / 100, 32563.3, "meiling CID spend sum must match source total");
 
 // Kailas
 const kailasDatasets = getCampaignDailyDatasetsByProject("kailas");
