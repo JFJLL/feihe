@@ -20,13 +20,13 @@ const THEME_PALETTES: {
     id: 'botanical',
     title: '🌿 旷野松石 (松石绿 + 赤陶橘)',
     subtitle: '温润纸感与自然松石绿主调，兼顾高可读性与全链路层次对比',
-    badge: '默认推荐',
     swatches: ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20'],
   },
   {
     id: 'terracotta',
     title: '📰 财经社论 (丹砂红 + 矿石蓝)',
     subtitle: '社论报刊级暖调丹砂与深矿蓝对比，适合经营复盘与投流归因审阅',
+      badge: '默认推荐',
     swatches: ['#C84B31', '#26547C', '#4A6B53', '#B87333'],
   },
   {
@@ -43,7 +43,7 @@ export function ProjectProfile({ project, projectId, onDone, toast }: {
 }) {
   const { workspace, error, refreshWorkspace } = useProject();
   const [editing, setEditing] = useState(false);
-  const [activePalette, setActivePalette] = useState<PaletteKey>('botanical');
+  const [activePalette, setActivePalette] = useState<PaletteKey>('terracotta');
   const hydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
 
   useEffect(() => {
@@ -53,11 +53,11 @@ export function ProjectProfile({ project, projectId, onDone, toast }: {
         raw ||
         window.localStorage.getItem('feihe_ui_palette') ||
         document.documentElement.getAttribute('data-palette') ||
-        'botanical';
+        'terracotta';
       const valid: PaletteKey =
         candidate === 'botanical' || candidate === 'terracotta' || candidate === 'nordic'
           ? candidate
-          : 'botanical';
+          : 'terracotta';
       document.documentElement.setAttribute('data-palette', valid);
       setActivePalette(valid);
     };

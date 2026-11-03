@@ -23,7 +23,7 @@ export async function GET(request: Request) {
   const access = await requireProjectAccess(request, projectId);
   if (!access.ok) return jsonError(access.error || '无权访问该项目', access.status || 403);
 
-  if (!isCampaignProject(projectId)) {
+  if (!isCampaignProject(projectId) && projectId !== 'qicui') {
     return jsonError('当前项目不是营销复盘项目，未开通行业分析模块', 403);
   }
 
@@ -94,7 +94,7 @@ export async function POST(request: Request) {
     const access = await requireProjectAccess(request, projectId, 'write');
     if (!access.ok) return jsonError(access.error || '无权修改该项目配置', access.status || 403);
 
-    if (!isCampaignProject(projectId)) {
+    if (!isCampaignProject(projectId) && projectId !== 'qicui') {
       return jsonError('当前项目未开通行业分析模块', 403);
     }
 

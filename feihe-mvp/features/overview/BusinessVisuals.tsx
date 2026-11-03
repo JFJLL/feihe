@@ -869,17 +869,43 @@ export function QicuiChannelStructureCard({
   );
 }
 
+  const ACTION_TRACKER_STORAGE_KEY = 'qicui_action_tracker_tasks_state_v1';
+
 export function QicuiActionClosureLayer() {
-  const [tasks, setTasks] = useState([
+    const defaultTasks = useMemo(() => [
     { id: 1, title: '标准化词包人群', desc: '统一规范竞品人群与拦截词包命名体系，剔除 CTR < 3% 的泛流量词。', owner: '投放组', date: '10/24', tag: '进行中', tagTone: 'warn', done: false },
     { id: 2, title: '本品笔记评论紧急补位', desc: '调配社区组兼职人力，本周内将本品笔记维护从 4% 提升至 30% 以上。', owner: '社区组', date: '10/22', tag: '最高优', tagTone: 'danger', done: false },
     { id: 3, title: '10月达人锁档下单', desc: '推进10月 88 位候选达人（73人二核已过）正式下单，向「电商引流机制」倾斜。', owner: 'BD媒介组', date: '10/25', tag: '进行中', tagTone: 'warn', done: false },
     { id: 4, title: '迭代高热拦截词', desc: '结合秋季换季敏宝热点，扩充高热竞品对比词与转奶需求词，拉升 S 端 CTR。', owner: '投放组', date: '10/28', tag: '待启动', tagTone: 'ok', done: true },
     { id: 5, title: '高爆笔记 1v1 精细化搭建', desc: '将 Top 10 有机搜索词与高转化防敏笔记单独绑定计划，提升投流 ROI。', owner: '内容+投放', date: '10/30', tag: '待启动', tagTone: 'ok', done: false },
-  ]);
+    ], []);
+
+    const [tasks, setTasks] = useState(defaultTasks);
+
+    useEffect(() => {
+      try {
+        const saved = typeof window !== 'undefined' ? localStorage.getItem(ACTION_TRACKER_STORAGE_KEY) : null;
+        if (saved) {
+          const map = JSON.parse(saved) as Record<string, boolean>;
+          if (map && typeof map === 'object') {
+            setTasks(prev => prev.map(t => map[t.id] !== undefined ? { ...t, done: Boolean(map[t.id]) } : t));
+          }
+        }
+      } catch {}
+    }, []);
 
   const toggleTask = (id: number) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t));
+      setTasks(prev => {
+        const updated = prev.map(t => t.id === id ? { ...t, done: !t.done } : t);
+        try {
+          if (typeof window !== 'undefined') {
+            const map: Record<string, boolean> = {};
+            for (const t of updated) map[t.id] = t.done;
+            localStorage.setItem(ACTION_TRACKER_STORAGE_KEY, JSON.stringify(map));
+          }
+        } catch {}
+        return updated;
+      });
   };
 
   const doneCount = tasks.filter(t => t.done).length;

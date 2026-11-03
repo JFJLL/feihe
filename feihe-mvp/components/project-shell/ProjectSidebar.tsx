@@ -77,10 +77,10 @@ export function ProjectSidebar({
         {PROJECT_NAV_ITEMS.filter((item) => {
           if (item.inSidebar === false) return false;
           if (['data', 'metrics', 'reports'].includes(item.id)) return false;
+          if (item.id === 'growth') return false;
           if (currentProject?.templateId === 'campaign_review') {
-            return ['overview', 'ads', 'content', 'industry', 'settings'].includes(item.id);
+            return ['overview', 'ads', 'industry', 'content', 'settings'].includes(item.id);
           }
-          if (item.id === 'industry') return false;
           if (item.id === 'ads') return ['content_marketing', 'ad_performance'].includes(currentProject?.templateId || '');
           if (currentProject?.templateId === 'ad_performance') return ['overview', 'ads', 'settings'].includes(item.id);
           if (['general_workbench', 'blank'].includes(currentProject?.templateId || '')) {

@@ -89,10 +89,6 @@ export function SpendBars({
     } else if (e.key === 'End') {
       e.preventDefault();
       nextIndex = series.length - 1;
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      if (onSelectDay) onSelectDay(series[index].date);
-      return;
     }
 
     if (nextIndex >= 0 && nextIndex !== index) {
@@ -178,15 +174,13 @@ export function SpendBars({
                     else barRefs.current.delete(p.date);
                   }}
                   className={'spend-bar-column ' + (hasSpend ? 'is-observed' : 'is-missing') + (isSelected ? ' is-selected' : '') + (isActive ? ' is-active' : '')}
-                  tabIndex={0}
-                  role="button"
+                  tabIndex={-1}
+                  role="graphics-symbol"
                   aria-label={label}
-                  aria-pressed={isSelected}
                   onMouseEnter={() => setHoveredDate(p.date)}
                   onMouseLeave={() => setHoveredDate(null)}
                   onFocus={() => setFocusedDate(p.date)}
                   onBlur={() => setFocusedDate(null)}
-                  onClick={() => onSelectDay?.(p.date)}
                   onKeyDown={e => handleKeyDown(e, idx)}
                 >
                   {/* Floating tooltip anchored to active bar */}

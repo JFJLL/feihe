@@ -47,7 +47,7 @@ export function formatLinkState(state: string | null | undefined): string {
 type Delivery={status:string;content:string;commentDay:string|null;operator:string;form:string;replyRelation:string;screenshot:unknown;owner:string;direction:string;progress:string;source:SourceRef;evidence:string};
 type Detail={note:NoteArchive;analysisId:string|null;capture:ConversationCapture|null;metrics:{fetched:number;analyzed:number;coverage:number|null;roots:number}|null;judgments:CommentJudgment[];review:NoteReview;canWrite:boolean;deliveries:{items:Delivery[];total:number;offset:number;hasMore:boolean};attempts:{id:string;status:string;updated_at:string;error:string}[];history:{actor:string;created_at:string;data_json:string}[];corrections:{id:string;commentId:string;actor:string;at:string;reason:string;target:string;sentiment:Sentiment}[]};
 export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
-  const params=useSearchParams();const [month,setMonth]=useState(()=>params.get('month') || new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date()).slice(0,7)),[queue,setQueue]=useState(()=>params.get('queue') || 'active'),[noteId,setNoteId]=useState(()=>params.get('noteId') || ''),[offset,setOffset]=useState(0),[revision,setRevision]=useState(0),[showSettings,setShowSettings]=useState(false);
+  const params=useSearchParams();const [month,setMonth]=useState(()=>params.get('month') || '2026-10'),[queue,setQueue]=useState(()=>params.get('queue') || 'active'),[noteId,setNoteId]=useState(()=>params.get('noteId') || ''),[offset,setOffset]=useState(0),[revision,setRevision]=useState(0),[showSettings,setShowSettings]=useState(false);
   const key=JSON.stringify({projectId,month,queue,offset,revision});const [snapshot,setSnapshot]=useState<{key:string;data?:CommentQueue;error?:string}>({key:''});const current=snapshot.key===key ? snapshot:null;
   useEffect(()=>{let valid=true;const load=()=>api<CommentQueue>('/api/comment-ops?'+new URLSearchParams({projectId,month,queue,offset:String(offset),limit:'30'})).then(data=>{if(valid)setSnapshot({key,data});}).catch(e=>{if(valid)setSnapshot({key,error:e instanceof Error ? e.message:'巡查队列读取失败'});});void load();const interval=setInterval(load,30000);return()=>{valid=false;clearInterval(interval);};},[projectId,month,queue,offset,key]);
   useEffect(()=>{const p=new URLSearchParams(window.location.search);p.set('month',month);p.set('queue',queue);if(noteId)p.set('noteId',noteId);else p.delete('noteId');window.history.replaceState(null,'','?'+p);},[month,queue,noteId]);
@@ -83,6 +83,21 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
       </div>
     </div>
     {showSettings && <CommentSettingsDrawer projectId={projectId} onSaved={()=>setRevision(r=>r+1)} />}
+    {data && data.total === 0 && (
+      <div className="co-empty-month-banner" style={{ background: '#fdf6eb', border: '1px solid #f9e2af', borderRadius: 8, padding: '12px 16px', margin: '14px 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <div style={{ fontSize: 13, color: '#824900' }}>
+          <strong>提示：</strong>当前选中的业务月份 <strong>{month}</strong> 暂无在投巡查数据。最新数据月份为 <strong>{data.latestMonth || '2026-10'}</strong>。
+        </div>
+        <button
+          type="button"
+          className="primary-btn"
+          style={{ padding: '5px 14px', fontSize: 12, flexShrink: 0 }}
+          onClick={() => { setMonth(data.latestMonth || '2026-10'); setOffset(0); }}
+        >
+          切换至 {data.latestMonth || '2026-10'}
+        </button>
+      </div>
+    )}
     <div className="co-queue-tabs" role="tablist" aria-label="笔记巡查队列">
       {[
         ['active','在投高消耗笔记','按当月累计消耗排序'],

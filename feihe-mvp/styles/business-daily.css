@@ -6,9 +6,46 @@
    ========================================================================= */
 
 /* =========================================================================
-   DESIGN TOKENS & LIGHT PALETTE PRESETS (WARM EDITORIAL)
+   DESIGN TOKENS & LIGHT PALETTE PRESETS (EDITORIAL DEFAULT)
    ========================================================================= */
-:root, [data-palette="botanical"] {
+:root, [data-palette="terracotta"] {
+  --bg-canvas: #F7F3EE;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #FBF9F6;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #8A847C;
+
+  --border-subtle: #E8E1D7;
+  --border-focus: #D5CBBF;
+  --border-brand: rgba(200, 75, 49, 0.25);
+
+  --brand-primary: #C84B31;
+  --brand-primary-soft: #FCEEED;
+  --accent-secondary: #26547C;
+  --accent-secondary-soft: #EDF4F9;
+  --accent-tertiary: #4A6B53;
+  --accent-tertiary-soft: #EFF5F0;
+  --accent-quaternary: #B87333;
+  --accent-quaternary-soft: #FBF3EC;
+
+  --status-success: #15803D;
+  --status-success-bg: #ECFDF3;
+  --status-warn: #B45309;
+  --status-warn-bg: #FFFBEB;
+  --status-danger: #C2410C;
+  --status-danger-bg: #FFF7ED;
+  --status-info: #0369A1;
+  --status-info-bg: #F0F9FF;
+
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.04);
+  --shadow-card: 0 2px 8px -1px rgba(28, 25, 23, 0.05), 0 1px 3px rgba(28, 25, 23, 0.03);
+  --shadow-hover: 0 8px 20px -3px rgba(28, 25, 23, 0.08), 0 3px 6px -1px rgba(28, 25, 23, 0.04);
+}
+
+[data-palette="botanical"] {
   --bg-canvas: #F5F4EE;
   --bg-surface: #FFFFFF;
   --bg-subtle: #FAF9F5;
@@ -1703,7 +1740,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  cursor: pointer;
+  cursor: default;
   position: relative;
   outline: none;
 }

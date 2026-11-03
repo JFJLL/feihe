@@ -127,6 +127,16 @@ export async function storeConversation(projectId: string,input: ConversationCap
 export async function readCommentQueue(projectId: string,month: string,queue='active',offset=0,limit=30): Promise<Omit<CommentQueue,'canWrite'>> {
   await ensureCommentOpsSchema();if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month) || !['active','new','history'].includes(queue) || !Number.isSafeInteger(offset) || offset<0 || !Number.isInteger(limit) || limit<1 || limit>100)throw new DailyError('巡查范围或分页无效');
   const raw=await db().prepare('SELECT data_json FROM business_note_archives WHERE project_id=?').bind(projectId).all<{data_json:string}>();
+  const allMonths = new Set<string>();
+  for (const r of raw.results) {
+    try {
+      const d = JSON.parse(r.data_json);
+      if (d.spendMonth) allMonths.add(d.spendMonth);
+      if (d.publishedDay) allMonths.add(d.publishedDay.slice(0, 7));
+    } catch {}
+  }
+  const availableMonths = Array.from(allMonths).filter(m => /^\d{4}-(0[1-9]|1[0-2])$/.test(m)).sort().reverse();
+  const latestMonth = availableMonths[0] || '2026-10';
   const notes=raw.results.map(r=>JSON.parse(r.data_json) as NoteArchive).filter(n=>queue==='active' ? n.spendMonth===month && n.monthlySpend.value!==null && n.monthlySpend.value>0:queue==='new' ? n.publishedDay?.startsWith(month):!n.publishedDay || !n.publishedDay.startsWith(month));
   notes.sort((a,b)=>queue==='active' ? (b.monthlySpend.value ?? -1)-(a.monthlySpend.value ?? -1) || a.id.localeCompare(b.id):(b.publishedDay || '').localeCompare(a.publishedDay || '') || a.id.localeCompare(b.id));
   const states=await db().prepare('SELECT r.note_id,r.data_json,h.analysis_id FROM business_note_reviews r LEFT JOIN business_comment_heads h ON h.project_id=r.project_id AND h.note_id=r.note_id WHERE r.project_id=?').bind(projectId).all<{note_id:string;data_json:string;analysis_id:string}>();
@@ -139,7 +149,7 @@ export async function readCommentQueue(projectId: string,month: string,queue='ac
   }
   const config=await businessConfig(projectId),hasDelivery=config?.bindings.some(b=>b.role==='comment_register');
   const unmatched=await db().prepare("SELECT COUNT(*) AS n FROM business_comment_deliveries WHERE project_id=? AND note_id='' AND status='registered'").bind(projectId).first<{n:number}>();
-  return {projectId,month,queue,ranking:queue==='active' ? '当月累计消耗排序 · 无日粒度笔记消耗，尚不能提供每日TOP100':'按发布日期筛选；历史投放不计为当月新发',items,total:notes.length,offset,hasMore:offset+items.length<notes.length,summary:{checked:checked.length,qualified:qualified.length,total:notes.length,qualityRate:checked.length ? qualified.length/checked.length:null,checkedCoverage:notes.length ? checked.length/notes.length:null},sourceStatus:{deliveries:hasDelivery ? `已接评论执行副本；登记时间与上评人员满足条件才计交付登记，计划独立列出；未证明平台可见。${unmatched?.n || 0}条登记尚缺稳定笔记ID，已保留来源行，不归入其他笔记。`:'交付登记表待接可读副本；已有供应商登记仅作为独立累计事实',comments:'指定评论采集账号未配置时保持未采集；失败不会显示零'}};
+  return {projectId,month,queue,ranking:queue==='active' ? '当月累计消耗排序 · 无日粒度笔记消耗，尚不能提供每日TOP100':'按发布日期筛选；历史投放不计为当月新发',items,total:notes.length,offset,hasMore:offset+items.length<notes.length,summary:{checked:checked.length,qualified:qualified.length,total:notes.length,qualityRate:checked.length ? qualified.length/checked.length:null,checkedCoverage:notes.length ? checked.length/notes.length:null},sourceStatus:{deliveries:hasDelivery ? `已接评论执行副本；登记时间与上评人员满足条件才计交付登记，计划独立列出；未证明平台可见。${unmatched?.n || 0}条登记尚缺稳定笔记ID，已保留来源行，不归入其他笔记。`:'交付登记表待接可读副本；已有供应商登记仅作为独立累计事实',comments:'指定评论采集账号未配置时保持未采集；失败不会显示零'},availableMonths,latestMonth};
 }
 export async function commentNoteDetail(projectId: string,noteId: string,deliveryOffset=0,deliveryLimit=20) {
   if(!Number.isSafeInteger(deliveryOffset) || deliveryOffset<0 || !Number.isInteger(deliveryLimit) || deliveryLimit<1 || deliveryLimit>100)throw new DailyError('交付登记分页无效');

@@ -43,12 +43,12 @@ import { cleanCreatorTier } from '../content/ScenePerformanceBoard';
 const sanitizeCreatorLevel = (raw: unknown): string => cleanCreatorTier(String(raw || ''));
 
 export function PaletteSwitcher() {
-  const [palette, setPalette] = useState<'botanical' | 'terracotta' | 'nordic'>('botanical');
+  const [palette, setPalette] = useState<'botanical' | 'terracotta' | 'nordic'>('terracotta');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const saved = localStorage.getItem('feihe_ui_palette') || localStorage.getItem('feihe_palette');
-    const cur = (saved || document.documentElement.getAttribute('data-palette') || 'botanical') as 'botanical' | 'terracotta' | 'nordic';
+    const cur = (saved || document.documentElement.getAttribute('data-palette') || 'terracotta') as 'botanical' | 'terracotta' | 'nordic';
     if (cur && ['botanical', 'terracotta', 'nordic'].includes(cur)) {
       setPalette(cur);
       document.documentElement.setAttribute('data-palette', cur);
@@ -186,7 +186,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const saved = localStorage.getItem('feihe_ui_palette') || localStorage.getItem('feihe_palette') || 'botanical';
+    const saved = localStorage.getItem('feihe_ui_palette') || localStorage.getItem('feihe_palette') || 'terracotta';
     if (['botanical', 'terracotta', 'nordic'].includes(saved)) {
       document.documentElement.setAttribute('data-palette', saved);
     }

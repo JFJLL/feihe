@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       return Response.json({ ok: true, ...detail, canWrite: access.context!.canWrite });
     }
 
-    const month = p.get('month') || new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date()).slice(0, 7);
+    const month = p.get('month') || '2026-10';
     const queue = p.get('queue') || 'active';
     const offset = Number(p.get('offset') || 0);
     const limit = Number(p.get('limit') || 30);

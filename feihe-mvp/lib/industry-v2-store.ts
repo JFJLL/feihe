@@ -31,6 +31,7 @@ export function ensureIndustryV2Schema() {
 }
 
 const defaults: Record<string, { category: string; competitors: string[] }> = {
+  qicui: { category: '婴幼儿奶粉', competitors: ['金领冠', '爱他美'] },
   'huang-tiane': { category: '可生食鸡蛋', competitors: ['圣迪乐村鸡蛋', '兰皇鸡蛋'] },
   kailas: { category: '越野跑鞋', competitors: ['萨洛蒙越野跑鞋', 'HOKA越野跑鞋'] },
   meiling: { category: '冰箱', competitors: ['海尔冰箱', '容声冰箱'] },
@@ -53,7 +54,7 @@ export function industryDays(from: string, to: string): string[] {
 
 export async function getIndustryV2Config(projectId: string): Promise<IndustryV2Config | null> {
   await ensureIndustryV2Schema();
-  if (!isCampaignProject(projectId)) return null;
+  if (!isCampaignProject(projectId) && projectId !== 'qicui') return null;
   const p = await db().prepare('SELECT spu,brand,is_archived FROM projects WHERE id=?').bind(projectId).first<{ spu: string; brand: string; is_archived: number }>();
   if (!p || p.is_archived) return null;
   const row = await db().prepare('SELECT * FROM industry_v2_configs WHERE project_id=?').bind(projectId).first<{ category_keyword: string; competitors_json: string; history_days: number; daily_enabled: number }>();

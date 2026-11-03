@@ -62,13 +62,13 @@ export function CampaignWorkspace({
     ? projectContext.currentProject
     : projectContext?.projects?.find((p) => p.id === projectId);
   const preset = resolveDashboardPreset('content_marketing');
-  const [currentPalette, setCurrentPalette] = useState<PaletteKey>('botanical');
+    const [currentPalette, setCurrentPalette] = useState<PaletteKey>('terracotta');
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
     const applyPalette = (raw: string | null | undefined) => {
       const savedPalette: PaletteKey =
-        raw === 'botanical' || raw === 'terracotta' || raw === 'nordic' ? raw : 'botanical';
+          raw === 'botanical' || raw === 'terracotta' || raw === 'nordic' ? raw : 'terracotta';
       document.documentElement.setAttribute('data-palette', savedPalette);
       setCurrentPalette(savedPalette);
     };
@@ -76,7 +76,7 @@ export function CampaignWorkspace({
     const savedPalette =
       window.localStorage.getItem('feihe_ui_palette') ||
       document.documentElement.getAttribute('data-palette') ||
-      'botanical';
+        'terracotta';
     applyPalette(savedPalette);
 
     const onPaletteChange = (e: Event) => {
@@ -86,7 +86,7 @@ export function CampaignWorkspace({
     };
     const onStorage = (e: StorageEvent) => {
       if (e.key === 'feihe_ui_palette') {
-        applyPalette(e.newValue || 'botanical');
+          applyPalette(e.newValue || 'terracotta');
       }
     };
 

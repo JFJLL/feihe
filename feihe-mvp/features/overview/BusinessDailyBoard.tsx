@@ -2250,7 +2250,7 @@ export function BusinessDailyBoard({
                       <div className='bd-two-col bd-structure-bento' style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: 16, alignItems: 'stretch' }}>
                         <section className='bd-panel' data-section='spend' style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                           <ChannelStructureOverview series={view.series} />
-                          <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
+                          <SpendBars view={view} selectedDay={day} />
                         </section>
                         <QicuiChannelStructureCard series={view.series} />
                       </div>
@@ -2545,7 +2545,7 @@ export function BusinessDailyBoard({
                                 { key: 'actual', label: '累计平台广告消耗', color: DASHBOARD_PALETTE.actual },
                               ]}
                             />
-                            <SpendBars view={view} selectedDay={day} onSelectDay={d => setDay(d)} />
+                            <SpendBars view={view} selectedDay={day} />
                             <p className="bd-caption" style={{ marginTop: 8 }}>
                               截至 {view.businessThrough || '待采集'}，同范围FS计划 {format(view.progress.planThroughData)} 元，实际 {format(view.progress.actualThroughData)} 元，差额（实际−计划）{format(view.progress.gapThroughData)} 元。
                             </p>
