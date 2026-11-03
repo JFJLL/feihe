@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { BusinessHighlights, CostComparison, DailyPoint, DailyView, RankValue, SourceRef } from '../../lib/business-daily/types';
 
 /**
@@ -388,6 +388,40 @@ export function QicuiSpendTrendVisual({
   const yTicks = [0, scaleMax * 0.33, scaleMax * 0.66, scaleMax];
   const hovered = hoverIdx !== null ? points[hoverIdx] : null;
 
+  const selectedIdx = selectedDay ? points.findIndex(p => p.date === selectedDay) : -1;
+  const visibleTickIndices = useMemo(() => {
+    const set = new Set<number>();
+    const count = points.length;
+    if (count <= 0) return set;
+    set.add(0);
+    if (count === 1) return set;
+    set.add(count - 1);
+
+    const minSpacing = 44;
+    const maxTicks = Math.max(2, Math.floor(plotW / minSpacing));
+    if (count <= maxTicks) {
+      for (let i = 0; i < count; i++) set.add(i);
+      return set;
+    }
+
+    const step = Math.max(2, Math.ceil((count - 1) / (maxTicks - 1)));
+    for (let i = step; i < count - 1; i += step) {
+      if (count - 1 - i >= Math.floor(step * 0.75)) {
+        set.add(i);
+      }
+    }
+    const focusIdx = hoverIdx !== null ? hoverIdx : selectedIdx;
+    if (focusIdx >= 0) {
+      for (const idx of Array.from(set)) {
+        if (idx !== 0 && idx !== count - 1 && Math.abs(idx - focusIdx) < step * 0.6) {
+          set.delete(idx);
+        }
+      }
+      set.add(focusIdx);
+    }
+    return set;
+  }, [points.length, plotW, selectedIdx, hoverIdx]);
+
   return (
     <div className="qicui-trend-card bento-card" style={{ padding: '20px', borderRadius: '12px', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)' }}>
       <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
@@ -566,21 +600,32 @@ export function QicuiSpendTrendVisual({
           )}
 
           {points.map((p, i) => {
+            if (!visibleTickIndices.has(i)) return null;
             const x = getX(i);
             const isSelected = selectedDay && p.date === selectedDay;
+            const isHovered = hoverIdx === i;
             return (
-              <text
-                key={p.date}
-                x={x}
-                y={padT + plotH + 16}
-                textAnchor="middle"
-                fontSize="11"
-                fill={isSelected ? 'var(--brand-primary, #0F5E52)' : 'var(--text-secondary, #57534E)'}
-                fontWeight={isSelected ? '700' : '500'}
-                className="num"
-              >
-                {p.shortDate}
-              </text>
+              <g key={p.date}>
+                <line
+                  x1={x}
+                  y1={padT + plotH}
+                  x2={x}
+                  y2={padT + plotH + 4}
+                  stroke={isSelected || isHovered ? 'var(--brand-primary, #0F5E52)' : 'var(--border-subtle, #E6E4DD)'}
+                  strokeWidth="1"
+                />
+                <text
+                  x={x}
+                  y={padT + plotH + 16}
+                  textAnchor="middle"
+                  fontSize="11"
+                  fill={isSelected || isHovered ? 'var(--brand-primary, #0F5E52)' : 'var(--text-secondary, #57534E)'}
+                  fontWeight={isSelected || isHovered ? '700' : '500'}
+                  className="num"
+                >
+                  {p.shortDate}
+                </text>
+              </g>
             );
           })}
         </svg>

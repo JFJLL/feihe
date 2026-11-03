@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, type KeyboardEvent } from 'react';
+import { useState, useRef, useMemo, type KeyboardEvent } from 'react';
 import type { DailyView } from '../../lib/business-daily/types';
 import { DASHBOARD_PALETTE } from './BusinessVisuals';
 
@@ -38,6 +38,42 @@ export function SpendBars({
   const scaleMax = Math.ceil((rawMax * 1.1) / step) * step;
   const tickCount = 4;
   const ticks = Array.from({ length: tickCount + 1 }, (_, i) => Math.round((scaleMax / tickCount) * i));
+
+  const isDense = series.length > 14;
+  const maxSpend = observedSpends.length ? Math.max(...observedSpends) : 0;
+  const selectedIdx = selectedDay ? series.findIndex(p => p.date === selectedDay) : -1;
+  const activeIdx = activeDate ? series.findIndex(p => p.date === activeDate) : -1;
+
+  const visibleDateIndices = useMemo(() => {
+    const set = new Set<number>();
+    const count = series.length;
+    if (count <= 0) return set;
+    set.add(0);
+    if (count === 1) return set;
+    set.add(count - 1);
+
+    if (!isDense) {
+      for (let i = 0; i < count; i++) set.add(i);
+      return set;
+    }
+
+    const stepSize = Math.max(2, Math.ceil(count / 7));
+    for (let i = stepSize; i < count - 1; i += stepSize) {
+      if (count - 1 - i >= Math.floor(stepSize * 0.75)) {
+        set.add(i);
+      }
+    }
+    const focusIdx = activeIdx >= 0 ? activeIdx : selectedIdx;
+    if (focusIdx >= 0) {
+      for (const idx of Array.from(set)) {
+        if (idx !== 0 && idx !== count - 1 && Math.abs(idx - focusIdx) < stepSize * 0.6) {
+          set.delete(idx);
+        }
+      }
+      set.add(focusIdx);
+    }
+    return set;
+  }, [series.length, isDense, selectedIdx, activeIdx]);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>, index: number) => {
     let nextIndex = -1;
@@ -128,6 +164,9 @@ export function SpendBars({
               const barHeightPct = hasSpend && spendVal !== null ? Math.min(100, Math.max(4, (spendVal / scaleMax) * 100)) : 0;
               const isSelected = selectedDay === p.date;
               const isActive = activeDate === p.date;
+              const isPeak = hasSpend && spendVal !== null && spendVal === maxSpend;
+              const showValBadge = !isDense || isActive || isSelected || isPeak;
+              const isDateVisible = visibleDateIndices.has(idx) || isActive || isSelected;
 
               const label = p.date + ' 广告消耗：' + (hasSpend ? formatNum(spendVal) + '元' : '未采集/缺失') + (p.plan.value ? '，当日计划：' + formatNum(p.plan.value) + '元' : '');
 
@@ -219,7 +258,14 @@ export function SpendBars({
                       />
                     )}
 
-                    <div className="spend-bar-val-badge">
+                    <div
+                      className="spend-bar-val-badge"
+                      style={{
+                        visibility: showValBadge ? 'visible' : 'hidden',
+                        color: isPeak ? '#0F5E52' : isSelected ? '#0b5cad' : undefined,
+                        fontWeight: (isPeak || isSelected || isActive) ? 700 : undefined,
+                      }}
+                    >
                       {hasSpend ? compactSpend(spendVal) : <span className="spend-missing-chip">—</span>}
                     </div>
 
@@ -277,13 +323,20 @@ export function SpendBars({
                       })()
                     ) : (
                       <div className="spend-bar-body missing" title="未采集或缺失，不作为0计算">
-                        <span className="spend-missing-mark">无数据</span>
+                        <span className="spend-missing-mark">{isDense ? '—' : '无数据'}</span>
                       </div>
                     )}
                   </div>
 
                   {/* Date label at bottom */}
-                  <span className="spend-bar-date-label">
+                  <span
+                    className="spend-bar-date-label"
+                    style={{
+                      visibility: isDateVisible ? 'visible' : 'hidden',
+                      color: (isSelected || isActive) ? '#0F5E52' : undefined,
+                      fontWeight: (isSelected || isActive) ? 700 : undefined,
+                    }}
+                  >
                     {p.date.slice(5)}
                   </span>
                 </div>
