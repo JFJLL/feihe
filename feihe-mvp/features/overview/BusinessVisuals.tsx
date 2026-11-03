@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import type { BusinessHighlights, CostComparison, DailyPoint, DailyView, RankValue, SourceRef } from '../../lib/business-daily/types';
 
 /**
@@ -339,6 +339,28 @@ export function QicuiSpendTrendVisual({
 }) {
   const [viewMode, setViewMode] = useState<'combo' | 'area'>('combo');
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(1000);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => {
+      const rw = el.getBoundingClientRect().width;
+      if (rw > 0) setContainerWidth(Math.round(rw));
+    };
+    measure();
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const cw = entry.contentRect.width;
+          if (cw > 0) setContainerWidth(Math.round(cw));
+        }
+      });
+      ro.observe(el);
+      return () => ro.disconnect();
+    }
+  }, []);
 
   const points = series.map(p => ({
     date: p.date,
@@ -354,7 +376,7 @@ export function QicuiSpendTrendVisual({
   const step = maxVal > 500000 ? 150000 : maxVal > 250000 ? 100000 : 50000;
   const scaleMax = Math.ceil((maxVal * 1.15) / step) * step;
 
-  const w = 720;
+  const w = Math.max(640, containerWidth);
   const h = 260;
   const padL = 46;
   const padR = 24;
@@ -480,7 +502,7 @@ export function QicuiSpendTrendVisual({
         </div>
       </div>
 
-      <div style={{ position: 'relative', width: '100%', height: 260 }}>
+      <div ref={containerRef} style={{ position: 'relative', width: '100%', height: 260 }}>
         <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: '100%', overflow: 'visible' }}>
           <defs>
             <linearGradient id="qicuiSettlementGrad" x1="0" y1="0" x2="0" y2="1">
@@ -662,6 +684,7 @@ export function QicuiChannelStructureCard({
 }: {
   series: DailyPoint[];
 }) {
+  const [hoveredSeg, setHoveredSeg] = useState<'ad' | 'creator' | 'other' | null>(null);
   const completeDays = series.filter(p => p.adSpend?.value !== null && p.projectInvestment?.value !== null);
   const sumVal = (key: keyof DailyPoint) =>
     completeDays.reduce((acc, p) => {
@@ -704,7 +727,7 @@ export function QicuiChannelStructureCard({
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', height: 180, margin: '6px 0' }}>
-        <svg width="160" height="160" viewBox="0 0 140 140" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
+        <svg width="170" height="170" viewBox="0 0 140 140" style={{ transform: 'rotate(-90deg)', overflow: 'visible' }}>
           <circle cx="70" cy="70" r={r} fill="none" stroke="#F5F4EE" strokeWidth="18" />
           <circle
             cx="70"
@@ -712,9 +735,12 @@ export function QicuiChannelStructureCard({
             r={r}
             fill="none"
             stroke="#0F5E52"
-            strokeWidth="18"
+            strokeWidth={hoveredSeg === 'ad' ? 24 : 18}
             strokeDasharray={`${dashAd.toFixed(2)} ${c.toFixed(2)}`}
             strokeDashoffset="0"
+            style={{ cursor: 'pointer', transition: 'stroke-width 0.2s ease, filter 0.2s ease', filter: hoveredSeg === 'ad' ? 'drop-shadow(0 2px 6px rgba(15,94,82,0.4))' : 'none' }}
+            onMouseEnter={() => setHoveredSeg('ad')}
+            onMouseLeave={() => setHoveredSeg(null)}
           />
           <circle
             cx="70"
@@ -722,9 +748,12 @@ export function QicuiChannelStructureCard({
             r={r}
             fill="none"
             stroke="#D95D39"
-            strokeWidth="18"
+            strokeWidth={hoveredSeg === 'creator' ? 24 : 18}
             strokeDasharray={`${dashCreator.toFixed(2)} ${c.toFixed(2)}`}
             strokeDashoffset={offsetCreator.toFixed(2)}
+            style={{ cursor: 'pointer', transition: 'stroke-width 0.2s ease, filter 0.2s ease', filter: hoveredSeg === 'creator' ? 'drop-shadow(0 2px 6px rgba(217,93,57,0.4))' : 'none' }}
+            onMouseEnter={() => setHoveredSeg('creator')}
+            onMouseLeave={() => setHoveredSeg(null)}
           />
           <circle
             cx="70"
@@ -732,32 +761,69 @@ export function QicuiChannelStructureCard({
             r={r}
             fill="none"
             stroke="#C87D20"
-            strokeWidth="18"
+            strokeWidth={hoveredSeg === 'other' ? 24 : 18}
             strokeDasharray={`${dashOther.toFixed(2)} ${c.toFixed(2)}`}
             strokeDashoffset={offsetOther.toFixed(2)}
+            style={{ cursor: 'pointer', transition: 'stroke-width 0.2s ease, filter 0.2s ease', filter: hoveredSeg === 'other' ? 'drop-shadow(0 2px 6px rgba(200,125,32,0.4))' : 'none' }}
+            onMouseEnter={() => setHoveredSeg('other')}
+            onMouseLeave={() => setHoveredSeg(null)}
           />
         </svg>
 
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-          <div style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', fontWeight: 600 }}>项目总投入</div>
-          <div className="num" style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary, #1C1917)' }}>
-            ¥{(totalInvestment / 10000).toFixed(1)}w
-          </div>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none', transition: 'all 0.2s ease' }}>
+          {hoveredSeg === 'ad' ? (
+            <>
+              <div style={{ fontSize: 11, color: '#0F5E52', fontWeight: 600 }}>硬广投流 ({pctAd.toFixed(1)}%)</div>
+              <div className="num" style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52' }}>¥{(adSpend / 10000).toFixed(1)}w</div>
+            </>
+          ) : hoveredSeg === 'creator' ? (
+            <>
+              <div style={{ fontSize: 11, color: '#D95D39', fontWeight: 600 }}>达人采买 ({pctCreator.toFixed(1)}%)</div>
+              <div className="num" style={{ fontSize: 18, fontWeight: 800, color: '#D95D39' }}>¥{(creatorCost / 10000).toFixed(1)}w</div>
+            </>
+          ) : hoveredSeg === 'other' ? (
+            <>
+              <div style={{ fontSize: 11, color: '#C87D20', fontWeight: 600 }}>其他/运维 ({pctOther.toFixed(1)}%)</div>
+              <div className="num" style={{ fontSize: 18, fontWeight: 800, color: '#C87D20' }}>¥{(otherCost / 10000).toFixed(1)}w</div>
+            </>
+          ) : (
+            <>
+              <div style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', fontWeight: 600 }}>项目总投入</div>
+              <div className="num" style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary, #1C1917)' }}>
+                ¥{(totalInvestment / 10000).toFixed(1)}w
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       <div className="placement-cpm-strip" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, margin: '10px 0' }}>
-        <div className="cpm-mini-card" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderTop: '2.5px solid var(--brand-primary, #0F5E52)', borderRadius: 8, padding: '8px 6px', textAlign: 'center' }}>
+        <div
+          className="cpm-mini-card"
+          style={{ background: hoveredSeg === 'ad' ? '#EBF5F3' : 'var(--bg-subtle, #FAF9F5)', border: `1px solid ${hoveredSeg === 'ad' ? '#0F5E52' : 'var(--border-subtle, #E6E4DD)'}`, borderTop: '2.5px solid var(--brand-primary, #0F5E52)', borderRadius: 8, padding: '8px 6px', textAlign: 'center', cursor: 'pointer', transition: 'all 0.15s ease' }}
+          onMouseEnter={() => setHoveredSeg('ad')}
+          onMouseLeave={() => setHoveredSeg(null)}
+        >
           <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>聚光搜索 (S)</div>
           <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--brand-primary, #0F5E52)', margin: '2px 0' }}>61.1%</div>
           <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>消耗 ¥293.4w</div>
         </div>
-        <div className="cpm-mini-card" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderTop: '2.5px solid var(--accent-tertiary, #2E6F8E)', borderRadius: 8, padding: '8px 6px', textAlign: 'center' }}>
+        <div
+          className="cpm-mini-card"
+          style={{ background: hoveredSeg === 'ad' ? '#EBF5F3' : 'var(--bg-subtle, #FAF9F5)', border: `1px solid ${hoveredSeg === 'ad' ? '#0F5E52' : 'var(--border-subtle, #E6E4DD)'}`, borderTop: '2.5px solid var(--accent-tertiary, #2E6F8E)', borderRadius: 8, padding: '8px 6px', textAlign: 'center', cursor: 'pointer', transition: 'all 0.15s ease' }}
+          onMouseEnter={() => setHoveredSeg('ad')}
+          onMouseLeave={() => setHoveredSeg(null)}
+        >
           <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>聚光信息流 (F)</div>
           <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-tertiary, #2E6F8E)', margin: '2px 0' }}>24.3%</div>
           <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>消耗 ¥116.5w</div>
         </div>
-        <div className="cpm-mini-card" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderTop: '2.5px solid var(--accent-secondary, #D95D39)', borderRadius: 8, padding: '8px 6px', textAlign: 'center' }}>
+        <div
+          className="cpm-mini-card"
+          style={{ background: hoveredSeg === 'creator' ? '#FDF0EC' : 'var(--bg-subtle, #FAF9F5)', border: `1px solid ${hoveredSeg === 'creator' ? '#D95D39' : 'var(--border-subtle, #E6E4DD)'}`, borderTop: '2.5px solid var(--accent-secondary, #D95D39)', borderRadius: 8, padding: '8px 6px', textAlign: 'center', cursor: 'pointer', transition: 'all 0.15s ease' }}
+          onMouseEnter={() => setHoveredSeg('creator')}
+          onMouseLeave={() => setHoveredSeg(null)}
+        >
           <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>达人采买 (K)</div>
           <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-secondary, #D95D39)', margin: '2px 0' }}>11.5%</div>
           <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>合作 117位</div>
@@ -1015,7 +1081,13 @@ export function FeedVisuals({
 
   return (
     <>
-      <div className="bv-feed-kpis">
+      <CostComparisonChart
+        costs={data.costs}
+        title="信息流成本与同月基准"
+        reference={reference?.feed ? { costs: reference.feed.costs, date: reference.date } : undefined}
+      />
+
+      <div className="bv-feed-kpis" style={{ marginTop: 12 }}>
         {activeCosts.map(c => (
           <article key={c.channel}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
@@ -1037,12 +1109,6 @@ export function FeedVisuals({
           <strong style={{ fontSize: 'clamp(16px, 4vw, 22px)', overflowWrap: 'anywhere' }}>{pct(activeReturnRate)}</strong>
         </article>
       </div>
-
-      <CostComparisonChart
-        costs={data.costs}
-        title="信息流成本与同月基准"
-        reference={reference?.feed ? { costs: reference.feed.costs, date: reference.date } : undefined}
-      />
 
       {!hideAudienceRanks && (
         <FeedAudienceVisuals data={data} reference={reference} />
@@ -1068,10 +1134,10 @@ export function FeedAudienceVisuals({
 
   return (
     <div className="bv-feed-audience-grid">
-      <div className="bv-audience-col">
+      <div className="bv-audience-col bv-audience-card">
         <HorizontalRanks rows={starGroups} title="小红星 / 人群包CPUV（低→高）" color="blue" zeroUnconfirmed={true} />
       </div>
-      <div className="bv-audience-col">
+      <div className="bv-audience-col bv-audience-card">
         <HorizontalRanks rows={allianceGroups} title="小红盟 / 人群包CPUV（低→高）" color="teal" zeroUnconfirmed={true} />
       </div>
       <div className="bv-audience-col bv-audience-penetration-col">

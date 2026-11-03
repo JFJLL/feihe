@@ -281,23 +281,39 @@
 .bv-feed-audience-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  align-items: start;
-  margin-top: 10px;
+  gap: 14px;
+  align-items: stretch;
+  margin-top: 6px;
 }
 
 .bv-audience-col {
   min-width: 0;
+  background: var(--bg-subtle, #FAF9F5);
+  border: 1px solid var(--border-subtle, #E6E3DC);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
 }
 
 .bv-audience-col .bv-ranks {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bv-audience-col .bv-ranks h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary, #1C1917);
 }
 
 .bv-audience-penetration-col {
-  background: #f9f9fb;
-  border:0.5px solid #d9d9e0;
-  border-radius: 8px;
+  background: var(--bg-subtle, #FAF9F5);
+  border: 1px solid var(--border-subtle, #E6E3DC);
+  border-radius: 10px;
   padding: 12px 14px;
 }
 
@@ -639,12 +655,12 @@
    -------------------------------------------------------------------------- */
 .funnel-steps-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
 }
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .funnel-steps-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 440px) {
@@ -656,12 +672,14 @@
   background: #FAF9F5;
   border: 1px solid #E6E3DC;
   border-radius: 10px;
-  padding: 12px;
+  padding: 10px 8px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   transition: all 0.15s ease;
+  overflow: hidden;
 }
 .funnel-step-card:hover {
   background: #FFFFFF;

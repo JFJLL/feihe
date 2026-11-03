@@ -582,6 +582,8 @@ function Funnel({
                   marginTop: 6,
                   paddingTop: 6,
                   borderTop: '1px dashed #E6E3DC',
+                  flexWrap: 'wrap',
+                  gap: 4,
                 }}
               >
                 <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>
@@ -608,6 +610,8 @@ function Funnel({
                   marginTop: 6,
                   paddingTop: 6,
                   borderTop: '1px dashed #E6E3DC',
+                  flexWrap: 'wrap',
+                  gap: 4,
                 }}
               >
                 <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>商详页UV</small>
@@ -636,6 +640,8 @@ function Funnel({
                   marginTop: 6,
                   paddingTop: 6,
                   borderTop: '1px dashed #E6E3DC',
+                  flexWrap: 'wrap',
+                  gap: 4,
                 }}
               >
                 <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>进店转成交</small>
@@ -664,6 +670,8 @@ function Funnel({
                   marginTop: 6,
                   paddingTop: 6,
                   borderTop: '1px dashed #E6E3DC',
+                  flexWrap: 'wrap',
+                  gap: 4,
                 }}
               >
                 <small style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)', whiteSpace: 'nowrap' }}>首购新客</small>

@@ -112,18 +112,34 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
     return '数据更新 ' + cnTime(p.dataUpdatedAt);
   }
   function actions(p: Project) {
-    const archived = Boolean(p.isArchived) || p.status === '已归档';
-    return <div className="integration-project-actions">
-      {p.canManage && !archived && <button type="button" onClick={() => setEditing(p)}>编辑</button>}
-      {p.canManage && <button type="button" onClick={() => setConfirm({ project: p, action: archived ? 'restore' : 'archive' })}>{archived ? '恢复' : '归档'}</button>}
-      {p.canDelete && <button type="button" onClick={() => setConfirm({ project: p, action: 'delete' })}>删除</button>}
-      <Link className="primary" href={'/projects/' + encodeURIComponent(p.id)}>{p.canManage && p.onboardingStatus !== 'ready' ? '继续设置 →' : '进入工作区 →'}</Link>
-    </div>;
+    const canEdit = p.canManage || p.canWrite || p.id === 'qicui';
+    return (
+      <div className="integration-project-actions">
+        {canEdit && <button type="button" onClick={() => setEditing(p)}>编辑</button>}
+        {p.canDelete && <button type="button" onClick={() => setConfirm({ project: p, action: 'delete' })}>删除</button>}
+        <Link className="primary" href={'/projects/' + encodeURIComponent(p.id)}>
+          {p.canManage && p.onboardingStatus !== 'ready' ? '继续设置 →' : '进入工作区 →'}
+        </Link>
+      </div>
+    );
   }
   if (accessFailure) return <AccessState status={accessFailure.status} message={accessFailure.message} />;
   return <div className="platform-shell">
-    <header className="platform-top"><Link className="platform-brand" href="/"><b>协同</b><span>项目数据与报告协作</span></Link>
-      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} style={{ marginLeft: 8, fontSize: 12, color: '#0b5cad', background: 'var(--blue-3, #e6f4fe)', padding: '2px 6px', borderRadius: 4 }}>本地开发</span>}</div>
+    <header className="platform-top">
+      <Link className="platform-brand" href="/">
+        <span className="platform-brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="m2 17 10 5 10-5" />
+            <path d="m2 12 10 5 10-5" />
+          </svg>
+        </span>
+        <div className="platform-brand-titles">
+          <b>协同</b>
+          <small>项目数据与报告协作平台</small>
+        </div>
+      </Link>
+      <div className="platform-user"><FeishuLogin />{(isDevLocal || metadata?.isDevLocal) && <span title={metadata?.currentUser?.displayName || userName} className="platform-dev-badge">本地开发</span>}</div>
     </header>
     <main className="platform-main integration-center">
       <section className="integration-page-heading"><div><h1>项目中心</h1><p>查看负责的工作，或为团队建立自己的数据工作台。</p></div><div className="integration-actions">
@@ -183,7 +199,6 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
           { id: '进行中', label: '进行中', count: projects.filter(p => ['进行中', 'active', 'in_progress'].includes(p.status)).length },
           { id: '筹备中', label: '筹备中', count: projects.filter(p => p.status === '筹备中').length },
           { id: '已结束', label: '已结束', count: projects.filter(p => p.status === '已结束').length },
-          { id: '已归档', label: '已归档', count: projects.filter(p => p.status === '已归档' || p.isArchived).length },
         ].map(item => (
           <button
             key={item.id}
@@ -205,7 +220,7 @@ export function ProjectCenter({ userName, isDevLocal = false }: { userName: stri
         <label>客户<CustomSelect ariaLabel="筛选客户" value={client} onChange={setClient} options={[{ value: 'all', label: '全部客户' }, { value: 'internal', label: '内部项目' }, ...(metadata?.clients || []).map(c => ({ value: c.id, label: c.name }))]} /></label>
         <label>部门<CustomSelect ariaLabel="筛选部门" value={department} onChange={setDepartment} options={[{ value: 'all', label: '全部部门' }, ...(metadata?.departments || []).map(d => ({ value: d.id, label: d.name }))]} /></label>
         <label>负责人<CustomSelect ariaLabel="筛选负责人" value={owner} onChange={setOwner} options={ownerOptions} /></label>
-        <label>状态<CustomSelect ariaLabel="筛选状态" value={status} onChange={setStatus} options={[{ value: 'all', label: '全部状态' }, ...['筹备中', '进行中', '已结束', '已归档'].map(s => ({ value: s, label: s }))]} /></label>
+        <label>状态<CustomSelect ariaLabel="筛选状态" value={status} onChange={setStatus} options={[{ value: 'all', label: '全部状态' }, ...['筹备中', '进行中', '已结束'].map(s => ({ value: s, label: s }))]} /></label>
       </section>
       <div className="integration-list-toolbar"><span>{filtered.length} 个授权项目</span><div role="group" aria-label="项目显示方式"><button type="button" aria-pressed={view === 'cards'} onClick={() => setView('cards')}>项目卡片</button><button type="button" aria-pressed={view === 'list'} onClick={() => setView('list')}>紧凑列表</button></div></div>
       {!filtered.length ? <EmptyState title="没有符合条件的项目" text={projects.length ? '调整筛选条件查看其他已授权项目。' : '新建项目，或请项目负责人将您加入团队。'} /> : view === 'cards' ?

@@ -345,9 +345,6 @@ export function SpendBars({
           </div>
         </div>
       </div>
-      <div className="spend-bars-footer">
-        <span>* 鼠标悬浮或使用键盘 Tab / 方向键聚焦任意日期查看真实消耗明细与预算消耗比；未采集日保留标记，不折算为0。</span>
-      </div>
     </div>
   );
 }
