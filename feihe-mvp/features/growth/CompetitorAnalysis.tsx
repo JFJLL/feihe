@@ -296,16 +296,16 @@ export function CompetitorAnalysis({
             ]}
           />
           <div style={{ marginTop: 14, paddingTop: 14, borderTop: '0.5px solid #f0f0f3', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
-            <div style={{ padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
-              <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>灵犀搜索峰值</div>
+            <div style={{ padding: '10px 14px', background: '#FAF9F5', borderRadius: 8, border: '1px solid #E6E3DC' }}>
+              <div style={{ fontSize: 12, color: '#57534E' }}>灵犀搜索峰值</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: '#0F5E52', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.lingxi || 0)))}</div>
             </div>
-            <div style={{ padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
-              <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>聚光搜索峰值</div>
+            <div style={{ padding: '10px 14px', background: '#FAF9F5', borderRadius: 8, border: '1px solid #E6E3DC' }}>
+              <div style={{ fontSize: 12, color: '#57534E' }}>聚光搜索峰值</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: '#D95D39', marginTop: 3 }}>{compactMetric(Math.max(0, ...combinedTrend.map(r => r.spotlight || 0)))}</div>
             </div>
-            <div style={{ padding: '10px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)' }}>
-              <div style={{ fontSize: 12, color: 'var(--slate-11, #60646c)' }}>近30天监测样本</div>
+            <div style={{ padding: '10px 14px', background: '#FAF9F5', borderRadius: 8, border: '1px solid #E6E3DC' }}>
+              <div style={{ fontSize: 12, color: '#57534E' }}>近30天监测样本</div>
               <div style={{ fontSize: 16, fontWeight: 700, color: '#1c2024', marginTop: 3 }}>{combinedTrend.length} 天</div>
             </div>
           </div>
@@ -372,7 +372,7 @@ export function CompetitorAnalysis({
                 </div>
 
                 {/* 左侧下半部健康度小结，填补空白且提升分析价值 */}
-                <div style={{ padding: '12px 14px', background: '#f9f9fb', borderRadius: 8, border: '0.5px solid var(--slate-6, #d9d9e0)', fontSize: 12, lineHeight: 1.6, color: '#60646c', marginTop: 14 }}>
+                <div style={{ padding: '12px 14px', background: '#FAF9F5', borderRadius: 8, border: '1px solid #E6E3DC', fontSize: 12, lineHeight: 1.6, color: '#57534E', marginTop: 14 }}>
                   <div style={{ fontWeight: 700, color: '#1c2024', marginBottom: 4 }}>💡 品牌讨论分布洞察</div>
                   <div>• 讨论重点在未标注记录（{(counts.get('未标注') || 0)}条）与金领冠（{(counts.get('金领冠') || 0)}条）。</div>
                   <div>• 飞鹤本品讨论合计 {(counts.get('飞鹤') || 0)} 条，主要集中在买赠权益与活动政策承接。</div>

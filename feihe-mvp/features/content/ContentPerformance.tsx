@@ -70,7 +70,7 @@ function DistributionBars({
                   {isObserved ? `${compact(val)}${valueUnit ? ` ${valueUnit}` : ''}` : '—'}
                 </strong>
                 {secText && (
-                  <em style={{ color: 'var(--slate-11, #60646c)', fontSize: '12px', fontStyle: 'normal' }}>
+                  <em style={{ color: '#57534E', fontSize: '12px', fontStyle: 'normal' }}>
                     {secText}
                   </em>
                 )}

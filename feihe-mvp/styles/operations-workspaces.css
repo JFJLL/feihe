@@ -200,12 +200,12 @@
 }
 .ops-metric-card-unit {
   font-size: 14px;
-  color:#60646c;
+  color:#57534E;
   font-weight: 500;
 }
 .ops-metric-card-desc {
   font-size: 12px;
-  color:#60646c;
+  color:#57534E;
   line-height: 1.4;
 }
 
@@ -332,11 +332,11 @@
 .ops-table th {
   position: sticky;
   top: 0;
-  background: #f9f9fb;
-  color:#60646c;
+  background: var(--bg-subtle, #FAF9F5);
+  color:#57534E;
   font-weight: 600;
   padding: 10px 14px;
-  border-bottom:0.5px solid #d9d9e0;
+  border-bottom:1px solid var(--border-subtle, #E6E3DC);
   z-index: 2;
   white-space: nowrap;
 }

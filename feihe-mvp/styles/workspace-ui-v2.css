@@ -116,6 +116,22 @@
   gap: 10px !important;
   flex-shrink: 0 !important;
 }
+[data-workspace-ui='v2'] .workspace-header-actions .workspace-compact-tabs {
+  height: 36px !important;
+  min-height: 36px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+[data-workspace-ui='v2'] .workspace-header-actions .sync-button {
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  border-radius: 9px !important;
+}
 [data-workspace-ui='v2'] .ui-page-header .overview-quarter-pill {
   background: var(--ws-interactive-soft);
   color:var(--ws-interactive);

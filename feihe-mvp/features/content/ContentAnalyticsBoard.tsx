@@ -121,7 +121,7 @@ export function ContentAnalyticsBoard({
                   <div style={{ height: 8, background: '#d9d9e0', borderRadius: 4, overflow: 'hidden' }}>
                     <div style={{ width: `${item.pct}%`, height: '100%', background: item.color, borderRadius: 4 }} />
                   </div>
-                  <span style={{ fontSize: '12px', color: 'var(--slate-11, #60646c)' }}>{item.subText}</span>
+                  <span style={{ fontSize: '12px', color: '#57534E' }}>{item.subText}</span>
                 </div>
               ))}
             </div>

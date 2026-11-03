@@ -321,22 +321,22 @@
 
 .comp-table th {
   padding: 0.65rem 0.875rem;
-  background: #f9f9fb;
-  border-bottom:0.5px solid #d9d9e0;
+  background: var(--bg-subtle, #FAF9F5);
+  border-bottom:1px solid var(--border-subtle, #E6E3DC);
   font-weight: 600;
-  color:#60646c;
+  color:#57534E;
   white-space: nowrap;
 }
 
 .comp-table td {
   padding: 0.65rem 0.875rem;
-  border-bottom:0.5px solid #f0f0f3;
-  color:#1c2024;
+  border-bottom:0.5px solid var(--border-subtle, #E6E3DC);
+  color:#2D312E;
   vertical-align: middle;
 }
 
 .comp-table tr:hover {
-  background: #f9f9fb;
+  background: var(--bg-subtle, #FAF9F5);
 }
 
 .comp-hex-len {
@@ -363,8 +363,8 @@
 .comp-legacy-archive {
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;
-  background: #f9f9fb;
-  border:0.5px dashed #d9d9e0;
+  background: var(--bg-subtle, #FAF9F5);
+  border:0.5px dashed var(--border-subtle, #E6E3DC);
   border-radius: 8px;
 }
 

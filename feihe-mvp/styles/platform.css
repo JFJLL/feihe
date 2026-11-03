@@ -668,7 +668,12 @@
   border-radius: 4px;
 }
 
-.integration-project-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr)); gap:18px; }
+.integration-project-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr)); gap:20px; }
+@media (min-width: 1100px) and (max-width: 1680px) {
+  .integration-project-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
 .integration-project-card { display:flex; flex-direction:column; gap:12px; min-width:0; padding:20px; background:#FFFFFF; border:1px solid #E6E3DC; border-radius:14px; transition: box-shadow 200ms ease, border-color 200ms ease, transform 200ms ease; box-shadow: 0 1px 3px rgba(28, 25, 23, 0.03); }
 .integration-project-card:hover { box-shadow: 0 8px 24px rgba(28, 25, 23, 0.08); border-color:#D4CFC5; transform: translateY(-2px); }
 .integration-project-card h2 { margin:2px 0; font-size:16px; font-weight: 800; color: #1C1917; overflow-wrap:anywhere; }
