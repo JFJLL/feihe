@@ -1455,6 +1455,10 @@ export function extractFeishuDrilldowns(
 
   const noteTables = tables.filter((t) => {
     const id = t.id.toLowerCase();
+    // Exclude aggregate tier summaries that lack creator identities
+    if (id.includes("kol-tier") || id.includes("tier-matrix") || id.includes("tier-breakdown")) {
+      return false;
+    }
     return (
       id.includes("creative") ||
       id.includes("note") ||
@@ -1470,10 +1474,36 @@ export function extractFeishuDrilldowns(
     for (let i = 0; i < t.rows.length; i++) {
       const r = t.rows[i];
       if (!r || (r as Record<string, unknown>).isSummary) continue;
-      const kol = String(r.kolName || r.kol_name || r.creator || r.account_name || r.material_name || r.creativeName || "").trim();
-      const title = String(r.material_name || r.creativeName || r.noteTitle || r.contentType || kol || `素材 #${i + 1}`).trim();
+      const kol = String(
+        r.kol_name ||
+        r.kolName ||
+        r.creator ||
+        r.nickname ||
+        r.nickName ||
+        r.account_name ||
+        r.author ||
+        r.creativeName ||
+        r.material_name ||
+        ""
+      ).trim();
+
+      // Skip rows with neither creator nickname nor specific creative title
+      if (!kol && !r.creativeName && !r.noteTitle && !r.title && !r.dish_type && !r.content_type) {
+        continue;
+      }
+
+      const title = String(
+        r.dish_type ||
+        r.content_direction ||
+        r.content_type ||
+        r.noteTitle ||
+        r.title ||
+        r.creativeName ||
+        r.material_name ||
+        (kol ? `${kol} 合作笔记` : `创意素材 #${i + 1}`)
+      ).trim();
       const channel = String(r.channel || r.tier || r.account_tier || r.kolTier || r.coopFormat || "精选合作").trim();
-      const spend = safeNum(r.spend ?? r.fsSpend ?? r.costSpend ?? r.kCost ?? r.totalSpendKfs ?? r.taskSpend);
+      const spend = safeNum(r.spend ?? r.fsSpend ?? r.costSpend ?? r.kCost ?? r.totalSpendKfs ?? r.taskSpend ?? r.price_with_fee ?? r.price_raw);
       const imp = safeNum(r.impressions ?? r.pgyImp ?? r.fsImp);
       const clk = safeNum(r.clicks ?? r.fsClick);
       const eng = safeNum(r.engagements ?? r.pgyEng ?? r.fsEng);

@@ -160,7 +160,7 @@ console.log("\nDeep testing Kailas daily dataset...");
   const dashboard = (await res.json()).dashboard;
 
   const dailyHtml = renderToStaticMarkup(React.createElement(CampaignDailyPage, { dashboard }));
-  assert(dailyHtml.includes("2026-10-01 ~ 2026-10-12"), "Kailas has 12-day period");
+  assert(dailyHtml.includes("2026-10-01 ~ 2026-10-18"), "Kailas has 18-day period");
   console.log("✓ Kailas 12-day creative dataset verified!");
 }
 

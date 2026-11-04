@@ -1541,8 +1541,8 @@
 }
 
 .ca-health-score-box {
-  width: 140px;
-  min-width: 140px;
+  width: 175px;
+  min-width: 175px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1550,7 +1550,7 @@
   background: var(--bg-subtle, #FAF9F5);
   border: 1px solid var(--border-subtle, #E6E3DC);
   border-radius: 12px;
-  padding: 14px 10px;
+  padding: 8px 10px;
   text-align: center;
   box-sizing: border-box;
 }
@@ -1644,4 +1644,213 @@
 
 .ca-feishu-subpanel-full {
   grid-column: 1 / -1 !important;
+}
+
+/* =========================================================================
+   FUNNEL AMPLIFICATION & 5-COLUMN CROSS DATASET GRID (COMMENTS 2, 3, 5)
+   ========================================================================= */
+/* Thicker funnel bars & balanced height with left card (Comment 2) */
+.ca-daily-page .ca-funnel-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  min-height: 380px !important;
+  justify-content: space-between !important;
+}
+
+.ca-daily-page .ca-funnel-steps-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.ca-daily-page .ca-funnel-step-card {
+  background: #FAF9F5 !important;
+  border: 1px solid #E6E3DC !important;
+  border-radius: 10px !important;
+  padding: 12px 14px !important;
+  min-height: 82px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.ca-daily-page .ca-funnel-step-name {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1C1917) !important;
+}
+
+.ca-daily-page .ca-funnel-step-val {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary, #1C1917) !important;
+}
+
+.ca-daily-page .ca-funnel-step-rate {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--brand-primary, #0F5E52) !important;
+  background: rgba(15, 94, 82, 0.08) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  display: inline-block !important;
+  margin-top: 4px !important;
+}
+
+/* Thicker progress tracks to eliminate bottom whitespace */
+.ca-daily-page .ca-dist-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-top: 4px !important;
+}
+
+.ca-daily-page .ca-dist-item {
+  padding: 8px 0 !important;
+}
+
+.ca-daily-page .ca-dist-label {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1C1917) !important;
+}
+
+.ca-daily-page .ca-dist-value {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: var(--text-primary, #1C1917) !important;
+}
+
+.ca-daily-page .ca-dist-bar-track {
+  height: 18px !important;
+  border-radius: 9px !important;
+  background: #f0f0f3 !important;
+  overflow: hidden !important;
+  margin-top: 6px !important;
+}
+
+.ca-daily-page .ca-dist-bar-fill {
+  height: 100% !important;
+  border-radius: 9px !important;
+  transition: width 0.3s ease !important;
+}
+
+/* 5-Column Cross-Dataset Grid (Comment 3) */
+@media (min-width: 1200px) {
+  .ca-daily-page .ca-cross-dataset-cards {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+}
+
+@media (max-width: 1199px) {
+  .ca-daily-page .ca-cross-dataset-cards {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+    gap: 12px !important;
+  }
+}
+
+.ca-daily-page .ca-cross-card {
+  background: #ffffff !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
+}
+
+.ca-daily-page .ca-cross-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.ca-daily-page .ca-cross-card-active {
+  border: 1.5px solid var(--brand-primary, #0F5E52) !important;
+  background: #f3fbf8 !important;
+}
+
+.ca-daily-page .ca-cross-card-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid var(--border-subtle, #E6E3DC) !important;
+}
+
+.ca-daily-page .ca-cross-card-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1C1917) !important;
+}
+
+.ca-daily-page .ca-cross-badge-active {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  background: var(--brand-primary, #0F5E52) !important;
+  padding: 2px 8px !important;
+  border-radius: 20px !important;
+}
+
+/* Amplified Audience & Keywords Cards in Drilldown (Comment 5) */
+.ca-daily-page .ca-feishu-subpanel {
+  min-height: 460px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.ca-daily-page .ca-feishu-tab-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+}
+
+.ca-daily-page .ca-aud-row,
+.ca-daily-page .ca-kw-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  background: #ffffff !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  border-radius: 10px !important;
+  margin-bottom: 8px !important;
+  gap: 12px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  transition: all 0.15s ease !important;
+}
+
+.ca-daily-page .ca-aud-row:hover,
+.ca-daily-page .ca-kw-row:hover {
+  border-color: var(--brand-primary, #0F5E52) !important;
+  box-shadow: 0 3px 8px rgba(15, 94, 82, 0.08) !important;
+}
+
+.ca-daily-page .ca-aud-name,
+.ca-daily-page .ca-kw-text {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: var(--text-primary, #1C1917) !important;
+}
+
+.ca-daily-page .ca-aud-stats,
+.ca-daily-page .ca-kw-stats {
+  display: flex !important;
+  gap: 14px !important;
+  font-size: 13px !important;
+  color: var(--text-secondary, #57534E) !important;
+}
+
+.ca-daily-page .ca-aud-stats strong,
+.ca-daily-page .ca-kw-stats strong {
+  color: var(--text-primary, #1C1917) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 13px !important;
 }

@@ -415,7 +415,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
           {/* L1 Daily Executive Bento Grid */}
           {richContext && (
             <div className="bento-grid" style={{ marginBottom: 16 }}>
-              <div className="bento-card col-6 ca-health-card">
+              <div className="bento-card col-6 ca-health-card ca-daily-diagnosis-banner">
                 <div className="card-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                   <div className="card-title" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary, #1C1917)", display: "flex", alignItems: "center", gap: 7 }}>
                     <span style={{ fontSize: 15 }}>🩺</span> 本日投流健康研判
@@ -426,12 +426,11 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                 </div>
                 <div className="ca-health-bento-body">
                   <div className="ca-health-score-box">
-                    <div className="ca-health-score-ring">
-                      <span className="ca-health-score-val num">
-                        {richContext.diagnosis.statusTone === 'optimal' ? 92 : richContext.diagnosis.statusTone === 'steady' ? 86 : richContext.diagnosis.statusTone === 'watch' ? 80 : 72}
-                      </span>
-                      <span className="ca-health-score-lbl">单日健康指数</span>
-                    </div>
+                    <HealthArcGauge
+                      score={richContext.diagnosis.statusTone === 'optimal' ? 92 : richContext.diagnosis.statusTone === 'steady' ? 86 : richContext.diagnosis.statusTone === 'watch' ? 80 : 72}
+                      label="单日健康指数"
+                      size={135}
+                    />
                     <span className="ca-health-pos-text">{richContext.diagnosis.positionText}</span>
                   </div>
                   <div className="ca-health-insights-list">
@@ -993,6 +992,31 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
             <span className="ca-daily-details-hint">点击展开全期分析</span>
           </summary>
           <div style={{ padding: "16px 20px" }}>
+            {richContext && (
+              <div className="ca-trend-summary-ribbon" role="region" aria-label="周期走势核心统计" style={{ marginBottom: 16 }}>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">全期累计消耗</span>
+                  <strong className="ca-ribbon-val">¥{fmtNum(richContext.benchmarks.periodTotalSpend)}</strong>
+                </div>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">全期日均消耗</span>
+                  <strong className="ca-ribbon-val">¥{fmtNum(richContext.benchmarks.periodAvgSpend)}</strong>
+                </div>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">全周期峰值日</span>
+                  <strong className="ca-ribbon-val">
+                    {richContext.benchmarks.peakDate || "—"}{" "}
+                    <small>({richContext.benchmarks.peakValue !== null ? `¥${fmtNum(richContext.benchmarks.peakValue)}` : "—"})</small>
+                  </strong>
+                </div>
+                <div className="ca-ribbon-stat">
+                  <span className="ca-ribbon-label">本日消耗占比</span>
+                  <strong className="ca-ribbon-val">
+                    {richContext.benchmarks.spendSharePct !== null ? `${richContext.benchmarks.spendSharePct}%` : "—"}
+                  </strong>
+                </div>
+              </div>
+            )}
             <CampaignDailyDiagnostics
               dataset={activeDataset}
               calendarRows={diagCalendarRows}

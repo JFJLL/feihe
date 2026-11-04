@@ -5320,9 +5320,9 @@
         {
           "month": "10月",
           "startDate": "2026-10-01",
-          "endDate": "2026-10-12",
-          "period": "2026-10-01 ~ 2026-10-12",
-          "observedDays": 12,
+          "endDate": "2026-10-18",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "observedDays": 18,
           "source_sheet": "OzIjd5",
           "logCount": 7750,
           "spend": 74256.4,
