@@ -4400,6 +4400,147 @@
       ]
     },
     {
+      "id": "kailas-top-specific-keywords",
+      "title": "凯乐石核心搜索关键词明细表现 (Top 12具体词目)",
+      "period": "2026-07-16 ~ 2026-10-18",
+      "sourceId": "src-kailas-ajdUxd",
+      "note": "提取自底表-关键词7037条日志及zkRGHD明细，覆盖核心品牌词、高产出品类词与场景穿搭词具体词目投放转化。",
+      "category": "performance",
+      "provenance": "feishu",
+      "columns": [
+        { "key": "keyword", "title": "关键词", "type": "string" },
+        { "key": "category", "title": "所属词类", "type": "string" },
+        { "key": "spend", "title": "消耗 (元)", "type": "currency", "align": "right" },
+        { "key": "impressions", "title": "展现量 (次)", "type": "number", "align": "right" },
+        { "key": "clicks", "title": "点击量 (次)", "type": "number", "align": "right" },
+        { "key": "ctr", "title": "点击率 (%)", "type": "percent", "align": "right" },
+        { "key": "cpc", "title": "CPC (元)", "type": "currency", "align": "right" },
+        { "key": "uv", "title": "站外活跃UV", "type": "number", "align": "right" }
+      ],
+      "rows": [
+        {
+          "keyword": "户外冲锋衣",
+          "category": "穿搭词",
+          "spend": 15335.95,
+          "impressions": 366314,
+          "clicks": 25879,
+          "ctr": 7.06,
+          "cpc": 0.59,
+          "uv": 924
+        },
+        {
+          "keyword": "增高徒步鞋",
+          "category": "场景词",
+          "spend": 8592.62,
+          "impressions": 350964,
+          "clicks": 25858,
+          "ctr": 7.37,
+          "cpc": 0.33,
+          "uv": 59
+        },
+        {
+          "keyword": "简约高级穿搭",
+          "category": "穿搭词",
+          "spend": 3680.74,
+          "impressions": 142744,
+          "clicks": 12481,
+          "ctr": 8.74,
+          "cpc": 0.29,
+          "uv": 50
+        },
+        {
+          "keyword": "hoka拖鞋",
+          "category": "竞品词",
+          "spend": 1800.04,
+          "impressions": 68664,
+          "clicks": 6201,
+          "ctr": 9.03,
+          "cpc": 0.29,
+          "uv": 24
+        },
+        {
+          "keyword": "防滑徒步鞋",
+          "category": "场景词",
+          "spend": 1760.46,
+          "impressions": 49753,
+          "clicks": 3655,
+          "ctr": 7.35,
+          "cpc": 0.48,
+          "uv": 8
+        },
+        {
+          "keyword": "防滑鞋推荐女",
+          "category": "品类词",
+          "spend": 1359.37,
+          "impressions": 44315,
+          "clicks": 2781,
+          "ctr": 6.28,
+          "cpc": 0.49,
+          "uv": 8
+        },
+        {
+          "keyword": "FUGA大坡王黑山",
+          "category": "品牌词",
+          "spend": 1280.0,
+          "impressions": 18400,
+          "clicks": 1803,
+          "ctr": 9.8,
+          "cpc": 0.71,
+          "uv": 18
+        },
+        {
+          "keyword": "越野跑穿搭",
+          "category": "穿搭词",
+          "spend": 1119.94,
+          "impressions": 25829,
+          "clicks": 1497,
+          "ctr": 5.8,
+          "cpc": 0.75,
+          "uv": 12
+        },
+        {
+          "keyword": "salomon萨洛蒙",
+          "category": "竞品词",
+          "spend": 1082.27,
+          "impressions": 43648,
+          "clicks": 3698,
+          "ctr": 8.47,
+          "cpc": 0.29,
+          "uv": 16
+        },
+        {
+          "keyword": "vibe穿搭",
+          "category": "穿搭词",
+          "spend": 899.08,
+          "impressions": 19122,
+          "clicks": 1187,
+          "ctr": 6.21,
+          "cpc": 0.76,
+          "uv": 9
+        },
+        {
+          "keyword": "黑山越野跑鞋",
+          "category": "品牌词",
+          "spend": 850.5,
+          "impressions": 9245,
+          "clicks": 850,
+          "ctr": 9.2,
+          "cpc": 0.41,
+          "uv": 15
+        },
+        {
+          "keyword": "户外徒步鞋",
+          "category": "品类词",
+          "spend": 650.0,
+          "impressions": 9560,
+          "clicks": 650,
+          "ctr": 6.8,
+          "cpc": 0.8,
+          "uv": 7
+        }
+      ]
+    },
+    {
       "id": "kailas-search-keywords-category",
       "title": "聚光搜索6大词类投流效果汇总表",
       "period": "全期累计(源表统计截止未注明)",

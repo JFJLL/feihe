@@ -1560,30 +1560,49 @@ export function extractFeishuDrilldowns(
     const id = t.id.toLowerCase();
     return id.includes("keyword") || id.includes("search");
   });
+
+  const specificKwRows: SearchKeywordItem[] = [];
+  const categoryKwRows: SearchKeywordItem[] = [];
+  const seenKws = new Set<string>();
+
   for (const t of kwTables) {
     for (const r of t.rows) {
       if (!r || (r as Record<string, unknown>).isSummary) continue;
-      const kw = String(r.keyword || r.category || r.category_name || r.word || "").trim();
-      if (!kw) continue;
+      const specificWord = String(r.keyword || r.word || "").trim();
+      const categoryName = String(r.category || r.category_name || r.keywordCategory || "").trim();
+      const kw = specificWord || categoryName;
+      if (!kw || seenKws.has(kw.toLowerCase())) continue;
+      seenKws.add(kw.toLowerCase());
+
       const spend = safeNum(r.spend);
       const clk = safeNum(r.clicks);
       const imp = safeNum(r.impressions);
       const cpc = safeNum(r.cpc);
       const ctr = safeNum(r.ctr);
       const uv = safeNum(r.uv ?? r.externalUv);
-      searchKeywords.push({
+
+      const item: SearchKeywordItem = {
         keyword: kw,
-        category: String(r.category || t.title.slice(0, 10)),
+        category: specificWord ? (categoryName || "搜索词") : "大类汇总",
         spend,
         clicks: clk,
         impressions: imp,
         cpc,
         ctr,
         uv,
-      });
+      };
+
+      if (specificWord) {
+        specificKwRows.push(item);
+      } else {
+        categoryKwRows.push(item);
+      }
     }
   }
-  searchKeywords.sort((a, b) => (b.spend ?? 0) - (a.spend ?? 0));
+
+  const finalKwList = specificKwRows.length > 0 ? specificKwRows : categoryKwRows;
+  finalKwList.sort((a, b) => (b.spend ?? 0) - (a.spend ?? 0));
+  searchKeywords.push(...finalKwList.slice(0, 10));
 
   const audTables = tables.filter((t) => {
     const id = t.id.toLowerCase();

@@ -904,14 +904,18 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                               richContext.feishuDrilldowns.searchKeywords.map((k) => (
                                 <div key={k.keyword} className="ca-kw-row">
                                   <div className="ca-kw-info">
+                                    {k.category && k.category !== k.keyword && (
+                                      <span className="ca-kw-badge-pill" data-category={k.category}>
+                                        {k.category}
+                                      </span>
+                                    )}
                                     <strong className="ca-kw-text">{k.keyword}</strong>
-                                    {k.category && <span className="ca-kw-cat">{k.category}</span>}
                                   </div>
-                                  <div className="ca-kw-stats">
-                                    {k.spend !== null && <span>消耗: <strong>¥{fmtNum(k.spend)}</strong></span>}
-                                    {k.cpc !== null && <span>CPC: <strong>¥{fmtNum(k.cpc, 2)}</strong></span>}
-                                    {k.ctr !== null && <span>CTR: <strong>{k.ctr}%</strong></span>}
-                                    {k.uv !== null && <span>UV: <strong>{fmtNum(k.uv, 0)}</strong></span>}
+                                  <div className="ca-kw-stats num">
+                                    {k.spend !== null && <span className="ca-stat-pill">消耗: <strong>¥{fmtNum(k.spend)}</strong></span>}
+                                    {k.cpc !== null && <span className="ca-stat-pill">CPC: <strong>¥{fmtNum(k.cpc, 2)}</strong></span>}
+                                    {k.ctr !== null && <span className="ca-stat-pill">CTR: <strong>{k.ctr}%</strong></span>}
+                                    {k.uv !== null && <span className="ca-stat-pill">UV: <strong>{fmtNum(k.uv, 0)}</strong></span>}
                                   </div>
                                 </div>
                               ))
@@ -928,13 +932,14 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                             richContext.feishuDrilldowns.audiencePackages.map((aud) => (
                               <div key={aud.name} className="ca-aud-row">
                                 <div className="ca-aud-name-wrap">
+                                  <span className="ca-aud-badge-pill">人群定向</span>
                                   <strong className="ca-aud-name">{aud.name}</strong>
                                 </div>
-                                <div className="ca-aud-stats">
-                                  {aud.spend !== null && <span>消耗: <strong>¥{fmtNum(aud.spend)}</strong></span>}
-                                  {aud.cpe !== null && <span>CPE: <strong>¥{fmtNum(aud.cpe, 2)}</strong></span>}
-                                  {aud.cpuv !== null && <span>CPUV: <strong>¥{fmtNum(aud.cpuv, 2)}</strong></span>}
-                                  {aud.clicks !== null && <span>点击: <strong>{fmtNum(aud.clicks, 0)}</strong></span>}
+                                <div className="ca-aud-stats num">
+                                  {aud.spend !== null && <span className="ca-stat-pill">消耗: <strong>¥{fmtNum(aud.spend)}</strong></span>}
+                                  {aud.cpe !== null && <span className="ca-stat-pill">CPE: <strong>¥{fmtNum(aud.cpe, 2)}</strong></span>}
+                                  {aud.cpuv !== null && <span className="ca-stat-pill">CPUV: <strong>¥{fmtNum(aud.cpuv, 2)}</strong></span>}
+                                  {aud.clicks !== null && <span className="ca-stat-pill">点击: <strong>{fmtNum(aud.clicks, 0)}</strong></span>}
                                 </div>
                               </div>
                             ))

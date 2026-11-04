@@ -1854,3 +1854,56 @@
   font-family: var(--font-mono) !important;
   font-size: 13px !important;
 }
+
+.ca-kw-badge-pill,
+.ca-aud-badge-pill {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+  background: #f0fdf4 !important;
+  color: #15803d !important;
+  border: 1px solid #bbf7d0 !important;
+  white-space: nowrap !important;
+}
+
+.ca-kw-badge-pill[data-category*="品牌"] {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe !important;
+}
+
+.ca-kw-badge-pill[data-category*="穿搭"] {
+  background: #faf5ff !important;
+  color: #7e22ce !important;
+  border-color: #e9d5ff !important;
+}
+
+.ca-kw-badge-pill[data-category*="竞品"] {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  border-color: #fecdd3 !important;
+}
+
+.ca-kw-badge-pill[data-category*="场景"] {
+  background: #fffbeb !important;
+  color: #b45309 !important;
+  border-color: #fde68a !important;
+}
+
+.ca-aud-badge-pill {
+  background: #fdf4ff !important;
+  color: #a21caf !important;
+  border-color: #f5d0fe !important;
+}
+
+.ca-stat-pill {
+  background: var(--bg-subtle, #FAF9F5) !important;
+  border: 1px solid var(--border-subtle, #E6E3DC) !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
