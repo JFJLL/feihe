@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞鹤启萃 - 看板丰富化优化分析报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f7fa; color: #1a1a2e; line-height: 1.7; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  
+  /* 头部 */
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); color: #fff; padding: 48px 40px; border-radius: 16px; margin-bottom: 32px; box-shadow: 0 8px 32px rgba(30,58,95,0.2); }
+  .header h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; }
+  .header .subtitle { font-size: 16px; opacity: 0.85; margin-bottom: 24px; }
+  .header .meta { display: flex; gap: 32px; flex-wrap: wrap; font-size: 14px; opacity: 0.9; }
+  .header .meta span { display: flex; align-items: center; gap: 6px; }
+  
+  /* 概览卡片 */
+  .section-title { font-size: 22px; font-weight: 700; margin: 40px 0 20px; padding-left: 14px; border-left: 4px solid #2d5a87; }
+  .overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .overview-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 4px solid; }
+  .overview-card:nth-child(1) { border-color: #e74c3c; }
+  .overview-card:nth-child(2) { border-color: #f39c12; }
+  .overview-card:nth-child(3) { border-color: #9b59b6; }
+  .overview-card:nth-child(4) { border-color: #1abc9c; }
+  .overview-card .card-title { font-size: 14px; color: #666; margin-bottom: 8px; font-weight: 500; }
+  .overview-card .card-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .overview-card .card-desc { font-size: 12px; color: #999; }
+  
+  /* 问题诊断 */
+  .diagnosis-box { background: #fff; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .diagnosis-box h3 { font-size: 18px; margin-bottom: 16px; color: #c0392b; display: flex; align-items: center; gap: 8px; }
+  .problem-list { list-style: none; }
+  .problem-list li { padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; gap: 12px; align-items: flex-start; }
+  .problem-list li:last-child { border-bottom: none; }
+  .problem-num { background: #c0392b; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .problem-text strong { color: #1a1a2e; }
+  .problem-text { color: #555; font-size: 14px; }
+  
+  /* 表格板块 */
+  .table-block { background: #fff; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
+  .table-header { padding: 20px 28px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+  .table-header.t1 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+  .table-header.t2 { background: linear-gradient(135deg, #d68910, #f39c12); }
+  .table-header.t3 { background: linear-gradient(135deg, #7d3c98, #9b59b6); }
+  .table-header.t4 { background: linear-gradient(135deg, #117a65, #1abc9c); }
+  .table-header h3 { font-size: 18px; font-weight: 700; }
+  .table-header .table-stats { font-size: 13px; opacity: 0.9; }
+  .table-body { padding: 24px 28px; }
+  
+  /* 现状标签 */
+  .status-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .status-tag { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+  .status-tag.good { background: #d5f5e3; color: #1e8449; }
+  .status-tag.warn { background: #fdebd0; color: #b9770e; }
+  .status-tag.bad { background: #fadbd8; color: #c0392b; }
+  
+  /* 建议板块 */
+  .suggestion-group { margin-bottom: 24px; }
+  .suggestion-group:last-child { margin-bottom: 0; }
+  .group-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; padding: 8px 14px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid #2d5a87; display: flex; align-items: center; gap: 8px; }
+  .group-title .icon { font-size: 18px; }
+  
+  .chart-suggestion { display: grid; grid-template-columns: 200px 1fr 120px; gap: 16px; padding: 14px 0; border-bottom: 1px solid #f5f5f5; align-items: start; }
+  .chart-suggestion:last-child { border-bottom: none; }
+  .chart-name { font-weight: 600; font-size: 14px; color: #1a1a2e; }
+  .chart-name .chart-type { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; background: #e8f4fd; color: #2874a6; margin-top: 4px; font-weight: 500; }
+  .chart-desc { font-size: 13px; color: #666; line-height: 1.6; }
+  .chart-priority { text-align: center; }
+  .priority-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .priority-high { background: #fadbd8; color: #c0392b; }
+  .priority-mid { background: #fdebd0; color: #b9770e; }
+  .priority-low { background: #d5f5e3; color: #1e8449; }
+  
+  /* 数据源说明 */
+  .data-source { font-size: 12px; color: #999; margin-top: 4px; font-style: italic; }
+  
+  /* 跨表整合 */
+  .integration-card { background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%); color: #fff; border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  .integration-card h3 { font-size: 20px; margin-bottom: 20px; }
+  .integration-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .integration-item { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 18px; backdrop-filter: blur(10px); }
+  .integration-item h4 { font-size: 15px; margin-bottom: 8px; color: #f9e79f; }
+  .integration-item p { font-size: 13px; opacity: 0.9; line-height: 1.6; }
+  
+  /* 优先级路线图 */
+  .roadmap { background: #fff; border-radius: 12px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .roadmap h3 { font-size: 20px; margin-bottom: 24px; }
+  .phase-row { display: flex; gap: 20px; margin-bottom: 20px; align-items: stretch; }
+  .phase-row:last-child { margin-bottom: 0; }
+  .phase-label { width: 120px; flex-shrink: 0; text-align: center; padding: 16px 8px; border-radius: 10px; color: #fff; font-weight: 700; font-size: 14px; display: flex; flex-direction: column; justify-content: center; }
+  .phase-label.p1 { background: #c0392b; }
+  .phase-label.p2 { background: #d68910; }
+  .phase-label.p3 { background: #2874a6; }
+  .phase-label .phase-time { font-size: 11px; font-weight: 400; opacity: 0.85; margin-top: 4px; }
+  .phase-content { flex: 1; background: #f8f9fa; border-radius: 10px; padding: 16px 20px; }
+  .phase-content h4 { font-size: 14px; margin-bottom: 8px; color: #1a1a2e; }
+  .phase-content ul { padding-left: 18px; font-size: 13px; color: #555; }
+  .phase-content li { margin-bottom: 4px; }
+  
+  /* 底部 */
+  .footer { text-align: center; padding: 32px; color: #999; font-size: 13px; }
+  
+  @media (max-width: 768px) {
+    .overview-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-suggestion { grid-template-columns: 1fr; }
+    .integration-grid { grid-template-columns: 1fr; }
+    .phase-row { flex-direction: column; }
+    .phase-label { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <h1>飞鹤启萃 · 看板丰富化优化分析报告</h1>
+    <div class="subtitle">基于4个核心飞书表格的数据资产盘点与看板体系升级建议</div>
+    <div class="meta">
+      <span>📊 分析表格：4 个</span>
+      <span>📑 涉及子表：162 个</span>
+      <span>📈 现有图表：2 个</span>
+      <span>💡 建议新增看板：30+ 个</span>
+    </div>
+  </div>
+
+  <!-- 一、整体现状概览 -->
+  <div class="section-title">一、整体现状概览</div>
+  
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="card-title">分日数据看板</div>
+      <div class="card-value">39</div>
+      <div class="card-desc">子表数量 · 图表 0 个</div>
+    </div>
+    <div class="overview-card">
+      <div class="card-title">周趋势变化底表</div>
+      <div class="card-value">21</div>
+      <div class="card-desc">子表数量 · 图表 1 个</div>
+    </div>
+    <div class="overview-card">
+      <div class="card-title">内容规划 all in one</div>
+      <div class="card-value">32</div>
+      <div class="card-desc">子表数量 · 图表 1 个</div>
+    </div>
+    <div class="overview-card">
+      <div class="card-title">评论区执行文档</div>
+      <div class="card-value">70</div>
+      <div class="card-desc">子表数量 · 图表 0 个</div>
+    </div>
+  </div>
+
+  <!-- 核心问题诊断 -->
+  <div class="diagnosis-box">
+    <h3>⚠️ 核心问题诊断</h3>
+    <ul class="problem-list">
+      <li>
+        <div class="problem-num">1</div>
+        <div class="problem-text"><strong>图表极度匮乏：</strong>4个表格共162个子表，仅有2个图表。聚光数据源3.3万行、蒲公英数据源1300+行等海量数据全部以原始表格形式存在，缺乏可视化汇总。</div>
+      </li>
+      <li>
+        <div class="problem-num">2</div>
+        <div class="problem-text"><strong>缺乏统一仪表盘：</strong>没有一个集中展示核心KPI（消耗、CPUV、进店UV、I+TI人群、爆文率等）的看板首页，管理者需要在多个子表间切换查找数据。</div>
+      </li>
+      <li>
+        <div class="problem-num">3</div>
+        <div class="problem-text"><strong>透视表无配套可视化：</strong>表格1有投流数据透视、人群透视、场景透视、关键词透视等多个透视表，但全部是纯数据透视，没有配套图表来直观呈现分布和趋势。</div>
+      </li>
+      <li>
+        <div class="problem-num">4</div>
+        <div class="problem-text"><strong>趋势分析不足：</strong>KFSOP周投资数据是日更的、聚光数据源是分日的，但没有消耗趋势、CPUV趋势、进店UV趋势等折线图来追踪变化。</div>
+      </li>
+      <li>
+        <div class="problem-num">5</div>
+        <div class="problem-text"><strong>执行进度可视化缺失：</strong>评论区执行文档有70个按日期拆分的明细表，总表有完成进度，但没有执行量趋势图、月度完成率仪表盘、达人vs素人执行对比等可视化。</div>
+      </li>
+      <li>
+        <div class="problem-num">6</div>
+        <div class="problem-text"><strong>内容效果与策略脱节：</strong>内容规划表有完整的人群×阶段内容切角矩阵和优质笔记库，但没有将内容策略维度（场景、人群、达人类型）与实际效果（CTR、互动量、CPUV）关联分析的看板。</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 二、分表格看板优化建议 -->
+  <div class="section-title">二、分表格看板优化建议</div>
+
+  <!-- 表格1：分日数据看板 -->
+  <div class="table-block">
+    <div class="table-header t1">
+      <h3>📊 表格1：启萃｜26年丨分日数据看板</h3>
+      <div class="table-stats">39子表 · 0图表 · 数据量最大</div>
+    </div>
+    <div class="table-body">
+      <div class="status-row">
+        <span class="status-tag bad">图表数量为0</span>
+        <span class="status-tag warn">有5个透视表但无可视化</span>
+        <span class="status-tag good">数据源维度丰富</span>
+        <span class="status-tag good">有KPI内部管理表</span>
+      </div>
+
+      <!-- 板块1：核心KPI仪表盘 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🎯</span> 板块1：核心KPI仪表盘（新建独立看板子表）</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">月度消耗进度仪表盘<span class="chart-type">仪表盘 + 进度条</span></div>
+          <div class="chart-desc">展示当月总预算 vs 实际消耗，按K/F/S/SEO/评论区拆分消耗进度条，直观显示各渠道预算执行率。数据来源：日报数据拉取@PM + KPI内部管理@PM</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">核心效率指标对比卡<span class="chart-type">KPI卡片组</span></div>
+          <div class="chart-desc">CPUV（星/盟/总）、CPM、CPC、CPE、CTR、爆文率等核心指标的KPI目标 vs 实际值对比卡片，用颜色标识达成状态（绿/黄/红）。数据来源：KPI内部管理@PM</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">人群资产看板<span class="chart-type">数字卡片 + 趋势</span></div>
+          <div class="chart-desc">I+TI人群总资产、早阶I+TI人群、CP(I+TI)、早阶人群占比等人群指标的实时展示，配合月度趋势小图。数据来源：KPI内部管理@PM + 聚光数据源</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块2：投流数据分析 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">📈</span> 板块2：投流数据分析（基于聚光数据源+透视表）</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">分日消耗趋势图<span class="chart-type">折线图</span></div>
+          <div class="chart-desc">按日展示总消耗及K/F/S分渠道消耗趋势，可叠加CPUV趋势线，帮助识别消耗波动和效率变化。数据来源：聚光数据源（日）@投手</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">达人层级消耗分布<span class="chart-type">饼图 + 柱状图</span></div>
+          <div class="chart-desc">头部KOL/腰尾/初级/素人/SEO各层级的消耗占比饼图，配合各层级CPUV、互动量、进店UV的对比柱状图，评估各层级投放效率。数据来源：投流数据透视</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">内容方向效果矩阵<span class="chart-type">散点图 / 气泡图</span></div>
+          <div class="chart-desc">X轴=消耗，Y轴=CPUV或进店UV，气泡大小=互动量，按内容方向（转奶干货/第一口奶/待产包/肉宝实证等）着色，识别高消耗低效率和低消耗高效率的内容方向。数据来源：聚光数据源 + 投流数据透视</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">投放版位效率对比<span class="chart-type">分组柱状图</span></div>
+          <div class="chart-desc">信息流 vs 搜索各版位的消耗、CPM、CPC、CPE、CTR对比，帮助优化版位预算分配。数据来源：场景透视 + 聚光数据源</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">下单平台（星/盟）对比<span class="chart-type">双轴对比图</span></div>
+          <div class="chart-desc">小红星 vs 小红盟的消耗、进店UV、CPUV、购买UV、新客UV对比，评估两个平台的投放效率差异。数据来源：电商内表-小红星/小红盟 + 红星/红盟数据大底表</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块3：内容效果分析 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">📝</span> 板块3：内容效果分析（基于蒲公英数据源+笔记库）</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">笔记效果分布直方图<span class="chart-type">直方图</span></div>
+          <div class="chart-desc">按自然CTR区间、互动量区间统计笔记数量分布，识别整体内容质量水平和爆文占比。数据来源：蒲公英数据源（日）@AE</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">流量来源结构分析<span class="chart-type">堆叠柱状图</span></div>
+          <div class="chart-desc">发现页/搜索页/个人页/关注页/附近页的流量占比随时间变化，评估内容分发渠道健康度。数据来源：蒲公英数据源（含流量来源字段）</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">爆文笔记排行榜<span class="chart-type">横向条形图</span></div>
+          <div class="chart-desc">按互动量/自然CTR/进店UV排序的TOP20爆文笔记，标注达人类型、内容场景、发布日期，供内容团队复盘学习。数据来源：爆文笔记库 + 蒲公英数据源</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">达人量级效果对比<span class="chart-type">箱线图</span></div>
+          <div class="chart-desc">头部/腰部/初级/素人各量级笔记的自然CTR、互动量、CPUV分布箱线图，识别各量级的效果波动和性价比。数据来源：蒲公英数据源 + 达人信息数据源</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块4：搜索与关键词 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🔍</span> 板块4：搜索与关键词分析</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">关键词消耗TOP20<span class="chart-type">横向条形图</span></div>
+          <div class="chart-desc">消耗最高的20个关键词及其CPC、点击量、转化率，帮助优化搜索投放关键词策略。数据来源：关键词透视</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">SEO笔记效果追踪<span class="chart-type">折线图 + 表格</span></div>
+          <div class="chart-desc">SEO笔记的搜索曝光、搜索点击、排名变化趋势，配合关键词覆盖数量统计。数据来源：SEO分笔记透视 + SEO分达人</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 表格2：周趋势变化底表 -->
+  <div class="table-block">
+    <div class="table-header t2">
+      <h3>📈 表格2：【飞鹤启萃】周趋势变化底表</h3>
+      <div class="table-stats">21子表 · 1图表 · KPI监测核心</div>
+    </div>
+    <div class="table-body">
+      <div class="status-row">
+        <span class="status-tag warn">仅1个图表</span>
+        <span class="status-tag good">KPI监测体系完整</span>
+        <span class="status-tag good">日更/周更数据连续</span>
+        <span class="status-tag warn">浮动图片为静态截图</span>
+      </div>
+
+      <!-- 板块1：KPI达成总览 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🎯</span> 板块1：KPI达成总览看板</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">Q3 KPI达成率仪表盘<span class="chart-type">多仪表盘组合</span></div>
+          <div class="chart-desc">总费用、进店UV（星/盟/总）、曝光量、阅读量、互动量、爆文率、I+TI人群、早阶人群占比等核心KPI的目标达成率仪表盘，一目了然展示整体KPI完成情况。数据来源：启萃Q3KPI指标 + 周KPI监测表</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">周度KPI趋势追踪<span class="chart-type">多系列折线图</span></div>
+          <div class="chart-desc">按周展示各核心KPI指标的实际值变化，叠加KPI目标线，直观展示每周进度和趋势走向。数据来源：【周五更】启萃日常周KPI监测表@翠娴</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块2：投资与消耗趋势 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">💰</span> 板块2：投资与消耗趋势</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">KFS日消耗趋势<span class="chart-type">堆叠面积图</span></div>
+          <div class="chart-desc">按日展示K（达人）、F（信息流/视频流）、S（搜索）的消耗堆叠面积图，配合总消耗折线，清晰展示各渠道消耗占比变化。数据来源：【日更】A-kfsop周投资数据（Q3）</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">KFS预算占比 vs 实际占比<span class="chart-type">对比饼图 / 环形图</span></div>
+          <div class="chart-desc">目标KFS占比（20:35:39等）与实际KFS占比的双环形对比图，快速识别预算分配偏差。数据来源：日报数据拉取 + KFSOP周投资数据</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">星盟平台消耗对比<span class="chart-type">分组柱状图</span></div>
+          <div class="chart-desc">小红星 vs 小红盟的分周消耗、CPUV、进店UV、购买UV、新客UV对比，评估两平台效率。数据来源：KFSOP周投资数据（含星盟分列）</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块3：效率指标趋势 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">⚡</span> 板块3：效率指标趋势</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">CPUV周趋势<span class="chart-type">折线图</span></div>
+          <div class="chart-desc">星CPUV、盟CPUV、总CPUV的周趋势折线，叠加目标线，追踪投放效率变化。数据来源：周KPI监测表 + KFSOP周投资数据</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">CPM/CPC/CPE/CTR效率矩阵<span class="chart-type">雷达图</span></div>
+          <div class="chart-desc">用雷达图展示CPM、CPC、CPE、CTR、互动率等效率指标的目标vs实际对比，多维度评估投放效率。数据来源：周KPI监测表</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">站内搜索指数趋势<span class="chart-type">折线图（替换现有静态图）</span></div>
+          <div class="chart-desc">将现有的1个静态图升级为可交互的动态折线图，展示品牌词、品类词、竞品词的搜索指数变化趋势。数据来源：【日更】站内搜索指数@翠娴</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块4：人群与留存 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">👥</span> 板块4：人群资产与留存</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">I+TI人群资产趋势<span class="chart-type">面积图</span></div>
+          <div class="chart-desc">I+TI人群总资产、早阶I+TI人群的周度累积趋势，配合CP(I+TI)折线，评估人群资产积累效率。数据来源：周KPI监测表 + 【月更】I+TI留存@翠娴</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">上下游留存漏斗<span class="chart-type">漏斗图</span></div>
+          <div class="chart-desc">曝光→阅读→互动→进店→购买→新客的转化漏斗，按周展示各环节转化率，识别流失瓶颈。数据来源：KFSOP周投资数据 + 上下游留存表</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">回搜量与回搜成本<span class="chart-type">双轴折线图</span></div>
+          <div class="chart-desc">周度回搜量柱状图 + 回搜成本折线，评估内容种草后的搜索转化效果。数据来源：KFSOP周投资数据（含回搜字段）</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 表格3：内容规划 all in one -->
+  <div class="table-block">
+    <div class="table-header t3">
+      <h3>🎨 表格3：【飞鹤启萃】内容规划 all in one</h3>
+      <div class="table-stats">32子表 · 1图表 · 内容策略核心</div>
+    </div>
+    <div class="table-body">
+      <div class="status-row">
+        <span class="status-tag warn">仅1个图表</span>
+        <span class="status-tag good">内容策略矩阵完整</span>
+        <span class="status-tag good">优质笔记库有数据</span>
+        <span class="status-tag warn">策略与效果未关联</span>
+      </div>
+
+      <!-- 板块1：内容策略可视化 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🗺️</span> 板块1：内容策略地图可视化</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">人群×阶段内容矩阵热力图<span class="chart-type">热力图</span></div>
+          <div class="chart-desc">将"内容切角们"表中的7类人群（新手妈妈/新手奶爸/早产妈妈/潮流妈妈/小镇妈妈/成分妈妈等）× 3阶段（孕晚期/0-6月/7月-3岁）的内容方向数量做成热力图，直观展示内容策略覆盖度和空白区域。数据来源：内容切角们</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">痛点关键词云<span class="chart-type">词云图</span></div>
+          <div class="chart-desc">从各人群各阶段的痛点描述中提取关键词，生成词云图，帮助内容团队快速把握核心痛点。数据来源：内容切角们 + 本品消费者反馈</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">内容场景分布树状图<span class="chart-type">树状图 / 矩形树图</span></div>
+          <div class="chart-desc">展示一级场景（第一口奶/转奶干货/待产包/肉宝实证/新生儿喂养知识等）下的二级内容方向数量分布，评估内容场景覆盖均衡度。数据来源：启萃场景库 + 优质笔记库</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块2：内容效果分析 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">📊</span> 板块2：内容效果分析（策略×效果关联）</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">内容场景效果对比<span class="chart-type">分组柱状图</span></div>
+          <div class="chart-desc">按二级场景（转奶干货/第一口奶/待产包/肉宝实证等）统计平均自然CTR、平均互动量、平均CPUV，识别高效内容场景。数据来源：优质笔记库（含二级场景字段）</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">达人类型×内容场景效果矩阵<span class="chart-type">热力图</span></div>
+          <div class="chart-desc">行=达人类型（KOL/KOC/素人/SEO初级/SEO素人），列=内容场景，值=平均自然CTR或互动量，热力图着色，识别哪类达人适合做哪类内容。数据来源：优质笔记库</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">笔记类型效果对比<span class="chart-type">箱线图 / 小提琴图</span></div>
+          <div class="chart-desc">图文 vs 视频笔记的自然CTR、互动量、完播率（视频）分布对比，评估两种内容形式的效果差异。数据来源：优质笔记库 + 蒲公英数据源</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">优质笔记上榜原因分布<span class="chart-type">饼图</span></div>
+          <div class="chart-desc">统计优质笔记库中各上榜原因（高CTR/高互动/高进店等）的数量占比，了解优质笔记的核心特征。数据来源：优质笔记库（上榜原因字段）</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块3：竞品与消费者洞察 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🔬</span> 板块3：竞品与消费者洞察</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">竞品问题类别分布<span class="chart-type">堆叠柱状图</span></div>
+          <div class="chart-desc">按品牌（飞鹤/合生元/A2/金领冠）× 问题类别（异物/价格/客服/销售政策/配件等）的堆叠柱状图，识别各竞品的主要负面问题。数据来源：竞品问题收集</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">本品消费者反馈分类<span class="chart-type">环形图</span></div>
+          <div class="chart-desc">本品消费者正面/负面/中性反馈占比，负面反馈按问题类别细分，帮助产品和内容团队针对性回应。数据来源：本品消费者反馈</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">竞品学习库内容类型分布<span class="chart-type">条形图</span></div>
+          <div class="chart-desc">统计竞品学习库中各内容类型、各竞品的优质笔记数量，为内容创新提供参考方向。数据来源：竞品学习库</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块4：内容生产管理 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">📋</span> 板块4：内容生产管理</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">月度笔记产出趋势<span class="chart-type">柱状图</span></div>
+          <div class="chart-desc">按月统计KOL/KOC/SEO/素人各类型笔记产出数量，追踪内容生产节奏。数据来源：各月KOL/KOC/SEO表 + 优质笔记库</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">卡审话术分类统计<span class="chart-type">词云 / 条形图</span></div>
+          <div class="chart-desc">统计卡审话术中各违规类型、各敏感词的出现频率，帮助内容团队规避审核风险。数据来源：卡审话术总结</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 表格4：评论区执行文档 -->
+  <div class="table-block">
+    <div class="table-header t4">
+      <h3>💬 表格4：供应商「启萃」评论区文案+表情包执行文档</h3>
+      <div class="table-stats">70子表 · 0图表 · 执行管理核心</div>
+    </div>
+    <div class="table-body">
+      <div class="status-row">
+        <span class="status-tag bad">图表数量为0</span>
+        <span class="status-tag bad">70个子表过于分散</span>
+        <span class="status-tag good">总表有执行统计</span>
+        <span class="status-tag warn">缺乏执行质量监控</span>
+      </div>
+
+      <!-- 板块1：执行总览看板 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">📊</span> 板块1：执行总览看板（新建汇总子表）</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">月度执行量仪表盘<span class="chart-type">仪表盘 + 数字卡片</span></div>
+          <div class="chart-desc">当月目标执行量 vs 实际执行量的完成率仪表盘，拆分纯文案和表情包执行量，展示达人评论和素人评论的执行占比。数据来源：总表</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">日执行量趋势图<span class="chart-type">柱状图 + 折线</span></div>
+          <div class="chart-desc">按日展示执行数量柱状图，叠加7日移动平均折线，识别执行节奏波动和高峰低谷。数据来源：总表（按执行时间汇总）</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">达人vs素人执行对比<span class="chart-type">分组柱状图</span></div>
+          <div class="chart-desc">按月/周对比达人评论和素人评论的执行数量、纯文案占比、表情包占比，评估两类执行的结构变化。数据来源：总表 + 各日期明细表</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块2：执行进度与结算 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">✅</span> 板块2：执行进度与结算管理</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">完成进度甘特图<span class="chart-type">甘特图 / 进度条</span></div>
+          <div class="chart-desc">按批次展示各执行任务的计划时间、实际完成时间、完成状态（已完成/进行中/未开始），直观展示执行进度。数据来源：总表（完成进度字段）</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">结算进度追踪<span class="chart-type">堆叠条形图</span></div>
+          <div class="chart-desc">按月展示已结算/未结算金额或数量占比，追踪结算进度，避免积压。数据来源：总表（结算进度字段）</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块3：执行质量监控 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🔍</span> 板块3：执行质量监控</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">链接失效量趋势<span class="chart-type">折线图</span></div>
+          <div class="chart-desc">按月/周统计达人评论链接失效数量和失效率，监控执行质量，识别高失效批次。数据来源：7月达人链接失效量 + 各月数据</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">评论修改量统计<span class="chart-type">柱状图</span></div>
+          <div class="chart-desc">按月统计需要修改的评论数量和修改率，按修改原因分类，评估文案质量和审核严格度变化。数据来源：7月达人修改评论 + 各月数据</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">表情包执行占比趋势<span class="chart-type">面积图</span></div>
+          <div class="chart-desc">纯文案 vs 表情包的执行占比随时间变化，评估表情包策略的执行力度变化。数据来源：总表 + 7月素人表情包量</div>
+          <div class="chart-priority"><span class="priority-badge priority-low">低优先级</span></div>
+        </div>
+      </div>
+
+      <!-- 板块4：数据表结构优化建议 -->
+      <div class="suggestion-group">
+        <div class="group-title"><span class="icon">🛠️</span> 板块4：数据表结构优化建议（非图表）</div>
+        <div class="chart-suggestion">
+          <div class="chart-name">明细表合并建议<span class="chart-type">结构优化</span></div>
+          <div class="chart-desc">70个按日期拆分的明细表建议合并为1-2张统一的执行明细表（增加"执行日期""执行类型"字段），减少子表数量，便于透视分析和图表生成。当前按日期拆表导致无法做跨日期的趋势分析。</div>
+          <div class="chart-priority"><span class="priority-badge priority-high">高优先级</span></div>
+        </div>
+        <div class="chart-suggestion">
+          <div class="chart-name">增加执行质量字段<span class="chart-type">字段补充</span></div>
+          <div class="chart-desc">建议在明细表中增加"链接状态（有效/失效）""是否修改""修改原因""评论互动量"等质量字段，从单纯的执行量管理升级为执行质量管理。</div>
+          <div class="chart-priority"><span class="priority-badge priority-mid">中优先级</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 三、跨表格整合建议 -->
+  <div class="section-title">三、跨表格整合建议</div>
+  
+  <div class="integration-card">
+    <h3>🔗 跨表格数据整合与联动看板</h3>
+    <div class="integration-grid">
+      <div class="integration-item">
+        <h4>1. 统一管理驾驶舱</h4>
+        <p>在表格1（分日数据看板）中新建"管理驾驶舱"子表，汇聚4个表格的核心KPI：消耗进度、CPUV、进店UV、I+TI人群、爆文率、内容产出量、评论区执行完成率等，实现一页看全局。</p>
+      </div>
+      <div class="integration-item">
+        <h4>2. 投流×内容效果联动</h4>
+        <p>将表格1的投流数据（聚光/蒲公英）与表格3的内容策略维度（人群/场景/达人类型）关联，建立"内容策略→投流效果"的归因分析看板，回答"哪类内容投流效果最好"。</p>
+      </div>
+      <div class="integration-item">
+        <h4>3. 周趋势×分日数据联动</h4>
+        <p>表格2的周KPI监测数据与表格1的分日数据联动，实现"日数据→周汇总→KPI达成"的自动追踪，减少人工汇总，确保周KPI数据与分日数据一致。</p>
+      </div>
+      <div class="integration-item">
+        <h4>4. 评论区×内容效果联动</h4>
+        <p>将表格4的评论区执行数据与表格3的优质笔记库关联，分析"评论区执行量→笔记互动量→自然流量"的传导效果，评估评论区运营对内容热度的实际贡献。</p>
+      </div>
+      <div class="integration-item">
+        <h4>5. 竞品洞察×内容策略联动</h4>
+        <p>将表格3的竞品问题收集与内容切角矩阵联动，建立"竞品痛点→本品内容机会"的映射看板，将竞品负面问题转化为本品的内容选题方向。</p>
+      </div>
+      <div class="integration-item">
+        <h4>6. 统一指标定义管理</h4>
+        <p>表格1已有"飞鹤常用指标定义"表，建议扩充为4个表格共用的统一指标字典，确保CPUV、进店UV、I+TI人群、爆文率等核心指标在4个表格中口径一致，避免数据歧义。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 四、实施优先级路线图 -->
+  <div class="section-title">四、实施优先级路线图</div>
+  
+  <div class="roadmap">
+    <h3>🚀 分阶段实施建议</h3>
+    
+    <div class="phase-row">
+      <div class="phase-label p1">第一阶段<br><span class="phase-time">快速见效（1-2周）</span></div>
+      <div class="phase-content">
+        <h4>核心KPI可视化 + 关键趋势图</h4>
+        <ul>
+          <li>表格1：新建核心KPI仪表盘子表（消耗进度、效率指标、人群资产）</li>
+          <li>表格1：分日消耗趋势图 + 达人层级消耗分布饼图</li>
+          <li>表格2：Q3 KPI达成率仪表盘 + KFS日消耗堆叠面积图</li>
+          <li>表格2：CPUV周趋势折线图</li>
+          <li>表格4：月度执行量仪表盘 + 日执行量趋势图 + 完成进度甘特图</li>
+          <li>表格4：链接失效量趋势图</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-row">
+      <div class="phase-label p2">第二阶段<br><span class="phase-time">深度分析（3-4周）</span></div>
+      <div class="phase-content">
+        <h4>多维分析 + 内容效果关联</h4>
+        <ul>
+          <li>表格1：内容方向效果矩阵散点图 + 投放版位效率对比 + 星盟平台对比</li>
+          <li>表格1：笔记效果分布直方图 + 流量来源结构分析 + 爆文排行榜</li>
+          <li>表格2：效率指标雷达图 + 转化漏斗图 + I+TI人群资产趋势</li>
+          <li>表格3：人群×阶段内容矩阵热力图 + 内容场景效果对比</li>
+          <li>表格3：达人类型×内容场景效果矩阵 + 竞品问题类别分布</li>
+          <li>表格4：明细表结构优化（合并70张分散表）+ 执行质量字段补充</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-row">
+      <div class="phase-label p3">第三阶段<br><span class="phase-time">体系完善（5-8周）</span></div>
+      <div class="phase-content">
+        <h4>跨表整合 + 体系化运营</h4>
+        <ul>
+          <li>新建统一管理驾驶舱（汇聚4表核心KPI）</li>
+          <li>投流×内容效果联动归因分析看板</li>
+          <li>评论区×内容效果联动分析</li>
+          <li>竞品洞察×内容策略联动映射看板</li>
+          <li>统一指标定义字典（4表共用）</li>
+          <li>关键词消耗TOP分析 + SEO效果追踪</li>
+          <li>内容生产管理看板（月度产出趋势 + 卡审风险监控）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 五、预期收益 -->
+  <div class="section-title">五、预期收益</div>
+  
+  <div class="overview-grid">
+    <div class="overview-card" style="border-color: #2d5a87;">
+      <div class="card-title">管理效率提升</div>
+      <div class="card-value">80%↑</div>
+      <div class="card-desc">一页看全局，减少多表切换</div>
+    </div>
+    <div class="overview-card" style="border-color: #2d5a87;">
+      <div class="card-title">决策速度提升</div>
+      <div class="card-value">3x</div>
+      <div class="card-desc">可视化趋势替代人工数据查找</div>
+    </div>
+    <div class="overview-card" style="border-color: #2d5a87;">
+      <div class="card-title">问题发现时效</div>
+      <div class="card-value">T+1</div>
+      <div class="card-desc">异常指标当日可见，及时调整</div>
+    </div>
+    <div class="overview-card" style="border-color: #2d5a87;">
+      <div class="card-title">数据资产利用率</div>
+      <div class="card-value">从5%→60%+</div>
+      <div class="card-desc">海量原始数据转化为决策洞察</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>飞鹤启萃看板丰富化优化分析报告 · 基于4个核心飞书表格的完整数据资产盘点</p>
+    <p style="margin-top: 8px;">报告生成时间：2026年9月9日 · 仅分析建议，未修改任何原始表格</p>
+  </div>
+
+</div>
+</body>
+</html>

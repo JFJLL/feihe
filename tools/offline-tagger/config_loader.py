@@ -16,7 +16,8 @@ from urllib.request import Request, urlopen
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_CONFIG_PATH = SCRIPT_DIR / "config.json"
+REPO_ROOT = SCRIPT_DIR.parent.parent
+DEFAULT_CONFIG_PATH = SCRIPT_DIR / "config.json" if (SCRIPT_DIR / "config.json").exists() else (REPO_ROOT / "config.json")
 
 
 def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:

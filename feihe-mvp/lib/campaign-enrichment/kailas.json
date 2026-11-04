@@ -1,6 +1,6 @@
 {
   "projectId": "kailas",
-  "extractedAt": "2026-11-02T07:47:28.896Z",
+  "extractedAt": "2026-11-04T10:42:23.388Z",
   "sources": [
     {
       "id": "src-kailas-node-LT1MwikWci8LTDk0UL7coXfrnVb",
@@ -4408,14 +4408,52 @@
       "category": "performance",
       "provenance": "feishu",
       "columns": [
-        { "key": "keyword", "title": "关键词", "type": "string" },
-        { "key": "category", "title": "所属词类", "type": "string" },
-        { "key": "spend", "title": "消耗 (元)", "type": "currency", "align": "right" },
-        { "key": "impressions", "title": "展现量 (次)", "type": "number", "align": "right" },
-        { "key": "clicks", "title": "点击量 (次)", "type": "number", "align": "right" },
-        { "key": "ctr", "title": "点击率 (%)", "type": "percent", "align": "right" },
-        { "key": "cpc", "title": "CPC (元)", "type": "currency", "align": "right" },
-        { "key": "uv", "title": "站外活跃UV", "type": "number", "align": "right" }
+        {
+          "key": "keyword",
+          "title": "关键词",
+          "type": "string"
+        },
+        {
+          "key": "category",
+          "title": "所属词类",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "title": "消耗 (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "impressions",
+          "title": "展现量 (次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "clicks",
+          "title": "点击量 (次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ctr",
+          "title": "点击率 (%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC (元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV",
+          "type": "number",
+          "align": "right"
+        }
       ],
       "rows": [
         {
@@ -4481,7 +4519,7 @@
         {
           "keyword": "FUGA大坡王黑山",
           "category": "品牌词",
-          "spend": 1280.0,
+          "spend": 1280,
           "impressions": 18400,
           "clicks": 1803,
           "ctr": 9.8,
@@ -4531,7 +4569,7 @@
         {
           "keyword": "户外徒步鞋",
           "category": "品类词",
-          "spend": 650.0,
+          "spend": 650,
           "impressions": 9560,
           "clicks": 650,
           "ctr": 6.8,

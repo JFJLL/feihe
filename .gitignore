@@ -50,3 +50,11 @@ output/
 feihe-mvp/output/
 feihe-mvp/.verification/
 feihe-mvp/.playwright-cli/
+.playwright-cli/
+.cache/
+.vite/
+.xhs-cookie-test/
+*.tsbuildinfo
+feihe-mvp/screenshots/
+.verification/
+*.bak

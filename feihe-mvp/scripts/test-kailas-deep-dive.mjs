@@ -19,7 +19,7 @@ const expectedTableIds = [
   'kailas-candidate-pool-status', 'kailas-kol-tier-matrix',
   'kailas-content-direction-summary', 'kailas-potential-notes-boost',
   'kailas-full-funnel-summary', 'kailas-biweekly-stage-evolution',
-  'kailas-tier-direction-matrix', 'kailas-audit-common-issues',
+  'kailas-tier-direction-matrix', 'kailas-audit-common-issues', 'kailas-top-specific-keywords',
 ];
 assert.deepStrictEqual(kailasData.tables.map(table => table.id).sort(), expectedTableIds.sort(), 'All current source tables exist exactly once');
 

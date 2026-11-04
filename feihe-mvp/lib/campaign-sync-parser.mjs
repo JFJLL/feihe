@@ -305,8 +305,9 @@ export function parseWipesTaosou(input) {
     const spend_f = safeParseNum(r[9]);
     const spend_s = safeParseNum(r[10]);
     const spend_cid = safeParseNum(r[11]);
-    // strictSum: if any channel is missing/null, spend_total is null!
-    const spend_total = strictSum([spend_k, spend_f, spend_s, spend_cid]);
+    const sheet_subtotal = safeParseNum(r[12]);
+    const spend_channels = [spend_k, spend_f, spend_s, spend_cid].filter((n) => n !== null);
+    const spend_total = sheet_subtotal !== null ? sheet_subtotal : (spend_channels.length > 0 ? strictSum(spend_channels) : null);
 
     const uvs = uvMap.get(date) || { search_uv: null, shop_uv: null, redstar_uv: null };
 

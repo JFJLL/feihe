@@ -112,7 +112,7 @@ export async function syncAllFeishuLive(options = {}) {
     '--format', 'json',
     '--spreadsheet-token', 'Ero1shDTFhVzwttqDMLceZQ4nMb',
     '--sheet-id', 'wY1HZO',
-    '--range', 'A1:W61',
+    '--range', 'A1:W120',
     '--no-header',
     '--output-path', wipesTaosouPath,
   ]);
