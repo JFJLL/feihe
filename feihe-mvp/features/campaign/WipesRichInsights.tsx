@@ -1395,6 +1395,80 @@ export function WipesRichInsights({ dashboard, section }: WipesRichInsightsProps
             height={280}
           />
         </ChartPanel>
+
+        {/* Chart 4: 3 Signed Doctor Accounts */}
+        <ChartPanel
+          title="三甲医院医生专家号独立背书专区 (全案116篇矩阵核心资产)"
+          subtitle="三甲儿科与妇幼专科专家权威背书，免费授权信息流投放3个月，构建母婴医疗级信任心智"
+          actions={
+            <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 600 }}>
+              定档签约 3 位 · 全案 116 篇 (113达人+3医生)
+            </span>
+          }
+        >
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+            {[
+              {
+                alias: '沈主任有点忙',
+                hospital: '深圳市儿童医院 (儿科)',
+                tier: '三甲专科',
+                price: '¥15,000',
+                status: '定档合作',
+                terms: '免费授权原视频站内信息流3个月(不含二剪)',
+                topic: '婴幼儿餐具与玩具消毒指南',
+              },
+              {
+                alias: '刘慧教授说健康',
+                hospital: '深圳市罗湖区妇幼保健院',
+                tier: '三甲专科',
+                price: '¥16,000',
+                status: '定档合作',
+                terms: '免费授权原视频站内信息流3个月(不含二剪)',
+                topic: '流感换季预防与居家杀菌误区',
+              },
+              {
+                alias: '硕士妈妈黄慧(测评版)',
+                hospital: '广州暨南大学附属第一医院',
+                tier: '三甲综合',
+                price: '¥20,000',
+                status: '定档合作',
+                terms: '免费授权原视频站内信息流3个月(不含二剪)',
+                topic: '医用级玉米酒精湿巾成分硬核评测',
+              },
+            ].map((doc, idx) => (
+              <div
+                key={doc.alias}
+                style={{
+                  background: '#FAF9F5',
+                  border: '1px solid #E6E3DC',
+                  borderRadius: 10,
+                  padding: '14px 16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontWeight: 800, fontSize: 14, color: '#1C1917' }}>🩺 #{idx + 1} {doc.alias}</span>
+                    <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.1)', color: '#0F5E52', fontWeight: 600 }}>
+                      {doc.tier}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>
+                    {doc.status}
+                  </span>
+                </div>
+                <div style={{ fontSize: 12, color: '#2E6F8E', fontWeight: 600 }}>{doc.hospital}</div>
+                <div style={{ fontSize: 11.5, color: '#57534E', lineHeight: 1.5 }}>
+                  <div>• 合作报价：<strong style={{ color: '#1C1917' }}>{doc.price}</strong></div>
+                  <div>• 选题方向：{doc.topic}</div>
+                  <div>• 授权条款：{doc.terms}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </ChartPanel>
         </div>
       </div>
     );

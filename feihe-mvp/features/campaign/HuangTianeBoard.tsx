@@ -1282,13 +1282,49 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
           </div>
 
           {/* 底部折叠明细表收纳 */}
+          <div className="ht-creator-pipeline-banner" style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '14px 18px', marginTop: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontWeight: 800, fontSize: 14, color: '#1C1917' }}>💼 31位定档达人履约全周期流水线</span>
+                <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>
+                  已上线 18 篇 (58.1%) · 在途制作 13 篇 (41.9%)
+                </span>
+              </div>
+              <span style={{ fontSize: 11.5, color: '#78716C' }}>
+                全案共 31 位合作达人，截至当前 18 篇顺利发布且素材 100% 收集
+              </span>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+              <div style={{ background: '#ffffff', border: '1px solid #ECEAE4', borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, color: '#78716C' }}>01 已发布上线</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>18 <span style={{ fontSize: 11, fontWeight: 500 }}>篇</span></div>
+                <div style={{ fontSize: 10.5, color: '#0F5E52' }}>素材收集率 100% (done)</div>
+              </div>
+              <div style={{ background: '#ffffff', border: '1px solid #ECEAE4', borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, color: '#78716C' }}>02 拍摄制作中</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#2E6F8E', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>7 <span style={{ fontSize: 11, fontWeight: 500 }}>篇</span></div>
+                <div style={{ fontSize: 10.5, color: '#57534E' }}>预计 10/25~10/31 交付</div>
+              </div>
+              <div style={{ background: '#ffffff', border: '1px solid #ECEAE4', borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, color: '#78716C' }}>03 易美初审中</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#C87D20', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>4 <span style={{ fontSize: 11, fontWeight: 500 }}>篇</span></div>
+                <div style={{ fontSize: 10.5, color: '#57534E' }}>脚本/大纲二审质检</div>
+              </div>
+              <div style={{ background: '#ffffff', border: '1px solid #ECEAE4', borderRadius: 8, padding: '10px 12px' }}>
+                <div style={{ fontSize: 11, color: '#78716C' }}>04 客户终审中</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#D95D39', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>2 <span style={{ fontSize: 11, fontWeight: 500 }}>篇</span></div>
+                <div style={{ fontSize: 10.5, color: '#57534E' }}>定稿待品牌终核</div>
+              </div>
+            </div>
+          </div>
+
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             <button
               type="button"
               className="ht-btn ht-btn-secondary"
               onClick={() => setCreatorTableOpen((prev) => !prev)}
             >
-              {creatorTableOpen ? '收起 31位达人定档执行明细表 ▲' : '查看 31位达人定档执行明细表 ▼'}
+              {creatorTableOpen ? '收起 31位达人定档执行明细表 (含预计发布与报价) ▲' : '查看 31位达人定档执行明细表 (含预计发布与报价) ▼'}
             </button>
             <button
               type="button"

@@ -1140,9 +1140,32 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
               <ChartPanel
                 title="双11试用样机产品型号分布与三态流转进度"
                 subtitle={`数据源：双11样机流转记录（全量${sampleMachineTotals.totalMachines}台）`}
+                actions={
+                  <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 600 }}>
+                    已下单履约率 72.6% · 退货完成 8 台
+                  </span>
+                }
               >
-                <HorizontalBarChart data={sampleMachineBarData} unit="台" />
-
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                    <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                      <div style={{ fontSize: 11, color: '#78716C' }}>01 已下单寄出 / 达人收件</div>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>61 <span style={{ fontSize: 11, fontWeight: 500 }}>台</span></div>
+                      <div style={{ fontSize: 10.5, color: '#0F5E52' }}>占比 72.6% (加急制图中)</div>
+                    </div>
+                    <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                      <div style={{ fontSize: 11, color: '#78716C' }}>02 拍摄制作中 / 待退货</div>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: '#C87D20', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>15 <span style={{ fontSize: 11, fontWeight: 500 }}>台</span></div>
+                      <div style={{ fontSize: 10.5, color: '#57534E' }}>占比 17.9% (履约在途)</div>
+                    </div>
+                    <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                      <div style={{ fontSize: 11, color: '#78716C' }}>03 样机退货完成入库</div>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: '#2E6F8E', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>8 <span style={{ fontSize: 11, fontWeight: 500 }}>台</span></div>
+                      <div style={{ fontSize: 10.5, color: '#2E6F8E' }}>占比 9.5% (资产回流闭环)</div>
+                    </div>
+                  </div>
+                  <HorizontalBarChart data={sampleMachineBarData} unit="台" />
+                </div>
               </ChartPanel>
             </div>
 
@@ -1620,10 +1643,34 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           </ChartPanel>
 
           <ChartPanel
-            title="双11试用样机产品型号分布"
+            title="双11试用样机产品型号分布与三态流转进度"
             subtitle={`数据源：双11样机流转记录（全量${sampleMachineTotals.totalMachines}台）`}
+            actions={
+              <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 600 }}>
+                已下单履约率 72.6% · 退货完成 8 台
+              </span>
+            }
           >
-            <HorizontalBarChart data={sampleMachineBarData} unit="台" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C' }}>01 已下单寄出 / 达人收件</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>61 <span style={{ fontSize: 11, fontWeight: 500 }}>台</span></div>
+                  <div style={{ fontSize: 10.5, color: '#0F5E52' }}>占比 72.6% (加急制图中)</div>
+                </div>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C' }}>02 拍摄制作中 / 待退货</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#C87D20', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>15 <span style={{ fontSize: 11, fontWeight: 500 }}>台</span></div>
+                  <div style={{ fontSize: 10.5, color: '#57534E' }}>占比 17.9% (履约在途)</div>
+                </div>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C' }}>03 样机退货完成入库</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#2E6F8E', fontFamily: 'var(--font-mono)', margin: '2px 0' }}>8 <span style={{ fontSize: 11, fontWeight: 500 }}>台</span></div>
+                  <div style={{ fontSize: 10.5, color: '#2E6F8E' }}>占比 9.5% (资产回流闭环)</div>
+                </div>
+              </div>
+              <HorizontalBarChart data={sampleMachineBarData} unit="台" />
+            </div>
 
           </ChartPanel>
 

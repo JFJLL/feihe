@@ -880,6 +880,20 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
     const totalKw = kwData?.totalSpend || 0;
     const totalMonthly = monthlyData?.sumSpend || 0;
     const avgCpc = monthlyData?.avgCPC;
+    const scatterRows = scatterTable?.rows || [];
+    let sumSeed = 0;
+    let sumDeepSeed = 0;
+    let seedSpend = 0;
+    for (const r of scatterRows) {
+      const s = parseNum(r.spend) || 0;
+      const seed = parseNum(r.seedCrowd) || 0;
+      const deep = parseNum(r.deepSeedCrowd) || 0;
+      seedSpend += s;
+      sumSeed += seed;
+      sumDeepSeed += deep;
+    }
+    const avgCpi = sumSeed > 0 ? seedSpend / sumSeed : null;
+    const avgCpti = sumDeepSeed > 0 ? seedSpend / sumDeepSeed : null;
     return [
       {
         label: '投放总消耗',
@@ -894,6 +908,18 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
         status: 'default',
       },
       {
+        label: '新增种草人群 (Seed)',
+        value: `${fmtNum(sumSeed)} 人`,
+        meta: avgCpi !== null ? `均CPI ¥${avgCpi.toFixed(2)}` : '种草转化受众',
+        status: 'default',
+      },
+      {
+        label: '深度种草人群 (TI)',
+        value: `${fmtNum(sumDeepSeed)} 人`,
+        meta: avgCpti !== null ? `均CPTI ¥${avgCpti.toFixed(2)}` : '深度种草受众',
+        status: 'accent',
+      },
+      {
         label: '平均点击成本 (CPC)',
         value: avgCpc !== null && avgCpc !== undefined ? `¥${avgCpc.toFixed(2)}` : '—',
         meta: '全周期平均点击成本',
@@ -906,7 +932,7 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
         status: 'default',
       },
     ];
-  }, [kwData, monthlyData]);
+  }, [kwData, monthlyData, scatterTable]);
 
   const contentMetrics: MetricStripItem[] = useMemo(() => {
     return [
@@ -1740,6 +1766,60 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                     ))}
                   </div>
                 </div>
+              </div>
+            </ChartPanel>
+
+            {/* 种草与深度心智转化标杆笔记 */}
+            <ChartPanel
+              title='核心笔记深度种草 (TI) 与 CPTI 效率排行 (Top 6 种草标杆)'
+              subtitle='从《种草投放数据》提取：评估每位达人沉淀深度种草人群能力与单人成本，指导追投决策'
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+                {[
+                  { kol: 'kat', deepSeed: 27733, cpti: 2.40, seed: 44088, cpi: 1.51, uv: 10, spend: 66586 },
+                  { kol: '恩予', deepSeed: 25652, cpti: 1.73, seed: 43109, cpi: 1.03, uv: 497, spend: 44372 },
+                  { kol: '上海在穿啥', deepSeed: 24376, cpti: 1.73, seed: 42089, cpi: 1.00, uv: 439, spend: 42091 },
+                  { kol: '没1月', deepSeed: 18944, cpti: 2.21, seed: 38221, cpi: 1.09, uv: 532, spend: 41824 },
+                  { kol: 'KK', deepSeed: 16823, cpti: 2.04, seed: 35140, cpi: 0.98, uv: 680, spend: 34281 },
+                  { kol: 'ONIONYOUNG', deepSeed: 7363, cpti: 5.75, seed: 54227, cpi: 0.78, uv: 636, spend: 42326 },
+                ].map((item, idx) => (
+                  <div
+                    key={item.kol}
+                    style={{
+                      background: '#FAF9F5',
+                      border: '1px solid #E6E3DC',
+                      borderRadius: 10,
+                      padding: '12px 14px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 8,
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: 700, fontSize: 13, color: '#1C1917' }}>
+                        #{idx + 1} {item.kol}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          padding: '1px 6px',
+                          borderRadius: 4,
+                          background: item.cpti <= 2.0 ? 'rgba(15, 94, 82, 0.1)' : 'rgba(200, 125, 32, 0.1)',
+                          color: item.cpti <= 2.0 ? '#0F5E52' : '#C87D20',
+                          fontWeight: 700,
+                        }}
+                      >
+                        CPTI ¥{item.cpti.toFixed(2)}
+                      </span>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, fontSize: 11, color: '#57534E' }}>
+                      <div>深度种草: <strong style={{ color: '#1C1917' }}>{item.deepSeed.toLocaleString()}人</strong></div>
+                      <div>新增种草: <strong style={{ color: '#1C1917' }}>{item.seed.toLocaleString()}人</strong></div>
+                      <div>CPI成本: <strong style={{ color: '#0F5E52' }}>¥{item.cpi.toFixed(2)}</strong></div>
+                      <div>进店UV: <strong style={{ color: '#2E6F8E' }}>{item.uv}人</strong></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </ChartPanel>
           </div>

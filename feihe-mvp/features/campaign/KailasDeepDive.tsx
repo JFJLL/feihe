@@ -352,6 +352,10 @@ function AdsNotesView({
                   <th className="num">CPE</th>
                   <th className="num">站外活跃UV</th>
                   <th className="num">CPUV</th>
+                  <th className="num">新增种草</th>
+                  <th className="num">CPI</th>
+                  <th className="num">深度种草</th>
+                  <th className="num">CPTI</th>
                 </tr>
               </thead>
               <tbody>
@@ -369,6 +373,10 @@ function AdsNotesView({
                     <td className="num">{fmtCurrency(r.cpe)}</td>
                     <td className="num">{fmtNum(r.externalUv)}</td>
                     <td className="num">{fmtCurrency(r.cpuv)}</td>
+                    <td className="num">{fmtNum(r.seedCrowd)}</td>
+                    <td className="num">{fmtCurrency(r.cpi)}</td>
+                    <td className="num">{fmtNum(r.deepSeedCrowd)}</td>
+                    <td className="num">{fmtCurrency(r.cpti)}</td>
                   </tr>
                 ))}
               </tbody>
