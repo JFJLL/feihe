@@ -291,25 +291,30 @@ export function SearchCoreWordsVisuals({ data }: { data: BusinessHighlights['sea
   const scopeCaption = data.tableScope || '来源快照，统计区间未标明';
   const cpuvLabel = data.tableCpuvLabel || 'CPUV';
   return (
-    <div className="bv-word-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', margin: '8px 0 14px' }}>
+    <div className="bv-word-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px', margin: '12px 0 16px' }}>
       {data.coreWords.length ? (
         data.coreWords.map(w => (
-          <article key={w.word} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column' }}>
-            <div className="bv-word-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: '#0f172a' }}>{w.word}</h4>
-              <span style={{ fontSize: '11px', fontWeight: 600, color: '#2563eb', background: '#eff6ff', padding: '2px 8px', borderRadius: '12px' }}>
-                SOC {pct(w.soc)} · 排名{w.rank ?? '—'}
+          <article key={w.word} style={{ background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 14, padding: '18px 20px', boxShadow: 'var(--shadow-sm)', display: 'flex', flexDirection: 'column' }}>
+            <div className="bv-word-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 6, background: 'var(--brand-primary-soft, #EBF5F3)', color: 'var(--brand-primary, #0F5E52)', fontSize: 11 }}>🔍</span>
+                <h4 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>{w.word}</h4>
+              </div>
+              <span className="semantic-tag tag-ok num" style={{ fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999 }}>
+                SOC {pct(w.soc)} · 排名 #{w.rank ?? '—'}
               </span>
             </div>
-            <strong className="bv-word-spend" style={{ fontSize: '24px', fontWeight: 700, color: '#0f172a', margin: '6px 0 2px' }}>
-              {num(w.spend)}<small style={{ fontSize: '12px', fontWeight: 500, marginLeft: '2px' }}>元</small>
+            <strong className="bv-word-spend num" style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary, #1C1917)', margin: '4px 0 2px', fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: '0.7em', fontWeight: 600, marginRight: 2, color: 'var(--text-muted, #8A847C)' }}>¥</span>
+              {num(w.spend)}
+              <small style={{ fontSize: 12, fontWeight: 500, marginLeft: 3, color: 'var(--text-muted, #8A847C)' }}>元</small>
             </strong>
-            <p className="bd-caption" style={{ color: '#94a3b8', fontSize: '11px', margin: '0 0 12px' }}>{scopeCaption}</p>
-            <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', background: '#f8fafc', padding: '10px 12px', borderRadius: '10px', margin: 0 }}>
-              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>底表消费占比</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{pct(w.share)}</dd></div>
-              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>源行CTR</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{pct(w.ctr)}</dd></div>
-              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>{cpuvLabel}</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{num(w.cpuv)}元</dd></div>
-              <div><dt style={{ fontSize: '11px', color: '#64748b' }}>搜索指数快照</dt><dd style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', margin: '2px 0 0' }}>{num(w.index)}</dd></div>
+            <p className="bd-caption" style={{ color: 'var(--text-muted, #8A847C)', fontSize: 11.5, margin: '2px 0 12px' }}>{scopeCaption}</p>
+            <dl style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', padding: '12px 14px', borderRadius: 10, margin: 0 }}>
+              <div><dt style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)' }}>底表消费占比</dt><dd className="num" style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text-primary, #1C1917)', margin: '3px 0 0' }}>{pct(w.share)}</dd></div>
+              <div><dt style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)' }}>源行CTR</dt><dd className="num" style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text-primary, #1C1917)', margin: '3px 0 0' }}>{pct(w.ctr)}</dd></div>
+              <div><dt style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)' }}>{cpuvLabel}</dt><dd className="num" style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text-primary, #1C1917)', margin: '3px 0 0' }}>¥{num(w.cpuv)}</dd></div>
+              <div><dt style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)' }}>搜索指数快照</dt><dd className="num" style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text-primary, #1C1917)', margin: '3px 0 0' }}>{num(w.index)}</dd></div>
             </dl>
           </article>
         ))

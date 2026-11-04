@@ -295,19 +295,7 @@ function PagedDataTable({ table, query, initial }: { table: TableView; query: Re
 }
 
 function NarrativeBlock({ title, view }: { title: string; view: DailyView }) {
-  const sections = view.narrative.filter(n => n.title.includes(title));
-  return sections.length ? (
-    <details className="bv-report-text">
-      <summary>展开作者判断与动作 / {title}</summary>
-      {sections.map((n, i) => (
-        <div className="bd-narrative" key={i}>
-          <h4>{n.title}</h4>
-          <p>{n.text || '该节数据见来源明细。'}</p>
-          <Source value={n.source} />
-        </div>
-      ))}
-    </details>
-  ) : null;
+  return null;
 }
 
 function NoteRows({ notes, projectId, day }: { notes: DailyView['notes']; projectId: string; day: string }) {
@@ -2484,15 +2472,21 @@ export function BusinessDailyBoard({
                                     <div className="bd-cost-item-val">
                                       {valNum !== null ? (
                                         <Value value={value} />
+                                      ) : refNum !== null && refNum !== undefined ? (
+                                        <div>
+                                          <strong className="num" style={{ color: 'var(--text-primary, #1C1917)', fontSize: 16, fontWeight: 700 }}>
+                                            <span style={{ fontSize: '0.7em', color: 'var(--text-muted, #8A847C)', marginRight: 2 }}>¥</span>
+                                            {format(refNum)}
+                                            <small style={{ fontSize: 11, marginLeft: 2, color: 'var(--text-muted, #8A847C)' }}>元</small>
+                                          </strong>
+                                          <small className="bd-state" style={{ color: 'var(--text-muted, #8A847C)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 2, fontSize: 11 }}>
+                                            <span className="semantic-tag tag-neutral" style={{ padding: '0 4px', fontSize: 10 }}>参考 {latestObservedPoint?.date?.slice(5)}</span>
+                                          </small>
+                                        </div>
                                       ) : (
                                         <div>
-                                          <strong style={{ color: '#525866' }}>—<small>元</small></strong>
-                                          {refNum !== null && refNum !== undefined && (
-                                            <small className="bd-state" style={{ color: '#525866', display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
-                                              <span>{latestObservedPoint?.date?.slice(5)}:</span>
-                                              <span style={{ color: '#006858', fontWeight: 600 }}>¥{format(refNum)}</span>
-                                            </small>
-                                          )}
+                                          <strong style={{ color: 'var(--text-muted, #8A847C)' }}>—<small>元</small></strong>
+                                          <small className="bd-state" style={{ color: 'var(--text-muted, #8A847C)', marginTop: 2, display: 'block', fontSize: 11 }}>待回填</small>
                                         </div>
                                       )}
                                     </div>
@@ -2717,46 +2711,12 @@ export function BusinessDailyBoard({
                       <section className="bd-panel" data-section="actions">
                         <h3>当天动作、负责人和证据</h3>
                         {table('板块负责人') && <DataTable table={table('板块负责人')!} />}
-                        <NarrativeBlock title="核心todo" view={view} />
-                        <NarrativeBlock title="核心亮点" view={view} />
 
                       </section>
 
 
                     </>
                   )}
-
-                  {/* Overview Group 4: 数据明细 */}
-                  {overview && (
-                    <GroupHeading
-                      id="view-overview-data"
-                      badge="04"
-                      title="数据明细"
-                      subtitle="业务数据源同步状态、差异清单与底表采集版本"
-                    />
-                  )}
-
-                  <BusinessSyncPanel
-                    projectId={projectId}
-                    canManage={Boolean(currentProject?.canManage && !currentProject?.isArchived)}
-                  />
-
-                  <details className="bd-panel">
-                    <summary>差异清单与来源版本（{view.differences.length} 项）</summary>
-                    {view.differences.map(d => (
-                      <div key={d.key}>
-                        <h4>{d.title}</h4>
-                        <p>{d.details}</p>
-                        {d.sources.map((s, i) => <Source key={i} value={s} />)}
-                      </div>
-                    ))}
-                    {view.sourceVersions.map(s => (
-                      <div key={s.sourceKey}>
-                        <Source value={s} />
-                        <span className="bd-caption"> / 采集 {s.capturedAt}</span>
-                      </div>
-                    ))}
-                  </details>
                 </>
               )}
             </>

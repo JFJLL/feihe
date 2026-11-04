@@ -87,10 +87,10 @@ export function ContentWorkspace({
   }
 
   const tabs: ModuleTab[] = [
-    { id: 'analysis', title: '内容分析', desc: '内容效率、达人与投放拆解', badge: dashboard.metrics.noteCount || 0, icon: '📈' },
-    { id: 'registry', title: '内容台账', desc: '内容资产总盘、自有导入与单篇明细', badge: dashboard.metrics.noteCount || 0, icon: '📑' },
-    { id: 'publishing', title: '发布管理', desc: '自有发布进度、发布目标与覆盖反馈', badge: dashboard.metrics.publishedCount || 0, icon: '🚀' },
-    { id: 'monitoring', title: '内容监测', desc: '单篇表现指标、数据质量与完整度', badge: dashboard.metrics.noteCount || 0, icon: '📊' },
+    { id: 'analysis', title: '内容分析', desc: '内容效率、达人与投放拆解', icon: '📈' },
+    { id: 'registry', title: '内容台账', desc: '内容资产总盘、自有导入与单篇明细', badge: dashboard.metrics.noteCount || undefined, icon: '📑' },
+    { id: 'publishing', title: '发布管理', desc: '自有发布进度、发布目标与覆盖反馈', icon: '🚀' },
+    { id: 'monitoring', title: '内容监测', desc: '单篇表现指标、数据质量与完整度', icon: '📊' },
   ];
 
   return (
