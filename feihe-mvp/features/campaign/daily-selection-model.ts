@@ -1327,6 +1327,7 @@ export interface TopCreativeItem {
 export interface SearchKeywordItem {
   keyword: string;
   category?: string;
+  representativeExamples?: string;
   spend: number | null;
   index?: number | null;
   clicks?: number | null;
@@ -1581,9 +1582,29 @@ export function extractFeishuDrilldowns(
       const ctr = safeNum(r.ctr);
       const uv = safeNum(r.uv ?? r.externalUv);
 
+      let displayKw = kw;
+      let displayCategory = specificWord ? (categoryName || "搜索词") : "意图词群";
+      let representativeExamples: string | undefined;
+
+      const HUANG_INTENTS: Record<string, { label: string; examples: string; tag: string }> = {
+        '品牌词': { label: '黄天鹅品牌核心词群', examples: '黄天鹅可生食鸡蛋、无菌蛋、黄天鹅蛋', tag: '品牌词' },
+        '品类需求词': { label: '可生食鸡蛋品类需求词群', examples: '可生食鸡蛋哪个好、生食蛋挑选、高品质鸡蛋', tag: '品类词' },
+        '溏心蛋相关词': { label: '溏心蛋烹饪意图词群', examples: '溏心蛋怎么做、日式溏心蛋做法、温泉蛋', tag: '场景词' },
+        '健身减脂词': { label: '减脂健身高蛋白搜索词群', examples: '减脂期吃什么蛋、健身生食鸡蛋、高蛋白早餐', tag: '功效词' },
+        '品牌短语词': { label: '黄天鹅品牌关联短语拓展', examples: '黄天鹅价格、黄天鹅产地、黄天鹅评价', tag: '品牌短语' },
+        '美食场景词': { label: '烘焙与寿喜烧美食场景词群', examples: '寿喜烧生食蛋液、烘焙专用鸡蛋、提拉米苏生蛋', tag: '场景词' },
+      };
+
+      if (HUANG_INTENTS[kw]) {
+        displayKw = HUANG_INTENTS[kw].label;
+        displayCategory = HUANG_INTENTS[kw].tag;
+        representativeExamples = HUANG_INTENTS[kw].examples;
+      }
+
       const item: SearchKeywordItem = {
-        keyword: kw,
-        category: specificWord ? (categoryName || "搜索词") : "大类汇总",
+        keyword: displayKw,
+        category: displayCategory,
+        representativeExamples,
         spend,
         clicks: clk,
         impressions: imp,

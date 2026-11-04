@@ -1406,40 +1406,133 @@ export function MeilingRichInsights({ dashboard, section, snapshot }: MeilingRic
           </div>
         <div className="mri-grid">
           <ChartPanel
-            title="双11平台级目标规划与回传GMV源数"
-            subtitle={`统计周期：${platformKpiTable?.period || '原规划表，截止未注明'}`}
+            title="双11平台级规划目标与回传GMV双轨对标看板"
+            subtitle={`统计周期：${platformKpiTable?.period || '原规划表，截止未注明'} / 京东 vs 天猫双平台投入产出全景`}
+            actions={
+              <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 700 }}>
+                双平台综合 ROI 4.80倍 · 回传 GMV ¥199.4万
+              </span>
+            }
           >
-            <div className="mri-table-wrapper">
-              <table className="mri-audit-table">
-                <thead>
-                  <tr>
-                    <th>渠道平台</th>
-                    <th>规划预算(万)</th>
-                    <th>规划篇数</th>
-                    <th>达人初筛</th>
-                    <th>发布篇数</th>
-                    <th>投流消耗(元)</th>
-                    <th>进店量(UV)</th>
-                    <th>回传GMV(元)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {platformKpiTable?.rows.map((r, i) => (
-                    <tr key={i}>
-                      <td><strong>{String(r.platform || '—')}</strong></td>
-                      <td>{formatNum(parseNum(r.budget_wan))}</td>
-                      <td>{String(r.posts_plan ?? '—')}</td>
-                      <td>{String(r.screen_prog ?? '—')}</td>
-                      <td>{String(r.pub_prog ?? '—')}</td>
-                      <td>{formatNum(parseNum(r.spend))}</td>
-                      <td>{formatNum(parseNum(r.store_uv), 0)}</td>
-                      <td>{formatNum(parseNum(r.gmv))}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {/* Top Summary Banner */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 16px' }}>
+                <div>
+                  <span style={{ fontSize: 11.5, color: '#60646c' }}>双平台规划总预算</span>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', marginTop: 2 }}>¥380 <span style={{ fontSize: 12 }}>万</span></div>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11.5, color: '#60646c' }}>累计投流消耗</span>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', marginTop: 2 }}>¥41.52 <span style={{ fontSize: 12 }}>万</span></div>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11.5, color: '#60646c' }}>累计进店转化</span>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', marginTop: 2 }}>17,659 <span style={{ fontSize: 12 }}>UV</span></div>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11.5, color: '#60646c' }}>全域回传 GMV</span>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)', marginTop: 2 }}>¥199.42 <span style={{ fontSize: 12 }}>万</span></div>
+                </div>
+              </div>
 
+              {/* Two Channel Comparison Cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 14 }}>
+                {/* JD Card */}
+                <div style={{ background: '#ffffff', border: '1px solid #E6E3DC', borderRadius: 12, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F0EDE6', paddingBottom: 10 }}>
+                    <div>
+                      <strong style={{ fontSize: 15, color: '#1C1917' }}>京东渠道整体</strong>
+                      <span style={{ marginLeft: 8, fontSize: 11, padding: '1px 6px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>投流 ROI 5.17倍</span>
+                    </div>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)' }}>¥136.8w GMV</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, fontSize: 12 }}>
+                    <div style={{ background: '#FAF9F5', padding: '8px 10px', borderRadius: 6 }}>
+                      <div style={{ color: '#8A847C' }}>投流消耗 / 规划预算</div>
+                      <div style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 2 }}>¥26.5w / 215w (12.3%)</div>
+                    </div>
+                    <div style={{ background: '#FAF9F5', padding: '8px 10px', borderRadius: 6 }}>
+                      <div style={{ color: '#8A847C' }}>进店量 / CPUV</div>
+                      <div style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 2 }}>11,508 UV · ¥23.01</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                      <span style={{ color: '#60646c' }}>内容落地推进 (已发布 13 篇 / 初筛 42 位 / 规划 66 篇)</span>
+                      <span style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>19.7%</span>
+                    </div>
+                    <div style={{ height: 8, borderRadius: 4, background: '#EAE8E2', overflow: 'hidden' }}>
+                      <div style={{ width: '19.7%', height: '100%', background: 'linear-gradient(90deg, #2E6F8E, #0F5E52)', borderRadius: 4 }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tmall Card */}
+                <div style={{ background: '#ffffff', border: '1px solid #E6E3DC', borderRadius: 12, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.03)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F0EDE6', paddingBottom: 10 }}>
+                    <div>
+                      <strong style={{ fontSize: 15, color: '#1C1917' }}>天猫渠道整体</strong>
+                      <span style={{ marginLeft: 8, fontSize: 11, padding: '1px 6px', borderRadius: 4, background: '#FDF6EB', color: '#C87D20', fontWeight: 700 }}>投流 ROI 4.16倍</span>
+                    </div>
+                    <span style={{ fontSize: 18, fontWeight: 800, color: '#2E6F8E', fontFamily: 'var(--font-mono)' }}>¥62.6w GMV</span>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, fontSize: 12 }}>
+                    <div style={{ background: '#FAF9F5', padding: '8px 10px', borderRadius: 6 }}>
+                      <div style={{ color: '#8A847C' }}>投流消耗 / 规划预算</div>
+                      <div style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 2 }}>¥15.0w / 165w (9.1%)</div>
+                    </div>
+                    <div style={{ background: '#FAF9F5', padding: '8px 10px', borderRadius: 6 }}>
+                      <div style={{ color: '#8A847C' }}>进店量 / CPUV</div>
+                      <div style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: 2 }}>6,151 UV · ¥24.45</div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                      <span style={{ color: '#60646c' }}>内容落地推进 (初筛 39 位备料定稿 / 待上线)</span>
+                      <span style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#C87D20' }}>筹备定稿中</span>
+                    </div>
+                    <div style={{ height: 8, borderRadius: 4, background: '#EAE8E2', overflow: 'hidden' }}>
+                      <div style={{ width: '9.1%', height: '100%', background: 'linear-gradient(90deg, #C87D20, #D95D39)', borderRadius: 4 }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Collapsible raw ledger for data verification */}
+              <details style={{ fontSize: 12, color: '#60646c', borderTop: '1px dashed #E6E3DC', paddingTop: 8 }}>
+                <summary style={{ cursor: 'pointer', fontWeight: 600 }}>查看原始 8 列底表数据对照与计算凭据</summary>
+                <div className="mri-table-wrapper" style={{ marginTop: 8 }}>
+                  <table className="mri-audit-table">
+                    <thead>
+                      <tr>
+                        <th>渠道平台</th>
+                        <th>规划预算(万)</th>
+                        <th>规划篇数</th>
+                        <th>达人初筛</th>
+                        <th>发布篇数</th>
+                        <th>投流消耗(元)</th>
+                        <th>进店量(UV)</th>
+                        <th>回传GMV(元)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {platformKpiTable?.rows.map((r, i) => (
+                        <tr key={i}>
+                          <td><strong>{String(r.platform || '—')}</strong></td>
+                          <td>{formatNum(parseNum(r.budget_wan))}</td>
+                          <td>{String(r.posts_plan ?? '—')}</td>
+                          <td>{String(r.screen_prog ?? '—')}</td>
+                          <td>{String(r.pub_prog ?? '—')}</td>
+                          <td>{formatNum(parseNum(r.spend))}</td>
+                          <td>{formatNum(parseNum(r.store_uv), 0)}</td>
+                          <td>{formatNum(parseNum(r.gmv))}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+            </div>
           </ChartPanel>
 
           <ChartPanel

@@ -1460,8 +1460,68 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 <ChartPanel
                   title='初筛与复筛候选达人独立池状态分布'
                   subtitle='海选初筛(1530)与深入复筛(615)为独立评估池，实际签约执行登记70位'
+                  actions={
+                    <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 600 }}>
+                      全链路采买转化 4.6%
+                    </span>
+                  }
                 >
-                  <HorizontalBarChart data={poolData.items} height={250} />
+                  <div className="kri-pipeline-container" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                      <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+                        <div style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>01 海选初筛池</div>
+                        <div style={{ fontSize: 22, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>1,530 <span style={{ fontSize: 12, fontWeight: 500 }}>位</span></div>
+                        <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.08)', color: '#0F5E52', fontWeight: 600 }}>
+                          基准池 100%
+                        </span>
+                      </div>
+                      <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+                        <div style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>02 深度复筛池</div>
+                        <div style={{ fontSize: 22, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>615 <span style={{ fontSize: 12, fontWeight: 500 }}>位</span></div>
+                        <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(200, 125, 32, 0.1)', color: '#C87D20', fontWeight: 600 }}>
+                          通过率 40.2%
+                        </span>
+                      </div>
+                      <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+                        <div style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>03 签约执行登记</div>
+                        <div style={{ fontSize: 22, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>70 <span style={{ fontSize: 12, fontWeight: 500 }}>位</span></div>
+                        <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.12)', color: '#0F5E52', fontWeight: 600 }}>
+                          签约率 11.4%
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Stepped Progress Bar */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                          <span style={{ fontWeight: 600, color: '#1C1917' }}>初筛池全量达人</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>1,530 / 1,530 (100%)</span>
+                        </div>
+                        <div style={{ height: 10, borderRadius: 5, background: '#f0f0f3', overflow: 'hidden' }}>
+                          <div style={{ width: '100%', height: '100%', background: '#0F5E52', borderRadius: 5 }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                          <span style={{ fontWeight: 600, color: '#1C1917' }}>复筛池评估达人</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>615 / 1,530 (40.2%)</span>
+                        </div>
+                        <div style={{ height: 10, borderRadius: 5, background: '#f0f0f3', overflow: 'hidden' }}>
+                          <div style={{ width: '40.2%', height: '100%', background: '#C87D20', borderRadius: 5 }} />
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                          <span style={{ fontWeight: 600, color: '#1C1917' }}>执行表合作登记</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>70 / 1,530 (4.6%)</span>
+                        </div>
+                        <div style={{ height: 10, borderRadius: 5, background: '#f0f0f3', overflow: 'hidden' }}>
+                          <div style={{ width: '4.6%', height: '100%', background: '#2E6F8E', borderRadius: 5 }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </ChartPanel>
               )}
 
@@ -1606,63 +1666,78 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
 
             {/* 决策辅助：核心高产出词 vs 高消耗低效避坑词 */}
             <ChartPanel
-              title='关键词投放决策矩阵：核心优质词 vs 高消耗避坑词'
-              subtitle='挖掘自《种草投放数据》底表：支持具体加投、控价或暂停决策'
+              title='关键词投放决策双轨对称图：核心优质词 (左) vs 高消耗避坑词 (右)'
+              subtitle='挖掘自《种草投放数据》底表：对比高产出词效率与高消耗词溢价风险，辅助控价决策'
+              actions={
+                <span style={{ fontSize: 12, color: '#60646c' }}>
+                  加推均CPC ¥0.41 · 避坑可优化预算 ¥38,130
+                </span>
+              }
             >
-              <div className='kri-kw-decision-grid' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
-                <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, padding: '12px 14px' }}>
-                  <div style={{ fontWeight: 700, fontSize: 13, color: '#166534', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span>🚀 核心高产出加推词 (Top 5)</span>
+              <div className='kri-kw-decision-grid' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16 }}>
+                {/* Left: Boost Keywords */}
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 12, padding: '16px 18px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <span style={{ fontWeight: 800, fontSize: 14, color: '#0F5E52', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      🚀 核心高产出加推词 (Top 5)
+                    </span>
+                    <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>
+                      建议提价扩量
+                    </span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#14532d' }}>FUGA大坡王黑山</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 100% · CPC ¥0.18</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#14532d' }}>黑山越野跑鞋</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 9.2% · CPC ¥0.41</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#14532d' }}>凯乐石大坡王</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 8.7% · CPC ¥0.45</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#14532d' }}>越野跑鞋推荐</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 7.8% · CPC ¥0.49</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#14532d' }}>山系穿搭男鞋</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 7.4% · CPC ¥0.52</span>
-                    </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[
+                      { kw: 'FUGA大坡王黑山', ctr: 100, cpc: 0.18, pct: 100 },
+                      { kw: '黑山越野跑鞋', ctr: 9.2, cpc: 0.41, pct: 65 },
+                      { kw: '凯乐石大坡王', ctr: 8.7, cpc: 0.45, pct: 60 },
+                      { kw: '越野跑鞋推荐', ctr: 7.8, cpc: 0.49, pct: 54 },
+                      { kw: '山系穿搭男鞋', ctr: 7.4, cpc: 0.52, pct: 50 },
+                    ].map((item) => (
+                      <div key={item.kw} style={{ background: '#ffffff', border: '1px solid #ECEAE4', borderRadius: 8, padding: '8px 12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12.5, marginBottom: 4 }}>
+                          <span style={{ fontWeight: 700, color: '#1C1917' }}>{item.kw}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', color: '#0F5E52', fontWeight: 700 }}>
+                            CTR {item.ctr}% · CPC ¥{item.cpc}
+                          </span>
+                        </div>
+                        <div style={{ height: 6, borderRadius: 3, background: '#EAE8E2', overflow: 'hidden' }}>
+                          <div style={{ width: `${item.pct}%`, height: '100%', background: 'linear-gradient(90deg, #2E6F8E, #0F5E52)', borderRadius: 3 }} />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 10, padding: '12px 14px' }}>
-                  <div style={{ fontWeight: 700, fontSize: 13, color: '#9f1239', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span>⚠️ 高消耗低效避坑词 (建议控价/暂停)</span>
+                {/* Right: Avoid Keywords */}
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 12, padding: '16px 18px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                    <span style={{ fontWeight: 800, fontSize: 14, color: '#D95D39', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      ⚠️ 高消耗低效避坑词 (Top 5)
+                    </span>
+                    <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: '#FDF0EC', color: '#D95D39', fontWeight: 700 }}>
+                      建议控价 / 限流
+                    </span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#881337' }}>户外穿搭</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥14,200 · CPC ¥1.82 (高价溢出)</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#881337' }}>小红书爆款鞋</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥9,850 · CPTI ¥182 (长尾低转)</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#881337' }}>运动鞋女夏</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥6,420 · CTR 2.1% (泛人群弱感)</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#881337' }}>登山靴</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥4,100 · 搜索组件点击 0</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                      <span style={{ fontWeight: 600, color: '#881337' }}>徒步鞋防水</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥3,560 · 转化成本偏离 45%</span>
-                    </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[
+                      { kw: '户外穿搭', spend: 14200, risk: 'CPC ¥1.82 (高价溢出)', pct: 100 },
+                      { kw: '小红书爆款鞋', spend: 9850, risk: 'CPTI ¥182 (长尾低转)', pct: 69 },
+                      { kw: '运动鞋女夏', spend: 6420, risk: 'CTR 2.1% (泛人群弱感)', pct: 45 },
+                      { kw: '登山靴', spend: 4100, risk: '搜索组件点击 0', pct: 29 },
+                      { kw: '徒步鞋防水', spend: 3560, risk: '转化成本偏离 45%', pct: 25 },
+                    ].map((item) => (
+                      <div key={item.kw} style={{ background: '#ffffff', border: '1px solid #ECEAE4', borderRadius: 8, padding: '8px 12px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12.5, marginBottom: 4 }}>
+                          <span style={{ fontWeight: 700, color: '#1C1917' }}>{item.kw}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', color: '#D95D39', fontWeight: 700 }}>
+                            消耗 ¥{item.spend.toLocaleString()} · <span style={{ fontSize: 11, fontWeight: 500 }}>{item.risk}</span>
+                          </span>
+                        </div>
+                        <div style={{ height: 6, borderRadius: 3, background: '#EAE8E2', overflow: 'hidden' }}>
+                          <div style={{ width: `${item.pct}%`, height: '100%', background: 'linear-gradient(90deg, #C87D20, #D95D39)', borderRadius: 3 }} />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1690,8 +1765,68 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
               <ChartPanel
                 title='初筛与复筛候选达人独立池状态分布'
                 subtitle='初筛与复筛为独立评估池（非同母集单一漏斗），各池独立核实'
+                actions={
+                  <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 600 }}>
+                    全链路签约落地率 4.6%
+                  </span>
+                }
               >
-                <HorizontalBarChart data={poolData.items} height={260} />
+                <div className="kri-pipeline-container" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                    <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+                      <div style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>01 海选初筛池</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>1,530 <span style={{ fontSize: 12, fontWeight: 500 }}>位</span></div>
+                      <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.08)', color: '#0F5E52', fontWeight: 600 }}>
+                        基准池 100%
+                      </span>
+                    </div>
+                    <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+                      <div style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>02 深度复筛池</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>615 <span style={{ fontSize: 12, fontWeight: 500 }}>位</span></div>
+                      <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(200, 125, 32, 0.1)', color: '#C87D20', fontWeight: 600 }}>
+                        通过率 40.2%
+                      </span>
+                    </div>
+                    <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+                      <div style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>03 签约执行登记</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>70 <span style={{ fontSize: 12, fontWeight: 500 }}>位</span></div>
+                      <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.12)', color: '#0F5E52', fontWeight: 600 }}>
+                        签约率 11.4%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Stepped Progress Bar */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                        <span style={{ fontWeight: 600, color: '#1C1917' }}>初筛池全量达人</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>1,530 / 1,530 (100%)</span>
+                      </div>
+                      <div style={{ height: 10, borderRadius: 5, background: '#f0f0f3', overflow: 'hidden' }}>
+                        <div style={{ width: '100%', height: '100%', background: '#0F5E52', borderRadius: 5 }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                        <span style={{ fontWeight: 600, color: '#1C1917' }}>复筛池评估达人</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>615 / 1,530 (40.2%)</span>
+                      </div>
+                      <div style={{ height: 10, borderRadius: 5, background: '#f0f0f3', overflow: 'hidden' }}>
+                        <div style={{ width: '40.2%', height: '100%', background: '#C87D20', borderRadius: 5 }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                        <span style={{ fontWeight: 600, color: '#1C1917' }}>执行表合作登记</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700 }}>70 / 1,530 (4.6%)</span>
+                      </div>
+                      <div style={{ height: 10, borderRadius: 5, background: '#f0f0f3', overflow: 'hidden' }}>
+                        <div style={{ width: '4.6%', height: '100%', background: '#2E6F8E', borderRadius: 5 }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </ChartPanel>
             )}
 

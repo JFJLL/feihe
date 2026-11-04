@@ -521,7 +521,7 @@ export async function ensureSchema() {
       d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
         VALUES('user-project-manager', 'pm@company.local', '项目主管(李强)', 'user', 'dept-marketing', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
-        VALUES('user-editor', 'editor@company.local', '业务编辑者(张晓)', 'user', 'dept-marketing', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
+        VALUES('user-editor', 'editor@company.local', '业务编辑者', 'user', 'dept-marketing', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO users(id, email, name, role, department_id, created_at, updated_at)
         VALUES('user-viewer', 'viewer@company.local', '项目观察员(王悦)', 'user', 'dept-operations', ?, ?)`).bind(new Date().toISOString(), new Date().toISOString()),
       d1.prepare(`INSERT OR IGNORE INTO project_members(id, project_id, user_id, role, created_at, updated_at)

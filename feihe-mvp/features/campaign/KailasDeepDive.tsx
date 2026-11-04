@@ -134,6 +134,16 @@ export function KailasDeepDive({ dashboard, section }: KailasDeepDiveProps) {
     () => tables.find((t) => t.id === 'kailas-kol-material-kfs-dual'),
     [tables]
   );
+
+  const availableBatches = useMemo(() => {
+    const s = new Set<string>();
+    const rows = Array.isArray(materialDualTable?.rows) ? materialDualTable!.rows : [];
+    rows.forEach((r) => {
+      if (r.stage) s.add(String(r.stage));
+    });
+    return Array.from(s);
+  }, [materialDualTable]);
+
   const keywordsCatTable = useMemo(
     () => tables.find((t) => t.id === 'kailas-search-keywords-category'),
     [tables]
@@ -190,6 +200,32 @@ export function KailasDeepDive({ dashboard, section }: KailasDeepDiveProps) {
             <h3 className="ca-kdd-title">内容端与投流端双轨洞察</h3>
             <span className="ca-kdd-subtitle">自然端与投流端曝光互动对比、各执行批次达人素材费用构成</span>
           </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 12, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>执行批次：</span>
+          <select
+            value={selectedBatch}
+            onChange={(e) => setSelectedBatch(e.target.value)}
+            aria-label="执行批次筛选"
+            style={{
+              padding: '4px 10px',
+              fontSize: 12,
+              fontWeight: 600,
+              color: '#1C1917',
+              background: '#FAF9F5',
+              border: '1px solid #E6E3DC',
+              borderRadius: 6,
+              cursor: 'pointer',
+              outline: 'none',
+            }}
+          >
+            <option value="all">全部执行批次</option>
+            {availableBatches.map((b) => (
+              <option key={b} value={b}>
+                {b}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
       <ContentDualView
@@ -478,15 +514,6 @@ function ContentDualView({
     [materialDualTable]
   );
 
-  // Batches
-  const availableBatches = useMemo(() => {
-    const s = new Set<string>();
-    rawMaterialRows.forEach((r) => {
-      if (r.stage) s.add(String(r.stage));
-    });
-    return Array.from(s);
-  }, [rawMaterialRows]);
-
   // Filtered by batch
   const batchFilteredMaterialRows = useMemo(() => {
     if (selectedBatch === 'all') return rawMaterialRows;
@@ -500,25 +527,6 @@ function ContentDualView({
 
   return (
     <>
-      <div className="ca-kdd-controls">
-        <div style={{ fontSize: '0.875rem', color: '#60646c', fontWeight: 500 }}>
-          执行批次筛选：
-        </div>
-        <StyledSelect
-          className="ca-kdd-select"
-          value={selectedBatch}
-          onChange={(e) => onBatchChange(e.target.value)}
-          aria-label="执行批次筛选"
-        >
-          <option value="all">全部执行批次</option>
-          {availableBatches.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
-          ))}
-        </StyledSelect>
-      </div>
-
       <div className="ca-kdd-grid">
         <ChartPanel
           title="自然端与投流端曝光及互动对比"

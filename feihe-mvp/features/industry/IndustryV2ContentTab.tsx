@@ -73,7 +73,7 @@ export function IndustryV2ContentTab({
           <p className="v2-empty-text">源数据暂无匹配特征分布</p>
         ) : (
           <div className="v2-dist-list">
-            {items.map((item) => {
+            {items.map((item, idx) => {
               const pct = maxCount > 0 && item.count > 0 ? Math.round((item.count / maxCount) * 100) : 0;
               const isSelected =
                 activeEvidenceFilter?.category === category &&
@@ -92,6 +92,9 @@ export function IndustryV2ContentTab({
                 }
               };
 
+              const colors = ['#0F5E52', '#2E6F8E', '#C87D20', '#D95D39', '#5B8266'];
+              const barColor = colors[idx % colors.length];
+
               return (
                 <div
                   key={item.label}
@@ -106,20 +109,38 @@ export function IndustryV2ContentTab({
                   role="button"
                   tabIndex={0}
                   title={`点击筛选关联证据笔记（共 ${item.evidenceIds?.length || 0} 篇支撑样本）`}
+                  style={{
+                    background: isSelected ? '#FAF9F5' : '#ffffff',
+                    border: `1px solid ${isSelected ? barColor : '#ECEAE4'}`,
+                    borderRadius: 10,
+                    padding: '10px 14px',
+                    marginBottom: 10,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
                 >
-                  <div className="v2-dist-item-head">
-                    <span className="v2-dist-label">{item.label}</span>
-                    <span className="v2-dist-count">
-                      {item.count} 篇
+                  <div className="v2-dist-item-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 700, padding: '1px 6px', borderRadius: 4, background: idx < 3 ? barColor : '#EAE8E2', color: idx < 3 ? '#ffffff' : '#57534E' }}>
+                        #{idx + 1}
+                      </span>
+                      <span className="v2-dist-label" style={{ fontWeight: 700, fontSize: 13, color: '#1C1917' }}>{item.label}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#1C1917' }}>
+                        {item.count.toLocaleString()} <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 500 }}>篇</span>
+                      </span>
                       {item.meanInteractions !== null && item.meanInteractions !== undefined && (
-                        <small> (均互动 {Math.round(item.meanInteractions)})</small>
+                        <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.08)', color: '#0F5E52', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                          均互动 {Math.round(item.meanInteractions)}
+                        </span>
                       )}
-                    </span>
+                    </div>
                   </div>
-                  <div className="v2-dist-track">
+                  <div className="v2-dist-track" style={{ height: 6, borderRadius: 3, background: '#EAE8E2', overflow: 'hidden' }}>
                     <div
                       className="v2-dist-bar"
-                      style={{ width: `${item.count > 0 && pct > 0 ? Math.max(3, pct) : 0}%` }}
+                      style={{ width: `${item.count > 0 && pct > 0 ? Math.max(4, pct) : 0}%`, background: barColor, height: '100%', borderRadius: 3 }}
                     />
                   </div>
                 </div>

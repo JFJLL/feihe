@@ -429,7 +429,7 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                     <HealthArcGauge
                       score={richContext.diagnosis.statusTone === 'optimal' ? 92 : richContext.diagnosis.statusTone === 'steady' ? 86 : richContext.diagnosis.statusTone === 'watch' ? 80 : 72}
                       label="单日健康指数"
-                      size={135}
+                      size={160}
                     />
                     <span className="ca-health-pos-text">{richContext.diagnosis.positionText}</span>
                   </div>
@@ -593,10 +593,12 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                           <span className="ca-funnel-step-idx">0{idx + 1}</span>
                           <span className="ca-funnel-step-name">{step.label}</span>
                         </div>
-                        <strong className="ca-funnel-step-val">{step.formattedValue}</strong>
-                        {step.conversionLabel && (
+                        {step.conversionLabel ? (
                           <span className="ca-funnel-step-rate">{step.conversionLabel}</span>
+                        ) : (
+                          <span className="ca-funnel-step-rate" style={{ opacity: 0.65 }}>100% 漏斗源头</span>
                         )}
+                        <strong className="ca-funnel-step-val num">{step.formattedValue}</strong>
                       </div>
                     ))}
                   </div>
@@ -623,10 +625,10 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                           <div className="ca-dist-item-header">
                             <span className="ca-dist-label">{step.label}</span>
                             <div className="ca-dist-val-group">
-                              <strong className="ca-dist-value num">{step.formattedValue}</strong>
                               {step.conversionLabel && (
-                                <span className="ca-dist-share">{step.conversionLabel}</span>
+                                <span className="ca-dist-share" style={{ marginRight: 6 }}>{step.conversionLabel}</span>
                               )}
+                              <strong className="ca-dist-value num">{step.formattedValue}</strong>
                             </div>
                           </div>
                           <div className="ca-dist-bar-track">
@@ -730,16 +732,11 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                         <div className="ca-cross-card-head">
                           <strong className="ca-cross-card-title">{formatDatasetDisplay(row.datasetId, row.datasetLabel)}</strong>
                           {row.datasetId === activeDataset.id ? (
-                            <span className="ca-cross-badge-active">当前查看</span>
+                            <span className="ca-cross-badge-active">当前聚焦</span>
                           ) : (
-                            <button
-                              type="button"
-                              className="ca-btn-reset"
-                              style={{ padding: "1px 6px", fontSize: 12 }}
-                              onClick={() => updateUrl({ dataset: row.datasetId })}
-                            >
-                              切换至此表
-                            </button>
+                            <span style={{ fontSize: 11, padding: "2px 6px", borderRadius: 4, background: "#f1f1f4", color: "#60646c" }}>
+                              横向对照
+                            </span>
                           )}
                         </div>
                         {!row.hasDataOnSelectedDate ? (
@@ -909,7 +906,14 @@ export function CampaignDailyPage({ dashboard }: CampaignDailyPageProps) {
                                         {k.category}
                                       </span>
                                     )}
-                                    <strong className="ca-kw-text">{k.keyword}</strong>
+                                    <div>
+                                      <strong className="ca-kw-text">{k.keyword}</strong>
+                                      {k.representativeExamples && (
+                                        <div style={{ fontSize: 11.5, color: "var(--text-muted, #8A847C)", marginTop: 2 }}>
+                                          代表搜索意图：{k.representativeExamples}
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
                                   <div className="ca-kw-stats num">
                                     {k.spend !== null && <span className="ca-stat-pill">消耗: <strong>¥{fmtNum(k.spend)}</strong></span>}

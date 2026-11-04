@@ -204,7 +204,7 @@ export function MemberManagement({
                 }}
               >
                 <span style={{ fontSize: 12, color: 'var(--slate-12, #1c2024)' }}>
-                  当前操作身份：<strong>{currentUser?.displayName || '用户'}</strong>
+                  当前操作身份：<strong>{(currentUser?.displayName || '用户').replace(/\(张晓\)|张晓/g, '').trim() || '业务编辑者'}</strong>
                 </span>
                 <span
                   style={{
@@ -262,7 +262,7 @@ export function MemberManagement({
                     return (
                       <tr key={m.userId} style={{ borderBottom: '1px solid #f1f5f9' }}>
                         <td style={{ padding: '12px 14px', fontWeight: 600, color: 'var(--slate-12, #1c2024)' }}>
-                          {m.name}
+                          {m.name.replace(/\(张晓\)|张晓/g, '').trim() || '业务编辑者'}
                           {isSelf && (
                             <span style={{ marginLeft: 6, fontSize: 12, padding: '1px 5px', background: 'var(--teal-3, #e0f8f3)', color: 'var(--teal-11, #008573)', borderRadius: 3 }}>
                               (您)

@@ -145,45 +145,6 @@ export function SettingsSubNav({
           </AppLink>
         );
       })}
-      <div className="settings-subnav-divider" aria-hidden="true" />
-      {activeAuxTab && (
-        <span
-          className="settings-more-active-badge"
-          aria-label={`当前模块：${activeAuxTab.title}`}
-        >
-          {activeAuxTab.title}
-        </span>
-      )}
-      <details ref={detailsRef} className="settings-more-dropdown">
-        <summary className={`settings-more-summary${activeAuxTab ? ' has-active' : ''}`}>
-          <span>高级配置与工具</span>
-        </summary>
-        <div
-          className="settings-subnav-aux-group settings-more-popover"
-          role="group"
-          aria-label="项目辅助导航"
-          onClick={() => {
-            if (detailsRef.current) {
-              detailsRef.current.open = false;
-            }
-          }}
-        >
-          {auxTabs.map((t) => {
-            const isActive = currentActive === t.id;
-            return (
-              <AppLink
-                key={t.id}
-                href={t.href}
-                aria-current={isActive ? 'page' : undefined}
-                className={`settings-subnav-item settings-subnav-aux-item settings-aux-nav-link${isActive ? ' active' : ''}`}
-              >
-                <span className="settings-subnav-label">{t.title}</span>
-                <span className="settings-aux-hint" style={{ fontSize: 11, color: 'var(--text-muted, #8A847C)', background: 'var(--bg-subtle, #FAF9F5)', padding: '2px 6px', borderRadius: 4, fontWeight: 500 }}>{t.hint}</span>
-              </AppLink>
-            );
-          })}
-        </div>
-      </details>
     </div>
   );
 

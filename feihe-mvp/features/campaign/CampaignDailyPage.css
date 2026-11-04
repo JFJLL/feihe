@@ -1654,8 +1654,8 @@
   display: flex !important;
   flex-direction: column !important;
   gap: 16px !important;
-  min-height: 380px !important;
-  justify-content: space-between !important;
+  min-height: auto !important;
+  justify-content: flex-start !important;
 }
 
 .ca-daily-page .ca-funnel-steps-grid {
