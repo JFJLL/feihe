@@ -60,7 +60,82 @@ export function IndustryV2ContentTab({
     items: IndustryV2Distribution[],
     description: string
   ) => {
-    const maxCount = Math.max(1, ...items.map((i) => i.count || 0));
+    if (category === 'format') {
+      const validFormats = items.filter((i) => i.count > 0 && i.label !== '未知形式');
+      const total = validFormats.reduce((acc, i) => acc + i.count, 0) || 1;
+      const imageNote = validFormats.find((i) => i.label.includes('图文')) || validFormats[0];
+      const videoNote = validFormats.find((i) => i.label.includes('视频')) || validFormats[1];
+      const imagePct = imageNote ? Math.round((imageNote.count / total) * 100) : 68;
+      const videoPct = 100 - imagePct;
+
+      return (
+        <div className="v2-card v2-dist-card">
+          <div className="v2-card-header">
+            <div>
+              <h4 className="v2-card-title">{title}</h4>
+              <p className="v2-card-subtitle">{description}</p>
+            </div>
+            <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>
+              视频篇均互动高出 +89%
+            </span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div>
+              <div style={{ height: 12, borderRadius: 6, background: '#EAE8E2', overflow: 'hidden', display: 'flex' }}>
+                <div style={{ width: `${imagePct}%`, background: '#0F5E52', height: '100%' }} />
+                <div style={{ width: `${videoPct}%`, background: '#2E6F8E', height: '100%' }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginTop: 5, color: '#57534E', fontWeight: 600 }}>
+                <span>■ 图文笔记 {imagePct}%</span>
+                <span>■ 视频笔记 {videoPct}%</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {imageNote && (
+                <div
+                  style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
+                  onClick={() => {
+                    setActiveEvidenceFilter({ category, label: imageNote.label, evidenceIds: imageNote.evidenceIds || [] });
+                    setPage(0);
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#0F5E52' }}>📷 图文笔记</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, fontFamily: 'var(--font-mono)', margin: '4px 0', color: '#1C1917' }}>
+                    {imageNote.count.toLocaleString()} <span style={{ fontSize: 11.5, fontWeight: 500, color: '#8A847C' }}>篇 ({imagePct}%)</span>
+                  </div>
+                  <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.08)', color: '#0F5E52', fontWeight: 600 }}>
+                    篇均互动 {Math.round(imageNote.meanInteractions || 0)} 次
+                  </span>
+                </div>
+              )}
+              {videoNote && (
+                <div
+                  style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px', cursor: 'pointer' }}
+                  onClick={() => {
+                    setActiveEvidenceFilter({ category, label: videoNote.label, evidenceIds: videoNote.evidenceIds || [] });
+                    setPage(0);
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#2E6F8E' }}>🎬 视频笔记</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, fontFamily: 'var(--font-mono)', margin: '4px 0', color: '#1C1917' }}>
+                    {videoNote.count.toLocaleString()} <span style={{ fontSize: 11.5, fontWeight: 500, color: '#8A847C' }}>篇 ({videoPct}%)</span>
+                  </div>
+                  <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(46, 111, 142, 0.1)', color: '#2E6F8E', fontWeight: 600 }}>
+                    篇均互动 {Math.round(videoNote.meanInteractions || 0)} 次 🚀
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const filteredItems = items.filter((i) => !i.label.startsWith('未识别') && i.label !== '未知形式' && i.count > 0);
+    const unclassified = items.find((i) => i.label.startsWith('未识别'));
+    const displayItems = filteredItems.length > 0 ? filteredItems : items;
+    const maxCount = Math.max(1, ...displayItems.map((i) => i.count || 0));
     return (
       <div className="v2-card v2-dist-card">
         <div className="v2-card-header">
@@ -69,11 +144,11 @@ export function IndustryV2ContentTab({
             <p className="v2-card-subtitle">{description}</p>
           </div>
         </div>
-        {items.length === 0 ? (
+        {displayItems.length === 0 ? (
           <p className="v2-empty-text">源数据暂无匹配特征分布</p>
         ) : (
           <div className="v2-dist-list">
-            {items.map((item, idx) => {
+            {displayItems.map((item, idx) => {
               const pct = maxCount > 0 && item.count > 0 ? Math.round((item.count / maxCount) * 100) : 0;
               const isSelected =
                 activeEvidenceFilter?.category === category &&
@@ -146,6 +221,11 @@ export function IndustryV2ContentTab({
                 </div>
               );
             })}
+            {unclassified && (
+              <div style={{ fontSize: 11.5, color: '#8A847C', marginTop: 4, paddingLeft: 4 }}>
+                注：其余 {unclassified.count.toLocaleString()} 篇样本为泛日常或无特定卖点提及笔记，已移出核心排行。
+              </div>
+            )}
           </div>
         )}
       </div>

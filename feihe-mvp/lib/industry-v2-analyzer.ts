@@ -38,6 +38,11 @@ export const PROJECT_DICTIONARIES: Record<ProjectCategory, ProjectDictionary> = 
       { label: '穿搭', keywords: ['穿搭', '搭配', '山系', '机能', '城市户外', 'ootd', '街头', '复古', '造型', '潮流'] },
     ],
     sellingPoints: [
+      { label: '防滑抓地', keywords: ['防滑', '抓地', 'v底', 'vibram', '湿地防滑', '齿耳', '抓地力', '大坡王', '防滑耐磨'] },
+      { label: '缓震回弹', keywords: ['缓震', '回弹', '中底', '减震', '踩屎感', '弹性', '吸震', '脚感'] },
+      { label: '轻量透气', keywords: ['轻量', '包裹', '轻便', '透气', '轻盈', '不挤脚', '轻量化'] },
+      { label: '包裹保护', keywords: ['包裹', '防撞', '防侧翻', '支撑', '护踝', '抗扭', '稳定性', '保护'] },
+      { label: '耐磨防护', keywords: ['耐磨', '防水', '耐造', '防泼水', '耐穿', '结实', 'gtx'] },
       { label: '测评', keywords: ['测评', '实测', '开箱', '上脚', '体验', '横评', '红黑榜', '优缺点', '评测', '脚感'] },
     ],
   },

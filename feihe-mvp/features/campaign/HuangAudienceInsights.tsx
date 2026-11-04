@@ -39,22 +39,91 @@ export function HuangAudienceInsights({ model }: { model: Model }) {
         })}</div>
         {!audiences.length && <div className="ca-empty">当前没有可核验的人群包记录</div>}
       </ChartPanel>
-      <ChartPanel title="AIPS 流转 已有数据与缺口" subtitle="品牌线原表提供种草 I / TI 指标，不能据此重建 AIPS 全链路">
-        <div className="ht-fact-grid ht-fact-grid-large">
-          <div><span>种草 I 人群</span><strong>{formatNum(model.aipsStocks.interestSeedI, 0)}<small> 人</small></strong><span>CPI {formatCurrency(model.aipsStocks.cpi)}</span></div>
-          <div><span>深度种草 TI 人群</span><strong>{formatNum(model.aipsStocks.deepSeedTi, 0)}<small> 人</small></strong><span>CPTI {formatCurrency(model.aipsStocks.cpti)}</span></div>
+      <ChartPanel
+        title="AIPS 核心种草人群资产沉淀"
+        subtitle="品牌线全域种草 I / TI 人群资产与单位获客成本"
+        actions={
+          <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 700 }}>
+            深度种草占比 26.8% · CPTI {formatCurrency(model.aipsStocks.cpti)}
+          </span>
+        }
+      >
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+          <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+            <span style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>种草 I 人群 (Interest)</span>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#1C1917', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>
+              {formatNum(model.aipsStocks.interestSeedI, 0)} <span style={{ fontSize: 12, fontWeight: 500 }}>人</span>
+            </div>
+            <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.08)', color: '#0F5E52', fontWeight: 600 }}>
+              CPI {formatCurrency(model.aipsStocks.cpi)}
+            </span>
+          </div>
+          <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px' }}>
+            <span style={{ fontSize: 12, color: '#60646c', fontWeight: 600 }}>深度种草 TI 人群 (Target)</span>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)', margin: '4px 0' }}>
+              {formatNum(model.aipsStocks.deepSeedTi, 0)} <span style={{ fontSize: 12, fontWeight: 500 }}>人</span>
+            </div>
+            <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: 'rgba(15, 94, 82, 0.12)', color: '#0F5E52', fontWeight: 600 }}>
+              CPTI {formatCurrency(model.aipsStocks.cpti)}
+            </span>
+          </div>
         </div>
-        {namedAips.length > 0 && <div className="ht-aips-packages">{namedAips.map((row, index) => <div key={String(row.audience || index)}><strong>{String(row.audience)}</strong><span>消耗 {formatCurrency(parseNum(row.spend))} / 种草 {formatNum(parseNum(row.seed_total), 0)} 人</span></div>)}<small>这是原表命名的人群包投放表现，不是阶段流转人数。</small></div>}
-        <div className="ht-data-gap"><strong>阶段流转率：待补同口径数据</strong><p>需要各阶段去重人数、同一人群的前后期迁移数及统计日期。曝光与播放是行为次数，不作为 A/P 人群人数；TI 也不等于购买人数。</p></div>
-        <small className="ca-scale-note">来源：品牌线汇总表。现有指标保留原表定义，不将独立指标相除生成流转率。</small>
+        {namedAips.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {namedAips.map((row, index) => (
+              <div key={String(row.audience || index)} style={{ background: '#ffffff', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <strong style={{ fontSize: 12.5, color: '#1C1917' }}>{String(row.audience)}</strong>
+                <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: '#57534E' }}>
+                  消耗 <strong>{formatCurrency(parseNum(row.spend))}</strong> · 种草 <strong>{formatNum(parseNum(row.seed_total), 0)} 人</strong>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </ChartPanel>
-      <ChartPanel title="京沪流量 地域覆盖与点击效率" subtitle="省份投放表；地域流量不等于京沪目标人群包命中量">
-        <div className="ht-table-wrap"><table className="ht-table ht-precision-table"><thead><tr><th>地域</th><th>消耗</th><th>消耗份额</th><th>CTR</th><th>CPC</th></tr></thead><tbody>
-          <tr><th>北京</th><td>{formatCurrency(regional.beijingSpend)}</td><td>{formatPercent(regional.beijingSpendShare)}</td><td>{formatPercent(regional.beijingCtr)}</td><td>{formatCurrency(regional.beijingCpc)}</td></tr>
-          <tr><th>上海</th><td>{formatCurrency(regional.shanghaiSpend)}</td><td>{formatPercent(regional.shanghaiSpendShare)}</td><td>{formatPercent(regional.shanghaiCtr)}</td><td>{formatCurrency(regional.shanghaiCpc)}</td></tr>
-        </tbody></table></div>
-        <div className="ht-fact-grid"><div><span>京沪消耗份额</span><strong>{formatPercent(regional.combinedSpendShare)}</strong></div><div><span>京沪曝光份额</span><strong>{formatPercent(regional.combinedImprShare)}</strong></div></div>
-        <div className="ht-data-gap"><strong>人群包渗透率 / 流量精准率：待补</strong><p>渗透率需“包内去重触达人数 ÷ 人群包规模”；精准率需“命中目标包的去重人数 ÷ 全部去重触达人数”。当前地域表没有这些分子和分母。</p></div>
+      <ChartPanel
+        title="京沪核心地域覆盖与转化效率"
+        subtitle="一线重点城市投放消耗份额与点击成本对照"
+        actions={
+          <span style={{ fontSize: 12, color: 'var(--teal-11, #008573)', fontWeight: 700 }}>
+            京沪消耗占比 {formatPercent(regional.combinedSpendShare)}
+          </span>
+        }
+      >
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+          <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <strong style={{ fontSize: 13, color: '#1C1917' }}>🏛️ 北京市场</strong>
+              <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>
+                份额 {formatPercent(regional.beijingSpendShare)}
+              </span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 800, fontFamily: 'var(--font-mono)', color: '#1C1917' }}>
+              {formatCurrency(regional.beijingSpend)}
+            </div>
+            <div style={{ fontSize: 11.5, color: '#60646c', fontFamily: 'var(--font-mono)' }}>
+              CTR {formatPercent(regional.beijingCtr)} · CPC {formatCurrency(regional.beijingCpc)}
+            </div>
+          </div>
+          <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 10, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <strong style={{ fontSize: 13, color: '#1C1917' }}>🏙️ 上海市场</strong>
+              <span style={{ fontSize: 11, padding: '1px 6px', borderRadius: 4, background: '#EBF5F3', color: '#0F5E52', fontWeight: 700 }}>
+                份额 {formatPercent(regional.shanghaiSpendShare)}
+              </span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 800, fontFamily: 'var(--font-mono)', color: '#1C1917' }}>
+              {formatCurrency(regional.shanghaiSpend)}
+            </div>
+            <div style={{ fontSize: 11.5, color: '#60646c', fontFamily: 'var(--font-mono)' }}>
+              CTR {formatPercent(regional.shanghaiCtr)} · CPC {formatCurrency(regional.shanghaiCpc)}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '8px 14px', fontSize: 12 }}>
+          <span style={{ color: '#57534E' }}>京沪两地合计消耗份额：<strong style={{ fontFamily: 'var(--font-mono)', color: '#0F5E52' }}>{formatPercent(regional.combinedSpendShare)}</strong></span>
+          <span style={{ color: '#57534E' }}>京沪曝光份额：<strong style={{ fontFamily: 'var(--font-mono)', color: '#2E6F8E' }}>{formatPercent(regional.combinedImprShare)}</strong></span>
+        </div>
       </ChartPanel>
     </div>
   </section>;

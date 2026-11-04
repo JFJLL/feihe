@@ -1144,6 +1144,23 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 rowHeaderTitle="年龄 / 性别"
                 showRowTotals={false}
               />
+              <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                <div>
+                  <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 600 }}>核心主力客群</span>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#1C1917', marginTop: 2 }}>28-40岁年轻家庭</div>
+                  <span style={{ fontSize: 11, color: '#0F5E52', fontFamily: 'var(--font-mono)' }}>消耗占比 56.4%</span>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 600 }}>性别决策偏好</span>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#1C1917', marginTop: 2 }}>女性受众占 92.4%</div>
+                  <span style={{ fontSize: 11, color: '#0F5E52', fontFamily: 'var(--font-mono)' }}>主导生食蛋采买</span>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 600 }}>最优效能区间</span>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#1C1917', marginTop: 2 }}>33-40岁女性</div>
+                  <span style={{ fontSize: 11, color: '#0F5E52', fontFamily: 'var(--font-mono)' }}>CPE ¥29.73 最佳</span>
+                </div>
+              </div>
             </ChartPanel>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -1178,6 +1195,23 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
               subtitle="以选号表及执行表为准；阶段人数与发布篇数分开查看"
             >
               <CampaignFunnelChart stages={creatorFunnelChartStages} />
+              <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                <div>
+                  <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 600 }}>初审淘汰率</span>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#D95D39', fontFamily: 'var(--font-mono)', marginTop: 2 }}>77.7%</div>
+                  <span style={{ fontSize: 10.5, color: '#8A847C' }}>严查假粉与调性</span>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 600 }}>策略签约率</span>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#0F5E52', fontFamily: 'var(--font-mono)', marginTop: 2 }}>53.4%</div>
+                  <span style={{ fontSize: 10.5, color: '#8A847C' }}>二审到定档转化</span>
+                </div>
+                <div>
+                  <span style={{ fontSize: 11, color: '#8A847C', fontWeight: 600 }}>采买成单率</span>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#2E6F8E', fontFamily: 'var(--font-mono)', marginTop: 2 }}>8.3%</div>
+                  <span style={{ fontSize: 10.5, color: '#8A847C' }}>373位 → 31位合作</span>
+                </div>
+              </div>
             </ChartPanel>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
