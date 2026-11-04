@@ -818,7 +818,7 @@ export function QicuiChannelStructureCard({
         >
           <div style={{ fontSize: 11, color: 'var(--text-secondary, #57534E)', fontWeight: 600 }}>达人采买 (K)</div>
           <div className="num" style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent-secondary, #D95D39)', margin: '2px 0' }}>11.5%</div>
-          <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>合作 117位</div>
+          <div className="num" style={{ fontSize: 10.5, color: 'var(--text-muted, #8A847C)' }}>合作达人</div>
         </div>
       </div>
 
@@ -834,7 +834,7 @@ export function QicuiChannelStructureCard({
         </div>
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 4 }}>
-            <span style={{ fontWeight: 600, color: 'var(--text-primary, #1C1917)' }}>117位合作达人排期交付</span>
+            <span style={{ fontWeight: 600, color: 'var(--text-primary, #1C1917)' }}>合作达人排期交付</span>
             <span className="num" style={{ fontWeight: 700, color: 'var(--accent-secondary, #D95D39)' }}>91.5% (日均 ¥3.66w)</span>
           </div>
           <div style={{ height: 6, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 4, overflow: 'hidden' }}>

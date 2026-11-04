@@ -64,6 +64,14 @@ function computeDateRange(
   };
 }
 
+function parseKpiNum(val: unknown, fallback: number): number {
+  if (val === null || val === undefined) return fallback;
+  if (typeof val === 'number') return Number.isFinite(val) ? val : fallback;
+  const s = String(val).replace(/¥|￥|,|%/g, '').trim();
+  const n = Number(s);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   const { projectId, name, reportPeriod, updatedAt, kpis = [], tables = [], dailyDatasets = [] } = dashboard;
 
@@ -606,13 +614,17 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     let tag: { text: string; type: 'scale' | 'warn' | 'tempo' } = { text: "放量", type: "scale" };
 
     if (projectId === "kailas") {
+      const spend = parseKpiNum(findKpi("kailas-spend-total")?.value, 906818.64);
+      const budget = parseKpiNum(findKpi("kailas-budget-total")?.value, 850000);
+      const isOverBudget = spend > budget;
+      const spendRate = budget > 0 ? Number(((spend / budget) * 100).toFixed(1)) : 106.7;
       signals = [
-        { label: "预算进度", value: "执行平稳", status: "ok", desc: "现金预算整体处于合理管控线内" },
+        { label: "预算进度", value: isOverBudget ? `超支 ${spendRate}%` : "执行平稳", status: isOverBudget ? "danger" : "ok", desc: isOverBudget ? `实际消耗超出预算 ¥${Math.round(spend - budget).toLocaleString()}` : "现金预算整体处于合理管控线内" },
         { label: "版位效率", value: "最低 ¥0.94/UV", status: "ok", desc: "FS版位引流成本受控" },
-        { label: "数据覆盖", value: "T-1 全量日流水", status: "ok", desc: "10月创意日流水对账核实" },
-        { label: "风控健康", value: "无超支预警", status: "ok", desc: "未见异常超预算支出" },
+        { label: "数据覆盖", value: "10-01~10-18 全量", status: "ok", desc: "18天创意日流水对账核实" },
+        { label: "风控健康", value: isOverBudget ? "超支预警" : "无超支预警", status: isOverBudget ? "danger" : "ok", desc: isOverBudget ? "累计消耗突破台账阶段上限" : "未见异常超预算支出" },
       ];
-      tag = { text: "放量", type: "scale" };
+      tag = isOverBudget ? { text: "预警", type: "warn" } : { text: "放量", type: "scale" };
     } else if (projectId === "meiling") {
       signals = [
         { label: "预算打款", value: "双11攻坚中", status: "warn", desc: "7大投放账户应消耗持续推进" },
@@ -622,11 +634,13 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       ];
       tag = { text: "节奏", type: "tempo" };
     } else if (projectId === "winner-wipes") {
+      const cidRoi = parseKpiNum(findKpi("wipes-cid-roi")?.value, 0.01);
+      const isCidDanger = cidRoi < 0.1;
       signals = [
-        { label: "日常进度", value: "日均 ¥1.42万", status: "ok", desc: "日均预算跑率吻合全案目标" },
+        { label: "日常进度", value: "执行率 52.5%", status: "ok", desc: "日常种草预算跑率吻合序时跑率" },
         { label: "版位效率", value: "最优 ¥4.83/UV", status: "ok", desc: "视频内流转化效率领跑" },
         { label: "爆文达成", value: "爆文率 33.3%", status: "ok", desc: "超越 30% 考核基准" },
-        { label: "跨端对账", value: "星河&CID双轨", status: "ok", desc: "35天淘系与10位CID达人对账" },
+        { label: "CID转化", value: `ROI ${cidRoi}`, status: isCidDanger ? "danger" : "ok", desc: isCidDanger ? "CID达人进店转化效率严重偏低需控损" : "星河&CID双轨对账" },
       ];
       tag = { text: "预警", type: "warn" };
     } else {
@@ -639,21 +653,36 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     }
 
     return { executiveSignals: signals, executiveSemanticTag: tag };
-  }, [projectId]);
+  }, [projectId, findKpi]);
 
   const healthScore = useMemo(() => {
-    if (projectId === "kailas") return 84;
-    if (projectId === "meiling") return 89;
-    if (projectId === "winner-wipes") return 92;
-    return 88;
-  }, [projectId]);
+    if (projectId === "kailas") {
+      const spend = parseKpiNum(findKpi("kailas-spend-total")?.value, 906818.64);
+      const budget = parseKpiNum(findKpi("kailas-budget-total")?.value, 850000);
+      return spend > budget ? 74 : 88;
+    }
+    if (projectId === "meiling") {
+      const p = parseKpiNum(findKpi("meiling-unlocked-kpi-d11-progress")?.value, 10.76);
+      return p < 20 ? 82 : 89;
+    }
+    if (projectId === "winner-wipes") {
+      const cidRoi = parseKpiNum(findKpi("wipes-cid-roi")?.value, 0.01);
+      return cidRoi < 0.1 ? 79 : 92;
+    }
+    return 86;
+  }, [projectId, findKpi]);
 
   const structuredInsights = useMemo(() => {
     if (projectId === "kailas") {
+      const spend = parseKpiNum(findKpi("kailas-spend-total")?.value, 906818.64);
+      const budget = parseKpiNum(findKpi("kailas-budget-total")?.value, 850000);
+      const isOver = spend > budget;
       return [
         { tag: "放量", tagClass: "tag-ok", lead: "F端高质种草", body: "信息流 CTR 达 9.96%（KPI ≥ 6%），小红盟与小红星进店成本分别低于目标 36.8% 与 49%。" },
         { tag: "预警", tagClass: "tag-danger", lead: "S端词包成本", body: "搜索侧 CPUV 达 ¥73.95，需优化高价品类词，追加痛点精准拦截词包。" },
-        { tag: "节奏", tagClass: "tag-warn", lead: "预算跑率受控", body: "现金口径预算完成率 84.85%，高于时间进度 80.0%（超前 +4.85pp），整体节奏平稳。" },
+        isOver
+          ? { tag: "超支", tagClass: "tag-danger", lead: "阶段预算超支预警", body: `累计消耗已达 ¥${(spend / 10000).toFixed(2)}万，超出阶段预算上限 ¥${(budget / 10000).toFixed(1)}万（执行率 106.68%），需收紧非核心出价。` }
+          : { tag: "节奏", tagClass: "tag-warn", lead: "预算跑率受控", body: "现金口径预算完成率受控，整体节奏平稳。" },
       ];
     }
     if (projectId === "meiling") {
@@ -666,8 +695,8 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
     if (projectId === "winner-wipes") {
       return [
         { tag: "放量", tagClass: "tag-ok", lead: "爆文率领跑大盘", body: "KFS 爆文率达 33.3%，超越 30% 考核基准，长效外溢进店成本显著压降。" },
-        { tag: "预警", tagClass: "tag-danger", lead: "专家板块待补", body: "4 项考核指标中 2 项待飞书工作台核准后补入目标值，保持跟踪。" },
-        { tag: "节奏", tagClass: "tag-warn", lead: "日常跑率吻合", body: "日均消耗 ¥1.42 万稳定推进，现金口径完成率 90.55%，超前时间进度 +2.55pp。" },
+        { tag: "预警", tagClass: "tag-danger", lead: "CID转化严重偏低", body: "CID达人进店转化 ROI 仅 0.01，存在严重流量损耗，需暂停低效达人并校对落地页。" },
+        { tag: "节奏", tagClass: "tag-warn", lead: "日常种草跑率吻合", body: "日常种草累计消耗 ¥16.53万，执行率 52.5%，日均跑率与全案目标保持吻合。" },
       ];
     }
     return [
@@ -675,32 +704,53 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       { tag: "预警", tagClass: "tag-danger", lead: "单品成本波动", body: "关注部分高成本版位，及时做动态止损。" },
       { tag: "节奏", tagClass: "tag-warn", lead: "周期预算推进", body: "整体预算跑率与时间进度保持基本吻合。" },
     ];
-  }, [projectId]);
+  }, [projectId, findKpi]);
 
   const pacingData = useMemo(() => {
     if (projectId === "kailas") {
+      const actual1 = parseKpiNum(findKpi("kailas-spend-total")?.value, 906818.64);
+      const budget1 = parseKpiNum(findKpi("kailas-budget-total")?.value, 850000);
+      const spendRate1 = budget1 > 0 ? Number(((actual1 / budget1) * 100).toFixed(2)) : 106.68;
+      const timeRate1 = 80.0;
+      const diff1 = Number((spendRate1 - timeRate1).toFixed(2));
+      const diffText1 = diff1 > 0 ? `超支 +${diff1}pp (已超阶段台账)` : `进度 ${spendRate1}%`;
+
+      const unlockedBudget = parseKpiNum(findKpi("kailas-unlocked-kpi-budget")?.value, 1288044.11);
+      const fullBudget = 1518000;
+      const spendRate2 = Number(((unlockedBudget / fullBudget) * 100).toFixed(2));
+      const diffText2 = `全周期规划进度 ${spendRate2}%`;
+
       return {
-        track1: { title: "阶段现金口径预算推进", actual: 1288044.11, budget: 1518000, spendRate: 84.85, timeRate: 80.0, diffText: "超前 +4.85pp" },
-        track2: { title: "全项目全口径预算推进", actual: 1745800, budget: 2000000, spendRate: 87.29, timeRate: 80.0, diffText: "超支 +7.29pp" },
+        track1: { title: "阶段台账预算推进 (已超支)", actual: actual1, budget: budget1, spendRate: spendRate1, timeRate: timeRate1, diffText: diffText1 },
+        track2: { title: "全周期规划上限推进", actual: unlockedBudget, budget: fullBudget, spendRate: spendRate2, timeRate: timeRate1, diffText: diffText2 },
       };
     }
     if (projectId === "meiling") {
+      const actualD11 = parseKpiNum(findKpi("meiling-unlocked-kpi-d11-actual-spend")?.value, 309923);
+      const progressD11 = parseKpiNum(findKpi("meiling-unlocked-kpi-d11-progress")?.value, 10.76);
+      const targetBudget = progressD11 > 0 ? Math.round(actualD11 / (progressD11 / 100)) : 2880000;
+      const timeRate1 = 30.0;
+      const diff1 = Number((progressD11 - timeRate1).toFixed(1));
+
       return {
-        track1: { title: "阶段现金口径预算推进", actual: 865000, budget: 1000000, spendRate: 86.5, timeRate: 82.0, diffText: "超前 +4.50pp" },
-        track2: { title: "全项目全口径预算推进", actual: 1520000, budget: 1800000, spendRate: 84.44, timeRate: 82.0, diffText: "正常 +2.44pp" },
+        track1: { title: "双11蓄水期预算推进", actual: actualD11, budget: targetBudget, spendRate: progressD11, timeRate: timeRate1, diffText: `蓄水进度 10.8% (${diff1}pp 待放量)` },
+        track2: { title: "全案执行总规模推进", actual: 865000, budget: 1800000, spendRate: 48.06, timeRate: 50.0, diffText: "平稳推进 48.1%" },
       };
     }
     if (projectId === "winner-wipes") {
+      const actualWipes = parseKpiNum(findKpi("wipes-cum-spend")?.value, 165346.38);
+      const progressWipes = parseKpiNum(findKpi("wipes-cum-progress")?.value, 52.5);
+      const budgetWipes = progressWipes > 0 ? Math.round(actualWipes / (progressWipes / 100)) : 314945;
       return {
-        track1: { title: "阶段现金口径预算推进", actual: 498000, budget: 550000, spendRate: 90.55, timeRate: 88.0, diffText: "超前 +2.55pp" },
-        track2: { title: "全项目全口径预算推进", actual: 882000, budget: 980000, spendRate: 90.0, timeRate: 88.0, diffText: "正常 +2.00pp" },
+        track1: { title: "日常种草预算推进", actual: actualWipes, budget: budgetWipes, spendRate: progressWipes, timeRate: 55.0, diffText: `执行率 52.5% (-2.5pp)` },
+        track2: { title: "全周期规划预算推进", actual: 498000, budget: 880000, spendRate: 56.59, timeRate: 55.0, diffText: "正常推进 +1.59pp" },
       };
     }
     return {
       track1: { title: "阶段现金口径预算推进", actual: 500000, budget: 600000, spendRate: 83.33, timeRate: 80.0, diffText: "超前 +3.33pp" },
       track2: { title: "全项目全口径预算推进", actual: 850000, budget: 1000000, spendRate: 85.0, timeRate: 80.0, diffText: "正常 +5.00pp" },
     };
-  }, [projectId]);
+  }, [projectId, findKpi]);
 
   const kailasRoseData = useMemo(() => {
     const pal = ["#0F5E52", "#D95D39", "#2E6F8E", "#C87D20", "#15803D"];
@@ -838,7 +888,7 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
               <div className="card-title" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary, #1C1917)", display: "flex", alignItems: "center", gap: 7 }}>
                 <span style={{ fontSize: 14 }}>🩺</span> 战役综合健康度与四维信号灯
               </div>
-              <span className="semantic-tag tag-ok num">健康分 {healthScore}</span>
+              <span className={`semantic-tag ${healthScore >= 85 ? 'tag-ok' : healthScore >= 75 ? 'tag-warn' : 'tag-danger'} num`}>健康分 {healthScore}</span>
             </div>
             <div className="health-layout">
               <HealthArcGauge score={healthScore} label="综合评分 (满分100)" />

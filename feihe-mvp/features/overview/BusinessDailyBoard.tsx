@@ -1617,6 +1617,18 @@ export function BusinessDailyBoard({
                       <div className="bd-l1-bento-row bento-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 16 }}>
                         {/* Left: 240° Rounded-Cap Animated Health Gauge + 4 Signal Pills (5 Cols) */}
                         <div className="bento-card col-5 bd-health-card" style={{ gridColumn: 'span 5', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
+                         {(() => {
+                           const actualSpendVal = view?.progress?.actualThroughData ?? view?.core?.monthlySettlement?.value ?? 5267917.2;
+                           const budgetVal = view?.progress?.planThroughData ?? view?.core?.monthlyBudget?.value ?? 7961325;
+                           const spendRateVal = budgetVal > 0 ? Number(((actualSpendVal / budgetVal) * 100).toFixed(1)) : 66.2;
+                           const timeRateVal = view?.progress?.timeFraction ? Number((view.progress.timeFraction * 100).toFixed(1)) : 83.9;
+                           const diffVal = Number((spendRateVal - timeRateVal).toFixed(1));
+                           const diffText = diffVal >= 0 ? `超前 +${diffVal}pp` : `滞后 ${Math.abs(diffVal)}pp`;
+                           const pacingTagClass = diffVal >= 0 ? 'tag-ok' : diffVal >= -5 ? 'tag-warn' : 'tag-danger';
+                           const noteCountVal = view?.noteCount ?? view?.notes?.length ?? 117;
+                           const dynamicHealthScore = diffVal >= 0 ? 91 : diffVal >= -10 ? 86 : 78;
+                           return (
+                             <>
                           <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                             <div className="card-title" style={{ fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary, #1C1917)' }}>
                               <span style={{ color: 'var(--brand-primary, #0F5E52)', display: 'inline-flex' }}>
@@ -1626,10 +1638,10 @@ export function BusinessDailyBoard({
                               </span>
                               <span>启萃 10月项目健康度与总投入进度</span>
                             </div>
-                            <span className="semantic-tag tag-ok num">健康分 91</span>
+                            <span className={`semantic-tag ${pacingTagClass} num`}>健康分 {dynamicHealthScore}</span>
                           </div>
                           <div className="health-layout" style={{ display: 'grid', gridTemplateColumns: '132px minmax(0, 1fr)', gap: 12, alignItems: 'center' }}>
-                            <HealthArcGauge score={91} label="综合评分 (满分100)" />
+                            <HealthArcGauge score={dynamicHealthScore} label="综合评分 (满分100)" />
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, minWidth: 0 }}>
                               <div className="signals-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 6 }}>
                               <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '6px 8px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', minWidth: 0 }}>
@@ -1637,7 +1649,7 @@ export function BusinessDailyBoard({
                                     <span className="dot-indicator dot-ok" />
                                     <span>投入节奏</span>
                                   </div>
-                                <span className="semantic-tag tag-ok num" style={{ fontSize: 10.5, padding: '1px 6px' }}>84.7% 达标</span>
+                                <span className={`semantic-tag ${spendRateVal >= 75 ? 'tag-ok' : 'tag-warn'} num`} style={{ fontSize: 10.5, padding: '1px 6px' }}>{spendRateVal}% {spendRateVal >= 75 ? '达标' : '推进中'}</span>
                                 </div>
                               <div className="signal-pill" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, padding: '6px 8px', borderRadius: 8, background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', minWidth: 0 }}>
                                 <div className="signal-pill-left" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600, color: 'var(--text-secondary, #57534E)', whiteSpace: 'nowrap' }}>
@@ -1658,25 +1670,40 @@ export function BusinessDailyBoard({
                                     <span className="dot-indicator dot-warn" />
                                     <span>达人合作</span>
                                   </div>
-                                <span className="semantic-tag tag-warn num" style={{ fontSize: 10.5, padding: '1px 6px' }}>117位 推进中</span>
+                                <span className="semantic-tag tag-warn num" style={{ fontSize: 10.5, padding: '1px 6px' }}>{noteCountVal}篇 推进中</span>
                                 </div>
                               </div>
                               <ul className="exec-insight-list" style={{ listStyle: 'none', margin: 0, padding: '8px 0 0', borderTop: '1px dashed var(--border-subtle, #E6E4DD)', display: 'flex', flexDirection: 'column', gap: 5, fontSize: 11.5, color: 'var(--text-secondary, #57534E)' }}>
                                 <li style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                   <span className="semantic-tag tag-ok">放量</span>
-                                  <span><b>硬广稳健拿量：</b>平台广告累计 ¥409.9w (占比85.4%)，日均 ¥27.3w。</span>
+                                  <span><b>硬广稳健拿量：</b>平台广告累计 ¥{(actualSpendVal / 10000).toFixed(1)}w (执行率 {spendRateVal}%)。</span>
                                 </li>
                                 <li style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                  <span className="semantic-tag tag-ok">结算</span>
-                                  <span><b>政策折让优异：</b>净结算 ¥465.7w，政策后结算率达 97.04%。</span>
+                                  <span className={`semantic-tag ${diffVal >= 0 ? 'tag-ok' : 'tag-warn'}`}>{diffVal >= 0 ? '平稳' : '节奏'}</span>
+                                  <span><b>序时进度对照：</b>时间进度 {timeRateVal}%，投入{diffText}。</span>
                                 </li>
                               </ul>
                             </div>
                           </div>
+                             </>
+                           );
+                         })()}
                         </div>
 
                         {/* Right: Bullet Pacing Chart (7 Cols) */}
                         <div className="bento-card col-7 bd-bullet-card" style={{ gridColumn: 'span 7', background: '#FFFFFF', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-sm)' }}>
+                         {(() => {
+                           const actualSpendVal = view?.progress?.actualThroughData ?? view?.core?.monthlySettlement?.value ?? 5267917.2;
+                           const budgetVal = view?.progress?.planThroughData ?? view?.core?.monthlyBudget?.value ?? 7961325;
+                           const spendRateVal = budgetVal > 0 ? Number(((actualSpendVal / budgetVal) * 100).toFixed(1)) : 66.2;
+                           const timeRateVal = view?.progress?.timeFraction ? Number((view.progress.timeFraction * 100).toFixed(1)) : 83.9;
+                           const diffVal = Number((spendRateVal - timeRateVal).toFixed(1));
+                           const diffText = diffVal >= 0 ? `超前 +${diffVal}pp` : `滞后 ${Math.abs(diffVal)}pp`;
+                           const pacingTagClass = diffVal >= 0 ? 'tag-ok' : diffVal >= -5 ? 'tag-warn' : 'tag-danger';
+                           const netSettlementVal = view?.core?.settlement?.value ?? view?.core?.monthlySettlement?.value ?? 4656721.23;
+                           const netRateVal = view?.progress?.settlementFraction ? Number((view.progress.settlementFraction * 100).toFixed(1)) : 70.2;
+                           return (
+                             <>
                           <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
                             <div className="card-title" style={{ fontSize: 14, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary, #1C1917)' }}>
                               <span style={{ color: 'var(--accent-secondary, #D95D39)', display: 'inline-flex' }}>
@@ -1688,27 +1715,27 @@ export function BusinessDailyBoard({
                               </span>
                               <span>启萃项目总投入执行进度 (子弹图)</span>
                             </div>
-                            <span className="semantic-tag tag-ok num">超前 +3.5pp (投放平稳达峰)</span>
+                            <span className={`semantic-tag ${pacingTagClass} num`}>{diffText} ({diffVal >= 0 ? '投放平稳推进' : '阶段待放量'})</span>
                           </div>
                           <div className="bullet-card-inner" style={{ background: 'var(--bg-subtle, #FAF9F5)', border: '1px solid var(--border-subtle, #E6E4DD)', borderRadius: 12, padding: '14px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                             <div className="bullet-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
                               <span className="bullet-title" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>全周期预算达成</span>
                               <div className="bullet-stats num" style={{ fontSize: 12.5, color: 'var(--text-secondary, #57534E)' }}>
-                                <span>实际已消耗：<b style={{ color: 'var(--text-primary, #1C1917)' }}>¥4,798,923.90</b></span>
-                                <span> / 规划上限 ¥5,665,685.30 (<b style={{ color: 'var(--brand-primary, #0F5E52)' }}>84.7%</b>)</span>
+                                <span>实际已消耗：<b style={{ color: 'var(--text-primary, #1C1917)' }}>¥{format(actualSpendVal)}</b></span>
+                                <span> / 规划上限 ¥{format(budgetVal)} (<b style={{ color: 'var(--brand-primary, #0F5E52)' }}>{spendRateVal}%</b>)</span>
                               </div>
                             </div>
                             <div className="bullet-track" style={{ height: 16, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 9999, position: 'relative', overflow: 'visible', margin: '14px 0 10px' }}>
-                              <div className="bullet-fill" style={{ height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, var(--brand-primary, #0F5E52), var(--accent-tertiary, #2E6F8E))', width: '84.7%' }} />
-                              <div className="bullet-time-marker" style={{ position: 'absolute', top: -6, bottom: -6, width: 3, background: 'var(--text-primary, #1C1917)', borderRadius: 2, zIndex: 2, left: '81.2%' }}>
+                              <div className="bullet-fill" style={{ height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, var(--brand-primary, #0F5E52), var(--accent-tertiary, #2E6F8E))', width: `${Math.min(100, Math.max(0, spendRateVal))}%` }} />
+                              <div className="bullet-time-marker" style={{ position: 'absolute', top: -6, bottom: -6, width: 3, background: 'var(--text-primary, #1C1917)', borderRadius: 2, zIndex: 2, left: `${Math.min(100, Math.max(0, timeRateVal))}%` }}>
                                 <span className="bullet-time-label" style={{ position: 'absolute', top: -22, transform: 'translateX(-50%)', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', color: 'var(--text-primary, #1C1917)', background: '#FFFFFF', padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border-focus, #D4CFC5)', whiteSpace: 'nowrap', boxShadow: 'var(--shadow-xs)' }}>
-                                  时间 81.2%
+                                  时间 {timeRateVal}%
                                 </span>
                               </div>
                             </div>
                             <div className="bullet-foot" style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--text-muted, #8A847C)' }}>
                               <span>起跑线 0.0% (10-01)</span>
-                              <span className="num" style={{ fontWeight: 700, color: 'var(--brand-primary, #0F5E52)' }}>预算执行率 84.7%</span>
+                              <span className="num" style={{ fontWeight: 700, color: 'var(--brand-primary, #0F5E52)' }}>预算执行率 {spendRateVal}%</span>
                               <span>战役收官 100.0% (10-21)</span>
                             </div>
                           </div>
@@ -1716,23 +1743,26 @@ export function BusinessDailyBoard({
                             <div className="bullet-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6, flexWrap: 'wrap', gap: 8 }}>
                               <span className="bullet-title" style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary, #1C1917)' }}>政策返点后财务净结算推进</span>
                               <div className="bullet-stats num" style={{ fontSize: 12.5, color: 'var(--text-secondary, #57534E)' }}>
-                                <span>净结算额：<b style={{ color: 'var(--text-primary, #1C1917)' }}>¥4,656,721.23</b></span>
-                                <span> / 结算达成 (<b style={{ color: 'var(--accent-secondary, #D95D39)' }}>82.2%</b>)</span>
+                                <span>净结算额：<b style={{ color: 'var(--text-primary, #1C1917)' }}>¥{format(netSettlementVal)}</b></span>
+                                <span> / 结算达成 (<b style={{ color: 'var(--accent-secondary, #D95D39)' }}>{netRateVal}%</b>)</span>
                               </div>
                             </div>
                             <div className="bullet-track" style={{ height: 14, background: 'var(--border-subtle, #E6E4DD)', borderRadius: 9999, position: 'relative', overflow: 'visible', margin: '12px 0 8px' }}>
-                              <div className="bullet-fill" style={{ height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, var(--accent-quaternary, #C87D20), var(--accent-secondary, #D95D39))', width: '82.2%' }} />
-                              <div className="bullet-time-marker" style={{ position: 'absolute', top: -5, bottom: -5, width: 3, background: 'var(--text-primary, #1C1917)', borderRadius: 2, zIndex: 2, left: '81.2%' }}>
+                              <div className="bullet-fill" style={{ height: '100%', borderRadius: 9999, background: 'linear-gradient(90deg, var(--accent-quaternary, #C87D20), var(--accent-secondary, #D95D39))', width: `${Math.min(100, Math.max(0, netRateVal))}%` }} />
+                              <div className="bullet-time-marker" style={{ position: 'absolute', top: -5, bottom: -5, width: 3, background: 'var(--text-primary, #1C1917)', borderRadius: 2, zIndex: 2, left: `${Math.min(100, Math.max(0, timeRateVal))}%` }}>
                                 <span className="bullet-time-label" style={{ position: 'absolute', top: -21, transform: 'translateX(-50%)', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono, monospace)', color: 'var(--text-primary, #1C1917)', background: '#FFFFFF', padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border-focus, #D4CFC5)', whiteSpace: 'nowrap', boxShadow: 'var(--shadow-xs)' }}>
-                                  时间 81.2%
+                                  时间 {timeRateVal}%
                                 </span>
                               </div>
                             </div>
                             <div className="bullet-foot" style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--text-muted, #8A847C)' }}>
-                              <span>硬广 ¥409.9w (85.4%) + 达人 ¥54.9w (11.5%)</span>
-                              <span className="num" style={{ fontWeight: 700, color: 'var(--accent-secondary, #D95D39)' }}>政策折让率 97.04%</span>
+                              <span>全案累计投入 ¥{(actualSpendVal / 10000).toFixed(1)}w</span>
+                              <span className="num" style={{ fontWeight: 700, color: 'var(--accent-secondary, #D95D39)' }}>政策折让达成 {netRateVal}%</span>
                             </div>
                           </div>
+                             </>
+                           );
+                         })()}
                         </div>
                       </div>
 

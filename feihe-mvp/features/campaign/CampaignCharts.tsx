@@ -452,10 +452,20 @@ export function MetricStrip({
               <div style={{ display: 'inline-flex', alignItems: 'baseline', gap: 4 }}>
                 <span
                   className={`ca-metric-value num ${isMissing ? 'ca-metric-missing' : ''}`}
-                  style={{ fontSize: 24, fontWeight: 800 }}
+                  style={{ fontSize: 26, fontWeight: 800, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}
                   title={formatted}
                 >
-                  {formatted}
+                  {(() => {
+                    if (formatted.startsWith('¥') || formatted.startsWith('￥')) {
+                      return (
+                        <>
+                          <span className="ca-currency-sym" style={{ fontSize: '0.7em', fontWeight: 600, marginRight: 2, color: 'var(--text-muted, #8A847C)' }}>¥</span>
+                          {formatted.slice(1)}
+                        </>
+                      );
+                    }
+                    return formatted;
+                  })()}
                 </span>
                 {it.unit && <small className="ca-metric-unit">{it.unit}</small>}
               </div>

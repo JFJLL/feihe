@@ -53,6 +53,12 @@ export function NoteOperationsWorkspace({projectId}:{projectId:string}) {
   useEffect(()=>{const p=new URLSearchParams(window.location.search);p.set('month',month);p.set('queue',queue);if(noteId)p.set('noteId',noteId);else p.delete('noteId');window.history.replaceState(null,'','?'+p);},[month,queue,noteId]);
   useEffect(()=>{const onBack=()=>{const p=new URLSearchParams(window.location.search);setNoteId(p.get('noteId') || '');setMonth(p.get('month') || new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date()).slice(0,7));setQueue(p.get('queue') || 'active');setOffset(0);};window.addEventListener('popstate',onBack);return()=>window.removeEventListener('popstate',onBack);},[]);
   const data=current?.data;
+  useEffect(() => {
+    if (data && data.total === 0 && data.latestMonth && data.latestMonth !== month && !params.get('month')) {
+      setMonth(data.latestMonth);
+      setOffset(0);
+    }
+  }, [data, month, params]);
   const maxSpend = (() => {
     if (!data?.items?.length) return 1;
     const vals = data.items.map(n => (n.spendMonth === month && typeof n.monthlySpend?.value === 'number') ? n.monthlySpend.value : 0);
