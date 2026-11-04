@@ -1603,6 +1603,70 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 />
               </ChartPanel>
             )}
+
+            {/* 决策辅助：核心高产出词 vs 高消耗低效避坑词 */}
+            <ChartPanel
+              title='关键词投放决策矩阵：核心优质词 vs 高消耗避坑词'
+              subtitle='挖掘自《种草投放数据》底表：支持具体加投、控价或暂停决策'
+            >
+              <div className='kri-kw-decision-grid' style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
+                <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: '#166534', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span>🚀 核心高产出加推词 (Top 5)</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#14532d' }}>FUGA大坡王黑山</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 100% · CPC ¥0.18</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#14532d' }}>黑山越野跑鞋</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 9.2% · CPC ¥0.41</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#14532d' }}>凯乐石大坡王</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 8.7% · CPC ¥0.45</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#14532d' }}>越野跑鞋推荐</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 7.8% · CPC ¥0.49</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#14532d' }}>山系穿搭男鞋</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#15803d' }}>CTR 7.4% · CPC ¥0.52</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', borderRadius: 10, padding: '12px 14px' }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, color: '#9f1239', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span>⚠️ 高消耗低效避坑词 (建议控价/暂停)</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#881337' }}>户外穿搭</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥14,200 · CPC ¥1.82 (高价溢出)</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#881337' }}>小红书爆款鞋</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥9,850 · CPTI ¥182 (长尾低转)</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#881337' }}>运动鞋女夏</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥6,420 · CTR 2.1% (泛人群弱感)</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#881337' }}>登山靴</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥4,100 · 搜索组件点击 0</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ fontWeight: 600, color: '#881337' }}>徒步鞋防水</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', color: '#be123c' }}>消耗 ¥3,560 · 转化成本偏离 45%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ChartPanel>
           </div>
         </div>
       )}
@@ -1663,6 +1727,35 @@ export function KailasRichInsights({ dashboard, section }: KailasRichInsightsPro
                 />
               </ChartPanel>
             )}
+
+            {/* 待发布稿件制作进度与排期 */}
+            <ChartPanel
+              title='待发布稿件制作阶段与发布排期 (11位推进中达人)'
+              subtitle='挖掘自《黑山Q3达人执行表》：已发布 59/70 篇，剩余 11 篇各阶段实时跟踪'
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C', marginBottom: 4 }}>达人初稿中</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#0F5E52' }}>2 位</div>
+                  <div style={{ fontSize: 11, color: '#57534E', marginTop: 4 }}>预计 10月中旬发布</div>
+                </div>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C', marginBottom: 4 }}>品牌待反馈</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#C87D20' }}>2 位</div>
+                  <div style={{ fontSize: 11, color: '#57534E', marginTop: 4 }}>初稿提交待终审</div>
+                </div>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C', marginBottom: 4 }}>达人脚本中</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#2E6F8E' }}>1 位</div>
+                  <div style={{ fontSize: 11, color: '#57534E', marginTop: 4 }}>大纲通过撰稿中</div>
+                </div>
+                <div style={{ background: '#FAF9F5', border: '1px solid #E6E3DC', borderRadius: 8, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 11, color: '#78716C', marginBottom: 4 }}>大纲待交/统筹</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: '#78716C' }}>6 位</div>
+                  <div style={{ fontSize: 11, color: '#57534E', marginTop: 4 }}>排期沟通与寄样中</div>
+                </div>
+              </div>
+            </ChartPanel>
           </div>
         </div>
       )}

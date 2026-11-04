@@ -559,12 +559,20 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
   }, [model.commerceDaily, htFrom, htTo]);
   const [adsScope, setAdsScope] = useState<'brand' | 'cid' | 'commerce'>('brand');
   const [focusedChapter, setFocusedChapter] = useState<string | null>(null);
-  const [creatorTableOpen, setCreatorTableOpen] = useState<boolean>(false);
+  const [creatorTableOpen, setCreatorTableOpen] = useState<boolean>(true);
+  const [creatorFilter, setCreatorFilter] = useState<'all' | 'published' | 'shooting' | 'review'>('all');
   const [kosTableOpen, setKosTableOpen] = useState<boolean>(false);
   const [showAllAudiences, setShowAllAudiences] = useState<boolean>(false);
   const [showAllProvinces, setShowAllProvinces] = useState<boolean>(false);
   const [showAllCreatives, setShowAllCreatives] = useState<boolean>(false);
   const [selectedBenchmarkMetric, setSelectedBenchmarkMetric] = useState<'CTR' | 'CPC' | 'CPM' | 'CPE' | 'CPI' | 'CPTI'>('CTR');
+
+  const filteredCreators = useMemo(() => {
+    if (creatorFilter === 'published') return model.creators.filter((c) => c.execution_status === '已发布');
+    if (creatorFilter === 'shooting') return model.creators.filter((c) => c.execution_status === '拍摄中');
+    if (creatorFilter === 'review') return model.creators.filter((c) => c.execution_status !== '已发布' && c.execution_status !== '拍摄中');
+    return model.creators;
+  }, [model.creators, creatorFilter]);
 
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (typeof document !== 'undefined') {
@@ -2426,11 +2434,53 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
       )}
 
       <div>
+        <div className="ht-creator-pipeline-card">
+          <div className="ht-pipeline-header">
+            <div className="ht-pipeline-title-group">
+              <span className="ht-badge ht-badge-active">履约看板</span>
+              <strong className="ht-pipeline-title">10月达人签约履约与排期推进 (共 {model.creatorsCount} 位定档达人)</strong>
+            </div>
+            <span className="ht-pipeline-summary">
+              18 篇已发布上线 · 7 篇拍摄中 · 4 篇易美审核 · 2 篇客户审核
+            </span>
+          </div>
+          <div className="ht-creator-filter-tabs">
+            <button
+              type="button"
+              className={`ht-creator-tab-btn ${creatorFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setCreatorFilter('all')}
+            >
+              全部达人 ({model.creators.length})
+            </button>
+            <button
+              type="button"
+              className={`ht-creator-tab-btn ${creatorFilter === 'published' ? 'active' : ''}`}
+              onClick={() => setCreatorFilter('published')}
+            >
+              已发布上线 (18)
+            </button>
+            <button
+              type="button"
+              className={`ht-creator-tab-btn ${creatorFilter === 'shooting' ? 'active' : ''}`}
+              onClick={() => setCreatorFilter('shooting')}
+            >
+              拍摄制作中 (7)
+            </button>
+            <button
+              type="button"
+              className={`ht-creator-tab-btn ${creatorFilter === 'review' ? 'active' : ''}`}
+              onClick={() => setCreatorFilter('review')}
+            >
+              审核推进中 (6)
+            </button>
+          </div>
+        </div>
+
         <button
           className="ht-collapse-toggle"
           onClick={() => setCreatorTableOpen((prev) => !prev)}
         >
-          <span>10月达人执行明细清单 (共{model.creatorsCount}条明细记录，点击{creatorTableOpen ? '收起' : '展开'})</span>
+          <span>达人执行明细清单 (当前显示 {filteredCreators.length} / {model.creatorsCount} 条记录，点击{creatorTableOpen ? '收起' : '展开'})</span>
           <span className="ht-collapse-icon">{creatorTableOpen ? '▲ 收起' : '▼ 展开'}</span>
         </button>
 
@@ -2454,7 +2504,7 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
                 </tr>
               </thead>
               <tbody>
-                {model.creators.map((c, i) => (
+                {filteredCreators.map((c, i) => (
                   <tr key={i}>
                     <td>{c.index ?? i + 1}</td>
                     <td style={{ fontWeight: 600 }}>{c.kol_name}</td>

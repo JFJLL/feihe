@@ -1855,3 +1855,74 @@ details.ht-layer[open] > .ht-summary-header::after {
 .ht-icon-blue { color: #2E6F8E; }
 .ht-icon-gold { color: #C87D20; }
 .ht-icon-sage { color: #5B8266; }
+
+/* Creator Pipeline & Filter Tabs */
+.ht-creator-pipeline-card {
+  background: #ffffff;
+  border: 1px solid var(--ht-border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ht-pipeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ht-pipeline-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ht-pipeline-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ht-text);
+}
+
+.ht-pipeline-summary {
+  font-size: 12px;
+  color: var(--ht-primary);
+  font-weight: 600;
+  background: var(--ht-surface);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--ht-border);
+}
+
+.ht-creator-filter-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ht-creator-tab-btn {
+  padding: 5px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--ht-border);
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ht-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ht-creator-tab-btn:hover {
+  border-color: var(--ht-primary);
+  color: var(--ht-primary);
+}
+
+.ht-creator-tab-btn.active {
+  background: var(--ht-primary);
+  border-color: var(--ht-primary);
+  color: #ffffff;
+}
