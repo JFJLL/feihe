@@ -1,3 +1,5 @@
+import { runProjectSync } from '@/lib/core/sync-runner';
+import { isProjectRegistered } from '@/lib/core/registry';
 import { triggerCampaignLiveSync } from '@/lib/campaign-live-sync';
 import { envVar } from '@/lib/runtime-env';
 import { requireProjectAccess, jsonError, type ProjectAuthContext } from '@/lib/api-auth';
@@ -83,6 +85,17 @@ export async function POST(request: Request) {
     if (project === 'qicui') {
       return syncHistoricalSources(access.context!);
     } else {
+      if (isProjectRegistered(project)) {
+        const syncRes = await runProjectSync(project, { force: true });
+        return Response.json({
+          ok: syncRes.ok,
+          message: syncRes.message,
+          importedNotes: 0,
+          sourcesUpdated: 1,
+          timestamp: syncRes.timestamp,
+        });
+      }
+
       // Check if project is campaign_review template
       const projRecord = await d1.prepare('SELECT template_id FROM projects WHERE id=?').bind(project).first<{ template_id: string }>();
       if (projRecord?.template_id === 'campaign_review' || ['kailas', 'meiling', 'winner-wipes', 'huang-tiane'].includes(project)) {

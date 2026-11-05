@@ -1,4 +1,6 @@
 import { db } from './db';
+import { isProjectRegistered, buildProjectBoard } from './core/registry';
+import { buildCopilotContext } from './core/copilot-context';
 
 export type AssistantContextOptions = {
   projectId: string;
@@ -42,6 +44,7 @@ export type AssistantFacts = {
     competitorScopeNote: string;
   };
   sources: Array<{ key: string; name: string; records: number; url?: string; status: string }>;
+  copilotFactSheet?: string;
 };
 
 export async function gatherAssistantFacts(options: AssistantContextOptions): Promise<AssistantFacts> {
@@ -57,6 +60,58 @@ export async function gatherAssistantFacts(options: AssistantContextOptions): Pr
   // 1. Verify and read project info
   const projectRow = await d1.prepare('SELECT name, spu, brand, category FROM projects WHERE id=?').bind(projectId).first<{ name: string; spu: string; brand: string; category: string }>();
   const projectName = projectRow?.name || projectId;
+
+  // Beacon architecture: dynamically build facts for all registered projects
+  if (projectId !== 'qicui' && isProjectRegistered(projectId)) {
+    try {
+      const board = await buildProjectBoard(projectId);
+      if (board) {
+        const copilotCtx = buildCopilotContext(board);
+        const sources = (board.sources || []).map((s, idx) => ({
+          key: s.id || `src-${idx}`,
+          name: s.name,
+          records: board.datasets[s.id]?.rows.length || 0,
+          url: s.url || '',
+          status: s.status || '已连接',
+        }));
+
+        return {
+          projectId,
+          projectName,
+          businessDay: targetDay,
+          dataCutoff: board.reportPeriod || targetDay,
+          section,
+          tab,
+          periodFrom,
+          periodTo,
+          dataMode,
+          dailyCore: {
+            adSpend: { value: null, formatted: '按项目看板口径', sourceKey: 'board' },
+          },
+          dailyTablesSummary: copilotCtx.keyTablesSummary.map(t => ({
+            title: t.name,
+            sampleRows: t.rowCount,
+          })),
+          sampleBoundaries: {
+            ownedNoteArchives: 0,
+            executionRecords: 0,
+            executionNote: `项目 ${projectName} 业务看板已连接，包含 ${copilotCtx.keyTablesSummary.length} 个结构化数据集。`,
+            sourcedComments: 0,
+            supplierDeliveries: 0,
+            commentSentimentNote: '数据口径与指标由项目 transform.ts 独立治理。',
+            competitorSampleTotal: 0,
+            competitorSampleBrandBreakdown: {},
+            competitorSampleNatureBreakdown: {},
+            competitorScopeNote: '全域真实入账口径。',
+          },
+          sources: sources.length ? sources : [{ key: 'board-datasets', name: `${projectName}数据大盘`, records: Object.keys(board.datasets).length, status: '已连接' }],
+          copilotFactSheet: copilotCtx.markdownFactSheet,
+        };
+      }
+    } catch (err) {
+      console.warn(`[assistant-context] Failed to load board for ${projectId}:`, err);
+    }
+  }
 
   // 2. Query business daily report strictly by verified projectId and targetDay
   let dailyRow = await d1.prepare('SELECT business_day, payload_json FROM business_daily_reports WHERE project_id=? AND business_day=? ORDER BY created_at DESC LIMIT 1').bind(projectId, targetDay).first<{ business_day: string; payload_json: string }>();

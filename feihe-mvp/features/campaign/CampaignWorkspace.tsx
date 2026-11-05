@@ -4,11 +4,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import type {
   CampaignDashboard as CampaignDashboardData,
 } from '../../lib/campaign-types';
+import type { BoardPayload } from '../../lib/core/types';
 import { CampaignOverviewPage } from './CampaignOverviewPage';
 import { CampaignDailyPage } from './CampaignDailyPage';
 import { CampaignAdsPage } from './CampaignAdsPage';
 import { CampaignContentPage } from './CampaignContentPage';
-import { HuangTianeBoard } from './HuangTianeBoard';
+import { UniversalBoardRenderer } from './UniversalBoardRenderer';
+import { getProjectManifest } from '../../lib/core/registry';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
@@ -62,13 +64,13 @@ export function CampaignWorkspace({
     ? projectContext.currentProject
     : projectContext?.projects?.find((p) => p.id === projectId);
   const preset = resolveDashboardPreset('content_marketing');
-    const [currentPalette, setCurrentPalette] = useState<PaletteKey>('terracotta');
+  const [currentPalette, setCurrentPalette] = useState<PaletteKey>('terracotta');
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
     const applyPalette = (raw: string | null | undefined) => {
       const savedPalette: PaletteKey =
-          raw === 'botanical' || raw === 'terracotta' || raw === 'nordic' ? raw : 'terracotta';
+        raw === 'botanical' || raw === 'terracotta' || raw === 'nordic' ? raw : 'terracotta';
       document.documentElement.setAttribute('data-palette', savedPalette);
       setCurrentPalette(savedPalette);
     };
@@ -76,7 +78,7 @@ export function CampaignWorkspace({
     const savedPalette =
       window.localStorage.getItem('feihe_ui_palette') ||
       document.documentElement.getAttribute('data-palette') ||
-        'terracotta';
+      'terracotta';
     applyPalette(savedPalette);
 
     const onPaletteChange = (e: Event) => {
@@ -86,7 +88,7 @@ export function CampaignWorkspace({
     };
     const onStorage = (e: StorageEvent) => {
       if (e.key === 'feihe_ui_palette') {
-          applyPalette(e.newValue || 'terracotta');
+        applyPalette(e.newValue || 'terracotta');
       }
     };
 
@@ -202,19 +204,19 @@ export function CampaignWorkspace({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ projectId, all: true }),
       }).catch(() => null);
-
       await fetchDashboard(projectId, true);
-      showToast('已从飞书同步最新数据');
+      showToast('已从外部数据源同步最新数据');
     } catch {
       await fetchDashboard(projectId, true);
-      showToast('已从飞书同步最新数据');
+      showToast('已从外部数据源同步最新数据');
     } finally {
       setSyncing(false);
     }
   };
 
-  // 严格按项目隔离数据，避免跨项目串流
   const activeDashboard = dashboard && dashboard.projectId === projectId ? dashboard : null;
+  const activePayload = activeDashboard as unknown as BoardPayload;
+  const manifest = getProjectManifest(projectId);
 
   const refreshAction = (
     <button
@@ -222,8 +224,8 @@ export function CampaignWorkspace({
       onClick={handleReload}
       disabled={loading || syncing}
       className={`ca-subnav-reload-btn ${syncing ? 'is-syncing' : ''}`}
-      title="同步飞书与腾讯文档等全部外部数据源并刷新"
-      aria-label="同步飞书与腾讯文档等全部外部数据源并刷新"
+      title="同步外部数据源并刷新"
+      aria-label="同步外部数据源并刷新"
     >
       <svg
         className="ca-subnav-reload-icon"
@@ -290,6 +292,12 @@ export function CampaignWorkspace({
     );
   }
 
+  const projDisplayName = manifest?.name || activeDashboard.name || project?.name || '营销战役';
+  const spu = manifest?.spu || '核心主推品';
+  const category = manifest?.category || '消费品与品牌营销';
+  const mode = manifest?.mode || '全域数据贯通 · 真实入账';
+  const period = activeDashboard.reportPeriod || manifest?.defaultReportPeriod || '观测周期中';
+
   return (
     <DashboardFrame
       preset={preset}
@@ -297,157 +305,117 @@ export function CampaignWorkspace({
       actions={frameActions}
       tabsSlot={tabsSlot}
     >
-      <div className={`campaign-workspace-root ${className}`}>
-      {/* 重新加载失败时的轻量警示条 */}
-      {error && (
+      <div
+        className={`campaign-workspace-root ${className}`}
+        data-project-id={projectId}
+        data-source-file={`projects/${projectId}/transform.ts`}
+      >
+        {/* Project Context Ribbon */}
         <div
-          role="alert"
-          style={{
-            background: '#fff7c2',
-            border: '0.5px solid #f3d673',
-            color: '#ab6400',
-            padding: '8px 16px',
-            fontSize: 14,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
+          className="project-context-bar"
+          role="region"
+          aria-label="当前项目档案元数据"
+          data-project-id={projectId}
+          data-source-file={`projects/${projectId}/transform.ts`}
+          data-section-id="project-context-ribbon"
         >
-          <span>重新加载失败：{error}</span>
-          <button
-            type="button"
-            onClick={handleReload}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#0d74ce',
-              cursor: 'pointer',
-              fontWeight: 500,
-            }}
-          >
-            重试
-          </button>
+          <div className="context-left">
+            <div className="context-item">
+              <span className="context-icon-badge" style={{ background: 'var(--brand-primary-soft, #EBF5F3)', color: 'var(--brand-primary, #0F5E52)' }}>💼</span>
+              <span>当前聚焦项目：<b>{projDisplayName}</b></span>
+            </div>
+            <div className="context-item">
+              <span className="context-icon-badge" style={{ background: 'var(--accent-secondary-soft, #FDF0EC)', color: 'var(--accent-secondary, #D95D39)' }}>🏷️</span>
+              <span>核心 SPU：<b>{spu}</b></span>
+            </div>
+            <div className="context-item">
+              <span className="context-icon-badge" style={{ background: 'var(--accent-tertiary-soft, #EEF6FA)', color: 'var(--accent-tertiary, #2E6F8E)' }}>📂</span>
+              <span>所属类目：<b>{category}</b></span>
+            </div>
+            <div className="context-item">
+              <span className="context-icon-badge" style={{ background: 'var(--accent-quaternary-soft, #FDF6EB)', color: 'var(--accent-quaternary, #C87D20)' }}>📅</span>
+              <span>数据观测周期：<b>{period}</b></span>
+            </div>
+          </div>
+          <div className="context-right">
+            <span className="semantic-tag tag-ok">
+              <span>🎯</span>
+              <span>{mode}</span>
+            </span>
+          </div>
         </div>
-      )}
 
-      {/* 当前项目档案横幅 (Project Context Ribbon) */}
-      {activeDashboard && (() => {
-        let spu = '核心主推品';
-        let category = '消费品与品牌营销';
-        let mode = '双轨全域归因 · KFS真实入账';
-        let projDisplayName = activeDashboard.name || project?.name || '营销战役';
-
-        if (projectId === 'kailas') {
-          projDisplayName = '凯乐石户外 · 跑鞋秋季战役';
-          spu = '凯乐石 FUGA 大坡王越野跑鞋';
-          category = '户外运动 / 越野跑鞋';
-          mode = '双轨全域归因 · KFS真实入账';
-        } else if (projectId === 'meiling') {
-          projDisplayName = '美菱家电 · 双11大促战役';
-          spu = '美菱 603 无霜冰箱';
-          category = '大家电 / 冰箱保鲜';
-          mode = '双11大促全域攻坚 · 四线独立归因';
-        } else if (projectId === 'winner-wipes') {
-          projDisplayName = '稳健医疗 · 日常种草战役';
-          spu = '全棉时代成人医用级酒精消毒湿巾';
-          category = '个人护理 / 卫生湿巾';
-          mode = '日常种草控盘 · 星河&CID对账';
-        } else if (projectId === 'huang-tiane') {
-          projDisplayName = '黄天鹅蛋品 · 全域营销复盘';
-          spu = '黄天鹅可生食鸡蛋';
-          category = '生鲜食品 / 禽蛋蛋品';
-          mode = '全域三线核算 · 真实入账';
-        }
-
-        const period = activeDashboard.reportPeriod || '观测周期中';
-
-        return (
-          <div className="project-context-bar" role="region" aria-label="当前项目档案元数据">
-            <div className="context-left">
-              <div className="context-item">
-                <span className="context-icon-badge" style={{ background: 'var(--brand-primary-soft, #EBF5F3)', color: 'var(--brand-primary, #0F5E52)' }}>💼</span>
-                <span>当前聚焦项目：<b>{projDisplayName}</b></span>
-              </div>
-              <div className="context-item">
-                <span className="context-icon-badge" style={{ background: 'var(--accent-secondary-soft, #FDF0EC)', color: 'var(--accent-secondary, #D95D39)' }}>🏷️</span>
-                <span>核心 SPU：<b>{spu}</b></span>
-              </div>
-              <div className="context-item">
-                <span className="context-icon-badge" style={{ background: 'var(--accent-tertiary-soft, #EEF6FA)', color: 'var(--accent-tertiary, #2E6F8E)' }}>📂</span>
-                <span>所属类目：<b>{category}</b></span>
-              </div>
-              <div className="context-item">
-                <span className="context-icon-badge" style={{ background: 'var(--accent-quaternary-soft, #FDF6EB)', color: 'var(--accent-quaternary, #C87D20)' }}>📅</span>
-                <span>数据观测周期：<b>{period}</b></span>
-              </div>
-            </div>
-            <div className="context-right">
-              <span className="semantic-tag tag-ok">
-                <span>🎯</span>
-                <span>{mode}</span>
-              </span>
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* 黄天鹅专属看板：分发 overview / ads / content 到 HuangTianeBoard，daily 保持共享分日看板 */}
-      {projectId === 'huang-tiane' && (
-        currentSection === 'overview' && overviewTab === 'daily' ? (
+        {/* 分日看板共享面板 */}
+        {currentSection === 'overview' && overviewTab === 'daily' && (
           <div
             id="workspace-tabpanel-daily"
             role="tabpanel"
             aria-labelledby="workspace-tab-daily"
             tabIndex={0}
+            data-project-id={projectId}
+            data-source-file={`projects/${projectId}/transform.ts`}
+            data-section-id="daily-tabpanel"
           >
             <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
           </div>
-        ) : (
-          <HuangTianeBoard
-            key={projectId}
-            dashboard={activeDashboard}
-            section={currentSection}
-          />
-        )
-      )}
+        )}
 
-      {/* 其它项目标准分发 */}
-      {projectId !== 'huang-tiane' && currentSection === 'ads' && (
-        <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
-      )}
-
-      {projectId !== 'huang-tiane' && currentSection === 'content' && (
-        <CampaignContentPage key={projectId} dashboard={activeDashboard} />
-      )}
-
-      {projectId !== 'huang-tiane' && currentSection === 'overview' && (
-        overviewTab === 'daily' ? (
-          <div
-            id="workspace-tabpanel-daily"
-            role="tabpanel"
-            aria-labelledby="workspace-tab-daily"
-            tabIndex={0}
-          >
-            <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
-          </div>
-        ) : (
+        {/* 数据总览看板：优先渲染带 DOM Provenance 溯源属性的 UniversalBoardRenderer */}
+        {currentSection === 'overview' && overviewTab === 'overview' && (
           <div
             id="workspace-tabpanel-overview"
             role="tabpanel"
             aria-labelledby="workspace-tab-overview"
             tabIndex={0}
+            data-project-id={projectId}
+            data-source-file={`projects/${projectId}/transform.ts`}
+            data-section-id="overview-tabpanel"
           >
-            <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
+            {activePayload?.sections && activePayload?.datasets ? (
+              <UniversalBoardRenderer payload={activePayload} />
+            ) : (
+              <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
+            )}
           </div>
-        )
-      )}
-      {toastMessage && (
-        <div className="ca-sync-toast" role="status">
-          <span>✓</span>
-          <span>{toastMessage}</span>
-        </div>
-      )}
-    </div>
+        )}
+
+        {/* 版位投放看板 */}
+        {currentSection === 'ads' && (
+          <div
+            data-project-id={projectId}
+            data-source-file={`projects/${projectId}/transform.ts`}
+            data-section-id="ads-section"
+          >
+            {activePayload?.sections && activePayload?.datasets ? (
+              <UniversalBoardRenderer payload={activePayload} />
+            ) : (
+              <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
+            )}
+          </div>
+        )}
+
+        {/* 内容执行看板 */}
+        {currentSection === 'content' && (
+          <div
+            data-project-id={projectId}
+            data-source-file={`projects/${projectId}/transform.ts`}
+            data-section-id="content-section"
+          >
+            {activePayload?.sections && activePayload?.datasets ? (
+              <UniversalBoardRenderer payload={activePayload} />
+            ) : (
+              <CampaignContentPage key={projectId} dashboard={activeDashboard} />
+            )}
+          </div>
+        )}
+
+        {toastMessage && (
+          <div className="ca-sync-toast" role="status">
+            <span>✓</span>
+            <span>{toastMessage}</span>
+          </div>
+        )}
+      </div>
     </DashboardFrame>
   );
 }

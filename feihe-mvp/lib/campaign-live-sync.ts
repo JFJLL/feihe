@@ -10,6 +10,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { isProjectRegistered } from './core/registry';
+import { runProjectSync } from './core/sync-runner';
 import type { CampaignEnrichmentPayload } from './campaign-enrichment-server';
 import type { CampaignDailyDataset } from './campaign-types';
 
@@ -36,6 +38,14 @@ export function triggerCampaignLiveSync(
   projectId?: string,
   force = false
 ): Promise<SyncResult> {
+  if (projectId && isProjectRegistered(projectId) && projectId !== 'qicui') {
+    return runProjectSync(projectId, { force }).then(res => ({
+      ok: res.ok,
+      message: res.message,
+      timestamp: res.timestamp,
+    }));
+  }
+
   if (activeSyncPromise) {
     console.log(`[campaign-live-sync] Sync already in progress; piggybacking on active run...`);
     return activeSyncPromise;

@@ -33,7 +33,10 @@
     "verify:focused:browser": "node node_modules/@playwright/test/cli.js test tests/browser/focused-red.spec.ts tests/browser/focused.spec.ts",
     "verify:unit-api:v2": "node scripts/verify-v2-unit-api.mjs",
     "verify:dev-auth": "node scripts/test-dev-auth-boundary.mjs",
-    "business:worker": "node scripts/run-business-sync.mjs --watch"
+    "business:worker": "node scripts/run-business-sync.mjs --watch",
+    "project:pull": "node scripts/project-cli.mjs pull",
+    "project:build": "node scripts/project-cli.mjs build",
+    "project:health": "node scripts/project-cli.mjs health"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

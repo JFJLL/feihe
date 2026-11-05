@@ -1,0 +1,120 @@
+/**
+ * Copilot Context Extractor
+ * Slices and formats BoardPayload for AI Assistant & Agent endpoints (/api/agent).
+ * Eliminates project-specific hardcoding in assistant-context.ts.
+ */
+
+import type { BoardPayload } from './types';
+
+export interface CopilotProjectContext {
+  projectId: string;
+  projectName: string;
+  brand: string;
+  spu?: string;
+  category?: string;
+  reportPeriod?: string;
+  summaryKpis: Record<string, { label: string; value: string | number | null; unit?: string }>;
+  keyTablesSummary: Array<{
+    id: string;
+    name: string;
+    rowCount: number;
+    columns: string[];
+    sampleRows: Record<string, unknown>[];
+  }>;
+  analysisInsights: Array<{
+    title: string;
+    summary: string;
+    recommendations?: string[];
+    severity?: string;
+  }>;
+  warnings: string[];
+  markdownFactSheet: string;
+}
+
+export function buildCopilotContext(payload: BoardPayload): CopilotProjectContext {
+  const summaryKpis: CopilotProjectContext['summaryKpis'] = {};
+
+  // Extract KPIs from summary_kpis or first metric dataset
+  const kpiDs = payload.datasets['summary_kpis'] || Object.values(payload.datasets).find(d => d.id.includes('kpi') || d.id.includes('summary'));
+  if (kpiDs && kpiDs.rows.length > 0) {
+    const firstRow = kpiDs.rows[0];
+    for (const col of kpiDs.columns) {
+      summaryKpis[col.key] = {
+        label: col.label,
+        value: firstRow[col.key] as string | number | null,
+        unit: col.displayUnits,
+      };
+    }
+  }
+
+  const keyTablesSummary: CopilotProjectContext['keyTablesSummary'] = [];
+  for (const [id, ds] of Object.entries(payload.datasets)) {
+    keyTablesSummary.push({
+      id,
+      name: ds.name || id,
+      rowCount: ds.rows.length,
+      columns: ds.columns.map(c => `${c.label} (${c.key})`),
+      sampleRows: ds.rows.slice(0, 3),
+    });
+  }
+
+  const analysisInsights: CopilotProjectContext['analysisInsights'] = (payload.analysisCards || []).map(c => ({
+    title: c.title,
+    summary: c.summary,
+    recommendations: c.recommendations,
+    severity: c.severity,
+  }));
+
+  // Build compact markdown fact sheet for prompt injection
+  const mdLines: string[] = [
+    `# 项目事实卡：${payload.name} (${payload.brand})`,
+    `- 核心SPU: ${payload.spu || '核心主推品'} | 所属类目: ${payload.category || '消费零售'}`,
+    `- 观测周期: ${payload.reportPeriod || '最新观测周期'}`,
+    '',
+    '## 核心指标看板 (KPIs):',
+  ];
+
+  if (Object.keys(summaryKpis).length > 0) {
+    for (const [k, v] of Object.entries(summaryKpis)) {
+      mdLines.push(`- **${v.label}**: ${v.value !== null ? v.value : '未观测'} ${v.unit || ''}`);
+    }
+  } else {
+    mdLines.push('- 暂无标量指标卡，请参考各业务表明细');
+  }
+
+  mdLines.push('', '## 业务数据表总览:');
+  for (const t of keyTablesSummary) {
+    mdLines.push(`- **${t.name}** [${t.id}]: 共 ${t.rowCount} 行记录, 字段: ${t.columns.join(', ')}`);
+  }
+
+  if (analysisInsights.length > 0) {
+    mdLines.push('', '## 重点洞察与建议:');
+    for (const insight of analysisInsights) {
+      mdLines.push(`- **[${insight.severity || 'info'}] ${insight.title}**: ${insight.summary}`);
+      if (insight.recommendations?.length) {
+        mdLines.push(`  - 建议行动: ${insight.recommendations.join('；')}`);
+      }
+    }
+  }
+
+  if (payload.warnings?.length) {
+    mdLines.push('', '## 数据口径与注意说明:');
+    for (const w of payload.warnings) {
+      mdLines.push(`- ⚠️ ${w}`);
+    }
+  }
+
+  return {
+    projectId: payload.projectId,
+    projectName: payload.name,
+    brand: payload.brand,
+    spu: payload.spu,
+    category: payload.category,
+    reportPeriod: payload.reportPeriod,
+    summaryKpis,
+    keyTablesSummary,
+    analysisInsights,
+    warnings: payload.warnings || [],
+    markdownFactSheet: mdLines.join('\n'),
+  };
+}

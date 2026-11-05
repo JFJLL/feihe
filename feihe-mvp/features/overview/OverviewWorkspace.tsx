@@ -461,7 +461,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
   const isGeneral = preset.kind === 'general';
   const isCommentQc = preset.kind === 'comment_qc';
   const isAd = preset.kind === 'ad_performance';
-  const isDatasetContent = project?.templateId === 'content_marketing' && projectId !== 'qicui' && !(dashboard.notes || []).length;
+  const isDatasetContent = project?.templateId === 'content_marketing' && !(dashboard.notes || []).length && !(dashboard.feishu?.reports || []).length;
 
   const headerSubtitle = isGeneral
     ? `${project?.departmentName || '业务部门'} / 结构化数据集与度量监控看板`
@@ -515,7 +515,7 @@ export function OverviewWorkspace({ projectId, project, dashboard, ops, onRefres
         <GeneralWorkbenchBoard key={projectId} projectId={projectId} project={project} />
       </div>
     ) : project?.templateId === 'comment_qc' ? (
-      <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="comment" hasLegacyData={Boolean(projectId === 'qicui' || (dashboard.notes || []).length || (ops.supplier || []).length)} legacy={<CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />} />
+      <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="comment" hasLegacyData={Boolean((dashboard.notes || []).length || (ops.supplier || []).length)} legacy={<CommentsWorkspace projectId={projectId} dashboard={dashboard} ops={ops} onRefresh={onRefresh} />} />
     ) : isDatasetContent ? <><BusinessDailyBoard key={`${projectId}:${tab}`} projectId={projectId} overview={tab === 'overview'} canWrite={canWrite} />{tab === 'overview' && <DatasetDomainOverview embedded key={projectId} projectId={projectId} kind="content" />}</> : project?.templateId === 'ad_performance' ? <DatasetAdOverview key={projectId} projectId={projectId} legacy={(dashboard.feishu?.daily || []).length ? (
       <div className="stack" data-testid="ad-performance-overview">
         <FeishuSources data={dashboard.feishu} projectId={projectId} />

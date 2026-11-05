@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { UniversalBoardRenderer } from "./UniversalBoardRenderer";
+import type { BoardPayload } from "../../lib/core/types";
 import Link from "next/link";
 import type {
   CampaignDashboard,
@@ -73,6 +75,11 @@ function parseKpiNum(val: unknown, fallback: number): number {
 }
 
 export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
+  const payload = dashboard as unknown as BoardPayload;
+  if (payload?.sections && payload?.datasets && Object.keys(payload.datasets).length > 0) {
+    return <UniversalBoardRenderer payload={payload} />;
+  }
+
   const { projectId, name, reportPeriod, updatedAt, kpis = [], tables = [], dailyDatasets = [] } = dashboard;
 
   const [activeSnapshot, setActiveSnapshot] = useState<string>(() => {

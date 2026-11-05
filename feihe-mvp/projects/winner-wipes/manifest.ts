@@ -1,0 +1,23 @@
+import type { ProjectManifest } from '../../lib/core/types';
+
+export const manifest: ProjectManifest = {
+  id: 'winner-wipes',
+  name: '酒精湿巾',
+  brand: '稳健',
+  spu: '全棉时代成人医用级酒精消毒湿巾',
+  category: '个人护理 / 卫生湿巾',
+  color: '#16a34a',
+  defaultReportPeriod: '营销复盘周期',
+  mode: '日常种草控盘 · 星河&CID对账',
+  subtitle: '种草效果与KPI进度',
+  description: '种草效果与KPI进度',
+  templateId: 'campaign_review',
+  enabledTabs: [
+    { key: 'overview', label: '数据总览', icon: '📊', desc: '预算进度与阶段效果' },
+    { key: 'daily', label: '分日看板', icon: '📅', desc: '当日指标与明细' },
+    { key: 'ads', label: '版位投放', icon: '🎯', desc: '广告与渠道效率' },
+    { key: 'content', label: '内容执行', icon: '📝', desc: '达人与笔记详情' },
+  ],
+};
+
+export default manifest;

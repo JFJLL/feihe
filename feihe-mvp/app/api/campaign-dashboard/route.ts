@@ -12,6 +12,8 @@ import {
   getFreshCampaignEnrichment,
   getFreshCampaignDailyDatasets,
 } from "@/lib/campaign-live-sync";
+import { getProjectManifest, buildProjectBoard } from "@/lib/core/registry";
+import { buildBoardPayloadFromCampaignDashboard } from "@/lib/core/transform-kit";
 
 export const dynamic = "force-dynamic";
 
@@ -28,10 +30,10 @@ export async function GET(request: Request) {
     return jsonError(access.error || "无权访问该项目", access.status || 403);
   }
 
-  // 2. Enforce template requirement: must be campaign_review
+  // 2. Enforce template requirement: must be campaign_review or content_marketing
   const project = access.context!.project;
   const templateId = String(project.template_id || "");
-  if (templateId !== "campaign_review") {
+  if (templateId !== "campaign_review" && templateId !== "content_marketing") {
     return jsonError("该项目非轻量营销看板(campaign_review)模板", 400);
   }
 
@@ -51,21 +53,32 @@ export async function GET(request: Request) {
   try {
     const snapshot = await getCampaignDashboardSnapshot(projectId);
     if (!snapshot) {
+      // Try building from registry if manifest exists
+      const manifest = getProjectManifest(projectId);
+      if (manifest) {
+        const board = await buildProjectBoard(projectId);
+        if (board) {
+          return Response.json({
+            ok: true,
+            dashboard: board,
+            projectId,
+            projectRole: access.context!.projectRole,
+            canWrite: access.context!.canWrite,
+            canManage: access.context!.canManage,
+          });
+        }
+      }
       return jsonError("尚未接入资料", 404);
     }
 
     // Background non-blocking auto-sync if snapshot is older than 30 minutes
     if (isSnapshotStale(snapshot.updatedAt, 30) && !shouldForceSync) {
-      console.log(
-        `[campaign-dashboard] Snapshot for ${projectId} is stale (last updated: ${snapshot.updatedAt}), triggering non-blocking background auto-sync...`
-      );
       triggerCampaignLiveSync(projectId).catch((err) => {
         console.error(`[campaign-dashboard] Background auto-sync error for ${projectId}:`, err);
       });
     }
 
-    // 4. Attach only this project's daily datasets (strict project isolation, server-only)
-    // Retain snapshot.dailyDatasets and merge with server daily datasets using mergeById
+    // 4. Attach only this project's daily datasets
     const serverDailyDatasets =
       getFreshCampaignDailyDatasets(projectId) ||
       getCampaignDailyDatasetsByProject(projectId) ||
@@ -76,12 +89,27 @@ export async function GET(request: Request) {
       dailyDatasets: mergedDailyDatasets,
     };
 
-    // 5. Merge project enrichment (tables, sources, dailyDatasets)
-    // Server-only whitelist read; id-overwrite; no DB writes; strict isolation
+    // 5. Merge project enrichment
     const enrichment =
       getFreshCampaignEnrichment(projectId) ||
       getCampaignEnrichment(projectId);
-    const finalDashboard = mergeCampaignEnrichment(baseDashboard, enrichment);
+    const mergedDashboard = mergeCampaignEnrichment(baseDashboard, enrichment);
+
+    // 6. Modern BoardPayload transformation
+    let finalDashboard: unknown = mergedDashboard;
+    const manifest = getProjectManifest(projectId);
+    if (manifest) {
+      try {
+        const board = await buildProjectBoard(projectId);
+        if (board) {
+          finalDashboard = board;
+        } else {
+          finalDashboard = buildBoardPayloadFromCampaignDashboard(mergedDashboard, manifest);
+        }
+      } catch {
+        finalDashboard = buildBoardPayloadFromCampaignDashboard(mergedDashboard, manifest);
+      }
+    }
 
     return Response.json({
       ok: true,
