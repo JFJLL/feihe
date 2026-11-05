@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { UniversalBoardRenderer } from "./UniversalBoardRenderer";
-import type { BoardPayload } from "../../lib/core/types";
 import Link from "next/link";
 import type {
   CampaignDashboard,
@@ -75,11 +73,6 @@ function parseKpiNum(val: unknown, fallback: number): number {
 }
 
 export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
-  const payload = dashboard as unknown as BoardPayload;
-  if (payload?.sections && payload?.datasets && Object.keys(payload.datasets).length > 0) {
-    return <UniversalBoardRenderer payload={payload} />;
-  }
-
   const { projectId, name, reportPeriod, updatedAt, kpis = [], tables = [], dailyDatasets = [] } = dashboard;
 
   const [activeSnapshot, setActiveSnapshot] = useState<string>(() => {
@@ -819,7 +812,13 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
   }, []);
 
   return (
-    <div className="ca-page" role="main" aria-label={name + " 营销战役总览"}>
+    <div
+      className="ca-page"
+      role="main"
+      aria-label={name + " 营销战役总览"}
+      data-project-id={projectId}
+      data-source-file={`projects/${projectId}/transform.ts`}
+    >
       {/* 1. 一体式吸顶控制台 (章节快速定位 + 统一日期范围控制条) */}
       <header className="ca-header ca-sticky-console bd-toolbar-compact">
         <div className="ca-console-left">
@@ -876,7 +875,15 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       </header>
 
       {/* 2. 核心指标大卡片 (包含核心指标条 + 战役分析核心观察 + 专项直达) */}
-      <div className="ca-section-macro-card" id="ca-macro-kpi">
+      <div
+        className="ca-section-macro-card"
+        id="ca-macro-kpi"
+        data-project-id={projectId}
+        data-source-file={`projects/${projectId}/transform.ts`}
+        data-section-id="ca-macro-kpi"
+        data-comp-type="metric-bento"
+        data-query-id="kpis"
+      >
         <div className="ca-chapter-header">
           <div className="ca-chapter-title-group">
             <span className="ca-chapter-num">01</span>
@@ -998,7 +1005,15 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       </div>
 
       {/* 3. 业务图表大卡片 (包含 01 章节头 + 业务图表网格) */}
-      <div className="ca-section-macro-card" id="ca-macro-charts">
+      <div
+        className="ca-section-macro-card"
+        id="ca-macro-charts"
+        data-project-id={projectId}
+        data-source-file={`projects/${projectId}/transform.ts`}
+        data-section-id="ca-macro-charts"
+        data-comp-type="chart-suite"
+        data-query-id="budget_and_placements"
+      >
         <div className="ca-chapter-header">
           <div className="ca-chapter-title-group">
             <span className="ca-chapter-badge ca-chapter-num">02</span>
@@ -1504,13 +1519,30 @@ export function CampaignOverviewPage({ dashboard }: CampaignOverviewPageProps) {
       </div>
 
       {/* 3.1 战役增强面板 (各项目总览 Rich 扩展分析卡) */}
-      <section id="ca-sec-enrichment" className="ca-section-enrichment" aria-label="深度业务拆解">
+      <section
+        id="ca-sec-enrichment"
+        className="ca-section-enrichment"
+        aria-label="深度业务拆解"
+        data-project-id={projectId}
+        data-source-file={`projects/${projectId}/transform.ts`}
+        data-section-id="ca-sec-enrichment"
+        data-comp-type="deep-dive"
+        data-query-id="enrichment"
+      >
         <CampaignEnrichmentPanels dashboard={dashboard} section="overview" activeSnapshot={activeSnapshot} />
       </section>
 
       {/* 6. 底层明细表格 (仅展示当前图表关联表，完整呈现全部行不静默截断) */}
       {activeDetailTables.length > 0 && (
-        <details id="ca-sec-details" className="ca-details-collapse">
+        <details
+          id="ca-sec-details"
+          className="ca-details-collapse"
+          data-project-id={projectId}
+          data-source-file={`projects/${projectId}/transform.ts`}
+          data-section-id="ca-sec-details"
+          data-comp-type="data-table"
+          data-query-id="detail_tables"
+        >
           <summary className="ca-details-summary">
             <span className="ca-summary-left">
               <span className="ca-chapter-num">

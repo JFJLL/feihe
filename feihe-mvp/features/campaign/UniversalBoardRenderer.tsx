@@ -26,10 +26,30 @@ import type {
   ColumnDef,
   AnalysisCardSpec,
 } from '../../lib/core/types';
+import {
+  TargetBulletChart,
+  NightingaleRoseChart,
+  CapabilityRadarChart,
+  MultiDimensionComparisonDeck,
+  StackedHorizontalBarChart,
+  type ComparisonDatum,
+  type NightingaleRoseDatum,
+  type RadarDimension,
+  type RadarSeries,
+  type StackedBarRow,
+  type StackedBarSegment,
+} from './CampaignCharts';
+import { CampaignComboChart, type ComboSeries } from './CampaignComboChart';
+import {
+  EffectScatterChart,
+  DistributionHistogram,
+  BoxPlotChart,
+} from '../overview/AdvancedCharts';
 import './campaign-analytics.css';
 
 export interface UniversalBoardRendererProps {
   payload: BoardPayload;
+  sectionId?: string;
   className?: string;
 }
 
@@ -57,9 +77,19 @@ export function formatDatasetValue(val: unknown, col?: ColumnDef): string {
   return String(val);
 }
 
-export function UniversalBoardRenderer({ payload, className = '' }: UniversalBoardRendererProps) {
+export function UniversalBoardRenderer({ payload, sectionId, className = '' }: UniversalBoardRendererProps) {
   const { projectId, name, sections = [], datasets = {}, analysisCards = [], warnings = [] } = payload;
   const [activeTabs, setActiveTabs] = useState<Record<string, string>>({});
+
+  const displayedSections = useMemo(() => {
+    if (!sectionId || sectionId === 'overview') {
+      return sections;
+    }
+    const filtered = sections.filter(
+      s => s.id === sectionId || s.id.toLowerCase().includes(sectionId.toLowerCase())
+    );
+    return filtered.length > 0 ? filtered : sections;
+  }, [sections, sectionId]);
   const [drilldownModal, setDrilldownModal] = useState<{
     title: string;
     dataset: DatasetTable;
@@ -185,96 +215,282 @@ export function UniversalBoardRenderer({ payload, className = '' }: UniversalBoa
       );
     }
 
-    // 3. line-bar-combo or time-series (Visual SVG dual-axis representation)
+    // 3. line-bar-combo or time-series (Render with CampaignComboChart)
     if (comp.type === 'line-bar-combo' || comp.type === 'time-series') {
       const rows = dataset.rows || [];
       const xCol = dataset.columns.find(c => c.key === comp.xField);
       const yCol = dataset.columns.find(c => c.key === comp.yField);
       const y2Col = comp.y2Field ? dataset.columns.find(c => c.key === comp.y2Field) : undefined;
 
-      const maxY = Math.max(...rows.map(r => Number(r[comp.yField || '']) || 0), 10);
-      const maxY2 = comp.y2Field ? Math.max(...rows.map(r => Number(r[comp.y2Field || '']) || 0), 1) : 1;
+      const series: ComboSeries[] = [
+        {
+          key: comp.yField || 'spend',
+          label: yCol?.label || comp.yField || '主要指标',
+          unit: yCol?.displayUnits || '',
+          axis: 'left',
+          kind: 'bar',
+          color: '#0F5E52',
+        },
+      ];
+      if (comp.y2Field) {
+        series.push({
+          key: comp.y2Field,
+          label: y2Col?.label || comp.y2Field || '对比指标',
+          unit: y2Col?.displayUnits || '',
+          axis: 'right',
+          kind: 'line',
+          color: '#D95D39',
+        });
+      }
 
       return (
         <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
-          <div className="ca-card-header" style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontWeight: 600, fontSize: 14 }}>{comp.title || comp.id}</span>
-            <div style={{ fontSize: 12, display: 'flex', gap: 12 }}>
-              <span style={{ color: '#2563eb' }}>■ {yCol?.label || comp.yField}</span>
-              {y2Col && <span style={{ color: '#d97706' }}>● {y2Col.label || comp.y2Field}</span>}
-            </div>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
           </div>
-          <div style={{ height: 220, position: 'relative', display: 'flex', alignItems: 'flex-end', gap: 4, paddingBottom: 24 }}>
-            {rows.slice(-20).map((r, i) => {
-              const yVal = Number(r[comp.yField || '']) || 0;
-              const y2Val = comp.y2Field ? Number(r[comp.y2Field || '']) || 0 : 0;
-              const heightPct = Math.min((yVal / maxY) * 100, 100);
-              const dotBottomPct = Math.min((y2Val / maxY2) * 100, 100);
-              const dateLabel = String(r[comp.xField || ''] || '').slice(-5);
+          <CampaignComboChart
+            rows={rows}
+            series={series}
+            xKey={comp.xField || 'date'}
+            title={comp.title || comp.id}
+            height={260}
+          />
+        </div>
+      );
+    }
 
-              return (
-                <div
-                  key={i}
-                  style={{
-                    flex: 1,
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    position: 'relative',
-                  }}
-                  title={`${r[comp.xField || '']}: ${yCol?.label || comp.yField}=${yVal}, ${y2Col?.label || comp.y2Field}=${y2Val}`}
-                  onClick={() => {
-                    if (comp.detailFields) {
-                      setDrilldownModal({
-                        title: `${comp.title} - ${r[comp.xField || '']}`,
-                        dataset,
-                        rows: [r],
-                        columns: dataset.columns.filter(c => comp.detailFields!.includes(c.key)),
-                      });
-                    }
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '70%',
-                      height: `${heightPct}%`,
-                      background: 'rgba(37, 99, 235, 0.7)',
-                      borderRadius: '2px 2px 0 0',
-                    }}
-                  />
-                  {comp.y2Field && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        bottom: `${dotBottomPct}%`,
-                        width: 6,
-                        height: 6,
-                        borderRadius: '50%',
-                        background: '#d97706',
-                      }}
-                    />
-                  )}
-                  <span style={{ position: 'absolute', bottom: -20, fontSize: 10, color: '#94a3b8' }}>
-                    {dateLabel}
-                  </span>
+    // 4. target-bullet (Target Bullet Chart)
+    if (comp.type === 'target-bullet') {
+      const bulletData: ComparisonDatum[] = dataset.rows.map(r => ({
+        label: String(r[comp.categoryField || 'label'] || r.label || r.name || ''),
+        actual: Number(r[comp.field || 'actual'] ?? r.value ?? 0),
+        target: Number(r[comp.targetField || 'target'] ?? 0),
+        unit: (comp as any).unit || '元',
+      }));
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <TargetBulletChart data={bulletData} />
+        </div>
+      );
+    }
+
+    // 5. donut-rose (Nightingale Rose Chart)
+    if (comp.type === 'donut-rose') {
+      const roseData: NightingaleRoseDatum[] = dataset.rows.map((r, i) => ({
+        name: String(r[comp.categoryField || 'label'] || r.name || r.channel || `类别${i + 1}`),
+        value: Math.max(0, Number(r[comp.field || 'value'] || 0)),
+        cpm: r.cpm !== undefined ? Number(r.cpm) : undefined,
+        cpuv: r.cpuv !== undefined ? Number(r.cpuv) : undefined,
+      }));
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <NightingaleRoseChart data={roseData} height={250} />
+        </div>
+      );
+    }
+
+    // 6. capability-radar (Multi-dimensional Radar Chart)
+    if (comp.type === 'capability-radar') {
+      const numCols = dataset.columns.filter(c => c.type === 'number').slice(0, 6);
+      const dims: RadarDimension[] = numCols.map(c => {
+        const maxVal = Math.max(...dataset.rows.map(r => Number(r[c.key]) || 0), 100);
+        return { name: c.label, max: maxVal > 0 ? maxVal : 100 };
+      });
+      const colors = ['#0F5E52', '#D95D39', '#2E6F8E'];
+      const radarSeries: RadarSeries[] = dataset.rows.slice(0, 3).map((r, i) => ({
+        name: String(r[comp.categoryField || 'name'] || r.label || `系列${i + 1}`),
+        values: numCols.map(c => Number(r[c.key]) || 0),
+        color: colors[i % colors.length],
+      }));
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <CapabilityRadarChart dimensions={dims} series={radarSeries} height={250} />
+        </div>
+      );
+    }
+
+    // 7. multi-line-deck (Multi-channel / Business lines deck)
+    if (comp.type === 'multi-line-deck') {
+      const deckItems = dataset.rows.map(r => ({
+        title: String(r[comp.categoryField || 'name'] || r.channel || r.line || '业务线'),
+        metrics: dataset.columns.filter(c => c.key !== 'name' && c.key !== 'id').slice(0, 4).map(c => ({
+          label: c.label,
+          value: formatDatasetValue(r[c.key], c),
+        })),
+      }));
+
+      return (
+        <div className="ca-card ca-deck-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <MultiDimensionComparisonDeck items={deckItems} />
+        </div>
+      );
+    }
+
+    // 8. percent-stack (100% Stacked Bar Chart)
+    if (comp.type === 'percent-stack') {
+      const numCols = dataset.columns.filter(c => c.type === 'number');
+      const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266'];
+      const segments: StackedBarSegment[] = numCols.map((c, i) => ({
+        key: c.key,
+        label: c.label,
+        color: pal[i % pal.length],
+      }));
+      const stackRows: StackedBarRow[] = dataset.rows.map(r => ({
+        label: String(r[comp.xField || 'name'] || r.label || ''),
+        segments: Object.fromEntries(numCols.map(c => [c.key, Number(r[c.key]) || 0])),
+      }));
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <StackedHorizontalBarChart rows={stackRows} segments={segments} normalize100={true} />
+        </div>
+      );
+    }
+
+    // 9. effect-scatter (Scatter quadrant chart)
+    if (comp.type === 'effect-scatter') {
+      const xCol = dataset.columns.find(c => c.key === comp.xField);
+      const yCol = dataset.columns.find(c => c.key === comp.yField);
+      const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20'];
+      const points = dataset.rows.map((r, i) => ({
+        x: Number(r[comp.xField || 'x'] || 0),
+        y: Number(r[comp.yField || 'y'] || 0),
+        size: Math.max(4, Math.min(20, Math.sqrt(Number(r.spend || r.size || 100)))),
+        color: pal[i % pal.length],
+        label: String(r[comp.categoryField || 'label'] || r.name || `实体${i + 1}`),
+        id: String(r.id || i),
+      }));
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <EffectScatterChart
+            points={points}
+            xLabel={xCol?.label || '成本投入'}
+            yLabel={yCol?.label || '转化效率'}
+            height={280}
+          />
+        </div>
+      );
+    }
+
+    // 10. distribution-histogram
+    if (comp.type === 'distribution-histogram') {
+      const bins = dataset.rows.map(r => ({
+        label: String(r.bucket || r.label || r[comp.categoryField || 'name'] || ''),
+        count: Number(r.count || r.value || r[comp.field || 'count'] || 0),
+      }));
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <DistributionHistogram bins={bins} height={240} />
+        </div>
+      );
+    }
+
+    // 11. grouped-boxplot
+    if (comp.type === 'grouped-boxplot') {
+      const pal = ['#0F5E52', '#D95D39', '#2E6F8E'];
+      const groups = dataset.rows.map((r, i) => {
+        const rawVals = r.values;
+        const vals = Array.isArray(rawVals)
+          ? (rawVals as number[])
+          : [Number(r.min || 0), Number(r.q1 || 0), Number(r.median || 0), Number(r.q3 || 0), Number(r.max || 0)];
+        return {
+          label: String(r.group || r.label || r.name || `组${i + 1}`),
+          values: vals,
+          color: pal[i % pal.length],
+        };
+      });
+
+      return (
+        <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
+          <div className="ca-card-header" style={{ marginBottom: 12 }}>
+            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+          </div>
+          <BoxPlotChart groups={groups} height={250} />
+        </div>
+      );
+    }
+
+    // 12. comment-qc-panel
+    if (comp.type === 'comment-qc-panel') {
+      const rows = dataset.rows || [];
+      return (
+        <div className="ca-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
+          <div className="ca-card-header" style={{ fontWeight: 600, fontSize: 15, marginBottom: 12 }}>
+            {comp.title || '舆情与评论质检面板'}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+            {rows.slice(0, 4).map((r, i) => (
+              <div key={i} style={{ background: '#f8fafc', padding: 12, borderRadius: 6, border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: 12, color: '#64748b' }}>{String(r.label || r.keyword || `规则${i + 1}`)}</div>
+                <div style={{ fontSize: 18, fontWeight: 700, marginTop: 4, color: '#0f172a' }}>
+                  {String(r.value || r.count || '-')}
                 </div>
-              );
-            })}
+                {Boolean(r.status) && (
+                  <span className="semantic-tag tag-ok" style={{ marginTop: 6, display: 'inline-block', fontSize: 11 }}>
+                    {String(r.status)}
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       );
     }
 
-    // Generic fallback for other components
+    // Clean Data Preview Fallback for any unmapped component (never prints text placeholder)
+    const displayCols = dataset.columns.slice(0, 5);
+    const previewRows = dataset.rows.slice(0, 6);
     return (
-      <div className="ca-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
-        <div className="ca-card-header" style={{ fontWeight: 600, fontSize: 14, marginBottom: 8 }}>
-          {comp.title || comp.id}
+      <div className="ca-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
+        <div className="ca-card-header" style={{ fontWeight: 600, fontSize: 15, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <span>{comp.title || dataset.name || comp.id}</span>
+          <span style={{ fontSize: 12, color: '#64748b' }}>共 {dataset.rows.length} 条记录</span>
         </div>
-        <div style={{ fontSize: 13, color: '#64748b' }}>
-          组件类型: <code>{comp.type}</code> | 数据集: <code>{comp.query}</code> ({dataset.rows.length} 条记录)
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+            <thead style={{ background: '#f8fafc' }}>
+              <tr>
+                {displayCols.map(c => (
+                  <th key={c.key} style={{ padding: '6px 10px', textAlign: 'left', borderBottom: '1px solid #e2e8f0' }}>{c.label}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {previewRows.map((r, ri) => (
+                <tr key={ri} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                  {displayCols.map(c => (
+                    <td key={c.key} style={{ padding: '6px 10px' }}>{formatDatasetValue(r[c.key], c)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     );
@@ -367,7 +583,7 @@ export function UniversalBoardRenderer({ payload, className = '' }: UniversalBoa
       )}
 
       {/* Sections */}
-      {sections.map(sec => renderSection(sec))}
+      {displayedSections.map(sec => renderSection(sec))}
 
       {/* Analysis Cards */}
       {analysisCards.length > 0 && (

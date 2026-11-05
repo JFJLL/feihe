@@ -28,6 +28,40 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   const serverDaily = getCampaignDailyDatasetsByProject('winner-wipes') || [];
   merged.dailyDatasets = mergeById(serverDaily, merged.dailyDatasets || []);
 
+  // Parse fresh raw sources if provided
+  const rawObj = (rawSources && typeof rawSources === 'object') ? (rawSources as Record<string, unknown>) : null;
+  const rawDelivery = rawObj?.['wipes-delivery'] || rawObj?.['0QTVhE'];
+  const rawTaosou = rawObj?.['wipes-taosou'] || rawObj?.['wY1HZO'];
+
+  if (rawDelivery) {
+    const { parseWipesDelivery, parseWipesTaosou } = await import('../../lib/campaign-sync-parser.mjs');
+    const parsedDelivery = parseWipesDelivery(rawDelivery);
+    const parsedTaosou = rawTaosou ? parseWipesTaosou(rawTaosou) : null;
+
+    const dDel = merged.dailyDatasets?.find(d => d.id === 'wipes-daily-delivery');
+    if (dDel && parsedDelivery?.rows?.length) {
+      dDel.rows = parsedDelivery.rows;
+      dDel.period = parsedDelivery.period;
+    }
+    const dTao = merged.dailyDatasets?.find(d => d.id === 'wipes-daily-taosou');
+    if (dTao && parsedTaosou?.rows?.length) {
+      dTao.rows = parsedTaosou.rows;
+      dTao.period = parsedTaosou.period;
+    }
+    const deliveryKpis = (parsedDelivery as any)?.kpis;
+    if (Array.isArray(deliveryKpis) && deliveryKpis.length && merged.kpis) {
+      for (const k of deliveryKpis) {
+        const exist = merged.kpis.find(x => x.id === k.id);
+        if (exist) {
+          exist.value = k.value;
+          exist.target = k.target;
+        } else {
+          merged.kpis.push(k);
+        }
+      }
+    }
+  }
+
   const sections: SectionSpec[] = [
     {
       id: 'summary-kpis',

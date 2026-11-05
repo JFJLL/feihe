@@ -8,6 +8,7 @@ Usage:
   python scripts/remote-deploy.py
 """
 
+import os
 import sys
 import paramiko
 
@@ -15,10 +16,13 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 SERVER_HOST = '172.16.10.45'
 SERVER_USER = 'user'
-SERVER_PASS = '111111'
+SERVER_PASS = os.environ.get('FEIHE_DEPLOY_PASS', '')
 REMOTE_REPO = '/home/user/models/feihe'
 
 def main():
+    if not SERVER_PASS:
+        print("Error: Environment variable FEIHE_DEPLOY_PASS is not set.", file=sys.stderr)
+        sys.exit(1)
     print(f"Connecting to {SERVER_USER}@{SERVER_HOST}...")
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())

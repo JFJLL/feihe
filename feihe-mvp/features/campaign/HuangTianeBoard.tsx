@@ -792,7 +792,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     ];
 
     return (
-      <div className="ht-board" data-testid="huang-tiane-overview">
+      <div
+        className="ht-board"
+        data-testid="huang-tiane-overview"
+        data-project-id="huang-tiane"
+        data-source-file="projects/huang-tiane/transform.ts"
+        data-section-id="huang-tiane-overview"
+      >
         {/* 吸顶章节导航与周期控制台 (一体化指挥舱) */}
         <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="黄天鹅全域章节导航与周期控制台">
           <div className="ht-command-bar-left">
@@ -1846,7 +1852,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
     ];
 
     return (
-      <div className="ht-board" data-testid="huang-tiane-ads">
+      <div
+        className="ht-board"
+        data-testid="huang-tiane-ads"
+        data-project-id="huang-tiane"
+        data-source-file="projects/huang-tiane/transform.ts"
+        data-section-id="huang-tiane-ads"
+      >
         <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="投放渠道控制台">
           <div className="ht-command-bar-left">
             <div className="ht-command-bar-brand">
@@ -2312,7 +2324,13 @@ export function HuangTianeBoard({ dashboard, section = 'overview' }: HuangTianeB
   const maxTierFee = Math.max(...model.creatorTierBreakdown.map((t) => t.totalFee || 0), 1);
 
   return (
-    <div className="ht-board" data-testid="huang-tiane-content">
+    <div
+      className="ht-board"
+      data-testid="huang-tiane-content"
+      data-project-id="huang-tiane"
+      data-source-file="projects/huang-tiane/transform.ts"
+      data-section-id="huang-tiane-content"
+    >
       <div className="ht-header ht-section-jumpbar ht-command-bar" role="navigation" aria-label="内容执行控制台">
         <div className="ht-command-bar-left">
           <div className="ht-command-bar-brand">

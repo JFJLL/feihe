@@ -9,8 +9,8 @@ import { CampaignOverviewPage } from './CampaignOverviewPage';
 import { CampaignDailyPage } from './CampaignDailyPage';
 import { CampaignAdsPage } from './CampaignAdsPage';
 import { CampaignContentPage } from './CampaignContentPage';
+import { HuangTianeBoard } from './HuangTianeBoard';
 import { UniversalBoardRenderer } from './UniversalBoardRenderer';
-import { getProjectManifest } from '../../lib/core/registry';
 import { useProjectTab } from '../../lib/hooks/useProjectTab';
 import { LoadingState } from '../../components/ui/LoadingState';
 import { ErrorState } from '../../components/ui/ErrorState';
@@ -216,7 +216,6 @@ export function CampaignWorkspace({
 
   const activeDashboard = dashboard && dashboard.projectId === projectId ? dashboard : null;
   const activePayload = activeDashboard as unknown as BoardPayload;
-  const manifest = getProjectManifest(projectId);
 
   const refreshAction = (
     <button
@@ -292,11 +291,11 @@ export function CampaignWorkspace({
     );
   }
 
-  const projDisplayName = manifest?.name || activeDashboard.name || project?.name || '营销战役';
-  const spu = manifest?.spu || '核心主推品';
-  const category = manifest?.category || '消费品与品牌营销';
-  const mode = manifest?.mode || '全域数据贯通 · 真实入账';
-  const period = activeDashboard.reportPeriod || manifest?.defaultReportPeriod || '观测周期中';
+  const projDisplayName = activePayload?.name || activeDashboard.name || project?.name || '营销战役';
+  const spu = activePayload?.spu || (activeDashboard as any).spu || '核心主推品';
+  const category = activePayload?.category || (activeDashboard as any).category || '消费品与品牌营销';
+  const mode = activePayload?.mode || (activeDashboard as any).mode || '全域数据贯通 · 真实入账';
+  const period = activePayload?.reportPeriod || activeDashboard.reportPeriod || '观测周期中';
 
   return (
     <DashboardFrame
@@ -345,68 +344,100 @@ export function CampaignWorkspace({
           </div>
         </div>
 
-        {/* 分日看板共享面板 */}
-        {currentSection === 'overview' && overviewTab === 'daily' && (
-          <div
-            id="workspace-tabpanel-daily"
-            role="tabpanel"
-            aria-labelledby="workspace-tab-daily"
-            tabIndex={0}
-            data-project-id={projectId}
-            data-source-file={`projects/${projectId}/transform.ts`}
-            data-section-id="daily-tabpanel"
-          >
-            <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
-          </div>
+        {/* 黄天鹅专属看板：分发 overview / ads / content 到 HuangTianeBoard，daily 保持共享分日看板 */}
+        {projectId === 'huang-tiane' && (
+          currentSection === 'overview' && overviewTab === 'daily' ? (
+            <div
+              id="workspace-tabpanel-daily"
+              role="tabpanel"
+              aria-labelledby="workspace-tab-daily"
+              tabIndex={0}
+              data-project-id={projectId}
+              data-source-file={`projects/${projectId}/transform.ts`}
+              data-section-id="daily-tabpanel"
+            >
+              <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
+            </div>
+          ) : (
+            <div
+              data-project-id={projectId}
+              data-source-file={`projects/${projectId}/transform.ts`}
+              data-section-id={`huang-tiane-${currentSection}`}
+            >
+              <HuangTianeBoard
+                key={projectId}
+                dashboard={activeDashboard}
+                section={currentSection}
+              />
+            </div>
+          )
         )}
 
-        {/* 数据总览看板：优先渲染带 DOM Provenance 溯源属性的 UniversalBoardRenderer */}
-        {currentSection === 'overview' && overviewTab === 'overview' && (
-          <div
-            id="workspace-tabpanel-overview"
-            role="tabpanel"
-            aria-labelledby="workspace-tab-overview"
-            tabIndex={0}
-            data-project-id={projectId}
-            data-source-file={`projects/${projectId}/transform.ts`}
-            data-section-id="overview-tabpanel"
-          >
-            {activePayload?.sections && activePayload?.datasets ? (
-              <UniversalBoardRenderer payload={activePayload} />
-            ) : (
-              <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
-            )}
-          </div>
-        )}
-
-        {/* 版位投放看板 */}
-        {currentSection === 'ads' && (
+        {/* 其它已有的 4 个营销项目标准分发与通用看板 */}
+        {projectId !== 'huang-tiane' && currentSection === 'ads' && (
           <div
             data-project-id={projectId}
             data-source-file={`projects/${projectId}/transform.ts`}
             data-section-id="ads-section"
           >
-            {activePayload?.sections && activePayload?.datasets ? (
-              <UniversalBoardRenderer payload={activePayload} />
+            {['kailas', 'meiling', 'winner-wipes'].includes(projectId) ? (
+              <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
+            ) : activePayload?.sections && activePayload?.datasets ? (
+              <UniversalBoardRenderer payload={activePayload} sectionId="ads" />
             ) : (
               <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
             )}
           </div>
         )}
 
-        {/* 内容执行看板 */}
-        {currentSection === 'content' && (
+        {projectId !== 'huang-tiane' && currentSection === 'content' && (
           <div
             data-project-id={projectId}
             data-source-file={`projects/${projectId}/transform.ts`}
             data-section-id="content-section"
           >
-            {activePayload?.sections && activePayload?.datasets ? (
-              <UniversalBoardRenderer payload={activePayload} />
+            {['kailas', 'meiling', 'winner-wipes'].includes(projectId) ? (
+              <CampaignContentPage key={projectId} dashboard={activeDashboard} />
+            ) : activePayload?.sections && activePayload?.datasets ? (
+              <UniversalBoardRenderer payload={activePayload} sectionId="content" />
             ) : (
               <CampaignContentPage key={projectId} dashboard={activeDashboard} />
             )}
           </div>
+        )}
+
+        {projectId !== 'huang-tiane' && currentSection === 'overview' && (
+          overviewTab === 'daily' ? (
+            <div
+              id="workspace-tabpanel-daily"
+              role="tabpanel"
+              aria-labelledby="workspace-tab-daily"
+              tabIndex={0}
+              data-project-id={projectId}
+              data-source-file={`projects/${projectId}/transform.ts`}
+              data-section-id="daily-tabpanel"
+            >
+              <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
+            </div>
+          ) : (
+            <div
+              id="workspace-tabpanel-overview"
+              role="tabpanel"
+              aria-labelledby="workspace-tab-overview"
+              tabIndex={0}
+              data-project-id={projectId}
+              data-source-file={`projects/${projectId}/transform.ts`}
+              data-section-id="overview-tabpanel"
+            >
+              {['kailas', 'meiling', 'winner-wipes'].includes(projectId) ? (
+                <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
+              ) : activePayload?.sections && activePayload?.datasets ? (
+                <UniversalBoardRenderer payload={activePayload} sectionId="overview" />
+              ) : (
+                <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
+              )}
+            </div>
+          )
         )}
 
         {toastMessage && (

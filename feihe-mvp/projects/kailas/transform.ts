@@ -28,6 +28,15 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   const serverDaily = getCampaignDailyDatasetsByProject('kailas') || [];
   merged.dailyDatasets = mergeById(serverDaily, merged.dailyDatasets || []);
 
+  // Parse fresh raw sources if provided
+  const rawObj = (rawSources && typeof rawSources === 'object') ? (rawSources as Record<string, unknown>) : null;
+  const rawOnline = rawObj?.['kailas-online-budget'] || rawObj?.['kailas-sheets'] || rawObj?.['ZpT73Q'];
+  if (rawOnline) {
+    const { applyKailasSnapshot } = await import('../../lib/campaign-online-kailas');
+    const updated = applyKailasSnapshot(merged, rawOnline);
+    Object.assign(merged, updated);
+  }
+
   const sections: SectionSpec[] = [
     {
       id: 'summary-kpis',

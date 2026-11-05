@@ -28,6 +28,86 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   const serverDaily = getCampaignDailyDatasetsByProject('huang-tiane') || [];
   merged.dailyDatasets = mergeById(serverDaily, merged.dailyDatasets || []);
 
+  // Parse fresh raw sources if provided
+  const rawObj = (rawSources && typeof rawSources === 'object') ? (rawSources as Record<string, unknown>) : null;
+  const rawCommerce = rawObj?.['huang-commerce'] || rawObj?.['Dz6eHe'];
+  const rawCid = rawObj?.['huang-cid'] || rawObj?.['Nm3Sev'];
+  const rawBrand = rawObj?.['huang-brand'] || rawObj?.['huang-brand-part1'] || rawObj?.['637ef8'];
+
+  if (rawCommerce || rawCid || rawBrand) {
+    const {
+      parseHuangCommerce,
+      parseHuangCid,
+      parseHuangBrandRaw,
+      rebuildHuangSummaryTables,
+    } = await import('../../lib/campaign-sync-parser.mjs');
+
+    let commerceParsed: any = null;
+    if (rawCommerce) {
+      commerceParsed = parseHuangCommerce(rawCommerce);
+      const hc = merged.dailyDatasets?.find(d => d.id === 'huang-commerce-daily');
+      if (hc && commerceParsed?.rows?.length) {
+        hc.rows = commerceParsed.rows;
+        hc.period = commerceParsed.period;
+      }
+    }
+
+    let cidParsed: any = null;
+    if (rawCid) {
+      cidParsed = parseHuangCid(rawCid);
+      const hcs = merged.dailyDatasets?.find(d => d.id === 'huang-cid-standard-daily');
+      if (hcs && cidParsed?.standard?.rows?.length) {
+        hcs.rows = cidParsed.standard.rows;
+        hcs.period = cidParsed.standard.period;
+      }
+      const hcsimple = merged.dailyDatasets?.find(d => d.id === 'huang-cid-simple-daily');
+      if (hcsimple && cidParsed?.simple?.rows?.length) {
+        hcsimple.rows = cidParsed.simple.rows;
+        hcsimple.period = cidParsed.simple.period;
+      }
+      const hctotal = merged.dailyDatasets?.find(d => d.id === 'huang-cid-total-daily');
+      if (hctotal && cidParsed?.total?.rows?.length) {
+        hctotal.rows = cidParsed.total.rows;
+        hctotal.period = cidParsed.total.period;
+      }
+    }
+
+    let brandParsed: any = null;
+    if (rawBrand) {
+      const rawRows = Array.isArray(rawBrand)
+        ? rawBrand
+        : (rawBrand as any)?.sheets?.[0]?.data || [];
+      if (rawRows.length > 0) {
+        brandParsed = parseHuangBrandRaw(rawRows);
+        const hb = merged.dailyDatasets?.find(d => d.id === 'huang-brand-daily');
+        if (hb && brandParsed?.rows?.length) {
+          hb.rows = brandParsed.rows;
+          hb.period = brandParsed.period;
+        }
+      }
+    }
+
+    if (brandParsed?.rows?.length && commerceParsed?.rows?.length) {
+      const summaries = rebuildHuangSummaryTables(brandParsed.rows, commerceParsed.rows);
+      if (merged.tables) {
+        const tSummary = merged.tables.find(t => t.id === 'huang-brand-summary');
+        if (tSummary && summaries.brandSummary) {
+          tSummary.period = brandParsed.period;
+          tSummary.rows = [summaries.brandSummary];
+        }
+        const tBudget = merged.tables.find(t => t.id === 'huang-brand-budget');
+        if (tBudget && summaries.brandBudget) {
+          tBudget.rows = [summaries.brandBudget];
+        }
+        const tCommerce = merged.tables.find(t => t.id === 'huang-commerce-summary');
+        if (tCommerce && summaries.commerceSummary) {
+          tCommerce.period = commerceParsed.period;
+          tCommerce.rows = [summaries.commerceSummary];
+        }
+      }
+    }
+  }
+
   const sections: SectionSpec[] = [
     {
       id: 'summary-kpis',

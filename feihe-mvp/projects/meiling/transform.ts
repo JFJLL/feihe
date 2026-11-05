@@ -28,6 +28,38 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   const serverDaily = getCampaignDailyDatasetsByProject('meiling') || [];
   merged.dailyDatasets = mergeById(serverDaily, merged.dailyDatasets || []);
 
+  // Parse fresh raw sources if provided
+  const rawObj = (rawSources && typeof rawSources === 'object') ? (rawSources as Record<string, unknown>) : null;
+  const hasMeilingSheets = rawObj && (
+    rawObj['meiling-daily-tm-seed'] || rawObj['iautvs'] ||
+    rawObj['meiling-daily-jd-seed'] || rawObj['B5TBE7'] ||
+    rawObj['meiling-daily-xingban-seed'] || rawObj['7gf6nq'] ||
+    rawObj['meiling-daily-jd-toitou-seed'] || rawObj['TLLRoo'] ||
+    rawObj['meiling-daily-cid-jd'] || rawObj['Trvrou']
+  );
+
+  if (hasMeilingSheets) {
+    const { parseMeilingPivot } = await import('../../lib/campaign-sync-parser.mjs');
+    const sheetDefs = [
+      { id: 'meiling-daily-tm-seed', keys: ['meiling-daily-tm-seed', 'iautvs'], isCid: false },
+      { id: 'meiling-daily-jd-seed', keys: ['meiling-daily-jd-seed', 'B5TBE7'], isCid: false },
+      { id: 'meiling-daily-xingban-seed', keys: ['meiling-daily-xingban-seed', '7gf6nq'], isCid: false },
+      { id: 'meiling-daily-jd-toitou-seed', keys: ['meiling-daily-jd-toitou-seed', 'TLLRoo'], isCid: false },
+      { id: 'meiling-daily-cid-jd', keys: ['meiling-daily-cid-jd', 'Trvrou'], isCid: true },
+    ];
+    for (const def of sheetDefs) {
+      const raw = def.keys.map(k => rawObj[k]).find(Boolean);
+      if (raw) {
+        const parsed = parseMeilingPivot(raw, { isCid: def.isCid });
+        const target = merged.dailyDatasets?.find(d => d.id === def.id);
+        if (target && parsed?.rows?.length) {
+          target.rows = parsed.rows as any;
+          target.period = parsed.period;
+        }
+      }
+    }
+  }
+
   const sections: SectionSpec[] = [
     {
       id: 'summary-kpis',

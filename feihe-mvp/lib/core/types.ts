@@ -174,7 +174,9 @@ export interface ProjectSourceConfig {
   filePath?: string;
   spreadsheetToken?: string;
   sheetId?: string;
+  range?: string;
   appToken?: string;
+  baseToken?: string;
   tableId?: string;
   description?: string;
 }

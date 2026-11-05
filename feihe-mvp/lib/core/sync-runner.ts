@@ -44,6 +44,18 @@ export function fetchFeishuSource(config: ProjectSourceConfig): unknown {
       '--spreadsheet-token', config.spreadsheetToken,
       '--sheet-id', config.sheetId,
     ];
+    if (config.range) {
+      args.push('--range', config.range);
+    }
+    args.push('--no-header');
+  } else if (config.type === 'feishu_bitable' && (config.baseToken || config.appToken) && config.tableId) {
+    args = [
+      'base', '+record-list',
+      '--base-token', (config.baseToken || config.appToken)!,
+      '--table-id', config.tableId,
+      '--as', 'user',
+      '--format', 'json',
+    ];
   } else if (config.type === 'feishu_bitable' && config.appToken && config.tableId) {
     args = [
       'bitable', '+record-list',

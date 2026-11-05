@@ -234,7 +234,12 @@ export function CampaignAdsPage({ dashboard }: CampaignAdsPageProps) {
   const halfBullet = Math.ceil(targetBulletData.length / 2);
 
   return (
-    <div className="ca-page">
+    <div
+      className="ca-page"
+      data-project-id={projectId}
+      data-source-file={`projects/${projectId}/transform.ts`}
+      data-section-id="campaign-ads-page"
+    >
       <header className="ca-header bd-toolbar-compact">
         <div className="ca-header-heading">
           <div className="ca-header-title-row">

@@ -9,6 +9,7 @@ export const sources: ProjectSources = {
       type: 'feishu_sheet',
       spreadsheetToken: 'Ero1shDTFhVzwttqDMLceZQ4nMb',
       sheetId: '0QTVhE',
+      range: 'A1:U200',
       url: 'https://yimeichuanbo.feishu.cn/wiki/Jo2cwK3c9ishJdkq40ycfNSMnTh?sheet=0QTVhE',
       description: '稳健玉米消毒湿巾全渠道投放日跟踪表（0QTVhE）',
     },
@@ -17,7 +18,8 @@ export const sources: ProjectSources = {
       name: '稳健湿巾淘搜数据',
       type: 'feishu_sheet',
       spreadsheetToken: 'Ero1shDTFhVzwttqDMLceZQ4nMb',
-      sheetId: 'gO3iBw',
+      sheetId: 'wY1HZO',
+      range: 'A1:W120',
       description: '稳健湿巾淘搜指数与站外回流追踪',
     },
     {
