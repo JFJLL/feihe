@@ -64,11 +64,41 @@ function seedFromMiniflare(file: string): void {
   } catch { /* fall through to fresh database */ }
 }
 
+export function resolveDatabasePath(): string {
+  if (process.env.LOCAL_DB_PATH) {
+    return process.env.LOCAL_DB_PATH;
+  }
+  const nb = nodeBuiltins;
+  if (!nb) throw new Error('D1 数据库未绑定');
+  const { fs, path } = nb;
+  const cwd = process.cwd();
+  const releaseMatch = cwd.match(/^(.*?)(?:[/\\]\.releases[/\\][^/\\]+)[/\\]feihe-mvp$/);
+  if (releaseMatch) {
+    const canonicalBase = releaseMatch[1];
+    const canonicalDb = path.join(canonicalBase, 'feihe-mvp', 'data', 'local.db');
+    if (fs.existsSync(canonicalDb) && fs.statSync(canonicalDb).size > 10000) {
+      return canonicalDb;
+    }
+  }
+  const candidates = [
+    '/home/user/models/feihe/feihe-mvp/data/local.db',
+    path.resolve(cwd, 'data', 'local.db'),
+    path.resolve(cwd, '..', 'data', 'local.db'),
+    path.resolve(cwd, '..', 'feihe-mvp', 'data', 'local.db'),
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate) && fs.statSync(candidate).size > 10000) {
+      return candidate;
+    }
+  }
+  return path.join(cwd, 'data', 'local.db');
+}
+
 function nodeDb(): MiniDb {
   if (sqliteDb) return sqliteDb;
   const nb = nodeBuiltins;
   if (!nb) throw new Error('D1 数据库未绑定');
-  const file = process.env.LOCAL_DB_PATH || nb.path.join(process.cwd(), 'data', 'local.db');
+  const file = resolveDatabasePath();
   seedFromMiniflare(file);
   nb.fs.mkdirSync(nb.path.dirname(file), { recursive: true });
   const native = new nb.sqlite.DatabaseSync(file);
