@@ -2,12 +2,15 @@
  * Huang Tiane (黄天鹅) Board Transformation Module
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
 import type { BoardPayload, SectionSpec, AnalysisCardSpec } from '../../lib/core/types';
 import { manifest } from './manifest';
 import { db, ensureSchema } from '../../lib/db';
-import { getCampaignEnrichment, mergeCampaignEnrichment, mergeById } from '../../lib/campaign-enrichment-server';
+import { getCampaignEnrichment, mergeById } from '../../lib/campaign-enrichment-server';
 import { getCampaignDailyDatasetsByProject } from '../../lib/campaign-daily-server';
 import { buildBoardPayloadFromCampaignDashboard } from '../../lib/core/transform-kit';
+import { getProjectsDir } from '../../lib/core/registry';
 
 export async function transformProject(rawSources?: unknown): Promise<BoardPayload> {
   await ensureSchema();
@@ -23,13 +26,35 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     base = huangMod.default || huangMod;
   }
 
+  // 1. If rawSources is not provided, check if .cache/raw-sources.json exists
+  let effectiveSources = rawSources;
+  if (!effectiveSources) {
+    const cachePath = path.join(getProjectsDir(), 'huang-tiane', '.cache', 'raw-sources.json');
+    if (fs.existsSync(cachePath)) {
+      try {
+        effectiveSources = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+      } catch {
+        // Ignore
+      }
+    }
+  }
+
   const enrichment = getCampaignEnrichment('huang-tiane');
-  const merged = mergeCampaignEnrichment(base, enrichment);
   const serverDaily = getCampaignDailyDatasetsByProject('huang-tiane') || [];
-  merged.dailyDatasets = mergeById(serverDaily, merged.dailyDatasets || []);
+
+  // 2. Protect DB latest snapshot: enrichment and serverDaily serve as fallback base,
+  // while the latest DB base snapshot overrides matching items by ID.
+  const merged: any = {
+    ...enrichment,
+    ...base,
+    sources: mergeById(enrichment?.sources || [], base.sources || []),
+    tables: mergeById(enrichment?.tables || [], base.tables || []),
+    kpis: mergeById((enrichment as any)?.kpis || [], base.kpis || []),
+    dailyDatasets: mergeById(serverDaily, base.dailyDatasets || []),
+  };
 
   // Parse fresh raw sources if provided
-  const rawObj = (rawSources && typeof rawSources === 'object') ? (rawSources as Record<string, unknown>) : null;
+  const rawObj = (effectiveSources && typeof effectiveSources === 'object') ? (effectiveSources as Record<string, unknown>) : null;
   const rawCommerce = rawObj?.['huang-commerce'] || rawObj?.['Dz6eHe'];
   const rawCid = rawObj?.['huang-cid'] || rawObj?.['Nm3Sev'];
   const rawBrand = rawObj?.['huang-brand'] || rawObj?.['huang-brand-part1'] || rawObj?.['637ef8'];
@@ -45,7 +70,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     let commerceParsed: any = null;
     if (rawCommerce) {
       commerceParsed = parseHuangCommerce(rawCommerce);
-      const hc = merged.dailyDatasets?.find(d => d.id === 'huang-commerce-daily');
+      const hc = merged.dailyDatasets?.find((d: any) => d.id === 'huang-commerce-daily');
       if (hc && commerceParsed?.rows?.length) {
         hc.rows = commerceParsed.rows;
         hc.period = commerceParsed.period;
@@ -55,17 +80,17 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     let cidParsed: any = null;
     if (rawCid) {
       cidParsed = parseHuangCid(rawCid);
-      const hcs = merged.dailyDatasets?.find(d => d.id === 'huang-cid-standard-daily');
+      const hcs = merged.dailyDatasets?.find((d: any) => d.id === 'huang-cid-standard-daily');
       if (hcs && cidParsed?.standard?.rows?.length) {
         hcs.rows = cidParsed.standard.rows;
         hcs.period = cidParsed.standard.period;
       }
-      const hcsimple = merged.dailyDatasets?.find(d => d.id === 'huang-cid-simple-daily');
+      const hcsimple = merged.dailyDatasets?.find((d: any) => d.id === 'huang-cid-simple-daily');
       if (hcsimple && cidParsed?.simple?.rows?.length) {
         hcsimple.rows = cidParsed.simple.rows;
         hcsimple.period = cidParsed.simple.period;
       }
-      const hctotal = merged.dailyDatasets?.find(d => d.id === 'huang-cid-total-daily');
+      const hctotal = merged.dailyDatasets?.find((d: any) => d.id === 'huang-cid-total-daily');
       if (hctotal && cidParsed?.total?.rows?.length) {
         hctotal.rows = cidParsed.total.rows;
         hctotal.period = cidParsed.total.period;
@@ -79,7 +104,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
         : (rawBrand as any)?.sheets?.[0]?.data || [];
       if (rawRows.length > 0) {
         brandParsed = parseHuangBrandRaw(rawRows);
-        const hb = merged.dailyDatasets?.find(d => d.id === 'huang-brand-daily');
+        const hb = merged.dailyDatasets?.find((d: any) => d.id === 'huang-brand-daily');
         if (hb && brandParsed?.rows?.length) {
           hb.rows = brandParsed.rows;
           hb.period = brandParsed.period;
@@ -90,16 +115,16 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     if (brandParsed?.rows?.length && commerceParsed?.rows?.length) {
       const summaries = rebuildHuangSummaryTables(brandParsed.rows, commerceParsed.rows);
       if (merged.tables) {
-        const tSummary = merged.tables.find(t => t.id === 'huang-brand-summary');
+        const tSummary = merged.tables.find((t: any) => t.id === 'huang-brand-summary');
         if (tSummary && summaries.brandSummary) {
           tSummary.period = brandParsed.period;
           tSummary.rows = [summaries.brandSummary];
         }
-        const tBudget = merged.tables.find(t => t.id === 'huang-brand-budget');
+        const tBudget = merged.tables.find((t: any) => t.id === 'huang-brand-budget');
         if (tBudget && summaries.brandBudget) {
           tBudget.rows = [summaries.brandBudget];
         }
-        const tCommerce = merged.tables.find(t => t.id === 'huang-commerce-summary');
+        const tCommerce = merged.tables.find((t: any) => t.id === 'huang-commerce-summary');
         if (tCommerce && summaries.commerceSummary) {
           tCommerce.period = commerceParsed.period;
           tCommerce.rows = [summaries.commerceSummary];

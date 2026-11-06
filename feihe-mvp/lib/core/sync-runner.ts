@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { db, ensureSchema } from '../db';
-import { getProjectsDir, discoverProjectIds, loadProjectSources, buildProjectBoard } from './registry';
+import { getProjectsDir, discoverProjectIds, loadProjectSources, buildProjectBoard, getProjectManifest } from './registry';
 import { validateBoardHealth, formatHealthReport } from './board-health';
 import type { BoardPayload, ProjectSourceConfig } from './types';
 
@@ -118,7 +118,7 @@ export async function runProjectSync(projectId: string, options: { force?: boole
     const rawSourcesCachePath = path.join(cacheDir, 'raw-sources.json');
     let rawSources: Record<string, unknown> = {};
 
-    if (fs.existsSync(rawSourcesCachePath) && !options.force) {
+    if (fs.existsSync(rawSourcesCachePath)) {
       try {
         rawSources = JSON.parse(fs.readFileSync(rawSourcesCachePath, 'utf8'));
       } catch {
@@ -126,23 +126,38 @@ export async function runProjectSync(projectId: string, options: { force?: boole
       }
     }
 
-    // If force or cache empty, fetch external sources
+    const hasCachedSources = Object.keys(rawSources).length > 0;
+    const shouldFetchRemote = Boolean(options.force) || !hasCachedSources;
+
+    // Only fetch remote when force is true or cache is empty
     if (sourcesConfig?.sources) {
+      let fetchedAny = false;
       for (const src of sourcesConfig.sources) {
         if (src.type === 'feishu_sheet' || src.type === 'feishu_bitable') {
-          const fetched = fetchFeishuSource(src);
-          if (fetched) {
-            rawSources[src.id] = fetched;
+          if (shouldFetchRemote) {
+            const fetched = fetchFeishuSource(src);
+            if (fetched) {
+              rawSources[src.id] = fetched;
+              fetchedAny = true;
+            }
           }
-        } else if (src.filePath && fs.existsSync(src.filePath)) {
-          try {
-            rawSources[src.id] = JSON.parse(fs.readFileSync(src.filePath, 'utf8'));
-          } catch {
-            // Ignore
+        } else if (src.filePath) {
+          const resolvedPath = path.isAbsolute(src.filePath)
+            ? src.filePath
+            : path.resolve(process.cwd(), src.filePath);
+          if (fs.existsSync(resolvedPath)) {
+            try {
+              rawSources[src.id] = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+              fetchedAny = true;
+            } catch {
+              // Ignore
+            }
           }
         }
       }
-      fs.writeFileSync(rawSourcesCachePath, JSON.stringify(rawSources, null, 2), 'utf8');
+      if (shouldFetchRemote || fetchedAny) {
+        fs.writeFileSync(rawSourcesCachePath, JSON.stringify(rawSources, null, 2), 'utf8');
+      }
     }
 
     // 2. Build BoardPayload via transformProject
@@ -191,9 +206,76 @@ export async function runProjectSync(projectId: string, options: { force?: boole
       .bind(id, projectId, 'campaign_dashboard', serialized, timestamp)
       .run();
 
+    // 5. Automatically register project in projects table with manifest metadata
+    const manifest = getProjectManifest(projectId);
+    const projName = manifest?.name || payload.name || projectId;
+    const projSpu = manifest?.spu || payload.spu || '';
+    const projBrand = manifest?.brand || payload.brand || '';
+    const projCategory = manifest?.category || payload.category || '';
+    const projDesc = manifest?.description || `战役复盘与数据分析项目 (${projectId})`;
+    const projColor = manifest?.color || '#1769d5';
+    const projTemplateId = manifest?.templateId || 'campaign_review';
+
     await d1
-      .prepare(`UPDATE projects SET updated_at=? WHERE id=?`)
-      .bind(timestamp, projectId)
+      .prepare(
+        `INSERT INTO projects (
+          id, name, spu, brand, category, description, status, color,
+          org_id, department_id, owner_id, owner_name, template_id,
+          is_archived, onboarding_status, created_by, created_at, updated_at
+        ) VALUES (
+          ?, ?, ?, ?, ?, ?, '进行中', ?,
+          'org-default', 'dept-general', 'user-admin', '系统管理员', ?,
+          0, 'ready', 'user-admin', ?, ?
+        )
+        ON CONFLICT(id) DO UPDATE SET
+          name=excluded.name,
+          spu=excluded.spu,
+          brand=excluded.brand,
+          category=excluded.category,
+          color=excluded.color,
+          updated_at=excluded.updated_at`
+      )
+      .bind(
+        projectId,
+        projName,
+        projSpu,
+        projBrand,
+        projCategory,
+        projDesc,
+        projColor,
+        projTemplateId,
+        timestamp,
+        timestamp
+      )
+      .run();
+
+    // 6. Automatically ensure default internal accounts have memberships
+    const defaultMembers: Array<{ userId: string; role: string }> = [
+      { userId: 'user-admin', role: 'project_admin' },
+      { userId: 'user-project-manager', role: 'project_admin' },
+      { userId: 'user-editor', role: 'editor' },
+      { userId: 'user-viewer', role: 'viewer' },
+    ];
+
+    for (const mem of defaultMembers) {
+      const memberId = `${projectId}:${mem.userId}`;
+      await d1
+        .prepare(
+          `INSERT OR IGNORE INTO project_members (id, project_id, user_id, role, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?)`
+        )
+        .bind(memberId, projectId, mem.userId, mem.role, timestamp, timestamp)
+        .run();
+    }
+
+    // 7. Ensure onboarding status is marked ready
+    await d1
+      .prepare(
+        `INSERT INTO project_onboarding (project_id, current_step, completed_steps_json, selected_template_id, updated_at)
+         VALUES (?, 'ready', '["template","source","first_sync","metrics","ready"]', ?, ?)
+         ON CONFLICT(project_id) DO UPDATE SET current_step='ready', updated_at=excluded.updated_at`
+      )
+      .bind(projectId, projTemplateId, timestamp)
       .run();
 
     return {

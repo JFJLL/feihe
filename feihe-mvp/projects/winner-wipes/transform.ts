@@ -2,12 +2,15 @@
  * Winner Wipes (稳健酒精湿巾) Board Transformation Module
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
 import type { BoardPayload, SectionSpec, AnalysisCardSpec } from '../../lib/core/types';
 import { manifest } from './manifest';
 import { db, ensureSchema } from '../../lib/db';
-import { getCampaignEnrichment, mergeCampaignEnrichment, mergeById } from '../../lib/campaign-enrichment-server';
+import { getCampaignEnrichment, mergeById } from '../../lib/campaign-enrichment-server';
 import { getCampaignDailyDatasetsByProject } from '../../lib/campaign-daily-server';
 import { buildBoardPayloadFromCampaignDashboard } from '../../lib/core/transform-kit';
+import { getProjectsDir } from '../../lib/core/registry';
 
 export async function transformProject(rawSources?: unknown): Promise<BoardPayload> {
   await ensureSchema();
@@ -23,13 +26,35 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     base = WIPES_MANUAL_DASHBOARD;
   }
 
+  // 1. If rawSources is not provided, check if .cache/raw-sources.json exists
+  let effectiveSources = rawSources;
+  if (!effectiveSources) {
+    const cachePath = path.join(getProjectsDir(), 'winner-wipes', '.cache', 'raw-sources.json');
+    if (fs.existsSync(cachePath)) {
+      try {
+        effectiveSources = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+      } catch {
+        // Ignore
+      }
+    }
+  }
+
   const enrichment = getCampaignEnrichment('winner-wipes');
-  const merged = mergeCampaignEnrichment(base, enrichment);
   const serverDaily = getCampaignDailyDatasetsByProject('winner-wipes') || [];
-  merged.dailyDatasets = mergeById(serverDaily, merged.dailyDatasets || []);
+
+  // 2. Protect DB latest snapshot: enrichment and serverDaily serve as fallback base,
+  // while the latest DB base snapshot overrides matching items by ID.
+  const merged: any = {
+    ...enrichment,
+    ...base,
+    sources: mergeById(enrichment?.sources || [], base.sources || []),
+    tables: mergeById(enrichment?.tables || [], base.tables || []),
+    kpis: mergeById((enrichment as any)?.kpis || [], base.kpis || []),
+    dailyDatasets: mergeById(serverDaily, base.dailyDatasets || []),
+  };
 
   // Parse fresh raw sources if provided
-  const rawObj = (rawSources && typeof rawSources === 'object') ? (rawSources as Record<string, unknown>) : null;
+  const rawObj = (effectiveSources && typeof effectiveSources === 'object') ? (effectiveSources as Record<string, unknown>) : null;
   const rawDelivery = rawObj?.['wipes-delivery'] || rawObj?.['0QTVhE'];
   const rawTaosou = rawObj?.['wipes-taosou'] || rawObj?.['wY1HZO'];
 
@@ -38,12 +63,12 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     const parsedDelivery = parseWipesDelivery(rawDelivery);
     const parsedTaosou = rawTaosou ? parseWipesTaosou(rawTaosou) : null;
 
-    const dDel = merged.dailyDatasets?.find(d => d.id === 'wipes-daily-delivery');
+    const dDel = merged.dailyDatasets?.find((d: any) => d.id === 'wipes-daily-delivery');
     if (dDel && parsedDelivery?.rows?.length) {
       dDel.rows = parsedDelivery.rows;
       dDel.period = parsedDelivery.period;
     }
-    const dTao = merged.dailyDatasets?.find(d => d.id === 'wipes-daily-taosou');
+    const dTao = merged.dailyDatasets?.find((d: any) => d.id === 'wipes-daily-taosou');
     if (dTao && parsedTaosou?.rows?.length) {
       dTao.rows = parsedTaosou.rows;
       dTao.period = parsedTaosou.period;
@@ -51,7 +76,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     const deliveryKpis = (parsedDelivery as any)?.kpis;
     if (Array.isArray(deliveryKpis) && deliveryKpis.length && merged.kpis) {
       for (const k of deliveryKpis) {
-        const exist = merged.kpis.find(x => x.id === k.id);
+        const exist = merged.kpis.find((x: any) => x.id === k.id);
         if (exist) {
           exist.value = k.value;
           exist.target = k.target;
