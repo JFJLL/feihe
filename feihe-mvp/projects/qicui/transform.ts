@@ -288,6 +288,10 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       { id: 'db-notes', name: '全量笔记库', status: '已连接', detail: `收录 ${noteCount} 篇笔记` },
       { id: 'db-daily', name: '分日业务日报', status: '已连接', detail: `共 ${dailyFlowRows.length} 天快照` },
     ],
+    actions: { title: '启萃重点事项', items: [] },
+    kpis: [],
+    tables: [],
+    dailyDatasets: [],
   };
 }
 

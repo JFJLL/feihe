@@ -7,26 +7,31 @@ function validateDashboardShape(projectId: string, data: unknown): asserts data 
   if (!data || typeof data !== 'object') {
     throw new Error(`Invalid campaign dashboard snapshot: payload is not an object for project ${projectId}`);
   }
-  const d = data as Partial<CampaignDashboard>;
+  const d = data as any;
   if (d.projectId !== projectId) {
     throw new Error(
       `Snapshot projectId mismatch: expected "${projectId}", found "${d.projectId}"`
     );
   }
-  if (!Array.isArray(d.sources)) {
-    throw new Error(`Invalid campaign dashboard snapshot: "sources" must be an array for project ${projectId}`);
-  }
-  if (!Array.isArray(d.kpis)) {
-    throw new Error(`Invalid campaign dashboard snapshot: "kpis" must be an array for project ${projectId}`);
-  }
-  if (!Array.isArray(d.tables)) {
-    throw new Error(`Invalid campaign dashboard snapshot: "tables" must be an array for project ${projectId}`);
-  }
+
+  // Modern BoardPayload compatibility
+  const isBoardPayload = Boolean(d.datasets && typeof d.datasets === 'object' && Array.isArray(d.sections));
+
+  // Normalize arrays and actions with safe defaults if missing
+  if (!Array.isArray(d.sources)) d.sources = [];
+  if (!Array.isArray(d.kpis)) d.kpis = [];
+  if (!Array.isArray(d.tables)) d.tables = [];
+  if (!Array.isArray(d.warnings)) d.warnings = [];
   if (!d.actions || !Array.isArray(d.actions.items)) {
-    throw new Error(`Invalid campaign dashboard snapshot: "actions.items" must be an array for project ${projectId}`);
+    d.actions = {
+      title: d.actions?.title || '重点事项',
+      items: Array.isArray(d.actions?.items) ? d.actions.items : [],
+    };
   }
-  if (!Array.isArray(d.warnings)) {
-    throw new Error(`Invalid campaign dashboard snapshot: "warnings" must be an array for project ${projectId}`);
+
+  // If legacy CampaignDashboard, ensure essential name exists
+  if (!isBoardPayload && (!d.name || typeof d.name !== 'string')) {
+    throw new Error(`Invalid campaign dashboard snapshot: "name" must be a string for project ${projectId}`);
   }
 }
 
@@ -47,9 +52,14 @@ export async function getCampaignDashboardSnapshot(
 
   if (!row?.value) return null;
 
-  const parsed = JSON.parse(row.value);
-  validateDashboardShape(projectId, parsed);
-  return parsed;
+  try {
+    const parsed = JSON.parse(row.value);
+    validateDashboardShape(projectId, parsed);
+    return parsed;
+  } catch (err) {
+    console.warn(`[campaign-store] Snapshot validation failed for ${projectId}, falling back to build:`, err);
+    return null;
+  }
 }
 
 /**

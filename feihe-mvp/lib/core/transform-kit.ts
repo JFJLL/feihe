@@ -384,6 +384,7 @@ export function buildBoardPayloadFromCampaignDashboard(
     analysisCards,
     warnings: dashboard.warnings || [],
     sources: (dashboard.sources || []) as import('./types').BoardSource[],
+    actions: (dashboard.actions as any) || { title: '重点事项', items: [] },
     // Legacy mirrors
     kpis,
     tables,

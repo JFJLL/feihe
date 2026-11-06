@@ -78,22 +78,31 @@ export async function GET(request: Request) {
       });
     }
 
-    // 4. Attach only this project's daily datasets
+    // 4. Attach only this project's daily datasets (DB snapshot overrides serverDaily baseline)
     const serverDailyDatasets =
       getFreshCampaignDailyDatasets(projectId) ||
       getCampaignDailyDatasetsByProject(projectId) ||
       [];
-    const mergedDailyDatasets = mergeById(snapshot.dailyDatasets || [], serverDailyDatasets);
+    const mergedDailyDatasets = mergeById(serverDailyDatasets, snapshot.dailyDatasets || []);
     const baseDashboard = {
       ...snapshot,
       dailyDatasets: mergedDailyDatasets,
     };
 
-    // 5. Merge project enrichment
+    // 5. Merge project enrichment (enrichment provides baseline; DB baseDashboard overrides matching tables)
     const enrichment =
       getFreshCampaignEnrichment(projectId) ||
       getCampaignEnrichment(projectId);
-    const mergedDashboard = mergeCampaignEnrichment(baseDashboard, enrichment);
+    const mergedDashboard = enrichment
+      ? {
+          ...enrichment,
+          ...baseDashboard,
+          sources: mergeById(enrichment.sources || [], baseDashboard.sources || []),
+          tables: mergeById(enrichment.tables || [], baseDashboard.tables || []),
+          kpis: mergeById((enrichment as any).kpis || [], baseDashboard.kpis || []),
+          dailyDatasets: mergedDailyDatasets,
+        }
+      : baseDashboard;
 
     // 6. Modern BoardPayload transformation
     let finalDashboard: unknown = mergedDashboard;
