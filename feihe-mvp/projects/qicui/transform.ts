@@ -50,6 +50,8 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   let latestSettlement: number | null = null;
   let latestMonthlyBudget: number | null = null;
   let latestMonthlySettlement: number | null = null;
+  let latestCreatorCost: number | null = null;
+  let latestProjectInvestment: number | null = null;
 
   if (latestDaily?.payload_json) {
     try {
@@ -59,6 +61,8 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       latestSettlement = strictNum(c.settlement?.value ?? c.settlement);
       latestMonthlyBudget = strictNum(c.monthlyBudget?.value ?? c.monthlyBudget);
       latestMonthlySettlement = strictNum(c.monthlySettlement?.value ?? c.monthlySettlement);
+      latestCreatorCost = strictNum(c.creatorCost?.value ?? c.creatorCost);
+      latestProjectInvestment = strictNum(c.projectInvestment?.value ?? c.projectInvestment);
     } catch {}
   }
 
@@ -127,6 +131,8 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
         { key: 'comment_total', label: '沉淀总评论数', type: 'number', format: 'integer', decimals: 0, displayUnits: '条', role: 'METRIC' },
         { key: 'ad_spend', label: '投流消耗', type: 'number', format: 'currency', decimals: 2, displayUnits: '元', role: 'METRIC' },
         { key: 'settlement', label: '结算金额', type: 'number', format: 'currency', decimals: 2, displayUnits: '元', role: 'METRIC' },
+        { key: 'project_investment', label: '项目总投资', type: 'number', format: 'currency', decimals: 2, displayUnits: '元', role: 'METRIC' },
+        { key: 'creator_cost', label: '达人总成本', type: 'number', format: 'currency', decimals: 2, displayUnits: '元', role: 'METRIC' },
       ],
       rows: [
         {
@@ -136,6 +142,8 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
           comment_total: commentTotal,
           ad_spend: latestAdSpend,
           settlement: latestSettlement,
+          project_investment: latestProjectInvestment,
+          creator_cost: latestCreatorCost,
         },
       ],
       totalRows: 1,
@@ -174,6 +182,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   const sections: SectionSpec[] = [
     {
       id: 'summary-kpis',
+      tab: 'overview',
       title: '启萃核心声量与消耗',
       description: '全量达人与广告消耗大盘',
       layout: 'paired-metrics',
@@ -215,6 +224,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
     {
       id: 'daily-trend-section',
+      tab: 'overview',
       title: '分日投资与消耗趋势',
       layout: 'grid',
       columns: 2,
@@ -242,12 +252,133 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       ],
     },
     {
-      id: 'notes-table-section',
-      title: '重点笔记明细榜',
+      id: 'ads-kpis-section',
+      tab: 'ads',
+      title: '版位投放与预算成本指标',
+      description: '投流预算、达人成本与结算对账',
+      layout: 'paired-metrics',
+      columns: 4,
+      components: [
+        {
+          id: 'kpi-ad-spend',
+          type: 'metric-card',
+          title: '累计投流消耗',
+          query: 'summary_kpis',
+          field: 'ad_spend',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-investment',
+          type: 'metric-card',
+          title: '项目总投资',
+          query: 'summary_kpis',
+          field: 'project_investment',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-creator-cost',
+          type: 'metric-card',
+          title: '达人总成本',
+          query: 'summary_kpis',
+          field: 'creator_cost',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-settlement',
+          type: 'metric-card',
+          title: '累计结算金额',
+          query: 'summary_kpis',
+          field: 'settlement',
+          width: 'quarter',
+        },
+      ],
+    },
+    {
+      id: 'ads-trend-section',
+      tab: 'ads',
+      title: '投放效率双轴走势',
+      description: '广告投放消耗与项目投资进度',
+      layout: 'grid',
+      columns: 2,
+      components: [
+        {
+          id: 'ads-trend-spend',
+          type: 'line-bar-combo',
+          title: '分日投流消耗 (元) 与投资进度',
+          query: 'daily_flow',
+          xField: 'date',
+          yField: 'ad_spend',
+          y2Field: 'project_investment',
+          width: 'half',
+        },
+        {
+          id: 'ads-trend-settlement',
+          type: 'line-bar-combo',
+          title: '分日结算金额 (元) 与达人成本走势',
+          query: 'daily_flow',
+          xField: 'date',
+          yField: 'settlement',
+          y2Field: 'creator_cost',
+          width: 'half',
+        },
+      ],
+    },
+    {
+      id: 'ads-flow-table-section',
+      tab: 'ads',
+      title: '分日投放结算流水明细',
       layout: 'stack',
       components: [
         {
-          id: 'comp-top-notes-table',
+          id: 'comp-ads-daily-table',
+          type: 'data-table',
+          query: 'daily_flow',
+          width: 'full',
+        },
+      ],
+    },
+    {
+      id: 'content-kpis-section',
+      tab: 'content',
+      title: '内容声量与互动指标',
+      description: '达人笔记库与粉丝互动质检',
+      layout: 'paired-metrics',
+      columns: 3,
+      components: [
+        {
+          id: 'content-kpi-notes',
+          type: 'metric-card',
+          title: '收录爆文笔记数',
+          query: 'summary_kpis',
+          field: 'note_count',
+          width: 'third',
+        },
+        {
+          id: 'content-kpi-exposure',
+          type: 'metric-card',
+          title: '全量笔记总曝光',
+          query: 'summary_kpis',
+          field: 'exposure',
+          width: 'third',
+        },
+        {
+          id: 'content-kpi-interaction',
+          type: 'metric-card',
+          title: '全量笔记总互动',
+          query: 'summary_kpis',
+          field: 'interaction_count',
+          width: 'third',
+        },
+      ],
+    },
+    {
+      id: 'content-notes-table-section',
+      tab: 'content',
+      title: '达人爆文与重点笔记库',
+      layout: 'stack',
+      components: [
+        {
+          id: 'comp-content-notes-table',
           type: 'data-table',
           query: 'creator_notes',
           width: 'full',
@@ -280,6 +411,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     themeColor: manifest.color,
     reportPeriod: manifest.defaultReportPeriod,
     mode: manifest.mode,
+    rendererMode: manifest.rendererMode || 'universal',
     datasets,
     sections,
     analysisCards,

@@ -9,6 +9,7 @@ export const manifest: ProjectManifest = {
   color: '#0d9488',
   defaultReportPeriod: '大促复盘周期',
   mode: '双11大促全域攻坚 · 四线独立归因',
+  rendererMode: 'legacy-campaign',
   subtitle: '双十一投放与内容执行',
   description: '双十一投放与内容执行',
   templateId: 'campaign_review',

@@ -9,6 +9,7 @@ export const manifest: ProjectManifest = {
   color: '#0284c7',
   defaultReportPeriod: '营销复盘周期',
   mode: '双轨全域归因 · KFS真实入账',
+  rendererMode: 'legacy-campaign',
   subtitle: '预算与版位效率',
   description: '预算与版位效率',
   templateId: 'campaign_review',

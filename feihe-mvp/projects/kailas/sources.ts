@@ -25,7 +25,7 @@ export const sources: ProjectSources = {
       id: 'kailas-enrichment',
       name: '凯乐石离线全量增强快照',
       type: 'manual',
-      filePath: 'lib/campaign-enrichment/kailas.json',
+      filePath: 'projects/kailas/data/enrichment.json',
       description: '包含预算执行、版位分布与达人明细等26张数据表',
     },
   ],

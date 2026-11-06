@@ -26,7 +26,7 @@ export const sources: ProjectSources = {
       id: 'wipes-enrichment',
       name: '稳健湿巾离线增强快照',
       type: 'manual',
-      filePath: 'lib/campaign-enrichment/winner-wipes.json',
+      filePath: 'projects/winner-wipes/data/enrichment.json',
       description: '达人执行、版位消耗、CID效果与阶段考核数据',
     },
   ],

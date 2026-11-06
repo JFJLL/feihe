@@ -9,6 +9,8 @@ data/
 !/feihe-mvp/features/data/**
 !/feihe-mvp/app/projects/*/data/
 !/feihe-mvp/app/projects/*/data/page.tsx
+!/feihe-mvp/projects/*/data/
+!/feihe-mvp/projects/*/data/**
 outputs/
 *.xlsx
 !docs/*.xlsx

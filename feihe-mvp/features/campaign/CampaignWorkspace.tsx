@@ -296,6 +296,7 @@ export function CampaignWorkspace({
   const category = activePayload?.category || (activeDashboard as any).category || '消费品与品牌营销';
   const mode = activePayload?.mode || (activeDashboard as any).mode || '全域数据贯通 · 真实入账';
   const period = activePayload?.reportPeriod || activeDashboard.reportPeriod || '观测周期中';
+  const rendererMode = activePayload?.rendererMode || 'universal';
 
   return (
     <DashboardFrame
@@ -344,100 +345,57 @@ export function CampaignWorkspace({
           </div>
         </div>
 
-        {/* 黄天鹅专属看板：分发 overview / ads / content 到 HuangTianeBoard，daily 保持共享分日看板 */}
-        {projectId === 'huang-tiane' && (
-          currentSection === 'overview' && overviewTab === 'daily' ? (
-            <div
-              id="workspace-tabpanel-daily"
-              role="tabpanel"
-              aria-labelledby="workspace-tab-daily"
-              tabIndex={0}
-              data-project-id={projectId}
-              data-source-file={`projects/${projectId}/transform.ts`}
-              data-section-id="daily-tabpanel"
-            >
-              <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
-            </div>
-          ) : (
-            <div
-              data-project-id={projectId}
-              data-source-file={`projects/${projectId}/transform.ts`}
-              data-section-id={`huang-tiane-${currentSection}`}
-            >
-              <HuangTianeBoard
-                key={projectId}
-                dashboard={activeDashboard}
-                section={currentSection}
-              />
-            </div>
-          )
-        )}
-
-        {/* 其它已有的 4 个营销项目标准分发与通用看板 */}
-        {projectId !== 'huang-tiane' && currentSection === 'ads' && (
+        {/* 看板分发：优先判断 overviewTab 是否为 daily 共享看板，否则根据 rendererMode 进行视图分发 */}
+        {overviewTab === 'daily' && currentSection === 'overview' ? (
+          <div
+            id="workspace-tabpanel-daily"
+            role="tabpanel"
+            aria-labelledby="workspace-tab-daily"
+            tabIndex={0}
+            data-project-id={projectId}
+            data-source-file={`projects/${projectId}/transform.ts`}
+            data-section-id="daily-tabpanel"
+          >
+            <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
+          </div>
+        ) : rendererMode === 'legacy-huang-tiane' ? (
           <div
             data-project-id={projectId}
             data-source-file={`projects/${projectId}/transform.ts`}
-            data-section-id="ads-section"
+            data-section-id={`board-${currentSection}`}
           >
-            {['kailas', 'meiling', 'winner-wipes'].includes(projectId) ? (
-              <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
-            ) : activePayload?.sections && activePayload?.datasets ? (
-              <UniversalBoardRenderer payload={activePayload} sectionId="ads" />
-            ) : (
-              <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
-            )}
+            <HuangTianeBoard
+              key={projectId}
+              dashboard={activeDashboard}
+              section={currentSection}
+            />
           </div>
-        )}
-
-        {projectId !== 'huang-tiane' && currentSection === 'content' && (
+        ) : rendererMode === 'legacy-campaign' ? (
           <div
             data-project-id={projectId}
             data-source-file={`projects/${projectId}/transform.ts`}
-            data-section-id="content-section"
+            data-section-id={`${currentSection}-section`}
           >
-            {['kailas', 'meiling', 'winner-wipes'].includes(projectId) ? (
+            {currentSection === 'ads' && <CampaignAdsPage key={projectId} dashboard={activeDashboard} />}
+            {currentSection === 'content' && <CampaignContentPage key={projectId} dashboard={activeDashboard} />}
+            {currentSection === 'overview' && <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />}
+          </div>
+        ) : (
+          <div
+            data-project-id={projectId}
+            data-source-file={`projects/${projectId}/transform.ts`}
+            data-section-id={`${currentSection}-section`}
+          >
+            {activePayload ? (
+              <UniversalBoardRenderer payload={activePayload} sectionId={currentSection} />
+            ) : currentSection === 'ads' ? (
+              <CampaignAdsPage key={projectId} dashboard={activeDashboard} />
+            ) : currentSection === 'content' ? (
               <CampaignContentPage key={projectId} dashboard={activeDashboard} />
-            ) : activePayload?.sections && activePayload?.datasets ? (
-              <UniversalBoardRenderer payload={activePayload} sectionId="content" />
             ) : (
-              <CampaignContentPage key={projectId} dashboard={activeDashboard} />
+              <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
             )}
           </div>
-        )}
-
-        {projectId !== 'huang-tiane' && currentSection === 'overview' && (
-          overviewTab === 'daily' ? (
-            <div
-              id="workspace-tabpanel-daily"
-              role="tabpanel"
-              aria-labelledby="workspace-tab-daily"
-              tabIndex={0}
-              data-project-id={projectId}
-              data-source-file={`projects/${projectId}/transform.ts`}
-              data-section-id="daily-tabpanel"
-            >
-              <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
-            </div>
-          ) : (
-            <div
-              id="workspace-tabpanel-overview"
-              role="tabpanel"
-              aria-labelledby="workspace-tab-overview"
-              tabIndex={0}
-              data-project-id={projectId}
-              data-source-file={`projects/${projectId}/transform.ts`}
-              data-section-id="overview-tabpanel"
-            >
-              {['kailas', 'meiling', 'winner-wipes'].includes(projectId) ? (
-                <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
-              ) : activePayload?.sections && activePayload?.datasets ? (
-                <UniversalBoardRenderer payload={activePayload} sectionId="overview" />
-              ) : (
-                <CampaignOverviewPage key={projectId} dashboard={activeDashboard} />
-              )}
-            </div>
-          )
         )}
 
         {toastMessage && (

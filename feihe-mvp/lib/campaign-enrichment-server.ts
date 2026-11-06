@@ -19,10 +19,10 @@ import type {
   CampaignDailyDataset,
 } from "./campaign-types";
 
-import kailasPayload from "./campaign-enrichment/kailas.json" with { type: "json" };
-import meilingPayload from "./campaign-enrichment/meiling.json" with { type: "json" };
-import winnerWipesPayload from "./campaign-enrichment/winner-wipes.json" with { type: "json" };
-import huangTianePayload from "./campaign-enrichment/huang-tiane.json" with { type: "json" };
+import kailasPayload from "../projects/kailas/data/enrichment.json" with { type: "json" };
+import meilingPayload from "../projects/meiling/data/enrichment.json" with { type: "json" };
+import winnerWipesPayload from "../projects/winner-wipes/data/enrichment.json" with { type: "json" };
+import huangTianePayload from "../projects/huang-tiane/data/enrichment.json" with { type: "json" };
 
 export interface CampaignEnrichmentPayload {
   projectId: string;

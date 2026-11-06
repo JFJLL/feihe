@@ -61,7 +61,7 @@ export const sources: ProjectSources = {
       id: 'meiling-enrichment',
       name: '美菱离线增强快照',
       type: 'manual',
-      filePath: 'lib/campaign-enrichment/meiling.json',
+      filePath: 'projects/meiling/data/enrichment.json',
       description: '包含四线归因、执行状态、KOL梯队等34张数据表',
     },
   ],

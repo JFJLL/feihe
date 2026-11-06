@@ -34,7 +34,7 @@ export const sources: ProjectSources = {
       id: 'huang-enrichment',
       name: '黄天鹅全域增强快照',
       type: 'manual',
-      filePath: 'lib/campaign-enrichment/huang-tiane.json',
+      filePath: 'projects/huang-tiane/data/enrichment.json',
       description: '包含品牌、商销、人群画像等25张表与5个分日流',
     },
   ],

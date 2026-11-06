@@ -5,6 +5,9 @@
  * ratio computations, total-row reconciliation, and categorization.
  */
 
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+
 export interface ExtractTableOptions {
   headerRowIndex?: number;
   skipTotalRows?: boolean;
@@ -170,6 +173,143 @@ export function bucketByKeywords<T extends string>(
 }
 
 /**
+ * Merges two arrays of entities by unique `id`.
+ * Items from `incoming` override matching `id`s in `base`.
+ */
+export function mergeById<T extends { id: string }>(base: T[] = [], incoming: T[] = []): T[] {
+  const map = new Map<string, T>();
+  for (const item of base) {
+    if (item && item.id) {
+      map.set(item.id, item);
+    }
+  }
+  for (const item of incoming) {
+    if (item && item.id) {
+      map.set(item.id, item);
+    }
+  }
+  return Array.from(map.values());
+}
+
+export function computeFileDigest(filePath: string): string | null {
+  if (!fs.existsSync(filePath)) return null;
+  const buffer = fs.readFileSync(filePath);
+  return crypto.createHash('sha256').update(buffer).digest('hex');
+}
+
+export function colLetterToIndex(col: string): number {
+  let index = 0;
+  for (let i = 0; i < col.length; i++) {
+    index = index * 26 + (col.toUpperCase().charCodeAt(i) - 64);
+  }
+  return index;
+}
+
+export function parseRangeDimensions(rangeStr: string): { expectedRows: number; expectedCols: number } | null {
+  if (!rangeStr || typeof rangeStr !== 'string') return null;
+  const m = rangeStr.match(/^([A-Za-z]+)(\d+):([A-Za-z]+)(\d+)$/);
+  if (!m) return null;
+  const startCol = colLetterToIndex(m[1]);
+  const startRow = parseInt(m[2], 10);
+  const endCol = colLetterToIndex(m[3]);
+  const endRow = parseInt(m[4], 10);
+  return {
+    expectedRows: endRow - startRow + 1,
+    expectedCols: endCol - startCol + 1,
+  };
+}
+
+export function validateCapture(receipt: any, payload: any, expectedOptions: { expectedRange?: string } = {}): boolean {
+  if (!receipt || typeof receipt !== 'object') {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Receipt is missing or not an object');
+  }
+  if (receipt.ok !== true) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Receipt ok is not true (got ${receipt.ok})`);
+  }
+  if (!receipt.data || typeof receipt.data !== 'object') {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Receipt data payload is missing');
+  }
+  if (receipt.data.complete !== true) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Receipt complete is false or missing (complete=${receipt.data.complete})`);
+  }
+  if (receipt.data.truncated === true) {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Receipt indicates truncated=true');
+  }
+  if (receipt.data.has_more === true) {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Receipt indicates has_more=true');
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Payload object is missing');
+  }
+  if (!Array.isArray(payload.sheets) || payload.sheets.length !== 1) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Expected payload.sheets to be single sheet array (got length ${payload?.sheets?.length})`);
+  }
+  if (payload.unread_sheets && Object.keys(payload.unread_sheets).length > 0) {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Payload contains unread_sheets');
+  }
+
+  const sheet = payload.sheets[0];
+  if (!sheet || typeof sheet !== 'object') {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Sheet object is invalid');
+  }
+  if (sheet.truncated === true) {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Sheet object indicates truncated=true');
+  }
+  if (!Array.isArray(sheet.data) || sheet.data.length === 0) {
+    throw new Error('CAPTURE_VALIDATION_FAILED: Sheet data is not a non-empty array');
+  }
+
+  if (expectedOptions.expectedRange && sheet.range !== expectedOptions.expectedRange) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Expected range ${expectedOptions.expectedRange}, got ${sheet.range}`);
+  }
+
+  const dims = parseRangeDimensions(sheet.range);
+  if (!dims) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Unable to parse dimensions from range "${sheet.range}"`);
+  }
+  if (sheet.data.length !== dims.expectedRows) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Row count mismatch for range ${sheet.range}: expected ${dims.expectedRows} rows, got ${sheet.data.length}`);
+  }
+  if (Array.isArray(sheet.columns) && sheet.columns.length !== dims.expectedCols) {
+    throw new Error(`CAPTURE_VALIDATION_FAILED: Column count mismatch for range ${sheet.range}: expected ${dims.expectedCols} columns, got ${sheet.columns.length}`);
+  }
+  for (let r = 0; r < sheet.data.length; r++) {
+    if (!Array.isArray(sheet.data[r]) || sheet.data[r].length !== dims.expectedCols) {
+      throw new Error(`CAPTURE_VALIDATION_FAILED: Row ${r} width mismatch for range ${sheet.range}: expected ${dims.expectedCols}, got ${sheet.data[r]?.length}`);
+    }
+  }
+
+  return true;
+}
+
+export function excelSerialToIsoDate(serial: unknown): string | null {
+  const n = Number(serial);
+  if (isNaN(n) || n <= 0) return null;
+  const d = new Date(Math.round((n - 25569) * 86400 * 1000));
+  return d.toISOString().slice(0, 10);
+}
+
+export function safeParseNum(val: unknown): number | null {
+  if (val === null || val === undefined) return null;
+  if (typeof val === 'number') return Number.isFinite(val) ? val : null;
+  const s = String(val).replace(/[¥￥,%\s]/g, '').trim();
+  if (!s || s === '-' || s === '—' || s === '/' || s === 'null' || s === 'None' || s.startsWith('#')) {
+    return null;
+  }
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+}
+
+export function extractDataRows(input: any): any[] {
+  if (Array.isArray(input)) return input;
+  if (input && Array.isArray(input.sheets) && input.sheets[0] && Array.isArray(input.sheets[0].data)) {
+    return input.sheets[0].data;
+  }
+  throw new Error('PARSER_ERROR: Invalid table input, expected rows array or sheets payload');
+}
+
+/**
  * Extracts structured rows from raw table grid (2D array).
  */
 export function extractTable(
@@ -241,6 +381,7 @@ export function buildBoardPayloadFromCampaignDashboard(
     color?: string;
     defaultReportPeriod?: string;
     mode?: string;
+    rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
   },
   sections: import('./types').SectionSpec[] = [],
   analysisCards: Array<{ id: string; targetQueryIds: string[]; type?: 'insight' | 'warning' | 'action'; title: string; summary: string; recommendations?: string[]; severity?: 'info' | 'warning' | 'critical' | 'success' }> = []
@@ -379,6 +520,7 @@ export function buildBoardPayloadFromCampaignDashboard(
     themeColor: manifest.color,
     reportPeriod: dashboard.reportPeriod || manifest.defaultReportPeriod,
     mode: manifest.mode,
+    rendererMode: manifest.rendererMode || 'universal',
     datasets,
     sections: finalSections,
     analysisCards,

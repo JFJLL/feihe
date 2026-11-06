@@ -1,17 +1,7 @@
 import { requireProjectAccess, jsonError } from "@/lib/api-auth";
 import { getCampaignDashboardSnapshot } from "@/lib/campaign-store";
-import { getCampaignDailyDatasetsByProject } from "@/lib/campaign-daily-server";
-import {
-  getCampaignEnrichment,
-  mergeCampaignEnrichment,
-  mergeById,
-} from "@/lib/campaign-enrichment-server";
-import {
-  triggerCampaignLiveSync,
-  isSnapshotStale,
-  getFreshCampaignEnrichment,
-  getFreshCampaignDailyDatasets,
-} from "@/lib/campaign-live-sync";
+import { isSnapshotStale } from "@/lib/campaign-live-sync";
+import { runProjectSync } from "@/lib/core/sync-runner";
 import { getProjectManifest, buildProjectBoard } from "@/lib/core/registry";
 import { buildBoardPayloadFromCampaignDashboard } from "@/lib/core/transform-kit";
 
@@ -37,19 +27,19 @@ export async function GET(request: Request) {
     return jsonError("该项目非轻量营销看板(campaign_review)模板", 400);
   }
 
-  // On-demand sync via ?fresh=1 or ?sync=1
+  // 3. On-demand sync via ?fresh=1 or ?sync=1
   const shouldForceSync =
     url.searchParams.get("fresh") === "1" || url.searchParams.get("sync") === "1";
   if (shouldForceSync && access.context!.canWrite) {
     try {
       console.log(`[campaign-dashboard] On-demand live sync requested for ${projectId}...`);
-      await triggerCampaignLiveSync(projectId, true);
+      await runProjectSync(projectId, { force: true });
     } catch (syncErr) {
       console.warn(`[campaign-dashboard] On-demand sync failed:`, syncErr);
     }
   }
 
-  // 3. Read snapshot from project_settings (server DB read, NOT directly from static constants)
+  // 4. Single-track board loading & output
   try {
     const snapshot = await getCampaignDashboardSnapshot(projectId);
     if (!snapshot) {
@@ -73,51 +63,30 @@ export async function GET(request: Request) {
 
     // Background non-blocking auto-sync if snapshot is older than 30 minutes
     if (isSnapshotStale(snapshot.updatedAt, 30) && !shouldForceSync) {
-      triggerCampaignLiveSync(projectId).catch((err) => {
+      runProjectSync(projectId, { force: true }).catch((err) => {
         console.error(`[campaign-dashboard] Background auto-sync error for ${projectId}:`, err);
       });
     }
 
-    // 4. Attach only this project's daily datasets (DB snapshot overrides serverDaily baseline)
-    const serverDailyDatasets =
-      getFreshCampaignDailyDatasets(projectId) ||
-      getCampaignDailyDatasetsByProject(projectId) ||
-      [];
-    const mergedDailyDatasets = mergeById(serverDailyDatasets, snapshot.dailyDatasets || []);
-    const baseDashboard = {
-      ...snapshot,
-      dailyDatasets: mergedDailyDatasets,
-    };
-
-    // 5. Merge project enrichment (enrichment provides baseline; DB baseDashboard overrides matching tables)
-    const enrichment =
-      getFreshCampaignEnrichment(projectId) ||
-      getCampaignEnrichment(projectId);
-    const mergedDashboard = enrichment
-      ? {
-          ...enrichment,
-          ...baseDashboard,
-          sources: mergeById(enrichment.sources || [], baseDashboard.sources || []),
-          tables: mergeById(enrichment.tables || [], baseDashboard.tables || []),
-          kpis: mergeById((enrichment as any).kpis || [], baseDashboard.kpis || []),
-          dailyDatasets: mergedDailyDatasets,
-        }
-      : baseDashboard;
-
-    // 6. Modern BoardPayload transformation
-    let finalDashboard: unknown = mergedDashboard;
+    let finalDashboard: unknown = null;
     const manifest = getProjectManifest(projectId);
     if (manifest) {
       try {
-        const board = await buildProjectBoard(projectId);
-        if (board) {
-          finalDashboard = board;
-        } else {
-          finalDashboard = buildBoardPayloadFromCampaignDashboard(mergedDashboard, manifest);
-        }
-      } catch {
-        finalDashboard = buildBoardPayloadFromCampaignDashboard(mergedDashboard, manifest);
+        finalDashboard = await buildProjectBoard(projectId);
+      } catch (err) {
+        console.warn(`[campaign-dashboard] buildProjectBoard fallback for ${projectId}:`, err);
       }
+    }
+
+    if (!finalDashboard) {
+      finalDashboard = buildBoardPayloadFromCampaignDashboard(
+        snapshot,
+        manifest || {
+          id: projectId,
+          name: projectId,
+          brand: projectId,
+        }
+      );
     }
 
     return Response.json({

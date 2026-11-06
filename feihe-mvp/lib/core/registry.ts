@@ -76,38 +76,63 @@ export function getAllProjectManifests(): Record<string, ProjectManifest> {
   const ids = discoverProjectIds();
 
   for (const id of ids) {
-    const manifestPath = path.join(PROJECTS_DIR, id, 'manifest.ts');
-    if (fs.existsSync(manifestPath)) {
-      try {
-        // Parse basic manifest properties safely from file content for sync availability
-        const content = fs.readFileSync(manifestPath, 'utf8');
-        const nameMatch = content.match(/name:\s*['"]([^'"]+)['"]/);
-        const brandMatch = content.match(/brand:\s*['"]([^'"]+)['"]/);
-        const spuMatch = content.match(/spu:\s*['"]([^'"]+)['"]/);
-        const catMatch = content.match(/category:\s*['"]([^'"]+)['"]/);
-        const colorMatch = content.match(/color:\s*['"]([^'"]+)['"]/);
-        const periodMatch = content.match(/defaultReportPeriod:\s*['"]([^'"]+)['"]/);
-        const descMatch = content.match(/description:\s*['"]([^'"]+)['"]/);
-        const subMatch = content.match(/subtitle:\s*['"]([^'"]+)['"]/);
-        const tplMatch = content.match(/templateId:\s*['"]([^'"]+)['"]/);
-        const modeMatch = content.match(/mode:\s*['"]([^'"]+)['"]/);
+    const manifestJsonPath = path.join(PROJECTS_DIR, id, 'manifest.json');
+    const manifestTsPath = path.join(PROJECTS_DIR, id, 'manifest.ts');
+    let manifestData: Partial<ProjectManifest> | null = null;
 
-        result[id] = {
-          id,
-          name: nameMatch ? nameMatch[1] : id,
-          brand: brandMatch ? brandMatch[1] : id,
-          spu: spuMatch ? spuMatch[1] : '核心主推品',
-          category: catMatch ? catMatch[1] : '全域营销',
-          color: colorMatch ? colorMatch[1] : '#2563eb',
-          defaultReportPeriod: periodMatch ? periodMatch[1] : '营销观测周期',
-          description: descMatch ? descMatch[1] : '',
-          subtitle: subMatch ? subMatch[1] : '',
-          templateId: tplMatch ? tplMatch[1] : 'campaign_review',
-          mode: modeMatch ? modeMatch[1] : '全域数据贯通 · 真实入账',
-        };
+    // 1. Prefer co-located manifest.json for 100% deterministic, zero-regex synchronous loading
+    if (fs.existsSync(manifestJsonPath)) {
+      try {
+        manifestData = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf8'));
       } catch (err) {
-        console.warn(`[registry] Error reading manifest for ${id}:`, err);
+        console.warn(`[registry] Error reading manifest.json for ${id}:`, err);
       }
+    }
+
+    // 2. Safe AST / evaluation fallback for manifest.ts if manifest.json is absent
+    if (!manifestData && fs.existsSync(manifestTsPath)) {
+      try {
+        const tsContent = fs.readFileSync(manifestTsPath, 'utf8');
+        const sanitized = tsContent
+          .replace(/^import\s+[^;]+;?\s*$/gm, '')
+          .replace(/:\s*ProjectManifest\b/g, '')
+          .replace(/^export\s+const\s+manifest\s*=\s*/m, 'return ')
+          .replace(/export\s+default\s+manifest;?/m, '');
+        const fn = new Function(sanitized);
+        manifestData = fn();
+      } catch (err) {
+        console.warn(`[registry] Error evaluating manifest.ts for ${id}:`, err);
+      }
+    }
+
+    if (manifestData) {
+      const defaultRenderer: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane' =
+        id === 'huang-tiane'
+          ? 'legacy-huang-tiane'
+          : ['kailas', 'meiling', 'winner-wipes'].includes(id)
+          ? 'legacy-campaign'
+          : 'universal';
+
+      result[id] = {
+        id,
+        name: manifestData.name || id,
+        brand: manifestData.brand || id,
+        spu: manifestData.spu || '核心主推品',
+        category: manifestData.category || '全域营销',
+        color: manifestData.color || '#2563eb',
+        defaultReportPeriod: manifestData.defaultReportPeriod || '营销观测周期',
+        description: manifestData.description || '',
+        subtitle: manifestData.subtitle || '',
+        templateId: manifestData.templateId || 'campaign_review',
+        mode: manifestData.mode || '全域数据贯通 · 真实入账',
+        rendererMode: manifestData.rendererMode || defaultRenderer,
+        enabledTabs: manifestData.enabledTabs || [
+          { key: 'overview', label: '数据总览', icon: '📊', desc: '全域核心指标' },
+          { key: 'daily', label: '分日看板', icon: '📅', desc: '当日指标与明细' },
+          { key: 'ads', label: '版位投放', icon: '🎯', desc: '广告与渠道效率' },
+          { key: 'content', label: '内容执行', icon: '📝', desc: '达人与笔记详情' },
+        ],
+      };
     }
   }
 

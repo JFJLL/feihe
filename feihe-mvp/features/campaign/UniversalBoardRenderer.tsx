@@ -82,13 +82,24 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
   const [activeTabs, setActiveTabs] = useState<Record<string, string>>({});
 
   const displayedSections = useMemo(() => {
-    if (!sectionId || sectionId === 'overview') {
+    const currentTab = sectionId || 'overview';
+    // 1. Match sections with explicit tab attribute
+    const matchedByTab = sections.filter(s => (s.tab || 'overview') === currentTab);
+    if (matchedByTab.length > 0) {
+      return matchedByTab;
+    }
+    // 2. Fallback matching by section id or substring
+    const filteredById = sections.filter(
+      s => s.id === currentTab || s.id.toLowerCase().includes(currentTab.toLowerCase())
+    );
+    if (filteredById.length > 0) {
+      return filteredById;
+    }
+    // 3. Fallback to all sections for overview
+    if (currentTab === 'overview') {
       return sections;
     }
-    const filtered = sections.filter(
-      s => s.id === sectionId || s.id.toLowerCase().includes(sectionId.toLowerCase())
-    );
-    return filtered.length > 0 ? filtered : sections;
+    return sections;
   }, [sections, sectionId]);
   const [drilldownModal, setDrilldownModal] = useState<{
     title: string;

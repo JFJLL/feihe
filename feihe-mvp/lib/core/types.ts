@@ -86,6 +86,7 @@ export interface SectionTabSpec {
 
 export interface SectionSpec {
   id: string;
+  tab?: 'overview' | 'ads' | 'content';
   title?: string;
   subtitle?: string;
   description?: string;
@@ -137,6 +138,7 @@ export interface BoardPayload {
   reportPeriod?: string;
   updatedAt?: string;
   mode?: string;
+  rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
   datasets: Record<string, DatasetTable>;
   sections: SectionSpec[];
   analysisCards?: AnalysisCardSpec[];
@@ -160,6 +162,7 @@ export interface ProjectManifest {
   color: string;
   defaultReportPeriod: string;
   templateId?: string;
+  rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
   mode?: string;
   subtitle?: string;
   description?: string;

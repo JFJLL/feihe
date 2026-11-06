@@ -7,10 +7,17 @@ import path from 'node:path';
 import type { BoardPayload, SectionSpec, AnalysisCardSpec } from '../../lib/core/types';
 import { manifest } from './manifest';
 import { db, ensureSchema } from '../../lib/db';
-import { getCampaignEnrichment, mergeById } from '../../lib/campaign-enrichment-server';
-import { getCampaignDailyDatasetsByProject } from '../../lib/campaign-daily-server';
-import { buildBoardPayloadFromCampaignDashboard } from '../../lib/core/transform-kit';
+import { mergeById, buildBoardPayloadFromCampaignDashboard } from '../../lib/core/transform-kit';
 import { getProjectsDir } from '../../lib/core/registry';
+import baseline from './data/baseline';
+import enrichment from './data/enrichment.json' with { type: 'json' };
+import serverDaily from './data/daily.json' with { type: 'json' };
+import {
+  parseHuangCommerce,
+  parseHuangCid,
+  parseHuangBrandRaw,
+  rebuildHuangSummaryTables,
+} from './parsers';
 
 export async function transformProject(rawSources?: unknown): Promise<BoardPayload> {
   await ensureSchema();
@@ -22,8 +29,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
 
   let base = row?.value ? JSON.parse(row.value) : null;
   if (!base) {
-    const huangMod = await import('../../lib/campaign-enrichment/huang-tiane.json', { with: { type: 'json' } });
-    base = huangMod.default || huangMod;
+    base = baseline;
   }
 
   // 1. If rawSources is not provided, check if .cache/raw-sources.json exists
@@ -39,9 +45,6 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     }
   }
 
-  const enrichment = getCampaignEnrichment('huang-tiane');
-  const serverDaily = getCampaignDailyDatasetsByProject('huang-tiane') || [];
-
   // 2. Protect DB latest snapshot: enrichment and serverDaily serve as fallback base,
   // while the latest DB base snapshot overrides matching items by ID.
   const merged: any = {
@@ -50,7 +53,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     sources: mergeById(enrichment?.sources || [], base.sources || []),
     tables: mergeById(enrichment?.tables || [], base.tables || []),
     kpis: mergeById((enrichment as any)?.kpis || [], base.kpis || []),
-    dailyDatasets: mergeById(serverDaily, base.dailyDatasets || []),
+    dailyDatasets: mergeById(serverDaily as any || [], base.dailyDatasets || []),
   };
 
   // Parse fresh raw sources if provided
@@ -60,13 +63,6 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   const rawBrand = rawObj?.['huang-brand'] || rawObj?.['huang-brand-part1'] || rawObj?.['637ef8'];
 
   if (rawCommerce || rawCid || rawBrand) {
-    const {
-      parseHuangCommerce,
-      parseHuangCid,
-      parseHuangBrandRaw,
-      rebuildHuangSummaryTables,
-    } = await import('../../lib/campaign-sync-parser.mjs');
-
     let commerceParsed: any = null;
     if (rawCommerce) {
       commerceParsed = parseHuangCommerce(rawCommerce);

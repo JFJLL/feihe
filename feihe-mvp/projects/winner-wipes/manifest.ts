@@ -9,6 +9,7 @@ export const manifest: ProjectManifest = {
   color: '#16a34a',
   defaultReportPeriod: '营销复盘周期',
   mode: '日常种草控盘 · 星河&CID对账',
+  rendererMode: 'legacy-campaign',
   subtitle: '种草效果与KPI进度',
   description: '种草效果与KPI进度',
   templateId: 'campaign_review',

@@ -9,6 +9,7 @@ export const manifest: ProjectManifest = {
   color: '#0f5e52',
   defaultReportPeriod: '营销复盘周期',
   mode: '全域声量与评论质检 · 真实对账',
+  rendererMode: 'universal',
   subtitle: '启萃全域声量与评论质检',
   description: '飞鹤启萃小红书全域声量、达人投放、评论外显质检与分日消耗',
   templateId: 'content_marketing',

@@ -38,7 +38,7 @@ export function triggerCampaignLiveSync(
   projectId?: string,
   force = false
 ): Promise<SyncResult> {
-  if (projectId && isProjectRegistered(projectId) && projectId !== 'qicui') {
+  if (projectId && isProjectRegistered(projectId)) {
     return runProjectSync(projectId, { force }).then(res => ({
       ok: res.ok,
       message: res.message,
@@ -120,10 +120,9 @@ export function getFreshCampaignEnrichment(
   projectId: string
 ): CampaignEnrichmentPayload | null {
   if (!projectId || typeof projectId !== 'string') return null;
-  const validProjects = new Set(['kailas', 'meiling', 'winner-wipes', 'huang-tiane']);
-  if (!validProjects.has(projectId)) return null;
-
-  const filePath = path.resolve(APP_ROOT, `lib/campaign-enrichment/${projectId}.json`);
+  const projectDataPath = path.resolve(APP_ROOT, `projects/${projectId}/data/enrichment.json`);
+  const legacyPath = path.resolve(APP_ROOT, `lib/campaign-enrichment/${projectId}.json`);
+  const filePath = fs.existsSync(projectDataPath) ? projectDataPath : legacyPath;
   if (!fs.existsSync(filePath)) return null;
 
   try {
@@ -145,6 +144,16 @@ export function getFreshCampaignEnrichment(
  */
 export function getFreshCampaignDailyDatasets(projectId: string): CampaignDailyDataset[] {
   if (!projectId || typeof projectId !== 'string') return [];
+  const projectDailyPath = path.resolve(APP_ROOT, `projects/${projectId}/data/daily.json`);
+  if (fs.existsSync(projectDailyPath)) {
+    try {
+      const raw = fs.readFileSync(projectDailyPath, 'utf8');
+      const datasets = JSON.parse(raw);
+      if (Array.isArray(datasets)) return datasets;
+    } catch {
+      // Fall back to legacy file
+    }
+  }
   const filePath = path.resolve(APP_ROOT, 'lib/campaign-daily-data.json');
   if (!fs.existsSync(filePath)) return [];
 

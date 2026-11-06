@@ -1,0 +1,5335 @@
+{
+  "projectId": "meiling",
+  "extractedAt": "2026-11-04T10:42:23.388Z",
+  "sources": [
+    {
+      "id": "meiling-base",
+      "name": "美菱双11多维表格 (双11 KOL进度表)",
+      "url": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tbluz50zuZOeGQWf&view=vewOPEh08l",
+      "status": "ready",
+      "detail": "双11多维表格，1096条提报记录，117条二核确认合作全量明细",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书多维表格Base",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-base-yangji",
+      "name": "美菱双11多维表格 - 样机信息表",
+      "url": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tblotoaoy40ShO5k",
+      "status": "ready",
+      "detail": "双11试用样机信息表，全量84台样机型号与流转进度（已脱敏）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书多维表格Base",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "name": "美菱冰箱双11日报表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
+      "status": "ready",
+      "detail": "双11大促日报表工作簿（RoAtsw3KTh56ZBtT7cmcTYaznJb），包含天猫/京东种草数据源细表与打款表",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-D9ddm3",
+      "name": "美菱双11日报表 - 自采天猫种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=D9ddm3",
+      "status": "ready",
+      "detail": "自采天猫种草全量底表（7632行，实际可比19天，9篇笔记素材）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-BI2xBs",
+      "name": "美菱双11日报表 - 自采京东种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=BI2xBs",
+      "status": "ready",
+      "detail": "自采京东种草全量底表（14992行，实际可比20天，5篇笔记素材）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-Trvrou",
+      "name": "美菱双11日报表 - 京东对投CID日流水",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
+      "status": "ready",
+      "detail": "京东对投CID真实消耗与成交转化（10/16-10/18，3天分日流水）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-Y7qNOu",
+      "name": "美菱双11日报表 - 打款与应消耗对照表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Y7qNOu",
+      "status": "ready",
+      "detail": "双11各渠道投放账户规划打款与实际应消耗（7大账户固定列映射）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-mG2COI",
+      "name": "美菱双11日报表 - 笔记&词类配置表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=mG2COI",
+      "status": "ready",
+      "detail": "小红书投放搜索词类与产品渗透聚类（有效339条非空词，竞品/品类/品牌/大促词）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-ACntPW",
+      "name": "美菱双11日报表 - 代采星伴种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=ACntPW",
+      "status": "ready",
+      "detail": "代采星伴种草底表（2979行明细聚合，10/15-10/18共4天流水）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-zF2qee",
+      "name": "美菱双11日报表 - 京东对投种草数据源流水",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=zF2qee",
+      "status": "ready",
+      "detail": "京东对投种草底表（13954行明细聚合，10/15-10/18共4天流水）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-node-HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "name": "美菱冰箱kpi管理表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre",
+      "status": "ready",
+      "detail": "美菱KPI管理表，接替无权限之RQff，包含双11进度更新（4SGaOf）、筛号透视（SI0mQy）及618/7-8月KPI总览",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-sheets-4SGaOf",
+      "name": "美菱冰箱kpi管理表 - 双11进度更新表",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre?sheet=4SGaOf",
+      "status": "ready",
+      "detail": "双11各产品系列与型号原规划预算（380万/117篇）及京东/天猫渠道级回传GMV（9/28更新）",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    },
+    {
+      "id": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "name": "美菱冰箱618复盘数据",
+      "url": "https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh",
+      "status": "ready",
+      "detail": "2026年618大促结案复盘工作簿（XSKrspszhhgvPvtxMNicmYlUnEc），包含全量105篇达人明细与财务级ROI",
+      "fetchedAt": "2026-10-30T14:38:00+08:00",
+      "provenance": {
+        "type": "feishu",
+        "sourceName": "飞书电子表格Sheets",
+        "syncedAt": "2026-10-30T14:38:00+08:00"
+      }
+    }
+  ],
+  "tables": [
+    {
+      "id": "meiling-enrich-matrix-product-stage",
+      "title": "双11二核确认KOL主推产品与审核执行阶段交叉矩阵（N=117）",
+      "category": "execution",
+      "period": "2026年双11（截至10月19日缓存快照）",
+      "sourceId": "meiling-base",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tbluz50zuZOeGQWf&view=vewOPEh08l",
+      "note": "多维表格117位二核确认KOL按产品型号×审核执行阶段交叉矩阵长表，专供热力图与跨阶段堆叠图。已发布50位与离线周报44篇不同期严格隔离。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "dimension",
+          "title": "主推产品型号",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "stage",
+          "title": "审核执行阶段",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "count",
+          "title": "达人账号数(位)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ratio",
+          "title": "产品内阶段占比(%)",
+          "type": "percent",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "dimension": "大白鲸570",
+          "stage": "已发布",
+          "count": 3,
+          "ratio": 75
+        },
+        {
+          "dimension": "大白鲸570",
+          "stage": "定稿可上传",
+          "count": 1,
+          "ratio": 25
+        },
+        {
+          "dimension": "小确杏421",
+          "stage": "已发布",
+          "count": 11,
+          "ratio": 45.83
+        },
+        {
+          "dimension": "小确杏421",
+          "stage": "待确认预览",
+          "count": 2,
+          "ratio": 8.33
+        },
+        {
+          "dimension": "小确杏421",
+          "stage": "达人修改中",
+          "count": 4,
+          "ratio": 16.67
+        },
+        {
+          "dimension": "小确杏421",
+          "stage": "品牌审核中",
+          "count": 1,
+          "ratio": 4.17
+        },
+        {
+          "dimension": "小确杏421",
+          "stage": "可推进",
+          "count": 6,
+          "ratio": 25
+        },
+        {
+          "dimension": "小确杏502Pro-柳潇",
+          "stage": "已发布",
+          "count": 4,
+          "ratio": 66.67
+        },
+        {
+          "dimension": "小确杏502Pro-柳潇",
+          "stage": "可推进",
+          "count": 1,
+          "ratio": 16.67
+        },
+        {
+          "dimension": "小确杏502Pro-柳潇",
+          "stage": "未进入审核",
+          "count": 1,
+          "ratio": 16.67
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "已发布",
+          "count": 8,
+          "ratio": 24.24
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "定稿可上传",
+          "count": 1,
+          "ratio": 3.03
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "待确认预览",
+          "count": 1,
+          "ratio": 3.03
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "达人拍摄中",
+          "count": 2,
+          "ratio": 6.06
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "达人修改中",
+          "count": 6,
+          "ratio": 18.18
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "品牌审核中",
+          "count": 4,
+          "ratio": 12.12
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "内审中",
+          "count": 8,
+          "ratio": 24.24
+        },
+        {
+          "dimension": "小确杏502pro",
+          "stage": "可推进",
+          "count": 3,
+          "ratio": 9.09
+        },
+        {
+          "dimension": "小确杏502pro-雨珂",
+          "stage": "已发布",
+          "count": 3,
+          "ratio": 50
+        },
+        {
+          "dimension": "小确杏502pro-雨珂",
+          "stage": "达人修改中",
+          "count": 1,
+          "ratio": 16.67
+        },
+        {
+          "dimension": "小确杏502pro-雨珂",
+          "stage": "可推进",
+          "count": 2,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "小确杏511",
+          "stage": "已发布",
+          "count": 4,
+          "ratio": 44.44
+        },
+        {
+          "dimension": "小确杏511",
+          "stage": "品牌审核中",
+          "count": 4,
+          "ratio": 44.44
+        },
+        {
+          "dimension": "小确杏511",
+          "stage": "未进入审核",
+          "count": 1,
+          "ratio": 11.11
+        },
+        {
+          "dimension": "小确杏520机皇",
+          "stage": "已发布",
+          "count": 11,
+          "ratio": 64.71
+        },
+        {
+          "dimension": "小确杏520机皇",
+          "stage": "达人拍摄中",
+          "count": 2,
+          "ratio": 11.76
+        },
+        {
+          "dimension": "小确杏520机皇",
+          "stage": "达人修改中",
+          "count": 1,
+          "ratio": 5.88
+        },
+        {
+          "dimension": "小确杏520机皇",
+          "stage": "品牌审核中",
+          "count": 3,
+          "ratio": 17.65
+        },
+        {
+          "dimension": "无忧嵌502",
+          "stage": "已发布",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌502",
+          "stage": "可推进",
+          "count": 2,
+          "ratio": 66.67
+        },
+        {
+          "dimension": "无忧嵌512",
+          "stage": "已发布",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌512",
+          "stage": "可推进",
+          "count": 2,
+          "ratio": 66.67
+        },
+        {
+          "dimension": "无忧嵌513",
+          "stage": "达人修改中",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌513",
+          "stage": "可推进",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌513",
+          "stage": "未进入审核",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌系列横测",
+          "stage": "已发布",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌系列横测",
+          "stage": "达人修改中",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "无忧嵌系列横测",
+          "stage": "内审中",
+          "count": 1,
+          "ratio": 33.33
+        },
+        {
+          "dimension": "黑珍珠516",
+          "stage": "已发布",
+          "count": 3,
+          "ratio": 50
+        },
+        {
+          "dimension": "黑珍珠516",
+          "stage": "达人拍摄中",
+          "count": 1,
+          "ratio": 16.67
+        },
+        {
+          "dimension": "黑珍珠516",
+          "stage": "品牌审核中",
+          "count": 1,
+          "ratio": 16.67
+        },
+        {
+          "dimension": "黑珍珠516",
+          "stage": "内审中",
+          "count": 1,
+          "ratio": 16.67
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-matrix-platform-stage",
+      "title": "双11二核确认KOL外溢平台与审核执行阶段交叉矩阵（N=117）",
+      "category": "execution",
+      "period": "2026年双11（截至10月19日缓存快照）",
+      "sourceId": "meiling-base",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tbluz50zuZOeGQWf&view=vewOPEh08l",
+      "note": "多维表格117位二核确认KOL按外溢平台链路×审核执行阶段交叉矩阵长表，专供平台热力分布图。天猫代采33、京东自采33、京东代采23、天猫自采17、待定11。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "dimension",
+          "title": "外溢平台链路",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "stage",
+          "title": "审核执行阶段",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "count",
+          "title": "达人账号数(位)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ratio",
+          "title": "平台内阶段占比(%)",
+          "type": "percent",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "dimension": "京东代采",
+          "stage": "已发布",
+          "count": 12,
+          "ratio": 52.17
+        },
+        {
+          "dimension": "京东代采",
+          "stage": "达人拍摄中",
+          "count": 2,
+          "ratio": 8.7
+        },
+        {
+          "dimension": "京东代采",
+          "stage": "达人修改中",
+          "count": 2,
+          "ratio": 8.7
+        },
+        {
+          "dimension": "京东代采",
+          "stage": "品牌审核中",
+          "count": 3,
+          "ratio": 13.04
+        },
+        {
+          "dimension": "京东代采",
+          "stage": "可推进",
+          "count": 3,
+          "ratio": 13.04
+        },
+        {
+          "dimension": "京东代采",
+          "stage": "未进入审核",
+          "count": 1,
+          "ratio": 4.35
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "已发布",
+          "count": 12,
+          "ratio": 36.36
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "定稿可上传",
+          "count": 1,
+          "ratio": 3.03
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "达人拍摄中",
+          "count": 2,
+          "ratio": 6.06
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "达人修改中",
+          "count": 5,
+          "ratio": 15.15
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "品牌审核中",
+          "count": 5,
+          "ratio": 15.15
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "内审中",
+          "count": 4,
+          "ratio": 12.12
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "可推进",
+          "count": 3,
+          "ratio": 9.09
+        },
+        {
+          "dimension": "京东自采",
+          "stage": "未进入审核",
+          "count": 1,
+          "ratio": 3.03
+        },
+        {
+          "dimension": "天猫代采",
+          "stage": "已发布",
+          "count": 15,
+          "ratio": 45.45
+        },
+        {
+          "dimension": "天猫代采",
+          "stage": "待确认预览",
+          "count": 2,
+          "ratio": 6.06
+        },
+        {
+          "dimension": "天猫代采",
+          "stage": "达人修改中",
+          "count": 4,
+          "ratio": 12.12
+        },
+        {
+          "dimension": "天猫代采",
+          "stage": "品牌审核中",
+          "count": 5,
+          "ratio": 15.15
+        },
+        {
+          "dimension": "天猫代采",
+          "stage": "可推进",
+          "count": 6,
+          "ratio": 18.18
+        },
+        {
+          "dimension": "天猫代采",
+          "stage": "未进入审核",
+          "count": 1,
+          "ratio": 3.03
+        },
+        {
+          "dimension": "天猫自采",
+          "stage": "已发布",
+          "count": 11,
+          "ratio": 64.71
+        },
+        {
+          "dimension": "天猫自采",
+          "stage": "定稿可上传",
+          "count": 1,
+          "ratio": 5.88
+        },
+        {
+          "dimension": "天猫自采",
+          "stage": "待确认预览",
+          "count": 1,
+          "ratio": 5.88
+        },
+        {
+          "dimension": "天猫自采",
+          "stage": "达人拍摄中",
+          "count": 1,
+          "ratio": 5.88
+        },
+        {
+          "dimension": "天猫自采",
+          "stage": "达人修改中",
+          "count": 3,
+          "ratio": 17.65
+        },
+        {
+          "dimension": "待定/未分配",
+          "stage": "内审中",
+          "count": 6,
+          "ratio": 54.55
+        },
+        {
+          "dimension": "待定/未分配",
+          "stage": "可推进",
+          "count": 5,
+          "ratio": 45.45
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-content-theme-format",
+      "title": "双11二核确认KOL内容类型与合作形式分布（N=117）",
+      "category": "execution",
+      "period": "2026年双11（截至10月19日缓存快照）",
+      "sourceId": "meiling-base",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tbluz50zuZOeGQWf&view=vewOPEh08l",
+      "note": "117位二核确认达人内容类型（产品测评48、场景种草43、攻略教程14、好物推荐8、口碑沉淀2、限时优惠2）与合作形式（图文63、视频54）真实分布计数。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "content_theme",
+          "title": "内容类型",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "format",
+          "title": "合作形式",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "count",
+          "title": "达人账号数(位)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ratio",
+          "title": "类型内形式占比(%)",
+          "type": "percent",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "content_theme": "产品测评",
+          "format": "图文",
+          "count": 20,
+          "ratio": 41.67
+        },
+        {
+          "content_theme": "产品测评",
+          "format": "视频",
+          "count": 28,
+          "ratio": 58.33
+        },
+        {
+          "content_theme": "场景种草",
+          "format": "图文",
+          "count": 27,
+          "ratio": 62.79
+        },
+        {
+          "content_theme": "场景种草",
+          "format": "视频",
+          "count": 16,
+          "ratio": 37.21
+        },
+        {
+          "content_theme": "攻略教程",
+          "format": "图文",
+          "count": 11,
+          "ratio": 78.57
+        },
+        {
+          "content_theme": "攻略教程",
+          "format": "视频",
+          "count": 3,
+          "ratio": 21.43
+        },
+        {
+          "content_theme": "好物推荐",
+          "format": "图文",
+          "count": 1,
+          "ratio": 12.5
+        },
+        {
+          "content_theme": "好物推荐",
+          "format": "视频",
+          "count": 7,
+          "ratio": 87.5
+        },
+        {
+          "content_theme": "口碑沉淀",
+          "format": "图文",
+          "count": 2,
+          "ratio": 100
+        },
+        {
+          "content_theme": "限时优惠",
+          "format": "图文",
+          "count": 2,
+          "ratio": 100
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-channel-creative-efficiency",
+      "title": "双11天猫自采与京东自采创意投放贡献效率对比（基于1984条细表流水聚合）",
+      "category": "performance",
+      "period": "天猫 2026-09-30 ~ 2026-10-18 / 京东 2026-09-29 ~ 2026-10-18",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
+      "note": "基于天猫自采775条（2026-09-30~2026-10-18）与京东自采1209条（2026-09-29~2026-10-18）真实流水全量聚合。展现量、点击量、互动量和消耗为实际累计；CTR、CPC、CPM、CPE、CPUV基于总量计算，绝不使用算术平均；UV为30日归因UV累计值。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "channel",
+          "title": "投放渠道",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "period",
+          "title": "实际统计周期",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "creatives_count",
+          "title": "活跃创意单元(条)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "spend",
+          "title": "累计消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "impressions",
+          "title": "总展现量(次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "clicks",
+          "title": "总点击量(次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ctr",
+          "title": "点击率(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "engagements",
+          "title": "互动量(次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "notes_count",
+          "title": "关联去重笔记数(篇)",
+          "type": "number",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "channel": "自采天猫种草",
+          "period": "2026-09-30 ~ 2026-10-18",
+          "creatives_count": 80,
+          "spend": 78951.87,
+          "impressions": 1408946,
+          "clicks": 161757,
+          "ctr": 11.48,
+          "cpc": 0.49,
+          "cpm": 56.04,
+          "engagements": 4172,
+          "cpe": 18.92,
+          "uv": 5076,
+          "cpuv": 15.55,
+          "notes_count": 9
+        },
+        {
+          "channel": "自采京东种草",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "creatives_count": 56,
+          "spend": 78526.29,
+          "impressions": 1423592,
+          "clicks": 141977,
+          "ctr": 9.97,
+          "cpc": 0.55,
+          "cpm": 55.16,
+          "engagements": 924,
+          "cpe": 84.99,
+          "uv": 1662,
+          "cpuv": 47.25,
+          "notes_count": 5
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-note-creative-efficiency",
+      "title": "双11全量商业投放笔记素材转化贡献效率明细（全量14篇）",
+      "category": "performance",
+      "period": "2026/09/29 ~ 2026/10/18",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
+      "note": "汇总1984条细表中全量14篇商业笔记素材投放消耗与转化效果（天猫9篇、京东5篇）。素材名称为投放流水中的创意标记，非实名达人姓名；UV为各创意30日归因UV累计值（非全案去重人数）。各行带准确真实投放期间。",
+      "provenance": "feishu",
+      "columns": [
+        {
+          "key": "channel",
+          "title": "投放渠道",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "material_name",
+          "title": "素材创意名称（非实名）",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "note_id",
+          "title": "笔记ID",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "period",
+          "title": "实际投放周期",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "spend",
+          "title": "累计投流消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "impressions",
+          "title": "总展现量(次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "clicks",
+          "title": "总点击量(次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ctr",
+          "title": "点击率(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "cpm",
+          "title": "CPM(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "engagements",
+          "title": "互动量(次)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "uv",
+          "title": "站外活跃UV(30日归因)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "creatives_count",
+          "title": "创意投放次数(条)",
+          "type": "number",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "channel": "自采天猫种草",
+          "material_name": "村西头的灰太狼（在装修）",
+          "note_id": "6abb9bec000000000a02720f",
+          "period": "2026-09-30 ~ 2026-10-18",
+          "spend": 52610.2,
+          "impressions": 1111950,
+          "clicks": 129614,
+          "ctr": 11.66,
+          "cpc": 0.41,
+          "cpm": 47.31,
+          "engagements": 3405,
+          "cpe": 15.45,
+          "uv": 1966,
+          "cpuv": 26.76,
+          "creatives_count": 247
+        },
+        {
+          "channel": "自采京东种草",
+          "material_name": "豆芽不是菜",
+          "note_id": "6aba3fcb000000001b030ece",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "spend": 52470.19,
+          "impressions": 997307,
+          "clicks": 96102,
+          "ctr": 9.64,
+          "cpc": 0.55,
+          "cpm": 52.61,
+          "engagements": 514,
+          "cpe": 102.08,
+          "uv": 1285,
+          "cpuv": 40.83,
+          "creatives_count": 602
+        },
+        {
+          "channel": "自采京东种草",
+          "material_name": "犹犹玉玉",
+          "note_id": "6abb86b4000000001b01c9c7",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "spend": 14216.92,
+          "impressions": 243774,
+          "clicks": 22856,
+          "ctr": 9.38,
+          "cpc": 0.62,
+          "cpm": 58.32,
+          "engagements": 183,
+          "cpe": 77.69,
+          "uv": 299,
+          "cpuv": 47.55,
+          "creatives_count": 487
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "李拜六不熬夜",
+          "note_id": "6ac72cc4000000001c02e832",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 13994.21,
+          "impressions": 209580,
+          "clicks": 26684,
+          "ctr": 12.73,
+          "cpc": 0.52,
+          "cpm": 66.77,
+          "engagements": 239,
+          "cpe": 58.55,
+          "uv": 991,
+          "cpuv": 14.12,
+          "creatives_count": 44
+        },
+        {
+          "channel": "自采京东种草",
+          "material_name": "yoohoow",
+          "note_id": "6ac77966000000001303d538",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 5972.22,
+          "impressions": 89613,
+          "clicks": 12008,
+          "ctr": 13.4,
+          "cpc": 0.5,
+          "cpm": 66.64,
+          "engagements": 180,
+          "cpe": 33.18,
+          "uv": 56,
+          "cpuv": 106.65,
+          "creatives_count": 86
+        },
+        {
+          "channel": "自采京东种草",
+          "material_name": "Jenny爱极简",
+          "note_id": "6acca9f2000000001203d946",
+          "period": "2026-10-15 ~ 2026-10-18",
+          "spend": 5862.55,
+          "impressions": 92492,
+          "clicks": 11002,
+          "ctr": 11.9,
+          "cpc": 0.53,
+          "cpm": 63.38,
+          "engagements": 47,
+          "cpe": 124.74,
+          "uv": 22,
+          "cpuv": 266.48,
+          "creatives_count": 20
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "刘威同学",
+          "note_id": "6abcedf50000000018013cff",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "spend": 3480.27,
+          "impressions": 38362,
+          "clicks": 3974,
+          "ctr": 10.36,
+          "cpc": 0.88,
+          "cpm": 90.72,
+          "engagements": 51,
+          "cpe": 68.24,
+          "uv": 417,
+          "cpuv": 8.35,
+          "creatives_count": 153
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "知仪",
+          "note_id": "6acca8a600000000150045ad",
+          "period": "2026-10-13 ~ 2026-10-18",
+          "spend": 2721.64,
+          "impressions": 18188,
+          "clicks": 1050,
+          "ctr": 5.77,
+          "cpc": 2.59,
+          "cpm": 149.64,
+          "engagements": 305,
+          "cpe": 8.92,
+          "uv": 467,
+          "cpuv": 5.83,
+          "creatives_count": 45
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "网友小金",
+          "note_id": "6ac77af8000000001c02e305",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 2231.04,
+          "impressions": 10999,
+          "clicks": 49,
+          "ctr": 0.45,
+          "cpc": 45.53,
+          "cpm": 202.84,
+          "engagements": 5,
+          "cpe": 446.21,
+          "uv": 358,
+          "cpuv": 6.23,
+          "creatives_count": 35
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "苏苏sue",
+          "note_id": "6acd91be000000001803bc53",
+          "period": "2026-10-13 ~ 2026-10-18",
+          "spend": 1453.37,
+          "impressions": 6066,
+          "clicks": 83,
+          "ctr": 1.37,
+          "cpc": 17.51,
+          "cpm": 239.59,
+          "engagements": 32,
+          "cpe": 45.42,
+          "uv": 374,
+          "cpuv": 3.89,
+          "creatives_count": 40
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "理工男朱先生的家",
+          "note_id": "6ac75f26000000001a02bf0a",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 1277.39,
+          "impressions": 5477,
+          "clicks": 33,
+          "ctr": 0.6,
+          "cpc": 38.71,
+          "cpm": 233.23,
+          "engagements": 6,
+          "cpe": 212.9,
+          "uv": 286,
+          "cpuv": 4.47,
+          "creatives_count": 42
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "娜娜智能家居",
+          "note_id": "6ac341dc000000001301b1d9",
+          "period": "2026-10-05 ~ 2026-10-18",
+          "spend": 1168.53,
+          "impressions": 7461,
+          "clicks": 241,
+          "ctr": 3.23,
+          "cpc": 4.85,
+          "cpm": 156.62,
+          "engagements": 127,
+          "cpe": 9.2,
+          "uv": 211,
+          "cpuv": 5.54,
+          "creatives_count": 54
+        },
+        {
+          "channel": "自采天猫种草",
+          "material_name": "造家物语",
+          "note_id": "6abce7fe000000001b0226b2",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "spend": 15.22,
+          "impressions": 863,
+          "clicks": 29,
+          "ctr": 3.36,
+          "cpc": 0.52,
+          "cpm": 17.64,
+          "engagements": 2,
+          "cpe": 7.61,
+          "uv": 6,
+          "cpuv": 2.54,
+          "creatives_count": 115
+        },
+        {
+          "channel": "自采京东种草",
+          "material_name": "设计师Brian",
+          "note_id": "6ad036d1000000001a030de4",
+          "period": "2026-10-15 ~ 2026-10-17",
+          "spend": 4.41,
+          "impressions": 406,
+          "clicks": 9,
+          "ctr": 2.22,
+          "cpc": 0.49,
+          "cpm": 10.86,
+          "engagements": 0,
+          "cpe": null,
+          "uv": 0,
+          "cpuv": null,
+          "creatives_count": 14
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-account-budget-pacing",
+      "title": "双11各渠道投放账户规划打款与实际应消耗（7大账户）",
+      "description": "来源DkdO双11日报Y7qNOu表，固定A/B/C/D/E列位置映射。包含红猫种草、红盟种草、京东对投、星伴等7个账户的规划打款额与实际应消耗需求",
+      "sourceId": "src-meiling-sheets-Y7qNOu",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Y7qNOu",
+      "period": "双11大促周期（打款与应消耗对照）",
+      "columns": [
+        {
+          "key": "account",
+          "title": "投放账户名称",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "budget_planned",
+          "title": "规划打款(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "actual_paid",
+          "title": "实际打款(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "actual_required_spend",
+          "title": "实际应消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "variance",
+          "title": "还差&应挪(元)",
+          "type": "currency",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "row_number": 2,
+          "account": "美菱-26年双11-自采-红猫种草（易美）",
+          "budget_planned": 250000,
+          "actual_paid": null,
+          "actual_required_spend": 1094327.99,
+          "variance": null
+        },
+        {
+          "row_number": 3,
+          "account": "美菱-26年双11-自采-CID红猫（易美）",
+          "budget_planned": 50000,
+          "actual_paid": null,
+          "actual_required_spend": null,
+          "variance": null
+        },
+        {
+          "row_number": 4,
+          "account": "美菱-26年双11-自采-红盟种草（易美）",
+          "budget_planned": 250000,
+          "actual_paid": null,
+          "actual_required_spend": 511713.93,
+          "variance": null
+        },
+        {
+          "row_number": 5,
+          "account": "美菱-26年双11-自采-CID红京（易美）",
+          "budget_planned": 250000,
+          "actual_paid": null,
+          "actual_required_spend": null,
+          "variance": null
+        },
+        {
+          "row_number": 6,
+          "account": "美菱-26年双11-代采-京东对投（易美）",
+          "budget_planned": 100000,
+          "actual_paid": null,
+          "actual_required_spend": 386111.11,
+          "variance": null
+        },
+        {
+          "row_number": 7,
+          "account": "美菱-26年双11-代采-CID京东对投（易美）",
+          "budget_planned": 200000,
+          "actual_paid": null,
+          "actual_required_spend": null,
+          "variance": null
+        },
+        {
+          "row_number": 8,
+          "account": "美菱-26年双11-代采-红猫种草（易美星伴）",
+          "budget_planned": 100000,
+          "actual_paid": null,
+          "actual_required_spend": 477497.26,
+          "variance": null
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-double11-model-planning",
+      "title": "双11各产品系列与型号原规划预算、篇数及投流消耗（9/28规划版·380万）",
+      "description": "来源HNDC kpi管理表4SGaOf前11行。覆盖小确杏、黑珍珠、大白鲸、无忧嵌四大系列的规划预算（380万）、规划篇数（117篇）、初步筛选（81篇）、已发布（13篇）及投流消耗（41.52万）。本表型号级无独立GMV归因，严格呈现源数不造假ROI。",
+      "sourceId": "src-meiling-sheets-4SGaOf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre?sheet=4SGaOf",
+      "period": "2026.9.28更新（原规划表，截止未注明）",
+      "columns": [
+        {
+          "key": "series",
+          "title": "产品系列",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "model",
+          "title": "产品型号",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "budget_wan",
+          "title": "规划预算(万元)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "posts_plan",
+          "title": "规划篇数",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "screen_prog",
+          "title": "初步筛选(篇)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "pub_prog",
+          "title": "已发篇数(篇)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "spend",
+          "title": "投流消耗(元)",
+          "type": "currency",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "row_number": 2,
+          "series": "小确杏系列",
+          "model": "BCD-520WFPU9CIZXG1",
+          "budget_wan": 65,
+          "posts_plan": 17,
+          "screen_prog": 9,
+          "pub_prog": 0,
+          "spend": 94321.54
+        },
+        {
+          "row_number": 3,
+          "series": "小确杏系列",
+          "model": "BCD-511WSPU9CIZXG1",
+          "budget_wan": 30,
+          "posts_plan": 9,
+          "screen_prog": 5,
+          "pub_prog": 0,
+          "spend": 12628
+        },
+        {
+          "row_number": 4,
+          "series": "小确杏系列",
+          "model": "BCD-502WFPU9CZXG1",
+          "budget_wan": 150,
+          "posts_plan": 45,
+          "screen_prog": 36,
+          "pub_prog": 13,
+          "spend": 274453.16
+        },
+        {
+          "row_number": 5,
+          "series": "小确杏系列",
+          "model": "BCD-421WFPU9CZXG1",
+          "budget_wan": 75,
+          "posts_plan": 24,
+          "screen_prog": 18,
+          "pub_prog": 0,
+          "spend": 15744.59
+        },
+        {
+          "row_number": 6,
+          "series": "大白鲸系列",
+          "model": "BCD-570WSPU9CDIZXG1",
+          "budget_wan": 15,
+          "posts_plan": 4,
+          "screen_prog": 4,
+          "pub_prog": 0,
+          "spend": 9581.56
+        },
+        {
+          "row_number": 7,
+          "series": "黑珍珠系列",
+          "model": "BCD-516WFPU9BIZX",
+          "budget_wan": 20,
+          "posts_plan": 6,
+          "screen_prog": 3,
+          "pub_prog": 0,
+          "spend": 8509.33
+        },
+        {
+          "row_number": 8,
+          "series": "无忧嵌系列",
+          "model": "BCD-513WFPU9CIZXG1",
+          "budget_wan": 25,
+          "posts_plan": 12,
+          "screen_prog": 6,
+          "pub_prog": 0,
+          "spend": null
+        },
+        {
+          "row_number": 9,
+          "series": "无忧嵌系列",
+          "model": "BCD-512WFPU9CZXG1白",
+          "budget_wan": null,
+          "posts_plan": null,
+          "screen_prog": null,
+          "pub_prog": null,
+          "spend": null
+        },
+        {
+          "row_number": 10,
+          "series": "无忧嵌系列",
+          "model": "BCD-502WSPU9CZXG1",
+          "budget_wan": null,
+          "posts_plan": null,
+          "screen_prog": null,
+          "pub_prog": null,
+          "spend": null
+        },
+        {
+          "row_number": 11,
+          "series": "双11全渠道合计",
+          "model": "全量产品型号",
+          "budget_wan": 380,
+          "posts_plan": 117,
+          "screen_prog": 81,
+          "pub_prog": 13,
+          "spend": 415238.18
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-double11-platform-kpi-summary",
+      "title": "双11分平台目标规划与渠道级回传GMV总览（京东 vs 天猫）",
+      "description": "来源HNDC kpi管理表4SGaOf平台合并区块。进店量与GMV在原表为平台级数据（京东平台11508进店/136.8万GMV/投流ROI 5.17；天猫平台6151进店/62.6万GMV/投流ROI 4.16）。严格保留渠道合并口径。",
+      "sourceId": "src-meiling-sheets-4SGaOf",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/RQffw002Aik9aNkW9PScJ05knre?sheet=4SGaOf",
+      "period": "2026.9.28更新（原规划表，截止未注明）",
+      "columns": [
+        {
+          "key": "platform",
+          "title": "归属平台",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "budget_wan",
+          "title": "规划预算(万元)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "posts_plan",
+          "title": "规划篇数",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "screen_prog",
+          "title": "达人筛选进度",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "pub_prog",
+          "title": "内容发布进度",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "spend",
+          "title": "投流消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "store_uv",
+          "title": "进店量(UV)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "gmv",
+          "title": "回传GMV(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "channel_roi",
+          "title": "平台投流ROI",
+          "type": "number",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "platform": "京东渠道整体",
+          "budget_wan": 215,
+          "posts_plan": 66,
+          "screen_prog": 42,
+          "pub_prog": 13,
+          "spend": 264853.93,
+          "store_uv": 11508,
+          "gmv": 1368061.2,
+          "channel_roi": null,
+          "evidence": "4SGaOf row 16 (UV 11,508 / GMV 1,368,061.20) 与 row 22 消耗合计 264,853.93"
+        },
+        {
+          "platform": "天猫渠道整体",
+          "budget_wan": 165,
+          "posts_plan": 51,
+          "screen_prog": 39,
+          "pub_prog": 0,
+          "spend": 150384.25,
+          "store_uv": 6151,
+          "gmv": 626127.49,
+          "channel_roi": null,
+          "evidence": "4SGaOf row 27 (UV 6,151 / GMV 626,127.49) 与 row 32 消耗合计 150,384.25"
+        },
+        {
+          "platform": "双平台总计",
+          "budget_wan": 380,
+          "posts_plan": 117,
+          "screen_prog": 81,
+          "pub_prog": 13,
+          "spend": 415238.18,
+          "store_uv": 17659,
+          "gmv": 1994188.69,
+          "channel_roi": null,
+          "evidence": "双平台加总：GMV 1,994,188.69 / 消耗 415,238.18 = 4.80"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-sample-machine-progress",
+      "title": "双11样机产品型号分布与流转进度统计（84台·隐私脱敏）",
+      "description": "来源Base双11样机信息表tblotoaoy40ShO5k。按真实字段【推荐产品】聚合型号分布（小确杏502Pro 35台/421 18台等），按【样机进度】聚合流转状态（已下单61台/已收加急制图15台等），彻底去除个人隐私信息。",
+      "sourceId": "src-meiling-base-yangji",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tblotoaoy40ShO5k",
+      "period": "双11大促全周期（84台样机）",
+      "columns": [
+        {
+          "key": "model",
+          "title": "样机型号",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "count",
+          "title": "样机台数(台)",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ratio",
+          "title": "占比(%)",
+          "type": "percent",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "model": "小确杏502Pro",
+          "count": 35,
+          "ratio": 41.7
+        },
+        {
+          "model": "小确杏421",
+          "count": 18,
+          "ratio": 21.4
+        },
+        {
+          "model": "小确杏520机皇",
+          "count": 8,
+          "ratio": 9.5
+        },
+        {
+          "model": "小确杏511",
+          "count": 7,
+          "ratio": 8.3
+        },
+        {
+          "model": "黑珍珠516",
+          "count": 6,
+          "ratio": 7.1
+        },
+        {
+          "model": "大白鲸570",
+          "count": 4,
+          "ratio": 4.8
+        },
+        {
+          "model": "无忧嵌512",
+          "count": 2,
+          "ratio": 2.4
+        },
+        {
+          "model": "无忧嵌502",
+          "count": 2,
+          "ratio": 2.4
+        },
+        {
+          "model": "无忧嵌513",
+          "count": 2,
+          "ratio": 2.4
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-search-keywords-classification",
+      "title": "小红书投放搜索词类与产品渗透聚类（有效339条非空词）",
+      "description": "来源DkdO双11日报mG2COI表，剔除空白网格后实际有效339条关键词。竞品截流词占比59.9%（203条）、品类词24.2%（82条）、品牌词8.3%（28条）、618大促词7.4%（25条）。",
+      "sourceId": "src-meiling-sheets-mG2COI",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=mG2COI",
+      "period": "投放搜索词绑定（339条有效关键词）",
+      "columns": [
+        {
+          "key": "category",
+          "title": "词类分类",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "product",
+          "title": "关联产品",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "count",
+          "title": "关键词条数",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "ratio",
+          "title": "类目占比(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "sample_keywords",
+          "title": "代表性关键词示例",
+          "type": "string",
+          "align": "left"
+        }
+      ],
+      "rows": [
+        {
+          "category": "竞品词",
+          "product": "-",
+          "count": 176,
+          "ratio": 51.9,
+          "sample_keywords": "懒人冰立得冰箱、海尔冰箱推荐性价比高、松下冰箱"
+        },
+        {
+          "category": "品类词",
+          "product": "-",
+          "count": 82,
+          "ratio": 24.2,
+          "sample_keywords": "冰箱品牌、小户型冰箱、冰箱设计"
+        },
+        {
+          "category": "品牌词",
+          "product": "-",
+          "count": 28,
+          "ratio": 8.3,
+          "sample_keywords": "美菱冰箱是什么档次、美菱黑珍珠镜面冰箱测评、美菱冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "小确杏机皇520",
+          "count": 10,
+          "ratio": 2.9,
+          "sample_keywords": "李佳琦618冰箱、618冰箱怎么买最划算、冰箱618买会更便宜吗"
+        },
+        {
+          "category": "竞品词",
+          "product": "小确杏机皇520",
+          "count": 10,
+          "ratio": 2.9,
+          "sample_keywords": "美的508Pro冰箱、华凌冰箱、海尔冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "黑珍珠",
+          "count": 6,
+          "ratio": 1.8,
+          "sample_keywords": "618冰箱选购、618冰箱、618冰箱攻略"
+        },
+        {
+          "category": "竞品词",
+          "product": "黑珍珠",
+          "count": 6,
+          "ratio": 1.8,
+          "sample_keywords": "美的冰箱、美的可爱多冰箱、卡萨帝冰箱"
+        },
+        {
+          "category": "竞品词",
+          "product": "小确杏409",
+          "count": 6,
+          "ratio": 1.8,
+          "sample_keywords": "东芝冰箱、海尔冰箱推荐、colmo冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "棉花糖515",
+          "count": 5,
+          "ratio": 1.5,
+          "sample_keywords": "618买冰箱什么时候最便宜、海尔冰箱618价格、618冰箱价格"
+        },
+        {
+          "category": "竞品词",
+          "product": "棉花糖515",
+          "count": 5,
+          "ratio": 1.5,
+          "sample_keywords": "美的小冰狗冰箱、海尔云溪冰箱、东芝大白梨冰箱"
+        },
+        {
+          "category": "618词",
+          "product": "小确杏409",
+          "count": 4,
+          "ratio": 1.2,
+          "sample_keywords": "618冰箱推荐性价比、618冰箱便宜吗、海尔618升对开门冰箱"
+        },
+        {
+          "category": "智能词包",
+          "product": "-",
+          "count": 1,
+          "ratio": 0.3,
+          "sample_keywords": "智能搭建词包"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-channel-daily-comparable",
+      "title": "双平台同周期可比分日消耗与效率对照（天猫自采 vs 京东自采 09/30~10/18）",
+      "description": "天猫自采与京东自采在相同19个日期区间内并排对比分日消耗、曝光、点击与CTR/CPC/CPE，避免盲目跨期加总。",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
+      "period": "2026-09-30 ~ 2026-10-18 (可比19天)",
+      "columns": [
+        {
+          "key": "date",
+          "title": "投放日期",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "tm_spend",
+          "title": "天猫消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "jd_spend",
+          "title": "京东消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "spend_ratio_jd_vs_tm",
+          "title": "京东/天猫消耗比",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "tm_ctr",
+          "title": "天猫CTR(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "jd_ctr",
+          "title": "京东CTR(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "tm_cpc",
+          "title": "天猫CPC(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "jd_cpc",
+          "title": "京东CPC(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "tm_cpe",
+          "title": "天猫CPE(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "jd_cpe",
+          "title": "京东CPE(元)",
+          "type": "currency",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "date": "2026-09-30",
+          "tm_spend": 643.11,
+          "jd_spend": 342.55,
+          "spend_ratio_jd_vs_tm": 0.53,
+          "tm_ctr": 17.3,
+          "jd_ctr": 12.88,
+          "tm_cpc": 0.37,
+          "jd_cpc": 0.44,
+          "tm_cpe": 49.47,
+          "jd_cpe": 5.71
+        },
+        {
+          "date": "2026-10-01",
+          "tm_spend": 1208.32,
+          "jd_spend": 1361.74,
+          "spend_ratio_jd_vs_tm": 1.13,
+          "tm_ctr": 15.25,
+          "jd_ctr": 10.69,
+          "tm_cpc": 0.26,
+          "jd_cpc": 0.44,
+          "tm_cpe": 24.66,
+          "jd_cpe": 45.39
+        },
+        {
+          "date": "2026-10-02",
+          "tm_spend": 1408.23,
+          "jd_spend": 1344.94,
+          "spend_ratio_jd_vs_tm": 0.96,
+          "tm_ctr": 14.62,
+          "jd_ctr": 11.61,
+          "tm_cpc": 0.23,
+          "jd_cpc": 0.43,
+          "tm_cpe": 26.08,
+          "jd_cpe": 67.25
+        },
+        {
+          "date": "2026-10-03",
+          "tm_spend": 1815.08,
+          "jd_spend": 1490.29,
+          "spend_ratio_jd_vs_tm": 0.82,
+          "tm_ctr": 13.87,
+          "jd_ctr": 10.61,
+          "tm_cpc": 0.23,
+          "jd_cpc": 0.44,
+          "tm_cpe": 30.25,
+          "jd_cpe": 62.1
+        },
+        {
+          "date": "2026-10-04",
+          "tm_spend": 2021.95,
+          "jd_spend": 1790.77,
+          "spend_ratio_jd_vs_tm": 0.89,
+          "tm_ctr": 12.46,
+          "jd_ctr": 9.07,
+          "tm_cpc": 0.3,
+          "jd_cpc": 0.45,
+          "tm_cpe": 29.73,
+          "jd_cpe": 74.62
+        },
+        {
+          "date": "2026-10-05",
+          "tm_spend": 3074.9,
+          "jd_spend": 2032.79,
+          "spend_ratio_jd_vs_tm": 0.66,
+          "tm_ctr": 11.51,
+          "jd_ctr": 9.43,
+          "tm_cpc": 0.33,
+          "jd_cpc": 0.47,
+          "tm_cpe": 29.57,
+          "jd_cpe": 81.31
+        },
+        {
+          "date": "2026-10-06",
+          "tm_spend": 3013.62,
+          "jd_spend": 2018.66,
+          "spend_ratio_jd_vs_tm": 0.67,
+          "tm_ctr": 11.56,
+          "jd_ctr": 9.26,
+          "tm_cpc": 0.36,
+          "jd_cpc": 0.52,
+          "tm_cpe": 28.7,
+          "jd_cpe": 144.19
+        },
+        {
+          "date": "2026-10-07",
+          "tm_spend": 3022.31,
+          "jd_spend": 2010.22,
+          "spend_ratio_jd_vs_tm": 0.67,
+          "tm_ctr": 11.39,
+          "jd_ctr": 9.24,
+          "tm_cpc": 0.36,
+          "jd_cpc": 0.52,
+          "tm_cpe": 22.06,
+          "jd_cpe": 95.72
+        },
+        {
+          "date": "2026-10-08",
+          "tm_spend": 3265.02,
+          "jd_spend": 2024.46,
+          "spend_ratio_jd_vs_tm": 0.62,
+          "tm_ctr": 10.95,
+          "jd_ctr": 9.05,
+          "tm_cpc": 0.35,
+          "jd_cpc": 0.53,
+          "tm_cpe": 33.32,
+          "jd_cpe": 96.4
+        },
+        {
+          "date": "2026-10-09",
+          "tm_spend": 3426.06,
+          "jd_spend": 5024.01,
+          "spend_ratio_jd_vs_tm": 1.47,
+          "tm_ctr": 10.87,
+          "jd_ctr": 10.09,
+          "tm_cpc": 0.4,
+          "jd_cpc": 0.52,
+          "tm_cpe": 28.79,
+          "jd_cpe": 86.62
+        },
+        {
+          "date": "2026-10-10",
+          "tm_spend": 3352.06,
+          "jd_spend": 4123.3,
+          "spend_ratio_jd_vs_tm": 1.23,
+          "tm_ctr": 11.49,
+          "jd_ctr": 9.62,
+          "tm_cpc": 0.41,
+          "jd_cpc": 0.5,
+          "tm_cpe": 31.62,
+          "jd_cpe": 91.63
+        },
+        {
+          "date": "2026-10-11",
+          "tm_spend": 3804.86,
+          "jd_spend": 5006.41,
+          "spend_ratio_jd_vs_tm": 1.32,
+          "tm_ctr": 11.69,
+          "jd_ctr": 10.08,
+          "tm_cpc": 0.41,
+          "jd_cpc": 0.5,
+          "tm_cpe": 29.27,
+          "jd_cpe": 86.32
+        },
+        {
+          "date": "2026-10-12",
+          "tm_spend": 3639.1,
+          "jd_spend": 5269.52,
+          "spend_ratio_jd_vs_tm": 1.45,
+          "tm_ctr": 11.15,
+          "jd_ctr": 9.91,
+          "tm_cpc": 0.46,
+          "jd_cpc": 0.49,
+          "tm_cpe": 41.83,
+          "jd_cpe": 86.39
+        },
+        {
+          "date": "2026-10-13",
+          "tm_spend": 6098.36,
+          "jd_spend": 4210.6,
+          "spend_ratio_jd_vs_tm": 0.69,
+          "tm_ctr": 11,
+          "jd_ctr": 10.17,
+          "tm_cpc": 0.47,
+          "jd_cpc": 0.53,
+          "tm_cpe": 14.98,
+          "jd_cpe": 79.45
+        },
+        {
+          "date": "2026-10-14",
+          "tm_spend": 6486.23,
+          "jd_spend": 3871.3,
+          "spend_ratio_jd_vs_tm": 0.6,
+          "tm_ctr": 11.57,
+          "jd_ctr": 10.03,
+          "tm_cpc": 0.51,
+          "jd_cpc": 0.59,
+          "tm_cpe": 12.97,
+          "jd_cpe": 70.39
+        },
+        {
+          "date": "2026-10-15",
+          "tm_spend": 12697.47,
+          "jd_spend": 8057.81,
+          "spend_ratio_jd_vs_tm": 0.63,
+          "tm_ctr": 10.47,
+          "jd_ctr": 10.19,
+          "tm_cpc": 0.79,
+          "jd_cpc": 0.68,
+          "tm_cpe": 15.68,
+          "jd_cpe": 76.02
+        },
+        {
+          "date": "2026-10-16",
+          "tm_spend": 10152.5,
+          "jd_spend": 10254.27,
+          "spend_ratio_jd_vs_tm": 1.01,
+          "tm_ctr": 10.39,
+          "jd_ctr": 9.36,
+          "tm_cpc": 0.87,
+          "jd_cpc": 0.7,
+          "tm_cpe": 17.78,
+          "jd_cpe": 173.8
+        },
+        {
+          "date": "2026-10-17",
+          "tm_spend": 3788.58,
+          "jd_spend": 8643.26,
+          "spend_ratio_jd_vs_tm": 2.28,
+          "tm_ctr": 10.97,
+          "jd_ctr": 10.2,
+          "tm_cpc": 0.91,
+          "jd_cpc": 0.58,
+          "tm_cpe": 86.1,
+          "jd_cpe": 101.69
+        },
+        {
+          "date": "2026-10-18",
+          "tm_spend": 6034.11,
+          "jd_spend": 9641.64,
+          "spend_ratio_jd_vs_tm": 1.6,
+          "tm_ctr": 10.79,
+          "jd_ctr": 10.56,
+          "tm_cpc": 0.76,
+          "jd_cpc": 0.57,
+          "tm_cpe": 8.5,
+          "jd_cpe": 102.57
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-material-pareto-efficiency",
+      "title": "双11全量14篇商业笔记素材消耗Pareto与能效层级诊断",
+      "description": "全量14篇商业笔记素材按累计消耗降序排列。揭示Top 3头部素材占70.2%消耗的集中度特征，并标注高成本/低效消耗素材（CPUV>30或CPE>20）。",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg",
+      "period": "2026-09-29 ~ 2026-10-18 (天猫09/30起，京东09/29起)",
+      "columns": [
+        {
+          "key": "rank",
+          "title": "消耗排名",
+          "type": "number",
+          "align": "center"
+        },
+        {
+          "key": "material_name",
+          "title": "素材创意名称",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "channel",
+          "title": "所属渠道",
+          "type": "string",
+          "align": "center"
+        },
+        {
+          "key": "spend",
+          "title": "累计消耗(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "spend_cum_ratio",
+          "title": "累计消耗占比(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "ctr",
+          "title": "点击率(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "cpc",
+          "title": "CPC(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "cpe",
+          "title": "CPE(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "uv",
+          "title": "进店UV",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "cpuv",
+          "title": "CPUV(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "efficiency_tier",
+          "title": "能效层级判定",
+          "type": "string",
+          "align": "center"
+        }
+      ],
+      "rows": [
+        {
+          "rank": 1,
+          "material_name": "村西头的灰太狼（在装修）",
+          "note_id": "6abb9bec000000000a02720f",
+          "channel": "自采天猫种草",
+          "period": "2026-09-30 ~ 2026-10-18",
+          "spend": 52610.2,
+          "spend_cum_ratio": 33.4,
+          "impressions": 1111950,
+          "clicks": 129614,
+          "ctr": 11.66,
+          "cpc": 0.41,
+          "cpe": 15.45,
+          "uv": 1966,
+          "cpuv": 26.76,
+          "efficiency_tier": "核心放量Top"
+        },
+        {
+          "rank": 2,
+          "material_name": "豆芽不是菜",
+          "note_id": "6aba3fcb000000001b030ece",
+          "channel": "自采京东种草",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "spend": 52470.19,
+          "spend_cum_ratio": 66.7,
+          "impressions": 997307,
+          "clicks": 96102,
+          "ctr": 9.64,
+          "cpc": 0.55,
+          "cpe": 102.08,
+          "uv": 1285,
+          "cpuv": 40.83,
+          "efficiency_tier": "核心放量Top"
+        },
+        {
+          "rank": 3,
+          "material_name": "犹犹玉玉",
+          "note_id": "6abb86b4000000001b01c9c7",
+          "channel": "自采京东种草",
+          "period": "2026-09-29 ~ 2026-10-18",
+          "spend": 14216.92,
+          "spend_cum_ratio": 75.8,
+          "impressions": 243774,
+          "clicks": 22856,
+          "ctr": 9.38,
+          "cpc": 0.62,
+          "cpe": 77.69,
+          "uv": 299,
+          "cpuv": 47.55,
+          "efficiency_tier": "核心放量Top"
+        },
+        {
+          "rank": 4,
+          "material_name": "李拜六不熬夜",
+          "note_id": "6ac72cc4000000001c02e832",
+          "channel": "自采天猫种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 13994.21,
+          "spend_cum_ratio": 84.6,
+          "impressions": 209580,
+          "clicks": 26684,
+          "ctr": 12.73,
+          "cpc": 0.52,
+          "cpe": 58.55,
+          "uv": 991,
+          "cpuv": 14.12,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 5,
+          "material_name": "yoohoow",
+          "note_id": "6ac77966000000001303d538",
+          "channel": "自采京东种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 5972.22,
+          "spend_cum_ratio": 88.4,
+          "impressions": 89613,
+          "clicks": 12008,
+          "ctr": 13.4,
+          "cpc": 0.5,
+          "cpe": 33.18,
+          "uv": 56,
+          "cpuv": 106.65,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 6,
+          "material_name": "Jenny爱极简",
+          "note_id": "6acca9f2000000001203d946",
+          "channel": "自采京东种草",
+          "period": "2026-10-15 ~ 2026-10-18",
+          "spend": 5862.55,
+          "spend_cum_ratio": 92.2,
+          "impressions": 92492,
+          "clicks": 11002,
+          "ctr": 11.9,
+          "cpc": 0.53,
+          "cpe": 124.74,
+          "uv": 22,
+          "cpuv": 266.48,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 7,
+          "material_name": "刘威同学",
+          "note_id": "6abcedf50000000018013cff",
+          "channel": "自采天猫种草",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "spend": 3480.27,
+          "spend_cum_ratio": 94.4,
+          "impressions": 38362,
+          "clicks": 3974,
+          "ctr": 10.36,
+          "cpc": 0.88,
+          "cpe": 68.24,
+          "uv": 417,
+          "cpuv": 8.35,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 8,
+          "material_name": "知仪",
+          "note_id": "6acca8a600000000150045ad",
+          "channel": "自采天猫种草",
+          "period": "2026-10-13 ~ 2026-10-18",
+          "spend": 2721.64,
+          "spend_cum_ratio": 96.1,
+          "impressions": 18188,
+          "clicks": 1050,
+          "ctr": 5.77,
+          "cpc": 2.59,
+          "cpe": 8.92,
+          "uv": 467,
+          "cpuv": 5.83,
+          "efficiency_tier": "稳健放量"
+        },
+        {
+          "rank": 9,
+          "material_name": "网友小金",
+          "note_id": "6ac77af8000000001c02e305",
+          "channel": "自采天猫种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 2231.04,
+          "spend_cum_ratio": 97.5,
+          "impressions": 10999,
+          "clicks": 49,
+          "ctr": 0.45,
+          "cpc": 45.53,
+          "cpe": 446.21,
+          "uv": 358,
+          "cpuv": 6.23,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 10,
+          "material_name": "苏苏sue",
+          "note_id": "6acd91be000000001803bc53",
+          "channel": "自采天猫种草",
+          "period": "2026-10-13 ~ 2026-10-18",
+          "spend": 1453.37,
+          "spend_cum_ratio": 98.4,
+          "impressions": 6066,
+          "clicks": 83,
+          "ctr": 1.37,
+          "cpc": 17.51,
+          "cpe": 45.42,
+          "uv": 374,
+          "cpuv": 3.89,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 11,
+          "material_name": "理工男朱先生的家",
+          "note_id": "6ac75f26000000001a02bf0a",
+          "channel": "自采天猫种草",
+          "period": "2026-10-08 ~ 2026-10-18",
+          "spend": 1277.39,
+          "spend_cum_ratio": 99.2,
+          "impressions": 5477,
+          "clicks": 33,
+          "ctr": 0.6,
+          "cpc": 38.71,
+          "cpe": 212.9,
+          "uv": 286,
+          "cpuv": 4.47,
+          "efficiency_tier": "高成本/低效消耗"
+        },
+        {
+          "rank": 12,
+          "material_name": "娜娜智能家居",
+          "note_id": "6ac341dc000000001301b1d9",
+          "channel": "自采天猫种草",
+          "period": "2026-10-05 ~ 2026-10-18",
+          "spend": 1168.53,
+          "spend_cum_ratio": 100,
+          "impressions": 7461,
+          "clicks": 241,
+          "ctr": 3.23,
+          "cpc": 4.85,
+          "cpe": 9.2,
+          "uv": 211,
+          "cpuv": 5.54,
+          "efficiency_tier": "试探期素材"
+        },
+        {
+          "rank": 13,
+          "material_name": "造家物语",
+          "note_id": "6abce7fe000000001b0226b2",
+          "channel": "自采天猫种草",
+          "period": "2026-10-01 ~ 2026-10-18",
+          "spend": 15.22,
+          "spend_cum_ratio": 100,
+          "impressions": 863,
+          "clicks": 29,
+          "ctr": 3.36,
+          "cpc": 0.52,
+          "cpe": 7.61,
+          "uv": 6,
+          "cpuv": 2.54,
+          "efficiency_tier": "试探期素材"
+        },
+        {
+          "rank": 14,
+          "material_name": "设计师Brian",
+          "note_id": "6ad036d1000000001a030de4",
+          "channel": "自采京东种草",
+          "period": "2026-10-15 ~ 2026-10-17",
+          "spend": 4.41,
+          "spend_cum_ratio": 100,
+          "impressions": 406,
+          "clicks": 9,
+          "ctr": 2.22,
+          "cpc": 0.49,
+          "cpe": null,
+          "uv": 0,
+          "cpuv": null,
+          "efficiency_tier": "试探期素材"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-618-procurement-roi-review",
+      "title": "2026年618复盘采买形式KOL+FS vs 纯FS结构与ROI口径拆解（独立已结案）",
+      "description": "来源MMPZ 618复盘数据与HNDC FkLCad表。严格独立呈现618结案数据（总花费197.6万/GMV 1696万/全案ROI 8.58），区分KOL采买费与信息流投流费，严禁与双11混同。",
+      "sourceId": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/E7LWwhPFhi8XNTkSXvoceiZfnJh",
+      "period": "2026-05-20 ~ 2026-06-20 (618已结案复盘)",
+      "columns": [
+        {
+          "key": "procurement_mode",
+          "title": "采买模式",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "channel",
+          "title": "归属渠道",
+          "type": "string",
+          "align": "left"
+        },
+        {
+          "key": "k_spend",
+          "title": "达人KOL费用(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "fs_spend",
+          "title": "信息流FS费用(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "total_spend",
+          "title": "总费用K+FS(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "k_share",
+          "title": "达人费用占比(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "fs_share",
+          "title": "投流费用占比(%)",
+          "type": "percent",
+          "align": "right"
+        },
+        {
+          "key": "gmv",
+          "title": "实现GMV(元)",
+          "type": "currency",
+          "align": "right"
+        },
+        {
+          "key": "fs_roi",
+          "title": "纯FS ROI",
+          "type": "number",
+          "align": "right"
+        },
+        {
+          "key": "overall_roi",
+          "title": "全案(K+FS) ROI",
+          "type": "number",
+          "align": "right"
+        }
+      ],
+      "rows": [
+        {
+          "procurement_mode": "自采",
+          "channel": "京东自采",
+          "k_spend": 220218.9,
+          "fs_spend": 371992,
+          "total_spend": 592210.9,
+          "k_share": 37.19,
+          "fs_share": 62.81,
+          "gmv": 3306734.71,
+          "fs_roi": 8.89,
+          "overall_roi": 5.58
+        },
+        {
+          "procurement_mode": "自采",
+          "channel": "天猫自采",
+          "k_spend": 192390,
+          "fs_spend": 411120,
+          "total_spend": 603510,
+          "k_share": 31.88,
+          "fs_share": 68.12,
+          "gmv": 6559520.62,
+          "fs_roi": 15.96,
+          "overall_roi": 10.87
+        },
+        {
+          "procurement_mode": "代采（对投）",
+          "channel": "京东对投",
+          "k_spend": 167596,
+          "fs_spend": 409330,
+          "total_spend": 576926,
+          "k_share": 29.05,
+          "fs_share": 70.95,
+          "gmv": 4292855.01,
+          "fs_roi": 10.49,
+          "overall_roi": 7.44
+        },
+        {
+          "procurement_mode": "代采（星伴）",
+          "channel": "天猫星伴",
+          "k_spend": 89980,
+          "fs_spend": 113182,
+          "total_spend": 203162,
+          "k_share": 44.29,
+          "fs_share": 55.71,
+          "gmv": 2800449.08,
+          "fs_roi": 24.74,
+          "overall_roi": 13.78
+        },
+        {
+          "procurement_mode": "618全案合计",
+          "channel": "全渠道已结案",
+          "k_spend": 670184.9,
+          "fs_spend": 1305624,
+          "total_spend": 1975808.9,
+          "k_share": 33.92,
+          "fs_share": 66.08,
+          "gmv": 16959559.42,
+          "fs_roi": 12.99,
+          "overall_roi": 8.58
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-full-funnel",
+      "title": "双11种草投流全链路转化漏斗（展现→点击→互动→进店UV）",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "period": "2026-09-30 ~ 2026-10-18",
+      "type": "funnel",
+      "columns": [
+        {
+          "key": "stage",
+          "label": "转化层级",
+          "type": "string"
+        },
+        {
+          "key": "value",
+          "label": "绝对规模",
+          "type": "number"
+        },
+        {
+          "key": "unit",
+          "label": "单位",
+          "type": "string"
+        },
+        {
+          "key": "conversion_label",
+          "label": "转化率",
+          "type": "string"
+        },
+        {
+          "key": "cost_label",
+          "label": "单位成本/总值",
+          "type": "string"
+        },
+        {
+          "key": "subtext",
+          "label": "链路含义",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "stage": "品牌曝光展现",
+          "stage_key": "impressions",
+          "value": 5356217,
+          "unit": "次",
+          "conversion_label": "基准曝光池",
+          "cost_label": "总消耗 ¥424,861.59",
+          "subtext": "跨10大投放线全网触达"
+        },
+        {
+          "stage": "种草点击浏览",
+          "stage_key": "clicks",
+          "value": 545840,
+          "unit": "次",
+          "conversion_label": "CTR 10.19%",
+          "cost_label": "CPC ¥0.78",
+          "subtext": "兴趣受众深度图文/视频阅读"
+        },
+        {
+          "stage": "深度互动交互",
+          "stage_key": "engagements",
+          "value": 8808,
+          "unit": "次",
+          "conversion_label": "互动率 1.61%",
+          "cost_label": "CPE ¥48.24",
+          "subtext": "点赞/收藏/评论/分享"
+        },
+        {
+          "stage": "电商进店引流",
+          "stage_key": "store_uv",
+          "value": 18193,
+          "unit": "UV",
+          "conversion_label": "进店率 3.33%",
+          "cost_label": "CPUV ¥23.35",
+          "subtext": "回传京东/天猫店铺活跃UV"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-multi-line-summary",
+      "title": "双11各细分投放线投放消耗与转化效能汇总（10大投放线）",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "period": "2026-09-30 ~ 2026-10-18",
+      "type": "summary",
+      "columns": [
+        {
+          "key": "line_name",
+          "label": "细分投放线",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "label": "消耗金额(元)",
+          "type": "number"
+        },
+        {
+          "key": "impressions",
+          "label": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "label": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "ctr",
+          "label": "点击率(%)",
+          "type": "number"
+        },
+        {
+          "key": "cpc",
+          "label": "平均点击成本(元)",
+          "type": "number"
+        },
+        {
+          "key": "engagements",
+          "label": "互动量",
+          "type": "number"
+        },
+        {
+          "key": "cpe",
+          "label": "平均互动成本(元)",
+          "type": "number"
+        },
+        {
+          "key": "uv",
+          "label": "站外活跃进店UV",
+          "type": "number"
+        },
+        {
+          "key": "cpuv",
+          "label": "平均进店成本(元)",
+          "type": "number"
+        },
+        {
+          "key": "status",
+          "label": "投放状态",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "line_name": "自采天猫种草",
+          "spend": 78951.87,
+          "impressions": 1408946,
+          "clicks": 161757,
+          "ctr": 11.48,
+          "cpc": 0.49,
+          "engagements": 4172,
+          "cpe": 18.92,
+          "uv": 5076,
+          "cpuv": 15.55,
+          "status": "投放中"
+        },
+        {
+          "line_name": "自采京东种草",
+          "spend": 78526.29,
+          "impressions": 1423592,
+          "clicks": 141977,
+          "ctr": 9.97,
+          "cpc": 0.55,
+          "engagements": 924,
+          "cpe": 84.99,
+          "uv": 1662,
+          "cpuv": 47.25,
+          "status": "投放中"
+        },
+        {
+          "line_name": "自采红猫CID",
+          "spend": 43027.96,
+          "impressions": 131639,
+          "clicks": 9922,
+          "ctr": 7.54,
+          "cpc": 4.34,
+          "engagements": 213,
+          "cpe": 202.01,
+          "uv": 0,
+          "cpuv": null,
+          "status": "投放中"
+        },
+        {
+          "line_name": "自采红京CID",
+          "spend": 61742.75,
+          "impressions": 224649,
+          "clicks": 22640,
+          "ctr": 10.08,
+          "cpc": 2.73,
+          "engagements": 230,
+          "cpe": 268.45,
+          "uv": 3124,
+          "cpuv": 19.76,
+          "status": "投放中"
+        },
+        {
+          "line_name": "代采星伴种草",
+          "spend": 28371.46,
+          "impressions": 203878,
+          "clicks": 9373,
+          "ctr": 4.6,
+          "cpc": 3.03,
+          "engagements": 282,
+          "cpe": 100.61,
+          "uv": 1075,
+          "cpuv": 26.39,
+          "status": "投放中"
+        },
+        {
+          "line_name": "UDS",
+          "spend": 0,
+          "impressions": 0,
+          "clicks": 0,
+          "ctr": 0,
+          "cpc": null,
+          "engagements": 0,
+          "cpe": null,
+          "uv": 0,
+          "cpuv": null,
+          "status": "待启动"
+        },
+        {
+          "line_name": "代付京东种草",
+          "spend": 105076.76,
+          "impressions": 1679357,
+          "clicks": 172748,
+          "ctr": 10.29,
+          "cpc": 0.61,
+          "engagements": 2457,
+          "cpe": 42.77,
+          "uv": 7005,
+          "cpuv": 15,
+          "status": "投放中"
+        },
+        {
+          "line_name": "对投京东种草",
+          "spend": 15779.52,
+          "impressions": 226179,
+          "clicks": 21607,
+          "ctr": 9.55,
+          "cpc": 0.73,
+          "engagements": 453,
+          "cpe": 34.83,
+          "uv": 35,
+          "cpuv": 450.84,
+          "status": "投放中"
+        },
+        {
+          "line_name": "JDS",
+          "spend": 10002.46,
+          "impressions": 43379,
+          "clicks": 4468,
+          "ctr": 10.3,
+          "cpc": 2.24,
+          "engagements": 59,
+          "cpe": 169.53,
+          "uv": 0,
+          "cpuv": null,
+          "status": "投放中"
+        },
+        {
+          "line_name": "京东对投CID",
+          "spend": 3382.52,
+          "impressions": 14598,
+          "clicks": 1348,
+          "ctr": 9.23,
+          "cpc": 2.51,
+          "engagements": 18,
+          "cpe": 187.92,
+          "uv": 216,
+          "cpuv": 15.66,
+          "status": "投放中"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-audience-age",
+      "title": "美菱冰箱受众人口学画像：年龄段分布（蒲公英真实样本N=105）",
+      "sourceId": "src-meiling-node-MMPZwhQbMiVmIKkcyb9c7mDQnHp",
+      "period": "2026历史与双11受众画像",
+      "type": "summary",
+      "columns": [
+        {
+          "key": "age_group",
+          "label": "年龄段",
+          "type": "string"
+        },
+        {
+          "key": "ratio",
+          "label": "人群占比(%)",
+          "type": "number"
+        },
+        {
+          "key": "sample_size",
+          "label": "样本笔记数",
+          "type": "number"
+        },
+        {
+          "key": "persona_note",
+          "label": "人群特征与场景需求",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "age_group": "<18岁",
+          "ratio": 1.49,
+          "sample_size": 105,
+          "persona_note": "前置潜在品牌心智沉淀"
+        },
+        {
+          "age_group": "18~24岁",
+          "ratio": 10.3,
+          "sample_size": 105,
+          "persona_note": "大学生/初入职场尝鲜尝新"
+        },
+        {
+          "age_group": "25~34岁",
+          "ratio": 48.5,
+          "sample_size": 105,
+          "persona_note": "独居安家/新婚首套/小户型扩容主力（近半壁江山）"
+        },
+        {
+          "age_group": "35~44岁",
+          "ratio": 26.07,
+          "sample_size": 105,
+          "persona_note": "二胎家庭/大容量除菌保鲜升级需求"
+        },
+        {
+          "age_group": "45岁及以上",
+          "ratio": 13.66,
+          "sample_size": 105,
+          "persona_note": "成熟家庭/线下转线上换新置换"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-audience-cities",
+      "title": "双11核心达人与受众渗透Top 12城市分布",
+      "sourceId": "meiling-base",
+      "period": "2026双11战役",
+      "type": "summary",
+      "columns": [
+        {
+          "key": "city",
+          "label": "核心城市",
+          "type": "string"
+        },
+        {
+          "key": "kol_count",
+          "label": "达人/受众分布指数",
+          "type": "number"
+        },
+        {
+          "key": "tier",
+          "label": "城市梯队",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "city": "成都",
+          "kol_count": 69,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "长沙",
+          "kol_count": 54,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "广州",
+          "kol_count": 51,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "杭州",
+          "kol_count": 50,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "重庆",
+          "kol_count": 44,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "郑州",
+          "kol_count": 38,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "深圳",
+          "kol_count": 35,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "武汉",
+          "kol_count": 32,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "佛山",
+          "kol_count": 29,
+          "tier": "二线核心"
+        },
+        {
+          "city": "苏州",
+          "kol_count": 27,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "上海",
+          "kol_count": 23,
+          "tier": "新一线/一线"
+        },
+        {
+          "city": "合肥",
+          "kol_count": 21,
+          "tier": "二线核心"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-audience-packages",
+      "title": "四大满贯定向人群包投放消耗与转化效能对比（Top 10人群包）",
+      "sourceId": "src-meiling-node-DkdOwDEk0i9FTUkXlh1cTE0fnOd",
+      "period": "2026-09-30 ~ 2026-10-18",
+      "type": "summary",
+      "columns": [
+        {
+          "key": "package_name",
+          "label": "定向人群包名称",
+          "type": "string"
+        },
+        {
+          "key": "spend",
+          "label": "消耗金额(元)",
+          "type": "number"
+        },
+        {
+          "key": "impressions",
+          "label": "展现量",
+          "type": "number"
+        },
+        {
+          "key": "clicks",
+          "label": "点击量",
+          "type": "number"
+        },
+        {
+          "key": "ctr",
+          "label": "点击率(%)",
+          "type": "number"
+        },
+        {
+          "key": "cpc",
+          "label": "平均点击成本(元)",
+          "type": "number"
+        },
+        {
+          "key": "cpe",
+          "label": "平均互动成本(元)",
+          "type": "number"
+        },
+        {
+          "key": "uv",
+          "label": "进店UV",
+          "type": "number"
+        },
+        {
+          "key": "cpuv",
+          "label": "平均进店成本(元)",
+          "type": "number"
+        },
+        {
+          "key": "channels",
+          "label": "应用投放线",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "package_name": "智能扩量",
+          "spend": 50107.96,
+          "impressions": 243961,
+          "clicks": 25670,
+          "ctr": 10.52,
+          "cpc": 1.95,
+          "cpe": 181.55,
+          "uv": 1114,
+          "cpuv": 44.98,
+          "channels": "自采红京CID / 自采红猫CID"
+        },
+        {
+          "package_name": "带制冰功能的冰箱推荐",
+          "spend": 28468.46,
+          "impressions": 155016,
+          "clicks": 13270,
+          "ctr": 8.56,
+          "cpc": 2.15,
+          "cpe": 139.55,
+          "uv": 1300,
+          "cpuv": 21.9,
+          "channels": "自采京东种草 / 自采天猫种草 / 自采红京CID / 自采红猫CID"
+        },
+        {
+          "package_name": "人群包-冰箱以旧换新人群",
+          "spend": 23598.94,
+          "impressions": 493493,
+          "clicks": 60996,
+          "ctr": 12.36,
+          "cpc": 0.39,
+          "cpe": 51.64,
+          "uv": 1000,
+          "cpuv": 23.6,
+          "channels": "自采京东种草 / 自采天猫种草 / 自采红京CID / 自采红猫CID"
+        },
+        {
+          "package_name": "智能定向",
+          "spend": 20318.25,
+          "impressions": 43174,
+          "clicks": 404,
+          "ctr": 0.94,
+          "cpc": 50.29,
+          "cpe": 230.89,
+          "uv": 407,
+          "cpuv": 49.92,
+          "channels": "自采红京CID / 自采红猫CID"
+        },
+        {
+          "package_name": "人群包-冰箱意向人群",
+          "spend": 17533.8,
+          "impressions": 302725,
+          "clicks": 37901,
+          "ctr": 12.52,
+          "cpc": 0.46,
+          "cpe": 28.33,
+          "uv": 1198,
+          "cpuv": 14.64,
+          "channels": "自采京东种草 / 自采天猫种草 / 自采红京CID / 自采红猫CID"
+        },
+        {
+          "package_name": "平台推荐-冰箱意向人群",
+          "spend": 11669.79,
+          "impressions": 229083,
+          "clicks": 23596,
+          "ctr": 10.3,
+          "cpc": 0.49,
+          "cpe": 69.46,
+          "uv": 293,
+          "cpuv": 39.83,
+          "channels": "自采京东种草"
+        },
+        {
+          "package_name": "人群包-冰箱_囤货冰箱",
+          "spend": 11470.37,
+          "impressions": 228235,
+          "clicks": 27638,
+          "ctr": 12.11,
+          "cpc": 0.42,
+          "cpe": 28.39,
+          "uv": 674,
+          "cpuv": 17.02,
+          "channels": "自采京东种草 / 自采天猫种草"
+        },
+        {
+          "package_name": "行业阅读兴趣-冰箱/冰柜",
+          "spend": 10944.12,
+          "impressions": 192692,
+          "clicks": 25201,
+          "ctr": 13.08,
+          "cpc": 0.43,
+          "cpe": 38.13,
+          "uv": 865,
+          "cpuv": 12.65,
+          "channels": "自采京东种草 / 自采天猫种草"
+        },
+        {
+          "package_name": "制冰冰箱推荐",
+          "spend": 10318.62,
+          "impressions": 201350,
+          "clicks": 18227,
+          "ctr": 9.05,
+          "cpc": 0.57,
+          "cpe": 29.31,
+          "uv": 41,
+          "cpuv": 251.67,
+          "channels": "自采京东种草 / 自采天猫种草 / 自采红京CID / 自采红猫CID"
+        },
+        {
+          "package_name": "人群包-厨房大电双11大促人群",
+          "spend": 8966.42,
+          "impressions": 61097,
+          "clicks": 4592,
+          "ctr": 7.52,
+          "cpc": 1.95,
+          "cpe": 5.54,
+          "uv": 1016,
+          "cpuv": 8.83,
+          "channels": "自采京东种草 / 自采天猫种草"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-campaign-evolution",
+      "title": "三大促战役跨期演进对比（618年中 vs 7-8月日常 vs 双11决战）",
+      "sourceId": "src-meiling-node-HNDCwmdpkiw4DgkFSNycB3cbnSc",
+      "period": "2026年度三大促跨期比对",
+      "type": "summary",
+      "columns": [
+        {
+          "key": "campaign",
+          "label": "大促战役",
+          "type": "string"
+        },
+        {
+          "key": "period",
+          "label": "战役周期",
+          "type": "string"
+        },
+        {
+          "key": "status",
+          "label": "结案状态",
+          "type": "string"
+        },
+        {
+          "key": "candidate_kols",
+          "label": "达人候选池",
+          "type": "number"
+        },
+        {
+          "key": "confirmed_kols",
+          "label": "确认达人数",
+          "type": "number"
+        },
+        {
+          "key": "published_posts",
+          "label": "发布篇数",
+          "type": "number"
+        },
+        {
+          "key": "k_spend",
+          "label": "K费用(元)",
+          "type": "number"
+        },
+        {
+          "key": "fs_spend",
+          "label": "FS投流费用(元)",
+          "type": "number"
+        },
+        {
+          "key": "total_spend",
+          "label": "K+FS总投入(元)",
+          "type": "number"
+        },
+        {
+          "key": "gmv",
+          "label": "实现GMV(元)",
+          "type": "number"
+        },
+        {
+          "key": "fs_roi",
+          "label": "纯FS ROI",
+          "type": "number"
+        },
+        {
+          "key": "overall_roi",
+          "label": "全案综合ROI",
+          "type": "number"
+        },
+        {
+          "key": "milestone",
+          "label": "战役核心里程碑与考核达成",
+          "type": "string"
+        }
+      ],
+      "rows": [
+        {
+          "campaign": "2026年618年中大促",
+          "period": "2026.05.20 ~ 2026.06.20",
+          "status": "已结案",
+          "candidate_kols": 515,
+          "confirmed_kols": 79,
+          "published_posts": 50,
+          "k_spend": 737011,
+          "fs_spend": 1488489,
+          "total_spend": 2225500,
+          "gmv": 16959559.42,
+          "fs_roi": 12.99,
+          "overall_roi": 8.58,
+          "milestone": "内容完成率107%，以旧换新人群突破，纯FS ROI 12.99"
+        },
+        {
+          "campaign": "2026年7-8月日常蓄水",
+          "period": "2026.07.01 ~ 2026.08.31",
+          "status": "已结案",
+          "candidate_kols": 538,
+          "confirmed_kols": 48,
+          "published_posts": 45,
+          "k_spend": 408961.5,
+          "fs_spend": 711365,
+          "total_spend": 1120326.5,
+          "gmv": 10740000,
+          "fs_roi": null,
+          "overall_roi": 9.59,
+          "milestone": "GMV目标达成率103.56%，考核CPE≤10元完成8.6万互动"
+        },
+        {
+          "campaign": "2026年双11年终决战",
+          "period": "2026.09.28 ~ 2026.11.20",
+          "status": "进行中",
+          "candidate_kols": 1096,
+          "confirmed_kols": 117,
+          "published_posts": 13,
+          "k_spend": 80334.41,
+          "fs_spend": 424861.59,
+          "total_spend": 505196,
+          "gmv": 1994188.69,
+          "fs_roi": 4.8,
+          "overall_roi": null,
+          "milestone": "初筛完成69.2%，10大投放线并发，进店18,193 UV"
+        }
+      ]
+    },
+    {
+      "id": "meiling-enrich-kol-tier-budget-stage",
+      "name": "双11二核确认达人量级与审核进度交叉透视",
+      "category": "达人与内容",
+      "period": "双11大促执行期",
+      "sourceId": "src-meiling-base-XH2obMhtwaPCWUsmsWacRCpLnvg",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/base/XH2obMhtwaPCWUsmsWacRCpLnvg?table=tbluz50zuZOeGQWf&view=vewOPEh08l",
+      "columns": [
+        {
+          "key": "tier",
+          "title": "达人量级",
+          "type": "string"
+        },
+        {
+          "key": "stage",
+          "title": "执行阶段",
+          "type": "string"
+        },
+        {
+          "key": "kol_count",
+          "title": "达人数(位)",
+          "type": "number"
+        },
+        {
+          "key": "avg_settlement_price",
+          "title": "均结算价(元)",
+          "type": "currency"
+        },
+        {
+          "key": "total_settlement_price",
+          "title": "总结算价(元)",
+          "type": "currency"
+        },
+        {
+          "key": "video_ratio",
+          "title": "视频占比",
+          "type": "percentage"
+        }
+      ],
+      "rows": [
+        {
+          "tier": "头部",
+          "stage": "已发布",
+          "kol_count": 4,
+          "avg_settlement_price": 35400,
+          "total_settlement_price": 141600,
+          "video_ratio": 100
+        },
+        {
+          "tier": "腰部",
+          "stage": "已发布",
+          "kol_count": 17,
+          "avg_settlement_price": 18788,
+          "total_settlement_price": 319400,
+          "video_ratio": 100
+        },
+        {
+          "tier": "尾部",
+          "stage": "已发布",
+          "kol_count": 55,
+          "avg_settlement_price": 8187,
+          "total_settlement_price": 450260,
+          "video_ratio": 52.7
+        },
+        {
+          "tier": "尾部",
+          "stage": "可推进",
+          "kol_count": 5,
+          "avg_settlement_price": 8960,
+          "total_settlement_price": 44800,
+          "video_ratio": 40
+        },
+        {
+          "tier": "尾部",
+          "stage": "达人修改中",
+          "kol_count": 1,
+          "avg_settlement_price": 6500,
+          "total_settlement_price": 6500,
+          "video_ratio": 100
+        },
+        {
+          "tier": "尾部",
+          "stage": "品牌审核中",
+          "kol_count": 1,
+          "avg_settlement_price": 6000,
+          "total_settlement_price": 6000,
+          "video_ratio": 100
+        },
+        {
+          "tier": "尾部",
+          "stage": "未进入审核流",
+          "kol_count": 1,
+          "avg_settlement_price": 9500,
+          "total_settlement_price": 9500,
+          "video_ratio": 0
+        },
+        {
+          "tier": "KOC",
+          "stage": "已发布",
+          "kol_count": 33,
+          "avg_settlement_price": 2994,
+          "total_settlement_price": 98800,
+          "video_ratio": 0
+        }
+      ]
+    }
+  ],
+  "dailyDatasets": [
+    {
+      "id": "meiling-daily-cid-jd",
+      "label": "美菱双11-京东对投CID日表现 (CID渠道)",
+      "period": "2026-10-16 ~ 2026-11-03",
+      "sourceId": "src-meiling-sheets-Trvrou",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=Trvrou",
+      "note": "美菱双11京东对投CID日表现（透视表Trvrou）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
+      "metrics": [
+        {
+          "key": "spend",
+          "label": "消耗",
+          "unit": "元"
+        },
+        {
+          "key": "impressions",
+          "label": "展现量",
+          "unit": "次"
+        },
+        {
+          "key": "clicks",
+          "label": "点击量",
+          "unit": "次"
+        },
+        {
+          "key": "ctr",
+          "label": "点击率",
+          "unit": "%"
+        },
+        {
+          "key": "cpc",
+          "label": "CPC",
+          "unit": "元"
+        },
+        {
+          "key": "cpm",
+          "label": "CPM",
+          "unit": "元"
+        },
+        {
+          "key": "engagements",
+          "label": "互动量",
+          "unit": "次"
+        },
+        {
+          "key": "cpe",
+          "label": "CPE",
+          "unit": "元"
+        },
+        {
+          "key": "orders",
+          "label": "订单量",
+          "unit": "单"
+        },
+        {
+          "key": "gmv",
+          "label": "成交GMV",
+          "unit": "元"
+        },
+        {
+          "key": "roi",
+          "label": "成交ROI",
+          "unit": ""
+        },
+        {
+          "key": "uv",
+          "label": "站外活跃UV(30日归因)",
+          "unit": "人"
+        }
+      ],
+      "rows": [
+        {
+          "date": "2026-10-16",
+          "spend": 1011.17,
+          "impressions": 4640,
+          "clicks": 397,
+          "ctr": 8.56,
+          "cpc": 2.55,
+          "cpm": 217.92,
+          "engagements": 7,
+          "cpe": 144.45,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 30
+        },
+        {
+          "date": "2026-10-17",
+          "spend": 1008.04,
+          "impressions": 5218,
+          "clicks": 498,
+          "ctr": 9.54,
+          "cpc": 2.02,
+          "cpm": 193.19,
+          "engagements": 7,
+          "cpe": 144.01,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 85
+        },
+        {
+          "date": "2026-10-18",
+          "spend": 1363.31,
+          "impressions": 4821,
+          "clicks": 453,
+          "ctr": 9.4,
+          "cpc": 3.01,
+          "cpm": 282.79,
+          "engagements": 4,
+          "cpe": 340.83,
+          "orders": 2,
+          "gmv": 8076.81,
+          "roi": 5.92,
+          "uv": 102
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 600.01,
+          "impressions": 2712,
+          "clicks": 291,
+          "ctr": 10.73,
+          "cpc": 2.06,
+          "cpm": 221.24,
+          "engagements": 5,
+          "cpe": 120,
+          "orders": 2,
+          "gmv": 10452.9,
+          "roi": 17.42,
+          "uv": 83
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 3083.73,
+          "impressions": 44069,
+          "clicks": 4569,
+          "ctr": 10.37,
+          "cpc": 0.67,
+          "cpm": 69.98,
+          "engagements": 37,
+          "cpe": 83.34,
+          "orders": 6,
+          "gmv": 29106.74,
+          "roi": 9.44,
+          "uv": 94
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 1826.46,
+          "impressions": 29613,
+          "clicks": 3213,
+          "ctr": 10.85,
+          "cpc": 0.57,
+          "cpm": 61.68,
+          "engagements": 29,
+          "cpe": 62.98,
+          "orders": 3,
+          "gmv": 10898.08,
+          "roi": 5.97,
+          "uv": 64
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 538.29,
+          "impressions": 1541,
+          "clicks": 123,
+          "ctr": 7.98,
+          "cpc": 4.38,
+          "cpm": 349.31,
+          "engagements": 5,
+          "cpe": 107.66,
+          "orders": 1,
+          "gmv": 5746.4,
+          "roi": 10.68,
+          "uv": 52
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 318.37,
+          "impressions": 1227,
+          "clicks": 99,
+          "ctr": 8.07,
+          "cpc": 3.22,
+          "cpm": 259.47,
+          "engagements": 6,
+          "cpe": 53.06,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 70
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 644.68,
+          "impressions": 1234,
+          "clicks": 83,
+          "ctr": 6.73,
+          "cpc": 7.77,
+          "cpm": 522.43,
+          "engagements": 2,
+          "cpe": 322.34,
+          "orders": 1,
+          "gmv": 5438,
+          "roi": 8.44,
+          "uv": 53
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 693.16,
+          "impressions": 1936,
+          "clicks": 127,
+          "ctr": 6.56,
+          "cpc": 5.46,
+          "cpm": 358.04,
+          "engagements": 2,
+          "cpe": 346.58,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 56
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 684.37,
+          "impressions": 1943,
+          "clicks": 210,
+          "ctr": 10.81,
+          "cpc": 3.26,
+          "cpm": 352.22,
+          "engagements": 3,
+          "cpe": 228.12,
+          "orders": 3,
+          "gmv": 15940.9,
+          "roi": 23.29,
+          "uv": 55
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 462.6,
+          "impressions": 2700,
+          "clicks": 380,
+          "ctr": 14.07,
+          "cpc": 1.22,
+          "cpm": 171.33,
+          "engagements": 5,
+          "cpe": 92.52,
+          "orders": 2,
+          "gmv": 9818.6,
+          "roi": 21.22,
+          "uv": 71
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 361.05,
+          "impressions": 1877,
+          "clicks": 233,
+          "ctr": 12.41,
+          "cpc": 1.55,
+          "cpm": 192.35,
+          "engagements": 2,
+          "cpe": 180.53,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 57
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 634.64,
+          "impressions": 1825,
+          "clicks": 196,
+          "ctr": 10.74,
+          "cpc": 3.24,
+          "cpm": 347.75,
+          "engagements": 2,
+          "cpe": 317.32,
+          "orders": 2,
+          "gmv": 10714.34,
+          "roi": 16.88,
+          "uv": 61
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 5092.73,
+          "impressions": 10288,
+          "clicks": 1317,
+          "ctr": 12.8,
+          "cpc": 3.87,
+          "cpm": 495.02,
+          "engagements": 12,
+          "cpe": 424.39,
+          "orders": 21,
+          "gmv": 108556.7,
+          "roi": 21.32,
+          "uv": 97
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 10043.1,
+          "impressions": 42848,
+          "clicks": 4939,
+          "ctr": 11.53,
+          "cpc": 2.03,
+          "cpm": 234.39,
+          "engagements": 49,
+          "cpe": 204.96,
+          "orders": 9,
+          "gmv": 191413.82,
+          "roi": 19.06,
+          "uv": 139
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 4197.59,
+          "impressions": 13910,
+          "clicks": 1447,
+          "ctr": 10.4,
+          "cpc": 2.9,
+          "cpm": 301.77,
+          "engagements": 17,
+          "cpe": 246.92,
+          "orders": 4,
+          "gmv": 17655.25,
+          "roi": 4.21,
+          "uv": 127
+        },
+        {
+          "date": "2026-11-02",
+          "spend": 2716.64,
+          "impressions": 10871,
+          "clicks": 1008,
+          "ctr": 9.27,
+          "cpc": 2.7,
+          "cpm": 249.9,
+          "engagements": 13,
+          "cpe": 208.97,
+          "orders": 1,
+          "gmv": 5432.68,
+          "roi": 2,
+          "uv": 105
+        },
+        {
+          "date": "2026-11-03",
+          "spend": 3031.24,
+          "impressions": 5252,
+          "clicks": 472,
+          "ctr": 8.99,
+          "cpc": 6.42,
+          "cpm": 577.16,
+          "engagements": 7,
+          "cpe": 433.03,
+          "orders": 0,
+          "gmv": 0,
+          "roi": 0,
+          "uv": 92
+        }
+      ],
+      "sourceSheetId": "Trvrou"
+    },
+    {
+      "id": "meiling-daily-tm-seed",
+      "label": "美菱双11-自采天猫种草日流水 (TM种草)",
+      "period": "2026-09-30 ~ 2026-11-03",
+      "sourceId": "src-meiling-sheets-D9ddm3",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=iautvs",
+      "note": "美菱双11自采天猫种草日流水（透视表iautvs）。小红星站外活跃UV为30日归因口径（各创意归因UV之和，非项目去重人数）。源CPUV若存在#NAME?按spend/uv重算。全量覆盖历史UV回填。",
+      "metrics": [
+        {
+          "key": "spend",
+          "label": "消耗",
+          "unit": "元"
+        },
+        {
+          "key": "impressions",
+          "label": "展现量",
+          "unit": "次"
+        },
+        {
+          "key": "clicks",
+          "label": "点击量",
+          "unit": "次"
+        },
+        {
+          "key": "ctr",
+          "label": "点击率",
+          "unit": "%"
+        },
+        {
+          "key": "cpc",
+          "label": "CPC",
+          "unit": "元"
+        },
+        {
+          "key": "cpm",
+          "label": "CPM",
+          "unit": "元"
+        },
+        {
+          "key": "engagements",
+          "label": "互动量",
+          "unit": "次"
+        },
+        {
+          "key": "cpe",
+          "label": "CPE",
+          "unit": "元"
+        },
+        {
+          "key": "uv",
+          "label": "站外活跃UV(30日归因)",
+          "unit": "人"
+        },
+        {
+          "key": "cpuv",
+          "label": "CPUV",
+          "unit": "元"
+        },
+        {
+          "key": "creatives_count",
+          "label": "活跃创意单元数",
+          "unit": "个"
+        }
+      ],
+      "rows": [
+        {
+          "date": "2026-09-30",
+          "spend": 643.11,
+          "impressions": 10176,
+          "clicks": 1760,
+          "ctr": 17.3,
+          "cpc": 0.37,
+          "cpm": 63.2,
+          "engagements": 13,
+          "cpe": 49.47,
+          "uv": 47,
+          "cpuv": 13.68
+        },
+        {
+          "date": "2026-10-01",
+          "spend": 1208.32,
+          "impressions": 30207,
+          "clicks": 4606,
+          "ctr": 15.25,
+          "cpc": 0.26,
+          "cpm": 40,
+          "engagements": 49,
+          "cpe": 24.66,
+          "uv": 239,
+          "cpuv": 5.06
+        },
+        {
+          "date": "2026-10-02",
+          "spend": 1408.23,
+          "impressions": 41672,
+          "clicks": 6091,
+          "ctr": 14.62,
+          "cpc": 0.23,
+          "cpm": 33.79,
+          "engagements": 54,
+          "cpe": 26.08,
+          "uv": 251,
+          "cpuv": 5.61
+        },
+        {
+          "date": "2026-10-03",
+          "spend": 1815.08,
+          "impressions": 56585,
+          "clicks": 7848,
+          "ctr": 13.87,
+          "cpc": 0.23,
+          "cpm": 32.08,
+          "engagements": 60,
+          "cpe": 30.25,
+          "uv": 376,
+          "cpuv": 4.83
+        },
+        {
+          "date": "2026-10-04",
+          "spend": 2021.95,
+          "impressions": 54449,
+          "clicks": 6783,
+          "ctr": 12.46,
+          "cpc": 0.3,
+          "cpm": 37.13,
+          "engagements": 68,
+          "cpe": 29.73,
+          "uv": 172,
+          "cpuv": 11.76
+        },
+        {
+          "date": "2026-10-05",
+          "spend": 3074.9,
+          "impressions": 80251,
+          "clicks": 9239,
+          "ctr": 11.51,
+          "cpc": 0.33,
+          "cpm": 38.32,
+          "engagements": 104,
+          "cpe": 29.57,
+          "uv": 248,
+          "cpuv": 12.4
+        },
+        {
+          "date": "2026-10-06",
+          "spend": 3013.62,
+          "impressions": 72241,
+          "clicks": 8353,
+          "ctr": 11.56,
+          "cpc": 0.36,
+          "cpm": 41.72,
+          "engagements": 105,
+          "cpe": 28.7,
+          "uv": 159,
+          "cpuv": 18.95
+        },
+        {
+          "date": "2026-10-07",
+          "spend": 3022.31,
+          "impressions": 73640,
+          "clicks": 8391,
+          "ctr": 11.39,
+          "cpc": 0.36,
+          "cpm": 41.04,
+          "engagements": 137,
+          "cpe": 22.06,
+          "uv": 191,
+          "cpuv": 15.82
+        },
+        {
+          "date": "2026-10-08",
+          "spend": 3265.02,
+          "impressions": 85410,
+          "clicks": 9355,
+          "ctr": 10.95,
+          "cpc": 0.35,
+          "cpm": 38.23,
+          "engagements": 98,
+          "cpe": 33.32,
+          "uv": 239,
+          "cpuv": 13.66
+        },
+        {
+          "date": "2026-10-09",
+          "spend": 3426.06,
+          "impressions": 78260,
+          "clicks": 8507,
+          "ctr": 10.87,
+          "cpc": 0.4,
+          "cpm": 43.78,
+          "engagements": 119,
+          "cpe": 28.79,
+          "uv": 331,
+          "cpuv": 10.35
+        },
+        {
+          "date": "2026-10-10",
+          "spend": 3352.06,
+          "impressions": 71089,
+          "clicks": 8170,
+          "ctr": 11.49,
+          "cpc": 0.41,
+          "cpm": 47.15,
+          "engagements": 106,
+          "cpe": 31.62,
+          "uv": 386,
+          "cpuv": 8.68
+        },
+        {
+          "date": "2026-10-11",
+          "spend": 3804.86,
+          "impressions": 79123,
+          "clicks": 9248,
+          "ctr": 11.69,
+          "cpc": 0.41,
+          "cpm": 48.09,
+          "engagements": 130,
+          "cpe": 29.27,
+          "uv": 451,
+          "cpuv": 8.44
+        },
+        {
+          "date": "2026-10-12",
+          "spend": 3639.1,
+          "impressions": 71143,
+          "clicks": 7935,
+          "ctr": 11.15,
+          "cpc": 0.46,
+          "cpm": 51.15,
+          "engagements": 87,
+          "cpe": 41.83,
+          "uv": 585,
+          "cpuv": 6.22
+        },
+        {
+          "date": "2026-10-13",
+          "spend": 6098.36,
+          "impressions": 117242,
+          "clicks": 12899,
+          "ctr": 11,
+          "cpc": 0.47,
+          "cpm": 52.02,
+          "engagements": 407,
+          "cpe": 14.98,
+          "uv": 578,
+          "cpuv": 10.55
+        },
+        {
+          "date": "2026-10-14",
+          "spend": 6486.23,
+          "impressions": 109922,
+          "clicks": 12713,
+          "ctr": 11.57,
+          "cpc": 0.51,
+          "cpm": 59.01,
+          "engagements": 500,
+          "cpe": 12.97,
+          "uv": 1380,
+          "cpuv": 4.7
+        },
+        {
+          "date": "2026-10-15",
+          "spend": 12697.47,
+          "impressions": 152799,
+          "clicks": 15994,
+          "ctr": 10.47,
+          "cpc": 0.79,
+          "cpm": 83.1,
+          "engagements": 810,
+          "cpe": 15.68,
+          "uv": 8837,
+          "cpuv": 1.44
+        },
+        {
+          "date": "2026-10-16",
+          "spend": 10152.5,
+          "impressions": 112883,
+          "clicks": 11724,
+          "ctr": 10.39,
+          "cpc": 0.87,
+          "cpm": 89.94,
+          "engagements": 571,
+          "cpe": 17.78,
+          "uv": 6564,
+          "cpuv": 1.55
+        },
+        {
+          "date": "2026-10-17",
+          "spend": 3788.58,
+          "impressions": 37943,
+          "clicks": 4163,
+          "ctr": 10.97,
+          "cpc": 0.91,
+          "cpm": 99.85,
+          "engagements": 44,
+          "cpe": 86.1,
+          "uv": 2318,
+          "cpuv": 1.63
+        },
+        {
+          "date": "2026-10-18",
+          "spend": 6034.11,
+          "impressions": 73911,
+          "clicks": 7978,
+          "ctr": 10.79,
+          "cpc": 0.76,
+          "cpm": 81.64,
+          "engagements": 710,
+          "cpe": 8.5,
+          "uv": 3579,
+          "cpuv": 1.69
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 7034.18,
+          "impressions": 99337,
+          "clicks": 10634,
+          "ctr": 10.7,
+          "cpc": 0.66,
+          "cpm": 70.81,
+          "engagements": 199,
+          "cpe": 35.35,
+          "uv": 4775,
+          "cpuv": 1.47
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 5812.36,
+          "impressions": 72581,
+          "clicks": 8554,
+          "ctr": 11.79,
+          "cpc": 0.68,
+          "cpm": 80.08,
+          "engagements": 82,
+          "cpe": 70.88,
+          "uv": 714,
+          "cpuv": 8.14
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 9802.26,
+          "impressions": 128915,
+          "clicks": 14153,
+          "ctr": 10.98,
+          "cpc": 0.69,
+          "cpm": 76.04,
+          "engagements": 111,
+          "cpe": 88.31,
+          "uv": 1107,
+          "cpuv": 8.85
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 10422.87,
+          "impressions": 138908,
+          "clicks": 15773,
+          "ctr": 11.35,
+          "cpc": 0.66,
+          "cpm": 75.03,
+          "engagements": 125,
+          "cpe": 83.38,
+          "uv": 1046,
+          "cpuv": 9.96
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 10175.31,
+          "impressions": 144687,
+          "clicks": 15613,
+          "ctr": 10.79,
+          "cpc": 0.65,
+          "cpm": 70.33,
+          "engagements": 143,
+          "cpe": 71.16,
+          "uv": 735,
+          "cpuv": 13.84
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 11764.23,
+          "impressions": 163183,
+          "clicks": 17597,
+          "ctr": 10.78,
+          "cpc": 0.67,
+          "cpm": 72.09,
+          "engagements": 363,
+          "cpe": 32.41,
+          "uv": 752,
+          "cpuv": 15.64
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 12627.91,
+          "impressions": 173661,
+          "clicks": 18697,
+          "ctr": 10.77,
+          "cpc": 0.68,
+          "cpm": 72.72,
+          "engagements": 380,
+          "cpe": 33.23,
+          "uv": 768,
+          "cpuv": 16.44
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 5302.13,
+          "impressions": 76985,
+          "clicks": 8335,
+          "ctr": 10.83,
+          "cpc": 0.64,
+          "cpm": 68.87,
+          "engagements": 82,
+          "cpe": 64.66,
+          "uv": 293,
+          "cpuv": 18.1
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 5014.98,
+          "impressions": 69311,
+          "clicks": 7871,
+          "ctr": 11.36,
+          "cpc": 0.64,
+          "cpm": 72.35,
+          "engagements": 66,
+          "cpe": 75.98,
+          "uv": 215,
+          "cpuv": 23.33
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 2171.96,
+          "impressions": 31375,
+          "clicks": 3745,
+          "ctr": 11.94,
+          "cpc": 0.58,
+          "cpm": 69.23,
+          "engagements": 40,
+          "cpe": 54.3,
+          "uv": 59,
+          "cpuv": 36.81
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 2235.43,
+          "impressions": 33142,
+          "clicks": 3914,
+          "ctr": 11.81,
+          "cpc": 0.57,
+          "cpm": 67.45,
+          "engagements": 30,
+          "cpe": 74.51,
+          "uv": 53,
+          "cpuv": 42.18
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 2200.5,
+          "impressions": 33689,
+          "clicks": 3837,
+          "ctr": 11.39,
+          "cpc": 0.57,
+          "cpm": 65.32,
+          "engagements": 40,
+          "cpe": 55.01,
+          "uv": 16,
+          "cpuv": 137.53
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 2942.36,
+          "impressions": 38344,
+          "clicks": 4199,
+          "ctr": 10.95,
+          "cpc": 0.7,
+          "cpm": 76.74,
+          "engagements": 189,
+          "cpe": 15.57,
+          "uv": 512,
+          "cpuv": 5.75
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 3373.26,
+          "impressions": 45015,
+          "clicks": 4545,
+          "ctr": 10.1,
+          "cpc": 0.74,
+          "cpm": 74.94,
+          "engagements": 293,
+          "cpe": 11.51,
+          "uv": 541,
+          "cpuv": 6.24
+        },
+        {
+          "date": "2026-11-02",
+          "spend": 3013.46,
+          "impressions": 42388,
+          "clicks": 4288,
+          "ctr": 10.12,
+          "cpc": 0.7,
+          "cpm": 71.09,
+          "engagements": 94,
+          "cpe": 32.06,
+          "uv": 152,
+          "cpuv": 19.83
+        },
+        {
+          "date": "2026-11-03",
+          "spend": 4982.27,
+          "impressions": 60192,
+          "clicks": 5905,
+          "ctr": 9.81,
+          "cpc": 0.84,
+          "cpm": 82.77,
+          "engagements": 85,
+          "cpe": 58.61,
+          "uv": 0,
+          "cpuv": null
+        }
+      ],
+      "sourceSheetId": "iautvs"
+    },
+    {
+      "id": "meiling-daily-jd-seed",
+      "label": "美菱双11-自采京东种草日流水 (JD种草)",
+      "period": "2026-09-29 ~ 2026-11-03",
+      "sourceId": "src-meiling-sheets-BI2xBs",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=B5TBE7",
+      "note": "美菱双11自采京东种草日流水（透视表B5TBE7）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
+      "metrics": [
+        {
+          "key": "spend",
+          "label": "消耗",
+          "unit": "元"
+        },
+        {
+          "key": "impressions",
+          "label": "展现量",
+          "unit": "次"
+        },
+        {
+          "key": "clicks",
+          "label": "点击量",
+          "unit": "次"
+        },
+        {
+          "key": "ctr",
+          "label": "点击率",
+          "unit": "%"
+        },
+        {
+          "key": "cpc",
+          "label": "CPC",
+          "unit": "元"
+        },
+        {
+          "key": "cpm",
+          "label": "CPM",
+          "unit": "元"
+        },
+        {
+          "key": "engagements",
+          "label": "互动量",
+          "unit": "次"
+        },
+        {
+          "key": "cpe",
+          "label": "CPE",
+          "unit": "元"
+        },
+        {
+          "key": "uv",
+          "label": "站外活跃UV(30日归因)",
+          "unit": "人"
+        },
+        {
+          "key": "cpuv",
+          "label": "CPUV",
+          "unit": "元"
+        },
+        {
+          "key": "creatives_count",
+          "label": "活跃创意单元数",
+          "unit": "个"
+        }
+      ],
+      "rows": [
+        {
+          "date": "2026-09-29",
+          "spend": 7.75,
+          "impressions": 70,
+          "clicks": 18,
+          "ctr": 25.71,
+          "cpc": 0.43,
+          "cpm": 110.71,
+          "engagements": 11,
+          "cpe": 0.7,
+          "uv": 0,
+          "cpuv": null
+        },
+        {
+          "date": "2026-09-30",
+          "spend": 342.55,
+          "impressions": 5996,
+          "clicks": 772,
+          "ctr": 12.88,
+          "cpc": 0.44,
+          "cpm": 57.13,
+          "engagements": 60,
+          "cpe": 5.71,
+          "uv": 0,
+          "cpuv": null
+        },
+        {
+          "date": "2026-10-01",
+          "spend": 1361.74,
+          "impressions": 29086,
+          "clicks": 3110,
+          "ctr": 10.69,
+          "cpc": 0.44,
+          "cpm": 46.82,
+          "engagements": 30,
+          "cpe": 45.39,
+          "uv": 8,
+          "cpuv": 170.22
+        },
+        {
+          "date": "2026-10-02",
+          "spend": 1344.94,
+          "impressions": 26827,
+          "clicks": 3114,
+          "ctr": 11.61,
+          "cpc": 0.43,
+          "cpm": 50.13,
+          "engagements": 20,
+          "cpe": 67.25,
+          "uv": 11,
+          "cpuv": 122.27
+        },
+        {
+          "date": "2026-10-03",
+          "spend": 1490.29,
+          "impressions": 32115,
+          "clicks": 3407,
+          "ctr": 10.61,
+          "cpc": 0.44,
+          "cpm": 46.4,
+          "engagements": 24,
+          "cpe": 62.1,
+          "uv": 27,
+          "cpuv": 55.2
+        },
+        {
+          "date": "2026-10-04",
+          "spend": 1790.77,
+          "impressions": 43513,
+          "clicks": 3948,
+          "ctr": 9.07,
+          "cpc": 0.45,
+          "cpm": 41.15,
+          "engagements": 24,
+          "cpe": 74.62,
+          "uv": 35,
+          "cpuv": 51.16
+        },
+        {
+          "date": "2026-10-05",
+          "spend": 2032.79,
+          "impressions": 45993,
+          "clicks": 4337,
+          "ctr": 9.43,
+          "cpc": 0.47,
+          "cpm": 44.2,
+          "engagements": 25,
+          "cpe": 81.31,
+          "uv": 48,
+          "cpuv": 42.35
+        },
+        {
+          "date": "2026-10-06",
+          "spend": 2018.66,
+          "impressions": 42327,
+          "clicks": 3919,
+          "ctr": 9.26,
+          "cpc": 0.52,
+          "cpm": 47.69,
+          "engagements": 14,
+          "cpe": 144.19,
+          "uv": 46,
+          "cpuv": 43.88
+        },
+        {
+          "date": "2026-10-07",
+          "spend": 2010.22,
+          "impressions": 41735,
+          "clicks": 3855,
+          "ctr": 9.24,
+          "cpc": 0.52,
+          "cpm": 48.17,
+          "engagements": 21,
+          "cpe": 95.72,
+          "uv": 71,
+          "cpuv": 28.31
+        },
+        {
+          "date": "2026-10-08",
+          "spend": 2024.46,
+          "impressions": 42121,
+          "clicks": 3812,
+          "ctr": 9.05,
+          "cpc": 0.53,
+          "cpm": 48.06,
+          "engagements": 21,
+          "cpe": 96.4,
+          "uv": 64,
+          "cpuv": 31.63
+        },
+        {
+          "date": "2026-10-09",
+          "spend": 5024.01,
+          "impressions": 96094,
+          "clicks": 9696,
+          "ctr": 10.09,
+          "cpc": 0.52,
+          "cpm": 52.28,
+          "engagements": 58,
+          "cpe": 86.62,
+          "uv": 100,
+          "cpuv": 50.24
+        },
+        {
+          "date": "2026-10-10",
+          "spend": 4123.3,
+          "impressions": 85982,
+          "clicks": 8271,
+          "ctr": 9.62,
+          "cpc": 0.5,
+          "cpm": 47.96,
+          "engagements": 45,
+          "cpe": 91.63,
+          "uv": 93,
+          "cpuv": 44.34
+        },
+        {
+          "date": "2026-10-11",
+          "spend": 5006.41,
+          "impressions": 98971,
+          "clicks": 9977,
+          "ctr": 10.08,
+          "cpc": 0.5,
+          "cpm": 50.58,
+          "engagements": 58,
+          "cpe": 86.32,
+          "uv": 96,
+          "cpuv": 52.15
+        },
+        {
+          "date": "2026-10-12",
+          "spend": 5269.52,
+          "impressions": 109091,
+          "clicks": 10811,
+          "ctr": 9.91,
+          "cpc": 0.49,
+          "cpm": 48.3,
+          "engagements": 61,
+          "cpe": 86.39,
+          "uv": 93,
+          "cpuv": 56.66
+        },
+        {
+          "date": "2026-10-13",
+          "spend": 4210.6,
+          "impressions": 77403,
+          "clicks": 7873,
+          "ctr": 10.17,
+          "cpc": 0.53,
+          "cpm": 54.4,
+          "engagements": 53,
+          "cpe": 79.45,
+          "uv": 120,
+          "cpuv": 35.09
+        },
+        {
+          "date": "2026-10-14",
+          "spend": 3871.3,
+          "impressions": 65971,
+          "clicks": 6615,
+          "ctr": 10.03,
+          "cpc": 0.59,
+          "cpm": 58.68,
+          "engagements": 55,
+          "cpe": 70.39,
+          "uv": 152,
+          "cpuv": 25.47
+        },
+        {
+          "date": "2026-10-15",
+          "spend": 8057.81,
+          "impressions": 116785,
+          "clicks": 11899,
+          "ctr": 10.19,
+          "cpc": 0.68,
+          "cpm": 69,
+          "engagements": 106,
+          "cpe": 76.02,
+          "uv": 164,
+          "cpuv": 49.13
+        },
+        {
+          "date": "2026-10-16",
+          "spend": 10254.27,
+          "impressions": 156569,
+          "clicks": 14659,
+          "ctr": 9.36,
+          "cpc": 0.7,
+          "cpm": 65.49,
+          "engagements": 59,
+          "cpe": 173.8,
+          "uv": 153,
+          "cpuv": 67.02
+        },
+        {
+          "date": "2026-10-17",
+          "spend": 8643.26,
+          "impressions": 146484,
+          "clicks": 14937,
+          "ctr": 10.2,
+          "cpc": 0.58,
+          "cpm": 59,
+          "engagements": 85,
+          "cpe": 101.69,
+          "uv": 179,
+          "cpuv": 48.29
+        },
+        {
+          "date": "2026-10-18",
+          "spend": 9641.64,
+          "impressions": 160459,
+          "clicks": 16947,
+          "ctr": 10.56,
+          "cpc": 0.57,
+          "cpm": 60.09,
+          "engagements": 94,
+          "cpe": 102.57,
+          "uv": 202,
+          "cpuv": 47.73
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 9232.61,
+          "impressions": 153922,
+          "clicks": 16589,
+          "ctr": 10.78,
+          "cpc": 0.56,
+          "cpm": 59.98,
+          "engagements": 167,
+          "cpe": 55.29,
+          "uv": 309,
+          "cpuv": 29.88
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 10512.46,
+          "impressions": 178754,
+          "clicks": 17858,
+          "ctr": 9.99,
+          "cpc": 0.59,
+          "cpm": 58.81,
+          "engagements": 191,
+          "cpe": 55.04,
+          "uv": 274,
+          "cpuv": 38.37
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 17594.55,
+          "impressions": 246142,
+          "clicks": 25550,
+          "ctr": 10.38,
+          "cpc": 0.69,
+          "cpm": 71.48,
+          "engagements": 669,
+          "cpe": 26.3,
+          "uv": 262,
+          "cpuv": 67.15
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 25511.39,
+          "impressions": 273201,
+          "clicks": 26014,
+          "ctr": 9.52,
+          "cpc": 0.98,
+          "cpm": 93.38,
+          "engagements": 1572,
+          "cpe": 16.23,
+          "uv": 324,
+          "cpuv": 78.74
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 29070.66,
+          "impressions": 315461,
+          "clicks": 27490,
+          "ctr": 8.71,
+          "cpc": 1.06,
+          "cpm": 92.15,
+          "engagements": 1620,
+          "cpe": 17.94,
+          "uv": 439,
+          "cpuv": 66.22
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 29989.03,
+          "impressions": 283335,
+          "clicks": 25166,
+          "ctr": 8.88,
+          "cpc": 1.19,
+          "cpm": 105.84,
+          "engagements": 2076,
+          "cpe": 14.45,
+          "uv": 494,
+          "cpuv": 60.71
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 29998.46,
+          "impressions": 301115,
+          "clicks": 27327,
+          "ctr": 9.08,
+          "cpc": 1.1,
+          "cpm": 99.62,
+          "engagements": 2035,
+          "cpe": 14.74,
+          "uv": 585,
+          "cpuv": 51.28
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 29995.66,
+          "impressions": 358109,
+          "clicks": 32205,
+          "ctr": 8.99,
+          "cpc": 0.93,
+          "cpm": 83.76,
+          "engagements": 1251,
+          "cpe": 23.98,
+          "uv": 665,
+          "cpuv": 45.11
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 20064.59,
+          "impressions": 244941,
+          "clicks": 21730,
+          "ctr": 8.87,
+          "cpc": 0.92,
+          "cpm": 81.92,
+          "engagements": 668,
+          "cpe": 30.04,
+          "uv": 653,
+          "cpuv": 30.73
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 18680.68,
+          "impressions": 197202,
+          "clicks": 18396,
+          "ctr": 9.33,
+          "cpc": 1.02,
+          "cpm": 94.73,
+          "engagements": 1204,
+          "cpe": 15.52,
+          "uv": 588,
+          "cpuv": 31.77
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 13729.93,
+          "impressions": 140720,
+          "clicks": 12337,
+          "ctr": 8.77,
+          "cpc": 1.11,
+          "cpm": 97.57,
+          "engagements": 514,
+          "cpe": 26.71,
+          "uv": 550,
+          "cpuv": 24.96
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 11476.7,
+          "impressions": 105155,
+          "clicks": 9276,
+          "ctr": 8.82,
+          "cpc": 1.24,
+          "cpm": 109.14,
+          "engagements": 407,
+          "cpe": 28.2,
+          "uv": 700,
+          "cpuv": 16.4
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 11908.96,
+          "impressions": 82116,
+          "clicks": 7503,
+          "ctr": 9.14,
+          "cpc": 1.59,
+          "cpm": 145.03,
+          "engagements": 1020,
+          "cpe": 11.68,
+          "uv": 644,
+          "cpuv": 18.49
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 12268.84,
+          "impressions": 97156,
+          "clicks": 8901,
+          "ctr": 9.16,
+          "cpc": 1.38,
+          "cpm": 126.28,
+          "engagements": 1045,
+          "cpe": 11.74,
+          "uv": 620,
+          "cpuv": 19.79
+        },
+        {
+          "date": "2026-11-02",
+          "spend": 6684.75,
+          "impressions": 65606,
+          "clicks": 5464,
+          "ctr": 8.33,
+          "cpc": 1.22,
+          "cpm": 101.89,
+          "engagements": 95,
+          "cpe": 70.37,
+          "uv": 529,
+          "cpuv": 12.64
+        },
+        {
+          "date": "2026-11-03",
+          "spend": 13962.99,
+          "impressions": 168384,
+          "clicks": 16534,
+          "ctr": 9.82,
+          "cpc": 0.84,
+          "cpm": 82.92,
+          "engagements": 438,
+          "cpe": 31.88,
+          "uv": 536,
+          "cpuv": 26.05
+        }
+      ],
+      "sourceSheetId": "B5TBE7"
+    },
+    {
+      "id": "meiling-daily-xingban-seed",
+      "label": "代采星伴种草分日流水",
+      "period": "2026-10-15 ~ 2026-11-03",
+      "sourceId": "src-meiling-sheets-ACntPW",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=7gf6nq",
+      "note": "美菱双11代采星伴种草分日流水（透视表7gf6nq）。小红星站外活跃UV为30日归因口径。",
+      "metrics": {
+        "totalSpend": 28371.46
+      },
+      "rows": [
+        {
+          "date": "2026-10-15",
+          "spend": 2180.16,
+          "impressions": 14060,
+          "clicks": 489,
+          "ctr": 3.48,
+          "cpc": 4.46,
+          "cpm": 155.06,
+          "engagements": 38,
+          "cpe": 57.37,
+          "uv": 0,
+          "cpuv": null
+        },
+        {
+          "date": "2026-10-16",
+          "spend": 6101.16,
+          "impressions": 36254,
+          "clicks": 1622,
+          "ctr": 4.47,
+          "cpc": 3.76,
+          "cpm": 168.29,
+          "engagements": 64,
+          "cpe": 95.33,
+          "uv": 2190,
+          "cpuv": 2.79
+        },
+        {
+          "date": "2026-10-17",
+          "spend": 9127.47,
+          "impressions": 67979,
+          "clicks": 2933,
+          "ctr": 4.31,
+          "cpc": 3.11,
+          "cpm": 134.27,
+          "engagements": 85,
+          "cpe": 107.38,
+          "uv": 4772,
+          "cpuv": 1.91
+        },
+        {
+          "date": "2026-10-18",
+          "spend": 10962.67,
+          "impressions": 85585,
+          "clicks": 4329,
+          "ctr": 5.06,
+          "cpc": 2.53,
+          "cpm": 128.09,
+          "engagements": 95,
+          "cpe": 115.4,
+          "uv": 5017,
+          "cpuv": 2.19
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 11771.95,
+          "impressions": 113266,
+          "clicks": 7080,
+          "ctr": 6.25,
+          "cpc": 1.66,
+          "cpm": 103.93,
+          "engagements": 216,
+          "cpe": 54.5,
+          "uv": 4795,
+          "cpuv": 2.46
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 17416.06,
+          "impressions": 178727,
+          "clicks": 12659,
+          "ctr": 7.08,
+          "cpc": 1.38,
+          "cpm": 97.45,
+          "engagements": 1069,
+          "cpe": 16.29,
+          "uv": 4986,
+          "cpuv": 3.49
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 19047.91,
+          "impressions": 184729,
+          "clicks": 13752,
+          "ctr": 7.44,
+          "cpc": 1.39,
+          "cpm": 103.11,
+          "engagements": 1197,
+          "cpe": 15.91,
+          "uv": 3975,
+          "cpuv": 4.79
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 20203.62,
+          "impressions": 209247,
+          "clicks": 16698,
+          "ctr": 7.98,
+          "cpc": 1.21,
+          "cpm": 96.55,
+          "engagements": 1566,
+          "cpe": 12.9,
+          "uv": 4324,
+          "cpuv": 4.67
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 21217.52,
+          "impressions": 234470,
+          "clicks": 18621,
+          "ctr": 7.94,
+          "cpc": 1.14,
+          "cpm": 90.49,
+          "engagements": 1589,
+          "cpe": 13.35,
+          "uv": 2857,
+          "cpuv": 7.43
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 22001.81,
+          "impressions": 228080,
+          "clicks": 18606,
+          "ctr": 8.16,
+          "cpc": 1.18,
+          "cpm": 96.47,
+          "engagements": 1854,
+          "cpe": 11.87,
+          "uv": 2653,
+          "cpuv": 8.29
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 22014.32,
+          "impressions": 234052,
+          "clicks": 21673,
+          "ctr": 9.26,
+          "cpc": 1.02,
+          "cpm": 94.06,
+          "engagements": 1738,
+          "cpe": 12.67,
+          "uv": 2025,
+          "cpuv": 10.87
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 17120.72,
+          "impressions": 205052,
+          "clicks": 17639,
+          "ctr": 8.6,
+          "cpc": 0.97,
+          "cpm": 83.49,
+          "engagements": 779,
+          "cpe": 21.98,
+          "uv": 2416,
+          "cpuv": 7.09
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 16801.88,
+          "impressions": 197210,
+          "clicks": 16831,
+          "ctr": 8.53,
+          "cpc": 1,
+          "cpm": 85.2,
+          "engagements": 673,
+          "cpe": 24.97,
+          "uv": 2304,
+          "cpuv": 7.29
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 15875.3,
+          "impressions": 174080,
+          "clicks": 13925,
+          "ctr": 8,
+          "cpc": 1.14,
+          "cpm": 91.2,
+          "engagements": 680,
+          "cpe": 23.35,
+          "uv": 2055,
+          "cpuv": 7.73
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 15950.16,
+          "impressions": 156823,
+          "clicks": 12031,
+          "ctr": 7.67,
+          "cpc": 1.33,
+          "cpm": 101.71,
+          "engagements": 1022,
+          "cpe": 15.61,
+          "uv": 1826,
+          "cpuv": 8.74
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 9733.74,
+          "impressions": 88986,
+          "clicks": 6003,
+          "ctr": 6.75,
+          "cpc": 1.62,
+          "cpm": 109.39,
+          "engagements": 280,
+          "cpe": 34.76,
+          "uv": 892,
+          "cpuv": 10.91
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 2016.31,
+          "impressions": 17165,
+          "clicks": 1116,
+          "ctr": 6.5,
+          "cpc": 1.81,
+          "cpm": 117.47,
+          "engagements": 29,
+          "cpe": 69.53,
+          "uv": 345,
+          "cpuv": 5.84
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 2013.54,
+          "impressions": 18090,
+          "clicks": 1204,
+          "ctr": 6.66,
+          "cpc": 1.67,
+          "cpm": 111.31,
+          "engagements": 26,
+          "cpe": 77.44,
+          "uv": 298,
+          "cpuv": 6.76
+        },
+        {
+          "date": "2026-11-02",
+          "spend": 3708.92,
+          "impressions": 32660,
+          "clicks": 2611,
+          "ctr": 7.99,
+          "cpc": 1.42,
+          "cpm": 113.56,
+          "engagements": 76,
+          "cpe": 48.8,
+          "uv": 374,
+          "cpuv": 9.92
+        },
+        {
+          "date": "2026-11-03",
+          "spend": 3827.24,
+          "impressions": 35871,
+          "clicks": 3062,
+          "ctr": 8.54,
+          "cpc": 1.25,
+          "cpm": 106.69,
+          "engagements": 97,
+          "cpe": 39.46,
+          "uv": 0,
+          "cpuv": null
+        }
+      ],
+      "sourceSheetId": "7gf6nq"
+    },
+    {
+      "id": "meiling-daily-jd-toitou-seed",
+      "label": "京东对投种草分日流水",
+      "period": "2026-10-15 ~ 2026-11-03",
+      "sourceId": "src-meiling-sheets-zF2qee",
+      "sourceUrl": "https://yimeichuanbo.feishu.cn/wiki/DMMpwdQShiyEpyk89jVcP6GInjg?sheet=TLLRoo",
+      "note": "美菱双11京东对投种草分日流水（透视表TLLRoo）。小红盟站外活跃行为UV为30日归因口径。未来空日期无观测不伪造。",
+      "metrics": {
+        "totalSpend": 15779.52
+      },
+      "rows": [
+        {
+          "date": "2026-10-15",
+          "spend": 443.91,
+          "impressions": 5805,
+          "clicks": 654,
+          "ctr": 11.27,
+          "cpc": 0.68,
+          "cpm": 76.47,
+          "engagements": 8,
+          "cpe": 55.49,
+          "uv": 0,
+          "cpuv": null
+        },
+        {
+          "date": "2026-10-16",
+          "spend": 3548.88,
+          "impressions": 53432,
+          "clicks": 5007,
+          "ctr": 9.37,
+          "cpc": 0.71,
+          "cpm": 66.42,
+          "engagements": 239,
+          "cpe": 14.85,
+          "uv": 37,
+          "cpuv": 95.92
+        },
+        {
+          "date": "2026-10-17",
+          "spend": 5180.45,
+          "impressions": 77908,
+          "clicks": 7480,
+          "ctr": 9.6,
+          "cpc": 0.69,
+          "cpm": 66.49,
+          "engagements": 102,
+          "cpe": 50.79,
+          "uv": 61,
+          "cpuv": 84.93
+        },
+        {
+          "date": "2026-10-18",
+          "spend": 6606.28,
+          "impressions": 89034,
+          "clicks": 8466,
+          "ctr": 9.51,
+          "cpc": 0.78,
+          "cpm": 74.2,
+          "engagements": 104,
+          "cpe": 63.52,
+          "uv": 101,
+          "cpuv": 65.41
+        },
+        {
+          "date": "2026-10-19",
+          "spend": 8002.46,
+          "impressions": 105769,
+          "clicks": 10073,
+          "ctr": 9.52,
+          "cpc": 0.79,
+          "cpm": 75.66,
+          "engagements": 114,
+          "cpe": 70.2,
+          "uv": 100,
+          "cpuv": 80.02
+        },
+        {
+          "date": "2026-10-20",
+          "spend": 10048.79,
+          "impressions": 133841,
+          "clicks": 13016,
+          "ctr": 9.72,
+          "cpc": 0.77,
+          "cpm": 75.08,
+          "engagements": 98,
+          "cpe": 102.54,
+          "uv": 82,
+          "cpuv": 122.55
+        },
+        {
+          "date": "2026-10-21",
+          "spend": 9985.42,
+          "impressions": 133742,
+          "clicks": 13186,
+          "ctr": 9.86,
+          "cpc": 0.76,
+          "cpm": 74.66,
+          "engagements": 90,
+          "cpe": 110.95,
+          "uv": 93,
+          "cpuv": 107.37
+        },
+        {
+          "date": "2026-10-22",
+          "spend": 9846.46,
+          "impressions": 146560,
+          "clicks": 13680,
+          "ctr": 9.33,
+          "cpc": 0.72,
+          "cpm": 67.18,
+          "engagements": 99,
+          "cpe": 99.46,
+          "uv": 103,
+          "cpuv": 95.6
+        },
+        {
+          "date": "2026-10-23",
+          "spend": 7918.01,
+          "impressions": 110562,
+          "clicks": 9867,
+          "ctr": 8.92,
+          "cpc": 0.8,
+          "cpm": 71.62,
+          "engagements": 66,
+          "cpe": 119.97,
+          "uv": 120,
+          "cpuv": 65.98
+        },
+        {
+          "date": "2026-10-24",
+          "spend": 8159.86,
+          "impressions": 117490,
+          "clicks": 9193,
+          "ctr": 7.82,
+          "cpc": 0.89,
+          "cpm": 69.45,
+          "engagements": 105,
+          "cpe": 77.71,
+          "uv": 100,
+          "cpuv": 81.6
+        },
+        {
+          "date": "2026-10-25",
+          "spend": 6031.44,
+          "impressions": 83331,
+          "clicks": 6442,
+          "ctr": 7.73,
+          "cpc": 0.94,
+          "cpm": 72.38,
+          "engagements": 77,
+          "cpe": 78.33,
+          "uv": 88,
+          "cpuv": 68.54
+        },
+        {
+          "date": "2026-10-26",
+          "spend": 7534.23,
+          "impressions": 101382,
+          "clicks": 7591,
+          "ctr": 7.49,
+          "cpc": 0.99,
+          "cpm": 74.32,
+          "engagements": 112,
+          "cpe": 67.27,
+          "uv": 183,
+          "cpuv": 41.17
+        },
+        {
+          "date": "2026-10-27",
+          "spend": 6521.18,
+          "impressions": 69923,
+          "clicks": 5327,
+          "ctr": 7.62,
+          "cpc": 1.22,
+          "cpm": 93.26,
+          "engagements": 422,
+          "cpe": 15.45,
+          "uv": 246,
+          "cpuv": 26.51
+        },
+        {
+          "date": "2026-10-28",
+          "spend": 6511.72,
+          "impressions": 73840,
+          "clicks": 5414,
+          "ctr": 7.33,
+          "cpc": 1.2,
+          "cpm": 88.19,
+          "engagements": 94,
+          "cpe": 69.27,
+          "uv": 310,
+          "cpuv": 21.01
+        },
+        {
+          "date": "2026-10-29",
+          "spend": 6521.82,
+          "impressions": 69647,
+          "clicks": 5299,
+          "ctr": 7.61,
+          "cpc": 1.23,
+          "cpm": 93.64,
+          "engagements": 67,
+          "cpe": 97.34,
+          "uv": 264,
+          "cpuv": 24.7
+        },
+        {
+          "date": "2026-10-30",
+          "spend": 2864.34,
+          "impressions": 20172,
+          "clicks": 1631,
+          "ctr": 8.09,
+          "cpc": 1.76,
+          "cpm": 142,
+          "engagements": 24,
+          "cpe": 119.35,
+          "uv": 141,
+          "cpuv": 20.31
+        },
+        {
+          "date": "2026-10-31",
+          "spend": 3007.1,
+          "impressions": 18049,
+          "clicks": 1189,
+          "ctr": 6.59,
+          "cpc": 2.53,
+          "cpm": 166.61,
+          "engagements": 12,
+          "cpe": 250.59,
+          "uv": 118,
+          "cpuv": 25.48
+        },
+        {
+          "date": "2026-11-01",
+          "spend": 3013.43,
+          "impressions": 21077,
+          "clicks": 1417,
+          "ctr": 6.72,
+          "cpc": 2.13,
+          "cpm": 142.97,
+          "engagements": 19,
+          "cpe": 158.6,
+          "uv": 99,
+          "cpuv": 30.44
+        },
+        {
+          "date": "2026-11-02",
+          "spend": 3000.68,
+          "impressions": 21519,
+          "clicks": 1874,
+          "ctr": 8.71,
+          "cpc": 1.6,
+          "cpm": 139.44,
+          "engagements": 22,
+          "cpe": 136.39,
+          "uv": 84,
+          "cpuv": 35.72
+        },
+        {
+          "date": "2026-11-03",
+          "spend": 3002.12,
+          "impressions": 25676,
+          "clicks": 2249,
+          "ctr": 8.76,
+          "cpc": 1.33,
+          "cpm": 116.92,
+          "engagements": 34,
+          "cpe": 88.3,
+          "uv": 50,
+          "cpuv": 60.04
+        }
+      ],
+      "sourceSheetId": "TLLRoo"
+    }
+  ]
+}
