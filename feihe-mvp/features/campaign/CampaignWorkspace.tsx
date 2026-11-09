@@ -235,6 +235,23 @@ export function CampaignWorkspace({
   const activeDashboard = dashboard && dashboard.projectId === projectId ? dashboard : null;
   const activePayload = activeDashboard as unknown as BoardPayload;
 
+  const activeBrandColor = activePayload?.themeColor || (activeDashboard as any)?.themeColor || project?.color;
+  const activeThemeStyle = useMemo(() => {
+    if (!activeBrandColor) return undefined;
+    const theme = deriveThemeFromBrandColor(activeBrandColor, activePayload?.themeId || project?.templateId);
+    return {
+      ...theme.cssVariables,
+      '--brand-primary': theme.chrome.accent,
+      '--brand-primary-soft': `${theme.chrome.accent}18`,
+      '--border-brand': `${theme.chrome.accent}40`,
+      '--teal-11': theme.chrome.accent,
+      '--primary-blue': theme.chrome.accent,
+      '--accent-primary': theme.chrome.accent,
+      '--dtc-theme-accent': theme.chrome.accent,
+      '--dtc-chart-color-0': theme.chrome.accent,
+    } as React.CSSProperties;
+  }, [activeBrandColor, activePayload?.themeId, project?.templateId]);
+
   const refreshAction = (
     <button
       type="button"
@@ -315,23 +332,6 @@ export function CampaignWorkspace({
   const mode = activePayload?.mode || (activeDashboard as any).mode || '全域数据贯通 · 真实入账';
   const period = activePayload?.reportPeriod || activeDashboard.reportPeriod || '观测周期中';
   const rendererMode = activePayload?.rendererMode || 'universal';
-
-  const activeBrandColor = activePayload?.themeColor || (activeDashboard as any)?.themeColor || project?.color;
-  const activeThemeStyle = useMemo(() => {
-    if (!activeBrandColor) return undefined;
-    const theme = deriveThemeFromBrandColor(activeBrandColor, activePayload?.themeId || project?.templateId);
-    return {
-      ...theme.cssVariables,
-      '--brand-primary': theme.chrome.accent,
-      '--brand-primary-soft': `${theme.chrome.accent}18`,
-      '--border-brand': `${theme.chrome.accent}40`,
-      '--teal-11': theme.chrome.accent,
-      '--primary-blue': theme.chrome.accent,
-      '--accent-primary': theme.chrome.accent,
-      '--dtc-theme-accent': theme.chrome.accent,
-      '--dtc-chart-color-0': theme.chrome.accent,
-    } as React.CSSProperties;
-  }, [activeBrandColor, activePayload?.themeId, project?.templateId]);
 
   return (
     <DashboardFrame
