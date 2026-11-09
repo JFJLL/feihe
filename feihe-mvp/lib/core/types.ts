@@ -76,7 +76,7 @@ export interface ComponentInstanceSpec {
   width?: 'full' | 'half' | 'third' | 'two-thirds' | 'quarter' | number;
 }
 
-export type SectionLayout = 'stack' | 'grid' | 'tabs' | 'paired-metrics';
+export type SectionLayout = 'stack' | 'grid' | 'tabs' | 'paired-metrics' | 'bento-split';
 
 export interface SectionTabSpec {
   id: string;
@@ -93,6 +93,7 @@ export interface SectionSpec {
   subtitle?: string;
   description?: string;
   layout?: SectionLayout;
+  variant?: 'default' | 'hero-spotlight' | 'compact';
   columns?: number;
   components: ComponentInstanceSpec[];
   tabs?: SectionTabSpec[];

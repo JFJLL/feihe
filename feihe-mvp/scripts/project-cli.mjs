@@ -231,7 +231,27 @@ function generateAutoBlueprint(pid, rawSources) {
     }
   }
 
-  lines.push('\n## 2. 推荐装配的看板模块清单 (Recommended Sections)');
+  // Infer Archetype recommendation
+  let recommendedArchetype = '原型 B（预算控盘与版位效率型）';
+  let archetypeReason = '检测到分日消耗与成本度量，推荐使用首屏 hero-spotlight + bento-split 双轴趋势与靶心图组合。';
+  const allColsStr = Object.values(rawSources).map(v => JSON.stringify(v)).join(' ').toLowerCase();
+  if (allColsStr.includes('roi') || allColsStr.includes('gmv') || allColsStr.includes('渠道') || allColsStr.includes('channel')) {
+    recommendedArchetype = '原型 A（多渠道/大促 ROI 归因型）';
+    archetypeReason = '检测到多渠道销售与 ROI/GMV 转化字段，推荐使用 hero-spotlight + multi-line-deck 横向赛马记分牌。';
+  } else if (allColsStr.includes('comment') || allColsStr.includes('情感') || allColsStr.includes('质检') || allColsStr.includes('舆情')) {
+    recommendedArchetype = '原型 D（舆情防守与口碑质检型）';
+    archetypeReason = '检测到评论内容与口碑质检字段，推荐使用 percent-stack 正负向情感堆叠图 + comment-qc-panel 质检面板。';
+  } else if (allColsStr.includes('note') || allColsStr.includes('达人') || allColsStr.includes('博主') || allColsStr.includes('互动')) {
+    recommendedArchetype = '原型 C（内容种草与达人矩阵型）';
+    archetypeReason = '检测到达人笔记与互动数据，推荐使用 hero-spotlight + pareto-chart 二八集中度 + effect-scatter 象限散点图。';
+  }
+
+  lines.push('\n## 2. 推荐选用的业务版式原型 (Recommended Archetype)');
+  lines.push(`- **推荐原型**: **${recommendedArchetype}**`);
+  lines.push(`- **推荐理由**: ${archetypeReason}`);
+  lines.push('- 详细装配规范请参阅根目录 `AGENTS.md` 第 4 节。');
+
+  lines.push('\n## 3. 推荐装配的看板模块清单 (Recommended Sections)');
   if (recommendedSections.length > 0) {
     recommendedSections.forEach((s, idx) => {
       lines.push(`${idx + 1}. **${s.title}**`);
@@ -243,7 +263,7 @@ function generateAutoBlueprint(pid, rawSources) {
     lines.push('2. **明细数据表格**: 展示核心数据表前 50 行记录');
   }
 
-  lines.push('\n## 3. 下一步行动指南');
+  lines.push('\n## 4. 下一步行动指南');
   lines.push('1. 根据上述推荐清单，在 `projects/<id>/transform.ts` 中编写 `transformProject(rawSources): BoardPayload`。');
   lines.push('2. 确保所有百分比、比率、单位换算 100% 在 `transform.ts` 中预先计算。');
   lines.push('3. 运行 `pnpm project:build <id>` 通过自检并入库。');

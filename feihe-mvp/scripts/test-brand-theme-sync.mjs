@@ -12,6 +12,14 @@ const EXPECTED_COLORS = {
   'huang-tiane': '#b8860b',
 };
 
+const EXPECTED_TABS = {
+  'qicui': ['全域声量总览', '评论外显质检', '竞品社媒监控', '达人爆文矩阵'],
+  'kailas': ['预算控盘总览', '版位效率寻优', '达人种草执行', '行业竞品监控'],
+  'meiling': ['双11四线总览', '渠道ROI赛马', 'KOL审稿与外溢', '行业竞品监控'],
+  'winner-wipes': ['日常种草控盘', '版位与52词投流', '达人内容矩阵', '行业竞品监控'],
+  'huang-tiane': ['三线全域核算', '商销与CID引流', '品牌FS种草执行', '行业竞品监控'],
+};
+
 test('1. 5 个现有项目的 SPU 颜色配置与清单完全校准', () => {
   for (const [pid, expectedHex] of Object.entries(EXPECTED_COLORS)) {
     const manifestPath = path.resolve(`projects/${pid}/manifest.json`);
@@ -27,6 +35,23 @@ test('1. 5 个现有项目的 SPU 颜色配置与清单完全校准', () => {
       `${pid} manifest.ts includes color ${expectedHex}`
     );
   }
+});
+
+test('2. 5 个现有项目专属业务导航名称已在 manifest 与 sidebar 映射中对齐', () => {
+  for (const [pid, expectedTabs] of Object.entries(EXPECTED_TABS)) {
+    const manifestPath = path.resolve(`projects/${pid}/manifest.json`);
+    const json = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    const tabLabels = (json.enabledTabs || []).map(t => t.label);
+    for (const exp of expectedTabs) {
+      assert.ok(tabLabels.includes(exp), `${pid} manifest.json contains customized tab "${exp}"`);
+    }
+  }
+  const sidebarCode = fs.readFileSync(path.resolve('components/project-shell/ProjectSidebar.tsx'), 'utf8');
+  assert.ok(sidebarCode.includes('PROJECT_CUSTOM_TABS'), 'ProjectSidebar contains PROJECT_CUSTOM_TABS map');
+  assert.ok(sidebarCode.includes('全域声量总览'), 'ProjectSidebar contains qicui custom label');
+  assert.ok(sidebarCode.includes('渠道ROI赛马'), 'ProjectSidebar contains meiling custom label');
+  assert.ok(sidebarCode.includes('版位与52词投流'), 'ProjectSidebar contains winner-wipes custom label');
+  assert.ok(sidebarCode.includes('三线全域核算'), 'ProjectSidebar contains huang-tiane custom label');
 });
 
 test('2. deriveThemeFromBrandColor 能基于各 SPU 颜色动态推导 BeaconTheme 与 CSS 变量', () => {
@@ -64,4 +89,24 @@ test('6. CampaignWorkspace 源码挂载动态主题与品牌色 ContextBar', () 
   assert.ok(wsCode.includes('style={activeThemeStyle}'), '挂载 activeThemeStyle 到 workspace root');
   assert.ok(wsCode.includes('project-context-bar'), '包含 project-context-bar');
   assert.ok(wsCode.includes('borderLeft'), 'ContextBar 具有动态 borderLeft 品牌色');
+});
+test('7. UniversalBoardRenderer 内置 hero-spotlight 与 bento-split 确定性版式', () => {
+  const rendererCode = fs.readFileSync(path.resolve('features/campaign/UniversalBoardRenderer.tsx'), 'utf8');
+  assert.ok(rendererCode.includes('ca-kpi-card-hero'), 'UniversalBoardRenderer 渲染实心 SPU 强调卡 ca-kpi-card-hero');
+  assert.ok(rendererCode.includes('bento-split'), 'UniversalBoardRenderer 支持 bento-split 非对称布局');
+  assert.ok(rendererCode.includes('1.8fr'), 'bento-split 采用 1.8fr / 1fr 比例');
+
+  const typesCode = fs.readFileSync(path.resolve('lib/core/types.ts'), 'utf8');
+  assert.ok(typesCode.includes("'bento-split'"), 'lib/core/types.ts 导出 bento-split 布局类型');
+});
+
+test('8. AGENTS.md 规范与 project-cli.mjs 包含 4 大业务原型选型指引', () => {
+  const agentsMd = fs.readFileSync(path.resolve('../AGENTS.md'), 'utf8');
+  assert.ok(agentsMd.includes('原型 A（多渠道/大促 ROI 归因型）'), 'AGENTS.md 包含原型 A');
+  assert.ok(agentsMd.includes('原型 B（预算控盘与版位效率型）'), 'AGENTS.md 包含原型 B');
+  assert.ok(agentsMd.includes('原型 C（内容种草与达人矩阵型）'), 'AGENTS.md 包含原型 C');
+  assert.ok(agentsMd.includes('原型 D（舆情防守与口碑质检型）'), 'AGENTS.md 包含原型 D');
+
+  const cliCode = fs.readFileSync(path.resolve('scripts/project-cli.mjs'), 'utf8');
+  assert.ok(cliCode.includes('推荐选用的业务版式原型'), 'project-cli.mjs 输出业务原型推荐');
 });

@@ -15,10 +15,10 @@ export const manifest: ProjectManifest = {
   description: '预算与版位效率',
   templateId: 'campaign_review',
   enabledTabs: [
-    { key: 'overview', label: '数据总览', icon: '📊', desc: '预算进度与阶段效果' },
-    { key: 'daily', label: '分日看板', icon: '📅', desc: '当日指标与明细' },
-    { key: 'ads', label: '版位投放', icon: '🎯', desc: '广告与渠道效率' },
-    { key: 'content', label: '内容执行', icon: '📝', desc: '达人与笔记详情' },
+    { key: 'overview', label: '预算控盘总览', icon: '📊', desc: '预算推进与双轨入账' },
+    { key: 'ads', label: '版位效率寻优', icon: '🎯', desc: '搜索与信息流投放效率' },
+    { key: 'content', label: '达人种草执行', icon: '📝', desc: '达人采买与笔记转化' },
+    { key: 'industry', label: '行业竞品监控', icon: '🔍', desc: '户外跑鞋行业动态' },
   ],
 };
 

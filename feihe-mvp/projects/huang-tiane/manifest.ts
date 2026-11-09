@@ -15,10 +15,10 @@ export const manifest: ProjectManifest = {
   description: '可生食鸡蛋小红书种草、投流与商销引流复盘',
   templateId: 'campaign_review',
   enabledTabs: [
-    { key: 'overview', label: '数据总览', icon: '📊', desc: '预算进度与阶段效果' },
-    { key: 'daily', label: '分日看板', icon: '📅', desc: '当日指标与明细' },
-    { key: 'ads', label: '版位投放', icon: '🎯', desc: '广告与渠道效率' },
-    { key: 'content', label: '内容执行', icon: '📝', desc: '达人与笔记详情' },
+    { key: 'overview', label: '三线全域核算', icon: '📊', desc: '三线独立核算大盘' },
+    { key: 'ads', label: '商销与CID引流', icon: '🛒', desc: '商销日报与CID全域引流' },
+    { key: 'content', label: '品牌FS种草执行', icon: '✨', desc: '品牌线FS投流与达人种草' },
+    { key: 'industry', label: '行业竞品监控', icon: '🔍', desc: '生鲜禽蛋行业竞争监控' },
   ],
 };
 

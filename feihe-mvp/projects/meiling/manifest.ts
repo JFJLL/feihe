@@ -15,10 +15,10 @@ export const manifest: ProjectManifest = {
   description: '双十一投放与内容执行',
   templateId: 'campaign_review',
   enabledTabs: [
-    { key: 'overview', label: '数据总览', icon: '📊', desc: '预算进度与阶段效果' },
-    { key: 'daily', label: '分日看板', icon: '📅', desc: '当日指标与明细' },
-    { key: 'ads', label: '版位投放', icon: '🎯', desc: '广告与渠道效率' },
-    { key: 'content', label: '内容执行', icon: '📝', desc: '达人与笔记详情' },
+    { key: 'overview', label: '双11四线总览', icon: '📊', desc: '双11大促全域总览' },
+    { key: 'ads', label: '渠道ROI赛马', icon: '🏇', desc: '多渠道投流ROI对比' },
+    { key: 'content', label: 'KOL审稿与外溢', icon: '📝', desc: 'KOL达人内容与外溢效果' },
+    { key: 'industry', label: '行业竞品监控', icon: '🔍', desc: '大家电与冰箱行业大盘' },
   ],
 };
 

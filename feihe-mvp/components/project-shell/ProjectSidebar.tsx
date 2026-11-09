@@ -1,10 +1,44 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from '../ui/AppLink';
 import { PROJECT_NAV_ITEMS } from '../../lib/navigation/project-navigation';
 import { ProjectSwitcher } from './ProjectSwitcher';
 import { useProject } from './ProjectContext';
 import { cnTime } from '../../lib/hooks/use-project-data';
+
+const PROJECT_CUSTOM_TABS: Record<string, Record<string, string>> = {
+  qicui: {
+    overview: '全域声量总览',
+    comments: '评论外显质检',
+    industry: '竞品社媒监控',
+    content: '达人爆文矩阵',
+  },
+  kailas: {
+    overview: '预算控盘总览',
+    ads: '版位效率寻优',
+    content: '达人种草执行',
+    industry: '行业竞品监控',
+  },
+  meiling: {
+    overview: '双11四线总览',
+    ads: '渠道ROI赛马',
+    content: 'KOL审稿与外溢',
+    industry: '行业竞品监控',
+  },
+  'winner-wipes': {
+    overview: '日常种草控盘',
+    ads: '版位与52词投流',
+    content: '达人内容矩阵',
+    industry: '行业竞品监控',
+  },
+  'huang-tiane': {
+    overview: '三线全域核算',
+    ads: '商销与CID引流',
+    content: '品牌FS种草执行',
+    industry: '行业竞品监控',
+  },
+};
 
 export function ProjectSidebar({
   userName,
@@ -35,6 +69,34 @@ export function ProjectSidebar({
     : loading && !currentProject
     ? { text: '正在连接项目资料…', ok: true }
     : { text: '项目资料已连接', ok: true };
+
+  const projectNavItems = useMemo(() => {
+    const customMap = PROJECT_CUSTOM_TABS[projectId];
+    const allowedKeys = customMap
+      ? [...Object.keys(customMap), 'settings']
+      : currentProject?.templateId === 'campaign_review'
+      ? ['overview', 'ads', 'content', 'industry', 'settings']
+      : currentProject?.templateId === 'comment_qc'
+      ? ['overview', 'comments', 'settings']
+      : currentProject?.templateId === 'ad_performance'
+      ? ['overview', 'ads', 'settings']
+      : ['overview', 'industry', 'settings'];
+
+    return allowedKeys
+      .map(key => {
+        const base = PROJECT_NAV_ITEMS.find(n => n.id === key);
+        if (!base) return null;
+        const customLabel =
+          currentProject?.enabledTabs?.find((t: { key?: string; id?: string; label: string }) => (t.key || t.id) === key)?.label ||
+          customMap?.[key] ||
+          base.label;
+        return {
+          ...base,
+          label: customLabel,
+        };
+      })
+      .filter((n): n is (typeof PROJECT_NAV_ITEMS)[number] => Boolean(n));
+  }, [projectId, currentProject]);
 
   return (
     <aside className="sidebar" aria-label="项目主要导航">
@@ -74,23 +136,7 @@ export function ProjectSidebar({
       />
 
       <nav className="project-main-nav" aria-label="项目模块">
-        {PROJECT_NAV_ITEMS.filter((item) => {
-          if (item.inSidebar === false) return false;
-          if (['data', 'metrics', 'reports'].includes(item.id)) return false;
-          if (item.id === 'growth') return false;
-          if (currentProject?.templateId === 'campaign_review') {
-            return ['overview', 'ads', 'industry', 'content', 'settings'].includes(item.id);
-          }
-          if (item.id === 'ads') return ['content_marketing', 'ad_performance'].includes(currentProject?.templateId || '');
-          if (currentProject?.templateId === 'ad_performance') return ['overview', 'ads', 'settings'].includes(item.id);
-          if (['general_workbench', 'blank'].includes(currentProject?.templateId || '')) {
-            return item.id === 'overview' || item.id === 'settings';
-          }
-          if (currentProject?.templateId === 'comment_qc') {
-            return item.id === 'overview' || item.id === 'comments' || item.id === 'settings';
-          }
-          return true;
-        }).map((item, index) => {
+        {projectNavItems.map((item, index) => {
           const href =
             item.path === ''
               ? '/projects/' + encodeURIComponent(projectId)

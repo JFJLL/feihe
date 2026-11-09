@@ -652,7 +652,69 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
       const col = dataset.columns.find(c => c.key === comp.field);
       const rawVal = effectiveRows[0]?.[comp.field || ''];
       const { display, unit, fullTitle } = formatMetricCardValue(rawVal, col);
-      const isFirstInPaired = section.layout === 'paired-metrics' && compIndex === 0;
+      const isHeroSpotlight =
+        (section.layout === 'paired-metrics' || section.variant === 'hero-spotlight') && compIndex === 0;
+
+      if (isHeroSpotlight) {
+        return (
+          <div
+            className="ca-card ca-kpi-card ca-kpi-card-hero"
+            key={comp.id}
+            title={fullTitle}
+            {...provenanceProps}
+            style={{
+              flex: 1,
+              minWidth: 180,
+              background: `linear-gradient(135deg, ${theme.chrome.accent}, color-mix(in srgb, ${theme.chrome.accent} 82%, #000))`,
+              border: `1px solid ${theme.chrome.accent}`,
+              borderRadius: 'var(--dtc-radius, 8px)',
+              boxShadow: '0 4px 14px -2px rgba(0, 0, 0, 0.12)',
+              padding: '16px 18px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <span
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                right: 12,
+                top: 10,
+                fontSize: 18,
+                opacity: 0.28,
+                userSelect: 'none',
+              }}
+            >
+              ★
+            </span>
+            <div className="ca-kpi-label" style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.88)', fontWeight: 600, letterSpacing: '0.02em' }}>
+              {comp.title || col?.label || comp.id}
+            </div>
+            <div className="ca-kpi-value-row" style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 10 }}>
+              <span
+                className="ca-kpi-value"
+                style={{
+                  fontSize: 28,
+                  fontWeight: 800,
+                  color: '#ffffff',
+                  fontVariantNumeric: 'tabular-nums',
+                  letterSpacing: '-0.8px',
+                }}
+              >
+                {display}
+              </span>
+              {unit && (
+                <span className="ca-kpi-unit" style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.82)', fontWeight: 500 }}>
+                  {unit}
+                </span>
+              )}
+            </div>
+          </div>
+        );
+      }
 
       return (
         <div
@@ -665,12 +727,10 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
             minWidth: 180,
             background: 'var(--dtc-theme-surface, #ffffff)',
             border: '1px solid var(--dtc-theme-border, #e2e8f0)',
-            borderTop: isFirstInPaired
-              ? '2px solid var(--dtc-theme-accent)'
-              : '1px solid var(--dtc-theme-border, #e2e8f0)',
+            borderTop: '2px solid var(--dtc-theme-border, #cbd5e1)',
             borderRadius: 'var(--dtc-radius, 8px)',
             boxShadow: 'none',
-            padding: isFirstInPaired ? '15px 16px 16px' : '16px',
+            padding: '16px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -1016,8 +1076,10 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // 7. multi-line-deck (Multi-channel / Business lines deck)
     if (comp.type === 'multi-line-deck') {
-      const deckItems = effectiveRows.map(r => ({
+      const pal = theme.chartPalette;
+      const deckItems = effectiveRows.map((r, rIdx) => ({
         title: String(r[comp.categoryField || 'name'] || r.channel || r.line || '业务线'),
+        color: pal[rIdx % pal.length],
         metrics: dataset.columns.filter(c => c.key !== 'name' && c.key !== 'id').slice(0, 4).map(c => ({
           label: c.label,
           value: formatDatasetValue(r[c.key], c),
@@ -1027,7 +1089,7 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
       return (
         <div className="ca-card ca-deck-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
           <div className="ca-card-header" style={{ marginBottom: 12 }}>
-            <span style={{ fontWeight: 600, fontSize: 15 }}>{comp.title || comp.id}</span>
+            <span style={{ fontWeight: 600, fontSize: 15, color: theme.chrome.text }}>{comp.title || comp.id}</span>
           </div>
           <MultiDimensionComparisonDeck items={deckItems} />
         </div>
@@ -1273,6 +1335,29 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
             }}
           >
             {sec.components.map((comp, cIdx) => renderComponent(comp, sec, cIdx))}
+          </div>
+        </div>
+      );
+    }
+
+    // Bento-split layout (2/3 main trend/chart + 1/3 diagnosis/decomposition)
+    if (layout === 'bento-split') {
+      return (
+        <div className="ca-section ca-section-bento" key={sec.id} style={{ marginBottom: 16 }}>
+          {sectionHeader}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1fr)',
+              gap: 16,
+              alignItems: 'stretch',
+            }}
+          >
+            {sec.components.map((comp, cIdx) => (
+              <div key={comp.id} style={{ minWidth: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                {renderComponent(comp, sec, cIdx)}
+              </div>
+            ))}
           </div>
         </div>
       );

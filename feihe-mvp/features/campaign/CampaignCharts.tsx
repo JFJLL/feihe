@@ -36,6 +36,27 @@ export const DEFAULT_SERIES_COLORS = [
 ];
 
 /**
+ * 动态获取当前活动项目的 SPU 专属图表调色板
+ * 优先从当前容器或全局 CSS 变量 --dtc-chart-color-0..5 读取（自适应 SPU 品牌色），
+ * 在 SSR 或无注入时安全回退至 DEFAULT_SERIES_COLORS。
+ */
+export function getActiveChartPalette(customPalette?: string[]): string[] {
+  if (customPalette && customPalette.length > 0) return customPalette;
+  if (typeof document !== 'undefined') {
+    const root = document.documentElement;
+    const colors: string[] = [];
+    for (let i = 0; i < 6; i++) {
+      const val =
+        root.style.getPropertyValue(`--dtc-chart-color-${i}`).trim() ||
+        window.getComputedStyle(root).getPropertyValue(`--dtc-chart-color-${i}`).trim();
+      if (val) colors.push(val);
+    }
+    if (colors.length >= 2) return colors;
+  }
+  return [...DEFAULT_SERIES_COLORS];
+}
+
+/**
  * 测量容器实际像素宽度，驱动 SVG 与复杂排版 1:1 响应式渲染，
  * 确保移动端（如 390px 视口，容器约 275px）字号不被按比例等比缩放至 12px 以下。
  * 采用稳定 callback ref 模式：节点挂载/换节点时自动 attach 测宽与监听，节点卸载或空态时自动 disconnect。
@@ -1074,13 +1095,14 @@ export function StackedHorizontalBarChart({
     }, 0)
   );
   const maxTotal = Math.max(1, ...rowTotals);
+  const activePal = getActiveChartPalette();
 
   return (
     <div className="ca-stacked-chart">
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 12, color: CAMPAIGN_PALETTE.textMuted }}>
-        {segments.map((s) => (
+        {segments.map((s, sIdx) => (
           <span key={s.key} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-            <i style={{ width: 10, height: 10, borderRadius: 3, background: s.color, display: 'inline-block' }} />
+            <i style={{ width: 10, height: 10, borderRadius: 3, background: s.color || activePal[sIdx % activePal.length], display: 'inline-block' }} />
             {s.label}
           </span>
         ))}
@@ -3244,7 +3266,7 @@ export function PlacementCpmStrip({
 }: {
   items: Array<{ name: string; spend?: number | null; cpm?: number | null; cpuv?: number | null; color?: string }>;
 }) {
-  const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#15803D'];
+  const pal = getActiveChartPalette();
   return (
     <div
       className="placement-cpm-strip"
@@ -3290,7 +3312,7 @@ export function NightingaleRoseChart({
   height?: number;
 }) {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const pal = ['#0F5E52', '#D95D39', '#2E6F8E', '#C87D20', '#5B8266', '#8C6239'];
+  const pal = getActiveChartPalette();
   const validData = (data || []).filter((d) => d && typeof d.value === 'number' && d.value > 0);
 
   if (validData.length === 0) {
@@ -3876,6 +3898,7 @@ export function CapabilityRadarChart({
 
 export interface ComparisonDeckItem {
   id?: string;
+  color?: string;
   badge?: string;
   title: string;
   subtitle?: string;
@@ -3898,6 +3921,7 @@ export function MultiDimensionComparisonDeck({
   summaryItems?: Array<{ label: string; value: string }>;
   items: ComparisonDeckItem[];
 }) {
+  const pal = getActiveChartPalette();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 10 }}>
       {summaryItems && summaryItems.length > 0 && (
@@ -3925,7 +3949,7 @@ export function MultiDimensionComparisonDeck({
           const tone = item.statusTone || 'neutral';
           const toneStyle =
             tone === 'ok'
-              ? { background: '#E8F5E9', color: '#0F5E52', border: '1px solid #A5D6A7' }
+              ? { background: 'var(--brand-primary-soft, #E8F5E9)', color: 'var(--brand-primary, #0F5E52)', border: '1px solid var(--border-brand, #A5D6A7)' }
               : tone === 'warn'
               ? { background: '#FEF3C7', color: '#B45309', border: '1px solid #FCD34D' }
               : tone === 'danger'
@@ -3933,6 +3957,7 @@ export function MultiDimensionComparisonDeck({
               : { background: 'rgba(0,0,0,0.05)', color: '#57534E', border: '1px solid var(--border-subtle, #E6E3DC)' };
 
           const badgeText = item.badge ?? (idx < 9 ? `0${idx + 1}` : `${idx + 1}`);
+          const cardAccent = item.color || pal[idx % pal.length];
 
           return (
             <div
@@ -3941,6 +3966,7 @@ export function MultiDimensionComparisonDeck({
               style={{
                 background: 'var(--bg-subtle, #FAF9F5)',
                 border: '1px solid var(--border-subtle, #E6E3DC)',
+                borderTop: `3px solid ${cardAccent}`,
                 borderRadius: 10,
                 padding: '10px 14px',
                 display: 'flex',

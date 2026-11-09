@@ -13,9 +13,9 @@
   "description": "种草效果与KPI进度",
   "templateId": "campaign_review",
   "enabledTabs": [
-    { "key": "overview", "label": "数据总览", "icon": "📊", "desc": "预算进度与阶段效果" },
-    { "key": "daily", "label": "分日看板", "icon": "📅", "desc": "当日指标与明细" },
-    { "key": "ads", "label": "版位投放", "icon": "🎯", "desc": "广告与渠道效率" },
-    { "key": "content", "label": "内容执行", "icon": "📝", "desc": "达人与笔记详情" }
+    { "key": "overview", "label": "日常种草控盘", "icon": "📊", "desc": "常态化种草与预算执行" },
+    { "key": "ads", "label": "版位与52词投流", "icon": "🎯", "desc": "52核心词与版位寻优" },
+    { "key": "content", "label": "达人内容矩阵", "icon": "📝", "desc": "达人库与种草内容" },
+    { "key": "industry", "label": "行业竞品监控", "icon": "🔍", "desc": "个人护理湿巾行业监控" }
   ]
 }

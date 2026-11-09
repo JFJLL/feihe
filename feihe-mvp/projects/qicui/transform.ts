@@ -196,6 +196,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       title: '启萃核心声量与消耗',
       description: '全量达人与广告消耗大盘',
       layout: 'paired-metrics',
+      variant: 'hero-spotlight',
       columns: 4,
       components: [
         {
@@ -237,7 +238,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       tab: 'overview',
       title: '分日投资与消耗趋势',
       hint: '分日双轴趋势：左轴展示投流消耗，右轴展示项目累计投资',
-      layout: 'grid',
+      layout: 'bento-split',
       columns: 2,
       components: [
         {
@@ -268,6 +269,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       title: '版位投放与预算成本指标',
       description: '投流预算、达人成本与结算对账',
       layout: 'paired-metrics',
+      variant: 'hero-spotlight',
       columns: 4,
       components: [
         {
@@ -310,7 +312,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       title: '投放效率双轴走势',
       description: '广告投放消耗与项目投资进度',
       hint: '广告投流消耗与项目投资进度动态走势对比',
-      layout: 'grid',
+      layout: 'bento-split',
       columns: 2,
       components: [
         {
@@ -356,6 +358,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       title: '内容声量与互动指标',
       description: '达人笔记库与粉丝互动质检',
       layout: 'paired-metrics',
+      variant: 'hero-spotlight',
       columns: 4,
       components: [
         {

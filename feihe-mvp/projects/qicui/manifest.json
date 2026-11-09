@@ -13,9 +13,9 @@
   "description": "飞鹤启萃小红书全域声量、达人投放、评论外显质检与分日消耗",
   "templateId": "content_marketing",
   "enabledTabs": [
-    { "key": "overview", "label": "数据总览", "icon": "📊", "desc": "全域声量与核心指标" },
-    { "key": "daily", "label": "业务日报", "icon": "📅", "desc": "分日流水与结算对账" },
-    { "key": "comments", "label": "评论质检", "icon": "💬", "desc": "外显审核与负向拦截" },
-    { "key": "content", "label": "达人笔记", "icon": "📝", "desc": "达人投放与爆文库" }
+    { "key": "overview", "label": "全域声量总览", "icon": "📊", "desc": "品牌声量与全量消耗大盘" },
+    { "key": "comments", "label": "评论外显质检", "icon": "💬", "desc": "真实舆情与口碑外显率" },
+    { "key": "industry", "label": "竞品社媒监控", "icon": "🔍", "desc": "本竞品声量与行业大盘" },
+    { "key": "content", "label": "达人爆文矩阵", "icon": "📝", "desc": "达人带货与爆文分布" }
   ]
 }

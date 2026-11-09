@@ -36,6 +36,7 @@ export type Project = {
   clientName?: string;
   templateName?: string;
   campaignSnapshotAt?: string | null;
+  enabledTabs?: Array<{ key: string; label: string; icon?: string; desc?: string }>;
 };
 
 export type Pipeline = {
