@@ -1,6 +1,9 @@
 import { db } from './db';
-import { isProjectRegistered, buildProjectBoard } from './core/registry';
+import { isProjectRegistered, getProjectManifest } from './core/registry';
 import { buildCopilotContext } from './core/copilot-context';
+import { getCampaignDashboardSnapshot } from './campaign-store';
+import { buildBoardPayloadFromCampaignDashboard } from './core/transform-kit';
+import type { BoardPayload } from './core/types';
 
 export type AssistantContextOptions = {
   projectId: string;
@@ -50,7 +53,7 @@ export type AssistantFacts = {
 export async function gatherAssistantFacts(options: AssistantContextOptions): Promise<AssistantFacts> {
   const d1 = db();
   const projectId = options.projectId;
-  const targetDay = options.day || '2026-10-13';
+  const targetDay = options.day;
   const section = options.section || 'overview';
   const tab = options.tab || (section === 'overview' ? 'overview' : undefined);
   const periodFrom = options.from;
@@ -61,71 +64,89 @@ export async function gatherAssistantFacts(options: AssistantContextOptions): Pr
   const projectRow = await d1.prepare('SELECT name, spu, brand, category FROM projects WHERE id=?').bind(projectId).first<{ name: string; spu: string; brand: string; category: string }>();
   const projectName = projectRow?.name || projectId;
 
-  // Beacon architecture: dynamically build facts for all registered projects
-  if (projectId !== 'qicui' && isProjectRegistered(projectId)) {
-    try {
-      const board = await buildProjectBoard(projectId);
-      if (board) {
-        const copilotCtx = buildCopilotContext(board, {
-          day: targetDay,
-          from: periodFrom,
-          to: periodTo,
+  // 2. Prioritize reading the verified formal dashboard snapshot from DB (never rebuild on read)
+  try {
+    const snapshot = await getCampaignDashboardSnapshot(projectId);
+    if (snapshot) {
+      let board: BoardPayload;
+      if ((snapshot as any).datasets && Array.isArray((snapshot as any).sections)) {
+        board = snapshot as unknown as BoardPayload;
+      } else {
+        const manifest = getProjectManifest(projectId);
+        board = buildBoardPayloadFromCampaignDashboard(snapshot, manifest || {
+          id: projectId,
+          name: (snapshot as any).name || projectId,
+          brand: (snapshot as any).brand || projectId,
+          spu: (snapshot as any).spu || '',
+          category: (snapshot as any).category || '',
+          color: '#1769d5',
+          defaultReportPeriod: (snapshot as any).reportPeriod || '',
         });
-        const sources = (board.sources || []).map((s, idx) => ({
-          key: s.id || `src-${idx}`,
-          name: s.name,
-          records: board.datasets[s.id]?.rows.length || 0,
-          url: s.url || '',
-          status: s.status || '已连接',
-        }));
-
-        return {
-          projectId,
-          projectName,
-          businessDay: targetDay,
-          dataCutoff: board.reportPeriod || targetDay,
-          section,
-          tab,
-          periodFrom,
-          periodTo,
-          dataMode,
-          dailyCore: {
-            adSpend: { value: null, formatted: '按项目看板口径', sourceKey: 'board' },
-          },
-          dailyTablesSummary: copilotCtx.keyTablesSummary.map(t => ({
-            title: t.name,
-            sampleRows: t.rowCount,
-          })),
-          sampleBoundaries: {
-            ownedNoteArchives: 0,
-            executionRecords: 0,
-            executionNote: `项目 ${projectName} 业务看板已连接，包含 ${copilotCtx.keyTablesSummary.length} 个结构化数据集。`,
-            sourcedComments: 0,
-            supplierDeliveries: 0,
-            commentSentimentNote: '数据口径与指标由项目 transform.ts 独立治理。',
-            competitorSampleTotal: 0,
-            competitorSampleBrandBreakdown: {},
-            competitorSampleNatureBreakdown: {},
-            competitorScopeNote: '全域真实入账口径。',
-          },
-          sources: sources.length ? sources : [{ key: 'board-datasets', name: `${projectName}数据大盘`, records: Object.keys(board.datasets).length, status: '已连接' }],
-          copilotFactSheet: copilotCtx.markdownFactSheet,
-        };
       }
-    } catch (err) {
-      console.warn(`[assistant-context] Failed to load board for ${projectId}:`, err);
+
+      const copilotCtx = buildCopilotContext(board, {
+        day: targetDay,
+        from: periodFrom,
+        to: periodTo,
+      });
+      const sources = (board.sources || []).map((s, idx) => ({
+        key: s.id || `src-${idx}`,
+        name: s.name,
+        records: board.datasets[s.id]?.rows?.length || 0,
+        url: s.url || '',
+        status: s.status || '已连接',
+      }));
+
+      const effectiveCutoff = targetDay || board.dataThrough || board.reportPeriod || '全周期';
+
+      return {
+        projectId,
+        projectName,
+        businessDay: targetDay || board.dataThrough || board.reportPeriod || '最新',
+        dataCutoff: effectiveCutoff,
+        section,
+        tab,
+        periodFrom,
+        periodTo,
+        dataMode,
+        dailyCore: {
+          adSpend: { value: null, formatted: '按正式看板快照口径', sourceKey: 'board' },
+        },
+        dailyTablesSummary: copilotCtx.keyTablesSummary.map(t => ({
+          title: t.name,
+          sampleRows: t.rowCount,
+        })),
+        sampleBoundaries: {
+          ownedNoteArchives: 0,
+          executionRecords: 0,
+          executionNote: `项目 ${projectName} 正式看板已连接，包含 ${copilotCtx.keyTablesSummary.length} 个结构化数据集。`,
+          sourcedComments: 0,
+          supplierDeliveries: 0,
+          commentSentimentNote: '数据口径与指标由项目正式发布快照治理保证。',
+          competitorSampleTotal: 0,
+          competitorSampleBrandBreakdown: {},
+          competitorSampleNatureBreakdown: {},
+          competitorScopeNote: '全域真实入账口径。',
+        },
+        sources: sources.length ? sources : [{ key: 'board-datasets', name: `${projectName}正式看板`, records: Object.keys(board.datasets).length, status: '已连接' }],
+        copilotFactSheet: copilotCtx.markdownFactSheet,
+      };
     }
+  } catch (err) {
+    console.warn(`[assistant-context] Failed to load formal snapshot for ${projectId}:`, err);
   }
 
-  // 2. Query business daily report strictly by verified projectId and targetDay
-  let dailyRow = await d1.prepare('SELECT business_day, payload_json FROM business_daily_reports WHERE project_id=? AND business_day=? ORDER BY created_at DESC LIMIT 1').bind(projectId, targetDay).first<{ business_day: string; payload_json: string }>();
+  // 3. Fallback: Query business daily report strictly by verified projectId
+  let dailyRow = targetDay
+    ? await d1.prepare('SELECT business_day, payload_json FROM business_daily_reports WHERE project_id=? AND business_day=? ORDER BY created_at DESC LIMIT 1').bind(projectId, targetDay).first<{ business_day: string; payload_json: string }>()
+    : null;
   if (!dailyRow) {
     dailyRow = await d1.prepare('SELECT business_day, payload_json FROM business_daily_reports WHERE project_id=? ORDER BY business_day DESC, created_at DESC LIMIT 1').bind(projectId).first<{ business_day: string; payload_json: string }>();
   }
 
   let dailyCore: AssistantFacts['dailyCore'] = undefined;
   let dailyTablesSummary: AssistantFacts['dailyTablesSummary'] = undefined;
-  let dataCutoff = targetDay;
+  let dataCutoff = targetDay || dailyRow?.business_day || '全周期';
 
   if (dailyRow?.payload_json) {
     try {
@@ -275,7 +296,7 @@ export async function gatherAssistantFacts(options: AssistantContextOptions): Pr
   return {
     projectId,
     projectName,
-    businessDay: dailyRow?.business_day || targetDay,
+    businessDay: dailyRow?.business_day || targetDay || '最新',
     dataCutoff,
     section,
     tab,

@@ -145,7 +145,7 @@ async function handleChatAgent(
   const history = Array.isArray(body.history) ? body.history as Array<{ role: string; content: string }> : [];
   const reqContext = (typeof body.context === 'object' && body.context ? body.context : {}) as Record<string, unknown>;
   const promptDayMatch = prompt.match(/\b(2026-\d{2}-\d{2})\b/);
-  const day = promptDayMatch ? promptDayMatch[1] : (text(reqContext.day) || '2026-10-13');
+  const day = promptDayMatch ? promptDayMatch[1] : (text(reqContext.day) || undefined);
   const section = text(reqContext.section) || 'overview';
   const tab = text(reqContext.tab) || undefined;
   const from = text(reqContext.from) || undefined;

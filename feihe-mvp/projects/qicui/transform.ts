@@ -107,6 +107,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       settlement: settle,
     });
   }
+  dailyFlowRows.sort((a, b) => String(a.date).localeCompare(String(b.date)));
 
   // 4. Query top notes
   const topNotesDb = await d1.prepare(`
@@ -436,22 +437,32 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
   ];
 
-  const safeNegRate = commentTotal > 0 ? (negativeCount / commentTotal) * 100 : 0;
-  const safeCleanRate = commentTotal > 0 ? 100 - safeNegRate : 100;
+  const hasComments = commentTotal > 0;
+  const safeNegRate = hasComments ? (negativeCount / commentTotal) * 100 : null;
+  const safeCleanRate = hasComments && safeNegRate !== null ? 100 - safeNegRate : null;
+
+  let sentimentSeverity: 'success' | 'warning' | 'info' = 'info';
+  let sentimentSummary = '';
+  if (hasComments && safeNegRate !== null && safeCleanRate !== null) {
+    sentimentSeverity = safeCleanRate >= 95 ? 'success' : 'warning';
+    sentimentSummary = `全域沉淀 ${noteCount} 篇笔记与 ${commentTotal} 条评论，负向评论占比 ${safeNegRate.toFixed(1)}%（非负向清洁度 ${safeCleanRate.toFixed(1)}%）。`;
+  } else {
+    sentimentSeverity = 'info';
+    sentimentSummary = `当前系统收录 ${noteCount} 篇笔记，尚无评论互动沉淀，数据就绪待初次外显质检（当前状态：待观测）。`;
+  }
+
   const analysisCards: AnalysisCardSpec[] = [
     {
       id: 'insight-qicui-sentiment',
       targetQueryIds: ['summary_kpis', 'creator_notes'],
       type: 'insight',
-      title: '启萃全域声量与评论外显质检',
-      summary: commentTotal > 0
-        ? `全域沉淀 ${noteCount} 篇笔记与 ${commentTotal} 条评论，负向评论占比 ${safeNegRate.toFixed(1)}%（非负向清洁度 ${safeCleanRate.toFixed(1)}%）。`
-        : `当前系统收录 ${noteCount} 篇笔记，尚无评论互动沉淀，数据就绪待初次外显质检。`,
+      title: hasComments ? '启萃全域声量与评论外显质检' : '启萃全域声量与评论外显质检（待观测）',
+      summary: sentimentSummary,
       recommendations: [
         '针对提问高频词（如转奶、便秘、乳铁蛋白）配置官方解答置顶',
         '继续跟进供应商待核验评论的外显状态',
       ],
-      severity: safeCleanRate >= 95 ? 'success' : 'warning',
+      severity: sentimentSeverity,
     },
   ];
 

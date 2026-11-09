@@ -203,10 +203,13 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
   ];
 
-  const cpuvKpi = (merged.kpis || []).find((k: any) => k.id?.includes('cpuv'));
-  const cpuvVal = cpuvKpi?.value ? Number(cpuvKpi.value).toFixed(2) : '8.23';
-  const analysisCards: AnalysisCardSpec[] = [
-    {
+  const cpuvKpi = (merged.kpis || []).find((k: any) => k.id === 'wipes-cum-cpuv-t2' || k.id === 'wipes-daily-cpuv-t2');
+  const cpuvNum = typeof cpuvKpi?.value === 'number' && Number.isFinite(cpuvKpi.value) ? cpuvKpi.value : null;
+
+  const analysisCards: AnalysisCardSpec[] = [];
+  if (cpuvNum !== null) {
+    const cpuvVal = cpuvNum.toFixed(2);
+    analysisCards.push({
       id: 'insight-wipes-cpuv',
       targetQueryIds: ['daily_flow', 'summary_kpis'],
       type: 'insight',
@@ -217,8 +220,17 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
         '建议加大高互动版位的投流倾斜',
       ],
       severity: 'success',
-    },
-  ];
+    });
+  } else {
+    analysisCards.push({
+      id: 'insight-wipes-cpuv',
+      targetQueryIds: ['summary_kpis'],
+      type: 'insight',
+      title: 'CPUV与站外归因效率待观测',
+      summary: '稳健酒精湿巾当前尚未观测到有效的 CPUV 回填指标，待站外归因数据就绪后生成分析卡。',
+      severity: 'info',
+    });
+  }
 
   return buildBoardPayloadFromCampaignDashboard(merged, manifest, sections, analysisCards);
 }

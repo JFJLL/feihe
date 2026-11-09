@@ -149,6 +149,15 @@ export function validateBoardHealth(payload: BoardPayload): HealthReport {
   for (const [dsId, ds] of Object.entries(datasets)) {
     for (const col of ds.columns || []) {
       if (col.format === 'percent') {
+        if (!col.percentInput) {
+          errors.push({
+            severity: 'error',
+            code: 'MISSING_PERCENT_INPUT_DECLARATION',
+            queryId: dsId,
+            message: `数据集 "${dsId}" 列 "${col.key}" 缺少显式 percentInput 口径声明 ('ratio' | 'points')`,
+            remediation: `在 ColumnDef 中显式设置 percentInput: 'points' 或 percentInput: 'ratio'，禁止依据数值大小猜测口径。`,
+          });
+        }
         for (let i = 0; i < Math.min(ds.rows.length, 50); i++) {
           const val = ds.rows[i]?.[col.key];
           if (typeof val === 'number') {
@@ -173,6 +182,54 @@ export function validateBoardHealth(payload: BoardPayload): HealthReport {
             }
           }
         }
+      }
+    }
+
+    // Duplicate business date check (enforced strictly on time-series daily flow datasets)
+    const isTimeSeriesDailyFlow = dsId === 'daily_flow' || dsId.includes('daily_flow') || (ds.columns.some(c => c.role === 'TIMESTAMP') && dsId.includes('daily'));
+    const dateCol = ds.columns?.find(c => c.role === 'TIMESTAMP' || (c.type === 'date' && isTimeSeriesDailyFlow));
+    if (isTimeSeriesDailyFlow && dateCol && Array.isArray(ds.rows) && ds.rows.length > 1) {
+      const seenDates = new Set<string>();
+      const duplicates = new Set<string>();
+      for (const r of ds.rows) {
+        const d = String(r[dateCol.key] || '').trim();
+        if (d) {
+          if (seenDates.has(d)) {
+            duplicates.add(d);
+          } else {
+            seenDates.add(d);
+          }
+        }
+      }
+      if (duplicates.size > 0) {
+        errors.push({
+          severity: 'error',
+          code: 'DUPLICATE_BUSINESS_DATE',
+          queryId: dsId,
+          message: `分日时序流数据集 "${dsId}" 的日期列 "${dateCol.key}" 包含重复业务日期: ${Array.from(duplicates).slice(0, 3).join(', ')}`,
+          remediation: `确保在 transform.ts 中对同一业务日期的多版本日报执行去重，避免重复日期进入时序走势图。`,
+        });
+      }
+    }
+  }
+
+  // 3.5 Sync metadata and source health check
+  if (payload.syncMetadata?.sources) {
+    for (const [sId, sState] of Object.entries(payload.syncMetadata.sources)) {
+      if (sState.critical && sState.status === 'failed') {
+        errors.push({
+          severity: 'error',
+          code: 'CRITICAL_SOURCE_FAILED',
+          message: `关键数据源 "${sId}" 同步失败: ${sState.error || '未返回有效数据'}`,
+          remediation: `检查数据源配置与凭证，关键数据源失败阻断正式发布。`,
+        });
+      } else if (sState.status === 'cached' && sState.error) {
+        warnings.push({
+          severity: 'warning',
+          code: 'STALE_CACHE_USED',
+          message: `外部数据源 "${sId}" 实时刷新失败 (${sState.error})，当前使用旧缓存`,
+          remediation: `核验外部数据源网络状态与权限。`,
+        });
       }
     }
   }

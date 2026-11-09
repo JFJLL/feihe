@@ -96,6 +96,37 @@ export function strictNum(val: unknown, fallback: number | null = null): number 
 }
 
 /**
+ * Standard percent formatting helper adhering strictly to declared percentInput caliber.
+ * Handles ratio (0.125 -> 12.5%), points (12.5 -> 12.5%), zero (0 -> 0%), and unobserved (null -> 未观测).
+ */
+export function formatPercentValue(
+  val: unknown,
+  percentInput: 'ratio' | 'points' = 'ratio',
+  maxDecimals = 2
+): string {
+  if (val === null || val === undefined) return '未观测';
+  if (typeof val === 'string') {
+    const s = val.trim();
+    if (!s || s === '-' || s === '--' || s === 'null' || s === 'undefined') return '未观测';
+    if (s.endsWith('%')) return s;
+    const n = Number(s);
+    if (!Number.isNaN(n)) {
+      const pct = percentInput === 'points' ? n : n * 100;
+      const formatted = pct.toFixed(maxDecimals).replace(/\.?0+$/, '');
+      return `${formatted === '-0' ? '0' : formatted}%`;
+    }
+    return s;
+  }
+  if (typeof val === 'number') {
+    if (!Number.isFinite(val)) return '未观测';
+    const pct = percentInput === 'points' ? val : val * 100;
+    const formatted = pct.toFixed(maxDecimals).replace(/\.?0+$/, '');
+    return `${formatted === '-0' ? '0' : formatted}%`;
+  }
+  return '未观测';
+}
+
+/**
  * Computes safe ratio = numerator / denominator.
  */
 export function strictRatio(

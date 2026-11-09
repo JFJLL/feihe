@@ -2,7 +2,7 @@ import { requireProjectAccess, jsonError } from "@/lib/api-auth";
 import { getCampaignDashboardSnapshot } from "@/lib/campaign-store";
 import { isSnapshotStale } from "@/lib/campaign-live-sync";
 import { runProjectSync } from "@/lib/core/sync-runner";
-import { getProjectManifest, buildProjectBoard } from "@/lib/core/registry";
+import { getProjectManifest } from "@/lib/core/registry";
 import { buildBoardPayloadFromCampaignDashboard } from "@/lib/core/transform-kit";
 
 export const dynamic = "force-dynamic";
@@ -45,21 +45,7 @@ export async function GET(request: Request) {
     const manifest = getProjectManifest(projectId);
 
     if (!snapshot) {
-      // First-time fallback: build from registry only when DB has no stored snapshot yet
-      if (manifest) {
-        const board = await buildProjectBoard(projectId);
-        if (board) {
-          return Response.json({
-            ok: true,
-            dashboard: board,
-            projectId,
-            projectRole: access.context!.projectRole,
-            canWrite: access.context!.canWrite,
-            canManage: access.context!.canManage,
-          });
-        }
-      }
-      return jsonError("尚未接入资料", 404);
+      return jsonError("项目看板尚未完成初始化数据同步，请联系管理员执行数据同步上架", 404);
     }
 
     // Background non-blocking auto-sync if snapshot is older than 30 minutes (non-force)

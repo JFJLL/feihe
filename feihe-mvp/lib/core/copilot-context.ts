@@ -12,6 +12,10 @@ export interface CopilotProjectContext {
   brand: string;
   spu?: string;
   category?: string;
+  dataThrough?: string | null;
+  publishedAt?: string;
+  isFiltered: boolean;
+  summaryKpiScope: 'full_cycle' | 'range_scoped';
   reportPeriod?: string;
   queryPeriod?: string;
   summaryKpis: Record<string, { label: string; value: string | number | null; unit?: string }>;
@@ -90,6 +94,8 @@ export function buildCopilotContext(
     `# 项目事实卡：${payload.name} (${payload.brand})`,
     `- 核心SPU: ${payload.spu || '核心主推品'} | 所属类目: ${payload.category || '消费零售'}`,
     `- 观测周期: ${payload.reportPeriod || '最新观测周期'}`,
+    `- 业务数据截止日期 (dataThrough): ${payload.dataThrough || payload.reportPeriod || '全周期'}`,
+    `- 看板发布时间: ${payload.syncMetadata?.publishedAt || payload.updatedAt || '已发布正式快照'}`,
     ...(filterDay ? [`- 当前查询指定业务日: ${filterDay}`] : []),
     ...(filterFrom && filterTo ? [`- 当前查询时间范围: ${filterFrom} ~ ${filterTo}`] : []),
     '',
@@ -97,6 +103,9 @@ export function buildCopilotContext(
   ];
 
   if (Object.keys(summaryKpis).length > 0) {
+    if (isFiltered) {
+      mdLines.push('> 注意：以下核心指标卡为全周期累计/基线值，非安全加和指标未在指定子区间中重算。如需特定时间段指标，请参考下方明细记录。');
+    }
     for (const [k, v] of Object.entries(summaryKpis)) {
       mdLines.push(`- **${v.label}**: ${v.value !== null ? v.value : '未观测'} ${v.unit || ''}`);
     }
@@ -114,6 +123,9 @@ export function buildCopilotContext(
 
   if (analysisInsights.length > 0) {
     mdLines.push('', '## 重点洞察与建议:');
+    if (isFiltered) {
+      mdLines.push('> 说明：以下策略洞察卡片属于全周期宏观结论，并非仅基于当前选定子区间。');
+    }
     for (const insight of analysisInsights) {
       mdLines.push(`- **[${insight.severity || 'info'}] ${insight.title}**: ${insight.summary}`);
       if (insight.recommendations?.length) {
@@ -135,6 +147,10 @@ export function buildCopilotContext(
     brand: payload.brand,
     spu: payload.spu,
     category: payload.category,
+    dataThrough: payload.dataThrough,
+    publishedAt: payload.syncMetadata?.publishedAt || payload.updatedAt,
+    isFiltered,
+    summaryKpiScope: isFiltered ? 'range_scoped' : 'full_cycle',
     reportPeriod: payload.reportPeriod,
     queryPeriod: filterDay || (filterFrom && filterTo ? `${filterFrom}~${filterTo}` : undefined),
     summaryKpis,

@@ -199,16 +199,34 @@ export function CampaignWorkspace({
   const handleReload = async () => {
     setSyncing(true);
     try {
-      await fetch('/api/feishu/sync', {
+      const syncRes = await fetch('/api/feishu/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ projectId, all: true }),
-      }).catch(() => null);
-      await fetchDashboard(projectId, true);
-      showToast('已从外部数据源同步最新数据');
+      });
+      const syncData = (await syncRes.json().catch(() => null)) as {
+        ok?: boolean;
+        message?: string;
+        error?: string;
+        warnings?: string[];
+      } | null;
+
+      if (!syncRes.ok || !syncData?.ok) {
+        const errorMsg = syncData?.message || syncData?.error || `同步失败 (HTTP ${syncRes.status})`;
+        showToast(`数据源同步未完成: ${errorMsg}，已保留当前快照`);
+        await fetchDashboard(projectId, false);
+        return;
+      }
+
+      await fetchDashboard(projectId, false);
+      if (syncData?.warnings && syncData.warnings.length > 0) {
+        showToast(`已从外部数据源同步最新数据（有 ${syncData.warnings.length} 项警示）`);
+      } else {
+        showToast('已从外部数据源同步最新数据');
+      }
     } catch {
-      await fetchDashboard(projectId, true);
-      showToast('已从外部数据源同步最新数据');
+      showToast('同步网络请求异常，已保留当前快照');
+      await fetchDashboard(projectId, false);
     } finally {
       setSyncing(false);
     }

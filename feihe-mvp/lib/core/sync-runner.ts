@@ -13,7 +13,7 @@ import { execFileSync } from 'node:child_process';
 import { db, ensureSchema } from '../db';
 import { getProjectsDir, discoverProjectIds, loadProjectSources, buildProjectBoard, getProjectManifest } from './registry';
 import { validateBoardHealth, formatHealthReport } from './board-health';
-import type { BoardPayload, ProjectSourceConfig } from './types';
+import type { BoardPayload, ProjectSourceConfig, SourceSyncState, SyncMetadata } from './types';
 
 export interface SyncRunResult {
   ok: boolean;
@@ -24,7 +24,8 @@ export interface SyncRunResult {
   healthSummary?: string;
   errors?: string[];
   warnings?: string[];
-  sourceReports?: Record<string, { status: 'live_success' | 'cached' | 'failed'; error?: string }>;
+  sourceReports?: Record<string, SourceSyncState>;
+  syncMetadata?: SyncMetadata;
 }
 
 const syncLocks = new Map<string, Promise<SyncRunResult>>();
@@ -97,6 +98,36 @@ export function fetchFeishuSource(config: ProjectSourceConfig): { ok: boolean; d
   }
 }
 
+function extractDataThrough(payload: BoardPayload): string | null {
+  const dates: string[] = [];
+  if (payload.datasets) {
+    for (const ds of Object.values(payload.datasets)) {
+      const dateCol = ds.columns?.find(c => c.type === 'date' || c.role === 'TIMESTAMP' || c.key.toLowerCase().includes('date'));
+      if (dateCol && Array.isArray(ds.rows)) {
+        for (const row of ds.rows) {
+          const val = row[dateCol.key];
+          if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}/.test(val)) {
+            dates.push(val.slice(0, 10));
+          }
+        }
+      }
+    }
+  }
+  if (dates.length > 0) {
+    dates.sort();
+    return dates[dates.length - 1];
+  }
+  if (payload.reportPeriod && /^\d{4}-\d{2}-\d{2}/.test(payload.reportPeriod)) {
+    return payload.reportPeriod.slice(0, 10);
+  }
+  const m = payload.reportPeriod?.match(/\d{4}[-/.年]\d{1,2}[-/.月]\d{1,2}/g);
+  if (m && m.length > 0) {
+    const last = m[m.length - 1].replace(/[年月]/g, '-').replace(/日/g, '');
+    return last;
+  }
+  return null;
+}
+
 /**
  * Executes the pull and transform pipeline for a single project.
  */
@@ -118,41 +149,99 @@ export async function runProjectSync(projectId: string, options: { force?: boole
     // 1. Load project sources
     const sourcesConfig = await loadProjectSources(projectId);
     const rawSourcesCachePath = path.join(cacheDir, 'raw-sources.json');
-    let rawSources: Record<string, unknown> = {};
-    const sourceReports: Record<string, { status: 'live_success' | 'cached' | 'failed'; error?: string }> = {};
+    const rawSourcesMetaPath = path.join(cacheDir, 'raw-sources-meta.json');
+    let validRawSources: Record<string, unknown> = {};
+    let validMeta: Record<string, SourceSyncState> = {};
     const syncWarnings: string[] = [];
 
     if (fs.existsSync(rawSourcesCachePath)) {
       try {
-        rawSources = JSON.parse(fs.readFileSync(rawSourcesCachePath, 'utf8'));
+        validRawSources = JSON.parse(fs.readFileSync(rawSourcesCachePath, 'utf8'));
       } catch {
-        rawSources = {};
+        validRawSources = {};
+      }
+    }
+    if (fs.existsSync(rawSourcesMetaPath)) {
+      try {
+        validMeta = JSON.parse(fs.readFileSync(rawSourcesMetaPath, 'utf8'));
+      } catch {
+        validMeta = {};
       }
     }
 
-    const hasCachedSources = Object.keys(rawSources).length > 0;
-    const shouldFetchRemote = Boolean(options.force) || !hasCachedSources;
+    // Candidate cache for isolation: promote only when build and health checks pass
+    const candidateRawSources: Record<string, unknown> = { ...validRawSources };
+    const candidateMeta: Record<string, SourceSyncState> = { ...validMeta };
 
-    // Only fetch remote when force is true or cache is empty
+    let externalAttemptCount = 0;
+    let externalSuccessCount = 0;
+    let criticalFailure: { sourceId: string; error: string } | null = null;
+
     if (sourcesConfig?.sources) {
-      let fetchedAny = false;
       for (const src of sourcesConfig.sources) {
+        const existingMeta = candidateMeta[src.id] || {
+          status: 'cached',
+          lastAttemptAt: '',
+          lastSuccessAt: null,
+          critical: src.critical,
+        };
+        const hasCache = validRawSources[src.id] !== undefined;
+        const intervalMs = (src.refreshIntervalMinutes ?? 60) * 60 * 1000;
+        const isExpired = !existingMeta.lastSuccessAt || (Date.now() - new Date(existingMeta.lastSuccessAt).getTime() > intervalMs);
+        const shouldFetchThis = Boolean(options.force) || !hasCache || isExpired;
+
         if (src.type === 'feishu_sheet' || src.type === 'feishu_bitable') {
-          if (shouldFetchRemote) {
+          externalAttemptCount++;
+          if (shouldFetchThis) {
+            candidateMeta[src.id] = {
+              ...existingMeta,
+              lastAttemptAt: timestamp,
+              critical: src.critical,
+            };
             const res = fetchFeishuSource(src);
             if (res.ok && res.data) {
-              rawSources[src.id] = res.data;
-              sourceReports[src.id] = { status: 'live_success' };
-              fetchedAny = true;
-            } else {
-              sourceReports[src.id] = {
-                status: rawSources[src.id] ? 'cached' : 'failed',
-                error: res.error,
+              candidateRawSources[src.id] = res.data;
+              candidateMeta[src.id] = {
+                status: 'live_success',
+                lastAttemptAt: timestamp,
+                lastSuccessAt: timestamp,
+                critical: src.critical,
               };
-              syncWarnings.push(`外部数据源 [${src.name || src.id}] 实时拉取失败 (${res.error || '未返回有效数据'})，已降级沿用本地缓存`);
+              externalSuccessCount++;
+            } else {
+              const errText = res.error || '拉取未返回有效数据';
+              if (hasCache) {
+                candidateMeta[src.id] = {
+                  status: 'cached',
+                  lastAttemptAt: timestamp,
+                  lastSuccessAt: existingMeta.lastSuccessAt,
+                  error: errText,
+                  critical: src.critical,
+                };
+                if (src.critical) {
+                  criticalFailure = { sourceId: src.id, error: errText };
+                } else {
+                  syncWarnings.push(`外部数据源 [${src.name || src.id}] 实时刷新失败 (${errText})，保留旧缓存（已标记过期）`);
+                }
+              } else {
+                candidateMeta[src.id] = {
+                  status: 'failed',
+                  lastAttemptAt: timestamp,
+                  lastSuccessAt: null,
+                  error: errText,
+                  critical: src.critical,
+                };
+                if (src.critical || !hasCache) {
+                  criticalFailure = { sourceId: src.id, error: errText };
+                }
+              }
             }
           } else {
-            sourceReports[src.id] = { status: 'cached' };
+            candidateMeta[src.id] = {
+              ...existingMeta,
+              status: 'cached',
+              critical: src.critical,
+            };
           }
         } else if (src.filePath) {
           const resolvedPath = path.isAbsolute(src.filePath)
@@ -160,24 +249,51 @@ export async function runProjectSync(projectId: string, options: { force?: boole
             : path.resolve(process.cwd(), src.filePath);
           if (fs.existsSync(resolvedPath)) {
             try {
-              rawSources[src.id] = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
-              sourceReports[src.id] = { status: 'live_success' };
-              fetchedAny = true;
+              candidateRawSources[src.id] = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+              candidateMeta[src.id] = {
+                status: 'live_success',
+                lastAttemptAt: timestamp,
+                lastSuccessAt: timestamp,
+                critical: src.critical,
+              };
             } catch {
               // Ignore
             }
           }
         }
       }
-      if (shouldFetchRemote || fetchedAny) {
-        fs.writeFileSync(rawSourcesCachePath, JSON.stringify(rawSources, null, 2), 'utf8');
-      }
+    }
+
+    // Abort if a critical source failed or all external sources failed without cache
+    if (criticalFailure) {
+      return {
+        ok: false,
+        projectId,
+        timestamp,
+        message: `关键数据源 [${criticalFailure.sourceId}] 拉取失败: ${criticalFailure.error}，保留原有效快照与原有效缓存`,
+        healthPassed: false,
+        errors: [`关键数据源 [${criticalFailure.sourceId}] 失败: ${criticalFailure.error}`],
+        warnings: syncWarnings,
+        sourceReports: candidateMeta,
+      };
+    }
+
+    if (externalAttemptCount > 0 && externalSuccessCount === 0 && Object.keys(validRawSources).length === 0) {
+      return {
+        ok: false,
+        projectId,
+        timestamp,
+        message: `所有远程数据源均拉取失败，且无可用的本地缓存`,
+        healthPassed: false,
+        errors: ['所有远程数据源同步失败'],
+        sourceReports: candidateMeta,
+      };
     }
 
     // 2. Build BoardPayload via transformProject
     let payload: BoardPayload | null = null;
     try {
-      payload = await buildProjectBoard(projectId, rawSources);
+      payload = await buildProjectBoard(projectId, candidateRawSources);
     } catch (err) {
       return {
         ok: false,
@@ -186,7 +302,7 @@ export async function runProjectSync(projectId: string, options: { force?: boole
         message: `转换失败: ${err instanceof Error ? err.message : String(err)}`,
         healthPassed: false,
         errors: [err instanceof Error ? err.message : String(err)],
-        sourceReports,
+        sourceReports: candidateMeta,
       };
     }
 
@@ -197,11 +313,20 @@ export async function runProjectSync(projectId: string, options: { force?: boole
         timestamp,
         message: `未能生成 BoardPayload`,
         healthPassed: false,
-        sourceReports,
+        sourceReports: candidateMeta,
       };
     }
 
+    const dataThrough = extractDataThrough(payload);
     payload.updatedAt = timestamp;
+    payload.dataThrough = dataThrough;
+    payload.syncMetadata = {
+      lastAttemptAt: timestamp,
+      lastSuccessAt: timestamp,
+      publishedAt: timestamp,
+      dataThrough,
+      sources: candidateMeta,
+    };
     if (syncWarnings.length > 0) {
       payload.warnings = [...(payload.warnings || []), ...syncWarnings];
     }
@@ -211,7 +336,7 @@ export async function runProjectSync(projectId: string, options: { force?: boole
     const healthOutput = formatHealthReport(health);
     console.log(healthOutput);
 
-    // Critical Gate: If health check fails, NEVER overwrite active snapshot!
+    // Critical Gate: If health check fails, NEVER overwrite active snapshot or active cache!
     if (!health.ok) {
       const d1 = db();
       await d1
@@ -242,9 +367,13 @@ export async function runProjectSync(projectId: string, options: { force?: boole
         healthSummary: health.summary,
         errors: health.errors.map(e => e.message),
         warnings: [...health.warnings.map(w => w.message), ...syncWarnings],
-        sourceReports,
+        sourceReports: candidateMeta,
       };
     }
+
+    // 3.5 Promote candidate cache to active valid cache only after health check passes
+    fs.writeFileSync(rawSourcesCachePath, JSON.stringify(candidateRawSources, null, 2), 'utf8');
+    fs.writeFileSync(rawSourcesMetaPath, JSON.stringify(candidateMeta, null, 2), 'utf8');
 
     // 4. Save to Database project_settings
     const d1 = db();
@@ -322,7 +451,8 @@ export async function runProjectSync(projectId: string, options: { force?: boole
       healthSummary: health.summary,
       errors: health.errors.map(e => e.message),
       warnings: [...health.warnings.map(w => w.message), ...syncWarnings],
-      sourceReports,
+      sourceReports: candidateMeta,
+      syncMetadata: payload.syncMetadata,
     };
   })();
 

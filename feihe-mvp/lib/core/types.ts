@@ -120,6 +120,22 @@ export interface BoardActionItem {
   dueDate?: string;
 }
 
+export interface SourceSyncState {
+  status: 'live_success' | 'cached' | 'failed';
+  lastAttemptAt: string;
+  lastSuccessAt: string | null;
+  error?: string;
+  critical?: boolean;
+}
+
+export interface SyncMetadata {
+  lastAttemptAt: string;
+  lastSuccessAt: string | null;
+  publishedAt: string;
+  dataThrough: string | null;
+  sources: Record<string, SourceSyncState>;
+}
+
 export interface BoardSource {
   id: string;
   name: string;
@@ -128,6 +144,7 @@ export interface BoardSource {
   status: string;
   detail?: string;
   fetchedAt?: string | null;
+  critical?: boolean;
 }
 
 export interface BoardPayload {
@@ -140,6 +157,8 @@ export interface BoardPayload {
   themeColor?: string;
   reportPeriod?: string;
   updatedAt?: string;
+  dataThrough?: string | null;
+  syncMetadata?: SyncMetadata;
   mode?: string;
   rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
   datasets: Record<string, DatasetTable>;
@@ -186,6 +205,8 @@ export interface ProjectSourceConfig {
   baseToken?: string;
   tableId?: string;
   description?: string;
+  critical?: boolean;
+  refreshIntervalMinutes?: number;
 }
 
 export interface ProjectSources {

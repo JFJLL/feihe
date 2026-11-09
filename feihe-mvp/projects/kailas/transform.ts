@@ -145,15 +145,26 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
   ];
 
-  const budgetKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-total' || k.id?.includes('budget'));
-  const spendKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-spent' || k.id?.includes('spent') || k.id?.includes('spend'));
-  const totalBudget = Number(budgetKpi?.value || 850000);
-  const totalSpend = Number(spendKpi?.value || 906818.64);
-  const overspend = totalSpend - totalBudget;
-  const progressPct = totalBudget > 0 ? (totalSpend / totalBudget) * 100 : 100;
+  const budgetKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-total');
+  const spendKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-spend-total');
+  const remainingKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-remaining');
+  const progressKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-progress');
 
-  const analysisCards: AnalysisCardSpec[] = [
-    {
+  const budgetNum = typeof budgetKpi?.value === 'number' && Number.isFinite(budgetKpi.value) ? budgetKpi.value : null;
+  const spendNum = typeof spendKpi?.value === 'number' && Number.isFinite(spendKpi.value) ? spendKpi.value : null;
+
+  const analysisCards: AnalysisCardSpec[] = [];
+  if (budgetNum !== null && spendNum !== null) {
+    const totalBudget = budgetNum;
+    const totalSpend = spendNum;
+    const overspend = typeof remainingKpi?.value === 'number' && Number.isFinite(remainingKpi.value)
+      ? -remainingKpi.value
+      : totalSpend - totalBudget;
+    const progressPct = typeof progressKpi?.value === 'number' && Number.isFinite(progressKpi.value)
+      ? progressKpi.value
+      : (totalBudget > 0 ? (totalSpend / totalBudget) * 100 : 0);
+
+    analysisCards.push({
       id: 'insight-kailas-overbudget',
       targetQueryIds: ['summary_kpis', 'kailas-budget-lines'],
       type: overspend > 0 ? 'warning' : 'insight',
@@ -166,8 +177,17 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
         '建议对非核心版位实行预算封顶限流',
       ],
       severity: overspend > 0 ? 'warning' : 'success',
-    },
-  ];
+    });
+  } else {
+    analysisCards.push({
+      id: 'insight-kailas-overbudget',
+      targetQueryIds: ['summary_kpis'],
+      type: 'insight',
+      title: '预算规划待同步',
+      summary: '当前尚未观测到有效的预算总额或消耗数据，待数据接入后生成执行进度结论。',
+      severity: 'info',
+    });
+  }
 
   return buildBoardPayloadFromCampaignDashboard(merged, manifest, sections, analysisCards);
 }

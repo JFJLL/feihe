@@ -83,17 +83,27 @@ export async function POST(request: Request) {
   // Top Bar or Full Project Sync
   if (body.all) {
     if (project === 'qicui') {
-      return syncHistoricalSources(access.context!);
+      const res = await syncHistoricalSources(access.context!);
+      if (isProjectRegistered('qicui')) {
+        await runProjectSync('qicui', { force: true }).catch(err => {
+          console.warn('[qicui-sync] Board payload refresh warning:', err);
+        });
+      }
+      return res;
     } else {
       if (isProjectRegistered(project)) {
         const syncRes = await runProjectSync(project, { force: true });
+        const updatedCount = Object.values(syncRes.sourceReports || {}).filter(s => s.status === 'live_success').length;
         return Response.json({
           ok: syncRes.ok,
           message: syncRes.message,
           importedNotes: 0,
-          sourcesUpdated: 1,
+          sourcesUpdated: updatedCount,
           timestamp: syncRes.timestamp,
-        });
+          warnings: syncRes.warnings,
+          errors: syncRes.errors,
+          syncMetadata: syncRes.syncMetadata,
+        }, { status: syncRes.ok ? 200 : 500 });
       }
 
       // Check if project is campaign_review template

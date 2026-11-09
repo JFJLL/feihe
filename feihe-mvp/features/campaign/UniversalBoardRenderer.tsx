@@ -49,6 +49,7 @@ import {
   DistributionHistogram,
   BoxPlotChart,
 } from '../overview/AdvancedCharts';
+import { formatPercentValue } from '../../lib/core/transform-kit';
 import './campaign-analytics.css';
 
 export interface UniversalBoardRendererProps {
@@ -62,12 +63,10 @@ export interface UniversalBoardRendererProps {
  */
 export function formatDatasetValue(val: unknown, col?: ColumnDef): string {
   if (val === null || val === undefined) return '-';
+  if (col?.format === 'percent') {
+    return formatPercentValue(val, col.percentInput || 'ratio', col.decimals ?? 2);
+  }
   if (typeof val === 'number') {
-    if (col?.format === 'percent') {
-      const pctVal = col.percentInput === 'points' ? val : val * 100;
-      const dec = col.decimals ?? 2;
-      return `${pctVal.toFixed(dec)}%`;
-    }
     if (col?.format === 'currency') {
       const dec = col.decimals ?? 2;
       return `¥${val.toLocaleString('zh-CN', { minimumFractionDigits: dec, maximumFractionDigits: dec })}`;
@@ -77,6 +76,12 @@ export function formatDatasetValue(val: unknown, col?: ColumnDef): string {
     }
     const dec = col?.decimals ?? 2;
     return val.toLocaleString('zh-CN', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+  if (typeof val === 'string') {
+    const s = val.trim();
+    if (!s || s === '-' || s === '--' || s === 'null' || s === 'undefined') return '-';
+    if (s.endsWith('%')) return s;
+    return s;
   }
   return String(val);
 }
@@ -92,15 +97,15 @@ export function formatMetricCardValue(val: unknown, col?: ColumnDef): {
 } {
   const baseUnit = col?.displayUnits || '';
   if (val === null || val === undefined) {
-    return { display: '-', unit: baseUnit, fullTitle: '-' };
+    return { display: '未观测', unit: baseUnit, fullTitle: '未观测' };
+  }
+  if (col?.format === 'percent') {
+    const formatted = formatPercentValue(val, col.percentInput || 'ratio', col.decimals ?? 2);
+    return { display: formatted, unit: '', fullTitle: `${col?.label || ''}: ${formatted}` };
   }
   if (typeof val === 'number') {
     const abs = Math.abs(val);
     const fullFormatted = formatDatasetValue(val, col) + (baseUnit ? ` ${baseUnit}` : '');
-
-    if (col?.format === 'percent') {
-      return { display: formatDatasetValue(val, col), unit: '', fullTitle: fullFormatted };
-    }
 
     if (abs >= 100_000_000) {
       const yi = val / 100_000_000;
@@ -549,7 +554,10 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // 0. date-range-filter (interactive in-page date badge)
     if (comp.type === 'date-range-filter') {
-      const dateCol = dataset.columns.find(c => c.type === 'date' || c.role === 'TIMESTAMP' || c.key.includes('date'));
+      const targetDateField = (comp.props?.dateField as string) || comp.field || comp.xField;
+      const dateCol = targetDateField
+        ? dataset.columns.find(c => c.key === targetDateField)
+        : dataset.columns.find(c => c.type === 'date' || c.role === 'TIMESTAMP' || c.key.toLowerCase().includes('date'));
       const allDates = dateCol ? (dataset.rows || []).map(r => String(r[dateCol.key] || '')).filter(Boolean).sort() : [];
       const minDate = allDates[0] || '';
       const maxDate = allDates[allDates.length - 1] || '';
@@ -580,7 +588,13 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
             value={startDate}
             min={minDate}
             max={maxDate}
-            onChange={e => handleFilterChange('__date_start', e.target.value)}
+            onChange={e => {
+              const newStart = e.target.value;
+              handleFilterChange('__date_start', newStart);
+              if (endDate && newStart > endDate) {
+                handleFilterChange('__date_end', newStart);
+              }
+            }}
             style={{
               border: '1px solid var(--dtc-theme-border, #cbd5e1)',
               borderRadius: 4,
@@ -595,7 +609,13 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
             value={endDate}
             min={minDate}
             max={maxDate}
-            onChange={e => handleFilterChange('__date_end', e.target.value)}
+            onChange={e => {
+              const newEnd = e.target.value;
+              handleFilterChange('__date_end', newEnd);
+              if (startDate && newEnd < startDate) {
+                handleFilterChange('__date_start', newEnd);
+              }
+            }}
             style={{
               border: '1px solid var(--dtc-theme-border, #cbd5e1)',
               borderRadius: 4,
@@ -996,7 +1016,7 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // 7. multi-line-deck (Multi-channel / Business lines deck)
     if (comp.type === 'multi-line-deck') {
-      const deckItems = dataset.rows.map(r => ({
+      const deckItems = effectiveRows.map(r => ({
         title: String(r[comp.categoryField || 'name'] || r.channel || r.line || '业务线'),
         metrics: dataset.columns.filter(c => c.key !== 'name' && c.key !== 'id').slice(0, 4).map(c => ({
           label: c.label,
@@ -1113,7 +1133,7 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // 12. comment-qc-panel
     if (comp.type === 'comment-qc-panel') {
-      const rows = dataset.rows || [];
+      const rows = effectiveRows;
       return (
         <div className="ca-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
           <div className="ca-card-header" style={{ fontWeight: 600, fontSize: 15, marginBottom: 12 }}>
@@ -1140,12 +1160,12 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // Clean Data Preview Fallback for any unmapped component (never prints text placeholder)
     const displayCols = dataset.columns.slice(0, 5);
-    const previewRows = dataset.rows.slice(0, 6);
+    const previewRows = effectiveRows.slice(0, 6);
     return (
       <div className="ca-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>
         <div className="ca-card-header" style={{ fontWeight: 600, fontSize: 15, marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
           <span>{comp.title || dataset.name || comp.id}</span>
-          <span style={{ fontSize: 12, color: '#64748b' }}>共 {dataset.rows.length} 条记录</span>
+          <span style={{ fontSize: 12, color: '#64748b' }}>共 {effectiveRows.length} 条记录</span>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
