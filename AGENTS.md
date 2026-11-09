@@ -48,3 +48,18 @@
 - **原型 D（舆情防守与口碑质检型）**：
   - 适用场景：包含评论采集、正负向情感判别、外显率达标核验与关键评论处置的项目（如飞鹤启萃、母婴医疗）。
   - 版式装配：首屏突出正向好评率与外显率；诊断区采用 `percent-stack` 呈现正向/中立/负向情感多层堆叠图；搭配 `comment-qc-panel` 质检面板与低置信度人工复核流。
+
+## 5. 【一级导航栏固定与板块内数据自由编排铁律】
+1. **一级导航栏全平台严格固定**：任何新项目严禁修改左侧一级导航栏名称。全平台所有项目的一级左侧导航栏始终固定统一为：
+   - 01 项目总览 (`overview`)
+   - 02 投流分析 (`ads`)
+   - 03 行业分析 (`industry`)
+   - 04 内容管理 (`content`)
+   - （仅当项目包含真实评论质检数据时显示 `评论质检` (`comments`)）
+   - 项目设置 (`settings`)
+   严禁在 `ProjectSidebar.tsx` 中为个别项目硬编码或映射别名。
+2. **板块内章节按数据基因自由深度编排**：
+   - 左侧栏固定为标准板块，但板块内部绝不允许千篇一律套用“4张卡+1张表”的死板模板！
+   - Agent 在编写 `projects/<newId>/transform.ts` 时，必须深入扫描该项目的所有源表，在固定的 `overview`、`ads`、`content` 三个板块下，根据其所属原型（大促归因/预算控盘/内容种草/舆情口碑），灵活选用 16 种标准图表与容器积木：
+     `hero-spotlight`、`bento-split`、`multi-line-deck`、`pareto-chart`、`contribution-waterfall`、`target-bullet`、`donut-rose`、`capability-radar`、`effect-scatter`、`percent-stack`、`placement-efficiency-strip`、`data-table` + `select-filter`，
+     每个顶级章节通过 `.ca-macro-section-card` 结构化大卡片呈现（01/02/03 SPU 品牌色编号徽章 + 16px 粗体标题 + 右侧口径导读胶囊），打造出既符合该业务独特逻辑、又严守统一视觉网格下限的专属灯塔看板。

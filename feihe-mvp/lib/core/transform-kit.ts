@@ -413,6 +413,7 @@ export function buildBoardPayloadFromCampaignDashboard(
     defaultReportPeriod?: string;
     mode?: string;
     rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
+    legacyRendererMode?: 'legacy-campaign' | 'legacy-huang-tiane';
   },
   sections: import('./types').SectionSpec[] = [],
   analysisCards: Array<{ id: string; targetQueryIds: string[]; type?: 'insight' | 'warning' | 'action'; title: string; summary: string; recommendations?: string[]; severity?: 'info' | 'warning' | 'critical' | 'success' }> = []
@@ -492,6 +493,33 @@ export function buildBoardPayloadFromCampaignDashboard(
       rows: flowRows,
       totalRows: flowRows.length,
     };
+
+    for (const d of dailyDatasets) {
+      if (!datasets[d.id]) {
+        datasets[d.id] = {
+          id: d.id,
+          name: d.label || d.id,
+          columns: [
+            { key: 'date', label: '日期', type: 'date', role: 'TIMESTAMP' },
+            ...(Array.isArray(d?.metrics) ? d.metrics : []).map(m => {
+              const isPct = m.unit === '%' || m.label.includes('率') || m.label.includes('CTR') || m.label.includes('ROI');
+              const isCurr = m.unit === '元' || m.label.includes('消耗') || m.label.includes('花费');
+              return {
+                key: m.key,
+                label: m.label,
+                type: 'number' as const,
+                format: isPct ? 'percent' as const : isCurr ? 'currency' as const : 'integer' as const,
+                percentInput: isPct ? 'points' as const : undefined,
+                decimals: isPct ? 2 : isCurr ? 2 : 0,
+                role: isPct ? 'RATIO' as const : 'METRIC' as const,
+              };
+            }),
+          ],
+          rows: d.rows || [],
+          totalRows: (d.rows || []).length,
+        };
+      }
+    }
   }
 
   // 3. Convert all tables
@@ -555,6 +583,7 @@ export function buildBoardPayloadFromCampaignDashboard(
     reportPeriod: dashboard.reportPeriod || manifest.defaultReportPeriod,
     mode: manifest.mode,
     rendererMode: manifest.rendererMode || 'universal',
+    legacyRendererMode: (manifest as any).legacyRendererMode,
     datasets,
     sections: finalSections,
     analysisCards,

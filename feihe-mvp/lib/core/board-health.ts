@@ -236,8 +236,9 @@ export function validateBoardHealth(payload: BoardPayload): HealthReport {
 
   // 4. Paired metrics & Grid balance check
   for (const sec of sections) {
-    if (sec.layout === 'paired-metrics' || (sec.layout === 'grid' && sec.components.every((c) => c.type === 'metric-card'))) {
-      const count = sec.components.length;
+    const secComps = sec.components || [];
+    if (sec.layout === 'paired-metrics' || (sec.layout === 'grid' && secComps.length > 0 && secComps.every((c) => c.type === 'metric-card'))) {
+      const count = secComps.length;
       if (count > 0 && count % 2 !== 0) {
         warnings.push({
           severity: 'warning',
@@ -250,7 +251,7 @@ export function validateBoardHealth(payload: BoardPayload): HealthReport {
     }
 
     // 5. Chart section hint or description check
-    const hasCharts = sec.components.some(c =>
+    const hasCharts = secComps.some(c =>
       c.type.includes('chart') ||
       c.type === 'line-bar-combo' ||
       c.type === 'donut-rose' ||

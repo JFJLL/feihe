@@ -18,7 +18,7 @@ export const sources: ProjectSources = {
     {
       id: 'qicui-weekly-q4',
       name: '飞鹤启萃周趋势变化底表 (Q4)',
-      type: 'feishu_sheet',
+      type: 'manual',
       url: 'https://yimeichuanbo.feishu.cn/wiki/SVwkw52kZiSlLEkQuaNcHvrynGg',
       description: '飞鹤启萃 Q4 周度投放与外显跟踪表',
     },

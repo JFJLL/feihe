@@ -36,6 +36,7 @@ import {
   CapabilityRadarChart,
   MultiDimensionComparisonDeck,
   StackedHorizontalBarChart,
+  PlacementCpmStrip,
   type ComparisonDatum,
   type NightingaleRoseDatum,
   type RadarDimension,
@@ -1220,6 +1221,38 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
       );
     }
 
+    // 10. placement-efficiency-strip / placement-cpm-strip
+    if (comp.type === 'placement-efficiency-strip' || comp.type === 'placement-cpm-strip') {
+      const items = effectiveRows.map(r => ({
+        name: String(r.name || r.placement || r.channel || r.line || r.title || r.category || '版位'),
+        spend: typeof r.spend === 'number' ? r.spend : typeof r.cost === 'number' ? r.cost : typeof r.actualSpend === 'number' ? r.actualSpend : null,
+        cpm: typeof r.cpm === 'number' ? r.cpm : typeof r.cost_per_mille === 'number' ? r.cost_per_mille : null,
+        cpuv: typeof r.cpuv === 'number' ? r.cpuv : typeof r.cost_per_uv === 'number' ? r.cost_per_uv : typeof r.cpc === 'number' ? r.cpc : null,
+      }));
+
+      return (
+        <div
+          className="ca-card"
+          key={comp.id}
+          {...provenanceProps}
+          style={{
+            padding: '16px 20px',
+            width: '100%',
+            background: '#ffffff',
+            borderRadius: 10,
+            border: `1px solid ${theme.chrome.border}`,
+          }}
+        >
+          {comp.title && (
+            <div className="ca-card-header" style={{ fontWeight: 600, fontSize: 14, marginBottom: 12, color: theme.chrome.text }}>
+              {comp.title}
+            </div>
+          )}
+          <PlacementCpmStrip items={items} />
+        </div>
+      );
+    }
+
     // Clean Data Preview Fallback for any unmapped component (never prints text placeholder)
     const displayCols = dataset.columns.slice(0, 5);
     const previewRows = effectiveRows.slice(0, 6);
@@ -1254,40 +1287,74 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
   };
 
   // Render section layout
-  const renderSection = (sec: SectionSpec) => {
+  const renderSection = (sec: SectionSpec, secIndex = 0) => {
     const layout = sec.layout || 'stack';
+    const components = sec.components || [];
 
     const sectionHeader = sec.title ? (
       <div
         style={{
           display: 'flex',
-          alignItems: 'baseline',
+          alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: 8,
-          marginBottom: 10,
+          gap: 12,
+          marginBottom: 16,
+          paddingBottom: 12,
+          borderBottom: `1px solid ${theme.chrome.border}35`,
         }}
       >
-        <h3 style={{ fontSize: 15, fontWeight: 600, color: theme.chrome.text, margin: 0 }}>
-          {sec.title}
-        </h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 26,
+              height: 26,
+              borderRadius: 6,
+              background: `linear-gradient(135deg, ${theme.chrome.accent}, ${theme.chrome.accent}dd)`,
+              color: '#ffffff',
+              fontSize: 12,
+              fontWeight: 700,
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+              boxShadow: `0 2px 4px ${theme.chrome.accent}33`,
+            }}
+          >
+            {String(secIndex + 1).padStart(2, '0')}
+          </span>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: theme.chrome.text, margin: 0, letterSpacing: '-0.01em' }}>
+            {sec.title}
+          </h3>
+        </div>
         {(sec.hint || sec.description) && (
-          <span style={{ fontSize: 12, color: theme.chrome.muted }}>
+          <span
+            style={{
+              fontSize: 12,
+              color: theme.chrome.muted,
+              background: theme.chrome.headBg || '#f8fafc',
+              border: `1px solid ${theme.chrome.border}`,
+              padding: '3px 10px',
+              borderRadius: 9999,
+              fontWeight: 500,
+            }}
+          >
             {sec.hint || sec.description}
           </span>
         )}
       </div>
     ) : null;
 
+    let bodyContent: React.ReactNode = null;
+
     // Tabs layout
     if (sec.tabs && sec.tabs.length > 0) {
       const activeTabId = activeTabs[sec.id] || sec.tabs[0].id;
       const activeTab = sec.tabs.find(t => t.id === activeTabId) || sec.tabs[0];
 
-      return (
-        <div className="ca-section" key={sec.id} style={{ marginBottom: 16 }}>
-          {sectionHeader}
-          <div style={{ display: 'flex', gap: 8, borderBottom: '1px solid #e2e8f0', marginBottom: 16 }}>
+      bodyContent = (
+        <div>
+          <div style={{ display: 'flex', gap: 8, borderBottom: `1px solid ${theme.chrome.border}`, marginBottom: 16 }}>
             {sec.tabs.map(tab => (
               <button
                 type="button"
@@ -1301,20 +1368,18 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
                   color: activeTabId === tab.id ? theme.chrome.accent : theme.chrome.muted,
                   fontWeight: activeTabId === tab.id ? 600 : 400,
                   cursor: 'pointer',
+                  fontSize: 13,
                 }}
               >
                 {tab.title}
               </button>
             ))}
           </div>
-          <div>{activeTab.sections?.map(s => renderSection(s))}</div>
+          <div>{activeTab.sections?.map((s, sIdx) => renderSection(s, sIdx))}</div>
         </div>
       );
-    }
-
-    // Paired metrics layout (Anti-orphan grid)
-    if (layout === 'paired-metrics') {
-      const count = sec.components.length;
+    } else if (layout === 'paired-metrics') {
+      const count = components.length;
       let gridTemplate = 'repeat(4, minmax(0, 1fr))';
       if (count === 4) {
         gridTemplate = 'repeat(4, minmax(0, 1fr))';
@@ -1324,82 +1389,84 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
         gridTemplate = `repeat(${count}, minmax(180px, 1fr))`;
       }
 
-      return (
-        <div className="ca-section" key={sec.id} style={{ marginBottom: 16 }}>
-          {sectionHeader}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: gridTemplate,
-              gap: 16,
-            }}
-          >
-            {sec.components.map((comp, cIdx) => renderComponent(comp, sec, cIdx))}
-          </div>
+      bodyContent = (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: gridTemplate,
+            gap: 16,
+          }}
+        >
+          {components.map((comp, cIdx) => renderComponent(comp, sec, cIdx))}
         </div>
       );
-    }
-
-    // Bento-split layout (2/3 main trend/chart + 1/3 diagnosis/decomposition)
-    if (layout === 'bento-split') {
-      return (
-        <div className="ca-section ca-section-bento" key={sec.id} style={{ marginBottom: 16 }}>
-          {sectionHeader}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1fr)',
-              gap: 16,
-              alignItems: 'stretch',
-            }}
-          >
-            {sec.components.map((comp, cIdx) => (
-              <div key={comp.id} style={{ minWidth: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+    } else if (layout === 'bento-split') {
+      bodyContent = (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1.8fr) minmax(0, 1fr)',
+            gap: 16,
+            alignItems: 'stretch',
+          }}
+        >
+          {components.map((comp, cIdx) => (
+            <div key={comp.id} style={{ minWidth: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+              {renderComponent(comp, sec, cIdx)}
+            </div>
+          ))}
+        </div>
+      );
+    } else if (layout === 'grid') {
+      const cols = sec.columns || 2;
+      bodyContent = (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+            gap: 16,
+          }}
+        >
+          {components.map((comp, cIdx) => {
+            const isLastOdd = cols === 2 && components.length % 2 === 1 && cIdx === components.length - 1;
+            return (
+              <div
+                key={comp.id}
+                style={{
+                  gridColumn: isLastOdd ? '1 / -1' : undefined,
+                  minWidth: 0,
+                }}
+              >
                 {renderComponent(comp, sec, cIdx)}
               </div>
-            ))}
-          </div>
+            );
+          })}
+        </div>
+      );
+    } else {
+      bodyContent = (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {components.map((comp, cIdx) => renderComponent(comp, sec, cIdx))}
         </div>
       );
     }
 
-    // Grid layout (Odd last item auto-spans full row)
-    if (layout === 'grid') {
-      const cols = sec.columns || 2;
-      return (
-        <div className="ca-section" key={sec.id} style={{ marginBottom: 16 }}>
-          {sectionHeader}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-              gap: 16,
-            }}
-          >
-            {sec.components.map((comp, cIdx) => {
-              const isLastOdd = cols === 2 && sec.components.length % 2 === 1 && cIdx === sec.components.length - 1;
-              return (
-                <div
-                  key={comp.id}
-                  style={{
-                    gridColumn: isLastOdd ? '1 / -1' : undefined,
-                    minWidth: 0,
-                  }}
-                >
-                  {renderComponent(comp, sec, cIdx)}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-
-    // Stack layout
     return (
-      <div className="ca-section" key={sec.id} style={{ marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div
+        className="ca-section ca-macro-section-card"
+        key={sec.id}
+        data-section-id={sec.id}
+        style={{
+          backgroundColor: '#ffffff',
+          border: `1px solid ${theme.chrome.border}`,
+          borderRadius: 12,
+          padding: '20px 24px',
+          marginBottom: 20,
+          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.04)',
+        }}
+      >
         {sectionHeader}
-        {sec.components.map((comp, cIdx) => renderComponent(comp, sec, cIdx))}
+        {bodyContent}
       </div>
     );
   };
@@ -1442,7 +1509,7 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
       )}
 
       {/* Sections */}
-      {displayedSections.map(sec => renderSection(sec))}
+      {displayedSections.map((sec, idx) => renderSection(sec, idx))}
 
       {/* Analysis Cards */}
       {analysisCards.length > 0 && (

@@ -7,37 +7,13 @@ import { ProjectSwitcher } from './ProjectSwitcher';
 import { useProject } from './ProjectContext';
 import { cnTime } from '../../lib/hooks/use-project-data';
 
-const PROJECT_CUSTOM_TABS: Record<string, Record<string, string>> = {
-  qicui: {
-    overview: '全域声量总览',
-    comments: '评论外显质检',
-    industry: '竞品社媒监控',
-    content: '达人爆文矩阵',
-  },
-  kailas: {
-    overview: '预算控盘总览',
-    ads: '版位效率寻优',
-    content: '达人种草执行',
-    industry: '行业竞品监控',
-  },
-  meiling: {
-    overview: '双11四线总览',
-    ads: '渠道ROI赛马',
-    content: 'KOL审稿与外溢',
-    industry: '行业竞品监控',
-  },
-  'winner-wipes': {
-    overview: '日常种草控盘',
-    ads: '版位与52词投流',
-    content: '达人内容矩阵',
-    industry: '行业竞品监控',
-  },
-  'huang-tiane': {
-    overview: '三线全域核算',
-    ads: '商销与CID引流',
-    content: '品牌FS种草执行',
-    industry: '行业竞品监控',
-  },
+const STANDARD_NAV_LABELS: Record<string, string> = {
+  overview: '项目总览',
+  ads: '投流分析',
+  industry: '行业分析',
+  content: '内容管理',
+  comments: '评论质检',
+  settings: '项目设置',
 };
 
 export function ProjectSidebar({
@@ -71,28 +47,22 @@ export function ProjectSidebar({
     : { text: '项目资料已连接', ok: true };
 
   const projectNavItems = useMemo(() => {
-    const customMap = PROJECT_CUSTOM_TABS[projectId];
-    const allowedKeys = customMap
-      ? [...Object.keys(customMap), 'settings']
-      : currentProject?.templateId === 'campaign_review'
-      ? ['overview', 'ads', 'content', 'industry', 'settings']
-      : currentProject?.templateId === 'comment_qc'
-      ? ['overview', 'comments', 'settings']
-      : currentProject?.templateId === 'ad_performance'
-      ? ['overview', 'ads', 'settings']
-      : ['overview', 'industry', 'settings'];
+    const hasComments =
+      projectId === 'qicui' ||
+      currentProject?.templateId === 'comment_qc' ||
+      Boolean((currentProject as any)?.enabledTabs?.some((t: any) => (t.key || t.id) === 'comments'));
+
+    const allowedKeys = hasComments
+      ? ['overview', 'ads', 'industry', 'content', 'comments', 'settings']
+      : ['overview', 'ads', 'industry', 'content', 'settings'];
 
     return allowedKeys
       .map(key => {
         const base = PROJECT_NAV_ITEMS.find(n => n.id === key);
         if (!base) return null;
-        const customLabel =
-          currentProject?.enabledTabs?.find((t: { key?: string; id?: string; label: string }) => (t.key || t.id) === key)?.label ||
-          customMap?.[key] ||
-          base.label;
         return {
           ...base,
-          label: customLabel,
+          label: STANDARD_NAV_LABELS[key] || base.label,
         };
       })
       .filter((n): n is (typeof PROJECT_NAV_ITEMS)[number] => Boolean(n));
@@ -158,7 +128,7 @@ export function ProjectSidebar({
                 navigateTo(href);
               }}
             >
-              <span className="nav-num">{String(index + 1).padStart(2, '0')}</span>
+              <span className="nav-num">{item.id === 'settings' ? '⚙' : String(index + 1).padStart(2, '0')}</span>
               <span className="nav-label">{item.label}</span>
             </a>
           );

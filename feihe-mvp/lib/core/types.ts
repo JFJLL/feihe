@@ -95,7 +95,7 @@ export interface SectionSpec {
   layout?: SectionLayout;
   variant?: 'default' | 'hero-spotlight' | 'compact';
   columns?: number;
-  components: ComponentInstanceSpec[];
+  components?: ComponentInstanceSpec[];
   tabs?: SectionTabSpec[];
   collapsible?: boolean;
   defaultCollapsed?: boolean;
@@ -162,6 +162,7 @@ export interface BoardPayload {
   syncMetadata?: SyncMetadata;
   mode?: string;
   rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
+  legacyRendererMode?: 'legacy-campaign' | 'legacy-huang-tiane';
   datasets: Record<string, DatasetTable>;
   sections: SectionSpec[];
   analysisCards?: AnalysisCardSpec[];
@@ -187,6 +188,7 @@ export interface ProjectManifest {
   defaultReportPeriod: string;
   templateId?: string;
   rendererMode?: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane';
+  legacyRendererMode?: 'legacy-campaign' | 'legacy-huang-tiane';
   mode?: string;
   subtitle?: string;
   description?: string;

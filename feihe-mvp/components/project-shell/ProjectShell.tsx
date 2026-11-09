@@ -52,7 +52,7 @@ function ProjectShellContent({
     refreshData,
   } = useProject();
   const themeTag = getProjectThemeTag(currentProject?.templateId);
-  const isCampaignReview = currentProject?.templateId === 'campaign_review';
+  const isCampaignReview = currentProject?.templateId === 'campaign_review' || currentProject?.templateId === 'content_marketing';
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 

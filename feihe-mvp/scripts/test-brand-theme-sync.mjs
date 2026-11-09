@@ -37,21 +37,15 @@ test('1. 5 个现有项目的 SPU 颜色配置与清单完全校准', () => {
   }
 });
 
-test('2. 5 个现有项目专属业务导航名称已在 manifest 与 sidebar 映射中对齐', () => {
-  for (const [pid, expectedTabs] of Object.entries(EXPECTED_TABS)) {
-    const manifestPath = path.resolve(`projects/${pid}/manifest.json`);
-    const json = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-    const tabLabels = (json.enabledTabs || []).map(t => t.label);
-    for (const exp of expectedTabs) {
-      assert.ok(tabLabels.includes(exp), `${pid} manifest.json contains customized tab "${exp}"`);
-    }
-  }
+test('2. 全平台一级左侧导航栏名称严格固定统一', () => {
   const sidebarCode = fs.readFileSync(path.resolve('components/project-shell/ProjectSidebar.tsx'), 'utf8');
-  assert.ok(sidebarCode.includes('PROJECT_CUSTOM_TABS'), 'ProjectSidebar contains PROJECT_CUSTOM_TABS map');
-  assert.ok(sidebarCode.includes('全域声量总览'), 'ProjectSidebar contains qicui custom label');
-  assert.ok(sidebarCode.includes('渠道ROI赛马'), 'ProjectSidebar contains meiling custom label');
-  assert.ok(sidebarCode.includes('版位与52词投流'), 'ProjectSidebar contains winner-wipes custom label');
-  assert.ok(sidebarCode.includes('三线全域核算'), 'ProjectSidebar contains huang-tiane custom label');
+  assert.ok(sidebarCode.includes('STANDARD_NAV_LABELS'), 'ProjectSidebar contains STANDARD_NAV_LABELS map');
+  assert.ok(sidebarCode.includes('项目总览'), 'ProjectSidebar contains 项目总览');
+  assert.ok(sidebarCode.includes('投流分析'), 'ProjectSidebar contains 投流分析');
+  assert.ok(sidebarCode.includes('行业分析'), 'ProjectSidebar contains 行业分析');
+  assert.ok(sidebarCode.includes('内容管理'), 'ProjectSidebar contains 内容管理');
+  assert.ok(sidebarCode.includes('评论质检'), 'ProjectSidebar contains 评论质检');
+  assert.ok(sidebarCode.includes('项目设置'), 'ProjectSidebar contains 项目设置');
 });
 
 test('2. deriveThemeFromBrandColor 能基于各 SPU 颜色动态推导 BeaconTheme 与 CSS 变量', () => {

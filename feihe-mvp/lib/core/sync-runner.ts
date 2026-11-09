@@ -173,6 +173,9 @@ export async function runProjectSync(projectId: string, options: { force?: boole
     const candidateRawSources: Record<string, unknown> = { ...validRawSources };
     const candidateMeta: Record<string, SourceSyncState> = { ...validMeta };
 
+    const hasCachedSources = Object.keys(validRawSources).length > 0;
+    const shouldFetchRemote = Boolean(options.force) || !hasCachedSources;
+
     let externalAttemptCount = 0;
     let externalSuccessCount = 0;
     let criticalFailure: { sourceId: string; error: string } | null = null;
@@ -186,13 +189,10 @@ export async function runProjectSync(projectId: string, options: { force?: boole
           critical: src.critical,
         };
         const hasCache = validRawSources[src.id] !== undefined;
-        const intervalMs = (src.refreshIntervalMinutes ?? 60) * 60 * 1000;
-        const isExpired = !existingMeta.lastSuccessAt || (Date.now() - new Date(existingMeta.lastSuccessAt).getTime() > intervalMs);
-        const shouldFetchThis = Boolean(options.force) || !hasCache || isExpired;
 
         if (src.type === 'feishu_sheet' || src.type === 'feishu_bitable') {
-          externalAttemptCount++;
-          if (shouldFetchThis) {
+          if (shouldFetchRemote) {
+            externalAttemptCount++;
             candidateMeta[src.id] = {
               ...existingMeta,
               lastAttemptAt: timestamp,
@@ -231,8 +231,10 @@ export async function runProjectSync(projectId: string, options: { force?: boole
                   error: errText,
                   critical: src.critical,
                 };
-                if (src.critical || !hasCache) {
+              if (src.critical) {
                   criticalFailure = { sourceId: src.id, error: errText };
+              } else {
+                syncWarnings.push(`非关键外部数据源 [${src.name || src.id}] 拉取失败: ${errText}`);
                 }
               }
             }

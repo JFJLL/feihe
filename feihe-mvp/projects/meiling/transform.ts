@@ -83,11 +83,14 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   }
 
   const sections: SectionSpec[] = [
+    // 01. overview: 双11大促核心战报
     {
-      id: 'summary-kpis',
-      title: '双十一核心指标组',
-      description: '执行合作与ROI关键成效',
+      id: 'meiling-battle-report',
+      tab: 'overview',
+      title: '双11大促核心战报',
+      hint: '确认合作达人、已发布笔记、双渠道ROI与全域总预算',
       layout: 'paired-metrics',
+      variant: 'hero-spotlight',
       columns: 4,
       components: [
         {
@@ -124,16 +127,281 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
         },
       ],
     },
+    // 02. overview: 四线独立归因赛马记分牌
     {
-      id: 'four-lines-section',
-      title: '四线独立归因明细',
-      description: '全域大促四线对比',
+      id: 'meiling-four-lines-deck',
+      tab: 'overview',
+      title: '四线独立归因赛马记分牌',
+      hint: '自采天猫、自采京东、代采星伴、京东对投四线综合对比',
       layout: 'stack',
       components: [
         {
-          id: 'comp-four-lines-table',
-          type: 'data-table',
+          id: 'comp-four-lines-deck',
+          type: 'multi-line-deck',
+          title: '四条核心业务线赛马记分牌',
           query: 'meiling-four-lines',
+          categoryField: 'name',
+          width: 'full',
+        },
+      ],
+    },
+    // 03. overview: 四线分日种草与 CID 引流走势
+    {
+      id: 'meiling-daily-cid-trend',
+      tab: 'overview',
+      title: '四线分日种草与 CID 引流走势',
+      hint: '左侧双轴分日走势，右侧四线消耗结构玫瑰图',
+      layout: 'bento-split',
+      columns: 2,
+      components: [
+        {
+          id: 'comp-daily-combo',
+          type: 'line-bar-combo',
+          title: '分日投流消耗 (元) 与引流 UV',
+          query: 'daily_flow',
+          xField: 'date',
+          yField: 'spend',
+          y2Field: 'uv',
+          width: 'half',
+        },
+        {
+          id: 'comp-channel-rose',
+          type: 'donut-rose',
+          title: '四线消耗占比玫瑰图',
+          query: 'meiling-four-lines',
+          categoryField: 'name',
+          field: 'fsSpend',
+          width: 'half',
+        },
+      ],
+    },
+    // 04. overview: 四线归因全量核算底表
+    {
+      id: 'meiling-attribution-tables',
+      tab: 'overview',
+      title: '四线归因全量核算底表',
+      hint: 'Tab 切换查看四线核心大盘与多渠道汇总明细',
+      layout: 'tabs',
+      tabs: [
+        {
+          id: 'tab-four-lines',
+          title: '四线归因核算底表',
+          sections: [
+            {
+              id: 'sec-four-lines-tbl',
+              layout: 'stack',
+              components: [
+                {
+                  id: 'tbl-four-lines',
+                  type: 'data-table',
+                  query: 'meiling-four-lines',
+                  width: 'full',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 'tab-multi-line-summary',
+          title: '多渠道汇总对账表',
+          sections: [
+            {
+              id: 'sec-multi-line-tbl',
+              layout: 'stack',
+              components: [
+                {
+                  id: 'tbl-multi-line',
+                  type: 'data-table',
+                  query: 'meiling-enrich-multi-line-summary',
+                  width: 'full',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    // 05. ads: 渠道效率与成本达成
+    {
+      id: 'meiling-ads-kpis',
+      tab: 'ads',
+      title: '渠道效率与成本达成指标',
+      hint: '天猫、京东、星伴、CID 核心投流达成',
+      layout: 'paired-metrics',
+      variant: 'hero-spotlight',
+      columns: 4,
+      components: [
+        {
+          id: 'kpi-ads-roi-jd',
+          type: 'metric-card',
+          title: '自采京东 ROI',
+          query: 'summary_kpis',
+          field: 'meiling_roi_jd',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-ads-roi-tm',
+          type: 'metric-card',
+          title: '自采天猫 ROI',
+          query: 'summary_kpis',
+          field: 'meiling_roi_tmall',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-ads-confirmed',
+          type: 'metric-card',
+          title: '累计合作达人',
+          query: 'summary_kpis',
+          field: 'meiling_confirmed_total',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-ads-published',
+          type: 'metric-card',
+          title: '已发布笔记数',
+          query: 'summary_kpis',
+          field: 'meiling_published_count',
+          width: 'quarter',
+        },
+      ],
+    },
+    {
+      id: 'meiling-ads-bullet-sec',
+      tab: 'ads',
+      title: '各渠道成本达成子弹图',
+      hint: '子弹图对比规划预算与实际达成',
+      layout: 'stack',
+      components: [
+        {
+          id: 'comp-ads-bullet',
+          type: 'target-bullet',
+          title: '各渠道实际消耗与预算达成',
+          query: 'meiling-enrich-channel-creative-efficiency',
+          categoryField: 'channel',
+          field: 'spend',
+          width: 'full',
+        },
+      ],
+    },
+    {
+      id: 'meiling-ads-tables-sec',
+      tab: 'ads',
+      title: '各渠道投流明细与可比分析',
+      hint: '切换查看渠道创意效率与分日可比对账',
+      layout: 'tabs',
+      tabs: [
+        {
+          id: 'tab-channel-efficiency',
+          title: '渠道创意效率明细',
+          sections: [
+            {
+              id: 'sec-ch-eff',
+              layout: 'stack',
+              components: [
+                {
+                  id: 'tbl-ch-eff',
+                  type: 'data-table',
+                  query: 'meiling-enrich-channel-creative-efficiency',
+                  width: 'full',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 'tab-channel-comparable',
+          title: '渠道分日可比分析',
+          sections: [
+            {
+              id: 'sec-ch-comp',
+              layout: 'stack',
+              components: [
+                {
+                  id: 'tbl-ch-comp',
+                  type: 'data-table',
+                  query: 'meiling-enrich-channel-daily-comparable',
+                  width: 'full',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    // 06. content: 双11 KOL 达人量级与审核进度
+    {
+      id: 'meiling-kol-kpis-sec',
+      tab: 'content',
+      title: '双11 KOL 达人量级与审核概览',
+      hint: '达人采买、稿件审核与已发布进度',
+      layout: 'paired-metrics',
+      variant: 'hero-spotlight',
+      columns: 4,
+      components: [
+        {
+          id: 'kpi-kol-confirmed',
+          type: 'metric-card',
+          title: '合作达人总数',
+          query: 'summary_kpis',
+          field: 'meiling_confirmed_total',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-kol-published',
+          type: 'metric-card',
+          title: '已发布笔记数',
+          query: 'summary_kpis',
+          field: 'meiling_published_count',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-kol-roi-jd',
+          type: 'metric-card',
+          title: '自采京东 ROI',
+          query: 'summary_kpis',
+          field: 'meiling_roi_jd',
+          width: 'quarter',
+        },
+        {
+          id: 'kpi-kol-roi-tm',
+          type: 'metric-card',
+          title: '自采天猫 ROI',
+          query: 'summary_kpis',
+          field: 'meiling_roi_tmall',
+          width: 'quarter',
+        },
+      ],
+    },
+    {
+      id: 'meiling-kol-stack-sec',
+      tab: 'content',
+      title: '各量级审核阶段进度分布',
+      hint: '各量级达人在初审、复审、终审与已发布阶段分布',
+      layout: 'stack',
+      components: [
+        {
+          id: 'comp-kol-stack',
+          type: 'percent-stack',
+          title: '各量级达人推进阶段 100% 堆叠分布',
+          query: 'meiling-enrich-kol-tier-budget-stage',
+          xField: 'tier',
+          width: 'full',
+        },
+      ],
+    },
+    {
+      id: 'meiling-kol-table-sec',
+      tab: 'content',
+      title: '双11达人进度明细表',
+      hint: '各量级达人结算单价、采买费用与视频占比全量明细',
+      layout: 'stack',
+      components: [
+        {
+          id: 'tbl-kol-detail',
+          type: 'data-table',
+          query: 'meiling-enrich-kol-tier-budget-stage',
           width: 'full',
         },
       ],

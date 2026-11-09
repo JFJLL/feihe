@@ -105,6 +105,7 @@ export function CampaignWorkspace({
   const [syncing, setSyncing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'universal' | 'legacy'>('universal');
   const abortControllerRef = useRef<AbortController | null>(null);
   const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -234,6 +235,7 @@ export function CampaignWorkspace({
 
   const activeDashboard = dashboard && dashboard.projectId === projectId ? dashboard : null;
   const activePayload = activeDashboard as unknown as BoardPayload;
+  const legacyRendererMode = activePayload?.legacyRendererMode || (project as any)?.legacyRendererMode;
 
   const activeBrandColor = activePayload?.themeColor || (activeDashboard as any)?.themeColor || project?.color;
   const activeThemeStyle = useMemo(() => {
@@ -280,6 +282,54 @@ export function CampaignWorkspace({
 
   const frameActions = (
     <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }} data-active-palette={currentPalette}>
+      {legacyRendererMode && (
+        <div
+          className="ca-view-mode-capsule"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            background: '#f1f5f9',
+            border: '1px solid #e2e8f0',
+            borderRadius: 9999,
+            padding: '2px',
+            fontSize: 12,
+          }}
+        >
+          <span style={{ color: '#64748b', padding: '0 8px', fontSize: 11, fontWeight: 500 }}>视图:</span>
+          <button
+            type="button"
+            onClick={() => setViewMode('universal')}
+            style={{
+              padding: '3px 10px',
+              borderRadius: 9999,
+              border: 'none',
+              background: viewMode === 'universal' ? (activeBrandColor || 'var(--dtc-theme-accent, #0f5e52)') : 'transparent',
+              color: viewMode === 'universal' ? '#ffffff' : '#64748b',
+              fontWeight: viewMode === 'universal' ? 600 : 400,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            新版灯塔看板
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('legacy')}
+            style={{
+              padding: '3px 10px',
+              borderRadius: 9999,
+              border: 'none',
+              background: viewMode === 'legacy' ? (activeBrandColor || 'var(--dtc-theme-accent, #0f5e52)') : 'transparent',
+              color: viewMode === 'legacy' ? '#ffffff' : '#64748b',
+              fontWeight: viewMode === 'legacy' ? 600 : 400,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            经典定制看板
+          </button>
+        </div>
+      )}
       {refreshAction}
     </div>
   );
@@ -354,7 +404,12 @@ export function CampaignWorkspace({
           data-project-id={projectId}
           data-source-file={`projects/${projectId}/transform.ts`}
           data-section-id="project-context-ribbon"
-          style={{ borderLeft: '4px solid ' + (activeBrandColor || 'var(--brand-primary, #0F5E52)') }}
+          style={{
+            background: `linear-gradient(90deg, color-mix(in srgb, ${activeBrandColor || 'var(--dtc-theme-accent, #0F5E52)'} 10%, #ffffff) 0%, #ffffff 65%)`,
+            border: `1px solid color-mix(in srgb, ${activeBrandColor || 'var(--dtc-theme-accent, #0F5E52)'} 25%, #e2e8f0)`,
+            borderLeft: `4px solid ${activeBrandColor || 'var(--dtc-theme-accent, #0F5E52)'}`,
+            borderRadius: 8,
+          }}
         >
           <div className="context-left">
             <div className="context-item">
@@ -375,7 +430,20 @@ export function CampaignWorkspace({
             </div>
           </div>
           <div className="context-right">
-            <span className="semantic-tag tag-ok">
+            <span
+              className="semantic-tag tag-ok"
+              style={{
+                background: activeBrandColor || 'var(--dtc-theme-accent, #0F5E52)',
+                color: '#ffffff',
+                fontWeight: 600,
+                border: 'none',
+                padding: '4px 12px',
+                borderRadius: 9999,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
               <span>🎯</span>
               <span>{mode}</span>
             </span>
@@ -395,7 +463,7 @@ export function CampaignWorkspace({
           >
             <CampaignDailyPage key={projectId} dashboard={activeDashboard} />
           </div>
-        ) : rendererMode === 'legacy-huang-tiane' ? (
+        ) : viewMode === 'legacy' && legacyRendererMode === 'legacy-huang-tiane' ? (
           <div
             data-project-id={projectId}
             data-source-file={`projects/${projectId}/transform.ts`}
@@ -407,7 +475,7 @@ export function CampaignWorkspace({
               section={currentSection}
             />
           </div>
-        ) : rendererMode === 'legacy-campaign' ? (
+        ) : viewMode === 'legacy' && legacyRendererMode === 'legacy-campaign' ? (
           <div
             data-project-id={projectId}
             data-source-file={`projects/${projectId}/transform.ts`}

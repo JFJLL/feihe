@@ -393,6 +393,13 @@ export async function ensureSchema() {
         notes_remarks TEXT NOT NULL DEFAULT '', review_status TEXT NOT NULL DEFAULT '',
         created_at TEXT NOT NULL, updated_at TEXT NOT NULL
       )`),
+      d1.prepare(`CREATE TABLE IF NOT EXISTS business_daily_reports (
+        id TEXT PRIMARY KEY, project_id TEXT NOT NULL, business_day TEXT NOT NULL,
+        status TEXT NOT NULL, confirmed_by TEXT, created_at TEXT NOT NULL,
+        fingerprint TEXT NOT NULL, payload_json TEXT NOT NULL,
+        UNIQUE(project_id, business_day, status, fingerprint)
+      )`),
+      d1.prepare('CREATE INDEX IF NOT EXISTS idx_business_report_day ON business_daily_reports(project_id, business_day, status, created_at)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_project_members_project ON project_members(project_id)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_project_members_user ON project_members(user_id)'),
       d1.prepare('CREATE INDEX IF NOT EXISTS idx_dashboards_project ON dashboards(project_id)'),
