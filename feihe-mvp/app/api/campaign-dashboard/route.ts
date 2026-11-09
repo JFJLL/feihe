@@ -42,9 +42,10 @@ export async function GET(request: Request) {
   // 4. Single-track board loading & output
   try {
     const snapshot = await getCampaignDashboardSnapshot(projectId);
+    const manifest = getProjectManifest(projectId);
+
     if (!snapshot) {
-      // Try building from registry if manifest exists
-      const manifest = getProjectManifest(projectId);
+      // First-time fallback: build from registry only when DB has no stored snapshot yet
       if (manifest) {
         const board = await buildProjectBoard(projectId);
         if (board) {
@@ -61,30 +62,39 @@ export async function GET(request: Request) {
       return jsonError("尚未接入资料", 404);
     }
 
-    // Background non-blocking auto-sync if snapshot is older than 30 minutes
-    if (isSnapshotStale(snapshot.updatedAt, 30) && !shouldForceSync) {
-      runProjectSync(projectId, { force: true }).catch((err) => {
+    // Background non-blocking auto-sync if snapshot is older than 30 minutes (non-force)
+    if (isSnapshotStale(snapshot.updatedAt, 30) && !shouldForceSync && process.env.NODE_ENV !== 'test') {
+      runProjectSync(projectId, { force: false }).catch((err) => {
         console.error(`[campaign-dashboard] Background auto-sync error for ${projectId}:`, err);
       });
     }
 
     let finalDashboard: unknown = null;
-    const manifest = getProjectManifest(projectId);
-    if (manifest) {
-      try {
-        finalDashboard = await buildProjectBoard(projectId);
-      } catch (err) {
-        console.warn(`[campaign-dashboard] buildProjectBoard fallback for ${projectId}:`, err);
-      }
-    }
+    const isModernBoard = Boolean(
+      (snapshot as any).datasets &&
+      typeof (snapshot as any).datasets === 'object' &&
+      Array.isArray((snapshot as any).sections)
+    );
 
-    if (!finalDashboard) {
+    if (isModernBoard) {
+      // Serve the validated database snapshot directly (never rebuild dynamically on read)
+      finalDashboard = {
+        ...snapshot,
+        themeId: (snapshot as any).themeId || manifest?.themeId,
+        themeColor: (snapshot as any).themeColor || manifest?.color,
+      };
+    } else {
+      // Legacy snapshot: adapt to BoardPayload preserving validated data and updatedAt
       finalDashboard = buildBoardPayloadFromCampaignDashboard(
         snapshot,
         manifest || {
           id: projectId,
-          name: projectId,
-          brand: projectId,
+          name: (snapshot as any).name || projectId,
+          brand: (snapshot as any).brand || projectId,
+          spu: (snapshot as any).spu || '',
+          category: (snapshot as any).category || '',
+          color: '#1769d5',
+          defaultReportPeriod: (snapshot as any).reportPeriod || '',
         }
       );
     }

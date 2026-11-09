@@ -389,6 +389,7 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
   const { projectId, name, sections = [], datasets = {}, analysisCards = [], warnings = [] } = payload;
   const [activeTabs, setActiveTabs] = useState<Record<string, string>>({});
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
+  const [tablePages, setTablePages] = useState<Record<string, number>>({});
 
   const theme = useMemo(
     () => deriveThemeFromBrandColor(payload.themeColor, payload.themeId),
@@ -470,7 +471,21 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // In-page interactive filtering
     let effectiveRows = dataset.rows || [];
-    const activeFilters = Object.entries(filterValues).filter(([_, v]) => v && v !== 'all');
+    const dateStart = filterValues['__date_start'];
+    const dateEnd = filterValues['__date_end'];
+    if (dateStart || dateEnd) {
+      const dateCol = dataset.columns.find(c => c.type === 'date' || c.role === 'TIMESTAMP' || c.key.includes('date'));
+      if (dateCol) {
+        effectiveRows = effectiveRows.filter(r => {
+          const d = String(r[dateCol.key] || '');
+          if (dateStart && d < dateStart) return false;
+          if (dateEnd && d > dateEnd) return false;
+          return true;
+        });
+      }
+    }
+
+    const activeFilters = Object.entries(filterValues).filter(([k, v]) => v && v !== 'all' && !k.startsWith('__date_'));
     if (activeFilters.length > 0 && effectiveRows.length > 0) {
       effectiveRows = effectiveRows.filter(row => {
         return activeFilters.every(([fKey, fVal]) => {
@@ -534,6 +549,13 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // 0. date-range-filter (interactive in-page date badge)
     if (comp.type === 'date-range-filter') {
+      const dateCol = dataset.columns.find(c => c.type === 'date' || c.role === 'TIMESTAMP' || c.key.includes('date'));
+      const allDates = dateCol ? (dataset.rows || []).map(r => String(r[dateCol.key] || '')).filter(Boolean).sort() : [];
+      const minDate = allDates[0] || '';
+      const maxDate = allDates[allDates.length - 1] || '';
+      const startDate = filterValues['__date_start'] || '';
+      const endDate = filterValues['__date_end'] || '';
+
       return (
         <div
           key={comp.id}
@@ -541,6 +563,7 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
           style={{
             display: 'inline-flex',
             alignItems: 'center',
+            flexWrap: 'wrap',
             gap: 8,
             padding: '6px 14px',
             background: 'var(--dtc-theme-surface, #ffffff)',
@@ -552,16 +575,54 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
           <span style={{ fontSize: 13, color: 'var(--dtc-theme-muted, #64748b)', fontWeight: 500 }}>
             📅 {comp.title || '观测周期'}:
           </span>
-          <span
+          <input
+            type="date"
+            value={startDate}
+            min={minDate}
+            max={maxDate}
+            onChange={e => handleFilterChange('__date_start', e.target.value)}
             style={{
-              fontSize: 13,
+              border: '1px solid var(--dtc-theme-border, #cbd5e1)',
+              borderRadius: 4,
+              padding: '2px 6px',
+              fontSize: 12,
               color: 'var(--dtc-theme-text, #18263c)',
-              fontVariantNumeric: 'tabular-nums',
-              fontWeight: 500,
             }}
-          >
-            {payload.reportPeriod || '全量周期'}
-          </span>
+          />
+          <span style={{ fontSize: 12, color: 'var(--dtc-theme-muted, #64748b)' }}>至</span>
+          <input
+            type="date"
+            value={endDate}
+            min={minDate}
+            max={maxDate}
+            onChange={e => handleFilterChange('__date_end', e.target.value)}
+            style={{
+              border: '1px solid var(--dtc-theme-border, #cbd5e1)',
+              borderRadius: 4,
+              padding: '2px 6px',
+              fontSize: 12,
+              color: 'var(--dtc-theme-text, #18263c)',
+            }}
+          />
+          {(startDate || endDate) && (
+            <button
+              type="button"
+              onClick={() => {
+                handleFilterChange('__date_start', '');
+                handleFilterChange('__date_end', '');
+              }}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                color: theme.chrome.accent,
+                fontSize: 12,
+                cursor: 'pointer',
+                padding: '0 4px',
+              }}
+            >
+              重置
+            </button>
+          )}
         </div>
       );
     }
@@ -625,7 +686,10 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
     if (comp.type === 'data-table') {
       const cols = dataset.columns || [];
       const rows = effectiveRows;
-      const displayRows = rows.slice(0, 50);
+      const pageSize = 15;
+      const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+      const currentPage = Math.min(totalPages, Math.max(1, tablePages[comp.id] || 1));
+      const displayRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
       return (
         <div
@@ -708,6 +772,59 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
               </tbody>
             </table>
           </div>
+          {totalPages > 1 && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '8px 16px',
+                background: theme.chrome.headBg,
+                borderTop: `1px solid ${theme.chrome.border}`,
+                fontSize: 12,
+              }}
+            >
+              <span style={{ color: theme.chrome.muted }}>
+                第 {currentPage} / {totalPages} 页 (共 {rows.length} 条记录)
+              </span>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => setTablePages(prev => ({ ...prev, [comp.id]: currentPage - 1 }))}
+                  style={{
+                    padding: '3px 8px',
+                    background: theme.chrome.surface,
+                    border: `1px solid ${theme.chrome.border}`,
+                    borderRadius: 4,
+                    cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+                    opacity: currentPage <= 1 ? 0.4 : 1,
+                    fontSize: 12,
+                    color: theme.chrome.text,
+                  }}
+                >
+                  上一页
+                </button>
+                <button
+                  type="button"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setTablePages(prev => ({ ...prev, [comp.id]: currentPage + 1 }))}
+                  style={{
+                    padding: '3px 8px',
+                    background: theme.chrome.surface,
+                    border: `1px solid ${theme.chrome.border}`,
+                    borderRadius: 4,
+                    cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+                    opacity: currentPage >= totalPages ? 0.4 : 1,
+                    fontSize: 12,
+                    color: theme.chrome.text,
+                  }}
+                >
+                  下一页
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -815,12 +932,14 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
 
     // 4. target-bullet (Target Bullet Chart)
     if (comp.type === 'target-bullet') {
-      const bulletData: ComparisonDatum[] = effectiveRows.map(r => ({
-        label: String(r[comp.categoryField || 'label'] || r.label || r.name || ''),
-        actual: Number(r[comp.field || 'actual'] ?? r.value ?? 0),
-        target: Number(r[comp.targetField || 'target'] ?? 0),
-        unit: (comp as any).unit || '元',
-      }));
+      const bulletData: ComparisonDatum[] = effectiveRows
+        .filter(r => (r[comp.field || 'actual'] ?? r.value) !== null && (r[comp.field || 'actual'] ?? r.value) !== undefined)
+        .map(r => ({
+          label: String(r[comp.categoryField || 'label'] || r.label || r.name || ''),
+          actual: Number(r[comp.field || 'actual'] ?? r.value),
+          target: r[comp.targetField || 'target'] !== null && r[comp.targetField || 'target'] !== undefined ? Number(r[comp.targetField || 'target']) : 0,
+          unit: (comp as any).unit || '元',
+        }));
 
       return (
         <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16 }}>
@@ -924,14 +1043,16 @@ export function UniversalBoardRenderer({ payload, sectionId, className = '' }: U
       const xCol = dataset.columns.find(c => c.key === comp.xField);
       const yCol = dataset.columns.find(c => c.key === comp.yField);
       const pal = theme.chartPalette;
-      const points = effectiveRows.map((r, i) => ({
-        x: Number(r[comp.xField || 'x'] || 0),
-        y: Number(r[comp.yField || 'y'] || 0),
-        size: Math.max(4, Math.min(20, Math.sqrt(Number(r.spend || r.size || 100)))),
-        color: pal[i % pal.length],
-        label: String(r[comp.categoryField || 'label'] || r.name || `实体${i + 1}`),
-        id: String(r.id || i),
-      }));
+      const points = effectiveRows
+        .filter(r => r[comp.xField || 'x'] !== null && r[comp.xField || 'x'] !== undefined && r[comp.yField || 'y'] !== null && r[comp.yField || 'y'] !== undefined)
+        .map((r, i) => ({
+          x: Number(r[comp.xField || 'x']),
+          y: Number(r[comp.yField || 'y']),
+          size: Math.max(4, Math.min(20, Math.sqrt(Number(r.spend || r.size || 100)))),
+          color: pal[i % pal.length],
+          label: String(r[comp.categoryField || 'label'] || r.name || `实体${i + 1}`),
+          id: String(r.id || i),
+        }));
 
       return (
         <div className="ca-card ca-chart-card" key={comp.id} {...provenanceProps} style={{ padding: 16, width: '100%' }}>

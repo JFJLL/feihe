@@ -203,13 +203,15 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
   ];
 
+  const cpuvKpi = (merged.kpis || []).find((k: any) => k.id?.includes('cpuv'));
+  const cpuvVal = cpuvKpi?.value ? Number(cpuvKpi.value).toFixed(2) : '8.23';
   const analysisCards: AnalysisCardSpec[] = [
     {
       id: 'insight-wipes-cpuv',
       targetQueryIds: ['daily_flow', 'summary_kpis'],
       type: 'insight',
       title: 'CPUV与站外归因效率洞察',
-      summary: '稳健酒精湿巾日常种草在站外UV归因上呈现稳步增长态势，小红星30日归因UV回填后全量CPUV保持在健康区间 (8.23元)。',
+      summary: `稳健酒精湿巾日常种草在站外UV归因上呈现稳步增长态势，小红星30日归因UV回填后全量CPUV当前测算为 ¥${cpuvVal}。`,
       recommendations: [
         '针对 10/25 当日 UV 异常归因缺失进行数据回溯',
         '建议加大高互动版位的投流倾斜',

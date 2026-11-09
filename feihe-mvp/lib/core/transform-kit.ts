@@ -401,13 +401,14 @@ export function buildBoardPayloadFromCampaignDashboard(
     const isCurrency = kpi.unit === '元' || kpi.label.includes('预算') || kpi.label.includes('消耗') || kpi.label.includes('花费');
     const isPercent = kpi.unit === '%' || kpi.label.includes('率') || kpi.label.includes('比') || kpi.label.includes('ROI') || kpi.label.includes('进度');
     const isInteger = !isCurrency && !isPercent;
+    const explicitPercentInput = (kpi as any).percentInput || (kpi.unit === '%' ? 'points' : isPercent ? 'points' : undefined);
 
     kpiCols.push({
       key: colKey,
       label: kpi.label,
       type: 'number',
       format: isPercent ? 'percent' : isCurrency ? 'currency' : 'integer',
-      percentInput: isPercent ? (val && val > 1 ? 'points' : 'ratio') : undefined,
+      percentInput: explicitPercentInput,
       decimals: isInteger ? 0 : 2,
       displayUnits: kpi.unit || '',
       role: isPercent ? 'RATIO' : 'METRIC',
@@ -470,13 +471,14 @@ export function buildBoardPayloadFromCampaignDashboard(
       const isPercent = c.type === 'percent' || title.includes('率') || title.includes('比') || title.includes('ROI') || title.includes('进度');
       const isDate = c.type === 'date' || c.key.toLowerCase().includes('date') || title.includes('日期');
       const isNum = c.type === 'number' || isCurrency || isPercent;
+      const explicitPercentInput = (c as any).percentInput || (isPercent ? 'points' : undefined);
 
       return {
         key: c.key,
         label: title,
         type: isDate ? 'date' : isNum ? 'number' : 'string',
         format: isPercent ? 'percent' : isCurrency ? 'currency' : isNum ? 'integer' : undefined,
-        percentInput: isPercent ? 'points' : undefined,
+        percentInput: explicitPercentInput,
         decimals: isPercent ? 2 : isCurrency ? 2 : isNum ? 0 : undefined,
         align: (c.align as 'left' | 'center' | 'right') || (isNum ? 'right' : 'left'),
         width: c.width,
@@ -518,6 +520,7 @@ export function buildBoardPayloadFromCampaignDashboard(
     spu: manifest.spu,
     category: manifest.category,
     themeColor: manifest.color,
+    themeId: (manifest as any).themeId || (dashboard as any).themeId,
     reportPeriod: dashboard.reportPeriod || manifest.defaultReportPeriod,
     mode: manifest.mode,
     rendererMode: manifest.rendererMode || 'universal',

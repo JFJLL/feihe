@@ -13,6 +13,7 @@ export interface CopilotProjectContext {
   spu?: string;
   category?: string;
   reportPeriod?: string;
+  queryPeriod?: string;
   summaryKpis: Record<string, { label: string; value: string | number | null; unit?: string }>;
   keyTablesSummary: Array<{
     id: string;
@@ -31,7 +32,10 @@ export interface CopilotProjectContext {
   markdownFactSheet: string;
 }
 
-export function buildCopilotContext(payload: BoardPayload): CopilotProjectContext {
+export function buildCopilotContext(
+  payload: BoardPayload,
+  filterOptions?: { day?: string; from?: string; to?: string }
+): CopilotProjectContext {
   const summaryKpis: CopilotProjectContext['summaryKpis'] = {};
 
   // Extract KPIs from summary_kpis or first metric dataset
@@ -47,14 +51,30 @@ export function buildCopilotContext(payload: BoardPayload): CopilotProjectContex
     }
   }
 
+  const filterDay = filterOptions?.day;
+  const filterFrom = filterOptions?.from;
+  const filterTo = filterOptions?.to;
+  const isFiltered = Boolean(filterDay || (filterFrom && filterTo));
+
   const keyTablesSummary: CopilotProjectContext['keyTablesSummary'] = [];
   for (const [id, ds] of Object.entries(payload.datasets)) {
+    let effectiveRows = ds.rows;
+    const dateCol = ds.columns.find(c => c.type === 'date' || c.key.toLowerCase().includes('date') || c.role === 'TIMESTAMP');
+    if (dateCol && isFiltered) {
+      effectiveRows = ds.rows.filter(r => {
+        const rowDate = String(r[dateCol.key] || '');
+        if (filterDay) return rowDate.startsWith(filterDay);
+        if (filterFrom && filterTo) return rowDate >= filterFrom && rowDate <= filterTo;
+        return true;
+      });
+    }
+
     keyTablesSummary.push({
       id,
       name: ds.name || id,
-      rowCount: ds.rows.length,
+      rowCount: effectiveRows.length,
       columns: ds.columns.map(c => `${c.label} (${c.key})`),
-      sampleRows: ds.rows.slice(0, 3),
+      sampleRows: effectiveRows.slice(0, 3),
     });
   }
 
@@ -70,6 +90,8 @@ export function buildCopilotContext(payload: BoardPayload): CopilotProjectContex
     `# 项目事实卡：${payload.name} (${payload.brand})`,
     `- 核心SPU: ${payload.spu || '核心主推品'} | 所属类目: ${payload.category || '消费零售'}`,
     `- 观测周期: ${payload.reportPeriod || '最新观测周期'}`,
+    ...(filterDay ? [`- 当前查询指定业务日: ${filterDay}`] : []),
+    ...(filterFrom && filterTo ? [`- 当前查询时间范围: ${filterFrom} ~ ${filterTo}`] : []),
     '',
     '## 核心指标看板 (KPIs):',
   ];
@@ -85,6 +107,9 @@ export function buildCopilotContext(payload: BoardPayload): CopilotProjectContex
   mdLines.push('', '## 业务数据表总览:');
   for (const t of keyTablesSummary) {
     mdLines.push(`- **${t.name}** [${t.id}]: 共 ${t.rowCount} 行记录, 字段: ${t.columns.join(', ')}`);
+    if (t.sampleRows.length > 0) {
+      mdLines.push(`  - 样本事实数据: ${JSON.stringify(t.sampleRows[0])}`);
+    }
   }
 
   if (analysisInsights.length > 0) {
@@ -111,6 +136,7 @@ export function buildCopilotContext(payload: BoardPayload): CopilotProjectContex
     spu: payload.spu,
     category: payload.category,
     reportPeriod: payload.reportPeriod,
+    queryPeriod: filterDay || (filterFrom && filterTo ? `${filterFrom}~${filterTo}` : undefined),
     summaryKpis,
     keyTablesSummary,
     analysisInsights,

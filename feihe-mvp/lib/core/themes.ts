@@ -281,12 +281,26 @@ function buildCssVariables(chrome: BeaconChrome, chartPalette: string[]): Record
 export function deriveThemeFromBrandColor(brandHex?: string, presetId?: string): BeaconTheme {
   if (presetId && presetThemes[presetId]) {
     const base = presetThemes[presetId];
-    if (!brandHex) {
+    if (!brandHex || brandHex === base.chrome.accent) {
       return {
         ...base,
         cssVariables: buildCssVariables(base.chrome, base.chartPalette),
       };
     }
+    // When both presetId and brandHex are supplied, use preset as foundation
+    // and calibrate accent + chartPalette[0] with the brand hex.
+    const { h, s, l } = hexToHsl(brandHex);
+    const clampedS = s > 78 ? 72 : s < 20 ? 25 : s;
+    const clampedL = l > 55 ? 44 : l < 22 ? 34 : Math.min(46, Math.max(32, l));
+    const accent = hslToHex(h, clampedS, clampedL);
+    const chrome = { ...base.chrome, accent };
+    const chartPalette = [accent, ...base.chartPalette.slice(1)];
+    return {
+      ...base,
+      chrome,
+      chartPalette,
+      cssVariables: buildCssVariables(chrome, chartPalette),
+    };
   }
 
   const raw = brandHex || '#0f5e52';

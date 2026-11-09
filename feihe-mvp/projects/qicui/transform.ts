@@ -28,7 +28,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     WHERE pn.project_id = 'qicui'
   `).first<Record<string, number>>();
 
-  const noteCount = noteAgg?.noteCount || 3076;
+  const noteCount = Number(noteAgg?.noteCount ?? 0);
   const commentTotal = noteAgg?.commentTotal || 0;
   const positiveCount = noteAgg?.positiveCount || 0;
   const negativeCount = noteAgg?.negativeCount || 0;
@@ -67,22 +67,31 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
   }
 
   // 3. Query all daily rows
+  // Deduplicate multiple versions per business_day (confirmed > latest created_at)
   const dailyRowsDb = await d1.prepare(`
-    SELECT business_day, payload_json
+    SELECT business_day, status, created_at, payload_json
     FROM business_daily_reports
     WHERE project_id = 'qicui'
-    ORDER BY business_day ASC
-  `).all<{ business_day: string; payload_json: string }>();
+    ORDER BY business_day ASC, CASE WHEN status='confirmed' THEN 1 ELSE 0 END DESC, created_at DESC
+  `).all<{ business_day: string; status: string; created_at: string; payload_json: string }>();
+
+  const dailyByDay = new Map<string, string>();
+  for (const r of dailyRowsDb.results || []) {
+    const dayKey = toIsoDate(r.business_day);
+    if (dayKey && !dailyByDay.has(dayKey)) {
+      dailyByDay.set(dayKey, r.payload_json);
+    }
+  }
 
   const dailyFlowRows: Array<Record<string, unknown>> = [];
-  for (const r of dailyRowsDb.results || []) {
+  for (const [dayKey, payloadJson] of dailyByDay.entries()) {
     let adSpend: number | null = null;
     let creator: number | null = null;
     let totalInvest: number | null = null;
     let settle: number | null = null;
-    if (r.payload_json) {
+    if (payloadJson) {
       try {
-        const p = JSON.parse(r.payload_json);
+        const p = JSON.parse(payloadJson);
         const c = p.core || {};
         adSpend = strictNum(c.adSpend?.value ?? c.adSpend);
         creator = strictNum(c.creatorCost?.value ?? c.creatorCost);
@@ -91,7 +100,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       } catch {}
     }
     dailyFlowRows.push({
-      date: toIsoDate(r.business_day),
+      date: dayKey,
       ad_spend: adSpend,
       creator_cost: creator,
       project_investment: totalInvest,
@@ -427,18 +436,22 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
   ];
 
+  const safeNegRate = commentTotal > 0 ? (negativeCount / commentTotal) * 100 : 0;
+  const safeCleanRate = commentTotal > 0 ? 100 - safeNegRate : 100;
   const analysisCards: AnalysisCardSpec[] = [
     {
       id: 'insight-qicui-sentiment',
       targetQueryIds: ['summary_kpis', 'creator_notes'],
       type: 'insight',
-      title: '启萃全域声量与负向拦截成效良好',
-      summary: `全域沉淀 ${noteCount} 篇笔记与 ${commentTotal} 条评论，负向拦截率稳定保持在98%以上，好评率与提问转化健康。`,
+      title: '启萃全域声量与评论外显质检',
+      summary: commentTotal > 0
+        ? `全域沉淀 ${noteCount} 篇笔记与 ${commentTotal} 条评论，负向评论占比 ${safeNegRate.toFixed(1)}%（非负向清洁度 ${safeCleanRate.toFixed(1)}%）。`
+        : `当前系统收录 ${noteCount} 篇笔记，尚无评论互动沉淀，数据就绪待初次外显质检。`,
       recommendations: [
         '针对提问高频词（如转奶、便秘、乳铁蛋白）配置官方解答置顶',
         '继续跟进供应商待核验评论的外显状态',
       ],
-      severity: 'success',
+      severity: safeCleanRate >= 95 ? 'success' : 'warning',
     },
   ];
 
@@ -449,6 +462,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     spu: manifest.spu,
     category: manifest.category,
     themeColor: manifest.color,
+    themeId: manifest.themeId || 'teal-mist',
     reportPeriod: manifest.defaultReportPeriod,
     mode: manifest.mode,
     rendererMode: manifest.rendererMode || 'universal',

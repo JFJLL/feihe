@@ -73,12 +73,12 @@ async function main() {
         for (const src of sourcesConfig.sources) {
           console.log(`- 正在读取数据源 [${src.id}] (${src.name})...`);
           if (src.type === 'feishu_sheet' || src.type === 'feishu_bitable') {
-            const fetched = fetchFeishuSource(src);
-            if (fetched) {
-              rawSources[src.id] = fetched;
+            const res = fetchFeishuSource(src);
+            if (res.ok && res.data) {
+              rawSources[src.id] = res.data;
               console.log(`  ✓ 成功拉取飞书源: ${src.id}`);
             } else {
-              console.log(`  ⚠ 无法在线拉取或未安装 lark-cli，复用已有缓存`);
+              console.log(`  ⚠ 无法在线拉取或未安装 lark-cli (${res.error || '未返回有效数据'})，复用已有缓存`);
             }
           } else if (src.filePath && fs.existsSync(path.resolve(ROOT_DIR, src.filePath))) {
             try {

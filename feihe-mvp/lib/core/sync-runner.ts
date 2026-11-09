@@ -24,6 +24,7 @@ export interface SyncRunResult {
   healthSummary?: string;
   errors?: string[];
   warnings?: string[];
+  sourceReports?: Record<string, { status: 'live_success' | 'cached' | 'failed'; error?: string }>;
 }
 
 const syncLocks = new Map<string, Promise<SyncRunResult>>();
@@ -31,7 +32,7 @@ const syncLocks = new Map<string, Promise<SyncRunResult>>();
 /**
  * Runs lark-cli to pull Feishu Sheets or Bitable data.
  */
-export function fetchFeishuSource(config: ProjectSourceConfig): unknown {
+export function fetchFeishuSource(config: ProjectSourceConfig): { ok: boolean; data?: unknown; error?: string } {
   const isWin = process.platform === 'win32';
   const bin = isWin ? 'lark-cli.cmd' : 'lark-cli';
 
@@ -65,7 +66,7 @@ export function fetchFeishuSource(config: ProjectSourceConfig): unknown {
       '--table-id', config.tableId,
     ];
   } else {
-    return null;
+    return { ok: false, error: '缺少有效的飞书配置参数' };
   }
 
   try {
@@ -77,8 +78,8 @@ export function fetchFeishuSource(config: ProjectSourceConfig): unknown {
       maxBuffer: 50 * 1024 * 1024,
     });
     const parsed = JSON.parse(out);
-    return parsed?.data || parsed;
-  } catch {
+    return { ok: true, data: parsed?.data || parsed };
+  } catch (errRtk) {
     try {
       const out = execFileSync(bin, args, {
         encoding: 'utf8',
@@ -88,9 +89,10 @@ export function fetchFeishuSource(config: ProjectSourceConfig): unknown {
         maxBuffer: 50 * 1024 * 1024,
       });
       const parsed = JSON.parse(out);
-      return parsed?.data || parsed;
+      return { ok: true, data: parsed?.data || parsed };
     } catch (e) {
-      return null;
+      const errMsg = e instanceof Error ? e.message : String(e);
+      return { ok: false, error: errMsg };
     }
   }
 }
@@ -117,6 +119,8 @@ export async function runProjectSync(projectId: string, options: { force?: boole
     const sourcesConfig = await loadProjectSources(projectId);
     const rawSourcesCachePath = path.join(cacheDir, 'raw-sources.json');
     let rawSources: Record<string, unknown> = {};
+    const sourceReports: Record<string, { status: 'live_success' | 'cached' | 'failed'; error?: string }> = {};
+    const syncWarnings: string[] = [];
 
     if (fs.existsSync(rawSourcesCachePath)) {
       try {
@@ -135,11 +139,20 @@ export async function runProjectSync(projectId: string, options: { force?: boole
       for (const src of sourcesConfig.sources) {
         if (src.type === 'feishu_sheet' || src.type === 'feishu_bitable') {
           if (shouldFetchRemote) {
-            const fetched = fetchFeishuSource(src);
-            if (fetched) {
-              rawSources[src.id] = fetched;
+            const res = fetchFeishuSource(src);
+            if (res.ok && res.data) {
+              rawSources[src.id] = res.data;
+              sourceReports[src.id] = { status: 'live_success' };
               fetchedAny = true;
+            } else {
+              sourceReports[src.id] = {
+                status: rawSources[src.id] ? 'cached' : 'failed',
+                error: res.error,
+              };
+              syncWarnings.push(`外部数据源 [${src.name || src.id}] 实时拉取失败 (${res.error || '未返回有效数据'})，已降级沿用本地缓存`);
             }
+          } else {
+            sourceReports[src.id] = { status: 'cached' };
           }
         } else if (src.filePath) {
           const resolvedPath = path.isAbsolute(src.filePath)
@@ -148,6 +161,7 @@ export async function runProjectSync(projectId: string, options: { force?: boole
           if (fs.existsSync(resolvedPath)) {
             try {
               rawSources[src.id] = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+              sourceReports[src.id] = { status: 'live_success' };
               fetchedAny = true;
             } catch {
               // Ignore
@@ -172,6 +186,7 @@ export async function runProjectSync(projectId: string, options: { force?: boole
         message: `转换失败: ${err instanceof Error ? err.message : String(err)}`,
         healthPassed: false,
         errors: [err instanceof Error ? err.message : String(err)],
+        sourceReports,
       };
     }
 
@@ -182,15 +197,54 @@ export async function runProjectSync(projectId: string, options: { force?: boole
         timestamp,
         message: `未能生成 BoardPayload`,
         healthPassed: false,
+        sourceReports,
       };
     }
 
     payload.updatedAt = timestamp;
+    if (syncWarnings.length > 0) {
+      payload.warnings = [...(payload.warnings || []), ...syncWarnings];
+    }
 
     // 3. Run Board Health Verification
     const health = validateBoardHealth(payload);
     const healthOutput = formatHealthReport(health);
     console.log(healthOutput);
+
+    // Critical Gate: If health check fails, NEVER overwrite active snapshot!
+    if (!health.ok) {
+      const d1 = db();
+      await d1
+        .prepare(
+          `INSERT INTO project_settings (id, project_id, key, value, updated_at)
+           VALUES (?, ?, ?, ?, ?)
+           ON CONFLICT(id) DO UPDATE SET value=excluded.value, updated_at=excluded.updated_at`
+        )
+        .bind(
+          `${projectId}:campaign_dashboard_health_error`,
+          projectId,
+          'campaign_dashboard_health_error',
+          JSON.stringify({
+            timestamp,
+            errors: health.errors,
+            warnings: health.warnings,
+          }),
+          timestamp
+        )
+        .run();
+
+      return {
+        ok: false,
+        projectId,
+        timestamp,
+        message: `构建健康检查未通过 (${health.errors.length} 项致命错误)，已阻止写入生产有效快照`,
+        healthPassed: false,
+        healthSummary: health.summary,
+        errors: health.errors.map(e => e.message),
+        warnings: [...health.warnings.map(w => w.message), ...syncWarnings],
+        sourceReports,
+      };
+    }
 
     // 4. Save to Database project_settings
     const d1 = db();
@@ -249,26 +303,7 @@ export async function runProjectSync(projectId: string, options: { force?: boole
       )
       .run();
 
-    // 6. Automatically ensure default internal accounts have memberships
-    const defaultMembers: Array<{ userId: string; role: string }> = [
-      { userId: 'user-admin', role: 'project_admin' },
-      { userId: 'user-project-manager', role: 'project_admin' },
-      { userId: 'user-editor', role: 'editor' },
-      { userId: 'user-viewer', role: 'viewer' },
-    ];
-
-    for (const mem of defaultMembers) {
-      const memberId = `${projectId}:${mem.userId}`;
-      await d1
-        .prepare(
-          `INSERT OR IGNORE INTO project_members (id, project_id, user_id, role, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?)`
-        )
-        .bind(memberId, projectId, mem.userId, mem.role, timestamp, timestamp)
-        .run();
-    }
-
-    // 7. Ensure onboarding status is marked ready
+    // 6. Ensure onboarding status is marked ready
     await d1
       .prepare(
         `INSERT INTO project_onboarding (project_id, current_step, completed_steps_json, selected_template_id, updated_at)
@@ -286,7 +321,8 @@ export async function runProjectSync(projectId: string, options: { force?: boole
       healthPassed: health.ok,
       healthSummary: health.summary,
       errors: health.errors.map(e => e.message),
-      warnings: health.warnings.map(w => w.message),
+      warnings: [...health.warnings.map(w => w.message), ...syncWarnings],
+      sourceReports,
     };
   })();
 

@@ -116,6 +116,7 @@ export function getAllProjectManifests(): Record<string, ProjectManifest> {
         spu: manifestData.spu || '核心主推品',
         category: manifestData.category || '全域营销',
         color: manifestData.color || '#2563eb',
+        themeId: manifestData.themeId,
         defaultReportPeriod: manifestData.defaultReportPeriod || '营销观测周期',
         description: manifestData.description || '',
         subtitle: manifestData.subtitle || '',

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { createServer } from 'vite';
 
+process.env.NODE_ENV = 'test';
+
 const ROOT_DIR = path.resolve('.');
 const vite = await createServer({
   configFile: false,

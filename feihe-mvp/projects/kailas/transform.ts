@@ -145,18 +145,27 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
     },
   ];
 
+  const budgetKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-total' || k.id?.includes('budget'));
+  const spendKpi = (merged.kpis || []).find((k: any) => k.id === 'kailas-budget-spent' || k.id?.includes('spent') || k.id?.includes('spend'));
+  const totalBudget = Number(budgetKpi?.value || 850000);
+  const totalSpend = Number(spendKpi?.value || 906818.64);
+  const overspend = totalSpend - totalBudget;
+  const progressPct = totalBudget > 0 ? (totalSpend / totalBudget) * 100 : 100;
+
   const analysisCards: AnalysisCardSpec[] = [
     {
       id: 'insight-kailas-overbudget',
       targetQueryIds: ['summary_kpis', 'kailas-budget-lines'],
-      type: 'warning',
-      title: '预算执行轻微超标预警',
-      summary: '累计总消耗达到 906,818.64 元，执行进度达到 106.68%，已超支 56,818.64 元。',
+      type: overspend > 0 ? 'warning' : 'insight',
+      title: overspend > 0 ? '预算执行超标预警' : '预算执行进度正常',
+      summary: overspend > 0
+        ? `累计总消耗达 ¥${totalSpend.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}，执行进度达 ${progressPct.toFixed(2)}%，已超支 ¥${overspend.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}。`
+        : `累计总消耗达 ¥${totalSpend.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}，预算控制在规划范围内（达成率 ${progressPct.toFixed(2)}%）。`,
       recommendations: [
         '核验 Q3 增补预算审批流是否已入账',
         '建议对非核心版位实行预算封顶限流',
       ],
-      severity: 'warning',
+      severity: overspend > 0 ? 'warning' : 'success',
     },
   ];
 

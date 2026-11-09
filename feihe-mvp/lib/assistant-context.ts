@@ -66,7 +66,11 @@ export async function gatherAssistantFacts(options: AssistantContextOptions): Pr
     try {
       const board = await buildProjectBoard(projectId);
       if (board) {
-        const copilotCtx = buildCopilotContext(board);
+        const copilotCtx = buildCopilotContext(board, {
+          day: targetDay,
+          from: periodFrom,
+          to: periodTo,
+        });
         const sources = (board.sources || []).map((s, idx) => ({
           key: s.id || `src-${idx}`,
           name: s.name,
