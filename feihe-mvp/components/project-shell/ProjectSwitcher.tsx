@@ -31,7 +31,7 @@ export function ProjectSwitcher({
   }
 
   return (
-    <div className="project-switcher">
+    <div className="project-switcher" style={{ borderLeft: '3.5px solid ' + (currentProject?.color || 'var(--brand-primary, #0F5E52)'), transition: 'border-color 0.2s ease' }}>
       <small>当前项目</small>
       <div className="switcher-control" style={{ width: '100%', marginTop: 4 }}>
         <CustomSelect

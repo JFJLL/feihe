@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import type { ProjectBootstrap } from '../../lib/project-bootstrap';
 import { ProjectProvider, useProject } from './ProjectContext';
 import { ProjectSidebar } from './ProjectSidebar';
@@ -26,6 +26,7 @@ import { AdsPlaceholder } from '../../features/overview/AdsPlaceholder';
 import { IndustryWorkspace } from '../../features/industry/IndustryWorkspace';
 import { getProjectThemeTag } from '../../features/overview/dashboard-template';
 import { ScrollChartAnimator } from '../ui/ScrollChartAnimator';
+import { deriveThemeFromBrandColor } from '../../lib/core/themes';
 
 function ProjectShellContent({
   userName,
@@ -55,6 +56,45 @@ function ProjectShellContent({
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  const brandColor = currentProject?.color;
+  const projectThemeStyle = useMemo(() => {
+    if (!brandColor) return undefined;
+    const theme = deriveThemeFromBrandColor(brandColor, (currentProject as any)?.themeId || currentProject?.templateId);
+    return {
+      ...theme.cssVariables,
+      '--brand-primary': theme.chrome.accent,
+      '--brand-primary-soft': `${theme.chrome.accent}18`,
+      '--border-brand': `${theme.chrome.accent}40`,
+      '--teal-11': theme.chrome.accent,
+      '--primary-blue': theme.chrome.accent,
+      '--accent-primary': theme.chrome.accent,
+      '--dtc-theme-accent': theme.chrome.accent,
+      '--dtc-chart-color-0': theme.chrome.accent,
+    } as React.CSSProperties;
+  }, [brandColor, (currentProject as any)?.themeId, currentProject?.templateId]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined' || !brandColor) return;
+    const prevPrimary = document.documentElement.style.getPropertyValue('--brand-primary');
+    const prevSoft = document.documentElement.style.getPropertyValue('--brand-primary-soft');
+    const prevTeal = document.documentElement.style.getPropertyValue('--teal-11');
+    const prevBlue = document.documentElement.style.getPropertyValue('--primary-blue');
+    document.documentElement.style.setProperty('--brand-primary', brandColor);
+    document.documentElement.style.setProperty('--brand-primary-soft', `${brandColor}18`);
+    document.documentElement.style.setProperty('--teal-11', brandColor);
+    document.documentElement.style.setProperty('--primary-blue', brandColor);
+    return () => {
+      if (prevPrimary) document.documentElement.style.setProperty('--brand-primary', prevPrimary);
+      else document.documentElement.style.removeProperty('--brand-primary');
+      if (prevSoft) document.documentElement.style.setProperty('--brand-primary-soft', prevSoft);
+      else document.documentElement.style.removeProperty('--brand-primary-soft');
+      if (prevTeal) document.documentElement.style.setProperty('--teal-11', prevTeal);
+      else document.documentElement.style.removeProperty('--teal-11');
+      if (prevBlue) document.documentElement.style.setProperty('--primary-blue', prevBlue);
+      else document.documentElement.style.removeProperty('--primary-blue');
+    };
+  }, [brandColor]);
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem('feihe_sidebar_collapsed');
@@ -79,7 +119,7 @@ function ProjectShellContent({
   // 首屏未加载完时展示骨架加载（设置和数据页面不阻塞，战役项目由专属工作区独立加载）
   if (dataLoading && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
-      <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
+      <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'} data-project-color={brandColor} style={projectThemeStyle}>
         <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
         <main className="main">
           <LoadingState text="正在准备项目全盘数据…" />
@@ -90,7 +130,7 @@ function ProjectShellContent({
 
   if (dataError && !dashboard && !isSettingsOrData && !isCampaignReview) {
     return (
-      <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
+      <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'} data-project-color={brandColor} style={projectThemeStyle}>
         <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
         <main className="main">
           <ErrorState error={dataError} onRetry={refreshData} />
@@ -238,7 +278,7 @@ function ProjectShellContent({
   }
 
   return (
-    <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'}>
+    <div className={`app-shell theme-${themeTag} ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`} data-project-template={currentProject?.templateId || 'general_workbench'} data-project-color={brandColor} style={projectThemeStyle}>
       <ProjectSidebar userName={userName} signedIn={signedIn} isDevLocal={isDevLocal} collapsed={sidebarCollapsed} onToggleCollapse={toggleSidebar} />
       <main className="main">
         <ScrollChartAnimator />

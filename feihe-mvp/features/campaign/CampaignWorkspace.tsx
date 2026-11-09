@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type {
   CampaignDashboard as CampaignDashboardData,
 } from '../../lib/campaign-types';
@@ -18,6 +18,7 @@ import { DashboardFrame } from '../overview/DashboardFrame';
 import { resolveDashboardPreset } from '../overview/dashboard-template';
 import { WorkspaceModuleTabs } from '../../components/ui/operations/WorkspaceModuleTabs';
 import { ProjectContext } from '../../components/project-shell/ProjectContext';
+import { deriveThemeFromBrandColor } from '../../lib/core/themes';
 import './campaign-analytics.css';
 import './campaign-shell.css';
 
@@ -75,11 +76,10 @@ export function CampaignWorkspace({
       setCurrentPalette(savedPalette);
     };
 
-    const savedPalette =
-      window.localStorage.getItem('feihe_ui_palette') ||
-      document.documentElement.getAttribute('data-palette') ||
-      'terracotta';
-    applyPalette(savedPalette);
+    const userSaved = window.localStorage.getItem('feihe_ui_palette');
+    if (userSaved && (userSaved === 'botanical' || userSaved === 'terracotta' || userSaved === 'nordic')) {
+      applyPalette(userSaved);
+    }
 
     const onPaletteChange = (e: Event) => {
       const detail = (e as CustomEvent).detail;
@@ -316,6 +316,23 @@ export function CampaignWorkspace({
   const period = activePayload?.reportPeriod || activeDashboard.reportPeriod || '观测周期中';
   const rendererMode = activePayload?.rendererMode || 'universal';
 
+  const activeBrandColor = activePayload?.themeColor || (activeDashboard as any)?.themeColor || project?.color;
+  const activeThemeStyle = useMemo(() => {
+    if (!activeBrandColor) return undefined;
+    const theme = deriveThemeFromBrandColor(activeBrandColor, activePayload?.themeId || project?.templateId);
+    return {
+      ...theme.cssVariables,
+      '--brand-primary': theme.chrome.accent,
+      '--brand-primary-soft': `${theme.chrome.accent}18`,
+      '--border-brand': `${theme.chrome.accent}40`,
+      '--teal-11': theme.chrome.accent,
+      '--primary-blue': theme.chrome.accent,
+      '--accent-primary': theme.chrome.accent,
+      '--dtc-theme-accent': theme.chrome.accent,
+      '--dtc-chart-color-0': theme.chrome.accent,
+    } as React.CSSProperties;
+  }, [activeBrandColor, activePayload?.themeId, project?.templateId]);
+
   return (
     <DashboardFrame
       preset={preset}
@@ -327,6 +344,7 @@ export function CampaignWorkspace({
         className={`campaign-workspace-root ${className}`}
         data-project-id={projectId}
         data-source-file={`projects/${projectId}/transform.ts`}
+        style={activeThemeStyle}
       >
         {/* Project Context Ribbon */}
         <div
@@ -336,6 +354,7 @@ export function CampaignWorkspace({
           data-project-id={projectId}
           data-source-file={`projects/${projectId}/transform.ts`}
           data-section-id="project-context-ribbon"
+          style={{ borderLeft: '4px solid ' + (activeBrandColor || 'var(--brand-primary, #0F5E52)') }}
         >
           <div className="context-left">
             <div className="context-item">
