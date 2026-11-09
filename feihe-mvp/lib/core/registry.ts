@@ -107,11 +107,7 @@ export function getAllProjectManifests(): Record<string, ProjectManifest> {
 
     if (manifestData) {
       const defaultRenderer: 'universal' | 'legacy-campaign' | 'legacy-huang-tiane' =
-        id === 'huang-tiane'
-          ? 'legacy-huang-tiane'
-          : ['kailas', 'meiling', 'winner-wipes'].includes(id)
-          ? 'legacy-campaign'
-          : 'universal';
+        manifestData.rendererMode || 'universal';
 
       result[id] = {
         id,

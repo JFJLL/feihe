@@ -49,6 +49,7 @@ export type ComponentType =
   | 'percent-stack'
   | 'capability-radar'
   | 'pareto-chart'
+  | 'contribution-waterfall'
   | 'effect-scatter'
   | 'distribution-histogram'
   | 'grouped-boxplot'
@@ -88,6 +89,7 @@ export interface SectionSpec {
   id: string;
   tab?: 'overview' | 'ads' | 'content';
   title?: string;
+  hint?: string;
   subtitle?: string;
   description?: string;
   layout?: SectionLayout;
@@ -134,6 +136,7 @@ export interface BoardPayload {
   brand: string;
   spu?: string;
   category?: string;
+  themeId?: string;
   themeColor?: string;
   reportPeriod?: string;
   updatedAt?: string;
@@ -159,6 +162,7 @@ export interface ProjectManifest {
   brand: string;
   spu: string;
   category: string;
+  themeId?: string;
   color: string;
   defaultReportPeriod: string;
   templateId?: string;
@@ -188,3 +192,15 @@ export interface ProjectSources {
   projectId: string;
   sources: ProjectSourceConfig[];
 }
+
+export type {
+  CampaignDashboard,
+  CampaignSource,
+  CampaignKpi,
+  CampaignTable,
+  CampaignTableColumn,
+  CampaignTableRow,
+  CampaignActionItem,
+  CampaignDailyDataset,
+} from '../campaign-types';
+export type { ManualCampaignTable } from '../campaign-manual';

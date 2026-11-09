@@ -176,6 +176,19 @@ export const COMPONENT_CATALOG: Record<ComponentType, ComponentCatalogEntry> = {
     supportsDrilldown: true,
     defaultWidth: 'half',
   },
+  'contribution-waterfall': {
+    type: 'contribution-waterfall',
+    name: '增减贡献瀑布图',
+    category: '图表',
+    description: '展示各阶段增减变动对最终净变化的阶梯式贡献。',
+    aiDescription: '用于预算消耗流水变动、阶段利润拆解、或各渠道对总增量的阶段阶梯增减贡献分析。',
+    autoMatchRule: {
+      requiredFields: ['categoryField', 'field'],
+      conditionSummary: '存在连续阶段或维度的增减变动值（正负 delta）并汇总为净变动',
+    },
+    supportsDrilldown: true,
+    defaultWidth: 'half',
+  },
   'effect-scatter': {
     type: 'effect-scatter',
     name: '效果散点象限图',

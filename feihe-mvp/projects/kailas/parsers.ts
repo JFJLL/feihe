@@ -10,7 +10,7 @@ import type {
   CampaignSource,
   CampaignTable,
   CampaignTableRow,
-} from '@/lib/campaign-types';
+} from '../../lib/core/types';
 
 export interface KailasSnapshotPayload {
   readAt?: string;

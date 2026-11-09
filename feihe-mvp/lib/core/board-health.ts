@@ -118,6 +118,16 @@ export function validateBoardHealth(payload: BoardPayload): HealthReport {
           message: `图表组件 "${comp.id}" 绑定的数据集 "${comp.query}" 行数为 0`,
           remediation: `确保源表抓取到真实记录，或提供有代表性的回退/空态样本。`,
         });
+      } else if ((comp.type === 'line-bar-combo' || comp.type === 'time-series') && rows.length < 2) {
+        warnings.push({
+          severity: 'warning',
+          code: 'INSUFFICIENT_TREND_POINTS',
+          componentId: comp.id,
+          sectionId: section.id,
+          queryId: comp.query,
+          message: `趋势图组件 "${comp.id}" 绑定的数据集 "${comp.query}" 仅有 ${rows.length} 行数据 (< 2)`,
+          remediation: `时序折线/趋势图至少需要 2 个以上连续时间点，单点数据建议降级为 metric-card 或数据摘要卡片展示。`,
+        });
       } else if (comp.yField) {
         const allNull = rows.every((r) => r[comp.yField!] === null || r[comp.yField!] === undefined);
         if (allNull) {
@@ -171,15 +181,61 @@ export function validateBoardHealth(payload: BoardPayload): HealthReport {
   for (const sec of sections) {
     if (sec.layout === 'paired-metrics' || (sec.layout === 'grid' && sec.components.every((c) => c.type === 'metric-card'))) {
       const count = sec.components.length;
-      if (count > 0 && count % 2 !== 0 && count !== 1 && count !== 3) {
+      if (count > 0 && count % 2 !== 0) {
         warnings.push({
           severity: 'warning',
           code: 'ODD_METRICS_COUNT',
           sectionId: sec.id,
-          message: `指标卡区域 "${sec.id}" 包含 ${count} 个指标卡，在双列网格下会留下孤立项`,
-          remediation: `建议在 section "${sec.id}" 中补充 1 个相关指标卡配对，或调整 layout / columns 避免视觉孤立。`,
+          message: `指标卡区域 "${sec.id}" 包含奇数张 (${count} 个) 指标卡，在双列网格下会留下孤立项`,
+          remediation: `建议在 section "${sec.id}" 中补充指标卡配成偶数对（如 2 张或 4 张），符合成对排版纪律。`,
         });
       }
+    }
+
+    // 5. Chart section hint or description check
+    const hasCharts = sec.components.some(c =>
+      c.type.includes('chart') ||
+      c.type === 'line-bar-combo' ||
+      c.type === 'donut-rose' ||
+      c.type === 'target-bullet' ||
+      c.type === 'capability-radar' ||
+      c.type === 'pareto-chart' ||
+      c.type === 'contribution-waterfall'
+    );
+    if (hasCharts && !sec.hint && !sec.description) {
+      warnings.push({
+        severity: 'warning',
+        code: 'MISSING_SECTION_HINT',
+        sectionId: sec.id,
+        message: `图表区块 "${sec.id}" 未填写 hint 或 description 读法导读说明`,
+        remediation: `在 SectionSpec 中补充 hint 导读说明（如“按互动降序，前20%达人贡献80%效果”），提升看板可读性。`,
+      });
+    }
+  }
+
+  // 6. 3-Tab Completeness Check (overview, ads, content)
+  const tabKeysPresent = new Set<string>();
+  for (const s of sections) {
+    if (s.tab) tabKeysPresent.add(s.tab);
+    if (s.id) {
+      if (s.id.includes('overview') || s.id.includes('summary')) tabKeysPresent.add('overview');
+      if (s.id.includes('ads') || s.id.includes('placement') || s.id.includes('channel')) tabKeysPresent.add('ads');
+      if (s.id.includes('content') || s.id.includes('notes') || s.id.includes('comments')) tabKeysPresent.add('content');
+    }
+    if (s.tabs) {
+      for (const t of s.tabs) tabKeysPresent.add(t.id);
+    }
+  }
+
+  const coreTabs = ['overview', 'ads', 'content'];
+  for (const t of coreTabs) {
+    if (!tabKeysPresent.has(t)) {
+      warnings.push({
+        severity: 'warning',
+        code: 'MISSING_CORE_TAB_SECTION',
+        message: `未检测到栏目 "${t}" 的专属内容区块`,
+        remediation: `建议在 transform.ts 中为 sections 配置 tab: "${t}" 区块，保证总览、版位投放与内容执行三栏结构完整。`,
+      });
     }
   }
 

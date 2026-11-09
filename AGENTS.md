@@ -21,3 +21,14 @@
    - `data-fields`: 关联字段名
 2. **严格单项目隔离修改**：Agent 必须直接定位到 `projects/<projectId>/transform.ts`（或 `manifest.ts`）进行增删改，**严禁修改 `lib/core/`、公共组件库或其它项目的文件**（除非用户明确要求升级全局样式或底座能力）。
 3. **修改后自动重检**：修改完成后，必须立即重跑 `pnpm project:build <projectId>`，确保通过 `board-health` 体检且 0 报错后再答复用户。
+
+## 3. 【新项目四段式黄金版面与主题自适应铁律】
+1. **四段式黄金节奏**：任何新项目的每个核心栏目（`overview` / `ads` / `content`）必须严格遵循腾讯灯塔的四段式视觉节奏：
+   - ① **顶部偶数张核心 KPI 卡**：4 张（或 2/6 张）核心指标卡，第一张卡带顶部 2px 品牌主色强调线，成对均分无孤儿卡。大数自动按万/亿收敛并配合 tabular-nums 等宽数字。
+   - ② **2 列对称主诊断图**：左双轴趋势图（`line-bar-combo`）+ 右结构诊断图（`donut-rose` / `target-bullet` / `pareto-chart` / `capability-radar` / `contribution-waterfall`），且必须在 `SectionSpec` 中提供 `hint` 或 `description` 读法导读说明。
+   - ③ **AI 洞察与行动建议卡**：`analysisCards` 提炼 1~3 条带量化证据与具体行动指引的分析卡。
+   - ④ **底部通栏明细表与筛选器**：`data-table` + `select-filter` / `date-range-filter`，展示多维明细并支持页内即时联动过滤。
+2. **纯通用渲染与色彩自适应**：
+   - 新项目一律使用 `rendererMode: 'universal'`。
+   - 严禁 Agent 为新项目手写自定义 React 页面或自定义 CSS。
+   - 只需在 `manifest.json` 中配置该 SPU/品牌的代表色 `color`（或可选指定 `themeId`），系统通过 `deriveThemeFromBrandColor` 自动执行 HSL 降噪护栏（S ≤ 78%, L ∈ [32%, 46%]）、90-8-2 极淡背景与 6 色冷暖互补图表色板派生，从底座杜绝廉价“AI 味”。

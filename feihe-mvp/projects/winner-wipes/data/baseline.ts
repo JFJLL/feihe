@@ -5,8 +5,8 @@ import type {
   CampaignTable,
   CampaignTableColumn,
   CampaignActionItem,
-} from '@/lib/campaign-types';
-import type { ManualCampaignTable } from '@/lib/campaign-manual';
+  ManualCampaignTable,
+} from '../../../lib/core/types';
 
 // 3. Winner Wipes (稳健酒精湿巾 - winner-wipes)
 // ============================================================================

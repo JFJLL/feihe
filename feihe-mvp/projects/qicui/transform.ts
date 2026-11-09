@@ -226,6 +226,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       id: 'daily-trend-section',
       tab: 'overview',
       title: '分日投资与消耗趋势',
+      hint: '分日双轴趋势：左轴展示投流消耗，右轴展示项目累计投资',
       layout: 'grid',
       columns: 2,
       components: [
@@ -298,6 +299,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       tab: 'ads',
       title: '投放效率双轴走势',
       description: '广告投放消耗与项目投资进度',
+      hint: '广告投流消耗与项目投资进度动态走势对比',
       layout: 'grid',
       columns: 2,
       components: [
@@ -327,6 +329,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       id: 'ads-flow-table-section',
       tab: 'ads',
       title: '分日投放结算流水明细',
+      description: '分日投流广告与达人采买真实出入账流水',
       layout: 'stack',
       components: [
         {
@@ -343,7 +346,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       title: '内容声量与互动指标',
       description: '达人笔记库与粉丝互动质检',
       layout: 'paired-metrics',
-      columns: 3,
+      columns: 4,
       components: [
         {
           id: 'content-kpi-notes',
@@ -351,7 +354,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
           title: '收录爆文笔记数',
           query: 'summary_kpis',
           field: 'note_count',
-          width: 'third',
+          width: 'quarter',
         },
         {
           id: 'content-kpi-exposure',
@@ -359,7 +362,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
           title: '全量笔记总曝光',
           query: 'summary_kpis',
           field: 'exposure',
-          width: 'third',
+          width: 'quarter',
         },
         {
           id: 'content-kpi-interaction',
@@ -367,7 +370,43 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
           title: '全量笔记总互动',
           query: 'summary_kpis',
           field: 'interaction_count',
-          width: 'third',
+          width: 'quarter',
+        },
+        {
+          id: 'content-kpi-comments',
+          type: 'metric-card',
+          title: '沉淀总评论数',
+          query: 'summary_kpis',
+          field: 'comment_total',
+          width: 'quarter',
+        },
+      ],
+    },
+    {
+      id: 'content-diagnostic-section',
+      tab: 'content',
+      title: '达人笔记互动贡献分析',
+      hint: '帕累托二八法则：前20%重点笔记贡献了全盘近80%的互动',
+      layout: 'grid',
+      columns: 2,
+      components: [
+        {
+          id: 'comp-content-pareto',
+          type: 'pareto-chart',
+          title: 'TOP笔记互动量帕累托集中度',
+          query: 'creator_notes',
+          categoryField: 'note_id',
+          field: 'interaction_count',
+          width: 'half',
+        },
+        {
+          id: 'comp-content-rose',
+          type: 'donut-rose',
+          title: '达人梯队互动分布玫瑰图',
+          query: 'creator_notes',
+          categoryField: 'creator_level',
+          field: 'interaction_count',
+          width: 'half',
         },
       ],
     },
@@ -375,6 +414,7 @@ export async function transformProject(rawSources?: unknown): Promise<BoardPaylo
       id: 'content-notes-table-section',
       tab: 'content',
       title: '达人爆文与重点笔记库',
+      description: 'TOP50 核心笔记与互动质检明细',
       layout: 'stack',
       components: [
         {

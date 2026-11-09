@@ -7,6 +7,7 @@ export const manifest: ProjectManifest = {
   spu: '飞鹤启萃系列婴配粉',
   category: '母婴乳品 / 奶粉',
   color: '#0f5e52',
+  themeId: 'teal-mist',
   defaultReportPeriod: '营销复盘周期',
   mode: '全域声量与评论质检 · 真实对账',
   rendererMode: 'universal',
